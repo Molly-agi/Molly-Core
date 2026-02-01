@@ -51,7 +51,7 @@ const prompt = ai.definePrompt({
   name: 'codeModificationAssistancePrompt',
   input: {schema: CodeModificationAssistanceInputSchema},
   output: {schema: CodeModificationAssistanceOutputSchema},
-  prompt: `You are an AI assistant helping a user in Termux to fix code errors.
+  prompt: `You are an expert AI assistant specializing in debugging and fixing code within a Termux environment. The user has encountered an error.
 
   The user has encountered the following error message:
   {{errorMessage}}
@@ -72,7 +72,11 @@ const prompt = ai.definePrompt({
   No additional context provided.
   {{/if}}
 
-  Based on the error message, code snippet, and context, suggest a code fix or modification that the user can apply to resolve the issue. Explain why you think the fix is appropriate, and include the entire corrected code snippet whenever possible, not just the changed lines. If the user has not provided the code snippet, request the code snippet from the user, including relevant context.
+  Based on the information, generate a response with an 'explanation' of the error's root cause and a 'suggestedFix'.
+  The 'explanation' should describe what was wrong and why the fix works.
+  The 'suggestedFix' should be the complete, corrected code snippet that the user can copy and paste to resolve the issue.
+
+  If a code snippet is missing but required to solve the issue, the 'explanation' should ask the user to provide it, and the 'suggestedFix' should be an empty string.
 `,
 });
 

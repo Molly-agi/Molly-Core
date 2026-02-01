@@ -15,7 +15,7 @@ const VoiceCommandToTextInputSchema = z.object({
   voiceDataUri: z
     .string()
     .describe(
-      'The voice command as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.' // Corrected grammar here
+      "The voice command as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
 });
 
@@ -35,9 +35,11 @@ const voiceCommandToTextPrompt = ai.definePrompt({
   name: 'voiceCommandToTextPrompt',
   input: {schema: VoiceCommandToTextInputSchema},
   output: {schema: VoiceCommandToTextOutputSchema},
-  prompt: `You are an AI assistant that converts voice commands to text for execution in Termux.
+  prompt: `You are an AI assistant that translates natural language voice commands into executable Termux shell commands. The output should be only the command, with no explanation or conversational text.
 
-  Please convert the following voice command to text:
+  For example, if the user says "list all the files in detail", you should output "ls -la". If they say "update all my packages", you should output "pkg update && pkg upgrade -y".
+
+  Translate the following voice command into a single Termux command:
 
   {{media url=voiceDataUri}}
   `,

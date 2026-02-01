@@ -56,22 +56,17 @@ const installationAssistancePrompt = ai.definePrompt({
   name: 'installationAssistancePrompt',
   input: {schema: InstallationAssistanceInputSchema},
   output: {schema: InstallationAssistanceOutputSchema},
-  prompt: `You are an AI assistant helping users install software in Termux.
+  prompt: `You are an AI assistant helping users fix software installation problems in Termux. The user attempted to run an installation command and received an error. Your task is to diagnose the problem and provide the exact command needed to fix it.
 
-The user is trying to install software using the following command:
-{{command}}
+The user's command was: {{command}}
+The error was: {{#if errorMessage}}{{errorMessage}}{{else}}None provided.{{/if}}
 
-If there was an error, the error message is:
-{{errorMessage}}
+Analyze the error. Common issues are missing dependencies, incorrect package names, or repository problems.
 
-Based on the command and the error message, suggest a fix for the installation problem.
-
-If additional dependencies are required, list them in the additionalDependencies field.
-
-Indicate whether user confirmation is required before applying the fix.
-
-Format your response as a JSON object matching the following schema:
-${JSON.stringify(InstallationAssistanceOutputSchema.shape)}`,
+Your response MUST be a JSON object.
+- The 'suggestedFix' field should contain the single, complete command-line command that will resolve the issue. For example: "pkg update && pkg install -y correct-package-name"
+- The 'additionalDependencies' field should be an array of any new packages required.
+- The 'confirmationRequired' field should be 'false' as the user will run the command manually.`,
 });
 
 const installationAssistanceFlow = ai.defineFlow(

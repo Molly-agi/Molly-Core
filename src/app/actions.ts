@@ -112,10 +112,32 @@ main()
         return [{ id: crypto.randomUUID(), type: 'output', content: isRoot ? 'root' : 'u0_a123' }];
 
       case 'help':
-        return [{ id: crypto.randomUUID(), type: 'output', content: 'Available commands: ls, cd, git, pkg, python, su, whoami, help. Try asking the AI for guidance!' }];
+        return [{ id: crypto.randomUUID(), type: 'output', content: `TermAI Simulated Terminal - Help
+
+This is a simulated environment. You can use the commands below or chat with TermAI in the 'AI Guidance' panel for assistance.
+
+Available commands:
+  ls              List directory contents
+  cd [dir]        Change directory
+  git clone [repo]  Clone a git repository
+  pkg install ...   Simulate package installation
+  python [script]   Simulate running a python script
+  node [script]     Simulate running a node script
+  su                Switch to root user (simulated)
+  whoami            Display the current user
+  help              Show this help message
+
+Examples:
+  ls
+  git clone https://github.com/some/repo.git
+  pkg install error-prone-package  (to see AI-assisted error fixing)
+  python buggy_script.py         (to see AI-assisted code debugging)
+
+For anything else, just ask TermAI!
+` }];
 
       default:
-        return [{ id: crypto.randomUUID(), type: 'error', content: `${baseCommand}: command not found. Type 'help' for a list of simulated commands.` }];
+        return [{ id: crypto.randomUUID(), type: 'error', content: `${baseCommand}: command not found. Type 'help' for a list of simulated commands, or ask your question in the 'AI Guidance' chat panel.` }];
     }
   } catch (e) {
     console.error(e);
