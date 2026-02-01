@@ -35,6 +35,7 @@ const voiceCommandToTextPrompt = ai.definePrompt({
   name: 'voiceCommandToTextPrompt',
   input: {schema: VoiceCommandToTextInputSchema},
   output: {schema: VoiceCommandToTextOutputSchema},
+  model: 'googleai/gemini-pro',
   prompt: `You are an AI assistant that translates natural language voice commands into executable Termux shell commands. The output should be only the command, with no explanation or conversational text.
 
   For example, if the user says "list all the files in detail", you should output "ls -la". If they say "update all my packages", you should output "pkg update && pkg upgrade -y".
