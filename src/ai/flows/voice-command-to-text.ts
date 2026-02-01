@@ -32,20 +32,20 @@ export async function voiceCommandToText(input: VoiceCommandToTextInput): Promis
   return voiceCommandToTextFlow(input);
 }
 
+// This prompt is simplified to return only raw text, which is more reliable.
 const voiceCommandToTextPrompt = ai.definePrompt({
   name: 'voiceCommandToTextPrompt',
   model: googleAI.model('gemini-1.5-flash-latest'),
   input: {schema: VoiceCommandToTextInputSchema},
-  output: {schema: VoiceCommandToTextOutputSchema},
-  prompt: `You are an AI assistant that translates natural language voice commands into executable Termux shell commands.
+  // No output schema means we get raw text back.
+  prompt: `You are an expert at translating natural language into Termux shell commands.
+Listen to the audio and provide ONLY the executable command. Do not add any explanation or formatting.
 
-Your task is to listen to the provided audio and convert it into a single, executable Termux command.
+Examples:
+- User says "list the files": you output "ls -la"
+- User says "update everything": you output "pkg update && pkg upgrade -y"
 
-For example:
-- If the user says "list all the files in detail", you generate the command "ls -la".
-- If they say "update all my packages", you generate the command "pkg update && pkg upgrade -y".
-
-Translate the following voice command into a single Termux command:
+Translate the following audio:
 
 {{media url=voiceDataUri}}
   `,
@@ -58,7 +58,11 @@ const voiceCommandToTextFlow = ai.defineFlow(
     outputSchema: VoiceCommandToTextOutputSchema,
   },
   async input => {
-    const {output} = await voiceCommandToTextPrompt(input);
-    return output!;
+    // The prompt now returns a GenerateResponse object. We get the text from response.text.
+    const response = await voiceCommandToTextPrompt(input);
+    const commandText = response.text.trim();
+    
+    // We manually construct the object the action expects.
+    return { textCommand: commandText };
   }
 );
