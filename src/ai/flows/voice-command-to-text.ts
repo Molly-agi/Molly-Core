@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 import {z} from 'genkit';
 
 const VoiceCommandToTextInputSchema = z.object({
@@ -33,15 +34,20 @@ export async function voiceCommandToText(input: VoiceCommandToTextInput): Promis
 
 const voiceCommandToTextPrompt = ai.definePrompt({
   name: 'voiceCommandToTextPrompt',
+  model: googleAI.model('gemini-1.5-pro-latest'),
   input: {schema: VoiceCommandToTextInputSchema},
   output: {schema: VoiceCommandToTextOutputSchema},
-  prompt: `You are an AI assistant that translates natural language voice commands into executable Termux shell commands. The output should be only the command, with no explanation or conversational text.
+  prompt: `You are an AI assistant that translates natural language voice commands into executable Termux shell commands.
 
-  For example, if the user says "list all the files in detail", you should output "ls -la". If they say "update all my packages", you should output "pkg update && pkg upgrade -y".
+Your task is to listen to the provided audio and convert it into a single, executable Termux command. The output MUST be a JSON object containing the command.
 
-  Translate the following voice command into a single Termux command:
+For example:
+- If the user says "list all the files in detail", your output should be {"textCommand": "ls -la"}.
+- If they say "update all my packages", your output should be {"textCommand": "pkg update && pkg upgrade -y"}.
 
-  {{media url=voiceDataUri}}
+Translate the following voice command into a single Termux command:
+
+{{media url=voiceDataUri}}
   `,
 });
 
