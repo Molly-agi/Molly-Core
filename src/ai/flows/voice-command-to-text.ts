@@ -62,7 +62,7 @@ const voiceCommandToTextFlow = ai.defineFlow(
     const response = await voiceCommandToTextPrompt(input);
     const commandText = response.text.trim();
     
-    // We manually construct the object the action expects.
+    // We manually construct the object the action expects. This is our "middleman".
     return { textCommand: commandText };
   }
 );
