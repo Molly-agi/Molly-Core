@@ -78,7 +78,7 @@ export default function Terminal() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [voiceState, voiceAction] = useActionState(getVoiceCommandAsText, null);
+  const [voiceState, voiceAction, isVoicePending] = useActionState(getVoiceCommandAsText, null);
 
   useEffect(() => {
     if (lines.length === 0) {
@@ -179,9 +179,9 @@ export default function Terminal() {
                   onChange={e => setInput(e.target.value)}
                   className="bg-transparent focus:outline-none flex-1"
                   autoFocus
-                  disabled={isProcessing}
+                  disabled={isProcessing || isVoicePending}
                 />
-                <VoiceControl voiceAction={voiceAction} />
+                <VoiceControl voiceAction={voiceAction} isPending={isVoicePending} />
               </form>
             )}
             {line.type === 'command' && (

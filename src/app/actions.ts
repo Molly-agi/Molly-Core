@@ -4,7 +4,7 @@
 import { voiceCommandToText } from '@/ai/flows/voice-command-to-text';
 import { installationAssistance } from '@/ai/flows/installation-assistance';
 import { suggestCodeFixes } from '@/ai/flows/code-modification-assistance';
-import { getContextualGuidance } from '@/ai/flows/contextual-ai-guidance';
+import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
 import { z } from 'zod';
 
 const transcode = async (file: File) => {
@@ -123,12 +123,12 @@ main()
   }
 }
 
-export async function getGuidance(query: string, context: string) {
+export async function getChatResponse(history: ConversationalChatInput['history'], message: string) {
     try {
-        const result = await getContextualGuidance({ query, termuxContext: context });
-        return { suggestion: result };
+        const result = await conversationalChat({ history, message });
+        return { response: result.response };
     } catch (e) {
         console.error(e);
-        return { error: 'Failed to get guidance from AI.' };
+        return { error: 'Failed to get response from AI.' };
     }
 }
