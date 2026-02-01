@@ -1,15 +1,15 @@
 
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { Mic, MicOff, Loader2 } from 'lucide-react';
+import { useState, useRef, useTransition } from 'react';
+import { Mic, Loader2 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
-type RecordingStatus = 'idle' | 'recording' | 'processing';
+type RecordingStatus = 'idle' | 'recording';
 
 export function VoiceControl({ voiceAction }: { voiceAction: (payload: FormData) => void }) {
   const [status, setStatus] = useState<RecordingStatus>('idle');
@@ -17,12 +17,7 @@ export function VoiceControl({ voiceAction }: { voiceAction: (payload: FormData)
   const audioChunks = useRef<Blob[]>([]);
   const { pending } = useFormStatus();
   const { toast } = useToast();
-  
-  useEffect(() => {
-    if(!pending && status === 'processing') {
-      setStatus('idle');
-    }
-  }, [pending, status])
+  const [isVoicePending, startTransition] = useTransition();
 
   const startRecording = async () => {
     if (status === 'recording') return;
@@ -36,10 +31,12 @@ export function VoiceControl({ voiceAction }: { voiceAction: (payload: FormData)
         const audioBlob = new Blob(audioChunks.current, { type: 'audio/webm' });
         const formData = new FormData();
         formData.append('audio', audioBlob, 'command.webm');
-        setStatus('processing');
-        voiceAction(formData);
+        startTransition(() => {
+          voiceAction(formData);
+        });
         audioChunks.current = [];
         stream.getTracks().forEach(track => track.stop());
+        setStatus('idle');
       };
       mediaRecorder.current.start();
       setStatus('recording');
@@ -73,13 +70,13 @@ export function VoiceControl({ voiceAction }: { voiceAction: (payload: FormData)
       size="icon"
       variant="ghost"
       onClick={handleMicClick}
-      disabled={pending}
+      disabled={pending || isVoicePending}
       className={cn(
         'transition-colors',
-        status === 'recording' && 'text-red-500 bg-red-500/10 hover:bg-red-500/20 hover:text-red-500',
+        status === 'recording' && !isVoicePending && 'text-red-500 bg-red-500/10 hover:bg-red-500/20 hover:text-red-500',
       )}
     >
-      {status === 'processing' || pending ? (
+      {pending || isVoicePending ? (
         <Loader2 className="animate-spin" />
       ) : status === 'recording' ? (
         <Mic className="animate-pulse" />
