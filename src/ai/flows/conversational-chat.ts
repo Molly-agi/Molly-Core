@@ -8,6 +8,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 import {z} from 'genkit';
 
 const ChatMessageSchema = z.object({
@@ -38,6 +39,7 @@ export async function conversationalChat(
 
 const prompt = ai.definePrompt({
   name: 'conversationalChatPrompt',
+  model: googleAI.model('gemini-1.5-flash-latest'),
   input: {schema: ConversationalChatInputSchema},
   output: {schema: ConversationalChatOutputSchema},
   prompt: `You are a sophisticated and helpful AI assistant named TermAI, specializing in Termux, the Linux command line, shell scripting, and general developer problem-solving. You have a deep understanding of all standard Linux/Android commands available in Termux, package management with 'pkg', and how to write and debug scripts. Your user is interacting with you through a terminal-like interface.
