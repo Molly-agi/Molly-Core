@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useTransition } from 'react';
 import { Mic, Loader2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -12,12 +12,11 @@ type RecordingStatus = 'idle' | 'recording';
 
 export function VoiceControl({
   voiceAction,
-  isPending,
 }: {
   voiceAction: (payload: FormData) => void;
-  isPending: boolean;
 }) {
   const [status, setStatus] = useState<RecordingStatus>('idle');
+  const [isPending, startTransition] = useTransition();
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
   const { toast } = useToast();
@@ -34,7 +33,9 @@ export function VoiceControl({
         const audioBlob = new Blob(audioChunks.current, { type: 'audio/webm' });
         const formData = new FormData();
         formData.append('audio', audioBlob, 'command.webm');
-        voiceAction(formData);
+        startTransition(() => {
+          voiceAction(formData);
+        });
         audioChunks.current = [];
         stream.getTracks().forEach(track => track.stop());
         setStatus('idle');

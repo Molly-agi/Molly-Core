@@ -181,7 +181,7 @@ export default function Terminal() {
                   autoFocus
                   disabled={isProcessing || isVoicePending}
                 />
-                <VoiceControl voiceAction={voiceAction} isPending={isVoicePending} />
+                <VoiceControl voiceAction={voiceAction} />
               </form>
             )}
             {line.type === 'command' && (
