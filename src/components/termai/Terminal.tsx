@@ -1,8 +1,7 @@
 
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import React, { useState, useRef, useEffect, useActionState } from 'react';
 import { Bot, ChevronRight, Loader2, Code, Terminal as TerminalIcon } from 'lucide-react';
 
 import { getVoiceCommandAsText, runCommand } from '@/app/actions';
@@ -79,7 +78,7 @@ export default function Terminal() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [voiceState, voiceAction] = useFormState(getVoiceCommandAsText, null);
+  const [voiceState, voiceAction] = useActionState(getVoiceCommandAsText, null);
 
   useEffect(() => {
     if (lines.length === 0) {
