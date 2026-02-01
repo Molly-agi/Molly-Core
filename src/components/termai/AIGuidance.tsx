@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import { Bot, Loader2, Send, Sparkles } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
-import { generateId } from 'ai';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,7 +28,7 @@ export function AIGuidance() {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage: Message = { id: generateId(), role: 'user', content: input };
+    const userMessage: Message = { id: crypto.randomUUID(), role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsPending(true);
@@ -39,14 +38,14 @@ export function AIGuidance() {
 
     if (result.suggestion) {
       const assistantMessage: Message = {
-        id: generateId(),
+        id: crypto.randomUUID(),
         role: 'assistant',
         content: result.suggestion,
       };
       setMessages(prev => [...prev, assistantMessage]);
     } else {
       const errorMessage: Message = {
-        id: generateId(),
+        id: crypto.randomUUID(),
         role: 'assistant',
         content: { explanation: result.error || 'Sorry, I had trouble with that request.' },
       };

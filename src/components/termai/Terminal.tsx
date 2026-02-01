@@ -3,7 +3,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useFormState } from 'react-dom';
-import { generateId } from 'ai';
 import { Bot, ChevronRight, Loader2, Code, Terminal as TerminalIcon } from 'lucide-react';
 
 import { getVoiceCommandAsText, runCommand } from '@/app/actions';
@@ -19,13 +18,6 @@ type Line = {
   type: 'prompt' | 'command' | 'output' | 'error' | 'component';
   content: any;
   isRoot?: boolean;
-};
-
-const initialLine: Line = {
-  id: generateId(),
-  type: 'prompt',
-  content: null,
-  isRoot: false,
 };
 
 function CommandSuggestion({ data, onAccept }: { data: any; onAccept: (command: string) => void }) {
@@ -80,7 +72,7 @@ function TerminalPrompt({ isRoot }: { isRoot: boolean }) {
 
 export default function Terminal() {
   const { toast } = useToast();
-  const [lines, setLines] = useState<Line[]>([initialLine]);
+  const [lines, setLines] = useState<Line[]>([]);
   const [input, setInput] = useState('');
   const [isRoot, setIsRoot] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -88,6 +80,12 @@ export default function Terminal() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [voiceState, voiceAction] = useFormState(getVoiceCommandAsText, null);
+
+  useEffect(() => {
+    if (lines.length === 0) {
+      setLines([{ id: crypto.randomUUID(), type: 'prompt', content: null, isRoot: false }]);
+    }
+  }, [lines.length]);
 
   useEffect(() => {
     if (voiceState?.command) {
@@ -109,12 +107,12 @@ export default function Terminal() {
 
   const execute = async (commandToRun: string) => {
     if (!commandToRun.trim()) {
-        setLines(prev => [...prev, { ...initialLine, isRoot }]);
+        setLines(prev => [...prev, { id: crypto.randomUUID(), type: 'prompt', content: null, isRoot }]);
         return;
     }
 
     const commandLine: Line = {
-      id: generateId(),
+      id: crypto.randomUUID(),
       type: 'command',
       content: commandToRun,
       isRoot,
@@ -130,7 +128,7 @@ export default function Terminal() {
     }
 
     setLines(prev => [...prev, ...outputs]);
-    setLines(prev => [...prev, { ...initialLine, isRoot: commandToRun === 'su' ? true : isRoot }]);
+    setLines(prev => [...prev, { id: crypto.randomUUID(), type: 'prompt', content: null, isRoot: commandToRun === 'su' ? true : isRoot }]);
     setIsProcessing(false);
     setInput('');
   };
@@ -153,7 +151,7 @@ export default function Terminal() {
         setIsRoot(true);
         await execute(lastCommand);
     } else {
-        setLines(prev => [...prev, {id: generateId(), type: 'error', content: 'Permission denied.'}, { ...initialLine, isRoot: false }]);
+        setLines(prev => [...prev, {id: crypto.randomUUID(), type: 'error', content: 'Permission denied.'}, { id: crypto.randomUUID(), type: 'prompt', content: null, isRoot: false }]);
     }
   }
 

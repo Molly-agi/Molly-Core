@@ -6,7 +6,7 @@ import { installationAssistance } from '@/ai/flows/installation-assistance';
 import { suggestCodeFixes } from '@/ai/flows/code-modification-assistance';
 import { getContextualGuidance } from '@/ai/flows/contextual-ai-guidance';
 import { z } from 'zod';
-import { generateId } from 'ai';
+import { generateId } from 'genkit';
 
 const transcode = async (file: File) => {
   const buffer = Buffer.from(await file.arrayBuffer());
