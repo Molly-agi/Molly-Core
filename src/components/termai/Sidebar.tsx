@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -39,15 +38,13 @@ export function TermAISidebar() {
       <SidebarContent className="p-2">
         <Accordion type="single" collapsible defaultValue="guidance" className="w-full">
           <AccordionItem value="guidance" className="border-none">
-            <AccordionTrigger className="w-full hover:no-underline [&[data-state=open]>svg]:hidden">
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="AI Guidance" isActive>
-                    <Bot />
-                    <span>AI Guidance</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
+            <AccordionTrigger className="w-full hover:no-underline [&[data-state=open]>svg]:hidden p-0">
+              <SidebarMenuButton tooltip="AI Guidance" isActive asChild>
+                <div>
+                  <Bot />
+                  <span>AI Guidance</span>
+                </div>
+              </SidebarMenuButton>
             </AccordionTrigger>
             <AccordionContent>
                 <AIGuidance />
@@ -55,15 +52,13 @@ export function TermAISidebar() {
           </AccordionItem>
           
           <AccordionItem value="other" className="border-none">
-            <AccordionTrigger className="w-full hover:no-underline [&[data-state=open]>svg]:hidden">
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="More Features" >
+            <AccordionTrigger className="w-full hover:no-underline [&[data-state=open]>svg]:hidden p-0">
+                <SidebarMenuButton tooltip="More Features" asChild>
+                  <div>
                     <Settings />
                     <span>More</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
+                  </div>
+                </SidebarMenuButton>
             </AccordionTrigger>
             <AccordionContent>
               <SidebarMenu>
