@@ -34,16 +34,16 @@ export async function voiceCommandToText(input: VoiceCommandToTextInput): Promis
 
 const voiceCommandToTextPrompt = ai.definePrompt({
   name: 'voiceCommandToTextPrompt',
-  model: googleAI.model('gemini-1.5-pro-latest'),
+  model: googleAI.model('gemini-1.5-flash-latest'),
   input: {schema: VoiceCommandToTextInputSchema},
   output: {schema: VoiceCommandToTextOutputSchema},
   prompt: `You are an AI assistant that translates natural language voice commands into executable Termux shell commands.
 
-Your task is to listen to the provided audio and convert it into a single, executable Termux command. The output MUST be a JSON object containing the command.
+Your task is to listen to the provided audio and convert it into a single, executable Termux command.
 
 For example:
-- If the user says "list all the files in detail", your output should be {"textCommand": "ls -la"}.
-- If they say "update all my packages", your output should be {"textCommand": "pkg update && pkg upgrade -y"}.
+- If the user says "list all the files in detail", you generate the command "ls -la".
+- If they say "update all my packages", you generate the command "pkg update && pkg upgrade -y".
 
 Translate the following voice command into a single Termux command:
 
