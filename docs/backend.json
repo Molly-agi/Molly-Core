@@ -16,6 +16,27 @@
         }
       },
       "required": ["displayName", "email"]
+    },
+    "LearnedCommand": {
+      "title": "Learned Command",
+      "description": "Represents a command the AI has successfully learned and saved.",
+      "type": "object",
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "description": "The original user prompt."
+        },
+        "command": {
+          "type": "string",
+          "description": "The successful command that was generated."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the command was learned."
+        }
+      },
+      "required": ["prompt", "command", "createdAt"]
     }
   },
   "auth": {
@@ -27,6 +48,12 @@
         "$ref": "#/backend/entities/UserProfile"
       },
       "description": "User profile documents, keyed by user ID."
+    },
+    "/users/{userId}/learnedCommands/{commandId}": {
+      "schema": {
+        "$ref": "#/backend/entities/LearnedCommand"
+      },
+      "description": "A collection of commands learned by the AI for a specific user."
     }
   }
 }
