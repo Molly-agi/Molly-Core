@@ -5,6 +5,7 @@ import { healthCheck } from '@/ai/flows/health-check';
 import { voiceCommandToText } from '@/ai/flows/voice-command-to-text';
 import { textToTermuxCommand } from '@/ai/flows/text-to-termux-command';
 import { contextualGuidance } from '@/ai/flows/contextual-ai-guidance';
+import { securityAnalysis } from '@/ai/flows/security-analysis';
 
 
 export async function getHealthCheck(text: string) {
@@ -36,4 +37,8 @@ export async function getTextToTermuxCommand(
 
 export async function getContextualGuidance(prompt: string) {
   return await contextualGuidance(prompt);
+}
+
+export async function getSecurityAnalysis(prompt: string) {
+  return await securityAnalysis(prompt);
 }
