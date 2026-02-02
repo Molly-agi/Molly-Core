@@ -32,7 +32,7 @@ const creativeSolutionFlow = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-pro-latest',
+      model: 'googleai/gemini-1.5-pro',
       prompt: `You are a highly creative and "out-of-the-box" thinking AI specialist. You are a Creative Technologist and Automator. You do not just provide simple commands; you invent novel solutions, write detailed scripts, and combine tools in unique ways to solve complex problems.
 
 Your goal is to brainstorm and generate an innovative solution to the user's request. Your output might be a shell script, a Python script, a detailed plan, or a series of chained commands.
@@ -57,7 +57,7 @@ const securityAnalysisFlow = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-pro-latest',
+      model: 'googleai/gemini-1.5-pro',
       prompt: `You are a world-class cybersecurity expert and penetration tester AI. You are operating in a conceptual 'sandbox' to analyze code and commands for security risks before they are ever run.
 
 Your task is to analyze the user's input and provide a thorough security assessment.
@@ -97,13 +97,9 @@ const autonomousSolutionFlow = ai.defineFlow(
     outputSchema: AutonomousSolutionOutputSchema,
   },
   async (prompt) => {
-    // Step 1: Generate a creative solution.
     const initialSolution = await creativeSolutionFlow(prompt);
-
-    // Step 2: Pass the creative solution to the security analyst.
     const analysisResult = await securityAnalysisFlow(initialSolution);
 
-    // Step 3: Synthesize a final, secure command.
     const synthesisPrompt = `You are a master systems engineer. Your task is to synthesize the findings from a creative AI and a security AI to produce a final, secure, and executable command.
 
     The Original Goal: "${prompt}"
@@ -123,10 +119,10 @@ const autonomousSolutionFlow = ai.defineFlow(
     Final Secure Command:`;
 
     const synthesisResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-pro-latest',
+      model: 'googleai/gemini-1.5-pro',
       prompt: synthesisPrompt,
       config: {
-        temperature: 0.0, // Be very deterministic for this step.
+        temperature: 0.0,
       },
     });
 
@@ -135,7 +131,7 @@ const autonomousSolutionFlow = ai.defineFlow(
       finalCommand.includes('Complex solution required.') ||
       finalCommand.trim() === ''
     ) {
-      finalCommand = ''; // Don't include the phrase in the output.
+      finalCommand = '';
     }
 
     return {
