@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import {
   getTextToTermuxCommand,
   getAutonomousSolution,
+  getHealthCheck,
   type AutonomousSolutionOutput,
 } from '@/app/actions';
 import { useUser } from '@/firebase/auth/use-user';
@@ -44,6 +45,9 @@ export default function Terminal() {
         if (user && firestore && aiResponse.finalCommand) {
           saveLearnedCommand(firestore, user.uid, prompt, aiResponse.finalCommand);
         }
+      } else if (currentCommand === '/healthcheck') {
+        const aiResponse = await getHealthCheck('ping');
+        setHistory((prev) => [...prev, `🩺 Health Check Passed: ${aiResponse}`]);
       } else {
         if (user && firestore) {
           const cachedCommand = await getLearnedCommand(
@@ -92,6 +96,8 @@ export default function Terminal() {
           Type{' '}
           <span className="text-accent font-semibold">/solve [your goal]</span>{' '}
           to use the autonomous agent team.
+          <br />
+          Type <span className="text-accent font-semibold">/healthcheck</span> to test system connectivity.
         </div>
         {history.map((line, index) => {
           if (typeof line !== 'string') {
@@ -100,6 +106,7 @@ export default function Terminal() {
 
           const isUser = line.startsWith('>');
           const isMemory = line.startsWith('🧠 From Memory:');
+          const isHealthCheck = line.startsWith('🩺 Health Check Passed:');
 
           if (isMemory) {
             return (
@@ -112,11 +119,24 @@ export default function Terminal() {
               </div>
             );
           }
+          
+          if (isHealthCheck) {
+            return (
+              <div
+                key={index}
+                className="flex items-center gap-2 text-green-400"
+              >
+                <span>{line}</span>
+              </div>
+            );
+          }
+
 
           return (
             <div key={index} className={isUser ? 'text-primary' : ''}>
               {line}
             </div>
+
           );
         })}
         {isLoading && <div className="animate-pulse">AI is thinking...</div>}
