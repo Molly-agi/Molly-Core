@@ -4,6 +4,7 @@ import { conversationalChat } from '@/ai/flows/conversational-chat';
 import { healthCheck } from '@/ai/flows/health-check';
 import { voiceCommandToText } from '@/ai/flows/voice-command-to-text';
 import { textToTermuxCommand } from '@/ai/flows/text-to-termux-command';
+import { contextualGuidance } from '@/ai/flows/contextual-ai-guidance';
 
 
 export async function getHealthCheck(text: string) {
@@ -31,4 +32,8 @@ export async function getTextToTermuxCommand(
   prompt: string
 ) {
   return await textToTermuxCommand(prompt);
+}
+
+export async function getContextualGuidance(prompt: string) {
+  return await contextualGuidance(prompt);
 }

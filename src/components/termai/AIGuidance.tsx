@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, User } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { getConversationalChat } from '@/app/actions';
+import { getContextualGuidance } from '@/app/actions';
 
 export function AIGuidance() {
   const [messages, setMessages] = useState<
@@ -24,10 +24,7 @@ export function AIGuidance() {
       setIsLoading(true);
 
       try {
-        const aiResponse = await getConversationalChat(
-          currentInput,
-          messages.map((m) => ({ role: m.role, content: m.content }))
-        );
+        const aiResponse = await getContextualGuidance(currentInput);
         setMessages([...newMessages, { role: 'bot' as const, content: aiResponse }]);
       } catch (error) {
         console.error(error);
@@ -44,7 +41,7 @@ export function AIGuidance() {
   return (
     <Card className="h-full flex flex-col border-0">
       <CardHeader>
-        <CardTitle className="text-lg">AI Guidance</CardTitle>
+        <CardTitle className="text-lg">AI Research</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col gap-4 overflow-y-auto p-4">
         <ScrollArea className="flex-1">
@@ -77,7 +74,7 @@ export function AIGuidance() {
               <div className="flex gap-3 text-sm">
                 <Bot className="size-5 shrink-0" />
                 <div className="rounded-lg px-3 py-2 bg-muted animate-pulse">
-                  AI is thinking...
+                  AI is researching...
                 </div>
               </div>
             )}
@@ -87,7 +84,7 @@ export function AIGuidance() {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask for advice..."
+            placeholder="Ask a research question..."
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
             className="bg-card"
             disabled={isLoading}
