@@ -378,8 +378,8 @@
   },
   "auth": {
     "providers": [
-      "anonymous",
-      "google.com"
+      "password",
+      "anonymous"
     ]
   },
   "firestore": {
@@ -391,7 +391,7 @@
           "schema": {
             "$ref": "#/backend/entities/User"
           },
-          "description": "Stores user profiles. Uses path-based ownership to ensure only the user can access their profile data.",
+          "description": "Collection to store user profiles.  Root document for user-owned data.",
           "params": [
             {
               "name": "userId",
@@ -407,7 +407,7 @@
           "schema": {
             "$ref": "#/backend/entities/VoiceCommand"
           },
-          "description": "Stores voice commands issued by users.  Nested under the user to ensure path-based ownership. Serves as a parent collection for all entities related to a specific command.",
+          "description": "Collection to store voice commands issued by a user.",
           "params": [
             {
               "name": "userId",
@@ -427,7 +427,7 @@
           "schema": {
             "$ref": "#/backend/entities/CommandExecution"
           },
-          "description": "Stores command execution details for a given voice command. Nested under voice commands to establish a clear relationship.",
+          "description": "Collection to store command executions triggered by a voice command.",
           "params": [
             {
               "name": "userId",
@@ -451,7 +451,7 @@
           "schema": {
             "$ref": "#/backend/entities/Installation"
           },
-          "description": "Stores installation details for a given voice command. Nested under voice commands to establish a clear relationship.",
+          "description": "Collection to store installation processes triggered by a voice command.",
           "params": [
             {
               "name": "userId",
@@ -475,7 +475,7 @@
           "schema": {
             "$ref": "#/backend/entities/CodeModification"
           },
-          "description": "Stores code modification details for a given voice command. Nested under voice commands to establish a clear relationship.",
+          "description": "Collection to store code modifications suggested and applied by the tool, triggered by a voice command.",
           "params": [
             {
               "name": "userId",
@@ -499,7 +499,7 @@
           "schema": {
             "$ref": "#/backend/entities/GitHubRepo"
           },
-          "description": "Stores GitHub repository details for a given voice command. Nested under voice commands to establish a clear relationship.",
+          "description": "Collection to store GitHub repository information used for pulling scripts/programs, triggered by a voice command.",
           "params": [
             {
               "name": "userId",
@@ -523,7 +523,7 @@
           "schema": {
             "$ref": "#/backend/entities/RootAccessRequest"
           },
-          "description": "Stores root access request details for a given voice command. Nested under voice commands to establish a clear relationship.",
+          "description": "Collection to store root access requests made by the AI, triggered by a voice command.",
           "params": [
             {
               "name": "userId",
@@ -547,7 +547,7 @@
           "schema": {
             "$ref": "#/backend/entities/AIResponse"
           },
-          "description": "Stores AI responses related to a given voice command. Nested under voice commands to establish a clear relationship.",
+          "description": "Collection to store AI-generated responses or suggestions related to a specific voice command.",
           "params": [
             {
               "name": "userId",
@@ -571,7 +571,7 @@
           "schema": {
             "$ref": "#/backend/entities/ErrorLog"
           },
-          "description": "Stores error logs related to a given voice command. Nested under voice commands to establish a clear relationship.",
+          "description": "Collection to store error logs associated with a specific voice command.",
           "params": [
             {
               "name": "userId",
@@ -583,12 +583,12 @@
             },
             {
               "name": "errorLogId",
-              "description": "The unique identifier of the error log."
+              "description": "The unique identifier of the error log entry."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to securely manage data for the TermAI application, focusing on voice commands and their related processes. It prioritizes authorization independence by denormalizing user IDs to avoid using `get()` calls in security rules. The structure facilitates secure `list` operations by segregating data based on ownership. The design implements path-based ownership where appropriate and membership maps where shared access is required.\n\nEach top-level entity related to a user is organized under the `/users/{userId}` collection, ensuring clear ownership and easy implementation of security rules. All subcollections under the `/users/{userId}` path inherit the user's ownership. This approach provides a simple and robust way to manage data associated with each user.\n\nFor entities directly related to voice commands, such as installations, AI responses, error logs, code modifications, command executions, GitHub repos, and root access requests, a nested structure under `/users/{userId}/voiceCommands/{voiceCommandId}` is utilized. This structure provides a clear hierarchy and improves data organization, making it easier to query and manage related data. This also makes the relationship between voice commands and sub-entities explicit, as shown in the schema, which allows for more intuitive debugging.\n\nThis structure supports the application's core features by providing a scalable and secure way to store and manage data. The explicit ownership and clear relationships between entities simplify the implementation of security rules, ensuring that only authorized users can access specific data. Also this explicit structure makes it easy to address edge-cases during implementation that may not be obvious at implementation time."
+    "reasoning": "The Firestore structure is designed to securely manage data for the TermAI application, focusing on voice commands and related executions within Termux. Prioritizing authorization independence, the structure avoids hierarchical dependencies by denormalizing authorization context. This ensures atomic operations (transactions/batches) and simplifies security rules. All user-owned data is nested under the `/users/{userId}` path to leverage path-based authorization. Specifically:\n\n*   **User-Owned Data:** All data related to a user's voice commands, command executions, installations, code modifications, GitHub repositories, root access requests, AI responses and error logs are stored under the `/users/{userId}` collection path. This ensures that each user can only access their own data, as enforced by simple path-based security rules.\n\n*   **Voice Commands and Subcollections:** For each voice command, subcollections are used to store associated data like executions, installations, code modifications, and AI responses, creating a clear hierarchy of data. The voice commands themselves are also placed under the user's path at `/users/{userId}/voiceCommands/{voiceCommandId}`.\n\n*   **No Public Data:** The design doesn't include any global collections with public access, as all features are centered around user-specific actions and data within Termux.\n\nThis approach facilitates straightforward security rules that rely solely on `request.auth.uid` and the document path, eliminating the need for complex `get()` calls and custom claims."
   }
 }
