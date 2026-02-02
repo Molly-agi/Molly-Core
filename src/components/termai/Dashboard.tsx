@@ -10,7 +10,7 @@ export default function Dashboard() {
         <Header />
         <div className="flex flex-1 overflow-hidden">
           <TermAISidebar />
-          <main className="flex flex-1 flex-col overflow-y-auto min-w-0">
+          <main className="flex flex-1 flex-col min-w-0">
             <Terminal />
           </main>
         </div>
