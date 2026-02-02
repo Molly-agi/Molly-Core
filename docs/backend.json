@@ -295,8 +295,6 @@
   },
   "auth": {
     "providers": [
-      "password",
-      "anonymous",
       "google.com"
     ]
   },
@@ -462,4 +460,5 @@
     "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and QAPs. User-owned data is stored under `/users/{userId}`. VoiceCommands and related entities (CommandExecution, Installation, CodeModification, GithubIntegration, AIGuidance) are stored as subcollections to the corresponding voice command, enabling efficient querying and organization. This also ensures that all data related to a user is grouped under their respective user document. Given that all data is directly tied to a user, there's no need for complex role-based access control, as access is determined by the user's ID.\\n\\nAuthorization Independence is achieved by denormalization. Specifically, the `userId` field is included in `VoiceCommand` documents. This ensures that access control rules can be applied to `voiceCommands` and subcollections without needing to perform `get()` operations on parent documents. This eliminates hierarchical authorization dependencies.\\n\\nThe structure supports QAPs by segregating data based on ownership. All data under `/users/{userId}` is owned by the user identified by `{userId}`, allowing for secure list operations based on the `request.auth.uid`. There are no collections mixing data with different access needs."
   }
 }
+    
     
