@@ -131,5 +131,3 @@ async function getLearnedCommandWithoutOrder(
     return null;
   }
 }
-
-    
