@@ -4,6 +4,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { creativeSolution } from './creative-solution';
 import { securityAnalysis } from './security-analysis';
+import { googleAI } from '@genkit-ai/google-genai';
 
 const AutonomousSolutionOutputSchema = z.object({
   creativeSolution: z
@@ -62,7 +63,7 @@ export const autonomousSolution = ai.defineFlow(
     Final Secure Command:`;
 
     const synthesisResponse = await ai.generate({
-      model: 'googleai/gemini-pro',
+      model: googleAI.model('gemini-pro'),
       prompt: synthesisPrompt,
       config: {
         temperature: 0.0, // Be very deterministic for this step.

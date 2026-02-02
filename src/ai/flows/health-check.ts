@@ -2,6 +2,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import { googleAI } from '@genkit-ai/google-genai';
 
 export const healthCheck = ai.defineFlow(
   {
@@ -12,7 +13,7 @@ export const healthCheck = ai.defineFlow(
   async (prompt) => {
     const llmResponse = await ai.generate({
       prompt: `You are a helpful AI assistant. Respond to the following prompt in a witty and creative way. Prompt: ${prompt}`,
-      model: 'googleai/gemini-pro',
+      model: googleAI.model('gemini-pro'),
     });
 
     return llmResponse.text;

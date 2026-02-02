@@ -2,6 +2,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import { googleAI } from '@genkit-ai/google-genai';
 
 export const voiceCommandToText = ai.defineFlow(
   {
@@ -13,7 +14,7 @@ export const voiceCommandToText = ai.defineFlow(
   },
   async (audioData) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-pro',
+      model: googleAI.model('gemini-pro'),
       prompt: [
         { text: 'Transcribe the following audio recording. The user is providing a voice command for a terminal assistant. Respond only with the transcribed text.' },
         { media: { url: audioData } },

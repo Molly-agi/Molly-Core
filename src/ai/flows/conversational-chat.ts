@@ -2,6 +2,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import { googleAI } from '@genkit-ai/google-genai';
 
 const HistoryItemSchema = z.object({
   role: z.enum(['user', 'bot']),
@@ -24,7 +25,7 @@ export const conversationalChat = ai.defineFlow(
     }));
 
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-pro',
+      model: googleAI.model('gemini-pro'),
       prompt: text,
       history: llmHistory,
       config: {

@@ -3,6 +3,7 @@
 import { ai } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { z } from 'zod';
+import { googleAI } from '@genkit-ai/google-genai';
 
 export const textToTermuxCommand = ai.defineFlow(
   {
@@ -12,7 +13,7 @@ export const textToTermuxCommand = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-pro',
+      model: googleAI.model('gemini-pro'),
       tools: [searchGitHub],
       prompt: `You are an expert in Termux, Linux command-line tools, and open-source software.
 The user will provide a prompt in natural language.
