@@ -10,35 +10,30 @@
           "type": "string",
           "description": "Unique identifier for the voice command."
         },
-        "timestamp": {
+        "userId": {
           "type": "string",
-          "description": "Timestamp of when the voice command was received.",
-          "format": "date-time"
+          "description": "Reference to the User who issued the command. (Relationship: User 1:N VoiceCommand)"
         },
-        "rawText": {
+        "commandText": {
           "type": "string",
-          "description": "The raw text transcribed from the voice command."
+          "description": "The raw text of the voice command as transcribed."
         },
         "interpretedText": {
           "type": "string",
-          "description": "The interpreted text of the voice command after processing by the AI."
+          "description": "The interpreted text of the command after AI processing."
         },
-        "commandType": {
+        "timestamp": {
           "type": "string",
-          "description": "The type of command (e.g., INSTALL, EXECUTE, MODIFY)."
-        },
-        "userId": {
-          "type": "string",
-          "description": "Reference to User. (Relationship: User 1:N VoiceCommand)"
+          "description": "Timestamp indicating when the voice command was received.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
-        "timestamp",
-        "rawText",
+        "userId",
+        "commandText",
         "interpretedText",
-        "commandType",
-        "userId"
+        "timestamp"
       ]
     },
     "CommandExecution": {
@@ -53,38 +48,39 @@
         },
         "voiceCommandId": {
           "type": "string",
-          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N CommandExecution)"
-        },
-        "executionTimestamp": {
-          "type": "string",
-          "description": "Timestamp of when the command was executed.",
-          "format": "date-time"
+          "description": "Reference to the VoiceCommand that triggered this execution. (Relationship: VoiceCommand 1:N CommandExecution)"
         },
         "command": {
           "type": "string",
-          "description": "The actual command that was executed."
+          "description": "The actual command executed in Termux."
         },
-        "exitCode": {
-          "type": "number",
-          "description": "The exit code of the command execution."
+        "executionStatus": {
+          "type": "string",
+          "description": "Status of the command execution (e.g., 'success', 'failure')."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Timestamp indicating when the command execution started.",
+          "format": "date-time"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Timestamp indicating when the command execution ended.",
+          "format": "date-time"
         },
         "output": {
           "type": "string",
-          "description": "The output of the command execution."
-        },
-        "isSuccessful": {
-          "type": "boolean",
-          "description": "Indicates whether the command execution was successful."
+          "description": "The output (stdout and stderr) of the command execution."
         }
       },
       "required": [
         "id",
         "voiceCommandId",
-        "executionTimestamp",
         "command",
-        "exitCode",
-        "output",
-        "isSuccessful"
+        "executionStatus",
+        "startTime",
+        "endTime",
+        "output"
       ]
     },
     "Installation": {
@@ -99,28 +95,29 @@
         },
         "voiceCommandId": {
           "type": "string",
-          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N Installation)"
+          "description": "Reference to the VoiceCommand that triggered this installation. (Relationship: VoiceCommand 1:N Installation)"
         },
-        "installationTimestamp": {
+        "name": {
           "type": "string",
-          "description": "Timestamp of when the installation was initiated.",
+          "description": "Name of the application, repo, or update being installed."
+        },
+        "installationType": {
+          "type": "string",
+          "description": "Type of installation (e.g., 'app', 'repo', 'update')."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the installation (e.g., 'pending', 'inProgress', 'success', 'failure')."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Timestamp indicating when the installation started.",
           "format": "date-time"
         },
-        "packageName": {
+        "endTime": {
           "type": "string",
-          "description": "The name of the package being installed."
-        },
-        "version": {
-          "type": "string",
-          "description": "The version of the package being installed."
-        },
-        "source": {
-          "type": "string",
-          "description": "The source of the package (e.g., apt, git)."
-        },
-        "isSuccessful": {
-          "type": "boolean",
-          "description": "Indicates whether the installation was successful."
+          "description": "Timestamp indicating when the installation ended.",
+          "format": "date-time"
         },
         "log": {
           "type": "string",
@@ -130,10 +127,11 @@
       "required": [
         "id",
         "voiceCommandId",
-        "installationTimestamp",
-        "packageName",
-        "source",
-        "isSuccessful",
+        "name",
+        "installationType",
+        "status",
+        "startTime",
+        "endTime",
         "log"
       ]
     },
@@ -141,7 +139,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "CodeModification",
       "type": "object",
-      "description": "Represents a code modification performed by the tool.",
+      "description": "Represents a code modification suggested and applied by the tool.",
       "properties": {
         "id": {
           "type": "string",
@@ -149,16 +147,11 @@
         },
         "voiceCommandId": {
           "type": "string",
-          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N CodeModification)"
-        },
-        "modificationTimestamp": {
-          "type": "string",
-          "description": "Timestamp of when the code modification was performed.",
-          "format": "date-time"
+          "description": "Reference to the VoiceCommand that triggered this modification. (Relationship: VoiceCommand 1:N CodeModification)"
         },
         "filePath": {
           "type": "string",
-          "description": "The path to the file that was modified."
+          "description": "Path to the file being modified."
         },
         "originalCode": {
           "type": "string",
@@ -166,74 +159,75 @@
         },
         "modifiedCode": {
           "type": "string",
-          "description": "The modified code."
+          "description": "The modified code after applying the suggestion."
         },
-        "description": {
+        "modificationSuggestion": {
           "type": "string",
-          "description": "A description of the code modification."
+          "description": "AI suggestion that was applied."
         },
-        "isSuccessful": {
-          "type": "boolean",
-          "description": "Indicates whether the code modification was successful."
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp indicating when the code modification was applied.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
         "voiceCommandId",
-        "modificationTimestamp",
         "filePath",
         "originalCode",
         "modifiedCode",
-        "description",
-        "isSuccessful"
+        "modificationSuggestion",
+        "timestamp"
       ]
     },
-    "GithubIntegration": {
+    "GitHubRepo": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "GithubIntegration",
+      "title": "GitHubRepo",
       "type": "object",
-      "description": "Represents an action performed involving Github, such as pulling and installing scripts.",
+      "description": "Represents a GitHub repository used for pulling scripts/programs.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the Github Integration action."
+          "description": "Unique identifier for the GitHub repository."
         },
         "voiceCommandId": {
           "type": "string",
-          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N GithubIntegration)"
+          "description": "Reference to the VoiceCommand that requested this integration. (Relationship: VoiceCommand 1:N GitHubRepo)"
         },
-        "actionTimestamp": {
+        "repoUrl": {
           "type": "string",
-          "description": "Timestamp of when the GitHub action was performed.",
+          "description": "URL of the GitHub repository.",
+          "format": "uri"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch to be used."
+        },
+        "lastPulledCommit": {
+          "type": "string",
+          "description": "The last commit that was successfully pulled."
+        },
+        "lastPulledDate": {
+          "type": "string",
+          "description": "Timestamp indicating when the repo was last pulled.",
           "format": "date-time"
-        },
-        "repositoryUrl": {
-          "type": "string",
-          "description": "The URL of the GitHub repository."
-        },
-        "commitHash": {
-          "type": "string",
-          "description": "The commit hash of the code that was pulled."
-        },
-        "isSuccessful": {
-          "type": "boolean",
-          "description": "Indicates whether the GitHub action was successful."
         }
       },
       "required": [
         "id",
         "voiceCommandId",
-        "actionTimestamp",
-        "repositoryUrl",
-        "commitHash",
-        "isSuccessful"
+        "repoUrl",
+        "branch",
+        "lastPulledCommit",
+        "lastPulledDate"
       ]
     },
     "User": {
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "User",
       "type": "object",
-      "description": "Represents a user of the application.",
+      "description": "Represents a user of the TermAI application.",
       "properties": {
         "id": {
           "type": "string",
@@ -241,16 +235,16 @@
         },
         "username": {
           "type": "string",
-          "description": "The user's username."
+          "description": "The username of the user."
         },
         "email": {
           "type": "string",
-          "description": "The user's email address.",
+          "description": "The email address of the user.",
           "format": "email"
         },
-        "creationDate": {
+        "registrationDate": {
           "type": "string",
-          "description": "Date the user was created.",
+          "description": "Timestamp indicating when the user registered.",
           "format": "date-time"
         }
       },
@@ -258,31 +252,120 @@
         "id",
         "username",
         "email",
-        "creationDate"
+        "registrationDate"
       ]
     },
-    "AIGuidance": {
+    "RootAccessRequest": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AIGuidance",
+      "title": "RootAccessRequest",
       "type": "object",
-      "description": "Represents a guidance or suggestion provided by the AI to the user.",
+      "description": "Represents a request for root access by the AI.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the AI guidance."
+          "description": "Unique identifier for the root access request."
         },
         "voiceCommandId": {
           "type": "string",
-          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N AIGuidance)"
+          "description": "Reference to the VoiceCommand that triggered this request. (Relationship: VoiceCommand 1:N RootAccessRequest)"
+        },
+        "requestedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the root access was requested.",
+          "format": "date-time"
+        },
+        "granted": {
+          "type": "boolean",
+          "description": "Indicates whether root access was granted."
+        },
+        "grantedAt": {
+          "type": "string",
+          "description": "Timestamp indicating when root access was granted (if applicable).",
+          "format": "date-time"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason for requesting root access."
+        }
+      },
+      "required": [
+        "id",
+        "voiceCommandId",
+        "requestedAt",
+        "granted",
+        "reason"
+      ]
+    },
+    "AIResponse": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AIResponse",
+      "type": "object",
+      "description": "Represents an AI generated response or suggestion.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AI response."
+        },
+        "voiceCommandId": {
+          "type": "string",
+          "description": "Reference to the VoiceCommand for this Response. (Relationship: VoiceCommand 1:N AIResponse)"
+        },
+        "responseText": {
+          "type": "string",
+          "description": "The text of the AI response."
+        },
+        "responseType": {
+          "type": "string",
+          "description": "Type of AI response (e.g., 'suggestion', 'guidance', 'error')."
         },
         "timestamp": {
           "type": "string",
-          "description": "Timestamp of when the AI guidance was provided.",
+          "description": "Timestamp indicating when the AI response was generated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "voiceCommandId",
+        "responseText",
+        "responseType",
+        "timestamp"
+      ]
+    },
+    "ErrorLog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ErrorLog",
+      "type": "object",
+      "description": "Represents an error log entry.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the error log entry."
+        },
+        "voiceCommandId": {
+          "type": "string",
+          "description": "Reference to the VoiceCommand for this Error. (Relationship: VoiceCommand 1:N ErrorLog)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp indicating when the error occurred.",
           "format": "date-time"
         },
         "message": {
           "type": "string",
-          "description": "The message provided by the AI."
+          "description": "Error message."
+        },
+        "stackTrace": {
+          "type": "string",
+          "description": "Error stack trace."
+        },
+        "sourceFile": {
+          "type": "string",
+          "description": "Source file where the error occurred."
+        },
+        "lineNumber": {
+          "type": "number",
+          "description": "Line number in the source file where the error occurred."
         }
       },
       "required": [
@@ -295,7 +378,8 @@
   },
   "auth": {
     "providers": [
-      "google.com"
+      "password",
+      "anonymous"
     ]
   },
   "firestore": {
@@ -307,7 +391,7 @@
           "schema": {
             "$ref": "#/backend/entities/User"
           },
-          "description": "Stores user profile information. Each user has a unique document ID matching their Firebase Authentication UID.",
+          "description": "Stores user profiles. Uses path-based ownership to ensure only the user can access their profile data.",
           "params": [
             {
               "name": "userId",
@@ -323,7 +407,7 @@
           "schema": {
             "$ref": "#/backend/entities/VoiceCommand"
           },
-          "description": "Stores voice commands associated with a user. Includes denormalized 'userId' field for authorization independence.",
+          "description": "Stores voice commands issued by users.  Nested under the user to ensure path-based ownership. Serves as a parent collection for all entities related to a specific command.",
           "params": [
             {
               "name": "userId",
@@ -343,7 +427,7 @@
           "schema": {
             "$ref": "#/backend/entities/CommandExecution"
           },
-          "description": "Stores command execution details for a specific voice command. Inherits authorization from the parent voice command.",
+          "description": "Stores command execution details for a given voice command. Nested under voice commands to establish a clear relationship.",
           "params": [
             {
               "name": "userId",
@@ -367,7 +451,7 @@
           "schema": {
             "$ref": "#/backend/entities/Installation"
           },
-          "description": "Stores installation details for a specific voice command. Inherits authorization from the parent voice command.",
+          "description": "Stores installation details for a given voice command. Nested under voice commands to establish a clear relationship.",
           "params": [
             {
               "name": "userId",
@@ -391,7 +475,7 @@
           "schema": {
             "$ref": "#/backend/entities/CodeModification"
           },
-          "description": "Stores code modification details for a specific voice command. Inherits authorization from the parent voice command.",
+          "description": "Stores code modification details for a given voice command. Nested under voice commands to establish a clear relationship.",
           "params": [
             {
               "name": "userId",
@@ -409,13 +493,13 @@
         }
       },
       {
-        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/githubIntegrations/{githubIntegrationId}",
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/gitHubRepos/{gitHubRepoId}",
         "definition": {
-          "entityName": "GithubIntegration",
+          "entityName": "GitHubRepo",
           "schema": {
-            "$ref": "#/backend/entities/GithubIntegration"
+            "$ref": "#/backend/entities/GitHubRepo"
           },
-          "description": "Stores GitHub integration details for a specific voice command. Inherits authorization from the parent voice command.",
+          "description": "Stores GitHub repository details for a given voice command. Nested under voice commands to establish a clear relationship.",
           "params": [
             {
               "name": "userId",
@@ -426,20 +510,20 @@
               "description": "The unique identifier of the voice command."
             },
             {
-              "name": "githubIntegrationId",
-              "description": "The unique identifier of the GitHub integration action."
+              "name": "gitHubRepoId",
+              "description": "The unique identifier of the GitHub repository."
             }
           ]
         }
       },
       {
-        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/aiGuidance/{aiGuidanceId}",
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/rootAccessRequests/{rootAccessRequestId}",
         "definition": {
-          "entityName": "AIGuidance",
+          "entityName": "RootAccessRequest",
           "schema": {
-            "$ref": "#/backend/entities/AIGuidance"
+            "$ref": "#/backend/entities/RootAccessRequest"
           },
-          "description": "Stores AI guidance messages for a specific voice command. Inherits authorization from the parent voice command.",
+          "description": "Stores root access request details for a given voice command. Nested under voice commands to establish a clear relationship.",
           "params": [
             {
               "name": "userId",
@@ -450,15 +534,61 @@
               "description": "The unique identifier of the voice command."
             },
             {
-              "name": "aiGuidanceId",
-              "description": "The unique identifier of the AI guidance."
+              "name": "rootAccessRequestId",
+              "description": "The unique identifier of the root access request."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/aiResponses/{aiResponseId}",
+        "definition": {
+          "entityName": "AIResponse",
+          "schema": {
+            "$ref": "#/backend/entities/AIResponse"
+          },
+          "description": "Stores AI responses related to a given voice command. Nested under voice commands to establish a clear relationship.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            },
+            {
+              "name": "aiResponseId",
+              "description": "The unique identifier of the AI response."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/errorLogs/{errorLogId}",
+        "definition": {
+          "entityName": "ErrorLog",
+          "schema": {
+            "$ref": "#/backend/entities/ErrorLog"
+          },
+          "description": "Stores error logs related to a given voice command. Nested under voice commands to establish a clear relationship.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            },
+            {
+              "name": "errorLogId",
+              "description": "The unique identifier of the error log."
             }
           ]
         }
       }
     ],
-    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and QAPs. User-owned data is stored under `/users/{userId}`. VoiceCommands and related entities (CommandExecution, Installation, CodeModification, GithubIntegration, AIGuidance) are stored as subcollections to the corresponding voice command, enabling efficient querying and organization. This also ensures that all data related to a user is grouped under their respective user document. Given that all data is directly tied to a user, there's no need for complex role-based access control, as access is determined by the user's ID.\\n\\nAuthorization Independence is achieved by denormalization. Specifically, the `userId` field is included in `VoiceCommand` documents. This ensures that access control rules can be applied to `voiceCommands` and subcollections without needing to perform `get()` operations on parent documents. This eliminates hierarchical authorization dependencies.\\n\\nThe structure supports QAPs by segregating data based on ownership. All data under `/users/{userId}` is owned by the user identified by `{userId}`, allowing for secure list operations based on the `request.auth.uid`. There are no collections mixing data with different access needs."
+    "reasoning": "The Firestore structure is designed to securely manage data for the TermAI application, focusing on voice commands and their related processes. It prioritizes authorization independence by denormalizing user IDs to avoid using `get()` calls in security rules. The structure facilitates secure `list` operations by segregating data based on ownership. The design implements path-based ownership where appropriate and membership maps where shared access is required.\n\nEach top-level entity related to a user is organized under the `/users/{userId}` collection, ensuring clear ownership and easy implementation of security rules. All subcollections under the `/users/{userId}` path inherit the user's ownership. This approach provides a simple and robust way to manage data associated with each user.\n\nFor entities directly related to voice commands, such as installations, AI responses, error logs, code modifications, command executions, GitHub repos, and root access requests, a nested structure under `/users/{userId}/voiceCommands/{voiceCommandId}` is utilized. This structure provides a clear hierarchy and improves data organization, making it easier to query and manage related data. This also makes the relationship between voice commands and sub-entities explicit, as shown in the schema, which allows for more intuitive debugging.\n\nThis structure supports the application's core features by providing a scalable and secure way to store and manage data. The explicit ownership and clear relationships between entities simplify the implementation of security rules, ensuring that only authorized users can access specific data. Also this explicit structure makes it easy to address edge-cases during implementation that may not be obvious at implementation time."
   }
 }
-    
-    

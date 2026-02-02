@@ -1,41 +1,29 @@
 /**
- * Core Philosophy: This ruleset enforces a strict user-ownership model. All data
- * is private and can only be accessed by the user who created it. There is no
+ * Core Philosophy: This ruleset enforces a strict user-ownership security model. All data is siloed within a
+ * user-specific data tree, ensuring that a user can only ever access their own information. There is no
  * public or shared data.
  *
- * Data Structure: The data is organized hierarchically under a top-level `users`
- * collection. Each user's data, including their profile, voice commands, and all
- * related execution logs, is nested under their unique user ID (`/users/{userId}`).
- * This structure provides a secure and query-efficient foundation.
+ * Data Structure: The entire data model is hierarchical, rooted at `/users/{userId}`. All other collections,
+ * such as `voiceCommands` and their related sub-collections (e.g., `commandExecutions`, `installations`), are
+ * nested under this user-specific path. This structure makes ownership explicit and rules simple.
  *
  * Key Security Decisions:
- * - User Isolation: Users can only read and write data within their own document
- *   tree (`/users/{request.auth.uid}`). Cross-user access is strictly forbidden.
- * - No User Enumeration: The ability to list documents in the top-level `/users`
- *   collection is disabled to prevent attackers from discovering user IDs.
- * - Default Deny: Access is denied by default. Rules only explicitly grant the
- *   minimum permissions necessary for the application to function for an
- *   authenticated owner.
- *
- * Denormalization for Authorization: To ensure fast and secure authorization,
- * critical ownership information is denormalized. For example, `VoiceCommand`
- * documents contain a `userId` field. On creation, this rule validates that the
- * `userId` in the document body matches the authenticated user, creating a secure
- * ownership link that is enforced as immutable on updates. This avoids costly
- * or impossible cross-document lookups in rules.
- *
- * Structural Segregation: The entire data model is segregated by user at the root
- * level (`/users/{userId}`). This is the most secure and performant pattern for
- * private, user-owned data, as it prevents any possibility of one user's list
- * query accidentally leaking another user's data.
+ * - User Isolation: A user's authentication UID (`request.auth.uid`) is used to grant access only to documents
+ *   within their corresponding path (`/users/{request.auth.uid}/...`).
+ * - No Public Listing: Listing the top-level `/users` collection is explicitly forbidden to prevent user enumeration.
+ * - Ownership by Path: Authorization for nested documents relies on the `{userId}` wildcard in the path, which is
+ *   the most performant and secure method for this data structure.
+ * - Relational Integrity: On creation, documents must contain the correct owner ID to link them to their parent
+ *   user document, and this link is immutable. For deeply nested documents, the existence of the parent document
+ *   is verified before creation is allowed.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
     // Helper Functions
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
     /**
      * isSignedIn
@@ -47,8 +35,7 @@ service cloud.firestore {
 
     /**
      * isOwner
-     * Checks if the authenticated user's UID matches the given userId. This is the
-     * primary function for enforcing data ownership.
+     * Validates that the requesting user's UID matches the document's owner ID from the path.
      */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
@@ -56,172 +43,192 @@ service cloud.firestore {
 
     /**
      * isExistingOwner
-     * A stricter version of isOwner used for update and delete operations. It
-     * ensures that the user is the owner AND that the document actually exists.
+     * A stricter version of isOwner used for update/delete operations.
+     * Ensures the document exists before attempting to modify it.
      */
     function isExistingOwner(userId) {
       return isOwner(userId) && resource != null;
     }
-
+    
     /**
-     * isCreatingOwnProfile
-     * Validates that a user is creating their own profile document and that the
-     * document's internal `id` field correctly matches their auth UID for
-     * relational integrity.
+     * isValidUserCreate
+     * Ensures the new user document contains its own ID for data consistency.
      */
-    function isCreatingOwnProfile(userId) {
-      return isOwner(userId) && request.resource.data.id == userId;
+    function isValidUserCreate(userId) {
+      return request.resource.data.id == userId;
     }
-
+    
     /**
-     * isUpdatingOwnProfile
-     * Enforces that the internal `id` field of a user profile document cannot be
-     * changed after it has been created.
+     * isImmutableUserId
+     * Ensures the user ID within a user document cannot be changed after creation.
      */
-    function isUpdatingOwnProfile() {
+    function isImmutableUserId() {
       return request.resource.data.id == resource.data.id;
     }
-
+    
     /**
-     * isCreatingOwnVoiceCommand
-     * Validates that the `userId` field inside a new VoiceCommand document
-     * correctly matches the creator's auth UID.
+     * isValidVoiceCommandCreate
+     * Ensures a new voice command document is correctly linked to its owner via an internal 'userId' field.
      */
-    function isCreatingOwnVoiceCommand(userId) {
-      return isOwner(userId) && request.resource.data.userId == userId;
+    function isValidVoiceCommandCreate(userId) {
+      return request.resource.data.userId == userId;
     }
-
+    
     /**
-     * isUpdatingOwnVoiceCommand
-     * Enforces that the `userId` field of a VoiceCommand document is immutable.
+     * isImmutableVoiceCommandUserId
+     * Ensures the ownership link ('userId' field) on a voice command cannot be changed after creation.
      */
-    function isUpdatingOwnVoiceCommand() {
+    function isImmutableVoiceCommandUserId() {
       return request.resource.data.userId == resource.data.userId;
     }
-
+    
     /**
-     * canWriteSubdocument
-     * A comprehensive check for creating or updating a subdocument of a voice command.
-     * It verifies ownership, ensures the parent document exists, and validates/enforces
-     * the relational link (`voiceCommandId`).
+     * parentVoiceCommandExists
+     * Verifies that the parent voiceCommand document exists before allowing a child document to be created.
+     * This maintains relational integrity in the nested structure.
      */
-    function canWriteSubdocument(userId, voiceCommandId) {
-      let isParentExists = exists(/databases/$(database)/documents/users/$(userId)/voiceCommands/$(voiceCommandId));
-      // On create, validate the link to parent and parent existence.
-      return isOwner(userId) && isParentExists && request.resource.data.voiceCommandId == voiceCommandId
-           || (isExistingOwner(userId) && request.resource.data.voiceCommandId == resource.data.voiceCommandId);
+    function parentVoiceCommandExists(userId, voiceCommandId) {
+      return exists(/databases/$(database)/documents/users/$(userId)/voiceCommands/$(voiceCommandId));
     }
 
 
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
     // Collection Rules
-    // ------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
     /**
-     * @description Manages user profile data.
+     * @description Manages user profile documents.
      * @path /users/{userId}
-     * @allow (create) A new user `auth.uid: 'user123'` can create their own profile at `/users/user123`.
-     * @deny (list) An authenticated user cannot list all documents in the `/users` collection.
-     * @deny (update) User `user123` cannot update the profile of `user456`.
-     * @principle Restricts access to a user's own data tree and prevents user enumeration.
+     * @allow (create) A new user can create their own profile document if their auth UID matches the document ID.
+     * @deny (get) An authenticated user cannot read another user's profile.
+     * @principle Restricts access to a user's own data tree and enforces self-creation of the root document.
      */
     match /users/{userId} {
       allow get: if isOwner(userId);
-      allow list: if false;
-      allow create: if isCreatingOwnProfile(userId);
-      allow update: if isExistingOwner(userId) && isUpdatingOwnProfile();
+      allow list: if false; // Disallow listing all users to prevent enumeration attacks.
+      allow create: if isOwner(userId) && isValidUserCreate(userId);
+      allow update: if isExistingOwner(userId) && isImmutableUserId();
       allow delete: if isExistingOwner(userId);
 
-          /**
-           * @description Manages user-specific voice commands.
-           * @path /users/{userId}/voiceCommands/{voiceCommandId}
-           * @allow (create) User `user123` can create a new voice command in their own subcollection.
-           * @allow (list) User `user123` can list all voice commands in their own subcollection.
-           * @deny (get) User `user123` cannot get a voice command belonging to `user456`.
-           * @principle Enforces document ownership for writes and validates relational integrity.
-           */
-          match /voiceCommands/{voiceCommandId} {
-            allow get: if isOwner(userId);
-            allow list: if isOwner(userId);
-            allow create: if isCreatingOwnVoiceCommand(userId);
-            allow update: if isExistingOwner(userId) && isUpdatingOwnVoiceCommand();
-            allow delete: if isExistingOwner(userId);
+      /**
+       * @description Stores voice commands initiated by a user.
+       * @path /users/{userId}/voiceCommands/{voiceCommandId}
+       * @allow (create) An authenticated user can create a voice command document under their own profile.
+       * @deny (list) An authenticated user cannot list voice commands belonging to another user.
+       * @principle Enforces strict ownership. All actions on a voice command are restricted to the owner.
+       */
+      match /voiceCommands/{voiceCommandId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidVoiceCommandCreate(userId);
+        allow update: if isExistingOwner(userId) && isImmutableVoiceCommandUserId();
+        allow delete: if isExistingOwner(userId);
 
-                /**
-                 * @description Manages command execution logs related to a specific voice command.
-                 * @path /users/{userId}/voiceCommands/{voiceCommandId}/commandExecutions/{commandExecutionId}
-                 * @allow (create) The owner `user123` can create a command execution log under their own voice command.
-                 * @deny (create) An owner `user123` cannot create a log under a non-existent voice command.
-                 * @principle Inherits ownership from the path and ensures the parent document exists.
-                 */
-                match /commandExecutions/{commandExecutionId} {
-                  allow get: if isOwner(userId);
-                  allow list: if isOwner(userId);
-                  allow create: if canWriteSubdocument(userId, voiceCommandId);
-                  allow update: if canWriteSubdocument(userId, voiceCommandId);
-                  allow delete: if isExistingOwner(userId);
-                }
+        /**
+         * @description Stores command execution details related to a voice command.
+         * @path /users/{userId}/voiceCommands/{voiceCommandId}/commandExecutions/{commandExecutionId}
+         * @allow (get, list, create, update, delete) The user who owns the parent voice command.
+         * @deny (any) Any user who does not own the parent voice command.
+         * @principle Inherits ownership from the parent user path.
+         */
+        match /commandExecutions/{commandExecutionId} {
+          allow get: if isOwner(userId);
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId) && parentVoiceCommandExists(userId, voiceCommandId);
+          allow update: if isExistingOwner(userId);
+          allow delete: if isExistingOwner(userId);
+        }
 
-                /**
-                 * @description Manages installation logs related to a specific voice command.
-                 * @path /users/{userId}/voiceCommands/{voiceCommandId}/installations/{installationId}
-                 * @allow (list) The owner `user123` can list all installation logs for their own voice command.
-                 * @deny (update) User `user123` cannot update an installation log for a voice command owned by `user456`.
-                 * @principle Inherits ownership from the path and ensures the parent document exists.
-                 */
-                match /installations/{installationId} {
-                  allow get: if isOwner(userId);
-                  allow list: if isOwner(userId);
-                  allow create: if canWriteSubdocument(userId, voiceCommandId);
-                  allow update: if canWriteSubdocument(userId, voiceCommandId);
-                  allow delete: if isExistingOwner(userId);
-                }
+        /**
+         * @description Stores installation details related to a voice command.
+         * @path /users/{userId}/voiceCommands/{voiceCommandId}/installations/{installationId}
+         * @allow (get, list, create, update, delete) The user who owns the parent voice command.
+         * @deny (any) Any user who does not own the parent voice command.
+         * @principle Inherits ownership from the parent user path.
+         */
+        match /installations/{installationId} {
+          allow get: if isOwner(userId);
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId) && parentVoiceCommandExists(userId, voiceCommandId);
+          allow update: if isExistingOwner(userId);
+          allow delete: if isExistingOwner(userId);
+        }
 
-                /**
-                 * @description Manages code modification logs related to a specific voice command.
-                 * @path /users/{userId}/voiceCommands/{voiceCommandId}/codeModifications/{codeModificationId}
-                 * @allow (get) The owner `user123` can read a code modification log for their own voice command.
-                 * @deny (delete) User `user123` cannot delete a log that doesn't exist.
-                 * @principle Inherits ownership from the path and ensures the parent document exists.
-                 */
-                match /codeModifications/{codeModificationId} {
-                  allow get: if isOwner(userId);
-                  allow list: if isOwner(userId);
-                  allow create: if canWriteSubdocument(userId, voiceCommandId);
-                  allow update: if canWriteSubdocument(userId, voiceCommandId);
-                  allow delete: if isExistingOwner(userId);
-                }
+        /**
+         * @description Stores code modification details related to a voice command.
+         * @path /users/{userId}/voiceCommands/{voiceCommandId}/codeModifications/{codeModificationId}
+         * @allow (get, list, create, update, delete) The user who owns the parent voice command.
+         * @deny (any) Any user who does not own the parent voice command.
+         * @principle Inherits ownership from the parent user path.
+         */
+        match /codeModifications/{codeModificationId} {
+          allow get: if isOwner(userId);
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId) && parentVoiceCommandExists(userId, voiceCommandId);
+          allow update: if isExistingOwner(userId);
+          allow delete: if isExistingOwner(userId);
+        }
 
-                /**
-                 * @description Manages GitHub action logs related to a specific voice command.
-                 * @path /users/{userId}/voiceCommands/{voiceCommandId}/githubIntegrations/{githubIntegrationId}
-                 * @allow (create) The owner `user123` can create a GitHub integration log under their own voice command.
-                 * @deny (create) User `user123` cannot create a log with a `voiceCommandId` in the body that mismatches the path.
-                 * @principle Inherits ownership from the path and ensures the parent document exists.
-                 */
-                match /githubIntegrations/{githubIntegrationId} {
-                  allow get: if isOwner(userId);
-                  allow list: if isOwner(userId);
-                  allow create: if canWriteSubdocument(userId, voiceCommandId);
-                  allow update: if canWriteSubdocument(userId, voiceCommandId);
-                  allow delete: if isExistingOwner(userId);
-                }
+        /**
+         * @description Stores GitHub repository details related to a voice command.
+         * @path /users/{userId}/voiceCommands/{voiceCommandId}/gitHubRepos/{gitHubRepoId}
+         * @allow (get, list, create, update, delete) The user who owns the parent voice command.
+         * @deny (any) Any user who does not own the parent voice command.
+         * @principle Inherits ownership from the parent user path.
+         */
+        match /gitHubRepos/{gitHubRepoId} {
+          allow get: if isOwner(userId);
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId) && parentVoiceCommandExists(userId, voiceCommandId);
+          allow update: if isExistingOwner(userId);
+          allow delete: if isExistingOwner(userId);
+        }
 
-                /**
-                 * @description Manages AI guidance messages related to a specific voice command.
-                 * @path /users/{userId}/voiceCommands/{voiceCommandId}/aiGuidance/{aiGuidanceId}
-                 * @allow (update) The owner `user123` can update an AI guidance message for their own voice command.
-                 * @deny (update) The owner `user123` cannot change the `voiceCommandId` of an existing message.
-                 * @principle Inherits ownership from the path and ensures the parent document exists.
-                 */
-                match /aiGuidance/{aiGuidanceId} {
-                  allow get: if isOwner(userId);
-                  allow list: if isOwner(userId);
-                  allow create: if canWriteSubdocument(userId, voiceCommandId);
-                  allow update: if canWriteSubdocument(userId, voiceCommandId);
-                  allow delete: if isExistingOwner(userId);
-                }
-          }
+        /**
+         * @description Stores root access requests related to a voice command.
+         * @path /users/{userId}/voiceCommands/{voiceCommandId}/rootAccessRequests/{rootAccessRequestId}
+         * @allow (get, list, create, update, delete) The user who owns the parent voice command.
+         * @deny (any) Any user who does not own the parent voice command.
+         * @principle Inherits ownership from the parent user path.
+         */
+        match /rootAccessRequests/{rootAccessRequestId} {
+          allow get: if isOwner(userId);
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId) && parentVoiceCommandExists(userId, voiceCommandId);
+          allow update: if isExistingOwner(userId);
+          allow delete: if isExistingOwner(userId);
+        }
+
+        /**
+         * @description Stores AI responses related to a voice command.
+         * @path /users/{userId}/voiceCommands/{voiceCommandId}/aiResponses/{aiResponseId}
+         * @allow (get, list, create, update, delete) The user who owns the parent voice command.
+         * @deny (any) Any user who does not own the parent voice command.
+         * @principle Inherits ownership from the parent user path.
+         */
+        match /aiResponses/{aiResponseId} {
+          allow get: if isOwner(userId);
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId) && parentVoiceCommandExists(userId, voiceCommandId);
+          allow update: if isExistingOwner(userId);
+          allow delete: if isExistingOwner(userId);
+        }
+
+        /**
+         * @description Stores error logs related to a voice command.
+         * @path /users/{userId}/voiceCommands/{voiceCommandId}/errorLogs/{errorLogId}
+         * @allow (get, list, create, update, delete) The user who owns the parent voice command.
+         * @deny (any) Any user who does not own the parent voice command.
+         * @principle Inherits ownership from the parent user path.
+         */
+        match /errorLogs/{errorLogId} {
+          allow get: if isOwner(userId);
+          allow list: if isOwner(userId);
+          allow create: if isOwner(userId) && parentVoiceCommandExists(userId, voiceCommandId);
+          allow update: if isExistingOwner(userId);
+          allow delete: if isExistingOwner(userId);
+        }
+      }
     }
   }
 }
