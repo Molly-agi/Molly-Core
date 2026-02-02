@@ -16,16 +16,37 @@ import {
 } from '@/firebase/firestore/memory';
 import { BrainCircuit } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
+import { type VoiceCommandResult } from './VoiceControl';
 
 type HistoryItem = string | AutonomousSolutionOutput;
 
-export default function Terminal() {
+export default function Terminal({
+  voiceResult,
+  onVoiceCommandProcessed,
+}: {
+  voiceResult: VoiceCommandResult | null;
+  onVoiceCommandProcessed: () => void;
+}) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [command, setCommand] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
   const firestore = useFirestore();
+
+  useEffect(() => {
+    if (voiceResult && !isLoading) {
+      const { prompt, command } = voiceResult;
+
+      setHistory((prev) => [...prev, `> ${prompt}`, command]);
+
+      if (user && firestore && !command.startsWith('Error:')) {
+        saveLearnedCommand(firestore, user.uid, prompt, command);
+      }
+
+      onVoiceCommandProcessed();
+    }
+  }, [voiceResult, onVoiceCommandProcessed, isLoading, user, firestore]);
 
   const handleCommand = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +64,12 @@ export default function Terminal() {
         setHistory((prev) => [...prev, aiResponse]);
 
         if (user && firestore && aiResponse.finalCommand) {
-          saveLearnedCommand(firestore, user.uid, prompt, aiResponse.finalCommand);
+          saveLearnedCommand(
+            firestore,
+            user.uid,
+            prompt,
+            aiResponse.finalCommand
+          );
         }
       } else if (currentCommand === '/healthcheck') {
         const aiResponse = await getHealthCheck('ping');
@@ -65,7 +91,12 @@ export default function Terminal() {
         const aiResponse = await getTextToTermuxCommand(currentCommand);
         setHistory((prev) => [...prev, aiResponse]);
 
-        if (user && firestore && aiResponse && !aiResponse.startsWith('Error:')) {
+        if (
+          user &&
+          firestore &&
+          aiResponse &&
+          !aiResponse.startsWith('Error:')
+        ) {
           saveLearnedCommand(firestore, user.uid, currentCommand, aiResponse);
         }
       }
@@ -97,7 +128,8 @@ export default function Terminal() {
           <span className="text-accent font-semibold">/solve [your goal]</span>{' '}
           to use the autonomous agent team.
           <br />
-          Type <span className="text-accent font-semibold">/healthcheck</span> to test system connectivity.
+          Type <span className="text-accent font-semibold">/healthcheck</span> to
+          test system connectivity.
         </div>
         {history.map((line, index) => {
           if (typeof line !== 'string') {
@@ -119,7 +151,7 @@ export default function Terminal() {
               </div>
             );
           }
-          
+
           if (isHealthCheck) {
             return (
               <div
@@ -131,12 +163,10 @@ export default function Terminal() {
             );
           }
 
-
           return (
             <div key={index} className={isUser ? 'text-primary' : ''}>
               {line}
             </div>
-
           );
         })}
         {isLoading && <div className="animate-pulse">AI is thinking...</div>}

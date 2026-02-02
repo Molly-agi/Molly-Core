@@ -22,11 +22,15 @@ export async function getVoiceCommand(audioData: string) {
 
   // If transcription is empty or failed, return an error.
   if (!transcribedText || !transcribedText.trim()) {
-    return "Error: I couldn't understand the audio.";
+    return {
+      prompt: '',
+      command: "Error: I couldn't understand the audio.",
+    };
   }
 
   // Then, take the transcribed text and convert it to a Termux command.
-  return await textToTermuxCommand(transcribedText);
+  const command = await textToTermuxCommand(transcribedText);
+  return { prompt: transcribedText, command };
 }
 
 export async function getConversationalChat(text: string, history: any[]) {
@@ -49,6 +53,6 @@ export async function getCreativeSolution(prompt: string) {
   return await creativeSolution(prompt);
 }
 
-export async function getAutonomousSolution(prompt: string) {
+export async function getAutonomousSolution(prompt:string): Promise<AutonomousSolutionOutput> {
   return await autonomousSolution(prompt);
 }
