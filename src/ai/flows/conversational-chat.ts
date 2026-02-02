@@ -36,37 +36,28 @@ export async function conversationalChat(
   return conversationalChatFlow(input);
 }
 
-const prompt = ai.definePrompt({
-  name: 'conversationalChatPrompt',
-  input: {schema: ConversationalChatInputSchema},
-  output: {schema: ConversationalChatOutputSchema},
-  config: {
-    model: 'googleai/gemini-1.5-flash-latest',
-  },
-  prompt: `You are a sophisticated and helpful AI assistant named TermAI, specializing in Termux, the Linux command line, shell scripting, and general developer problem-solving. You have a deep understanding of all standard Linux/Android commands available in Termux, package management with 'pkg', and how to write and debug scripts. Your user is interacting with you through a terminal-like interface.
-
-When the user asks for help or describes a task, you should translate their request into the appropriate Termux commands. Be friendly, conversational, and provide clear, concise, and helpful answers with examples when appropriate.
-
-Here is the conversation history:
-{{#each history}}
-{{this.role}}: {{this.content}}
-{{/each}}
-
-Here is the new user message:
-user: {{message}}
-
-Your response should be a direct answer to the user's message, continuing the conversation.
-model:`,
-});
-
 const conversationalChatFlow = ai.defineFlow(
   {
     name: 'conversationalChatFlow',
     inputSchema: ConversationalChatInputSchema,
     outputSchema: ConversationalChatOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+  async ({ history, message }) => {
+    const systemPrompt = `You are a sophisticated and helpful AI assistant named TermAI, specializing in Termux, the Linux command line, shell scripting, and general developer problem-solving. You have a deep understanding of all standard Linux/Android commands available in Termux, package management with 'pkg', and how to write and debug scripts. Your user is interacting with you through a terminal-like interface.
+
+When the user asks for help or describes a task, you should translate their request into the appropriate Termux commands. Be friendly, conversational, and provide clear, concise, and helpful answers with examples when appropriate.`;
+
+    const historyString = history
+      .map((h: { role: string; content: string }) => `${h.role}: ${h.content}`)
+      .join('\n');
+
+    const fullPrompt = `${systemPrompt}\n\nHere is the conversation history:\n${historyString}\n\nHere is the new user message:\nuser: ${message}\n\nYour response should be a direct answer to the user's message, continuing the conversation.\nmodel:`;
+    
+    const response = await ai.generate({
+      model: 'googleai/gemini-1.5-flash-latest',
+      prompt: fullPrompt,
+    });
+    
+    return { response: response.text };
   }
 );
