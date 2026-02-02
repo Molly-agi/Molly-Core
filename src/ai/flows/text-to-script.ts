@@ -13,7 +13,7 @@ const TextToScriptOutputSchema = z.object({
 });
 export type TextToScriptOutput = z.infer<typeof TextToScriptOutputSchema>;
 
-export const textToScript = ai.defineFlow(
+const textToScriptFlow = ai.defineFlow(
   {
     name: 'textToScript',
     inputSchema: z.string().describe('A goal to be achieved with a script.'),
@@ -42,3 +42,7 @@ Your JSON Response:`,
     return llmResponse.output!;
   }
 );
+
+export async function textToScript(prompt: string): Promise<TextToScriptOutput> {
+  return await textToScriptFlow(prompt);
+}
