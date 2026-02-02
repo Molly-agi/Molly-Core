@@ -49,7 +49,6 @@ const conversationalChatFlow = ai.defineFlow(
 When the user asks for help or describes a task, you should translate their request into the appropriate Termux commands. Be friendly, conversational, and provide clear, concise, and helpful answers with examples when appropriate.`;
 
     const response = await ai.generate({
-      model: 'googleai/gemini-1.5-flash-latest',
       system: systemPrompt,
       history: [...history, {role: 'user', content: message}],
     });

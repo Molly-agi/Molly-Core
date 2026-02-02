@@ -20,7 +20,6 @@ const healthCheckFlow = ai.defineFlow(
   },
   async (message) => {
     const response = await ai.generate({
-      model: 'googleai/gemini-1.5-flash-latest',
       prompt: message,
     });
     return response.text;

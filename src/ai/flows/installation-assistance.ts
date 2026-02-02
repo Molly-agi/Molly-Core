@@ -56,9 +56,6 @@ const installationAssistancePrompt = ai.definePrompt({
   name: 'installationAssistancePrompt',
   input: {schema: InstallationAssistanceInputSchema},
   output: {schema: InstallationAssistanceOutputSchema},
-  config: {
-    model: 'googleai/gemini-1.5-flash-latest',
-  },
   prompt: `You are an AI assistant helping users fix software installation problems in Termux. The user attempted to run an installation command and received an error. Your task is to diagnose the problem and provide the exact command needed to fix it.
 
 The user's command was: {{command}}

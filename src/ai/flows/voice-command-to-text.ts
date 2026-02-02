@@ -40,7 +40,6 @@ const voiceCommandToTextFlow = ai.defineFlow(
   },
   async ({ voiceDataUri }) => {
     const response = await ai.generate({
-        model: 'googleai/gemini-1.5-flash-latest',
         prompt: [
             { text: `You are an expert at translating natural language into Termux shell commands.
 Listen to the audio and provide ONLY the executable command. Do not add any explanation or formatting.
