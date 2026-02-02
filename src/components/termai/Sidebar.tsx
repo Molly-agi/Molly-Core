@@ -50,33 +50,6 @@ export function TermAISidebar() {
                 <AIGuidance />
             </AccordionContent>
           </AccordionItem>
-          
-          <AccordionItem value="other" className="border-none">
-            <AccordionTrigger className="w-full hover:no-underline [&[data-state=open]>svg]:hidden p-0">
-                <SidebarMenuButton tooltip="More Features" asChild>
-                  <div>
-                    <Settings />
-                    <span>More</span>
-                  </div>
-                </SidebarMenuButton>
-            </AccordionTrigger>
-            <AccordionContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Terminal" variant='ghost'>
-                    <Terminal />
-                    <span>Terminal</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="GitHub" variant='ghost'>
-                    <Github />
-                    <span>GitHub</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </AccordionContent>
-          </AccordionItem>
         </Accordion>
       </SidebarContent>
     </Sidebar>

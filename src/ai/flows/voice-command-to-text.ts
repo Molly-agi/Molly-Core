@@ -35,6 +35,9 @@ export async function voiceCommandToText(input: VoiceCommandToTextInput): Promis
 const voiceCommandToTextPrompt = ai.definePrompt({
   name: 'voiceCommandToTextPrompt',
   input: {schema: VoiceCommandToTextInputSchema},
+  config: {
+    model: 'googleai/gemini-1.5-flash-latest',
+  },
   // No output schema means we get raw text back.
   prompt: `You are an expert at translating natural language into Termux shell commands.
 Listen to the audio and provide ONLY the executable command. Do not add any explanation or formatting.
