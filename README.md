@@ -4,6 +4,27 @@ This is a NextJS starter in Firebase Studio.
 
 To get started, take a look at src/app/page.tsx.
 
+### Google AI Integration (MANDATORY)
+
+To allow Molly to think and respond, you must provide a Google AI API key. This is the final and most important key needed to make the application work.
+
+1.  **Generate an API Key**: Go to the [Google AI Studio](https://aistudio.google.com/app/apikey) to generate a new API key.
+2.  **Set Environment Variable**: Copy the generated key and add it to the `.env` file in the root of this project:
+    ```
+    GEMINI_API_KEY="your_google_ai_key_here"
+    ```
+
+### GitHub Integration
+
+To allow the AI to search for open-source tools and programs, you must provide a GitHub Personal Access Token.
+
+1.  **Generate a Token**: Go to your [GitHub Developer Settings](https://github.com/settings/tokens) to generate a new personal access token.
+    *   You do not need to grant any scopes/permissions to the token for it to read public repository data.
+2.  **Set Environment Variable**: Copy the generated token and add it to the `.env` file in the root of this project:
+    ```
+    GITHUB_TOKEN="your_github_token_here"
+    ```
+
 ### Future Native Integration (`.apk`)
 
 This web application has been designed to serve as the intelligent frontend and backend for a future native Android application (`.apk`). The native application will act as a "bridge," allowing this web interface to interface directly with the Termux environment on an Android device.
@@ -45,14 +66,3 @@ The native `.apk` will be responsible for:
 4.  **Executing Commands**: Taking the command string received from the API and executing it within the Android device's Termux environment. This is the key function that bridges the security sandbox.
 
 By following this guide, a developer or another AI can create the native Android component that will seamlessly connect with this web application, completing the vision for a fully integrated Molly.
-
-### GitHub Integration
-
-To allow the AI to search for open-source tools and programs, you must provide a GitHub Personal Access Token.
-
-1.  **Generate a Token**: Go to your [GitHub Developer Settings](https://github.com/settings/tokens) to generate a new personal access token.
-    *   You do not need to grant any scopes/permissions to the token for it to read public repository data.
-2.  **Set Environment Variable**: Copy the generated token and add it to the `.env` file in the root of this project:
-    ```
-    GITHUB_TOKEN="your_github_token_here"
-    ```
