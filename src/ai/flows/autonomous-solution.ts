@@ -4,7 +4,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const AutonomousSolutionOutputSchema = z.object({
+const AutonomousSolutionOutputSchema = z.object({
   creativeSolution: z
     .string()
     .describe(
