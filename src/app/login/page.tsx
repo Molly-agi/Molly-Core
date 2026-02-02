@@ -1,12 +1,12 @@
 'use client';
 
 import { useAuth, useUser } from '@/firebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInAnonymously } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Chrome } from 'lucide-react';
+import { User as UserIcon } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LoginPage() {
@@ -22,12 +22,11 @@ export default function LoginPage() {
 
   const handleSignIn = async () => {
     if (!auth) return;
-    const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      await signInAnonymously(auth);
       router.push('/');
     } catch (error) {
-      console.error('Error signing in with Google', error);
+      console.error('Error signing in anonymously', error);
     }
   };
 
@@ -52,11 +51,11 @@ export default function LoginPage() {
         <CardContent>
           <div className="flex flex-col gap-4">
             <p className="text-center text-muted-foreground">
-              Sign in to begin your session.
+              Continue anonymously to begin your session.
             </p>
             <Button onClick={handleSignIn} className="w-full">
-              <Chrome className="mr-2" />
-              Sign in with Google
+              <UserIcon className="mr-2" />
+              Enter Anonymously
             </Button>
           </div>
         </CardContent>
