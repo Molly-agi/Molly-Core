@@ -121,7 +121,7 @@ export default function Terminal({
         className="p-4 bg-card rounded-lg h-[calc(100vh-150px)] overflow-y-auto"
       >
         <div className="mb-4">
-          Welcome to TermAI. Your AI-powered terminal assistant that learns over
+          Welcome to Molly. Your AI-powered terminal assistant that learns over
           time.
           <br />
           Type{' '}

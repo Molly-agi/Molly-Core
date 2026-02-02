@@ -44,7 +44,7 @@ The native `.apk` will be responsible for:
 3.  **API Communication**: Sending data to the web backend's API endpoints and receiving the results.
 4.  **Executing Commands**: Taking the command string received from the API and executing it within the Android device's Termux environment. This is the key function that bridges the security sandbox.
 
-By following this guide, a developer or another AI can create the native Android component that will seamlessly connect with this web application, completing the vision for a fully integrated TermAI.
+By following this guide, a developer or another AI can create the native Android component that will seamlessly connect with this web application, completing the vision for a fully integrated Molly.
 
 ### GitHub Integration
 

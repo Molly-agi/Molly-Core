@@ -5,8 +5,8 @@ import { Toaster } from '@/components/ui/toaster';
 import FirebaseClientProvider from '@/firebase/client-provider';
 
 export const metadata: Metadata = {
-  title: 'TermAI',
-  description: 'Your AI-powered terminal assistant.',
+  title: 'Molly',
+  description: 'Your AI assistant Molly.',
 };
 
 export default function RootLayout({
