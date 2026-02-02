@@ -13,7 +13,7 @@ export const voiceCommandToText = ai.defineFlow(
   },
   async (audioData) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: 'googleai/gemini-pro',
       prompt: [
         { text: 'Transcribe the following audio recording. The user is providing a voice command for a terminal assistant. Respond only with the transcribed text.' },
         { media: { url: audioData } },

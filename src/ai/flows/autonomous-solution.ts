@@ -62,7 +62,7 @@ export const autonomousSolution = ai.defineFlow(
     Final Secure Command:`;
 
     const synthesisResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: 'googleai/gemini-pro',
       prompt: synthesisPrompt,
       config: {
         temperature: 0.0, // Be very deterministic for this step.
