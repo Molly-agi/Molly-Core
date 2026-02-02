@@ -1,59 +1,463 @@
 {
   "entities": {
-    "UserProfile": {
-      "title": "User Profile",
-      "description": "Represents a user's public profile.",
+    "VoiceCommand": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "VoiceCommand",
       "type": "object",
+      "description": "Represents a voice command received from the user.",
       "properties": {
-        "displayName": {
+        "id": {
           "type": "string",
-          "description": "The user's display name."
+          "description": "Unique identifier for the voice command."
         },
-        "email": {
+        "timestamp": {
           "type": "string",
-          "format": "email",
-          "description": "The user's email address."
+          "description": "Timestamp of when the voice command was received.",
+          "format": "date-time"
+        },
+        "rawText": {
+          "type": "string",
+          "description": "The raw text transcribed from the voice command."
+        },
+        "interpretedText": {
+          "type": "string",
+          "description": "The interpreted text of the voice command after processing by the AI."
+        },
+        "commandType": {
+          "type": "string",
+          "description": "The type of command (e.g., INSTALL, EXECUTE, MODIFY)."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N VoiceCommand)"
         }
       },
-      "required": ["displayName", "email"]
+      "required": [
+        "id",
+        "timestamp",
+        "rawText",
+        "interpretedText",
+        "commandType",
+        "userId"
+      ]
     },
-    "LearnedCommand": {
-      "title": "Learned Command",
-      "description": "Represents a command the AI has successfully learned and saved.",
+    "CommandExecution": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CommandExecution",
       "type": "object",
+      "description": "Represents the execution of a command in Termux.",
       "properties": {
-        "prompt": {
+        "id": {
           "type": "string",
-          "description": "The original user prompt."
+          "description": "Unique identifier for the command execution."
+        },
+        "voiceCommandId": {
+          "type": "string",
+          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N CommandExecution)"
+        },
+        "executionTimestamp": {
+          "type": "string",
+          "description": "Timestamp of when the command was executed.",
+          "format": "date-time"
         },
         "command": {
           "type": "string",
-          "description": "The successful command that was generated."
+          "description": "The actual command that was executed."
         },
-        "createdAt": {
+        "exitCode": {
+          "type": "number",
+          "description": "The exit code of the command execution."
+        },
+        "output": {
           "type": "string",
-          "format": "date-time",
-          "description": "When the command was learned."
+          "description": "The output of the command execution."
+        },
+        "isSuccessful": {
+          "type": "boolean",
+          "description": "Indicates whether the command execution was successful."
         }
       },
-      "required": ["prompt", "command", "createdAt"]
+      "required": [
+        "id",
+        "voiceCommandId",
+        "executionTimestamp",
+        "command",
+        "exitCode",
+        "output",
+        "isSuccessful"
+      ]
+    },
+    "Installation": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Installation",
+      "type": "object",
+      "description": "Represents an installation managed by the tool.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the installation."
+        },
+        "voiceCommandId": {
+          "type": "string",
+          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N Installation)"
+        },
+        "installationTimestamp": {
+          "type": "string",
+          "description": "Timestamp of when the installation was initiated.",
+          "format": "date-time"
+        },
+        "packageName": {
+          "type": "string",
+          "description": "The name of the package being installed."
+        },
+        "version": {
+          "type": "string",
+          "description": "The version of the package being installed."
+        },
+        "source": {
+          "type": "string",
+          "description": "The source of the package (e.g., apt, git)."
+        },
+        "isSuccessful": {
+          "type": "boolean",
+          "description": "Indicates whether the installation was successful."
+        },
+        "log": {
+          "type": "string",
+          "description": "Installation log."
+        }
+      },
+      "required": [
+        "id",
+        "voiceCommandId",
+        "installationTimestamp",
+        "packageName",
+        "source",
+        "isSuccessful",
+        "log"
+      ]
+    },
+    "CodeModification": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CodeModification",
+      "type": "object",
+      "description": "Represents a code modification performed by the tool.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the code modification."
+        },
+        "voiceCommandId": {
+          "type": "string",
+          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N CodeModification)"
+        },
+        "modificationTimestamp": {
+          "type": "string",
+          "description": "Timestamp of when the code modification was performed.",
+          "format": "date-time"
+        },
+        "filePath": {
+          "type": "string",
+          "description": "The path to the file that was modified."
+        },
+        "originalCode": {
+          "type": "string",
+          "description": "The original code before modification."
+        },
+        "modifiedCode": {
+          "type": "string",
+          "description": "The modified code."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the code modification."
+        },
+        "isSuccessful": {
+          "type": "boolean",
+          "description": "Indicates whether the code modification was successful."
+        }
+      },
+      "required": [
+        "id",
+        "voiceCommandId",
+        "modificationTimestamp",
+        "filePath",
+        "originalCode",
+        "modifiedCode",
+        "description",
+        "isSuccessful"
+      ]
+    },
+    "GithubIntegration": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "GithubIntegration",
+      "type": "object",
+      "description": "Represents an action performed involving Github, such as pulling and installing scripts.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Github Integration action."
+        },
+        "voiceCommandId": {
+          "type": "string",
+          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N GithubIntegration)"
+        },
+        "actionTimestamp": {
+          "type": "string",
+          "description": "Timestamp of when the GitHub action was performed.",
+          "format": "date-time"
+        },
+        "repositoryUrl": {
+          "type": "string",
+          "description": "The URL of the GitHub repository."
+        },
+        "commitHash": {
+          "type": "string",
+          "description": "The commit hash of the code that was pulled."
+        },
+        "isSuccessful": {
+          "type": "boolean",
+          "description": "Indicates whether the GitHub action was successful."
+        }
+      },
+      "required": [
+        "id",
+        "voiceCommandId",
+        "actionTimestamp",
+        "repositoryUrl",
+        "commitHash",
+        "isSuccessful"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user."
+        },
+        "username": {
+          "type": "string",
+          "description": "The user's username."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "creationDate": {
+          "type": "string",
+          "description": "Date the user was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "email",
+        "creationDate"
+      ]
+    },
+    "AIGuidance": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AIGuidance",
+      "type": "object",
+      "description": "Represents a guidance or suggestion provided by the AI to the user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AI guidance."
+        },
+        "voiceCommandId": {
+          "type": "string",
+          "description": "Reference to VoiceCommand. (Relationship: VoiceCommand 1:N AIGuidance)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the AI guidance was provided.",
+          "format": "date-time"
+        },
+        "message": {
+          "type": "string",
+          "description": "The message provided by the AI."
+        }
+      },
+      "required": [
+        "id",
+        "voiceCommandId",
+        "timestamp",
+        "message"
+      ]
     }
   },
   "auth": {
-    "providers": ["google.com"]
+    "providers": [
+      "password",
+      "anonymous"
+    ]
   },
   "firestore": {
-    "/users/{userId}": {
-      "schema": {
-        "$ref": "#/backend/entities/UserProfile"
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile information. Each user has a unique document ID matching their Firebase Authentication UID.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
       },
-      "description": "User profile documents, keyed by user ID."
-    },
-    "/users/{userId}/learnedCommands/{commandId}": {
-      "schema": {
-        "$ref": "#/backend/entities/LearnedCommand"
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}",
+        "definition": {
+          "entityName": "VoiceCommand",
+          "schema": {
+            "$ref": "#/backend/entities/VoiceCommand"
+          },
+          "description": "Stores voice commands associated with a user. Includes denormalized 'userId' field for authorization independence.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            }
+          ]
+        }
       },
-      "description": "A collection of commands learned by the AI for a specific user."
-    }
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/commandExecutions/{commandExecutionId}",
+        "definition": {
+          "entityName": "CommandExecution",
+          "schema": {
+            "$ref": "#/backend/entities/CommandExecution"
+          },
+          "description": "Stores command execution details for a specific voice command. Inherits authorization from the parent voice command.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            },
+            {
+              "name": "commandExecutionId",
+              "description": "The unique identifier of the command execution."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/installations/{installationId}",
+        "definition": {
+          "entityName": "Installation",
+          "schema": {
+            "$ref": "#/backend/entities/Installation"
+          },
+          "description": "Stores installation details for a specific voice command. Inherits authorization from the parent voice command.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            },
+            {
+              "name": "installationId",
+              "description": "The unique identifier of the installation."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/codeModifications/{codeModificationId}",
+        "definition": {
+          "entityName": "CodeModification",
+          "schema": {
+            "$ref": "#/backend/entities/CodeModification"
+          },
+          "description": "Stores code modification details for a specific voice command. Inherits authorization from the parent voice command.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            },
+            {
+              "name": "codeModificationId",
+              "description": "The unique identifier of the code modification."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/githubIntegrations/{githubIntegrationId}",
+        "definition": {
+          "entityName": "GithubIntegration",
+          "schema": {
+            "$ref": "#/backend/entities/GithubIntegration"
+          },
+          "description": "Stores GitHub integration details for a specific voice command. Inherits authorization from the parent voice command.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            },
+            {
+              "name": "githubIntegrationId",
+              "description": "The unique identifier of the GitHub integration action."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/voiceCommands/{voiceCommandId}/aiGuidance/{aiGuidanceId}",
+        "definition": {
+          "entityName": "AIGuidance",
+          "schema": {
+            "$ref": "#/backend/entities/AIGuidance"
+          },
+          "description": "Stores AI guidance messages for a specific voice command. Inherits authorization from the parent voice command.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "voiceCommandId",
+              "description": "The unique identifier of the voice command."
+            },
+            {
+              "name": "aiGuidanceId",
+              "description": "The unique identifier of the AI guidance."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to ensure Authorization Independence, DBAC, and QAPs. User-owned data is stored under `/users/{userId}`. VoiceCommands and related entities (CommandExecution, Installation, CodeModification, GithubIntegration, AIGuidance) are stored as subcollections to the corresponding voice command, enabling efficient querying and organization. This also ensures that all data related to a user is grouped under their respective user document. Given that all data is directly tied to a user, there's no need for complex role-based access control, as access is determined by the user's ID.\n\nAuthorization Independence is achieved by denormalization. Specifically, the `userId` field is included in `VoiceCommand` documents. This ensures that access control rules can be applied to `voiceCommands` and subcollections without needing to perform `get()` operations on parent documents. This eliminates hierarchical authorization dependencies.\n\nThe structure supports QAPs by segregating data based on ownership. All data under `/users/{userId}` is owned by the user identified by `{userId}`, allowing for secure list operations based on the `request.auth.uid`. There are no collections mixing data with different access needs."
   }
 }
