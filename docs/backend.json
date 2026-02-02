@@ -378,8 +378,8 @@
   },
   "auth": {
     "providers": [
-      "password",
-      "anonymous"
+      "anonymous",
+      "google.com"
     ]
   },
   "firestore": {
