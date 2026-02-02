@@ -1,11 +1,7 @@
 'use client';
 
-import {
-  useAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  useUser,
-} from '@/firebase';
+import { useAuth, useUser } from '@/firebase';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';

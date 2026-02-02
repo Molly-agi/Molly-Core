@@ -1,7 +1,8 @@
 'use client';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { VoiceControl, type VoiceCommandResult } from './VoiceControl';
-import { useAuth, useUser, signOut } from '@/firebase';
+import { useAuth, useUser } from '@/firebase';
+import { signOut } from 'firebase/auth';
 import {
   DropdownMenu,
   DropdownMenuContent,
