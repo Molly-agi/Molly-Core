@@ -45,3 +45,14 @@ The native `.apk` will be responsible for:
 4.  **Executing Commands**: Taking the command string received from the API and executing it within the Android device's Termux environment. This is the key function that bridges the security sandbox.
 
 By following this guide, a developer or another AI can create the native Android component that will seamlessly connect with this web application, completing the vision for a fully integrated TermAI.
+
+### GitHub Integration
+
+To allow the AI to search for open-source tools and programs, you must provide a GitHub Personal Access Token.
+
+1.  **Generate a Token**: Go to your [GitHub Developer Settings](https://github.com/settings/tokens) to generate a new personal access token.
+    *   You do not need to grant any scopes/permissions to the token for it to read public repository data.
+2.  **Set Environment Variable**: Copy the generated token and add it to the `.env` file in the root of this project:
+    ```
+    GITHUB_TOKEN="your_github_token_here"
+    ```
