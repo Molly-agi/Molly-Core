@@ -1,130 +1,22 @@
 /**
- * This is a Prototyping Mode ruleset for Firestore.
+ * DEVELOPMENT MODE - SUPER USER RULESET
  *
- * ## Core Philosophy
- * This ruleset enforces a strict user-ownership model. All data is private and
- * belongs to a specific user. There is no public or shared data. The rules ensure
- * that an authenticated user can only ever access data that exists within their
- * own dedicated data tree.
+ * WARNING: These rules grant any authenticated user full read and write access
+ * to the entire database. This is for debugging purposes ONLY and removes all
+ * data security.
  *
- * ## Data Structure
- * The entire database is structured hierarchically under the `/users/{userId}`
- * collection. All other data, such as voice commands and their associated logs or
- * executions, are stored in subcollections within each user's document path. This
- * structure is fundamental to the security model, as it allows for simple and
- * highly performant path-based authorization.
+ * DO NOT USE IN PRODUCTION.
  *
- * ## Key Security Decisions
- * - **Strict Ownership**: All rules are based on the `{userId}` wildcard in the path.
- *   A user's authenticated UID (`request.auth.uid`) must match the `{userId}` in
- *   the document path they are trying to access.
- * - **No User Enumeration**: Listing documents from the top-level `/users` collection
- *   is explicitly disallowed to prevent unauthorized users from discovering the list
- *   of all application users.
- * - **Relational Integrity**: When a new document is created, its internal ID or
- *   owner ID (`userId`, `voiceCommandId`) is validated to ensure it matches the ID
- *   from the document's path. These critical relational fields are enforced as
- *   immutable on updates.
- * - **Authorization Denormalization**: The data model is perfectly designed for security rules.
- *   By nesting all data under a user-specific path, we avoid the need for slow and
- *   costly `get()` or `exists()` calls to other documents for authorization checks.
- *
- * ## Note on 'auth/operation-not-allowed' Error
- * The client-side error 'auth/operation-not-allowed' is not a Firestore Security
- * Rules issue. It indicates that an authentication method (e.g., Anonymous or
- * Email/Password sign-in) is being used in the app but has not been enabled in the
- * Firebase Authentication console. To fix this, go to your Firebase project, navigate
- * to Authentication > Sign-in method, and enable the providers your app requires.
- * This ruleset is fully compatible with authenticated users from any provider.
+ * This was implemented to allow the developer/creator to act as a "super user"
+ * to diagnose application logic issues without interference from security rules.
+ * The original, secure rules should be restored before the application is
+ * considered complete.
  */
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Helper functions for reusable logic
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    // Checks if the requesting user's UID matches the document's owner ID from the path.
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    // Ensures a document exists before allowing an update or delete, and verifies ownership.
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
-    }
-
-    /**
-     * @description User profile documents. Each user can create, read, and update
-     *              their own profile, but cannot see or list other users' profiles.
-     * @path        /users/{userId}
-     * @allow       (create) A new user signing up, creating their own user document.
-     *              auth.uid: "user_abc", path: /users/user_abc
-     * @deny        (list) Any user trying to list all users in the app.
-     *              auth.uid: "user_abc", path: /users
-     * @principle   Restricts access to a user's own data tree and prevents user enumeration.
-     */
-    match /users/{userId} {
-      allow get: if isOwner(userId);
-      allow list: if false;
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-      allow delete: if isExistingOwner(userId);
-    }
-
-    /**
-     * @description A user's collection of voice commands. A user can manage all
-     *              aspects of their own voice commands.
-     * @path        /users/{userId}/voiceCommands/{voiceCommandId}
-     * @allow       (create) A signed-in user creating a new voice command for themselves.
-     *              auth.uid: "user_abc", path: /users/user_abc/voiceCommands/cmd_123
-     * @deny        (get) A user trying to read another user's voice command.
-     *              auth.uid: "user_xyz", path: /users/user_abc/voiceCommands/cmd_123
-     * @principle   Enforces strict document ownership within a user-specific subcollection.
-     */
-    match /users/{userId}/voiceCommands/{voiceCommandId} {
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.userId == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-      allow delete: if isExistingOwner(userId);
-    }
-    
-    /**
-     * @description A user's collection of learned commands. A user can manage all
-     *              aspects of their own learned commands.
-     * @path        /users/{userId}/learnedCommands/{learnedCommandId}
-     * @principle   Enforces strict document ownership within a user-specific subcollection.
-     */
-    match /users/{userId}/learnedCommands/{learnedCommandId} {
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.userId == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
-      allow delete: if isExistingOwner(userId);
-    }
-
-    /**
-     * @description All sub-data related to a specific voice command, such as executions,
-     *              logs, and AI responses. Access is granted if the user owns the
-     *              parent voice command.
-     * @path        /users/{userId}/voiceCommands/{voiceCommandId}/{subcollection}/{docId}
-     * @allow       (list) A user listing all executions for their own voice command.
-     *              auth.uid: "user_abc", path: /users/user_abc/voiceCommands/cmd_123/commandExecutions
-     * @deny        (create) A user trying to log an error for another user's voice command.
-     *              auth.uid: "user_xyz", path: /users/user_abc/voiceCommands/cmd_123/errorLogs/err_456
-     * @principle   Inherits ownership from the parent document path for all nested subcollections.
-     */
-    match /users/{userId}/voiceCommands/{voiceCommandId}/{subcollection}/{docId} {
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.voiceCommandId == voiceCommandId;
-      allow update: if isExistingOwner(userId) && request.resource.data.voiceCommandId == resource.data.voiceCommandId;
-      allow delete: if isExistingOwner(userId);
+    match /{document=**} {
+      allow read, write: if request.auth != null;
     }
   }
 }
-
-    
