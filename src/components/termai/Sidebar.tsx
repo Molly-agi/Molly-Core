@@ -2,21 +2,11 @@
 
 import {
   Bot,
-  Github,
-  PanelLeft,
-  Settings,
-  Terminal,
-  Triangle,
 } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
-  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   Accordion,
@@ -27,7 +17,6 @@ import {
 import { AIGuidance } from './AIGuidance';
 
 export function TermAISidebar() {
-  const { open } = useSidebar();
   return (
     <Sidebar
       className="border-r"
