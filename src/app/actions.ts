@@ -7,6 +7,7 @@ import { textToTermuxCommand } from '@/ai/flows/text-to-termux-command';
 import { contextualGuidance } from '@/ai/flows/contextual-ai-guidance';
 import { securityAnalysis } from '@/ai/flows/security-analysis';
 import { creativeSolution } from '@/ai/flows/creative-solution';
+import { autonomousSolution } from '@/ai/flows/autonomous-solution';
 
 
 export async function getHealthCheck(text: string) {
@@ -46,4 +47,8 @@ export async function getSecurityAnalysis(prompt: string) {
 
 export async function getCreativeSolution(prompt: string) {
   return await creativeSolution(prompt);
+}
+
+export async function getAutonomousSolution(prompt: string) {
+  return await autonomousSolution(prompt);
 }
