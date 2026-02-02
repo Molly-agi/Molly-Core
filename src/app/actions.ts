@@ -5,8 +5,6 @@ import { healthCheck } from '@/ai/flows/health-check';
 import { voiceCommandToText } from '@/ai/flows/voice-command-to-text';
 import { textToTermuxCommand } from '@/ai/flows/text-to-termux-command';
 import { contextualGuidance } from '@/ai/flows/contextual-ai-guidance';
-import { securityAnalysis } from '@/ai/flows/security-analysis';
-import { creativeSolution } from '@/ai/flows/creative-solution';
 import {
   autonomousSolution,
   type AutonomousSolutionOutput,
@@ -44,14 +42,6 @@ export async function getTextToTermuxCommand(prompt: string) {
 
 export async function getContextualGuidance(prompt: string) {
   return await contextualGuidance(prompt);
-}
-
-export async function getSecurityAnalysis(prompt: string) {
-  return await securityAnalysis(prompt);
-}
-
-export async function getCreativeSolution(prompt: string) {
-  return await creativeSolution(prompt);
 }
 
 export async function getAutonomousSolution(prompt:string): Promise<AutonomousSolutionOutput> {
