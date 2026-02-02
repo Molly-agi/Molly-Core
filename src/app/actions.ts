@@ -1,14 +1,10 @@
 'use server';
 
-import {
-  codeModificationAssistance,
-} from '@/ai/flows/code-modification-assistance';
 import { conversationalChat } from '@/ai/flows/conversational-chat';
 import { healthCheck } from '@/ai/flows/health-check';
-import {
-  installationAssistance,
-} from '@/ai/flows/installation-assistance';
 import { voiceCommandToText } from '@/ai/flows/voice-command-to-text';
+import { textToTermuxCommand } from '@/ai/flows/text-to-termux-command';
+
 
 export async function getHealthCheck(text: string) {
   return await healthCheck(text);
@@ -19,17 +15,11 @@ export async function getVoiceCommand(audioData: string) {
 }
 
 export async function getConversationalChat(text: string, history: any[]) {
-  return await conversationalChat(text, history);
+  return await conversationalChat({ text, history });
 }
 
-export async function getInstallationAssistance(
-  text: string
+export async function getTextToTermuxCommand(
+  prompt: string
 ) {
-  return await installationAssistance(text);
-}
-
-export async function getCodeModificationAssistance(
-  text: string
-) {
-  return await codeModificationAssistance(text);
+  return await textToTermuxCommand(prompt);
 }
