@@ -59,7 +59,12 @@ export async function runCommand(
           // Simulate installation error
           if (command.includes('error-prone-package')) {
             const errorMessage = `E: Unable to locate package error-prone-package`;
-            const assistance = await installationAssistance({ command, errorMessage });
+            const suggestedFix = await installationAssistance({ command, errorMessage });
+            const assistance = {
+                suggestedFix: suggestedFix,
+                additionalDependencies: [],
+                confirmationRequired: false
+            };
             return [
               { id: crypto.randomUUID(), type: 'error', content: errorMessage },
               { id: crypto.randomUUID(), type: 'component', content: { type: 'InstallAssist', data: assistance } },
@@ -82,7 +87,11 @@ def main():
 main()
           `;
           const errorMessage = 'Traceback (most recent call last):\n  File "buggy_script.py", line 5, in <module>\n    main()\n  File "buggy_script.py", line 4, in main\n    print(x / y)\nZeroDivisionError: division by zero';
-          const fix = await suggestCodeFixes({ command, errorMessage, codeSnippet, context: "User is trying to run a python script." });
+          const suggestedFix = await suggestCodeFixes({ command, errorMessage, codeSnippet, context: "User is trying to run a python script." });
+          const fix = {
+            suggestedFix: suggestedFix,
+            explanation: 'AI has suggested the following fix for your code.'
+          };
           return [
             { id: crypto.randomUUID(), type: 'error', content: errorMessage },
             { id: crypto.randomUUID(), type: 'component', content: { type: 'CodeFix', data: fix } },

@@ -5,7 +5,6 @@
  *
  * - suggestCodeFixes - A function that suggests code fixes based on error messages.
  * - CodeModificationAssistanceInput - The input type for the suggestCodeFixes function.
- * - CodeModificationAssistanceOutput - The return type for the suggestCodeFixes function.
  */
 
 import {ai} from '@/ai/genkit';
@@ -28,65 +27,35 @@ export type CodeModificationAssistanceInput = z.infer<
   typeof CodeModificationAssistanceInputSchema
 >;
 
-const CodeModificationAssistanceOutputSchema = z.object({
-  suggestedFix: z
-    .string()
-    .describe('The suggested code fix or modification.'),
-  explanation: z
-    .string()
-    .describe('An explanation of why the fix is suggested.'),
-});
-export type CodeModificationAssistanceOutput = z.infer<
-  typeof CodeModificationAssistanceOutputSchema
->;
-
 export async function suggestCodeFixes(
   input: CodeModificationAssistanceInput
-): Promise<CodeModificationAssistanceOutput> {
+): Promise<string> {
   return codeModificationAssistanceFlow(input);
 }
-
-const prompt = ai.definePrompt({
-  name: 'codeModificationAssistancePrompt',
-  input: {schema: CodeModificationAssistanceInputSchema},
-  output: {schema: CodeModificationAssistanceOutputSchema},
-  prompt: `You are an expert AI assistant specializing in debugging and fixing code within a Termux environment. The user has encountered an error.
-
-  The user has encountered the following error message:
-  {{errorMessage}}
-
-  Here is the relevant code snippet, if available:
-  {{#if codeSnippet}}
-  \`\`\`
-  {{codeSnippet}}
-  \`\`\`
-  {{else}}
-  No code snippet provided.
-  {{/if}}
-
-  Here is some additional context, if available:
-  {{#if context}}
-  {{context}}
-  {{else}}
-  No additional context provided.
-  {{/if}}
-
-  Based on the information, generate a response with an 'explanation' of the error's root cause and a 'suggestedFix'.
-  The 'explanation' should describe what was wrong and why the fix works.
-  The 'suggestedFix' should be the complete, corrected code snippet that the user can copy and paste to resolve the issue.
-
-  If a code snippet is missing but required to solve the issue, the 'explanation' should ask the user to provide it, and the 'suggestedFix' should be an empty string.
-`,
-});
 
 const codeModificationAssistanceFlow = ai.defineFlow(
   {
     name: 'codeModificationAssistanceFlow',
     inputSchema: CodeModificationAssistanceInputSchema,
-    outputSchema: CodeModificationAssistanceOutputSchema,
+    outputSchema: z.string(),
   },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+  async ({ errorMessage, codeSnippet, context }) => {
+    const prompt = `You are an expert AI assistant specializing in debugging and fixing code. The user has encountered an error. Your task is to provide ONLY the complete, corrected code snippet that the user can copy and paste to resolve the issue. Do not provide any explanation, preamble, or markdown formatting.
+
+The user has encountered the following error message:
+${errorMessage}
+
+Here is the relevant code snippet that caused the error:
+\`\`\`
+${codeSnippet || 'No code snippet provided.'}
+\`\`\`
+
+Here is some additional context:
+${context || 'No additional context provided.'}
+
+Return only the corrected code.`;
+    
+    const response = await ai.generate({ prompt });
+    return response.text.trim();
   }
 );
