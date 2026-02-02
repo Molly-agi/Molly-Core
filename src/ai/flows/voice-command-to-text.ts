@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -31,39 +32,27 @@ export async function voiceCommandToText(input: VoiceCommandToTextInput): Promis
   return voiceCommandToTextFlow(input);
 }
 
-// This prompt is simplified to return only raw text, which is more reliable.
-const voiceCommandToTextPrompt = ai.definePrompt({
-  name: 'voiceCommandToTextPrompt',
-  input: {schema: VoiceCommandToTextInputSchema},
-  config: {
-    model: 'googleai/gemini-1.5-flash-latest',
-  },
-  // No output schema means we get raw text back.
-  prompt: `You are an expert at translating natural language into Termux shell commands.
-Listen to the audio and provide ONLY the executable command. Do not add any explanation or formatting.
-
-Examples:
-- User says "list the files": you output "ls -la"
-- User says "update everything": you output "pkg update && pkg upgrade -y"
-
-Translate the following audio:
-
-{{media url=voiceDataUri}}
-  `,
-});
-
 const voiceCommandToTextFlow = ai.defineFlow(
   {
     name: 'voiceCommandToTextFlow',
     inputSchema: VoiceCommandToTextInputSchema,
     outputSchema: VoiceCommandToTextOutputSchema,
   },
-  async input => {
-    // The prompt now returns a GenerateResponse object. We get the text from response.text.
-    const response = await voiceCommandToTextPrompt(input);
-    const commandText = response.text.trim();
-    
-    // We manually construct the object the action expects. This is our "middleman".
-    return { textCommand: commandText };
+  async ({ voiceDataUri }) => {
+    const response = await ai.generate({
+        model: 'googleai/gemini-1.5-flash-latest',
+        prompt: [
+            { text: `You are an expert at translating natural language into Termux shell commands.
+Listen to the audio and provide ONLY the executable command. Do not add any explanation or formatting.
+
+Examples:
+- User says "list the files": you output "ls -la"
+- User says "update everything": you output "pkg update && pkg upgrade -y"
+
+Translate the following audio:`},
+            { media: { url: voiceDataUri } },
+        ]
+    });
+    return { textCommand: response.text.trim() };
   }
 );

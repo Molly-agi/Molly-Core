@@ -6,7 +6,6 @@ import { installationAssistance } from '@/ai/flows/installation-assistance';
 import { suggestCodeFixes } from '@/ai/flows/code-modification-assistance';
 import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
 import { z } from 'zod';
-import { healthCheck } from '@/ai/flows/health-check';
 
 const transcode = async (file: File) => {
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -148,9 +147,8 @@ For anything else, just ask TermAI!
 
 export async function getChatResponse(history: ConversationalChatInput['history'], message: string) {
     try {
-        // Rerouted to the simplest possible flow for diagnostics.
-        const result = await healthCheck(message);
-        return { response: result };
+        const result = await conversationalChat({ history, message });
+        return { response: result.response };
     } catch (e) {
         console.error(e);
         return { error: 'Failed to get response from AI.' };

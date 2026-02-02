@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A general-purpose conversational AI chat flow.
@@ -47,15 +48,10 @@ const conversationalChatFlow = ai.defineFlow(
 
 When the user asks for help or describes a task, you should translate their request into the appropriate Termux commands. Be friendly, conversational, and provide clear, concise, and helpful answers with examples when appropriate.`;
 
-    const historyString = history
-      .map((h: { role: string; content: string }) => `${h.role}: ${h.content}`)
-      .join('\n');
-
-    const fullPrompt = `${systemPrompt}\n\nHere is the conversation history:\n${historyString}\n\nHere is the new user message:\nuser: ${message}\n\nYour response should be a direct answer to the user's message, continuing the conversation.\nmodel:`;
-    
     const response = await ai.generate({
       model: 'googleai/gemini-1.5-flash-latest',
-      prompt: fullPrompt,
+      system: systemPrompt,
+      history: [...history, {role: 'user', content: message}],
     });
     
     return { response: response.text };
