@@ -12,7 +12,7 @@ export const textToTermuxCommand = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-flash-latest',
+      model: 'googleai/gemini-1.5-flash',
       tools: [searchGitHub],
       prompt: `You are an expert in Termux, Linux command-line tools, and open-source software.
 The user will provide a prompt in natural language.
