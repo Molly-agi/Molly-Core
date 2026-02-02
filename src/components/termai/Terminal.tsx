@@ -46,9 +46,28 @@ export default function Terminal({
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [command, setCommand] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isIntroducing, setIsIntroducing] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user } = useUser();
   const firestore = useFirestore();
+
+  useEffect(() => {
+    const fetchIntroduction = async () => {
+      try {
+        const intro = await getHealthCheck(
+          'Introduce yourself to the user in a short, friendly message. Mention that you are Molly, an AI assistant, and briefly state your purpose. Also mention the /solve, /script, and /healthcheck commands.'
+        );
+        setHistory((prev) => [intro]);
+      } catch (error) {
+        console.error(error);
+        const errorMessage = error instanceof Error ? error.message : 'Could not get response from AI.';
+        setHistory((prev) => [`Error: ${errorMessage}`]);
+      } finally {
+        setIsIntroducing(false);
+      }
+    };
+    fetchIntroduction();
+  }, []);
 
   useEffect(() => {
     if (voiceResult && !isLoading) {
@@ -133,7 +152,7 @@ export default function Terminal({
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
-  }, [history, isLoading]);
+  }, [history, isLoading, isIntroducing]);
 
   return (
     <div className="font-code text-sm">
@@ -141,21 +160,7 @@ export default function Terminal({
         ref={scrollAreaRef}
         className="p-4 bg-card rounded-lg h-[calc(100vh-150px)] overflow-y-auto"
       >
-        <div className="mb-4">
-          Welcome to Molly. Your AI-powered terminal assistant that learns over
-          time.
-          <br />
-          Type{' '}
-          <span className="text-accent font-semibold">/solve [your goal]</span>{' '}
-          to use the autonomous agent team.
-          <br />
-           Type{' '}
-          <span className="text-accent font-semibold">/script [your goal]</span>{' '}
-          to have Molly write a downloadable script.
-          <br />
-          Type <span className="text-accent font-semibold">/healthcheck</span> to
-          test system connectivity.
-        </div>
+        {isIntroducing && <div className="animate-pulse">Molly is waking up...</div>}
         {history.map((line, index) => {
           if (isScriptResponse(line)) {
             return <DownloadableScript key={index} response={line} />;
@@ -208,7 +213,7 @@ export default function Terminal({
           placeholder="Type a command or use /solve, /script..."
           className="mt-4 w-full bg-card border-border font-code"
           autoFocus
-          disabled={isLoading}
+          disabled={isLoading || isIntroducing}
         />
       </form>
     </div>
