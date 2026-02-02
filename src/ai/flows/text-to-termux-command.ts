@@ -1,7 +1,6 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { generate } from 'genkit/ai';
 import { z } from 'zod';
 
 export const textToTermuxCommand = ai.defineFlow(
@@ -11,7 +10,7 @@ export const textToTermuxCommand = ai.defineFlow(
     outputSchema: z.string(),
   },
   async (prompt) => {
-    const llmResponse = await generate({
+    const llmResponse = await ai.generate({
       model: 'googleai/gemini-1.5-flash-latest',
       prompt: `You are an expert in Termux and Linux command-line tools.
 The user will provide a prompt in natural language.
@@ -24,6 +23,6 @@ User prompt: "${prompt}"
 Command:`,
     });
 
-    return llmResponse.text();
+    return llmResponse.text;
   }
 );
