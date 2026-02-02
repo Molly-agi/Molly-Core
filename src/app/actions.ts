@@ -2,8 +2,6 @@
 'use server';
 
 import { voiceCommandToText } from '@/ai/flows/voice-command-to-text';
-import { installationAssistance } from '@/ai/flows/installation-assistance';
-import { suggestCodeFixes } from '@/ai/flows/code-modification-assistance';
 import { z } from 'zod';
 
 const transcode = async (file: File) => {
@@ -58,15 +56,8 @@ export async function runCommand(
           // Simulate installation error
           if (command.includes('error-prone-package')) {
             const errorMessage = `E: Unable to locate package error-prone-package`;
-            const suggestedFix = await installationAssistance({ command, errorMessage });
-            const assistance = {
-                suggestedFix: suggestedFix,
-                additionalDependencies: [],
-                confirmationRequired: false
-            };
             return [
               { id: crypto.randomUUID(), type: 'error', content: errorMessage },
-              { id: crypto.randomUUID(), type: 'component', content: { type: 'InstallAssist', data: assistance } },
             ];
           }
           return [{ id: crypto.randomUUID(), type: 'output', content: `Simulating installation of ${parts.slice(2).join(' ')}...\nPackage installed successfully.` }];
@@ -78,22 +69,9 @@ export async function runCommand(
       case 'bash':
         // Simulate code execution error
         if (command.includes('buggy_script.py')) {
-          const codeSnippet = `
-def main():
-  x = 10
-  y = 0
-  print(x / y) # Division by zero
-main()
-          `;
           const errorMessage = 'Traceback (most recent call last):\n  File "buggy_script.py", line 5, in <module>\n    main()\n  File "buggy_script.py", line 4, in main\n    print(x / y)\nZeroDivisionError: division by zero';
-          const suggestedFix = await suggestCodeFixes({ command, errorMessage, codeSnippet, context: "User is trying to run a python script." });
-          const fix = {
-            suggestedFix: suggestedFix,
-            explanation: 'AI has suggested the following fix for your code.'
-          };
           return [
             { id: crypto.randomUUID(), type: 'error', content: errorMessage },
-            { id: crypto.randomUUID(), type: 'component', content: { type: 'CodeFix', data: fix } },
           ];
         }
         return [{ id: crypto.randomUUID(), type: 'output', content: 'Script executed successfully, returned 0.' }];

@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useActionState } from 'react';
-import { Bot, ChevronRight, Loader2, Code, Terminal as TerminalIcon } from 'lucide-react';
+import { ChevronRight, Loader2, Terminal as TerminalIcon } from 'lucide-react';
 
 import { getVoiceCommandAsText, runCommand } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
@@ -18,26 +18,6 @@ type Line = {
   content: any;
   isRoot?: boolean;
 };
-
-function CommandSuggestion({ data, onAccept }: { data: any; onAccept: (command: string) => void }) {
-  return (
-    <Card className="my-2 bg-secondary/50 border-accent">
-      <CardHeader className="p-4 flex-row items-center gap-3">
-        <Bot className="text-accent" />
-        <CardTitle className="text-base">AI Suggestion</CardTitle>
-      </CardHeader>
-      <CardContent className="p-4 pt-0 space-y-2">
-        <p className="text-sm">{data.explanation || data.suggestedFix}</p>
-        {data.suggestedFix && (
-          <pre className="font-code bg-background/50 p-2 rounded-md text-sm">{data.suggestedFix}</pre>
-        )}
-        <Button onClick={() => onAccept(data.suggestedFix)} size="sm">
-          Apply Fix
-        </Button>
-      </CardContent>
-    </Card>
-  );
-}
 
 function RootRequest({ onAccept }: { onAccept: (isRoot: boolean) => void }) {
     return (
@@ -137,11 +117,6 @@ export default function Terminal() {
     setLines(prev => prev.slice(0, -1)); // Remove the current prompt line
     await execute(input);
   };
-  
-  const handleSuggestionAccept = async (command: string) => {
-    setLines(prev => prev.slice(0, -1)); // Remove the component and the prompt
-    await execute(command);
-  };
 
   const handleRootRequestAccept = async (granted: boolean) => {
     const lastCommand = (lines.findLast(l => l.type === 'command') as Line)?.content;
@@ -194,8 +169,6 @@ export default function Terminal() {
             {line.type === 'error' && <div className="whitespace-pre-wrap text-red-400">{line.content}</div>}
             {line.type === 'component' && (
                 <>
-                {line.content.type === 'InstallAssist' && <CommandSuggestion data={line.content.data} onAccept={handleSuggestionAccept} />}
-                {line.content.type === 'CodeFix' && <CommandSuggestion data={line.content.data} onAccept={handleSuggestionAccept} />}
                 {line.content.type === 'RootRequest' && <RootRequest onAccept={handleRootRequestAccept} />}
                 </>
             )}
