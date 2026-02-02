@@ -4,7 +4,6 @@
 import { voiceCommandToText } from '@/ai/flows/voice-command-to-text';
 import { installationAssistance } from '@/ai/flows/installation-assistance';
 import { suggestCodeFixes } from '@/ai/flows/code-modification-assistance';
-import { conversationalChat, ConversationalChatInput } from '@/ai/flows/conversational-chat';
 import { z } from 'zod';
 
 const transcode = async (file: File) => {
@@ -152,14 +151,4 @@ For anything else, just ask TermAI!
     console.error(e);
     return [{ id: crypto.randomUUID(), type: 'error', content: 'An unexpected error occurred while running the command.' }];
   }
-}
-
-export async function getChatResponse(history: ConversationalChatInput['history'], message: string) {
-    try {
-        const result = await conversationalChat({ history, message });
-        return { response: result.response };
-    } catch (e) {
-        console.error(e);
-        return { error: 'Failed to get response from AI.' };
-    }
 }
