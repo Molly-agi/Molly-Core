@@ -1,4 +1,3 @@
-// Implemented by Gemini.
 'use server';
 
 /**
@@ -51,6 +50,9 @@ const prompt = ai.definePrompt({
   name: 'codeModificationAssistancePrompt',
   input: {schema: CodeModificationAssistanceInputSchema},
   output: {schema: CodeModificationAssistanceOutputSchema},
+  config: {
+    model: 'googleai/gemini-1.5-flash-latest',
+  },
   prompt: `You are an expert AI assistant specializing in debugging and fixing code within a Termux environment. The user has encountered an error.
 
   The user has encountered the following error message:
