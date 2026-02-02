@@ -1,3 +1,74 @@
+'use client';
+
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Bot, User } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+
 export function AIGuidance() {
-  return null;
+  const [messages, setMessages] = useState<
+    { role: 'user' | 'bot'; content: string }[]
+  >([]);
+  const [input, setInput] = useState('');
+
+  const handleSend = () => {
+    if (input.trim()) {
+      setMessages([
+        ...messages,
+        { role: 'user', content: input },
+        { role: 'bot', content: `AI response for: ${input}` },
+      ]);
+      setInput('');
+    }
+  };
+
+  return (
+    <Card className="h-full flex flex-col border-0">
+      <CardHeader>
+        <CardTitle className="text-lg">AI Guidance</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-1 flex flex-col gap-4 overflow-y-auto p-4">
+        <ScrollArea className="flex-1">
+          <div className="space-y-4">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex gap-3 text-sm ${
+                  message.role === 'user' ? 'justify-end' : ''
+                }`}
+              >
+                {message.role === 'bot' && (
+                  <Bot className="size-5 shrink-0" />
+                )}
+                <div
+                  className={`rounded-lg px-3 py-2 ${
+                    message.role === 'user'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted'
+                  }`}
+                >
+                  {message.content}
+                </div>
+                 {message.role === 'user' && (
+                  <User className="size-5 shrink-0" />
+                )}
+              </div>
+            ))}
+          </div>
+        </ScrollArea>
+        <div className="flex items-center gap-2">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask for advice..."
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            className="bg-card"
+          />
+          <Button onClick={handleSend} size="sm">Send</Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
