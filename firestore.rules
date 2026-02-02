@@ -91,6 +91,20 @@ service cloud.firestore {
       allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
       allow delete: if isExistingOwner(userId);
     }
+    
+    /**
+     * @description A user's collection of learned commands. A user can manage all
+     *              aspects of their own learned commands.
+     * @path        /users/{userId}/learnedCommands/{learnedCommandId}
+     * @principle   Enforces strict document ownership within a user-specific subcollection.
+     */
+    match /users/{userId}/learnedCommands/{learnedCommandId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow delete: if isExistingOwner(userId);
+    }
 
     /**
      * @description All sub-data related to a specific voice command, such as executions,
@@ -112,3 +126,5 @@ service cloud.firestore {
     }
   }
 }
+
+    

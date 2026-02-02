@@ -38,6 +38,7 @@ export function saveLearnedCommand(
     'learnedCommands'
   );
   const newMemory = {
+    userId: userId,
     prompt,
     command,
     createdAt: serverTimestamp(),
@@ -130,3 +131,5 @@ async function getLearnedCommandWithoutOrder(
     return null;
   }
 }
+
+    

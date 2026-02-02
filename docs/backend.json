@@ -374,6 +374,41 @@
         "timestamp",
         "message"
       ]
+    },
+    "LearnedCommand": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "LearnedCommand",
+      "type": "object",
+      "description": "Represents a command that the AI has learned and saved for a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the learned command."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who owns this command."
+        },
+        "prompt": {
+          "type": "string",
+          "description": "The natural language prompt that triggered the command."
+        },
+        "command": {
+          "type": "string",
+          "description": "The executable command that was learned."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp indicating when the command was learned.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "prompt",
+        "command",
+        "createdAt"
+      ]
     }
   },
   "auth": {
@@ -416,6 +451,26 @@
             {
               "name": "voiceCommandId",
               "description": "The unique identifier of the voice command."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/learnedCommands/{learnedCommandId}",
+        "definition": {
+          "entityName": "LearnedCommand",
+          "schema": {
+            "$ref": "#/backend/entities/LearnedCommand"
+          },
+          "description": "Collection to store commands learned by the AI for a specific user.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
+            {
+              "name": "learnedCommandId",
+              "description": "The unique identifier of the learned command."
             }
           ]
         }
@@ -592,3 +647,5 @@
     "reasoning": "The Firestore structure is designed to securely manage data for the TermAI application, focusing on voice commands and related executions within Termux. Prioritizing authorization independence, the structure avoids hierarchical dependencies by denormalizing authorization context. This ensures atomic operations (transactions/batches) and simplifies security rules. All user-owned data is nested under the `/users/{userId}` path to leverage path-based authorization. Specifically:\n\n*   **User-Owned Data:** All data related to a user's voice commands, command executions, installations, code modifications, GitHub repositories, root access requests, AI responses and error logs are stored under the `/users/{userId}` collection path. This ensures that each user can only access their own data, as enforced by simple path-based security rules.\n\n*   **Voice Commands and Subcollections:** For each voice command, subcollections are used to store associated data like executions, installations, code modifications, and AI responses, creating a clear hierarchy of data. The voice commands themselves are also placed under the user's path at `/users/{userId}/voiceCommands/{voiceCommandId}`.\n\n*   **No Public Data:** The design doesn't include any global collections with public access, as all features are centered around user-specific actions and data within Termux.\n\nThis approach facilitates straightforward security rules that rely solely on `request.auth.uid` and the document path, eliminating the need for complex `get()` calls and custom claims."
   }
 }
+
+    
