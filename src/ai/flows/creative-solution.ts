@@ -4,7 +4,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const creativeSolution = ai.defineFlow(
+const creativeSolutionFlow = ai.defineFlow(
   {
     name: 'creativeSolution',
     inputSchema: z.string().describe('A problem or a goal to be solved with a creative, multi-step solution, script, or unconventional command.'),
@@ -27,3 +27,7 @@ Your Creative Solution:`,
     return llmResponse.text;
   }
 );
+
+export async function creativeSolution(prompt: string): Promise<string> {
+  return creativeSolutionFlow(prompt);
+}

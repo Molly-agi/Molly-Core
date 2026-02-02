@@ -4,7 +4,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const voiceCommandToText = ai.defineFlow(
+const voiceCommandToTextFlow = ai.defineFlow(
   {
     name: 'voiceCommandToText',
     inputSchema: z.string().describe(
@@ -24,3 +24,7 @@ export const voiceCommandToText = ai.defineFlow(
     return llmResponse.text;
   }
 );
+
+export async function voiceCommandToText(audioData: string): Promise<string> {
+  return voiceCommandToTextFlow(audioData);
+}

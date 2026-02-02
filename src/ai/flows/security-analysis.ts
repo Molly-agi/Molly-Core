@@ -4,7 +4,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const securityAnalysis = ai.defineFlow(
+const securityAnalysisFlow = ai.defineFlow(
   {
     name: 'securityAnalysis',
     inputSchema: z.string().describe('A snippet of code, a command, or a description of a task to be analyzed for security vulnerabilities.'),
@@ -39,3 +39,7 @@ Security Report:`,
     return llmResponse.text;
   }
 );
+
+export async function securityAnalysis(prompt: string): Promise<string> {
+  return securityAnalysisFlow(prompt);
+}

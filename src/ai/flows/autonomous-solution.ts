@@ -26,7 +26,7 @@ export type AutonomousSolutionOutput = z.infer<
   typeof AutonomousSolutionOutputSchema
 >;
 
-export const autonomousSolution = ai.defineFlow(
+const autonomousSolutionFlow = ai.defineFlow(
   {
     name: 'autonomousSolution',
     inputSchema: z
@@ -85,3 +85,7 @@ export const autonomousSolution = ai.defineFlow(
     };
   }
 );
+
+export async function autonomousSolution(prompt: string): Promise<AutonomousSolutionOutput> {
+  return autonomousSolutionFlow(prompt);
+}

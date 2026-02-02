@@ -9,13 +9,17 @@ const HistoryItemSchema = z.object({
   content: z.string(),
 });
 
-export const conversationalChat = ai.defineFlow(
+const ConversationalChatInputSchema = z.object({
+  text: z.string(),
+  history: z.array(HistoryItemSchema),
+});
+type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
+
+
+const conversationalChatFlow = ai.defineFlow(
   {
     name: 'conversationalChat',
-    inputSchema: z.object({
-      text: z.string(),
-      history: z.array(HistoryItemSchema),
-    }),
+    inputSchema: ConversationalChatInputSchema,
     outputSchema: z.string(),
   },
   async ({ text, history }) => {
@@ -36,3 +40,7 @@ export const conversationalChat = ai.defineFlow(
     return llmResponse.text;
   }
 );
+
+export async function conversationalChat(input: ConversationalChatInput): Promise<string> {
+  return conversationalChatFlow(input);
+}

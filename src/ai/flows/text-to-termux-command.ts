@@ -5,7 +5,7 @@ import { searchGitHub } from '../tools/github';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const textToTermuxCommand = ai.defineFlow(
+const textToTermuxCommandFlow = ai.defineFlow(
   {
     name: 'textToTermuxCommand',
     inputSchema: z.string(),
@@ -35,3 +35,7 @@ Response:`,
     return llmResponse.text;
   }
 );
+
+export async function textToTermuxCommand(prompt: string): Promise<string> {
+  return textToTermuxCommandFlow(prompt);
+}

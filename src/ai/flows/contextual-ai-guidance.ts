@@ -5,7 +5,7 @@ import { searchGitHub } from '../tools/github';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const contextualGuidance = ai.defineFlow(
+const contextualGuidanceFlow = ai.defineFlow(
   {
     name: 'contextualGuidance',
     inputSchema: z.string(),
@@ -26,3 +26,7 @@ User's question: "${prompt}"`,
     return llmResponse.text;
   }
 );
+
+export async function contextualGuidance(prompt: string): Promise<string> {
+  return contextualGuidanceFlow(prompt);
+}

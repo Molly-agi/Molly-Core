@@ -4,7 +4,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const healthCheck = ai.defineFlow(
+const healthCheckFlow = ai.defineFlow(
   {
     name: 'healthCheck',
     inputSchema: z.string(),
@@ -19,3 +19,7 @@ export const healthCheck = ai.defineFlow(
     return llmResponse.text;
   }
 );
+
+export async function healthCheck(prompt: string): Promise<string> {
+  return healthCheckFlow(prompt);
+}
