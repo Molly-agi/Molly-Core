@@ -9,7 +9,6 @@
  */
 
 import {ai} from '@/ai/genkit';
-import {googleAI} from '@genkit-ai/google-genai';
 import {z} from 'genkit';
 
 const VoiceCommandToTextInputSchema = z.object({
@@ -35,7 +34,6 @@ export async function voiceCommandToText(input: VoiceCommandToTextInput): Promis
 // This prompt is simplified to return only raw text, which is more reliable.
 const voiceCommandToTextPrompt = ai.definePrompt({
   name: 'voiceCommandToTextPrompt',
-  model: googleAI.model('gemini-1.5-flash-latest'),
   input: {schema: VoiceCommandToTextInputSchema},
   // No output schema means we get raw text back.
   prompt: `You are an expert at translating natural language into Termux shell commands.
