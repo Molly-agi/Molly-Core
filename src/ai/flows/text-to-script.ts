@@ -1,7 +1,6 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { googleAI } from '@genkit-ai/google-genai';
 import { z } from 'zod';
 
 const TextToScriptOutputSchema = z.object({
@@ -22,7 +21,7 @@ export const textToScript = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: googleAI.model('gemini-pro'),
+      model: 'gemini-pro',
       prompt: `You are an expert programmer and scripter. The user will provide a goal, and your task is to generate a complete, executable script to achieve that goal.
 
 Your response must be a JSON object containing two fields: "filename" and "content".

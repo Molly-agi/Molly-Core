@@ -3,7 +3,6 @@
 import { ai } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { z } from 'zod';
-import { googleAI } from '@genkit-ai/google-genai';
 
 const contextualGuidanceFlow = ai.defineFlow(
   {
@@ -13,7 +12,7 @@ const contextualGuidanceFlow = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: googleAI.model('gemini-pro'),
+      model: 'gemini-pro',
       tools: [searchGitHub],
       prompt: `You are an expert AI research assistant named Molly.
 Your goal is to answer the user's question by forming a plan and using the tools available to you.

@@ -2,7 +2,6 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { googleAI } from '@genkit-ai/google-genai';
 
 const textToTermuxCommandFlow = ai.defineFlow(
   {
@@ -12,7 +11,7 @@ const textToTermuxCommandFlow = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: googleAI.model('gemini-pro'),
+      model: 'gemini-pro',
       prompt: `You are an expert in Termux and Linux command-line tools.
 Your ONLY goal is to convert a natural language prompt into a single, executable command-line command for a Termux environment on Android.
 - Provide ONLY the single, executable command.
