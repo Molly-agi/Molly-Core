@@ -21,7 +21,7 @@ const textToScriptFlow = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: 'googleai/gemini-1.5-flash-latest',
       prompt: `You are an expert programmer and scripter. The user will provide a goal, and your task is to generate a complete, executable script to achieve that goal.
 
 Your response must be a JSON object containing two fields: "filename" and "content".

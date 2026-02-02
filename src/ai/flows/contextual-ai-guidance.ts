@@ -12,7 +12,7 @@ const contextualGuidanceFlow = ai.defineFlow(
   },
   async (prompt) => {
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: 'googleai/gemini-1.5-flash-latest',
       tools: [searchGitHub],
       prompt: `You are an expert AI research assistant named Molly.
 Your goal is to answer the user's question by forming a plan and using the tools available to you.
