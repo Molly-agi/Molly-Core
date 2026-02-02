@@ -28,9 +28,10 @@ export function AIGuidance() {
         setMessages([...newMessages, { role: 'bot' as const, content: aiResponse }]);
       } catch (error) {
         console.error(error);
+        const errorMessage = error instanceof Error ? error.message : 'Could not get response from AI.';
         setMessages([
           ...newMessages,
-          { role: 'bot' as const, content: 'Error: Could not get response from AI.' },
+          { role: 'bot' as const, content: `Error: ${errorMessage}` },
         ]);
       } finally {
         setIsLoading(false);

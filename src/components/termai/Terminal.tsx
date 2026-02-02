@@ -122,7 +122,8 @@ export default function Terminal({
       }
     } catch (error) {
       console.error(error);
-      setHistory((prev) => [...prev, 'Error: Could not get response from AI.']);
+      const errorMessage = error instanceof Error ? error.message : 'Could not get response from AI.';
+      setHistory((prev) => [...prev, `Error: ${errorMessage}`]);
     } finally {
       setIsLoading(false);
     }

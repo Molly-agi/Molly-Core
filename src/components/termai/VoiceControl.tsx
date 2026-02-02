@@ -57,10 +57,11 @@ export function VoiceControl({
             }
           } catch (error) {
             console.error('Transcription error:', error);
+            const errorMessage = error instanceof Error ? error.message : 'Could not process the voice command.';
             toast({
               variant: 'destructive',
               title: 'Transcription Failed',
-              description: 'Could not process the voice command.',
+              description: errorMessage,
             });
           } finally {
             setIsProcessing(false);
