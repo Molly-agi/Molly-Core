@@ -2,7 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { getTextToTermuxCommand } from '@/app/actions';
+import {
+  getTextToTermuxCommand,
+  getAutonomousSolution,
+  type AutonomousSolutionOutput,
+} from '@/app/actions';
 import { useUser } from '@/firebase/auth/use-user';
 import { useFirestore } from '@/firebase/provider';
 import {
@@ -10,9 +14,12 @@ import {
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
 import { BrainCircuit } from 'lucide-react';
+import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
+
+type HistoryItem = string | AutonomousSolutionOutput;
 
 export default function Terminal() {
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [command, setCommand] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -29,27 +36,34 @@ export default function Terminal() {
     setIsLoading(true);
 
     try {
-      // Step 1: Check memory first
-      if (user && firestore) {
-        const cachedCommand = await getLearnedCommand(
-          firestore,
-          user.uid,
-          currentCommand
-        );
-        if (cachedCommand) {
-          setHistory((prev) => [...prev, `🧠 From Memory: ${cachedCommand}`]);
-          setIsLoading(false);
-          return;
+      if (currentCommand.startsWith('/solve ')) {
+        const prompt = currentCommand.replace('/solve ', '');
+        const aiResponse = await getAutonomousSolution(prompt);
+        setHistory((prev) => [...prev, aiResponse]);
+
+        if (user && firestore && aiResponse.finalCommand) {
+          saveLearnedCommand(firestore, user.uid, prompt, aiResponse.finalCommand);
         }
-      }
+      } else {
+        if (user && firestore) {
+          const cachedCommand = await getLearnedCommand(
+            firestore,
+            user.uid,
+            currentCommand
+          );
+          if (cachedCommand) {
+            setHistory((prev) => [...prev, `🧠 From Memory: ${cachedCommand}`]);
+            setIsLoading(false);
+            return;
+          }
+        }
 
-      // Step 2: If not in memory, ask the AI
-      const aiResponse = await getTextToTermuxCommand(currentCommand);
-      setHistory((prev) => [...prev, aiResponse]);
+        const aiResponse = await getTextToTermuxCommand(currentCommand);
+        setHistory((prev) => [...prev, aiResponse]);
 
-      // Step 3: Save the new successful response to memory
-      if (user && firestore && aiResponse && !aiResponse.startsWith('Error:')) {
-        saveLearnedCommand(firestore, user.uid, currentCommand, aiResponse);
+        if (user && firestore && aiResponse && !aiResponse.startsWith('Error:')) {
+          saveLearnedCommand(firestore, user.uid, currentCommand, aiResponse);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -74,8 +88,16 @@ export default function Terminal() {
         <div className="mb-4">
           Welcome to TermAI. Your AI-powered terminal assistant that learns over
           time.
+          <br />
+          Type{' '}
+          <span className="text-accent font-semibold">/solve [your goal]</span>{' '}
+          to use the autonomous agent team.
         </div>
         {history.map((line, index) => {
+          if (typeof line !== 'string') {
+            return <AutonomousSolutionResponse key={index} response={line} />;
+          }
+
           const isUser = line.startsWith('>');
           const isMemory = line.startsWith('🧠 From Memory:');
 
@@ -103,7 +125,7 @@ export default function Terminal() {
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Type a command or ask a question..."
+          placeholder="Type a command or use /solve [your goal]..."
           className="mt-4 w-full bg-card border-border font-code"
           autoFocus
           disabled={isLoading}

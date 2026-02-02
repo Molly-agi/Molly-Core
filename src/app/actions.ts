@@ -7,8 +7,10 @@ import { textToTermuxCommand } from '@/ai/flows/text-to-termux-command';
 import { contextualGuidance } from '@/ai/flows/contextual-ai-guidance';
 import { securityAnalysis } from '@/ai/flows/security-analysis';
 import { creativeSolution } from '@/ai/flows/creative-solution';
-import { autonomousSolution } from '@/ai/flows/autonomous-solution';
-
+import {
+  autonomousSolution,
+  type AutonomousSolutionOutput,
+} from '@/ai/flows/autonomous-solution';
 
 export async function getHealthCheck(text: string) {
   return await healthCheck(text);
@@ -31,9 +33,7 @@ export async function getConversationalChat(text: string, history: any[]) {
   return await conversationalChat({ text, history });
 }
 
-export async function getTextToTermuxCommand(
-  prompt: string
-) {
+export async function getTextToTermuxCommand(prompt: string) {
   return await textToTermuxCommand(prompt);
 }
 
@@ -52,3 +52,5 @@ export async function getCreativeSolution(prompt: string) {
 export async function getAutonomousSolution(prompt: string) {
   return await autonomousSolution(prompt);
 }
+
+export type { AutonomousSolutionOutput };
