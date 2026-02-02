@@ -6,6 +6,7 @@ import {
   getTextToTermuxCommand,
   getAutonomousSolution,
   getHealthCheck,
+  getTextToScript,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -17,8 +18,23 @@ import {
 import { BrainCircuit } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
+import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
+import { DownloadableScript } from './DownloadableScript';
 
-type HistoryItem = string | AutonomousSolutionOutput;
+type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput;
+
+function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
+  return (
+    typeof item === 'object' &&
+    'filename' in item &&
+    'content' in item &&
+    !('creativeSolution' in item)
+  );
+}
+
+function isAutonomousSolution(item: HistoryItem): item is AutonomousSolutionOutput {
+    return typeof item === 'object' && 'creativeSolution' in item;
+}
 
 export default function Terminal({
   voiceResult,
@@ -71,6 +87,10 @@ export default function Terminal({
             aiResponse.finalCommand
           );
         }
+      } else if (currentCommand.startsWith('/script ')) {
+        const prompt = currentCommand.replace('/script ', '');
+        const scriptResponse = await getTextToScript(prompt);
+        setHistory((prev) => [...prev, scriptResponse]);
       } else if (currentCommand === '/healthcheck') {
         const aiResponse = await getHealthCheck('ping');
         setHistory((prev) => [...prev, `🩺 Health Check Passed: ${aiResponse}`]);
@@ -128,13 +148,22 @@ export default function Terminal({
           <span className="text-accent font-semibold">/solve [your goal]</span>{' '}
           to use the autonomous agent team.
           <br />
+           Type{' '}
+          <span className="text-accent font-semibold">/script [your goal]</span>{' '}
+          to have Molly write a downloadable script.
+          <br />
           Type <span className="text-accent font-semibold">/healthcheck</span> to
           test system connectivity.
         </div>
         {history.map((line, index) => {
-          if (typeof line !== 'string') {
+          if (isScriptResponse(line)) {
+            return <DownloadableScript key={index} response={line} />;
+          }
+          if (isAutonomousSolution(line)) {
             return <AutonomousSolutionResponse key={index} response={line} />;
           }
+
+          if(typeof line !== 'string') return null;
 
           const isUser = line.startsWith('>');
           const isMemory = line.startsWith('🧠 From Memory:');
@@ -175,7 +204,7 @@ export default function Terminal({
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Type a command or use /solve [your goal]..."
+          placeholder="Type a command or use /solve, /script..."
           className="mt-4 w-full bg-card border-border font-code"
           autoFocus
           disabled={isLoading}

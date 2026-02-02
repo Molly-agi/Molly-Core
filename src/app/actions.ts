@@ -11,6 +11,7 @@ import {
   autonomousSolution,
   type AutonomousSolutionOutput,
 } from '@/ai/flows/autonomous-solution';
+import { textToScript, type TextToScriptOutput } from '@/ai/flows/text-to-script';
 
 export async function getHealthCheck(text: string) {
   return await healthCheck(text);
@@ -55,4 +56,8 @@ export async function getCreativeSolution(prompt: string) {
 
 export async function getAutonomousSolution(prompt:string): Promise<AutonomousSolutionOutput> {
   return await autonomousSolution(prompt);
+}
+
+export async function getTextToScript(prompt: string): Promise<TextToScriptOutput> {
+  return await textToScript(prompt);
 }
