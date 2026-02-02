@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { creativeSolution } from './creative-solution';
 import { securityAnalysis } from './security-analysis';
 
-export const AutonomousSolutionOutputSchema = z.object({
+const AutonomousSolutionOutputSchema = z.object({
   creativeSolution: z
     .string()
     .describe(

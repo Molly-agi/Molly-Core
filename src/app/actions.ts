@@ -52,5 +52,3 @@ export async function getCreativeSolution(prompt: string) {
 export async function getAutonomousSolution(prompt: string) {
   return await autonomousSolution(prompt);
 }
-
-export type { AutonomousSolutionOutput };

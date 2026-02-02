@@ -6,8 +6,8 @@ import {
   getTextToTermuxCommand,
   getAutonomousSolution,
   getHealthCheck,
-  type AutonomousSolutionOutput,
 } from '@/app/actions';
+import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
 import { useFirestore } from '@/firebase/provider';
 import {

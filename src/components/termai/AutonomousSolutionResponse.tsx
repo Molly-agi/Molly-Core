@@ -1,6 +1,6 @@
 'use client';
 
-import type { AutonomousSolutionOutput } from '@/app/actions';
+import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lightbulb, ShieldCheck, TerminalSquare } from 'lucide-react';
 import { Separator } from '../ui/separator';
