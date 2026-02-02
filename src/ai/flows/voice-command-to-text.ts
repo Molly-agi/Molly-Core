@@ -6,13 +6,20 @@ import { z } from 'zod';
 export const voiceCommandToText = ai.defineFlow(
   {
     name: 'voiceCommandToText',
-    inputSchema: z.string(),
+    inputSchema: z.string().describe(
+      "An audio recording as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+    ),
     outputSchema: z.string(),
   },
   async (audioData) => {
-    // This is a placeholder. In a real implementation, you would use a
-    // speech-to-text model to convert the audio data to text.
-    console.log('Received audio data for transcription.');
-    return 'This is a placeholder for transcribed voice command.';
+    const llmResponse = await ai.generate({
+      model: 'googleai/gemini-1.5-flash-latest',
+      prompt: [
+        { text: 'Transcribe the following audio recording. The user is providing a voice command for a terminal assistant. Respond only with the transcribed text.' },
+        { media: { url: audioData } },
+      ],
+    });
+
+    return llmResponse.text;
   }
 );

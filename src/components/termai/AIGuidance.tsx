@@ -6,21 +6,38 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, User } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { getConversationalChat } from '@/app/actions';
 
 export function AIGuidance() {
   const [messages, setMessages] = useState<
     { role: 'user' | 'bot'; content: string }[]
   >([]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSend = () => {
-    if (input.trim()) {
-      setMessages([
-        ...messages,
-        { role: 'user', content: input },
-        { role: 'bot', content: `AI response for: ${input}` },
-      ]);
+  const handleSend = async () => {
+    if (input.trim() && !isLoading) {
+      const newMessages = [...messages, { role: 'user' as const, content: input }];
+      setMessages(newMessages);
+      const currentInput = input;
       setInput('');
+      setIsLoading(true);
+
+      try {
+        const aiResponse = await getConversationalChat(
+          currentInput,
+          messages.map((m) => ({ role: m.role, content: m.content }))
+        );
+        setMessages([...newMessages, { role: 'bot' as const, content: aiResponse }]);
+      } catch (error) {
+        console.error(error);
+        setMessages([
+          ...newMessages,
+          { role: 'bot' as const, content: 'Error: Could not get response from AI.' },
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -56,6 +73,14 @@ export function AIGuidance() {
                 )}
               </div>
             ))}
+            {isLoading && (
+              <div className="flex gap-3 text-sm">
+                <Bot className="size-5 shrink-0" />
+                <div className="rounded-lg px-3 py-2 bg-muted animate-pulse">
+                  AI is thinking...
+                </div>
+              </div>
+            )}
           </div>
         </ScrollArea>
         <div className="flex items-center gap-2">
@@ -63,10 +88,11 @@ export function AIGuidance() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask for advice..."
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
             className="bg-card"
+            disabled={isLoading}
           />
-          <Button onClick={handleSend} size="sm">Send</Button>
+          <Button onClick={handleSend} size="sm" disabled={isLoading}>Send</Button>
         </div>
       </CardContent>
     </Card>

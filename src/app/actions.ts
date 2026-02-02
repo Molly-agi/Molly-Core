@@ -11,7 +11,16 @@ export async function getHealthCheck(text: string) {
 }
 
 export async function getVoiceCommand(audioData: string) {
-  return await voiceCommandToText(audioData);
+  // First, transcribe the audio data to text.
+  const transcribedText = await voiceCommandToText(audioData);
+
+  // If transcription is empty or failed, return an error.
+  if (!transcribedText || !transcribedText.trim()) {
+    return "Error: I couldn't understand the audio.";
+  }
+
+  // Then, take the transcribed text and convert it to a Termux command.
+  return await textToTermuxCommand(transcribedText);
 }
 
 export async function getConversationalChat(text: string, history: any[]) {
