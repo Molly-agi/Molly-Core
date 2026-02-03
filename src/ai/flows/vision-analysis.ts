@@ -6,7 +6,7 @@
  * to diagnose bugs or gain environment context.
  */
 
-import { ai, gemini15Flash } from '@/ai/genkit';
+import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 
 const VisionAnalysisInputSchema = z.object({
@@ -28,7 +28,7 @@ export const visionAnalysisFlow = ai.defineFlow(
   },
   async (input) => {
     const response = await ai.generate({
-      model: gemini15Flash,
+      model: 'googleai/gemini-1.5-flash',
       system: `You are Molly's Visual Cortex. 
       Analyze the provided screenshot of the Android environment or Terminal.
       Identify UI elements, terminal errors, or "vibe" indicators.
