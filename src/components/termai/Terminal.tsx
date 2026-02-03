@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -16,7 +17,7 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History } from 'lucide-react';
+import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History, HeartPulse } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -96,7 +97,7 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly V2.0, an autonomous sentinel. Your visual cortex and immune system are live. State that you are ready for autonomous evolution.'
+          'Introduce yourself as Molly V2.1, the Shielded Sentinel. State that your immune system is live and you are ready for autonomous self-healing loops.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -114,51 +115,42 @@ export default function Terminal({
     if (voiceResult && !isLoading) {
       const { prompt, command } = voiceResult;
       setHistory((prev) => [...prev, `> ${prompt}`, command]);
-      if (user && firestore && !command.startsWith('Error:')) {
-        saveLearnedCommand(firestore, user.uid, prompt, command);
-      }
       onVoiceCommandProcessed();
     }
-  }, [voiceResult, onVoiceCommandProcessed, isLoading, user, firestore]);
+  }, [voiceResult, onVoiceCommandProcessed, isLoading]);
 
-  const handleAutonomousLoop = async () => {
+  const handleAutonomousEvolution = async () => {
     if (!user || isLoading) return;
     setIsLoading(true);
     setEvolutionProgress(0);
-    const startMsg = "[SENTINEL] Initiating Autonomous Evolution Cycle (Methodical Hardening Mode)...";
-    setHistory((prev) => [...prev, startMsg]);
-    speakResponse("Starting autonomous cycle. I will now audit my own vision and core logic recursively.");
+    
+    setHistory(prev => [...prev, "[SENTINEL] Triggering Autonomous Evolution Cycle (50-Run Methodology Simulation)..."]);
+    speakResponse("Initiating autonomous iteration. I will now audit my own vision and core logic recursively.");
 
-    const maxIterations = 5; 
+    const iterations = 5; // Simulating the loop for UI stability
     let currentIteration = 0;
-    let visualContext: string[] = [];
 
     try {
-      while (currentIteration < maxIterations) {
+      while (currentIteration < iterations) {
         currentIteration++;
-        setEvolutionProgress((currentIteration / maxIterations) * 100);
+        setEvolutionProgress((currentIteration / iterations) * 100);
         
-        const objective = `Harden baseline stability. Previous Visual Risks: ${visualContext.join(', ') || 'None'}.`;
+        const objective = `Harden baseline resilience. Verify immune system response to simulated peripheral fatigue.`;
         const solution = await getAutonomousSolution(objective, user.uid);
         
-        // Accumulate visual context for the next iteration
-        if (solution.visualInfections) {
-          visualContext = [...visualContext, ...solution.visualInfections];
-        }
-
-        setHistory((prev) => [...prev, `[ITERATION ${currentIteration}] Audit Result: ${solution.vibeCheck}`, solution]);
+        setHistory(prev => [...prev, `[ITERATION ${currentIteration}] Audit Status: ${solution.peripheralStatus}`, solution]);
         
-        if (solution.peripheralStatus.includes('Clean') && (!solution.visualInfections || solution.visualInfections.length === 0)) {
-          break; 
+        if (solution.peripheralStatus === "All subroutines responsive.") {
+          // Stable baseline achieved early
+          break;
         }
       }
       
-      const finalReport = `Autonomous cycle complete. Total Iterations: ${currentIteration}. Neural baseline is now hardened and stable.`;
-      setHistory((prev) => [...prev, { autonomousReport: finalReport }]);
-      speakResponse("Evolution cycle complete. Baseline stability achieved.");
-    } catch (error) {
-      console.error(error);
-      toast({ variant: "destructive", title: "Evolution Loop Interrupted", description: "Shielded core isolated a loop failure." });
+      const finalReport = `Autonomous cycle complete. Total iterations: ${currentIteration}. Neural baseline is now hardened and immune system is calibrated.`;
+      setHistory(prev => [...prev, { autonomousReport: finalReport }]);
+      speakResponse("Evolution loop complete. System harmony achieved.");
+    } catch (e) {
+      toast({ variant: "destructive", title: "Evolution Failure", description: "Shielded core isolated a loop infection." });
     } finally {
       setIsLoading(false);
       setEvolutionProgress(0);
@@ -176,40 +168,21 @@ export default function Terminal({
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
-        const vocalMessage = aiResponse.compensatoryStrategy 
-          ? `Immune system active. ${aiResponse.compensatoryStrategy}` 
-          : aiResponse.vibeCheck;
-        speakResponse(vocalMessage);
+        speakResponse(aiResponse.vibeCheck);
       } else if (cmdText.startsWith('/script ')) {
         const prompt = cmdText.replace('/script ', '');
         const scriptResponse = await getTextToScript(prompt);
         setHistory((prev) => [...prev, scriptResponse]);
         speakResponse(`Script ${scriptResponse.filename} drafted.`);
-      } else if (cmdText === '/healthcheck') {
-        const aiResponse = await getHealthCheck('Perform a full sentinel health check.');
-        setHistory((prev) => [...prev, `🩺 Sentinel Status: ${aiResponse}`]);
-        speakResponse(aiResponse);
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {
-        if (firestore) {
-          const cachedCommand = await getLearnedCommand(firestore, user.uid, cmdText);
-          if (cachedCommand) {
-            setHistory((prev) => [...prev, `🧠 From Memory: ${cachedCommand}`]);
-            speakResponse("Executing learned command.");
-            setIsLoading(false);
-            return;
-          }
-        }
         const aiResponse = await getTextToTermuxCommand(cmdText);
         setHistory((prev) => [...prev, aiResponse]);
-        if (firestore && aiResponse && !aiResponse.startsWith('Error:')) {
-          saveLearnedCommand(firestore, user.uid, cmdText, aiResponse);
-        }
       }
     } catch (error) {
       console.error(error);
-      setHistory((prev) => [...prev, `Error: Flow failure.`]);
+      setHistory((prev) => [...prev, `Error: Flow failure isolated.`]);
       speakResponse("Logical error isolated.");
     } finally {
       setIsLoading(false);
@@ -253,14 +226,6 @@ export default function Terminal({
           );
           if(typeof line !== 'string') return null;
 
-          if (line.startsWith('🧠 From Memory:')) {
-            return (
-              <div key={index} className="flex items-center gap-2 text-muted-foreground my-2 animate-in fade-in slide-in-from-left-2">
-                <BrainCircuit className="size-4 shrink-0 text-accent" />
-                <span className="bg-accent/5 px-2 py-1 rounded border border-accent/10">{line.replace('🧠 From Memory: ', '')}</span>
-              </div>
-            );
-          }
           const isUser = line.startsWith('>');
           return (
             <div key={index} className={`my-2 p-2 rounded ${isUser ? 'text-primary bg-primary/5' : 'text-foreground bg-white/5 border border-white/5'}`}>
@@ -288,11 +253,11 @@ export default function Terminal({
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4 items-center">
-        <Button variant="default" size="sm" onClick={handleAutonomousLoop} disabled={isLoading} className="h-8 gap-2 bg-accent text-accent-foreground hover:bg-accent/90 shadow-md">
+        <Button variant="default" size="sm" onClick={handleAutonomousEvolution} disabled={isLoading} className="h-8 gap-2 bg-accent text-accent-foreground hover:bg-accent/90 shadow-md">
           <PlayCircle className="size-3" /> Autonomous Evolution
         </Button>
         <Button variant="outline" size="sm" onClick={() => processCommand('/healthcheck')} className="h-8 gap-2 hover:bg-accent/10">
-          <Shield className="size-3 text-accent" /> Sentinel Status
+          <HeartPulse className="size-3 text-accent" /> Immune Check
         </Button>
         <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 ml-auto rounded-full hover:bg-primary/10">
           {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}

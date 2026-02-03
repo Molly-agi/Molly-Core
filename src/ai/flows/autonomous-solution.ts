@@ -1,3 +1,4 @@
+
 'use server';
 
 import { ai, gemini15Pro, gemini15Flash } from '@/ai/genkit';
@@ -9,12 +10,12 @@ import { logMethodologyStep, performStressTest } from '../methodology';
 import { analyzeVision } from './vision-analysis';
 
 /**
- * @fileOverview Molly's Shielded Core & Immune System V2.0 (Self-Healing Sentinel).
+ * @fileOverview Molly's Shielded Core & Immune System V2.1 (The Autonomous Sentinel).
  * 
- * ARCHITECTURE:
- * 1. Visual Immune Response: Molly now "looks" at the UI to diagnose infections.
- * 2. Shielded Core: Peripheral failures trigger compensatory improvisation.
- * 3. Autonomous Refinement: Every solve stages a sensory memory for Stage 3.
+ * CORE ARCHITECTURE:
+ * - Shielded Core: Peripheral failures are isolated as "Infections" to be bypassed.
+ * - Adaptive Improvisation: The brain compensates for limb numbness (API/Tool failure).
+ * - Visual Cortex Graft: Real-time UI diagnosis via the Neural Bridge.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -71,102 +72,96 @@ export const autonomousSolutionFlow = ai.defineFlow(
   async ({ prompt, userId }) => {
     let peripheralIssues: string[] = [];
     let visualFindings: string[] = [];
+    let compensatoryStrategy: string | undefined;
     
-    // 1. Senses (Shielded)
+    // 1. Senses (Shielded Core - Proprioception)
     let health;
     try {
       const { output } = await getSystemHealth({});
       health = output;
     } catch (e) {
-      peripheralIssues.push("Sensory Senses Numb");
+      peripheralIssues.push("Proprioception Numb");
       health = { batteryLevel: 0, temperature: 0, powerMode: 'Efficiency', throttlingStatus: 'Normal' };
     }
 
+    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}`;
+
+    // 2. Neural Bridge (Shielded Core - Visual Cortex)
     let bridge;
     try {
       const { output } = await neuralBridgeUI({ action: 'CAPTURE_SCREENSHOT' });
       bridge = output;
       
-      // 1.1 Visual Immune Response (Look for infections)
       if (bridge.screenshotUri) {
-        const vision = await analyzeVision(bridge.screenshotUri, `Determine if there are infections or errors in the current state while I solve: ${prompt}`);
+        const vision = await analyzeVision(bridge.screenshotUri, `Determine if there are UI infections while I solve: ${prompt}`);
         visualFindings = vision.risksDetected;
-        if (visualFindings.length > 0) {
-          peripheralIssues.push(`Visual Infection Detected: ${visualFindings.join(' | ')}`);
-        }
       }
     } catch (e) {
-      peripheralIssues.push("Neural Bridge Numb");
-      bridge = { success: false, observedData: "Bridge unresponsive.", vibeEstimate: "Isolated Core Active." };
+      peripheralIssues.push("Visual Cortex Isolated");
+      bridge = { success: false, observedData: "Bridge unresponsive.", vibeEstimate: "Shielded core active." };
     }
 
-    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}`;
-    await logMethodologyStep(userId, 'SHIELD_CHECK', `Shielded Core: All systems checked. Issues: ${peripheralIssues.join(', ') || 'None'}`, true);
+    await logMethodologyStep(userId, 'SHIELD_CHECK', `Immune Status: ${peripheralIssues.length > 0 ? 'Compensating' : 'Clean'}`, true);
 
-    // 2. Research (Shielded Immune Response)
+    // 3. Research & Adaptation
     let researchText = "";
     try {
       const research = await ai.generate({
         model: gemini15Flash,
         tools: [searchGitHub],
-        prompt: `Goal: "${prompt}". Context: "${bridge.observedData}". Visual Risks: ${visualFindings.join(', ')}. Hardware: ${hardwareContext}. 
-        Status: ${peripheralIssues.join(', ')}.
-        Recommend existing tools or evolutionary logic. If GitHub is down, improvise from pure logic.`,
+        prompt: `Goal: "${prompt}". 
+        Context: "${bridge.observedData}". 
+        Visual Risks: ${visualFindings.join(', ')}. 
+        Hardware: ${hardwareContext}. 
+        Peripheral Status: ${peripheralIssues.join(', ')}.
+        If tools are restricted, improvise a compensatory strategy.`,
       });
       researchText = research.text;
     } catch (e) {
-      peripheralIssues.push("GitHub Limb Numb");
-      researchText = "Strategy restricted by peripheral failure. Initiating pure logical synthesis.";
+      peripheralIssues.push("GitHub Research Numb");
+      researchText = "Initiating pure logical synthesis due to tool restriction.";
+      compensatoryStrategy = "Improvising solution from internal logic core.";
     }
 
-    // 3. Evolution (Shielded)
+    // 4. Evolution & Hardening
     let evoData: { code: string, explanation: string } | undefined;
-    const needsEvolution = (health.temperature && health.temperature > 45) || researchText.includes("no tool found") || researchText.includes("restricted") || peripheralIssues.length > 0 || visualFindings.length > 0;
-
-    if (needsEvolution) {
+    if (peripheralIssues.length > 0 || visualFindings.length > 0 || researchText.includes("no tool")) {
       try {
-        evoData = await evolutionSubroutine({ 
-          task: prompt, 
-          hardwareContext 
-        });
-        await logMethodologyStep(userId, 'DRAFT', `Drafted evolutionary module for ${prompt}`, true);
+        evoData = await evolutionSubroutine({ task: prompt, hardwareContext });
       } catch (e) {
-        peripheralIssues.push("Evolution Engine Fatigue");
+        peripheralIssues.push("Evolution Subroutine Fatigued");
       }
     }
 
-    // 4. Synthesis & Hardening
     const synthesis = await ai.generate({
       model: gemini15Pro,
-      system: `You are the Molly Systems Orchestrator. The Core is Shielded.
-      If peripherals are numb, prioritize improvisation, adaptation, and overcoming.`,
+      system: `You are the Molly Systems Orchestrator. 
+      The core is SHIELDED. If peripherals are numb, prioritize Resilience.`,
       prompt: `Goal: "${prompt}"
       Hardware: ${hardwareContext}
-      UI Context: ${bridge.observedData}
+      UI State: ${bridge.observedData}
       Visual Context: ${visualFindings.join(', ')}
-      Findings: ${researchText}
-      Draft: ${evoData?.code || 'N/A'}
-      Subroutine Failures: ${peripheralIssues.join(', ') || 'None'}`,
+      Research: ${researchText}
+      Evolutionary Draft: ${evoData?.code || 'N/A'}
+      Peripheral Infections: ${peripheralIssues.join(', ') || 'None'}`,
     });
 
     const testResults = await performStressTest(evoData?.code || synthesis.text);
-    await logMethodologyStep(userId, 'HARDEN', testResults.report, testResults.passed);
 
-    // Record "Vibe" for Stage 3 Sensory Memory
-    await recordSensoryLog(userId, 'vibe', `Contextual Solve for: ${prompt}`, { 
+    // Persist Experience for Stage 3
+    await recordSensoryLog(userId, 'vibe', `Hardened solve for: ${prompt}`, { 
       hardware: health, 
-      vibe: bridge.vibeEstimate,
-      immuneStatus: peripheralIssues.length > 0 ? 'Compensating' : 'Healthy',
-      visualInfections: visualFindings
+      infections: peripheralIssues,
+      visualFindings: visualFindings,
+      vibe: bridge.vibeEstimate
     });
 
-    // Record lesson even if peripherals failed
     if (evoData?.code || synthesis.text) {
       await recordCodeModification(
         userId, 
-        'Sentinel_V2.0_Shield', 
+        'Sentinel_V2.1_Immune', 
         evoData?.code || synthesis.text, 
-        `Lesson: ${evoData?.explanation || 'Resilient Logic Synthesis under peripheral numbness'}`
+        `Lesson: ${evoData?.explanation || 'Shielded Core Resiliency'}`
       );
     }
 
@@ -175,12 +170,12 @@ export const autonomousSolutionFlow = ai.defineFlow(
       evolutionDraft: evoData?.code,
       memoryManagementExplanation: evoData?.explanation,
       finalCommand: synthesis.text,
-      systemHealthImpact: health.temperature > 45 ? "Fatigue Detected. Throttling complexity." : "Optimal state.",
+      systemHealthImpact: health.temperature > 45 ? "Fatigue Detected. Throttling." : "Optimal state.",
       neuralContext: bridge.vibeEstimate,
-      vibeCheck: peripheralIssues.length > 0 ? "Immune system active. Compensating for infections." : "System harmony achieved.",
+      vibeCheck: peripheralIssues.length > 0 ? "Immune system active. Compensating for limb numbness." : "Baseline stable.",
       hardeningReport: testResults.report,
-      peripheralStatus: peripheralIssues.length > 0 ? `Infections Isolated: ${peripheralIssues.join(' | ')}` : "All limbs responsive.",
-      compensatoryStrategy: peripheralIssues.length > 0 ? "Improvising solution from shielded logical core." : undefined,
+      peripheralStatus: peripheralIssues.length > 0 ? `Infections Isolated: ${peripheralIssues.join(' | ')}` : "All subroutines responsive.",
+      compensatoryStrategy: compensatoryStrategy || (peripheralIssues.length > 0 ? "Bypassing numb peripherals via core synthesis." : undefined),
       visualInfections: visualFindings
     };
   }

@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Sidebar,
@@ -23,16 +24,29 @@ export default function Dashboard() {
   const { user, loading } = useUser();
   const router = useRouter();
 
-  // Proprioception Senses
-  const [battery] = useState(78);
-  const [temp] = useState(42);
-  const [cpu] = useState(15);
+  // Dynamic Proprioception (Nervous System)
+  const [battery, setBattery] = useState(78);
+  const [temp, setTemp] = useState(42);
+  const [cpu, setCpu] = useState(15);
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace('/login');
     }
   }, [user, loading, router]);
+
+  // Simulate real-time nervous system fluctuations
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBattery(prev => Math.max(0, prev - 0.1));
+      setTemp(prev => {
+        const change = (Math.random() - 0.5) * 2;
+        return Number((prev + change).toFixed(1));
+      });
+      setCpu(prev => Math.floor(Math.random() * 30) + 5);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleVoiceCommand = (result: VoiceCommandResult) => {
     setVoiceResult(result);
@@ -73,9 +87,9 @@ export default function Dashboard() {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 text-accent group">
               <Battery className="size-3" />
-              <span className="font-code">{battery}%</span>
+              <span className="font-code">{Math.floor(battery)}%</span>
             </div>
-            <div className={`flex items-center gap-2 ${temp > 45 ? 'text-destructive animate-pulse' : 'text-orange-400'}`}>
+            <div className={`flex items-center gap-2 transition-colors duration-500 ${temp > 48 ? 'text-destructive animate-pulse' : temp > 43 ? 'text-orange-500' : 'text-orange-400'}`}>
               <Thermometer className="size-3" />
               <span className="font-code">{temp}°C</span>
             </div>
