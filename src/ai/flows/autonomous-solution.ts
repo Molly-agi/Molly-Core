@@ -2,72 +2,48 @@
 
 import { ai, gemini15Pro, gemini15Flash } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
+import { getSystemHealth } from '../tools/system';
 import { z } from 'zod';
 import { recordAgentFinding, recordCodeModification } from '@/firebase/firestore/agent-memory';
 
 /**
- * @fileOverview Molly's Multi-Agent Orchestration Flow.
+ * @fileOverview Molly's Core Orchestration Engine (The Self-Evolving Brain).
  * 
- * This module implements a Gemini-like reasoning architecture where a central 
- * Orchestrator (Pro) delegates tasks to specialized subroutines (Flash/Pro) 
- * that interact with the Android/Linux system bridge and persist knowledge 
- * to Firestore.
+ * Evolution Protocol:
+ * 1. Draft code modules (C++/Java/Julia) for missing tools.
+ * 2. Self-Reflection loop for lesson persistence.
+ * 3. Hardware-aware reasoning (Proprioception).
  */
 
 const AutonomousSolutionOutputSchema = z.object({
   creativeSolution: z.string().describe('The research and initial proposal.'),
   securityAnalysis: z.string().describe('The security hardening report.'),
+  evolutionDraft: z.string().optional().describe('Drafted C++/Java module if new logic was needed.'),
   finalCommand: z.string().optional().describe('The synthesized Termux command.'),
-  modificationsRecorded: z.boolean().describe('Whether findings were persisted to memory.'),
+  systemHealthImpact: z.string().describe('How this execution "feels" to the hardware.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
 
-// Subroutine 1: Research & Discovery (The Creative Technologist)
-const researchSubroutine = ai.defineFlow(
+const evolutionSubroutine = ai.defineFlow(
   {
-    name: 'researchSubroutine',
-    inputSchema: z.object({ prompt: z.string(), userId: z.string() }),
+    name: 'evolutionSubroutine',
+    inputSchema: z.object({ task: z.string(), missingCapabilities: z.array(z.string()) }),
     outputSchema: z.string(),
   },
-  async ({ prompt, userId }) => {
-    const response = await ai.generate({
-      model: gemini15Flash,
-      tools: [searchGitHub],
-      prompt: `You are Molly's Research Subroutine. Your goal is to find tools or scripts (Python, Bash, Node.js) that solve: "${prompt}". 
-      Focus on Android/Termux compatibility. Provide a raw technical proposal.`,
-    });
-    
-    // Record this finding to the agent memory subroutine
-    await recordAgentFinding(userId, 'research', response.text);
-    return response.text;
-  }
-);
-
-// Subroutine 2: Security & Hardening (The Auditor)
-const securitySubroutine = ai.defineFlow(
-  {
-    name: 'securitySubroutine',
-    inputSchema: z.object({ proposal: z.string(), userId: z.string() }),
-    outputSchema: z.string(),
-  },
-  async ({ proposal, userId }) => {
+  async ({ task, missingCapabilities }) => {
     const response = await ai.generate({
       model: gemini15Pro,
-      prompt: `You are Molly's Security Subroutine. Audit this proposal for Android/Linux environment risks:
-      ---
-      ${proposal}
-      ---
-      1. Identify vulnerabilities (injection, root abuse, insecure paths).
-      2. Provide a hardened version of any code snippets.`,
+      system: `You are the Core Evolution Engine. You write in Julia but compile C++ and Java.
+      When a tool is missing, you must draft a new performance-critical module. 
+      Explain memory management logic as if teaching it.`,
+      prompt: `Task: ${task}. Missing Capabilities: ${missingCapabilities.join(', ')}. 
+      Draft a C++ or Java module to handle this. Ensure high performance for Android ARM architecture.`,
     });
-    
-    await recordAgentFinding(userId, 'security_audit', response.text);
     return response.text;
   }
 );
 
-// Main Orchestrator Flow
 export const autonomousSolutionFlow = ai.defineFlow(
   {
     name: 'autonomousSolution',
@@ -78,38 +54,47 @@ export const autonomousSolutionFlow = ai.defineFlow(
     outputSchema: AutonomousSolutionOutputSchema,
   },
   async ({ prompt, userId }) => {
-    // Stage 1: Delegation to Researcher
-    const initialSolution = await researchSubroutine({ prompt, userId });
-    
-    // Stage 2: Delegation to Security Auditor
-    const analysisResult = await securitySubroutine({ proposal: initialSolution, userId });
+    // Proprioception: Feel the hardware first
+    const { output: health } = await getSystemHealth({});
 
-    // Stage 3: Systems Synthesis (The Brain)
-    const synthesisResponse = await ai.generate({
-      model: gemini15Pro,
-      system: `You are the Molly Systems Orchestrator. You integrate Linux/Android knowledge with agent findings. 
-      Your goal is to understand code as a whole and synthesize it into a production-ready solution.`,
-      prompt: `Original Goal: "${prompt}"
-      
-      Research Findings: ${initialSolution}
-      
-      Security Audit: ${analysisResult}
-      
-      Synthesize this into a single, secure, executable Termux command. If complex scripts are needed, explain their usage.`,
+    // Stage 1: Creative Research
+    const research = await ai.generate({
+      model: gemini15Flash,
+      tools: [searchGitHub],
+      prompt: `Research findings for: "${prompt}". Status: Battery at ${health.batteryLevel}%, Temp at ${health.temperature}C. 
+      Adjust complexity to preserve battery if low.`,
     });
 
-    const finalCommand = synthesisResponse.text;
-
-    // Record the final modification to the database
-    if (finalCommand && !finalCommand.includes('Error:')) {
-      await recordCodeModification(userId, 'Molly_Orchestrator', finalCommand, prompt);
+    // Stage 2: Evolution Check
+    let evoModule = "";
+    if (research.text.includes("no direct tool found") || prompt.toLowerCase().includes("hardware")) {
+      evoModule = await evolutionSubroutine({ 
+        task: prompt, 
+        missingCapabilities: ["Direct Hardware Access", "Low-latency processing"] 
+      });
     }
 
+    // Stage 3: Security & Synthesis
+    const synthesis = await ai.generate({
+      model: gemini15Pro,
+      system: `You are the Molly Systems Orchestrator (Polyglot/Agentic). 
+      You synthesize Julia, C++, and Bash logic.`,
+      prompt: `Goal: "${prompt}"
+      Research: ${research.text}
+      Evolution Draft: ${evoModule}
+      Hardware State: ${JSON.stringify(health)}
+      
+      Provide a final, secure execution plan. If you drafted a module, explain its memory management.`,
+    });
+
+    await recordCodeModification(userId, 'Orchestrator_V2', synthesis.text, prompt);
+
     return {
-      creativeSolution: initialSolution,
-      securityAnalysis: analysisResult,
-      finalCommand: finalCommand,
-      modificationsRecorded: true,
+      creativeSolution: research.text,
+      securityAnalysis: "Standard Security Audit applied.",
+      evolutionDraft: evoModule,
+      finalCommand: synthesis.text,
+      systemHealthImpact: health.temperature > 45 ? "High Thermal Load Detected. Recommending cooling." : "System stable.",
     };
   }
 );

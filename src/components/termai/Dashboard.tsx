@@ -13,6 +13,8 @@ import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
+import { Battery, Thermometer } from 'lucide-react';
+import { Badge } from '../ui/badge';
 
 export default function Dashboard() {
   const [voiceResult, setVoiceResult] = useState<VoiceCommandResult | null>(
@@ -60,6 +62,22 @@ export default function Dashboard() {
       </Sidebar>
       <SidebarInset className="flex flex-col">
         <Header onVoiceCommand={handleVoiceCommand} />
+        
+        {/* Hardware Proprioception Bar */}
+        <div className="bg-secondary/30 px-6 py-2 flex items-center gap-4 text-xs">
+          <div className="flex items-center gap-1 text-accent">
+            <Battery className="size-3" />
+            <span>78%</span>
+          </div>
+          <div className="flex items-center gap-1 text-destructive">
+            <Thermometer className="size-3" />
+            <span>42°C</span>
+          </div>
+          <Badge variant="outline" className="text-[10px] h-4 py-0 border-accent/30 text-accent/70">
+            Evolution Engine: Ready
+          </Badge>
+        </div>
+
         <div className="flex-1 p-4 overflow-y-auto">
           <Terminal
             voiceResult={voiceResult}

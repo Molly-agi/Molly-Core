@@ -11,6 +11,7 @@ import {
 } from '@/ai/flows/autonomous-solution';
 import { textToScript } from '@/ai/flows/text-to-script';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
+import { visionaryCoach } from '@/ai/flows/visionary-coach';
 
 function ensureApiKey() {
   if (!process.env.GEMINI_API_KEY) {
@@ -60,6 +61,10 @@ export async function getAutonomousSolution(prompt: string, userId: string): Pro
 
 export async function getTextToScript(prompt: string): Promise<TextToScriptOutput> {
   ensureApiKey();
-  const result = await textToScript(prompt);
-  return result;
+  return await textToScript(prompt);
+}
+
+export async function getVisionaryCoach(progress: string, stage: string, concern?: string) {
+  ensureApiKey();
+  return await visionaryCoach(progress, stage, concern);
 }
