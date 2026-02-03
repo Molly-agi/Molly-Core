@@ -16,7 +16,7 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Network, FileCode, Trash2, Shield, Volume2, VolumeX } from 'lucide-react';
+import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -172,7 +172,7 @@ export default function Terminal({
 
   return (
     <div className="font-code text-sm h-full flex flex-col">
-      <audio ref={audioRef} className="hidden" src={audioSrc || ''} />
+      <audio ref={audioRef} className="hidden" src={audioSrc ?? undefined} />
       
       <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20 shadow-inner scrollbar-thin scrollbar-thumb-primary/20">
         {isIntroducing && <div className="animate-pulse text-primary font-bold">Orchestrator initializing...</div>}
@@ -225,7 +225,7 @@ export default function Terminal({
           className="w-full bg-card border-primary/30 font-code focus-visible:ring-primary h-12 pr-12"
           disabled={isLoading || isIntroducing}
         />
-        <div className="absolute right-4 top-1\/2 -translate-y-1\/2 text-[10px] text-primary/40 uppercase tracking-tighter hidden md:block">
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-primary/40 uppercase tracking-tighter hidden md:block">
           Press Enter to commit
         </div>
       </form>

@@ -32,10 +32,11 @@ export async function performStressTest(logic: string): Promise<{ passed: boolea
   // Methodical logic check
   const risks = [];
   if (logic.includes('rm -rf')) risks.push('Destructive command detected.');
-  if (logic.length > 500) risks.push('Logic complexity exceeds thermal budget.');
+  if (logic.length > 1000) risks.push('Logic complexity exceeds thermal budget.');
+  if (logic.includes('sudo') && !logic.includes('apt')) risks.push('Potential unauthorized root escalation.');
   
   return {
     passed: risks.length === 0,
-    report: risks.length > 0 ? risks.join(' ') : 'Logic passed baseline hardening.',
+    report: risks.length > 0 ? `Risk Detected: ${risks.join(' | ')}` : 'Logic passed baseline hardening.',
   };
 }

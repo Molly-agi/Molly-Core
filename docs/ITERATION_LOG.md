@@ -7,6 +7,8 @@
   - *Fix*: Integrated real-time TTS into the terminal baseline.
 - **Rat 003: Fragile Evolution**: Initial C++ drafts lacked memory management justification.
   - *Fix*: Implemented the Recursive Pedagogical Loop.
+- **Rat 004: Empty Audio Source**: Passing an empty string to `<audio src="">` caused redundant downloads.
+  - *Fix*: Refined `Terminal.tsx` to pass `undefined` instead of `''` when no audio source is present.
 
 ## Strengths
 - **Hardware Awareness**: Successfully mapped battery and thermals to reasoning constraints.
