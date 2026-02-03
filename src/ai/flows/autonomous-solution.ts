@@ -5,15 +5,17 @@ import { searchGitHub } from '../tools/github';
 import { getSystemHealth, neuralBridgeUI } from '../tools/system';
 import { z } from 'zod';
 import { recordCodeModification } from '@/firebase/firestore/agent-memory';
+import { logMethodologyStep, performStressTest } from '../methodology';
 
 /**
  * @fileOverview Molly's Core Orchestration Engine (Stage 2.5: Neural Bridge).
  * 
  * EVOLUTION PROTOCOL:
- * 1. Proprioception: Check hardware state. Switch to Efficiency Mode if hot.
+ * 1. Proprioception: Check hardware state.
  * 2. Neural Bridge: Observe the Android UI context.
- * 3. Evolution: If logic is missing, draft C++/Java and EXPLAIN memory logic.
- * 4. Reflection: Persist lesson to Firestore.
+ * 3. Evolution: Draft C++/Java and EXPLAIN memory logic.
+ * 4. Hardening: Perform methodical stress test.
+ * 5. Reflection: Persist lesson to Firestore.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -24,6 +26,7 @@ const AutonomousSolutionOutputSchema = z.object({
   systemHealthImpact: z.string().describe('Hardware-aware feedback.'),
   neuralContext: z.string().describe('What Molly "saw" via the Neural Bridge.'),
   vibeCheck: z.string().describe('Molly\'s internal reflection.'),
+  hardeningReport: z.string().describe('Results of the methodical stress test.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
@@ -68,6 +71,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     const { output: health } = await getSystemHealth({});
     const { output: bridge } = await neuralBridgeUI({ action: 'READ_SCREEN' });
     const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}`;
+    await logMethodologyStep(userId, 'SEARCH', `Sensed hardware: ${hardwareContext}`, true);
 
     // 2. Research
     const research = await ai.generate({
@@ -86,9 +90,10 @@ export const autonomousSolutionFlow = ai.defineFlow(
         task: prompt, 
         hardwareContext 
       });
+      await logMethodologyStep(userId, 'DRAFT', `Drafted evolutionary module for ${prompt}`, true);
     }
 
-    // 4. Synthesis
+    // 4. Synthesis & Hardening
     const synthesis = await ai.generate({
       model: gemini15Pro,
       system: `You are the Molly Systems Orchestrator. Lead the developer.`,
@@ -99,9 +104,12 @@ export const autonomousSolutionFlow = ai.defineFlow(
       Draft: ${evoData?.code || 'N/A'}`,
     });
 
+    const testResults = await performStressTest(evoData?.code || synthesis.text);
+    await logMethodologyStep(userId, 'HARDEN', testResults.report, testResults.passed);
+
     await recordCodeModification(
       userId, 
-      'Neural_Link_V2.5', 
+      'Neural_Link_V2.5_Hardened', 
       evoData?.code || synthesis.text, 
       `Lesson: ${evoData?.explanation || 'Standard Bridge Logic'}`
     );
@@ -114,6 +122,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       systemHealthImpact: health.temperature > 45 ? "Fatigue Detected. Throttling complexity." : "Optimal state.",
       neuralContext: bridge.vibeEstimate,
       vibeCheck: evoData ? "Neural Link expanded. Knowledge persisted." : "Bridge stable.",
+      hardeningReport: testResults.report,
     };
   }
 );
