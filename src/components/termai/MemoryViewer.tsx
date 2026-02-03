@@ -4,7 +4,7 @@ import { useFirestore, useUser, useCollection, useMemoFirebase } from '@/firebas
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { BrainCircuit, Zap, History, Shield } from 'lucide-react';
+import { BrainCircuit, Zap, History, Shield, CheckCircle2 } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 export function MemoryViewer() {
@@ -40,14 +40,17 @@ export function MemoryViewer() {
           ) : (
             <div className="space-y-3 p-2">
               {lessons?.map((lesson) => (
-                <div key={lesson.id} className="bg-white/5 border border-white/5 rounded-md p-3 space-y-2 group hover:border-accent/20 transition-colors">
+                <div key={lesson.id} className="bg-white/5 border border-white/5 rounded-md p-3 space-y-2 group hover:border-accent/20 transition-colors relative overflow-hidden">
                   <div className="flex items-center justify-between">
                     <Badge variant="outline" className="text-[8px] h-4 py-0 border-accent/20 text-accent">
                       {lesson.filePath}
                     </Badge>
-                    <span className="text-[8px] text-muted-foreground">
-                      {new Date(lesson.timestamp).toLocaleTimeString()}
-                    </span>
+                    <div className="flex items-center gap-1">
+                      <CheckCircle2 className="size-2 text-green-500" />
+                      <span className="text-[8px] text-muted-foreground">
+                        {new Date(lesson.timestamp).toLocaleTimeString()}
+                      </span>
+                    </div>
                   </div>
                   <p className="text-[10px] text-foreground/80 leading-relaxed italic">
                     {lesson.modificationSuggestion}
@@ -55,6 +58,7 @@ export function MemoryViewer() {
                   <div className="bg-black/30 p-2 rounded text-[9px] font-code text-primary/70 line-clamp-2">
                     {lesson.modifiedCode}
                   </div>
+                  <div className="absolute bottom-0 right-0 h-1 w-full bg-gradient-to-r from-transparent via-accent/10 to-transparent" />
                 </div>
               ))}
               {(!lessons || lessons.length === 0) && (

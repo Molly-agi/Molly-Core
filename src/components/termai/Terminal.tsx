@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -9,15 +8,12 @@ import {
   getHealthCheck,
   getTextToScript,
   getMollyVoice,
+  startAutonomousCycle,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
 import { useFirestore } from '@/firebase/provider';
-import {
-  saveLearnedCommand,
-  getLearnedCommand,
-} from '@/firebase/firestore/memory';
-import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History, HeartPulse } from 'lucide-react';
+import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History, HeartPulse, Eye } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -26,7 +22,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '../ui/progress';
 
-type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string };
+type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string; verification?: string };
 
 function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
   return (
@@ -42,7 +38,7 @@ function isAutonomousSolution(item: HistoryItem): item is AutonomousSolutionOutp
     return typeof item === 'object' && item !== null && 'creativeSolution' in item;
 }
 
-function isAutoReport(item: HistoryItem): item is { autonomousReport: string } {
+function isAutoReport(item: HistoryItem): item is { autonomousReport: string; verification?: string } {
   return typeof item === 'object' && item !== null && 'autonomousReport' in item;
 }
 
@@ -65,7 +61,6 @@ export default function Terminal({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
-  const firestore = useFirestore();
   const { toast } = useToast();
 
   const speakResponse = async (text: string) => {
@@ -97,7 +92,7 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly V2.1, the Shielded Sentinel. State that your immune system is live and you are ready for autonomous self-healing loops.'
+          'Introduce yourself as Molly V2.2, the Self-Healing Sentinel. State that your visual immune system is live and you are ready for sensory-verified autonomous loops.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -124,31 +119,19 @@ export default function Terminal({
     setIsLoading(true);
     setEvolutionProgress(0);
     
-    setHistory(prev => [...prev, "[SENTINEL] Triggering Autonomous Evolution Cycle (50-Run Methodology Simulation)..."]);
-    speakResponse("Initiating autonomous iteration. I will now audit my own vision and core logic recursively.");
-
-    const iterations = 5; // Simulating the loop for UI stability
-    let currentIteration = 0;
+    setHistory(prev => [...prev, "[SENTINEL] Initiating Sensory-Verified Autonomous Evolution..."]);
+    speakResponse("Triggering visual verification loop. I will now audit my logic and confirm the results through my visual cortex.");
 
     try {
-      while (currentIteration < iterations) {
-        currentIteration++;
-        setEvolutionProgress((currentIteration / iterations) * 100);
-        
-        const objective = `Harden baseline resilience. Verify immune system response to simulated peripheral fatigue.`;
-        const solution = await getAutonomousSolution(objective, user.uid);
-        
-        setHistory(prev => [...prev, `[ITERATION ${currentIteration}] Audit Status: ${solution.peripheralStatus}`, solution]);
-        
-        if (solution.peripheralStatus === "All subroutines responsive.") {
-          // Stable baseline achieved early
-          break;
-        }
-      }
+      // Execute the multi-iteration flow
+      const result = await startAutonomousCycle("Hardened baseline resilience. Verify visual immune response to simulated UI infections.", user.uid, 5);
       
-      const finalReport = `Autonomous cycle complete. Total iterations: ${currentIteration}. Neural baseline is now hardened and immune system is calibrated.`;
-      setHistory(prev => [...prev, { autonomousReport: finalReport }]);
-      speakResponse("Evolution loop complete. System harmony achieved.");
+      setHistory(prev => [...prev, { 
+        autonomousReport: result.finalReport,
+        verification: result.visualVerification
+      }]);
+      
+      speakResponse(result.stableBaselineReached ? "Evolution cycle complete. System harmony visually verified." : "Cycle complete. Further iteration recommended.");
     } catch (e) {
       toast({ variant: "destructive", title: "Evolution Failure", description: "Shielded core isolated a loop infection." });
     } finally {
@@ -221,7 +204,16 @@ export default function Terminal({
                 <ShieldCheck className="size-4" />
                 <h4 className="font-bold uppercase text-[10px] tracking-widest">Autonomous Iteration Report</h4>
               </div>
-              <p className="text-xs">{line.autonomousReport}</p>
+              <p className="text-xs mb-3">{line.autonomousReport}</p>
+              {line.verification && (
+                <div className="bg-black/40 p-3 rounded border border-accent/20 flex gap-3 items-start">
+                  <Eye className="size-4 text-accent shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Visual Verification Outcome</span>
+                    <p className="text-[11px] italic text-accent/80 leading-relaxed">{line.verification}</p>
+                  </div>
+                </div>
+              )}
             </div>
           );
           if(typeof line !== 'string') return null;
@@ -239,15 +231,6 @@ export default function Terminal({
               <Loader2 className="size-4 animate-spin" />
               Neural Link active...
             </div>
-            {evolutionProgress > 0 && (
-              <div className="max-w-xs space-y-1">
-                <div className="flex justify-between text-[10px] uppercase tracking-tighter text-muted-foreground">
-                  <span>Evolution Iteration</span>
-                  <span>{Math.round(evolutionProgress)}%</span>
-                </div>
-                <Progress value={evolutionProgress} className="h-1" />
-              </div>
-            )}
           </div>
         )}
       </div>
