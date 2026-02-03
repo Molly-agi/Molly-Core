@@ -1,6 +1,6 @@
 'use server';
 
-import { ai } from '@/ai/genkit';
+import { ai, gemini15Flash } from '@/ai/genkit';
 import { z } from 'zod';
 
 const HistoryItemSchema = z.object({
@@ -28,7 +28,7 @@ const conversationalChatFlow = ai.defineFlow(
     }));
 
     const llmResponse = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: gemini15Flash,
       prompt: text,
       history: llmHistory,
       config: {

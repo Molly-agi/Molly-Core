@@ -15,11 +15,12 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit } from 'lucide-react';
+import { BrainCircuit, Network, FileCode, Trash2, Shield } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { DownloadableScript } from './DownloadableScript';
+import { Button } from '@/components/ui/button';
 
 type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput;
 
@@ -83,18 +84,15 @@ export default function Terminal({
     }
   }, [voiceResult, onVoiceCommandProcessed, isLoading, user, firestore]);
 
-  const handleCommand = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!command.trim() || isLoading) return;
+  const processCommand = async (cmdText: string) => {
+    if (!cmdText.trim() || isLoading) return;
 
-    const currentCommand = command;
-    setHistory((prev) => [...prev, `> ${currentCommand}`]);
-    setCommand('');
+    setHistory((prev) => [...prev, `> ${cmdText}`]);
     setIsLoading(true);
 
     try {
-      if (currentCommand.startsWith('/solve ')) {
-        const prompt = currentCommand.replace('/solve ', '');
+      if (cmdText.startsWith('/solve ')) {
+        const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt);
         setHistory((prev) => [...prev, aiResponse]);
 
@@ -106,19 +104,21 @@ export default function Terminal({
             aiResponse.finalCommand
           );
         }
-      } else if (currentCommand.startsWith('/script ')) {
-        const prompt = currentCommand.replace('/script ', '');
+      } else if (cmdText.startsWith('/script ')) {
+        const prompt = cmdText.replace('/script ', '');
         const scriptResponse = await getTextToScript(prompt);
         setHistory((prev) => [...prev, scriptResponse]);
-      } else if (currentCommand === '/healthcheck') {
+      } else if (cmdText === '/healthcheck') {
         const aiResponse = await getHealthCheck('ping');
         setHistory((prev) => [...prev, `🩺 Health Check Passed: ${aiResponse}`]);
+      } else if (cmdText === 'clear') {
+        setHistory([]);
       } else {
         if (user && firestore) {
           const cachedCommand = await getLearnedCommand(
             firestore,
             user.uid,
-            currentCommand
+            cmdText
           );
           if (cachedCommand) {
             setHistory((prev) => [...prev, `🧠 From Memory: ${cachedCommand}`]);
@@ -127,7 +127,7 @@ export default function Terminal({
           }
         }
 
-        const aiResponse = await getTextToTermuxCommand(currentCommand);
+        const aiResponse = await getTextToTermuxCommand(cmdText);
         setHistory((prev) => [...prev, aiResponse]);
 
         if (
@@ -136,7 +136,7 @@ export default function Terminal({
           aiResponse &&
           !aiResponse.startsWith('Error:')
         ) {
-          saveLearnedCommand(firestore, user.uid, currentCommand, aiResponse);
+          saveLearnedCommand(firestore, user.uid, cmdText, aiResponse);
         }
       }
     } catch (error) {
@@ -148,6 +148,17 @@ export default function Terminal({
     }
   };
 
+  const handleCommand = (e: React.FormEvent) => {
+    e.preventDefault();
+    processCommand(command);
+    setCommand('');
+  };
+
+  const handleQuickAction = (cmd: string) => {
+    setCommand('');
+    processCommand(cmd);
+  };
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
@@ -155,10 +166,10 @@ export default function Terminal({
   }, [history, isLoading, isIntroducing]);
 
   return (
-    <div className="font-code text-sm">
+    <div className="font-code text-sm h-full flex flex-col">
       <div
         ref={scrollAreaRef}
-        className="p-4 bg-card rounded-lg h-[calc(100vh-150px)] overflow-y-auto"
+        className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4"
       >
         {isIntroducing && <div className="animate-pulse">Molly is waking up...</div>}
         {history.map((line, index) => {
@@ -179,7 +190,7 @@ export default function Terminal({
             return (
               <div
                 key={index}
-                className="flex items-center gap-2 text-muted-foreground"
+                className="flex items-center gap-2 text-muted-foreground my-1"
               >
                 <BrainCircuit className="size-4 shrink-0 text-accent" />
                 <span>{line.replace('🧠 From Memory: ', '')}</span>
@@ -191,7 +202,7 @@ export default function Terminal({
             return (
               <div
                 key={index}
-                className="flex items-center gap-2 text-green-400"
+                className="flex items-center gap-2 text-green-400 my-1"
               >
                 <span>{line}</span>
               </div>
@@ -199,19 +210,35 @@ export default function Terminal({
           }
 
           return (
-            <div key={index} className={isUser ? 'text-primary' : ''}>
+            <div key={index} className={isUser ? 'text-primary my-1' : 'my-1'}>
               {line}
             </div>
           );
         })}
-        {isLoading && <div className="animate-pulse">AI is thinking...</div>}
+        {isLoading && <div className="animate-pulse text-accent mt-2">Molly is thinking...</div>}
       </div>
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        <Button variant="outline" size="sm" onClick={() => handleQuickAction('ifconfig')} className="h-8 gap-2">
+          <Network className="size-3" /> Net Info
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => handleQuickAction('ls -la')} className="h-8 gap-2">
+          <FileCode className="size-3" /> List Files
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve check system security')} className="h-8 gap-2">
+          <Shield className="size-3" /> Security Scan
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => handleQuickAction('clear')} className="h-8 gap-2 text-destructive hover:text-destructive">
+          <Trash2 className="size-3" /> Clear
+        </Button>
+      </div>
+
       <form onSubmit={handleCommand}>
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
           placeholder="Type a command or use /solve, /script..."
-          className="mt-4 w-full bg-card border-border font-code"
+          className="w-full bg-card border-border font-code"
           autoFocus
           disabled={isLoading || isIntroducing}
         />
