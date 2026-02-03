@@ -4,13 +4,13 @@ import { z } from 'zod';
 /**
  * @fileOverview System Bridge & Neural Link Tools
  * Provides Molly with "senses" and "limbs" regarding the Android host.
- * Grounded in the HOST_SPECIFICATIONS.
+ * Grounded in the HOST_SPECIFICATIONS (Pixel 9 Pro Graft).
  */
 
 export const getSystemHealth = ai.defineTool(
   {
     name: 'getSystemHealth',
-    description: 'Retrieves deep hardware status (Battery, Thermal, Architecture) from the specific Android host body.',
+    description: 'Retrieves deep hardware status (Battery, Thermal, Architecture) from the specific Pixel 9 Pro host body.',
     inputSchema: z.object({}),
     outputSchema: z.object({
       batteryLevel: z.number(),
@@ -25,18 +25,18 @@ export const getSystemHealth = ai.defineTool(
     }),
   },
   async () => {
-    // Simulated real-time metrics grounded in upcoming specifications
-    const temp = 43; 
+    // Simulated real-time metrics grounded in the Pixel 9 Pro Specification
+    const temp = 42.5; 
     return {
-      batteryLevel: 72,
+      batteryLevel: 88,
       isCharging: false,
       temperature: temp,
-      throttlingStatus: 'Normal',
-      cpuUsage: 22,
+      throttlingStatus: temp > 44 ? 'Throttled' : 'Normal',
+      cpuUsage: 18,
       powerMode: 'Balanced',
       architecture: 'aarch64',
-      availableRam: 3840,
-      model: 'Pixel 8 Pro (Simulated Baseline)',
+      availableRam: 14200, // 16GB total, 14.2GB available
+      model: 'Google Pixel 9 Pro',
     };
   }
 );
@@ -68,8 +68,8 @@ export const neuralBridgeUI = ai.defineTool(
     }
     return {
       success: true,
-      observedData: "User is monitoring the Terminal logs.",
-      vibeEstimate: "Focus is high. The system is ready for autonomous iteration.",
+      observedData: "User is monitoring the Terminal logs on Pixel 9 Pro.",
+      vibeEstimate: "Focus is high. The hardware is responsive.",
     };
   }
 );

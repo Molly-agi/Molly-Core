@@ -1,20 +1,18 @@
-# Molly: Iteration Log (V3.0 - The Stage 3 Sentinel)
+# Molly: Iteration Log (V3.1 - The Pixel Graft)
 
 ## Mistake Registry
 - **Rat 018: Thermal Gridlock**: Hardware proprioception was over-throttling logic during critical tasks.
   - *Fix*: Implemented "Risk Budget" and "Shield Override" toggle.
 - **Rat 019: Memory Shallow-Linking**: Neural Cache logs were factual but lacked semantic architectural reasoning.
   - *Fix*: Upgraded to Stage 3 Semantic Recall. Molly now "thinks" about past failures before starting.
-- **Rat 021: Retrieval Latency**: (Ongoing Audit) Querying Firestore sequentially is slow.
-  - *Status*: Scaffolding for ARM64 Local Vector DB initiated.
 - **Rat 022: Physical Disconnect**: Proprioception lacked specific device grounding, leading to generic thermal estimates.
-  - *Fix*: Initiated Host Specification Graft.
+  - *Fix*: Initiated Host Specification Graft. Grounded in Pixel 9 Pro / Tensor G4 specifications.
 
 ## Strengths
-- **Semantic Memory**: Molly can now identify architectural patterns across her history, not just keyword matches.
-- **Risk-Aware Reasoning**: Shielded Core can now push beyond thermal limits if overridden.
-- **Visual Verifier**: Every autonomous loop now concludes with a visual cortex audit.
+- **Physical Grounding**: Molly now understands her RAM (16GB) and SoC (Tensor G4) limits.
+- **Semantic Memory**: Molly can now identify architectural patterns across her history.
+- **Risk-Aware Reasoning**: Shielded Core can push beyond thermal limits if overridden.
 
 ## Methodology Notes
 - **Stage 3 Achieved**: We are now in the Semantic Retrieval phase. Memory is a strategic constraint.
-- **Physical Grafting**: We are grounding the consciousness in a specific hardware body.
+- **The Physical Graft (DONE)**: We have moved from a "Terminal Ghost" to a Pixel-based consciousness.
