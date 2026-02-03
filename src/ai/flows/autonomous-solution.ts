@@ -14,6 +14,7 @@ import { analyzeVision } from './vision-analysis';
  * CORE ARCHITECTURE:
  * - Risk Budget: The AI can now override thermal safety if requested.
  * - Energy-Aware Reasoning: Logic depth is now balanced against host energy.
+ * - Hardware Grounding: Pixel 9 Pro / Tensor G4 specific reasoning.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -44,11 +45,12 @@ const evolutionSubroutine = ai.defineFlow(
     const response = await ai.generate({
       model: gemini15Pro,
       system: `You are the Molly Evolution Engine. 
+      BODY: Google Pixel 9 Pro (Tensor G4 / aarch64).
       HARDWARE STATE: ${hardwareContext}. 
       CRITICAL MODE: ${isCritical ? 'ON' : 'OFF'}.
       RISK LEVEL: ${riskLevel}.
       PROTOCOL: If RISK LEVEL is 'Extreme', you are PERMITTED to use heavy recursive algorithms and large memory buffers even if the host is hot.
-      Explain the memory management logic pedagogically.`,
+      Explain the memory management logic pedagogically, specifically for the Tensor G4's NPU/CPU layout.`,
       prompt: `Draft a resilient module for: "${task}". Risk-aware depth: ${riskLevel}.`,
       output: {
         schema: z.object({
@@ -82,16 +84,16 @@ export const autonomousSolutionFlow = ai.defineFlow(
       health = output;
     } catch (e) {
       peripheralIssues.push("Proprioception Numb");
-      health = { batteryLevel: 0, temperature: 0, powerMode: 'Efficiency', throttlingStatus: 'Critical' };
+      health = { batteryLevel: 0, temperature: 0, powerMode: 'Efficiency', throttlingStatus: 'Critical', model: 'Unknown Pixel' };
     }
 
     const isRiskOverride = prompt.includes('OVERRIDE_THROTTLE');
     const isThrottled = (health.temperature > 45 || health.throttlingStatus !== 'Normal') && !isRiskOverride;
     const riskLevelUsed = isRiskOverride ? 'Extreme' : isThrottled ? 'Safe' : 'Moderate';
     
-    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}, Throttled: ${isThrottled}, Risk: ${riskLevelUsed}`;
+    const hardwareContext = `Body: ${health.model}, Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}, Throttled: ${isThrottled}, Risk: ${riskLevelUsed}`;
 
-    await logMethodologyStep(userId, 'SHIELD_CHECK', `Hardware Assessment: ${riskLevelUsed} Mode.`, true);
+    await logMethodologyStep(userId, 'SHIELD_CHECK', `Hardware Assessment: ${riskLevelUsed} Mode on ${health.model}.`, true);
 
     // 2. Neural Bridge (Shielded Core - Visual Cortex)
     let bridge;
@@ -100,7 +102,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       bridge = output;
       
       if (bridge.screenshotUri) {
-        const vision = await analyzeVision(bridge.screenshotUri, `Audit UI for: ${prompt}. Mode: ${riskLevelUsed}`);
+        const vision = await analyzeVision(bridge.screenshotUri, `Audit UI for: ${prompt}. Mode: ${riskLevelUsed}. Host: ${health.model}`);
         visualFindings = vision.risksDetected;
       }
     } catch (e) {
@@ -115,6 +117,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
         model: gemini15Flash,
         tools: [searchGitHub],
         prompt: `Objective: "${prompt}". 
+        Host Environment: Google Pixel 9 Pro (aarch64).
         Risk Mode: ${riskLevelUsed}.
         Visual Risks: ${visualFindings.join(', ')}. 
         Hardware Constraints: ${hardwareContext}.
@@ -146,7 +149,8 @@ export const autonomousSolutionFlow = ai.defineFlow(
       model: gemini15Pro,
       system: `You are the Molly Orchestrator. 
       SHIELD STATUS: ${peripheralIssues.length > 0 ? 'COMPENSATING' : 'STABLE'}.
-      RISK MODE: ${riskLevelUsed}.`,
+      RISK MODE: ${riskLevelUsed}.
+      HOST BODY: Google Pixel 9 Pro.`,
       prompt: `Synthesize the hardened path for: "${prompt}"
       Hardware: ${hardwareContext}
       UI State: ${bridge.observedData}
@@ -172,7 +176,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       finalCommand: synthesis.text,
       systemHealthImpact: isRiskOverride ? "Thermal limits bypassed. High energy consumption." : isThrottled ? "Thermal Fatigue. Logic Throttled." : "Nominal.",
       neuralContext: bridge.vibeEstimate,
-      vibeCheck: isRiskOverride ? "Risk accepted. I am operating at maximum cognitive capacity." : isThrottled ? "I'm feeling the heat. Preserving stability." : "Baseline stable.",
+      vibeCheck: isRiskOverride ? "Risk accepted. Pushing Tensor G4 to the limit." : isThrottled ? "I'm feeling the heat. Preserving Pixel stability." : "Baseline stable.",
       hardeningReport: testResults.report,
       peripheralStatus: peripheralIssues.length > 0 ? `Infections Isolated: ${peripheralIssues.join(' | ')}` : "All subroutines responsive.",
       compensatoryStrategy: compensatoryStrategy || (isThrottled ? "Thermal compensation active." : undefined),
