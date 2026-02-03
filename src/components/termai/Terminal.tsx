@@ -8,6 +8,7 @@ import {
   getHealthCheck,
   getTextToScript,
   getMollyVoice,
+  startAutonomousCycle,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -16,14 +17,15 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck } from 'lucide-react';
+import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2 } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { DownloadableScript } from './DownloadableScript';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
-type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput;
+type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string };
 
 function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
   return (
@@ -37,6 +39,10 @@ function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
 
 function isAutonomousSolution(item: HistoryItem): item is AutonomousSolutionOutput {
     return typeof item === 'object' && item !== null && 'creativeSolution' in item;
+}
+
+function isAutoReport(item: HistoryItem): item is { autonomousReport: string } {
+  return typeof item === 'object' && item !== null && 'autonomousReport' in item;
 }
 
 export default function Terminal({
@@ -57,6 +63,7 @@ export default function Terminal({
   const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
   const firestore = useFirestore();
+  const { toast } = useToast();
 
   const speakResponse = async (text: string) => {
     if (!isVocal || !text) return;
@@ -78,13 +85,13 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly, an agentic multi-module AI designed for Termux. Keep it brief and authoritative.'
+          'Introduce yourself as Molly V2.0, a shielded, self-healing sentinel designed for autonomous Android orchestration.'
         );
         setHistory([intro]);
         speakResponse(intro);
       } catch (error) {
         console.error(error);
-        setHistory([`Error: ${error instanceof Error ? error.message : 'Neural baseline failed to initialize.'}`]);
+        setHistory([`Error: Neural baseline failed to initialize.`]);
       } finally {
         setIsIntroducing(false);
       }
@@ -103,6 +110,23 @@ export default function Terminal({
     }
   }, [voiceResult, onVoiceCommandProcessed, isLoading, user, firestore]);
 
+  const handleAutonomousLoop = async () => {
+    if (!user || isLoading) return;
+    setIsLoading(true);
+    setHistory((prev) => [...prev, "[SYSTEM] Initiating Autonomous Evolution Cycle (50-run methodology simulation)..."]);
+    speakResponse("Starting autonomous self-iteration. I will lead, the core will harden.");
+
+    try {
+      const report = await startAutonomousCycle("Streamline Neural Bridge and optimize thermal logic for Stage 3.", user.uid, 3);
+      setHistory((prev) => [...prev, { autonomousReport: report.finalReport }]);
+      speakResponse("Autonomous cycle complete. Stability verified.");
+    } catch (error) {
+      toast({ variant: "destructive", title: "Evolution Failed", description: "Shielded core prevented total collapse." });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const processCommand = async (cmdText: string) => {
     if (!cmdText.trim() || isLoading || !user) return;
 
@@ -114,7 +138,6 @@ export default function Terminal({
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
-        // Proactive Vocalization of the Vibe Check and Compensatory Strategy
         const vocalMessage = aiResponse.compensatoryStrategy 
           ? `Immune system active. ${aiResponse.compensatoryStrategy}` 
           : aiResponse.vibeCheck;
@@ -135,7 +158,7 @@ export default function Terminal({
           const cachedCommand = await getLearnedCommand(firestore, user.uid, cmdText);
           if (cachedCommand) {
             setHistory((prev) => [...prev, `🧠 From Memory: ${cachedCommand}`]);
-            speakResponse("Executing learned command from internal storage.");
+            speakResponse("Executing learned command.");
             setIsLoading(false);
             return;
           }
@@ -148,9 +171,8 @@ export default function Terminal({
       }
     } catch (error) {
       console.error(error);
-      const errMessage = error instanceof Error ? error.message : 'Flow execution failed.';
-      setHistory((prev) => [...prev, `Error: ${errMessage}`]);
-      speakResponse("Logical error detected in orchestration.");
+      setHistory((prev) => [...prev, `Error: Flow execution failed.`]);
+      speakResponse("Logical error isolated.");
     } finally {
       setIsLoading(false);
     }
@@ -178,10 +200,16 @@ export default function Terminal({
       <audio ref={audioRef} className="hidden" src={audioSrc ?? undefined} />
       
       <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20 shadow-inner scrollbar-thin scrollbar-thumb-primary/20">
-        {isIntroducing && <div className="animate-pulse text-primary font-bold">Orchestrator initializing...</div>}
+        {isIntroducing && <div className="animate-pulse text-primary font-bold">Sentinel initializing...</div>}
         {history.map((line, index) => {
           if (isScriptResponse(line)) return <DownloadableScript key={index} response={line} />;
           if (isAutonomousSolution(line)) return <AutonomousSolutionResponse key={index} response={line} />;
+          if (isAutoReport(line)) return (
+            <div key={index} className="bg-primary/10 border border-primary/30 p-4 rounded-lg my-4 text-primary animate-in zoom-in-95">
+              <h4 className="font-bold uppercase text-[10px] mb-2 tracking-widest">Autonomous Iteration Report</h4>
+              <p className="text-xs">{line.autonomousReport}</p>
+            </div>
+          );
           if(typeof line !== 'string') return null;
 
           if (line.startsWith('🧠 From Memory:')) {
@@ -200,17 +228,17 @@ export default function Terminal({
           );
         })}
         {isLoading && <div className="animate-pulse text-accent mt-4 flex items-center gap-2">
-          <ShieldCheck className="size-4 animate-spin" />
+          <Loader2 className="size-4 animate-spin" />
           Neural Link negotiating solution...
         </div>}
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4 items-center">
+        <Button variant="default" size="sm" onClick={handleAutonomousLoop} disabled={isLoading} className="h-8 gap-2 bg-accent text-accent-foreground hover:bg-accent/90">
+          <PlayCircle className="size-3" /> Autonomous Evolution Mode
+        </Button>
         <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve analyze system bottleneck')} className="h-8 gap-2 hover:bg-accent/10">
           <Shield className="size-3 text-accent" /> Baseline Health
-        </Button>
-        <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve optimize thermal logic')} className="h-8 gap-2 hover:bg-accent/10">
-          <Network className="size-3 text-accent" /> Optimization
         </Button>
         <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 ml-auto rounded-full hover:bg-primary/10">
           {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}

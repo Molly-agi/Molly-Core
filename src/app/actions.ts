@@ -14,6 +14,8 @@ import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { visionaryCoach } from '@/ai/flows/visionary-coach';
 import { textToSpeech } from '@/ai/flows/text-to-speech';
 import { introspectionFlow } from '@/ai/flows/introspection';
+import { runAutonomousEvolution } from '@/ai/flows/evolution-loop';
+import { analyzeVision } from '@/ai/flows/vision-analysis';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -82,4 +84,14 @@ export async function getMollyVoice(text: string) {
 export async function runIntrospection(pastLessons: any[], hardwareContext: string) {
   ensureApiKey();
   return await introspectionFlow({ pastLessons, hardwareContext });
+}
+
+export async function startAutonomousCycle(objective: string, userId: string, count: number) {
+  ensureApiKey();
+  return await runAutonomousEvolution(objective, userId, count);
+}
+
+export async function getVisionAnalysis(dataUri: string, context?: string) {
+  ensureApiKey();
+  return await analyzeVision(dataUri, context);
 }

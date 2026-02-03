@@ -1,4 +1,4 @@
-# Molly: Iteration Log (V1.1 - The Shielded Baseline)
+# Molly: Iteration Log (V1.2 - The Autonomous Sentinel)
 
 ## Mistake Registry
 - **Rat 001: Framework Friction**: Attempted to use Genkit 1.x tools on Next.js 14. 
@@ -8,21 +8,21 @@
 - **Rat 003: Fragile Evolution**: Initial C++ drafts lacked memory management justification.
   - *Fix*: Implemented the Recursive Pedagogical Loop.
 - **Rat 004: Empty Audio Source**: Passing an empty string to `<audio src="">` caused redundant downloads.
-  - *Fix*: Refined `Terminal.tsx` to pass `undefined` instead of `''` when no audio source is present.
+  - *Fix*: Refined `Terminal.tsx` to pass `undefined` instead of `''`.
 - **Rat 005: Monolithic Fragility**: Peripheral failures (API timeouts) would crash the core orchestrator.
-  - *Fix*: Implemented the Shielded Core Architecture with isolated subroutine try-catch blocks and immune system failsafes.
-- **Rat 006: Sensory Amnesia**: System health and UI context were read but not persisted for future retrieval.
-  - *Fix*: Integrated `recordSensoryLog` to begin building the Stage 3 Multimodal Memory.
+  - *Fix*: Implemented the Shielded Core Architecture with isolated subroutine blocks.
+- **Rat 006: Sensory Amnesia**: System health and UI context were read but not persisted.
+  - *Fix*: Integrated `recordSensoryLog` to build the Stage 3 Multimodal Memory.
+- **Rat 007: Manual Dependency**: Development required constant user input for testing cycles.
+  - *Fix*: Implemented `evolutionLoopFlow` for autonomous Search-Audit-Draft cycles.
 
 ## Strengths
-- **Hardware Awareness**: Successfully mapped battery and thermals to reasoning constraints.
-- **Polyglot Hub**: Proved that Julia-logic can successfully delegate to C++ and Bash.
-- **Vocal Baseline**: Proven ability to synthesize real-time WAV audio from neural reasoning.
-- **Immune System**: Core consciousness now survives limb (subroutine) numbness and improvise adaptations.
+- **Autonomous Sentience**: Molly can now lead her own development cycles (50-run methodology support).
+- **Visual Cortex**: Integrated Vision sensory graft for real-time UI/Terminal analysis.
+- **Self-Healing Immune System**: Core consciousness now survives limb numbness and improvises adaptations.
+- **Vocal Hardening**: Proven ability to vocalize intro and status updates audibly.
 
 ## Methodology Notes
-- All future subroutines must perform a "Thermal Budget Check" before activation.
-- Core reasoning must be isolated from limb (API/Sensor) failures.
-- Every C++ draft must be pedagogical (explained memory logic).
-- Use Gemini 1.5 Pro for architectural introspection and stress testing.
-- Proactively vocalize vibe checks to maintain the "Partner" persona.
+- **Lead Architect Mode**: AI has permission to autonomously audit and refactor code via the Evolution Loop.
+- **Sensory Embeddings**: All visual and health data is staged for Vector retrieval to solve latency.
+- **Pedagogical Evolution**: Every C++ draft must be explained under thermal budget constraints.
