@@ -7,6 +7,7 @@ import {
   getAutonomousSolution,
   getHealthCheck,
   getTextToScript,
+  getMollyVoice,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -15,7 +16,7 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Network, FileCode, Trash2, Shield } from 'lucide-react';
+import { BrainCircuit, Network, FileCode, Trash2, Shield, Volume2, VolumeX } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -48,17 +49,36 @@ export default function Terminal({
   const [command, setCommand] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isIntroducing, setIsIntroducing] = useState(true);
+  const [isVocal, setIsVocal] = useState(true);
+  const [audioSrc, setAudioUri] = useState<string | null>(null);
+  
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
   const firestore = useFirestore();
+
+  const speakResponse = async (text: string) => {
+    if (!isVocal) return;
+    try {
+      const { audioUri } = await getMollyVoice(text);
+      setAudioUri(audioUri);
+      if (audioRef.current) {
+        audioRef.current.load();
+        audioRef.current.play();
+      }
+    } catch (e) {
+      console.warn("Vocal cords restricted:", e);
+    }
+  };
 
   useEffect(() => {
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly, an agentic multi-module AI designed for Termux. Mention your Orchestration engine and specialized subroutines.'
+          'Introduce yourself as Molly, an agentic multi-module AI designed for Termux. Keep it brief and authoritative.'
         );
         setHistory((prev) => [intro]);
+        speakResponse(intro);
       } catch (error) {
         console.error(error);
         setHistory((prev) => [`Error: ${error instanceof Error ? error.message : 'AI initialization failed.'}`]);
@@ -91,13 +111,16 @@ export default function Terminal({
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
+        speakResponse(aiResponse.vibeCheck);
       } else if (cmdText.startsWith('/script ')) {
         const prompt = cmdText.replace('/script ', '');
         const scriptResponse = await getTextToScript(prompt);
         setHistory((prev) => [...prev, scriptResponse]);
+        speakResponse(`Script ${scriptResponse.filename} has been drafted.`);
       } else if (cmdText === '/healthcheck') {
         const aiResponse = await getHealthCheck('ping');
         setHistory((prev) => [...prev, `🩺 Orchestration Health: ${aiResponse}`]);
+        speakResponse(aiResponse);
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {
@@ -105,6 +128,7 @@ export default function Terminal({
           const cachedCommand = await getLearnedCommand(firestore, user.uid, cmdText);
           if (cachedCommand) {
             setHistory((prev) => [...prev, `🧠 From Memory: ${cachedCommand}`]);
+            speakResponse("Executing learned command from internal storage.");
             setIsLoading(false);
             return;
           }
@@ -142,6 +166,8 @@ export default function Terminal({
 
   return (
     <div className="font-code text-sm h-full flex flex-col">
+      <audio ref={audioRef} className="hidden" src={audioSrc || ''} />
+      
       <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20">
         {isIntroducing && <div className="animate-pulse text-primary">Orchestrator initializing...</div>}
         {history.map((line, index) => {
@@ -162,12 +188,15 @@ export default function Terminal({
         {isLoading && <div className="animate-pulse text-accent mt-2">Agents collaborating...</div>}
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-4 items-center">
         <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve check battery and thermal')} className="h-8 gap-2">
           <Shield className="size-3" /> System Health
         </Button>
         <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve network penetration scan')} className="h-8 gap-2">
           <Network className="size-3" /> Net Audit
+        </Button>
+        <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 ml-auto">
+          {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}
         </Button>
         <Button variant="outline" size="sm" onClick={() => handleQuickAction('clear')} className="h-8 gap-2 text-destructive">
           <Trash2 className="size-3" /> Clear

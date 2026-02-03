@@ -12,6 +12,8 @@ import {
 import { textToScript } from '@/ai/flows/text-to-script';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { visionaryCoach } from '@/ai/flows/visionary-coach';
+import { textToSpeech } from '@/ai/flows/text-to-speech';
+import { introspect } from '@/ai/flows/introspection';
 
 function ensureApiKey() {
   if (!process.env.GEMINI_API_KEY) {
@@ -67,4 +69,14 @@ export async function getTextToScript(prompt: string): Promise<TextToScriptOutpu
 export async function getVisionaryCoach(progress: string, stage: string, concern?: string) {
   ensureApiKey();
   return await visionaryCoach(progress, stage, concern);
+}
+
+export async function getMollyVoice(text: string) {
+  ensureApiKey();
+  return await textToSpeech(text);
+}
+
+export async function runIntrospection(pastLessons: any[], hardwareContext: string) {
+  ensureApiKey();
+  return await introspect(pastLessons, hardwareContext);
 }
