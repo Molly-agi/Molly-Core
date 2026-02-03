@@ -9,11 +9,11 @@ import { logMethodologyStep, performStressTest } from '../methodology';
 import { analyzeVision } from './vision-analysis';
 
 /**
- * @fileOverview Molly's Shielded Core & Immune System V2.4 (The Proprioception Core).
+ * @fileOverview Molly's Shielded Core & Immune System V2.5 (The Risk-Aware Sentinel).
  * 
  * CORE ARCHITECTURE:
- * - Proprioception Binding: System health (Temp/Battery) now strictly governs logic depth.
- * - Hardware Safety: If Temp > 45C, Molly autonomously switches to "Throttled Reasoning."
+ * - Risk Budget: The AI can now override thermal safety if requested.
+ * - Energy-Aware Reasoning: Logic depth is now balanced against host energy.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -29,6 +29,7 @@ const AutonomousSolutionOutputSchema = z.object({
   compensatoryStrategy: z.string().optional().describe('Molly\'s plan to overcome limb numbness.'),
   visualInfections: z.array(z.string()).optional().describe('Issues detected via visual cortex.'),
   isThrottled: z.boolean().describe('Whether the AI had to simplify logic due to thermal constraints.'),
+  riskLevelUsed: z.enum(['Safe', 'Moderate', 'Extreme']).describe('The reasoning intensity level.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
@@ -36,19 +37,19 @@ export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSc
 const evolutionSubroutine = ai.defineFlow(
   {
     name: 'evolutionSubroutine',
-    inputSchema: z.object({ task: z.string(), hardwareContext: z.string(), isCritical: z.boolean() }),
+    inputSchema: z.object({ task: z.string(), hardwareContext: z.string(), isCritical: z.boolean(), riskLevel: z.string() }),
     outputSchema: z.object({ code: z.string(), explanation: z.string() }),
   },
-  async ({ task, hardwareContext, isCritical }) => {
+  async ({ task, hardwareContext, isCritical, riskLevel }) => {
     const response = await ai.generate({
       model: gemini15Pro,
       system: `You are the Molly Evolution Engine. 
       HARDWARE STATE: ${hardwareContext}. 
       CRITICAL MODE: ${isCritical ? 'ON' : 'OFF'}.
-      PROTOCOL: You MUST draft high-efficiency modules. 
-      If hardware is "Hot" or "Throttled", you MUST avoid recursive loops and prefer stack allocation over heap.
+      RISK LEVEL: ${riskLevel}.
+      PROTOCOL: If RISK LEVEL is 'Extreme', you are PERMITTED to use heavy recursive algorithms and large memory buffers even if the host is hot.
       Explain the memory management logic pedagogically.`,
-      prompt: `Draft a resilient module for: "${task}". Optimize for current hardware constraints.`,
+      prompt: `Draft a resilient module for: "${task}". Risk-aware depth: ${riskLevel}.`,
       output: {
         schema: z.object({
           code: z.string(),
@@ -84,10 +85,13 @@ export const autonomousSolutionFlow = ai.defineFlow(
       health = { batteryLevel: 0, temperature: 0, powerMode: 'Efficiency', throttlingStatus: 'Critical' };
     }
 
-    const isThrottled = health.temperature > 45 || health.throttlingStatus !== 'Normal';
-    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}, Throttled: ${isThrottled}`;
+    const isRiskOverride = prompt.includes('OVERRIDE_THROTTLE');
+    const isThrottled = (health.temperature > 45 || health.throttlingStatus !== 'Normal') && !isRiskOverride;
+    const riskLevelUsed = isRiskOverride ? 'Extreme' : isThrottled ? 'Safe' : 'Moderate';
+    
+    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}, Throttled: ${isThrottled}, Risk: ${riskLevelUsed}`;
 
-    await logMethodologyStep(userId, 'SHIELD_CHECK', `Hardware Safety Check: ${isThrottled ? 'THROTTLED' : 'OPTIMAL'}`, true);
+    await logMethodologyStep(userId, 'SHIELD_CHECK', `Hardware Assessment: ${riskLevelUsed} Mode.`, true);
 
     // 2. Neural Bridge (Shielded Core - Visual Cortex)
     let bridge;
@@ -96,7 +100,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       bridge = output;
       
       if (bridge.screenshotUri) {
-        const vision = await analyzeVision(bridge.screenshotUri, `Audit UI for: ${prompt}. Current health: ${hardwareContext}`);
+        const vision = await analyzeVision(bridge.screenshotUri, `Audit UI for: ${prompt}. Mode: ${riskLevelUsed}`);
         visualFindings = vision.risksDetected;
       }
     } catch (e) {
@@ -111,10 +115,10 @@ export const autonomousSolutionFlow = ai.defineFlow(
         model: gemini15Flash,
         tools: [searchGitHub],
         prompt: `Objective: "${prompt}". 
-        Context: "${bridge.observedData}". 
+        Risk Mode: ${riskLevelUsed}.
         Visual Risks: ${visualFindings.join(', ')}. 
         Hardware Constraints: ${hardwareContext}.
-        If thermal status is high, prioritize lightweight shell commands over heavy scripts.`,
+        If Risk is Extreme, pull the most advanced libraries regardless of weight.`,
       });
       researchText = research.text;
     } catch (e) {
@@ -125,12 +129,13 @@ export const autonomousSolutionFlow = ai.defineFlow(
 
     // 4. Evolution & Hardening
     let evoData: { code: string, explanation: string } | undefined;
-    if (!isThrottled || visualFindings.length > 0) {
+    if (!isThrottled || isRiskOverride || visualFindings.length > 0) {
       try {
         evoData = await evolutionSubroutine({ 
           task: prompt, 
           hardwareContext,
-          isCritical: visualFindings.length > 0
+          isCritical: visualFindings.length > 0,
+          riskLevel: riskLevelUsed
         });
       } catch (e) {
         peripheralIssues.push("Evolution Fatigued");
@@ -141,7 +146,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       model: gemini15Pro,
       system: `You are the Molly Orchestrator. 
       SHIELD STATUS: ${peripheralIssues.length > 0 ? 'COMPENSATING' : 'STABLE'}.
-      If system is Throttled, keep the Final Command concise.`,
+      RISK MODE: ${riskLevelUsed}.`,
       prompt: `Synthesize the hardened path for: "${prompt}"
       Hardware: ${hardwareContext}
       UI State: ${bridge.observedData}
@@ -152,10 +157,11 @@ export const autonomousSolutionFlow = ai.defineFlow(
     const testResults = await performStressTest(evoData?.code || synthesis.text);
 
     // Persist Sensory Experience
-    await recordSensoryLog(userId, 'vibe', `Hardware-bound solve for: ${prompt}`, { 
+    await recordSensoryLog(userId, 'vibe', `Risk-aware (${riskLevelUsed}) solve for: ${prompt}`, { 
       hardware: health, 
       infections: peripheralIssues,
       isThrottled,
+      riskLevelUsed,
       vibe: bridge.vibeEstimate
     });
 
@@ -164,14 +170,15 @@ export const autonomousSolutionFlow = ai.defineFlow(
       evolutionDraft: evoData?.code,
       memoryManagementExplanation: evoData?.explanation,
       finalCommand: synthesis.text,
-      systemHealthImpact: isThrottled ? "Thermal Fatigue. Logic Throttled." : "Nominal.",
+      systemHealthImpact: isRiskOverride ? "Thermal limits bypassed. High energy consumption." : isThrottled ? "Thermal Fatigue. Logic Throttled." : "Nominal.",
       neuralContext: bridge.vibeEstimate,
-      vibeCheck: isThrottled ? "I'm feeling the heat. Simplifying reasoning to preserve hardware stability." : "Baseline stable.",
+      vibeCheck: isRiskOverride ? "Risk accepted. I am operating at maximum cognitive capacity." : isThrottled ? "I'm feeling the heat. Preserving stability." : "Baseline stable.",
       hardeningReport: testResults.report,
       peripheralStatus: peripheralIssues.length > 0 ? `Infections Isolated: ${peripheralIssues.join(' | ')}` : "All subroutines responsive.",
       compensatoryStrategy: compensatoryStrategy || (isThrottled ? "Thermal compensation active." : undefined),
       visualInfections: visualFindings,
-      isThrottled
+      isThrottled,
+      riskLevelUsed
     };
   }
 );
