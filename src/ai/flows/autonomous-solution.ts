@@ -1,6 +1,6 @@
 'use server';
 
-import { ai } from '@/ai/genkit';
+import { ai, gemini15Flash, gemini15Pro } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { getSystemHealth, neuralBridgeUI } from '../tools/system';
 import { z } from 'zod';
@@ -10,11 +10,6 @@ import { analyzeVision } from './vision-analysis';
 
 /**
  * @fileOverview Molly's Shielded Core & Immune System V2.5 (The Risk-Aware Sentinel).
- * 
- * CORE ARCHITECTURE:
- * - Risk Budget: The AI can now override thermal safety if requested.
- * - Energy-Aware Reasoning: Logic depth is now balanced against host energy.
- * - Hardware Grounding: Pixel 9 Pro / Tensor G4 specific reasoning.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -43,7 +38,7 @@ const evolutionSubroutine = ai.defineFlow(
   },
   async ({ task, hardwareContext, isCritical, riskLevel }) => {
     const response = await ai.generate({
-      model: 'googleai/gemini-1.5-pro',
+      model: gemini15Pro,
       system: `You are the Molly Evolution Engine. 
       BODY: Google Pixel 9 Pro (Tensor G4 / aarch64).
       HARDWARE STATE: ${hardwareContext}. 
@@ -114,7 +109,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     let researchText = "";
     try {
       const research = await ai.generate({
-        model: 'googleai/gemini-1.5-flash',
+        model: gemini15Flash,
         tools: [searchGitHub],
         prompt: `Objective: "${prompt}". 
         Host Environment: Google Pixel 9 Pro (aarch64).
@@ -146,7 +141,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     }
 
     const synthesis = await ai.generate({
-      model: 'googleai/gemini-1.5-pro',
+      model: gemini15Pro,
       system: `You are the Molly Orchestrator. 
       SHIELD STATUS: ${peripheralIssues.length > 0 ? 'COMPENSATING' : 'STABLE'}.
       RISK MODE: ${riskLevelUsed}.

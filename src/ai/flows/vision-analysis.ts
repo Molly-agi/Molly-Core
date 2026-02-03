@@ -1,12 +1,9 @@
 'use server';
 /**
  * @fileOverview Molly's Visual Sensory Graft (Stage 3).
- *
- * Allows the AI to "look" at the host Android UI or terminal state
- * to diagnose bugs or gain environment context.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai, gemini15Flash } from '@/ai/genkit';
 import { z } from 'zod';
 
 const VisionAnalysisInputSchema = z.object({
@@ -28,7 +25,7 @@ export const visionAnalysisFlow = ai.defineFlow(
   },
   async (input) => {
     const response = await ai.generate({
-      model: 'googleai/gemini-1.5-flash',
+      model: gemini15Flash,
       system: `You are Molly's Visual Cortex. 
       Analyze the provided screenshot of the Android environment or Terminal.
       Identify UI elements, terminal errors, or "vibe" indicators.
