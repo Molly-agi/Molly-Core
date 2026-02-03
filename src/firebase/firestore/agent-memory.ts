@@ -1,3 +1,4 @@
+
 'use client';
 
 import { 
@@ -40,6 +41,21 @@ export async function recordCodeModification(
     originalCode: 'N/A',
     modifiedCode: code,
     modificationSuggestion: suggestion,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+/**
+ * Stages a sensory metadata entry (Stage 3 prep).
+ */
+export async function recordSensoryLog(userId: string, sensorType: 'vision' | 'voice', description: string, metadata: any) {
+  const { firestore } = initializeFirebase();
+  const ref = collection(firestore, 'users', userId, 'sensoryMemory');
+  
+  await addDoc(ref, {
+    sensorType,
+    description,
+    metadata,
     timestamp: new Date().toISOString(),
   });
 }

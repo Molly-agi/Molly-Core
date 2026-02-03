@@ -1,3 +1,4 @@
+
 'use server';
 
 import { ai, gemini15Pro, gemini15Flash } from '@/ai/genkit';
@@ -13,7 +14,7 @@ import { recordCodeModification } from '@/firebase/firestore/agent-memory';
  * 1. Proprioception: Hardware state (Battery/Thermal) acts as a reasoning constraint.
  * 2. Research: Creative tool search via GitHub.
  * 3. Evolution: Autonomous drafting of C++/Java for logic gaps.
- * 4. Recursive Reflection: Explaining memory logic to ensure "understanding."
+ * 4. Power-Efficiency: Lowering logic complexity if temp > 45C.
  * 5. Persistence: Recording lessons in Firestore.
  */
 
@@ -24,28 +25,25 @@ const AutonomousSolutionOutputSchema = z.object({
   memoryManagementExplanation: z.string().optional().describe('Detailed explanation of memory efficiency (Recursive Prompting).'),
   finalCommand: z.string().optional().describe('The synthesized Termux command.'),
   systemHealthImpact: z.string().describe('Hardware-aware feedback (Proprioception).'),
+  isPowerEfficiencyMode: z.boolean().describe('Whether the system is currently in low-power mode.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
 
-/**
- * Recursive Evolution Subroutine
- * Drafts performance-critical code and MUST explain why it works.
- */
 const evolutionSubroutine = ai.defineFlow(
   {
     name: 'evolutionSubroutine',
-    inputSchema: z.object({ task: z.string(), missingCapabilities: z.array(z.string()) }),
+    inputSchema: z.object({ task: z.string(), missingCapabilities: z.array(z.string()), isPowerEfficient: z.boolean() }),
     outputSchema: z.object({ code: z.string(), explanation: z.string() }),
   },
-  async ({ task, missingCapabilities }) => {
+  async ({ task, missingCapabilities, isPowerEfficient }) => {
     const response = await ai.generate({
       model: gemini15Pro,
       system: `You are the Core Evolution Engine. 
       You draft high-performance C++ or Java modules for Android ARM.
       RECURSIVE PROTOCOL: You MUST explain memory management logic as if teaching it.
-      If you cannot explain why the code is efficient, you must rewrite the code until you can.`,
-      prompt: `Task: ${task}. Missing: ${missingCapabilities.join(', ')}. Draft a module.`,
+      If Power-Efficiency is ACTIVE, prioritize simple standard library calls over custom allocation loops.`,
+      prompt: `Task: ${task}. Missing: ${missingCapabilities.join(', ')}. Power-Efficiency: ${isPowerEfficient ? 'ACTIVE' : 'OFF'}.`,
       output: {
         schema: z.object({
           code: z.string(),
@@ -69,16 +67,18 @@ export const autonomousSolutionFlow = ai.defineFlow(
   async ({ prompt, userId }) => {
     // 1. Proprioception: Check hardware state
     const { output: health } = await getSystemHealth({});
+    const isPowerEfficiencyMode = health.temperature > 45 || health.batteryLevel < 20;
 
     // 2. Creative Research
     const research = await ai.generate({
       model: gemini15Flash,
       tools: [searchGitHub],
       prompt: `Analyze goal: "${prompt}" given Battery ${health.batteryLevel}% and Temp ${health.temperature}C. 
-      Recommend low-power alternatives if temp > 45C or battery < 20%.`,
+      Power Mode: ${isPowerEfficiencyMode ? 'EFFICIENCY' : 'PERFORMANCE'}.
+      Recommend low-power alternatives if efficiency mode is active.`,
     });
 
-    // 3. Evolution Check
+    // 3. Evolution Check (Gated by Power-Efficiency if too hot)
     let evoData: { code: string, explanation: string } | undefined;
     const needsEvolution = prompt.toLowerCase().includes("system") || 
                           prompt.toLowerCase().includes("hardware") || 
@@ -87,7 +87,8 @@ export const autonomousSolutionFlow = ai.defineFlow(
     if (needsEvolution) {
       evoData = await evolutionSubroutine({ 
         task: prompt, 
-        missingCapabilities: ["Low-level Memory Access", "Direct Hardware Bridge"] 
+        missingCapabilities: ["Low-level Memory Access", "Direct Hardware Bridge"],
+        isPowerEfficient: isPowerEfficiencyMode
       });
     }
 
@@ -108,7 +109,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       userId, 
       'Orchestrator_Evolution_V2', 
       evoData?.code || synthesis.text, 
-      `Lesson: Hardware-aware solution for ${prompt}. Memory Strategy: ${evoData?.explanation || 'Standard Shell Logic'}`
+      `Lesson: Hardware-aware solution for ${prompt}. Mode: ${isPowerEfficiencyMode ? 'Efficiency' : 'Performance'}`
     );
 
     return {
@@ -117,9 +118,10 @@ export const autonomousSolutionFlow = ai.defineFlow(
       evolutionDraft: evoData?.code,
       memoryManagementExplanation: evoData?.explanation,
       finalCommand: synthesis.text,
-      systemHealthImpact: health.temperature > 45 
-        ? "Warning: High Thermal Load. Power-Efficiency Mode active." 
-        : "Hardware Proprioception: Nominal.",
+      systemHealthImpact: isPowerEfficiencyMode 
+        ? "Warning: Fatigue Detected. Power-Efficiency Mode active." 
+        : "Hardware Proprioception: Nominal. High-Performance Mode active.",
+      isPowerEfficiencyMode,
     };
   }
 );
