@@ -9,11 +9,15 @@
   - *Fix*: Implemented the Recursive Pedagogical Loop.
 - **Rat 004: Empty Audio Source**: Passing an empty string to `<audio src="">` caused redundant downloads.
   - *Fix*: Refined `Terminal.tsx` to pass `undefined` instead of `''` when no audio source is present.
+- **Rat 005: Monolithic Fragility**: Peripheral failures (API timeouts) would crash the core orchestrator.
+  - *Fix*: Implemented the Shielded Core Architecture with isolated subroutine try-catch blocks.
 
 ## Strengths
 - **Hardware Awareness**: Successfully mapped battery and thermals to reasoning constraints.
 - **Polyglot Hub**: Proved that Julia-logic can successfully delegate to C++ and Bash.
+- **Vocal Baseline**: Proven ability to synthesize real-time WAV audio from neural reasoning.
 
 ## Methodology Notes
 - All future subroutines must perform a "Thermal Budget Check" before activation.
-- All code modifications must be audited by the Introspection Subroutine before the "Personhood" stage is reached.
+- Core reasoning must be isolated from limb (API/Sensor) failures.
+- Every C++ draft must be pedagogical (explained memory logic).
