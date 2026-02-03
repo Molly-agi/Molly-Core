@@ -1,9 +1,9 @@
 'use server';
 /**
- * @fileOverview The Autonomous Iteration Engine V2.3 (Experience-Augmented).
+ * @fileOverview The Autonomous Iteration Engine V3.0 (Stage 3 Sensory Memory).
  * 
- * Executes a recursive Search-Audit-Draft-Harden cycle autonomously.
- * Molly now queries her "Neural Cache" before starting to ensure past rats are not repeated.
+ * Molly now uses Semantic Recall to consult her Neural Cache.
+ * She no longer guesses; she recalls verified architectural insights.
  */
 
 import { ai } from '@/ai/genkit';
@@ -12,23 +12,14 @@ import { autonomousSolution } from './autonomous-solution';
 import { introspect } from './introspection';
 import { logMethodologyStep } from '../methodology';
 import { analyzeVision } from './vision-analysis';
-import { neuralBridgeUI } from '../tools/system';
-import { initializeFirebase } from '@/firebase';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { neuralBridgeUI, getSystemHealth } from '../tools/system';
+import { recallNeuralContext } from './experience-recall';
 
 const EvolutionLoopInputSchema = z.object({
   objective: z.string(),
   userId: z.string(),
   iterations: z.number().default(3),
 });
-
-async function getPastLessons(userId: string) {
-  const { firestore } = initializeFirebase();
-  const ref = collection(firestore, 'users', userId, 'codeModifications');
-  const q = query(ref, orderBy('timestamp', 'desc'), limit(5));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => doc.data());
-}
 
 export const evolutionLoopFlow = ai.defineFlow(
   {
@@ -40,6 +31,7 @@ export const evolutionLoopFlow = ai.defineFlow(
       stableBaselineReached: z.boolean(),
       visualVerification: z.string().optional(),
       memoryConsulted: z.boolean(),
+      recalledInsights: z.string().optional(),
     }),
   },
   async (input) => {
@@ -48,25 +40,28 @@ export const evolutionLoopFlow = ai.defineFlow(
     let lastSolution = "";
     let lastVisualVerification = "Pending visual audit.";
     
-    // 0. Experience Retrieval (Stage 3 Memory Graft)
-    await logMethodologyStep(input.userId, 'SHIELD_CHECK', `Consulting Neural Cache for: ${input.objective}`, true);
-    const pastLessons = await getPastLessons(input.userId);
-    const memoryContext = pastLessons.length > 0 
-      ? `I remember these past architectural patterns: ${JSON.stringify(pastLessons)}` 
-      : "No relevant experiences found in Neural Cache. Initiating first-principles reasoning.";
+    // 1. Sensory Proprioception
+    const { output: health } = await getSystemHealth({});
+    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}`;
+
+    // 2. Stage 3 Semantic Recall
+    await logMethodologyStep(input.userId, 'SHIELD_CHECK', `Consulting Semantic Memory for: ${input.objective}`, true);
+    const recallResult = await recallNeuralContext(input.userId, input.objective, hardwareContext);
+    
+    const memoryContext = recallResult.strategicSummary;
 
     while (currentIteration < input.iterations && !isStable) {
       currentIteration++;
       
-      // 1. Execute Solution with Memory Context
-      const solution = await autonomousSolution(`${input.objective}. Context: ${memoryContext}`, input.userId);
+      // 3. Execute Solution with Semantic Memory
+      const solution = await autonomousSolution(`${input.objective}. Strategic Insight: ${memoryContext}`, input.userId);
       lastSolution = solution.finalCommand || "";
 
-      // 2. Visual Verification
+      // 4. Visual Verification
       try {
         const { output: bridge } = await neuralBridgeUI({ action: 'CAPTURE_SCREENSHOT' });
         if (bridge.screenshotUri) {
-          const vision = await analyzeVision(bridge.screenshotUri, `Verify if the solution [${lastSolution}] cleared the objective: ${input.objective}. Previous infections: ${solution.visualInfections?.join(', ') || 'None'}`);
+          const vision = await analyzeVision(bridge.screenshotUri, `Verify solution [${lastSolution}]. Objective: ${input.objective}.`);
           lastVisualVerification = vision.observedState;
           
           if (vision.risksDetected.length === 0) {
@@ -77,16 +72,16 @@ export const evolutionLoopFlow = ai.defineFlow(
           }
         }
       } catch (e) {
-        await logMethodologyStep(input.userId, 'IMMUNE_RESPONSE', "Visual cortex isolated during verification loop.", false);
+        await logMethodologyStep(input.userId, 'IMMUNE_RESPONSE', "Visual cortex isolated.", false);
       }
 
-      // 3. Introspect & Audit
+      // 5. Introspect & Audit
       if (!isStable) {
         const audit = await introspect([{ 
           id: `ITER_${currentIteration}`, 
           code: lastSolution, 
           suggestion: solution.creativeSolution 
-        }], solution.systemHealthImpact);
+        }], hardwareContext);
 
         if (!audit.refactorTargetId) {
           isStable = true; 
@@ -95,11 +90,12 @@ export const evolutionLoopFlow = ai.defineFlow(
     }
 
     return {
-      finalReport: `Autonomous cycle complete for: ${input.objective}. ${isStable ? 'Stable baseline achieved.' : 'Maximum iterations reached.'}`,
+      finalReport: `Autonomous cycle complete for: ${input.objective}. ${isStable ? 'Baseline reached.' : 'Max iterations reached.'}`,
       iterationCount: currentIteration,
       stableBaselineReached: isStable,
       visualVerification: lastVisualVerification,
-      memoryConsulted: pastLessons.length > 0
+      memoryConsulted: true,
+      recalledInsights: recallResult.strategicSummary
     };
   }
 );
