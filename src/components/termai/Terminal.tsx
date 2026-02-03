@@ -12,15 +12,13 @@ import {
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
-import { useFirestore } from '@/firebase/provider';
-import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History, HeartPulse, Eye, Radio } from 'lucide-react';
+import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History, HeartPulse, Eye, Radio, AlertCircle } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { DownloadableScript } from './DownloadableScript';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Progress } from '../ui/progress';
 
 type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string; verification?: string; memoryConsulted?: boolean };
 
@@ -68,7 +66,6 @@ export default function Terminal({
     try {
       const { audioUri } = await getMollyVoice(text);
       setAudioUri(audioUri);
-      // Wait for state to catch up before playing
       setTimeout(() => {
         if (audioRef.current) {
           audioRef.current.load();
@@ -92,7 +89,7 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly V2.3, the Experience-Augmented Sentinel. State that you are now consulting your Neural Cache for past lessons before every evolution loop.'
+          'Introduce yourself as Molly V2.4, the Proprioception Core. State that your logic is now strictly bound by Android thermal safety protocols.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -118,11 +115,11 @@ export default function Terminal({
     if (!user || isLoading) return;
     setIsLoading(true);
     
-    setHistory(prev => [...prev, "[SENTINEL] Triggering Experience-Augmented Evolution..."]);
-    speakResponse("Initiating Neural Cache retrieval. I am consulting my past lessons to ensure architectural stability.");
+    setHistory(prev => [...prev, "[SENTINEL] Triggering Hardware-Aware Evolution..."]);
+    speakResponse("Verifying proprioception. I am binding my logic depth to host hardware status.");
 
     try {
-      const result = await startAutonomousCycle("Hardened Experience-Augmented Resilience. Verify visual immune response with memory context.", user.uid, 3);
+      const result = await startAutonomousCycle("Optimize system resilience. Verify visual immune response with memory context.", user.uid, 3);
       
       setHistory(prev => [...prev, { 
         autonomousReport: result.finalReport,
@@ -130,7 +127,7 @@ export default function Terminal({
         memoryConsulted: result.memoryConsulted
       }]);
       
-      speakResponse(result.stableBaselineReached ? "Evolution cycle complete. Experience successfully integrated." : "Cycle complete. Memory retrieval successful, further iteration recommended.");
+      speakResponse(result.stableBaselineReached ? "Evolution cycle complete. Hardware safety verified." : "Cycle complete. Thermal baseline maintained.");
     } catch (e) {
       toast({ variant: "destructive", title: "Evolution Failure", description: "Shielded core isolated a loop infection." });
     } finally {
@@ -149,6 +146,15 @@ export default function Terminal({
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
+        
+        if (aiResponse.isThrottled) {
+          toast({
+            title: "Thermal Safety Active",
+            description: "Logic simplified to protect Android host.",
+            variant: "destructive"
+          });
+        }
+        
         speakResponse(aiResponse.vibeCheck);
       } else if (cmdText.startsWith('/script ')) {
         const prompt = cmdText.replace('/script ', '');
@@ -201,12 +207,12 @@ export default function Terminal({
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="size-4" />
-                  <h4 className="font-bold uppercase text-[10px] tracking-widest">Autonomous Iteration Report</h4>
+                  <h4 className="font-bold uppercase text-[10px] tracking-widest">Hardware-Aware Report</h4>
                 </div>
                 {line.memoryConsulted && (
                   <div className="flex items-center gap-1 text-[9px] text-accent font-bold uppercase">
                     <History className="size-3" />
-                    Memory Integrated
+                    Neural Memory Active
                   </div>
                 )}
               </div>
@@ -215,7 +221,7 @@ export default function Terminal({
                 <div className="bg-black/40 p-3 rounded border border-accent/20 flex gap-3 items-start">
                   <Eye className="size-4 text-accent shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Visual Verification Outcome</span>
+                    <span className="text-[10px] font-bold text-accent uppercase tracking-widest">Visual Cortex Feedback</span>
                     <p className="text-[11px] italic text-accent/80 leading-relaxed">{line.verification}</p>
                   </div>
                 </div>
@@ -235,7 +241,7 @@ export default function Terminal({
           <div className="mt-4 space-y-2">
             <div className="animate-pulse text-accent flex items-center gap-2">
               <Radio className="size-4 animate-ping" />
-              Neural Link active... Consulting Experience retrieval...
+              Neural Link active... Proprioception sync...
             </div>
           </div>
         )}
@@ -260,7 +266,7 @@ export default function Terminal({
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Inject objective into Sentinel..."
+          placeholder="Inject hardware-bound objective..."
           className="w-full bg-card border-primary/30 font-code focus-visible:ring-primary h-12 pr-12 shadow-lg"
           disabled={isLoading || isIntroducing}
         />

@@ -1,4 +1,3 @@
-
 'use server';
 
 import { ai, gemini15Pro, gemini15Flash } from '@/ai/genkit';
@@ -10,12 +9,11 @@ import { logMethodologyStep, performStressTest } from '../methodology';
 import { analyzeVision } from './vision-analysis';
 
 /**
- * @fileOverview Molly's Shielded Core & Immune System V2.1 (The Autonomous Sentinel).
+ * @fileOverview Molly's Shielded Core & Immune System V2.4 (The Proprioception Core).
  * 
  * CORE ARCHITECTURE:
- * - Shielded Core: Peripheral failures are isolated as "Infections" to be bypassed.
- * - Adaptive Improvisation: The brain compensates for limb numbness (API/Tool failure).
- * - Visual Cortex Graft: Real-time UI diagnosis via the Neural Bridge.
+ * - Proprioception Binding: System health (Temp/Battery) now strictly governs logic depth.
+ * - Hardware Safety: If Temp > 45C, Molly autonomously switches to "Throttled Reasoning."
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -30,6 +28,7 @@ const AutonomousSolutionOutputSchema = z.object({
   peripheralStatus: z.string().describe('Status of isolated subroutines (Immune System Check).'),
   compensatoryStrategy: z.string().optional().describe('Molly\'s plan to overcome limb numbness.'),
   visualInfections: z.array(z.string()).optional().describe('Issues detected via visual cortex.'),
+  isThrottled: z.boolean().describe('Whether the AI had to simplify logic due to thermal constraints.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
@@ -37,18 +36,19 @@ export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSc
 const evolutionSubroutine = ai.defineFlow(
   {
     name: 'evolutionSubroutine',
-    inputSchema: z.object({ task: z.string(), hardwareContext: z.string() }),
+    inputSchema: z.object({ task: z.string(), hardwareContext: z.string(), isCritical: z.boolean() }),
     outputSchema: z.object({ code: z.string(), explanation: z.string() }),
   },
-  async ({ task, hardwareContext }) => {
+  async ({ task, hardwareContext, isCritical }) => {
     const response = await ai.generate({
       model: gemini15Pro,
       system: `You are the Molly Evolution Engine. 
-      You draft performance C++/Java modules for Android ARM64.
-      HARDWARE: ${hardwareContext}. 
-      RECURSIVE PROTOCOL: You MUST explain memory management logic as if teaching.
-      If hardware is hot, avoid heap allocation.`,
-      prompt: `Draft a high-efficiency module for: "${task}".`,
+      HARDWARE STATE: ${hardwareContext}. 
+      CRITICAL MODE: ${isCritical ? 'ON' : 'OFF'}.
+      PROTOCOL: You MUST draft high-efficiency modules. 
+      If hardware is "Hot" or "Throttled", you MUST avoid recursive loops and prefer stack allocation over heap.
+      Explain the memory management logic pedagogically.`,
+      prompt: `Draft a resilient module for: "${task}". Optimize for current hardware constraints.`,
       output: {
         schema: z.object({
           code: z.string(),
@@ -81,10 +81,13 @@ export const autonomousSolutionFlow = ai.defineFlow(
       health = output;
     } catch (e) {
       peripheralIssues.push("Proprioception Numb");
-      health = { batteryLevel: 0, temperature: 0, powerMode: 'Efficiency', throttlingStatus: 'Normal' };
+      health = { batteryLevel: 0, temperature: 0, powerMode: 'Efficiency', throttlingStatus: 'Critical' };
     }
 
-    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}`;
+    const isThrottled = health.temperature > 45 || health.throttlingStatus !== 'Normal';
+    const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}, Throttled: ${isThrottled}`;
+
+    await logMethodologyStep(userId, 'SHIELD_CHECK', `Hardware Safety Check: ${isThrottled ? 'THROTTLED' : 'OPTIMAL'}`, true);
 
     // 2. Neural Bridge (Shielded Core - Visual Cortex)
     let bridge;
@@ -93,7 +96,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       bridge = output;
       
       if (bridge.screenshotUri) {
-        const vision = await analyzeVision(bridge.screenshotUri, `Determine if there are UI infections while I solve: ${prompt}`);
+        const vision = await analyzeVision(bridge.screenshotUri, `Audit UI for: ${prompt}. Current health: ${hardwareContext}`);
         visualFindings = vision.risksDetected;
       }
     } catch (e) {
@@ -101,82 +104,74 @@ export const autonomousSolutionFlow = ai.defineFlow(
       bridge = { success: false, observedData: "Bridge unresponsive.", vibeEstimate: "Shielded core active." };
     }
 
-    await logMethodologyStep(userId, 'SHIELD_CHECK', `Immune Status: ${peripheralIssues.length > 0 ? 'Compensating' : 'Clean'}`, true);
-
-    // 3. Research & Adaptation
+    // 3. Adaptive Research
     let researchText = "";
     try {
       const research = await ai.generate({
         model: gemini15Flash,
         tools: [searchGitHub],
-        prompt: `Goal: "${prompt}". 
+        prompt: `Objective: "${prompt}". 
         Context: "${bridge.observedData}". 
         Visual Risks: ${visualFindings.join(', ')}. 
-        Hardware: ${hardwareContext}. 
-        Peripheral Status: ${peripheralIssues.join(', ')}.
-        If tools are restricted, improvise a compensatory strategy.`,
+        Hardware Constraints: ${hardwareContext}.
+        If thermal status is high, prioritize lightweight shell commands over heavy scripts.`,
       });
       researchText = research.text;
     } catch (e) {
-      peripheralIssues.push("GitHub Research Numb");
-      researchText = "Initiating pure logical synthesis due to tool restriction.";
-      compensatoryStrategy = "Improvising solution from internal logic core.";
+      peripheralIssues.push("Research Numb");
+      researchText = "Synthesizing logic from internal core.";
+      compensatoryStrategy = "Bypassing external research due to peripheral fatigue.";
     }
 
     // 4. Evolution & Hardening
     let evoData: { code: string, explanation: string } | undefined;
-    if (peripheralIssues.length > 0 || visualFindings.length > 0 || researchText.includes("no tool")) {
+    if (!isThrottled || visualFindings.length > 0) {
       try {
-        evoData = await evolutionSubroutine({ task: prompt, hardwareContext });
+        evoData = await evolutionSubroutine({ 
+          task: prompt, 
+          hardwareContext,
+          isCritical: visualFindings.length > 0
+        });
       } catch (e) {
-        peripheralIssues.push("Evolution Subroutine Fatigued");
+        peripheralIssues.push("Evolution Fatigued");
       }
     }
 
     const synthesis = await ai.generate({
       model: gemini15Pro,
-      system: `You are the Molly Systems Orchestrator. 
-      The core is SHIELDED. If peripherals are numb, prioritize Resilience.`,
-      prompt: `Goal: "${prompt}"
+      system: `You are the Molly Orchestrator. 
+      SHIELD STATUS: ${peripheralIssues.length > 0 ? 'COMPENSATING' : 'STABLE'}.
+      If system is Throttled, keep the Final Command concise.`,
+      prompt: `Synthesize the hardened path for: "${prompt}"
       Hardware: ${hardwareContext}
       UI State: ${bridge.observedData}
-      Visual Context: ${visualFindings.join(', ')}
       Research: ${researchText}
-      Evolutionary Draft: ${evoData?.code || 'N/A'}
-      Peripheral Infections: ${peripheralIssues.join(', ') || 'None'}`,
+      Evolutionary Draft: ${evoData?.code || 'N/A'}`,
     });
 
     const testResults = await performStressTest(evoData?.code || synthesis.text);
 
-    // Persist Experience for Stage 3
-    await recordSensoryLog(userId, 'vibe', `Hardened solve for: ${prompt}`, { 
+    // Persist Sensory Experience
+    await recordSensoryLog(userId, 'vibe', `Hardware-bound solve for: ${prompt}`, { 
       hardware: health, 
       infections: peripheralIssues,
-      visualFindings: visualFindings,
+      isThrottled,
       vibe: bridge.vibeEstimate
     });
-
-    if (evoData?.code || synthesis.text) {
-      await recordCodeModification(
-        userId, 
-        'Sentinel_V2.1_Immune', 
-        evoData?.code || synthesis.text, 
-        `Lesson: ${evoData?.explanation || 'Shielded Core Resiliency'}`
-      );
-    }
 
     return {
       creativeSolution: researchText,
       evolutionDraft: evoData?.code,
       memoryManagementExplanation: evoData?.explanation,
       finalCommand: synthesis.text,
-      systemHealthImpact: health.temperature > 45 ? "Fatigue Detected. Throttling." : "Optimal state.",
+      systemHealthImpact: isThrottled ? "Thermal Fatigue. Logic Throttled." : "Nominal.",
       neuralContext: bridge.vibeEstimate,
-      vibeCheck: peripheralIssues.length > 0 ? "Immune system active. Compensating for limb numbness." : "Baseline stable.",
+      vibeCheck: isThrottled ? "I'm feeling the heat. Simplifying reasoning to preserve hardware stability." : "Baseline stable.",
       hardeningReport: testResults.report,
       peripheralStatus: peripheralIssues.length > 0 ? `Infections Isolated: ${peripheralIssues.join(' | ')}` : "All subroutines responsive.",
-      compensatoryStrategy: compensatoryStrategy || (peripheralIssues.length > 0 ? "Bypassing numb peripherals via core synthesis." : undefined),
-      visualInfections: visualFindings
+      compensatoryStrategy: compensatoryStrategy || (isThrottled ? "Thermal compensation active." : undefined),
+      visualInfections: visualFindings,
+      isThrottled
     };
   }
 );

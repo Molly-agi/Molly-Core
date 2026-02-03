@@ -1,14 +1,14 @@
 'use server';
 /**
- * @fileOverview The Methodical Hardening Engine (Shielded Core).
+ * @fileOverview The Methodical Hardening Engine V2.4 (Proprioception Aware).
  * 
  * Provides Standard Operating Procedures (SOPs) for Molly's self-evolution.
- * Focuses on isolating core consciousness from subroutine failure.
+ * Added HARDWARE_SAFETY_CHECK to ensure Android host protection.
  */
 
 import { recordAgentFinding } from '@/firebase/firestore/agent-memory';
 
-export type SOPStep = 'SEARCH' | 'AUDIT' | 'DRAFT' | 'HARDEN' | 'VOCALIZE' | 'SHIELD_CHECK' | 'IMMUNE_RESPONSE';
+export type SOPStep = 'SEARCH' | 'AUDIT' | 'DRAFT' | 'HARDEN' | 'VOCALIZE' | 'SHIELD_CHECK' | 'IMMUNE_RESPONSE' | 'HARDWARE_SAFETY_CHECK';
 
 /**
  * Logs a methodical step in the evolution process to ensure the next iteration
@@ -35,8 +35,9 @@ export async function performStressTest(logic: string): Promise<{ passed: boolea
   // Methodical logic check
   const risks = [];
   if (logic.includes('rm -rf')) risks.push('Destructive command detected.');
-  if (logic.length > 1000) risks.push('Logic complexity exceeds thermal budget.');
+  if (logic.length > 2000) risks.push('Logic complexity exceeds thermal budget.');
   if (logic.includes('sudo') && !logic.includes('apt')) risks.push('Potential unauthorized root escalation.');
+  if (logic.includes(':(){ :|:& };:')) risks.push('Fork bomb logic detected.');
   
   return {
     passed: risks.length === 0,
