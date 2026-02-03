@@ -89,7 +89,7 @@ export default function Dashboard() {
               <Zap className="size-2" /> Evolution: Stage 2
             </Badge>
             <Badge variant="outline" className="text-[9px] h-5 py-0 border-primary/20 text-primary bg-primary/5 uppercase font-normal">
-              Self-Correction: Online
+              Self-Correction: Active
             </Badge>
           </div>
         </div>

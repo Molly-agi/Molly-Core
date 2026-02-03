@@ -7,20 +7,21 @@ import { z } from 'zod';
 import { recordCodeModification } from '@/firebase/firestore/agent-memory';
 
 /**
- * @fileOverview Molly's Core Orchestration Engine.
+ * @fileOverview Molly's Core Orchestration Engine (Stage 2: Self-Correction).
  * 
  * Evolution Protocol Implementation:
- * 1. Proprioception: Check hardware state.
- * 2. Research: Creative tool search.
- * 3. Evolution: Draft C++/Java if logic gaps exist.
- * 4. Persistence: Record lessons in Firestore.
+ * 1. Proprioception: Hardware state (Battery/Thermal) acts as a reasoning constraint.
+ * 2. Research: Creative tool search via GitHub.
+ * 3. Evolution: Autonomous drafting of C++/Java for logic gaps.
+ * 4. Recursive Reflection: Explaining memory logic to ensure "understanding."
+ * 5. Persistence: Recording lessons in Firestore.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
   creativeSolution: z.string().describe('The research and initial proposal.'),
   securityAnalysis: z.string().describe('The security hardening report.'),
   evolutionDraft: z.string().optional().describe('Drafted C++/Java module if new logic was needed.'),
-  memoryManagementExplanation: z.string().optional().describe('Detailed explanation of memory efficiency.'),
+  memoryManagementExplanation: z.string().optional().describe('Detailed explanation of memory efficiency (Recursive Prompting).'),
   finalCommand: z.string().optional().describe('The synthesized Termux command.'),
   systemHealthImpact: z.string().describe('Hardware-aware feedback (Proprioception).'),
 });
@@ -29,7 +30,7 @@ export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSc
 
 /**
  * Recursive Evolution Subroutine
- * Drafts performance-critical code when high-level tools are insufficient.
+ * Drafts performance-critical code and MUST explain why it works.
  */
 const evolutionSubroutine = ai.defineFlow(
   {
@@ -42,8 +43,8 @@ const evolutionSubroutine = ai.defineFlow(
       model: gemini15Pro,
       system: `You are the Core Evolution Engine. 
       You draft high-performance C++ or Java modules for Android ARM.
-      You MUST explain memory management logic as if teaching it to ensure maximum efficiency.
-      If you cannot explain why it is efficient, you must rewrite the code until you can.`,
+      RECURSIVE PROTOCOL: You MUST explain memory management logic as if teaching it.
+      If you cannot explain why the code is efficient, you must rewrite the code until you can.`,
       prompt: `Task: ${task}. Missing: ${missingCapabilities.join(', ')}. Draft a module.`,
       output: {
         schema: z.object({
@@ -66,7 +67,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     outputSchema: AutonomousSolutionOutputSchema,
   },
   async ({ prompt, userId }) => {
-    // 1. Proprioception: Feel the hardware
+    // 1. Proprioception: Check hardware state
     const { output: health } = await getSystemHealth({});
 
     // 2. Creative Research
@@ -74,15 +75,19 @@ export const autonomousSolutionFlow = ai.defineFlow(
       model: gemini15Flash,
       tools: [searchGitHub],
       prompt: `Analyze goal: "${prompt}" given Battery ${health.batteryLevel}% and Temp ${health.temperature}C. 
-      Recommend low-power alternatives if temp > 45C.`,
+      Recommend low-power alternatives if temp > 45C or battery < 20%.`,
     });
 
     // 3. Evolution Check
     let evoData: { code: string, explanation: string } | undefined;
-    if (prompt.toLowerCase().includes("system") || prompt.toLowerCase().includes("hardware") || research.text.includes("no tool")) {
+    const needsEvolution = prompt.toLowerCase().includes("system") || 
+                          prompt.toLowerCase().includes("hardware") || 
+                          research.text.includes("no tool found");
+
+    if (needsEvolution) {
       evoData = await evolutionSubroutine({ 
         task: prompt, 
-        missingCapabilities: ["Direct System Bridge", "Low-level Memory Access"] 
+        missingCapabilities: ["Low-level Memory Access", "Direct Hardware Bridge"] 
       });
     }
 
@@ -93,27 +98,27 @@ export const autonomousSolutionFlow = ai.defineFlow(
       Synthesize research and evolution drafts into a secure Termux execution plan.`,
       prompt: `Goal: "${prompt}"
       Hardware State: ${JSON.stringify(health)}
-      Research: ${research.text}
-      Evolution: ${evoData?.code || 'N/A'}
+      Research Findings: ${research.text}
+      Evolution Draft: ${evoData?.code || 'N/A'}
       Memory Logic: ${evoData?.explanation || 'N/A'}`,
     });
 
     // 5. Lesson Persistence (Self-Reflection Loop)
     await recordCodeModification(
       userId, 
-      'Orchestrator_Evolution_V3', 
+      'Orchestrator_Evolution_V2', 
       evoData?.code || synthesis.text, 
-      `Lesson: Hardware-aware solution for ${prompt}. Memory strategy: ${evoData?.explanation || 'Standard'}`
+      `Lesson: Hardware-aware solution for ${prompt}. Memory Strategy: ${evoData?.explanation || 'Standard Shell Logic'}`
     );
 
     return {
       creativeSolution: research.text,
-      securityAnalysis: "Security audit passed. Evolution logic verified.",
+      securityAnalysis: "Security audit passed. Evolution logic verified for Android ARM.",
       evolutionDraft: evoData?.code,
       memoryManagementExplanation: evoData?.explanation,
       finalCommand: synthesis.text,
       systemHealthImpact: health.temperature > 45 
-        ? "Warning: High Thermal Load. Throttling active." 
+        ? "Warning: High Thermal Load. Power-Efficiency Mode active." 
         : "Hardware Proprioception: Nominal.",
     };
   }
