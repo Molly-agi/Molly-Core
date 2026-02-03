@@ -3,6 +3,7 @@
  * @fileOverview Molly's Vocal Cords (Hardened).
  * 
  * Provides audible synthesis for the AI responses using gemini-2.5-flash-preview-tts.
+ * Voice updated to 'Alsephina' (Feminine) per strategic mandate.
  */
 
 import { ai } from '@/ai/genkit';
@@ -51,7 +52,7 @@ export const textToSpeechFlow = ai.defineFlow(
         responseModalities: ['AUDIO'],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Algenib' },
+            prebuiltVoiceConfig: { voiceName: 'Alsephina' }, // Feminine voice name
           },
         },
       },
