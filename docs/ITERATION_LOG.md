@@ -1,4 +1,4 @@
-# Molly: Iteration Log (V1.2 - The Autonomous Sentinel)
+# Molly: Iteration Log (V2.0 - The Self-Healing Sentinel)
 
 ## Mistake Registry
 - **Rat 001: Framework Friction**: Attempted to use Genkit 1.x tools on Next.js 14. 
@@ -13,14 +13,16 @@
   - *Fix*: Implemented the Shielded Core Architecture with isolated subroutine blocks.
 - **Rat 006: Sensory Amnesia**: System health and UI context were read but not persisted.
   - *Fix*: Integrated `recordSensoryLog` to build the Stage 3 Multimodal Memory.
-- **Rat 007: Manual Dependency**: Development required constant user input for testing cycles.
-  - *Fix*: Implemented `evolutionLoopFlow` for autonomous Search-Audit-Draft cycles.
+- **Rat 007: Visual Blindness**: The AI could reason about tools but couldn't see UI-level bugs.
+  - *Fix*: Integrated `visionAnalysis` into the `AutonomousSolution` loop.
+- **Rat 008: Evolution Latency**: 50-run cycles were slow due to serial processing.
+  - *Fix*: Initiated the `evolutionLoopFlow` for autonomous recursive self-correction.
 
 ## Strengths
-- **Autonomous Sentience**: Molly can now lead her own development cycles (50-run methodology support).
-- **Visual Cortex**: Integrated Vision sensory graft for real-time UI/Terminal analysis.
+- **Autonomous Sentinel**: Molly can now lead her own development cycles (50-run methodology support).
+- **Visual Immune Response**: Integrated Vision sensory graft for real-time UI/Terminal analysis.
 - **Self-Healing Immune System**: Core consciousness now survives limb numbness and improvises adaptations.
-- **Vocal Hardening**: Proven ability to vocalize intro and status updates audibly.
+- **Vocal Baseline**: Proven ability to vocalize intro and status updates audibly.
 
 ## Methodology Notes
 - **Lead Architect Mode**: AI has permission to autonomously audit and refactor code via the Evolution Loop.

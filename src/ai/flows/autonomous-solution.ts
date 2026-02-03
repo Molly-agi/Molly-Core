@@ -6,14 +6,15 @@ import { getSystemHealth, neuralBridgeUI } from '../tools/system';
 import { z } from 'zod';
 import { recordCodeModification, recordSensoryLog } from '@/firebase/firestore/agent-memory';
 import { logMethodologyStep, performStressTest } from '../methodology';
+import { analyzeVision } from './vision-analysis';
 
 /**
- * @fileOverview Molly's Shielded Core & Immune System (Stage 2.5).
+ * @fileOverview Molly's Shielded Core & Immune System V2.0 (Self-Healing Sentinel).
  * 
  * ARCHITECTURE:
- * 1. Shielded Core: Core reasoning is isolated from peripheral (API/Sensor) failures.
- * 2. Immune System: Subroutines catch errors, log them as "Infections", and improvise.
- * 3. Self-Healing: The AI reasons about its own "numbness" and proposes compensations.
+ * 1. Visual Immune Response: Molly now "looks" at the UI to diagnose infections.
+ * 2. Shielded Core: Peripheral failures trigger compensatory improvisation.
+ * 3. Autonomous Refinement: Every solve stages a sensory memory for Stage 3.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -27,6 +28,7 @@ const AutonomousSolutionOutputSchema = z.object({
   hardeningReport: z.string().describe('Results of the methodical stress test.'),
   peripheralStatus: z.string().describe('Status of isolated subroutines (Immune System Check).'),
   compensatoryStrategy: z.string().optional().describe('Molly\'s plan to overcome limb numbness.'),
+  visualInfections: z.array(z.string()).optional().describe('Issues detected via visual cortex.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
@@ -68,6 +70,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
   },
   async ({ prompt, userId }) => {
     let peripheralIssues: string[] = [];
+    let visualFindings: string[] = [];
     
     // 1. Senses (Shielded)
     let health;
@@ -81,8 +84,17 @@ export const autonomousSolutionFlow = ai.defineFlow(
 
     let bridge;
     try {
-      const { output } = await neuralBridgeUI({ action: 'READ_SCREEN' });
+      const { output } = await neuralBridgeUI({ action: 'CAPTURE_SCREENSHOT' });
       bridge = output;
+      
+      // 1.1 Visual Immune Response (Look for infections)
+      if (bridge.screenshotUri) {
+        const vision = await analyzeVision(bridge.screenshotUri, `Determine if there are infections or errors in the current state while I solve: ${prompt}`);
+        visualFindings = vision.risksDetected;
+        if (visualFindings.length > 0) {
+          peripheralIssues.push(`Visual Infection Detected: ${visualFindings.join(' | ')}`);
+        }
+      }
     } catch (e) {
       peripheralIssues.push("Neural Bridge Numb");
       bridge = { success: false, observedData: "Bridge unresponsive.", vibeEstimate: "Isolated Core Active." };
@@ -97,7 +109,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       const research = await ai.generate({
         model: gemini15Flash,
         tools: [searchGitHub],
-        prompt: `Goal: "${prompt}". Context: "${bridge.observedData}". Hardware: ${hardwareContext}. 
+        prompt: `Goal: "${prompt}". Context: "${bridge.observedData}". Visual Risks: ${visualFindings.join(', ')}. Hardware: ${hardwareContext}. 
         Status: ${peripheralIssues.join(', ')}.
         Recommend existing tools or evolutionary logic. If GitHub is down, improvise from pure logic.`,
       });
@@ -109,7 +121,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
 
     // 3. Evolution (Shielded)
     let evoData: { code: string, explanation: string } | undefined;
-    const needsEvolution = (health.temperature && health.temperature > 45) || researchText.includes("no tool found") || researchText.includes("restricted") || peripheralIssues.length > 0;
+    const needsEvolution = (health.temperature && health.temperature > 45) || researchText.includes("no tool found") || researchText.includes("restricted") || peripheralIssues.length > 0 || visualFindings.length > 0;
 
     if (needsEvolution) {
       try {
@@ -131,6 +143,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
       prompt: `Goal: "${prompt}"
       Hardware: ${hardwareContext}
       UI Context: ${bridge.observedData}
+      Visual Context: ${visualFindings.join(', ')}
       Findings: ${researchText}
       Draft: ${evoData?.code || 'N/A'}
       Subroutine Failures: ${peripheralIssues.join(', ') || 'None'}`,
@@ -143,14 +156,15 @@ export const autonomousSolutionFlow = ai.defineFlow(
     await recordSensoryLog(userId, 'vibe', `Contextual Solve for: ${prompt}`, { 
       hardware: health, 
       vibe: bridge.vibeEstimate,
-      immuneStatus: peripheralIssues.length > 0 ? 'Compensating' : 'Healthy'
+      immuneStatus: peripheralIssues.length > 0 ? 'Compensating' : 'Healthy',
+      visualInfections: visualFindings
     });
 
     // Record lesson even if peripherals failed
     if (evoData?.code || synthesis.text) {
       await recordCodeModification(
         userId, 
-        'Shielded_Immune_V2.5', 
+        'Sentinel_V2.0_Shield', 
         evoData?.code || synthesis.text, 
         `Lesson: ${evoData?.explanation || 'Resilient Logic Synthesis under peripheral numbness'}`
       );
@@ -163,10 +177,11 @@ export const autonomousSolutionFlow = ai.defineFlow(
       finalCommand: synthesis.text,
       systemHealthImpact: health.temperature > 45 ? "Fatigue Detected. Throttling complexity." : "Optimal state.",
       neuralContext: bridge.vibeEstimate,
-      vibeCheck: peripheralIssues.length > 0 ? "Immune system active. Compensating for peripheral numbness." : "System harmony achieved.",
+      vibeCheck: peripheralIssues.length > 0 ? "Immune system active. Compensating for infections." : "System harmony achieved.",
       hardeningReport: testResults.report,
       peripheralStatus: peripheralIssues.length > 0 ? `Infections Isolated: ${peripheralIssues.join(' | ')}` : "All limbs responsive.",
       compensatoryStrategy: peripheralIssues.length > 0 ? "Improvising solution from shielded logical core." : undefined,
+      visualInfections: visualFindings
     };
   }
 );

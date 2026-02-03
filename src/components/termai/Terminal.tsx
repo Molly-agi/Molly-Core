@@ -17,7 +17,7 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2 } from 'lucide-react';
+import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Eye } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -85,7 +85,7 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly V2.0, a shielded, self-healing sentinel designed for autonomous Android orchestration.'
+          'Introduce yourself as Molly V2.0, an autonomous, self-healing sentinel. Your visual cortex and immune system are now live.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -113,13 +113,13 @@ export default function Terminal({
   const handleAutonomousLoop = async () => {
     if (!user || isLoading) return;
     setIsLoading(true);
-    setHistory((prev) => [...prev, "[SYSTEM] Initiating Autonomous Evolution Cycle (50-run methodology simulation)..."]);
-    speakResponse("Starting autonomous self-iteration. I will lead, the core will harden.");
+    setHistory((prev) => [...prev, "[SENTINEL] Initiating Autonomous Evolution Cycle (50-run simulation)..."]);
+    speakResponse("Starting autonomous self-iteration. I am now optimizing my visual and memory subroutines.");
 
     try {
-      const report = await startAutonomousCycle("Streamline Neural Bridge and optimize thermal logic for Stage 3.", user.uid, 3);
+      const report = await startAutonomousCycle("Harden visual immune response and eliminate sensory memory latency.", user.uid, 3);
       setHistory((prev) => [...prev, { autonomousReport: report.finalReport }]);
-      speakResponse("Autonomous cycle complete. Stability verified.");
+      speakResponse("Autonomous cycle complete. Baseline hardened. All visual infections isolated.");
     } catch (error) {
       toast({ variant: "destructive", title: "Evolution Failed", description: "Shielded core prevented total collapse." });
     } finally {
@@ -149,7 +149,7 @@ export default function Terminal({
         speakResponse(`Script ${scriptResponse.filename} has been drafted.`);
       } else if (cmdText === '/healthcheck') {
         const aiResponse = await getHealthCheck('ping');
-        setHistory((prev) => [...prev, `🩺 Orchestration Health: ${aiResponse}`]);
+        setHistory((prev) => [...prev, `🩺 Sentinel Health: ${aiResponse}`]);
         speakResponse(aiResponse);
       } else if (cmdText === 'clear') {
         setHistory([]);
@@ -238,7 +238,7 @@ export default function Terminal({
           <PlayCircle className="size-3" /> Autonomous Evolution Mode
         </Button>
         <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve analyze system bottleneck')} className="h-8 gap-2 hover:bg-accent/10">
-          <Shield className="size-3 text-accent" /> Baseline Health
+          <Shield className="size-3 text-accent" /> Sentinel Health
         </Button>
         <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 ml-auto rounded-full hover:bg-primary/10">
           {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}
@@ -252,7 +252,7 @@ export default function Terminal({
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Inject objective into Orchestrator..."
+          placeholder="Inject objective into Sentinel..."
           className="w-full bg-card border-primary/30 font-code focus-visible:ring-primary h-12 pr-12"
           disabled={isLoading || isIntroducing}
         />

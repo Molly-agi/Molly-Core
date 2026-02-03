@@ -2,7 +2,7 @@
 
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Lightbulb, TerminalSquare, Zap, Cpu, BookOpen, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Lightbulb, TerminalSquare, Zap, Cpu, BookOpen, ShieldCheck, AlertTriangle, Eye } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
 
@@ -37,6 +37,20 @@ export function AutonomousSolutionResponse({
               <h4 className="text-[10px] font-bold text-yellow-500 uppercase tracking-widest">Immune Response Active</h4>
               <p className="text-xs text-yellow-100/80">{response.compensatoryStrategy}</p>
             </div>
+          </div>
+        )}
+
+        {response.visualInfections && response.visualInfections.length > 0 && (
+          <div className="bg-destructive/10 p-3 rounded-lg border border-destructive/30">
+            <h4 className="flex items-center gap-2 text-[10px] font-bold text-destructive uppercase tracking-widest mb-1">
+              <Eye className="size-3" />
+              Visual Infection Detected
+            </h4>
+            <ul className="list-disc list-inside text-xs text-destructive/80">
+              {response.visualInfections.map((inf, i) => (
+                <li key={i}>{inf}</li>
+              ))}
+            </ul>
           </div>
         )}
 
