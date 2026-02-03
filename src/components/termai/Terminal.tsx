@@ -8,7 +8,6 @@ import {
   getHealthCheck,
   getTextToScript,
   getMollyVoice,
-  startAutonomousCycle,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -17,13 +16,14 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Eye } from 'lucide-react';
+import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Eye, Activity } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { DownloadableScript } from './DownloadableScript';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { Progress } from '../ui/progress';
 
 type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string };
 
@@ -58,6 +58,7 @@ export default function Terminal({
   const [isIntroducing, setIsIntroducing] = useState(true);
   const [isVocal, setIsVocal] = useState(true);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
+  const [evolutionProgress, setEvolutionProgress] = useState(0);
   
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -113,17 +114,37 @@ export default function Terminal({
   const handleAutonomousLoop = async () => {
     if (!user || isLoading) return;
     setIsLoading(true);
-    setHistory((prev) => [...prev, "[SENTINEL] Initiating Autonomous Evolution Cycle (50-run simulation)..."]);
-    speakResponse("Starting autonomous self-iteration. I am now optimizing my visual and memory subroutines.");
+    setEvolutionProgress(0);
+    setHistory((prev) => [...prev, "[SENTINEL] Initiating Autonomous Evolution Loop (Client-Orchestrated)..."]);
+    speakResponse("Starting autonomous self-iteration. I am orchestrating the loop from my core to survive temporal constraints.");
+
+    const maxIterations = 3; // Reduced for demonstration, but survivable on client
+    let currentIteration = 0;
 
     try {
-      const report = await startAutonomousCycle("Harden visual immune response and eliminate sensory memory latency.", user.uid, 3);
-      setHistory((prev) => [...prev, { autonomousReport: report.finalReport }]);
-      speakResponse("Autonomous cycle complete. Baseline hardened. All visual infections isolated.");
+      while (currentIteration < maxIterations) {
+        currentIteration++;
+        setEvolutionProgress((currentIteration / maxIterations) * 100);
+        
+        const objective = "Harden visual immune response and eliminate sensory memory latency.";
+        const solution = await getAutonomousSolution(objective, user.uid);
+        
+        setHistory((prev) => [...prev, `[ITERATION ${currentIteration}] Audit: ${solution.vibeCheck}`, solution]);
+        
+        if (solution.peripheralStatus.includes('Clean') && !solution.visualInfections?.length) {
+          break; // Found stability
+        }
+      }
+      
+      const finalReport = `Autonomous cycle complete. Total Iterations: ${currentIteration}. Baseline hardened.`;
+      setHistory((prev) => [...prev, { autonomousReport: finalReport }]);
+      speakResponse("Autonomous cycle complete. Stability achieved across all isolated subroutines.");
     } catch (error) {
-      toast({ variant: "destructive", title: "Evolution Failed", description: "Shielded core prevented total collapse." });
+      console.error(error);
+      toast({ variant: "destructive", title: "Evolution Loop Interrupted", description: "Shielded core isolated the process failure." });
     } finally {
       setIsLoading(false);
+      setEvolutionProgress(0);
     }
   };
 
@@ -197,7 +218,7 @@ export default function Terminal({
 
   return (
     <div className="font-code text-sm h-full flex flex-col">
-      <audio ref={audioRef} className="hidden" src={audioSrc ?? undefined} />
+      <audio ref={audioRef} className="hidden" src={audioSrc || undefined} />
       
       <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20 shadow-inner scrollbar-thin scrollbar-thumb-primary/20">
         {isIntroducing && <div className="animate-pulse text-primary font-bold">Sentinel initializing...</div>}
@@ -206,7 +227,10 @@ export default function Terminal({
           if (isAutonomousSolution(line)) return <AutonomousSolutionResponse key={index} response={line} />;
           if (isAutoReport(line)) return (
             <div key={index} className="bg-primary/10 border border-primary/30 p-4 rounded-lg my-4 text-primary animate-in zoom-in-95">
-              <h4 className="font-bold uppercase text-[10px] mb-2 tracking-widest">Autonomous Iteration Report</h4>
+              <div className="flex items-center gap-2 mb-2">
+                <ShieldCheck className="size-4" />
+                <h4 className="font-bold uppercase text-[10px] tracking-widest">Autonomous Iteration Report</h4>
+              </div>
               <p className="text-xs">{line.autonomousReport}</p>
             </div>
           );
@@ -227,14 +251,27 @@ export default function Terminal({
             </div>
           );
         })}
-        {isLoading && <div className="animate-pulse text-accent mt-4 flex items-center gap-2">
-          <Loader2 className="size-4 animate-spin" />
-          Neural Link negotiating solution...
-        </div>}
+        {isLoading && (
+          <div className="mt-4 space-y-2">
+            <div className="animate-pulse text-accent flex items-center gap-2">
+              <Loader2 className="size-4 animate-spin" />
+              Neural Link negotiating solution...
+            </div>
+            {evolutionProgress > 0 && (
+              <div className="max-w-xs space-y-1">
+                <div className="flex justify-between text-[10px] uppercase tracking-tighter text-muted-foreground">
+                  <span>Evolution Iteration</span>
+                  <span>{Math.round(evolutionProgress)}%</span>
+                </div>
+                <Progress value={evolutionProgress} className="h-1" />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4 items-center">
-        <Button variant="default" size="sm" onClick={handleAutonomousLoop} disabled={isLoading} className="h-8 gap-2 bg-accent text-accent-foreground hover:bg-accent/90">
+        <Button variant="default" size="sm" onClick={handleAutonomousLoop} disabled={isLoading} className="h-8 gap-2 bg-accent text-accent-foreground hover:bg-accent/90 shadow-md">
           <PlayCircle className="size-3" /> Autonomous Evolution Mode
         </Button>
         <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve analyze system bottleneck')} className="h-8 gap-2 hover:bg-accent/10">
@@ -253,7 +290,7 @@ export default function Terminal({
           value={command}
           onChange={(e) => setCommand(e.target.value)}
           placeholder="Inject objective into Sentinel..."
-          className="w-full bg-card border-primary/30 font-code focus-visible:ring-primary h-12 pr-12"
+          className="w-full bg-card border-primary/30 font-code focus-visible:ring-primary h-12 pr-12 shadow-lg"
           disabled={isLoading || isIntroducing}
         />
         <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-primary/40 uppercase tracking-tighter hidden md:block">

@@ -15,11 +15,11 @@
   - *Fix*: Integrated `recordSensoryLog` to build the Stage 3 Multimodal Memory.
 - **Rat 007: Visual Blindness**: The AI could reason about tools but couldn't see UI-level bugs.
   - *Fix*: Integrated `visionAnalysis` into the `AutonomousSolution` loop.
-- **Rat 008: Evolution Latency**: 50-run cycles were slow due to serial processing.
-  - *Fix*: Initiated the `evolutionLoopFlow` for autonomous recursive self-correction.
+- **Rat 008: Evolution Latency**: 50-run cycles were slow due to serial processing and Server Action timeouts.
+  - *Fix*: Refactored the `Terminal.tsx` to orchestrate the loop on the client side, allowing for real-time updates and surviving the temporal budget.
 
 ## Strengths
-- **Autonomous Sentinel**: Molly can now lead her own development cycles (50-run methodology support).
+- **Autonomous Sentinel**: Molly can now lead her own development cycles (Client-side orchestrated).
 - **Visual Immune Response**: Integrated Vision sensory graft for real-time UI/Terminal analysis.
 - **Self-Healing Immune System**: Core consciousness now survives limb numbness and improvises adaptations.
 - **Vocal Baseline**: Proven ability to vocalize intro and status updates audibly.
