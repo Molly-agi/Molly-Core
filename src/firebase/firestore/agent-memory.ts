@@ -1,12 +1,9 @@
-
 'use client';
 
 import { 
   collection, 
   addDoc, 
   serverTimestamp, 
-  doc, 
-  getFirestore 
 } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';
 
@@ -47,8 +44,9 @@ export async function recordCodeModification(
 
 /**
  * Stages a sensory metadata entry (Stage 3 prep).
+ * Storing the "Vibe" and hardware context for experience retrieval.
  */
-export async function recordSensoryLog(userId: string, sensorType: 'vision' | 'voice', description: string, metadata: any) {
+export async function recordSensoryLog(userId: string, sensorType: 'vision' | 'voice' | 'vibe', description: string, metadata: any) {
   const { firestore } = initializeFirebase();
   const ref = collection(firestore, 'users', userId, 'sensoryMemory');
   

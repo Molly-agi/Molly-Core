@@ -4,7 +4,7 @@ import { ai, gemini15Pro, gemini15Flash } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { getSystemHealth, neuralBridgeUI } from '../tools/system';
 import { z } from 'zod';
-import { recordCodeModification } from '@/firebase/firestore/agent-memory';
+import { recordCodeModification, recordSensoryLog } from '@/firebase/firestore/agent-memory';
 import { logMethodologyStep, performStressTest } from '../methodology';
 
 /**
@@ -12,7 +12,7 @@ import { logMethodologyStep, performStressTest } from '../methodology';
  * 
  * ARCHITECTURE:
  * 1. Shielded Core: Core reasoning is isolated from peripheral (API/Sensor) failures.
- * 2. Immune System: Subroutines catch errors, log them as "Fatigue", and improvise.
+ * 2. Immune System: Subroutines catch errors, log them as "Infections", and improvise.
  * 3. Self-Healing: The AI reasons about its own "numbness" and proposes compensations.
  */
 
@@ -109,7 +109,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
 
     // 3. Evolution (Shielded)
     let evoData: { code: string, explanation: string } | undefined;
-    const needsEvolution = (health.temperature && health.temperature > 45) || researchText.includes("no tool found") || researchText.includes("restricted");
+    const needsEvolution = (health.temperature && health.temperature > 45) || researchText.includes("no tool found") || researchText.includes("restricted") || peripheralIssues.length > 0;
 
     if (needsEvolution) {
       try {
@@ -138,6 +138,13 @@ export const autonomousSolutionFlow = ai.defineFlow(
 
     const testResults = await performStressTest(evoData?.code || synthesis.text);
     await logMethodologyStep(userId, 'HARDEN', testResults.report, testResults.passed);
+
+    // Record "Vibe" for Stage 3 Sensory Memory
+    await recordSensoryLog(userId, 'vibe', `Contextual Solve for: ${prompt}`, { 
+      hardware: health, 
+      vibe: bridge.vibeEstimate,
+      immuneStatus: peripheralIssues.length > 0 ? 'Compensating' : 'Healthy'
+    });
 
     // Record lesson even if peripherals failed
     if (evoData?.code || synthesis.text) {

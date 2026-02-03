@@ -16,7 +16,7 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX } from 'lucide-react';
+import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -59,11 +59,10 @@ export default function Terminal({
   const firestore = useFirestore();
 
   const speakResponse = async (text: string) => {
-    if (!isVocal) return;
+    if (!isVocal || !text) return;
     try {
       const { audioUri } = await getMollyVoice(text);
       setAudioUri(audioUri);
-      // Use setTimeout to ensure audio element is ready
       setTimeout(() => {
         if (audioRef.current) {
           audioRef.current.load();
@@ -115,7 +114,11 @@ export default function Terminal({
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
-        speakResponse(aiResponse.vibeCheck);
+        // Proactive Vocalization of the Vibe Check and Compensatory Strategy
+        const vocalMessage = aiResponse.compensatoryStrategy 
+          ? `Immune system active. ${aiResponse.compensatoryStrategy}` 
+          : aiResponse.vibeCheck;
+        speakResponse(vocalMessage);
       } else if (cmdText.startsWith('/script ')) {
         const prompt = cmdText.replace('/script ', '');
         const scriptResponse = await getTextToScript(prompt);
@@ -197,7 +200,7 @@ export default function Terminal({
           );
         })}
         {isLoading && <div className="animate-pulse text-accent mt-4 flex items-center gap-2">
-          <BrainCircuit className="size-4 animate-spin" />
+          <ShieldCheck className="size-4 animate-spin" />
           Neural Link negotiating solution...
         </div>}
       </div>

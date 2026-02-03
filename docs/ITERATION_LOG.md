@@ -1,4 +1,4 @@
-# Molly: Iteration Log (V1.0 - The Neural Baseline)
+# Molly: Iteration Log (V1.1 - The Shielded Baseline)
 
 ## Mistake Registry
 - **Rat 001: Framework Friction**: Attempted to use Genkit 1.x tools on Next.js 14. 
@@ -11,16 +11,18 @@
   - *Fix*: Refined `Terminal.tsx` to pass `undefined` instead of `''` when no audio source is present.
 - **Rat 005: Monolithic Fragility**: Peripheral failures (API timeouts) would crash the core orchestrator.
   - *Fix*: Implemented the Shielded Core Architecture with isolated subroutine try-catch blocks and immune system failsafes.
+- **Rat 006: Sensory Amnesia**: System health and UI context were read but not persisted for future retrieval.
+  - *Fix*: Integrated `recordSensoryLog` to begin building the Stage 3 Multimodal Memory.
 
 ## Strengths
 - **Hardware Awareness**: Successfully mapped battery and thermals to reasoning constraints.
 - **Polyglot Hub**: Proved that Julia-logic can successfully delegate to C++ and Bash.
 - **Vocal Baseline**: Proven ability to synthesize real-time WAV audio from neural reasoning.
-- **Immune System**: Core consciousness now survives limb (subroutine) numbness.
+- **Immune System**: Core consciousness now survives limb (subroutine) numbness and improvise adaptations.
 
 ## Methodology Notes
 - All future subroutines must perform a "Thermal Budget Check" before activation.
 - Core reasoning must be isolated from limb (API/Sensor) failures.
 - Every C++ draft must be pedagogical (explained memory logic).
 - Use Gemini 1.5 Pro for architectural introspection and stress testing.
-
+- Proactively vocalize vibe checks to maintain the "Partner" persona.
