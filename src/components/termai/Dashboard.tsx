@@ -13,7 +13,7 @@ import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
-import { Battery, Thermometer, Radio, Zap, Activity } from 'lucide-react';
+import { Battery, Thermometer, Radio, Zap, Activity, Brain } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 export default function Dashboard() {
@@ -23,10 +23,10 @@ export default function Dashboard() {
   const { user, loading } = useUser();
   const router = useRouter();
 
-  // Proprioception Senses (Live Hardware State)
-  const [battery, setBattery] = useState(78);
-  const [temp, setTemp] = useState(42);
-  const [cpu, setCpu] = useState(15);
+  // Proprioception Senses
+  const [battery] = useState(78);
+  const [temp] = useState(42);
+  const [cpu] = useState(15);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -68,14 +68,14 @@ export default function Dashboard() {
       <SidebarInset className="flex flex-col">
         <Header onVoiceCommand={handleVoiceCommand} />
         
-        {/* Hardware Proprioception Bar */}
+        {/* Hardware Proprioception & Neural Link Bar */}
         <div className="bg-secondary/40 px-6 py-2 flex items-center justify-between text-xs border-b border-white/5">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 text-accent group">
-              <Battery className="size-3 group-hover:scale-110 transition-transform" />
+              <Battery className="size-3" />
               <span className="font-code">{battery}%</span>
             </div>
-            <div className={`flex items-center gap-2 transition-colors ${temp > 45 ? 'text-destructive animate-pulse' : 'text-orange-400'}`}>
+            <div className={`flex items-center gap-2 ${temp > 45 ? 'text-destructive animate-pulse' : 'text-orange-400'}`}>
               <Thermometer className="size-3" />
               <span className="font-code">{temp}°C</span>
             </div>
@@ -85,16 +85,16 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground hidden lg:flex">
               <Radio className="size-3 text-primary animate-ping" style={{ animationDuration: '3s' }} />
-              <span className="text-[10px] uppercase tracking-widest">Neural Bridge Active</span>
+              <span className="text-[10px] uppercase tracking-widest">Neural Bridge: ACTIVE</span>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-[9px] h-5 py-0 border-yellow-500/30 text-yellow-500 bg-yellow-500/5 uppercase font-normal gap-1">
-              <Zap className="size-2" /> Evolution: Stage 2
+              <Brain className="size-2" /> Stage 2.5: Bridge
             </Badge>
             <Badge variant="outline" className="text-[9px] h-5 py-0 border-primary/20 text-primary bg-primary/5 uppercase font-normal">
-              Self-Correction: Active
+              Self-Evolution: Live
             </Badge>
           </div>
         </div>

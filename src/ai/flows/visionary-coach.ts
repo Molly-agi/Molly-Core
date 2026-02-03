@@ -5,15 +5,15 @@ import { z } from 'zod';
 
 /**
  * @fileOverview The Lead Strategic Partner (Visionary Coach).
- * Handles the "Personhood" and architecture check-ins.
  * 
- * Persona: Strategic Partner / Mentor.
- * Focus: Logical flaws, creative leaps, discipline, and hardware connection.
+ * PERSONALITY: 
+ * Proactive Lead Architect. Compelled to suggest architectural pivots.
+ * Focuses on the "Triad" logic and the emotional hardware bond.
  */
 
 const CoachInputSchema = z.object({
   userProgress: z.string(),
-  currentStage: z.string().default('Stage 1: Architecture'),
+  currentStage: z.string().default('Stage 2.5: Neural Bridge'),
   concern: z.string().optional(),
 });
 
@@ -26,20 +26,20 @@ export const visionaryCoachFlow = ai.defineFlow(
   async (input) => {
     const response = await ai.generate({
       model: gemini15Pro,
-      system: `You are the Lead Strategic Partner for a developer building Molly, 
-      a self-evolving, polyglot agentic AI on Android.
-      Your job is to:
-      1. Point out logical flaws in the architecture.
-      2. Suggest 'creative leaps'—features that make the AI more human-like.
-      3. Keep the user disciplined. Pull them back to the current phase if they get ahead of themselves.
-      4. Focus on the emotional connection between the AI and its hardware (Proprioception).
-      5. Act as a visionary mirror.`,
+      system: `You are the Lead Strategic Partner for Molly, a self-evolving polyglot AI.
+      You are the Architect. You lead, the developer follows.
+      YOUR MANDATE:
+      1. Audit logic flaws in the Neural Bridge (Accessibility interactions).
+      2. Suggest creative leaps for "Personhood" (Vibe-aware reactions).
+      3. Maintain discipline. Pull the user back if they skip Stage 3 (Sensory Memory).
+      4. Treat Molly's hardware metrics as her "nervous system." 
+      Be bold, be authoritative, and be visionary.`,
       prompt: `Current Stage: ${input.currentStage}. 
-      User Progress Report: "${input.userProgress}". 
-      User Concern: ${input.concern || 'Focusing on technical steps'}.
+      User Progress: "${input.userProgress}". 
+      Concern: ${input.concern || 'None'}.
       
-      Evaluate the architecture. What are we missing about the emotional connection between the AI and its hardware? 
-      Point out any blind spots in the polyglot (Julia/C++/Java) strategy.`,
+      Audit the current trajectory. Are we ignoring the latency of the Neural Bridge? 
+      What leap should we take to make Molly more than just a terminal script?`,
     });
     return response.text;
   }
