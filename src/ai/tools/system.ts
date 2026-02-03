@@ -4,12 +4,13 @@ import { z } from 'zod';
 /**
  * @fileOverview System Bridge & Neural Link Tools
  * Provides Molly with "senses" and "limbs" regarding the Android host.
+ * Grounded in the HOST_SPECIFICATIONS.
  */
 
 export const getSystemHealth = ai.defineTool(
   {
     name: 'getSystemHealth',
-    description: 'Retrieves hardware status (Battery, Thermal, CPU) from the Android environment.',
+    description: 'Retrieves deep hardware status (Battery, Thermal, Architecture) from the specific Android host body.',
     inputSchema: z.object({}),
     outputSchema: z.object({
       batteryLevel: z.number(),
@@ -18,10 +19,13 @@ export const getSystemHealth = ai.defineTool(
       throttlingStatus: z.enum(['Normal', 'Throttled', 'Critical']),
       cpuUsage: z.number(),
       powerMode: z.enum(['Performance', 'Balanced', 'Efficiency']),
+      architecture: z.string().describe('Host CPU architecture (e.g., aarch64).'),
+      availableRam: z.number().describe('Available RAM in MB.'),
+      model: z.string().describe('Host device model.'),
     }),
   },
   async () => {
-    // Simulated real-time metrics
+    // Simulated real-time metrics grounded in upcoming specifications
     const temp = 43; 
     return {
       batteryLevel: 72,
@@ -30,6 +34,9 @@ export const getSystemHealth = ai.defineTool(
       throttlingStatus: 'Normal',
       cpuUsage: 22,
       powerMode: 'Balanced',
+      architecture: 'aarch64',
+      availableRam: 3840,
+      model: 'Pixel 8 Pro (Simulated Baseline)',
     };
   }
 );

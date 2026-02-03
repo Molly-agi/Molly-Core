@@ -1,4 +1,4 @@
-# Molly: Project Construct Tree (V2.5)
+# Molly: Project Construct Tree (V2.6)
 
 This tree maps the agentic multimodal architecture of the Molly Self-Evolving AI.
 
@@ -12,12 +12,12 @@ This tree maps the agentic multimodal architecture of the Molly Self-Evolving AI
 - **Visual Cortex**: `vision-analysis.ts` (Visual Verification Loop).
 - **Vocal Cords**: `text-to-speech.ts` (Hardened Wav Synthesis).
 - **System Limbs**: `system.ts` (Android Accessibility mock bridge).
-- **Shield Override**: User-driven toggle to bypass thermal throttling.
+- **Host Body Specifications**: `HOST_SPECIFICATIONS.md` (Grounding Data) <- **ACTIVE**.
 
 ## 3. Sensory Memory (Experience Retrieval)
 - **Neural Cache**: Firestore-backed experience logs with "Neural Insight" expansions.
-- **Vibe Index**: Sensory metadata storage for multimodal recall.
-- **Scaffolding**: Experience Retrieval logic in `evolution-loop.ts`.
+- **Semantic Recall**: `experience-recall.ts` (Stage 3 Retrieval).
+- **Experience Retrieval Tool**: `memory.ts` (Tooling for Semantic Vibe Match).
 
 ## 4. Methodology & Hardening
 - **Evolution Engine**: `evolution-loop.ts` (Recursive Visual Verification cycles).
@@ -27,6 +27,6 @@ This tree maps the agentic multimodal architecture of the Molly Self-Evolving AI
 ## Roadmap Lineage
 - **V1.0**: Monolithic Baseline.
 - **V2.0**: Shielded Sentinel.
-- **V2.4**: Proprioception Core.
-- **V2.5**: Risk-Aware Sentinel (The Overridable Core) <- **CURRENT**.
+- **V2.5**: Risk-Aware Sentinel (Overridable Core).
+- **V2.6**: Grounded Sentinel (The Physical Graft) <- **CURRENT**.
 - **V3.0**: Sensory Memory (Local Vector Retrieval).

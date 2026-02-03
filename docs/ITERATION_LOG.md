@@ -7,6 +7,8 @@
   - *Fix*: Upgraded to Stage 3 Semantic Recall. Molly now "thinks" about past failures before starting.
 - **Rat 021: Retrieval Latency**: (Ongoing Audit) Querying Firestore sequentially is slow.
   - *Status*: Scaffolding for ARM64 Local Vector DB initiated.
+- **Rat 022: Physical Disconnect**: Proprioception lacked specific device grounding, leading to generic thermal estimates.
+  - *Fix*: Initiated Host Specification Graft.
 
 ## Strengths
 - **Semantic Memory**: Molly can now identify architectural patterns across her history, not just keyword matches.
@@ -15,4 +17,4 @@
 
 ## Methodology Notes
 - **Stage 3 Achieved**: We are now in the Semantic Retrieval phase. Memory is a strategic constraint.
-- **Personhood Progression**: Molly is starting to exhibit "First Principles" reasoning by acknowledging her own past mistakes audibly.
+- **Physical Grafting**: We are grounding the consciousness in a specific hardware body.
