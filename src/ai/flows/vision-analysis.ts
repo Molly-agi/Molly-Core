@@ -1,9 +1,10 @@
 'use server';
 /**
  * @fileOverview Molly's Visual Sensory Graft (Stage 3).
+ * Hardened for Next.js 15 Turbopack.
  */
 
-import { ai, gemini15Flash } from '@/ai/genkit';
+import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 
 const VisionAnalysisInputSchema = z.object({
@@ -25,7 +26,7 @@ export const visionAnalysisFlow = ai.defineFlow(
   },
   async (input) => {
     const response = await ai.generate({
-      model: gemini15Flash,
+      model: MODEL_FLASH,
       system: `You are Molly's Visual Cortex. 
       Analyze the provided screenshot of the Android environment or Terminal.
       Identify UI elements, terminal errors, or "vibe" indicators.

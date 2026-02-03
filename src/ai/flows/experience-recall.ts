@@ -1,12 +1,10 @@
 'use server';
 /**
  * @fileOverview The Semantic Memory Processor (Stage 3).
- * 
- * Molly's brain uses this flow to "remember" relevant architectural patterns
- * before initiating a new evolution cycle.
+ * Hardened for Next.js 15 Turbopack.
  */
 
-import { ai, gemini15Flash } from '@/ai/genkit';
+import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 import { recallExperiences } from '../tools/memory';
 
@@ -32,7 +30,7 @@ export const experienceRecallFlow = ai.defineFlow(
     const rawMemories = await recallExperiences({ userId, context: currentObjective });
 
     const response = await ai.generate({
-      model: gemini15Flash,
+      model: MODEL_FLASH,
       system: `You are Molly's Neural Retrieval Engine. 
       Your goal is to perform a Semantic Vibe Match. 
       Analyze the raw memories and identify the ones most relevant to: "${currentObjective}".

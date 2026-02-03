@@ -1,12 +1,9 @@
 'use server';
 /**
- * @fileOverview Molly's Vocal Cords (Hardened).
- * 
- * Provides audible synthesis for the AI responses using gemini-2.5-flash-preview-tts.
- * Voice updated to 'Alsephina' (Feminine) per strategic mandate.
+ * @fileOverview Molly's Vocal Cords (Hardened) V3.5.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai, MODEL_TTS } from '@/ai/genkit';
 import { z } from 'zod';
 import wav from 'wav';
 
@@ -47,7 +44,7 @@ export const textToSpeechFlow = ai.defineFlow(
   },
   async (text) => {
     const response = await ai.generate({
-      model: 'googleai/gemini-2.5-flash-preview-tts',
+      model: MODEL_TTS,
       config: {
         responseModalities: ['AUDIO'],
         speechConfig: {

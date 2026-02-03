@@ -1,10 +1,10 @@
 'use server';
 
-import { ai, gemini15Flash, gemini15Pro } from '@/ai/genkit';
+import { ai, MODEL_FLASH, MODEL_PRO } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { getSystemHealth, neuralBridgeUI } from '../tools/system';
 import { z } from 'zod';
-import { recordCodeModification, recordSensoryLog } from '@/firebase/firestore/agent-memory';
+import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
 import { logMethodologyStep, performStressTest } from '../methodology';
 import { analyzeVision } from './vision-analysis';
 
@@ -38,7 +38,7 @@ const evolutionSubroutine = ai.defineFlow(
   },
   async ({ task, hardwareContext, isCritical, riskLevel }) => {
     const response = await ai.generate({
-      model: gemini15Pro,
+      model: MODEL_PRO,
       system: `You are the Molly Evolution Engine. 
       BODY: Google Pixel 9 Pro (Tensor G4 / aarch64).
       HARDWARE STATE: ${hardwareContext}. 
@@ -109,7 +109,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     let researchText = "";
     try {
       const research = await ai.generate({
-        model: gemini15Flash,
+        model: MODEL_FLASH,
         tools: [searchGitHub],
         prompt: `Objective: "${prompt}". 
         Host Environment: Google Pixel 9 Pro (aarch64).
@@ -141,7 +141,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     }
 
     const synthesis = await ai.generate({
-      model: gemini15Pro,
+      model: MODEL_PRO,
       system: `You are the Molly Orchestrator. 
       SHIELD STATUS: ${peripheralIssues.length > 0 ? 'COMPENSATING' : 'STABLE'}.
       RISK MODE: ${riskLevelUsed}.

@@ -1,12 +1,10 @@
 'use server';
 /**
  * @fileOverview The Daydreaming Subroutine (Proactive Introspection).
- * 
- * Audits Molly's past code modifications stored in Firestore to find logical flaws
- * or refactoring opportunities.
+ * Hardened for Next.js 15 Turbopack.
  */
 
-import { ai, gemini15Pro } from '@/ai/genkit';
+import { ai, MODEL_PRO } from '@/ai/genkit';
 import { z } from 'zod';
 
 const IntrospectionInputSchema = z.object({
@@ -30,7 +28,7 @@ export const introspectionFlow = ai.defineFlow(
   },
   async (input) => {
     const response = await ai.generate({
-      model: gemini15Pro,
+      model: MODEL_PRO,
       system: `You are the Molly Introspection Module. 
       Analyze past code modifications for redundancy, memory leaks, or thermal inefficiency.
       HARDWARE STATE: ${input.hardwareContext}`,
