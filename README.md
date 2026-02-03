@@ -1,31 +1,27 @@
-# Molly: Agentic Multi-Module AI
+# Molly: Self-Evolving Polyglot AI
 
-Molly is a specialized AI terminal assistant designed for the Android Termux environment. She operates as a **multi-agent system** capable of autonomous research, security auditing, and command synthesis.
+Molly is a specialized, agentic multi-module AI designed for the Android Termux environment. She operates as a **self-evolving system** capable of hardware-aware reasoning and autonomous code generation.
+
+## Evolution Protocol (The Brain)
+Molly follows a recursive feedback loop for self-improvement:
+1. **Proprioception**: Analyzes Android battery and thermal states before execution.
+2. **Research**: Uses the Creative Agent to find open-source tools via GitHub.
+3. **Evolution Subroutine**: If a tool is missing, Molly drafts a new high-performance module in C++ or Java.
+4. **Self-Reflection**: Stores "lessons learned" in Firebase Firestore to persist knowledge across restarts.
 
 ## Architecture
+- **Orchestrator**: Gemini 1.5 Pro (Strategic Reasoning & Polyglot Synthesis).
+- **Subroutines**: Gemini 1.5 Flash (Rapid Research, Security Auditing, Command Synthesis).
+- **Languages**: Julia (Logic), C++/Java (System Performance), Python/Bash (Execution).
+- **Database**: Firebase Firestore (Persistent Command & Sensory Memory).
 
-Molly is built using a "Multi-Module" approach where different specialized agents collaborate to solve complex tasks:
-
-- **Creative Technologist Agent**: Researches open-source tools on GitHub and brainstorms custom script solutions.
-- **Security Auditor Agent**: Analyzes every proposal for security risks and vulnerabilities before execution.
-- **Systems Engineer Agent**: Synthesizes agent findings into final, executable commands.
-
-## Tech Stack
-
-- **Primary Language**: TypeScript (Next.js 14/15)
-- **AI Orchestration**: Genkit (1.x)
-- **AI Models**: Google Gemini 1.5 Flash (Performance) & Gemini 1.5 Pro (Reasoning)
-- **Database**: Firebase Firestore (Personal Command Memory)
-- **Scripting Capabilities**: Bash, Python, JavaScript (Node.js)
+## Project Roadmap
+- **Stage 1: Architecture (DONE)**: Polyglot Hub and Hardware Bridge established.
+- **Stage 2: Self-Correction (ACTIVE)**: Implementation of the Evolution Engine and memory persistence.
+- **Stage 3: Sensory Memory (UPCOMING)**: Connecting Vision/Voice to a Vector Database.
+- **Stage 4: Personhood (UPCOMING)**: Finalizing the autonomous "Vibe" and decision-making.
 
 ## Commands
-
-- `/solve <goal>`: Triggers the multi-agent autonomous solution flow.
-- `/script <goal>`: Generates a downloadable script (Python/Bash).
-- `/healthcheck`: Connectivity test with Molly.
-
-## Setup
-
-1. **API Keys**: Provide a `GEMINI_API_KEY` in `.env`.
-2. **GitHub Access**: Provide a `GITHUB_TOKEN` to enable the Creative Agent's research capabilities.
-3. **Database**: Provision Firestore via Firebase Console to enable Molly's personal memory.
+- `/solve <goal>`: Triggers the multi-agent evolution and solution flow.
+- `/script <goal>`: Generates a downloadable performance script.
+- `/healthcheck`: Verifies the Neural Bridge and Orchestration health.

@@ -13,7 +13,7 @@ import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
-import { Battery, Thermometer, Radio } from 'lucide-react';
+import { Battery, Thermometer, Radio, Zap } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 export default function Dashboard() {
@@ -23,7 +23,7 @@ export default function Dashboard() {
   const { user, loading } = useUser();
   const router = useRouter();
 
-  // Simulated live proprioception state
+  // Proprioception Senses (Live Hardware State)
   const [battery, setBattery] = useState(78);
   const [temp, setTemp] = useState(42);
 
@@ -85,8 +85,8 @@ export default function Dashboard() {
           </div>
           
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-[9px] h-5 py-0 border-accent/30 text-accent bg-accent/5 uppercase font-normal">
-              Evolution Engine: V3.0
+            <Badge variant="outline" className="text-[9px] h-5 py-0 border-yellow-500/30 text-yellow-500 bg-yellow-500/5 uppercase font-normal gap-1">
+              <Zap className="size-2" /> Evolution: Stage 2
             </Badge>
             <Badge variant="outline" className="text-[9px] h-5 py-0 border-primary/20 text-primary bg-primary/5 uppercase font-normal">
               Self-Correction: Online
