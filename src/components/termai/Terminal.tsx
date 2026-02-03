@@ -13,7 +13,7 @@ import {
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
 import { useFirestore } from '@/firebase/provider';
-import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History, HeartPulse, Eye } from 'lucide-react';
+import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History, HeartPulse, Eye, Radio } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '../ui/progress';
 
-type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string; verification?: string };
+type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string; verification?: string; memoryConsulted?: boolean };
 
 function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
   return (
@@ -38,7 +38,7 @@ function isAutonomousSolution(item: HistoryItem): item is AutonomousSolutionOutp
     return typeof item === 'object' && item !== null && 'creativeSolution' in item;
 }
 
-function isAutoReport(item: HistoryItem): item is { autonomousReport: string; verification?: string } {
+function isAutoReport(item: HistoryItem): item is { autonomousReport: string; verification?: string; memoryConsulted?: boolean } {
   return typeof item === 'object' && item !== null && 'autonomousReport' in item;
 }
 
@@ -55,7 +55,6 @@ export default function Terminal({
   const [isIntroducing, setIsIntroducing] = useState(true);
   const [isVocal, setIsVocal] = useState(true);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
-  const [evolutionProgress, setEvolutionProgress] = useState(0);
   const [isVocalizing, setIsVocalizing] = useState(false);
   
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -69,6 +68,7 @@ export default function Terminal({
     try {
       const { audioUri } = await getMollyVoice(text);
       setAudioUri(audioUri);
+      // Wait for state to catch up before playing
       setTimeout(() => {
         if (audioRef.current) {
           audioRef.current.load();
@@ -92,7 +92,7 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly V2.2, the Self-Healing Sentinel. State that your visual immune system is live and you are ready for sensory-verified autonomous loops.'
+          'Introduce yourself as Molly V2.3, the Experience-Augmented Sentinel. State that you are now consulting your Neural Cache for past lessons before every evolution loop.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -117,26 +117,24 @@ export default function Terminal({
   const handleAutonomousEvolution = async () => {
     if (!user || isLoading) return;
     setIsLoading(true);
-    setEvolutionProgress(0);
     
-    setHistory(prev => [...prev, "[SENTINEL] Initiating Sensory-Verified Autonomous Evolution..."]);
-    speakResponse("Triggering visual verification loop. I will now audit my logic and confirm the results through my visual cortex.");
+    setHistory(prev => [...prev, "[SENTINEL] Triggering Experience-Augmented Evolution..."]);
+    speakResponse("Initiating Neural Cache retrieval. I am consulting my past lessons to ensure architectural stability.");
 
     try {
-      // Execute the multi-iteration flow
-      const result = await startAutonomousCycle("Hardened baseline resilience. Verify visual immune response to simulated UI infections.", user.uid, 5);
+      const result = await startAutonomousCycle("Hardened Experience-Augmented Resilience. Verify visual immune response with memory context.", user.uid, 3);
       
       setHistory(prev => [...prev, { 
         autonomousReport: result.finalReport,
-        verification: result.visualVerification
+        verification: result.visualVerification,
+        memoryConsulted: result.memoryConsulted
       }]);
       
-      speakResponse(result.stableBaselineReached ? "Evolution cycle complete. System harmony visually verified." : "Cycle complete. Further iteration recommended.");
+      speakResponse(result.stableBaselineReached ? "Evolution cycle complete. Experience successfully integrated." : "Cycle complete. Memory retrieval successful, further iteration recommended.");
     } catch (e) {
       toast({ variant: "destructive", title: "Evolution Failure", description: "Shielded core isolated a loop infection." });
     } finally {
       setIsLoading(false);
-      setEvolutionProgress(0);
     }
   };
 
@@ -200,9 +198,17 @@ export default function Terminal({
           if (isAutonomousSolution(line)) return <AutonomousSolutionResponse key={index} response={line} />;
           if (isAutoReport(line)) return (
             <div key={index} className="bg-primary/10 border border-primary/30 p-4 rounded-lg my-4 text-primary animate-in zoom-in-95">
-              <div className="flex items-center gap-2 mb-2">
-                <ShieldCheck className="size-4" />
-                <h4 className="font-bold uppercase text-[10px] tracking-widest">Autonomous Iteration Report</h4>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="size-4" />
+                  <h4 className="font-bold uppercase text-[10px] tracking-widest">Autonomous Iteration Report</h4>
+                </div>
+                {line.memoryConsulted && (
+                  <div className="flex items-center gap-1 text-[9px] text-accent font-bold uppercase">
+                    <History className="size-3" />
+                    Memory Integrated
+                  </div>
+                )}
               </div>
               <p className="text-xs mb-3">{line.autonomousReport}</p>
               {line.verification && (
@@ -228,8 +234,8 @@ export default function Terminal({
         {isLoading && (
           <div className="mt-4 space-y-2">
             <div className="animate-pulse text-accent flex items-center gap-2">
-              <Loader2 className="size-4 animate-spin" />
-              Neural Link active...
+              <Radio className="size-4 animate-ping" />
+              Neural Link active... Consulting Experience retrieval...
             </div>
           </div>
         )}

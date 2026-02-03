@@ -39,6 +39,7 @@ export async function recordCodeModification(
     modifiedCode: code,
     modificationSuggestion: suggestion,
     timestamp: new Date().toISOString(),
+    agentId: agentId, // Added for iteration lineage
   });
 }
 
@@ -50,10 +51,17 @@ export async function recordSensoryLog(userId: string, sensorType: 'vision' | 'v
   const { firestore } = initializeFirebase();
   const ref = collection(firestore, 'users', userId, 'sensoryMemory');
   
-  await addDoc(ref, {
+  // Enhanced metadata structure for future vector embeddings
+  const logEntry = {
     sensorType,
     description,
-    metadata,
+    metadata: {
+      ...metadata,
+      vibeScore: metadata.vibeScore || 0.5,
+      isHardened: true,
+    },
     timestamp: new Date().toISOString(),
-  });
+  };
+
+  await addDoc(ref, logEntry);
 }
