@@ -28,6 +28,7 @@ type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput;
 function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
   return (
     typeof item === 'object' &&
+    item !== null &&
     'filename' in item &&
     'content' in item &&
     !('creativeSolution' in item)
@@ -35,7 +36,7 @@ function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
 }
 
 function isAutonomousSolution(item: HistoryItem): item is AutonomousSolutionOutput {
-    return typeof item === 'object' && 'creativeSolution' in item;
+    return typeof item === 'object' && item !== null && 'creativeSolution' in item;
 }
 
 export default function Terminal({
@@ -62,12 +63,15 @@ export default function Terminal({
     try {
       const { audioUri } = await getMollyVoice(text);
       setAudioUri(audioUri);
-      if (audioRef.current) {
-        audioRef.current.load();
-        audioRef.current.play();
-      }
+      // Use setTimeout to ensure audio element is ready
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.load();
+          audioRef.current.play().catch(e => console.warn("Vocal cord ignition failed:", e));
+        }
+      }, 50);
     } catch (e) {
-      console.warn("Vocal cords restricted:", e);
+      console.warn("Molly: My vocal processors are restricted.", e);
     }
   };
 
@@ -77,11 +81,11 @@ export default function Terminal({
         const intro = await getHealthCheck(
           'Introduce yourself as Molly, an agentic multi-module AI designed for Termux. Keep it brief and authoritative.'
         );
-        setHistory((prev) => [intro]);
+        setHistory([intro]);
         speakResponse(intro);
       } catch (error) {
         console.error(error);
-        setHistory((prev) => [`Error: ${error instanceof Error ? error.message : 'AI initialization failed.'}`]);
+        setHistory([`Error: ${error instanceof Error ? error.message : 'Neural baseline failed to initialize.'}`]);
       } finally {
         setIsIntroducing(false);
       }
@@ -141,7 +145,9 @@ export default function Terminal({
       }
     } catch (error) {
       console.error(error);
-      setHistory((prev) => [...prev, `Error: ${error instanceof Error ? error.message : 'Flow execution failed.'}`]);
+      const errMessage = error instanceof Error ? error.message : 'Flow execution failed.';
+      setHistory((prev) => [...prev, `Error: ${errMessage}`]);
+      speakResponse("Logical error detected in orchestration.");
     } finally {
       setIsLoading(false);
     }
@@ -162,14 +168,14 @@ export default function Terminal({
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
-  }, [history, isLoading, isIntroducing]);
+  }, [history, isLoading]);
 
   return (
     <div className="font-code text-sm h-full flex flex-col">
       <audio ref={audioRef} className="hidden" src={audioSrc || ''} />
       
-      <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20">
-        {isIntroducing && <div className="animate-pulse text-primary">Orchestrator initializing...</div>}
+      <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20 shadow-inner scrollbar-thin scrollbar-thumb-primary/20">
+        {isIntroducing && <div className="animate-pulse text-primary font-bold">Orchestrator initializing...</div>}
         {history.map((line, index) => {
           if (isScriptResponse(line)) return <DownloadableScript key={index} response={line} />;
           if (isAutonomousSolution(line)) return <AutonomousSolutionResponse key={index} response={line} />;
@@ -177,40 +183,51 @@ export default function Terminal({
 
           if (line.startsWith('🧠 From Memory:')) {
             return (
-              <div key={index} className="flex items-center gap-2 text-muted-foreground my-1">
+              <div key={index} className="flex items-center gap-2 text-muted-foreground my-2 animate-in fade-in slide-in-from-left-2">
                 <BrainCircuit className="size-4 shrink-0 text-accent" />
-                <span>{line.replace('🧠 From Memory: ', '')}</span>
+                <span className="bg-accent/5 px-2 py-1 rounded border border-accent/10">{line.replace('🧠 From Memory: ', '')}</span>
               </div>
             );
           }
-          return <div key={index} className={line.startsWith('>') ? 'text-primary my-1' : 'my-1'}>{line}</div>;
+          const isUser = line.startsWith('>');
+          return (
+            <div key={index} className={`my-2 p-2 rounded ${isUser ? 'text-primary bg-primary/5' : 'text-foreground bg-white/5 border border-white/5'}`}>
+              {line}
+            </div>
+          );
         })}
-        {isLoading && <div className="animate-pulse text-accent mt-2">Agents collaborating...</div>}
+        {isLoading && <div className="animate-pulse text-accent mt-4 flex items-center gap-2">
+          <BrainCircuit className="size-4 animate-spin" />
+          Neural Link negotiating solution...
+        </div>}
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4 items-center">
-        <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve check battery and thermal')} className="h-8 gap-2">
-          <Shield className="size-3" /> System Health
+        <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve analyze system bottleneck')} className="h-8 gap-2 hover:bg-accent/10">
+          <Shield className="size-3 text-accent" /> Baseline Health
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve network penetration scan')} className="h-8 gap-2">
-          <Network className="size-3" /> Net Audit
+        <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve optimize thermal logic')} className="h-8 gap-2 hover:bg-accent/10">
+          <Network className="size-3 text-accent" /> Optimization
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 ml-auto">
+        <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 ml-auto rounded-full hover:bg-primary/10">
           {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleQuickAction('clear')} className="h-8 gap-2 text-destructive">
-          <Trash2 className="size-3" /> Clear
+        <Button variant="outline" size="sm" onClick={() => handleQuickAction('clear')} className="h-8 gap-2 text-destructive border-destructive/20 hover:bg-destructive/10">
+          <Trash2 className="size-3" /> Purge
         </Button>
       </div>
 
-      <form onSubmit={handleCommand}>
+      <form onSubmit={handleCommand} className="relative">
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Input objective for Orchestrator..."
-          className="w-full bg-card border-primary/30 font-code focus-visible:ring-primary"
+          placeholder="Inject objective into Orchestrator..."
+          className="w-full bg-card border-primary/30 font-code focus-visible:ring-primary h-12 pr-12"
           disabled={isLoading || isIntroducing}
         />
+        <div className="absolute right-4 top-1\/2 -translate-y-1\/2 text-[10px] text-primary/40 uppercase tracking-tighter hidden md:block">
+          Press Enter to commit
+        </div>
       </form>
     </div>
   );

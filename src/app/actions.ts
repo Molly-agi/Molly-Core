@@ -13,12 +13,15 @@ import { textToScript } from '@/ai/flows/text-to-script';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { visionaryCoach } from '@/ai/flows/visionary-coach';
 import { textToSpeech } from '@/ai/flows/text-to-speech';
-import { introspect } from '@/ai/flows/introspection';
+import { introspectionFlow } from '@/ai/flows/introspection';
 
+/**
+ * Hardened gatekeeper to ensure environment stability.
+ */
 function ensureApiKey() {
   if (!process.env.GEMINI_API_KEY) {
     throw new Error(
-      'The GEMINI_API_KEY environment variable is not set. Please refer to the README.md for instructions on how to obtain and configure the API key.'
+      'Molly: Critical Failure. GEMINI_API_KEY is not configured in the environment.'
     );
   }
 }
@@ -34,7 +37,7 @@ export async function getVoiceCommand(audioData: string) {
   if (!transcribedText || !transcribedText.trim()) {
     return {
       prompt: '',
-      command: "Error: I couldn't understand the audio.",
+      command: "Error: No audible input detected.",
     };
   }
   const command = await textToTermuxCommand(transcribedText);
@@ -78,5 +81,5 @@ export async function getMollyVoice(text: string) {
 
 export async function runIntrospection(pastLessons: any[], hardwareContext: string) {
   ensureApiKey();
-  return await introspect(pastLessons, hardwareContext);
+  return await introspectionFlow({ pastLessons, hardwareContext });
 }

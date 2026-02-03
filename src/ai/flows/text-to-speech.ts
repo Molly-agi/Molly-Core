@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview Molly's Vocal Cords (Text-To-Speech).
+ * @fileOverview Molly's Vocal Cords (Hardened).
  * 
  * Provides audible synthesis for the AI responses using gemini-2.5-flash-preview-tts.
  */
@@ -45,7 +45,7 @@ export const textToSpeechFlow = ai.defineFlow(
     }),
   },
   async (text) => {
-    const { media } = await ai.generate({
+    const response = await ai.generate({
       model: 'googleai/gemini-2.5-flash-preview-tts',
       config: {
         responseModalities: ['AUDIO'],
@@ -58,8 +58,10 @@ export const textToSpeechFlow = ai.defineFlow(
       prompt: text,
     });
 
-    if (!media) {
-      throw new Error('Molly: My vocal processors failed to initialize.');
+    const media = response.media;
+
+    if (!media || !media.url) {
+      throw new Error('Molly: My vocal processors failed to synthesize audio.');
     }
 
     const audioBuffer = Buffer.from(
