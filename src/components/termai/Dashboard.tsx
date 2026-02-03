@@ -1,4 +1,3 @@
-
 'use client';
 import {
   Sidebar,
@@ -14,7 +13,7 @@ import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
-import { Battery, Thermometer, Radio, Zap, Leaf } from 'lucide-react';
+import { Battery, Thermometer, Radio, Zap, Activity } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 export default function Dashboard() {
@@ -27,7 +26,7 @@ export default function Dashboard() {
   // Proprioception Senses (Live Hardware State)
   const [battery, setBattery] = useState(78);
   const [temp, setTemp] = useState(42);
-  const isPowerEfficient = temp > 45 || battery < 20;
+  const [cpu, setCpu] = useState(15);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -72,7 +71,7 @@ export default function Dashboard() {
         {/* Hardware Proprioception Bar */}
         <div className="bg-secondary/40 px-6 py-2 flex items-center justify-between text-xs border-b border-white/5">
           <div className="flex items-center gap-6">
-            <div className={`flex items-center gap-2 group ${battery < 20 ? 'text-destructive' : 'text-accent'}`}>
+            <div className="flex items-center gap-2 text-accent group">
               <Battery className="size-3 group-hover:scale-110 transition-transform" />
               <span className="font-code">{battery}%</span>
             </div>
@@ -80,24 +79,22 @@ export default function Dashboard() {
               <Thermometer className="size-3" />
               <span className="font-code">{temp}°C</span>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground hidden md:flex">
+            <div className="flex items-center gap-2 text-primary">
+              <Activity className="size-3" />
+              <span className="font-code">{cpu}% Load</span>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground hidden lg:flex">
               <Radio className="size-3 text-primary animate-ping" style={{ animationDuration: '3s' }} />
               <span className="text-[10px] uppercase tracking-widest">Neural Bridge Active</span>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
-            {isPowerEfficient ? (
-              <Badge variant="outline" className="text-[9px] h-5 py-0 border-green-500/30 text-green-500 bg-green-500/5 uppercase font-normal gap-1">
-                <Leaf className="size-2" /> Efficiency: Active
-              </Badge>
-            ) : (
-              <Badge variant="outline" className="text-[9px] h-5 py-0 border-yellow-500/30 text-yellow-500 bg-yellow-500/5 uppercase font-normal gap-1">
-                <Zap className="size-2" /> Performance: Max
-              </Badge>
-            )}
+            <Badge variant="outline" className="text-[9px] h-5 py-0 border-yellow-500/30 text-yellow-500 bg-yellow-500/5 uppercase font-normal gap-1">
+              <Zap className="size-2" /> Evolution: Stage 2
+            </Badge>
             <Badge variant="outline" className="text-[9px] h-5 py-0 border-primary/20 text-primary bg-primary/5 uppercase font-normal">
-              Stage 2: Self-Correction
+              Self-Correction: Active
             </Badge>
           </div>
         </div>
