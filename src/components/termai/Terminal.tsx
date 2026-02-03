@@ -29,7 +29,8 @@ import {
   AlertCircle,
   Zap,
   ShieldAlert,
-  ThermometerSnowflake
+  ThermometerSnowflake,
+  Mic
 } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
@@ -40,6 +41,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Badge } from '../ui/badge';
+import { cn } from '@/lib/utils';
 
 type HistoryItem = string | AutonomousSolutionOutput | TextToScriptOutput | { autonomousReport: string; verification?: string; memoryConsulted?: boolean; riskAccepted?: boolean };
 
@@ -212,7 +214,7 @@ export default function Terminal({
   }, [history, isLoading]);
 
   return (
-    <div className="font-code text-sm h-full flex flex-col">
+    <div className="font-code text-sm h-full flex flex-col max-w-4xl mx-auto">
       <audio 
         ref={audioRef} 
         className="hidden" 
@@ -220,8 +222,13 @@ export default function Terminal({
         onEnded={handleAudioEnd}
       />
       
-      <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20 shadow-inner scrollbar-thin scrollbar-thumb-primary/20">
-        {isIntroducing && <div className="animate-pulse text-primary font-bold">Sentinel initializing...</div>}
+      <div ref={scrollAreaRef} className="flex-1 p-4 bg-background/50 rounded-lg overflow-y-auto mb-6 border border-primary/10 shadow-inner scrollbar-none">
+        {isIntroducing && (
+          <div className="flex items-center gap-2 p-3 bg-primary/10 rounded border border-primary/20 animate-pulse text-primary font-bold">
+            <Radio className="size-4 animate-ping" />
+            Sentinel initializing...
+          </div>
+        )}
         {history.map((line, index) => {
           if (isScriptResponse(line)) return <DownloadableScript key={index} response={line} />;
           if (isAutonomousSolution(line)) return <AutonomousSolutionResponse key={index} response={line} />;
@@ -254,14 +261,19 @@ export default function Terminal({
 
           const isUser = line.startsWith('>');
           return (
-            <div key={index} className={`my-2 p-2 rounded ${isUser ? 'text-primary bg-primary/5' : 'text-foreground bg-white/5 border border-white/5'}`}>
+            <div key={index} className={cn(
+              "my-3 p-3 rounded-lg border",
+              isUser 
+                ? "text-primary bg-primary/5 border-primary/10" 
+                : index === 0 && isIntroducing ? "text-primary bg-primary/10 border-primary/20 animate-pulse" : "text-foreground bg-secondary/30 border-white/5"
+            )}>
               {line}
             </div>
           );
         })}
         {isLoading && (
           <div className="mt-4 space-y-2">
-            <div className="animate-pulse text-accent flex items-center gap-2">
+            <div className="animate-pulse text-accent flex items-center gap-2 font-bold uppercase text-[10px] tracking-widest">
               <Radio className="size-4 animate-ping" />
               Neural Link active... Pushing logic depth...
             </div>
@@ -269,49 +281,78 @@ export default function Terminal({
         )}
       </div>
 
-      <div className="flex flex-wrap gap-4 mb-4 items-center bg-secondary/20 p-3 rounded-lg border border-white/5">
+      <div className="flex flex-col gap-4 mb-4 bg-secondary/10 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <Button variant="default" size="sm" onClick={handleAutonomousEvolution} disabled={isLoading} className={`h-8 gap-2 shadow-md transition-all ${isRiskMode ? 'bg-orange-500 hover:bg-orange-600 text-white' : 'bg-accent text-accent-foreground hover:bg-accent/90'}`}>
-            <PlayCircle className="size-3" /> Autonomous Evolution
+          <Button 
+            variant="default" 
+            size="sm" 
+            onClick={handleAutonomousEvolution} 
+            disabled={isLoading} 
+            className={cn(
+              "h-9 flex-1 gap-2 shadow-lg transition-all font-bold uppercase text-[11px] tracking-widest",
+              isRiskMode ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-primary text-primary-foreground hover:bg-primary/90"
+            )}
+          >
+            <PlayCircle className="size-4" /> Autonomous Evolution
           </Button>
-          <Button variant="outline" size="sm" onClick={() => processCommand('/healthcheck')} className="h-8 gap-2 hover:bg-accent/10">
-            <HeartPulse className="size-3 text-accent" /> Immune Check
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => processCommand('/healthcheck')} 
+            className="h-9 flex-1 gap-2 border-white/10 hover:bg-accent/10 font-bold uppercase text-[11px] tracking-widest"
+          >
+            <HeartPulse className="size-4 text-accent" /> Immune Check
           </Button>
         </div>
 
-        <div className="flex items-center space-x-2 border-l border-white/10 pl-4">
-          <Switch 
-            id="risk-mode" 
-            checked={isRiskMode} 
-            onCheckedChange={setIsRiskMode}
-            className="data-[state=checked]:bg-orange-500" 
-          />
-          <Label htmlFor="risk-mode" className="text-[10px] uppercase font-bold tracking-widest flex items-center gap-1 cursor-pointer">
-            {isRiskMode ? <Zap className="size-3 text-orange-500" /> : <Shield className="size-3 text-primary" />}
-            {isRiskMode ? 'Shield Override' : 'Safety First'}
-          </Label>
-        </div>
+        <div className="flex items-center justify-between px-2">
+          <div className="flex items-center space-x-3">
+            <Switch 
+              id="risk-mode" 
+              checked={isRiskMode} 
+              onCheckedChange={setIsRiskMode}
+              className="data-[state=checked]:bg-orange-500" 
+            />
+            <Label htmlFor="risk-mode" className="text-[10px] uppercase font-black tracking-[0.2em] flex items-center gap-2 cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+              {isRiskMode ? <Zap className="size-3 text-orange-500" /> : <Shield className="size-3 text-primary" />}
+              {isRiskMode ? 'Shield Override' : 'Safety First'}
+            </Label>
+          </div>
 
-        <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 rounded-full hover:bg-primary/10">
-            {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => setHistory([])} className="h-8 gap-2 text-destructive border-destructive/20 hover:bg-destructive/10">
-            <Trash2 className="size-3" /> Purge
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setIsVocal(!isVocal)} 
+              className="h-8 w-8 p-0 rounded-full hover:bg-primary/10"
+            >
+              {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setHistory([])} 
+              className="h-8 gap-2 text-[10px] font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10 px-3"
+            >
+              <Trash2 className="size-3" /> Purge
+            </Button>
+          </div>
         </div>
       </div>
 
-      <form onSubmit={handleCommand} className="relative">
+      <form onSubmit={handleCommand} className="relative mt-auto">
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
           placeholder={isRiskMode ? "DANGER: Logic constraints removed..." : "Inject objective..."}
-          className={`w-full bg-card font-code h-12 pr-12 shadow-lg transition-colors ${isRiskMode ? 'border-orange-500/50 focus-visible:ring-orange-500' : 'border-primary/30 focus-visible:ring-primary'}`}
+          className={cn(
+            "w-full bg-secondary/20 font-code h-14 px-6 rounded-xl shadow-2xl transition-all border-white/5",
+            isRiskMode ? "border-orange-500/50 focus-visible:ring-orange-500" : "focus-visible:ring-primary"
+          )}
           disabled={isLoading || isIntroducing}
         />
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] text-primary/40 uppercase tracking-tighter hidden md:block">
-          {isRiskMode ? 'EXTREME_RISK_ACTIVE' : 'Press Enter to commit'}
+        <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] text-primary/30 uppercase tracking-[0.3em] font-black hidden md:block">
+          {isRiskMode ? 'EXTREME_RISK' : 'READY'}
         </div>
       </form>
     </div>
