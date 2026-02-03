@@ -19,7 +19,17 @@ export type LearnedCommand = {
   id?: string;
   prompt: string;
   command: string;
-  createdAt: Date;
+  createdAt: any;
+};
+
+export type SavedRepo = {
+  id?: string;
+  name: string;
+  url: string;
+  description: string | null;
+  stars: number;
+  voiceCommandId?: string;
+  createdAt: any;
 };
 
 /**
@@ -86,12 +96,7 @@ export async function getLearnedCommand(
     const doc = querySnapshot.docs[0];
     return doc.data().command as string;
   } catch (serverError: any) {
-    // Check if the error is due to a missing index
     if (serverError.code === 'failed-precondition') {
-      console.warn(
-        'Firestore index not found. Please create a composite index for the `learnedCommands` collection on `prompt` and `createdAt`.'
-      );
-      // You can try a query without the ordering as a fallback, though less ideal
       return getLearnedCommandWithoutOrder(db, userId, prompt);
     }
     const permissionError = new FirestorePermissionError({
@@ -103,7 +108,6 @@ export async function getLearnedCommand(
   }
 }
 
-// Fallback function without ordering to avoid index-related crashes on first query
 async function getLearnedCommandWithoutOrder(
   db: Firestore,
   userId: string,
@@ -130,4 +134,28 @@ async function getLearnedCommandWithoutOrder(
     errorEmitter.emit('permission-error', permissionError);
     return null;
   }
+}
+
+/**
+ * Saves a GitHub repository to the user's profile for future reference.
+ */
+export function saveGitHubRepoMemory(
+  db: Firestore,
+  userId: string,
+  repo: Omit<SavedRepo, 'id' | 'createdAt'>
+) {
+  const repoCollectionRef = collection(db, 'users', userId, 'gitHubRepos');
+  const data = {
+    ...repo,
+    createdAt: serverTimestamp(),
+  };
+
+  addDoc(repoCollectionRef, data).catch(async (error) => {
+    const permissionError = new FirestorePermissionError({
+      path: repoCollectionRef.path,
+      operation: 'create',
+      requestResourceData: data,
+    } satisfies SecurityRuleContext);
+    errorEmitter.emit('permission-error', permissionError);
+  });
 }

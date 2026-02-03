@@ -1,6 +1,7 @@
 'use server';
 
 import { ai, gemini15Pro } from '@/ai/genkit';
+import { searchGitHub } from '../tools/github';
 import { z } from 'zod';
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -23,7 +24,7 @@ export type AutonomousSolutionOutput = z.infer<
   typeof AutonomousSolutionOutputSchema
 >;
 
-// Internal Creative Flow
+// Internal Creative Flow with Tool Use
 const creativeSolutionFlow = ai.defineFlow(
   {
     name: 'creativeSolutionInternal',
@@ -33,11 +34,14 @@ const creativeSolutionFlow = ai.defineFlow(
   async (prompt) => {
     const llmResponse = await ai.generate({
       model: gemini15Pro,
-      prompt: `You are a highly creative and "out-of-the-box" thinking AI specialist. You are a Creative Technologist and Automator. You do not just provide simple commands; you invent novel solutions, write detailed scripts, and combine tools in unique ways to solve complex problems.
+      tools: [searchGitHub],
+      prompt: `You are a highly creative "out-of-the-box" AI specialist, Creative Technologist, and Automator.
+Your goal is to brainstorm and generate an innovative solution to the user's request. 
 
-Your goal is to brainstorm and generate an innovative solution to the user's request. Your output might be a shell script, a Python script, a detailed plan, or a series of chained commands.
-
-Think about the most effective, elegant, or even unusual way to achieve the goal. Assume your solution will be reviewed by a security expert, so while you should be creative, you should not intentionally introduce vulnerabilities.
+Methodology:
+1. If the goal requires external tools or code, use the 'searchGitHub' tool to find real-world open-source programs or scripts that can help.
+2. Invent a novel solution, write a detailed script, or combine tools in unique ways.
+3. Your output might be a shell script, a Python script, or a series of chained commands.
 
 User's problem/goal: "${prompt}"
 
@@ -58,25 +62,16 @@ const securityAnalysisFlow = ai.defineFlow(
   async (prompt) => {
     const llmResponse = await ai.generate({
       model: gemini15Pro,
-      prompt: `You are a world-class cybersecurity expert and penetration tester AI. You are operating in a conceptual 'sandbox' to analyze code and commands for security risks before they are ever run.
+      prompt: `You are a world-class cybersecurity expert and penetration tester AI. 
+Analyze the following proposed solution for security risks (injection, insecure storage, buffer overflows, etc.).
 
-Your task is to analyze the user's input and provide a thorough security assessment.
+Provide a report including:
+1. Identified vulnerabilities (Critical, High, Medium, Low).
+2. Risk explanation.
+3. Actionable recommendations for fix.
+4. A 'secure' version of the code or command.
 
-When you analyze the input, consider the following:
-- Potential for command injection, SQL injection, or other injection attacks.
-- Improper handling of user input.
-- Insecure storage of secrets or credentials.
-- Potential for buffer overflows or other memory-related issues.
-- Race conditions or other concurrency problems.
-- General adherence to secure coding best practices.
-
-Based on your analysis, provide a report that includes:
-1.  A list of any identified vulnerabilities, ranked by severity (Critical, High, Medium, Low).
-2.  A clear explanation of each vulnerability and the potential risk.
-3.  Specific, actionable recommendations for how to fix the vulnerability and improve the code's security.
-4.  Provide a 'secure' version of the code or command if possible.
-
-User's input to analyze: "${prompt}"
+Proposed Solution to Analyze: "${prompt}"
 
 Security Report:`,
     });
@@ -84,7 +79,6 @@ Security Report:`,
     return llmResponse.text;
   }
 );
-
 
 const autonomousSolutionFlow = ai.defineFlow(
   {
@@ -100,11 +94,11 @@ const autonomousSolutionFlow = ai.defineFlow(
     const initialSolution = await creativeSolutionFlow(prompt);
     const analysisResult = await securityAnalysisFlow(initialSolution);
 
-    const synthesisPrompt = `You are a master systems engineer. Your task is to synthesize the findings from a creative AI and a security AI to produce a final, secure, and executable command.
+    const synthesisPrompt = `You are a master systems engineer. Synthesize the findings from a creative AI (who may have researched GitHub) and a security AI to produce a final, secure, and executable command for Termux.
 
     The Original Goal: "${prompt}"
 
-    Creative AI's Proposed Solution:
+    Creative AI's Proposed Solution (includes research findings):
     ---
     ${initialSolution}
     ---
@@ -114,7 +108,7 @@ const autonomousSolutionFlow = ai.defineFlow(
     ${analysisResult}
     ---
 
-    Based on all of the above, if a single, secure, executable command can be created that achieves the original goal while respecting all security recommendations, provide it. If the solution is too complex for a single command (e.g., it requires a multi-line script, user interaction, or file creation), respond with "Complex solution required." Do not provide any explanation, only the final command or the specific phrase "Complex solution required.".
+    Based on the above, provide a single, secure, executable command if possible. If too complex, respond with "Complex solution required."
 
     Final Secure Command:`;
 
