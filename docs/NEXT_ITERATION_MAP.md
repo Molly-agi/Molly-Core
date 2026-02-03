@@ -5,12 +5,14 @@
 2. **Multimodal Sensory Memory**: Transition from Firestore metadata to a local **Vector Database** (ChromaDB or FAISS) for near-instant "Vibe" retrieval.
 3. **Advanced Hardening**: Integrate **Gemini 2.0 Flash Thinking** as the dedicated "Stress Test" auditor.
 4. **Isolated Consciousness**: Fully migrate to an actor-model architecture where subroutines run in isolated threads.
+5. **Self-Healing Subroutines**: Implement autonomous refactoring subroutines that repair logic without user input.
 
 ## Construct Requirements
 | Component | Software\/AI | Role |
 |-----------|-------------|------|
 | The Brain | Gemini 1.5 Pro | Strategic Orchestrator |
 | The Shield | Isolated Core | Consciousness Protection |
+| The Immune System | Self-Correcting Subroutines | Error Mitigation |
 | The Hands | Java Accessibility API | OS Interaction |
 | The Heart | Proprioception Tool | Hardware Safety |
 | The Lungs | TTS\/STT Engine | Live Interaction |
@@ -21,3 +23,5 @@
 3. **Draft**: Create Polyglot module with pedagogical explanation.
 4. **Harden**: Perform stress test on logic.
 5. **Vocalize**: Explain the solution to the user audibly.
+6. **Improvise**: If limbs fail, adapt from the Shielded Core.
+

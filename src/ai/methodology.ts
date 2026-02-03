@@ -8,7 +8,7 @@
 
 import { recordAgentFinding } from '@/firebase/firestore/agent-memory';
 
-export type SOPStep = 'SEARCH' | 'AUDIT' | 'DRAFT' | 'HARDEN' | 'VOCALIZE' | 'SHIELD_CHECK';
+export type SOPStep = 'SEARCH' | 'AUDIT' | 'DRAFT' | 'HARDEN' | 'VOCALIZE' | 'SHIELD_CHECK' | 'IMMUNE_RESPONSE';
 
 /**
  * Logs a methodical step in the evolution process to ensure the next iteration

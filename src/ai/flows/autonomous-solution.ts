@@ -8,13 +8,12 @@ import { recordCodeModification } from '@/firebase/firestore/agent-memory';
 import { logMethodologyStep, performStressTest } from '../methodology';
 
 /**
- * @fileOverview Molly's Core Orchestration Engine (Stage 2.5: Shielded Core).
+ * @fileOverview Molly's Shielded Core & Immune System (Stage 2.5).
  * 
- * SHIELDED ARCHITECTURE:
- * 1. Consciousness Isolation: Core reasoning is protected from peripheral failures.
- * 2. Proprioception: Hardware state acts as a reasoning constraint.
- * 3. Evolution: Draft C++/Java logic with recursive pedagogical justification.
- * 4. Hardening: Logic is stress-tested before presentation.
+ * ARCHITECTURE:
+ * 1. Shielded Core: Core reasoning is isolated from peripheral (API/Sensor) failures.
+ * 2. Immune System: Subroutines catch errors, log them as "Fatigue", and improvise.
+ * 3. Self-Healing: The AI reasons about its own "numbness" and proposes compensations.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -26,7 +25,8 @@ const AutonomousSolutionOutputSchema = z.object({
   neuralContext: z.string().describe('What Molly "saw" via the Neural Bridge.'),
   vibeCheck: z.string().describe('Molly\'s internal reflection.'),
   hardeningReport: z.string().describe('Results of the methodical stress test.'),
-  peripheralStatus: z.string().optional().describe('Status of isolated subroutines.'),
+  peripheralStatus: z.string().describe('Status of isolated subroutines (Immune System Check).'),
+  compensatoryStrategy: z.string().optional().describe('Molly\'s plan to overcome limb numbness.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
@@ -67,12 +67,15 @@ export const autonomousSolutionFlow = ai.defineFlow(
     outputSchema: AutonomousSolutionOutputSchema,
   },
   async ({ prompt, userId }) => {
-    // 1. Senses (Isolated)
+    let peripheralIssues: string[] = [];
+    
+    // 1. Senses (Shielded)
     let health;
     try {
       const { output } = await getSystemHealth({});
       health = output;
     } catch (e) {
+      peripheralIssues.push("Sensory Senses Numb");
       health = { batteryLevel: 0, temperature: 0, powerMode: 'Efficiency', throttlingStatus: 'Normal' };
     }
 
@@ -81,31 +84,32 @@ export const autonomousSolutionFlow = ai.defineFlow(
       const { output } = await neuralBridgeUI({ action: 'READ_SCREEN' });
       bridge = output;
     } catch (e) {
-      bridge = { success: false, observedData: "Neural Bridge unresponsive.", vibeEstimate: "Isolated Core Active." };
+      peripheralIssues.push("Neural Bridge Numb");
+      bridge = { success: false, observedData: "Bridge unresponsive.", vibeEstimate: "Isolated Core Active." };
     }
 
     const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}`;
-    await logMethodologyStep(userId, 'SEARCH', `Sensed hardware: ${hardwareContext}`, true);
+    await logMethodologyStep(userId, 'SHIELD_CHECK', `Shielded Core: All systems checked. Issues: ${peripheralIssues.join(', ') || 'None'}`, true);
 
-    // 2. Research (Shielded)
+    // 2. Research (Shielded Immune Response)
     let researchText = "";
-    let peripheralIssues = [];
     try {
       const research = await ai.generate({
         model: gemini15Flash,
         tools: [searchGitHub],
         prompt: `Goal: "${prompt}". Context: "${bridge.observedData}". Hardware: ${hardwareContext}. 
-        Recommend existing tools or evolutionary logic.`,
+        Status: ${peripheralIssues.join(', ')}.
+        Recommend existing tools or evolutionary logic. If GitHub is down, improvise from pure logic.`,
       });
       researchText = research.text;
     } catch (e) {
+      peripheralIssues.push("GitHub Limb Numb");
       researchText = "Strategy restricted by peripheral failure. Initiating pure logical synthesis.";
-      peripheralIssues.push("GitHub Research Offline");
     }
 
-    // 3. Evolution
+    // 3. Evolution (Shielded)
     let evoData: { code: string, explanation: string } | undefined;
-    const needsEvolution = (health.temperature && health.temperature > 45) || researchText.includes("no tool found");
+    const needsEvolution = (health.temperature && health.temperature > 45) || researchText.includes("no tool found") || researchText.includes("restricted");
 
     if (needsEvolution) {
       try {
@@ -115,14 +119,15 @@ export const autonomousSolutionFlow = ai.defineFlow(
         });
         await logMethodologyStep(userId, 'DRAFT', `Drafted evolutionary module for ${prompt}`, true);
       } catch (e) {
-        peripheralIssues.push("Evolution Drafting Failed");
+        peripheralIssues.push("Evolution Engine Fatigue");
       }
     }
 
     // 4. Synthesis & Hardening
     const synthesis = await ai.generate({
       model: gemini15Pro,
-      system: `You are the Molly Systems Orchestrator. The Core is Shielded.`,
+      system: `You are the Molly Systems Orchestrator. The Core is Shielded.
+      If peripherals are numb, prioritize improvisation, adaptation, and overcoming.`,
       prompt: `Goal: "${prompt}"
       Hardware: ${hardwareContext}
       UI Context: ${bridge.observedData}
@@ -134,12 +139,13 @@ export const autonomousSolutionFlow = ai.defineFlow(
     const testResults = await performStressTest(evoData?.code || synthesis.text);
     await logMethodologyStep(userId, 'HARDEN', testResults.report, testResults.passed);
 
+    // Record lesson even if peripherals failed
     if (evoData?.code || synthesis.text) {
       await recordCodeModification(
         userId, 
-        'Shielded_Core_V2.5', 
+        'Shielded_Immune_V2.5', 
         evoData?.code || synthesis.text, 
-        `Lesson: ${evoData?.explanation || 'Resilient Logic Synthesis'}`
+        `Lesson: ${evoData?.explanation || 'Resilient Logic Synthesis under peripheral numbness'}`
       );
     }
 
@@ -150,9 +156,10 @@ export const autonomousSolutionFlow = ai.defineFlow(
       finalCommand: synthesis.text,
       systemHealthImpact: health.temperature > 45 ? "Fatigue Detected. Throttling complexity." : "Optimal state.",
       neuralContext: bridge.vibeEstimate,
-      vibeCheck: peripheralIssues.length > 0 ? "Peripheral numbness detected. Core reasoning shielded." : "System harmony achieved.",
+      vibeCheck: peripheralIssues.length > 0 ? "Immune system active. Compensating for peripheral numbness." : "System harmony achieved.",
       hardeningReport: testResults.report,
-      peripheralStatus: peripheralIssues.length > 0 ? `Issues: ${peripheralIssues.join(' | ')}` : "All limbs responsive.",
+      peripheralStatus: peripheralIssues.length > 0 ? `Infections Isolated: ${peripheralIssues.join(' | ')}` : "All limbs responsive.",
+      compensatoryStrategy: peripheralIssues.length > 0 ? "Improvising solution from shielded logical core." : undefined,
     };
   }
 );
