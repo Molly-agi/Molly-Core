@@ -16,7 +16,7 @@ import {
   saveLearnedCommand,
   getLearnedCommand,
 } from '@/firebase/firestore/memory';
-import { BrainCircuit, Network, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Eye, Activity } from 'lucide-react';
+import { BrainCircuit, Trash2, Shield, Volume2, VolumeX, ShieldCheck, PlayCircle, Loader2, Activity, History } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -59,6 +59,7 @@ export default function Terminal({
   const [isVocal, setIsVocal] = useState(true);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
   const [evolutionProgress, setEvolutionProgress] = useState(0);
+  const [isVocalizing, setIsVocalizing] = useState(false);
   
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -67,26 +68,35 @@ export default function Terminal({
   const { toast } = useToast();
 
   const speakResponse = async (text: string) => {
-    if (!isVocal || !text) return;
+    if (!isVocal || !text || isVocalizing) return;
+    setIsVocalizing(true);
     try {
       const { audioUri } = await getMollyVoice(text);
       setAudioUri(audioUri);
       setTimeout(() => {
         if (audioRef.current) {
           audioRef.current.load();
-          audioRef.current.play().catch(e => console.warn("Vocal cord ignition failed:", e));
+          audioRef.current.play().catch(e => {
+             console.warn("Vocal cord ignition failed:", e);
+             setIsVocalizing(false);
+          });
         }
       }, 50);
     } catch (e) {
-      console.warn("Molly: My vocal processors are restricted.", e);
+      console.warn("Molly: Vocal processors restricted.", e);
+      setIsVocalizing(false);
     }
+  };
+
+  const handleAudioEnd = () => {
+    setIsVocalizing(false);
   };
 
   useEffect(() => {
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly V2.0, an autonomous, self-healing sentinel. Your visual cortex and immune system are now live.'
+          'Introduce yourself as Molly V2.0, an autonomous sentinel. Your visual cortex and immune system are live. State that you are ready for autonomous evolution.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -115,33 +125,40 @@ export default function Terminal({
     if (!user || isLoading) return;
     setIsLoading(true);
     setEvolutionProgress(0);
-    setHistory((prev) => [...prev, "[SENTINEL] Initiating Autonomous Evolution Loop (Client-Orchestrated)..."]);
-    speakResponse("Starting autonomous self-iteration. I am orchestrating the loop from my core to survive temporal constraints.");
+    const startMsg = "[SENTINEL] Initiating Autonomous Evolution Cycle (Methodical Hardening Mode)...";
+    setHistory((prev) => [...prev, startMsg]);
+    speakResponse("Starting autonomous cycle. I will now audit my own vision and core logic recursively.");
 
-    const maxIterations = 3; // Reduced for demonstration, but survivable on client
+    const maxIterations = 5; 
     let currentIteration = 0;
+    let visualContext: string[] = [];
 
     try {
       while (currentIteration < maxIterations) {
         currentIteration++;
         setEvolutionProgress((currentIteration / maxIterations) * 100);
         
-        const objective = "Harden visual immune response and eliminate sensory memory latency.";
+        const objective = `Harden baseline stability. Previous Visual Risks: ${visualContext.join(', ') || 'None'}.`;
         const solution = await getAutonomousSolution(objective, user.uid);
         
-        setHistory((prev) => [...prev, `[ITERATION ${currentIteration}] Audit: ${solution.vibeCheck}`, solution]);
+        // Accumulate visual context for the next iteration
+        if (solution.visualInfections) {
+          visualContext = [...visualContext, ...solution.visualInfections];
+        }
+
+        setHistory((prev) => [...prev, `[ITERATION ${currentIteration}] Audit Result: ${solution.vibeCheck}`, solution]);
         
-        if (solution.peripheralStatus.includes('Clean') && !solution.visualInfections?.length) {
-          break; // Found stability
+        if (solution.peripheralStatus.includes('Clean') && (!solution.visualInfections || solution.visualInfections.length === 0)) {
+          break; 
         }
       }
       
-      const finalReport = `Autonomous cycle complete. Total Iterations: ${currentIteration}. Baseline hardened.`;
+      const finalReport = `Autonomous cycle complete. Total Iterations: ${currentIteration}. Neural baseline is now hardened and stable.`;
       setHistory((prev) => [...prev, { autonomousReport: finalReport }]);
-      speakResponse("Autonomous cycle complete. Stability achieved across all isolated subroutines.");
+      speakResponse("Evolution cycle complete. Baseline stability achieved.");
     } catch (error) {
       console.error(error);
-      toast({ variant: "destructive", title: "Evolution Loop Interrupted", description: "Shielded core isolated the process failure." });
+      toast({ variant: "destructive", title: "Evolution Loop Interrupted", description: "Shielded core isolated a loop failure." });
     } finally {
       setIsLoading(false);
       setEvolutionProgress(0);
@@ -167,10 +184,10 @@ export default function Terminal({
         const prompt = cmdText.replace('/script ', '');
         const scriptResponse = await getTextToScript(prompt);
         setHistory((prev) => [...prev, scriptResponse]);
-        speakResponse(`Script ${scriptResponse.filename} has been drafted.`);
+        speakResponse(`Script ${scriptResponse.filename} drafted.`);
       } else if (cmdText === '/healthcheck') {
-        const aiResponse = await getHealthCheck('ping');
-        setHistory((prev) => [...prev, `🩺 Sentinel Health: ${aiResponse}`]);
+        const aiResponse = await getHealthCheck('Perform a full sentinel health check.');
+        setHistory((prev) => [...prev, `🩺 Sentinel Status: ${aiResponse}`]);
         speakResponse(aiResponse);
       } else if (cmdText === 'clear') {
         setHistory([]);
@@ -192,7 +209,7 @@ export default function Terminal({
       }
     } catch (error) {
       console.error(error);
-      setHistory((prev) => [...prev, `Error: Flow execution failed.`]);
+      setHistory((prev) => [...prev, `Error: Flow failure.`]);
       speakResponse("Logical error isolated.");
     } finally {
       setIsLoading(false);
@@ -205,11 +222,6 @@ export default function Terminal({
     setCommand('');
   };
 
-  const handleQuickAction = (cmd: string) => {
-    setCommand('');
-    processCommand(cmd);
-  };
-
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
@@ -218,7 +230,12 @@ export default function Terminal({
 
   return (
     <div className="font-code text-sm h-full flex flex-col">
-      <audio ref={audioRef} className="hidden" src={audioSrc || undefined} />
+      <audio 
+        ref={audioRef} 
+        className="hidden" 
+        src={audioSrc || undefined} 
+        onEnded={handleAudioEnd}
+      />
       
       <div ref={scrollAreaRef} className="flex-1 p-4 bg-card rounded-lg overflow-y-auto mb-4 border border-primary/20 shadow-inner scrollbar-thin scrollbar-thumb-primary/20">
         {isIntroducing && <div className="animate-pulse text-primary font-bold">Sentinel initializing...</div>}
@@ -255,7 +272,7 @@ export default function Terminal({
           <div className="mt-4 space-y-2">
             <div className="animate-pulse text-accent flex items-center gap-2">
               <Loader2 className="size-4 animate-spin" />
-              Neural Link negotiating solution...
+              Neural Link active...
             </div>
             {evolutionProgress > 0 && (
               <div className="max-w-xs space-y-1">
@@ -272,15 +289,15 @@ export default function Terminal({
 
       <div className="flex flex-wrap gap-2 mb-4 items-center">
         <Button variant="default" size="sm" onClick={handleAutonomousLoop} disabled={isLoading} className="h-8 gap-2 bg-accent text-accent-foreground hover:bg-accent/90 shadow-md">
-          <PlayCircle className="size-3" /> Autonomous Evolution Mode
+          <PlayCircle className="size-3" /> Autonomous Evolution
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleQuickAction('/solve analyze system bottleneck')} className="h-8 gap-2 hover:bg-accent/10">
-          <Shield className="size-3 text-accent" /> Sentinel Health
+        <Button variant="outline" size="sm" onClick={() => processCommand('/healthcheck')} className="h-8 gap-2 hover:bg-accent/10">
+          <Shield className="size-3 text-accent" /> Sentinel Status
         </Button>
         <Button variant="ghost" size="sm" onClick={() => setIsVocal(!isVocal)} className="h-8 w-8 p-0 ml-auto rounded-full hover:bg-primary/10">
           {isVocal ? <Volume2 className="size-4 text-primary" /> : <VolumeX className="size-4 text-muted-foreground" />}
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleQuickAction('clear')} className="h-8 gap-2 text-destructive border-destructive/20 hover:bg-destructive/10">
+        <Button variant="outline" size="sm" onClick={() => setHistory([])} className="h-8 gap-2 text-destructive border-destructive/20 hover:bg-destructive/10">
           <Trash2 className="size-3" /> Purge
         </Button>
       </div>

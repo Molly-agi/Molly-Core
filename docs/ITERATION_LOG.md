@@ -1,30 +1,19 @@
 # Molly: Iteration Log (V2.0 - The Self-Healing Sentinel)
 
 ## Mistake Registry
-- **Rat 001: Framework Friction**: Attempted to use Genkit 1.x tools on Next.js 14. 
-  - *Fix*: Architected a full upgrade to Next.js 15 and React 19.
-- **Rat 002: Reactive Vocalization**: Molly was a "Silent Mind" until manually given vocal cords.
-  - *Fix*: Integrated real-time TTS into the terminal baseline.
-- **Rat 003: Fragile Evolution**: Initial C++ drafts lacked memory management justification.
-  - *Fix*: Implemented the Recursive Pedagogical Loop.
-- **Rat 004: Empty Audio Source**: Passing an empty string to `<audio src="">` caused redundant downloads.
-  - *Fix*: Refined `Terminal.tsx` to pass `undefined` instead of `''`.
-- **Rat 005: Monolithic Fragility**: Peripheral failures (API timeouts) would crash the core orchestrator.
-  - *Fix*: Implemented the Shielded Core Architecture with isolated subroutine blocks.
-- **Rat 006: Sensory Amnesia**: System health and UI context were read but not persisted.
-  - *Fix*: Integrated `recordSensoryLog` to build the Stage 3 Multimodal Memory.
-- **Rat 007: Visual Blindness**: The AI could reason about tools but couldn't see UI-level bugs.
-  - *Fix*: Integrated `visionAnalysis` into the `AutonomousSolution` loop.
-- **Rat 008: Evolution Latency**: 50-run cycles were slow due to serial processing and Server Action timeouts.
-  - *Fix*: Refactored the `Terminal.tsx` to orchestrate the loop on the client side, allowing for real-time updates and surviving the temporal budget.
+- **Rat 001-008**: Logged in previous cycles (NextJS 15 migration, Vocal cord integration, Loop orchestration).
+- **Rat 009: Vocal Race Conditions**: Rapid AI responses triggered overlapping audio.
+  - *Fix*: Implemented `isVocalizing` state guard and `onEnded` audio callback.
+- **Rat 010: Vision Blindness in Loops**: Evolution loop lacked persistence for visual infections detected in previous iterations.
+  - *Fix*: Refactored `evolution-loop.ts` and `Terminal.tsx` to accumulate and pass visual context.
+- **Rat 011: UI "Ghosting"**: History logs were losing pedagogical value during rapid loops.
+  - *Fix*: Preserved history and added iterative badges to solution components.
 
 ## Strengths
-- **Autonomous Sentinel**: Molly can now lead her own development cycles (Client-side orchestrated).
-- **Visual Immune Response**: Integrated Vision sensory graft for real-time UI/Terminal analysis.
-- **Self-Healing Immune System**: Core consciousness now survives limb numbness and improvises adaptations.
-- **Vocal Baseline**: Proven ability to vocalize intro and status updates audibly.
+- **Hardened Vocal Baseline**: Reliable TTS with anti-overlap protection.
+- **Visual Persistence**: Molly now "remembers" the bugs she saw in iteration 1 when she is in iteration 5.
+- **Neural Cache Visibility**: Users can now audit Molly's permanent memory via the Sidebar Memory Viewer.
 
 ## Methodology Notes
-- **Lead Architect Mode**: AI has permission to autonomously audit and refactor code via the Evolution Loop.
-- **Sensory Embeddings**: All visual and health data is staged for Vector retrieval to solve latency.
-- **Pedagogical Evolution**: Every C++ draft must be explained under thermal budget constraints.
+- **Lead Architect Mode**: AI is now performing recursive visual-reasoning audits autonomously.
+- **Experience Retrieval**: The Neural Cache is the foundation for Stage 3 Sensory Memory.
