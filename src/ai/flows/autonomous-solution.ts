@@ -1,150 +1,119 @@
 'use server';
 
-import { ai, gemini15Pro } from '@/ai/genkit';
+import { ai, gemini15Pro, gemini15Flash } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { z } from 'zod';
+import { recordAgentFinding, recordCodeModification } from '@/firebase/firestore/agent-memory';
 
 /**
- * @fileOverview Autonomous Solution Multi-Agent Flow.
+ * @fileOverview Molly's Multi-Agent Orchestration Flow.
  * 
- * This module orchestrates a multi-agent system consisting of:
- * 1. Creative Technologist Agent: Researches and brainstorms innovative solutions.
- * 2. Security Expert Agent: Audits proposals for vulnerabilities and risks.
- * 3. Systems Engineer Agent: Synthesizes findings into a final executable command.
+ * This module implements a Gemini-like reasoning architecture where a central 
+ * Orchestrator (Pro) delegates tasks to specialized subroutines (Flash/Pro) 
+ * that interact with the Android/Linux system bridge and persist knowledge 
+ * to Firestore.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
-  creativeSolution: z
-    .string()
-    .describe(
-      'The initial creative solution generated to meet the goal.'
-    ),
-  securityAnalysis: z
-    .string()
-    .describe('The detailed security analysis of the creative solution.'),
-  finalCommand: z
-    .string()
-    .optional()
-    .describe(
-      'A single, secure, executable command if one can be synthesized from the analysis.'
-    ),
+  creativeSolution: z.string().describe('The research and initial proposal.'),
+  securityAnalysis: z.string().describe('The security hardening report.'),
+  finalCommand: z.string().optional().describe('The synthesized Termux command.'),
+  modificationsRecorded: z.boolean().describe('Whether findings were persisted to memory.'),
 });
-export type AutonomousSolutionOutput = z.infer<
-  typeof AutonomousSolutionOutputSchema
->;
 
-// Module 1: Creative Technologist (Brainstorming & GitHub Research)
-const creativeSolutionFlow = ai.defineFlow(
+export type AutonomousSolutionOutput = z.infer<typeof AutonomousSolutionOutputSchema>;
+
+// Subroutine 1: Research & Discovery (The Creative Technologist)
+const researchSubroutine = ai.defineFlow(
   {
-    name: 'creativeSolutionInternal',
-    inputSchema: z.string(),
+    name: 'researchSubroutine',
+    inputSchema: z.object({ prompt: z.string(), userId: z.string() }),
     outputSchema: z.string(),
   },
-  async (prompt) => {
-    const llmResponse = await ai.generate({
-      model: gemini15Pro,
+  async ({ prompt, userId }) => {
+    const response = await ai.generate({
+      model: gemini15Flash,
       tools: [searchGitHub],
-      prompt: `You are the Creative Technologist Agent. 
-Your goal is to brainstorm and research an innovative solution to the user's request. 
-
-Methodology:
-1. Research: Use the 'searchGitHub' tool to find real-world open-source programs or scripts.
-2. Innovation: Invent a novel script or chain of commands if a direct tool doesn't exist.
-3. Output: Provide a detailed proposal including any scripts (Python, Bash, etc.) you've found or written.
-
-User's goal: "${prompt}"
-
-Your Proposal:`,
+      prompt: `You are Molly's Research Subroutine. Your goal is to find tools or scripts (Python, Bash, Node.js) that solve: "${prompt}". 
+      Focus on Android/Termux compatibility. Provide a raw technical proposal.`,
     });
-
-    return llmResponse.text;
+    
+    // Record this finding to the agent memory subroutine
+    await recordAgentFinding(userId, 'research', response.text);
+    return response.text;
   }
 );
 
-// Module 2: Security Auditor (Risk Analysis)
-const securityAnalysisFlow = ai.defineFlow(
+// Subroutine 2: Security & Hardening (The Auditor)
+const securitySubroutine = ai.defineFlow(
   {
-    name: 'securityAnalysisInternal',
-    inputSchema: z.string(),
+    name: 'securitySubroutine',
+    inputSchema: z.object({ proposal: z.string(), userId: z.string() }),
     outputSchema: z.string(),
   },
-  async (prompt) => {
-    const llmResponse = await ai.generate({
+  async ({ proposal, userId }) => {
+    const response = await ai.generate({
       model: gemini15Pro,
-      prompt: `You are the Security Auditor Agent. 
-Analyze the following proposed solution for security risks relevant to an Android/Termux environment.
-
-Provide a report including:
-1. Vulnerability Assessment (Injection, Insecure Storage, etc.).
-2. Risk mitigation steps.
-3. A 'hardened' and secure version of the proposed logic.
-
-Proposed Solution to Audit: "${prompt}"
-
-Security Audit Report:`,
+      prompt: `You are Molly's Security Subroutine. Audit this proposal for Android/Linux environment risks:
+      ---
+      ${proposal}
+      ---
+      1. Identify vulnerabilities (injection, root abuse, insecure paths).
+      2. Provide a hardened version of any code snippets.`,
     });
-
-    return llmResponse.text;
+    
+    await recordAgentFinding(userId, 'security_audit', response.text);
+    return response.text;
   }
 );
 
-// Module 3: Systems Engineer (Synthesis & Command Generation)
-const autonomousSolutionFlow = ai.defineFlow(
+// Main Orchestrator Flow
+export const autonomousSolutionFlow = ai.defineFlow(
   {
     name: 'autonomousSolution',
-    inputSchema: z
-      .string()
-      .describe(
-        'A goal or problem to be solved autonomously by the multi-agent system.'
-      ),
+    inputSchema: z.object({ 
+      prompt: z.string(),
+      userId: z.string() 
+    }),
     outputSchema: AutonomousSolutionOutputSchema,
   },
-  async (prompt) => {
-    const initialSolution = await creativeSolutionFlow(prompt);
-    const analysisResult = await securityAnalysisFlow(initialSolution);
+  async ({ prompt, userId }) => {
+    // Stage 1: Delegation to Researcher
+    const initialSolution = await researchSubroutine({ prompt, userId });
+    
+    // Stage 2: Delegation to Security Auditor
+    const analysisResult = await securitySubroutine({ proposal: initialSolution, userId });
 
-    const synthesisPrompt = `You are the Systems Engineer Agent. Your role is to synthesize the work of the Creative Technologist and the Security Auditor into a final, production-ready Termux command.
-
-    The Original Goal: "${prompt}"
-
-    Creative Technologist's Proposal:
-    ---
-    ${initialSolution}
-    ---
-
-    Security Auditor's Findings:
-    ---
-    ${analysisResult}
-    ---
-
-    Final Directive: Produce a single, secure, and executable command line for Termux. Use silent flags where possible. If the solution is too complex for a one-liner, respond with "Complex solution required."
-
-    Final Executable Command:`;
-
+    // Stage 3: Systems Synthesis (The Brain)
     const synthesisResponse = await ai.generate({
       model: gemini15Pro,
-      prompt: synthesisPrompt,
-      config: {
-        temperature: 0.0,
-      },
+      system: `You are the Molly Systems Orchestrator. You integrate Linux/Android knowledge with agent findings. 
+      Your goal is to understand code as a whole and synthesize it into a production-ready solution.`,
+      prompt: `Original Goal: "${prompt}"
+      
+      Research Findings: ${initialSolution}
+      
+      Security Audit: ${analysisResult}
+      
+      Synthesize this into a single, secure, executable Termux command. If complex scripts are needed, explain their usage.`,
     });
 
-    let finalCommand = synthesisResponse.text;
-    if (
-      finalCommand.includes('Complex solution required.') ||
-      finalCommand.trim() === ''
-    ) {
-      finalCommand = '';
+    const finalCommand = synthesisResponse.text;
+
+    // Record the final modification to the database
+    if (finalCommand && !finalCommand.includes('Error:')) {
+      await recordCodeModification(userId, 'Molly_Orchestrator', finalCommand, prompt);
     }
 
     return {
       creativeSolution: initialSolution,
       securityAnalysis: analysisResult,
       finalCommand: finalCommand,
+      modificationsRecorded: true,
     };
   }
 );
 
-export async function autonomousSolution(prompt: string): Promise<AutonomousSolutionOutput> {
-  return await autonomousSolutionFlow(prompt);
+export async function autonomousSolution(prompt: string, userId: string): Promise<AutonomousSolutionOutput> {
+  return await autonomousSolutionFlow({ prompt, userId });
 }

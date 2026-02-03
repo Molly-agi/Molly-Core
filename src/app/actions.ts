@@ -27,18 +27,13 @@ export async function getHealthCheck(text: string) {
 
 export async function getVoiceCommand(audioData: string) {
   ensureApiKey();
-  // First, transcribe the audio data to text.
   const transcribedText = await voiceCommandToText(audioData);
-
-  // If transcription is empty or failed, return an error.
   if (!transcribedText || !transcribedText.trim()) {
     return {
       prompt: '',
       command: "Error: I couldn't understand the audio.",
     };
   }
-
-  // Then, take the transcribed text and convert it to a Termux command.
   const command = await textToTermuxCommand(transcribedText);
   return { prompt: transcribedText, command };
 }
@@ -58,9 +53,9 @@ export async function getContextualGuidance(prompt: string) {
   return await contextualGuidance(prompt);
 }
 
-export async function getAutonomousSolution(prompt:string): Promise<AutonomousSolutionOutput> {
+export async function getAutonomousSolution(prompt: string, userId: string): Promise<AutonomousSolutionOutput> {
   ensureApiKey();
-  return await autonomousSolution(prompt);
+  return await autonomousSolution(prompt, userId);
 }
 
 export async function getTextToScript(prompt: string): Promise<TextToScriptOutput> {
