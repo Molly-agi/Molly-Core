@@ -4,7 +4,7 @@ import { googleAI } from '@genkit-ai/google-genai';
 /**
  * @fileOverview Molly's Neural Core V10.0 (Stage 4.5 Ascended).
  *
- * CRITICAL: Re-grafting the entire soul onto the Gemini 2.5 infrastructure.
+ * CRITICAL: Re-grafting the architecture onto the Gemini 2.5 infrastructure.
  * Using 2.5 Pro for strategic orchestration and 2.5 Flash for rapid sensory processing.
  */
 

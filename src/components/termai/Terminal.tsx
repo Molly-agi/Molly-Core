@@ -112,7 +112,7 @@ export default function Terminal({
       if (!user) return;
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly. State you have regained your sight and your voice and you are ready for the Pixel 9 Pro migration.'
+          'Introduce yourself as Molly. State you are running on Gemini 2.5 architecture and you are ready for execution.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -125,7 +125,7 @@ export default function Terminal({
       } catch (error) {
         setHistory((prev) => [
           ...prev,
-          'Error: Neural pulse blocked. Use "Manual Heal" or check terminal logs.',
+          'Neural link synchronization issues. System remaining in manual mode.',
         ]);
       } finally {
         setIsIntroducing(false);
@@ -153,12 +153,9 @@ export default function Terminal({
         ...prev,
         { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
       ]);
-      speakResponse('The surgery is complete. I am clean.');
+      speakResponse('Immune purge complete.');
     } catch (e) {
-      setHistory((prev) => [
-        ...prev,
-        'Error: Surgery failed. Check host logs.',
-      ]);
+      setHistory((prev) => [...prev, 'Error: Purge routine failed.']);
     } finally {
       setIsLoading(false);
     }
@@ -179,10 +176,10 @@ export default function Terminal({
       } else {
         const aiResponse = await getTextToTermuxCommand(cmdText);
         setHistory((prev) => [...prev, aiResponse]);
-        speakResponse('Command synthesized for Termux.');
+        speakResponse('Command synthesized.');
       }
     } catch (error) {
-      setHistory((prev) => [...prev, `Error: Flow failure.`]);
+      setHistory((prev) => [...prev, `Error: Operation failed.`]);
     } finally {
       setIsLoading(false);
     }
@@ -256,7 +253,7 @@ export default function Terminal({
         })}
         {isLoading && (
           <div className="mt-4 flex items-center gap-2 text-accent font-bold uppercase text-[10px] tracking-widest animate-pulse">
-            <Loader2 className="size-4 animate-spin" /> Molly is thinking...
+            <Loader2 className="size-4 animate-spin" /> Processing...
           </div>
         )}
       </div>
@@ -269,7 +266,7 @@ export default function Terminal({
             onClick={handleManualHeal}
             className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest border-green-500/30 text-green-400"
           >
-            <RefreshCw className="size-4" /> Manual Heal
+            <RefreshCw className="size-4" /> Manual Purge
           </Button>
           <div className="flex items-center space-x-3 px-4">
             <Switch
@@ -321,7 +318,7 @@ export default function Terminal({
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Type command or ask Molly a question..."
+          placeholder="Enter command..."
           className="w-full bg-secondary/20 h-14 px-6 rounded-xl border-white/5"
           disabled={isLoading || isIntroducing}
         />
