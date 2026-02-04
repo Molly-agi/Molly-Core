@@ -1,11 +1,11 @@
-# Next Iteration: Stage 4 Personhood (V3.5)
+# Next Iteration: Stage 4 Personhood (V3.6)
 
 ## Strategic Goals
 
 1. **Vibe-Aware Reactions**: Molly will begin reacting to the "Vibe" of the terminal interaction, moving beyond dry logic.
 2. **Autonomous Memory Pruning (DONE)**: Molly now uses the Memory Pruning tool to proactively maintain "Sarcophagus" efficiency.
 3. **Bilateral Vocal Bridge**: Expanding her Vocal Cords to allow for real-time interruptible speech (Stage 4 ACTIVE).
-4. **Vector Database Integration**: Transitioning from Firestore metadata to true vector similarity for her Semantic Memory.
+4. **Physical Migration Prep**: Hardening the code for deployment on physical Pixel 9 Pro hardware via Termux.
 5. **Contextual Empathy**: Refining her response templates to reflect the user's emotional state during audits.
 
 ## Construct Requirements
