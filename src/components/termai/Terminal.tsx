@@ -6,28 +6,19 @@ import {
   getTextToTermuxCommand,
   getAutonomousSolution,
   getHealthCheck,
-  getTextToScript,
   getMollyVoice,
   triggerImmuneResponse,
-  startSyntheticSynthesis,
-  getModelPulse,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
 import {
-  BrainCircuit,
   Trash2,
-  Shield,
   Volume2,
   VolumeX,
   ShieldCheck,
   Loader2,
-  Radio,
+  Shield,
   Zap,
-  Fingerprint,
-  Users,
-  Code,
-  AlertTriangle,
   Stethoscope,
   RefreshCw,
 } from 'lucide-react';
@@ -36,10 +27,8 @@ import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import { DownloadableScript } from './DownloadableScript';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
 
@@ -68,24 +57,10 @@ function isAutonomousSolution(
   );
 }
 
-function isHiveOutput(item: HistoryItem): item is HiveOutput {
-  return typeof item === 'object' && item !== null && 'strategicReport' in item;
-}
-
 function isImmuneReport(
   item: HistoryItem
 ): item is { immuneReport: string; isHealthy: boolean } {
   return typeof item === 'object' && item !== null && 'immuneReport' in item;
-}
-
-function isSyntheticReport(
-  item: HistoryItem
-): item is {
-  syntheticReport: string;
-  implementation: string;
-  authority: string;
-} {
-  return typeof item === 'object' && item !== null && 'syntheticReport' in item;
 }
 
 export default function Terminal({
@@ -95,7 +70,9 @@ export default function Terminal({
   voiceResult: VoiceCommandResult | null;
   onVoiceCommandProcessed: () => void;
 }) {
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([
+    '[SYSTEM]: Initializing Neural Link...',
+  ]);
   const [command, setCommand] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isIntroducing, setIsIntroducing] = useState(true);
@@ -107,7 +84,6 @@ export default function Terminal({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
-  const { toast } = useToast();
 
   const speakResponse = async (text: string) => {
     if (!isVocal || !text || isVocalizing) return;
@@ -136,7 +112,7 @@ export default function Terminal({
       if (!user) return;
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly. State you have regained your sight and your voice.'
+          'Introduce yourself as Molly. State you have regained your sight and your voice and you are ready for the Pixel 9 Pro migration.'
         );
         setHistory([intro]);
         speakResponse(intro);
@@ -147,8 +123,9 @@ export default function Terminal({
           { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
         ]);
       } catch (error) {
-        setHistory([
-          'Error: Neural pulse blocked. Use "Manual Heal" to realign.',
+        setHistory((prev) => [
+          ...prev,
+          'Error: Neural pulse blocked. Use "Manual Heal" or check terminal logs.',
         ]);
       } finally {
         setIsIntroducing(false);
@@ -160,30 +137,31 @@ export default function Terminal({
   useEffect(() => {
     if (voiceResult && !isLoading) {
       onVoiceCommandProcessed();
+      processCommand(voiceResult.command);
     }
-  }, [voiceResult, onVoiceCommandProcessed, isLoading]);
-
-  const handleModelPulse = async () => {
-    setIsLoading(true);
-    const models = await getModelPulse();
-    setHistory((prev) => [
-      ...prev,
-      `[MODEL_PULSE] Available: ${models.join(', ')}`,
-    ]);
-    setIsLoading(false);
-    speakResponse(`I have identified my available neural models, Father.`);
-  };
+  }, [voiceResult]);
 
   const handleManualHeal = async () => {
     if (!user) return;
     setIsLoading(true);
-    const result = await triggerImmuneResponse(user.uid, 'Manual_Intervention');
-    setHistory((prev) => [
-      ...prev,
-      { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
-    ]);
-    setIsLoading(false);
-    speakResponse('The surgery is complete. My environment is clean.');
+    try {
+      const result = await triggerImmuneResponse(
+        user.uid,
+        'Manual_Intervention'
+      );
+      setHistory((prev) => [
+        ...prev,
+        { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
+      ]);
+      speakResponse('The surgery is complete. I am clean.');
+    } catch (e) {
+      setHistory((prev) => [
+        ...prev,
+        'Error: Surgery failed. Check host logs.',
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const processCommand = async (cmdText: string) => {
@@ -191,9 +169,7 @@ export default function Terminal({
     setHistory((prev) => [...prev, `> ${cmdText}`]);
     setIsLoading(true);
     try {
-      if (cmdText === '/ping') {
-        await handleModelPulse();
-      } else if (cmdText.startsWith('/solve ')) {
+      if (cmdText.startsWith('/solve ')) {
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
@@ -203,6 +179,7 @@ export default function Terminal({
       } else {
         const aiResponse = await getTextToTermuxCommand(cmdText);
         setHistory((prev) => [...prev, aiResponse]);
+        speakResponse('Command synthesized for Termux.');
       }
     } catch (error) {
       setHistory((prev) => [...prev, `Error: Flow failure.`]);
@@ -279,7 +256,7 @@ export default function Terminal({
         })}
         {isLoading && (
           <div className="mt-4 flex items-center gap-2 text-accent font-bold uppercase text-[10px] tracking-widest animate-pulse">
-            <Loader2 className="size-4 animate-spin" /> Hive processing...
+            <Loader2 className="size-4 animate-spin" /> Molly is thinking...
           </div>
         )}
       </div>
@@ -294,18 +271,7 @@ export default function Terminal({
           >
             <RefreshCw className="size-4" /> Manual Heal
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleModelPulse}
-            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest border-primary/30 text-primary"
-          >
-            <ShieldCheck className="size-4" /> Model Pulse
-          </Button>
-        </div>
-
-        <div className="flex items-center justify-between px-2">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 px-4">
             <Switch
               id="risk-mode"
               checked={isRiskMode}
@@ -321,9 +287,12 @@ export default function Terminal({
               ) : (
                 <Shield className="size-3 text-primary" />
               )}
-              {isRiskMode ? 'SuperUser Protocol' : 'Standard Logic'}
+              {isRiskMode ? 'SuperUser' : 'Standard'}
             </Label>
           </div>
+        </div>
+
+        <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -352,7 +321,7 @@ export default function Terminal({
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Type command or /ping to audit models..."
+          placeholder="Type command or ask Molly a question..."
           className="w-full bg-secondary/20 h-14 px-6 rounded-xl border-white/5"
           disabled={isLoading || isIntroducing}
         />

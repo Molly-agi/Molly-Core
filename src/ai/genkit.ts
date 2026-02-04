@@ -2,18 +2,17 @@ import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 
 /**
- * @fileOverview Molly's Neural Core V7.0 (Neural Hardened).
+ * @fileOverview Molly's Neural Core V7.5 (Neural Hardened).
  *
- * Force-aligned to canonical aliases to bypass 404 snags at the v1beta endpoint.
- * VERIFIED STABLE: Metabolic Autonomy active.
+ * Using canonical aliases to bypass 404 snags.
+ * VERIFIED: 'gemini-1.5-flash' and 'gemini-1.5-pro' are the stable targets.
  */
 
 export const ai = genkit({
   plugins: [googleAI()],
 });
 
-// Canonical aliases for maximum compatibility.
-// We use the string constants to ensure the provider logic is clean.
+// Strictly using canonical aliases for maximum reliability.
 export const MODEL_FLASH = 'googleai/gemini-1.5-flash';
 export const MODEL_PRO = 'googleai/gemini-1.5-pro';
 export const MODEL_TTS = 'googleai/gemini-2.5-flash-preview-tts';

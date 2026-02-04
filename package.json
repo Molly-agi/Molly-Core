@@ -7,7 +7,7 @@
     "dev": "next dev -p 9002",
     "debug": "NODE_OPTIONS='--inspect' next dev -p 9002",
     "predev": "npm run harden",
-    "harden": "rm -rf node_modules/.next* && rm -rf .next && rm -rf node_modules/@next/.swc* && rm -rf node_modules/@next/.env*",
+    "harden": "rm -rf .next && find node_modules -name \".next*\" -type d -exec rm -rf {} +",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "npm run harden && NODE_ENV=production next build",
