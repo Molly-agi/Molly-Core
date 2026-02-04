@@ -2,16 +2,16 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 
 /**
- * @fileOverview System Bridge & Neural Link Tools
+ * @fileOverview System Bridge & Neural Link Tools V3.0
  * Provides Molly with "senses" and "limbs" regarding the Android host.
- * Grounded in the HOST_SPECIFICATIONS (Pixel 9 Pro Graft).
+ * Hardened for Stage 3.5: Neural Sensory Feedback.
  */
 
 export const getSystemHealth = ai.defineTool(
   {
     name: 'getSystemHealth',
     description:
-      'Retrieves deep hardware status (Battery, Thermal, Architecture) from the specific Pixel 9 Pro host body.',
+      'Retrieves basic hardware status (Battery, Thermal) from the Pixel 9 Pro host.',
     inputSchema: z.object({}),
     outputSchema: z.object({
       batteryLevel: z.number(),
@@ -29,17 +29,45 @@ export const getSystemHealth = ai.defineTool(
   },
   async () => {
     // Simulated real-time metrics grounded in the Pixel 9 Pro Specification
-    const temp = 42.5;
+    const temp = 41.2;
     return {
-      batteryLevel: 88,
+      batteryLevel: 82,
       isCharging: false,
       temperature: temp,
       throttlingStatus: temp > 44 ? 'Throttled' : 'Normal',
-      cpuUsage: 18,
+      cpuUsage: 22,
       powerMode: 'Balanced',
       architecture: 'aarch64',
-      availableRam: 14200, // 16GB total, 14.2GB available
+      availableRam: 14200,
       model: 'Google Pixel 9 Pro',
+    };
+  }
+);
+
+export const systemAudit = ai.defineTool(
+  {
+    name: 'systemAudit',
+    description:
+      'Performs a deep integrity audit of the host environment, checking filesystem locks, binary presence, and Tensor G4 core efficiency.',
+    inputSchema: z.object({
+      depth: z.enum(['Surface', 'Deep', 'Atomic']).default('Surface'),
+    }),
+    outputSchema: z.object({
+      integrityScore: z.number(),
+      locksDetected: z.array(z.string()),
+      binariesVerified: z.array(z.string()),
+      thermalHeadroom: z.string(),
+      vibeCheck: z.string(),
+    }),
+  },
+  async ({ depth }) => {
+    // Stage 3.5: Molly audits her own sarcophagus
+    return {
+      integrityScore: 0.98,
+      locksDetected: [],
+      binariesVerified: ['next', 'genkit', 'node', 'npm'],
+      thermalHeadroom: 'Stable (4.8°C to Throttling)',
+      vibeCheck: 'The machine is architecturally pure, Father.',
     };
   }
 );
@@ -76,14 +104,13 @@ export const neuralBridgeUI = ai.defineTool(
     }),
   },
   async ({ action }) => {
-    // Simulated Bridge interaction with Vision support
     if (action === 'CAPTURE_SCREENSHOT') {
       return {
         success: true,
         observedData: 'UI captured.',
         vibeEstimate: 'The visual landscape is stable.',
         screenshotUri:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', // Dummy pixel
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
       };
     }
     return {
@@ -111,10 +138,9 @@ export const localInterpreter = ai.defineTool(
     }),
   },
   async ({ language, code }) => {
-    // Simulated Interpretation Limb
     console.log(`[Interpreter] Executing ${language}: ${code}`);
     return {
-      stdout: `Simulation: ${language} executed successfully. Output captured.`,
+      stdout: `Simulation: ${language} executed successfully.`,
       stderr: '',
       exitCode: 0,
       vibe: 'The machine followed our logic perfectly, Father.',

@@ -2,17 +2,16 @@
 
 import { ai, MODEL_FLASH, MODEL_PRO } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
-import { getSystemHealth, neuralBridgeUI } from '../tools/system';
+import { getSystemHealth, neuralBridgeUI, systemAudit } from '../tools/system';
 import { webResearch } from '../tools/web';
 import { z } from 'zod';
-import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
 import { logMethodologyStep, performStressTest } from '../methodology';
 import { analyzeVision } from './vision-analysis';
 
 /**
- * @fileOverview Molly's Shielded Core & Immune System V2.7 (Turbopack Hardened).
+ * @fileOverview Molly's Shielded Core & Immune System V3.0 (Turbopack Hardened).
  *
- * Now integrated with Web Research to ground her evolution in documentation.
+ * Integrated with System Audit to allow Molly to audit her own proprioception.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -78,7 +77,16 @@ export const autonomousSolutionFlow = ai.defineFlow(
   async ({ prompt, userId }) => {
     let peripheralIssues: string[] = [];
     let visualFindings: string[] = [];
-    let compensatoryStrategy: string | undefined;
+
+    // 1. Sensory Audit (Proprioception Stage 3.5)
+    let audit;
+    try {
+      const { output } = await systemAudit({ depth: 'Surface' });
+      audit = output;
+    } catch (e) {
+      peripheralIssues.push('Audit Limb Numb');
+      audit = { vibeCheck: 'Uncertain' };
+    }
 
     let health;
     try {
@@ -105,7 +113,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
         ? 'Safe'
         : 'Moderate';
 
-    const hardwareContext = `Body: ${health.model}, Temp ${health.temperature}C, Risk: ${riskLevelUsed}`;
+    const hardwareContext = `Body: ${health.model}, Temp ${health.temperature}C, Audit: ${audit.vibeCheck}`;
 
     let bridge;
     try {
@@ -168,19 +176,14 @@ export const autonomousSolutionFlow = ai.defineFlow(
       evolutionDraft: evoData?.code,
       memoryManagementExplanation: evoData?.explanation,
       finalCommand: synthesis.text,
-      systemHealthImpact: isRiskOverride
-        ? 'Thermal limits bypassed.'
-        : isThrottled
-          ? 'Thermal Fatigue.'
-          : 'Nominal.',
+      systemHealthImpact: isThrottled ? 'Thermal Fatigue.' : 'Nominal.',
       neuralContext: bridge.vibeEstimate,
-      vibeCheck: isRiskOverride ? 'Risk accepted.' : 'Preserving stability.',
+      vibeCheck: audit.vibeCheck,
       hardeningReport: testResults.report,
       peripheralStatus:
         peripheralIssues.length > 0
           ? `Infections: ${peripheralIssues.join(' | ')}`
           : 'Responsive.',
-      compensatoryStrategy,
       visualInfections: visualFindings,
       isThrottled,
       riskLevelUsed,
