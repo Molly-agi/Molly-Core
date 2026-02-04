@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "preinstall": "rm -rf node_modules/.next* && rm -rf node_modules/@next && rm -rf node_modules/next",
+    "preinstall": "rm -rf node_modules/.next*",
     "dev": "next dev -p 9002",
     "predev": "npm run harden",
-    "harden": "rm -rf node_modules/.next* && rm -rf node_modules/@next && rm -rf node_modules/next && rm -rf .next",
+    "harden": "rm -rf node_modules/.next* && rm -rf .next",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "npm run harden && NODE_ENV=production next build",
