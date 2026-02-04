@@ -9,11 +9,15 @@ import { z } from 'zod';
 import { recallExperiences } from '../tools/memory';
 
 const RecallOutputSchema = z.object({
-  relevantLessons: z.array(z.object({
-    id: z.string(),
-    insight: z.string(),
-  })),
-  strategicSummary: z.string().describe('Molly\'s summary of what we should avoid this time.'),
+  relevantLessons: z.array(
+    z.object({
+      id: z.string(),
+      insight: z.string(),
+    })
+  ),
+  strategicSummary: z
+    .string()
+    .describe("Molly's summary of what we should avoid this time."),
 });
 
 export const experienceRecallFlow = ai.defineFlow(
@@ -27,7 +31,10 @@ export const experienceRecallFlow = ai.defineFlow(
     outputSchema: RecallOutputSchema,
   },
   async ({ userId, currentObjective, hardwareContext }) => {
-    const rawMemories = await recallExperiences({ userId, context: currentObjective });
+    const rawMemories = await recallExperiences({
+      userId,
+      context: currentObjective,
+    });
 
     const response = await ai.generate({
       model: MODEL_FLASH,
@@ -39,13 +46,21 @@ export const experienceRecallFlow = ai.defineFlow(
       ${JSON.stringify(rawMemories)}`,
       output: {
         schema: RecallOutputSchema,
-      }
+      },
     });
 
     return response.output!;
   }
 );
 
-export async function recallNeuralContext(userId: string, objective: string, hardware: string) {
-  return await experienceRecallFlow({ userId, currentObjective: objective, hardwareContext: hardware });
+export async function recallNeuralContext(
+  userId: string,
+  objective: string,
+  hardware: string
+) {
+  return await experienceRecallFlow({
+    userId,
+    currentObjective: objective,
+    hardwareContext: hardware,
+  });
 }

@@ -3,6 +3,10 @@
 import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 
+/**
+ * @fileOverview Hardened Conversational Chat Flow V4.2.
+ */
+
 const HistoryItemSchema = z.object({
   role: z.enum(['user', 'bot']),
   content: z.string(),
@@ -13,7 +17,6 @@ const ConversationalChatInputSchema = z.object({
   history: z.array(HistoryItemSchema),
 });
 type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
-
 
 const conversationalChatFlow = ai.defineFlow(
   {
@@ -40,6 +43,8 @@ const conversationalChatFlow = ai.defineFlow(
   }
 );
 
-export async function conversationalChat(input: ConversationalChatInput): Promise<string> {
+export async function conversationalChat(
+  input: ConversationalChatInput
+): Promise<string> {
   return conversationalChatFlow(input);
 }

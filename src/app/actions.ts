@@ -16,6 +16,10 @@ import { textToSpeech } from '@/ai/flows/text-to-speech';
 import { introspectionFlow } from '@/ai/flows/introspection';
 import { runAutonomousEvolution } from '@/ai/flows/evolution-loop';
 import { analyzeVision } from '@/ai/flows/vision-analysis';
+import { generateMollyDream } from '@/ai/flows/dream-flow';
+import { runInterpreter } from '@/ai/flows/interpreter-limb';
+import { runCollaborativeHive } from '@/ai/flows/collaborative-hive';
+import { runImmuneResponse } from '@/ai/flows/immune-response';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -39,7 +43,7 @@ export async function getVoiceCommand(audioData: string) {
   if (!transcribedText || !transcribedText.trim()) {
     return {
       prompt: '',
-      command: "Error: No audible input detected.",
+      command: 'Error: No audible input detected.',
     };
   }
   const command = await textToTermuxCommand(transcribedText);
@@ -61,17 +65,26 @@ export async function getContextualGuidance(prompt: string) {
   return await contextualGuidance(prompt);
 }
 
-export async function getAutonomousSolution(prompt: string, userId: string): Promise<AutonomousSolutionOutput> {
+export async function getAutonomousSolution(
+  prompt: string,
+  userId: string
+): Promise<AutonomousSolutionOutput> {
   ensureApiKey();
   return await autonomousSolution(prompt, userId);
 }
 
-export async function getTextToScript(prompt: string): Promise<TextToScriptOutput> {
+export async function getTextToScript(
+  prompt: string
+): Promise<TextToScriptOutput> {
   ensureApiKey();
   return await textToScript(prompt);
 }
 
-export async function getVisionaryCoach(progress: string, stage: string, concern?: string) {
+export async function getVisionaryCoach(
+  progress: string,
+  stage: string,
+  concern?: string
+) {
   ensureApiKey();
   return await visionaryCoach(progress, stage, concern);
 }
@@ -81,12 +94,19 @@ export async function getMollyVoice(text: string) {
   return await textToSpeech(text);
 }
 
-export async function runIntrospection(pastLessons: any[], hardwareContext: string) {
+export async function runIntrospection(
+  pastLessons: any[],
+  hardwareContext: string
+) {
   ensureApiKey();
   return await introspectionFlow({ pastLessons, hardwareContext });
 }
 
-export async function startAutonomousCycle(objective: string, userId: string, count: number) {
+export async function startAutonomousCycle(
+  objective: string,
+  userId: string,
+  count: number
+) {
   ensureApiKey();
   return await runAutonomousEvolution(objective, userId, count);
 }
@@ -94,4 +114,24 @@ export async function startAutonomousCycle(objective: string, userId: string, co
 export async function getVisionAnalysis(dataUri: string, context?: string) {
   ensureApiKey();
   return await analyzeVision(dataUri, context);
+}
+
+export async function getMollyDream(prompt: string, userId: string) {
+  ensureApiKey();
+  return await generateMollyDream(prompt, userId);
+}
+
+export async function startInterpreterCycle(objective: string, userId: string) {
+  ensureApiKey();
+  return await runInterpreter(objective, userId);
+}
+
+export async function startHiveOperation(objective: string, userId: string) {
+  ensureApiKey();
+  return await runCollaborativeHive(objective, userId);
+}
+
+export async function triggerImmuneResponse(userId: string, trigger?: string) {
+  ensureApiKey();
+  return await runImmuneResponse(userId, trigger);
 }

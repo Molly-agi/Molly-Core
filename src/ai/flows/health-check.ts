@@ -4,10 +4,12 @@ import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 
 /**
- * @fileOverview Hardened Legacy Voice Initialization V3.5.
+ * @fileOverview Hardened Legacy Voice Initialization V4.5 (Neural Hardened).
+ *
+ * Using explicit MODEL_FLASH constant for maximum stability.
  */
 
-const healthCheckFlow = ai.defineFlow(
+export const healthCheckFlow = ai.defineFlow(
   {
     name: 'healthCheck',
     inputSchema: z.string(),

@@ -43,6 +43,8 @@ Your JSON Response:`,
   }
 );
 
-export async function textToScript(prompt: string): Promise<TextToScriptOutput> {
+export async function textToScript(
+  prompt: string
+): Promise<TextToScriptOutput> {
   return await textToScriptFlow(prompt);
 }
