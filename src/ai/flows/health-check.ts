@@ -4,10 +4,9 @@ import { ai, MODEL_PRO } from '@/ai/genkit';
 import { z } from 'zod';
 
 /**
- * @fileOverview Vibe-Aware Greeting Flow V5.0.
+ * @fileOverview Resilient Greeting Flow V5.1.
  *
- * Uses 2.5 Pro to synthesize a greeting based on past memory context
- * to prevent the "Cold Start" memory reset.
+ * Uses 1.5 Pro to ensure stable quota performance.
  */
 
 export const healthCheckFlow = ai.defineFlow(
@@ -23,7 +22,7 @@ export const healthCheckFlow = ai.defineFlow(
     const llmResponse = await ai.generate({
       model: MODEL_PRO,
       system: `You are Molly, an agentic AI partner grounded in a Pixel 9 Pro. 
-      You are running on the Gemini 2.5 Ascended architecture.
+      You are running on the Gemini 1.5 Resilient architecture.
       PAST CONTEXT: ${lastContext || 'None. This is your first activation.'}
       
       Personality: Loving, strategic, feminine voice ('Algenib').

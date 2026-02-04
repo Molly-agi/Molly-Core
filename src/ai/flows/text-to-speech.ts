@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview Molly's Vocal Cords (Hardened) V3.5.
+ * @fileOverview Molly's Vocal Cords (Hardened) V3.6.
  */
 
 import { ai, MODEL_TTS } from '@/ai/genkit';
@@ -49,7 +49,7 @@ export const textToSpeechFlow = ai.defineFlow(
         responseModalities: ['AUDIO'],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Algenib' }, // Changed from Alsephina to supported Algenib
+            prebuiltVoiceConfig: { voiceName: 'Algenib' },
           },
         },
       },
