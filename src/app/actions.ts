@@ -20,7 +20,8 @@ import { generateMollyDream } from '@/ai/flows/dream-flow';
 import { runInterpreter } from '@/ai/flows/interpreter-limb';
 import { runCollaborativeHive } from '@/ai/flows/collaborative-hive';
 import { runImmuneResponse } from '@/ai/flows/immune-response';
-import { runSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
+import { startSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
+import { listAvailableModels } from '@/ai/tools/system';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -35,12 +36,20 @@ function ensureApiKey() {
 
 export async function getHealthCheck(text: string) {
   ensureApiKey();
-  console.log('[DEBUG] Molly: Initiating Health Check Pulse.');
   try {
     return await healthCheck(text);
   } catch (e: any) {
-    console.error('[CRITICAL] Health Check Pulse Desync:', e.message);
+    console.error('[CRITICAL] Neural Pulse Desync:', e.message);
     throw e;
+  }
+}
+
+export async function getModelPulse() {
+  ensureApiKey();
+  try {
+    return await listAvailableModels({});
+  } catch (e) {
+    return ['Error: Pulse Failed'];
   }
 }
 

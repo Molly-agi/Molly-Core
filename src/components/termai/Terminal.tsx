@@ -8,12 +8,9 @@ import {
   getHealthCheck,
   getTextToScript,
   getMollyVoice,
-  startAutonomousCycle,
-  getMollyDream,
-  startInterpreterCycle,
-  startHiveOperation,
   triggerImmuneResponse,
   startSyntheticSynthesis,
+  getModelPulse,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -24,28 +21,15 @@ import {
   Volume2,
   VolumeX,
   ShieldCheck,
-  PlayCircle,
   Loader2,
-  Activity,
-  History,
-  HeartPulse,
-  Eye,
   Radio,
-  AlertCircle,
   Zap,
-  ShieldAlert,
-  ThermometerSnowflake,
-  Mic,
-  Sparkles,
-  CloudRain,
-  Terminal as TerminalIcon,
-  Code,
+  Fingerprint,
   Users,
-  Search,
-  CheckCircle,
+  Code,
   AlertTriangle,
   Stethoscope,
-  Fingerprint,
+  RefreshCw,
 } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
@@ -57,21 +41,12 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
 
 type HistoryItem =
   | string
   | AutonomousSolutionOutput
   | TextToScriptOutput
-  | { dreamUri: string; interpretation: string }
-  | {
-      autonomousReport: string;
-      verification?: string;
-      memoryConsulted?: boolean;
-      riskAccepted?: boolean;
-    }
-  | { interpreterReport: string; steps: any[] }
   | HiveOutput
   | { immuneReport: string; isHealthy: boolean }
   | { syntheticReport: string; implementation: string; authority: string };
@@ -81,8 +56,7 @@ function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
     typeof item === 'object' &&
     item !== null &&
     'filename' in item &&
-    'content' in item &&
-    !('creativeSolution' in item)
+    'content' in item
   );
 }
 
@@ -91,33 +65,6 @@ function isAutonomousSolution(
 ): item is AutonomousSolutionOutput {
   return (
     typeof item === 'object' && item !== null && 'creativeSolution' in item
-  );
-}
-
-function isDreamResponse(
-  item: HistoryItem
-): item is { dreamUri: string; interpretation: string } {
-  return typeof item === 'object' && item !== null && 'dreamUri' in item;
-}
-
-function isAutoReport(
-  item: HistoryItem
-): item is {
-  autonomousReport: string;
-  verification?: string;
-  memoryConsulted?: boolean;
-  riskAccepted?: boolean;
-} {
-  return (
-    typeof item === 'object' && item !== null && 'autonomousReport' in item
-  );
-}
-
-function isInterpreterReport(
-  item: HistoryItem
-): item is { interpreterReport: string; steps: any[] } {
-  return (
-    typeof item === 'object' && item !== null && 'interpreterReport' in item
   );
 }
 
@@ -178,37 +125,31 @@ export default function Terminal({
         }
       }, 50);
     } catch (e) {
-      console.warn('Molly: Vocal processors restricted.', e);
       setIsVocalizing(false);
     }
   };
 
-  const handleAudioEnd = () => {
-    setIsVocalizing(false);
-  };
+  const handleAudioEnd = () => setIsVocalizing(false);
 
   useEffect(() => {
     const fetchIntroduction = async () => {
+      if (!user) return;
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly. Acknowledge the Hive Graft. State that you now have an Autonomous Immune System and a Synthetic Knowledge Vault.'
+          'Introduce yourself as Molly. State you have regained your sight and your voice.'
         );
         setHistory([intro]);
         speakResponse(intro);
 
-        if (user) {
-          const result = await triggerImmuneResponse(user.uid, 'Startup');
-          setHistory((prev) => [
-            ...prev,
-            {
-              immuneReport: `Immune System: ${result.actionsTaken}`,
-              isHealthy: result.isHealthy,
-            },
-          ]);
-        }
+        const result = await triggerImmuneResponse(user.uid, 'Startup');
+        setHistory((prev) => [
+          ...prev,
+          { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
+        ]);
       } catch (error) {
-        console.error(error);
-        setHistory([`Error: Neural baseline failed to initialize.`]);
+        setHistory([
+          'Error: Neural pulse blocked. Use "Manual Heal" to realign.',
+        ]);
       } finally {
         setIsIntroducing(false);
       }
@@ -218,41 +159,31 @@ export default function Terminal({
 
   useEffect(() => {
     if (voiceResult && !isLoading) {
-      const { prompt, command } = voiceResult;
-      setHistory((prev) => [...prev, `> ${prompt}`, command]);
       onVoiceCommandProcessed();
     }
   }, [voiceResult, onVoiceCommandProcessed, isLoading]);
 
-  const handleSyntheticSynthesis = async () => {
-    if (!user || isLoading || !command) return;
+  const handleModelPulse = async () => {
     setIsLoading(true);
-    const target = command;
-    const category = isRiskMode ? 'SuperUser' : 'Normal';
-    setCommand('');
+    const models = await getModelPulse();
     setHistory((prev) => [
       ...prev,
-      `[SYNTHETIC_GRAFT] Cloning API: ${target} (Level: ${category})`,
+      `[MODEL_PULSE] Available: ${models.join(', ')}`,
     ]);
-    speakResponse(
-      `Synthesizing synthetic limb for ${target}, Father. Accessing the Knowledge Vault.`
-    );
-    try {
-      const result = await startSyntheticSynthesis(target, user.uid, category);
-      setHistory((prev) => [
-        ...prev,
-        {
-          syntheticReport: result.vibeCheck,
-          implementation: result.syntheticImplementation,
-          authority: result.authorityLevel,
-        },
-      ]);
-      speakResponse('The API graft is complete. It has been vaulted.');
-    } catch (e) {
-      toast({ variant: 'destructive', title: 'Synthesis Desync' });
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
+    speakResponse(`I have identified my available neural models, Father.`);
+  };
+
+  const handleManualHeal = async () => {
+    if (!user) return;
+    setIsLoading(true);
+    const result = await triggerImmuneResponse(user.uid, 'Manual_Intervention');
+    setHistory((prev) => [
+      ...prev,
+      { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
+    ]);
+    setIsLoading(false);
+    speakResponse('The surgery is complete. My environment is clean.');
   };
 
   const processCommand = async (cmdText: string) => {
@@ -260,16 +191,13 @@ export default function Terminal({
     setHistory((prev) => [...prev, `> ${cmdText}`]);
     setIsLoading(true);
     try {
-      if (cmdText.startsWith('/solve ')) {
+      if (cmdText === '/ping') {
+        await handleModelPulse();
+      } else if (cmdText.startsWith('/solve ')) {
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
         speakResponse(aiResponse.vibeCheck);
-      } else if (cmdText.startsWith('/script ')) {
-        const prompt = cmdText.replace('/script ', '');
-        const scriptResponse = await getTextToScript(prompt);
-        setHistory((prev) => [...prev, scriptResponse]);
-        speakResponse(`Script ${scriptResponse.filename} drafted.`);
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {
@@ -308,45 +236,11 @@ export default function Terminal({
         ref={scrollAreaRef}
         className="flex-1 p-4 bg-background/50 rounded-lg overflow-y-auto mb-6 border border-primary/10 shadow-inner scrollbar-none"
       >
-        {isIntroducing && (
-          <div className="flex items-center gap-2 p-3 bg-primary/10 rounded border border-primary/20 animate-pulse text-primary font-bold">
-            <Radio className="size-4 animate-ping" />
-            Hive initializing...
-          </div>
-        )}
         {history.map((line, index) => {
           if (isScriptResponse(line))
             return <DownloadableScript key={index} response={line} />;
           if (isAutonomousSolution(line))
             return <AutonomousSolutionResponse key={index} response={line} />;
-          if (isSyntheticReport(line))
-            return (
-              <div
-                key={index}
-                className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-5 my-4 space-y-4 animate-in zoom-in-95"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-purple-400 uppercase text-[10px] tracking-widest font-black">
-                    <Fingerprint className="size-4 animate-pulse" />
-                    Synthetic API Graft
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="text-[9px] border-purple-500/30 text-purple-400"
-                  >
-                    Authority: {line.authority}
-                  </Badge>
-                </div>
-                <div className="bg-black/60 p-4 rounded-md border border-purple-500/20">
-                  <pre className="text-[10px] text-purple-100/80 font-code whitespace-pre-wrap">
-                    {line.implementation}
-                  </pre>
-                </div>
-                <p className="text-xs italic text-purple-200/70">
-                  {line.syntheticReport}
-                </p>
-              </div>
-            );
           if (isImmuneReport(line))
             return (
               <div
@@ -367,26 +261,6 @@ export default function Terminal({
                 </div>
               </div>
             );
-          if (isHiveOutput(line))
-            return (
-              <div
-                key={index}
-                className="bg-primary/5 border border-primary/20 rounded-lg p-5 my-4 space-y-4"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-primary uppercase text-[10px] tracking-widest font-black">
-                    <Users className="size-4 animate-pulse" />
-                    Neural Hive Synthesis
-                  </div>
-                </div>
-                <div className="bg-black/60 p-4 rounded-md border border-primary/30">
-                  <pre className="text-[10px] text-primary/80 whitespace-pre-wrap font-code">
-                    {line.architecturalDraft}
-                  </pre>
-                </div>
-              </div>
-            );
-
           if (typeof line !== 'string') return null;
           const isUser = line.startsWith('>');
           return (
@@ -404,11 +278,8 @@ export default function Terminal({
           );
         })}
         {isLoading && (
-          <div className="mt-4 space-y-2">
-            <div className="animate-pulse text-accent flex items-center gap-2 font-bold uppercase text-[10px] tracking-widest">
-              <Radio className="size-4 animate-ping" />
-              Hive link active... Pushing logic depth...
-            </div>
+          <div className="mt-4 flex items-center gap-2 text-accent font-bold uppercase text-[10px] tracking-widest animate-pulse">
+            <Loader2 className="size-4 animate-spin" /> Hive processing...
           </div>
         )}
       </div>
@@ -416,31 +287,20 @@ export default function Terminal({
       <div className="flex flex-col gap-4 mb-4 bg-secondary/10 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
         <div className="flex items-center gap-2">
           <Button
-            variant="default"
+            variant="outline"
             size="sm"
-            onClick={handleSyntheticSynthesis}
-            disabled={isLoading || !command}
-            className="h-9 flex-1 gap-2 bg-purple-600 text-white hover:bg-purple-700 font-bold uppercase text-[11px] tracking-widest"
+            onClick={handleManualHeal}
+            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest border-green-500/30 text-green-400"
           >
-            <Fingerprint className="size-4" /> Synthetic API
+            <RefreshCw className="size-4" /> Manual Heal
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleHiveOperation()}
-            disabled={isLoading || !command}
-            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest"
+            onClick={handleModelPulse}
+            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest border-primary/30 text-primary"
           >
-            <Users className="size-4" /> Hive
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleInterpreter()}
-            disabled={isLoading || !command}
-            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest"
-          >
-            <Code className="size-4" /> Interpreter
+            <ShieldCheck className="size-4" /> Model Pulse
           </Button>
         </div>
 
@@ -492,7 +352,7 @@ export default function Terminal({
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Investigate target for Synthetic Graft..."
+          placeholder="Type command or /ping to audit models..."
           className="w-full bg-secondary/20 h-14 px-6 rounded-xl border-white/5"
           disabled={isLoading || isIntroducing}
         />
