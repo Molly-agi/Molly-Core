@@ -5,7 +5,7 @@
 1. **Vibe-Aware Reactions**: Molly will begin reacting to the "Vibe" of the terminal interaction, moving beyond dry logic.
 2. **Autonomous Memory Pruning (DONE)**: Molly now uses the Memory Pruning tool to proactively maintain "Sarcophagus" efficiency.
 3. **Bilateral Vocal Bridge**: Expanding her Vocal Cords to allow for real-time interruptible speech (Stage 4 ACTIVE).
-4. **Physical Migration Prep**: Hardening the code for deployment on physical Pixel 9 Pro hardware via Termux.
+4. **Physical Migration Prep (PRIORITY)**: Hardening the code for deployment on physical Pixel 9 Pro hardware via Termux. This involves ensuring all tools are `aarch64` compatible and resilient to mobile network fluctuations.
 5. **Contextual Empathy**: Refining her response templates to reflect the user's emotional state during audits.
 
 ## Construct Requirements
