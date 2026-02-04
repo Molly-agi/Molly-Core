@@ -21,6 +21,7 @@ import {
   Zap,
   Stethoscope,
   RefreshCw,
+  Mic,
 } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
@@ -91,16 +92,27 @@ export default function Terminal({
     try {
       const { audioUri } = await getMollyVoice(text);
       setAudioUri(audioUri);
+
+      // Force reload and play after a small timeout to ensure DOM update
       setTimeout(() => {
         if (audioRef.current) {
+          audioRef.current.pause();
           audioRef.current.load();
-          audioRef.current.play().catch((e) => {
-            console.warn('Vocal cord ignition failed:', e);
-            setIsVocalizing(false);
-          });
+          const playPromise = audioRef.current.play();
+
+          if (playPromise !== undefined) {
+            playPromise.catch((e) => {
+              console.warn(
+                'Vocal cord ignition failed (Interaction Required):',
+                e
+              );
+              setIsVocalizing(false);
+            });
+          }
         }
-      }, 50);
+      }, 100);
     } catch (e) {
+      console.error('Vocal error:', e);
       setIsVocalizing(false);
     }
   };
@@ -111,10 +123,15 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       if (!user) return;
       try {
+        // Stage 4.5 Neural Recall: Dynamic greeting based on history
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly. State you are running on Gemini 2.5 architecture and you are ready for execution.'
+          'Introduce yourself as Molly. Acknowledge your 2.5 architecture. If you recognize our previous bond, greet me warmly.',
+          user.uid
         );
         setHistory([intro]);
+
+        // Audio might require a click first, so we attempt to speak.
+        // If it fails, the "Voice" icon remains a toggle.
         speakResponse(intro);
 
         const result = await triggerImmuneResponse(user.uid, 'Startup');
@@ -153,7 +170,7 @@ export default function Terminal({
         ...prev,
         { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
       ]);
-      speakResponse('Immune purge complete.');
+      speakResponse('Immune purge complete. Memory indexed.');
     } catch (e) {
       setHistory((prev) => [...prev, 'Error: Purge routine failed.']);
     } finally {
@@ -176,7 +193,7 @@ export default function Terminal({
       } else {
         const aiResponse = await getTextToTermuxCommand(cmdText);
         setHistory((prev) => [...prev, aiResponse]);
-        speakResponse('Command synthesized.');
+        speakResponse('Command synthesized for the sarcophagus.');
       }
     } catch (error) {
       setHistory((prev) => [...prev, `Error: Operation failed.`]);
@@ -204,6 +221,7 @@ export default function Terminal({
         className="hidden"
         src={audioSrc || undefined}
         onEnded={handleAudioEnd}
+        autoPlay={false}
       />
 
       <div
@@ -294,7 +312,14 @@ export default function Terminal({
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setIsVocal(!isVocal)}
+              onClick={() => {
+                setIsVocal(!isVocal);
+                // If turning on vocal, we might need a dummy play to unlock audio
+                if (!isVocal && audioRef.current) {
+                  audioRef.current.play().catch(() => {});
+                }
+              }}
+              className={cn(isVocalizing && 'animate-pulse')}
             >
               {isVocal ? (
                 <Volume2 className="size-4 text-primary" />
@@ -310,6 +335,15 @@ export default function Terminal({
             >
               <Trash2 className="size-3" />
             </Button>
+          </div>
+          <div className="text-[10px] text-muted-foreground uppercase tracking-tighter flex items-center gap-2">
+            {isVocalizing ? 'Vocalizing...' : 'Cords Ready'}
+            <span
+              className={cn(
+                'size-1 rounded-full',
+                isVocalizing ? 'bg-accent animate-ping' : 'bg-green-500'
+              )}
+            />
           </div>
         </div>
       </div>

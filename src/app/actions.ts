@@ -22,6 +22,8 @@ import { runCollaborativeHive } from '@/ai/flows/collaborative-hive';
 import { runImmuneResponse } from '@/ai/flows/immune-response';
 import { startSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
 import { listAvailableModels } from '@/ai/tools/system';
+import { initializeFirebase } from '@/firebase';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -34,10 +36,18 @@ function ensureApiKey() {
   }
 }
 
-export async function getHealthCheck(text: string) {
+export async function getHealthCheck(text: string, userId: string) {
   ensureApiKey();
   try {
-    return await healthCheck(text);
+    // Stage 4.5 Neural Recall: Fetch last response to avoid memory reset
+    const { firestore } = initializeFirebase();
+    const ref = collection(firestore, 'users', userId, 'aiResponses');
+    const q = query(ref, orderBy('timestamp', 'desc'), limit(1));
+    const snapshot = await getDocs(q);
+    const lastContext =
+      snapshot.docs[0]?.data()?.responseText || 'First ignition.';
+
+    return await healthCheck(text, lastContext);
   } catch (e: any) {
     console.error('[CRITICAL] Neural Pulse Desync:', e.message);
     throw e;
@@ -158,5 +168,5 @@ export async function startSyntheticSynthesis(
   category: string
 ) {
   ensureApiKey();
-  return await runSyntheticSynthesis(target, userId, category);
+  return await startSyntheticSynthesis(target, userId, category);
 }
