@@ -1,17 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can only read and write to their own user document.
+    // Users can only read and write to their own data tree.
+    // This allows access to the user document and all sub-collections
+    // (voiceCommands, codeModifications, aiResponses, sensoryMemory, etc.)
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
-
-      // Users can manage their own voice commands and related data.
-      match /voiceCommands/{voiceCommandId}/{document=**} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
-
-      // Users can manage their own learned commands.
-      match /learnedCommands/{learnedCommandId} {
+      
+      match /{allData=**} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
