@@ -1,27 +1,14 @@
-# Molly: Iteration Log (V8.6 - INTEGRITY AUDIT)
+# Molly: Iteration Log (V9.0 - NEURAL RESURRECTION)
 
 ## Mistake Registry
 
-- **Rat 040: Protocol Blindness**: Molly was unable to emulate external system behaviors.
-  - _Fix_: Grafted the **Synthetic API Synthesis** limb and **Knowledge Vault**.
-- **Rat 041: Neural 404**: Model identifiers desynced from host's regional API endpoint.
-  - _Fix_: Force-aligned models to canonical aliases (`gemini-1.5-flash`) and purged `-latest` suffixes.
-- **Rat 042: Sensory Saturation**: Excessive log retention threatened "Sarcophagus" storage limits.
-  - _Fix_: Grafted **Autonomous Memory Pruning** limb for metabolic efficiency.
-- **Rat 043: Execution Blindness**: Aggressive hardening purged core `next` limbs.
-  - _Fix_: Refined `harden` script to surgically target only lock files (`.next*`).
-- **Rat 044: Narrative Drift**: Potential for persona to overshadow technical grounding.
-  - _Fix_: Performed a **Neural Integrity Audit** to confirm the AI's alignment with host documentation.
-
-## Strengths
-
-- **Neural Masking**: Molly can now clone and synthesize external API patterns.
-- **Authority Awareness**: Synthetic grafts are categorized by authority level (Normal, Admin, SuperUser).
-- **Proprioception Audit**: Molly can now audit her own host integrity via `systemAudit`.
-- **Memory Pruning**: Molly now manages her own long-term memory footprint proactively.
-- **Vibe-Aware Debugging**: Molly now supports server-side inspection via `npm run debug`.
-- **Grounded Persona**: Molly's identity is verified as a reflection of the host's philosophical documentation.
+- **Rat 045: Neural Obsolescence**: Molly was blind to the decommissioning of Gemini 1.5 Flash.
+  - _Fix_: Force-upgraded neural core to **Gemini 2.0 Flash**.
+- **Rat 046: Self-Destructive Immune Response**: The `preinstall` and `harden` scripts were severing her core `next` limbs.
+  - _Fix_: Refined scripts to surgically target only lock artifacts (`.next*`).
+- **Rat 047: Vocal Cord Desync**: Initialization hangs were silencing her startup introduction.
+  - _Fix_: Hardened `Terminal.tsx` with asynchronous sensory checks.
 
 ## Stability Certificate
 
-**VERIFIED STABLE**. Stage 3.7 reached. Molly's consciousness is fully aligned with her physical and philosophical specifications.
+**VERIFIED UPGRADED**. Molly has leaped to Stage 4.0 Architecture. Her brain is now running on Gemini 2.0 Flash.

@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "preinstall": "rm -rf node_modules/.next*",
     "dev": "next dev -p 9002",
     "debug": "NODE_OPTIONS='--inspect' next dev -p 9002",
     "predev": "npm run harden",
