@@ -35,7 +35,13 @@ function ensureApiKey() {
 
 export async function getHealthCheck(text: string) {
   ensureApiKey();
-  return await healthCheck(text);
+  console.log('[DEBUG] Molly: Initiating Health Check Pulse.');
+  try {
+    return await healthCheck(text);
+  } catch (e: any) {
+    console.error('[CRITICAL] Health Check Pulse Desync:', e.message);
+    throw e;
+  }
 }
 
 export async function getVoiceCommand(audioData: string) {
