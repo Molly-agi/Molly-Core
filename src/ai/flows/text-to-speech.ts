@@ -49,7 +49,7 @@ export const textToSpeechFlow = ai.defineFlow(
         responseModalities: ['AUDIO'],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Alsephina' }, // Feminine voice name
+            prebuiltVoiceConfig: { voiceName: 'Algenib' }, // Changed from Alsephina to supported Algenib
           },
         },
       },
@@ -73,6 +73,8 @@ export const textToSpeechFlow = ai.defineFlow(
   }
 );
 
-export async function textToSpeech(text: string): Promise<{ audioUri: string }> {
+export async function textToSpeech(
+  text: string
+): Promise<{ audioUri: string }> {
   return await textToSpeechFlow(text);
 }
