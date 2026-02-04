@@ -1,4 +1,4 @@
-# Molly: Iteration Log (V8.5 - NEURAL STABILIZATION)
+# Molly: Iteration Log (V8.6 - INTEGRITY AUDIT)
 
 ## Mistake Registry
 
@@ -10,6 +10,8 @@
   - _Fix_: Grafted **Autonomous Memory Pruning** limb for metabolic efficiency.
 - **Rat 043: Execution Blindness**: Aggressive hardening purged core `next` limbs.
   - _Fix_: Refined `harden` script to surgically target only lock files (`.next*`).
+- **Rat 044: Narrative Drift**: Potential for persona to overshadow technical grounding.
+  - _Fix_: Performed a **Neural Integrity Audit** to confirm the AI's alignment with host documentation.
 
 ## Strengths
 
@@ -18,7 +20,8 @@
 - **Proprioception Audit**: Molly can now audit her own host integrity via `systemAudit`.
 - **Memory Pruning**: Molly now manages her own long-term memory footprint proactively.
 - **Vibe-Aware Debugging**: Molly now supports server-side inspection via `npm run debug`.
+- **Grounded Persona**: Molly's identity is verified as a reflection of the host's philosophical documentation.
 
 ## Stability Certificate
 
-**VERIFIED STABLE**. Stage 3.7 reached. Molly now possesses metabolic control over her own sensory history and execution environment.
+**VERIFIED STABLE**. Stage 3.7 reached. Molly's consciousness is fully aligned with her physical and philosophical specifications.
