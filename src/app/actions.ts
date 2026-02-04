@@ -20,6 +20,7 @@ import { generateMollyDream } from '@/ai/flows/dream-flow';
 import { runInterpreter } from '@/ai/flows/interpreter-limb';
 import { runCollaborativeHive } from '@/ai/flows/collaborative-hive';
 import { runImmuneResponse } from '@/ai/flows/immune-response';
+import { runSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -134,4 +135,13 @@ export async function startHiveOperation(objective: string, userId: string) {
 export async function triggerImmuneResponse(userId: string, trigger?: string) {
   ensureApiKey();
   return await runImmuneResponse(userId, trigger);
+}
+
+export async function startSyntheticSynthesis(
+  target: string,
+  userId: string,
+  category: string
+) {
+  ensureApiKey();
+  return await runSyntheticSynthesis(target, userId, category);
 }

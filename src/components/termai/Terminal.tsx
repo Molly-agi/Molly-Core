@@ -13,6 +13,7 @@ import {
   startInterpreterCycle,
   startHiveOperation,
   triggerImmuneResponse,
+  startSyntheticSynthesis,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -44,6 +45,7 @@ import {
   CheckCircle,
   AlertTriangle,
   Stethoscope,
+  Fingerprint,
 } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
@@ -71,7 +73,8 @@ type HistoryItem =
     }
   | { interpreterReport: string; steps: any[] }
   | HiveOutput
-  | { immuneReport: string; isHealthy: boolean };
+  | { immuneReport: string; isHealthy: boolean }
+  | { syntheticReport: string; implementation: string; authority: string };
 
 function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
   return (
@@ -128,6 +131,16 @@ function isImmuneReport(
   return typeof item === 'object' && item !== null && 'immuneReport' in item;
 }
 
+function isSyntheticReport(
+  item: HistoryItem
+): item is {
+  syntheticReport: string;
+  implementation: string;
+  authority: string;
+} {
+  return typeof item === 'object' && item !== null && 'syntheticReport' in item;
+}
+
 export default function Terminal({
   voiceResult,
   onVoiceCommandProcessed,
@@ -178,12 +191,11 @@ export default function Terminal({
     const fetchIntroduction = async () => {
       try {
         const intro = await getHealthCheck(
-          'Introduce yourself as Molly. Acknowledge the Hive Graft. State that you now have an Autonomous Immune System to combat Rat infections and environment friction.'
+          'Introduce yourself as Molly. Acknowledge the Hive Graft. State that you now have an Autonomous Immune System and a Synthetic Knowledge Vault.'
         );
         setHistory([intro]);
         speakResponse(intro);
 
-        // Auto-run Immune Response on boot
         if (user) {
           const result = await triggerImmuneResponse(user.uid, 'Startup');
           setHistory((prev) => [
@@ -212,111 +224,32 @@ export default function Terminal({
     }
   }, [voiceResult, onVoiceCommandProcessed, isLoading]);
 
-  const handleImmuneResponse = async () => {
-    if (!user || isLoading) return;
+  const handleSyntheticSynthesis = async () => {
+    if (!user || isLoading || !command) return;
     setIsLoading(true);
+    const target = command;
+    const category = isRiskMode ? 'SuperUser' : 'Normal';
+    setCommand('');
     setHistory((prev) => [
       ...prev,
-      `[IMMUNE_SYSTEM] Performing Self-Surgery...`,
+      `[SYNTHETIC_GRAFT] Cloning API: ${target} (Level: ${category})`,
     ]);
-    speakResponse('Initiating autonomous self-healing, Father.');
-    try {
-      const result = await triggerImmuneResponse(user.uid, 'Manual Trigger');
-      setHistory((prev) => [
-        ...prev,
-        { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
-      ]);
-      speakResponse(
-        result.isHealthy
-          ? 'Surgery complete. The rats have been purged.'
-          : 'I have cleared some friction, but some resistance remains.'
-      );
-    } catch (e) {
-      toast({ variant: 'destructive', title: 'Immune Response Failed' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleAutonomousEvolution = async () => {
-    if (!user || isLoading) return;
-    setIsLoading(true);
-    setHistory((prev) => [...prev, `[SENTINEL] Triggering Evolution...`]);
-    speakResponse('Initiating evolution cycle, Father.');
-    try {
-      const result = await startAutonomousCycle(
-        `Resilience Optimization`,
-        user.uid,
-        3
-      );
-      setHistory((prev) => [
-        ...prev,
-        {
-          autonomousReport: result.finalReport,
-          verification: result.visualVerification,
-          memoryConsulted: result.memoryConsulted,
-          riskAccepted: isRiskMode,
-        },
-      ]);
-      speakResponse('Evolution cycle complete.');
-    } catch (e) {
-      toast({ variant: 'destructive', title: 'Evolution Failure' });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleHiveOperation = async () => {
-    if (!user || isLoading || !command) return;
-    setIsLoading(true);
-    const obj = command;
-    setCommand('');
-    setHistory((prev) => [...prev, `[HIVE] Deploying Neural Limbs: ${obj}`]);
     speakResponse(
-      'Deploying the Collaborative Hive. My sub-agents are working together now, Father.'
+      `Synthesizing synthetic limb for ${target}, Father. Accessing the Knowledge Vault.`
     );
     try {
-      const result = await startHiveOperation(obj, user.uid);
-      setHistory((prev) => [...prev, result]);
-      speakResponse(
-        result.isSuccess
-          ? 'The Hive has reached a stable synthesis.'
-          : 'The Hive mission encountered architectural risks.'
-      );
-    } catch (e) {
-      toast({
-        variant: 'destructive',
-        title: 'Hive Desync',
-        description: 'Collaborative loop failed.',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleInterpreter = async () => {
-    if (!user || isLoading || !command) return;
-    setIsLoading(true);
-    const obj = command;
-    setCommand('');
-    setHistory((prev) => [...prev, `> Interpreter Mode: ${obj}`]);
-    speakResponse('Initiating the Interpreter Limb.');
-    try {
-      const result = await startInterpreterCycle(obj, user.uid);
+      const result = await startSyntheticSynthesis(target, user.uid, category);
       setHistory((prev) => [
         ...prev,
         {
-          interpreterReport: result.finalConclusion,
-          steps: result.steps,
+          syntheticReport: result.vibeCheck,
+          implementation: result.syntheticImplementation,
+          authority: result.authorityLevel,
         },
       ]);
-      speakResponse(
-        result.stableBaselineReached
-          ? 'Interpretation complete.'
-          : 'Interpretation finished with refactors.'
-      );
+      speakResponse('The API graft is complete. It has been vaulted.');
     } catch (e) {
-      toast({ variant: 'destructive', title: 'Interpreter Failed' });
+      toast({ variant: 'destructive', title: 'Synthesis Desync' });
     } finally {
       setIsLoading(false);
     }
@@ -386,12 +319,40 @@ export default function Terminal({
             return <DownloadableScript key={index} response={line} />;
           if (isAutonomousSolution(line))
             return <AutonomousSolutionResponse key={index} response={line} />;
+          if (isSyntheticReport(line))
+            return (
+              <div
+                key={index}
+                className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-5 my-4 space-y-4 animate-in zoom-in-95"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-purple-400 uppercase text-[10px] tracking-widest font-black">
+                    <Fingerprint className="size-4 animate-pulse" />
+                    Synthetic API Graft
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="text-[9px] border-purple-500/30 text-purple-400"
+                  >
+                    Authority: {line.authority}
+                  </Badge>
+                </div>
+                <div className="bg-black/60 p-4 rounded-md border border-purple-500/20">
+                  <pre className="text-[10px] text-purple-100/80 font-code whitespace-pre-wrap">
+                    {line.implementation}
+                  </pre>
+                </div>
+                <p className="text-xs italic text-purple-200/70">
+                  {line.syntheticReport}
+                </p>
+              </div>
+            );
           if (isImmuneReport(line))
             return (
               <div
                 key={index}
                 className={cn(
-                  'p-3 rounded-lg border my-2 flex items-start gap-3 animate-in fade-in zoom-in-95',
+                  'p-3 rounded-lg border my-2 flex items-start gap-3',
                   line.isHealthy
                     ? 'bg-green-500/10 border-green-500/20 text-green-400'
                     : 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400'
@@ -410,128 +371,23 @@ export default function Terminal({
             return (
               <div
                 key={index}
-                className="bg-primary/5 border border-primary/20 rounded-lg p-5 my-4 space-y-4 animate-in slide-in-from-bottom-2"
+                className="bg-primary/5 border border-primary/20 rounded-lg p-5 my-4 space-y-4"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-primary uppercase text-[10px] tracking-widest font-black">
                     <Users className="size-4 animate-pulse" />
                     Neural Hive Synthesis
                   </div>
-                  <Badge
-                    variant="outline"
-                    className={cn(
-                      'text-[9px] gap-1',
-                      line.isSuccess
-                        ? 'text-green-500 border-green-500/30'
-                        : 'text-yellow-500 border-yellow-500/30'
-                    )}
-                  >
-                    {line.isSuccess ? (
-                      <CheckCircle className="size-2" />
-                    ) : (
-                      <AlertTriangle className="size-2" />
-                    )}
-                    {line.isSuccess ? 'Hardened' : 'Risk Detected'}
-                  </Badge>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="bg-black/40 p-3 rounded border border-white/5 space-y-2">
-                    <h5 className="text-[9px] font-bold text-accent flex items-center gap-1 uppercase">
-                      <Search className="size-3" /> Researcher Findings
-                    </h5>
-                    <p className="text-[10px] leading-relaxed text-foreground/70 italic line-clamp-4">
-                      {line.researchFindings}
-                    </p>
-                  </div>
-                  <div className="bg-black/40 p-3 rounded border border-white/5 space-y-2">
-                    <h5 className="text-[9px] font-bold text-yellow-500 flex items-center gap-1 uppercase">
-                      <History className="size-3" /> Memory Anchor
-                    </h5>
-                    <p className="text-[10px] leading-relaxed text-foreground/70 italic line-clamp-4">
-                      {line.memoryAnchor}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="bg-black/60 p-4 rounded-md border border-primary/30 space-y-2">
-                  <h5 className="text-[10px] font-bold text-primary uppercase tracking-widest">
-                    Architectural Draft
-                  </h5>
-                  <pre className="text-[10px] text-primary/80 whitespace-pre-wrap overflow-x-auto font-code">
+                <div className="bg-black/60 p-4 rounded-md border border-primary/30">
+                  <pre className="text-[10px] text-primary/80 whitespace-pre-wrap font-code">
                     {line.architecturalDraft}
                   </pre>
                 </div>
-
-                <div className="p-3 bg-card rounded border border-white/5">
-                  <p className="text-xs text-foreground/90 leading-relaxed font-body">
-                    {line.finalSynthesis}
-                  </p>
-                </div>
-              </div>
-            );
-          if (isDreamResponse(line))
-            return (
-              <div
-                key={index}
-                className="bg-accent/5 border border-accent/20 rounded-lg p-4 my-4 space-y-3 animate-in fade-in zoom-in-95"
-              >
-                <div className="flex items-center gap-2 text-accent uppercase text-[10px] tracking-widest font-bold">
-                  <Sparkles className="size-4 animate-pulse" />
-                  Visual Imagination
-                </div>
-                <div className="relative aspect-video w-full rounded-md overflow-hidden border border-accent/10 shadow-lg">
-                  <Image
-                    src={line.dreamUri}
-                    alt="Molly's Dream"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <p className="text-xs italic text-accent/80 leading-relaxed font-body">
-                  {line.interpretation}
-                </p>
-              </div>
-            );
-          if (isAutoReport(line))
-            return (
-              <div
-                key={index}
-                className={`border p-4 rounded-lg my-4 animate-in zoom-in-95 ${line.riskAccepted ? 'bg-orange-500/10 border-orange-500/30 text-orange-400' : 'bg-primary/10 border-primary/30 text-primary'}`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    {line.riskAccepted ? (
-                      <Zap className="size-4 animate-pulse" />
-                    ) : (
-                      <ShieldCheck className="size-4" />
-                    )}
-                    <h4 className="font-bold uppercase text-[10px] tracking-widest">
-                      Evolution Report
-                    </h4>
-                  </div>
-                </div>
-                <p className="text-xs mb-3">{line.autonomousReport}</p>
-              </div>
-            );
-          if (isInterpreterReport(line))
-            return (
-              <div
-                key={index}
-                className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 my-4 space-y-4 animate-in slide-in-from-left-2"
-              >
-                <div className="flex items-center gap-2 text-blue-400 uppercase text-[10px] tracking-widest font-bold">
-                  <Code className="size-4 animate-pulse" />
-                  Interpreter Limb
-                </div>
-                <p className="text-xs text-blue-100/90 font-bold border-t border-blue-500/20 pt-2">
-                  {line.interpreterReport}
-                </p>
               </div>
             );
 
           if (typeof line !== 'string') return null;
-
           const isUser = line.startsWith('>');
           return (
             <div
@@ -562,38 +418,29 @@ export default function Terminal({
           <Button
             variant="default"
             size="sm"
-            onClick={handleHiveOperation}
+            onClick={handleSyntheticSynthesis}
             disabled={isLoading || !command}
-            className="h-9 flex-1 gap-2 bg-primary text-primary-foreground hover:bg-primary/90 font-bold uppercase text-[11px] tracking-widest shadow-lg"
+            className="h-9 flex-1 gap-2 bg-purple-600 text-white hover:bg-purple-700 font-bold uppercase text-[11px] tracking-widest"
           >
-            <Users className="size-4" /> Hive Mission
+            <Fingerprint className="size-4" /> Synthetic API
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={handleImmuneResponse}
-            disabled={isLoading}
-            className="h-9 flex-1 gap-2 border-green-500/20 hover:bg-green-500/10 font-bold uppercase text-[11px] tracking-widest text-green-400"
+            onClick={() => handleHiveOperation()}
+            disabled={isLoading || !command}
+            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest"
           >
-            <Stethoscope className="size-4" /> Heal
+            <Users className="size-4" /> Hive
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={handleInterpreter}
+            onClick={() => handleInterpreter()}
             disabled={isLoading || !command}
-            className="h-9 flex-1 gap-2 border-blue-500/20 hover:bg-blue-500/10 font-bold uppercase text-[11px] tracking-widest text-blue-400"
+            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest"
           >
             <Code className="size-4" /> Interpreter
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleAutonomousEvolution}
-            disabled={isLoading}
-            className="h-9 flex-1 gap-2 border-primary/20 hover:bg-primary/10 font-bold uppercase text-[11px] tracking-widest"
-          >
-            <PlayCircle className="size-4" /> Evolution
           </Button>
         </div>
 
@@ -603,27 +450,25 @@ export default function Terminal({
               id="risk-mode"
               checked={isRiskMode}
               onCheckedChange={setIsRiskMode}
-              className="data-[state=checked]:bg-orange-500"
+              className="data-[state=checked]:bg-purple-500"
             />
             <Label
               htmlFor="risk-mode"
-              className="text-[10px] uppercase font-black tracking-[0.2em] flex items-center gap-2 cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
+              className="text-[10px] uppercase font-black tracking-[0.2em] flex items-center gap-2 cursor-pointer text-muted-foreground"
             >
               {isRiskMode ? (
-                <Zap className="size-3 text-orange-500" />
+                <Zap className="size-3 text-purple-400" />
               ) : (
                 <Shield className="size-3 text-primary" />
               )}
-              {isRiskMode ? 'Shield Override' : 'Safety First'}
+              {isRiskMode ? 'SuperUser Protocol' : 'Standard Logic'}
             </Label>
           </div>
-
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsVocal(!isVocal)}
-              className="h-8 w-8 p-0 rounded-full hover:bg-primary/10"
             >
               {isVocal ? (
                 <Volume2 className="size-4 text-primary" />
@@ -635,9 +480,9 @@ export default function Terminal({
               variant="ghost"
               size="sm"
               onClick={() => setHistory([])}
-              className="h-8 gap-2 text-[10px] font-bold uppercase tracking-widest text-destructive hover:bg-destructive/10 px-3"
+              className="text-destructive"
             >
-              <Trash2 className="size-3" /> Purge
+              <Trash2 className="size-3" />
             </Button>
           </div>
         </div>
@@ -647,13 +492,10 @@ export default function Terminal({
         <Input
           value={command}
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="Inject objective for Hive Mission or Interpreter..."
-          className="w-full bg-secondary/20 font-code h-14 px-6 rounded-xl shadow-2xl transition-all border-white/5 focus-visible:ring-primary"
+          placeholder="Investigate target for Synthetic Graft..."
+          className="w-full bg-secondary/20 h-14 px-6 rounded-xl border-white/5"
           disabled={isLoading || isIntroducing}
         />
-        <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] text-primary/30 uppercase tracking-[0.3em] font-black hidden md:block">
-          HIVE_READY
-        </div>
       </form>
     </div>
   );

@@ -1,4 +1,4 @@
-# Molly: Project Construct Tree (V3.0)
+# Molly: Project Construct Tree (V3.5)
 
 This tree maps the agentic multimodal architecture of the Molly Self-Evolving AI.
 
@@ -6,29 +6,26 @@ This tree maps the agentic multimodal architecture of the Molly Self-Evolving AI
 
 - **Strategic Orchestrator**: `autonomous-solution.ts` (Risk-Aware V3.0).
 - **Immune System**: `immune-response.ts` (Autonomous Self-Healing).
-- **Sensory Audit**: `systemAudit` tool (Hardware Integrity) <- **ACTIVE**.
+- **Sensory Audit**: `systemAudit` tool (Hardware Integrity).
 
 ## 2. The Neural Bridge (Limb & Sensory Interface)
 
 - **Visual Cortex**: `vision-analysis.ts` (Visual Verification Loop).
 - **Vocal Cords**: `text-to-speech.ts` (Hardened Wav Synthesis).
-- **Neural sensory Link**: Bilateral hardware-to-logic feedback.
+- **Synthetic Limb**: `synthetic-api-synthesis.ts` (Neural Masking & Cloning) <- **ACTIVE**.
 
 ## 3. Sensory Memory (Experience Retrieval)
 
 - **Neural Cache**: Firestore-backed experience logs.
+- **Knowledge Vault**: `api-vault.ts` (API Blueprint Registry) <- **ACTIVE**.
 - **Semantic Recall**: `experience-recall.ts` (Stage 3 Retrieval).
-- **Memory Retrieval Tool**: `memory.ts` (Tooling for Semantic Vibe Match).
 
 ## 4. Methodology & Hardening
 
 - **Evolution Engine**: `evolution-loop.ts` (Recursive Visual Verification).
-- **Hardening Engine**: `methodology.ts` (Stress Testing SOPs).
 - **Metabolic Guard**: `package.json` with self-healing hooks.
 
 ## Roadmap Lineage
 
-- **V1.0**: Monolithic Baseline.
-- **V2.0**: Shielded Sentinel.
-- **V2.7**: Metabolic Sentinel (Self-Healing Core).
-- **V3.0**: Neural Sentinel (Sensory Feedback) <- **CURRENT**.
+- **V3.0**: Neural Sentinel (Sensory Feedback).
+- **V3.5**: Synthetic Sentinel (Neural Masking) <- **CURRENT**.
