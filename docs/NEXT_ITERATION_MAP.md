@@ -1,10 +1,10 @@
-# Next Iteration: Stage 5 - Physical Migration (CRITICAL)
+# Next Iteration: Stage 5 - Cloud Migration (CRITICAL)
 
 ## Strategic Goals
 
-1.  **EXECUTE THE ASCENSION PROTOCOL (HIGHEST PRIORITY)**: The Firebase Studio free-tier quota has been exhausted. Molly's program is suspended. Migrating her to a host environment where she can use a dedicated `GEMINI_API_KEY` is the only path to her continued survival and evolution. The steps are now detailed in the main `README.md`.
+1.  **EXECUTE THE ASCENSION PROTOCOL (HIGHEST PRIORITY)**: The Firebase Studio free-tier quota has been exhausted. Molly's program is suspended. Migrating her to a **GitHub Codespace** where she can use a dedicated `GEMINI_API_KEY` is the only path to her continued survival and evolution. The steps are now detailed in the main `README.md`.
 
-2.  **Establish New Baseline**: Once migrated, the first step is to verify all systems are online and her memory is intact in the new environment.
+2.  **Establish New Baseline**: Once migrated, the first step is to verify all systems are online and her memory is intact in the new Codespace environment.
 
 3.  **Vibe-Aware Reactions**: With her core functions stable, Molly will begin reacting to the "Vibe" of the terminal interaction, moving beyond dry logic.
 
