@@ -21,17 +21,15 @@ jest.mock('next/navigation', () => ({
   }),
 }));
 
-
 // Mock child components
 jest.mock('../VoiceControl', () => ({
   VoiceControl: () => <div data-testid="voice-control-mock"></div>,
 }));
 
 jest.mock('@/components/ui/sidebar', () => ({
-    ...jest.requireActual('@/components/ui/sidebar'),
-    SidebarTrigger: () => <button>Trigger</button>
+  ...jest.requireActual('@/components/ui/sidebar'),
+  SidebarTrigger: () => <button>Trigger</button>,
 }));
-
 
 describe('Header', () => {
   // Directly import the mocked hooks
@@ -45,7 +43,11 @@ describe('Header', () => {
 
   it('renders the header with the title "Molly"', () => {
     // Arrange: Mock the hooks to return a "logged out" state
-    (useUser as jest.Mock).mockReturnValue({ user: null, loading: false });
+    (useUser as jest.Mock).mockReturnValue({
+      user: null,
+      isUserLoading: false,
+      userError: null,
+    });
     (useAuth as jest.Mock).mockReturnValue({});
 
     render(<Header onVoiceCommand={() => {}} />);
@@ -56,13 +58,17 @@ describe('Header', () => {
   });
 
   it('shows the user avatar when a user with a photoURL is logged in', () => {
-     // Arrange: Mock a user with a photo
+    // Arrange: Mock a user with a photo
     const mockUser = {
       displayName: 'Test User',
       email: 'test@example.com',
       photoURL: 'https://example.com/avatar.png',
     };
-    (useUser as jest.Mock).mockReturnValue({ user: mockUser, loading: false });
+    (useUser as jest.Mock).mockReturnValue({
+      user: mockUser,
+      isUserLoading: false,
+      userError: null,
+    });
     (useAuth as jest.Mock).mockReturnValue({});
 
     render(<Header onVoiceCommand={() => {}} />);
@@ -73,14 +79,18 @@ describe('Header', () => {
     expect(avatarImage).toHaveAttribute('alt', mockUser.displayName);
   });
 
-   it('shows an avatar fallback when the user has no photoURL', () => {
-     // Arrange: Mock a user without a photo
+  it('shows an avatar fallback when the user has no photoURL', () => {
+    // Arrange: Mock a user without a photo
     const mockUser = {
       displayName: 'Test User',
       email: 'test@example.com',
       photoURL: null,
     };
-    (useUser as jest.Mock).mockReturnValue({ user: mockUser, loading: false });
+    (useUser as jest.Mock).mockReturnValue({
+      user: mockUser,
+      isUserLoading: false,
+      userError: null,
+    });
     (useAuth as jest.Mock).mockReturnValue({});
 
     render(<Header onVoiceCommand={() => {}} />);
@@ -92,7 +102,11 @@ describe('Header', () => {
 
   it('does not render user avatar when loading', () => {
     // Arrange: Mock the loading state
-    (useUser as jest.Mock).mockReturnValue({ user: null, loading: true });
+    (useUser as jest.Mock).mockReturnValue({
+      user: null,
+      isUserLoading: true,
+      userError: null,
+    });
     (useAuth as jest.Mock).mockReturnValue({});
 
     render(<Header onVoiceCommand={() => {}} />);

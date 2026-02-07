@@ -17,3 +17,4 @@ export const MODEL_FLASH = 'googleai/gemini-2.5-flash';
 export const MODEL_PRO = 'googleai/gemini-2.5-pro';
 export const MODEL_TTS = 'googleai/gemini-2.5-flash-preview-tts';
 export const MODEL_IMAGEN = 'googleai/imagen-3.0-generate-001';
+export const MODEL_EMBEDDING = 'googleai/text-embedding-004';

@@ -42,16 +42,40 @@ export default function Dashboard() {
   }, [user, isUserLoading, router]);
 
   // Simulate real-time nervous system fluctuations
+  // Uses requestIdleCallback to avoid blocking other updates
   useEffect(() => {
-    const interval = setInterval(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+    let rafId: number | null = null;
+
+    const updateMetrics = () => {
       setBattery((prev) => Math.max(0, prev - 0.1));
       setTemp((prev) => {
         const change = (Math.random() - 0.5) * 2;
         return Number((prev + change).toFixed(1));
       });
       setCpu((prev) => Math.floor(Math.random() * 30) + 5);
-    }, 5000);
-    return () => clearInterval(interval);
+
+      // Schedule next update only when browser is idle, max 5 seconds
+      if ('requestIdleCallback' in window) {
+        rafId = requestIdleCallback(updateMetrics, {
+          timeout: 5000,
+        }) as unknown as number;
+      } else {
+        timeoutId = setTimeout(updateMetrics, 5000);
+      }
+    };
+
+    // Start the metrics update cycle
+    updateMetrics();
+
+    return () => {
+      if (rafId !== null && 'cancelIdleCallback' in window) {
+        cancelIdleCallback(rafId);
+      }
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, []);
 
   const handleVoiceCommand = (result: VoiceCommandResult) => {

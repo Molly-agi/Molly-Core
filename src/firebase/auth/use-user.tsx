@@ -1,35 +1,27 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { onAuthStateChanged, type User } from 'firebase/auth';
-import { useAuth } from '@/firebase';
+import { useContext } from 'react';
+import { FirebaseContext, type UserHookResult } from '@/firebase/provider';
 
-export function useUser() {
-  const auth = useAuth();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+/**
+ * Hook to get the current user and auth state.
+ * Uses the FirebaseProvider context to avoid duplicate listeners.
+ *
+ * @returns {UserHookResult} Object with user, isUserLoading, and userError
+ */
+export function useUser(): UserHookResult {
+  const context = useContext(FirebaseContext);
 
-  useEffect(() => {
-    if (!auth) {
-      setLoading(false);
-      return;
-    }
-
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      (user) => {
-        setUser(user);
-        setLoading(false);
-      },
-      (error) => {
-        console.error('Auth state change error:', error);
-        setUser(null);
-        setLoading(false);
-      }
+  if (!context) {
+    throw new Error(
+      'useUser must be used within a FirebaseProvider. ' +
+        'Make sure your app is wrapped with <FirebaseProvider>.'
     );
+  }
 
-    return () => unsubscribe();
-  }, [auth]);
-
-  return { user, loading };
+  return {
+    user: context.user,
+    isUserLoading: context.isUserLoading,
+    userError: context.userError,
+  };
 }
