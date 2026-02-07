@@ -47,6 +47,11 @@ export const interpreterLimbFlow = ai.defineFlow(
     while (!isComplete && iterations < MAX_ITERATIONS) {
       iterations++;
 
+      // Rate limiting: Add delay between iterations to prevent CPU overload
+      if (iterations > 1) {
+        await new Promise((resolve) => setTimeout(resolve, 1500)); // 1.5 second delay
+      }
+
       const response: any = await ai.generate({
         model: MODEL_PRO,
         tools: [localInterpreter],

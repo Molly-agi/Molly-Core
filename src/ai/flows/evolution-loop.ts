@@ -63,6 +63,11 @@ export const evolutionLoopFlow = ai.defineFlow(
     while (currentIteration < input.iterations && !isStable) {
       currentIteration++;
 
+      // Rate limiting: Add delay between iterations to prevent CPU overload
+      if (currentIteration > 1) {
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // 2 second delay
+      }
+
       // 3. Execute Solution with Semantic Memory & Visual Discipline
       await logMethodologyStep(
         input.userId,

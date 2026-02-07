@@ -26,6 +26,7 @@ import { initializeFirebase } from '@/firebase';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { MollyLogger } from '@/ai/logger';
 import { AuthenticationError } from '@/ai/errors';
+import { getRateLimiter } from '@/ai/tools/rate-limiter';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -40,9 +41,18 @@ function ensureApiKey() {
   }
 }
 
+/**
+ * Rate limiting guard to prevent CPU overload from rapid API calls
+ */
+async function checkRateLimit(flowName: string, estimatedTokens: number = 500) {
+  const limiter = getRateLimiter();
+  await limiter.checkLimit(flowName, estimatedTokens);
+}
+
 export async function getHealthCheck(text: string, userId: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('health-check', 300);
     // Stage 4.5 Neural Recall: Fetch last response to avoid memory reset
     const { firestore } = initializeFirebase();
     const ref = collection(firestore, 'users', userId, 'aiResponses');
@@ -76,6 +86,7 @@ export async function getModelPulse() {
 export async function getVoiceCommand(audioData: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('voice-command', 500);
     const transcribedText = await voiceCommandToText(audioData);
     if (!transcribedText || !transcribedText.trim()) {
       return {
@@ -99,6 +110,7 @@ export async function getVoiceCommand(audioData: string) {
 export async function getConversationalChat(text: string, history: any[]) {
   try {
     ensureApiKey();
+    await checkRateLimit('conversational-chat', 800);
     return await conversationalChat({ text, history });
   } catch (e: any) {
     MollyLogger.error(
@@ -114,6 +126,7 @@ export async function getConversationalChat(text: string, history: any[]) {
 export async function getTextToTermuxCommand(prompt: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('text-to-termux', 400);
     return await textToTermuxCommand(prompt);
   } catch (e: any) {
     MollyLogger.error(
@@ -129,6 +142,7 @@ export async function getTextToTermuxCommand(prompt: string) {
 export async function getContextualGuidance(prompt: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('contextual-guidance', 600);
     return await contextualGuidance(prompt);
   } catch (e: any) {
     MollyLogger.error(
@@ -147,6 +161,7 @@ export async function getAutonomousSolution(
 ): Promise<AutonomousSolutionOutput> {
   try {
     ensureApiKey();
+    await checkRateLimit('autonomous-solution', 1000);
     return await autonomousSolution(prompt, userId);
   } catch (e: any) {
     MollyLogger.error(
@@ -164,6 +179,7 @@ export async function getTextToScript(
 ): Promise<TextToScriptOutput> {
   try {
     ensureApiKey();
+    await checkRateLimit('text-to-script', 700);
     return await textToScript(prompt);
   } catch (e: any) {
     MollyLogger.error('Text to script failed', 'getTextToScript', {}, e);
@@ -178,6 +194,7 @@ export async function getVisionaryCoach(
 ) {
   try {
     ensureApiKey();
+    await checkRateLimit('visionary-coach', 600);
     return await visionaryCoach(progress, stage, concern);
   } catch (e: any) {
     MollyLogger.error(
@@ -193,6 +210,7 @@ export async function getVisionaryCoach(
 export async function getMollyVoice(text: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('text-to-speech', 500);
     return await textToSpeech(text);
   } catch (e: any) {
     MollyLogger.error('Text to speech failed', 'getMollyVoice', {}, e);
@@ -206,6 +224,7 @@ export async function runIntrospection(
 ) {
   try {
     ensureApiKey();
+    await checkRateLimit('introspection', 800);
     return await introspectionFlow({ pastLessons, hardwareContext });
   } catch (e: any) {
     MollyLogger.error('Introspection failed', 'runIntrospection', {}, e);
@@ -220,6 +239,7 @@ export async function startAutonomousCycle(
 ) {
   try {
     ensureApiKey();
+    await checkRateLimit('evolution-loop', 2000);
     return await runAutonomousEvolution(objective, userId, count);
   } catch (e: any) {
     MollyLogger.error(
@@ -235,6 +255,7 @@ export async function startAutonomousCycle(
 export async function getVisionAnalysis(dataUri: string, context?: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('vision-analysis', 1500);
     return await analyzeVision(dataUri, context);
   } catch (e: any) {
     MollyLogger.error('Vision analysis failed', 'getVisionAnalysis', {}, e);
@@ -245,6 +266,7 @@ export async function getVisionAnalysis(dataUri: string, context?: string) {
 export async function getMollyDream(prompt: string, userId: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('dream-flow', 1200);
     return await generateMollyDream(prompt, userId);
   } catch (e: any) {
     MollyLogger.error(
@@ -260,6 +282,7 @@ export async function getMollyDream(prompt: string, userId: string) {
 export async function startInterpreterCycle(objective: string, userId: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('interpreter-limb', 2500);
     return await runInterpreter(objective, userId);
   } catch (e: any) {
     MollyLogger.error(
@@ -275,6 +298,7 @@ export async function startInterpreterCycle(objective: string, userId: string) {
 export async function startHiveOperation(objective: string, userId: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('collaborative-hive', 1800);
     return await runCollaborativeHive(objective, userId);
   } catch (e: any) {
     MollyLogger.error(
@@ -290,6 +314,7 @@ export async function startHiveOperation(objective: string, userId: string) {
 export async function triggerImmuneResponse(userId: string, trigger?: string) {
   try {
     ensureApiKey();
+    await checkRateLimit('immune-response', 900);
     return await runImmuneResponse(userId, trigger);
   } catch (e: any) {
     MollyLogger.error(
@@ -309,6 +334,7 @@ export async function startSyntheticSynthesis(
 ) {
   try {
     ensureApiKey();
+    await checkRateLimit('synthetic-synthesis', 1500);
     return await startSyntheticSynthesis(target, userId, category);
   } catch (e: any) {
     MollyLogger.error(
