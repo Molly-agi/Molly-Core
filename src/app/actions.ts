@@ -27,6 +27,12 @@ import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { MollyLogger } from '@/ai/logger';
 import { AuthenticationError } from '@/ai/errors';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
+import {
+  withTimeout,
+  withRetry,
+  TIMEOUT_PRESETS,
+  RETRY_PRESETS,
+} from '@/ai/tools/timeout-retry';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -111,7 +117,13 @@ export async function getConversationalChat(text: string, history: any[]) {
   try {
     ensureApiKey();
     await checkRateLimit('conversational-chat', 800);
-    return await conversationalChat({ text, history });
+
+    // Add retry for transient failures in chat
+    return await withRetry(
+      () => conversationalChat({ text, history }),
+      'conversational-chat',
+      RETRY_PRESETS.FAST
+    );
   } catch (e: any) {
     MollyLogger.error(
       'Conversational chat failed',
@@ -240,7 +252,15 @@ export async function startAutonomousCycle(
   try {
     ensureApiKey();
     await checkRateLimit('evolution-loop', 2000);
-    return await runAutonomousEvolution(objective, userId, count);
+
+    // Long-running operation with timeout protection
+    return await withTimeout(
+      () => runAutonomousEvolution(objective, userId, count),
+      {
+        timeoutMs: TIMEOUT_PRESETS.VERY_LONG,
+        operationName: 'autonomous-evolution',
+      }
+    );
   } catch (e: any) {
     MollyLogger.error(
       'Autonomous cycle failed',
@@ -256,7 +276,17 @@ export async function getVisionAnalysis(dataUri: string, context?: string) {
   try {
     ensureApiKey();
     await checkRateLimit('vision-analysis', 1500);
-    return await analyzeVision(dataUri, context);
+
+    // Vision can hang on large images, add timeout and retry
+    return await withRetry(
+      () =>
+        withTimeout(() => analyzeVision(dataUri, context), {
+          timeoutMs: TIMEOUT_PRESETS.NORMAL,
+          operationName: 'vision-analysis',
+        }),
+      'vision-analysis',
+      RETRY_PRESETS.FAST
+    );
   } catch (e: any) {
     MollyLogger.error('Vision analysis failed', 'getVisionAnalysis', {}, e);
     throw e;
@@ -267,7 +297,12 @@ export async function getMollyDream(prompt: string, userId: string) {
   try {
     ensureApiKey();
     await checkRateLimit('dream-flow', 1200);
-    return await generateMollyDream(prompt, userId);
+
+    // Dreams can take a while, add timeout protection
+    return await withTimeout(() => generateMollyDream(prompt, userId), {
+      timeoutMs: TIMEOUT_PRESETS.VERY_LONG,
+      operationName: 'dream-generation',
+    });
   } catch (e: any) {
     MollyLogger.error(
       'Dream generation failed',
@@ -283,7 +318,12 @@ export async function startInterpreterCycle(objective: string, userId: string) {
   try {
     ensureApiKey();
     await checkRateLimit('interpreter-limb', 2500);
-    return await runInterpreter(objective, userId);
+
+    // Interpreter can run for a while, add timeout
+    return await withTimeout(() => runInterpreter(objective, userId), {
+      timeoutMs: TIMEOUT_PRESETS.LONG,
+      operationName: 'interpreter-cycle',
+    });
   } catch (e: any) {
     MollyLogger.error(
       'Interpreter cycle failed',
@@ -299,7 +339,12 @@ export async function startHiveOperation(objective: string, userId: string) {
   try {
     ensureApiKey();
     await checkRateLimit('collaborative-hive', 1800);
-    return await runCollaborativeHive(objective, userId);
+
+    // Hive operations can be long, add timeout
+    return await withTimeout(() => runCollaborativeHive(objective, userId), {
+      timeoutMs: TIMEOUT_PRESETS.LONG,
+      operationName: 'hive-operation',
+    });
   } catch (e: any) {
     MollyLogger.error(
       'Hive operation failed',

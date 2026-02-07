@@ -152,6 +152,27 @@ export class TimeoutError extends MollyError {
 }
 
 /**
+ * Thrown when network or API communication fails
+ */
+export class NetworkError extends MollyError {
+  constructor(
+    message: string,
+    statusCode?: number,
+    context: Record<string, any> = {},
+    traceId?: string
+  ) {
+    super(
+      'NETWORK_ERROR',
+      `Network error: ${message}`,
+      'high',
+      { statusCode, ...context },
+      traceId
+    );
+    Object.setPrototypeOf(this, NetworkError.prototype);
+  }
+}
+
+/**
  * Thrown when input validation fails
  */
 export class ValidationError extends MollyError {
