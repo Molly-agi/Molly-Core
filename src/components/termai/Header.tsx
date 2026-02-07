@@ -1,6 +1,7 @@
 'use client';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { VoiceControl, type VoiceCommandResult } from './VoiceControl';
+import { MollyGreetingPlayer } from './MollyGreetingPlayer';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import {
@@ -37,7 +38,7 @@ export function Header({
   };
 
   return (
-    <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
+    <header className="relative flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
       <SidebarTrigger />
       <div className="flex-1">
         <h1 className="font-semibold text-lg">Molly</h1>
@@ -48,7 +49,10 @@ export function Header({
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
               <Avatar className="h-8 w-8">
-                <AvatarImage src={user.photoURL ?? ''} alt={user.displayName ?? ''} />
+                <AvatarImage
+                  src={user.photoURL ?? ''}
+                  alt={user.displayName ?? ''}
+                />
                 <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
               </Avatar>
             </Button>
@@ -65,12 +69,13 @@ export function Header({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut}>
-              Log out
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleSignOut}>Log out</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      <div className="fixed right-4 top-[72px] z-50">
+        <MollyGreetingPlayer variant="floating" />
+      </div>
     </header>
   );
 }

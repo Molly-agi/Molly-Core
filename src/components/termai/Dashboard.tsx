@@ -8,7 +8,6 @@ import {
 import { TermAISidebar } from './Sidebar';
 import { Header } from './Header';
 import Terminal from './Terminal';
-import { MollyGreetingPlayer } from './MollyGreetingPlayer';
 import { useState, useEffect } from 'react';
 import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
@@ -135,7 +134,6 @@ export default function Dashboard() {
 
         <div className="flex-1 p-4 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-secondary/20 via-background to-background">
           <div className="max-w-4xl mx-auto space-y-4">
-            <MollyGreetingPlayer />
             <Terminal
               voiceResult={voiceResult}
               onVoiceCommandProcessed={handleVoiceCommandProcessed}
