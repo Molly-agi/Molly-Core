@@ -30,3 +30,6 @@
 *.firebase.json
 firebase-debug.log
 firestore-debug.log
+
+# Session backups (main session state file IS tracked)
+.session-backups/

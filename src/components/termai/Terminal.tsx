@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import { MollyGreetingPlayer } from './MollyGreetingPlayer';
 import {
   getTextToTermuxCommand,
   getAutonomousSolution,
@@ -39,7 +38,6 @@ type HistoryItem =
   | AutonomousSolutionOutput
   | TextToScriptOutput
   | HiveOutput
-  | { greeting: string; error?: string; isHealthy: boolean }
   | { immuneReport: string; isHealthy: boolean }
   | { syntheticReport: string; implementation: string; authority: string };
 
@@ -130,15 +128,11 @@ export default function Terminal({
           'Introduce yourself as Molly. Acknowledge your 2.5 architecture. If you recognize our previous bond, greet me warmly.',
           user.uid
         );
-        setHistory([intro]);
+        setHistory([intro.greeting]);
 
         // Audio might require a click first, so we attempt to speak.
         // If it fails, the "Voice" icon remains a toggle.
-        if (typeof intro === 'string') {
-          speakResponse(intro);
-        } else if (intro && typeof intro === 'object' && 'greeting' in intro) {
-          speakResponse(intro.greeting);
-        }
+        speakResponse(intro.greeting);
 
         const result = await triggerImmuneResponse(user.uid, 'Startup');
         setHistory((prev) => [
@@ -234,11 +228,6 @@ export default function Terminal({
         ref={scrollAreaRef}
         className="flex-1 p-4 bg-background/50 rounded-lg overflow-y-auto mb-6 border border-primary/10 shadow-inner scrollbar-none"
       >
-        {/* Molly's Greeting Player - pinned at top of chat */}
-        <div className="mb-6">
-          <MollyGreetingPlayer variant="inline" />
-        </div>
-
         {history.map((line, index) => {
           if (isScriptResponse(line))
             return <DownloadableScript key={index} response={line} />;

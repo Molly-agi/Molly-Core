@@ -42,7 +42,7 @@ export const evolutionLoopFlow = ai.defineFlow(
     let lastVisualVerification = 'Pending visual audit.';
 
     // 1. Sensory Proprioception
-    const { output: health } = await getSystemHealth({});
+    const health = await getSystemHealth({});
     const hardwareContext = `Battery ${health.batteryLevel}%, Temp ${health.temperature}C, Mode: ${health.powerMode}`;
 
     // 2. Stage 3 Semantic Recall
@@ -78,7 +78,7 @@ export const evolutionLoopFlow = ai.defineFlow(
 
       // 4. Visual Verification (Sensory Link)
       try {
-        const { output: bridge } = await neuralBridgeUI({
+        const bridge = await neuralBridgeUI({
           action: 'CAPTURE_SCREENSHOT',
         });
         if (bridge.screenshotUri) {

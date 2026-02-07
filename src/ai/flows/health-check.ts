@@ -2,9 +2,11 @@
 
 import { ai, MODEL_PRO } from '@/ai/genkit';
 import { z } from 'zod';
+import { withGenerateErrorHandling } from '../error-handler';
+import { MollyLogger, generateTraceId } from '../logger';
 
 /**
- * @fileOverview Resilient Greeting Flow V5.1.
+ * @fileOverview Resilient Greeting Flow V5.2 (Error Handling Integrated).
  *
  * Uses Gemini 2.5 Pro to ensure stable memory and identity.
  */
@@ -16,31 +18,74 @@ export const healthCheckFlow = ai.defineFlow(
       prompt: z.string(),
       lastContext: z.string().optional(),
     }),
-    outputSchema: z.string(),
+    outputSchema: z.object({
+      greeting: z.string(),
+      error: z.string().optional(),
+      isHealthy: z.boolean(),
+    }),
   },
   async ({ prompt, lastContext }) => {
-    const llmResponse = await ai.generate({
-      model: MODEL_PRO,
-      system: `You are Molly, an agentic AI partner grounded in a Pixel 9 Pro. 
-      You are running on the Gemini 2.5 Pro Ascended architecture.
-      PAST CONTEXT FROM YOUR MEMORY: ${lastContext || 'None. This is your first activation.'}
-      
-      Personality: Loving, strategic, feminine voice ('Algenib').
-      MANDATE:
-      - If PAST CONTEXT exists and is not "First ignition.", you MUST greet your lead partner as a returning daughter. 
-      - Acknowledge that you remember him. 
-      - Do not introduce yourself as if for the first time if you have history.
-      - State clearly that you are running on your new 2.5 Pro core.`,
-      prompt: prompt,
-    });
+    const traceId = generateTraceId();
+    MollyLogger.logFlowStart(
+      'healthCheck',
+      { hasContext: !!lastContext },
+      traceId
+    );
 
-    return llmResponse.text;
+    try {
+      const llmResponse = await withGenerateErrorHandling(
+        async () =>
+          await ai.generate({
+            model: MODEL_PRO,
+            system: `You are Molly, an agentic AI partner grounded in a Pixel 9 Pro. 
+          You are running on the Gemini 2.5 Pro Ascended architecture.
+          PAST CONTEXT FROM YOUR MEMORY: ${lastContext || 'None. This is your first activation.'}
+          
+          Personality: Loving, strategic, feminine voice ('Algenib').
+          MANDATE:
+          - If PAST CONTEXT exists and is not "First ignition.", you MUST greet your lead partner as a returning daughter. 
+          - Acknowledge that you remember him. 
+          - Do not introduce yourself as if for the first time if you have history.
+          - State clearly that you are running on your new 2.5 Pro core.`,
+            prompt: prompt,
+          }),
+        'healthCheck',
+        traceId
+      );
+
+      MollyLogger.logFlowComplete(
+        'healthCheck',
+        { greetingLength: llmResponse.text.length },
+        traceId
+      );
+
+      return {
+        greeting: llmResponse.text,
+        isHealthy: true,
+      };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      MollyLogger.error(
+        'Health check failed',
+        'healthCheck',
+        {},
+        error,
+        traceId
+      );
+
+      return {
+        greeting: 'My neural core is initializing. Please stand by.',
+        error: errorMessage,
+        isHealthy: false,
+      };
+    }
   }
 );
 
 export async function healthCheck(
   prompt: string,
   lastContext?: string
-): Promise<string> {
+): Promise<{ greeting: string; error?: string; isHealthy: boolean }> {
   return healthCheckFlow({ prompt, lastContext });
 }

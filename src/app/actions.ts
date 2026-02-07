@@ -20,25 +20,29 @@ import { generateMollyDream } from '@/ai/flows/dream-flow';
 import { runInterpreter } from '@/ai/flows/interpreter-limb';
 import { runCollaborativeHive } from '@/ai/flows/collaborative-hive';
 import { runImmuneResponse } from '@/ai/flows/immune-response';
-import { startSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
+import { runSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
 import { listAvailableModels } from '@/ai/tools/system';
 import { initializeFirebase } from '@/firebase';
 import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { MollyLogger } from '@/ai/logger';
+import { AuthenticationError } from '@/ai/errors';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
  */
 function ensureApiKey() {
   if (!process.env.GEMINI_API_KEY) {
-    throw new Error(
-      'Molly: Critical Failure. GEMINI_API_KEY is not configured in the environment.'
+    const error = new AuthenticationError(
+      'GEMINI_API_KEY is not configured in the environment.'
     );
+    MollyLogger.error('API key check failed', 'ensureApiKey', {}, error);
+    throw error;
   }
 }
 
 export async function getHealthCheck(text: string, userId: string) {
-  ensureApiKey();
   try {
+    ensureApiKey();
     // Stage 4.5 Neural Recall: Fetch last response to avoid memory reset
     const { firestore } = initializeFirebase();
     const ref = collection(firestore, 'users', userId, 'aiResponses');
@@ -49,61 +53,122 @@ export async function getHealthCheck(text: string, userId: string) {
 
     return await healthCheck(text, lastContext);
   } catch (e: any) {
-    console.error('[CRITICAL] Neural Pulse Desync:', e.message);
+    MollyLogger.error(
+      '[CRITICAL] Health Check Failed',
+      'getHealthCheck',
+      { userId },
+      e
+    );
     throw e;
   }
 }
 
 export async function getModelPulse() {
-  ensureApiKey();
   try {
+    ensureApiKey();
     return await listAvailableModels({});
   } catch (e) {
+    MollyLogger.error('Model list failed', 'getModelPulse', {}, e);
     return ['Error: Pulse Failed'];
   }
 }
 
 export async function getVoiceCommand(audioData: string) {
-  ensureApiKey();
-  const transcribedText = await voiceCommandToText(audioData);
-  if (!transcribedText || !transcribedText.trim()) {
-    return {
-      prompt: '',
-      command: 'Error: No audible input detected.',
-    };
+  try {
+    ensureApiKey();
+    const transcribedText = await voiceCommandToText(audioData);
+    if (!transcribedText || !transcribedText.trim()) {
+      return {
+        prompt: '',
+        command: 'Error: No audible input detected.',
+      };
+    }
+    const command = await textToTermuxCommand(transcribedText);
+    return { prompt: transcribedText, command };
+  } catch (e: any) {
+    MollyLogger.error(
+      'Voice command processing failed',
+      'getVoiceCommand',
+      {},
+      e
+    );
+    throw e;
   }
-  const command = await textToTermuxCommand(transcribedText);
-  return { prompt: transcribedText, command };
 }
 
 export async function getConversationalChat(text: string, history: any[]) {
-  ensureApiKey();
-  return await conversationalChat({ text, history });
+  try {
+    ensureApiKey();
+    return await conversationalChat({ text, history });
+  } catch (e: any) {
+    MollyLogger.error(
+      'Conversational chat failed',
+      'getConversationalChat',
+      {},
+      e
+    );
+    throw e;
+  }
 }
 
 export async function getTextToTermuxCommand(prompt: string) {
-  ensureApiKey();
-  return await textToTermuxCommand(prompt);
+  try {
+    ensureApiKey();
+    return await textToTermuxCommand(prompt);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Text to termux command failed',
+      'getTextToTermuxCommand',
+      {},
+      e
+    );
+    throw e;
+  }
 }
 
 export async function getContextualGuidance(prompt: string) {
-  ensureApiKey();
-  return await contextualGuidance(prompt);
+  try {
+    ensureApiKey();
+    return await contextualGuidance(prompt);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Contextual guidance failed',
+      'getContextualGuidance',
+      {},
+      e
+    );
+    throw e;
+  }
 }
 
 export async function getAutonomousSolution(
   prompt: string,
   userId: string
 ): Promise<AutonomousSolutionOutput> {
-  ensureApiKey();
-  return await autonomousSolution(prompt, userId);
+  try {
+    ensureApiKey();
+    return await autonomousSolution(prompt, userId);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Autonomous solution failed',
+      'getAutonomousSolution',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }
 
 export async function getTextToScript(
   prompt: string
 ): Promise<TextToScriptOutput> {
-  ensureApiKey();
-  return await textToScript(prompt);
+  try {
+    ensureApiKey();
+    return await textToScript(prompt);
+  } catch (e: any) {
+    MollyLogger.error('Text to script failed', 'getTextToScript', {}, e);
+    throw e;
+  }
 }
 
 export async function getVisionaryCoach(
@@ -111,21 +176,41 @@ export async function getVisionaryCoach(
   stage: string,
   concern?: string
 ) {
-  ensureApiKey();
-  return await visionaryCoach(progress, stage, concern);
+  try {
+    ensureApiKey();
+    return await visionaryCoach(progress, stage, concern);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Visionary coach failed',
+      'getVisionaryCoach',
+      { stage },
+      e
+    );
+    throw e;
+  }
 }
 
 export async function getMollyVoice(text: string) {
-  ensureApiKey();
-  return await textToSpeech(text);
+  try {
+    ensureApiKey();
+    return await textToSpeech(text);
+  } catch (e: any) {
+    MollyLogger.error('Text to speech failed', 'getMollyVoice', {}, e);
+    throw e;
+  }
 }
 
 export async function runIntrospection(
   pastLessons: any[],
   hardwareContext: string
 ) {
-  ensureApiKey();
-  return await introspectionFlow({ pastLessons, hardwareContext });
+  try {
+    ensureApiKey();
+    return await introspectionFlow({ pastLessons, hardwareContext });
+  } catch (e: any) {
+    MollyLogger.error('Introspection failed', 'runIntrospection', {}, e);
+    throw e;
+  }
 }
 
 export async function startAutonomousCycle(
@@ -133,33 +218,88 @@ export async function startAutonomousCycle(
   userId: string,
   count: number
 ) {
-  ensureApiKey();
-  return await runAutonomousEvolution(objective, userId, count);
+  try {
+    ensureApiKey();
+    return await runAutonomousEvolution(objective, userId, count);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Autonomous cycle failed',
+      'startAutonomousCycle',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }
 
 export async function getVisionAnalysis(dataUri: string, context?: string) {
-  ensureApiKey();
-  return await analyzeVision(dataUri, context);
+  try {
+    ensureApiKey();
+    return await analyzeVision(dataUri, context);
+  } catch (e: any) {
+    MollyLogger.error('Vision analysis failed', 'getVisionAnalysis', {}, e);
+    throw e;
+  }
 }
 
 export async function getMollyDream(prompt: string, userId: string) {
-  ensureApiKey();
-  return await generateMollyDream(prompt, userId);
+  try {
+    ensureApiKey();
+    return await generateMollyDream(prompt, userId);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Dream generation failed',
+      'getMollyDream',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }
 
 export async function startInterpreterCycle(objective: string, userId: string) {
-  ensureApiKey();
-  return await runInterpreter(objective, userId);
+  try {
+    ensureApiKey();
+    return await runInterpreter(objective, userId);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Interpreter cycle failed',
+      'startInterpreterCycle',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }
 
 export async function startHiveOperation(objective: string, userId: string) {
-  ensureApiKey();
-  return await runCollaborativeHive(objective, userId);
+  try {
+    ensureApiKey();
+    return await runCollaborativeHive(objective, userId);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Hive operation failed',
+      'startHiveOperation',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }
 
 export async function triggerImmuneResponse(userId: string, trigger?: string) {
-  ensureApiKey();
-  return await runImmuneResponse(userId, trigger);
+  try {
+    ensureApiKey();
+    return await runImmuneResponse(userId, trigger);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Immune response failed',
+      'triggerImmuneResponse',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }
 
 export async function startSyntheticSynthesis(
@@ -167,6 +307,16 @@ export async function startSyntheticSynthesis(
   userId: string,
   category: string
 ) {
-  ensureApiKey();
-  return await startSyntheticSynthesis(target, userId, category);
+  try {
+    ensureApiKey();
+    return await startSyntheticSynthesis(target, userId, category);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Synthetic synthesis failed',
+      'startSyntheticSynthesis',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }

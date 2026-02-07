@@ -11,14 +11,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LoginPage() {
   const auth = useAuth();
-  const { user, loading } = useUser();
+  const { user, isUserLoading } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && user) {
+    if (!isUserLoading && user) {
       router.replace('/');
     }
-  }, [user, loading, router]);
+  }, [user, isUserLoading, router]);
 
   const handleSignIn = async () => {
     if (!auth) return;
@@ -30,8 +30,8 @@ export default function LoginPage() {
     }
   };
 
-  if (loading || user) {
-     return (
+  if (isUserLoading || user) {
+    return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="w-64 space-y-4">
           <Skeleton className="h-12 w-full" />

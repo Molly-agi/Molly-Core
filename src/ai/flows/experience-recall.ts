@@ -34,6 +34,7 @@ export const experienceRecallFlow = ai.defineFlow(
     const rawMemories = await recallExperiences({
       userId,
       context: currentObjective,
+      limit: 10,
     });
 
     const response = await ai.generate({

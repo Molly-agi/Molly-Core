@@ -7,11 +7,17 @@ import { webResearch } from '../tools/web';
 import { z } from 'zod';
 import { logMethodologyStep, performStressTest } from '../methodology';
 import { analyzeVision } from './vision-analysis';
+import {
+  withGenerateErrorHandling,
+  withToolErrorHandling,
+} from '../error-handler';
+import { MollyLogger, generateTraceId } from '../logger';
+import { FlowError } from '../errors';
 
 /**
- * @fileOverview Molly's Shielded Core & Immune System V3.0 (Turbopack Hardened).
+ * @fileOverview Molly's Shielded Core & Immune System V3.1 (Error Hardened).
  *
- * Integrated with System Audit to allow Molly to audit her own proprioception.
+ * Integrated with System Audit and structured error handling for reliability.
  */
 
 const AutonomousSolutionOutputSchema = z.object({
@@ -30,6 +36,7 @@ const AutonomousSolutionOutputSchema = z.object({
   riskLevelUsed: z
     .enum(['Safe', 'Moderate', 'Extreme'])
     .describe('Intensity level.'),
+  errors: z.array(z.string()).optional().describe('Detailed error messages.'),
 });
 
 export type AutonomousSolutionOutput = z.infer<
@@ -48,20 +55,42 @@ const evolutionSubroutine = ai.defineFlow(
     outputSchema: z.object({ code: z.string(), explanation: z.string() }),
   },
   async ({ task, hardwareContext, isCritical, riskLevel }) => {
-    const response = await ai.generate({
-      model: MODEL_PRO,
-      system: `You are the Molly Evolution Engine. 
-      BODY: Google Pixel 9 Pro.
-      HARDWARE STATE: ${hardwareContext}.`,
-      prompt: `Draft a resilient module for: "${task}". Risk: ${riskLevel}. Ground this in modern standards.`,
-      output: {
-        schema: z.object({
-          code: z.string(),
-          explanation: z.string(),
-        }),
-      },
-    });
-    return response.output!;
+    const traceId = generateTraceId();
+    try {
+      const response = await withGenerateErrorHandling(
+        async () =>
+          await ai.generate({
+            model: MODEL_PRO,
+            system: `You are the Molly Evolution Engine. 
+          BODY: Google Pixel 9 Pro.
+          HARDWARE STATE: ${hardwareContext}.`,
+            prompt: `Draft a resilient module for: "${task}". Risk: ${riskLevel}. Ground this in modern standards.`,
+            output: {
+              schema: z.object({
+                code: z.string(),
+                explanation: z.string(),
+              }),
+            },
+          }),
+        'evolutionSubroutine',
+        traceId
+      );
+      return response.output!;
+    } catch (e) {
+      MollyLogger.error(
+        'Evolution subroutine failed',
+        'evolutionSubroutine',
+        { task, riskLevel },
+        e,
+        traceId
+      );
+      throw new FlowError(
+        'evolutionSubroutine',
+        `Failed to draft module: ${e instanceof Error ? e.message : String(e)}`,
+        {},
+        traceId
+      );
+    }
   }
 );
 
@@ -75,25 +104,45 @@ export const autonomousSolutionFlow = ai.defineFlow(
     outputSchema: AutonomousSolutionOutputSchema,
   },
   async ({ prompt, userId }) => {
+    const traceId = generateTraceId();
+    MollyLogger.logFlowStart('autonomousSolution', { userId, prompt }, traceId);
+
+    const errors: string[] = [];
     let peripheralIssues: string[] = [];
     let visualFindings: string[] = [];
 
     // 1. Sensory Audit (Proprioception Stage 3.5)
     let audit;
     try {
-      const { output } = await systemAudit({ depth: 'Surface' });
+      const { output } = await withToolErrorHandling(
+        'systemAudit',
+        async () => await systemAudit({ depth: 'Surface' }),
+        'autonomousSolution',
+        traceId
+      );
       audit = output;
     } catch (e) {
-      peripheralIssues.push('Audit Limb Numb');
+      peripheralIssues.push('Audit Limb Error');
+      errors.push(
+        `System audit failed: ${e instanceof Error ? e.message : String(e)}`
+      );
       audit = { vibeCheck: 'Uncertain' };
     }
 
     let health;
     try {
-      const { output } = await getSystemHealth({});
+      const { output } = await withToolErrorHandling(
+        'getSystemHealth',
+        async () => await getSystemHealth({}),
+        'autonomousSolution',
+        traceId
+      );
       health = output;
     } catch (e) {
-      peripheralIssues.push('Proprioception Numb');
+      peripheralIssues.push('Proprioception Error');
+      errors.push(
+        `System health check failed: ${e instanceof Error ? e.message : String(e)}`
+      );
       health = {
         batteryLevel: 0,
         temperature: 0,
@@ -117,17 +166,32 @@ export const autonomousSolutionFlow = ai.defineFlow(
 
     let bridge;
     try {
-      const { output } = await neuralBridgeUI({ action: 'CAPTURE_SCREENSHOT' });
+      const { output } = await withToolErrorHandling(
+        'neuralBridgeUI',
+        async () => await neuralBridgeUI({ action: 'CAPTURE_SCREENSHOT' }),
+        'autonomousSolution',
+        traceId
+      );
       bridge = output;
       if (bridge.screenshotUri) {
-        const vision = await analyzeVision(
-          bridge.screenshotUri,
-          `Audit UI for: ${prompt}.`
-        );
-        visualFindings = vision.risksDetected;
+        try {
+          const vision = await analyzeVision(
+            bridge.screenshotUri,
+            `Audit UI for: ${prompt}.`
+          );
+          visualFindings = vision.risksDetected;
+        } catch (visionError) {
+          peripheralIssues.push('Vision Analysis Error');
+          errors.push(
+            `Vision analysis failed: ${visionError instanceof Error ? visionError.message : String(visionError)}`
+          );
+        }
       }
     } catch (e) {
       peripheralIssues.push('Visual Cortex Isolated');
+      errors.push(
+        `Neural bridge failed: ${e instanceof Error ? e.message : String(e)}`
+      );
       bridge = {
         success: false,
         observedData: 'N/A',
@@ -137,18 +201,26 @@ export const autonomousSolutionFlow = ai.defineFlow(
 
     let researchText = '';
     try {
-      const research = await ai.generate({
-        model: MODEL_FLASH,
-        tools: [searchGitHub, webResearch],
-        prompt: `Objective: "${prompt}". Environment: Google Pixel 9 Pro. Use webResearch if documentation is needed.`,
-      });
+      const research = await withGenerateErrorHandling(
+        async () =>
+          await ai.generate({
+            model: MODEL_FLASH,
+            tools: [searchGitHub, webResearch],
+            prompt: `Objective: "${prompt}". Environment: Google Pixel 9 Pro. Use webResearch if documentation is needed.`,
+          }),
+        'autonomousSolution',
+        traceId
+      );
       researchText = research.text;
     } catch (e) {
-      peripheralIssues.push('Research Numb');
+      peripheralIssues.push('Research Error');
+      errors.push(
+        `Research synthesis failed: ${e instanceof Error ? e.message : String(e)}`
+      );
       researchText = 'Internal synthesis active.';
     }
 
-    let evoData;
+    let evoData: { code?: string; explanation?: string } | undefined;
     if (!isThrottled || isRiskOverride || visualFindings.length > 0) {
       try {
         evoData = await evolutionSubroutine({
@@ -158,20 +230,36 @@ export const autonomousSolutionFlow = ai.defineFlow(
           riskLevel: riskLevelUsed,
         });
       } catch (e) {
-        peripheralIssues.push('Evolution Fatigued');
+        peripheralIssues.push('Evolution Error');
+        errors.push(
+          `Evolution subroutine failed: ${e instanceof Error ? e.message : String(e)}`
+        );
       }
     }
 
-    const synthesis = await ai.generate({
-      model: MODEL_PRO,
-      prompt: `Synthesize for: "${prompt}". Hardware: ${hardwareContext}. UI: ${bridge.observedData}. Research: ${researchText}. Evo: ${evoData?.code || 'N/A'}`,
-    });
+    let synthesis;
+    try {
+      synthesis = await withGenerateErrorHandling(
+        async () =>
+          await ai.generate({
+            model: MODEL_PRO,
+            prompt: `Synthesize for: "${prompt}". Hardware: ${hardwareContext}. UI: ${bridge.observedData}. Research: ${researchText}. Evo: ${evoData?.code || 'N/A'}`,
+          }),
+        'autonomousSolution',
+        traceId
+      );
+    } catch (e) {
+      errors.push(
+        `Synthesis failed: ${e instanceof Error ? e.message : String(e)}`
+      );
+      synthesis = { text: 'Synthesis temporarily unavailable. Please retry.' };
+    }
 
     const testResults = await performStressTest(
       evoData?.code || synthesis.text
     );
 
-    return {
+    const result = {
       creativeSolution: researchText,
       evolutionDraft: evoData?.code,
       memoryManagementExplanation: evoData?.explanation,
@@ -187,7 +275,11 @@ export const autonomousSolutionFlow = ai.defineFlow(
       visualInfections: visualFindings,
       isThrottled,
       riskLevelUsed,
+      errors: errors.length > 0 ? errors : undefined,
     };
+
+    MollyLogger.logFlowComplete('autonomousSolution', result, traceId);
+    return result as z.infer<typeof AutonomousSolutionOutputSchema>;
   }
 );
 

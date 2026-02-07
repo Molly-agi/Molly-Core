@@ -54,5 +54,5 @@ export const immuneResponseFlow = ai.defineFlow(
 );
 
 export async function runImmuneResponse(userId: string, trigger?: string) {
-  return await immuneResponseFlow({ userId, trigger });
+  return await immuneResponseFlow({ userId, trigger: trigger ?? 'Startup' });
 }

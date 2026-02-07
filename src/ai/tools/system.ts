@@ -30,13 +30,15 @@ export const getSystemHealth = ai.defineTool(
   async () => {
     // Simulated real-time metrics grounded in the Pixel 9 Pro Specification
     const temp = 41.2;
+    const throttlingStatus =
+      temp > 44 ? ('Throttled' as const) : ('Normal' as const);
     return {
       batteryLevel: 82,
       isCharging: false,
       temperature: temp,
-      throttlingStatus: temp > 44 ? 'Throttled' : 'Normal',
+      throttlingStatus,
       cpuUsage: 22,
-      powerMode: 'Balanced',
+      powerMode: 'Balanced' as const,
       architecture: 'aarch64',
       availableRam: 14200,
       model: 'Google Pixel 9 Pro',

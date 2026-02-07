@@ -133,12 +133,10 @@ export default function Dashboard() {
         </div>
 
         <div className="flex-1 p-4 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-secondary/20 via-background to-background">
-          <div className="max-w-4xl mx-auto space-y-4">
-            <Terminal
-              voiceResult={voiceResult}
-              onVoiceCommandProcessed={handleVoiceCommandProcessed}
-            />
-          </div>
+          <Terminal
+            voiceResult={voiceResult}
+            onVoiceCommandProcessed={handleVoiceCommandProcessed}
+          />
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -2,9 +2,11 @@
 
 import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
+import { withGenerateErrorHandling } from '../error-handler';
+import { MollyLogger, generateTraceId } from '../logger';
 
 /**
- * @fileOverview Hardened Conversational Chat Flow V4.2.
+ * @fileOverview Hardened Conversational Chat Flow V4.3 (Error Handling Integrated).
  */
 
 const HistoryItemSchema = z.object({
@@ -22,29 +24,71 @@ const conversationalChatFlow = ai.defineFlow(
   {
     name: 'conversationalChat',
     inputSchema: ConversationalChatInputSchema,
-    outputSchema: z.string(),
+    outputSchema: z.object({
+      response: z.string(),
+      error: z.string().optional(),
+    }),
   },
   async ({ text, history }) => {
-    const llmHistory = history.map((item) => ({
-      role: item.role === 'bot' ? ('model' as const) : ('user' as const),
-      parts: [{ text: item.content }],
-    }));
+    const traceId = generateTraceId();
+    MollyLogger.logFlowStart(
+      'conversationalChat',
+      { historyLength: history.length },
+      traceId
+    );
 
-    const llmResponse = await ai.generate({
-      model: MODEL_FLASH,
-      prompt: text,
-      history: llmHistory,
-      config: {
-        systemPrompt: `You are an expert AI assistant named Molly. You specialize in Termux, Linux, and general programming. Your goal is to provide guidance, write code, and help the user understand complex topics. The user is interacting with you in a side panel next to a terminal interface. Be helpful and provide clear, concise explanations.`,
-      },
-    });
+    try {
+      const llmHistory = history.map((item) => ({
+        role: item.role === 'bot' ? ('model' as const) : ('user' as const),
+        parts: [{ text: item.content }],
+      }));
 
-    return llmResponse.text;
+      const llmResponse = await withGenerateErrorHandling(
+        // Cast to any to satisfy differing GenerateOptions typings across genkit versions
+        async () =>
+          await ai.generate({
+            model: MODEL_FLASH,
+            prompt: text,
+            history: llmHistory,
+            config: {
+              systemPrompt: `You are an expert AI assistant named Molly. You specialize in Termux, Linux, and general programming. Your goal is to provide guidance, write code, and help the user understand complex topics. The user is interacting with you in a side panel next to a terminal interface. Be helpful and provide clear, concise explanations.`,
+            },
+          } as any),
+        'conversationalChat',
+        traceId
+      );
+
+      MollyLogger.logFlowComplete(
+        'conversationalChat',
+        { responseLength: llmResponse.text.length },
+        traceId
+      );
+
+      return {
+        response: llmResponse.text,
+      };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      MollyLogger.error(
+        'Conversational chat failed',
+        'conversationalChat',
+        {},
+        error,
+        traceId
+      );
+
+      return {
+        response:
+          'I encountered an issue processing your request. Please try again.',
+        error: errorMessage,
+      };
+    }
   }
 );
 
 export async function conversationalChat(
   input: ConversationalChatInput
-): Promise<string> {
+): Promise<{ response: string; error?: string }> {
   return conversationalChatFlow(input);
 }

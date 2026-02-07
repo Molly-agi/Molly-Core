@@ -47,7 +47,7 @@ export const interpreterLimbFlow = ai.defineFlow(
     while (!isComplete && iterations < MAX_ITERATIONS) {
       iterations++;
 
-      const response = await ai.generate({
+      const response: any = await ai.generate({
         model: MODEL_PRO,
         tools: [localInterpreter],
         system: `You are Molly's Universal Interpreter Limb. 
@@ -65,7 +65,7 @@ export const interpreterLimbFlow = ai.defineFlow(
 
         let visualAudit = '';
         try {
-          const { output: bridge } = await neuralBridgeUI({
+          const bridge = await neuralBridgeUI({
             action: 'CAPTURE_SCREENSHOT',
           });
           if (bridge.screenshotUri) {

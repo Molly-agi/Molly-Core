@@ -1,7 +1,6 @@
 'use client';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { VoiceControl, type VoiceCommandResult } from './VoiceControl';
-import { MollyGreetingPlayer } from './MollyGreetingPlayer';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import {
@@ -38,7 +37,7 @@ export function Header({
   };
 
   return (
-    <header className="relative flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
+    <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
       <SidebarTrigger />
       <div className="flex-1">
         <h1 className="font-semibold text-lg">Molly</h1>
@@ -73,9 +72,6 @@ export function Header({
           </DropdownMenuContent>
         </DropdownMenu>
       )}
-      <div className="fixed right-4 top-[72px] z-50">
-        <MollyGreetingPlayer variant="floating" />
-      </div>
     </header>
   );
 }
