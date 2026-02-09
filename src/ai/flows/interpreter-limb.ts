@@ -38,7 +38,13 @@ export const interpreterLimbFlow = ai.defineFlow(
     outputSchema: InterpreterOutputSchema,
   },
   async (input) => {
-    const steps = [];
+    const steps: Array<{
+      thought: string;
+      code: string;
+      output: string;
+      isSuccess: boolean;
+      visualVerification?: string;
+    }> = [];
     let currentObjective = input.objective;
     let isComplete = false;
     let iterations = 0;

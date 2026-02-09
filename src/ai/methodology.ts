@@ -44,7 +44,7 @@ export async function performStressTest(
   if (!logic)
     return { passed: false, report: 'No logic provided for stress test.' };
 
-  const risks = [];
+  const risks: string[] = [];
 
   // Destructive pattern audit
   if (logic.includes('rm -rf')) risks.push('Destructive command detected.');

@@ -315,7 +315,7 @@ describe('Safety Systems Integration', () => {
       withTimeout(
         async () => {
           // Simulate missing rate check by doing rapid calls
-          const promises = [];
+          const promises: Promise<string>[] = [];
           for (let i = 0; i < 100; i++) {
             promises.push(Promise.resolve('call'));
           }
