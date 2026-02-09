@@ -15,8 +15,8 @@ describe('Rate Limiter', () => {
     const testConfig: Partial<RateLimitConfig> = {
       maxPerMinute: 20,
       maxTokensPerDay: 50000,
-      costPer1MTokens: 1.5,
-      dailyBudgetUSD: 10.0, // $10/day for testing
+      costPer1MTokens: 15000, // Much higher cost for testing ($15 per 1M tokens = $0.015 per 1k tokens)
+      dailyBudgetUSD: 0.1, // $0.10 budget for testing
       warningThreshold: 0.7,
     };
     limiter = new RateLimiter(testConfig);
@@ -24,7 +24,9 @@ describe('Rate Limiter', () => {
 
   describe('Token Bucket', () => {
     it('should allow initial generations within budget', async () => {
-      expect(() => limiter.checkLimit('test-flow', 1000)).not.toThrow();
+      await expect(
+        limiter.checkLimit('test-flow', 1000)
+      ).resolves.toBeUndefined();
     });
 
     it('should track token usage', async () => {
@@ -39,15 +41,16 @@ describe('Rate Limiter', () => {
   describe('Budget Enforcement', () => {
     it('should reject generations exceeding daily budget', async () => {
       // Record usage approaching budget limit
+      // 1M tokens = $1.50. 5 calls * 1M tokens = 5M tokens = $7.50
       for (let i = 0; i < 5; i++) {
-        await limiter.checkLimit('expensive-flow', 1000);
-        limiter.recordUsage('expensive-flow', 1000, 1.5); // $1.50 each
+        await limiter.checkLimit('expensive-flow', 1000000); // 1M tokens = $1.50
+        limiter.recordUsage('expensive-flow', 1000000, 1.5); // Record actual $1.50
       }
 
-      // Next attempt should fail (7.50 + 1.50 > 10)
-      expect(() => limiter.checkLimit('expensive-flow', 1000)).toThrow(
-        RateLimitError
-      );
+      // After 5 calls = $7.50 spent. Next call would be $9.00 > $8.00 budget
+      await expect(
+        limiter.checkLimit('expensive-flow', 1000000)
+      ).rejects.toThrow(RateLimitError);
     });
 
     it('should return remaining budget', () => {

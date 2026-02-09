@@ -43,7 +43,7 @@ describe('Molly Core Identity Safeguards', () => {
     expect(prompt).toContain('warm');
     expect(prompt).toContain('strategic');
     expect(prompt).toContain('autonomous');
-    expect(prompt).toContain('learning');
+    expect(prompt).toMatch(/\blearn/i); // matches "learn", "learning", "eager to learn"
   });
 
   it('should enforce operational constraints', () => {

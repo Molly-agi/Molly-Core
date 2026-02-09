@@ -10,6 +10,7 @@ import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 import { voiceCommandToText } from '../flows/voice-command-to-text';
 import { textToSpeech } from '../flows/text-to-speech';
+import { autonomousSolutionFlow } from '../flows/autonomous-solution';
 import { recallSimilarMemories } from './semantic-recall';
 import { MollyLogger, generateTraceId } from '../logger';
 import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
@@ -238,6 +239,74 @@ Respond naturally:`,
 }
 
 /**
+ * Handle command intent - execute voice commands through autonomous solution
+ */
+async function handleCommandIntent(
+  transcription: string,
+  context: VoiceCommandContext,
+  extracted: string
+): Promise<string> {
+  const traceId = generateTraceId();
+
+  try {
+    MollyLogger.info(
+      'Executing voice command',
+      'voice-command-processor',
+      { command: transcription.substring(0, 50) },
+      traceId
+    );
+
+    // Route to autonomousSolutionFlow for execution
+    const result = await autonomousSolutionFlow({
+      prompt: transcription,
+      userId: context.userId,
+    });
+
+    // Synthesize natural response from solution
+    const executionSummary = `I've executed your command. Here's what I found: ${result.creativeSolution.substring(0, 200)}...`;
+
+    // Log the execution
+    await recordSensoryLog(
+      context.userId,
+      'voice',
+      `Executed command: ${transcription}`,
+      {
+        transcription,
+        vibeScore: 0.9,
+        source: 'voice-command',
+        actionTaken: 'command_executed',
+        timestamp: Date.now(),
+        traceId,
+        result: {
+          solution: result.creativeSolution.substring(0, 100),
+          riskLevel: result.riskLevelUsed,
+          throttled: result.isThrottled,
+        },
+      }
+    );
+
+    MollyLogger.info(
+      'Voice command executed successfully',
+      'voice-command-processor',
+      { riskLevel: result.riskLevelUsed, throttled: result.isThrottled },
+      traceId
+    );
+
+    return executionSummary;
+  } catch (error) {
+    MollyLogger.error(
+      'Command execution failed',
+      'voice-command-processor',
+      { transcription, command: extracted },
+      error,
+      traceId
+    );
+
+    return `I tried to execute that command, but ran into an issue. The command was: "${transcription.substring(0, 50)}...". Let me try a different approach or simpler task.`;
+  }
+}
+
+/**
  * Handle general questions and conversation
  */
 async function handleQuestionIntent(
@@ -373,9 +442,12 @@ export async function processVoiceCommand(
         break;
 
       case 'command':
-        // TODO: Integrate with command execution flows
-        responseText =
-          'I understand you want me to do something. Command execution will be available soon.';
+        responseText = await handleCommandIntent(
+          transcription,
+          context,
+          intent.extractedInfo
+        );
+        actionTaken = 'command_executed';
         break;
 
       default:
