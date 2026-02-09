@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { getVisionaryCoach } from '@/app/actions';
+import { getVisionaryCoach } from '@/app/actions/ai-flows';
 import { Sparkles, Target, ShieldAlert } from 'lucide-react';
 import { ScrollArea } from '../ui/scroll-area';
 
@@ -17,7 +17,10 @@ export function VisionaryCoachTab() {
     if (!progress.trim()) return;
     setIsLoading(true);
     try {
-      const response = await getVisionaryCoach(progress, 'Stage 1: Architecture');
+      const response = await getVisionaryCoach(
+        progress,
+        'Stage 1: Architecture'
+      );
       setGuidance(response);
     } catch (error) {
       console.error(error);
@@ -39,7 +42,9 @@ export function VisionaryCoachTab() {
         </CardHeader>
         <CardContent>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            I am your visionary mirror. Share your current technical hurdles or architectural doubts. I will audit your logic and suggest creative leaps.
+            I am your visionary mirror. Share your current technical hurdles or
+            architectural doubts. I will audit your logic and suggest creative
+            leaps.
           </p>
         </CardContent>
       </Card>
@@ -69,7 +74,7 @@ export function VisionaryCoachTab() {
             value={progress}
             onChange={(e) => setProgress(e.target.value)}
           />
-          <Button 
+          <Button
             className="w-full bg-accent text-accent-foreground hover:bg-accent/90 gap-2"
             onClick={handleConsult}
             disabled={isLoading}

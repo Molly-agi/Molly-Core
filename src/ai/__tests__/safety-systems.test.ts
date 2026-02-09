@@ -227,8 +227,8 @@ describe('Retry with Exponential Backoff', () => {
 
     // Verify delays are increasing (exponential backoff)
     if (delays.length > 2) {
-      expect(delays[1]).toBeGreaterThan(0);
-      expect(delays[2]).toBeGreaterThan(delays[1]);
+      expect(delays[1]!).toBeGreaterThan(0);
+      expect(delays[2]!).toBeGreaterThan(delays[1]!);
     }
   });
 

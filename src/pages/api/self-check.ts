@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getConversationalChat } from '@/app/actions';
+import { getConversationalChat } from '@/app/actions/ai-flows';
 
 export default async function handler(
   req: NextApiRequest,

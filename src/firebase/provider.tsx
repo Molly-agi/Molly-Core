@@ -1,10 +1,24 @@
 'use client';
 
-import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
+import React, {
+  DependencyList,
+  createContext,
+  useContext,
+  ReactNode,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import { FirebaseApp } from 'firebase/app';
 import { Firestore } from 'firebase/firestore';
-import { Auth, User, onAuthStateChanged } from 'firebase/auth';
-import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
+import {
+  Auth,
+  User,
+  onAuthStateChanged,
+  signInAnonymously,
+} from 'firebase/auth';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 interface FirebaseProviderProps {
   children: ReactNode;
@@ -43,14 +57,17 @@ export interface FirebaseServicesAndUser {
 }
 
 // Return type for useUser() - specific to user auth state
-export interface UserHookResult { // Renamed from UserAuthHookResult for consistency if desired, or keep as UserAuthHookResult
+export interface UserHookResult {
+  // Renamed from UserAuthHookResult for consistency if desired, or keep as UserAuthHookResult
   user: User | null;
   isUserLoading: boolean;
   userError: Error | null;
 }
 
 // React Context
-export const FirebaseContext = createContext<FirebaseContextState | undefined>(undefined);
+export const FirebaseContext = createContext<FirebaseContextState | undefined>(
+  undefined
+);
 
 /**
  * FirebaseProvider manages and provides Firebase services and user authentication state.
@@ -69,25 +86,105 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
   // Effect to subscribe to Firebase auth state changes
   useEffect(() => {
-    if (!auth) { // If no Auth service instance, cannot determine user state
-      setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth service not provided.") });
+    if (!auth) {
+      // If no Auth service instance, cannot determine user state
+      setUserAuthState({
+        user: null,
+        isUserLoading: false,
+        userError: new Error('Auth service not provided.'),
+      });
       return;
     }
 
     setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
 
+    let timeoutId: NodeJS.Timeout;
+    let authCheckComplete = false;
+
+    // Add timeout for auth check (prevent infinite loading)
+    timeoutId = setTimeout(() => {
+      if (!authCheckComplete) {
+        console.warn(
+          '[FirebaseProvider] Auth state check timeout - proceeding anyway'
+        );
+        setUserAuthState({ user: null, isUserLoading: false, userError: null });
+      }
+    }, 10000); // 10 second timeout
+
     const unsubscribe = onAuthStateChanged(
       auth,
-      (firebaseUser) => { // Auth state determined
-        setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
+      (firebaseUser) => {
+        // Auth state determined
+        authCheckComplete = true;
+        clearTimeout(timeoutId);
+        console.log('[FirebaseProvider] Auth state resolved:', !!firebaseUser);
+        setUserAuthState({
+          user: firebaseUser,
+          isUserLoading: false,
+          userError: null,
+        });
       },
-      (error) => { // Auth listener error
-        console.error("FirebaseProvider: onAuthStateChanged error:", error);
-        setUserAuthState({ user: null, isUserLoading: false, userError: error });
+      (error) => {
+        // Auth listener error
+        authCheckComplete = true;
+        clearTimeout(timeoutId);
+        console.error('[FirebaseProvider] onAuthStateChanged error:', error);
+        setUserAuthState({
+          user: null,
+          isUserLoading: false,
+          userError: error,
+        });
       }
     );
-    return () => unsubscribe(); // Cleanup
+
+    return () => {
+      clearTimeout(timeoutId);
+      unsubscribe();
+    }; // Cleanup
   }, [auth]); // Depends on the auth instance
+
+  // Auto sign-in effect: if user is not authenticated after timeout, try anonymous sign-in
+  const autoSignInAttempted = useRef(false);
+
+  useEffect(() => {
+    if (!auth) return;
+    if (autoSignInAttempted.current) return;
+    if (userAuthState.user) return; // Already authenticated
+    if (userAuthState.isUserLoading) return; // Still checking auth state
+
+    // Auth check completed with no user - attempt anonymous sign-in
+    autoSignInAttempted.current = true;
+
+    const performAutoSignIn = async () => {
+      try {
+        console.log(
+          '[FirebaseProvider] Attempting automatic anonymous sign-in'
+        );
+        const trace = (globalThis as any).__MOLLY_TRACE;
+        if (trace) trace('AUTH', 'Auto sign-in attempt', 'start');
+
+        const result = await signInAnonymously(auth);
+
+        if (trace)
+          trace('AUTH', 'Auto sign-in successful', 'complete', {
+            uid: result.user.uid,
+          });
+        console.log(
+          '[FirebaseProvider] Auto sign-in successful:',
+          result.user.uid
+        );
+      } catch (error) {
+        console.error('[FirebaseProvider] Auto sign-in failed:', error);
+        const trace = (globalThis as any).__MOLLY_TRACE;
+        if (trace)
+          trace('AUTH', 'Auto sign-in failed', 'error', {
+            error: String(error),
+          });
+      }
+    };
+
+    performAutoSignIn();
+  }, [auth, userAuthState.user, userAuthState.isUserLoading]);
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
@@ -122,8 +219,15 @@ export const useFirebase = (): FirebaseServicesAndUser => {
     throw new Error('useFirebase must be used within a FirebaseProvider.');
   }
 
-  if (!context.areServicesAvailable || !context.firebaseApp || !context.firestore || !context.auth) {
-    throw new Error('Firebase core services not available. Check FirebaseProvider props.');
+  if (
+    !context.areServicesAvailable ||
+    !context.firebaseApp ||
+    !context.firestore ||
+    !context.auth
+  ) {
+    throw new Error(
+      'Firebase core services not available. Check FirebaseProvider props.'
+    );
   }
 
   return {
@@ -154,14 +258,17 @@ export const useFirebaseApp = (): FirebaseApp => {
   return firebaseApp;
 };
 
-type MemoFirebase <T> = T & {__memo?: boolean};
+type MemoFirebase<T> = T & { __memo?: boolean };
 
-export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | (MemoFirebase<T>) {
+export function useMemoFirebase<T>(
+  factory: () => T,
+  deps: DependencyList
+): T | MemoFirebase<T> {
   const memoized = useMemo(factory, deps);
-  
-  if(typeof memoized !== 'object' || memoized === null) return memoized;
+
+  if (typeof memoized !== 'object' || memoized === null) return memoized;
   (memoized as MemoFirebase<T>).__memo = true;
-  
+
   return memoized;
 }
 
@@ -170,7 +277,8 @@ export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | 
  * This provides the User object, loading status, and any auth errors.
  * @returns {UserHookResult} Object with user, isUserLoading, userError.
  */
-export const useUser = (): UserHookResult => { // Renamed from useAuthUser
+export const useUser = (): UserHookResult => {
+  // Renamed from useAuthUser
   const { user, isUserLoading, userError } = useFirebase(); // Leverages the main hook
   return { user, isUserLoading, userError };
 };

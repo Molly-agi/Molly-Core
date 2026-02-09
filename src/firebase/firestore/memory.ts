@@ -89,7 +89,7 @@ export async function getLearnedCommand(
 
     const querySnapshot = await getDocs(q);
 
-    if (querySnapshot.empty) {
+    if (querySnapshot.empty || !querySnapshot.docs[0]) {
       return null;
     }
 
@@ -120,14 +120,18 @@ async function getLearnedCommandWithoutOrder(
       userId,
       'learnedCommands'
     );
-    const q = query(memoryCollectionRef, where('prompt', '==', prompt), limit(1));
+    const q = query(
+      memoryCollectionRef,
+      where('prompt', '==', prompt),
+      limit(1)
+    );
     const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) {
+    if (querySnapshot.empty || !querySnapshot.docs[0]) {
       return null;
     }
     return querySnapshot.docs[0].data().command as string;
   } catch (e) {
-     const permissionError = new FirestorePermissionError({
+    const permissionError = new FirestorePermissionError({
       path: `users/${userId}/learnedCommands`,
       operation: 'list',
     } satisfies SecurityRuleContext);

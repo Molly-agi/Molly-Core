@@ -199,7 +199,7 @@ export function MollyGreetingPlayer({
             max={100}
             step={1}
             onValueChange={(value) => {
-              const nextVolume = value[0] / 100;
+              const nextVolume = (value?.[0] ?? 0) / 100;
               lastVolumeRef.current = nextVolume;
               setVolume(nextVolume);
               setIsMuted(nextVolume === 0);

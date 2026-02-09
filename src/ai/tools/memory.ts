@@ -8,8 +8,22 @@ import {
   limit,
   getDocs,
   doc,
-  deleteDoc,
+  runTransaction,
 } from 'firebase/firestore';
+
+import { MollyLogger, generateTraceId } from '../logger';
+import {
+  validateMemoryRecord,
+  ExperienceRecord,
+  AIResponseRecord,
+} from './memory-schema';
+import {
+  addChecksum,
+  verifyRecordIntegrity,
+  scoreVibe,
+  semanticPriority,
+  VibeContext,
+} from './memory-integrity';
 
 /**
  * @fileOverview Stage 3 Neural Recall & Memory Pruning Tool.
@@ -66,7 +80,7 @@ export const pruneSensoryLogs = ai.defineTool(
   {
     name: 'pruneSensoryLogs',
     description:
-      'Proactively prunes older or irrelevant sensory logs from the host storage.',
+      'Proactively prunes older or irrelevant sensory logs from the host storage using atomic transactions.',
     inputSchema: z.object({
       userId: z.string(),
       retentionCount: z
@@ -77,29 +91,64 @@ export const pruneSensoryLogs = ai.defineTool(
     outputSchema: z.object({
       prunedCount: z.number(),
       status: z.string(),
+      failedDeletes: z.array(z.string()).optional(),
     }),
   },
   async ({ userId, retentionCount }) => {
     const { firestore } = initializeFirebase();
     const ref = collection(firestore, 'users', userId, 'aiResponses');
     const q = query(ref, orderBy('timestamp', 'desc'));
-    const snapshot = await getDocs(q);
 
-    if (snapshot.size <= retentionCount) {
-      return { prunedCount: 0, status: 'Memory levels within safety margins.' };
+    try {
+      const snapshot = await getDocs(q);
+
+      if (snapshot.size <= retentionCount) {
+        return {
+          prunedCount: 0,
+          status: 'Memory levels within safety margins.',
+        };
+      }
+
+      const toPrune = snapshot.docs.slice(retentionCount);
+      const failedDeletes: string[] = [];
+      let successCount = 0;
+
+      // Use atomic transaction to ensure all-or-nothing semantics
+      await runTransaction(firestore, async (transaction) => {
+        for (const docSnapshot of toPrune) {
+          try {
+            const docRef = doc(
+              firestore,
+              'users',
+              userId,
+              'aiResponses',
+              docSnapshot.id
+            );
+            transaction.delete(docRef);
+            successCount++;
+          } catch (err) {
+            failedDeletes.push(docSnapshot.id);
+          }
+        }
+      });
+
+      const resultStatus =
+        failedDeletes.length === 0
+          ? `Successfully archived ${successCount} irrelevant memory fragments.`
+          : `Partially archived: ${successCount} succeeded, ${failedDeletes.length} failed.`;
+
+      return {
+        prunedCount: successCount,
+        status: resultStatus,
+        ...(failedDeletes.length > 0 && { failedDeletes }),
+      };
+    } catch (error) {
+      const message = `Failed to prune logs: ${error instanceof Error ? error.message : String(error)}`;
+      return {
+        prunedCount: 0,
+        status: message,
+        failedDeletes: [],
+      };
     }
-
-    const toPrune = snapshot.docs.slice(retentionCount);
-    let count = 0;
-
-    for (const docSnapshot of toPrune) {
-      deleteDoc(doc(firestore, 'users', userId, 'aiResponses', docSnapshot.id));
-      count++;
-    }
-
-    return {
-      prunedCount: count,
-      status: `Successfully archived ${count} irrelevant memory fragments.`,
-    };
   }
 );

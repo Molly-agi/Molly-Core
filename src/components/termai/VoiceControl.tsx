@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Mic, Square } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { getVoiceCommand } from '@/app/actions';
+import { getVoiceCommand } from '@/app/actions/ai-flows';
 import { useToast } from '@/hooks/use-toast';
 
 export type VoiceCommandResult = { prompt: string; command: string };
@@ -57,7 +57,10 @@ export function VoiceControl({
             }
           } catch (error) {
             console.error('Transcription error:', error);
-            const errorMessage = error instanceof Error ? error.message : 'Could not process the voice command.';
+            const errorMessage =
+              error instanceof Error
+                ? error.message
+                : 'Could not process the voice command.';
             toast({
               variant: 'destructive',
               title: 'Transcription Failed',
@@ -74,7 +77,8 @@ export function VoiceControl({
       toast({
         variant: 'destructive',
         title: 'Microphone Access Denied',
-        description: 'Please enable microphone permissions in your browser settings.',
+        description:
+          'Please enable microphone permissions in your browser settings.',
       });
     }
   };

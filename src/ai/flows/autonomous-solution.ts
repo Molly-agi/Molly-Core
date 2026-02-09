@@ -145,16 +145,41 @@ export const autonomousSolutionFlow = ai.defineFlow(
       );
       health = {
         batteryLevel: 0,
-        temperature: 0,
+        temperature: 60, // Assume critical if sensor fails
         powerMode: 'Efficiency',
         throttlingStatus: 'Critical',
         model: 'Unknown Pixel',
       };
     }
 
+    // Log critical health states as warnings
+    if (health.throttlingStatus === 'Critical') {
+      MollyLogger.warn(
+        'Hardware in CRITICAL thermal state',
+        'autonomousSolution',
+        {
+          temperature: health.temperature,
+          throttlingStatus: health.throttlingStatus,
+        },
+        traceId
+      );
+    }
+    if (health.batteryLevel < 10) {
+      MollyLogger.warn(
+        'Battery critically low',
+        'autonomousSolution',
+        { batteryLevel: health.batteryLevel },
+        traceId
+      );
+    }
+
     const isRiskOverride = prompt.includes('OVERRIDE_THROTTLE');
+    // More aggressive thermal regulation: 48°C threshold (was 45°C)
+    // Added CPU usage check for better stability
     const isThrottled =
-      (health.temperature > 45 || health.throttlingStatus !== 'Normal') &&
+      (health.temperature > 48 ||
+        health.throttlingStatus !== 'Normal' ||
+        (health as any).cpuUsage > 70) && // CPU check for process overload
       !isRiskOverride;
     const riskLevelUsed = isRiskOverride
       ? 'Extreme'
@@ -249,10 +274,17 @@ export const autonomousSolutionFlow = ai.defineFlow(
         traceId
       );
     } catch (e) {
-      errors.push(
-        `Synthesis failed: ${e instanceof Error ? e.message : String(e)}`
+      // Synthesis failure is FATAL - this is the core reasoning step
+      const errorMsg = `Synthesis failed (FATAL): ${e instanceof Error ? e.message : String(e)}`;
+      MollyLogger.error(errorMsg, 'autonomousSolution', {}, e, traceId);
+      errors.push(errorMsg);
+
+      throw new FlowError(
+        'autonomousSolution',
+        'Core synthesis failed. Cannot continue.',
+        { cause: e },
+        traceId
       );
-      synthesis = { text: 'Synthesis temporarily unavailable. Please retry.' };
     }
 
     const testResults = await performStressTest(

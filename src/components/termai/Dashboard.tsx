@@ -27,53 +27,64 @@ export default function Dashboard() {
   const [voiceResult, setVoiceResult] = useState<VoiceCommandResult | null>(
     null
   );
-  const { user, isUserLoading } = useUser();
+  const { user, isUserLoading, userError } = useUser();
   const router = useRouter();
+  const [authRetryAttempt, setAuthRetryAttempt] = useState(0);
 
   // Dynamic Proprioception (Nervous System)
   const [battery, setBattery] = useState(78);
   const [temp, setTemp] = useState(42);
   const [cpu, setCpu] = useState(15);
 
+  // Redirect to login if not authenticated (but allow in dev mode)
   useEffect(() => {
-    if (!isUserLoading && !user) {
-      router.replace('/login');
+    const isDev = process.env.NODE_ENV === 'development';
+    if (!isUserLoading && !user && !isDev) {
+      // Add a small delay to prevent rapid redirects
+      const timeout = setTimeout(() => {
+        router.replace('/login');
+      }, 500);
+      return () => clearTimeout(timeout);
     }
   }, [user, isUserLoading, router]);
 
-  // Simulate real-time nervous system fluctuations
-  // Uses requestIdleCallback to avoid blocking other updates
+  // Handle authentication errors with retry
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null;
-    let rafId: number | null = null;
+    if (userError && authRetryAttempt < 3) {
+      console.warn('[Dashboard] Auth error detected, will retry:', userError);
+      const timeout = setTimeout(() => {
+        setAuthRetryAttempt((prev) => prev + 1);
+        window.location.reload();
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [userError, authRetryAttempt]);
+
+  // Simulate real-time nervous system fluctuations
+  // THERMAL FIX: Reduced frequency to prevent cascade (30s intervals)
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | null = null;
+    let mounted = true;
 
     const updateMetrics = () => {
-      setBattery((prev) => Math.max(0, prev - 0.1));
-      setTemp((prev) => {
-        const change = (Math.random() - 0.5) * 2;
-        return Number((prev + change).toFixed(1));
-      });
-      setCpu((prev) => Math.floor(Math.random() * 30) + 5);
+      // Safety check: only update if component is still mounted
+      if (!mounted) return;
 
-      // Schedule next update only when browser is idle, max 5 seconds
-      if ('requestIdleCallback' in window) {
-        rafId = requestIdleCallback(updateMetrics, {
-          timeout: 5000,
-        }) as unknown as number;
-      } else {
-        timeoutId = setTimeout(updateMetrics, 5000);
-      }
+      setBattery((prev) => Math.max(0, prev - 0.05));
+      setTemp((prev) => {
+        const change = (Math.random() - 0.5) * 1;
+        return Number(Math.min(50, Math.max(38, prev + change)).toFixed(1));
+      });
+      setCpu((prev) => Math.floor(Math.random() * 20) + 5);
     };
 
-    // Start the metrics update cycle
-    updateMetrics();
+    // Update every 30 seconds to prevent thermal cascade
+    intervalId = setInterval(updateMetrics, 30000);
 
     return () => {
-      if (rafId !== null && 'cancelIdleCallback' in window) {
-        cancelIdleCallback(rafId);
-      }
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
+      mounted = false;
+      if (intervalId !== null) {
+        clearInterval(intervalId);
       }
     };
   }, []);
@@ -86,16 +97,58 @@ export default function Dashboard() {
     setVoiceResult(null);
   };
 
-  if (isUserLoading || !user) {
+  if (isUserLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="w-64 space-y-4">
+          <div className="text-center mb-4">
+            <p className="text-sm text-muted-foreground">
+              Initializing Molly...
+            </p>
+            {authRetryAttempt > 0 && (
+              <p className="text-xs text-yellow-500 mt-2">
+                Retry attempt {authRetryAttempt}/3
+              </p>
+            )}
+          </div>
           <Skeleton className="h-12 w-full" />
           <Skeleton className="h-32 w-full" />
           <Skeleton className="h-8 w-3/4" />
         </div>
       </div>
     );
+  }
+
+  // Show error state if authentication failed after retries
+  if (userError && authRetryAttempt >= 3) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <div className="w-96 space-y-4 p-6 border border-destructive/50 rounded-lg">
+          <h2 className="text-lg font-semibold text-destructive">
+            Authentication Error
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Unable to authenticate after multiple attempts. Please check your
+            Firebase configuration.
+          </p>
+          <p className="text-xs font-mono text-muted-foreground bg-muted p-2 rounded">
+            {userError.message}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Allow access in development mode even without auth
+  const isDev = process.env.NODE_ENV === 'development';
+  if (!isDev && !user) {
+    return null; // Will redirect via useEffect
   }
 
   return (

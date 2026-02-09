@@ -7,6 +7,12 @@
 
 // Health & Diagnostics
 export { getHealthCheck, getModelPulse } from './ai-flows';
+export { getCircuitBreakerStatus, resetCircuitBreaker } from './diagnostics';
+export { testModelAvailability } from './model-test';
+export {
+  diagnoseMollyNeuralLink,
+  restoreMollyNeuralLink,
+} from './neural-link-recovery';
 
 // Voice Processing
 export { getVoiceCommand, getMollyVoice } from './ai-flows';
@@ -17,6 +23,18 @@ export {
   getContextualGuidance,
   getVisionaryCoach,
 } from './ai-flows';
+
+// Research & Knowledge Base
+export {
+  executeResearchWithCache,
+  saveNewResearch,
+  queryMollyKnowledgeBase,
+  getResearchByCategory,
+  getMollysFavoriteDiscoveries,
+  getAllMollyResearch,
+  recordResearchUsage,
+  checkIfRecentlyResearched,
+} from './research-cache';
 
 // Problem Solving & Code Generation
 export {
@@ -37,3 +55,14 @@ export {
   triggerImmuneResponse,
   startSyntheticSynthesis,
 } from './ai-flows';
+
+// Molly's Personal Tool Library
+export {
+  addToolToDatabase,
+  searchTools,
+  getToolsBycat,
+  getRecentFoundTools,
+  getToolLibraryStats,
+  accessTool,
+  deleteToolFromDatabase,
+} from './tool-library';

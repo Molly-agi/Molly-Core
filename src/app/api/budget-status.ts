@@ -1,8 +1,9 @@
-'use server';
 /**
  * @fileOverview Budget Monitoring & Metrics API
  *
- * Server action to check rate limiting and cost status
+ * NOTE: This is an API Route Handler, NOT a Server Action.
+ * API routes should NOT have 'use server' directive.
+ *
  * Can be called from components, flows, or frontend
  */
 

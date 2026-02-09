@@ -22,7 +22,10 @@ import {
   Stethoscope,
   RefreshCw,
   Mic,
+  Wrench,
+  ChevronDown,
 } from 'lucide-react';
+import { DiagnosticPanel } from '@/components/DiagnosticPanel';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -32,6 +35,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
+import { DiagnosticToolset } from './DiagnosticToolset';
 
 type HistoryItem =
   | string
@@ -81,6 +85,7 @@ export default function Terminal({
   const [isRiskMode, setIsRiskMode] = useState(false);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
   const [isVocalizing, setIsVocalizing] = useState(false);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -308,7 +313,8 @@ export default function Terminal({
         </div>
 
         <div className="flex items-center justify-between px-2">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <DiagnosticToolset />
             <Button
               variant="ghost"
               size="sm"

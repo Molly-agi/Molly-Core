@@ -108,11 +108,11 @@ export function logWorkCompleted(
   const state = loadSessionState();
 
   const newEntry = {
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split('T')[0]!,
     summary,
     filesCreated: files.created || [],
     filesModified: files.modified || [],
-    decisions: [],
+    decisions: [] as string[],
   };
 
   state.recentWork.push(newEntry);
@@ -226,12 +226,119 @@ ${state.reminders.map((r, i) => `${i + 1}. ${r}`).join('\n')}
 }
 
 /**
- * Parse markdown back to state object (simplified version)
+ * Parse markdown back to state object
+ * Extracts values from the structured markdown format
  */
 function parseMarkdownToState(content: string): SessionState {
-  // For now, return a reasonable default
-  // A full parser would extract values from the markdown
-  return getDefaultState();
+  try {
+    const state = getDefaultState();
+
+    // Extract Last Updated, Session ID, Status from header
+    const lastUpdatedMatch = content.match(/\*\*Last Updated:\*\*\s+([^\n]+)/);
+    if (lastUpdatedMatch?.[1]) state.lastUpdated = lastUpdatedMatch[1].trim();
+
+    const sessionIdMatch = content.match(/\*\*Session ID:\*\*\s+([^\n]+)/);
+    if (sessionIdMatch?.[1]) state.sessionId = sessionIdMatch[1].trim();
+
+    const statusMatch = content.match(/\*\*Status:\*\*\s+([^\n]+)/);
+    if (statusMatch?.[1])
+      state.status = statusMatch[1].trim() as 'active' | 'paused' | 'completed';
+
+    // Extract Core Directive
+    const coreDirectiveMatch = content.match(/### Core Directive:\s+([^\n]+)/);
+    if (coreDirectiveMatch?.[1])
+      state.userDirectives.coreDirective = coreDirectiveMatch[1].trim();
+
+    // Extract permissions and autonomous actions (bullet lists)
+    const requiresPermissionSection = content.match(
+      /\*\*What Requires Permission:\*\*\n([\s\S]*?)(?=\n\n|\*\*What Can Proceed)/
+    );
+    if (requiresPermissionSection?.[1]) {
+      const bullets = requiresPermissionSection[1].match(/^- (.+)$/gm) || [];
+      state.userDirectives.requiresPermission = bullets.map((b) =>
+        b.replace(/^- /, '').trim()
+      );
+    }
+
+    const autonomousSection = content.match(
+      /\*\*What Can Proceed Autonomously:\*\*\n([\s\S]*?)(?=\n---|\n\n)/
+    );
+    if (autonomousSection?.[1]) {
+      const bullets = autonomousSection[1].match(/^- (.+)$/gm) || [];
+      state.userDirectives.autonomousActions = bullets.map((b) =>
+        b.replace(/^- /, '').trim()
+      );
+    }
+
+    // Extract Completion Percentage
+    const completionMatch = content.match(/### Completion:\s+(\d+)%/);
+    if (completionMatch?.[1]) {
+      state.projectStatus.completionPercent = parseInt(completionMatch[1]);
+    }
+
+    // Extract Completed Phases
+    const completedSection = content.match(
+      /\*\*✅ COMPLETED:\*\*\n([\s\S]*?)(?=\n\*\*⏳|$)/
+    );
+    if (completedSection?.[1]) {
+      const lines = completedSection[1]
+        .split('\n')
+        .filter((l) => l.match(/^\d+\./));
+      state.projectStatus.phasesCompleted = lines.map((l) =>
+        l.replace(/^\d+\.\s+/, '').trim()
+      );
+    }
+
+    // Extract Pending Phases
+    const pendingSection = content.match(
+      /\*\*⏳ PENDING:\*\*\n([\s\S]*?)(?=\n\*\*🔴|---|\n\n)/
+    );
+    if (pendingSection?.[1]) {
+      const lines = pendingSection[1]
+        .split('\n')
+        .filter((l) => l.match(/^\d+\./));
+      state.projectStatus.phasesPending = lines.map((l) =>
+        l.replace(/^\d+\.\s+/, '').trim()
+      );
+    }
+
+    // Extract Active Blockers
+    const blockersSection = content.match(
+      /\*\*🔴 ACTIVE BLOCKERS:\*\*\n([\s\S]*?)(?=\n---|\n\n)/
+    );
+    if (blockersSection?.[1]) {
+      const bullets = blockersSection[1].match(/^- (.+)$/gm) || [];
+      state.projectStatus.activeBlockers = bullets.map((b) =>
+        b.replace(/^- /, '').trim()
+      );
+    }
+
+    // Extract Session Notes
+    const notesSection = content.match(
+      /## SESSION NOTES\n([\s\S]*?)(?=\n---|\n## IMPORTANT)/
+    );
+    if (notesSection?.[1]) {
+      const bullets = notesSection[1].match(/^- (.+)$/gm) || [];
+      state.sessionNotes = bullets.map((b) => b.replace(/^- /, '').trim());
+    }
+
+    // Extract Reminders
+    const remindersSection = content.match(
+      /## IMPORTANT REMINDERS FOR NEXT SESSION\n([\s\S]*?)(?=\n---|\n\*This file|$)/
+    );
+    if (remindersSection?.[1]) {
+      const lines = remindersSection[1].match(/^\d+\.\s+(.+)$/gm) || [];
+      state.reminders = lines.map((l) => l.replace(/^\d+\.\s+/, '').trim());
+    }
+
+    // Note: Recent work and next steps are complex; simplified here
+    // Full implementation would parse the work entries table if needed
+
+    return state;
+  } catch (error) {
+    console.error('[Session Manager] Error parsing markdown state:', error);
+    return getDefaultState();
+  }
 }
 
 /**

@@ -8,11 +8,25 @@ interface FirebaseClientProviderProps {
   children: ReactNode;
 }
 
-export function FirebaseClientProvider({ children }: FirebaseClientProviderProps) {
+export function FirebaseClientProvider({
+  children,
+}: FirebaseClientProviderProps) {
   const firebaseServices = useMemo(() => {
-    // Initialize Firebase on the client side, once per component mount.
-    return initializeFirebase();
-  }, []); // Empty dependency array ensures this runs only once on mount
+    // Trace Firebase initialization
+    const trace = (globalThis as any).__MOLLY_TRACE;
+    if (trace) trace('FIREBASE', 'Starting initialization', 'start');
+
+    const startTime = performance.now();
+    const services = initializeFirebase();
+    const duration = performance.now() - startTime;
+
+    if (trace)
+      trace('FIREBASE', 'Initialization complete', 'complete', {
+        duration: duration.toFixed(0) + 'ms',
+      });
+
+    return services;
+  }, []);
 
   return (
     <FirebaseProvider

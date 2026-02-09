@@ -145,7 +145,7 @@ class CostTracker {
     let totalCost = 0;
 
     for (const record of rangeRecords) {
-      const dateKey = new Date(record.timestamp).toISOString().split('T')[0];
+      const dateKey = new Date(record.timestamp).toISOString().split('T')[0]!;
       dailyBreakdown[dateKey] =
         (dailyBreakdown[dateKey] || 0) + record.estimatedCostUSD;
       totalCost += record.estimatedCostUSD;

@@ -3,6 +3,7 @@ import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { MollyLogger } from '@/ai/logger';
 import { AuthenticationError } from '@/ai/errors';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
+import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
 
 /**
  * Hardened gatekeeper to ensure environment stability.
@@ -24,6 +25,27 @@ export async function checkRateLimit(
   flowName: string,
   estimatedTokens: number = 500
 ) {
+  // Check circuit breaker first - if it's open, fail fast
+  const breaker = getCircuitBreaker();
+  if (!breaker.canProceed(flowName)) {
+    // Log the circuit breaker state for debugging
+    const stats = breaker.getStats(flowName);
+    MollyLogger.warn(
+      `Circuit breaker blocked ${flowName}: ${stats.state}`,
+      'checkRateLimit',
+      {
+        flowName,
+        state: stats.state,
+        errorRate: `${stats.errorRate.toFixed(1)}%`,
+        failures: stats.failureCount,
+      }
+    );
+    const error = new Error(
+      `Circuit breaker is ${stats.state} for ${flowName}. Retry in a moment.`
+    );
+    throw error;
+  }
+
   const limiter = getRateLimiter();
   await limiter.checkLimit(flowName, estimatedTokens);
 }
@@ -44,4 +66,47 @@ export async function fetchLastContext(userId: string): Promise<string> {
     });
     return 'First ignition.';
   }
+}
+
+/**
+ * Serialize complex history items into a format safe for Server Actions
+ * Next.js Server Actions can only pass serializable types
+ */
+export function serializeHistoryForServer(
+  history: any[]
+): Array<string | { type: string; data: any }> {
+  return history.map((item) => {
+    // Already a string, safe to pass
+    if (typeof item === 'string') {
+      return item;
+    }
+
+    // Handle complex objects by converting to a serializable format
+    if (item !== null && typeof item === 'object') {
+      // Solution responses
+      if ('creativeSolution' in item || 'vibeCheck' in item) {
+        return { type: 'solution', data: { vibeCheck: item.vibeCheck } };
+      }
+
+      // Script responses
+      if ('filename' in item || 'content' in item) {
+        return { type: 'script', data: { filename: item.filename } };
+      }
+
+      // Immune reports
+      if ('immuneReport' in item) {
+        return { type: 'immune', data: { status: item.isHealthy } };
+      }
+
+      // Synthetic synthesis reports
+      if ('syntheticReport' in item) {
+        return { type: 'synthetic', data: {} };
+      }
+
+      // Hive outputs or other objects - summarize them
+      return { type: 'response', data: {} };
+    }
+
+    return String(item);
+  });
 }

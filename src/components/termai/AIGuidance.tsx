@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, User } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { getContextualGuidance } from '@/app/actions';
+import { getContextualGuidance } from '@/app/actions/ai-flows';
 
 export function AIGuidance() {
   const [messages, setMessages] = useState<
@@ -17,7 +17,10 @@ export function AIGuidance() {
 
   const handleSend = async () => {
     if (input.trim() && !isLoading) {
-      const newMessages = [...messages, { role: 'user' as const, content: input }];
+      const newMessages = [
+        ...messages,
+        { role: 'user' as const, content: input },
+      ];
       setMessages(newMessages);
       const currentInput = input;
       setInput('');
@@ -25,10 +28,16 @@ export function AIGuidance() {
 
       try {
         const aiResponse = await getContextualGuidance(currentInput);
-        setMessages([...newMessages, { role: 'bot' as const, content: aiResponse }]);
+        setMessages([
+          ...newMessages,
+          { role: 'bot' as const, content: aiResponse },
+        ]);
       } catch (error) {
         console.error(error);
-        const errorMessage = error instanceof Error ? error.message : 'Could not get response from AI.';
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Could not get response from AI.';
         setMessages([
           ...newMessages,
           { role: 'bot' as const, content: `Error: ${errorMessage}` },
@@ -54,9 +63,7 @@ export function AIGuidance() {
                   message.role === 'user' ? 'justify-end' : ''
                 }`}
               >
-                {message.role === 'bot' && (
-                  <Bot className="size-5 shrink-0" />
-                )}
+                {message.role === 'bot' && <Bot className="size-5 shrink-0" />}
                 <div
                   className={`rounded-lg px-3 py-2 ${
                     message.role === 'user'
@@ -66,7 +73,7 @@ export function AIGuidance() {
                 >
                   {message.content}
                 </div>
-                 {message.role === 'user' && (
+                {message.role === 'user' && (
                   <User className="size-5 shrink-0" />
                 )}
               </div>
@@ -86,11 +93,17 @@ export function AIGuidance() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask a research question..."
-            onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSend())}
+            onKeyDown={(e) =>
+              e.key === 'Enter' &&
+              !e.shiftKey &&
+              (e.preventDefault(), handleSend())
+            }
             className="bg-card"
             disabled={isLoading}
           />
-          <Button onClick={handleSend} size="sm" disabled={isLoading}>Send</Button>
+          <Button onClick={handleSend} size="sm" disabled={isLoading}>
+            Send
+          </Button>
         </div>
       </CardContent>
     </Card>

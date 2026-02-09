@@ -178,6 +178,7 @@ export async function getContextWindow(
   // Work backwards from most recent message
   for (let i = allMessages.length - 1; i >= 0; i--) {
     const msg = allMessages[i];
+    if (!msg) continue; // Skip if message is undefined
     const msgTokens = estimateTokens(msg.content);
 
     if (tokenCount + msgTokens > maxTokens && contextMessages.length > 0) {

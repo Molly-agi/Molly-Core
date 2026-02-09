@@ -12,6 +12,15 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        'localhost:9002',
+        '*.app.github.dev', // Allow GitHub codespace hosts
+        '127.0.0.1:9002',
+      ],
+    },
+  },
   images: {
     remotePatterns: [
       {

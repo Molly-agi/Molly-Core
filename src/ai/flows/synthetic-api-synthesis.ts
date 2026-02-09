@@ -51,7 +51,7 @@ export const syntheticAPISynthesisFlow = ai.defineFlow(
       userId: input.userId,
       query: input.target,
     });
-    if (existing.length > 0) {
+    if (existing && existing.length > 0 && existing[0]) {
       await logMethodologyStep(
         input.userId,
         'SHIELD_CHECK',
