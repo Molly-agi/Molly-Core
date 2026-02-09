@@ -16,6 +16,8 @@ import {
   getDocs,
   limit,
   orderBy,
+  updateDoc,
+  doc,
 } from 'firebase/firestore';
 import {
   getEmbeddingProvider,
@@ -48,6 +50,46 @@ export interface SemanticRecallResult {
 /**
  * Semantic recall tool - finds memories using embedding similarity
  */
+
+/**
+ * Cache embedding vector to Firestore for future use
+ */
+async function cacheEmbedding(
+  userId: string,
+  collectionName: string,
+  docId: string,
+  embeddingVector: number[],
+  traceId: string
+): Promise<void> {
+  try {
+    const { firestore } = initializeFirebase();
+    const docRef = doc(firestore, 'users', userId, collectionName, docId);
+
+    await updateDoc(docRef, {
+      embeddingVector: embeddingVector,
+      embeddingCachedAt: new Date().toISOString(),
+    });
+
+    MollyLogger.debug(
+      'Embedding cached to Firestore',
+      'semantic-recall',
+      { collectionName, docId, vectorLength: embeddingVector.length },
+      traceId
+    );
+  } catch (error) {
+    // Non-fatal: embedding caching failed, but search still works
+    MollyLogger.warn(
+      'Failed to cache embedding',
+      'semantic-recall',
+      {
+        collectionName,
+        docId,
+        error: error instanceof Error ? error.message : String(error),
+      },
+      traceId
+    );
+  }
+}
 export const semanticRecall = ai.defineTool(
   {
     name: 'semanticRecall',
@@ -197,7 +239,14 @@ export const semanticRecall = ai.defineTool(
             const result = await embeddingProvider.embed(memoryText);
             memoryEmbedding = result.vector;
 
-            // TODO: Store this embedding back to Firestore for future use
+            // Cache the embedding for future use
+            await cacheEmbedding(
+              userId,
+              memory.collection,
+              memory.id,
+              memoryEmbedding,
+              traceId
+            );
           }
 
           // Calculate similarity
