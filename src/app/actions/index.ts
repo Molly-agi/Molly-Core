@@ -15,7 +15,11 @@ export {
 } from './neural-link-recovery';
 
 // Voice Processing
-export { getVoiceCommand, getMollyVoice } from './ai-flows';
+export {
+  getVoiceCommand,
+  getMollyVoice,
+  processVoiceInteraction,
+} from './ai-flows';
 
 // Conversational & Guidance
 export {

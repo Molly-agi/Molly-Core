@@ -2,6 +2,7 @@
 
 import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
+import { MollyLogger, generateTraceId } from '@/ai/logger';
 
 const voiceCommandToTextFlow = ai.defineFlow(
   {
@@ -14,6 +15,16 @@ const voiceCommandToTextFlow = ai.defineFlow(
     outputSchema: z.string(),
   },
   async (audioData) => {
+    const traceId = generateTraceId();
+    const mimeMatch = audioData.match(/^data:([^;]+);base64,/);
+    const mimeType = mimeMatch?.[1] ?? 'unknown';
+
+    MollyLogger.info('Voice transcription requested', 'voiceCommandToText', {
+      mimeType,
+      dataSize: audioData.length,
+      traceId,
+    });
+
     const llmResponse = await ai.generate({
       model: MODEL_FLASH,
       prompt: [
@@ -22,6 +33,12 @@ const voiceCommandToTextFlow = ai.defineFlow(
         },
         { media: { url: audioData } },
       ],
+    });
+
+    MollyLogger.info('Voice transcription complete', 'voiceCommandToText', {
+      mimeType,
+      responseLength: llmResponse.text.length,
+      traceId,
     });
 
     return llmResponse.text;

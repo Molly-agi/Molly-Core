@@ -15,7 +15,7 @@ export async function testModelAvailability() {
       FLASH: { available: false, error: null as string | null, latencyMs: 0 },
       PRO: { available: false, error: null as string | null, latencyMs: 0 },
     },
-    apiKeyConfigured: !!process.env.GEMINI_API_KEY,
+    apiKeyConfigured: !!process.env.GOOGLE_GENAI_API_KEY,
   };
 
   // Test MODEL_FLASH

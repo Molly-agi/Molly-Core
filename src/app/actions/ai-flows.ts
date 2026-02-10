@@ -23,6 +23,7 @@ import { runImmuneResponse } from '@/ai/flows/immune-response';
 import { runSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
 import { listAvailableModels } from '@/ai/tools/system';
 import { MollyLogger } from '@/ai/logger';
+import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import {
   withTimeout,
   withRetry,
@@ -30,6 +31,11 @@ import {
   RETRY_PRESETS,
 } from '@/ai/tools/timeout-retry';
 import { ensureApiKey, checkRateLimit, fetchLastContext } from './utils';
+
+function getAudioMimeType(dataUri: string): string {
+  const match = dataUri.match(/^data:([^;]+);base64,/);
+  return match?.[1] ?? 'unknown';
+}
 
 // ============================================
 // HEALTH & DIAGNOSTICS
@@ -66,10 +72,18 @@ export async function getModelPulse() {
 // VOICE PROCESSING
 // ============================================
 
+/**
+ * Legacy voice command handler (converts to termux commands)
+ * Use processVoiceInteraction for conversational voice instead
+ */
 export async function getVoiceCommand(audioData: string) {
   try {
     ensureApiKey();
     await checkRateLimit('voice-command', 500);
+    MollyLogger.info('Voice command received', 'getVoiceCommand', {
+      mimeType: getAudioMimeType(audioData),
+      dataSize: audioData.length,
+    });
     const transcribedText = await voiceCommandToText(audioData);
     if (!transcribedText || !transcribedText.trim()) {
       return {
@@ -83,10 +97,94 @@ export async function getVoiceCommand(audioData: string) {
     MollyLogger.error(
       'Voice command processing failed',
       'getVoiceCommand',
-      {},
+      { mimeType: getAudioMimeType(audioData), dataSize: audioData.length },
       e
     );
     throw e;
+  }
+}
+
+/**
+ * Process voice input for conversational interaction with Molly
+ * This is the proper voice path - not the sarcophagus/termux converter
+ */
+export async function processVoiceInteraction(
+  audioData: string,
+  userId: string
+) {
+  try {
+    ensureApiKey();
+    await checkRateLimit('voice-interaction', 500);
+    const mimeType = getAudioMimeType(audioData);
+
+    MollyLogger.info('Voice interaction started', 'processVoiceInteraction', {
+      userId,
+      mimeType,
+      dataSize: audioData.length,
+    });
+
+    if (mimeType === 'unknown') {
+      MollyLogger.warn(
+        'Invalid audio payload received (missing data URI)',
+        'processVoiceInteraction',
+        { userId }
+      );
+      return {
+        recognized: false,
+        transcription: '',
+        response:
+          'Voice input was not captured correctly. Please try again and wait for the recording icon.',
+        intent: 'error',
+        confidence: 0,
+      };
+    }
+
+    // Step 1: Transcribe audio to text
+    const transcription = await voiceCommandToText(audioData);
+
+    if (!transcription || !transcription.trim()) {
+      return {
+        recognized: false,
+        transcription: '',
+        response: "I didn't catch that. Could you speak again?",
+        intent: 'unknown',
+        confidence: 0,
+      };
+    }
+
+    MollyLogger.info('Voice transcribed', 'processVoiceInteraction', {
+      userId,
+      transcription: transcription.substring(0, 50),
+    });
+
+    // Step 2: Get conversational response from Molly
+    const chatResponse = await conversationalChat({
+      text: transcription,
+      history: [],
+    });
+
+    return {
+      recognized: true,
+      transcription,
+      response: chatResponse.response,
+      intent: 'conversation',
+      confidence: 0.9,
+    };
+  } catch (e: any) {
+    MollyLogger.error(
+      'Voice interaction failed',
+      'processVoiceInteraction',
+      { userId },
+      e
+    );
+    const message = e instanceof Error ? e.message : String(e);
+    return {
+      recognized: false,
+      transcription: '',
+      response: `Voice processing failed: ${message}`,
+      intent: 'error',
+      confidence: 0,
+    };
   }
 }
 
@@ -366,6 +464,26 @@ export async function startSyntheticSynthesis(
     MollyLogger.error(
       'Synthetic synthesis failed',
       'startSyntheticSynthesis',
+      { userId },
+      e
+    );
+    throw e;
+  }
+}
+
+// ============================================
+// RESEARCH ASSISTANT
+// ============================================
+
+export async function getEnhancedResearch(prompt: string, userId: string) {
+  try {
+    ensureApiKey();
+    await checkRateLimit('enhanced-research', 800);
+    return await enhancedResearch(prompt, userId);
+  } catch (e: any) {
+    MollyLogger.error(
+      'Enhanced research failed',
+      'getEnhancedResearch',
       { userId },
       e
     );

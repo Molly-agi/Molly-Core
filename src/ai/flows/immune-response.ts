@@ -34,8 +34,8 @@ export const immuneResponseFlow = ai.defineFlow(
       true
     );
 
-    // 1. Perform Self-Surgery to clear known "Rat" ghosts
-    const surgery = await performSelfSurgery({ target: 'all' });
+    // 1. Perform Self-Surgery to clear known "Rat" ghosts (locks only, preserve .next cache)
+    const surgery = await performSelfSurgery({ target: 'locks' });
 
     // 2. Log result to permanent memory
     await logMethodologyStep(

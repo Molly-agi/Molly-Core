@@ -6,7 +6,7 @@
  * Integrated HARDWARE_SAFETY_CHECK grounded in Pixel 9 Pro / Tensor G4 limits.
  */
 
-import { recordAgentFinding } from '@/firebase/firestore/agent-memory';
+import { MollyLogger } from './logger';
 
 export type SOPStep =
   | 'SEARCH'
@@ -31,7 +31,12 @@ export async function logMethodologyStep(
   const status = wasSuccessful ? 'SUCCESS' : 'SHIELDED_FAILURE';
   const entry = `[SOP:${step}] ${status}: ${detail}`;
 
-  await recordAgentFinding(userId, 'METHODOLOGY_ENGINE', entry);
+  // Use server-safe logger instead of client-side Firestore
+  MollyLogger.info(entry, 'methodology-engine', {
+    userId,
+    step,
+    wasSuccessful,
+  });
 }
 
 /**

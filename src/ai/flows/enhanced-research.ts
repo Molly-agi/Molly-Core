@@ -1,17 +1,27 @@
 /**
  * @fileOverview Enhanced Research Agent with Tool Caching (V2.0)
  *
- * When the research agent finds useful programs on GitHub or elsewhere,
- * it automatically saves them to Molly's personal tool database.
+ * Now integrated with Molly's core capabilities:
+ * - Uses semantic memory to recall past research
+ * - Saves findings to shared knowledge base
+ * - Can be triggered from terminal or research panel
+ * - Results flow bidirectionally between terminal and research UI
  */
 
 'use server';
 
 import { ai, MODEL_FLASH } from '@/ai/genkit';
-import { searchGitHub } from '../tools/github';
+import {
+  searchGitHub,
+  fetchGitHubReadme,
+  fetchGitHubFile,
+} from '../tools/github';
 import { z } from 'zod';
 import { saveFoundTool } from '@/firebase/firestore/tool-database';
-import { MollyLogger } from '../logger';
+import { MollyLogger, generateTraceId } from '../logger';
+import { recallSimilarMemories } from '../tools/semantic-recall';
+import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
+import { saveResearchFinding } from '@/firebase/firestore/research-cache';
 
 const EnhancedResearchSchema = z.object({
   answer: z.string().describe('The answer to the user query'),
@@ -34,24 +44,67 @@ export const enhancedResearchFlow = ai.defineFlow(
     inputSchema: z.object({
       prompt: z.string(),
       userId: z.string(),
+      useMemory: z.boolean().optional().default(true),
     }),
     outputSchema: EnhancedResearchSchema,
   },
-  async ({ prompt, userId }) => {
+  async ({ prompt, userId, useMemory }) => {
+    const traceId = generateTraceId();
+    MollyLogger.logFlowStart(
+      'enhancedResearch',
+      { userId, prompt: prompt.substring(0, 50) },
+      traceId
+    );
+
+    // Phase 1: Check semantic memory for related past research
+    let memoryContext = '';
+    if (useMemory) {
+      try {
+        const memories = await recallSimilarMemories(userId, prompt, {
+          limit: 3,
+          minSimilarity: 0.5,
+        });
+        if (memories.length > 0) {
+          memoryContext = `\n\nRELEVANT PAST RESEARCH:\n${memories.map((m, i) => `${i + 1}. ${m.suggestion}`).join('\n')}`;
+          MollyLogger.info(
+            'Research leveraging semantic memory',
+            'enhancedResearch',
+            { memoryCount: memories.length },
+            traceId
+          );
+        }
+      } catch (error) {
+        MollyLogger.warn(
+          'Memory recall failed, continuing without context',
+          'enhancedResearch',
+          {},
+          traceId
+        );
+      }
+    }
+
     try {
       const llmResponse = await ai.generate({
         model: MODEL_FLASH,
-        tools: [searchGitHub],
+        tools: [searchGitHub, fetchGitHubReadme, fetchGitHubFile],
         output: {
           schema: EnhancedResearchSchema,
         },
-        prompt: `You are an expert AI research assistant named Molly.
-Your goal is to answer the user's question by forming a plan and using the tools available to you.
-If you need to search for open-source programs or code, use the 'searchGitHub' tool.
-Provide a clear, concise answer based on your findings.
+        prompt: `You are Molly's Research Agent - an integrated subsystem with access to:
 
-IMPORTANT: If you find a particularly useful program, tool, or library,
-include details about it in the toolInfo field so it can be saved to Molly's database.
+AVAILABLE TOOLS:
+- searchGitHub: Search for repositories
+- fetchGitHubReadme: Get README to understand installation and usage
+- fetchGitHubFile: Get specific files from repos
+
+SHARED KNOWLEDGE:${memoryContext}
+
+Your role is to research and provide actionable findings. When you find a useful tool:
+1. Fetch its README to get installation instructions
+2. Include the clone URL and installation steps in your answer
+3. Fill out the toolInfo field so it gets saved to Molly's shared database
+
+Be specific, provide exact commands where possible, and explain how the tool fits the use case.
 
 User's question: "${prompt}"`,
       });
@@ -67,9 +120,10 @@ User's question: "${prompt}"`,
         };
       }
 
-      // If a tool was found, save it to Molly's database
+      // If a tool was found, save it to Molly's shared databases
       if (result?.isToolFound && result?.toolInfo) {
         try {
+          // Save to tool database
           const toolId = await saveFoundTool(userId, {
             userId: userId,
             name: result.toolInfo.name || 'Unknown Tool',
@@ -85,21 +139,59 @@ User's question: "${prompt}"`,
             useCase: result.toolInfo.useCase || prompt,
           });
 
+          // Save to research cache for future reference
+          await saveResearchFinding(userId, {
+            userId,
+            topic: result.toolInfo.category || 'tools',
+            title: result.toolInfo.name || 'Research Finding',
+            description:
+              result.toolInfo.description || result.answer.substring(0, 200),
+            keywords: [
+              result.toolInfo.category || 'research',
+              result.toolInfo.name || 'finding',
+            ],
+            source: 'other',
+            tags: result.toolInfo.tags || [],
+            relevance: 8,
+          });
+
+          // Save to semantic memory for cross-session recall
+          await recordSensoryLog(
+            userId,
+            'voice',
+            `Research finding: ${result.toolInfo.name} - ${result.toolInfo.description}`,
+            {
+              source: 'research-agent',
+              toolId,
+              vibeScore: 0.85,
+              timestamp: Date.now(),
+              traceId,
+            }
+          );
+
           MollyLogger.info(
-            `Saved tool to database: ${result.toolInfo.name}`,
+            `Saved tool to shared knowledge base: ${result.toolInfo.name}`,
             'enhancedResearch',
-            { toolId, userId }
+            { toolId, userId },
+            traceId
           );
         } catch (saveError) {
           MollyLogger.error(
             'Failed to save tool to database',
             'enhancedResearch',
             { toolName: result.toolInfo.name },
-            saveError
+            saveError,
+            traceId
           );
           // Don't fail the whole operation if saving fails
         }
       }
+
+      MollyLogger.logFlowComplete(
+        'enhancedResearch',
+        { toolFound: result.isToolFound },
+        traceId
+      );
 
       return result;
     } catch (error) {
@@ -107,7 +199,8 @@ User's question: "${prompt}"`,
         'Enhanced research failed',
         'enhancedResearch',
         {},
-        error
+        error,
+        traceId
       );
       // Return a default response instead of throwing
       return {
@@ -119,6 +212,10 @@ User's question: "${prompt}"`,
   }
 );
 
-export async function enhancedResearch(prompt: string, userId: string) {
-  return await enhancedResearchFlow({ prompt, userId });
+export async function enhancedResearch(
+  prompt: string,
+  userId: string,
+  useMemory: boolean = true
+) {
+  return await enhancedResearchFlow({ prompt, userId, useMemory });
 }

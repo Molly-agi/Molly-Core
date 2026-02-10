@@ -8,6 +8,7 @@ import {
   getHealthCheck,
   getMollyVoice,
   triggerImmuneResponse,
+  getConversationalChat,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -125,43 +126,87 @@ export default function Terminal({
   const handleAudioEnd = () => setIsVocalizing(false);
 
   useEffect(() => {
+    let mounted = true;
+
     const fetchIntroduction = async () => {
-      if (!user) return;
+      if (!user || !mounted) return;
+
       try {
         // Stage 4.5 Neural Recall: Dynamic greeting based on history
         const intro = await getHealthCheck(
           'Introduce yourself as Molly. Acknowledge your 2.5 architecture. If you recognize our previous bond, greet me warmly.',
           user.uid
         );
-        setHistory([intro.greeting]);
 
-        // Audio might require a click first, so we attempt to speak.
-        // If it fails, the "Voice" icon remains a toggle.
-        speakResponse(intro.greeting);
-
-        const result = await triggerImmuneResponse(user.uid, 'Startup');
-        setHistory((prev) => [
-          ...prev,
-          { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
-        ]);
+        if (mounted) {
+          setHistory([intro.greeting]);
+          // Audio might require a click first, so we attempt to speak.
+          // If it fails, the "Voice" icon remains a toggle.
+          speakResponse(intro.greeting);
+        }
       } catch (error) {
-        setHistory((prev) => [
-          ...prev,
-          'Neural link synchronization issues. System remaining in manual mode.',
-        ]);
+        console.error('Neural link sync failed during greeting:', error);
+        if (mounted) {
+          setHistory((prev) => [
+            ...prev,
+            'Neural link synchronization issue during greeting. System in manual mode.',
+          ]);
+        }
       } finally {
-        setIsIntroducing(false);
+        if (mounted) {
+          setIsIntroducing(false);
+        }
+      }
+
+      if (!mounted) return;
+
+      try {
+        const result = await triggerImmuneResponse(user.uid, 'Startup');
+        if (mounted) {
+          setHistory((prev) => [
+            ...prev,
+            { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
+          ]);
+        }
+      } catch (error) {
+        console.error('Immune response failed during startup:', error);
+        if (mounted) {
+          setHistory((prev) => [
+            ...prev,
+            'Immune response degraded. Diagnostics recommended.',
+          ]);
+        }
       }
     };
-    fetchIntroduction();
+
+    fetchIntroduction().catch((err) => {
+      console.error('Unhandled error in fetchIntroduction:', err);
+    });
+
+    return () => {
+      mounted = false;
+    };
   }, [user]);
 
   useEffect(() => {
     if (voiceResult && !isLoading) {
       onVoiceCommandProcessed();
-      processCommand(voiceResult.command);
+      // Voice is now properly processed - display transcription and response
+      if (voiceResult.recognized && voiceResult.transcription) {
+        setHistory((prev) => [
+          ...prev,
+          `> ${voiceResult.transcription}`,
+          voiceResult.response,
+        ]);
+        speakResponse(voiceResult.response);
+      } else {
+        setHistory((prev) => [
+          ...prev,
+          'Error: Voice not recognized. Please try again.',
+        ]);
+      }
     }
-  }, [voiceResult]);
+  }, [voiceResult, isLoading]);
 
   const handleManualHeal = async () => {
     if (!user) return;
@@ -193,6 +238,15 @@ export default function Terminal({
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
         speakResponse(aiResponse.vibeCheck);
+      } else if (cmdText.startsWith('/research ')) {
+        const prompt = cmdText.replace('/research ', '');
+        const { getEnhancedResearch } = await import('@/app/actions/ai-flows');
+        const aiResponse = await getEnhancedResearch(prompt, user.uid);
+        setHistory((prev) => [
+          ...prev,
+          `[RESEARCH AGENT] ${aiResponse.answer}${aiResponse.isToolFound ? ' (Tool saved to database)' : ''}`,
+        ]);
+        speakResponse('Research complete. Check the findings.');
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {

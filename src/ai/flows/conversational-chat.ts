@@ -44,16 +44,14 @@ const conversationalChatFlow = ai.defineFlow(
       }));
 
       const llmResponse = await withGenerateErrorHandling(
-        // Cast to any to satisfy differing GenerateOptions typings across genkit versions
         async () =>
           await ai.generate({
             model: MODEL_FLASH,
+            system:
+              'You are an expert AI assistant named Molly. You specialize in Termux, Linux, and general programming. Your goal is to provide guidance, write code, and help the user understand complex topics. The user is interacting with you in a side panel next to a terminal interface. Be helpful and provide clear, concise explanations.',
             prompt: text,
             history: llmHistory,
-            config: {
-              systemPrompt: `You are an expert AI assistant named Molly. You specialize in Termux, Linux, and general programming. Your goal is to provide guidance, write code, and help the user understand complex topics. The user is interacting with you in a side panel next to a terminal interface. Be helpful and provide clear, concise explanations.`,
-            },
-          } as any),
+          }),
         'conversationalChat',
         traceId
       );

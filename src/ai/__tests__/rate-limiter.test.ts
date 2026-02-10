@@ -11,12 +11,12 @@ describe('Rate Limiter', () => {
   let limiter: RateLimiter;
 
   beforeEach(() => {
-    // Create a limiter with small limits for testing
+    // Create a limiter with reasonable limits for testing
     const testConfig: Partial<RateLimitConfig> = {
       maxPerMinute: 20,
-      maxTokensPerDay: 50000,
-      costPer1MTokens: 15000, // Much higher cost for testing ($15 per 1M tokens = $0.015 per 1k tokens)
-      dailyBudgetUSD: 0.1, // $0.10 budget for testing
+      maxTokensPerDay: 10_000_000,
+      costPer1MTokens: 1.5, // Gemini pricing: $1.50 per 1M tokens
+      dailyBudgetUSD: 10.0, // $10.00 budget for testing
       warningThreshold: 0.7,
     };
     limiter = new RateLimiter(testConfig);
@@ -40,17 +40,16 @@ describe('Rate Limiter', () => {
 
   describe('Budget Enforcement', () => {
     it('should reject generations exceeding daily budget', async () => {
-      // Record usage approaching budget limit
-      // 1M tokens = $1.50. 5 calls * 1M tokens = 5M tokens = $7.50
-      for (let i = 0; i < 5; i++) {
-        await limiter.checkLimit('expensive-flow', 1000000); // 1M tokens = $1.50
-        limiter.recordUsage('expensive-flow', 1000000, 1.5); // Record actual $1.50
+      // Directly record usage to approach budget limit without hitting bucket rate limits
+      // 10k tokens at a time: 667 calls * 10k = 6.67M tokens = $10.005
+      for (let i = 0; i < 667; i++) {
+        limiter.recordUsage('expensive-flow', 10000, 0.015); // $1.50 per 1M = $0.015 per 10k
       }
 
-      // After 5 calls = $7.50 spent. Next call would be $9.00 > $8.00 budget
-      await expect(
-        limiter.checkLimit('expensive-flow', 1000000)
-      ).rejects.toThrow(RateLimitError);
+      // After 667 calls = $10.005 spent. Next checkLimit should fail due to budget
+      await expect(limiter.checkLimit('expensive-flow', 10000)).rejects.toThrow(
+        RateLimitError
+      );
     });
 
     it('should return remaining budget', () => {
@@ -95,12 +94,12 @@ describe('Rate Limiter', () => {
 
   describe('Cost Calculation', () => {
     it('should calculate accurate costs', async () => {
-      // 100K tokens at $1.5 per 1M = $0.15
-      await limiter.checkLimit('test-flow', 100000);
-      limiter.recordUsage('test-flow', 100000, 0.15);
+      // 10k tokens at $1.5 per 1M = $0.015
+      await limiter.checkLimit('test-flow', 10000);
+      limiter.recordUsage('test-flow', 10000, 0.015);
 
       const remaining = limiter.getRemaining();
-      expect(remaining.budgetUSD).toBeCloseTo(9.85, 2);
+      expect(remaining.budgetUSD).toBeCloseTo(9.985, 2);
     });
   });
 });

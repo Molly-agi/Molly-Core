@@ -137,13 +137,14 @@ export class FlowOrchestrator {
         currentInput = result.output; // Chain output to next flow
       } else {
         MollyLogger.warn(
-          `Pipeline stopped at ${flowName} due to failure`,
+          `Flow ${flowName} failed, continuing with remaining flows in pipeline`,
           'orchestrator',
           {
             traceId: this.traceId,
+            error: result.error,
           }
         );
-        break;
+        // Don't break - continue with next flow using previous successful input
       }
     }
 
