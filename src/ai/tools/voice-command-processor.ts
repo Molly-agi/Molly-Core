@@ -67,20 +67,24 @@ async function analyzeIntent(
   try {
     const response = await ai.generate({
       model: MODEL_FLASH,
-      system: `You are Molly's intent analyzer. Classify voice commands into intents.
+      system: `You are Molly's intent analyzer. Classify conversational voice commands into intents.
 
 Context:
 - User: ${context.userId}
 - Session: ${context.sessionId}
 ${context.previousCommands ? `- Recent: ${context.previousCommands.join(', ')}` : ''}
 
-Focus on ACTIONABLE understanding. If user says "remember this about thermal issues",
+Focus on CONVERSATIONAL understanding. If user says "remember this about thermal issues",
 intent is 'remember' and info is about thermal management.`,
       prompt: `Analyze this voice command: "${transcription}"`,
       output: { schema: VoiceIntentSchema },
     });
 
-    return response.output!;
+    if (!response.output) {
+      throw new Error('No intent analysis output');
+    }
+
+    return response.output;
   } catch (error) {
     MollyLogger.error(
       'Intent analysis failed',
@@ -90,32 +94,13 @@ intent is 'remember' and info is about thermal management.`,
       traceId
     );
 
-    // Fallback to simple pattern matching
-    const lower = transcription.toLowerCase();
-
-    if (lower.includes('remember') || lower.includes('save')) {
-      return {
-        intent: 'remember' as const,
-        confidence: 0.6,
-        extractedInfo: transcription,
-        reasoning: 'Keyword match: remember/save',
-      };
-    }
-
-    if (lower.includes('recall') || lower.includes('what did')) {
-      return {
-        intent: 'recall' as const,
-        confidence: 0.6,
-        extractedInfo: transcription,
-        reasoning: 'Keyword match: recall/what did',
-      };
-    }
-
+    // Fallback to conversational intent
+    // Avoid routing voice to terminal/sarcophagus paths
     return {
-      intent: 'question' as const,
-      confidence: 0.3,
+      intent: 'conversation' as const,
+      confidence: 0.5,
       extractedInfo: transcription,
-      reasoning: 'Fallback - no clear match',
+      reasoning: 'Fallback - defaulting to conversation',
     };
   }
 }

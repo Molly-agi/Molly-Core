@@ -102,7 +102,25 @@ export function VoiceControl({
               }),
             });
 
-            const data = await response.json();
+            let data;
+            try {
+              data = await response.json();
+            } catch (parseError) {
+              console.error(
+                '[VoiceControl] JSON parse error:',
+                parseError,
+                'Response status:',
+                response.status
+              );
+              toast({
+                variant: 'destructive',
+                title: 'Voice Processing Error',
+                description:
+                  'Failed to parse voice response. Please try again.',
+              });
+              setIsProcessing(false);
+              return;
+            }
 
             if (!response.ok || !data?.success) {
               toast({

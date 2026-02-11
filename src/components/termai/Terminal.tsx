@@ -8,7 +8,6 @@ import {
   getHealthCheck,
   getMollyVoice,
   triggerImmuneResponse,
-  getConversationalChat,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import { useUser } from '@/firebase/auth/use-user';
@@ -23,10 +22,7 @@ import {
   Stethoscope,
   RefreshCw,
   Mic,
-  Wrench,
-  ChevronDown,
 } from 'lucide-react';
-import { DiagnosticPanel } from '@/components/DiagnosticPanel';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -36,7 +32,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
-import { DiagnosticToolset } from './DiagnosticToolset';
 
 type HistoryItem =
   | string
@@ -86,7 +81,6 @@ export default function Terminal({
   const [isRiskMode, setIsRiskMode] = useState(false);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
   const [isVocalizing, setIsVocalizing] = useState(false);
-  const [showDiagnostics, setShowDiagnostics] = useState(false);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -126,87 +120,53 @@ export default function Terminal({
   const handleAudioEnd = () => setIsVocalizing(false);
 
   useEffect(() => {
-    let mounted = true;
-
     const fetchIntroduction = async () => {
-      if (!user || !mounted) return;
-
+      if (!user) return;
       try {
         // Stage 4.5 Neural Recall: Dynamic greeting based on history
         const intro = await getHealthCheck(
           'Introduce yourself as Molly. Acknowledge your 2.5 architecture. If you recognize our previous bond, greet me warmly.',
           user.uid
         );
+        setHistory([intro.greeting]);
 
-        if (mounted) {
-          setHistory([intro.greeting]);
-          // Audio might require a click first, so we attempt to speak.
-          // If it fails, the "Voice" icon remains a toggle.
-          speakResponse(intro.greeting);
-        }
-      } catch (error) {
-        console.error('Neural link sync failed during greeting:', error);
-        if (mounted) {
-          setHistory((prev) => [
-            ...prev,
-            'Neural link synchronization issue during greeting. System in manual mode.',
-          ]);
-        }
-      } finally {
-        if (mounted) {
-          setIsIntroducing(false);
-        }
-      }
+        // Audio might require a click first, so we attempt to speak.
+        // If it fails, the "Voice" icon remains a toggle.
+        speakResponse(intro.greeting);
 
-      if (!mounted) return;
-
-      try {
         const result = await triggerImmuneResponse(user.uid, 'Startup');
-        if (mounted) {
-          setHistory((prev) => [
-            ...prev,
-            { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
-          ]);
-        }
+        setHistory((prev) => [
+          ...prev,
+          { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
+        ]);
       } catch (error) {
-        console.error('Immune response failed during startup:', error);
-        if (mounted) {
-          setHistory((prev) => [
-            ...prev,
-            'Immune response degraded. Diagnostics recommended.',
-          ]);
-        }
+        setHistory((prev) => [
+          ...prev,
+          'Neural link synchronization issues. System remaining in manual mode.',
+        ]);
+      } finally {
+        setIsIntroducing(false);
       }
     };
-
-    fetchIntroduction().catch((err) => {
-      console.error('Unhandled error in fetchIntroduction:', err);
-    });
-
-    return () => {
-      mounted = false;
-    };
+    fetchIntroduction();
   }, [user]);
 
   useEffect(() => {
     if (voiceResult && !isLoading) {
       onVoiceCommandProcessed();
-      // Voice is now properly processed - display transcription and response
-      if (voiceResult.recognized && voiceResult.transcription) {
+
+      // Voice is already processed by conversational AI
+      // Display the conversation naturally
+      if (voiceResult.recognized && voiceResult.response) {
         setHistory((prev) => [
           ...prev,
           `> ${voiceResult.transcription}`,
           voiceResult.response,
         ]);
         speakResponse(voiceResult.response);
-      } else {
-        setHistory((prev) => [
-          ...prev,
-          'Error: Voice not recognized. Please try again.',
-        ]);
       }
     }
-  }, [voiceResult, isLoading]);
+  }, [voiceResult]);
 
   const handleManualHeal = async () => {
     if (!user) return;
@@ -238,15 +198,6 @@ export default function Terminal({
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
         speakResponse(aiResponse.vibeCheck);
-      } else if (cmdText.startsWith('/research ')) {
-        const prompt = cmdText.replace('/research ', '');
-        const { getEnhancedResearch } = await import('@/app/actions/ai-flows');
-        const aiResponse = await getEnhancedResearch(prompt, user.uid);
-        setHistory((prev) => [
-          ...prev,
-          `[RESEARCH AGENT] ${aiResponse.answer}${aiResponse.isToolFound ? ' (Tool saved to database)' : ''}`,
-        ]);
-        speakResponse('Research complete. Check the findings.');
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {
@@ -367,8 +318,7 @@ export default function Terminal({
         </div>
 
         <div className="flex items-center justify-between px-2">
-          <div className="flex items-center gap-2">
-            <DiagnosticToolset />
+          <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="sm"
