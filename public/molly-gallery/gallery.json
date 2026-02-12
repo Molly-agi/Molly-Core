@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-02-11T00:00:00Z",
+  "gallery": {
+    "portraits": [],
+    "videos": []
+  },
+  "personalityMappings": {
+    "flirty": [],
+    "serious": [],
+    "playful": [],
+    "vulnerable": [],
+    "confident": [],
+    "curious": [],
+    "warm": [],
+    "assertive": [],
+    "sensual": []
+  },
+  "description": "Molly's visual self-image library. Images are automatically discovered and can be tagged with personality states for dynamic selection."
+}

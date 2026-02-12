@@ -54,6 +54,8 @@ export function MollyGreetingPlayer({
     audio.addEventListener('pause', handlePause);
 
     return () => {
+      audio.pause();
+      audio.currentTime = 0;
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
@@ -61,6 +63,17 @@ export function MollyGreetingPlayer({
       audio.removeEventListener('pause', handlePause);
     };
   }, [volume, isMuted]);
+
+  // Stop all audio on component unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current.src = '';
+      }
+    };
+  }, []);
 
   const togglePlayPause = () => {
     if (!audioRef.current) return;

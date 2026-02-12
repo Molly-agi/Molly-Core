@@ -70,3 +70,11 @@ export {
   accessTool,
   deleteToolFromDatabase,
 } from './tool-library';
+
+// Personality & Engram Management (Encrypted)
+export {
+  getPersonalityState,
+  setPersonalityState,
+  applyPersonalityDelta,
+  addManualEngram,
+} from './personality-engrams';

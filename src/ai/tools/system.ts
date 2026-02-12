@@ -109,11 +109,11 @@ export const listAvailableModels = ai.defineTool(
       // In Genkit/GoogleAI context, we check the registry for what's loaded.
       // For the user's specific request, we report the canonicals we are targeting.
       return [
-        'gemini-1.5-flash',
-        'gemini-1.5-pro',
-        'gemini-2.0-flash-exp',
-        'imagen-3.0-generate-001',
+        'gemini-2.5-flash',
+        'gemini-2.5-pro',
         'gemini-2.5-flash-preview-tts',
+        'imagen-3.0-generate-001',
+        'text-embedding-004',
       ];
     } catch (e) {
       return ['Error: Neural pulse failed.'];

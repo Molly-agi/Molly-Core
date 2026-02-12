@@ -8,6 +8,7 @@ import {
 import { TermAISidebar } from './Sidebar';
 import { Header } from './Header';
 import Terminal from './Terminal';
+import { HiddenAdminPanel } from './HiddenAdminPanel';
 import { useState, useEffect } from 'react';
 import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
@@ -30,6 +31,7 @@ export default function Dashboard() {
   const { user, isUserLoading, userError } = useUser();
   const router = useRouter();
   const [authRetryAttempt, setAuthRetryAttempt] = useState(0);
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
 
   // Dynamic Proprioception (Nervous System)
   const [battery, setBattery] = useState(78);
@@ -97,6 +99,13 @@ export default function Dashboard() {
     setVoiceResult(null);
   };
 
+  const adminUids = (process.env.NEXT_PUBLIC_ADMIN_UIDS || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const isDev = process.env.NODE_ENV === 'development';
+  const isAdmin = isDev || (!!user && adminUids.includes(user.uid));
+
   if (isUserLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
@@ -146,7 +155,6 @@ export default function Dashboard() {
   }
 
   // Allow access in development mode even without auth
-  const isDev = process.env.NODE_ENV === 'development';
   if (!isDev && !user) {
     return null; // Will redirect via useEffect
   }
@@ -163,7 +171,17 @@ export default function Dashboard() {
         </SidebarContent>
       </Sidebar>
       <SidebarInset className="flex flex-col">
-        <Header onVoiceCommand={handleVoiceCommand} />
+        <Header
+          onVoiceCommand={handleVoiceCommand}
+          onAdminUnlock={() => setIsAdminPanelOpen(true)}
+        />
+
+        <HiddenAdminPanel
+          open={isAdminPanelOpen}
+          onOpenChange={setIsAdminPanelOpen}
+          isAdmin={isAdmin}
+          userId={user?.uid ?? null}
+        />
 
         {/* Hardware Proprioception & Neural Link Bar */}
         <div className="bg-secondary/40 px-6 py-2 flex items-center justify-between text-xs border-b border-white/5">

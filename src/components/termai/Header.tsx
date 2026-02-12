@@ -3,6 +3,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { VoiceControl, type VoiceCommandResult } from './VoiceControl';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
+import { useRef, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,14 +14,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
+import { Flower2 } from 'lucide-react';
 
 export function Header({
   onVoiceCommand,
+  onAdminUnlock,
 }: {
   onVoiceCommand: (result: VoiceCommandResult) => void;
+  onAdminUnlock: () => void;
 }) {
   const { user } = useUser();
   const auth = useAuth();
+  const [unlockCount, setUnlockCount] = useState(0);
+  const resetTimer = useRef<NodeJS.Timeout | null>(null);
 
   const handleSignOut = async () => {
     if (auth) {
@@ -36,11 +42,40 @@ export function Header({
       .join('');
   };
 
+  const handleSecretTap = () => {
+    const nextCount = unlockCount + 1;
+    setUnlockCount(nextCount);
+
+    if (resetTimer.current) {
+      clearTimeout(resetTimer.current);
+    }
+
+    resetTimer.current = setTimeout(() => {
+      setUnlockCount(0);
+    }, 2500);
+
+    if (nextCount >= 7) {
+      setUnlockCount(0);
+      onAdminUnlock();
+    }
+  };
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6">
       <SidebarTrigger />
       <div className="flex-1">
-        <h1 className="font-semibold text-lg">Molly</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="font-semibold text-lg">Molly</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleSecretTap}
+            className="h-6 w-6 text-muted-foreground/50 hover:text-foreground"
+            title=""
+          >
+            <Flower2 className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
       <VoiceControl onVoiceCommand={onVoiceCommand} />
       {user && (

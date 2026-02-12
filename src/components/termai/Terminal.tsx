@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import {
-  getTextToTermuxCommand,
+  getConversationalChat,
   getAutonomousSolution,
   getHealthCheck,
   getMollyVoice,
@@ -201,9 +201,14 @@ export default function Terminal({
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {
-        const aiResponse = await getTextToTermuxCommand(cmdText);
-        setHistory((prev) => [...prev, aiResponse]);
-        speakResponse('Command synthesized for the sarcophagus.');
+        // Route unknown commands to conversational Molly (NOT to sarcophagus)
+        // Use conversational chat instead of terminal command synthesis
+        const aiResponse = await getConversationalChat(
+          cmdText,
+          user?.uid || 'anonymous'
+        );
+        setHistory((prev) => [...prev, `> ${cmdText}`, aiResponse]);
+        speakResponse(aiResponse);
       }
     } catch (error) {
       setHistory((prev) => [...prev, `Error: Operation failed.`]);
@@ -217,6 +222,31 @@ export default function Terminal({
     processCommand(command);
     setCommand('');
   };
+
+  // CRITICAL: Stop all audio on unmount (prevents lingering voice)
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current.src = '';
+      }
+      setIsVocalizing(false);
+      setAudioUri(null);
+    };
+  }, []);
+
+  // Stop audio on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
