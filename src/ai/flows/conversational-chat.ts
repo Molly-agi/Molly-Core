@@ -4,9 +4,14 @@ import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
+import {
+  getContextWindow,
+  storeConversationMessage,
+  getOrCreateConversation,
+} from '../tools/conversation-context';
 
 /**
- * @fileOverview Hardened Conversational Chat Flow V4.3 (Error Handling Integrated).
+ * @fileOverview Hardened Conversational Chat Flow V4.4 (Context Restoration Integrated).
  */
 
 const HistoryItemSchema = z.object({
@@ -16,7 +21,9 @@ const HistoryItemSchema = z.object({
 
 const ConversationalChatInputSchema = z.object({
   text: z.string(),
-  history: z.array(HistoryItemSchema),
+  history: z.array(HistoryItemSchema).optional(),
+  userId: z.string().optional(),
+  conversationId: z.string().optional(),
 });
 type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
 
@@ -29,16 +36,64 @@ const conversationalChatFlow = ai.defineFlow(
       error: z.string().optional(),
     }),
   },
-  async ({ text, history }) => {
+  async ({ text, history, userId, conversationId }) => {
     const traceId = generateTraceId();
     MollyLogger.logFlowStart(
       'conversationalChat',
-      { historyLength: history.length },
+      { 
+        historyLength: history?.length || 0,
+        userId: userId || 'anonymous',
+        conversationId: conversationId || 'none',
+        contextRestoration: !!(userId && conversationId)
+      },
       traceId
     );
 
     try {
-      const llmHistory = history.map((item) => ({
+      let effectiveHistory = history || [];
+      
+      // Context Restoration: Load history from Firestore if userId and conversationId provided
+      if (userId && conversationId) {
+        MollyLogger.info(
+          'Restoring conversation context from Firestore',
+          'conversationalChat',
+          { userId, conversationId },
+          traceId
+        );
+        
+        // Ensure conversation exists
+        await getOrCreateConversation(userId, conversationId);
+        
+        // Fetch context window (last N messages within token limit)
+        const contextMessages = await getContextWindow(userId, conversationId, 4000);
+        
+        // Convert Firestore messages to history format
+        effectiveHistory = contextMessages.map((msg) => ({
+          role: msg.role === 'assistant' ? ('bot' as const) : ('user' as const),
+          content: msg.content,
+        }));
+        
+        MollyLogger.info(
+          `Restored ${effectiveHistory.length} messages from context`,
+          'conversationalChat',
+          { contextMessageCount: effectiveHistory.length },
+          traceId
+        );
+        
+        // Store the new user message
+        await storeConversationMessage({
+          userId,
+          conversationId,
+          role: 'user',
+          content: text,
+          timestamp: new Date().toISOString(),
+          metadata: {
+            flowName: 'conversationalChat',
+          },
+        });
+      }
+
+      const llmHistory = effectiveHistory.map((item) => ({
         role: item.role === 'bot' ? ('model' as const) : ('user' as const),
         parts: [{ text: item.content }],
       }));
@@ -58,9 +113,26 @@ const conversationalChatFlow = ai.defineFlow(
         traceId
       );
 
+      // Store the assistant's response if context restoration is enabled
+      if (userId && conversationId) {
+        await storeConversationMessage({
+          userId,
+          conversationId,
+          role: 'assistant',
+          content: llmResponse.text,
+          timestamp: new Date().toISOString(),
+          metadata: {
+            flowName: 'conversationalChat',
+          },
+        });
+      }
+
       MollyLogger.logFlowComplete(
         'conversationalChat',
-        { responseLength: llmResponse.text.length },
+        { 
+          responseLength: llmResponse.text.length,
+          contextRestored: !!(userId && conversationId)
+        },
         traceId
       );
 

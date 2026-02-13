@@ -105,12 +105,22 @@ export async function getMollyVoice(text: string) {
 // CONVERSATIONAL & GUIDANCE
 // ============================================
 
-export async function getConversationalChat(text: string, history: any[]) {
+export async function getConversationalChat(
+  text: string, 
+  history: any[], 
+  userId?: string, 
+  conversationId?: string
+) {
   try {
     ensureApiKey();
     await checkRateLimit('conversational-chat', 800);
     return await withRetry(
-      () => conversationalChat({ text, history }),
+      () => conversationalChat({ 
+        text, 
+        history, 
+        userId, 
+        conversationId 
+      }),
       'conversational-chat',
       RETRY_PRESETS.FAST
     );
