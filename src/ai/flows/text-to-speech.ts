@@ -7,6 +7,21 @@ import { ai, MODEL_TTS } from '@/ai/genkit';
 import { z } from 'zod';
 import wav from 'wav';
 
+// Use Aoede - proven female voice for Gemini TTS
+const DEFAULT_VOICE_NAME = 'Aoede';
+const CONFIGURED_VOICE_NAME = process.env.MOLLY_TTS_VOICE || DEFAULT_VOICE_NAME;
+
+function buildSpeechConfig(voiceName: string) {
+  return {
+    responseModalities: ['AUDIO'],
+    speechConfig: {
+      voiceConfig: {
+        prebuiltVoiceConfig: { voiceName },
+      },
+    },
+  };
+}
+
 async function toWav(
   pcmData: Buffer,
   channels = 1,
@@ -43,18 +58,31 @@ export const textToSpeechFlow = ai.defineFlow(
     }),
   },
   async (text) => {
-    const response = await ai.generate({
-      model: MODEL_TTS,
-      config: {
-        responseModalities: ['AUDIO'],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'algenib' },
-          },
-        },
-      },
-      prompt: text,
-    });
+    console.log(`[TTS] Using voice: ${CONFIGURED_VOICE_NAME}`);
+    let response;
+    try {
+      response = await ai.generate({
+        model: MODEL_TTS,
+        config: buildSpeechConfig(CONFIGURED_VOICE_NAME),
+        prompt: text,
+      });
+      console.log(`[TTS] Success with voice: ${CONFIGURED_VOICE_NAME}`);
+    } catch (error) {
+      console.error(`[TTS] Failed with voice ${CONFIGURED_VOICE_NAME}:`, error);
+      if (CONFIGURED_VOICE_NAME !== DEFAULT_VOICE_NAME) {
+        console.log(
+          `[TTS] Retrying with fallback voice: ${DEFAULT_VOICE_NAME}`
+        );
+        response = await ai.generate({
+          model: MODEL_TTS,
+          config: buildSpeechConfig(DEFAULT_VOICE_NAME),
+          prompt: text,
+        });
+        console.log(`[TTS] Success with fallback voice: ${DEFAULT_VOICE_NAME}`);
+      } else {
+        throw error;
+      }
+    }
 
     const media = response.media;
 

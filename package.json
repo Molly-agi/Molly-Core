@@ -5,12 +5,8 @@
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 next dev -p 9002",
     "dev:fresh": "npm run harden && NODE_OPTIONS=--max-old-space-size=4096 next dev -p 9002",
-    "predev:fresh": "node scripts/save-session.mjs",
-    "postdev:fresh": "node scripts/save-session.mjs",
     "debug": "NODE_OPTIONS='--inspect' next dev -p 9002",
-    "postdev": "node scripts/save-session.mjs",
     "harden": "rm -rf .next",
-    "save-session": "node scripts/save-session.mjs",
     "monitor": "node scripts/molly-monitor.mjs",
     "monitor:watch": "node scripts/molly-monitor.mjs --continuous",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",

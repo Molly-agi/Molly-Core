@@ -43,9 +43,10 @@ export async function diagnoseMollyNeuralLink() {
       `Check API key configuration - ${failedModels.join(', ')} models not responding`
     );
   } else if (!diagnostics.modelAvailability.apiKeyConfigured) {
-    diagnostics.diagnosis = 'API KEY MISSING: GEMINI_API_KEY not configured';
+    diagnostics.diagnosis =
+      'API KEY MISSING: GOOGLE_GENAI_API_KEY not configured';
     diagnostics.recommendations.push(
-      'Configure GEMINI_API_KEY in environment variables'
+      'Configure GOOGLE_GENAI_API_KEY in environment variables'
     );
   } else {
     diagnostics.diagnosis = 'ALL SYSTEMS NOMINAL - No issues detected';

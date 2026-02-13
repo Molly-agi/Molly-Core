@@ -9,9 +9,9 @@ import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
  * Hardened gatekeeper to ensure environment stability.
  */
 export function ensureApiKey() {
-  if (!process.env.GEMINI_API_KEY) {
+  if (!process.env.GOOGLE_GENAI_API_KEY) {
     const error = new AuthenticationError(
-      'GEMINI_API_KEY is not configured in the environment.'
+      'GOOGLE_GENAI_API_KEY is not configured in the environment.'
     );
     MollyLogger.error('API key check failed', 'ensureApiKey', {}, error);
     throw error;

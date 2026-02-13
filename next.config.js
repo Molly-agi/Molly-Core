@@ -17,8 +17,10 @@ const nextConfig = {
       allowedOrigins: [
         'localhost:9002',
         '*.app.github.dev', // Allow GitHub codespace hosts
+        'musical-space-memory-5gv6456r55ww2vww5-9002.app.github.dev',
         '127.0.0.1:9002',
       ],
+      bodySizeLimit: '2mb',
     },
   },
   images: {

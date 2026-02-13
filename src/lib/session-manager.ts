@@ -373,8 +373,11 @@ function getDefaultState(): SessionState {
 /**
  * Hook to call before app shutdown
  */
-export function onAppShutdown(): void {
+export function onAppShutdown(reason?: string): void {
   console.log('[Session Manager] Saving state before shutdown...');
+  if (reason) {
+    console.log(`[Session Manager] Shutdown signal: ${reason}`);
+  }
   const state = loadSessionState();
   state.status = 'paused';
   saveSessionState(state);
@@ -382,7 +385,7 @@ export function onAppShutdown(): void {
 
 // Register shutdown hooks
 if (typeof process !== 'undefined') {
-  process.on('SIGINT', onAppShutdown);
-  process.on('SIGTERM', onAppShutdown);
-  process.on('exit', onAppShutdown);
+  process.on('SIGINT', () => onAppShutdown('SIGINT'));
+  process.on('SIGTERM', () => onAppShutdown('SIGTERM'));
+  process.on('exit', (code) => onAppShutdown(`exit:${code}`));
 }

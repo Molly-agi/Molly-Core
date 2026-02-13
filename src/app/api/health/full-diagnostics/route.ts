@@ -73,7 +73,6 @@ export async function GET() {
   diagnostics.checks.environment = {
     status: 'ok',
     nodeEnv: process.env.NODE_ENV,
-    hasGeminiKey: !!process.env.GEMINI_API_KEY,
     hasGoogleKey: !!process.env.GOOGLE_GENAI_API_KEY,
   };
 

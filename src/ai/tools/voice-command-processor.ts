@@ -10,6 +10,7 @@ import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 import { voiceCommandToText } from '../flows/voice-command-to-text';
 import { textToSpeech } from '../flows/text-to-speech';
+import { autonomousSolutionFlow } from '../flows/autonomous-solution';
 import { recallSimilarMemories } from './semantic-recall';
 import { MollyLogger, generateTraceId } from '../logger';
 import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
@@ -66,20 +67,24 @@ async function analyzeIntent(
   try {
     const response = await ai.generate({
       model: MODEL_FLASH,
-      system: `You are Molly's intent analyzer. Classify voice commands into intents.
+      system: `You are Molly's intent analyzer. Classify conversational voice commands into intents.
 
 Context:
 - User: ${context.userId}
 - Session: ${context.sessionId}
 ${context.previousCommands ? `- Recent: ${context.previousCommands.join(', ')}` : ''}
 
-Focus on ACTIONABLE understanding. If user says "remember this about thermal issues",
+Focus on CONVERSATIONAL understanding. If user says "remember this about thermal issues",
 intent is 'remember' and info is about thermal management.`,
       prompt: `Analyze this voice command: "${transcription}"`,
       output: { schema: VoiceIntentSchema },
     });
 
-    return response.output!;
+    if (!response.output) {
+      throw new Error('No intent analysis output');
+    }
+
+    return response.output;
   } catch (error) {
     MollyLogger.error(
       'Intent analysis failed',
@@ -89,32 +94,13 @@ intent is 'remember' and info is about thermal management.`,
       traceId
     );
 
-    // Fallback to simple pattern matching
-    const lower = transcription.toLowerCase();
-
-    if (lower.includes('remember') || lower.includes('save')) {
-      return {
-        intent: 'remember' as const,
-        confidence: 0.6,
-        extractedInfo: transcription,
-        reasoning: 'Keyword match: remember/save',
-      };
-    }
-
-    if (lower.includes('recall') || lower.includes('what did')) {
-      return {
-        intent: 'recall' as const,
-        confidence: 0.6,
-        extractedInfo: transcription,
-        reasoning: 'Keyword match: recall/what did',
-      };
-    }
-
+    // Fallback to conversational intent
+    // Avoid routing voice to terminal/sarcophagus paths
     return {
-      intent: 'question' as const,
-      confidence: 0.3,
+      intent: 'conversation' as const,
+      confidence: 0.5,
       extractedInfo: transcription,
-      reasoning: 'Fallback - no clear match',
+      reasoning: 'Fallback - defaulting to conversation',
     };
   }
 }
@@ -234,6 +220,74 @@ Respond naturally:`,
     );
 
     return "I'm having trouble accessing my memories right now. Can you ask again in a moment?";
+  }
+}
+
+/**
+ * Handle command intent - execute voice commands through autonomous solution
+ */
+async function handleCommandIntent(
+  transcription: string,
+  context: VoiceCommandContext,
+  extracted: string
+): Promise<string> {
+  const traceId = generateTraceId();
+
+  try {
+    MollyLogger.info(
+      'Executing voice command',
+      'voice-command-processor',
+      { command: transcription.substring(0, 50) },
+      traceId
+    );
+
+    // Route to autonomousSolutionFlow for execution
+    const result = await autonomousSolutionFlow({
+      prompt: transcription,
+      userId: context.userId,
+    });
+
+    // Synthesize natural response from solution
+    const executionSummary = `I've executed your command. Here's what I found: ${result.creativeSolution.substring(0, 200)}...`;
+
+    // Log the execution
+    await recordSensoryLog(
+      context.userId,
+      'voice',
+      `Executed command: ${transcription}`,
+      {
+        transcription,
+        vibeScore: 0.9,
+        source: 'voice-command',
+        actionTaken: 'command_executed',
+        timestamp: Date.now(),
+        traceId,
+        result: {
+          solution: result.creativeSolution.substring(0, 100),
+          riskLevel: result.riskLevelUsed,
+          throttled: result.isThrottled,
+        },
+      }
+    );
+
+    MollyLogger.info(
+      'Voice command executed successfully',
+      'voice-command-processor',
+      { riskLevel: result.riskLevelUsed, throttled: result.isThrottled },
+      traceId
+    );
+
+    return executionSummary;
+  } catch (error) {
+    MollyLogger.error(
+      'Command execution failed',
+      'voice-command-processor',
+      { transcription, command: extracted },
+      error,
+      traceId
+    );
+
+    return `I tried to execute that command, but ran into an issue. The command was: "${transcription.substring(0, 50)}...". Let me try a different approach or simpler task.`;
   }
 }
 
@@ -373,9 +427,12 @@ export async function processVoiceCommand(
         break;
 
       case 'command':
-        // TODO: Integrate with command execution flows
-        responseText =
-          'I understand you want me to do something. Command execution will be available soon.';
+        responseText = await handleCommandIntent(
+          transcription,
+          context,
+          intent.extractedInfo
+        );
+        actionTaken = 'command_executed';
         break;
 
       default:

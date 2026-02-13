@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import {
-  getTextToTermuxCommand,
+  getConversationalChat,
   getAutonomousSolution,
   getHealthCheck,
   getMollyVoice,
@@ -22,10 +22,7 @@ import {
   Stethoscope,
   RefreshCw,
   Mic,
-  Wrench,
-  ChevronDown,
 } from 'lucide-react';
-import { DiagnosticPanel } from '@/components/DiagnosticPanel';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
@@ -35,7 +32,6 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
-import { DiagnosticToolset } from './DiagnosticToolset';
 
 type HistoryItem =
   | string
@@ -85,7 +81,6 @@ export default function Terminal({
   const [isRiskMode, setIsRiskMode] = useState(false);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
   const [isVocalizing, setIsVocalizing] = useState(false);
-  const [showDiagnostics, setShowDiagnostics] = useState(false);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -159,7 +154,17 @@ export default function Terminal({
   useEffect(() => {
     if (voiceResult && !isLoading) {
       onVoiceCommandProcessed();
-      processCommand(voiceResult.command);
+
+      // Voice is already processed by conversational AI
+      // Display the conversation naturally
+      if (voiceResult.recognized && voiceResult.response) {
+        setHistory((prev) => [
+          ...prev,
+          `> ${voiceResult.transcription}`,
+          voiceResult.response,
+        ]);
+        speakResponse(voiceResult.response);
+      }
     }
   }, [voiceResult]);
 
@@ -196,9 +201,14 @@ export default function Terminal({
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {
-        const aiResponse = await getTextToTermuxCommand(cmdText);
-        setHistory((prev) => [...prev, aiResponse]);
-        speakResponse('Command synthesized for the sarcophagus.');
+        // Route unknown commands to conversational Molly (NOT to sarcophagus)
+        // Use conversational chat instead of terminal command synthesis
+        const aiResponse = await getConversationalChat(
+          cmdText,
+          user?.uid || 'anonymous'
+        );
+        setHistory((prev) => [...prev, `> ${cmdText}`, aiResponse]);
+        speakResponse(aiResponse);
       }
     } catch (error) {
       setHistory((prev) => [...prev, `Error: Operation failed.`]);
@@ -212,6 +222,31 @@ export default function Terminal({
     processCommand(command);
     setCommand('');
   };
+
+  // CRITICAL: Stop all audio on unmount (prevents lingering voice)
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current.src = '';
+      }
+      setIsVocalizing(false);
+      setAudioUri(null);
+    };
+  }, []);
+
+  // Stop audio on page unload
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -313,8 +348,7 @@ export default function Terminal({
         </div>
 
         <div className="flex items-center justify-between px-2">
-          <div className="flex items-center gap-2">
-            <DiagnosticToolset />
+          <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="sm"

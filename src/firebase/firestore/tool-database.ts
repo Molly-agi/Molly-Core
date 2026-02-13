@@ -19,7 +19,7 @@ import {
   deleteDoc,
   increment,
 } from 'firebase/firestore';
-import { initializeFirebase } from '@/firebase';
+import { initializeFirebaseServer } from '@/firebase/server';
 
 export interface FoundTool {
   id?: string;
@@ -45,7 +45,7 @@ export async function saveFoundTool(
   userId: string,
   tool: Omit<FoundTool, 'id' | 'savedAt' | 'accessCount' | 'lastAccessedAt'>
 ): Promise<string> {
-  const { firestore } = initializeFirebase();
+  const { firestore } = initializeFirebaseServer();
 
   const docRef = await addDoc(
     collection(firestore, 'users', userId, 'foundTools'),
@@ -68,7 +68,7 @@ export async function searchSavedTools(
   searchTerm: string,
   category?: string
 ): Promise<FoundTool[]> {
-  const { firestore } = initializeFirebase();
+  const { firestore } = initializeFirebaseServer();
 
   let q = query(
     collection(firestore, 'users', userId, 'foundTools'),
@@ -113,7 +113,7 @@ export async function getToolsByCategory(
   userId: string,
   category: string
 ): Promise<FoundTool[]> {
-  const { firestore } = initializeFirebase();
+  const { firestore } = initializeFirebaseServer();
 
   const q = query(
     collection(firestore, 'users', userId, 'foundTools'),
@@ -137,7 +137,7 @@ export async function getRecentTools(
   userId: string,
   count: number = 10
 ): Promise<FoundTool[]> {
-  const { firestore } = initializeFirebase();
+  const { firestore } = initializeFirebaseServer();
 
   const q = query(
     collection(firestore, 'users', userId, 'foundTools'),
@@ -161,7 +161,7 @@ export async function recordToolAccess(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const { firestore } = initializeFirebase();
+  const { firestore } = initializeFirebaseServer();
 
   const toolRef = doc(firestore, 'users', userId, 'foundTools', toolId);
   await updateDoc(toolRef, {
@@ -177,7 +177,7 @@ export async function removeTool(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const { firestore } = initializeFirebase();
+  const { firestore } = initializeFirebaseServer();
   await deleteDoc(doc(firestore, 'users', userId, 'foundTools', toolId));
 }
 
@@ -190,7 +190,7 @@ export async function getToolStats(userId: string): Promise<{
   mostUsedTools: FoundTool[];
   recentlyAdded: FoundTool[];
 }> {
-  const { firestore } = initializeFirebase();
+  const { firestore } = initializeFirebaseServer();
 
   const snapshot = await getDocs(
     collection(firestore, 'users', userId, 'foundTools')
