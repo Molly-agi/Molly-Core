@@ -21,6 +21,7 @@
     "typecheck": "tsc --noEmit",
     "test": "jest --watch",
     "format": "prettier --write .",
+    "security-check": "bash scripts/security-check.sh",
     "prepare": "husky"
   },
   "dependencies": {

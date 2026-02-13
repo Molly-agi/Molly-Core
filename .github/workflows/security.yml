@@ -1,0 +1,147 @@
+name: Security - CodeQL & Vulnerability Scanning
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Run security scans weekly on Mondays at 00:00 UTC
+    - cron: '0 0 * * 1'
+
+jobs:
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['javascript']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended,security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+      
+      - name: Generate audit report
+        run: npm audit --json > audit-report.json || true
+      
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: audit-report.json
+
+  custom-security-checks:
+    name: Custom Security Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check for memory leaks (setInterval without cleanup)
+        run: |
+          echo "Checking for potential memory leaks..."
+          if grep -r "setInterval" src --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx"; then
+            echo "Found setInterval usage. Checking for cleanup..."
+            # This is a basic check - in production, you'd want a more sophisticated analysis
+            FILES=$(grep -rl "setInterval" src --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx")
+            for file in $FILES; do
+              echo "Checking $file for cleanup..."
+              if grep -q "clearInterval\|return.*=>" "$file"; then
+                echo "✓ $file appears to have cleanup logic"
+              else
+                echo "⚠️  WARNING: $file may have memory leak - no cleanup detected"
+                exit 1
+              fi
+            done
+          else
+            echo "✓ No setInterval usage found"
+          fi
+      
+      - name: Check for insecure encryption patterns
+        run: |
+          echo "Checking for insecure encryption patterns..."
+          # Check for predictable salt usage (user IDs, hardcoded values)
+          if grep -rE "(salt.*userId|salt.*=.*['\"]|userId.*salt)" src --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx"; then
+            echo "⚠️  WARNING: Potential insecure salt usage detected"
+            echo "Salt should be randomly generated, not based on user IDs or hardcoded values"
+            exit 1
+          else
+            echo "✓ No obvious insecure salt patterns detected"
+          fi
+      
+      - name: Check for admin functions with missing password parameters
+        run: |
+          echo "Checking admin functions for password parameters..."
+          # Look for admin-related function definitions
+          if grep -rE "function\s+(set|update|modify|change).*State|function\s+admin" src --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx"; then
+            echo "Found admin-related functions. Checking for password parameters..."
+            # This is a basic heuristic - adjust based on your security model
+            ADMIN_FUNCS=$(grep -rE "function\s+(set|update|modify|change).*State|function\s+admin" src --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" | grep -v "password\|auth\|token")
+            if [ ! -z "$ADMIN_FUNCS" ]; then
+              echo "⚠️  WARNING: Found admin functions without apparent authentication:"
+              echo "$ADMIN_FUNCS"
+              echo "Consider adding password/auth parameters to sensitive functions"
+            else
+              echo "✓ Admin functions appear to have authentication parameters"
+            fi
+          else
+            echo "✓ No admin function patterns detected"
+          fi
+      
+      - name: Check for exposed secrets
+        run: |
+          echo "Checking for potential exposed secrets..."
+          if grep -rE "(api[_-]?key|secret|password|token).*=.*['\"][^{]" src --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --exclude="*.test.*" --exclude="*.spec.*"; then
+            echo "⚠️  WARNING: Potential hardcoded secrets detected"
+            echo "Secrets should be stored in environment variables, not hardcoded"
+            exit 1
+          else
+            echo "✓ No obvious hardcoded secrets detected"
+          fi
