@@ -8,11 +8,13 @@ import { ai, MODEL_PRO } from '@/ai/genkit';
 import { z } from 'zod';
 
 const IntrospectionInputSchema = z.object({
-  pastLessons: z.array(z.object({
-    id: z.string(),
-    code: z.string(),
-    suggestion: z.string(),
-  })),
+  pastLessons: z.array(
+    z.object({
+      id: z.string(),
+      code: z.string(),
+      suggestion: z.string(),
+    })
+  ),
   hardwareContext: z.string(),
 });
 
@@ -39,8 +41,8 @@ export const introspectionFlow = ai.defineFlow(
           analysis: z.string(),
           refactorTargetId: z.string().optional(),
           suggestedOptimizedCode: z.string().optional(),
-        })
-      }
+        }),
+      },
     });
 
     return response.output!;

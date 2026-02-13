@@ -1,13 +1,32 @@
 'use client';
 
-import { useFirestore, useUser, useCollection, useMemoFirebase } from '@/firebase';
+import {
+  useFirestore,
+  useUser,
+  useCollection,
+  useMemoFirebase,
+} from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { BrainCircuit, Zap, History, Shield, CheckCircle2, ChevronDown, Lightbulb, AlertTriangle } from 'lucide-react';
+import {
+  BrainCircuit,
+  Zap,
+  History,
+  Shield,
+  CheckCircle2,
+  ChevronDown,
+  Lightbulb,
+  AlertTriangle,
+} from 'lucide-react';
 import { Badge } from '../ui/badge';
 import { useState } from 'react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../ui/accordion';
 
 export function MemoryViewer() {
   const { user } = useUser();
@@ -32,7 +51,10 @@ export function MemoryViewer() {
             <History className="size-4" />
             Neural Cache
           </div>
-          <Badge variant="outline" className="text-[8px] h-4 py-0 border-primary/20 text-primary uppercase">
+          <Badge
+            variant="outline"
+            className="text-[8px] h-4 py-0 border-primary/20 text-primary uppercase"
+          >
             Vibe Index: 2.5
           </Badge>
         </CardTitle>
@@ -48,15 +70,18 @@ export function MemoryViewer() {
             <div className="space-y-3 p-2">
               <Accordion type="single" collapsible className="w-full space-y-3">
                 {lessons?.map((lesson) => (
-                  <AccordionItem 
-                    key={lesson.id} 
-                    value={lesson.id} 
+                  <AccordionItem
+                    key={lesson.id}
+                    value={lesson.id}
                     className="bg-white/5 border border-white/5 rounded-md px-3 py-1 group hover:border-accent/20 transition-colors relative overflow-hidden"
                   >
                     <AccordionTrigger className="hover:no-underline py-2">
                       <div className="flex flex-col items-start text-left gap-1">
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-[7px] h-3 py-0 border-accent/20 text-accent uppercase tracking-tighter">
+                          <Badge
+                            variant="outline"
+                            className="text-[7px] h-3 py-0 border-accent/20 text-accent uppercase tracking-tighter"
+                          >
                             {lesson.filePath}
                           </Badge>
                           <span className="text-[8px] text-muted-foreground">
@@ -75,22 +100,32 @@ export function MemoryViewer() {
                           Neural Insight
                         </h4>
                         <p className="text-[10px] italic text-muted-foreground leading-relaxed">
-                          Applied this modification to resolve a recurring "Logic Fatigue" infection. The core was over-throttled here.
+                          Applied this modification to resolve a recurring
+                          "Logic Fatigue" infection. The core was over-throttled
+                          here.
                         </p>
                       </div>
-                      
+
                       <div className="space-y-1">
-                         <h4 className="text-[8px] font-bold text-primary uppercase tracking-widest mb-1">Modified Logic</h4>
-                         <div className="bg-black/60 p-2 rounded text-[9px] font-code text-primary/70 overflow-x-auto whitespace-pre">
+                        <h4 className="text-[8px] font-bold text-primary uppercase tracking-widest mb-1">
+                          Modified Logic
+                        </h4>
+                        <div className="bg-black/60 p-2 rounded text-[9px] font-code text-primary/70 overflow-x-auto whitespace-pre">
                           {lesson.modifiedCode}
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 pt-2 border-t border-white/5">
-                        <Badge variant="secondary" className="text-[7px] py-0 h-3 bg-green-500/10 text-green-500 border-green-500/20">
+                        <Badge
+                          variant="secondary"
+                          className="text-[7px] py-0 h-3 bg-green-500/10 text-green-500 border-green-500/20"
+                        >
                           <CheckCircle2 className="size-2 mr-1" /> VERIFIED
                         </Badge>
-                        <Badge variant="secondary" className="text-[7px] py-0 h-3 bg-accent/10 text-accent border-accent/20 uppercase">
+                        <Badge
+                          variant="secondary"
+                          className="text-[7px] py-0 h-3 bg-accent/10 text-accent border-accent/20 uppercase"
+                        >
                           Agent: {lesson.agentId || 'ShieldedCore'}
                         </Badge>
                       </div>

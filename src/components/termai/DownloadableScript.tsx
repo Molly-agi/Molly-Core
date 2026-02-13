@@ -6,7 +6,11 @@ import { Button } from '@/components/ui/button';
 import { FileDown, FileText } from 'lucide-react';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 
-export function DownloadableScript({ response }: { response: TextToScriptOutput }) {
+export function DownloadableScript({
+  response,
+}: {
+  response: TextToScriptOutput;
+}) {
   const handleDownload = () => {
     const blob = new Blob([response.content], {
       type: 'text/plain;charset=utf-8',

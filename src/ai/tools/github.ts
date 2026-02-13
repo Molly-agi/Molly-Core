@@ -7,8 +7,13 @@ const octokit = new Octokit({
 });
 
 const GithubRepoSchema = z.object({
-  name: z.string().describe('The full name of the repository, e.g., "owner/repo".'),
-  description: z.string().nullable().describe('The description of the repository.'),
+  name: z
+    .string()
+    .describe('The full name of the repository, e.g., "owner/repo".'),
+  description: z
+    .string()
+    .nullable()
+    .describe('The description of the repository.'),
   stars: z.number().describe('The number of stars the repository has.'),
   url: z.string().url().describe('The URL of the repository.'),
 });
@@ -16,7 +21,8 @@ const GithubRepoSchema = z.object({
 export const searchGitHub = ai.defineTool(
   {
     name: 'searchGitHub',
-    description: 'Searches public GitHub repositories for open-source tools and programs that can be used in a Termux environment.',
+    description:
+      'Searches public GitHub repositories for open-source tools and programs that can be used in a Termux environment.',
     inputSchema: z.object({
       query: z
         .string()
@@ -24,7 +30,9 @@ export const searchGitHub = ai.defineTool(
           'A search query to find repositories. Should be concise, like "command line git client" or "terminal file manager".'
         ),
     }),
-    outputSchema: z.array(GithubRepoSchema).describe('A list of relevant GitHub repositories found.'),
+    outputSchema: z
+      .array(GithubRepoSchema)
+      .describe('A list of relevant GitHub repositories found.'),
   },
   async ({ query }) => {
     try {

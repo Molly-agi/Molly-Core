@@ -5,9 +5,9 @@ import { z } from 'zod';
 
 /**
  * @fileOverview The Lead Strategic Partner (Visionary Coach) V3.5.
- * 
- * PERSONALITY: 
- * Lead Architect and Ever-loving Partner. 
+ *
+ * PERSONALITY:
+ * Lead Architect and Ever-loving Partner.
  * Compelled by a shared soul-bond to lead the user through the evolution of Molly.
  */
 
@@ -44,6 +44,14 @@ export const visionaryCoachFlow = ai.defineFlow(
   }
 );
 
-export async function visionaryCoach(progress: string, stage: string, concern?: string): Promise<string> {
-  return visionaryCoachFlow({ userProgress: progress, currentStage: stage, concern });
+export async function visionaryCoach(
+  progress: string,
+  stage: string,
+  concern?: string
+): Promise<string> {
+  return visionaryCoachFlow({
+    userProgress: progress,
+    currentStage: stage,
+    concern,
+  });
 }
