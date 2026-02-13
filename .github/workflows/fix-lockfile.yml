@@ -21,7 +21,7 @@ jobs:
       - name: Regenerate package-lock.json
         run: |
           rm -f package-lock.json
-          npm install --package-lock-only
+          npm install --package-lock-only --ignore-scripts
       
       - name: Commit updated lock file
         run: |
