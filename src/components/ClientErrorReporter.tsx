@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { logClientErrorToFirestore } from '@/firebase/system-logger';
 
 type ErrorPayload = {
   message: string;
@@ -22,10 +23,36 @@ function sendClientError(payload: ErrorPayload) {
   });
 }
 
+function sendSessionEvent(message: string, details?: string) {
+  void fetch('/api/session/event', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      event: message,
+      details,
+      url: typeof window !== 'undefined' ? window.location.href : undefined,
+      timestamp: new Date().toISOString(),
+    }),
+    keepalive: true,
+  });
+}
+
 export function ClientErrorReporter() {
   useEffect(() => {
     const handleError = (event: ErrorEvent) => {
+      const details = event.error?.stack || event.message;
+      sendSessionEvent('client-error', details);
       sendClientError({
+        message: event.message || 'Unknown error',
+        stack: event.error?.stack,
+        source: event.filename,
+        line: event.lineno,
+        column: event.colno,
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+      });
+      void logClientErrorToFirestore({
         message: event.message || 'Unknown error',
         stack: event.error?.stack,
         source: event.filename,
@@ -39,7 +66,19 @@ export function ClientErrorReporter() {
 
     const handleRejection = (event: PromiseRejectionEvent) => {
       const reason = event.reason instanceof Error ? event.reason : null;
+      sendSessionEvent(
+        'unhandled-rejection',
+        reason?.stack || String(event.reason || 'Unhandled rejection')
+      );
       sendClientError({
+        message:
+          reason?.message || String(event.reason || 'Unhandled rejection'),
+        stack: reason?.stack,
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+      });
+      void logClientErrorToFirestore({
         message:
           reason?.message || String(event.reason || 'Unhandled rejection'),
         stack: reason?.stack,

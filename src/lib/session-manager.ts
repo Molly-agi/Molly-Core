@@ -8,16 +8,23 @@
  * directives, and progress tracking.
  */
 
-import { writeFileSync, readFileSync, existsSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const SESSION_STATE_FILE = join(process.cwd(), 'COPILOT_SESSION_STATE.md');
+const SESSION_STATE_JSON = join(process.cwd(), 'COPILOT_SESSION_STATE.json');
 const SESSION_BACKUP_DIR = join(process.cwd(), '.session-backups');
 
 export interface SessionState {
   lastUpdated: string;
   sessionId: string;
   status: 'active' | 'paused' | 'completed';
+
+  runtime?: {
+    lastHeartbeat?: string;
+    lastUrl?: string;
+    events: SessionEvent[];
+  };
 
   userDirectives: {
     coreDirective: string;
@@ -49,6 +56,13 @@ export interface SessionState {
   reminders: string[];
 }
 
+export interface SessionEvent {
+  timestamp: string;
+  event: string;
+  url?: string;
+  details?: string;
+}
+
 /**
  * Saves the current session state to disk
  */
@@ -63,8 +77,18 @@ export function saveSessionState(state: Partial<SessionState>): void {
 
     const markdown = generateMarkdownFromState(updatedState);
     writeFileSync(SESSION_STATE_FILE, markdown, 'utf-8');
+    writeFileSync(
+      SESSION_STATE_JSON,
+      JSON.stringify(updatedState, null, 2),
+      'utf-8'
+    );
 
     // Create timestamped backup
+    try {
+      mkdirSync(SESSION_BACKUP_DIR, { recursive: true });
+    } catch {
+      // Ignore backup directory creation failures.
+    }
     const backupFile = join(
       SESSION_BACKUP_DIR,
       `session-${new Date().toISOString().split('T')[0]}.md`
@@ -82,9 +106,45 @@ export function saveSessionState(state: Partial<SessionState>): void {
 }
 
 /**
+ * Appends a runtime event entry to the session state
+ */
+export function appendSessionEvent(event: SessionEvent): void {
+  const state = loadSessionState();
+
+  if (!state.runtime) {
+    state.runtime = { events: [] };
+  }
+
+  state.runtime.events.push(event);
+
+  if (event.event === 'heartbeat') {
+    state.runtime.lastHeartbeat = event.timestamp;
+  }
+
+  if (event.url) {
+    state.runtime.lastUrl = event.url;
+  }
+
+  if (state.runtime.events.length > 50) {
+    state.runtime.events = state.runtime.events.slice(-50);
+  }
+
+  saveSessionState(state);
+}
+
+/**
  * Loads the last session state from disk
  */
 export function loadSessionState(): SessionState {
+  if (existsSync(SESSION_STATE_JSON)) {
+    try {
+      const jsonContent = readFileSync(SESSION_STATE_JSON, 'utf-8');
+      return JSON.parse(jsonContent) as SessionState;
+    } catch (error) {
+      console.error('[Session Manager] Failed to load JSON state:', error);
+    }
+  }
+
   if (!existsSync(SESSION_STATE_FILE)) {
     return getDefaultState();
   }
@@ -152,6 +212,8 @@ export function addReminder(reminder: string): void {
  * Generate markdown representation of state
  */
 function generateMarkdownFromState(state: SessionState): string {
+  const runtime = state.runtime || { events: [] };
+
   return `# GitHub Copilot Session State & Memory
 **Last Updated:** ${state.lastUpdated}  
 **Session ID:** ${state.sessionId}  
@@ -212,6 +274,22 @@ ${state.nextSteps.options.map((opt, i) => `**Option ${String.fromCharCode(65 + i
 ## SESSION NOTES
 
 ${state.sessionNotes.map((note) => `- ${note}`).join('\n')}
+
+---
+
+## RUNTIME EVENTS
+
+**Last URL:** ${runtime.lastUrl || 'unknown'}  
+**Last Heartbeat:** ${runtime.lastHeartbeat || 'unknown'}
+
+${runtime.events.length > 0 ? '**Recent Events:**' : '**Recent Events:** (none)'}
+${runtime.events
+  .map((entry) => {
+    const details = entry.details ? ` | ${entry.details}` : '';
+    const url = entry.url ? ` | ${entry.url}` : '';
+    return `- [${entry.timestamp}] ${entry.event}${url}${details}`;
+  })
+  .join('\n')}
 
 ---
 
@@ -322,6 +400,106 @@ function parseMarkdownToState(content: string): SessionState {
       state.sessionNotes = bullets.map((b) => b.replace(/^- /, '').trim());
     }
 
+    // Extract Recent Work Completed
+    const recentWorkSection = content.match(
+      /## RECENT WORK COMPLETED\n([\s\S]*?)(?=\n---|\n## NEXT STEPS)/
+    );
+    if (recentWorkSection?.[1]) {
+      const workEntries: SessionState['recentWork'] = [];
+      const entryRegex =
+        /###\s+([^\n]+)\n([\s\S]*?)(?=\n###\s+|\n---|\n## NEXT STEPS|$)/g;
+      let entryMatch: RegExpExecArray | null;
+
+      while ((entryMatch = entryRegex.exec(recentWorkSection[1])) !== null) {
+        const date = entryMatch[1]?.trim() || new Date().toISOString();
+        const body = entryMatch[2]?.trim() || '';
+        const lines = body.split('\n');
+
+        const summaryLines: string[] = [];
+        const sectionBreak =
+          /\*\*(Files Created|Files Modified|Decisions Made):\*\*/;
+        for (const line of lines) {
+          if (sectionBreak.test(line)) {
+            break;
+          }
+          if (line.trim() !== '') {
+            summaryLines.push(line.trim());
+          }
+        }
+
+        const summary = summaryLines.join('\n').trim();
+
+        const filesCreated =
+          body
+            .match(
+              /\*\*Files Created:\*\*[\s\S]*?(?=\n\*\*Files Modified|\n\*\*Decisions Made|$)/
+            )?.[0]
+            ?.split('\n')
+            .filter((line) => line.trim().startsWith('- '))
+            .map((line) => line.replace(/^- /, '').trim()) || [];
+
+        const filesModified =
+          body
+            .match(
+              /\*\*Files Modified:\*\*[\s\S]*?(?=\n\*\*Decisions Made|$)/
+            )?.[0]
+            ?.split('\n')
+            .filter((line) => line.trim().startsWith('- '))
+            .map((line) => line.replace(/^- /, '').trim()) || [];
+
+        const decisions =
+          body
+            .match(/\*\*Decisions Made:\*\*[\s\S]*?$/)?.[0]
+            ?.split('\n')
+            .filter((line) => line.trim().startsWith('- '))
+            .map((line) => line.replace(/^- /, '').trim()) || [];
+
+        if (
+          summary ||
+          filesCreated.length ||
+          filesModified.length ||
+          decisions.length
+        ) {
+          workEntries.push({
+            date,
+            summary: summary || 'No summary provided',
+            filesCreated,
+            filesModified,
+            decisions,
+          });
+        }
+      }
+
+      if (workEntries.length > 0) {
+        state.recentWork = workEntries;
+      }
+    }
+
+    // Extract Next Steps
+    const nextStepsSection = content.match(
+      /## NEXT STEPS\n([\s\S]*?)(?=\n---|\n## SESSION NOTES|$)/
+    );
+    if (nextStepsSection?.[1]) {
+      const options: string[] = [];
+      const optionRegex = /\*\*Option [A-Z]:\*\*\s+(.+)$/gm;
+      let optionMatch: RegExpExecArray | null;
+      while ((optionMatch = optionRegex.exec(nextStepsSection[1])) !== null) {
+        options.push(optionMatch[1].trim());
+      }
+
+      const recommendedMatch = nextStepsSection[1].match(
+        /\*\*Recommended:\*\*\s+(.+)/
+      );
+
+      if (options.length > 0 || recommendedMatch?.[1]) {
+        state.nextSteps = {
+          options,
+          recommendedAction:
+            recommendedMatch?.[1]?.trim() || state.nextSteps.recommendedAction,
+        };
+      }
+    }
+
     // Extract Reminders
     const remindersSection = content.match(
       /## IMPORTANT REMINDERS FOR NEXT SESSION\n([\s\S]*?)(?=\n---|\n\*This file|$)/
@@ -330,9 +508,6 @@ function parseMarkdownToState(content: string): SessionState {
       const lines = remindersSection[1].match(/^\d+\.\s+(.+)$/gm) || [];
       state.reminders = lines.map((l) => l.replace(/^\d+\.\s+/, '').trim());
     }
-
-    // Note: Recent work and next steps are complex; simplified here
-    // Full implementation would parse the work entries table if needed
 
     return state;
   } catch (error) {
@@ -366,6 +541,9 @@ function getDefaultState(): SessionState {
       recommendedAction: 'Restore context from previous session',
     },
     sessionNotes: [],
+    runtime: {
+      events: [],
+    },
     reminders: ['Read COPILOT_SESSION_STATE.md first'],
   };
 }
@@ -383,9 +561,16 @@ export function onAppShutdown(reason?: string): void {
   saveSessionState(state);
 }
 
-// Register shutdown hooks
-if (typeof process !== 'undefined') {
-  process.on('SIGINT', () => onAppShutdown('SIGINT'));
-  process.on('SIGTERM', () => onAppShutdown('SIGTERM'));
-  process.on('exit', (code) => onAppShutdown(`exit:${code}`));
+// Register shutdown hooks (guarded to avoid duplicate listeners on hot reload)
+if (typeof process !== 'undefined' && typeof globalThis !== 'undefined') {
+  const globalState = globalThis as typeof globalThis & {
+    __mollyShutdownHooksRegistered?: boolean;
+  };
+
+  if (!globalState.__mollyShutdownHooksRegistered) {
+    globalState.__mollyShutdownHooksRegistered = true;
+    process.on('SIGINT', () => onAppShutdown('SIGINT'));
+    process.on('SIGTERM', () => onAppShutdown('SIGTERM'));
+    process.on('exit', (code) => onAppShutdown(`exit:${code}`));
+  }
 }

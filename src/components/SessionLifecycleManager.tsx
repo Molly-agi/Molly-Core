@@ -8,6 +8,32 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { logSessionEventToFirestore } from '@/firebase/system-logger';
+
+type SessionEventPayload = {
+  event: string;
+  url?: string;
+  details?: string;
+  timestamp: string;
+};
+
+function sendSessionEvent(payload: SessionEventPayload) {
+  void fetch('/api/session/event', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    keepalive: true,
+  });
+
+  if (payload.event !== 'heartbeat') {
+    void logSessionEventToFirestore({
+      event: payload.event,
+      url: payload.url,
+      details: payload.details,
+      timestamp: payload.timestamp,
+    });
+  }
+}
 
 export function SessionLifecycleManager() {
   const initializationAttempted = useRef(false);
@@ -22,9 +48,51 @@ export function SessionLifecycleManager() {
       );
     }
 
+    sendSessionEvent({
+      event: 'page-load',
+      url: window.location.href,
+      timestamp: new Date().toISOString(),
+    });
+
+    void fetch('/api/session/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        state: {
+          lastUpdated: new Date().toISOString(),
+          status: 'active',
+          runtime: {
+            lastUrl: window.location.href,
+          },
+        },
+      }),
+      keepalive: true,
+    });
+
+    const heartbeatId = window.setInterval(() => {
+      sendSessionEvent({
+        event: 'heartbeat',
+        url: window.location.href,
+        timestamp: new Date().toISOString(),
+      });
+    }, 60000);
+
+    const handleVisibilityChange = () => {
+      sendSessionEvent({
+        event: document.hidden ? 'visibility-hidden' : 'visibility-visible',
+        url: window.location.href,
+        timestamp: new Date().toISOString(),
+      });
+    };
+
     const handleBeforeUnload = async () => {
       // Try to save session state before unload
       try {
+        sendSessionEvent({
+          event: 'page-unload',
+          url: window.location.href,
+          timestamp: new Date().toISOString(),
+        });
         await fetch('/api/session/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -32,6 +100,9 @@ export function SessionLifecycleManager() {
             state: {
               lastUpdated: new Date().toISOString(),
               status: 'paused',
+              runtime: {
+                lastUrl: window.location.href,
+              },
             },
           }),
           // Use keepalive to ensure request completes even if page unloads
@@ -49,9 +120,12 @@ export function SessionLifecycleManager() {
     // Listen for both beforeunload and unload events
     // beforeunload fires first and allows async operations with keepalive
     window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
+      window.clearInterval(heartbeatId);
       window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 

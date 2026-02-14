@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import '@/lib/server-runtime-logger';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
 import { SessionLifecycleManager } from '@/components/SessionLifecycleManager';
 import { InitializationTracer } from '@/components/InitializationTracer';
+import { ClientErrorReporter } from '@/components/ClientErrorReporter';
 
 export const metadata: Metadata = {
   title: 'Molly',
@@ -32,6 +34,7 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased min-h-screen bg-background')}>
         <SessionLifecycleManager />
+        <ClientErrorReporter />
         <FirebaseClientProvider>{children}</FirebaseClientProvider>
         <Toaster />
         <InitializationTracer />

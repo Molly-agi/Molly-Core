@@ -24,6 +24,7 @@ import {
   Loader2,
   Code,
 } from 'lucide-react';
+import { fetchRecentSystemLogs } from '@/firebase/system-logger';
 
 export function DiagnosticPanel() {
   const [loading, setLoading] = useState(false);
@@ -31,6 +32,59 @@ export function DiagnosticPanel() {
     'status'
   );
   const [results, setResults] = useState<any>(null);
+
+  const fetchClientErrors = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/client-errors');
+      if (!response.ok) {
+        throw new Error('Failed to fetch client errors');
+      }
+      const data = await response.json();
+      setResults({ type: 'client-errors', data });
+    } catch (e) {
+      setResults({
+        type: 'error',
+        error: e instanceof Error ? e.message : String(e),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSessionState = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/session/state');
+      if (!response.ok) {
+        throw new Error('Failed to fetch session state');
+      }
+      const data = await response.json();
+      setResults({ type: 'session-state', data });
+    } catch (e) {
+      setResults({
+        type: 'error',
+        error: e instanceof Error ? e.message : String(e),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchFirestoreLogs = async () => {
+    setLoading(true);
+    try {
+      const logs = await fetchRecentSystemLogs(30);
+      setResults({ type: 'firestore-logs', data: logs });
+    } catch (e) {
+      setResults({
+        type: 'error',
+        error: e instanceof Error ? e.message : String(e),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const runDiagnostic = async () => {
     setLoading(true);
@@ -199,6 +253,33 @@ export function DiagnosticPanel() {
                 <Code className="w-3 h-3 mr-1" />
                 Test Models
               </Button>
+              <Button
+                onClick={fetchClientErrors}
+                disabled={loading}
+                size="sm"
+                variant="secondary"
+              >
+                <Code className="w-3 h-3 mr-1" />
+                Client Errors
+              </Button>
+              <Button
+                onClick={fetchSessionState}
+                disabled={loading}
+                size="sm"
+                variant="secondary"
+              >
+                <Code className="w-3 h-3 mr-1" />
+                Session State
+              </Button>
+              <Button
+                onClick={fetchFirestoreLogs}
+                disabled={loading}
+                size="sm"
+                variant="secondary"
+              >
+                <Code className="w-3 h-3 mr-1" />
+                Firestore Logs
+              </Button>
             </div>
           </div>
 
@@ -306,6 +387,21 @@ export function DiagnosticPanel() {
               ) : results.type === 'models' ? (
                 <div>
                   <p className="font-semibold mb-3">Model Availability Test</p>
+                  <pre>{JSON.stringify(results.data, null, 2)}</pre>
+                </div>
+              ) : results.type === 'client-errors' ? (
+                <div>
+                  <p className="font-semibold mb-3">Recent Client Errors</p>
+                  <pre>{JSON.stringify(results.data, null, 2)}</pre>
+                </div>
+              ) : results.type === 'session-state' ? (
+                <div>
+                  <p className="font-semibold mb-3">Session State</p>
+                  <pre>{JSON.stringify(results.data, null, 2)}</pre>
+                </div>
+              ) : results.type === 'firestore-logs' ? (
+                <div>
+                  <p className="font-semibold mb-3">Firestore Logs</p>
                   <pre>{JSON.stringify(results.data, null, 2)}</pre>
                 </div>
               ) : (
