@@ -21,10 +21,12 @@
 
 # Environment variables
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+.local
+.development.local
+.test.local
+.production.local
 
 # Firebase
 *.firebase.json
@@ -33,3 +35,4 @@ firestore-debug.log
 
 # Session backups (main session state file IS tracked)
 .session-backups/
+COPILOT_SESSION_STATE.json

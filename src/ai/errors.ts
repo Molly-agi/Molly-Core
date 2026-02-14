@@ -11,7 +11,7 @@
 export class MollyError extends Error {
   public readonly code: string;
   public readonly severity: 'critical' | 'high' | 'medium' | 'low';
-  public readonly context: Record<string, any>;
+  public readonly context: Record<string, unknown>;
   public readonly timestamp: number;
   public readonly traceId?: string;
 
@@ -19,7 +19,7 @@ export class MollyError extends Error {
     code: string,
     message: string,
     severity: 'critical' | 'high' | 'medium' | 'low' = 'high',
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(message);
@@ -52,7 +52,7 @@ export class ToolError extends MollyError {
   constructor(
     toolName: string,
     message: string,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -73,7 +73,7 @@ export class FlowError extends MollyError {
   constructor(
     flowName: string,
     message: string,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -93,7 +93,7 @@ export class FlowError extends MollyError {
 export class AuthenticationError extends MollyError {
   constructor(
     message: string,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -115,7 +115,7 @@ export class RateLimitError extends MollyError {
 
   constructor(
     retryAfterMs: number = 60000,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -137,7 +137,7 @@ export class TimeoutError extends MollyError {
   constructor(
     operation: string,
     timeoutMs: number,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -158,7 +158,7 @@ export class NetworkError extends MollyError {
   constructor(
     message: string,
     statusCode?: number,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -179,7 +179,7 @@ export class ValidationError extends MollyError {
   constructor(
     fieldName: string,
     message: string,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -200,7 +200,7 @@ export class GenerativeAIError extends MollyError {
   constructor(
     message: string,
     statusCode?: number,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(
@@ -221,7 +221,7 @@ export class FirebaseError extends MollyError {
   constructor(
     operation: string,
     message: string,
-    context: Record<string, any> = {},
+    context: Record<string, unknown> = {},
     traceId?: string
   ) {
     super(

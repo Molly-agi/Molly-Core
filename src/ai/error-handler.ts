@@ -8,6 +8,30 @@
 import { MollyError, GenerativeAIError, TimeoutError } from './errors';
 import { MollyLogger, generateTraceId } from './logger';
 
+type ErrorWithStatus = {
+  statusCode?: number | string;
+  code?: number | string;
+};
+
+function getStatusCode(error: unknown): number | undefined {
+  if (typeof error !== 'object' || error === null) {
+    return undefined;
+  }
+
+  const maybe = error as ErrorWithStatus;
+  const raw = maybe.statusCode ?? maybe.code;
+  if (typeof raw === 'number') {
+    return raw;
+  }
+
+  if (typeof raw === 'string') {
+    const parsed = Number(raw);
+    return Number.isNaN(parsed) ? undefined : parsed;
+  }
+
+  return undefined;
+}
+
 /**
  * Wraps a flow to catch and log errors, with optional recovery
  */
@@ -131,8 +155,7 @@ export async function withGenerateErrorHandling<T>(
     return await fn();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    const statusCode =
-      (error as any)?.statusCode || (error as any)?.code || undefined;
+    const statusCode = getStatusCode(error);
 
     MollyLogger.error(
       `GenAI API call failed in '${flowName}'`,

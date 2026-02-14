@@ -18,12 +18,40 @@ export interface LogEntry {
   flowName?: string;
   toolName?: string;
   userId?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   error?: {
     code: string;
     stack?: string;
     severity: string;
   };
+}
+
+type ErrorLike = {
+  code?: string;
+  stack?: string;
+  severity?: string;
+};
+
+function normalizeErrorDetails(error: unknown): LogEntry['error'] | undefined {
+  if (error instanceof Error) {
+    const maybe = error as Error & ErrorLike;
+    return {
+      code: typeof maybe.code === 'string' ? maybe.code : 'UNKNOWN',
+      stack: error.stack,
+      severity: typeof maybe.severity === 'string' ? maybe.severity : 'high',
+    };
+  }
+
+  if (typeof error === 'object' && error !== null) {
+    const maybe = error as ErrorLike;
+    return {
+      code: typeof maybe.code === 'string' ? maybe.code : 'UNKNOWN',
+      stack: typeof maybe.stack === 'string' ? maybe.stack : undefined,
+      severity: typeof maybe.severity === 'string' ? maybe.severity : 'high',
+    };
+  }
+
+  return undefined;
 }
 
 /**
@@ -32,6 +60,7 @@ export interface LogEntry {
  */
 export class MollyLogger {
   private static readonly isDevelopment = process.env.NODE_ENV !== 'production';
+  private static readonly sessionEventName = 'heart-patch';
 
   /**
    * Log an error
@@ -39,8 +68,8 @@ export class MollyLogger {
   static error(
     message: string,
     flowName?: string,
-    context?: Record<string, any>,
-    error?: any,
+    context?: Record<string, unknown>,
+    error?: unknown,
     traceId?: string
   ) {
     const entry: LogEntry = {
@@ -52,12 +81,9 @@ export class MollyLogger {
       context,
     };
 
-    if (error) {
-      entry.error = {
-        code: error.code || 'UNKNOWN',
-        stack: error.stack,
-        severity: error.severity || 'high',
-      };
+    const details = normalizeErrorDetails(error);
+    if (details) {
+      entry.error = details;
     }
 
     this.output(entry);
@@ -69,7 +95,7 @@ export class MollyLogger {
   static warn(
     message: string,
     flowName?: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
     traceId?: string
   ) {
     const entry: LogEntry = {
@@ -90,7 +116,7 @@ export class MollyLogger {
   static info(
     message: string,
     flowName?: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
     traceId?: string
   ) {
     const entry: LogEntry = {
@@ -111,7 +137,7 @@ export class MollyLogger {
   static debug(
     message: string,
     flowName?: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
     traceId?: string
   ) {
     if (!this.isDevelopment) return;
@@ -132,6 +158,10 @@ export class MollyLogger {
    * Output the log entry (to console in dev, Cloud Logging in prod)
    */
   private static output(entry: LogEntry) {
+    if (entry.level === 'ERROR' || entry.level === 'WARN') {
+      this.recordSessionEvent(entry);
+    }
+
     if (this.isDevelopment) {
       console.log(JSON.stringify(entry, null, 2));
     } else {
@@ -140,12 +170,43 @@ export class MollyLogger {
     }
   }
 
+  private static recordSessionEvent(entry: LogEntry) {
+    try {
+      // Lazy import to keep this server-only and avoid bundling in clients.
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { appendSessionEvent } = require('@/lib/session-manager') as {
+        appendSessionEvent: (event: {
+          timestamp: string;
+          event: string;
+          details?: string;
+        }) => void;
+      };
+
+      const detailParts = [
+        'tag=heart-patch',
+        entry.message,
+        entry.flowName ? `flow=${entry.flowName}` : null,
+        entry.toolName ? `tool=${entry.toolName}` : null,
+        entry.traceId ? `trace=${entry.traceId}` : null,
+        entry.error?.code ? `code=${entry.error.code}` : null,
+      ].filter(Boolean);
+
+      appendSessionEvent({
+        event: this.sessionEventName,
+        details: detailParts.join(' | '),
+        timestamp: new Date(entry.timestamp).toISOString(),
+      });
+    } catch {
+      // Avoid cascading failures if session logging is unavailable.
+    }
+  }
+
   /**
    * Log a tool invocation
    */
   static logToolCall(
     toolName: string,
-    input: any,
+    input: unknown,
     traceId?: string,
     flowName?: string
   ) {
@@ -162,7 +223,7 @@ export class MollyLogger {
    */
   static logToolResult(
     toolName: string,
-    result: any,
+    result: unknown,
     traceId?: string,
     flowName?: string
   ) {
@@ -177,7 +238,7 @@ export class MollyLogger {
   /**
    * Log a flow start
    */
-  static logFlowStart(flowName: string, input: any, traceId?: string) {
+  static logFlowStart(flowName: string, input: unknown, traceId?: string) {
     this.info(
       `Flow started: ${flowName}`,
       flowName,
@@ -191,7 +252,7 @@ export class MollyLogger {
    */
   static logFlowComplete(
     flowName: string,
-    result: any,
+    result: unknown,
     traceId?: string,
     durationMs?: number
   ) {
@@ -211,9 +272,9 @@ export class MollyLogger {
    */
   static logFlowError(
     flowName: string,
-    error: any,
+    error: unknown,
     traceId?: string,
-    context?: Record<string, any>
+    context?: Record<string, unknown>
   ) {
     this.error(`Flow failed: ${flowName}`, flowName, context, error, traceId);
   }
