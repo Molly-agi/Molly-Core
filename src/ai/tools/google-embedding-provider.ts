@@ -20,7 +20,9 @@ import { MollyLogger, generateTraceId } from '@/ai/logger';
  */
 export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
   private traceId: string;
-  private embedTool: any | null = null;
+  private embedTool:
+    | ((input: { text: string }) => Promise<{ embedding: number[] }>)
+    | null = null;
 
   constructor() {
     super();
@@ -62,7 +64,7 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
           }
           return { embedding: vectors };
         }
-      );
+      ) as (input: { text: string }) => Promise<{ embedding: number[] }>;
     } catch (error) {
       MollyLogger.warn(
         'Failed to initialize embedding tool, using fallback',

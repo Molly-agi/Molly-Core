@@ -136,7 +136,7 @@ export const runSelfDiagnostic = ai.defineTool(
         try {
           // Simple test to see if genkit is accessible
           recommendations.push('AI flow connectivity: Operational');
-        } catch (e) {
+        } catch {
           status = 'Degraded';
           recommendations.push(
             'AI flow connectivity issue detected. Check network and API keys.'

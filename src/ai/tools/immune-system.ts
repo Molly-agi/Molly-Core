@@ -46,7 +46,7 @@ export const performSelfSurgery = ai.defineTool(
           try {
             await execAsync(`rm -rf "${ghostPath}"`);
             report.push(`Purged ghost: ${ghost}`);
-          } catch (e) {
+          } catch {
             success = false;
             report.push(`Failed ghost: ${ghost}`);
           }
@@ -59,7 +59,7 @@ export const performSelfSurgery = ai.defineTool(
             await execAsync('rm -rf .next');
             report.push('Purged .next cache');
           }
-        } catch (e) {
+        } catch {
           success = false;
           report.push('Cache purge failed.');
         }

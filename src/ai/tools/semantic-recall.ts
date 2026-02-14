@@ -8,27 +8,12 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { initializeFirebase } from '@/firebase';
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  limit,
-  orderBy,
-  updateDoc,
-  doc,
-} from 'firebase/firestore';
+import { getAdminFirestore } from '@/firebase/admin';
 import {
   getEmbeddingProvider,
   isEmbeddingProviderReady,
 } from './embedding-provider';
 import { MollyLogger, generateTraceId } from '../logger';
-import {
-  validateMemoryRecord,
-  ExperienceRecord,
-  AIResponseRecord,
-} from './memory-schema';
 import { verifyRecordIntegrity, semanticPriority } from './memory-integrity';
 
 /**
@@ -47,6 +32,27 @@ export interface SemanticRecallResult {
   priority: number;
 }
 
+type RawMemory = Record<string, unknown> & {
+  id: string;
+  collection: string;
+};
+
+function asString(value: unknown, fallback: string = ''): string {
+  return typeof value === 'string' ? value : fallback;
+}
+
+function asNumber(value: unknown, fallback: number): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function asNumberArray(value: unknown): number[] | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+  const numbers = value.filter((entry) => typeof entry === 'number');
+  return numbers.length === value.length ? numbers : null;
+}
+
 /**
  * Semantic recall tool - finds memories using embedding similarity
  */
@@ -62,10 +68,14 @@ async function cacheEmbedding(
   traceId: string
 ): Promise<void> {
   try {
-    const { firestore } = initializeFirebase();
-    const docRef = doc(firestore, 'users', userId, collectionName, docId);
+    const firestore = getAdminFirestore();
+    const docRef = firestore
+      .collection('users')
+      .doc(userId)
+      .collection(collectionName)
+      .doc(docId);
 
-    await updateDoc(docRef, {
+    await docRef.update({
       embeddingVector: embeddingVector,
       embeddingCachedAt: new Date().toISOString(),
     });
@@ -148,7 +158,7 @@ export const semanticRecall = ai.defineTool(
         return await fallbackKeywordSearch(userId, queryText, resultLimit);
       }
 
-      const { firestore } = initializeFirebase();
+      const firestore = getAdminFirestore();
       const embeddingProvider = getEmbeddingProvider();
 
       MollyLogger.info(
@@ -164,34 +174,31 @@ export const semanticRecall = ai.defineTool(
       // STEP 2: Fetch candidate memories
       // Fetch from multiple collections to get diverse memories
       const collections = ['experiences', 'aiResponses', 'codeModifications'];
-      const allMemories: any[] = [];
+      const allMemories: RawMemory[] = [];
 
       for (const collectionName of collections) {
-        const ref = collection(firestore, 'users', userId, collectionName);
-        let firestoreQuery = query(
-          ref,
-          orderBy('timestamp', 'desc'),
-          limit(100)
-        );
+        const ref = firestore
+          .collection('users')
+          .doc(userId)
+          .collection(collectionName);
+        let firestoreQuery = ref.orderBy('timestamp', 'desc').limit(100);
 
         // Apply context filter if provided
         if (contextFilter) {
-          firestoreQuery = query(
-            ref,
-            where('context', '==', contextFilter),
-            orderBy('timestamp', 'desc'),
-            limit(100)
-          );
+          firestoreQuery = ref
+            .where('context', '==', contextFilter)
+            .orderBy('timestamp', 'desc')
+            .limit(100);
         }
 
-        const snapshot = await getDocs(firestoreQuery);
+        const snapshot = await firestoreQuery.get();
         const memories = snapshot.docs.map((doc) => {
-          const data = doc.data();
+          const data = doc.data() as Record<string, unknown>;
           return {
             id: doc.id,
             collection: collectionName,
             ...data,
-          };
+          } as RawMemory;
         });
 
         allMemories.push(...memories);
@@ -231,7 +238,9 @@ export const semanticRecall = ai.defineTool(
           }
 
           // Check if memory has embedding
-          let memoryEmbedding = memory.embeddingVector || memory.embedding;
+          const embeddingVector = asNumberArray(memory.embeddingVector);
+          const embedding = asNumberArray(memory.embedding);
+          let memoryEmbedding = embeddingVector || embedding;
 
           // If no embedding, generate one on-the-fly
           if (!memoryEmbedding) {
@@ -262,25 +271,31 @@ export const semanticRecall = ai.defineTool(
 
           // Calculate priority (combines similarity with vibe score and recency)
           const priority = semanticPriority(
-            memory.vibeScore || 0.5,
-            memory.timestamp || Date.now(),
+            asNumber(memory.vibeScore, 0.5),
+            asNumber(memory.timestamp, Date.now()),
             Date.now(),
             similarity
           );
 
           memoriesWithSimilarity.push({
             id: memory.id,
-            type: memory.type || inferType(memory.collection),
-            context: memory.context || 'general',
+            type: asString(memory.type, inferType(memory.collection)),
+            context: asString(memory.context, 'general'),
             suggestion:
-              memory.suggestion ||
-              memory.modificationSuggestion ||
-              memory.responseText ||
+              asString(memory.suggestion) ||
+              asString(memory.modificationSuggestion) ||
+              asString(memory.responseText) ||
               'No suggestion',
-            code: memory.code || memory.modifiedCode,
-            timestamp: memory.timestamp || Date.now(),
-            vibe: memory.vibe,
-            vibeScore: memory.vibeScore,
+            code:
+              asString(memory.code) ||
+              asString(memory.modifiedCode) ||
+              undefined,
+            timestamp: asNumber(memory.timestamp, Date.now()),
+            vibe: asString(memory.vibe) || undefined,
+            vibeScore:
+              typeof memory.vibeScore === 'number'
+                ? memory.vibeScore
+                : undefined,
             similarity,
             priority,
           });
@@ -336,15 +351,14 @@ export const semanticRecall = ai.defineTool(
 /**
  * Build searchable text from memory record
  */
-function buildMemoryText(memory: any): string {
+function buildMemoryText(memory: Record<string, unknown>): string {
   const parts = [
-    memory.context || '',
-    memory.suggestion ||
-      memory.modificationSuggestion ||
-      memory.responseText ||
-      '',
-    memory.code || memory.modifiedCode || '',
-    memory.vibe || '',
+    asString(memory.context),
+    asString(memory.suggestion) ||
+      asString(memory.modificationSuggestion) ||
+      asString(memory.responseText),
+    asString(memory.code) || asString(memory.modifiedCode),
+    asString(memory.vibe),
   ];
 
   return parts.filter(Boolean).join(' ').trim();
@@ -372,7 +386,7 @@ async function fallbackKeywordSearch(
   queryText: string,
   resultLimit: number
 ): Promise<SemanticRecallResult[]> {
-  const { firestore } = initializeFirebase();
+  const firestore = getAdminFirestore();
   const traceId = generateTraceId();
 
   MollyLogger.info(
@@ -383,18 +397,19 @@ async function fallbackKeywordSearch(
   );
 
   // Simple keyword search - fetch recent memories
-  const ref = collection(firestore, 'users', userId, 'codeModifications');
-  const firestoreQuery = query(
-    ref,
-    orderBy('timestamp', 'desc'),
-    limit(resultLimit * 3)
-  );
-  const snapshot = await getDocs(firestoreQuery);
+  const ref = firestore
+    .collection('users')
+    .doc(userId)
+    .collection('codeModifications');
+  const snapshot = await ref
+    .orderBy('timestamp', 'desc')
+    .limit(resultLimit * 3)
+    .get();
 
   const queryLower = queryText.toLowerCase();
   const memories = snapshot.docs
     .map((doc) => {
-      const data = doc.data() as any;
+      const data = doc.data() as Record<string, unknown>;
       const text = buildMemoryText(data).toLowerCase();
 
       // Simple keyword matching
@@ -407,12 +422,13 @@ async function fallbackKeywordSearch(
       return {
         id: doc.id,
         type: 'codeModification',
-        context: data.context || 'general',
-        suggestion: data.modificationSuggestion || 'No suggestion',
-        code: data.modifiedCode,
-        timestamp: data.timestamp || Date.now(),
-        vibe: data.vibe,
-        vibeScore: data.vibeScore,
+        context: asString(data.context, 'general'),
+        suggestion: asString(data.modificationSuggestion, 'No suggestion'),
+        code: asString(data.modifiedCode) || undefined,
+        timestamp: asNumber(data.timestamp, Date.now()),
+        vibe: asString(data.vibe) || undefined,
+        vibeScore:
+          typeof data.vibeScore === 'number' ? data.vibeScore : undefined,
         similarity: matchScore,
         priority: matchScore,
       };

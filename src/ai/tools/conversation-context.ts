@@ -32,7 +32,7 @@ export interface ConversationMessage {
     flowName?: string;
     tokens?: number;
     emotion?: string;
-    context?: Record<string, any>;
+    context?: Record<string, unknown>;
   };
 }
 
@@ -95,7 +95,7 @@ export async function storeConversationMessage(
     );
 
     return docRef.id;
-  } catch (error: any) {
+  } catch (error: unknown) {
     MollyLogger.error(
       'Failed to store conversation message',
       'conversation-context',
@@ -147,7 +147,7 @@ export async function getConversationHistory(
     );
 
     return messages;
-  } catch (error: any) {
+  } catch (error: unknown) {
     MollyLogger.error(
       'Failed to retrieve conversation history',
       'conversation-context',
@@ -207,7 +207,6 @@ export async function getOrCreateConversation(
     const { firestore } = initializeFirebase();
 
     // Try to get existing conversation by ID
-    const ref = collection(firestore, 'users', userId, 'conversations');
     // In a real implementation, you'd fetch by docId directly
     // For now, return a new conversation context
 
@@ -231,7 +230,7 @@ export async function getOrCreateConversation(
       summary: undefined,
       memoryKey: undefined,
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     MollyLogger.error(
       'Failed to get or create conversation',
       'conversation-context',

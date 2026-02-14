@@ -1,15 +1,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { initializeFirebase } from '@/firebase';
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  orderBy,
-  limit,
-} from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 /**
  * @fileOverview Molly's API Vault Tool V1.0.
@@ -66,12 +58,23 @@ export const searchAPIVault = ai.defineTool(
     const ref = collection(firestore, 'users', userId, 'apiBlueprints');
     // Simplified search for the MVP
     const snapshot = await getDocs(ref);
+    const normalizedQuery = searchQuery.toLowerCase();
+    const toString = (value: unknown) =>
+      typeof value === 'string' ? value : '';
+
     return snapshot.docs
-      .map((d) => d.data() as any)
+      .map((doc) => {
+        const data = doc.data() as Record<string, unknown>;
+        const name = toString(data.name);
+        const category = toString(data.category);
+        const description = toString(data.description);
+        const implementation = toString(data.implementation);
+        return { name, category, description, implementation };
+      })
       .filter(
-        (d) =>
-          d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          d.description.toLowerCase().includes(searchQuery.toLowerCase())
+        (entry) =>
+          entry.name.toLowerCase().includes(normalizedQuery) ||
+          entry.description.toLowerCase().includes(normalizedQuery)
       )
       .slice(0, 5);
   }

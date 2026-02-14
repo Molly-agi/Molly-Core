@@ -11,20 +11,6 @@ import {
   runTransaction,
 } from 'firebase/firestore';
 
-import { MollyLogger, generateTraceId } from '../logger';
-import {
-  validateMemoryRecord,
-  ExperienceRecord,
-  AIResponseRecord,
-} from './memory-schema';
-import {
-  addChecksum,
-  verifyRecordIntegrity,
-  scoreVibe,
-  semanticPriority,
-  VibeContext,
-} from './memory-integrity';
-
 /**
  * @fileOverview Stage 3 Neural Recall & Memory Pruning Tool.
  *
@@ -57,6 +43,7 @@ export const recallExperiences = ai.defineTool(
     ),
   },
   async ({ userId, context, limit: searchLimit }) => {
+    void context;
     const { firestore } = initializeFirebase();
 
     const ref = collection(firestore, 'users', userId, 'codeModifications');
@@ -126,7 +113,7 @@ export const pruneSensoryLogs = ai.defineTool(
             );
             transaction.delete(docRef);
             successCount++;
-          } catch (err) {
+          } catch {
             failedDeletes.push(docSnapshot.id);
           }
         }

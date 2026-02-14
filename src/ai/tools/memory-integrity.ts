@@ -34,11 +34,12 @@ export function verifyCRC32(data: string, checksum: string): boolean {
 /**
  * Add CRC32 to a memory record object
  */
-export function addChecksum<T extends Record<string, any>>(
+export function addChecksum<T extends Record<string, unknown>>(
   record: T
 ): T & { crc32: string } {
   // Create a copy without existing CRC
-  const { crc32: _, ...recordWithoutCrc } = record;
+  const { crc32, ...recordWithoutCrc } = record as T & { crc32?: string };
+  void crc32;
   const dataStr = JSON.stringify(recordWithoutCrc);
   const checksum = calculateCRC32(dataStr);
 
@@ -51,15 +52,16 @@ export function addChecksum<T extends Record<string, any>>(
 /**
  * Verify record integrity by checking its CRC32
  */
-export function verifyRecordIntegrity<T extends Record<string, any>>(
-  record: T
+export function verifyRecordIntegrity<T extends Record<string, unknown>>(
+  record: T & { crc32?: string }
 ): boolean {
   if (!record.crc32) {
     return false; // No checksum to verify
   }
 
   const crc = record.crc32;
-  const { crc32: _, ...recordWithoutCrc } = record;
+  const { crc32, ...recordWithoutCrc } = record;
+  void crc32;
   const dataStr = JSON.stringify(recordWithoutCrc);
   const calculated = calculateCRC32(dataStr);
 

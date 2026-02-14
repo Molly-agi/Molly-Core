@@ -145,6 +145,7 @@ export function validateMemoryRecord(
   record: unknown,
   type?: string
 ): MemoryRecord {
+  void type;
   try {
     const validated = MemoryRecordSchema.parse(record);
     return validated;

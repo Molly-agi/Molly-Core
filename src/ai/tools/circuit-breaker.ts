@@ -97,7 +97,7 @@ class CircuitBreaker {
   /**
    * Record failed operation
    */
-  recordFailure(operationName: string, error?: any): void {
+  recordFailure(operationName: string, error?: unknown): void {
     const opBreaker = this.getOrCreateBreaker(operationName);
     opBreaker.recordFailure();
     this.globalBreaker.recordFailure();
