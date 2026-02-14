@@ -25,6 +25,77 @@ export function VoiceControl({
   const { toast } = useToast();
   const { user } = useUser();
 
+  const convertToWavDataUrl = async (audioBlob: Blob): Promise<string> => {
+    const audioBuffer = await audioBlob.arrayBuffer();
+    const audioContext = new AudioContext();
+
+    try {
+      const decoded = await audioContext.decodeAudioData(audioBuffer);
+      const wavBuffer = encodeWav(decoded);
+      const wavBase64 = arrayBufferToBase64(wavBuffer);
+      return `data:audio/wav;base64,${wavBase64}`;
+    } finally {
+      audioContext.close();
+    }
+  };
+
+  const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    for (let i = 0; i < bytes.byteLength; i += 1) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  };
+
+  const encodeWav = (audioBuffer: AudioBuffer): ArrayBuffer => {
+    const channelCount = audioBuffer.numberOfChannels;
+    const sampleRate = audioBuffer.sampleRate;
+    const length = audioBuffer.length;
+    const bytesPerSample = 2;
+    const blockAlign = channelCount * bytesPerSample;
+    const byteRate = sampleRate * blockAlign;
+    const dataSize = length * blockAlign;
+    const buffer = new ArrayBuffer(44 + dataSize);
+    const view = new DataView(buffer);
+
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + dataSize, true);
+    writeString(view, 8, 'WAVE');
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, channelCount, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bytesPerSample * 8, true);
+    writeString(view, 36, 'data');
+    view.setUint32(40, dataSize, true);
+
+    const channels: Float32Array[] = [];
+    for (let channel = 0; channel < channelCount; channel += 1) {
+      channels.push(audioBuffer.getChannelData(channel));
+    }
+
+    let offset = 44;
+    for (let i = 0; i < length; i += 1) {
+      for (let channel = 0; channel < channelCount; channel += 1) {
+        const sample = Math.max(-1, Math.min(1, channels[channel][i]));
+        view.setInt16(offset, sample * 0x7fff, true);
+        offset += bytesPerSample;
+      }
+    }
+
+    return buffer;
+  };
+
+  const writeString = (view: DataView, offset: number, text: string) => {
+    for (let i = 0; i < text.length; i += 1) {
+      view.setUint8(offset + i, text.charCodeAt(i));
+    }
+  };
+
   const pickMimeType = () => {
     const preferredTypes = [
       'audio/ogg;codecs=opus',
@@ -78,7 +149,16 @@ export function VoiceControl({
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
         reader.onloadend = async () => {
-          const base64Audio = reader.result as string;
+          let base64Audio = reader.result as string;
+          try {
+            // Normalize to WAV/PCM for consistent transcription support.
+            base64Audio = await convertToWavDataUrl(audioBlob);
+          } catch (conversionError) {
+            console.warn(
+              '[VoiceControl] WAV conversion failed, falling back to source format:',
+              conversionError
+            );
+          }
           try {
             if (!user) {
               toast({

@@ -36,8 +36,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Default user ID for testing
-    const userId = body.userId || 'test-user';
+    if (!body.userId) {
+      return NextResponse.json(
+        { error: 'Missing userId for voice interaction.' },
+        { status: 400 }
+      );
+    }
+
+    const userId = body.userId;
     const sessionId = body.sessionId || `session-${Date.now()}`;
 
     MollyLogger.info(

@@ -13,7 +13,13 @@ import { textToSpeech } from '../flows/text-to-speech';
 import { autonomousSolutionFlow } from '../flows/autonomous-solution';
 import { recallSimilarMemories } from './semantic-recall';
 import { MollyLogger, generateTraceId } from '../logger';
-import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
+import { recordSensoryLogServer } from '@/firebase/firestore/agent-memory-server';
+import {
+  getSafewordPhrase,
+  getSleepState,
+  isSleepSafeword,
+  toggleSleepState,
+} from './safety-sleep';
 
 export interface VoiceCommandContext {
   userId: string;
@@ -127,7 +133,7 @@ Be concise but preserve meaning. Format as a memory suggestion.`,
     const suggestion = memoryPrompt.text;
 
     // Store in sensory memory
-    await recordSensoryLog(
+    await recordSensoryLogServer(
       context.userId,
       'voice',
       `Voice command: ${suggestion}`,
@@ -251,7 +257,7 @@ async function handleCommandIntent(
     const executionSummary = `I've executed your command. Here's what I found: ${result.creativeSolution.substring(0, 200)}...`;
 
     // Log the execution
-    await recordSensoryLog(
+    await recordSensoryLogServer(
       context.userId,
       'voice',
       `Executed command: ${transcription}`,
@@ -384,6 +390,42 @@ export async function processVoiceCommand(
       { transcription: transcription.substring(0, 50) },
       traceId
     );
+
+    if (isSleepSafeword(transcription)) {
+      const nextState = toggleSleepState('voice-safeword');
+      const responseText = nextState.isSleeping
+        ? `Sleep mode engaged. Say "${getSafewordPhrase()}" to wake me.`
+        : 'Sleep mode disabled. I am listening again.';
+
+      return {
+        recognized: true,
+        intent: 'safety',
+        transcription,
+        response: responseText,
+        metadata: {
+          confidence: 1,
+          memoryRecalled: false,
+          actionTaken: nextState.isSleeping
+            ? 'sleep_enabled'
+            : 'sleep_disabled',
+        },
+      };
+    }
+
+    const sleepState = getSleepState();
+    if (sleepState.isSleeping) {
+      return {
+        recognized: true,
+        intent: 'safety',
+        transcription,
+        response: `Sleep mode is active. Say "${getSafewordPhrase()}" to wake me.`,
+        metadata: {
+          confidence: 1,
+          memoryRecalled: false,
+          actionTaken: 'sleep_blocked',
+        },
+      };
+    }
 
     // Step 2: Analyze intent
     const intent = await analyzeIntent(transcription, context);

@@ -7,11 +7,21 @@ import { Textarea } from '@/components/ui/textarea';
 import { getVisionaryCoach } from '@/app/actions/ai-flows';
 import { Sparkles, Target, ShieldAlert } from 'lucide-react';
 import { ScrollArea } from '../ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 
 export function VisionaryCoachTab() {
   const [progress, setProgress] = useState('');
   const [guidance, setGuidance] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleSleepNotice = (message: string) => {
+    if (!message.toLowerCase().startsWith('sleep mode')) return;
+    toast({
+      title: 'Sleep Mode Active',
+      description: message,
+    });
+  };
 
   const handleConsult = async () => {
     if (!progress.trim()) return;
@@ -22,8 +32,14 @@ export function VisionaryCoachTab() {
         'Stage 1: Architecture'
       );
       setGuidance(response);
+      if (typeof response === 'string') {
+        handleSleepNotice(response);
+      }
     } catch (error) {
-      console.error(error);
+      const message =
+        error instanceof Error ? error.message : 'Request failed.';
+      setGuidance(message);
+      handleSleepNotice(message);
     } finally {
       setIsLoading(false);
     }

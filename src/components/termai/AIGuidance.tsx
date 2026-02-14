@@ -14,6 +14,7 @@ import {
   type ResearchMessage,
 } from '@/firebase/firestore/research-conversations';
 import { Badge } from '../ui/badge';
+import { useToast } from '@/hooks/use-toast';
 
 export function AIGuidance() {
   const { user } = useUser();
@@ -21,6 +22,15 @@ export function AIGuidance() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const { toast } = useToast();
+
+  const handleSleepNotice = (message: string) => {
+    if (!message.toLowerCase().startsWith('sleep mode')) return;
+    toast({
+      title: 'Sleep Mode Active',
+      description: message,
+    });
+  };
 
   // Load conversation history on mount
   useEffect(() => {
@@ -93,6 +103,8 @@ export function AIGuidance() {
             ? error.message
             : 'Could not get response from AI.';
 
+        handleSleepNotice(errorMessage);
+
         const errorBotMessage: ResearchMessage = {
           role: 'bot',
           content: `Error: ${errorMessage}`,
@@ -111,8 +123,8 @@ export function AIGuidance() {
       <CardHeader>
         <CardTitle className="text-lg">AI Research Assistant</CardTitle>
         <p className="text-xs text-muted-foreground">
-          Integrated with Molly's memory · GitHub tools · Auto-saves to shared
-          database
+          Integrated with Molly&apos;s memory · GitHub tools · Auto-saves to
+          shared database
         </p>
         <p className="text-[10px] text-muted-foreground/60 mt-1">
           Terminal command:{' '}

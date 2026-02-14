@@ -15,13 +15,11 @@ import {
   Trash2,
   Volume2,
   VolumeX,
-  ShieldCheck,
   Loader2,
   Shield,
   Zap,
   Stethoscope,
   RefreshCw,
-  Mic,
 } from 'lucide-react';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
 import { type VoiceCommandResult } from './VoiceControl';
@@ -32,6 +30,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
+import { useToast } from '@/hooks/use-toast';
 
 type HistoryItem =
   | string
@@ -85,6 +84,15 @@ export default function Terminal({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
+  const { toast } = useToast();
+
+  const handleSleepNotice = (message: string) => {
+    if (!message.toLowerCase().startsWith('sleep mode')) return;
+    toast({
+      title: 'Sleep Mode Active',
+      description: message,
+    });
+  };
 
   const speakResponse = async (text: string) => {
     if (!isVocal || !text || isVocalizing) return;
@@ -139,7 +147,7 @@ export default function Terminal({
           ...prev,
           { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
         ]);
-      } catch (error) {
+      } catch {
         setHistory((prev) => [
           ...prev,
           'Neural link synchronization issues. System remaining in manual mode.',
@@ -181,7 +189,7 @@ export default function Terminal({
         { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
       ]);
       speakResponse('Immune purge complete. Memory indexed.');
-    } catch (e) {
+    } catch {
       setHistory((prev) => [...prev, 'Error: Purge routine failed.']);
     } finally {
       setIsLoading(false);
@@ -203,15 +211,24 @@ export default function Terminal({
       } else {
         // Route unknown commands to conversational Molly (NOT to sarcophagus)
         // Use conversational chat instead of terminal command synthesis
-        const aiResponse = await getConversationalChat(
-          cmdText,
-          user?.uid || 'anonymous'
-        );
-        setHistory((prev) => [...prev, `> ${cmdText}`, aiResponse]);
-        speakResponse(aiResponse);
+        const aiResponse = await getConversationalChat(cmdText, []);
+        const responseText =
+          typeof aiResponse === 'string'
+            ? aiResponse
+            : aiResponse?.response || 'No response.';
+        setHistory((prev) => [...prev, `> ${cmdText}`, responseText]);
+        handleSleepNotice(responseText);
+        speakResponse(responseText);
       }
     } catch (error) {
-      setHistory((prev) => [...prev, `Error: Operation failed.`]);
+      const message =
+        error instanceof Error ? error.message : 'Operation failed.';
+      if (message.toLowerCase().startsWith('sleep mode')) {
+        setHistory((prev) => [...prev, message]);
+        handleSleepNotice(message);
+      } else {
+        setHistory((prev) => [...prev, 'Error: Operation failed.']);
+      }
     } finally {
       setIsLoading(false);
     }

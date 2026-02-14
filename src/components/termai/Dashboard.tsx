@@ -14,14 +14,7 @@ import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
-import {
-  Battery,
-  Thermometer,
-  Radio,
-  Zap,
-  Activity,
-  Brain,
-} from 'lucide-react';
+import { Battery, Thermometer, Radio, Activity, Brain } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 export default function Dashboard() {
@@ -32,6 +25,12 @@ export default function Dashboard() {
   const router = useRouter();
   const [authRetryAttempt, setAuthRetryAttempt] = useState(0);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
+  const [sleepState, setSleepState] = useState<{
+    isSleeping: boolean;
+    safeword: string;
+  } | null>(null);
+  const [authStalled, setAuthStalled] = useState(false);
+  const [forceContinue, setForceContinue] = useState(false);
 
   // Dynamic Proprioception (Nervous System)
   const [battery, setBattery] = useState(78);
@@ -49,6 +48,22 @@ export default function Dashboard() {
       return () => clearTimeout(timeout);
     }
   }, [user, isUserLoading, router]);
+
+  useEffect(() => {
+    if (!isUserLoading) {
+      setAuthStalled(false);
+      return;
+    }
+
+    const isDev = process.env.NODE_ENV === 'development';
+    if (!isDev) return;
+
+    const timeout = setTimeout(() => {
+      setAuthStalled(true);
+    }, 12000);
+
+    return () => clearTimeout(timeout);
+  }, [isUserLoading]);
 
   // Handle authentication errors with retry
   useEffect(() => {
@@ -77,7 +92,7 @@ export default function Dashboard() {
         const change = (Math.random() - 0.5) * 1;
         return Number(Math.min(50, Math.max(38, prev + change)).toFixed(1));
       });
-      setCpu((prev) => Math.floor(Math.random() * 20) + 5);
+      setCpu(() => Math.floor(Math.random() * 20) + 5);
     };
 
     // Update every 30 seconds to prevent thermal cascade
@@ -88,6 +103,33 @@ export default function Dashboard() {
       if (intervalId !== null) {
         clearInterval(intervalId);
       }
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    const fetchSleepState = async () => {
+      try {
+        const response = await fetch('/api/safety/sleep-state');
+        if (!response.ok) return;
+        const data = await response.json();
+        if (mounted) {
+          setSleepState({
+            isSleeping: !!data.isSleeping,
+            safeword: data.safeword || 'pineapple van',
+          });
+        }
+      } catch {
+        // Ignore polling errors.
+      }
+    };
+
+    fetchSleepState();
+    const intervalId = setInterval(fetchSleepState, 5000);
+
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
     };
   }, []);
 
@@ -106,7 +148,7 @@ export default function Dashboard() {
   const isDev = process.env.NODE_ENV === 'development';
   const isAdmin = isDev || (!!user && adminUids.includes(user.uid));
 
-  if (isUserLoading) {
+  if (isUserLoading && !forceContinue) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="w-64 space-y-4">
@@ -114,6 +156,19 @@ export default function Dashboard() {
             <p className="text-sm text-muted-foreground">
               Initializing Molly...
             </p>
+            {authStalled && (
+              <div className="mt-2 space-y-2">
+                <p className="text-[11px] text-yellow-500">
+                  Auth is taking longer than expected.
+                </p>
+                <button
+                  onClick={() => setForceContinue(true)}
+                  className="px-3 py-1 text-[10px] uppercase tracking-widest border border-yellow-500/50 text-yellow-500 rounded"
+                >
+                  Continue without auth
+                </button>
+              </div>
+            )}
             {authRetryAttempt > 0 && (
               <p className="text-xs text-yellow-500 mt-2">
                 Retry attempt {authRetryAttempt}/3
@@ -175,6 +230,12 @@ export default function Dashboard() {
           onVoiceCommand={handleVoiceCommand}
           onAdminUnlock={() => setIsAdminPanelOpen(true)}
         />
+
+        {sleepState?.isSleeping && (
+          <div className="bg-destructive/20 text-destructive border-b border-destructive/30 px-6 py-2 text-xs">
+            Sleep mode active. Say {sleepState.safeword} to wake Molly.
+          </div>
+        )}
 
         <HiddenAdminPanel
           open={isAdminPanelOpen}

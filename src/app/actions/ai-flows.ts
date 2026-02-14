@@ -25,6 +25,12 @@ import { listAvailableModels } from '@/ai/tools/system';
 import { MollyLogger } from '@/ai/logger';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import {
+  getSafewordPhrase,
+  getSleepState,
+  isSleepSafeword,
+  toggleSleepState,
+} from '@/ai/tools/safety-sleep';
+import {
   withTimeout,
   withRetry,
   TIMEOUT_PRESETS,
@@ -35,6 +41,40 @@ import { ensureApiKey, checkRateLimit, fetchLastContext } from './utils';
 function getAudioMimeType(dataUri: string): string {
   const match = dataUri.match(/^data:([^;]+);base64,/);
   return match?.[1] ?? 'unknown';
+}
+
+type SleepGuardResult = {
+  message: string;
+  toggled: boolean;
+  blocked: boolean;
+};
+
+function getSleepGuard(
+  inputText: string | null | undefined,
+  source: string
+): SleepGuardResult | null {
+  const text = inputText?.trim();
+  if (text && isSleepSafeword(text)) {
+    const nextState = toggleSleepState(source);
+    return {
+      message: nextState.isSleeping
+        ? `Sleep mode engaged. Say "${getSafewordPhrase()}" to wake me.`
+        : 'Sleep mode disabled. I am listening again.',
+      toggled: true,
+      blocked: nextState.isSleeping,
+    };
+  }
+
+  const sleepState = getSleepState();
+  if (sleepState.isSleeping) {
+    return {
+      message: `Sleep mode is active. Say "${getSafewordPhrase()}" to wake me.`,
+      toggled: false,
+      blocked: true,
+    };
+  }
+
+  return null;
 }
 
 // ============================================
@@ -152,6 +192,30 @@ export async function processVoiceInteraction(
       };
     }
 
+    if (isSleepSafeword(transcription)) {
+      const nextState = toggleSleepState('voice-interaction-safeword');
+      return {
+        recognized: true,
+        transcription,
+        response: nextState.isSleeping
+          ? `Sleep mode engaged. Say "${getSafewordPhrase()}" to wake me.`
+          : 'Sleep mode disabled. I am listening again.',
+        intent: 'safety',
+        confidence: 1,
+      };
+    }
+
+    const sleepState = getSleepState();
+    if (sleepState.isSleeping) {
+      return {
+        recognized: true,
+        transcription,
+        response: `Sleep mode is active. Say "${getSafewordPhrase()}" to wake me.`,
+        intent: 'safety',
+        confidence: 1,
+      };
+    }
+
     MollyLogger.info('Voice transcribed', 'processVoiceInteraction', {
       userId,
       transcription: transcription.substring(0, 50),
@@ -207,6 +271,12 @@ export async function getConversationalChat(text: string, history: any[]) {
   try {
     ensureApiKey();
     await checkRateLimit('conversational-chat', 800);
+    const guard = getSleepGuard(text, 'text-chat');
+    if (guard) {
+      return {
+        response: guard.message,
+      };
+    }
     return await withRetry(
       () => conversationalChat({ text, history }),
       'conversational-chat',
@@ -227,6 +297,10 @@ export async function getContextualGuidance(prompt: string) {
   try {
     ensureApiKey();
     await checkRateLimit('contextual-guidance', 600);
+    const guard = getSleepGuard(prompt, 'contextual-guidance');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await contextualGuidance(prompt);
   } catch (e: any) {
     MollyLogger.error(
@@ -247,6 +321,13 @@ export async function getVisionaryCoach(
   try {
     ensureApiKey();
     await checkRateLimit('visionary-coach', 600);
+    const guard = getSleepGuard(
+      [progress, stage, concern].filter(Boolean).join(' '),
+      'visionary-coach'
+    );
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await visionaryCoach(progress, stage, concern);
   } catch (e: any) {
     MollyLogger.error(
@@ -270,6 +351,10 @@ export async function getAutonomousSolution(
   try {
     ensureApiKey();
     await checkRateLimit('autonomous-solution', 1000);
+    const guard = getSleepGuard(prompt, 'autonomous-solution');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await autonomousSolution(prompt, userId);
   } catch (e: any) {
     MollyLogger.error(
@@ -288,6 +373,10 @@ export async function getTextToScript(
   try {
     ensureApiKey();
     await checkRateLimit('text-to-script', 700);
+    const guard = getSleepGuard(prompt, 'text-to-script');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await textToScript(prompt);
   } catch (e: any) {
     MollyLogger.error('Text to script failed', 'getTextToScript', {}, e);
@@ -299,6 +388,10 @@ export async function getTextToTermuxCommand(prompt: string) {
   try {
     ensureApiKey();
     await checkRateLimit('text-to-termux', 400);
+    const guard = getSleepGuard(prompt, 'text-to-termux');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await textToTermuxCommand(prompt);
   } catch (e: any) {
     MollyLogger.error(
@@ -319,6 +412,10 @@ export async function getVisionAnalysis(dataUri: string, context?: string) {
   try {
     ensureApiKey();
     await checkRateLimit('vision-analysis', 1500);
+    const guard = getSleepGuard(context, 'vision-analysis');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await withRetry(
       () =>
         withTimeout(() => analyzeVision(dataUri, context), {
@@ -341,6 +438,10 @@ export async function runIntrospection(
   try {
     ensureApiKey();
     await checkRateLimit('introspection', 800);
+    const guard = getSleepGuard(hardwareContext, 'introspection');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await introspectionFlow({ pastLessons, hardwareContext });
   } catch (e: any) {
     MollyLogger.error('Introspection failed', 'runIntrospection', {}, e);
@@ -360,6 +461,10 @@ export async function startAutonomousCycle(
   try {
     ensureApiKey();
     await checkRateLimit('evolution-loop', 2000);
+    const guard = getSleepGuard(objective, 'autonomous-cycle');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await withTimeout(
       () => runAutonomousEvolution(objective, userId, count),
       {
@@ -382,6 +487,10 @@ export async function getMollyDream(prompt: string, userId: string) {
   try {
     ensureApiKey();
     await checkRateLimit('dream-flow', 1200);
+    const guard = getSleepGuard(prompt, 'dream-flow');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await withTimeout(() => generateMollyDream(prompt, userId), {
       timeoutMs: TIMEOUT_PRESETS.VERY_LONG,
       operationName: 'dream-generation',
@@ -401,6 +510,10 @@ export async function startInterpreterCycle(objective: string, userId: string) {
   try {
     ensureApiKey();
     await checkRateLimit('interpreter-limb', 2500);
+    const guard = getSleepGuard(objective, 'interpreter-cycle');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await withTimeout(() => runInterpreter(objective, userId), {
       timeoutMs: TIMEOUT_PRESETS.LONG,
       operationName: 'interpreter-cycle',
@@ -420,6 +533,10 @@ export async function startHiveOperation(objective: string, userId: string) {
   try {
     ensureApiKey();
     await checkRateLimit('collaborative-hive', 1800);
+    const guard = getSleepGuard(objective, 'hive-operation');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await withTimeout(() => runCollaborativeHive(objective, userId), {
       timeoutMs: TIMEOUT_PRESETS.LONG,
       operationName: 'hive-operation',
@@ -439,6 +556,10 @@ export async function triggerImmuneResponse(userId: string, trigger?: string) {
   try {
     ensureApiKey();
     await checkRateLimit('immune-response', 900);
+    const guard = getSleepGuard(trigger, 'immune-response');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await runImmuneResponse(userId, trigger);
   } catch (e: any) {
     MollyLogger.error(
@@ -459,6 +580,13 @@ export async function startSyntheticSynthesis(
   try {
     ensureApiKey();
     await checkRateLimit('synthetic-synthesis', 1500);
+    const guard = getSleepGuard(
+      [target, category].filter(Boolean).join(' '),
+      'synthetic-synthesis'
+    );
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await runSyntheticSynthesis(target, userId, category);
   } catch (e: any) {
     MollyLogger.error(
@@ -479,6 +607,10 @@ export async function getEnhancedResearch(prompt: string, userId: string) {
   try {
     ensureApiKey();
     await checkRateLimit('enhanced-research', 800);
+    const guard = getSleepGuard(prompt, 'enhanced-research');
+    if (guard) {
+      throw new Error(guard.message);
+    }
     return await enhancedResearch(prompt, userId);
   } catch (e: any) {
     MollyLogger.error(
