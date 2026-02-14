@@ -5,21 +5,8 @@
  * they are saved here for future reference instead of re-searching.
  */
 
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  orderBy,
-  limit,
-  Timestamp,
-  doc,
-  updateDoc,
-  deleteDoc,
-  increment,
-} from 'firebase/firestore';
-import { initializeFirebaseServer } from '@/firebase/server';
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
+import { getAdminFirestore } from '@/firebase/admin';
 
 export interface FoundTool {
   id?: string;
@@ -45,17 +32,17 @@ export async function saveFoundTool(
   userId: string,
   tool: Omit<FoundTool, 'id' | 'savedAt' | 'accessCount' | 'lastAccessedAt'>
 ): Promise<string> {
-  const { firestore } = initializeFirebaseServer();
-
-  const docRef = await addDoc(
-    collection(firestore, 'users', userId, 'foundTools'),
-    {
+  const firestore = getAdminFirestore();
+  const docRef = await firestore
+    .collection('users')
+    .doc(userId)
+    .collection('foundTools')
+    .add({
       ...tool,
       savedAt: Timestamp.now(),
       accessCount: 0,
       lastAccessedAt: null,
-    }
-  );
+    });
 
   return docRef.id;
 }
@@ -68,24 +55,17 @@ export async function searchSavedTools(
   searchTerm: string,
   category?: string
 ): Promise<FoundTool[]> {
-  const { firestore } = initializeFirebaseServer();
+  const firestore = getAdminFirestore();
+  const baseRef = firestore
+    .collection('users')
+    .doc(userId)
+    .collection('foundTools');
 
-  let q = query(
-    collection(firestore, 'users', userId, 'foundTools'),
-    where('category', '==', category || 'all'),
-    orderBy('savedAt', 'desc')
-  );
+  let q = category
+    ? baseRef.where('category', '==', category).orderBy('savedAt', 'desc')
+    : baseRef.orderBy('savedAt', 'desc').limit(20);
 
-  if (!category) {
-    // Search across all categories by name/description
-    q = query(
-      collection(firestore, 'users', userId, 'foundTools'),
-      orderBy('savedAt', 'desc'),
-      limit(20)
-    );
-  }
-
-  const snapshot = await getDocs(q);
+  const snapshot = await q.get();
   const tools = snapshot.docs
     .map((doc) => ({
       id: doc.id,
@@ -113,15 +93,14 @@ export async function getToolsByCategory(
   userId: string,
   category: string
 ): Promise<FoundTool[]> {
-  const { firestore } = initializeFirebaseServer();
-
-  const q = query(
-    collection(firestore, 'users', userId, 'foundTools'),
-    where('category', '==', category),
-    orderBy('accessCount', 'desc')
-  );
-
-  const snapshot = await getDocs(q);
+  const firestore = getAdminFirestore();
+  const snapshot = await firestore
+    .collection('users')
+    .doc(userId)
+    .collection('foundTools')
+    .where('category', '==', category)
+    .orderBy('accessCount', 'desc')
+    .get();
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
@@ -137,15 +116,14 @@ export async function getRecentTools(
   userId: string,
   count: number = 10
 ): Promise<FoundTool[]> {
-  const { firestore } = initializeFirebaseServer();
-
-  const q = query(
-    collection(firestore, 'users', userId, 'foundTools'),
-    orderBy('savedAt', 'desc'),
-    limit(count)
-  );
-
-  const snapshot = await getDocs(q);
+  const firestore = getAdminFirestore();
+  const snapshot = await firestore
+    .collection('users')
+    .doc(userId)
+    .collection('foundTools')
+    .orderBy('savedAt', 'desc')
+    .limit(count)
+    .get();
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
@@ -161,12 +139,16 @@ export async function recordToolAccess(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const { firestore } = initializeFirebaseServer();
+  const firestore = getAdminFirestore();
+  const toolRef = firestore
+    .collection('users')
+    .doc(userId)
+    .collection('foundTools')
+    .doc(toolId);
 
-  const toolRef = doc(firestore, 'users', userId, 'foundTools', toolId);
-  await updateDoc(toolRef, {
+  await toolRef.update({
     lastAccessedAt: Timestamp.now(),
-    accessCount: increment(1),
+    accessCount: FieldValue.increment(1),
   });
 }
 
@@ -177,8 +159,13 @@ export async function removeTool(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const { firestore } = initializeFirebaseServer();
-  await deleteDoc(doc(firestore, 'users', userId, 'foundTools', toolId));
+  const firestore = getAdminFirestore();
+  await firestore
+    .collection('users')
+    .doc(userId)
+    .collection('foundTools')
+    .doc(toolId)
+    .delete();
 }
 
 /**
@@ -190,11 +177,12 @@ export async function getToolStats(userId: string): Promise<{
   mostUsedTools: FoundTool[];
   recentlyAdded: FoundTool[];
 }> {
-  const { firestore } = initializeFirebaseServer();
-
-  const snapshot = await getDocs(
-    collection(firestore, 'users', userId, 'foundTools')
-  );
+  const firestore = getAdminFirestore();
+  const snapshot = await firestore
+    .collection('users')
+    .doc(userId)
+    .collection('foundTools')
+    .get();
 
   const tools = snapshot.docs.map((doc) => ({
     id: doc.id,
