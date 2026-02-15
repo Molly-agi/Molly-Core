@@ -203,6 +203,31 @@ interface MollyContext {
 - [ ] Check Genkit dev server status and model credentials
 - [ ] Validate Firestore reads/writes for the affected user
 
+### Session: Feb 15, 2026 - Anchors, Startup Hardening, Memory Continuity
+
+**Completed:**
+
+- [x] Added memory anchors + avatar UI with screenshots
+- [x] Added first-person anchor phrasing and Identity Core copy
+- [x] Lazy-loaded sidebar panels and header controls to reduce startup load
+- [x] Added diagnostics on-demand loading with retry boundary
+- [x] Fixed test instability (Jest mocks, vision flow mock)
+- [x] Addressed voice parsing and duplicate startup immune response in dev
+- [x] Ran full Jest suite (green) and typecheck
+- [x] Bundle analyzer snapshot generated for baseline
+
+**Notes:**
+
+- Startup delays improved after lazy-loading tab panels and header widgets
+- Diagnostics chunk still intermittently fails; now contained behind on-demand loader
+- Memory continuity blocked by Firestore permissions; switched to safer client-auth persistence
+
+**Follow-up Actions:**
+
+- [ ] Verify health-check greeting persists across reloads (aiResponses write/read)
+- [ ] Validate diagnostics load on demand and retry path
+- [ ] Re-run bundle analyzer after additional safe splits
+
 ### Session 1: Feb 7, 2026 - Error Handling Framework
 
 **Started:** Error type definitions and logging  

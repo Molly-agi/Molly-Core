@@ -1,3 +1,7 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === '1',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* Optimized for performance and reduced memory usage */
@@ -47,4 +51,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

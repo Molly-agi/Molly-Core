@@ -12,7 +12,17 @@ import {
   triggerImmuneResponse,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
+import { useFirestore } from '@/firebase';
 import { useUser } from '@/firebase/auth/use-user';
+import {
+  addDoc,
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  serverTimestamp,
+} from 'firebase/firestore';
 import {
   Trash2,
   Volume2,
@@ -86,10 +96,12 @@ export default function Terminal({
 
   const lastResponseRef = useRef<string | null>(null);
   const originStorySeededRef = useRef(false);
+  const immuneTriggeredRef = useRef<string | null>(null);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
+  const firestore = useFirestore();
   const { toast } = useToast();
 
   const handleSleepNotice = (message: string) => {
@@ -164,16 +176,49 @@ export default function Terminal({
     return true;
   };
 
+  const fetchLastContext = async () => {
+    if (!firestore || !user) return undefined;
+    try {
+      const ref = collection(firestore, 'users', user.uid, 'aiResponses');
+      const q = query(ref, orderBy('timestamp', 'desc'), limit(1));
+      const snapshot = await getDocs(q);
+      return snapshot.docs[0]?.data()?.responseText || undefined;
+    } catch (error) {
+      console.warn('[Terminal] Failed to fetch last context', error);
+      return undefined;
+    }
+  };
+
+  const persistHealthContext = async (greeting: string) => {
+    if (!firestore || !user || !greeting) return;
+    try {
+      await addDoc(collection(firestore, 'users', user.uid, 'aiResponses'), {
+        responseText: greeting,
+        responseType: 'healthCheck',
+        timestamp: serverTimestamp(),
+      });
+    } catch (error) {
+      console.warn('[Terminal] Failed to persist health context', error);
+    }
+  };
+
   useEffect(() => {
     const fetchIntroduction = async () => {
       if (!user) return;
+      if (immuneTriggeredRef.current === user.uid) {
+        return;
+      }
+      immuneTriggeredRef.current = user.uid;
       try {
+        const lastContext = await fetchLastContext();
         // Stage 4.5 Neural Recall: Dynamic greeting based on history
         const intro = await getHealthCheck(
           'Introduce yourself as Molly. Acknowledge your 2.5 architecture. If you recognize our previous bond, greet me warmly.',
-          user.uid
+          user.uid,
+          lastContext
         );
         setHistory([intro.greeting]);
+        await persistHealthContext(intro.greeting);
 
         // Audio might require a click first, so we attempt to speak.
         // If it fails, the "Voice" icon remains a toggle.

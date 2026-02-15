@@ -1,6 +1,6 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-02-15T06:15:54.913Z  
+**Last Updated:** 2026-02-15T08:18:00.000Z  
 **Session ID:** voice-terminal-integration-fix  
 **Status:** paused
 
@@ -40,10 +40,20 @@
 
 ## RECENT WORK COMPLETED
 
+- Added memory anchors + avatar UI with first-person phrasing
+- Lazy-loaded sidebar panels and header controls to reduce startup load
+- Added diagnostics on-demand loading with retry boundary
+- Hardened voice response parsing and avoided duplicate startup immune runs
+- Bundle analyzer baseline generated
+- Switched memory continuity to client-auth read/write (no admin)
+
 ---
 
-## NEXT STEPS
+- Verify `aiResponses` persists and is read on next startup
+- Confirm diagnostics loads on demand without chunk errors
+- Rebuild analyzer report after any further safe splits
 
+**Recommended:** Resume with startup verification + memory continuity check
 **Recommended:** Restore context from previous session
 
 ---
@@ -66,60 +76,12 @@
 ## RUNTIME EVENTS
 
 **Last URL:** https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/  
-**Last Heartbeat:** 2026-02-15T03:45:38.271Z
+**Last Heartbeat:** 2026-02-15T07:06:50.017Z
 
 **Recent Events:**
 
-- [2026-02-15T05:41:43.700Z] heart-patch | tag=heart-patch | Operation "self-healing-operation" failed (attempt 2), retrying in 19ms | flow=timeout-retry
-- [2026-02-15T05:41:43.746Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed (attempt 1), retrying in 12ms | flow=timeout-retry
-- [2026-02-15T05:41:43.763Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed (attempt 2), retrying in 21ms | flow=timeout-retry
-- [2026-02-15T05:41:43.779Z] heart-patch | tag=heart-patch | Operation "slow-operation" timed out after 100ms | flow=timeout-retry
-- [2026-02-15T05:41:43.790Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed after 3 attempts | flow=timeout-retry | code=UNKNOWN
-- [2026-02-15T05:41:43.794Z] heart-patch | tag=heart-patch | Operation "backoff-test" failed (attempt 1), retrying in 50ms | flow=timeout-retry
-- [2026-02-15T05:41:43.850Z] heart-patch | tag=heart-patch | Operation "backoff-test" failed (attempt 2), retrying in 100ms | flow=timeout-retry
-- [2026-02-15T05:41:44.165Z] heart-patch | tag=heart-patch | Budget HIGH: 90.0% used | flow=rate-limiter
-- [2026-02-15T05:41:44.180Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 2985000ms | flow=safety-test
-- [2026-02-15T05:41:44.288Z] heart-patch | tag=heart-patch | Operation "rapid-batch" timed out after 100ms | flow=timeout-retry
-- [2026-02-15T05:41:45.197Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 60000ms | flow=expensive-flow
-- [2026-02-15T05:41:47.149Z] heart-patch | tag=heart-patch | Flow failing-flow failed | flow=orchestrator | trace=trace_1771134107149_3rkbiqw | code=UNKNOWN
-- [2026-02-15T05:41:47.173Z] heart-patch | tag=heart-patch | Flow failing-flow failed, continuing with remaining flows in pipeline | flow=orchestrator
-- [2026-02-15T05:42:55.393Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 2400000ms | flow=burst-flow
-- [2026-02-15T05:42:55.467Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 60000ms | flow=expensive
-- [2026-02-15T05:42:55.729Z] heart-patch | tag=heart-patch | Operation "self-healing-operation" failed (attempt 1), retrying in 9ms | flow=timeout-retry
-- [2026-02-15T05:42:55.744Z] heart-patch | tag=heart-patch | Operation "self-healing-operation" failed (attempt 2), retrying in 16ms | flow=timeout-retry
-- [2026-02-15T05:42:55.775Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed (attempt 1), retrying in 9ms | flow=timeout-retry
-- [2026-02-15T05:42:55.805Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed (attempt 2), retrying in 25ms | flow=timeout-retry
-- [2026-02-15T05:42:55.813Z] heart-patch | tag=heart-patch | Operation "slow-operation" timed out after 100ms | flow=timeout-retry
-- [2026-02-15T05:42:55.837Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed after 3 attempts | flow=timeout-retry | code=UNKNOWN
-- [2026-02-15T05:42:55.845Z] heart-patch | tag=heart-patch | Operation "backoff-test" failed (attempt 1), retrying in 50ms | flow=timeout-retry
-- [2026-02-15T05:42:55.901Z] heart-patch | tag=heart-patch | Operation "backoff-test" failed (attempt 2), retrying in 100ms | flow=timeout-retry
-- [2026-02-15T05:42:56.222Z] heart-patch | tag=heart-patch | Budget HIGH: 90.0% used | flow=rate-limiter
-- [2026-02-15T05:42:56.225Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 2998000ms | flow=safety-test
-- [2026-02-15T05:42:56.329Z] heart-patch | tag=heart-patch | Operation "rapid-batch" timed out after 100ms | flow=timeout-retry
-- [2026-02-15T05:42:57.684Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 60000ms | flow=expensive-flow
-- [2026-02-15T05:42:59.515Z] heart-patch | tag=heart-patch | Flow failing-flow failed | flow=orchestrator | trace=trace_1771134179514_x9rcrp2 | code=UNKNOWN
-- [2026-02-15T05:42:59.532Z] heart-patch | tag=heart-patch | Flow failing-flow failed, continuing with remaining flows in pipeline | flow=orchestrator
-- [2026-02-15T05:45:33.013Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 2400000ms | flow=burst-flow
-- [2026-02-15T05:45:33.115Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 60000ms | flow=expensive
-- [2026-02-15T05:45:33.362Z] heart-patch | tag=heart-patch | Operation "self-healing-operation" failed (attempt 1), retrying in 11ms | flow=timeout-retry
-- [2026-02-15T05:45:33.375Z] heart-patch | tag=heart-patch | Operation "self-healing-operation" failed (attempt 2), retrying in 16ms | flow=timeout-retry
-- [2026-02-15T05:45:33.399Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed (attempt 1), retrying in 8ms | flow=timeout-retry
-- [2026-02-15T05:45:33.413Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed (attempt 2), retrying in 21ms | flow=timeout-retry
-- [2026-02-15T05:45:33.442Z] heart-patch | tag=heart-patch | Operation "failing-operation" failed after 3 attempts | flow=timeout-retry | code=UNKNOWN
-- [2026-02-15T05:45:33.454Z] heart-patch | tag=heart-patch | Operation "backoff-test" failed (attempt 1), retrying in 50ms | flow=timeout-retry
-- [2026-02-15T05:45:33.459Z] heart-patch | tag=heart-patch | Operation "slow-operation" timed out after 100ms | flow=timeout-retry
-- [2026-02-15T05:45:33.511Z] heart-patch | tag=heart-patch | Operation "backoff-test" failed (attempt 2), retrying in 100ms | flow=timeout-retry
-- [2026-02-15T05:45:33.821Z] heart-patch | tag=heart-patch | Budget HIGH: 90.0% used | flow=rate-limiter
-- [2026-02-15T05:45:33.825Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 2996000ms | flow=safety-test
-- [2026-02-15T05:45:33.929Z] heart-patch | tag=heart-patch | Operation "rapid-batch" timed out after 100ms | flow=timeout-retry
-- [2026-02-15T05:45:34.934Z] heart-patch | tag=heart-patch | Rate limit exceeded. Retry after 60000ms | flow=expensive-flow
-- [2026-02-15T05:45:37.027Z] heart-patch | tag=heart-patch | Flow failing-flow failed | flow=orchestrator | trace=trace_1771134337026_bq837lc | code=UNKNOWN
-- [2026-02-15T05:45:37.041Z] heart-patch | tag=heart-patch | Flow failing-flow failed, continuing with remaining flows in pipeline | flow=orchestrator
-- [2026-02-15T05:56:39.969Z] server-runtime-init | tag=heart-patch
-- [2026-02-15T05:59:41.939Z] server-runtime-init | tag=heart-patch
-- [2026-02-15T06:02:47.378Z] server-runtime-init | tag=heart-patch
-- [2026-02-15T06:10:45.529Z] server-runtime-init | tag=heart-patch
-- [2026-02-15T06:15:32.586Z] server-runtime-init | tag=heart-patch
+- [2026-02-15T07:06:46.793Z] server-heartbeat
+- [2026-02-15T07:06:50.017Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
 
 ---
 

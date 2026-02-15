@@ -174,11 +174,12 @@ export function VoiceControl({
         });
 
         const contentType = response.headers.get('content-type') || '';
+        const rawText = await response.text();
         let data: any = null;
 
-        if (contentType.includes('application/json')) {
+        if (contentType.includes('application/json') && rawText.trim()) {
           try {
-            data = await response.json();
+            data = JSON.parse(rawText);
           } catch (parseError) {
             console.error(
               '[VoiceControl] JSON parse error:',
@@ -187,8 +188,7 @@ export function VoiceControl({
               response.status
             );
           }
-        } else {
-          const rawText = await response.text();
+        } else if (!contentType.includes('application/json')) {
           console.warn('[VoiceControl] Non-JSON response:', rawText);
         }
 

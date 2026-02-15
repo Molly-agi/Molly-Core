@@ -40,7 +40,7 @@ import {
   TIMEOUT_PRESETS,
   RETRY_PRESETS,
 } from '@/ai/tools/timeout-retry';
-import { ensureApiKey, checkRateLimit, fetchLastContext } from './utils';
+import { ensureApiKey, checkRateLimit } from './utils';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -107,12 +107,16 @@ async function buildNervousSystemSignal(): Promise<NeuralBridgeSignal | null> {
 // HEALTH & DIAGNOSTICS
 // ============================================
 
-export async function getHealthCheck(text: string, userId: string) {
+export async function getHealthCheck(
+  text: string,
+  userId: string,
+  lastContext?: string
+) {
   try {
     ensureApiKey();
     await checkRateLimit('health-check', 300);
-    const lastContext = await fetchLastContext(userId);
-    return await healthCheck(text, lastContext);
+    const context = lastContext || 'First ignition.';
+    return await healthCheck(text, context);
   } catch (e: any) {
     MollyLogger.error(
       '[CRITICAL] Health Check Failed',

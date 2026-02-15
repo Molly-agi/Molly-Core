@@ -1,7 +1,7 @@
 'use client';
+import dynamic from 'next/dynamic';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { VoiceControl, type VoiceCommandResult } from './VoiceControl';
-import { OriginStoryDialog } from './OriginStoryDialog';
+import type { VoiceCommandResult } from './VoiceControl';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useRef, useState } from 'react';
@@ -17,6 +17,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MOLLY_AVATAR_URL } from '@/lib/memory-anchors';
 import { Button } from '../ui/button';
 import { Flower2 } from 'lucide-react';
+
+const VoiceControl = dynamic(
+  () => import('./VoiceControl').then((mod) => mod.VoiceControl),
+  { ssr: false }
+);
+
+const OriginStoryDialog = dynamic(
+  () => import('./OriginStoryDialog').then((mod) => mod.OriginStoryDialog),
+  { ssr: false }
+);
 
 export function Header({
   onVoiceCommand,
