@@ -26,6 +26,10 @@ jest.mock('../VoiceControl', () => ({
   VoiceControl: () => <div data-testid="voice-control-mock"></div>,
 }));
 
+jest.mock('../OriginStoryDialog', () => ({
+  OriginStoryDialog: () => <div data-testid="origin-story-dialog-mock" />,
+}));
+
 jest.mock('@/components/ui/sidebar', () => ({
   ...jest.requireActual('@/components/ui/sidebar'),
   SidebarTrigger: () => <button>Trigger</button>,
@@ -50,7 +54,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} />);
+    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
 
     // Act & Assert: Check for the title
     const titleElement = screen.getByText('Molly');
@@ -71,7 +75,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} />);
+    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
 
     // Act & Assert: Check that the avatar/dropdown menu is rendered
     // In test environments, images may not load so we verify the component structure
@@ -99,7 +103,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} />);
+    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
 
     // Act & Assert: Check for the fallback initials "TU"
     const fallback = screen.getByText('TU');
@@ -115,7 +119,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} />);
+    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
 
     // Act & Assert: The avatar dropdown should not be present
     const avatarImage = screen.queryByRole('img');

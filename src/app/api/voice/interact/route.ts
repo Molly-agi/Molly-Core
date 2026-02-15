@@ -17,6 +17,7 @@ interface VoiceInteractRequest {
   userId?: string;
   sessionId?: string;
   synthesizeSpeech?: boolean;
+  lastResponse?: string;
   hardwareState?: {
     temperature?: number;
     batteryLevel?: number;
@@ -52,12 +53,19 @@ export async function POST(request: NextRequest) {
       { userId, sessionId, hasAudio: !!body.audioData }
     );
 
+    if (body.lastResponse) {
+      MollyLogger.debug('Voice lastResponse received', 'voice-interact-api', {
+        length: body.lastResponse.length,
+      });
+    }
+
     // Process voice command
     const result = await processVoiceCommand(
       body.audioData,
       {
         userId,
         sessionId,
+        lastResponse: body.lastResponse,
         hardwareState: body.hardwareState,
       },
       body.synthesizeSpeech !== false

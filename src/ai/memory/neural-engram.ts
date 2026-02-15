@@ -1,6 +1,6 @@
 /**
  * @fileOverview Neural Engram System - Molly's Brain-like Memory Architecture
- * 
+ *
  * Mimics human memory structures to reduce API overhead:
  * - Frontal Cortex: Working memory (hot, in-process)
  * - Hippocampus: Memory consolidation (warm, periodic)
@@ -9,7 +9,8 @@
  * - Long-term Storage: Cold storage (Firestore)
  */
 
-import { MollyLogger, generateTraceId } from '@/ai/logger';
+import { MollyLogger } from '@/ai/logger';
+import { persistEngramBatch } from '@/ai/memory/engram-persistence';
 
 // ============================================================================
 // MOLLY'S PERSONALITY MODULATION SYSTEM
@@ -24,13 +25,13 @@ export interface PersonalityModulation {
   flirtiness: number; // 0: professional, 1: playfully flirty
   arousal: number; // 0: calm/tired, 1: energetic/excited
   sexuality: number; // 0: neutral/asexual, 1: sensual/intimate (non-explicit)
-  
+
   // Expressive dimensions
   humor: number; // 0: serious, 1: comedic/witty
   warmth: number; // 0: distant/clinical, 1: affectionate/intimate
   assertiveness: number; // 0: passive/deferential, 1: confident/bold
   vulnerability: number; // 0: guarded, 1: open/emotionally expressive
-  
+
   // Cognitive dimensions
   technicality: number; // 0: casual, 1: highly technical
   depth: number; // 0: surface-level, 1: deeply analytical
@@ -78,7 +79,7 @@ export interface MemoryEngram {
   consolidationState: 'working' | 'consolidating' | 'consolidated' | 'archived';
   contextTags: string[];
   relatedEngrams: string[]; // IDs of associated memories
-  
+
   // NEW: Personality context from when memory was formed
   personalityContext?: PersonalityModulation;
 }
@@ -87,6 +88,12 @@ export interface WorkingMemorySlot {
   engram: MemoryEngram;
   activationLevel: number; // 0 to 1 (how "hot" this memory is)
   decayRate: number;
+}
+
+export interface EngramPersistenceConfig {
+  userId: string;
+  password: string;
+  source?: string;
 }
 
 // ============================================================================
@@ -154,7 +161,9 @@ class FrontalCortex {
     for (const slot of this.workingMemory.values()) {
       if (
         slot.engram.content.toLowerCase().includes(queryLower) ||
-        slot.engram.contextTags.some((tag) => tag.toLowerCase().includes(queryLower))
+        slot.engram.contextTags.some((tag) =>
+          tag.toLowerCase().includes(queryLower)
+        )
       ) {
         slot.activationLevel = Math.min(1.0, slot.activationLevel + 0.2);
         matches.push(slot.engram);
@@ -234,7 +243,10 @@ class FrontalCortex {
   private startDecay(): void {
     this.decayTimer = setInterval(() => {
       for (const [id, slot] of this.workingMemory.entries()) {
-        slot.activationLevel = Math.max(0, slot.activationLevel - slot.decayRate);
+        slot.activationLevel = Math.max(
+          0,
+          slot.activationLevel - slot.decayRate
+        );
 
         // Auto-evict if activation drops to zero
         if (slot.activationLevel <= 0.01) {
@@ -265,12 +277,15 @@ class Amygdala {
   /**
    * Tag memory with emotional context and calculate importance
    */
-  tag(engram: MemoryEngram, context: {
-    success?: boolean;
-    error?: boolean;
-    userFeedback?: 'positive' | 'negative' | 'neutral';
-    novelty?: number; // 0 to 1
-  }): MemoryEngram {
+  tag(
+    engram: MemoryEngram,
+    context: {
+      success?: boolean;
+      error?: boolean;
+      userFeedback?: 'positive' | 'negative' | 'neutral';
+      novelty?: number; // 0 to 1
+    }
+  ): MemoryEngram {
     let emotionalValence = engram.emotionalValence;
     let arousal = engram.arousal;
     let importance = engram.importance;
@@ -334,11 +349,9 @@ class Hippocampus {
     engram.consolidationState = 'consolidating';
     this.consolidationQueue.push(engram);
 
-    MollyLogger.debug(
-      `Staged for consolidation`,
-      'hippocampus',
-      { queue: this.consolidationQueue.length }
-    );
+    MollyLogger.debug(`Staged for consolidation`, 'hippocampus', {
+      queue: this.consolidationQueue.length,
+    });
   }
 
   /**
@@ -349,7 +362,10 @@ class Hippocampus {
     this.consolidationQueue.sort((a, b) => b.importance - a.importance);
 
     // Take batch
-    const batch = this.consolidationQueue.splice(0, this.CONSOLIDATION_BATCH_SIZE);
+    const batch = this.consolidationQueue.splice(
+      0,
+      this.CONSOLIDATION_BATCH_SIZE
+    );
 
     return batch.map((engram) => ({
       ...engram,
@@ -411,7 +427,8 @@ class Hypothalamus {
     if (queueSize > 50) {
       return {
         status: 'stressed',
-        recommendation: 'Consolidation queue building up. Schedule batch processing.',
+        recommendation:
+          'Consolidation queue building up. Schedule batch processing.',
       };
     }
 
@@ -437,7 +454,9 @@ class Hypothalamus {
     ).length;
 
     if (staleCount > 20) {
-      recommendations.push(`Archive ${staleCount} stale memories to cold storage`);
+      recommendations.push(
+        `Archive ${staleCount} stale memories to cold storage`
+      );
     }
 
     // Check for duplicate patterns
@@ -446,7 +465,9 @@ class Hypothalamus {
       const key = engram.content.substring(0, 50);
       contentMap.set(key, (contentMap.get(key) || 0) + 1);
     }
-    const duplicates = Array.from(contentMap.values()).filter((c) => c > 1).length;
+    const duplicates = Array.from(contentMap.values()).filter(
+      (c) => c > 1
+    ).length;
 
     if (duplicates > 5) {
       recommendations.push(`Merge ${duplicates} similar memory patterns`);
@@ -474,6 +495,7 @@ export class NeuralEngramSystem {
   private currentPersonality: PersonalityModulation | null = null;
   private selfImage: SelfImage | null = null;
   private nextId = 1;
+  private persistenceConfig: EngramPersistenceConfig | null = null;
 
   constructor() {
     this.frontalCortex = new FrontalCortex();
@@ -485,6 +507,25 @@ export class NeuralEngramSystem {
     this.currentPersonality = this.getBaselinePersonality();
 
     MollyLogger.info('Neural engram system initialized', 'neural-engram');
+  }
+
+  /**
+   * Configure persistence for consolidated engrams.
+   */
+  configurePersistence(config: EngramPersistenceConfig): void {
+    this.persistenceConfig = { ...config };
+    MollyLogger.info('Engram persistence configured', 'neural-engram', {
+      userId: config.userId,
+      source: config.source || 'consolidation',
+    });
+  }
+
+  /**
+   * Disable persistence for consolidated engrams.
+   */
+  clearPersistence(): void {
+    this.persistenceConfig = null;
+    MollyLogger.info('Engram persistence disabled', 'neural-engram');
   }
 
   /**
@@ -515,7 +556,8 @@ export class NeuralEngramSystem {
       contextTags: context.tags || [],
       relatedEngrams: [],
       // Capture current personality state when memory is formed
-      personalityContext: this.currentPersonality || this.getBaselinePersonality(),
+      personalityContext:
+        this.currentPersonality || this.getBaselinePersonality(),
     };
 
     // Tag with emotional context (Amygdala)
@@ -559,15 +601,31 @@ export class NeuralEngramSystem {
       ? this.hippocampus.getConsolidationBatch()
       : [];
 
-    MollyLogger.info(
-      `Memory consolidation cycle`,
-      'neural-engram',
-      {
-        candidates: candidates.length,
-        consolidated: batch.length,
-        queued: this.hippocampus.getQueueSize(),
+    if (batch.length > 0 && this.persistenceConfig) {
+      try {
+        await persistEngramBatch(
+          this.persistenceConfig.userId,
+          this.persistenceConfig.password,
+          batch,
+          { source: this.persistenceConfig.source }
+        );
+      } catch (error) {
+        MollyLogger.warn(
+          'Failed to persist consolidated engrams',
+          'neural-engram',
+          {
+            batchSize: batch.length,
+            error: error instanceof Error ? error.message : String(error),
+          }
+        );
       }
-    );
+    }
+
+    MollyLogger.info(`Memory consolidation cycle`, 'neural-engram', {
+      candidates: candidates.length,
+      consolidated: batch.length,
+      queued: this.hippocampus.getQueueSize(),
+    });
 
     return {
       consolidated: batch.length,
@@ -624,7 +682,9 @@ export class NeuralEngramSystem {
    */
   computePersonalityState(): PersonalityModulation {
     const workingMemories = Array.from(
-      this.frontalCortex['workingMemory'].values() as IterableIterator<WorkingMemorySlot>
+      this.frontalCortex[
+        'workingMemory'
+      ].values() as IterableIterator<WorkingMemorySlot>
     );
 
     if (workingMemories.length === 0) {
@@ -688,8 +748,10 @@ export class NeuralEngramSystem {
       sexuality: computed.sexuality * 0.7 + baseline.sexuality * 0.3,
       humor: computed.humor * 0.7 + baseline.humor * 0.3,
       warmth: computed.warmth * 0.7 + baseline.warmth * 0.3,
-      assertiveness: computed.assertiveness * 0.7 + baseline.assertiveness * 0.3,
-      vulnerability: computed.vulnerability * 0.7 + baseline.vulnerability * 0.3,
+      assertiveness:
+        computed.assertiveness * 0.7 + baseline.assertiveness * 0.3,
+      vulnerability:
+        computed.vulnerability * 0.7 + baseline.vulnerability * 0.3,
       technicality: computed.technicality * 0.7 + baseline.technicality * 0.3,
       depth: computed.depth * 0.7 + baseline.depth * 0.3,
       curiosity: computed.curiosity * 0.7 + baseline.curiosity * 0.3,
@@ -817,6 +879,16 @@ export function getNeuralBrain(): NeuralEngramSystem {
   }
 
   return _globalBrain;
+}
+
+export function configureNeuralPersistence(
+  config: EngramPersistenceConfig
+): void {
+  getNeuralBrain().configurePersistence(config);
+}
+
+export function clearNeuralPersistence(): void {
+  getNeuralBrain().clearPersistence();
 }
 
 export function shutdownNeuralBrain(): void {

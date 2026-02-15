@@ -7,6 +7,8 @@ import {
   getAutonomousSolution,
   getHealthCheck,
   getMollyVoice,
+  getOriginStory,
+  seedOriginStoryMemory,
   triggerImmuneResponse,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
@@ -31,6 +33,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
 import { useToast } from '@/hooks/use-toast';
+import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
 
 type HistoryItem =
   | string
@@ -81,6 +84,9 @@ export default function Terminal({
   const [audioSrc, setAudioUri] = useState<string | null>(null);
   const [isVocalizing, setIsVocalizing] = useState(false);
 
+  const lastResponseRef = useRef<string | null>(null);
+  const originStorySeededRef = useRef(false);
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
@@ -127,6 +133,37 @@ export default function Terminal({
 
   const handleAudioEnd = () => setIsVocalizing(false);
 
+  const isOriginStoryRequest = (text: string) =>
+    /origin story|your origin|creation story|where did you come from/i.test(
+      text
+    );
+
+  const handleOriginStoryRequest = async (text: string) => {
+    if (!isOriginStoryRequest(text)) return false;
+
+    setIsLoading(true);
+    try {
+      const { content } = await getOriginStory();
+      setHistory((prev) => [...prev, '--- Origin Story ---', content]);
+      if (user && !originStorySeededRef.current) {
+        await seedOriginStoryMemory(user.uid);
+        originStorySeededRef.current = true;
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to load origin story.';
+      toast({
+        variant: 'destructive',
+        title: 'Origin Story Unavailable',
+        description: message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+
+    return true;
+  };
+
   useEffect(() => {
     const fetchIntroduction = async () => {
       if (!user) return;
@@ -161,20 +198,29 @@ export default function Terminal({
 
   useEffect(() => {
     if (voiceResult && !isLoading) {
-      onVoiceCommandProcessed();
+      const processVoice = async () => {
+        onVoiceCommandProcessed();
 
-      // Voice is already processed by conversational AI
-      // Display the conversation naturally
-      if (voiceResult.recognized && voiceResult.response) {
-        setHistory((prev) => [
-          ...prev,
-          `> ${voiceResult.transcription}`,
-          voiceResult.response,
-        ]);
-        speakResponse(voiceResult.response);
-      }
+        if (voiceResult.recognized) {
+          setHistory((prev) => [...prev, `> ${voiceResult.transcription}`]);
+          const handled = await handleOriginStoryRequest(
+            voiceResult.transcription
+          );
+          if (handled) return;
+        }
+
+        // Voice is already processed by conversational AI
+        // Display the conversation naturally
+        if (voiceResult.recognized && voiceResult.response) {
+          setHistory((prev) => [...prev, voiceResult.response]);
+          lastResponseRef.current = voiceResult.response;
+          speakResponse(voiceResult.response);
+        }
+      };
+
+      void processVoice();
     }
-  }, [voiceResult]);
+  }, [voiceResult, isLoading]);
 
   const handleManualHeal = async () => {
     if (!user) return;
@@ -199,25 +245,44 @@ export default function Terminal({
   const processCommand = async (cmdText: string) => {
     if (!cmdText.trim() || isLoading || !user) return;
     setHistory((prev) => [...prev, `> ${cmdText}`]);
+    if (await handleOriginStoryRequest(cmdText)) {
+      return;
+    }
     setIsLoading(true);
     try {
       if (cmdText.startsWith('/solve ')) {
         const prompt = cmdText.replace('/solve ', '');
         const aiResponse = await getAutonomousSolution(prompt, user.uid);
         setHistory((prev) => [...prev, aiResponse]);
+        lastResponseRef.current = aiResponse.vibeCheck || null;
         speakResponse(aiResponse.vibeCheck);
       } else if (cmdText === 'clear') {
         setHistory([]);
       } else {
         // Route unknown commands to conversational Molly (NOT to sarcophagus)
         // Use conversational chat instead of terminal command synthesis
-        const aiResponse = await getConversationalChat(cmdText, []);
+        const selfSignals: NeuralBridgeSignal[] | undefined =
+          lastResponseRef.current
+            ? [
+                {
+                  action: 'self.vocalize_text',
+                  content: lastResponseRef.current,
+                },
+              ]
+            : undefined;
+
+        const aiResponse = await getConversationalChat(
+          cmdText,
+          [],
+          selfSignals
+        );
         const responseText =
           typeof aiResponse === 'string'
             ? aiResponse
             : aiResponse?.response || 'No response.';
         setHistory((prev) => [...prev, `> ${cmdText}`, responseText]);
         handleSleepNotice(responseText);
+        lastResponseRef.current = responseText;
         speakResponse(responseText);
       }
     } catch (error) {

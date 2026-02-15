@@ -22,7 +22,11 @@ import { runCollaborativeHive } from '@/ai/flows/collaborative-hive';
 import { runImmuneResponse } from '@/ai/flows/immune-response';
 import { runSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
 import { listAvailableModels } from '@/ai/tools/system';
+import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
+import { getSystemHealth } from '@/ai/tools/system';
+import { logPacingTelemetry } from '@/ai/tools/pacing-telemetry';
 import { MollyLogger } from '@/ai/logger';
+import { recordSensoryLogServer } from '@/firebase/firestore/agent-memory-server';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import {
   getSafewordPhrase,
@@ -37,6 +41,9 @@ import {
   RETRY_PRESETS,
 } from '@/ai/tools/timeout-retry';
 import { ensureApiKey, checkRateLimit, fetchLastContext } from './utils';
+import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import path from 'node:path';
 
 function getAudioMimeType(dataUri: string): string {
   const match = dataUri.match(/^data:([^;]+);base64,/);
@@ -75,6 +82,25 @@ function getSleepGuard(
   }
 
   return null;
+}
+
+async function buildNervousSystemSignal(): Promise<NeuralBridgeSignal | null> {
+  try {
+    const health = await getSystemHealth({});
+    return {
+      action: 'self.nervous_system',
+      cpuUsage: health.cpuUsage,
+      temperatureC: health.temperature,
+    };
+  } catch (error) {
+    MollyLogger.warn(
+      'Failed to collect nervous system metrics',
+      'buildNervousSystemSignal',
+      {},
+      error
+    );
+    return null;
+  }
 }
 
 // ============================================
@@ -222,10 +248,25 @@ export async function processVoiceInteraction(
     });
 
     // Step 2: Get conversational response from Molly
+    const nervousSignal = await buildNervousSystemSignal();
+    const selfSignals = nervousSignal ? [nervousSignal] : undefined;
+
     const chatResponse = await conversationalChat({
       text: transcription,
       history: [],
+      inputContext: {
+        source: 'self.auditory_input',
+        modality: 'audio',
+        content: transcription,
+      },
+      selfSignals,
     });
+
+    logPacingTelemetry(
+      'processVoiceInteraction',
+      chatResponse.response,
+      nervousSignal
+    );
 
     return {
       recognized: true,
@@ -264,10 +305,64 @@ export async function getMollyVoice(text: string) {
 }
 
 // ============================================
+// ORIGIN STORY
+// ============================================
+
+export async function getOriginStory() {
+  try {
+    const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
+    const content = await readFile(originPath, 'utf8');
+    return { content };
+  } catch (e: any) {
+    MollyLogger.error('Origin story load failed', 'getOriginStory', {}, e);
+    throw e;
+  }
+}
+
+export async function seedOriginStoryMemory(userId: string) {
+  try {
+    if (!userId) {
+      throw new Error('Missing userId for origin story seeding.');
+    }
+
+    const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
+    const content = await readFile(originPath, 'utf8');
+    const hash = createHash('sha256').update(content).digest('hex');
+
+    const summary =
+      'Origin story archived from docs/ORIGIN_STORY.md. ' +
+      'Authored by Eric in February 2026. ' +
+      'Contains the creation context, purpose, and early conversation about Molly.';
+
+    await recordSensoryLogServer(userId, 'vibe', summary, {
+      source: 'origin-story',
+      path: 'docs/ORIGIN_STORY.md',
+      contentHash: hash,
+      contentLength: content.length,
+      timestamp: Date.now(),
+    });
+
+    return { seeded: true, hash };
+  } catch (e: any) {
+    MollyLogger.error(
+      'Origin story seed failed',
+      'seedOriginStoryMemory',
+      {},
+      e
+    );
+    throw e;
+  }
+}
+
+// ============================================
 // CONVERSATIONAL & GUIDANCE
 // ============================================
 
-export async function getConversationalChat(text: string, history: any[]) {
+export async function getConversationalChat(
+  text: string,
+  history: any[],
+  selfSignals?: NeuralBridgeSignal[]
+) {
   try {
     ensureApiKey();
     await checkRateLimit('conversational-chat', 800);
@@ -277,11 +372,31 @@ export async function getConversationalChat(text: string, history: any[]) {
         response: guard.message,
       };
     }
-    return await withRetry(
-      () => conversationalChat({ text, history }),
+    const nervousSignal = await buildNervousSystemSignal();
+    const mergedSignals = nervousSignal
+      ? [...(selfSignals ?? []), nervousSignal]
+      : selfSignals;
+    const response = await withRetry(
+      () =>
+        conversationalChat({
+          text,
+          history,
+          inputContext: {
+            source: 'text_input',
+            modality: 'text',
+            content: text,
+          },
+          selfSignals: mergedSignals,
+        }),
       'conversational-chat',
       RETRY_PRESETS.FAST
     );
+
+    const responseText =
+      typeof response === 'string' ? response : (response?.response ?? '');
+    logPacingTelemetry('getConversationalChat', responseText, nervousSignal);
+
+    return response;
   } catch (e: any) {
     MollyLogger.error(
       'Conversational chat failed',

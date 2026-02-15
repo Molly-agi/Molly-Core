@@ -69,11 +69,21 @@ export interface SessionEvent {
 export function saveSessionState(state: Partial<SessionState>): void {
   try {
     const currentState = loadSessionState();
-    const updatedState = {
+    let updatedState: SessionState = {
       ...currentState,
       ...state,
       lastUpdated: new Date().toISOString(),
     };
+
+    if (updatedState.runtime) {
+      updatedState = {
+        ...updatedState,
+        runtime: {
+          ...updatedState.runtime,
+          events: updatedState.runtime.events ?? [],
+        },
+      };
+    }
 
     const markdown = generateMarkdownFromState(updatedState);
     writeFileSync(SESSION_STATE_FILE, markdown, 'utf-8');
@@ -212,7 +222,9 @@ export function addReminder(reminder: string): void {
  * Generate markdown representation of state
  */
 function generateMarkdownFromState(state: SessionState): string {
-  const runtime = state.runtime || { events: [] };
+  const runtime = state.runtime
+    ? { ...state.runtime, events: state.runtime.events ?? [] }
+    : { events: [] as SessionEvent[] };
 
   return `# GitHub Copilot Session State & Memory
 **Last Updated:** ${state.lastUpdated}  

@@ -1,9 +1,10 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Mic, Square } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/firebase/auth/use-user';
+import { VoiceActivityDetector } from '@/ai/tools/voice-activity-detection';
 
 export type VoiceCommandResult = {
   recognized: boolean;
@@ -18,10 +19,20 @@ export function VoiceControl({
 }: {
   onVoiceCommand: (result: VoiceCommandResult) => void;
 }) {
+  const [isListening, setIsListening] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const isListeningRef = useRef(false);
+  const isProcessingRef = useRef(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const vadRef = useRef<VoiceActivityDetector | null>(null);
+  const frameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const speechActiveRef = useRef(false);
   const audioChunksRef = useRef<Blob[]>([]);
+  const lastResponseRef = useRef<string | null>(null);
   const { toast } = useToast();
   const { user } = useUser();
 
@@ -113,147 +124,289 @@ export function VoiceControl({
     return null;
   };
 
-  const handleStartRecording = async () => {
-    if (isRecording || isProcessing) return;
-    try {
-      const mimeType = pickMimeType();
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setIsRecording(true);
-      audioChunksRef.current = [];
-      const recorder = mimeType
-        ? new MediaRecorder(stream, { mimeType })
-        : new MediaRecorder(stream);
-      mediaRecorderRef.current = recorder;
-
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) audioChunksRef.current.push(event.data);
-      };
-
-      recorder.onstop = async () => {
-        stream.getTracks().forEach((track) => track.stop());
-        setIsRecording(false);
-        if (audioChunksRef.current.length === 0) {
+  const submitAudioBlob = async (audioBlob: Blob) => {
+    isProcessingRef.current = true;
+    setIsProcessing(true);
+    const reader = new FileReader();
+    reader.readAsDataURL(audioBlob);
+    reader.onloadend = async () => {
+      let base64Audio = reader.result as string | null;
+      if (!base64Audio) {
+        toast({
+          variant: 'destructive',
+          title: 'Audio Processing Failed',
+          description: 'No audio data was captured. Please try again.',
+        });
+        setIsProcessing(false);
+        return;
+      }
+      try {
+        // Normalize to WAV/PCM for consistent transcription support.
+        base64Audio = await convertToWavDataUrl(audioBlob);
+      } catch (conversionError) {
+        console.warn(
+          '[VoiceControl] WAV conversion failed, falling back to source format:',
+          conversionError
+        );
+      }
+      try {
+        if (!user) {
           toast({
             variant: 'destructive',
-            title: 'No Audio Captured',
-            description:
-              'Try again and speak after you see the recording icon.',
+            title: 'Not Authenticated',
+            description: 'Please sign in to use voice interaction.',
+          });
+          setIsProcessing(false);
+          return;
+        }
+
+        const response = await fetch('/api/voice/interact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            audioData: base64Audio,
+            userId: user.uid,
+            synthesizeSpeech: false,
+            lastResponse: lastResponseRef.current ?? undefined,
+          }),
+        });
+
+        const contentType = response.headers.get('content-type') || '';
+        let data: any = null;
+
+        if (contentType.includes('application/json')) {
+          try {
+            data = await response.json();
+          } catch (parseError) {
+            console.error(
+              '[VoiceControl] JSON parse error:',
+              parseError,
+              'Response status:',
+              response.status
+            );
+          }
+        } else {
+          const rawText = await response.text();
+          console.warn('[VoiceControl] Non-JSON response:', rawText);
+        }
+
+        if (!data) {
+          toast({
+            variant: 'destructive',
+            title: 'Voice Processing Error',
+            description: 'Unexpected server response. Please try again.',
+          });
+          setIsProcessing(false);
+          return;
+        }
+
+        if (!response.ok || !data?.success) {
+          toast({
+            variant: 'destructive',
+            title: 'Voice Processing Failed',
+            description: data?.error || 'Unexpected server response.',
           });
           return;
         }
 
-        setIsProcessing(true);
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: mimeType || 'audio/webm',
-        });
-        const reader = new FileReader();
-        reader.readAsDataURL(audioBlob);
-        reader.onloadend = async () => {
-          let base64Audio = reader.result as string;
-          try {
-            // Normalize to WAV/PCM for consistent transcription support.
-            base64Audio = await convertToWavDataUrl(audioBlob);
-          } catch (conversionError) {
-            console.warn(
-              '[VoiceControl] WAV conversion failed, falling back to source format:',
-              conversionError
-            );
-          }
-          try {
-            if (!user) {
-              toast({
-                variant: 'destructive',
-                title: 'Not Authenticated',
-                description: 'Please sign in to use voice interaction.',
-              });
-              setIsProcessing(false);
-              return;
-            }
+        const result = {
+          recognized: !!data.result?.recognized,
+          transcription: data.result?.transcription || '',
+          response: data.result?.response || '',
+          intent: data.result?.intent || 'unknown',
+          confidence: data.result?.metadata?.confidence ?? 0,
+        } as VoiceCommandResult;
 
-            const response = await fetch('/api/voice/interact', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                audioData: base64Audio,
-                userId: user.uid,
-                synthesizeSpeech: false,
-              }),
-            });
+        if (result.response) {
+          lastResponseRef.current = result.response;
+        }
 
-            let data;
-            try {
-              data = await response.json();
-            } catch (parseError) {
-              console.error(
-                '[VoiceControl] JSON parse error:',
-                parseError,
-                'Response status:',
-                response.status
-              );
-              toast({
-                variant: 'destructive',
-                title: 'Voice Processing Error',
-                description:
-                  'Failed to parse voice response. Please try again.',
-              });
-              setIsProcessing(false);
-              return;
-            }
-
-            if (!response.ok || !data?.success) {
-              toast({
-                variant: 'destructive',
-                title: 'Voice Processing Failed',
-                description: data?.error || 'Unexpected server response.',
-              });
-              return;
-            }
-
-            const result = {
-              recognized: !!data.result?.recognized,
-              transcription: data.result?.transcription || '',
-              response: data.result?.response || '',
-              intent: data.result?.intent || 'unknown',
-              confidence: data.result?.metadata?.confidence ?? 0,
-            } as VoiceCommandResult;
-
-            if (result.recognized && result.transcription) {
-              onVoiceCommand(result);
-            } else {
-              toast({
-                variant: 'destructive',
-                title: 'Voice Not Recognized',
-                description: result.response || 'Could not understand audio.',
-              });
-            }
-          } catch (error) {
-            console.error('Voice interaction error:', error);
-            const errorMessage =
-              error instanceof Error
-                ? error.message
-                : 'Could not process the voice command.';
-            toast({
-              variant: 'destructive',
-              title: 'Voice Processing Failed',
-              description: errorMessage,
-            });
-          } finally {
-            setIsProcessing(false);
-          }
-        };
-        reader.onerror = (error) => {
-          console.error('FileReader error:', error);
+        if (result.recognized && result.transcription) {
+          onVoiceCommand(result);
+        } else {
           toast({
             variant: 'destructive',
-            title: 'Audio Processing Failed',
-            description: 'Failed to read audio data',
+            title: 'Voice Not Recognized',
+            description: result.response || 'Could not understand audio.',
           });
-          setIsProcessing(false);
-        };
-      };
-      recorder.start();
+        }
+      } catch (error) {
+        console.error('Voice interaction error:', error);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Could not process the voice command.';
+        toast({
+          variant: 'destructive',
+          title: 'Voice Processing Failed',
+          description: errorMessage,
+        });
+      } finally {
+        isProcessingRef.current = false;
+        setIsProcessing(false);
+      }
+    };
+    reader.onerror = (error) => {
+      console.error('FileReader error:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Audio Processing Failed',
+        description: 'Failed to read audio data',
+      });
+      isProcessingRef.current = false;
+      setIsProcessing(false);
+    };
+  };
+
+  const startSegmentRecording = (stream: MediaStream) => {
+    if (mediaRecorderRef.current?.state === 'recording') return;
+
+    const mimeType = pickMimeType();
+    const recorder = mimeType
+      ? new MediaRecorder(stream, { mimeType })
+      : new MediaRecorder(stream);
+    mediaRecorderRef.current = recorder;
+    audioChunksRef.current = [];
+    setIsRecording(true);
+
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) audioChunksRef.current.push(event.data);
+    };
+
+    recorder.onstop = async () => {
+      setIsRecording(false);
+      if (audioChunksRef.current.length === 0) {
+        return;
+      }
+
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: mimeType || 'audio/webm',
+      });
+      await submitAudioBlob(audioBlob);
+    };
+
+    recorder.start();
+  };
+
+  const stopSegmentRecording = () => {
+    if (mediaRecorderRef.current?.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+  };
+
+  const stopListening = (suppressStateUpdate = false) => {
+    isListeningRef.current = false;
+    if (!suppressStateUpdate) {
+      setIsListening(false);
+    }
+    speechActiveRef.current = false;
+    if (frameTimerRef.current) {
+      clearTimeout(frameTimerRef.current);
+      frameTimerRef.current = null;
+    }
+    stopSegmentRecording();
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+    analyserRef.current = null;
+    vadRef.current = null;
+  };
+
+  const processAudioFrames = () => {
+    if (!isListeningRef.current || !analyserRef.current || !vadRef.current) {
+      return;
+    }
+
+    const analyser = analyserRef.current;
+    const vad = vadRef.current;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Float32Array(bufferLength);
+
+    const tick = () => {
+      if (!isListeningRef.current || !analyserRef.current || !vadRef.current) {
+        return;
+      }
+
+      analyserRef.current.getFloatTimeDomainData(dataArray);
+      const result = vad.processFrame(dataArray);
+
+      if (
+        result.isSpeaking &&
+        !speechActiveRef.current &&
+        !isProcessingRef.current &&
+        streamRef.current
+      ) {
+        speechActiveRef.current = true;
+        startSegmentRecording(streamRef.current);
+      }
+
+      if (speechActiveRef.current && vad.isTimeoutExceeded()) {
+        speechActiveRef.current = false;
+        stopSegmentRecording();
+        vad.stopSession();
+        vad.startSession();
+      }
+
+      frameTimerRef.current = setTimeout(tick, 20);
+    };
+
+    tick();
+  };
+
+  const startListening = async () => {
+    if (isListeningRef.current || isProcessingRef.current) return;
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Not Authenticated',
+        description: 'Please sign in to use voice interaction.',
+      });
+      return;
+    }
+
+    if (!('MediaRecorder' in window)) {
+      toast({
+        variant: 'destructive',
+        title: 'Microphone Unsupported',
+        description: 'This browser does not support voice recording.',
+      });
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+
+      streamRef.current = stream;
+      const audioContext = new AudioContext();
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 512;
+
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyser);
+
+      audioContextRef.current = audioContext;
+      analyserRef.current = analyser;
+      vadRef.current = new VoiceActivityDetector({
+        autoCalibrate: true,
+      });
+      vadRef.current.startSession();
+
+      isListeningRef.current = true;
+      setIsListening(true);
+      processAudioFrames();
     } catch (error) {
       console.error('Error accessing microphone:', error);
       toast({
@@ -262,36 +415,37 @@ export function VoiceControl({
         description:
           'Please enable microphone permissions in your browser settings.',
       });
-      setIsRecording(false);
-      setIsProcessing(false);
+      stopListening(true);
     }
   };
 
-  const handleStopRecording = () => {
-    if (mediaRecorderRef.current?.state === 'recording') {
-      mediaRecorderRef.current.stop();
-    }
-  };
+  useEffect(() => {
+    return () => {
+      stopListening(true);
+    };
+  }, []);
 
-  const isLoading = isRecording || isProcessing;
+  useEffect(() => {
+    isProcessingRef.current = isProcessing;
+  }, [isProcessing]);
 
   return (
     <Button
-      variant={isRecording ? 'destructive' : 'outline'}
+      variant={isListening ? 'destructive' : 'outline'}
       size="icon"
-      onClick={isRecording ? handleStopRecording : handleStartRecording}
+      onClick={() => (isListening ? stopListening() : startListening())}
       disabled={isProcessing}
-      title={isRecording ? 'Stop Recording' : 'Start Recording'}
+      title={isListening ? 'Stop Listening' : 'Start Listening'}
     >
       {isProcessing ? (
         <div className="animate-pulse h-2 w-2 bg-primary rounded-full"></div>
-      ) : isRecording ? (
+      ) : isListening ? (
         <Square className="h-4 w-4 fill-current text-white" />
       ) : (
         <Mic className="h-4 w-4" />
       )}
       <span className="sr-only">
-        {isRecording ? 'Stop Recording' : 'Start Recording'}
+        {isListening ? 'Stop Listening' : 'Start Listening'}
       </span>
     </Button>
   );

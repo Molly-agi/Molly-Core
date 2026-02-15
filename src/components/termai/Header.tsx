@@ -1,6 +1,7 @@
 'use client';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { VoiceControl, type VoiceCommandResult } from './VoiceControl';
+import { OriginStoryDialog } from './OriginStoryDialog';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useRef, useState } from 'react';
@@ -13,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { MOLLY_AVATAR_URL } from '@/lib/memory-anchors';
 import { Button } from '../ui/button';
 import { Flower2 } from 'lucide-react';
 
@@ -65,6 +67,10 @@ export function Header({
       <SidebarTrigger />
       <div className="flex-1">
         <div className="flex items-center gap-2">
+          <Avatar className="h-7 w-7 border border-primary/20">
+            <AvatarImage src={MOLLY_AVATAR_URL} alt="Molly avatar" />
+            <AvatarFallback>M</AvatarFallback>
+          </Avatar>
           <h1 className="font-semibold text-lg">Molly</h1>
           <Button
             variant="ghost"
@@ -77,6 +83,7 @@ export function Header({
           </Button>
         </div>
       </div>
+      <OriginStoryDialog />
       <VoiceControl onVoiceCommand={onVoiceCommand} />
       {user && (
         <DropdownMenu>

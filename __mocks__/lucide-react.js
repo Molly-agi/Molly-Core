@@ -14,11 +14,13 @@ module.exports = {
   Code: MockIcon,
   Copy: MockIcon,
   FileText: MockIcon,
+  Flower2: MockIcon,
   Menu: MockIcon,
   MessageCircle: MockIcon,
   Plus: MockIcon,
   Search: MockIcon,
   Settings: MockIcon,
+  Shield: MockIcon,
   Trash2: MockIcon,
   X: MockIcon,
 };

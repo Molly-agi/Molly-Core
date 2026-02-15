@@ -172,9 +172,14 @@ export class MollyLogger {
 
   private static recordSessionEvent(entry: LogEntry) {
     try {
+      if (typeof window !== 'undefined') {
+        return;
+      }
+
       // Lazy import to keep this server-only and avoid bundling in clients.
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { appendSessionEvent } = require('@/lib/session-manager') as {
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval
+      const requireFunc = eval('require') as NodeRequire;
+      const { appendSessionEvent } = requireFunc('@/lib/session-manager') as {
         appendSessionEvent: (event: {
           timestamp: string;
           event: string;

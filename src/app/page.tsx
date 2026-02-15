@@ -1,5 +1,5 @@
-import Dashboard from '@/components/termai/Dashboard';
+import StartupGate from '@/components/StartupGate';
 
 export default function Home() {
-  return <Dashboard />;
+  return <StartupGate />;
 }

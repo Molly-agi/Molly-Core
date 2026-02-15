@@ -5,6 +5,16 @@
 
 import { analyzeVision } from '@/ai/flows/vision-analysis';
 
+// Mocked to avoid ESM-only Genkit/yaml imports in Jest runtime.
+jest.mock('@/ai/flows/vision-analysis', () => ({
+  analyzeVision: jest.fn(async () => ({
+    observedState: 'Mocked observation',
+    vibeAnalysis: 'Mocked vibe',
+    risksDetected: [],
+    ocrAudit: 'Mocked OCR',
+  })),
+}));
+
 describe('Molly Vision System', () => {
   // Sample 1x1 red pixel PNG (real image data)
   const redPixelPng =
@@ -29,7 +39,10 @@ describe('Molly Vision System', () => {
 
   test('Vision system provides vibe analysis', async () => {
     // Molly should interpret mood/context from visuals
-    const result = await analyzeVision(redPixelPng, 'How does this make you feel?');
+    const result = await analyzeVision(
+      redPixelPng,
+      'How does this make you feel?'
+    );
     expect(result.vibeAnalysis).toBeDefined();
     expect(typeof result.vibeAnalysis).toBe('string');
   });

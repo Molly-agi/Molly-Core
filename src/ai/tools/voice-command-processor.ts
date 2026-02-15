@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { voiceCommandToText } from '../flows/voice-command-to-text';
 import { textToSpeech } from '../flows/text-to-speech';
 import { autonomousSolutionFlow } from '../flows/autonomous-solution';
+import { conversationalChat } from '../flows/conversational-chat';
 import { recallSimilarMemories } from './semantic-recall';
 import { MollyLogger, generateTraceId } from '../logger';
 import { recordSensoryLogServer } from '@/firebase/firestore/agent-memory-server';
@@ -20,11 +21,16 @@ import {
   isSleepSafeword,
   toggleSleepState,
 } from './safety-sleep';
+import { getSystemHealth } from './system';
+import { logPacingTelemetry } from './pacing-telemetry';
+import type { NeuralBridgeSignal } from './neural-bridge';
+import { buildNeuralBridgeContext } from './neural-bridge';
 
 export interface VoiceCommandContext {
   userId: string;
   sessionId: string;
   previousCommands?: string[];
+  lastResponse?: string;
   hardwareState?: {
     temperature?: number;
     batteryLevel?: number;
@@ -322,17 +328,83 @@ async function handleQuestionIntent(
         ? `\n\nRelevant past experiences:\n${memories.map((m) => m.suggestion).join('\n')}`
         : '';
 
-    const response = await ai.generate({
-      model: MODEL_FLASH,
-      system: `You are Molly - a loving, strategic AI assistant.
-${context.hardwareState ? `System: Temp ${context.hardwareState.temperature}°C, Battery ${context.hardwareState.batteryLevel}%` : ''}
-${memoryContext}
+    const selfSignals: NeuralBridgeSignal[] = [];
+    if (context.lastResponse) {
+      selfSignals.push({
+        action: 'self.vocalize_text',
+        content: context.lastResponse,
+      });
+    }
 
-Be conversational, warm, and helpful.`,
-      prompt: transcription,
+    let nervousSignal: NeuralBridgeSignal | null = null;
+    try {
+      if (context.hardwareState) {
+        nervousSignal = {
+          action: 'self.nervous_system',
+          cpuUsage: context.hardwareState.cpuUsage,
+          temperatureC: context.hardwareState.temperature,
+        };
+      } else {
+        const health = await getSystemHealth({});
+        nervousSignal = {
+          action: 'self.nervous_system',
+          cpuUsage: health.cpuUsage,
+          temperatureC: health.temperature,
+        };
+      }
+    } catch (error) {
+      MollyLogger.warn(
+        'Failed to collect nervous system metrics',
+        'voice-command-processor',
+        { error: error instanceof Error ? error.message : String(error) },
+        traceId
+      );
+    }
+
+    if (nervousSignal) {
+      selfSignals.push(nervousSignal);
+    }
+
+    const prompt = memoryContext
+      ? `${transcription}
+
+Relevant past experiences:
+${memories.map((m) => m.suggestion).join('\n')}`
+      : transcription;
+
+    const bridgeContext = buildNeuralBridgeContext(
+      {
+        source: 'self.auditory_input',
+        modality: 'audio',
+        content: transcription,
+      },
+      selfSignals.length > 0 ? selfSignals : undefined
+    );
+
+    if (bridgeContext) {
+      MollyLogger.debug(
+        'Neural bridge context (voice)',
+        'voice-command-processor',
+        { bridgeContext },
+        traceId
+      );
+    }
+
+    const response = await conversationalChat({
+      text: prompt,
+      history: [],
+      inputContext: {
+        source: 'self.auditory_input',
+        modality: 'audio',
+        content: transcription,
+      },
+      selfSignals: selfSignals.length > 0 ? selfSignals : undefined,
     });
 
-    return response.text;
+    const responseText = response?.response ?? '';
+    logPacingTelemetry('voice-command-processor', responseText, nervousSignal);
+
+    return responseText;
   } catch (error) {
     MollyLogger.error(
       'Failed to process question',

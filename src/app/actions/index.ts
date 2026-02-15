@@ -26,6 +26,8 @@ export {
   getConversationalChat,
   getContextualGuidance,
   getVisionaryCoach,
+  getOriginStory,
+  seedOriginStoryMemory,
 } from './ai-flows';
 
 // Research & Knowledge Base

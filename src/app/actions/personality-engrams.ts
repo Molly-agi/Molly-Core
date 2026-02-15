@@ -17,68 +17,14 @@ import type {
   PersonalityModulation,
   MemoryEngram,
 } from '@/ai/memory/neural-engram';
-import * as crypto from 'crypto';
+import {
+  encryptEngramData,
+  decryptEngramData,
+} from '@/ai/memory/engram-crypto';
 
 // ============================================================================
 // ENCRYPTION UTILITIES FOR PERSONALITY DATA
 // ============================================================================
-
-/**
- * Derive encryption key from userId + password using PBKDF2
- */
-function deriveEncryptionKey(userId: string, password: string): Buffer {
-  const salt = Buffer.from(userId, 'utf-8');
-  return crypto.pbkdf2Sync(password, salt, 100000, 32, 'sha256');
-}
-
-/**
- * Encrypt sensitive personality data using AES-256-GCM
- */
-function encryptPersonalityData(
-  data: string,
-  userId: string,
-  password: string
-): { encrypted: string; iv: string; authTag: string } {
-  const key = deriveEncryptionKey(userId, password);
-  const iv = crypto.randomBytes(16);
-
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-  let encrypted = cipher.update(data, 'utf-8', 'hex');
-  encrypted += cipher.final('hex');
-
-  const authTag = cipher.getAuthTag();
-
-  return {
-    encrypted,
-    iv: iv.toString('hex'),
-    authTag: authTag.toString('hex'),
-  };
-}
-
-/**
- * Decrypt sensitive personality data using AES-256-GCM
- */
-function decryptPersonalityData(
-  encrypted: string,
-  userId: string,
-  password: string,
-  iv: string,
-  authTag: string
-): string {
-  const key = deriveEncryptionKey(userId, password);
-
-  const decipher = crypto.createDecipheriv(
-    'aes-256-gcm',
-    key,
-    Buffer.from(iv, 'hex')
-  );
-  decipher.setAuthTag(Buffer.from(authTag, 'hex'));
-
-  let decrypted = decipher.update(encrypted, 'hex', 'utf-8');
-  decrypted += decipher.final('utf-8');
-
-  return decrypted;
-}
 
 // ============================================================================
 // PERSONALITY STATE STORAGE STRUCTURE
@@ -107,14 +53,19 @@ export async function getPersonalityState(
 ): Promise<{ personality: PersonalityModulation | null; timestamp?: Date }> {
   const traceId = generateTraceId();
   try {
-    MollyLogger.info(
-      'Retrieving personality state',
-      'getPersonalityState',
-      { userId, traceId }
-    );
+    MollyLogger.info('Retrieving personality state', 'getPersonalityState', {
+      userId,
+      traceId,
+    });
 
     const { firestore } = initializeFirebaseServer();
-    const docRef = doc(firestore, 'users', userId, 'personalityState', 'current');
+    const docRef = doc(
+      firestore,
+      'users',
+      userId,
+      'personalityState',
+      'current'
+    );
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
@@ -131,7 +82,7 @@ export async function getPersonalityState(
     // If password is provided, attempt decryption
     if (password) {
       try {
-        const decrypted = decryptPersonalityData(
+        const decrypted = decryptEngramData(
           record.encrypted,
           userId,
           password,
@@ -185,23 +136,29 @@ export async function setPersonalityState(
 ): Promise<{ success: boolean; timestamp: Date }> {
   const traceId = generateTraceId();
   try {
-    MollyLogger.info(
-      'Setting personality state',
-      'setPersonalityState',
-      { userId, source, traceId }
-    );
+    MollyLogger.info('Setting personality state', 'setPersonalityState', {
+      userId,
+      source,
+      traceId,
+    });
 
     const { firestore } = initializeFirebaseServer();
 
     // Encrypt the personality data
     const personalityJson = JSON.stringify(personality);
-    const { encrypted, iv, authTag } = encryptPersonalityData(
+    const { encrypted, iv, authTag } = encryptEngramData(
       personalityJson,
       userId,
       password
     );
 
-    const docRef = doc(firestore, 'users', userId, 'personalityState', 'current');
+    const docRef = doc(
+      firestore,
+      'users',
+      userId,
+      'personalityState',
+      'current'
+    );
     const timestamp = Timestamp.now();
 
     const record: EncryptedPersonalityRecord = {
@@ -264,11 +221,12 @@ export async function applyPersonalityDelta(
 ): Promise<{ success: boolean; personality: PersonalityModulation }> {
   const traceId = generateTraceId();
   try {
-    MollyLogger.info(
-      'Applying personality delta',
-      'applyPersonalityDelta',
-      { userId, source, traceId, deltaKeys: Object.keys(delta) }
-    );
+    MollyLogger.info('Applying personality delta', 'applyPersonalityDelta', {
+      userId,
+      source,
+      traceId,
+      deltaKeys: Object.keys(delta),
+    });
 
     // Get current personality
     const current = await getPersonalityState(userId, password);
@@ -314,11 +272,11 @@ export async function addManualEngram(
 ): Promise<{ success: boolean; engramId: string }> {
   const traceId = generateTraceId();
   try {
-    MollyLogger.info(
-      'Adding manual engram',
-      'addManualEngram',
-      { userId, traceId, contentLength: engram.content?.length }
-    );
+    MollyLogger.info('Adding manual engram', 'addManualEngram', {
+      userId,
+      traceId,
+      contentLength: engram.content?.length,
+    });
 
     const { firestore } = initializeFirebaseServer();
 
@@ -350,20 +308,14 @@ export async function addManualEngram(
 
     // Encrypt the entire engram
     const engramJson = JSON.stringify(fullEngram);
-    const { encrypted, iv, authTag } = encryptPersonalityData(
+    const { encrypted, iv, authTag } = encryptEngramData(
       engramJson,
       userId,
       password
     );
 
     // Store in Firestore
-    const docRef = doc(
-      firestore,
-      'users',
-      userId,
-      'engrams',
-      engramId
-    );
+    const docRef = doc(firestore, 'users', userId, 'engrams', engramId);
 
     await setDoc(docRef, {
       encrypted,
@@ -376,11 +328,11 @@ export async function addManualEngram(
       consolidationState: fullEngram.consolidationState,
     });
 
-    MollyLogger.info(
-      'Engram added successfully',
-      'addManualEngram',
-      { userId, engramId, traceId }
-    );
+    MollyLogger.info('Engram added successfully', 'addManualEngram', {
+      userId,
+      engramId,
+      traceId,
+    });
 
     return {
       success: true,
@@ -410,19 +362,13 @@ async function logPersonalityEngram(
     const engramId = `personality-log-${Date.now()}`;
 
     const engramJson = JSON.stringify(engram);
-    const { encrypted, iv, authTag } = encryptPersonalityData(
+    const { encrypted, iv, authTag } = encryptEngramData(
       engramJson,
       userId,
       password
     );
 
-    const docRef = doc(
-      firestore,
-      'users',
-      userId,
-      'personalityLogs',
-      engramId
-    );
+    const docRef = doc(firestore, 'users', userId, 'personalityLogs', engramId);
 
     await setDoc(docRef, {
       encrypted,
@@ -433,11 +379,10 @@ async function logPersonalityEngram(
       importance: engram.importance,
     });
 
-    MollyLogger.debug(
-      'Personality engram logged',
-      'logPersonalityEngram',
-      { userId, engramId }
-    );
+    MollyLogger.debug('Personality engram logged', 'logPersonalityEngram', {
+      userId,
+      engramId,
+    });
   } catch (error) {
     MollyLogger.warn(
       'Failed to log personality engram',
