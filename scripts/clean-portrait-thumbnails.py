@@ -29,12 +29,12 @@ def analyze_image(image_path):
     try:
         with Image.open(image_path) as img:
             width, height = img.size
-            format = img.format
+            img_format = img.format
             mode = img.mode
             return {
                 "width": width,
                 "height": height,
-                "format": format,
+                "format": img_format,
                 "mode": mode,
                 "size_kb": os.path.getsize(image_path) / 1024,
             }

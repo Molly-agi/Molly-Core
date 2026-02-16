@@ -35,7 +35,14 @@ The best solution for the future:
 
 **Original images:** 720x1640px (with thumbnail in bottom-left)  
 **Cleaned images:** 720x1440px (thumbnail removed)  
-**Crop amount:** 200px from bottom
+**Crop amount:** 200px from bottom (1640 - 200 = 1440)
+
+The 200px crop value was determined empirically by:
+1. Examining the original screenshots showing thumbnails in the bottom-left
+2. Estimating the height needed to remove both the thumbnail (~150px) and bottom navigation/UI (~50px)
+3. Testing on the actual images and verifying the cleaned results
+
+For different image sizes or thumbnail positions, adjust the `DEFAULT_CROP_BOTTOM` value in the Python script.
 
 The Python script (`scripts/clean-portrait-thumbnails.py`) was used to:
 - Create backups in `portraits-backup/`
