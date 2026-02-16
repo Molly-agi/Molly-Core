@@ -60,7 +60,7 @@ The `/api/self-check` endpoint now supports context restoration:
   "prompt": "Continue our discussion",
   "userId": "user-123",
   "conversationId": "conv-456",
-  "history": []  // optional, will be loaded from Firestore if userId provided
+  "history": []  // optional; ignored when userId and conversationId are provided (Firestore history is used instead)
 }
 ```
 
