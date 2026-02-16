@@ -36,3 +36,7 @@ firestore-debug.log
 # Session backups (main session state file IS tracked)
 .session-backups/
 COPILOT_SESSION_STATE.json
+
+# Gallery image processing
+/public/molly-gallery/portraits-backup/
+/public/molly-gallery/portraits-clean/
