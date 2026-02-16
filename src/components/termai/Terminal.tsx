@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
 import {
   getConversationalChat,
   getAutonomousSolution,
   getHealthCheck,
   getMollyVoice,
-  getOriginStory,
+  getOriginStoryParts,
+  getOriginStoryAnchorParts,
   seedOriginStoryMemory,
   triggerImmuneResponse,
 } from '@/app/actions';
@@ -53,6 +54,15 @@ type HistoryItem =
   | { immuneReport: string; isHealthy: boolean }
   | { syntheticReport: string; implementation: string; authority: string };
 
+type AnchorRecallDetail = {
+  title?: string;
+  summary?: string;
+  payload?: {
+    type: 'origin-story' | 'static';
+    partIndex?: number;
+  };
+};
+
 function isScriptResponse(item: HistoryItem): item is TextToScriptOutput {
   return (
     typeof item === 'object' &&
@@ -93,6 +103,12 @@ export default function Terminal({
   const [isRiskMode, setIsRiskMode] = useState(false);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
   const [isVocalizing, setIsVocalizing] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [originStoryParts, setOriginStoryParts] = useState<string[]>([]);
+  const [originStoryIndex, setOriginStoryIndex] = useState<number | null>(null);
+  const [expandedLines, setExpandedLines] = useState<Record<number, boolean>>(
+    {}
+  );
 
   const lastResponseRef = useRef<string | null>(null);
   const originStorySeededRef = useRef(false);
@@ -103,6 +119,16 @@ export default function Terminal({
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
+
+  const collapseThreshold = 700;
+  const isCollapsibleLine = (line: string, isUser: boolean) =>
+    !isUser && line.length > collapseThreshold;
+  const toggleLineExpansion = (index: number) => {
+    setExpandedLines((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
   const handleSleepNotice = (message: string) => {
     if (!message.toLowerCase().startsWith('sleep mode')) return;
@@ -116,27 +142,13 @@ export default function Terminal({
     if (!isVocal || !text || isVocalizing) return;
     setIsVocalizing(true);
     try {
-      const { audioUri } = await getMollyVoice(text);
+      const { audioUri, error } = await getMollyVoice(text);
+      if (!audioUri) {
+        console.warn('Vocal cords returned no audio:', error);
+        setIsVocalizing(false);
+        return;
+      }
       setAudioUri(audioUri);
-
-      // Force reload and play after a small timeout to ensure DOM update
-      setTimeout(() => {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current.load();
-          const playPromise = audioRef.current.play();
-
-          if (playPromise !== undefined) {
-            playPromise.catch((e) => {
-              console.warn(
-                'Vocal cord ignition failed (Interaction Required):',
-                e
-              );
-              setIsVocalizing(false);
-            });
-          }
-        }
-      }, 100);
     } catch (e) {
       console.error('Vocal error:', e);
       setIsVocalizing(false);
@@ -150,13 +162,61 @@ export default function Terminal({
       text
     );
 
+  const isOriginStoryAdvanceRequest = (text: string) =>
+    /origin (next|continue|part|more)|next part/i.test(text);
+
+  const appendOriginStoryPart = (
+    part: string,
+    index: number,
+    total: number
+  ) => {
+    setHistory((prev) => [
+      ...prev,
+      `--- Origin Story Part ${index + 1}/${total} ---`,
+      part,
+    ]);
+  };
+
+  const showNextOriginStoryPart = () => {
+    if (originStoryParts.length === 0) return false;
+    const nextIndex = originStoryIndex === null ? 0 : originStoryIndex + 1;
+    if (nextIndex >= originStoryParts.length) {
+      setHistory((prev) => [...prev, '--- End of Origin Story ---']);
+      return true;
+    }
+
+    appendOriginStoryPart(
+      originStoryParts[nextIndex],
+      nextIndex,
+      originStoryParts.length
+    );
+    setOriginStoryIndex(nextIndex);
+    if (nextIndex < originStoryParts.length - 1) {
+      setHistory((prev) => [...prev, "Type 'origin next' to continue."]);
+    }
+
+    return true;
+  };
+
   const handleOriginStoryRequest = async (text: string) => {
+    if (isOriginStoryAdvanceRequest(text)) {
+      return showNextOriginStoryPart();
+    }
+
     if (!isOriginStoryRequest(text)) return false;
 
     setIsLoading(true);
     try {
-      const { content } = await getOriginStory();
-      setHistory((prev) => [...prev, '--- Origin Story ---', content]);
+      const { parts, totalParts } = await getOriginStoryParts();
+      if (!parts || parts.length === 0) {
+        throw new Error('Origin story is empty.');
+      }
+      setOriginStoryParts(parts);
+      setOriginStoryIndex(0);
+      appendOriginStoryPart(parts[0], 0, totalParts || parts.length);
+      if (parts.length > 1) {
+        setHistory((prev) => [...prev, "Type 'origin next' to continue."]);
+      }
       if (user && !originStorySeededRef.current) {
         await seedOriginStoryMemory(user.uid);
         originStorySeededRef.current = true;
@@ -202,6 +262,24 @@ export default function Terminal({
     }
   };
 
+  const buildChatHistory = (items: HistoryItem[]) => {
+    const historyItems: Array<{ role: 'user' | 'bot'; content: string }> = [];
+
+    for (const item of items) {
+      if (typeof item !== 'string') continue;
+      if (item.startsWith('--- Origin Story')) continue;
+      if (item.startsWith("Type 'origin next'")) continue;
+
+      if (item.startsWith('> ')) {
+        historyItems.push({ role: 'user', content: item.replace(/^>\s*/, '') });
+      } else if (!item.startsWith('[SYSTEM]')) {
+        historyItems.push({ role: 'bot', content: item });
+      }
+    }
+
+    return historyItems.slice(-12);
+  };
+
   useEffect(() => {
     const fetchIntroduction = async () => {
       if (!user) return;
@@ -218,11 +296,10 @@ export default function Terminal({
           lastContext
         );
         setHistory([intro.greeting]);
-        await persistHealthContext(intro.greeting);
 
-        // Audio might require a click first, so we attempt to speak.
-        // If it fails, the "Voice" icon remains a toggle.
+        // Speak immediately, then persist in the background to reduce latency.
         speakResponse(intro.greeting);
+        void persistHealthContext(intro.greeting);
 
         const result = await triggerImmuneResponse(user.uid, 'Startup');
         setHistory((prev) => [
@@ -287,68 +364,123 @@ export default function Terminal({
     }
   };
 
-  const processCommand = async (cmdText: string) => {
-    if (!cmdText.trim() || isLoading || !user) return;
-    setHistory((prev) => [...prev, `> ${cmdText}`]);
-    if (await handleOriginStoryRequest(cmdText)) {
-      return;
-    }
-    setIsLoading(true);
-    try {
-      if (cmdText.startsWith('/solve ')) {
-        const prompt = cmdText.replace('/solve ', '');
-        const aiResponse = await getAutonomousSolution(prompt, user.uid);
-        setHistory((prev) => [...prev, aiResponse]);
-        lastResponseRef.current = aiResponse.vibeCheck || null;
-        speakResponse(aiResponse.vibeCheck);
-      } else if (cmdText === 'clear') {
-        setHistory([]);
-      } else {
-        // Route unknown commands to conversational Molly (NOT to sarcophagus)
-        // Use conversational chat instead of terminal command synthesis
-        const selfSignals: NeuralBridgeSignal[] | undefined =
-          lastResponseRef.current
-            ? [
-                {
-                  action: 'self.vocalize_text',
-                  content: lastResponseRef.current,
-                },
-              ]
-            : undefined;
+  const processCommand = useCallback(
+    async (cmdText: string) => {
+      if (!cmdText.trim() || isLoading || !user) return;
+      const nextHistory = [...history, `> ${cmdText}`];
+      setHistory(nextHistory);
 
-        const aiResponse = await getConversationalChat(
-          cmdText,
-          [],
-          selfSignals
-        );
-        const responseText =
-          typeof aiResponse === 'string'
-            ? aiResponse
-            : aiResponse?.response || 'No response.';
-        setHistory((prev) => [...prev, `> ${cmdText}`, responseText]);
-        handleSleepNotice(responseText);
-        lastResponseRef.current = responseText;
-        speakResponse(responseText);
+      if (await handleOriginStoryRequest(cmdText)) {
+        return;
       }
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Operation failed.';
-      if (message.toLowerCase().startsWith('sleep mode')) {
-        setHistory((prev) => [...prev, message]);
-        handleSleepNotice(message);
-      } else {
-        setHistory((prev) => [...prev, 'Error: Operation failed.']);
+
+      setIsLoading(true);
+      try {
+        if (cmdText.startsWith('/solve ')) {
+          const prompt = cmdText.replace('/solve ', '');
+          const aiResponse = await getAutonomousSolution(prompt, user.uid);
+          setHistory((prev) => [...prev, aiResponse]);
+          lastResponseRef.current = aiResponse.vibeCheck || null;
+          speakResponse(aiResponse.vibeCheck);
+        } else if (cmdText === 'clear') {
+          setHistory([]);
+        } else {
+          const selfSignals: NeuralBridgeSignal[] | undefined =
+            lastResponseRef.current
+              ? [
+                  {
+                    action: 'self.vocalize_text',
+                    content: lastResponseRef.current,
+                  },
+                ]
+              : undefined;
+
+          const chatHistory = buildChatHistory(nextHistory);
+          const aiResponse = await getConversationalChat(
+            cmdText,
+            chatHistory,
+            selfSignals,
+            user.uid
+          );
+          const responseText =
+            typeof aiResponse === 'string'
+              ? aiResponse
+              : aiResponse?.response || 'No response.';
+          setHistory((prev) => [...prev, responseText]);
+          handleSleepNotice(responseText);
+          lastResponseRef.current = responseText;
+          speakResponse(responseText);
+        }
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Operation failed.';
+        if (message.toLowerCase().startsWith('sleep mode')) {
+          setHistory((prev) => [...prev, message]);
+          handleSleepNotice(message);
+        } else {
+          setHistory((prev) => [...prev, 'Error: Operation failed.']);
+        }
+      } finally {
+        setIsLoading(false);
       }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [
+      buildChatHistory,
+      handleOriginStoryRequest,
+      history,
+      isLoading,
+      speakResponse,
+      user,
+    ]
+  );
 
   const handleCommand = (e: React.FormEvent) => {
     e.preventDefault();
     processCommand(command);
     setCommand('');
   };
+
+  const handleAnchorRecall = useCallback(
+    async (detail: AnchorRecallDetail) => {
+      if (!detail) return;
+
+      let summary = detail.summary ?? '';
+
+      if (detail.payload?.type === 'origin-story') {
+        try {
+          const { parts } = await getOriginStoryAnchorParts();
+          const part = parts?.[detail.payload.partIndex ?? 0];
+          if (part) summary = part;
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Failed to load origin story anchor.';
+          toast({
+            variant: 'destructive',
+            title: 'Origin Story Unavailable',
+            description: message,
+          });
+          return;
+        }
+      }
+
+      if (!summary) return;
+      const prompt = `Remember this anchor: ${detail.title || 'Memory'}. ${summary}`;
+      void processCommand(prompt);
+    },
+    [processCommand, toast]
+  );
+
+  useEffect(() => {
+    const listener = (event: Event) => {
+      const detail = (event as CustomEvent).detail as AnchorRecallDetail;
+      void handleAnchorRecall(detail);
+    };
+
+    window.addEventListener('molly:anchor', listener);
+    return () => window.removeEventListener('molly:anchor', listener);
+  }, [handleAnchorRecall]);
 
   // CRITICAL: Stop all audio on unmount (prevents lingering voice)
   useEffect(() => {
@@ -380,6 +512,52 @@ export default function Terminal({
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
     }
   }, [history, isLoading]);
+
+  useEffect(() => {
+    if (!isVocal) {
+      setAutoplayBlocked(false);
+    }
+  }, [isVocal]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !audioSrc) return;
+    audio.pause();
+    audio.load();
+
+    const attemptPlay = async () => {
+      if (!isVocal) return;
+      try {
+        await audio.play();
+        setAutoplayBlocked(false);
+      } catch (error) {
+        console.warn('Audio autoplay blocked:', error);
+        setAutoplayBlocked(true);
+        setIsVocalizing(false);
+      }
+    };
+
+    void attemptPlay();
+  }, [audioSrc, isVocal]);
+
+  useEffect(() => {
+    if (!autoplayBlocked) return;
+
+    const handleUnlock = () => {
+      const audio = audioRef.current;
+      if (!audio || !audioSrc || !isVocal) return;
+      setIsVocalizing(true);
+      audio
+        .play()
+        .then(() => setAutoplayBlocked(false))
+        .catch(() => {
+          setIsVocalizing(false);
+        });
+    };
+
+    window.addEventListener('pointerdown', handleUnlock, { once: true });
+    return () => window.removeEventListener('pointerdown', handleUnlock);
+  }, [autoplayBlocked, audioSrc, isVocal]);
 
   return (
     <div className="font-code text-sm h-full flex flex-col max-w-4xl mx-auto">
@@ -422,6 +600,8 @@ export default function Terminal({
             );
           if (typeof line !== 'string') return null;
           const isUser = line.startsWith('>');
+          const canCollapse = isCollapsibleLine(line, isUser);
+          const isExpanded = expandedLines[index] ?? false;
           return (
             <div
               key={index}
@@ -432,7 +612,25 @@ export default function Terminal({
                   : 'text-foreground bg-secondary/30 border-white/5'
               )}
             >
-              {line}
+              <div
+                className={cn(
+                  'whitespace-pre-wrap',
+                  canCollapse && !isExpanded && 'max-h-32 overflow-hidden'
+                )}
+              >
+                {line}
+              </div>
+              {canCollapse && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="mt-2 h-6 px-2 text-[9px] uppercase tracking-widest text-accent"
+                  onClick={() => toggleLineExpansion(index)}
+                >
+                  {isExpanded ? 'Show less' : 'Show more'}
+                </Button>
+              )}
             </div>
           );
         })}
@@ -504,11 +702,19 @@ export default function Terminal({
             </Button>
           </div>
           <div className="text-[10px] text-muted-foreground uppercase tracking-tighter flex items-center gap-2">
-            {isVocalizing ? 'Vocalizing...' : 'Cords Ready'}
+            {autoplayBlocked
+              ? 'Tap to enable voice'
+              : isVocalizing
+                ? 'Vocalizing...'
+                : 'Cords Ready'}
             <span
               className={cn(
                 'size-1 rounded-full',
-                isVocalizing ? 'bg-accent animate-ping' : 'bg-green-500'
+                autoplayBlocked
+                  ? 'bg-yellow-400 animate-pulse'
+                  : isVocalizing
+                    ? 'bg-accent animate-ping'
+                    : 'bg-green-500'
               )}
             />
           </div>

@@ -30,11 +30,27 @@ export function VoiceControl({
   const analyserRef = useRef<AnalyserNode | null>(null);
   const vadRef = useRef<VoiceActivityDetector | null>(null);
   const frameTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sessionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const speechActiveRef = useRef(false);
   const audioChunksRef = useRef<Blob[]>([]);
   const lastResponseRef = useRef<string | null>(null);
   const { toast } = useToast();
   const { user } = useUser();
+
+  const resetSessionTimeout = () => {
+    if (sessionTimeoutRef.current) {
+      clearTimeout(sessionTimeoutRef.current);
+    }
+    sessionTimeoutRef.current = setTimeout(() => {
+      if (isListeningRef.current) {
+        stopListening();
+        toast({
+          title: 'Listening ended',
+          description: 'Voice session timed out due to inactivity.',
+        });
+      }
+    }, 60000);
+  };
 
   const convertToWavDataUrl = async (audioBlob: Blob): Promise<string> => {
     const audioBuffer = await audioBlob.arrayBuffer();
@@ -285,6 +301,9 @@ export function VoiceControl({
         type: mimeType || 'audio/webm',
       });
       await submitAudioBlob(audioBlob);
+      if (isListeningRef.current) {
+        stopListening();
+      }
     };
 
     recorder.start();
@@ -305,6 +324,10 @@ export function VoiceControl({
     if (frameTimerRef.current) {
       clearTimeout(frameTimerRef.current);
       frameTimerRef.current = null;
+    }
+    if (sessionTimeoutRef.current) {
+      clearTimeout(sessionTimeoutRef.current);
+      sessionTimeoutRef.current = null;
     }
     stopSegmentRecording();
     if (streamRef.current) {
@@ -344,6 +367,7 @@ export function VoiceControl({
         streamRef.current
       ) {
         speechActiveRef.current = true;
+        resetSessionTimeout();
         startSegmentRecording(streamRef.current);
       }
 
@@ -352,6 +376,7 @@ export function VoiceControl({
         stopSegmentRecording();
         vad.stopSession();
         vad.startSession();
+        resetSessionTimeout();
       }
 
       frameTimerRef.current = setTimeout(tick, 20);
@@ -406,6 +431,7 @@ export function VoiceControl({
 
       isListeningRef.current = true;
       setIsListening(true);
+      resetSessionTimeout();
       processAudioFrames();
     } catch (error) {
       console.error('Error accessing microphone:', error);
@@ -434,7 +460,7 @@ export function VoiceControl({
       variant={isListening ? 'destructive' : 'outline'}
       size="icon"
       onClick={() => (isListening ? stopListening() : startListening())}
-      disabled={isProcessing}
+      disabled={isProcessing && !isListening}
       title={isListening ? 'Stop Listening' : 'Start Listening'}
     >
       {isProcessing ? (

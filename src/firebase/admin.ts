@@ -12,6 +12,15 @@ import { getFirestore } from 'firebase-admin/firestore';
 
 let adminInitialized = false;
 
+export function isAdminConfigured() {
+  return Boolean(
+    process.env.FIREBASE_SERVICE_ACCOUNT_JSON ||
+      process.env.GOOGLE_CLOUD_PROJECT ||
+      process.env.GCLOUD_PROJECT ||
+      process.env.FIREBASE_PROJECT_ID
+  );
+}
+
 function getServiceAccount() {
   const json = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
   if (!json) return null;

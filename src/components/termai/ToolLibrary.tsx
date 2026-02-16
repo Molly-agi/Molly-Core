@@ -35,6 +35,7 @@ export function ToolLibrary() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [stats, setStats] = useState<any>(null);
+  const [toolError, setToolError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -49,9 +50,14 @@ export function ToolLibrary() {
       const result = await getRecentFoundTools(user.uid, 10);
       if (result.success) {
         setTools(result.tools);
+        setToolError(null);
+      } else {
+        setToolError(result.error || 'Tool library is unavailable.');
+        setTools([]);
       }
     } catch (e) {
       console.error('Failed to load tools:', e);
+      setToolError('Tool library is unavailable.');
     }
     setIsLoading(false);
   };
@@ -62,9 +68,13 @@ export function ToolLibrary() {
       const result = await getToolLibraryStats(user.uid);
       if (result.success) {
         setStats(result.stats);
+      } else {
+        setToolError(result.error || 'Tool stats are unavailable.');
+        setStats(null);
       }
     } catch (e) {
       console.error('Failed to load stats:', e);
+      setToolError('Tool stats are unavailable.');
     }
   };
 
@@ -80,9 +90,13 @@ export function ToolLibrary() {
       const result = await searchTools(user.uid, searchQuery);
       if (result.success) {
         setTools(result.tools);
+      } else {
+        setToolError(result.error || 'Search is unavailable.');
+        setTools([]);
       }
     } catch (e) {
       console.error('Search failed:', e);
+      setToolError('Search is unavailable.');
     }
     setIsLoading(false);
   };
@@ -100,6 +114,12 @@ export function ToolLibrary() {
 
   return (
     <div className="space-y-4">
+      {toolError && (
+        <div className="rounded border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
+          {toolError}
+        </div>
+      )}
+
       {/* Stats Overview */}
       {stats && (
         <div className="grid grid-cols-3 gap-2">

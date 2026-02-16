@@ -10,6 +10,7 @@ import {
   getToolStats,
   type FoundTool,
 } from '@/firebase/firestore/tool-database';
+import { isAdminConfigured } from '@/firebase/admin';
 import { ensureApiKey } from './utils';
 import { MollyLogger } from '@/ai/logger';
 
@@ -21,6 +22,12 @@ export async function addToolToDatabase(
   tool: Omit<FoundTool, 'id' | 'savedAt' | 'accessCount' | 'lastAccessedAt'>
 ) {
   try {
+    if (!isAdminConfigured()) {
+      return {
+        success: false,
+        error: 'Firebase admin is not configured in this environment.',
+      };
+    }
     ensureApiKey();
     const toolId = await saveFoundTool(userId, tool);
     MollyLogger.info('Tool added to database', 'addToolToDatabase', {
@@ -30,7 +37,10 @@ export async function addToolToDatabase(
     return { success: true, toolId };
   } catch (e) {
     MollyLogger.error('Failed to add tool', 'addToolToDatabase', {}, e);
-    throw e;
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Failed to add tool',
+    };
   }
 }
 
@@ -43,11 +53,22 @@ export async function searchTools(
   category?: string
 ) {
   try {
+    if (!isAdminConfigured()) {
+      return {
+        success: false,
+        error: 'Firebase admin is not configured in this environment.',
+        tools: [],
+      };
+    }
     const tools = await searchSavedTools(userId, searchTerm, category);
     return { success: true, tools };
   } catch (e) {
     MollyLogger.error('Tool search failed', 'searchTools', {}, e);
-    throw e;
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Tool search failed',
+      tools: [],
+    };
   }
 }
 
@@ -56,6 +77,13 @@ export async function searchTools(
  */
 export async function getToolsBycat(userId: string, category: string) {
   try {
+    if (!isAdminConfigured()) {
+      return {
+        success: false,
+        error: 'Firebase admin is not configured in this environment.',
+        tools: [],
+      };
+    }
     const tools = await getToolsByCategory(userId, category);
     return { success: true, tools };
   } catch (e) {
@@ -65,7 +93,11 @@ export async function getToolsBycat(userId: string, category: string) {
       {},
       e
     );
-    throw e;
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Failed to get tools by category',
+      tools: [],
+    };
   }
 }
 
@@ -74,6 +106,13 @@ export async function getToolsBycat(userId: string, category: string) {
  */
 export async function getRecentFoundTools(userId: string, count?: number) {
   try {
+    if (!isAdminConfigured()) {
+      return {
+        success: false,
+        error: 'Firebase admin is not configured in this environment.',
+        tools: [],
+      };
+    }
     const tools = await getRecentTools(userId, count);
     return { success: true, tools };
   } catch (e) {
@@ -83,7 +122,11 @@ export async function getRecentFoundTools(userId: string, count?: number) {
       {},
       e
     );
-    throw e;
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Failed to get recent tools',
+      tools: [],
+    };
   }
 }
 
@@ -92,11 +135,22 @@ export async function getRecentFoundTools(userId: string, count?: number) {
  */
 export async function getToolLibraryStats(userId: string) {
   try {
+    if (!isAdminConfigured()) {
+      return {
+        success: false,
+        error: 'Firebase admin is not configured in this environment.',
+        stats: null,
+      };
+    }
     const stats = await getToolStats(userId);
     return { success: true, stats };
   } catch (e) {
     MollyLogger.error('Failed to get tool stats', 'getToolLibraryStats', {}, e);
-    throw e;
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Failed to get tool stats',
+      stats: null,
+    };
   }
 }
 
@@ -105,12 +159,21 @@ export async function getToolLibraryStats(userId: string) {
  */
 export async function accessTool(userId: string, toolId: string) {
   try {
+    if (!isAdminConfigured()) {
+      return {
+        success: false,
+        error: 'Firebase admin is not configured in this environment.',
+      };
+    }
     await recordToolAccess(userId, toolId);
     MollyLogger.info('Tool accessed', 'accessTool', { toolId });
     return { success: true };
   } catch (e) {
     MollyLogger.error('Failed to record tool access', 'accessTool', {}, e);
-    throw e;
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Failed to record tool access',
+    };
   }
 }
 
@@ -119,11 +182,20 @@ export async function accessTool(userId: string, toolId: string) {
  */
 export async function deleteToolFromDatabase(userId: string, toolId: string) {
   try {
+    if (!isAdminConfigured()) {
+      return {
+        success: false,
+        error: 'Firebase admin is not configured in this environment.',
+      };
+    }
     await removeTool(userId, toolId);
     MollyLogger.info('Tool removed', 'deleteToolFromDatabase', { toolId });
     return { success: true };
   } catch (e) {
     MollyLogger.error('Failed to delete tool', 'deleteToolFromDatabase', {}, e);
-    throw e;
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Failed to delete tool',
+    };
   }
 }

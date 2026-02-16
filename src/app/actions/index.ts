@@ -27,6 +27,8 @@ export {
   getContextualGuidance,
   getVisionaryCoach,
   getOriginStory,
+  getOriginStoryParts,
+  getOriginStoryAnchorParts,
   seedOriginStoryMemory,
 } from './ai-flows';
 

@@ -28,6 +28,17 @@ import {
   AccordionTrigger,
 } from '../ui/accordion';
 import { memoryAnchors } from '@/lib/memory-anchors';
+import { Button } from '../ui/button';
+
+type AnchorDispatchDetail = {
+  id: string;
+  title: string;
+  summary: string;
+  payload?: {
+    type: 'origin-story' | 'static';
+    partIndex?: number;
+  };
+};
 
 export function MemoryViewer() {
   const { user } = useUser();
@@ -43,6 +54,15 @@ export function MemoryViewer() {
   }, [firestore, user]);
 
   const { data: lessons, isLoading } = useCollection(lessonsQuery);
+
+  const handleAnchorRecall = (anchor: AnchorDispatchDetail) => {
+    if (typeof window === 'undefined') return;
+    window.dispatchEvent(
+      new CustomEvent('molly:anchor', {
+        detail: anchor,
+      })
+    );
+  };
 
   return (
     <Card className="h-full flex flex-col border-0 bg-transparent">
@@ -112,6 +132,22 @@ export function MemoryViewer() {
                         <p className="text-[9px] text-muted-foreground line-clamp-2">
                           {anchor.summary}
                         </p>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="mt-2 h-6 px-2 text-[8px] uppercase tracking-widest"
+                          onClick={() =>
+                            handleAnchorRecall({
+                              id: anchor.id,
+                              title: anchor.title,
+                              summary: anchor.summary,
+                              payload: anchor.payload,
+                            })
+                          }
+                        >
+                          Send to Molly
+                        </Button>
                       </div>
                     </div>
                   ))}

@@ -25,8 +25,16 @@ import { listAvailableModels } from '@/ai/tools/system';
 import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
 import { getSystemHealth } from '@/ai/tools/system';
 import { logPacingTelemetry } from '@/ai/tools/pacing-telemetry';
-import { MollyLogger } from '@/ai/logger';
+import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { recordSensoryLogServer } from '@/firebase/firestore/agent-memory-server';
+import { recallSimilarMemories } from '@/ai/tools/semantic-recall';
+import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { Timestamp } from 'firebase-admin/firestore';
+import { addChecksum } from '@/ai/tools/memory-integrity';
+import {
+  createMemoryRecord,
+  type ExperienceRecord,
+} from '@/ai/tools/memory-schema';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import {
   getSafewordPhrase,
@@ -44,6 +52,8 @@ import { ensureApiKey, checkRateLimit } from './utils';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+
+const MAX_ORIGIN_PART_SIZE = 3500;
 
 function getAudioMimeType(dataUri: string): string {
   const match = dataUri.match(/^data:([^;]+);base64,/);
@@ -103,6 +113,130 @@ async function buildNervousSystemSignal(): Promise<NeuralBridgeSignal | null> {
   }
 }
 
+function splitOriginStory(content: string): string[] {
+  const lines = content.split('\n');
+  const parts: string[] = [];
+  let buffer: string[] = [];
+  let length = 0;
+
+  for (const line of lines) {
+    const nextLength = length + line.length + 1;
+    if (nextLength > MAX_ORIGIN_PART_SIZE && buffer.length > 0) {
+      parts.push(buffer.join('\n').trim());
+      buffer = [];
+      length = 0;
+    }
+
+    buffer.push(line);
+    length += line.length + 1;
+  }
+
+  if (buffer.length > 0) {
+    parts.push(buffer.join('\n').trim());
+  }
+
+  return parts.filter(Boolean);
+}
+
+function splitOriginStoryAnchors(
+  content: string,
+  targetParts: number = 3
+): string[] {
+  const lines = content.split('\n');
+  const totalLength = content.length;
+  const targetLength = Math.ceil(totalLength / targetParts);
+  const parts: string[] = [];
+  let buffer: string[] = [];
+  let length = 0;
+
+  for (const line of lines) {
+    const nextLength = length + line.length + 1;
+    if (
+      parts.length < targetParts - 1 &&
+      nextLength > targetLength &&
+      buffer.length > 0
+    ) {
+      parts.push(buffer.join('\n').trim());
+      buffer = [];
+      length = 0;
+    }
+
+    buffer.push(line);
+    length += line.length + 1;
+  }
+
+  if (buffer.length > 0) {
+    parts.push(buffer.join('\n').trim());
+  }
+
+  return parts.filter(Boolean);
+}
+
+function truncateText(text: string, maxLength: number) {
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength)}...`;
+}
+
+async function buildMemoryContext(userId: string | undefined, text: string) {
+  if (!userId || !isAdminConfigured()) return undefined;
+
+  try {
+    const memories = await recallSimilarMemories(userId, text, {
+      limit: 4,
+      minSimilarity: 0.4,
+    });
+
+    if (memories.length === 0) return undefined;
+
+    const lines = memories.map((memory) => {
+      const context = memory.context ? ` (${memory.context})` : '';
+      const suggestion = truncateText(memory.suggestion, 220);
+      return `- ${memory.type}${context}: ${suggestion}`;
+    });
+
+    return `Relevant memories:\n${lines.join('\n')}`;
+  } catch (error) {
+    MollyLogger.warn(
+      'Memory recall failed for conversational chat',
+      'buildMemoryContext',
+      { userId },
+      error
+    );
+    return undefined;
+  }
+}
+
+async function recordChatResponse(
+  userId: string | undefined,
+  prompt: string,
+  response: string,
+  memoryContext?: string
+) {
+  if (!userId || !isAdminConfigured()) return;
+
+  try {
+    const firestore = getAdminFirestore();
+    await firestore
+      .collection('users')
+      .doc(userId)
+      .collection('aiResponses')
+      .add({
+        responseText: response,
+        responseType: 'conversationalChat',
+        prompt,
+        memoryContext: memoryContext || null,
+        timestamp: Timestamp.now(),
+      });
+  } catch (error) {
+    MollyLogger.warn(
+      'Failed to persist conversational response',
+      'recordChatResponse',
+      { userId },
+      error
+    );
+  }
+}
+
 // ============================================
 // HEALTH & DIAGNOSTICS
 // ============================================
@@ -124,7 +258,11 @@ export async function getHealthCheck(
       { userId },
       e
     );
-    throw e;
+    return {
+      greeting: 'My neural core is initializing. Please stand by.',
+      error: e instanceof Error ? e.message : String(e),
+      isHealthy: false,
+    };
   }
 }
 
@@ -254,6 +392,7 @@ export async function processVoiceInteraction(
     // Step 2: Get conversational response from Molly
     const nervousSignal = await buildNervousSystemSignal();
     const selfSignals = nervousSignal ? [nervousSignal] : undefined;
+    const memoryContext = await buildMemoryContext(userId, transcription);
 
     const chatResponse = await conversationalChat({
       text: transcription,
@@ -264,12 +403,20 @@ export async function processVoiceInteraction(
         content: transcription,
       },
       selfSignals,
+      memoryContext,
     });
 
     logPacingTelemetry(
       'processVoiceInteraction',
       chatResponse.response,
       nervousSignal
+    );
+
+    await recordChatResponse(
+      userId,
+      transcription,
+      chatResponse.response,
+      memoryContext
     );
 
     return {
@@ -304,7 +451,10 @@ export async function getMollyVoice(text: string) {
     return await textToSpeech(text);
   } catch (e: any) {
     MollyLogger.error('Text to speech failed', 'getMollyVoice', {}, e);
-    throw e;
+    return {
+      audioUri: '',
+      error: e instanceof Error ? e.message : String(e),
+    };
   }
 }
 
@@ -323,20 +473,101 @@ export async function getOriginStory() {
   }
 }
 
+export async function getOriginStoryParts() {
+  try {
+    const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
+    const content = await readFile(originPath, 'utf8');
+    const parts = splitOriginStory(content);
+    return { parts, totalParts: parts.length };
+  } catch (e: any) {
+    MollyLogger.error('Origin story load failed', 'getOriginStoryParts', {}, e);
+    throw e;
+  }
+}
+
+export async function getOriginStoryAnchorParts() {
+  try {
+    const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
+    const content = await readFile(originPath, 'utf8');
+    const parts = splitOriginStoryAnchors(content, 3);
+    return { parts, totalParts: parts.length };
+  } catch (e: any) {
+    MollyLogger.error(
+      'Origin story anchor load failed',
+      'getOriginStoryAnchorParts',
+      {},
+      e
+    );
+    throw e;
+  }
+}
+
 export async function seedOriginStoryMemory(userId: string) {
   try {
     if (!userId) {
       throw new Error('Missing userId for origin story seeding.');
     }
 
+    if (!isAdminConfigured()) {
+      MollyLogger.warn(
+        'Origin story seed skipped (admin not configured)',
+        'seedOriginStoryMemory',
+        { userId }
+      );
+      return { seeded: false, reason: 'admin-not-configured' };
+    }
+
     const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
     const content = await readFile(originPath, 'utf8');
     const hash = createHash('sha256').update(content).digest('hex');
+    const firestore = getAdminFirestore();
+    const context = `origin story:${hash}`;
+
+    const existing = await firestore
+      .collection('users')
+      .doc(userId)
+      .collection('experiences')
+      .where('context', '==', context)
+      .limit(1)
+      .get();
+
+    if (!existing.empty) {
+      return { seeded: false, reason: 'already-seeded', hash };
+    }
+
+    const parts = splitOriginStory(content);
+    const traceId = generateTraceId();
+    const batch = firestore.batch();
+    const now = Date.now();
+
+    parts.forEach((part, index) => {
+      const record = createMemoryRecord<ExperienceRecord>({
+        type: 'experience',
+        userId,
+        timestamp: now + index,
+        traceId,
+        context,
+        suggestion: `Origin story part ${index + 1}/${parts.length}:\n${part}`,
+        vibe: 'Origin',
+        vibeScore: 0.95,
+        success: true,
+      });
+
+      const recordWithChecksum = addChecksum(record);
+      const docRef = firestore
+        .collection('users')
+        .doc(userId)
+        .collection('experiences')
+        .doc(recordWithChecksum.id);
+      batch.set(docRef, recordWithChecksum);
+    });
 
     const summary =
       'Origin story archived from docs/ORIGIN_STORY.md. ' +
       'Authored by Eric in February 2026. ' +
       'Contains the creation context, purpose, and early conversation about Molly.';
+
+    await batch.commit();
 
     await recordSensoryLogServer(userId, 'vibe', summary, {
       source: 'origin-story',
@@ -346,7 +577,7 @@ export async function seedOriginStoryMemory(userId: string) {
       timestamp: Date.now(),
     });
 
-    return { seeded: true, hash };
+    return { seeded: true, hash, parts: parts.length };
   } catch (e: any) {
     MollyLogger.error(
       'Origin story seed failed',
@@ -365,7 +596,8 @@ export async function seedOriginStoryMemory(userId: string) {
 export async function getConversationalChat(
   text: string,
   history: any[],
-  selfSignals?: NeuralBridgeSignal[]
+  selfSignals?: NeuralBridgeSignal[],
+  userId?: string
 ) {
   try {
     ensureApiKey();
@@ -380,6 +612,7 @@ export async function getConversationalChat(
     const mergedSignals = nervousSignal
       ? [...(selfSignals ?? []), nervousSignal]
       : selfSignals;
+    const memoryContext = await buildMemoryContext(userId, text);
     const response = await withRetry(
       () =>
         conversationalChat({
@@ -391,6 +624,7 @@ export async function getConversationalChat(
             content: text,
           },
           selfSignals: mergedSignals,
+          memoryContext,
         }),
       'conversational-chat',
       RETRY_PRESETS.FAST
@@ -399,6 +633,7 @@ export async function getConversationalChat(
     const responseText =
       typeof response === 'string' ? response : (response?.response ?? '');
     logPacingTelemetry('getConversationalChat', responseText, nervousSignal);
+    await recordChatResponse(userId, text, responseText, memoryContext);
 
     return response;
   } catch (e: any) {
