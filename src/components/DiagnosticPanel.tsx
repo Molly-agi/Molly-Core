@@ -71,6 +71,25 @@ export function DiagnosticPanel() {
     }
   };
 
+  const fetchFullDiagnostics = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/health/full-diagnostics');
+      if (!response.ok) {
+        throw new Error('Failed to fetch full diagnostics');
+      }
+      const data = await response.json();
+      setResults({ type: 'full-diagnostics', data });
+    } catch (e) {
+      setResults({
+        type: 'error',
+        error: e instanceof Error ? e.message : String(e),
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchFirestoreLogs = async () => {
     setLoading(true);
     try {
@@ -236,6 +255,15 @@ export function DiagnosticPanel() {
             </p>
             <div className="grid grid-cols-2 gap-2">
               <Button
+                onClick={fetchFullDiagnostics}
+                disabled={loading}
+                size="sm"
+                variant="secondary"
+              >
+                <Code className="w-3 h-3 mr-1" />
+                Full Diagnostics
+              </Button>
+              <Button
                 onClick={checkCircuitBreaker}
                 disabled={loading}
                 size="sm"
@@ -328,6 +356,22 @@ export function DiagnosticPanel() {
                 </>
               )}
             </CardTitle>
+            {results.type === 'full-diagnostics' &&
+              results.data?.checks?.latencyCache && (
+                <CardDescription>
+                  {(() => {
+                    const cache = results.data.checks.latencyCache;
+                    const byPrefix = cache.byPrefix || {};
+                    const textAvg = byPrefix.text?.avg ?? null;
+                    const voiceAvg = byPrefix.voice?.avg ?? null;
+                    const parts = [] as string[];
+                    if (textAvg !== null) parts.push(`text avg ${textAvg}ms`);
+                    if (voiceAvg !== null)
+                      parts.push(`voice avg ${voiceAvg}ms`);
+                    return `Latency cache: ${cache.totalEntries} entries${parts.length ? ` (${parts.join(', ')})` : ''}`;
+                  })()}
+                </CardDescription>
+              )}
           </CardHeader>
           <CardContent>
             <div className="bg-muted p-3 rounded font-mono text-xs max-h-96 overflow-y-auto">
@@ -402,6 +446,23 @@ export function DiagnosticPanel() {
               ) : results.type === 'firestore-logs' ? (
                 <div>
                   <p className="font-semibold mb-3">Firestore Logs</p>
+                  <pre>{JSON.stringify(results.data, null, 2)}</pre>
+                </div>
+              ) : results.type === 'full-diagnostics' ? (
+                <div>
+                  <p className="font-semibold mb-3">Full Diagnostics</p>
+                  {results.data?.checks?.latencyCache && (
+                    <div className="mb-3">
+                      <p className="font-semibold mb-2">Latency Cache</p>
+                      <pre>
+                        {JSON.stringify(
+                          results.data.checks.latencyCache,
+                          null,
+                          2
+                        )}
+                      </pre>
+                    </div>
+                  )}
                   <pre>{JSON.stringify(results.data, null, 2)}</pre>
                 </div>
               ) : (

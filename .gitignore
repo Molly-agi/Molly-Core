@@ -36,3 +36,7 @@ firestore-debug.log
 # Session backups (main session state file IS tracked)
 .session-backups/
 COPILOT_SESSION_STATE.json
+
+# Genkit runtime artifacts
+.genkit/runtimes/
+.genkit/servers/

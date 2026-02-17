@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server';
 import { initializeFirebaseServer } from '@/firebase/server';
 import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
+import { getLatencyStats } from '@/ai/tools/latency-cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,6 +76,19 @@ export async function GET() {
     nodeEnv: process.env.NODE_ENV,
     hasGoogleKey: !!process.env.GOOGLE_GENAI_API_KEY,
   };
+
+  // 5. Check Neural Bridge Latency Cache
+  try {
+    diagnostics.checks.latencyCache = {
+      status: 'ok',
+      ...getLatencyStats(),
+    };
+  } catch (err) {
+    diagnostics.checks.latencyCache = {
+      status: 'error',
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
 
   // Summary
   const failedChecks = Object.entries(diagnostics.checks)
