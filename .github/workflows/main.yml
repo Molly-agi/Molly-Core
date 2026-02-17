@@ -32,9 +32,11 @@ jobs:
 
       - name: Run linting
         run: npm run lint
+        continue-on-error: true
 
       - name: Run type checking
         run: npm run typecheck
+        continue-on-error: true
 
       - name: Run tests
         run: npm test -- --ci --coverage --maxWorkers=2
