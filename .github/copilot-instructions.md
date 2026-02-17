@@ -123,3 +123,103 @@ Key Configuration Files:
 - React 19 and Next.js 15 are used with strict version overrides in package.json
 - The app uses server components by default; add "use client" when needed
 - Genkit flows can be tested independently via genkit:dev before integrating into UI
+
+## Debugging & Troubleshooting
+
+### Common Issues and Solutions
+* **Build fails with memory errors**: Run `npm run harden` to clean the .next cache, then rebuild
+* **Port 9002 already in use**: Check for existing Next.js processes with `lsof -i :9002` and kill if needed
+* **Firebase initialization errors**: Verify `.env.local` exists with valid `GOOGLE_GENAI_API_KEY`
+* **Type errors in AI flows**: Check that zod schemas match the data structures being passed
+* **Server Action serialization errors**: Use `serializeHistoryForServer` for chat history before passing to flows
+
+### Debugging Tools
+* Use `npm run debug` to start Next.js with Node.js inspector attached
+* Use `npm run genkit:dev` to test AI flows in isolation with the Genkit developer UI
+* Check logs in browser console and terminal for detailed error messages
+* Firebase errors appear in both client and server logs - check both
+
+### Performance Debugging
+* Monitor memory usage during builds - adjust `NODE_OPTIONS` if needed
+* Use React DevTools Profiler to identify slow components
+* Check Genkit flow execution times in the developer UI
+* Watch for rate limiting messages in server logs
+
+## Security Best Practices
+
+### API Keys and Secrets
+* Never commit API keys to source control
+* Always use environment variables via `.env.local`
+* Firebase config is embedded but can be overridden via environment variables
+* Genkit flows have rate limiting built-in - respect these limits
+
+### Authentication & Authorization
+* Firebase Auth handles user authentication
+* Firestore security rules are in `firestore.rules` - review before modifying
+* Server Actions run server-side and have access to Firebase Admin SDK
+* Always validate user permissions before accessing protected resources
+
+### Data Validation
+* All AI flow inputs use zod schemas for validation
+* Server Actions must validate and sanitize user inputs
+* Use TypeScript strict null checks to catch potential null/undefined errors
+* Validate Firebase document IDs before querying
+
+### Security Scanning
+* CodeQL is configured for security scanning (when CI is set up)
+* Review npm audit warnings regularly
+* Keep dependencies updated, especially security-related ones
+
+## Code Review Guidelines
+
+### Before Submitting Changes
+1. Run `npm run typecheck` - TypeScript must pass without errors
+2. Run `npm run lint` - Fix all ESLint warnings/errors
+3. Run `npm run format` - Ensure consistent code formatting
+4. Test affected flows using `npm run genkit:dev`
+5. Verify changes don't break existing functionality
+
+### Code Quality Standards
+* Follow existing patterns in the codebase
+* Use TypeScript types - avoid `any` where possible
+* Write descriptive variable and function names
+* Keep functions focused and single-purpose
+* Add JSDoc comments for complex logic
+
+### Testing Requirements
+* Add/update tests in `__tests__` directories
+* Ensure tests pass with `npm test`
+* Mock external dependencies appropriately
+* Test both success and error cases
+
+### Performance Considerations
+* Avoid unnecessary re-renders in React components
+* Use React.memo() for expensive components
+* Implement proper loading states for async operations
+* Keep bundle size small - check imports
+* Cache expensive computations where appropriate
+
+## AI Flow Development
+
+### Creating New Flows
+1. Define flow in `src/ai/flows/` with descriptive name
+2. Use `ai.defineFlow` with proper zod schema
+3. Add error handling via `withGenerateErrorHandling`
+4. Test in isolation using `npm run genkit:dev`
+5. Export from `src/ai/flows/index.ts`
+6. Create Server Action in `src/app/actions/ai-flows.ts`
+7. Re-export from `src/app/actions/index.ts`
+
+### Flow Best Practices
+* Keep prompts clear and specific
+* Use structured output schemas for predictable responses
+* Implement rate limiting and timeouts
+* Log important events via `src/ai/logger.ts`
+* Handle errors gracefully with user-friendly messages
+* Test with various inputs including edge cases
+
+### Memory System
+* User experiences stored in Firestore `users/{userId}/experiences`
+* Memory consolidation runs via `memory-consolidation.ts` flow
+* Respect user privacy - store only necessary data
+* Implement cleanup for old memories if needed
