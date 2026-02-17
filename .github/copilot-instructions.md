@@ -1,8 +1,5 @@
 # Copilot Instructions for Molly-Core
 
-## Project Overview
-Molly-Core is a Next.js 15 AI assistant application using Google GenAI (via Genkit), Firebase (Auth/Firestore), TypeScript, React 19, and Tailwind CSS. The app features conversational AI, memory/learning systems, and voice interaction capabilities.
-
 ## Big picture architecture
 - Next.js App Router UI lives in src/app with root wiring in src/app/layout.tsx.
 - Server Actions are defined in src/app/actions/ai-flows.ts and re-exported from src/app/actions/index.ts; these call Genkit flows in src/ai/flows.
@@ -11,96 +8,81 @@ Molly-Core is a Next.js 15 AI assistant application using Google GenAI (via Genk
 - Memory and learning live in src/ai/memory and src/ai/flows/memory-consolidation.ts, persisting to Firestore users/{userId}/experiences.
 - Firebase client wiring is in src/firebase (initializeFirebase in src/firebase/index.ts) and is provided to the app by FirebaseClientProvider in layout.
 
-## Environment Setup (REQUIRED)
-**ALWAYS set up environment before any operations:**
-1. Copy `.env.local.example` to `.env.local`
-2. Add required `GOOGLE_GENAI_API_KEY` from https://aistudio.google.com/app/apikey
-3. Firebase config is embedded in code but can be overridden via environment variables
-4. Without the API key, the application will not function
-
-## Build & Validation Commands
-**ALWAYS run commands in this exact order to avoid failures:**
-
-### Initial Setup
-```bash
-npm install  # Install dependencies (takes ~30-60 seconds)
-```
-
-### Development
-```bash
-npm run dev              # Start Next.js dev server on port 9002 (initial build ~60-90 seconds)
-npm run dev:turbo        # Faster dev mode using Turbo
-npm run dev:fresh        # Clean start: runs harden then dev
-npm run debug            # Start with Node.js inspector
-npm run genkit:dev       # Start Genkit dev UI for flow testing
-npm run genkit:watch     # Genkit dev with auto-reload
-```
-
-### Build & Type Checking
-```bash
-npm run harden           # Clean .next cache (use before builds)
-npm run build            # Production build (takes 90-120 seconds, requires harden first)
-npm run typecheck        # TypeScript check without emitting (takes ~10-15 seconds)
-npm run lint             # Run ESLint (takes ~5-10 seconds)
-npm run format           # Format code with Prettier
-```
-
-### Testing
-```bash
-npm run test             # Run Jest in watch mode
-# For CI: npm test -- --ci --coverage --maxWorkers=2
-```
-
-### Known Build Issues & Workarounds
-- **Memory issues during build**: Build script uses `NODE_OPTIONS=--max-old-space-size=4096`
-- **Stale cache problems**: ALWAYS run `npm run harden` before `npm run build`
-- **Port conflicts**: Dev server uses port 9002 by default
-- **First build timing**: Initial builds can take up to 2 minutes; subsequent builds are faster
-
 ## Project-specific conventions
 - Keep Molly personality core protected: src/ai/persona.ts is read-only unless explicit user permission is provided.
 - Many flows use "use server" at top; keep it intact for Server Actions and flows.
 - Server Actions must receive serializable data; use serializeHistoryForServer in src/app/actions/utils.ts when passing chat history.
 - Rate limiting, timeouts, and circuit breaking are enforced in server actions via src/ai/tools and src/app/actions/utils.ts.
-- Use `@/` path alias for imports from `src/` directory (configured in tsconfig.json)
-- TypeScript is configured with `strict: false` but `strictNullChecks: true`
 
-## Project Structure
-```
-src/
-├── ai/                      # Core AI functionality
-│   ├── flows/              # Genkit AI flows (30+ flows)
-│   ├── memory/             # Memory system
-│   ├── tools/              # AI tools and utilities
-│   ├── genkit.ts           # Genkit configuration
-│   ├── persona.ts          # Molly's personality (READ-ONLY)
-│   └── error-handler.ts    # Error handling utilities
-├── app/                     # Next.js App Router
-│   ├── actions/            # Server Actions
-│   ├── api/                # API routes
-│   └── layout.tsx          # Root layout
-├── components/             # React components
-├── firebase/               # Firebase configuration
-├── hooks/                  # React hooks
-├── lib/                    # Utility libraries
-├── types/                  # TypeScript type definitions
-└── pages/                  # Legacy pages (if any)
+## Dev workflows
+- Dev server: npm run dev (Next.js on port 9002).
+- Type check: npm run typecheck.
+- Tests: npm run test (Jest watch).
+- Genkit dev server: npm run genkit:dev or npm run genkit:watch.
+- Reset build cache: npm run harden.
+- Linting: npm run lint (ESLint with Next.js config).
+- Formatting: npm run format (Prettier with single quotes, 2-space tabs).
 
-Key Configuration Files:
-- package.json              # Scripts and dependencies
-- tsconfig.json             # TypeScript config (paths alias, strict settings)
-- jest.config.mjs           # Jest test configuration
-- next.config.js            # Next.js configuration
-- tailwind.config.ts        # Tailwind CSS config
-- .eslintrc.json            # ESLint rules
-- firestore.rules           # Firestore security rules
-```
+## Testing guidelines
+- Test files use .test.ts or .test.tsx extension and live alongside source files in __tests__ directories.
+- Use Jest with jsdom environment for component tests.
+- Import paths use @ alias (e.g., @/ai/logger) defined in tsconfig.json.
+- Mock external dependencies like lucide-react in __mocks__ directory.
+- Follow existing test patterns: describe blocks for grouping, beforeEach for setup.
+- See examples: src/ai/__tests__/rate-limiter.test.ts, src/components/termai/__tests__/Header.test.tsx.
+
+## Error handling patterns
+- Always wrap flows with withErrorHandling or withGenerateErrorHandling from src/ai/error-handler.ts.
+- Use custom error types from src/ai/errors.ts: MollyError, GenerativeAIError, TimeoutError, RateLimitError, AuthenticationError.
+- All flows should include traceId for logging and debugging.
+- Check rate limits with checkRateLimit() before expensive operations.
+- Circuit breaker automatically protects against cascading failures.
+- Use ensureApiKey() to validate environment configuration before API calls.
+
+## Code style and formatting
+- TypeScript strict mode disabled (strict: false) but strictNullChecks enabled.
+- Use Prettier settings: single quotes, semicolons, 2-space tabs, 80-char line width, ES5 trailing commas.
+- Follow ESLint rules from Next.js core-web-vitals and TypeScript presets.
+- Use functional components with TypeScript interfaces for props.
+- Prefer named exports over default exports for utilities and flows.
+- Add JSDoc comments with @fileOverview for file documentation.
+
+## File and directory naming
+- React components: PascalCase (e.g., Header.tsx, ChatInterface.tsx).
+- Utilities and flows: kebab-case (e.g., rate-limiter.ts, memory-consolidation.ts).
+- Server Actions: kebab-case in src/app/actions (e.g., ai-flows.ts, diagnostics.ts).
+- Test files: match source name with .test suffix (e.g., rate-limiter.test.ts).
+- Types: prefer interfaces over types; define in same file or types.ts if shared.
+
+## Security considerations
+- Never commit API keys; use environment variables (GOOGLE_GENAI_API_KEY, FIREBASE_CONFIG).
+- Always validate and sanitize user inputs before processing.
+- Server Actions automatically protected by Next.js; still validate inputs.
+- Rate limiting and circuit breaking prevent abuse and resource exhaustion.
+- Firebase security rules defined in firestore.rules - enforce auth and data access controls.
+- Use ensureApiKey() guard in all Server Actions that call AI APIs.
+
+## Common pitfalls and troubleshooting
+- "use server" directive must be at top of Server Action files, not inside functions.
+- Chat history must be serialized with serializeHistoryForServer before passing to Server Actions.
+- Rate limiter and circuit breaker are singleton instances - use getRateLimiter() and getCircuitBreaker().
+- Genkit flows require initialization before use - run genkit:dev for local development.
+- If .next cache causes issues, run npm run harden to clear build artifacts.
+- Port 9002 is hardcoded - ensure it's available or modify in package.json scripts.
+- Firebase initialization differs between client (initializeFirebase) and server (initializeFirebaseServer).
+
+## Dependency management
+- Package manager: npm (see package-lock.json).
+- Key dependencies: @genkit-ai/google-genai (1.22.0), next (React framework), firebase, zod (schema validation).
+- UI components: Radix UI primitives with Tailwind CSS styling.
+- Dev dependencies: TypeScript, Jest, ESLint, Prettier, Husky (git hooks).
+- Before adding new dependencies, check compatibility with Next.js App Router and server components.
+- Update dependencies cautiously - Genkit and Firebase versions must stay compatible.
 
 ## Integration points
 - Genkit (Google GenAI): models defined in src/ai/genkit.ts.
 - Firebase Auth/Firestore: initializeFirebase on client, initializeFirebaseServer on server.
 - Voice pipeline: src/ai/flows/text-to-speech.ts and src/ai/flows/voice-command-to-text.ts.
-- Radix UI components for UI primitives (see src/components)
 
 ## Examples to follow
 - Flow patterns: src/ai/flows/conversational-chat.ts and src/ai/flows/evolution-loop.ts.
@@ -223,3 +205,6 @@ Key Configuration Files:
 * Memory consolidation runs via `memory-consolidation.ts` flow
 * Respect user privacy - store only necessary data
 * Implement cleanup for old memories if needed
+- Error handling: src/ai/error-handler.ts (withErrorHandling wrapper).
+- Rate limiting: src/ai/tools/rate-limiter.ts (checkLimit, recordUsage).
+- Testing: src/ai/__tests__/rate-limiter.test.ts (Jest patterns).
