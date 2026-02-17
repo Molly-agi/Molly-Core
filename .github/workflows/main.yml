@@ -32,10 +32,14 @@ jobs:
 
       - name: Run linting
         run: npm run lint
+        # TODO: Remove continue-on-error once ~200+ pre-existing lint errors are fixed
+        # Temporarily non-blocking to unblock codespace and CI/CD pipeline
         continue-on-error: true
 
       - name: Run type checking
         run: npm run typecheck
+        # TODO: Remove continue-on-error once pre-existing type errors are fixed
+        # Temporarily non-blocking to unblock codespace and CI/CD pipeline
         continue-on-error: true
 
       - name: Run tests
