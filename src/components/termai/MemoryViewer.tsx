@@ -9,18 +9,8 @@ import {
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  BrainCircuit,
-  Zap,
-  History,
-  Shield,
-  CheckCircle2,
-  ChevronDown,
-  Lightbulb,
-  AlertTriangle,
-} from 'lucide-react';
+import { History, Shield, CheckCircle2, Lightbulb } from 'lucide-react';
 import { Badge } from '../ui/badge';
-import { useState } from 'react';
 import {
   Accordion,
   AccordionContent,
