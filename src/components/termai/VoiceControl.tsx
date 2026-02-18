@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Mic, Square } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/firebase/auth/use-user';
 import { VoiceActivityDetector } from '@/ai/tools/voice-activity-detection';
@@ -16,9 +16,20 @@ export type VoiceCommandResult = {
 
 export function VoiceControl({
   onVoiceCommand,
+  lastResponseRef,
+  hardwareState,
 }: {
   onVoiceCommand: (result: VoiceCommandResult) => void;
+  lastResponseRef?: MutableRefObject<string | null>;
+  hardwareState?: {
+    temperature: number;
+    batteryLevel: number;
+    cpuUsage: number;
+  };
 }) {
+  const isVoiceDebug =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).has('voiceDebug');
   const [isListening, setIsListening] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -33,7 +44,8 @@ export function VoiceControl({
   const sessionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const speechActiveRef = useRef(false);
   const audioChunksRef = useRef<Blob[]>([]);
-  const lastResponseRef = useRef<string | null>(null);
+  const localLastResponseRef = useRef<string | null>(null);
+  const activeLastResponseRef = lastResponseRef ?? localLastResponseRef;
   const { toast } = useToast();
   const { user } = useUser();
 
@@ -156,9 +168,15 @@ export function VoiceControl({
         setIsProcessing(false);
         return;
       }
+      if (isVoiceDebug) {
+        console.debug('[VoiceDebug] Raw audio bytes:', base64Audio.length);
+      }
       try {
         // Normalize to WAV/PCM for consistent transcription support.
         base64Audio = await convertToWavDataUrl(audioBlob);
+        if (isVoiceDebug) {
+          console.debug('[VoiceDebug] WAV conversion complete');
+        }
       } catch (conversionError) {
         console.warn(
           '[VoiceControl] WAV conversion failed, falling back to source format:',
@@ -185,13 +203,19 @@ export function VoiceControl({
             audioData: base64Audio,
             userId: user.uid,
             synthesizeSpeech: false,
-            lastResponse: lastResponseRef.current ?? undefined,
+            lastResponse: activeLastResponseRef.current ?? undefined,
+            hardwareState,
           }),
         });
 
         const contentType = response.headers.get('content-type') || '';
         const rawText = await response.text();
         let data: any = null;
+
+        if (isVoiceDebug) {
+          console.debug('[VoiceDebug] Response status:', response.status);
+          console.debug('[VoiceDebug] Response body:', rawText);
+        }
 
         if (contentType.includes('application/json') && rawText.trim()) {
           try {
@@ -212,17 +236,24 @@ export function VoiceControl({
           toast({
             variant: 'destructive',
             title: 'Voice Processing Error',
-            description: 'Unexpected server response. Please try again.',
+            description: isVoiceDebug
+              ? `Unexpected server response (${response.status}).`
+              : 'Unexpected server response. Please try again.',
           });
           setIsProcessing(false);
           return;
         }
 
         if (!response.ok || !data?.success) {
+          const errorMessage =
+            data?.error ||
+            (isVoiceDebug
+              ? `Request failed (${response.status}).`
+              : 'Unexpected server response.');
           toast({
             variant: 'destructive',
             title: 'Voice Processing Failed',
-            description: data?.error || 'Unexpected server response.',
+            description: errorMessage,
           });
           return;
         }
@@ -236,7 +267,7 @@ export function VoiceControl({
         } as VoiceCommandResult;
 
         if (result.response) {
-          lastResponseRef.current = result.response;
+          activeLastResponseRef.current = result.response;
         }
 
         if (result.recognized && result.transcription) {
@@ -257,7 +288,9 @@ export function VoiceControl({
         toast({
           variant: 'destructive',
           title: 'Voice Processing Failed',
-          description: errorMessage,
+          description: isVoiceDebug
+            ? `Voice interaction error: ${errorMessage}`
+            : errorMessage,
         });
       } finally {
         isProcessingRef.current = false;

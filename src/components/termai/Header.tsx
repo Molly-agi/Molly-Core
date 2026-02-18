@@ -4,7 +4,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { VoiceCommandResult } from './VoiceControl';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
-import { useRef, useState } from 'react';
+import { useRef, useState, type MutableRefObject } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,9 +31,17 @@ const OriginStoryDialog = dynamic(
 export function Header({
   onVoiceCommand,
   onAdminUnlock,
+  lastResponseRef,
+  hardwareState,
 }: {
   onVoiceCommand: (result: VoiceCommandResult) => void;
   onAdminUnlock: () => void;
+  lastResponseRef: MutableRefObject<string | null>;
+  hardwareState: {
+    temperature: number;
+    batteryLevel: number;
+    cpuUsage: number;
+  };
 }) {
   const { user } = useUser();
   const auth = useAuth();
@@ -94,7 +102,11 @@ export function Header({
         </div>
       </div>
       <OriginStoryDialog />
-      <VoiceControl onVoiceCommand={onVoiceCommand} />
+      <VoiceControl
+        onVoiceCommand={onVoiceCommand}
+        lastResponseRef={lastResponseRef}
+        hardwareState={hardwareState}
+      />
       {user && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
