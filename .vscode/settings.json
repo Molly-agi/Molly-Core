@@ -2,5 +2,28 @@
   "terminal.integrated.shellIntegration.enabled": true,
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
   "terminal.integrated.shellIntegration.history": 100,
-  "terminal.integrated.shellIntegration.suggestEnabled": true
+  "terminal.integrated.shellIntegration.suggestEnabled": true,
+  "files.watcherExclude": {
+    "**/.next/**": true,
+    "**/out/**": true,
+    "**/.genkit/**": true,
+    "**/.session-backups/**": true,
+    "**/coverage/**": true,
+    "**/node_modules/**": true
+  },
+  "search.exclude": {
+    "**/.next": true,
+    "**/out": true,
+    "**/.genkit": true,
+    "**/.session-backups": true,
+    "**/coverage": true,
+    "**/node_modules": true
+  },
+  "files.exclude": {
+    "**/.next": true,
+    "**/out": true,
+    "**/.genkit": true,
+    "**/.session-backups": true,
+    "**/coverage": true
+  }
 }

@@ -9,7 +9,7 @@ import { TermAISidebar } from './Sidebar';
 import { Header } from './Header';
 import Terminal from './Terminal';
 import { HiddenAdminPanel } from './HiddenAdminPanel';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
@@ -21,6 +21,7 @@ export default function Dashboard() {
   const [voiceResult, setVoiceResult] = useState<VoiceCommandResult | null>(
     null
   );
+  const lastResponseRef = useRef<string | null>(null);
   const { user, isUserLoading, userError } = useUser();
   const router = useRouter();
   const [authRetryAttempt, setAuthRetryAttempt] = useState(0);
@@ -36,6 +37,11 @@ export default function Dashboard() {
   const [battery, setBattery] = useState(78);
   const [temp, setTemp] = useState(42);
   const [cpu, setCpu] = useState(15);
+  const hardwareState = {
+    batteryLevel: Math.floor(battery),
+    temperature: temp,
+    cpuUsage: cpu,
+  };
 
   // Redirect to login if not authenticated (but allow in dev mode)
   useEffect(() => {
@@ -229,6 +235,8 @@ export default function Dashboard() {
         <Header
           onVoiceCommand={handleVoiceCommand}
           onAdminUnlock={() => setIsAdminPanelOpen(true)}
+          lastResponseRef={lastResponseRef}
+          hardwareState={hardwareState}
         />
 
         {sleepState?.isSleeping && (
@@ -292,6 +300,7 @@ export default function Dashboard() {
           <Terminal
             voiceResult={voiceResult}
             onVoiceCommandProcessed={handleVoiceCommandProcessed}
+            lastResponseRef={lastResponseRef}
           />
         </div>
       </SidebarInset>

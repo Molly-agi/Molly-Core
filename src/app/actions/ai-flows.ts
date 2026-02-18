@@ -25,6 +25,7 @@ import { listAvailableModels } from '@/ai/tools/system';
 import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
 import { getSystemHealth } from '@/ai/tools/system';
 import { logPacingTelemetry } from '@/ai/tools/pacing-telemetry';
+import { getLastLatencyMs, setLastLatencyMs } from '@/ai/tools/latency-cache';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { recordSensoryLogServer } from '@/firebase/firestore/agent-memory-server';
 import { recallSimilarMemories } from '@/ai/tools/semantic-recall';
@@ -390,10 +391,29 @@ export async function processVoiceInteraction(
     });
 
     // Step 2: Get conversational response from Molly
+    const latencyKey = `voice:${userId}`;
+    const lastLatencyMs = getLastLatencyMs(latencyKey);
     const nervousSignal = await buildNervousSystemSignal();
-    const selfSignals = nervousSignal ? [nervousSignal] : undefined;
+    let selfSignals: NeuralBridgeSignal[] | undefined;
+    if (nervousSignal) {
+      if (nervousSignal.action === 'self.nervous_system') {
+        selfSignals = [
+          {
+            ...nervousSignal,
+            latencyMs: lastLatencyMs ?? nervousSignal.latencyMs,
+          },
+        ];
+      } else {
+        selfSignals = [nervousSignal];
+      }
+    } else if (lastLatencyMs !== undefined) {
+      selfSignals = [
+        { action: 'self.nervous_system', latencyMs: lastLatencyMs },
+      ];
+    }
     const memoryContext = await buildMemoryContext(userId, transcription);
 
+    const startTime = Date.now();
     const chatResponse = await conversationalChat({
       text: transcription,
       history: [],
@@ -405,6 +425,7 @@ export async function processVoiceInteraction(
       selfSignals,
       memoryContext,
     });
+    setLastLatencyMs(latencyKey, Date.now() - startTime);
 
     logPacingTelemetry(
       'processVoiceInteraction',
@@ -444,7 +465,9 @@ export async function processVoiceInteraction(
   }
 }
 
-export async function getMollyVoice(text: string) {
+export async function getMollyVoice(
+  text: string
+): Promise<{ audioUri: string; error?: string }> {
   try {
     ensureApiKey();
     await checkRateLimit('text-to-speech', 500);
@@ -608,11 +631,32 @@ export async function getConversationalChat(
         response: guard.message,
       };
     }
+    const latencyKey = userId ? `text:${userId}` : 'text:anonymous';
+    const lastLatencyMs = getLastLatencyMs(latencyKey);
     const nervousSignal = await buildNervousSystemSignal();
-    const mergedSignals = nervousSignal
-      ? [...(selfSignals ?? []), nervousSignal]
-      : selfSignals;
+    let mergedSignals = selfSignals ?? [];
+
+    if (nervousSignal) {
+      if (nervousSignal.action === 'self.nervous_system') {
+        mergedSignals = [
+          ...mergedSignals,
+          {
+            ...nervousSignal,
+            latencyMs: lastLatencyMs ?? nervousSignal.latencyMs,
+          },
+        ];
+      } else {
+        mergedSignals = [...mergedSignals, nervousSignal];
+      }
+    } else if (lastLatencyMs !== undefined) {
+      mergedSignals = [
+        ...mergedSignals,
+        { action: 'self.nervous_system', latencyMs: lastLatencyMs },
+      ];
+    }
+
     const memoryContext = await buildMemoryContext(userId, text);
+    const startTime = Date.now();
     const response = await withRetry(
       () =>
         conversationalChat({
@@ -629,6 +673,7 @@ export async function getConversationalChat(
       'conversational-chat',
       RETRY_PRESETS.FAST
     );
+    setLastLatencyMs(latencyKey, Date.now() - startTime);
 
     const responseText =
       typeof response === 'string' ? response : (response?.response ?? '');

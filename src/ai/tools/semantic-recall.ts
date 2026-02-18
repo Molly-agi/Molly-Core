@@ -8,7 +8,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { getAdminFirestore } from '@/firebase/admin';
+import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 import {
   getEmbeddingProvider,
   isEmbeddingProviderReady,
@@ -147,6 +147,16 @@ export const semanticRecall = ai.defineTool(
     const traceId = generateTraceId();
 
     try {
+      if (!isAdminConfigured()) {
+        MollyLogger.warn(
+          'Admin Firestore not configured - skipping semantic recall',
+          'semantic-recall',
+          { userId },
+          traceId
+        );
+        return [];
+      }
+
       // Check if embedding provider is ready
       if (!isEmbeddingProviderReady()) {
         MollyLogger.warn(
@@ -386,8 +396,19 @@ async function fallbackKeywordSearch(
   queryText: string,
   resultLimit: number
 ): Promise<SemanticRecallResult[]> {
-  const firestore = getAdminFirestore();
   const traceId = generateTraceId();
+
+  if (!isAdminConfigured()) {
+    MollyLogger.warn(
+      'Admin Firestore not configured - skipping keyword search',
+      'semantic-recall',
+      { userId },
+      traceId
+    );
+    return [];
+  }
+
+  const firestore = getAdminFirestore();
 
   MollyLogger.info(
     'Using fallback keyword search',

@@ -1,6 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type MutableRefObject,
+} from 'react';
 import { Input } from '@/components/ui/input';
 import {
   getConversationalChat,
@@ -89,9 +95,11 @@ function isImmuneReport(
 export default function Terminal({
   voiceResult,
   onVoiceCommandProcessed,
+  lastResponseRef: externalLastResponseRef,
 }: {
   voiceResult: VoiceCommandResult | null;
   onVoiceCommandProcessed: () => void;
+  lastResponseRef?: MutableRefObject<string | null>;
 }) {
   const [history, setHistory] = useState<HistoryItem[]>([
     '[SYSTEM]: Initializing Neural Link...',
@@ -110,7 +118,8 @@ export default function Terminal({
     {}
   );
 
-  const lastResponseRef = useRef<string | null>(null);
+  const internalLastResponseRef = useRef<string | null>(null);
+  const lastResponseRef = externalLastResponseRef ?? internalLastResponseRef;
   const originStorySeededRef = useRef(false);
   const immuneTriggeredRef = useRef<string | null>(null);
 
@@ -142,13 +151,13 @@ export default function Terminal({
     if (!isVocal || !text || isVocalizing) return;
     setIsVocalizing(true);
     try {
-      const { audioUri, error } = await getMollyVoice(text);
-      if (!audioUri) {
-        console.warn('Vocal cords returned no audio:', error);
+      const voiceResponse = await getMollyVoice(text);
+      if (!voiceResponse.audioUri) {
+        console.warn('Vocal cords returned no audio:', voiceResponse.error);
         setIsVocalizing(false);
         return;
       }
-      setAudioUri(audioUri);
+      setAudioUri(voiceResponse.audioUri);
     } catch (e) {
       console.error('Vocal error:', e);
       setIsVocalizing(false);
