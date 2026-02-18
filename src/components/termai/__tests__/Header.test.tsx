@@ -38,6 +38,14 @@ jest.mock('@/components/ui/sidebar', () => ({
 describe('Header', () => {
   // Directly import the mocked hooks
   const { useUser, useAuth } = require('@/firebase');
+  const lastResponseRef = { current: null } as React.MutableRefObject<
+    string | null
+  >;
+  const hardwareState = {
+    temperature: 0,
+    batteryLevel: 0,
+    cpuUsage: 0,
+  };
 
   beforeEach(() => {
     // Reset mocks before each test to ensure test isolation
@@ -54,7 +62,14 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
+    render(
+      <Header
+        onVoiceCommand={() => {}}
+        onAdminUnlock={() => {}}
+        lastResponseRef={lastResponseRef}
+        hardwareState={hardwareState}
+      />
+    );
 
     // Act & Assert: Check for the title
     const titleElement = screen.getByText('Molly');
@@ -75,7 +90,14 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
+    render(
+      <Header
+        onVoiceCommand={() => {}}
+        onAdminUnlock={() => {}}
+        lastResponseRef={lastResponseRef}
+        hardwareState={hardwareState}
+      />
+    );
 
     // Act & Assert: Check that the avatar/dropdown menu is rendered
     // In test environments, images may not load so we verify the component structure
@@ -103,7 +125,14 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
+    render(
+      <Header
+        onVoiceCommand={() => {}}
+        onAdminUnlock={() => {}}
+        lastResponseRef={lastResponseRef}
+        hardwareState={hardwareState}
+      />
+    );
 
     // Act & Assert: Check for the fallback initials "TU"
     const fallback = screen.getByText('TU');
@@ -119,7 +148,14 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(<Header onVoiceCommand={() => {}} onAdminUnlock={() => {}} />);
+    render(
+      <Header
+        onVoiceCommand={() => {}}
+        onAdminUnlock={() => {}}
+        lastResponseRef={lastResponseRef}
+        hardwareState={hardwareState}
+      />
+    );
 
     // Act & Assert: The avatar dropdown should not be present
     const avatarImage = screen.queryByRole('img');

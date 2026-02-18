@@ -25,6 +25,7 @@ import { getSystemHealth } from './system';
 import { logPacingTelemetry } from './pacing-telemetry';
 import type { NeuralBridgeSignal } from './neural-bridge';
 import { buildNeuralBridgeContext } from './neural-bridge';
+import { getLastLatencyMs, setLastLatencyMs } from './latency-cache';
 
 export interface VoiceCommandContext {
   userId: string;
@@ -313,6 +314,11 @@ async function handleQuestionIntent(
   const traceId = generateTraceId();
 
   try {
+    const latencyKey = context.sessionId
+      ? `voice:${context.sessionId}`
+      : `voice:${context.userId}`;
+    const lastLatencyMs = getLastLatencyMs(latencyKey);
+
     // Check if question relates to past experiences
     const memories = await recallSimilarMemories(
       context.userId,
@@ -361,8 +367,19 @@ async function handleQuestionIntent(
       );
     }
 
-    if (nervousSignal) {
-      selfSignals.push(nervousSignal);
+    if (nervousSignal && nervousSignal.action === 'self.nervous_system') {
+      selfSignals.push({
+        action: 'self.nervous_system',
+        cpuUsage: nervousSignal.cpuUsage,
+        gpuUsage: nervousSignal.gpuUsage,
+        temperatureC: nervousSignal.temperatureC,
+        latencyMs: lastLatencyMs ?? nervousSignal.latencyMs,
+      });
+    } else if (lastLatencyMs !== undefined) {
+      selfSignals.push({
+        action: 'self.nervous_system',
+        latencyMs: lastLatencyMs,
+      });
     }
 
     const prompt = memoryContext
@@ -390,6 +407,7 @@ ${memories.map((m) => m.suggestion).join('\n')}`
       );
     }
 
+    const startTime = Date.now();
     const response = await conversationalChat({
       text: prompt,
       history: [],
@@ -400,6 +418,7 @@ ${memories.map((m) => m.suggestion).join('\n')}`
       },
       selfSignals: selfSignals.length > 0 ? selfSignals : undefined,
     });
+    setLastLatencyMs(latencyKey, Date.now() - startTime);
 
     const responseText = response?.response ?? '';
     logPacingTelemetry('voice-command-processor', responseText, nervousSignal);

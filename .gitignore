@@ -37,6 +37,10 @@ firestore-debug.log
 .session-backups/
 COPILOT_SESSION_STATE.json
 
+# Genkit runtime artifacts
+.genkit/runtimes/
+.genkit/servers/
+
 # Gallery image processing
 /public/molly-gallery/portraits-backup/
 /public/molly-gallery/portraits-clean/
