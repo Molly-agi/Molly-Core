@@ -9,13 +9,22 @@ import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
 import type { TextToScriptOutput } from '@/ai/flows/text-to-script';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
 
+export interface VisionReport {
+  observedState: string;
+  vibeAnalysis: string;
+  risksDetected: string[];
+  ocrAudit?: string;
+  thumbnailUri?: string;
+}
+
 export type HistoryItem =
   | string
   | AutonomousSolutionOutput
   | TextToScriptOutput
   | HiveOutput
   | { immuneReport: string; isHealthy: boolean }
-  | { syntheticReport: string; implementation: string; authority: string };
+  | { syntheticReport: string; implementation: string; authority: string }
+  | { visionReport: VisionReport };
 
 export type AnchorRecallDetail = {
   title?: string;
@@ -49,4 +58,10 @@ export function isImmuneReport(
   item: HistoryItem
 ): item is { immuneReport: string; isHealthy: boolean } {
   return typeof item === 'object' && item !== null && 'immuneReport' in item;
+}
+
+export function isVisionReport(
+  item: HistoryItem
+): item is { visionReport: VisionReport } {
+  return typeof item === 'object' && item !== null && 'visionReport' in item;
 }
