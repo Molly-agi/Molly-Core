@@ -37,6 +37,7 @@ import { useTTS } from './useTTS';
 import { useFamilyStory } from './useFamilyStory';
 import { ChatHistory } from './ChatHistory';
 import { CommandBar } from './CommandBar';
+import { VisionPanel } from './VisionPanel';
 
 export default function Terminal({
   voiceResult,
@@ -360,6 +361,13 @@ export default function Terminal({
   return (
     <div className="font-code text-sm h-full flex flex-col max-w-4xl mx-auto">
       {audioElement}
+
+      <VisionPanel
+        setHistory={setHistory}
+        setIsLoading={setIsLoading}
+        isLoading={isLoading}
+        speakResponse={speakResponse}
+      />
 
       <ChatHistory
         history={history}

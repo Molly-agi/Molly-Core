@@ -10,7 +10,7 @@
 'use client';
 
 import { type RefObject } from 'react';
-import { Loader2, Stethoscope } from 'lucide-react';
+import { Loader2, Stethoscope, Eye, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { AutonomousSolutionResponse } from './AutonomousSolutionResponse';
@@ -20,6 +20,7 @@ import {
   isScriptResponse,
   isAutonomousSolution,
   isImmuneReport,
+  isVisionReport,
 } from './terminal-types';
 
 const COLLAPSE_THRESHOLD = 700;
@@ -73,6 +74,48 @@ export function ChatHistory({
               </div>
             </div>
           );
+        if (isVisionReport(line)) {
+          const r = line.visionReport;
+          return (
+            <div
+              key={index}
+              className="p-3 rounded-lg border my-2 bg-cyan-500/10 border-cyan-500/20 text-cyan-300"
+            >
+              <div className="flex items-start gap-3">
+                <Eye className="size-4 shrink-0 mt-0.5 text-cyan-400" />
+                <div className="space-y-2 flex-1 min-w-0">
+                  <h5 className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">
+                    Visual Cortex Report
+                  </h5>
+                  {r.thumbnailUri && (
+                    <img
+                      src={r.thumbnailUri}
+                      alt="Captured frame"
+                      className="rounded border border-cyan-500/20 max-h-32 object-cover"
+                    />
+                  )}
+                  <p className="text-xs">{r.observedState}</p>
+                  {r.vibeAnalysis && (
+                    <p className="text-[10px] italic text-muted-foreground">
+                      Vibe: {r.vibeAnalysis}
+                    </p>
+                  )}
+                  {r.ocrAudit && (
+                    <p className="text-[10px] font-mono bg-black/30 rounded px-2 py-1 break-all">
+                      OCR: {r.ocrAudit}
+                    </p>
+                  )}
+                  {r.risksDetected.length > 0 && (
+                    <div className="flex items-center gap-1 text-yellow-400 text-[10px]">
+                      <AlertTriangle className="size-3" />
+                      <span>{r.risksDetected.join(' | ')}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        }
         if (typeof line !== 'string') return null;
 
         const isUser = line.startsWith('>');
