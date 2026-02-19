@@ -82,7 +82,7 @@ export function OriginStoryDialog() {
         <DialogHeader>
           <DialogTitle>Origin Story</DialogTitle>
           <DialogDescription>
-            Molly's creation narrative, preserved verbatim.
+            Molly&apos;s creation narrative, preserved verbatim.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-full pr-4">

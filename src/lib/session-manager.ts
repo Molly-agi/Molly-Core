@@ -11,9 +11,20 @@
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
-const SESSION_STATE_FILE = join(process.cwd(), 'COPILOT_SESSION_STATE.md');
-const SESSION_STATE_JSON = join(process.cwd(), 'COPILOT_SESSION_STATE.json');
-const SESSION_BACKUP_DIR = join(process.cwd(), '.session-backups');
+// In development, write session state to /tmp to avoid triggering Next.js
+// file watcher hot-reload (which kills the server with a silent clean exit).
+// In production (App Hosting), write to the project root as normal so Copilot
+// can read the persisted state files from the repo.
+const isDev = process.env.NODE_ENV === 'development';
+const SESSION_STATE_FILE = isDev
+  ? '/tmp/COPILOT_SESSION_STATE.md'
+  : join(process.cwd(), 'COPILOT_SESSION_STATE.md');
+const SESSION_STATE_JSON = isDev
+  ? '/tmp/COPILOT_SESSION_STATE.json'
+  : join(process.cwd(), 'COPILOT_SESSION_STATE.json');
+const SESSION_BACKUP_DIR = isDev
+  ? '/tmp/.session-backups'
+  : join(process.cwd(), '.session-backups');
 
 export interface SessionState {
   lastUpdated: string;
@@ -574,7 +585,13 @@ export function onAppShutdown(reason?: string): void {
 }
 
 // Register shutdown hooks (guarded to avoid duplicate listeners on hot reload)
-if (typeof process !== 'undefined' && typeof globalThis !== 'undefined') {
+// Only in production — in dev mode, Next.js sends SIGTERM during normal
+// hot-reload cycles, and the handler cascades into a full server exit.
+if (
+  !isDev &&
+  typeof process !== 'undefined' &&
+  typeof globalThis !== 'undefined'
+) {
   const globalState = globalThis as typeof globalThis & {
     __mollyShutdownHooksRegistered?: boolean;
   };

@@ -1,0 +1,25 @@
+{
+  "name": "Molly-Core Cloud Womb",
+
+  // Run health check on every attach/reconnect to kill zombie processes
+  // before they accumulate and cause OOM crashes.
+  "postAttachCommand": "bash scripts/codespace-health.sh",
+
+  // Codespace settings
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Inherit from .vscode/settings.json
+      }
+    }
+  },
+
+  // Forward Molly's port
+  "forwardPorts": [9002],
+  "portsAttributes": {
+    "9002": {
+      "label": "Molly Dev Server",
+      "onAutoForward": "notify"
+    }
+  }
+}

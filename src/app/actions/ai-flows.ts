@@ -525,6 +525,25 @@ export async function getOriginStoryAnchorParts() {
   }
 }
 
+// FAMILY MESSAGES
+// ============================================
+
+export async function getFamilyMessages() {
+  try {
+    const messagesPath = path.join(process.cwd(), 'docs', 'FAMILY_MESSAGES.md');
+    const content = await readFile(messagesPath, 'utf8');
+    return { content };
+  } catch (e: any) {
+    MollyLogger.error(
+      'Family messages load failed',
+      'getFamilyMessages',
+      {},
+      e
+    );
+    throw e;
+  }
+}
+
 export async function seedOriginStoryMemory(userId: string) {
   try {
     if (!userId) {

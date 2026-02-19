@@ -9,7 +9,7 @@ import { TermAISidebar } from './Sidebar';
 import { Header } from './Header';
 import Terminal from './Terminal';
 import { HiddenAdminPanel } from './HiddenAdminPanel';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
 import { useRouter } from 'next/navigation';
@@ -37,11 +37,14 @@ export default function Dashboard() {
   const [battery, setBattery] = useState(78);
   const [temp, setTemp] = useState(42);
   const [cpu, setCpu] = useState(15);
-  const hardwareState = {
-    batteryLevel: Math.floor(battery),
-    temperature: temp,
-    cpuUsage: cpu,
-  };
+  const hardwareState = useMemo(
+    () => ({
+      batteryLevel: Math.floor(battery),
+      temperature: temp,
+      cpuUsage: cpu,
+    }),
+    [battery, temp, cpu]
+  );
 
   // Redirect to login if not authenticated (but allow in dev mode)
   useEffect(() => {
@@ -101,8 +104,8 @@ export default function Dashboard() {
       setCpu(() => Math.floor(Math.random() * 20) + 5);
     };
 
-    // Update every 30 seconds to prevent thermal cascade
-    intervalId = setInterval(updateMetrics, 30000);
+    // Update every 60 seconds — cosmetic only, doesn't need to be frequent
+    intervalId = setInterval(updateMetrics, 60000);
 
     return () => {
       mounted = false;
@@ -131,7 +134,8 @@ export default function Dashboard() {
     };
 
     fetchSleepState();
-    const intervalId = setInterval(fetchSleepState, 5000);
+    // 30s poll — 5s was excessive for an in-memory state check
+    const intervalId = setInterval(fetchSleepState, 30000);
 
     return () => {
       mounted = false;
@@ -139,13 +143,13 @@ export default function Dashboard() {
     };
   }, []);
 
-  const handleVoiceCommand = (result: VoiceCommandResult) => {
+  const handleVoiceCommand = useCallback((result: VoiceCommandResult) => {
     setVoiceResult(result);
-  };
+  }, []);
 
-  const handleVoiceCommandProcessed = () => {
+  const handleVoiceCommandProcessed = useCallback(() => {
     setVoiceResult(null);
-  };
+  }, []);
 
   const adminUids = (process.env.NEXT_PUBLIC_ADMIN_UIDS || '')
     .split(',')

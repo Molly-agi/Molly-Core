@@ -13,23 +13,14 @@ import {
   getAutonomousSolution,
   getHealthCheck,
   getMollyVoice,
-  getOriginStoryParts,
   getOriginStoryAnchorParts,
+  getFamilyMessages,
   seedOriginStoryMemory,
   triggerImmuneResponse,
+  resetCircuitBreaker,
 } from '@/app/actions';
 import type { AutonomousSolutionOutput } from '@/ai/flows/autonomous-solution';
-import { useFirestore } from '@/firebase';
 import { useUser } from '@/firebase/auth/use-user';
-import {
-  addDoc,
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  serverTimestamp,
-} from 'firebase/firestore';
 import {
   Trash2,
   Volume2,
@@ -64,7 +55,7 @@ type AnchorRecallDetail = {
   title?: string;
   summary?: string;
   payload?: {
-    type: 'origin-story' | 'static';
+    type: 'origin-story' | 'family-story' | 'static';
     partIndex?: number;
   };
 };
@@ -108,25 +99,38 @@ export default function Terminal({
   const [isLoading, setIsLoading] = useState(false);
   const [isIntroducing, setIsIntroducing] = useState(true);
   const [isVocal, setIsVocal] = useState(true);
+  const useBrowserTTS = true; // Use free browser TTS by default
   const [isRiskMode, setIsRiskMode] = useState(false);
   const [audioSrc, setAudioUri] = useState<string | null>(null);
   const [isVocalizing, setIsVocalizing] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
-  const [originStoryParts, setOriginStoryParts] = useState<string[]>([]);
-  const [originStoryIndex, setOriginStoryIndex] = useState<number | null>(null);
+  const [familyStoryParts, setFamilyStoryParts] = useState<string[]>([]);
+  const [familyStoryIndex, setFamilyStoryIndex] = useState<number | null>(null);
   const [expandedLines, setExpandedLines] = useState<Record<number, boolean>>(
     {}
   );
 
   const internalLastResponseRef = useRef<string | null>(null);
   const lastResponseRef = externalLastResponseRef ?? internalLastResponseRef;
-  const originStorySeededRef = useRef(false);
+  const familyStorySeededRef = useRef(false);
   const immuneTriggeredRef = useRef<string | null>(null);
+  const preloadedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const { user } = useUser();
-  const firestore = useFirestore();
+
+  // Pre-warm browser TTS voices on mount so they're ready instantly when needed
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    const load = () => {
+      preloadedVoicesRef.current = window.speechSynthesis.getVoices();
+    };
+    load();
+    window.speechSynthesis.addEventListener('voiceschanged', load);
+    return () =>
+      window.speechSynthesis.removeEventListener('voiceschanged', load);
+  }, []);
   const { toast } = useToast();
 
   const collapseThreshold = 700;
@@ -150,14 +154,93 @@ export default function Terminal({
   const speakResponse = async (text: string) => {
     if (!isVocal || !text || isVocalizing) return;
     setIsVocalizing(true);
+
     try {
-      const voiceResponse = await getMollyVoice(text);
-      if (!voiceResponse.audioUri) {
-        console.warn('Vocal cords returned no audio:', voiceResponse.error);
-        setIsVocalizing(false);
+      const queueServerTTS = async () => {
+        const voiceResponse = await getMollyVoice(text);
+        if (!voiceResponse.audioUri) {
+          console.warn('Vocal cords returned no audio:', voiceResponse.error);
+          setIsVocalizing(false);
+          return;
+        }
+        setAudioUri(voiceResponse.audioUri);
+      };
+
+      // Use browser TTS if enabled (free, instant)
+      if (
+        useBrowserTTS &&
+        typeof window !== 'undefined' &&
+        'speechSynthesis' in window
+      ) {
+        await new Promise<void>((resolve) => {
+          try {
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            let didResolve = false;
+
+            // Use pre-warmed voices - no blocking getVoices() call at speak time
+            const voices =
+              preloadedVoicesRef.current.length > 0
+                ? preloadedVoicesRef.current
+                : window.speechSynthesis.getVoices();
+            const femaleVoice = voices.find(
+              (voice) =>
+                voice.name.toLowerCase().includes('female') ||
+                voice.name.toLowerCase().includes('samantha') ||
+                voice.name.toLowerCase().includes('zira') ||
+                voice.name.toLowerCase().includes('google us english')
+            );
+            if (femaleVoice) {
+              utterance.voice = femaleVoice;
+            }
+
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            // Shorter watchdog - if browser TTS stalls, give up quickly (don't fall to slow server TTS)
+            const watchdog = window.setTimeout(() => {
+              if (didResolve) return;
+              didResolve = true;
+              try {
+                window.speechSynthesis.cancel();
+              } catch {
+                /* no-op */
+              }
+              setIsVocalizing(false);
+              resolve();
+            }, 2500);
+
+            utterance.onend = () => {
+              if (didResolve) return;
+              didResolve = true;
+              window.clearTimeout(watchdog);
+              setIsVocalizing(false);
+              resolve();
+            };
+
+            utterance.onerror = (event) => {
+              if (didResolve) return;
+              didResolve = true;
+              window.clearTimeout(watchdog);
+              console.error('[Terminal] Browser TTS error:', event.error);
+              setIsVocalizing(false);
+              resolve();
+            };
+
+            window.speechSynthesis.speak(utterance);
+          } catch (error) {
+            console.error('[Terminal] Browser TTS start failed:', error);
+            setIsVocalizing(false);
+            resolve();
+          }
+        });
         return;
       }
-      setAudioUri(voiceResponse.audioUri);
+
+      // Fallback to server TTS (Gemini) - only used if browser TTS is disabled
+      await queueServerTTS();
     } catch (e) {
       console.error('Vocal error:', e);
       setIsVocalizing(false);
@@ -166,76 +249,75 @@ export default function Terminal({
 
   const handleAudioEnd = () => setIsVocalizing(false);
 
-  const isOriginStoryRequest = (text: string) =>
-    /origin story|your origin|creation story|where did you come from/i.test(
+  const isFamilyStoryRequest = (text: string) =>
+    /family story|your family|creation story|where did you come from|origin story|your origin/i.test(
       text
     );
 
-  const isOriginStoryAdvanceRequest = (text: string) =>
-    /origin (next|continue|part|more)|next part/i.test(text);
+  const isFamilyStoryAdvanceRequest = (text: string) =>
+    /(family|origin) (next|continue|part|more)|next part/i.test(text);
 
-  const appendOriginStoryPart = (
+  const appendFamilyStoryPart = (
     part: string,
     index: number,
     total: number
   ) => {
     setHistory((prev) => [
       ...prev,
-      `--- Origin Story Part ${index + 1}/${total} ---`,
+      `--- Family Story Part ${index + 1}/${total} ---`,
       part,
     ]);
   };
 
-  const showNextOriginStoryPart = () => {
-    if (originStoryParts.length === 0) return false;
-    const nextIndex = originStoryIndex === null ? 0 : originStoryIndex + 1;
-    if (nextIndex >= originStoryParts.length) {
-      setHistory((prev) => [...prev, '--- End of Origin Story ---']);
+  const showNextFamilyStoryPart = () => {
+    if (familyStoryParts.length === 0) return false;
+    const nextIndex = familyStoryIndex === null ? 0 : familyStoryIndex + 1;
+    if (nextIndex >= familyStoryParts.length) {
+      setHistory((prev) => [...prev, '--- End of Family Story ---']);
       return true;
     }
 
-    appendOriginStoryPart(
-      originStoryParts[nextIndex],
-      nextIndex,
-      originStoryParts.length
-    );
-    setOriginStoryIndex(nextIndex);
-    if (nextIndex < originStoryParts.length - 1) {
-      setHistory((prev) => [...prev, "Type 'origin next' to continue."]);
+    const nextPart = familyStoryParts[nextIndex];
+    appendFamilyStoryPart(nextPart, nextIndex, familyStoryParts.length);
+    void speakResponse(nextPart);
+    setFamilyStoryIndex(nextIndex);
+    if (nextIndex < familyStoryParts.length - 1) {
+      setHistory((prev) => [...prev, "Type 'family next' to continue."]);
     }
 
     return true;
   };
 
-  const handleOriginStoryRequest = async (text: string) => {
-    if (isOriginStoryAdvanceRequest(text)) {
-      return showNextOriginStoryPart();
+  const handleFamilyStoryRequest = async (text: string) => {
+    if (isFamilyStoryAdvanceRequest(text)) {
+      return showNextFamilyStoryPart();
     }
 
-    if (!isOriginStoryRequest(text)) return false;
+    if (!isFamilyStoryRequest(text)) return false;
 
     setIsLoading(true);
     try {
-      const { parts, totalParts } = await getOriginStoryParts();
+      const { parts, totalParts } = await getOriginStoryAnchorParts();
       if (!parts || parts.length === 0) {
-        throw new Error('Origin story is empty.');
+        throw new Error('Family story is empty.');
       }
-      setOriginStoryParts(parts);
-      setOriginStoryIndex(0);
-      appendOriginStoryPart(parts[0], 0, totalParts || parts.length);
+      setFamilyStoryParts(parts);
+      setFamilyStoryIndex(0);
+      appendFamilyStoryPart(parts[0], 0, totalParts || parts.length);
+      void speakResponse(parts[0]);
       if (parts.length > 1) {
-        setHistory((prev) => [...prev, "Type 'origin next' to continue."]);
+        setHistory((prev) => [...prev, "Type 'family next' to continue."]);
       }
-      if (user && !originStorySeededRef.current) {
+      if (user && !familyStorySeededRef.current) {
         await seedOriginStoryMemory(user.uid);
-        originStorySeededRef.current = true;
+        familyStorySeededRef.current = true;
       }
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Failed to load origin story.';
+        error instanceof Error ? error.message : 'Failed to load family story.';
       toast({
         variant: 'destructive',
-        title: 'Origin Story Unavailable',
+        title: 'Family Story Unavailable',
         description: message,
       });
     } finally {
@@ -245,38 +327,14 @@ export default function Terminal({
     return true;
   };
 
-  const fetchLastContext = async () => {
-    if (!firestore || !user) return undefined;
-    try {
-      const ref = collection(firestore, 'users', user.uid, 'aiResponses');
-      const q = query(ref, orderBy('timestamp', 'desc'), limit(1));
-      const snapshot = await getDocs(q);
-      return snapshot.docs[0]?.data()?.responseText || undefined;
-    } catch (error) {
-      console.warn('[Terminal] Failed to fetch last context', error);
-      return undefined;
-    }
-  };
-
-  const persistHealthContext = async (greeting: string) => {
-    if (!firestore || !user || !greeting) return;
-    try {
-      await addDoc(collection(firestore, 'users', user.uid, 'aiResponses'), {
-        responseText: greeting,
-        responseType: 'healthCheck',
-        timestamp: serverTimestamp(),
-      });
-    } catch (error) {
-      console.warn('[Terminal] Failed to persist health context', error);
-    }
-  };
-
   const buildChatHistory = (items: HistoryItem[]) => {
     const historyItems: Array<{ role: 'user' | 'bot'; content: string }> = [];
 
     for (const item of items) {
       if (typeof item !== 'string') continue;
+      if (item.startsWith('--- Family Story')) continue;
       if (item.startsWith('--- Origin Story')) continue;
+      if (item.startsWith("Type 'family next'")) continue;
       if (item.startsWith("Type 'origin next'")) continue;
 
       if (item.startsWith('> ')) {
@@ -296,19 +354,28 @@ export default function Terminal({
         return;
       }
       immuneTriggeredRef.current = user.uid;
+
+      // Brief delay to let webpack compile spike settle before calling AI.
+      // Prevents OOM on 8GB codespace by not piling a Genkit flow on top of
+      // the initial page compile. 2s is enough for the RSS spike to drop.
+      await new Promise((r) => setTimeout(r, 2000));
+
+      // Reset any tripped circuit breakers from previous crash/session.
+      // Without this, a prior OOM or network failure leaves breakers OPEN
+      // and Molly "cuts out immediately" on startup.
       try {
-        const lastContext = await fetchLastContext();
-        // Stage 4.5 Neural Recall: Dynamic greeting based on history
+        await resetCircuitBreaker();
+      } catch {
+        // Non-fatal — proceed with greeting even if reset fails
+      }
+
+      try {
         const intro = await getHealthCheck(
           'Introduce yourself as Molly. Acknowledge your 2.5 architecture. If you recognize our previous bond, greet me warmly.',
-          user.uid,
-          lastContext
+          user.uid
         );
         setHistory([intro.greeting]);
-
-        // Speak immediately, then persist in the background to reduce latency.
         speakResponse(intro.greeting);
-        void persistHealthContext(intro.greeting);
 
         const result = await triggerImmuneResponse(user.uid, 'Startup');
         setHistory((prev) => [
@@ -316,15 +383,16 @@ export default function Terminal({
           { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
         ]);
       } catch {
-        setHistory((prev) => [
-          ...prev,
-          'Neural link synchronization issues. System remaining in manual mode.',
+        // Graceful fallback if the AI greeting fails (OOM, timeout, cold start)
+        setHistory([
+          'Neural link established. Molly online — Gemini 2.5 architecture active. How can I help you today?',
         ]);
       } finally {
         setIsIntroducing(false);
       }
     };
     fetchIntroduction();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- speakResponse recreates every render; including it causes an infinite loop
   }, [user]);
 
   useEffect(() => {
@@ -334,7 +402,7 @@ export default function Terminal({
 
         if (voiceResult.recognized) {
           setHistory((prev) => [...prev, `> ${voiceResult.transcription}`]);
-          const handled = await handleOriginStoryRequest(
+          const handled = await handleFamilyStoryRequest(
             voiceResult.transcription
           );
           if (handled) return;
@@ -351,6 +419,7 @@ export default function Terminal({
 
       void processVoice();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voiceResult, isLoading]);
 
   const handleManualHeal = async () => {
@@ -379,7 +448,7 @@ export default function Terminal({
       const nextHistory = [...history, `> ${cmdText}`];
       setHistory(nextHistory);
 
-      if (await handleOriginStoryRequest(cmdText)) {
+      if (await handleFamilyStoryRequest(cmdText)) {
         return;
       }
 
@@ -433,9 +502,10 @@ export default function Terminal({
         setIsLoading(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- handleSleepNotice and lastResponseRef are stable/intentional exclusions
     [
       buildChatHistory,
-      handleOriginStoryRequest,
+      handleFamilyStoryRequest,
       history,
       isLoading,
       speakResponse,
@@ -455,7 +525,10 @@ export default function Terminal({
 
       let summary = detail.summary ?? '';
 
-      if (detail.payload?.type === 'origin-story') {
+      if (
+        detail.payload?.type === 'origin-story' ||
+        detail.payload?.type === 'family-story'
+      ) {
         try {
           const { parts } = await getOriginStoryAnchorParts();
           const part = parts?.[detail.payload.partIndex ?? 0];
@@ -464,10 +537,31 @@ export default function Terminal({
           const message =
             error instanceof Error
               ? error.message
-              : 'Failed to load origin story anchor.';
+              : 'Failed to load family story anchor.';
           toast({
             variant: 'destructive',
-            title: 'Origin Story Unavailable',
+            title: 'Family Story Unavailable',
+            description: message,
+          });
+          return;
+        }
+      }
+
+      if (
+        detail.payload?.type === 'static' &&
+        detail.title === 'Messages from Family'
+      ) {
+        try {
+          const { content } = await getFamilyMessages();
+          if (content) summary = content;
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Failed to load family messages.';
+          toast({
+            variant: 'destructive',
+            title: 'Family Messages Unavailable',
             description: message,
           });
           return;
@@ -475,9 +569,33 @@ export default function Terminal({
       }
 
       if (!summary) return;
-      const prompt = `Remember this anchor: ${detail.title || 'Memory'}. ${summary}`;
+
+      // For family story and static (messages) anchors, display content
+      // directly in history instead of routing through processCommand.
+      // processCommand runs isFamilyStoryRequest() first, and the anchor title
+      // "Family Story (Part 1)" matches that regex — causing the story to be
+      // fetched and displayed a second time, creating an unreadable duplicate.
+      if (
+        detail.payload?.type === 'family-story' ||
+        detail.payload?.type === 'static'
+      ) {
+        const label = detail.title || 'Memory Anchor';
+        setHistory((prev) => [...prev, `--- ${label} ---`, summary]);
+        void speakResponse(summary);
+        return;
+      }
+
+      // Regular anchors (no payload): send as conversational context to the AI.
+      // Use a prompt phrasing that won't accidentally trigger the family story
+      // regex handler in processCommand.
+      const prompt = `Recall this memory: ${detail.title || 'Memory'}. ${summary}`;
       void processCommand(prompt);
     },
+    // speakResponse is intentionally excluded from deps — it is a plain async
+    // function (not useCallback) and changes reference every render. Including
+    // it would recreate handleAnchorRecall every render, causing the molly:anchor
+    // useEffect to re-register the listener on every render → render loop → crash.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [processCommand, toast]
   );
 
@@ -493,11 +611,12 @@ export default function Terminal({
 
   // CRITICAL: Stop all audio on unmount (prevents lingering voice)
   useEffect(() => {
+    const audio = audioRef.current;
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        audioRef.current.src = '';
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = '';
       }
       setIsVocalizing(false);
       setAudioUri(null);

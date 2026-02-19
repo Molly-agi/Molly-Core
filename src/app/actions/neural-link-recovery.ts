@@ -30,12 +30,27 @@ export async function diagnoseMollyNeuralLink() {
   const failedModels = Object.entries(diagnostics.modelAvailability.modelTests)
     .filter(([_, test]) => !test.available)
     .map(([name]) => name);
+  const flashAvailable =
+    diagnostics.modelAvailability.modelTests.FLASH.available;
+  const proAvailable = diagnostics.modelAvailability.modelTests.PRO.available;
 
   // Set diagnosis
   if (openBreakers.length > 0) {
     diagnostics.diagnosis = `CIRCUIT BREAKER ISSUE: ${openBreakers.length} operations blocked (${openBreakers.join(', ')})`;
     diagnostics.recommendations.push(
       `Reset circuit breaker for: ${openBreakers.join(', ')}`
+    );
+  } else if (!flashAvailable) {
+    diagnostics.diagnosis =
+      'MODEL AVAILABILITY ISSUE: FLASH unavailable (core neural link offline)';
+    diagnostics.recommendations.push(
+      'Check API key configuration - FLASH model must be available'
+    );
+  } else if (!proAvailable) {
+    diagnostics.diagnosis =
+      'DEGRADED MODE: PRO unavailable, running on FLASH-only fallback';
+    diagnostics.recommendations.push(
+      'Optional: restore PRO model access for higher-quality responses'
     );
   } else if (failedModels.length > 0) {
     diagnostics.diagnosis = `MODEL AVAILABILITY ISSUE: ${failedModels.join(', ')} unavailable`;
@@ -118,11 +133,17 @@ export async function restoreMollyNeuralLink() {
     // Verify recovery
     recoveryLog.afterDiagnostic = await diagnoseMollyNeuralLink();
 
+    const afterStatus = recoveryLog.afterDiagnostic;
+    const hasOpenBreakers = Object.values(
+      afterStatus.circuitBreakerStatus.operationStats
+    ).some((stats: any) => stats.state === 'OPEN');
+    const flashAvailable =
+      afterStatus.modelAvailability.modelTests.FLASH.available;
+    const recoverySucceeded = !hasOpenBreakers && flashAvailable;
+
     return {
-      success:
-        recoveryLog.afterDiagnostic.diagnosis ===
-        'ALL SYSTEMS NOMINAL - No issues detected',
-      message: recoveryLog.afterDiagnostic.diagnosis,
+      success: recoverySucceeded,
+      message: afterStatus.diagnosis,
       recoveryLog,
     };
   } catch (e) {

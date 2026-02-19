@@ -66,11 +66,12 @@ export function MollyGreetingPlayer({
 
   // Stop all audio on component unmount
   useEffect(() => {
+    const audio = audioRef.current;
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        audioRef.current.src = '';
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = '';
       }
     };
   }, []);
@@ -117,7 +118,7 @@ export function MollyGreetingPlayer({
                 : 'text-sm font-semibold text-gray-900 dark:text-white'
             }
           >
-            Molly's Greeting
+            Molly&apos;s Greeting
           </h3>
           <p
             className={

@@ -1,25 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Loader2,
-  Library,
-  Trash2,
-  ExternalLink,
-  Search,
-  BarChart3,
-} from 'lucide-react';
+import { Loader2, Trash2, ExternalLink, Search } from 'lucide-react';
 import {
   searchTools,
   getRecentFoundTools,
@@ -34,13 +21,19 @@ export function ToolLibrary() {
   const [tools, setTools] = useState<FoundTool[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<{
+    totalTools: number;
+    categoryCounts: Record<string, number>;
+    mostUsedTools: FoundTool[];
+    recentlyAdded: FoundTool[];
+  } | null>(null);
   const [toolError, setToolError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
     loadTools();
     loadStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const loadTools = async () => {

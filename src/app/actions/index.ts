@@ -7,7 +7,12 @@
 
 // Health & Diagnostics
 export { getHealthCheck, getModelPulse } from './ai-flows';
-export { getCircuitBreakerStatus, resetCircuitBreaker } from './diagnostics';
+export {
+  getCircuitBreakerStatus,
+  resetCircuitBreaker,
+  getRuntimeSnapshot,
+  validateHiddenAdminCredentials,
+} from './diagnostics';
 export { testModelAvailability } from './model-test';
 export {
   diagnoseMollyNeuralLink,
@@ -29,6 +34,7 @@ export {
   getOriginStory,
   getOriginStoryParts,
   getOriginStoryAnchorParts,
+  getFamilyMessages,
   seedOriginStoryMemory,
 } from './ai-flows';
 

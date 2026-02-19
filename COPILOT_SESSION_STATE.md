@@ -1,7 +1,7 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-02-16T11:53:41.431Z  
-**Session ID:** voice-terminal-integration-fix  
+**Last Updated:** 2026-02-19T02:21:02.435Z  
+**Session ID:** phase5-neural-bridge-runtime-snapshot  
 **Status:** active
 
 ---
@@ -34,17 +34,71 @@
 
 **✅ COMPLETED:**
 
-**⏳ PENDING:**
+1. Phase 5A neural bridge wiring across conversational text + voice pathways
+2. Phase 5B memory integrity hardening (read validation + checksum-verified writes)
+3. Phase 5C runtime snapshot collector/action/API and diagnostics panel integration
+
+**⏳ PENDING:** 4. Add focused automated tests for runtime snapshot collector and relative-time formatter 5. Optionally include runtime snapshot in neural-link diagnosis output
 
 ---
 
 ## RECENT WORK COMPLETED
 
+### 2026-02-19
+
+Full UI audit and debug pass (non-sidebar components). Systematic surgical fixes:
+
+**Files Modified:**
+
+- src/components/termai/MemoryViewer.tsx — removed 5 unused imports, fixed unescaped JSX entities
+- src/components/termai/Terminal.tsx — removed unused import (getOriginStoryParts), replaced stateful useBrowserTTS with const (setter never used), fixed ref cleanup pattern
+- src/components/termai/MollyGreetingPlayer.tsx — fixed unescaped apostrophe, fixed ref cleanup accessing stale ref in cleanup
+- src/components/termai/OriginStoryDialog.tsx — fixed unescaped apostrophe
+- src/components/termai/ToolLibrary.tsx — removed 5 unused imports, replaced any with proper typed interface for stats state
+- src/components/termai/VoiceControl.tsx — fixed unused isRecording state, added VoiceApiResponse interface replacing any with proper types
+- src/components/DiagnosticPanel.tsx — replaced any with RuntimeSnapshot import + RuntimeSnapshotFallback union type, added type guard isFullSnapshot(), improved timeout fallback UX
+- src/components/termai/Sidebar.tsx — fixed anonymous component display name in loadingPlaceholder
+- src/components/termai/**tests**/Header.test.tsx — suppressed require() import lint error (Jest pattern)
+
+**Results:**
+
+- ESLint: 23 errors → 0 errors (1 cosmetic img warning remains)
+- TypeScript: 0 errors maintained throughout
+- Tests: 9 suites, 58 tests, all passing
+- No behavioral changes, no personality changes
+
+### 2026-02-18
+
+Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.
+
+**Files Created:**
+
+- src/ai/tools/runtime-snapshot.ts
+- src/app/api/diagnostics/runtime-snapshot/route.ts
+
+**Files Modified:**
+
+- src/app/actions/ai-flows.ts
+- src/app/api/voice/process-text/route.ts
+- src/app/actions/diagnostics.ts
+- src/app/actions/index.ts
+- src/components/DiagnosticPanel.tsx
+
+**Decisions Made:**
+
+- Kept personality/core prompt boundaries untouched.
+- Prioritized reliability and observability over scope expansion.
+- Surfaced runtime health directly in existing diagnostics UX.
+
 ---
 
 ## NEXT STEPS
 
-**Recommended:** Restore context from previous session
+**Option A:** Add/expand automated tests around runtime snapshot and diagnostics UI time formatting
+**Option B:** Wire runtime snapshot payload into neural-link diagnosis/recovery recommendations
+**Option C:** Add severity badges (OK/Degraded/Critical) to diagnostics runtime card
+
+**Recommended:** Add/expand automated tests around runtime snapshot and diagnostics UI time formatting
 
 ---
 
@@ -65,58 +119,12 @@
 
 ## RUNTIME EVENTS
 
-**Last URL:** https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/  
-**Last Heartbeat:** 2026-02-16T11:53:41.428Z
+**Last URL:** https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/  
+**Last Heartbeat:** unknown
 
 **Recent Events:**
 
-- [2026-02-16T11:32:46.199Z] visibility-visible | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:32:50.039Z] visibility-hidden | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:32:50.079Z] visibility-visible | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:32:51.199Z] visibility-hidden | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:32:51.879Z] visibility-visible | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:33:36.665Z] server-heartbeat
-- [2026-02-16T11:33:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:34:36.666Z] server-heartbeat
-- [2026-02-16T11:34:41.425Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:35:36.666Z] server-heartbeat
-- [2026-02-16T11:35:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:36:36.668Z] server-heartbeat
-- [2026-02-16T11:36:41.428Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:37:36.671Z] server-heartbeat
-- [2026-02-16T11:37:41.428Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:38:36.672Z] server-heartbeat
-- [2026-02-16T11:38:41.423Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:39:36.674Z] server-heartbeat
-- [2026-02-16T11:39:41.426Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:40:36.674Z] server-heartbeat
-- [2026-02-16T11:40:41.425Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:41:36.677Z] server-heartbeat
-- [2026-02-16T11:41:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:42:36.680Z] server-heartbeat
-- [2026-02-16T11:42:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:43:36.681Z] server-heartbeat
-- [2026-02-16T11:43:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:44:36.682Z] server-heartbeat
-- [2026-02-16T11:44:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:45:36.684Z] server-heartbeat
-- [2026-02-16T11:45:41.427Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:46:36.686Z] server-heartbeat
-- [2026-02-16T11:46:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:47:36.687Z] server-heartbeat
-- [2026-02-16T11:47:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:48:36.686Z] server-heartbeat
-- [2026-02-16T11:48:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:49:36.688Z] server-heartbeat
-- [2026-02-16T11:49:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:50:36.691Z] server-heartbeat
-- [2026-02-16T11:50:41.426Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:51:36.692Z] server-heartbeat
-- [2026-02-16T11:51:41.425Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:52:36.695Z] server-heartbeat
-- [2026-02-16T11:52:41.424Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
-- [2026-02-16T11:53:36.695Z] server-heartbeat
-- [2026-02-16T11:53:41.428Z] heartbeat | https://probable-succotash-5gv6456r5pp7crjx-9002.app.github.dev/
+- [2026-02-19T02:20:46.716Z] page-load | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
 
 ---
 

@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--max-old-space-size=4096 next dev -H 0.0.0.0 -p 9002",
-    "dev:turbo": "NODE_OPTIONS=--max-old-space-size=4096 next dev --turbo -p 9002",
-    "dev:fresh": "npm run harden && NODE_OPTIONS=--max-old-space-size=4096 next dev -p 9002",
+    "predev": "bash scripts/codespace-health.sh --predev",
+    "dev": "NODE_OPTIONS=--max-old-space-size=3072 next dev -H 0.0.0.0 -p 9002",
+    "dev:turbo": "NODE_OPTIONS=--max-old-space-size=3072 next dev --turbo -p 9002",
+    "dev:fresh": "npm run harden && NODE_OPTIONS=--max-old-space-size=3072 next dev -p 9002",
+    "dev:unsafe": "NODE_OPTIONS=--max-old-space-size=4096 next dev -H 0.0.0.0 -p 9002",
     "debug": "NODE_OPTIONS='--inspect' next dev -p 9002",
     "harden": "rm -rf .next",
     "monitor": "node scripts/molly-monitor.mjs",
@@ -18,7 +20,8 @@
     "typecheck": "tsc --noEmit",
     "test": "jest --watch",
     "format": "prettier --write .",
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "health": "bash scripts/codespace-health.sh"
   },
   "dependencies": {
     "@genkit-ai/google-genai": "1.22.0",

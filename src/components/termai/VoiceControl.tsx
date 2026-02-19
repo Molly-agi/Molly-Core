@@ -14,6 +14,19 @@ export type VoiceCommandResult = {
   confidence: number;
 };
 
+/** Shape of the JSON returned by /api/voice/process-text */
+interface VoiceApiResponse {
+  success?: boolean;
+  error?: string;
+  result?: {
+    recognized?: boolean;
+    transcription?: string;
+    response?: string;
+    intent?: string;
+    metadata?: { confidence?: number };
+  };
+}
+
 export function VoiceControl({
   onVoiceCommand,
   lastResponseRef,
@@ -31,7 +44,7 @@ export function VoiceControl({
     typeof window !== 'undefined' &&
     new URLSearchParams(window.location.search).has('voiceDebug');
   const [isListening, setIsListening] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
+  const [, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const isListeningRef = useRef(false);
   const isProcessingRef = useRef(false);
@@ -210,7 +223,7 @@ export function VoiceControl({
 
         const contentType = response.headers.get('content-type') || '';
         const rawText = await response.text();
-        let data: any = null;
+        let data: VoiceApiResponse | null = null;
 
         if (isVoiceDebug) {
           console.debug('[VoiceDebug] Response status:', response.status);
@@ -482,6 +495,7 @@ export function VoiceControl({
     return () => {
       stopListening(true);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

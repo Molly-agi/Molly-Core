@@ -37,6 +37,7 @@ jest.mock('@/components/ui/sidebar', () => ({
 
 describe('Header', () => {
   // Directly import the mocked hooks
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { useUser, useAuth } = require('@/firebase');
   const lastResponseRef = { current: null } as React.MutableRefObject<
     string | null

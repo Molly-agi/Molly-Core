@@ -3,14 +3,25 @@
   "terminal.integrated.shellIntegration.decorationsEnabled": "both",
   "terminal.integrated.shellIntegration.history": 100,
   "terminal.integrated.shellIntegration.suggestEnabled": true,
+
+  // === FILE WATCHER EXCLUSIONS (SINGLE SOURCE OF TRUTH) ===
+  // Reduces inotify pressure and file watcher memory on 8GB codespace.
   "files.watcherExclude": {
     "**/.next/**": true,
     "**/out/**": true,
     "**/.genkit/**": true,
     "**/.session-backups/**": true,
     "**/coverage/**": true,
-    "**/node_modules/**": true
+    "**/node_modules/**": true,
+    "**/docs/**": true,
+    "**/stuff/**": true,
+    "**/assets/**": true,
+    "**/public/molly-gallery/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/logs/**": true
   },
+
   "search.exclude": {
     "**/.next": true,
     "**/out": true,
@@ -19,11 +30,27 @@
     "**/coverage": true,
     "**/node_modules": true
   },
+
   "files.exclude": {
     "**/.next": true,
     "**/out": true,
     "**/.genkit": true,
     "**/.session-backups": true,
     "**/coverage": true
+  },
+
+  // === MEMORY PROTECTION (8GB Codespace) ===
+  // Cap tsserver memory to prevent OOM when extension hosts multiply
+  "typescript.tsserver.maxTsServerMemory": 1536,
+  // Exclude heavy dirs from TS project so tsserver stays lean
+  "typescript.tsserver.watchOptions": {
+    "excludeDirectories": [
+      "node_modules",
+      ".next",
+      "docs",
+      "stuff",
+      "assets",
+      "public"
+    ]
   }
 }

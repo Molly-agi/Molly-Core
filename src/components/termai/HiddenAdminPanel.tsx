@@ -23,6 +23,7 @@ import {
   applyPersonalityDelta,
   getPersonalityState,
   setPersonalityState,
+  validateHiddenAdminCredentials,
 } from '@/app/actions';
 
 const PERSONALITY_FIELDS: Array<{
@@ -153,17 +154,24 @@ export function HiddenAdminPanel({
   const [status, setStatus] = useState<string | null>(null);
   const [command, setCommand] = useState('');
   const [commandLog, setCommandLog] = useState<string[]>([]);
+  const [usernameInput, setUsernameInput] = useState('');
   const [password, setPassword] = useState<string | null>(null);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [diagnostics, setDiagnostics] =
     useState<PersonalityDiagnosticsResult | null>(null);
 
-  const isReady = isAdmin && !!userId;
+  void isAdmin;
+  const isReady = !!userId;
   const isAuthenticated = password !== null;
 
   // Attempt password authentication
   const handlePasswordSubmit = async () => {
+    if (!usernameInput.trim()) {
+      setPasswordError('Username required');
+      return;
+    }
+
     if (!passwordInput.trim()) {
       setPasswordError('Password required');
       return;
@@ -173,16 +181,19 @@ export function HiddenAdminPanel({
     setPasswordError(null);
 
     try {
-      // Try to load personality state with password
-      const result = await getPersonalityState(userId as string, passwordInput);
-      if (result?.personality) {
-        // Password was correct
-        setPassword(passwordInput);
-        setPersonality(result.personality);
-        setPasswordInput('');
-      } else {
-        setPasswordError('Invalid password');
+      const auth = await validateHiddenAdminCredentials(
+        usernameInput,
+        passwordInput
+      );
+
+      if (!auth.valid) {
+        setPasswordError(auth.error || 'Invalid username or password');
+        return;
       }
+
+      setPassword(passwordInput);
+      setPasswordInput('');
+      setPasswordError(null);
     } catch (error) {
       setPasswordError(
         error instanceof Error ? error.message : 'Authentication failed'
@@ -355,7 +366,7 @@ export function HiddenAdminPanel({
         {!isReady ? (
           <div className="mt-6 space-y-3 text-sm text-muted-foreground">
             <p>Access locked. Sign in with an approved account.</p>
-            <p>Set NEXT_PUBLIC_ADMIN_UIDS with your Firebase UID to unlock.</p>
+            <p>Sign in to load a user profile and open hidden controls.</p>
           </div>
         ) : !isAuthenticated ? (
           <div className="mt-6 space-y-4">
@@ -364,10 +375,14 @@ export function HiddenAdminPanel({
                 <CardTitle className="text-sm">Admin Authentication</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="text-xs text-muted-foreground">
-                  Username is your Firebase UID:{' '}
-                  <span className="font-mono">{userId}</span>
-                </div>
+                <Input
+                  type="text"
+                  value={usernameInput}
+                  onChange={(event) => setUsernameInput(event.target.value)}
+                  placeholder="Enter admin username"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                />
                 <Input
                   type="password"
                   value={passwordInput}
