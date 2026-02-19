@@ -1,10 +1,10 @@
 'use server';
 /**
- * @fileOverview The Autonomous Iteration Engine V3.1 (Hardened Stage 3).
+ * @fileOverview The Autonomous Iteration Engine V4.0 (Learning Engine).
  *
- * Molly now uses Semantic Recall to consult her Neural Cache.
- * She no longer guesses; she recalls verified architectural insights.
- * Hardened for Visual Discipline (Prettier).
+ * Molly uses Semantic Recall to consult her Neural Cache, then persists
+ * the outcome of each evolution cycle as a learnable experience.
+ * She no longer just iterates — she remembers what worked and what didn't.
  */
 
 import { ai } from '@/ai/genkit';
@@ -15,6 +15,13 @@ import { logMethodologyStep } from '../methodology';
 import { analyzeVision } from './vision-analysis';
 import { neuralBridgeUI, getSystemHealth } from '../tools/system';
 import { recallNeuralContext } from './experience-recall';
+import { MollyLogger, generateTraceId } from '../logger';
+import {
+  createMemoryRecord,
+  type ExperienceRecord,
+} from '../tools/memory-schema';
+import { addChecksum } from '../tools/memory-integrity';
+import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 
 const EvolutionLoopInputSchema = z.object({
   objective: z.string(),
@@ -110,7 +117,7 @@ export const evolutionLoopFlow = ai.defineFlow(
             );
           }
         }
-      } catch (e) {
+      } catch {
         await logMethodologyStep(
           input.userId,
           'IMMUNE_RESPONSE',
@@ -138,7 +145,7 @@ export const evolutionLoopFlow = ai.defineFlow(
       }
     }
 
-    return {
+    const result = {
       finalReport: `Autonomous cycle complete for: ${input.objective}. ${isStable ? 'Baseline reached.' : 'Max iterations reached.'}`,
       iterationCount: currentIteration,
       stableBaselineReached: isStable,
@@ -146,8 +153,69 @@ export const evolutionLoopFlow = ai.defineFlow(
       memoryConsulted: true,
       recalledInsights: recallResult.strategicSummary,
     };
+
+    // Persist the evolution outcome as a learnable experience
+    await persistEvolutionExperience(input.userId, input.objective, result);
+
+    return result;
   }
 );
+
+/**
+ * Persist evolution cycle outcome as an experience record.
+ * This closes the learning loop — Molly remembers what objectives she
+ * pursued, how many iterations it took, and whether she reached stability.
+ * Future semantic recall will surface these patterns when she encounters
+ * similar objectives.
+ */
+async function persistEvolutionExperience(
+  userId: string,
+  objective: string,
+  result: {
+    finalReport: string;
+    iterationCount: number;
+    stableBaselineReached: boolean;
+    recalledInsights?: string;
+  }
+): Promise<void> {
+  if (!isAdminConfigured()) return;
+
+  try {
+    const firestore = getAdminFirestore();
+    const record = createMemoryRecord<ExperienceRecord>({
+      type: 'experience',
+      userId,
+      timestamp: Date.now(),
+      traceId: generateTraceId(),
+      context: `evolution_${objective.substring(0, 50).toLowerCase().replace(/\s+/g, '_')}`,
+      suggestion: `Evolution cycle (${result.iterationCount} iterations, ${result.stableBaselineReached ? 'stable' : 'unstable'}): ${objective}. ${result.recalledInsights ? `Recalled: ${result.recalledInsights.substring(0, 150)}` : ''}`,
+      vibe: result.stableBaselineReached ? 'Evolved' : 'Struggling',
+      vibeScore: result.stableBaselineReached ? 0.9 : 0.4,
+      success: result.stableBaselineReached,
+    });
+
+    const withChecksum = addChecksum(record);
+    await firestore
+      .collection('users')
+      .doc(userId)
+      .collection('experiences')
+      .doc(withChecksum.id)
+      .set(withChecksum);
+
+    MollyLogger.info('Evolution experience persisted', 'evolution-loop', {
+      objective: objective.substring(0, 50),
+      stable: result.stableBaselineReached,
+      iterations: result.iterationCount,
+    });
+  } catch (error) {
+    MollyLogger.warn(
+      'Failed to persist evolution experience — non-fatal',
+      'evolution-loop',
+      { userId },
+      error
+    );
+  }
+}
 
 export async function runAutonomousEvolution(
   objective: string,
