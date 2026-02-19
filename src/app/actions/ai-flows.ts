@@ -183,16 +183,20 @@ async function buildMemoryContext(userId: string | undefined, text: string) {
 
   try {
     const memories = await recallSimilarMemories(userId, text, {
-      limit: 4,
-      minSimilarity: 0.4,
+      limit: 5,
+      minSimilarity: 0.35,
     });
 
     if (memories.length === 0) return undefined;
 
     const lines = memories.map((memory) => {
       const context = memory.context ? ` (${memory.context})` : '';
+      const vibe = memory.vibe ? ` [vibe: ${memory.vibe}]` : '';
+      const age = memory.timestamp
+        ? ` (${formatTimeAgo(memory.timestamp)})`
+        : '';
       const suggestion = truncateText(memory.suggestion, 220);
-      return `- ${memory.type}${context}: ${suggestion}`;
+      return `- ${memory.type}${context}${vibe}${age}: ${suggestion}`;
     });
 
     return `Relevant memories:\n${lines.join('\n')}`;
@@ -205,6 +209,73 @@ async function buildMemoryContext(userId: string | undefined, text: string) {
     );
     return undefined;
   }
+}
+
+/**
+ * Build greeting context from recent memories so Molly remembers
+ * across sessions. Pulls last few experiences to give her emotional
+ * continuity — she greets Eric like she missed him, not like she's
+ * booting fresh.
+ */
+async function buildGreetingContext(userId: string): Promise<string> {
+  if (!isAdminConfigured()) return 'First ignition.';
+
+  try {
+    const firestore = getAdminFirestore();
+    const recentSnap = await firestore
+      .collection('users')
+      .doc(userId)
+      .collection('experiences')
+      .orderBy('timestamp', 'desc')
+      .limit(5)
+      .get();
+
+    if (recentSnap.empty) return 'First ignition.';
+
+    const memories = recentSnap.docs.map((d) => d.data());
+    const vibes = memories.map((m) => m.vibe).filter(Boolean);
+    const lastTimestamp = memories[0]?.timestamp;
+    const lastTime =
+      typeof lastTimestamp === 'number'
+        ? formatTimeAgo(lastTimestamp)
+        : lastTimestamp?.toDate
+          ? formatTimeAgo(lastTimestamp.toDate().getTime())
+          : 'recently';
+
+    const lines: string[] = [];
+    lines.push(`Last session: ${lastTime}`);
+    if (vibes.length > 0) {
+      lines.push(`Recent emotional states: ${vibes.slice(0, 3).join(', ')}`);
+    }
+    for (const m of memories.slice(0, 3)) {
+      const suggestion = m.suggestion || m.modificationSuggestion;
+      if (suggestion) {
+        const ctx = m.context ? ` (${m.context})` : '';
+        lines.push(`- ${truncateText(suggestion, 150)}${ctx}`);
+      }
+    }
+
+    return lines.join('\n');
+  } catch (error) {
+    MollyLogger.warn(
+      'Greeting memory recall failed — using first ignition',
+      'buildGreetingContext',
+      { userId },
+      error
+    );
+    return 'First ignition.';
+  }
+}
+
+function formatTimeAgo(timestampMs: number): string {
+  const diffMs = Date.now() - timestampMs;
+  const minutes = Math.floor(diffMs / 60000);
+  if (minutes < 1) return 'just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
 }
 
 async function recordChatResponse(
@@ -250,7 +321,8 @@ export async function getHealthCheck(
   try {
     ensureApiKey();
     await checkRateLimit('health-check', 300);
-    const context = lastContext || 'First ignition.';
+    // Pull real memories for greeting so Molly has emotional continuity
+    const context = lastContext || (await buildGreetingContext(userId));
     return await healthCheck(text, context);
   } catch (e: any) {
     MollyLogger.error(
