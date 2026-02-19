@@ -9,7 +9,9 @@ interface ErrorProps {
 
 export default function GlobalError({ error, reset }: ErrorProps) {
   useEffect(() => {
-    const trace = (globalThis as any).__MOLLY_TRACE;
+    const trace = (
+      globalThis as unknown as { __MOLLY_TRACE?: (...args: unknown[]) => void }
+    ).__MOLLY_TRACE;
     if (trace) {
       trace('APP', 'Global error boundary', 'error', {
         message: error.message,

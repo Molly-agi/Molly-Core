@@ -12,9 +12,14 @@ export const ai = genkit({
   plugins: [googleAI()],
 });
 
-// Ascended 2.5 Infrastructure
-export const MODEL_FLASH = 'googleai/gemini-2.5-flash';
-export const MODEL_PRO = 'googleai/gemini-2.5-pro';
-export const MODEL_TTS = 'googleai/gemini-2.5-flash-preview-tts';
-export const MODEL_IMAGEN = 'googleai/imagen-3.0-generate-001';
-export const MODEL_EMBEDDING = 'googleai/text-embedding-004';
+// Ascended 2.5 Infrastructure — env-overridable for fast model migration
+export const MODEL_FLASH =
+  process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-2.5-flash';
+export const MODEL_PRO =
+  process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro';
+export const MODEL_TTS =
+  process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.5-flash-preview-tts';
+export const MODEL_IMAGEN =
+  process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-3.0-generate-001';
+export const MODEL_EMBEDDING =
+  process.env.MOLLY_MODEL_EMBEDDING || 'googleai/text-embedding-004';

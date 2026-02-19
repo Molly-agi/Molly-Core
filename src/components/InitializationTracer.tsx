@@ -9,23 +9,35 @@
 
 import { useEffect, useState } from 'react';
 
+type TraceStatus = 'start' | 'complete' | 'error';
+
 interface TraceEvent {
   timestamp: number;
   phase: string;
   event: string;
   duration?: number;
-  status: 'start' | 'complete' | 'error';
-  details?: Record<string, any>;
+  status: TraceStatus;
+  details?: Record<string, unknown>;
+}
+
+interface MollyGlobal {
+  __MOLLY_TRACE?: (
+    phase: string,
+    event: string,
+    status: TraceStatus,
+    details?: Record<string, unknown>
+  ) => void;
+  __MOLLY_TRACE_EVENTS?: TraceEvent[];
 }
 
 const TRACE_EVENTS: TraceEvent[] = [];
 
 // Global trace function - can be called from anywhere
-(globalThis as any).__MOLLY_TRACE = (
+(globalThis as unknown as MollyGlobal).__MOLLY_TRACE = (
   phase: string,
   event: string,
-  status: 'start' | 'complete' | 'error',
-  details?: Record<string, any>
+  status: TraceStatus,
+  details?: Record<string, unknown>
 ) => {
   const trace: TraceEvent = {
     timestamp: performance.now(),
@@ -53,7 +65,8 @@ function TracingPanel() {
   useEffect(() => {
     const interval = setInterval(() => {
       setEvents([
-        ...((globalThis as any).__MOLLY_TRACE_EVENTS || TRACE_EVENTS),
+        ...((globalThis as unknown as MollyGlobal).__MOLLY_TRACE_EVENTS ||
+          TRACE_EVENTS),
       ]);
     }, 500);
 
@@ -180,7 +193,7 @@ function TracingPanel() {
 export function InitializationTracer() {
   useEffect(() => {
     // Store globally so it persists
-    (globalThis as any).__MOLLY_TRACE_EVENTS = TRACE_EVENTS;
+    (globalThis as unknown as MollyGlobal).__MOLLY_TRACE_EVENTS = TRACE_EVENTS;
   }, []);
 
   return <TracingPanel />;

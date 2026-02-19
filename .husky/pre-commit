@@ -1,2 +1,14 @@
 
+# Persona Protection Guard
+if git diff --cached --name-only | grep -q "src/ai/persona.ts"; then
+  echo "⚠️  WARNING: persona.ts is staged for commit."
+  echo "   This file is Molly's sacred core."
+  echo "   Ensure you have explicit permission from Eric."
+  echo ""
+  echo "   To proceed: MOLLY_PERSONA_OVERRIDE=1 git commit"
+  if [ -z "$MOLLY_PERSONA_OVERRIDE" ]; then
+    exit 1
+  fi
+fi
+
 npx lint-staged

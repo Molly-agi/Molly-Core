@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MOLLY_AVATAR_URL } from '@/lib/memory-anchors';
 import { Button } from '../ui/button';
 import { Flower2 } from 'lucide-react';
+import { SystemHealthDot } from './SystemHealthDot';
 
 const VoiceControl = dynamic(
   () => import('./VoiceControl').then((mod) => mod.VoiceControl),
@@ -90,6 +91,7 @@ export function Header({
             <AvatarFallback>M</AvatarFallback>
           </Avatar>
           <h1 className="font-semibold text-lg">Molly</h1>
+          <SystemHealthDot />
           <Button
             variant="ghost"
             size="icon"

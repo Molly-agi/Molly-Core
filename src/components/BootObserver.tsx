@@ -24,14 +24,16 @@ function trace(
   status: 'start' | 'complete' | 'error',
   details?: Record<string, unknown>
 ) {
-  const tracer = (globalThis as any).__MOLLY_TRACE as
-    | ((
+  const tracer = (
+    globalThis as unknown as {
+      __MOLLY_TRACE?: (
         phase: string,
         event: string,
         status: 'start' | 'complete' | 'error',
         details?: Record<string, unknown>
-      ) => void)
-    | undefined;
+      ) => void;
+    }
+  ).__MOLLY_TRACE;
   tracer?.(phase, event, status, details);
 }
 

@@ -30,17 +30,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run linting
+      - name: Run linting (full project)
         run: npm run lint
-        # TODO: Remove continue-on-error once ~200+ pre-existing lint errors are fixed
-        # Temporarily non-blocking to unblock codespace and CI/CD pipeline
-        continue-on-error: true
+
+      - name: Lint UI components (blocking)
+        # 2 cosmetic warnings: layout.tsx custom-font placement, MemoryViewer <img> tag
+        run: npx eslint src/components/ src/app/page.tsx src/app/layout.tsx src/app/error.tsx --max-warnings 2
 
       - name: Run type checking
         run: npm run typecheck
-        # TODO: Remove continue-on-error once pre-existing type errors are fixed
-        # Temporarily non-blocking to unblock codespace and CI/CD pipeline
-        continue-on-error: true
 
       - name: Run tests
         run: npm test -- --ci --coverage --maxWorkers=2

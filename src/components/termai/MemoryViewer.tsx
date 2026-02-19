@@ -175,9 +175,8 @@ export function MemoryViewer() {
                           Neural Insight
                         </h4>
                         <p className="text-[10px] italic text-muted-foreground leading-relaxed">
-                          Applied this modification to resolve a recurring
-                          &ldquo;Logic Fatigue&rdquo; infection. The core was
-                          over-throttled here.
+                          {lesson.modificationSuggestion ||
+                            'No insight recorded.'}
                         </p>
                       </div>
 
@@ -203,6 +202,14 @@ export function MemoryViewer() {
                         >
                           Agent: {lesson.agentId || 'ShieldedCore'}
                         </Badge>
+                        {lesson.vibe && (
+                          <Badge
+                            variant="secondary"
+                            className="text-[7px] py-0 h-3"
+                          >
+                            Vibe: {lesson.vibe}
+                          </Badge>
+                        )}
                       </div>
                     </AccordionContent>
                   </AccordionItem>
