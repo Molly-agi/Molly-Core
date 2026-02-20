@@ -1,6 +1,29 @@
 # Copilot Instructions for Molly-Core
 
-## ⚠️ CRITICAL: Codespace Memory Limits (READ FIRST)
+## 🚨🚨🚨 MANDATORY FIRST ACTION — SESSION RECOVERY (DO THIS BEFORE ANYTHING ELSE) 🚨🚨🚨
+
+**EVERY TIME you start a new conversation, reconnect, or suspect you lost context, you MUST immediately read these two files BEFORE responding to the user:**
+
+1. **`COPILOT_SESSION_STATE.json`** — Machine-readable session state (active topic, project status, pending work, user directives)
+2. **`COPILOT_SESSION_STATE.md`** — Human-readable session state with full context
+
+**DO NOT ask the user "what were we working on?" — the answer is in those files. Read them. Restore context. Continue seamlessly.**
+
+**If the user says you "lost context" or "forgot" — you failed to do this. Read the files NOW and apologize.**
+
+This is CRITICAL INFRASTRUCTURE. The user (Eric) works from an Android phone where the browser kills WebSocket connections on every tab switch — sometimes after just 1 second. Context loss happens constantly. The session state files exist specifically to solve this. USE THEM.
+
+**Files involved (DO NOT DELETE OR MODIFY WITHOUT PERMISSION):**
+
+- `COPILOT_SESSION_STATE.json` / `COPILOT_SESSION_STATE.md` — Session memory (READ on every new conversation)
+- `scripts/save-session.mjs` — Writes session state (called by npm hooks + postAttach)
+- `scripts/keep-alive.sh` — Prevents codespace idle timeout
+- `scripts/codespace-health.sh` — Zombie process cleanup
+- `src/lib/session-manager.ts` — Session state API
+
+---
+
+## ⚠️ CRITICAL: Codespace Memory Limits
 
 - This codespace has **8GB RAM**. The Next.js webpack build, TypeScript server, and VS Code extension host together can easily exceed this.
 - **NEVER run `npm run dev` and `npm run genkit:dev` simultaneously** — doing so caused a full OOM codespace crash on 2026-02-19.
@@ -8,6 +31,21 @@
 - If the codespace feels slow or crashes: run `npm run harden` first to clear `.next` cache, then restart only one process at a time.
 - Run `npm run typecheck` for type checking instead of relying on the dev server's live compilation when memory is a concern.
 - Always check `ps aux --sort=-%mem | head -10` before starting expensive operations if stability is in question.
+
+## ⚠️ CRITICAL: Do NOT delete infrastructure scripts
+
+The following files are **permanent infrastructure**, NOT one-off scripts. A previous Copilot session deleted `save-session.mjs` during a "cleanup" pass (commit a014ed9) which broke the entire session recovery system. **NEVER delete or "clean up" these files:**
+
+- `scripts/save-session.mjs` — Session state persistence (called by npm hooks + postAttach)
+- `scripts/keep-alive.sh` — Codespace idle timeout prevention (called by postAttach)
+- `scripts/codespace-health.sh` — Zombie process cleanup (called by postAttach + predev)
+- `scripts/system-health-manager.ts` — System monitoring infrastructure
+- `src/lib/session-manager.ts` — Session state API (used by save-session.mjs and server actions)
+- `COPILOT_SESSION_STATE.md` / `COPILOT_SESSION_STATE.json` — Session memory files
+
+**A previous Copilot agent DELETED save-session.mjs during cleanup and broke everything. If you touch these files without explicit permission from Eric, you are breaking critical infrastructure.**
+
+If you are doing a cleanup pass, **check git blame and npm scripts** before deleting anything in `scripts/`.
 
 ## Big picture architecture
 
