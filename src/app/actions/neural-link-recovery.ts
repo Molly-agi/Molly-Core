@@ -1,5 +1,9 @@
 'use server';
-import { getCircuitBreakerStatus, resetCircuitBreaker } from './diagnostics';
+import {
+  getCircuitBreakerStatus,
+  resetCircuitBreaker,
+  getRuntimeSnapshot,
+} from './diagnostics';
 import { testModelAvailability } from './model-test';
 import { MollyLogger } from '@/ai/logger';
 
@@ -9,13 +13,22 @@ import { MollyLogger } from '@/ai/logger';
  * This checks:
  * 1. Circuit breaker status for all operations
  * 2. Model availability (FLASH vs PRO)
- * 3. Recommends fixes based on findings
+ * 3. Runtime snapshot (system health, latency, rate limiter, heartbeat, memory)
+ * 4. Recommends fixes based on findings
  */
 export async function diagnoseMollyNeuralLink() {
+  const [circuitBreakerStatus, modelAvailability, runtimeSnapshot] =
+    await Promise.all([
+      getCircuitBreakerStatus(),
+      testModelAvailability(),
+      getRuntimeSnapshot().catch(() => null),
+    ]);
+
   const diagnostics = {
     timestamp: new Date().toISOString(),
-    circuitBreakerStatus: await getCircuitBreakerStatus(),
-    modelAvailability: await testModelAvailability(),
+    circuitBreakerStatus,
+    modelAvailability,
+    runtimeSnapshot,
     diagnosis: null as string | null,
     recommendations: [] as string[],
   };
@@ -72,6 +85,47 @@ export async function diagnoseMollyNeuralLink() {
     diagnostics.recommendations.push(
       'health-check circuit breaker recently tripped - resetting will restore Molly communication'
     );
+  }
+
+  // Runtime-snapshot-driven recommendations
+  if (
+    runtimeSnapshot &&
+    typeof runtimeSnapshot === 'object' &&
+    'rateLimiter' in runtimeSnapshot
+  ) {
+    const snap = runtimeSnapshot as {
+      rateLimiter?: { percentageUsed?: number };
+      systemHealth?: { status?: string };
+      heartbeat?: { freshnessMs?: number | null };
+      memoryHealth?: { status?: string };
+    };
+
+    if ((snap.rateLimiter?.percentageUsed ?? 0) > 80) {
+      diagnostics.recommendations.push(
+        `Rate limiter at ${snap.rateLimiter!.percentageUsed!.toFixed(0)}% — consider reducing autonomous cycles`
+      );
+    }
+
+    if (snap.systemHealth?.status === 'degraded') {
+      diagnostics.recommendations.push(
+        'System health degraded — check CPU/memory/temperature'
+      );
+    }
+
+    if (
+      snap.heartbeat?.freshnessMs != null &&
+      snap.heartbeat.freshnessMs > 5 * 60_000
+    ) {
+      diagnostics.recommendations.push(
+        'Heartbeat stale (>5 min) — client may have disconnected'
+      );
+    }
+
+    if (snap.memoryHealth?.status === 'degraded') {
+      diagnostics.recommendations.push(
+        'Memory integrity degraded — some records have invalid checksums'
+      );
+    }
   }
 
   MollyLogger.info(
