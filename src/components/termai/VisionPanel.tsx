@@ -140,6 +140,15 @@ export function VisionPanel({
   const videoRef = useRef<HTMLVideoElement>(null);
   const autoScanTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Refs to avoid stale closures in setInterval callbacks —
+  // React state is ALWAYS stale inside setInterval. These refs
+  // are the ground truth for the auto-scan guard.
+  const isAnalyzingRef = useRef(false);
+  const lastFrameUriRef = useRef<string | null>(null);
+  // Consecutive error counter — circuit breaker for auto-scan
+  const consecutiveErrorsRef = useRef(0);
+  const MAX_CONSECUTIVE_ERRORS = 3;
+
   // Minimum difference threshold to trigger auto-analysis (0-1)
   const CHANGE_THRESHOLD = 0.08;
   // Auto-scan interval in ms
@@ -245,11 +254,14 @@ export function VisionPanel({
   // --- Capture & analyze ---
   const captureAndAnalyze = useCallback(
     async (context?: string) => {
-      if (!videoRef.current || isAnalyzing || isLoading) return;
+      // Use ref for the in-flight guard — state is stale in setInterval
+      if (!videoRef.current || isAnalyzingRef.current || isLoading) return;
 
       const frameUri = captureFrame(videoRef.current);
       if (!frameUri) return;
 
+      // Lock BOTH the ref (for interval guard) and state (for UI)
+      isAnalyzingRef.current = true;
       setIsAnalyzing(true);
       setIsLoading(true);
 
@@ -270,6 +282,10 @@ export function VisionPanel({
 
         setHistory((prev) => [...prev, { visionReport }]);
         setLastFrameUri(frameUri);
+        lastFrameUriRef.current = frameUri;
+
+        // Reset error counter on success
+        consecutiveErrorsRef.current = 0;
 
         // Narrate a summary
         const summary =
@@ -281,26 +297,48 @@ export function VisionPanel({
         const message =
           error instanceof Error ? error.message : 'Vision analysis failed';
         setHistory((prev) => [...prev, `[VISION ERROR]: ${message}`]);
+
+        // Circuit breaker: count consecutive errors
+        consecutiveErrorsRef.current++;
+        if (
+          consecutiveErrorsRef.current >= MAX_CONSECUTIVE_ERRORS &&
+          autoScan
+        ) {
+          console.warn(
+            `[VisionPanel] Circuit breaker tripped after ${MAX_CONSECUTIVE_ERRORS} consecutive errors. Disabling auto-scan.`
+          );
+          setAutoScan(false);
+          setHistory((prev) => [
+            ...prev,
+            '[VISION] Auto-scan disabled — too many consecutive failures. Molly is protecting her systems.',
+          ]);
+        }
       } finally {
+        isAnalyzingRef.current = false;
         setIsAnalyzing(false);
         setIsLoading(false);
       }
     },
-    [isAnalyzing, isLoading, setHistory, setIsLoading, speakResponse]
+    [isLoading, setHistory, setIsLoading, speakResponse, autoScan]
   );
 
   // --- Auto-scan with change detection ---
+  // Uses refs for ALL guards because setInterval callbacks capture a stale
+  // closure. Reading React state here would see the value from when the
+  // effect ran, NOT the current value. That's what caused the "bomb" —
+  // the isAnalyzing guard passed even while analysis was in flight.
   useEffect(() => {
     if (autoScan && stream) {
       autoScanTimerRef.current = setInterval(async () => {
-        if (!videoRef.current || isAnalyzing || isLoading) return;
+        // Guard via REF — never stale
+        if (!videoRef.current || isAnalyzingRef.current) return;
 
         const frameUri = captureFrame(videoRef.current);
         if (!frameUri) return;
 
-        // Check if scene changed enough to warrant analysis
-        if (lastFrameUri) {
-          const diff = await frameDifference(lastFrameUri, frameUri);
+        // Check if scene changed enough to warrant analysis (ref, not state)
+        if (lastFrameUriRef.current) {
+          const diff = await frameDifference(lastFrameUriRef.current, frameUri);
           if (diff < CHANGE_THRESHOLD) {
             return; // Scene hasn't changed enough — skip
           }
@@ -318,8 +356,10 @@ export function VisionPanel({
         autoScanTimerRef.current = null;
       }
     };
+    // Only re-create the interval when autoScan or stream changes.
+    // All other guards are read via refs, not closure state.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoScan, stream, isAnalyzing, isLoading, lastFrameUri]);
+  }, [autoScan, stream]);
 
   // --- Cleanup on unmount ---
   useEffect(() => {
