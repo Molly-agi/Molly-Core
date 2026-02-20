@@ -11,20 +11,12 @@
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
-// In development, write session state to /tmp to avoid triggering Next.js
-// file watcher hot-reload (which kills the server with a silent clean exit).
-// In production (App Hosting), write to the project root as normal so Copilot
-// can read the persisted state files from the repo.
-const isDev = process.env.NODE_ENV === 'development';
-const SESSION_STATE_FILE = isDev
-  ? '/tmp/COPILOT_SESSION_STATE.md'
-  : join(process.cwd(), 'COPILOT_SESSION_STATE.md');
-const SESSION_STATE_JSON = isDev
-  ? '/tmp/COPILOT_SESSION_STATE.json'
-  : join(process.cwd(), 'COPILOT_SESSION_STATE.json');
-const SESSION_BACKUP_DIR = isDev
-  ? '/tmp/.session-backups'
-  : join(process.cwd(), '.session-backups');
+// Session state always writes to project root so Copilot can read the
+// persisted state files. The /tmp path was causing files to vanish on
+// codespace restart, breaking session recovery completely.
+const SESSION_STATE_FILE = join(process.cwd(), 'COPILOT_SESSION_STATE.md');
+const SESSION_STATE_JSON = join(process.cwd(), 'COPILOT_SESSION_STATE.json');
+const SESSION_BACKUP_DIR = join(process.cwd(), '.session-backups');
 
 export interface SessionState {
   lastUpdated: string;

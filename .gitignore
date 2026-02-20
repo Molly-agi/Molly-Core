@@ -37,9 +37,9 @@ firestore-debug.log
 # Local sensitive files
 /stuff/
 
-# Session backups (main session state file IS tracked)
+# Session backups (main session state files ARE tracked for recovery)
 .session-backups/
-COPILOT_SESSION_STATE.json
+.codespace-heartbeat
 
 # Genkit runtime artifacts
 .genkit/runtimes/

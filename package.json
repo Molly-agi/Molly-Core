@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "bash scripts/codespace-health.sh --predev",
+    "predev": "bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active",
     "dev": "NODE_OPTIONS=--max-old-space-size=3072 next dev -H 0.0.0.0 -p 9002",
     "dev:turbo": "NODE_OPTIONS=--max-old-space-size=3072 next dev --turbo -p 9002",
     "dev:fresh": "npm run harden && NODE_OPTIONS=--max-old-space-size=3072 next dev -p 9002",
@@ -21,7 +21,10 @@
     "test": "jest --watch",
     "format": "prettier --write .",
     "prepare": "husky || true",
-    "health": "bash scripts/codespace-health.sh"
+    "health": "bash scripts/codespace-health.sh",
+    "keep-alive": "nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
+    "save-session": "node scripts/save-session.mjs",
+    "save-session:pause": "node scripts/save-session.mjs --status paused"
   },
   "dependencies": {
     "@genkit-ai/google-genai": "1.22.0",

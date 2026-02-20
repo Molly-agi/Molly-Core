@@ -3,7 +3,9 @@
 
   // Run health check on every attach/reconnect to kill zombie processes
   // before they accumulate and cause OOM crashes.
-  "postAttachCommand": "bash scripts/codespace-health.sh",
+  // Save session state so Copilot can restore context after reconnect.
+  // Start keep-alive heartbeat to prevent idle timeout (critical for mobile).
+  "postAttachCommand": "bash scripts/codespace-health.sh && node scripts/save-session.mjs --status active --note 'Codespace reconnected' && nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
 
   // Codespace settings
   "customizations": {

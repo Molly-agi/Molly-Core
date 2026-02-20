@@ -36,6 +36,8 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const preloadedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
+  const pendingTextRef = useRef<string | null>(null);
+  const hasUserGestureRef = useRef(false);
 
   // Pre-warm browser TTS voices on mount so they're ready instantly
   useEffect(() => {
@@ -95,7 +97,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
                 }
                 setIsVocalizing(false);
                 resolve();
-              }, 2500);
+              }, 30_000);
 
               utterance.onend = () => {
                 if (didResolve) return;
@@ -109,7 +111,19 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
                 if (didResolve) return;
                 didResolve = true;
                 window.clearTimeout(watchdog);
-                console.error('[TTS] Browser TTS error:', event.error);
+
+                if (event.error === 'not-allowed') {
+                  // Browser blocked TTS because no user gesture yet.
+                  // Queue text for replay after the first click/tap.
+                  console.warn(
+                    '[TTS] Autoplay blocked — queued for user gesture'
+                  );
+                  pendingTextRef.current = text;
+                  setAutoplayBlocked(true);
+                } else {
+                  console.warn('[TTS] Browser TTS error:', event.error);
+                }
+
                 setIsVocalizing(false);
                 resolve();
               };
@@ -195,11 +209,24 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
     void attemptPlay();
   }, [audioSrc, isVocal]);
 
-  // Autoplay unlock on user interaction
+  // Autoplay unlock on user interaction (handles both browser TTS and audio element)
   useEffect(() => {
     if (!autoplayBlocked) return;
 
     const handleUnlock = () => {
+      hasUserGestureRef.current = true;
+
+      // If we have queued browser-TTS text, replay it now
+      const pending = pendingTextRef.current;
+      if (pending && isVocal && 'speechSynthesis' in window) {
+        pendingTextRef.current = null;
+        setAutoplayBlocked(false);
+        // Re-invoke speakResponse; the gesture is now active
+        speakResponse(pending);
+        return;
+      }
+
+      // Fallback: server-TTS audio element
       const audio = audioRef.current;
       if (!audio || !audioSrc || !isVocal) return;
       setIsVocalizing(true);
@@ -213,13 +240,22 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
 
     window.addEventListener('pointerdown', handleUnlock, { once: true });
     return () => window.removeEventListener('pointerdown', handleUnlock);
-  }, [autoplayBlocked, audioSrc, isVocal]);
+  }, [autoplayBlocked, audioSrc, isVocal, speakResponse]);
 
   const unlockAutoplay = useCallback(() => {
+    hasUserGestureRef.current = true;
+    // If there's pending browser-TTS text, speak it
+    const pending = pendingTextRef.current;
+    if (pending && isVocal) {
+      pendingTextRef.current = null;
+      setAutoplayBlocked(false);
+      speakResponse(pending);
+      return;
+    }
     if (audioRef.current) {
       audioRef.current.play().catch(() => {});
     }
-  }, []);
+  }, [isVocal, speakResponse]);
 
   const audioElement = (
     <audio
