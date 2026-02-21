@@ -580,7 +580,7 @@ export function onAppShutdown(reason?: string): void {
 // Only in production — in dev mode, Next.js sends SIGTERM during normal
 // hot-reload cycles, and the handler cascades into a full server exit.
 if (
-  !isDev &&
+  process.env.NODE_ENV !== 'development' &&
   typeof process !== 'undefined' &&
   typeof globalThis !== 'undefined'
 ) {
