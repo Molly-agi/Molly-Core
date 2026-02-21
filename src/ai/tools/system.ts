@@ -1,4 +1,5 @@
 import { ai } from '@/ai/genkit';
+import { execSync } from 'child_process';
 import { z } from 'zod';
 
 /**
@@ -31,7 +32,7 @@ export const getSystemHealth = ai.defineTool(
   async () => {
     // REAL-TIME hardware metrics from actual system
     try {
-      const { execSync } = require('child_process');
+      // execSync imported at top level
 
       // Get real CPU load average (1-min)
       const loadAvg = parseFloat(

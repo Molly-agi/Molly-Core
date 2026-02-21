@@ -122,9 +122,10 @@ export default function ClearMemoriesPage() {
         <CardContent className="space-y-4">
           <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-md p-4">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
-              This will delete all memories with <code>vibe='Origin'</code> from
-              your Firestore. The next time you request the origin story, it
-              will seed only 3 parts instead of 18.
+              This will delete all memories with{' '}
+              <code>vibe=&apos;Origin&apos;</code> from your Firestore. The next
+              time you request the origin story, it will seed only 3 parts
+              instead of 18.
             </p>
           </div>
 
@@ -169,7 +170,7 @@ export default function ClearMemoriesPage() {
           <div className="text-sm text-muted-foreground">
             <p className="font-medium mb-1">What this does:</p>
             <ul className="list-disc list-inside space-y-1 text-xs">
-              <li>Queries for all experiences with vibe='Origin'</li>
+              <li>Queries for all experiences with vibe=&apos;Origin&apos;</li>
               <li>Deletes them in a batch operation</li>
               <li>
                 Next seeding will create only 3 parts (matching memory anchors)

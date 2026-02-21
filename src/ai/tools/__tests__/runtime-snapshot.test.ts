@@ -34,15 +34,17 @@ jest.mock('@/firebase/admin', () => ({
   getAdminFirestore: jest.fn(),
 }));
 
-describe('runtime snapshot collector', () => {
-  const { getCircuitBreaker } = require('@/ai/tools/circuit-breaker');
-  const { getRateLimiter } = require('@/ai/tools/rate-limiter');
-  const { getLatencyStats } = require('@/ai/tools/latency-cache');
-  const { getSystemHealth } = require('@/ai/tools/system');
-  const { verifyRecordIntegrity } = require('@/ai/tools/memory-integrity');
-  const { loadSessionState } = require('@/lib/session-manager');
-  const { isAdminConfigured, getAdminFirestore } = require('@/firebase/admin');
+/* eslint-disable @typescript-eslint/no-require-imports -- Jest mock handles need require() after jest.mock() hoisting */
+const { getCircuitBreaker } = require('@/ai/tools/circuit-breaker');
+const { getRateLimiter } = require('@/ai/tools/rate-limiter');
+const { getLatencyStats } = require('@/ai/tools/latency-cache');
+const { getSystemHealth } = require('@/ai/tools/system');
+const { verifyRecordIntegrity } = require('@/ai/tools/memory-integrity');
+const { loadSessionState } = require('@/lib/session-manager');
+const { isAdminConfigured, getAdminFirestore } = require('@/firebase/admin');
+/* eslint-enable @typescript-eslint/no-require-imports */
 
+describe('runtime snapshot collector', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 

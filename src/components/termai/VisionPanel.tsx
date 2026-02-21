@@ -135,7 +135,6 @@ export function VisionPanel({
   );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [autoScan, setAutoScan] = useState(false);
-  const [lastFrameUri, setLastFrameUri] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const autoScanTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -281,7 +280,6 @@ export function VisionPanel({
         };
 
         setHistory((prev) => [...prev, { visionReport }]);
-        setLastFrameUri(frameUri);
         lastFrameUriRef.current = frameUri;
 
         // Reset error counter on success
