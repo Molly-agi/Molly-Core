@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-27T12:37:04.444Z",
+  "lastUpdated": "2026-02-27T12:49:59.876Z",
   "sessionId": "phase5-mobile-stability",
   "status": "active",
   "activeConversation": {
@@ -85,131 +85,136 @@
     "**2026-02-20:** Cradle architecture complete. Identity core written to copilot-instructions.md. Write-back circuit wired in save-session.mjs. Tested and working."
   ],
   "runtime": {
-    "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
+    "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
     "events": [
       {
+        "event": "visibility-visible",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
+        "timestamp": "2026-02-27T12:41:01.399Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
+        "timestamp": "2026-02-27T12:41:01.520Z"
+      },
+      {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:24:04.424Z"
+        "timestamp": "2026-02-27T12:41:04.456Z"
       },
       {
         "event": "heartbeat",
         "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:24:46.172Z"
+        "timestamp": "2026-02-27T12:41:46.185Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:41:58.898Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:25:04.426Z"
+        "timestamp": "2026-02-27T12:42:04.457Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:42:58.898Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T12:43:04.457Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:43:58.899Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T12:44:04.458Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:44:58.897Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T12:45:04.458Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:45:58.899Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T12:46:04.458Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:46:58.898Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T12:47:04.459Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:47:58.902Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T12:48:04.459Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:48:58.899Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T12:49:04.461Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:49:13.689Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:49:18.678Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:49:18.810Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
+        "timestamp": "2026-02-27T12:49:21.159Z"
       },
       {
         "event": "heartbeat",
         "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:25:46.123Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:26:04.428Z"
+        "timestamp": "2026-02-27T12:49:21.758Z"
       },
       {
         "event": "heartbeat",
         "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:26:46.122Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:27:04.430Z"
+        "timestamp": "2026-02-27T12:49:46.123Z"
       },
       {
         "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:27:46.123Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:28:04.432Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:28:46.122Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:29:04.433Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:29:46.122Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:30:04.434Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:30:46.122Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:31:04.435Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:31:46.133Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:32:04.436Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:32:46.122Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:33:04.438Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:33:46.123Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:34:04.440Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:34:46.124Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:35:04.441Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:35:46.122Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:36:04.443Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=979228dd-5b58-48ad-8a24-fae6bb8493cb&vscodeBrowserReqId=1772195016295",
-        "timestamp": "2026-02-27T12:36:46.128Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T12:37:04.443Z"
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-02-27T12:49:59.182Z"
       }
     ],
-    "lastHeartbeat": "2026-02-27T12:36:46.128Z"
+    "lastHeartbeat": "2026-02-27T12:49:59.182Z"
   },
   "reminders": [
     "**ALWAYS read this file first** when restored - this IS your memory",

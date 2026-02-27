@@ -73,6 +73,7 @@ export default function Terminal({
   // --- Extracted hooks ---
   const {
     speakResponse,
+    queueGreeting,
     isVocalizing,
     autoplayBlocked,
     audioElement,
@@ -136,7 +137,7 @@ export default function Terminal({
           user.uid
         );
         setHistory([intro.greeting]);
-        speakResponse(intro.greeting);
+        queueGreeting(intro.greeting);
 
         const result = await triggerImmuneResponse(user.uid, 'Startup');
         setHistory((prev) => [
