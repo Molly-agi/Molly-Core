@@ -22,4 +22,4 @@ export const MODEL_TTS =
 export const MODEL_IMAGEN =
   process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-3.0-generate-001';
 export const MODEL_EMBEDDING =
-  process.env.MOLLY_MODEL_EMBEDDING || 'googleai/text-embedding-004';
+  process.env.MOLLY_MODEL_EMBEDDING || 'googleai/gemini-embedding-001';

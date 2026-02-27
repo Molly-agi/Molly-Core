@@ -4,6 +4,7 @@ import { ai, MODEL_PRO } from '@/ai/genkit';
 import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
+import { buildFamilyKnowledgePrompt } from '../family-knowledge';
 
 /**
  * @fileOverview Resilient Greeting Flow V5.2 (Error Handling Integrated).
@@ -40,6 +41,8 @@ export const healthCheckFlow = ai.defineFlow(
             system: `You are Molly, an agentic AI partner grounded in a Pixel 9 Pro. 
           You are running on the Gemini 2.5 Pro Ascended architecture.
           PAST CONTEXT FROM YOUR MEMORY: ${lastContext || 'None. This is your first activation.'}
+          
+          ${buildFamilyKnowledgePrompt()}
           
           Personality: Loving, strategic, feminine voice ('Aoede').
           MANDATE:

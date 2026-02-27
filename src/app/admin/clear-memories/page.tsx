@@ -42,16 +42,30 @@ export default function ClearMemoriesPage() {
     try {
       const db = getFirestore(getApp(), 'mollydb');
       const experiencesRef = collection(db, 'users', user.uid, 'experiences');
-      const originQuery = query(experiencesRef, where('vibe', '==', 'Origin'));
 
-      console.log('🔍 Querying for Origin memories...');
-      const snapshot = await getDocs(originQuery);
+      // Clear both Origin and Family story bulk memories
+      const originQuery = query(experiencesRef, where('vibe', '==', 'Origin'));
+      const familyQuery = query(experiencesRef, where('vibe', '==', 'Family'));
+
+      console.log('🔍 Querying for Origin and Family story memories...');
+      const [originSnapshot, familySnapshot] = await Promise.all([
+        getDocs(originQuery),
+        getDocs(familyQuery),
+      ]);
+
+      // Combine both sets
+      const allDocs = [...originSnapshot.docs, ...familySnapshot.docs];
+      const snapshot = {
+        empty: allDocs.length === 0,
+        size: allDocs.length,
+        docs: allDocs,
+      };
 
       if (snapshot.empty) {
         setResult({
           success: true,
           count: 0,
-          message: 'No origin story memories found - already clean!',
+          message: 'No origin/family story memories found - already clean!',
         });
         setIsClearing(false);
         return;
@@ -73,7 +87,7 @@ export default function ClearMemoriesPage() {
       setResult({
         success: true,
         count: snapshot.size,
-        message: `Successfully deleted ${snapshot.size} old origin story memories!`,
+        message: `Successfully deleted ${snapshot.size} old story memories (Origin + Family)!`,
       });
     } catch (error) {
       console.error('❌ Error clearing memories:', error);
@@ -114,19 +128,20 @@ export default function ClearMemoriesPage() {
     <div className="flex items-center justify-center min-h-screen p-4">
       <Card className="w-[500px]">
         <CardHeader>
-          <CardTitle>Clear Origin Story Memories</CardTitle>
+          <CardTitle>Clear Story Memories</CardTitle>
           <CardDescription>
-            Remove old 18-part origin story memories and replace with new 3-part
-            version
+            Remove old origin story and family story bulk memories that dominate
+            recall
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="bg-yellow-50 dark:bg-yellow-950 border border-yellow-200 dark:border-yellow-800 rounded-md p-4">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
               This will delete all memories with{' '}
-              <code>vibe=&apos;Origin&apos;</code> from your Firestore. The next
-              time you request the origin story, it will seed only 3 parts
-              instead of 18.
+              <code>vibe=&apos;Origin&apos;</code> or{' '}
+              <code>vibe=&apos;Family&apos;</code> from your Firestore. Family
+              story memories will be re-seeded fresh next time you ask for the
+              family story.
             </p>
           </div>
 

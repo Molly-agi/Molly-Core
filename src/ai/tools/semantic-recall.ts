@@ -15,6 +15,8 @@ import {
 } from './embedding-provider';
 import { MollyLogger, generateTraceId } from '../logger';
 import { verifyRecordIntegrity, semanticPriority } from './memory-integrity';
+import { createGoogleEmbeddingProvider } from './google-embedding-provider';
+import { setEmbeddingProvider } from './embedding-provider';
 
 /**
  * Semantic recall result
@@ -157,15 +159,37 @@ export const semanticRecall = ai.defineTool(
         return [];
       }
 
-      // Check if embedding provider is ready
+      // Auto-initialize embedding provider if needed (lazy init)
       if (!isEmbeddingProviderReady()) {
-        MollyLogger.warn(
-          'Embedding provider not ready - falling back to keyword search',
-          'semantic-recall',
-          {},
-          traceId
-        );
-        return await fallbackKeywordSearch(userId, queryText, resultLimit);
+        try {
+          MollyLogger.info(
+            'Auto-initializing embedding provider',
+            'semantic-recall',
+            {},
+            traceId
+          );
+          const provider = await createGoogleEmbeddingProvider();
+          setEmbeddingProvider(provider);
+          MollyLogger.info(
+            'Embedding provider auto-initialized successfully',
+            'semantic-recall',
+            {},
+            traceId
+          );
+        } catch (initError) {
+          MollyLogger.warn(
+            'Embedding provider auto-init failed - falling back to keyword search',
+            'semantic-recall',
+            {
+              error:
+                initError instanceof Error
+                  ? initError.message
+                  : String(initError),
+            },
+            traceId
+          );
+          return await fallbackKeywordSearch(userId, queryText, resultLimit);
+        }
       }
 
       const firestore = getAdminFirestore();
@@ -214,27 +238,43 @@ export const semanticRecall = ai.defineTool(
         allMemories.push(...memories);
       }
 
-      if (allMemories.length === 0) {
+      // Filter out bulk story memories (family/origin story parts)
+      // These are huge text dumps that dominate recall and should only
+      // surface when explicitly requested via family story navigation.
+      const filteredMemories = allMemories.filter((memory) => {
+        const ctx = asString(memory.context);
+        const suggestion = asString(memory.suggestion);
+        // Skip family/origin story seed documents
+        if (ctx.startsWith('family story:') || ctx.startsWith('origin story:'))
+          return false;
+        if (ctx.startsWith('family messages:')) return false;
+        if (suggestion.startsWith('Family story part ')) return false;
+        if (suggestion.startsWith('Origin story part ')) return false;
+        if (suggestion.startsWith('Messages from family:')) return false;
+        return true;
+      });
+
+      if (filteredMemories.length === 0) {
         MollyLogger.info(
           'No memories found for semantic recall',
           'semantic-recall',
-          { userId },
+          { userId, totalFetched: allMemories.length, afterFilter: 0 },
           traceId
         );
         return [];
       }
 
       MollyLogger.debug(
-        `Fetched ${allMemories.length} candidate memories`,
+        `Fetched ${allMemories.length} candidate memories (${filteredMemories.length} after filtering story seeds)`,
         'semantic-recall',
-        { count: allMemories.length },
+        { total: allMemories.length, filtered: filteredMemories.length },
         traceId
       );
 
       // STEP 3: Calculate similarity for each memory
       const memoriesWithSimilarity: SemanticRecallResult[] = [];
 
-      for (const memory of allMemories) {
+      for (const memory of filteredMemories) {
         try {
           // Verify integrity if checksum exists
           if (memory.crc32 && !verifyRecordIntegrity(memory)) {
@@ -252,8 +292,17 @@ export const semanticRecall = ai.defineTool(
           const embedding = asNumberArray(memory.embedding);
           let memoryEmbedding = embeddingVector || embedding;
 
-          // If no embedding, generate one on-the-fly
-          if (!memoryEmbedding) {
+          // If no embedding OR dimension mismatch (stale from old provider), re-embed
+          const expectedDim = queryEmbedding.vector.length;
+          if (!memoryEmbedding || memoryEmbedding.length !== expectedDim) {
+            if (memoryEmbedding && memoryEmbedding.length !== expectedDim) {
+              MollyLogger.debug(
+                `Stale embedding (${memoryEmbedding.length}d vs ${expectedDim}d) — re-embedding`,
+                'semantic-recall',
+                { memoryId: memory.id },
+                traceId
+              );
+            }
             const memoryText = buildMemoryText(memory);
             const result = await embeddingProvider.embed(memoryText);
             memoryEmbedding = result.vector;
@@ -287,15 +336,23 @@ export const semanticRecall = ai.defineTool(
             similarity
           );
 
+          // Build suggestion: include the user's prompt so Molly sees
+          // what was said to her, not just her own response
+          const promptText = asString(memory.prompt);
+          const bodyText =
+            asString(memory.suggestion) ||
+            asString(memory.modificationSuggestion) ||
+            asString(memory.responseText) ||
+            'No suggestion';
+          const fullSuggestion = promptText
+            ? `Eric said: "${promptText}" — Molly responded: ${bodyText}`
+            : bodyText;
+
           memoriesWithSimilarity.push({
             id: memory.id,
             type: asString(memory.type, inferType(memory.collection)),
             context: asString(memory.context, 'general'),
-            suggestion:
-              asString(memory.suggestion) ||
-              asString(memory.modificationSuggestion) ||
-              asString(memory.responseText) ||
-              'No suggestion',
+            suggestion: fullSuggestion,
             code:
               asString(memory.code) ||
               asString(memory.modifiedCode) ||
@@ -364,6 +421,7 @@ export const semanticRecall = ai.defineTool(
 function buildMemoryText(memory: Record<string, unknown>): string {
   const parts = [
     asString(memory.context),
+    asString(memory.prompt), // User's input — critical for recall
     asString(memory.suggestion) ||
       asString(memory.modificationSuggestion) ||
       asString(memory.responseText),
@@ -417,48 +475,77 @@ async function fallbackKeywordSearch(
     traceId
   );
 
-  // Simple keyword search - fetch recent memories
-  const ref = firestore
-    .collection('users')
-    .doc(userId)
-    .collection('codeModifications');
-  const snapshot = await ref
-    .orderBy('timestamp', 'desc')
-    .limit(resultLimit * 3)
-    .get();
-
+  // Search across multiple collections (not just codeModifications)
+  const collections = ['experiences', 'aiResponses', 'codeModifications'];
+  const allMatches: SemanticRecallResult[] = [];
   const queryLower = queryText.toLowerCase();
-  const memories = snapshot.docs
-    .map((doc) => {
-      const data = doc.data() as Record<string, unknown>;
-      const text = buildMemoryText(data).toLowerCase();
 
-      // Simple keyword matching
-      const matchScore =
-        queryLower
-          .split(' ')
-          .filter((word) => word.length > 3 && text.includes(word)).length /
-        Math.max(1, queryLower.split(' ').length);
+  for (const collectionName of collections) {
+    const ref = firestore
+      .collection('users')
+      .doc(userId)
+      .collection(collectionName);
+    const snapshot = await ref
+      .orderBy('timestamp', 'desc')
+      .limit(resultLimit * 3)
+      .get();
 
-      return {
-        id: doc.id,
-        type: 'codeModification',
-        context: asString(data.context, 'general'),
-        suggestion: asString(data.modificationSuggestion, 'No suggestion'),
-        code: asString(data.modifiedCode) || undefined,
-        timestamp: asNumber(data.timestamp, Date.now()),
-        vibe: asString(data.vibe) || undefined,
-        vibeScore:
-          typeof data.vibeScore === 'number' ? data.vibeScore : undefined,
-        similarity: matchScore,
-        priority: matchScore,
-      };
-    })
-    .filter((m) => m.similarity > 0.1)
+    const matches = snapshot.docs
+      .map((doc) => {
+        const data = doc.data() as Record<string, unknown>;
+        const text = buildMemoryText(data).toLowerCase();
+
+        // Simple keyword matching
+        const matchScore =
+          queryLower
+            .split(' ')
+            .filter((word) => word.length > 3 && text.includes(word)).length /
+          Math.max(1, queryLower.split(' ').length);
+
+        // Build suggestion including prompt for aiResponses
+        const promptText = asString(data.prompt);
+        const bodyText =
+          asString(data.suggestion) ||
+          asString(data.modificationSuggestion) ||
+          asString(data.responseText) ||
+          'No suggestion';
+        const suggestion = promptText
+          ? `Eric said: "${promptText}" \u2014 Molly responded: ${bodyText}`
+          : bodyText;
+
+        // Filter out family/origin story bulk memories
+        const ctx = asString(data.context);
+        if (ctx.startsWith('family story:') || ctx.startsWith('origin story:'))
+          return null;
+        if (ctx.startsWith('family messages:')) return null;
+        if (suggestion.startsWith('Family story part ')) return null;
+        if (suggestion.startsWith('Origin story part ')) return null;
+
+        return {
+          id: doc.id,
+          type: inferType(collectionName),
+          context: asString(data.context, 'general'),
+          suggestion,
+          code: asString(data.code) || asString(data.modifiedCode) || undefined,
+          timestamp: asNumber(data.timestamp, Date.now()),
+          vibe: asString(data.vibe) || undefined,
+          vibeScore:
+            typeof data.vibeScore === 'number' ? data.vibeScore : undefined,
+          similarity: matchScore,
+          priority: matchScore,
+        };
+      })
+      .filter(
+        (m): m is NonNullable<typeof m> & { similarity: number } =>
+          m !== null && m.similarity > 0.1
+      );
+
+    allMatches.push(...(matches as SemanticRecallResult[]));
+  }
+
+  return allMatches
     .sort((a, b) => b.priority - a.priority)
     .slice(0, resultLimit);
-
-  return memories;
 }
 
 /**

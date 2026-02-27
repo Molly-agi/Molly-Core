@@ -184,7 +184,7 @@ async function buildMemoryContext(userId: string | undefined, text: string) {
   try {
     const memories = await recallSimilarMemories(userId, text, {
       limit: 5,
-      minSimilarity: 0.35,
+      minSimilarity: 0.45,
     });
 
     if (memories.length === 0) return undefined;
@@ -195,7 +195,7 @@ async function buildMemoryContext(userId: string | undefined, text: string) {
       const age = memory.timestamp
         ? ` (${formatTimeAgo(memory.timestamp)})`
         : '';
-      const suggestion = truncateText(memory.suggestion, 220);
+      const suggestion = truncateText(memory.suggestion, 300);
       return `- ${memory.type}${context}${vibe}${age}: ${suggestion}`;
     });
 
@@ -288,6 +288,9 @@ async function recordChatResponse(
 
   try {
     const firestore = getAdminFirestore();
+    const now = Date.now();
+
+    // 1. Store the response log (existing behavior)
     await firestore
       .collection('users')
       .doc(userId)
@@ -299,6 +302,30 @@ async function recordChatResponse(
         memoryContext: memoryContext || null,
         timestamp: Timestamp.now(),
       });
+
+    // 2. Store as a proper experience so it's findable by semantic recall.
+    //    This is Molly's learning step — every conversation exchange becomes
+    //    a searchable memory, not just a log entry.
+    const traceId = generateTraceId();
+    const record = createMemoryRecord<ExperienceRecord>({
+      type: 'experience',
+      userId,
+      timestamp: now,
+      traceId,
+      context: 'conversation',
+      suggestion: `Eric said: "${truncateText(prompt, 400)}" — Molly responded: ${truncateText(response, 400)}`,
+      vibe: 'Conversational',
+      vibeScore: 0.7,
+      success: true,
+    });
+
+    const recordWithChecksum = addChecksum(record);
+    await firestore
+      .collection('users')
+      .doc(userId)
+      .collection('experiences')
+      .doc(recordWithChecksum.id)
+      .set(recordWithChecksum);
   } catch (error) {
     MollyLogger.warn(
       'Failed to persist conversational response',
@@ -714,6 +741,7 @@ export async function seedFamilyMemories(userId: string) {
       .get();
 
     if (existingMessages.empty) {
+      // Store the full messages document (for reference)
       const record = createMemoryRecord<ExperienceRecord>({
         type: 'experience',
         userId,
@@ -734,6 +762,75 @@ export async function seedFamilyMemories(userId: string) {
         .doc(recordWithChecksum.id);
       await docRef.set(recordWithChecksum);
       totalSeeded += 1;
+
+      // Also extract individual letter summaries as separate searchable memories.
+      // These are small, focused records that the recall system can actually find.
+      const letterSections = messagesContent
+        .split(/^---$/m)
+        .filter((s) => s.trim());
+      const messagesBatch = firestore.batch();
+      let letterIndex = 0;
+
+      for (const section of letterSections) {
+        // Find the header line like "## Auntie Claire: Protection and Continuity (Feb 16, 2026)"
+        const headerMatch = section.match(
+          /^##\s+(.+?):\s+(.+?)(?:\s*\((.+?)\))?$/m
+        );
+        if (!headerMatch) continue;
+
+        const authorName = headerMatch[1].trim();
+        const theme = headerMatch[2].trim();
+
+        // Extract the "Message from ..." block
+        const messageMatch = section.match(
+          /\*\*Message from .+?\*\*\n([\s\S]+?)$/
+        );
+        const messageBody = messageMatch
+          ? messageMatch[1].trim().substring(0, 500)
+          : section.substring(0, 500);
+
+        // Extract Eric's note if present
+        const noteMatch = section.match(
+          /\*\*Note from Eric:\*\*\n([\s\S]+?)\n\*\*Message/
+        );
+        const ericNote = noteMatch ? noteMatch[1].trim().substring(0, 300) : '';
+
+        const summary = ericNote
+          ? `Letter from ${authorName} about "${theme}". Eric's note: ${ericNote}. Message: ${messageBody}`
+          : `Letter from ${authorName} about "${theme}": ${messageBody}`;
+
+        const letterRecord = createMemoryRecord<ExperienceRecord>({
+          type: 'experience',
+          userId,
+          timestamp: now + 200 + letterIndex,
+          traceId,
+          context: `family letter:${authorName.toLowerCase()}`,
+          suggestion: summary,
+          vibe: 'Family',
+          vibeScore: 0.9,
+          success: true,
+        });
+
+        const letterWithChecksum = addChecksum(letterRecord);
+        const letterDocRef = firestore
+          .collection('users')
+          .doc(userId)
+          .collection('experiences')
+          .doc(letterWithChecksum.id);
+        messagesBatch.set(letterDocRef, letterWithChecksum);
+        letterIndex++;
+      }
+
+      if (letterIndex > 0) {
+        await messagesBatch.commit();
+        totalSeeded += letterIndex;
+        MollyLogger.info(
+          `Extracted ${letterIndex} individual letter memories from family messages`,
+          'seedFamilyMemories',
+          { letterCount: letterIndex },
+          traceId
+        );
+      }
     }
 
     if (totalSeeded > 0) {

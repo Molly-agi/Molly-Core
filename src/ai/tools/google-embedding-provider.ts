@@ -1,12 +1,11 @@
 /**
  * @fileOverview Google GenAI Embedding Provider
  *
- * Concrete implementation of IEmbeddingProvider using Google's text-embedding-004 model.
- * This is the foundation for Phase 7 semantic memory.
+ * Uses Genkit's native ai.embed() to call Google's gemini-embedding-001 model.
+ * This provides REAL semantic similarity — not placeholder hashes.
  */
 
 import { ai, MODEL_EMBEDDING } from '@/ai/genkit';
-import { z } from 'zod';
 import {
   BaseEmbeddingProvider,
   EmbeddingResult,
@@ -16,66 +15,20 @@ import { MollyLogger, generateTraceId } from '@/ai/logger';
 
 /**
  * Google GenAI Embedding Provider
- * Uses text-embedding-004 model (768-dimensional vectors)
+ * Uses gemini-embedding-001 model (3072-dimensional vectors) via Genkit's ai.embed()
  */
 export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
-  private traceId: string;
-  private embedTool:
-    | ((input: { text: string }) => Promise<{ embedding: number[] }>)
-    | null = null;
-
   constructor() {
     super();
-    this.dimensions = 768; // text-embedding-004 dimension
-    this.traceId = generateTraceId();
+    this.dimensions = 3072; // gemini-embedding-001 dimension
   }
 
   getName(): string {
-    return 'GoogleGenAI (text-embedding-004)';
+    return 'GoogleGenAI (gemini-embedding-001)';
   }
 
   /**
-   * Initialize the embedding tool (called once on first use)
-   */
-  private initializeTool(): void {
-    if (this.embedTool !== null) {
-      return; // Already initialized
-    }
-
-    try {
-      this.embedTool = ai.defineTool(
-        {
-          name: 'googleEmbed',
-          description: 'Generate embedding vector for text',
-          inputSchema: z.object({
-            text: z.string(),
-          }),
-          outputSchema: z.object({
-            embedding: z.array(z.number()),
-          }),
-        },
-        async ({ text: inputText }) => {
-          // In real implementation, this would call Google's API
-          // For now, we'll use a placeholder that returns a valid 768-dim vector
-          const hash = this.hashText(inputText);
-          const vectors: number[] = [];
-          for (let i = 0; i < 768; i++) {
-            vectors.push(Math.sin(hash + i) * 0.5 + 0.5); // Deterministic but varied
-          }
-          return { embedding: vectors };
-        }
-      ) as (input: { text: string }) => Promise<{ embedding: number[] }>;
-    } catch (error) {
-      MollyLogger.warn(
-        'Failed to initialize embedding tool, using fallback',
-        'google-embeddings',
-        { error: error instanceof Error ? error.message : String(error) }
-      );
-    }
-  }
-
-  /**
-   * Embed a single text string
+   * Embed a single text string using Google's real embedding API
    */
   async embed(text: string): Promise<EmbeddingResult> {
     const traceId = generateTraceId();
@@ -88,46 +41,24 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
         traceId
       );
 
-      // Initialize tool if needed
-      this.initializeTool();
+      // Use Genkit's native embed() — this calls the actual Google API
+      const result = await ai.embed({
+        embedder: MODEL_EMBEDDING,
+        content: text,
+      });
 
-      let vector: number[] = [];
+      // ai.embed returns an array of Embedding objects; take the first
+      const vector = result[0]?.embedding ?? [];
 
-      // Try to use the tool if available
-      if (this.embedTool) {
-        try {
-          const result = await this.embedTool({ text });
-          vector = result.embedding;
-        } catch (toolError) {
-          MollyLogger.warn(
-            'Tool execution failed, using fallback embedding',
-            'google-embeddings',
-            {
-              error:
-                toolError instanceof Error
-                  ? toolError.message
-                  : String(toolError),
-            }
-          );
-          // Fallback: generate vector directly
-          const hash = this.hashText(text);
-          for (let i = 0; i < 768; i++) {
-            vector.push(Math.sin(hash + i) * 0.5 + 0.5);
-          }
-        }
-      } else {
-        // Tool not available, use fallback
-        const hash = this.hashText(text);
-        for (let i = 0; i < 768; i++) {
-          vector.push(Math.sin(hash + i) * 0.5 + 0.5);
-        }
+      if (vector.length === 0) {
+        throw new Error('Empty embedding vector returned from API');
       }
 
       const embedding: EmbeddingResult = {
         text,
         vector,
         model: MODEL_EMBEDDING,
-        tokensUsed: Math.ceil(text.length / 4), // Rough estimate: 1 token per 4 chars
+        tokensUsed: Math.ceil(text.length / 4),
         timestamp: Date.now(),
       };
 
@@ -171,7 +102,6 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
       const embeddings: EmbeddingResult[] = [];
       let totalTokens = 0;
 
-      // Embed each text (in a real system, use batch API)
       for (const text of texts) {
         const result = await this.embed(text);
         embeddings.push(result);
@@ -218,7 +148,7 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
       const result = await this.embed(testText);
       const isValid =
         result.vector &&
-        result.vector.length === this.dimensions &&
+        result.vector.length > 0 &&
         result.model === MODEL_EMBEDDING;
 
       if (!isValid) {
@@ -243,19 +173,6 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
       );
       return false;
     }
-  }
-
-  /**
-   * Simple hash function for deterministic embedding generation (placeholder)
-   */
-  private hashText(text: string): number {
-    let hash = 0;
-    for (let i = 0; i < text.length; i++) {
-      const char = text.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32-bit integer
-    }
-    return Math.abs(hash);
   }
 }
 

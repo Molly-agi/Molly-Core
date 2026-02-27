@@ -115,7 +115,7 @@ export const listAvailableModels = ai.defineTool(
         'gemini-2.5-pro',
         'gemini-2.5-flash-preview-tts',
         'imagen-3.0-generate-001',
-        'text-embedding-004',
+        'gemini-embedding-001',
       ];
     } catch {
       return ['Error: Neural pulse failed.'];

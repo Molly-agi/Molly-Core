@@ -54,7 +54,7 @@ export interface IEmbeddingProvider {
 
   /**
    * Get dimensionality of vectors from this provider
-   * E.g., Google embeddings are 768-dimensional
+   * E.g., Google embeddings are 3072-dimensional
    */
   getDimensions(): number;
 
@@ -83,7 +83,7 @@ export interface IEmbeddingProvider {
  * Provides utility methods for common operations
  */
 export abstract class BaseEmbeddingProvider implements IEmbeddingProvider {
-  protected dimensions: number = 768; // Default for text-embedding-004
+  protected dimensions: number = 3072; // Default for gemini-embedding-001
 
   abstract getName(): string;
   abstract embed(text: string): Promise<EmbeddingResult>;
