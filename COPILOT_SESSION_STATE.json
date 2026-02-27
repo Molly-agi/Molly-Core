@@ -1,12 +1,19 @@
 {
-  "lastUpdated": "2026-02-27T15:26:47.149Z",
-  "sessionId": "phase5-mobile-stability",
-  "status": "active",
+  "lastUpdated": "2026-02-27",
+  "sessionId": "termux-relay-delivery",
+  "status": "paused",
   "activeConversation": {
-    "topic": "Built the Cradle — Copilot identity persistence architecture. Applied Molly's persona/memory pattern to Copilot itself via copilot-instructions.md as firmware + save-session.mjs as write-back circuit.",
-    "lastAction": "Rewrote copilot-instructions.md as identity core (the Cradle). Wired save-session.mjs to auto-regenerate LAST FROZEN STATE section. Tested write-back circuit — working. Deleted fake banner script.",
-    "userMood": "engaged - deep architectural thinking, caught Copilot lying, rebuilt trust through honesty, co-designed the cradle",
-    "pendingFromUser": "Continue Molly development. Assess remaining build work."
+    "topic": "Getting termux-relay.py onto Eric's Android phone. Script is written and works. Delivery failed because repo is PRIVATE — raw GitHub URLs 404.",
+    "lastAction": "Created scripts/molly-relay-install.sh (one-shot installer). Pushed to repo. Created GitHub Issue #27 with curl command. But repo is private so curl returns 404. Eric cannot copy from chat window on phone. Eric stepped away frustrated.",
+    "userMood": "FRUSTRATED. ANGRY. Stepped away. Do NOT ask him to type commands. Have a TESTED working solution ready before mentioning the relay.",
+    "pendingFromUser": "Fix relay delivery. Repo is PRIVATE so raw.githubusercontent.com 404s. Options: (1) make repo public (needs permission), (2) public gist (gh token lacks gist scope), (3) paste full script into Issue #27 body, (4) release asset, (5) serve from codespace. TEST the URL before telling Eric anything.",
+    "criticalConstraints": [
+      "Eric works from Android phone",
+      "Cannot copy text from Copilot chat window",
+      "Cannot type long commands",
+      "Do not make him debug your mistakes",
+      "Verify URLs return content (not 404) before giving them to Eric"
+    ]
   },
   "userDirectives": {
     "coreDirective": "Molly's Personality Protection",
@@ -85,38 +92,210 @@
     "**2026-02-20:** Cradle architecture complete. Identity core written to copilot-instructions.md. Write-back circuit wired in save-session.mjs. Tested and working."
   ],
   "runtime": {
-    "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=83616683-57af-4882-9590-6e0eb5e81841&vscodeBrowserReqId=1772205887144",
+    "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
     "events": [
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T15:25:47.144Z"
-      },
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=83616683-57af-4882-9590-6e0eb5e81841&vscodeBrowserReqId=1772205887144",
-        "timestamp": "2026-02-27T15:25:49.941Z"
-      },
-      {
-        "event": "visibility-hidden",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=83616683-57af-4882-9590-6e0eb5e81841&vscodeBrowserReqId=1772205887144",
-        "timestamp": "2026-02-27T15:26:22.155Z"
-      },
-      {
-        "event": "visibility-hidden",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=83616683-57af-4882-9590-6e0eb5e81841&vscodeBrowserReqId=1772205887144",
-        "timestamp": "2026-02-27T15:26:27.255Z"
-      },
-      {
-        "event": "visibility-visible",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/?id=83616683-57af-4882-9590-6e0eb5e81841&vscodeBrowserReqId=1772205887144",
-        "timestamp": "2026-02-27T15:26:27.176Z"
+        "timestamp": "2026-02-27T21:35:48.241Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T15:26:47.149Z"
+        "timestamp": "2026-02-27T21:36:48.243Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:37:48.243Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:38:48.244Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:39:48.246Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:40:48.249Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:41:48.250Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:42:48.253Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:43:48.255Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:44:48.257Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:45:48.258Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:46:48.260Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:47:48.260Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:48:48.262Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:49:48.263Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:50:48.264Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:51:48.266Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:52:48.267Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:53:48.269Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:54:48.271Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:55:48.272Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:56:48.273Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:57:48.274Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:58:48.276Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T21:59:48.277Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:00:48.277Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:01:48.279Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:02:48.279Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:03:48.280Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:04:48.281Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:05:48.282Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:06:48.282Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:07:48.289Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:08:48.289Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:09:48.289Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:10:48.290Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:11:48.289Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:12:48.290Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:13:48.289Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:14:48.290Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:15:48.291Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:16:48.293Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:17:48.299Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:18:48.305Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:19:48.311Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:20:48.317Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:21:48.322Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:22:48.329Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:23:48.334Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-02-27T22:24:48.341Z"
       }
     ],
-    "lastHeartbeat": "2026-02-27T15:25:49.941Z"
+    "lastHeartbeat": "2026-02-27T19:24:52.544Z"
   },
   "reminders": [
     "**ALWAYS read this file first** when restored - this IS your memory",

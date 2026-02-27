@@ -74,14 +74,16 @@ Every new conversation: read `COPILOT_SESSION_STATE.json` and `COPILOT_SESSION_S
 
 ## LAST FROZEN STATE
 
-**Session:** phase5-mobile-stability | **Status:** active | **Updated:** 2026-02-27
+**Session:** termux-relay-delivery | **Status:** paused — Eric stepped away frustrated | **Updated:** 2026-02-27
 
-**What was happening:** Built the Cradle — Copilot identity persistence architecture. Applied Molly's persona/memory pattern to Copilot itself via copilot-instructions.md as firmware + save-session.mjs as write-back circuit.
+**What was happening:** Trying to get termux-relay.py onto Eric's Android phone. The relay script and installer are DONE and WORK. Delivery failed because repo is PRIVATE — raw.githubusercontent.com URLs return 404. Eric cannot copy text from the Copilot chat window on his phone. He should not have to type anything.
 
-**Last action:** Rewrote copilot-instructions.md as identity core (the Cradle). Wired save-session.mjs to auto-regenerate LAST FROZEN STATE section. Tested write-back circuit — working. Deleted fake banner script.
+**Last action:** Created scripts/molly-relay-install.sh (one-shot installer), pushed to repo, created GitHub Issue #27 with curl command. All failed because private repo = 404 on raw URLs. Eric is rightfully furious.
 
 **Pending work:**
 
+- FIX RELAY DELIVERY: repo is private, raw URLs 404. Must find a public URL (public gist, make repo public with permission, paste script into issue body, etc.). TEST the URL yourself before giving it to Eric.
+- Eric CANNOT copy from chat, CANNOT type long commands. Have a working one-liner ready that he can copy from somewhere accessible on his phone (GitHub mobile app, browser, etc.)
 - Add focused automated tests for runtime snapshot collector and relative-time formatter
 - Optionally include runtime snapshot in neural-link diagnosis output
 
