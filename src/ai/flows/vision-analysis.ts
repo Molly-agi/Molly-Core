@@ -1,56 +1,57 @@
 'use server';
 /**
- * @fileOverview Molly's Visual Sensory Graft (Stage 3) V4.0.
+ * @fileOverview Molly's Visual Sensory Graft (Stage 3) V4.1.
  *
- * Integrated Tesseract.js for local OCR auditing to harden the Visual Cortex.
+ * Gemini Flash vision analysis with optional Tesseract.js OCR.
  *
- * SAFETY HARDENING (Feb 20, 2026):
- * - Tesseract worker is pooled (create once, reuse). No more spawning a
- *   20-40MB WASM worker on every call — that's what caused the OOM bomb.
- * - Concurrency lock prevents overlapping vision analyses on the server.
- *   Only one analysis can run at a time; concurrent calls are rejected
- *   immediately instead of queuing and cascading.
- * - OCR has a timeout — if Tesseract hangs, we move on without it.
+ * SAFETY HARDENING:
+ * - OCR is best-effort — Tesseract worker threads crash under Turbopack
+ *   (missing .next/worker-script/node/index.js). OCR failure never blocks
+ *   the Gemini vision call.
+ * - Concurrency lock prevents overlapping vision analyses.
+ * - Uses Promise.allSettled so Gemini succeeds even if OCR explodes.
  */
 
 import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
-import { createWorker, type Worker as TesseractWorker } from 'tesseract.js';
 
-// ── Tesseract Worker Pool (singleton) ─────────────────────────────
-// One worker, created lazily, reused across all calls.
-// Terminated only on process exit (server-side) or never (server actions).
-let _ocrWorker: TesseractWorker | null = null;
-let _ocrWorkerInitializing = false;
+// ── OCR (best-effort, may not work under Turbopack) ───────────────
+// Lazily imported to avoid crashing at module load time.
+let _ocrAvailable: boolean | null = null; // null = untested
+let _ocrWorker: unknown = null;
 
-async function getOCRWorker(): Promise<TesseractWorker> {
-  if (_ocrWorker) return _ocrWorker;
+async function performLocalOCR(dataUri: string): Promise<string> {
+  // If we already know OCR doesn't work, skip immediately
+  if (_ocrAvailable === false) return 'OCR unavailable in this environment.';
 
-  // Prevent two simultaneous initializations
-  if (_ocrWorkerInitializing) {
-    // Wait for the other initialization to finish (poll)
-    for (let i = 0; i < 50; i++) {
-      await new Promise((r) => setTimeout(r, 200));
-      if (_ocrWorker) return _ocrWorker;
-    }
-    throw new Error('OCR worker initialization timed out');
-  }
+  const OCR_TIMEOUT_MS = 10_000;
 
-  _ocrWorkerInitializing = true;
   try {
-    _ocrWorker = await createWorker('eng');
-    return _ocrWorker;
+    // Dynamic import to avoid crashing if tesseract.js worker threads fail
+    if (!_ocrWorker) {
+      const { createWorker } = await import('tesseract.js');
+      _ocrWorker = await createWorker('eng');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const worker = _ocrWorker as any;
+    const result = await Promise.race([
+      worker.recognize(dataUri),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('OCR timed out')), OCR_TIMEOUT_MS)
+      ),
+    ]);
+    _ocrAvailable = true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (result as any).data.text;
   } catch (error) {
-    _ocrWorkerInitializing = false;
-    throw error;
-  } finally {
-    _ocrWorkerInitializing = false;
+    console.warn('Molly: OCR limb unavailable, skipping.', error);
+    _ocrAvailable = false;
+    return 'OCR skipped.';
   }
 }
 
 // ── Concurrency Lock ──────────────────────────────────────────────
-// Only one vision analysis can run at a time. This prevents the
-// cascading bomb where auto-scan fires faster than analysis completes.
 let _visionInFlight = false;
 
 const VisionAnalysisInputSchema = z.object({
@@ -61,28 +62,6 @@ const VisionAnalysisInputSchema = z.object({
     ),
   context: z.string().optional().describe('What Molly should look for.'),
 });
-
-/**
- * Performs local OCR on the provided image using the pooled worker.
- * Has a 10-second timeout — if Tesseract hangs, we skip OCR gracefully.
- */
-async function performLocalOCR(dataUri: string): Promise<string> {
-  const OCR_TIMEOUT_MS = 10_000;
-
-  try {
-    const worker = await getOCRWorker();
-    const result = await Promise.race([
-      worker.recognize(dataUri),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('OCR timed out')), OCR_TIMEOUT_MS)
-      ),
-    ]);
-    return result.data.text;
-  } catch (error) {
-    console.warn('Molly: Local OCR limb fatigued.', error);
-    return 'OCR skipped.';
-  }
-}
 
 export const visionAnalysisFlow = ai.defineFlow(
   {
@@ -116,13 +95,13 @@ export const visionAnalysisFlow = ai.defineFlow(
 
     _visionInFlight = true;
     try {
-      // Run OCR and Gemini Vision in PARALLEL — no reason to wait for OCR
-      // before sending the image to Gemini. This cuts total latency roughly in half.
-      const [ocrText, response] = await Promise.all([
-        // 1. Audit locally with Tesseract limb (pooled worker)
+      // Run OCR and Gemini Vision in PARALLEL with allSettled —
+      // OCR is best-effort and MUST NOT block Gemini if it crashes.
+      // Tesseract worker threads throw uncaught exceptions under Turbopack
+      // that bypass try/catch. allSettled isolates the blast radius.
+      const [ocrResult, geminiResult] = await Promise.allSettled([
         performLocalOCR(input.photoDataUri),
 
-        // 2. Synthesize with LLM Vision (doesn't need OCR to start)
         ai.generate({
           model: MODEL_FLASH,
           system: `You are Molly's Visual Cortex.
@@ -142,8 +121,17 @@ export const visionAnalysisFlow = ai.defineFlow(
         }),
       ]);
 
+      // Extract OCR text (best-effort)
+      const ocrText =
+        ocrResult.status === 'fulfilled' ? ocrResult.value : 'OCR failed.';
+
+      // Gemini vision MUST succeed — if it failed, throw
+      if (geminiResult.status === 'rejected') {
+        throw geminiResult.reason;
+      }
+
       return {
-        ...response.output!,
+        ...geminiResult.value.output!,
         ocrAudit: ocrText,
       };
     } finally {
