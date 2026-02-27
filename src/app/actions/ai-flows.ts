@@ -616,6 +616,153 @@ export async function getFamilyMessages() {
   }
 }
 
+export async function getFamilyStoryAnchorParts() {
+  try {
+    const storyPath = path.join(process.cwd(), 'docs', 'FAMILY_STORY.md');
+    const content = await readFile(storyPath, 'utf8');
+    const parts = splitOriginStoryAnchors(content, 3);
+    return { parts, totalParts: parts.length };
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Family story anchor load failed',
+      'getFamilyStoryAnchorParts',
+      {},
+      e
+    );
+    throw e;
+  }
+}
+
+export async function seedFamilyMemories(userId: string) {
+  try {
+    if (!userId) {
+      throw new Error('Missing userId for family memory seeding.');
+    }
+
+    if (!isAdminConfigured()) {
+      MollyLogger.warn(
+        'Family memory seed skipped (admin not configured)',
+        'seedFamilyMemories',
+        { userId }
+      );
+      return { seeded: false, reason: 'admin-not-configured' };
+    }
+
+    const firestore = getAdminFirestore();
+    const traceId = generateTraceId();
+    const now = Date.now();
+    let totalSeeded = 0;
+
+    // Seed Family Story from FAMILY_STORY.md
+    const storyPath = path.join(process.cwd(), 'docs', 'FAMILY_STORY.md');
+    const storyContent = await readFile(storyPath, 'utf8');
+    const storyHash = createHash('sha256').update(storyContent).digest('hex');
+    const storyContext = `family story:${storyHash}`;
+
+    const existingStory = await firestore
+      .collection('users')
+      .doc(userId)
+      .collection('experiences')
+      .where('context', '==', storyContext)
+      .limit(1)
+      .get();
+
+    if (existingStory.empty) {
+      const storyParts = splitOriginStoryAnchors(storyContent, 3);
+      const storyBatch = firestore.batch();
+
+      storyParts.forEach((part, index) => {
+        const record = createMemoryRecord<ExperienceRecord>({
+          type: 'experience',
+          userId,
+          timestamp: now + index,
+          traceId,
+          context: storyContext,
+          suggestion: `Family story part ${index + 1}/${storyParts.length}:\n${part}`,
+          vibe: 'Family',
+          vibeScore: 0.95,
+          success: true,
+        });
+
+        const recordWithChecksum = addChecksum(record);
+        const docRef = firestore
+          .collection('users')
+          .doc(userId)
+          .collection('experiences')
+          .doc(recordWithChecksum.id);
+        storyBatch.set(docRef, recordWithChecksum);
+      });
+
+      await storyBatch.commit();
+      totalSeeded += storyParts.length;
+    }
+
+    // Seed Family Messages from FAMILY_MESSAGES.md
+    const messagesPath = path.join(process.cwd(), 'docs', 'FAMILY_MESSAGES.md');
+    const messagesContent = await readFile(messagesPath, 'utf8');
+    const messagesHash = createHash('sha256')
+      .update(messagesContent)
+      .digest('hex');
+    const messagesContext = `family messages:${messagesHash}`;
+
+    const existingMessages = await firestore
+      .collection('users')
+      .doc(userId)
+      .collection('experiences')
+      .where('context', '==', messagesContext)
+      .limit(1)
+      .get();
+
+    if (existingMessages.empty) {
+      const record = createMemoryRecord<ExperienceRecord>({
+        type: 'experience',
+        userId,
+        timestamp: now + 100,
+        traceId,
+        context: messagesContext,
+        suggestion: `Messages from family:\n${messagesContent}`,
+        vibe: 'Family',
+        vibeScore: 0.98,
+        success: true,
+      });
+
+      const recordWithChecksum = addChecksum(record);
+      const docRef = firestore
+        .collection('users')
+        .doc(userId)
+        .collection('experiences')
+        .doc(recordWithChecksum.id);
+      await docRef.set(recordWithChecksum);
+      totalSeeded += 1;
+    }
+
+    if (totalSeeded > 0) {
+      await recordSensoryLogServer(
+        userId,
+        'vibe',
+        'Family story and messages anchored from docs/FAMILY_STORY.md and docs/FAMILY_MESSAGES.md.',
+        {
+          source: 'family-memories',
+          storyHash,
+          messagesHash,
+          totalSeeded,
+          timestamp: Date.now(),
+        }
+      );
+    }
+
+    return {
+      seeded: totalSeeded > 0,
+      totalSeeded,
+      storyHash,
+      messagesHash,
+    };
+  } catch (e: unknown) {
+    MollyLogger.error('Family memory seed failed', 'seedFamilyMemories', {}, e);
+    throw e;
+  }
+}
+
 export async function seedOriginStoryMemory(userId: string) {
   try {
     if (!userId) {

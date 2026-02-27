@@ -8,10 +8,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import {
-  getOriginStoryAnchorParts,
-  seedOriginStoryMemory,
-} from '@/app/actions';
+import { getFamilyStoryAnchorParts, seedFamilyMemories } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import type { HistoryItem } from './terminal-types';
 
@@ -88,7 +85,7 @@ export function useFamilyStory({
       setIsLoading(true);
       try {
         const { parts: fetchedParts, totalParts } =
-          await getOriginStoryAnchorParts();
+          await getFamilyStoryAnchorParts();
         if (!fetchedParts || fetchedParts.length === 0) {
           throw new Error('Family story is empty.');
         }
@@ -103,7 +100,7 @@ export function useFamilyStory({
         }
 
         if (userId && !seededRef.current) {
-          await seedOriginStoryMemory(userId);
+          await seedFamilyMemories(userId);
           seededRef.current = true;
         }
       } catch (error) {

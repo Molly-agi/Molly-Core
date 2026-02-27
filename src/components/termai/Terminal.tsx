@@ -24,6 +24,8 @@ import {
   getHealthCheck,
   getOriginStoryAnchorParts,
   getFamilyMessages,
+  getFamilyStoryAnchorParts,
+  seedFamilyMemories,
   triggerImmuneResponse,
   resetCircuitBreaker,
 } from '@/app/actions';
@@ -279,14 +281,34 @@ export default function Terminal({
       if (!detail) return;
       let summary = detail.summary ?? '';
 
-      if (
-        detail.payload?.type === 'origin-story' ||
-        detail.payload?.type === 'family-story'
-      ) {
+      if (detail.payload?.type === 'origin-story') {
         try {
           const { parts } = await getOriginStoryAnchorParts();
           const part = parts?.[detail.payload.partIndex ?? 0];
           if (part) summary = part;
+        } catch (error) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : 'Failed to load origin story anchor.';
+          toast({
+            variant: 'destructive',
+            title: 'Origin Story Unavailable',
+            description: message,
+          });
+          return;
+        }
+      }
+
+      if (detail.payload?.type === 'family-story') {
+        try {
+          const { parts } = await getFamilyStoryAnchorParts();
+          const part = parts?.[detail.payload.partIndex ?? 0];
+          if (part) summary = part;
+          // Seed family memories on first recall
+          if (user?.uid) {
+            void seedFamilyMemories(user.uid);
+          }
         } catch (error) {
           const message =
             error instanceof Error
@@ -308,6 +330,10 @@ export default function Terminal({
         try {
           const { content } = await getFamilyMessages();
           if (content) summary = content;
+          // Seed family memories on first recall
+          if (user?.uid) {
+            void seedFamilyMemories(user.uid);
+          }
         } catch (error) {
           const message =
             error instanceof Error
@@ -338,7 +364,7 @@ export default function Terminal({
       void processCommand(prompt);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [processCommand, toast]
+    [processCommand, toast, user]
   );
 
   useEffect(() => {
