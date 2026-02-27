@@ -206,7 +206,9 @@ export default function Terminal({
       const nextHistory = [...history, `> ${cmdText}`];
       setHistory(nextHistory);
 
-      if (await handleFamilyStoryRequest(cmdText)) return;
+      // Skip family story text-navigation for anchor recalls (they should go straight to Molly)
+      const isAnchorRecall = cmdText.startsWith('Recall this memory:');
+      if (!isAnchorRecall && (await handleFamilyStoryRequest(cmdText))) return;
 
       setIsLoading(true);
       try {
