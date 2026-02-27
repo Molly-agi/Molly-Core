@@ -50,6 +50,12 @@ import {
   type PillarPipelineResult,
 } from '@/ai/flows/pillar-pipeline';
 import {
+  setupTermuxEnvironment,
+  updateTermuxEnvironment,
+  getTermuxBootstrapCommand,
+  type TermuxSelfSetupResult,
+} from '@/ai/flows/termux-self-setup';
+import {
   getSafewordPhrase,
   getSleepState,
   isSleepSafeword,
@@ -1469,6 +1475,48 @@ export async function getPillarPipelineResult(
  */
 export function getPillarFilesList(): string[] {
   return listPillarFiles();
+}
+
+/**
+ * Self-setup: Molly clones her own repo onto Termux and installs everything.
+ * Requires the relay to already be running (first-time bootstrap is manual).
+ */
+export async function getTermuxSelfSetup(
+  relayUrl: string,
+  options: { token?: string; githubToken?: string } = {}
+): Promise<TermuxSelfSetupResult> {
+  try {
+    ensureApiKey();
+    await checkRateLimit('termux-setup', 10000);
+    return await setupTermuxEnvironment(relayUrl, options);
+  } catch (e: unknown) {
+    MollyLogger.error('Termux self-setup failed', 'getTermuxSelfSetup', {}, e);
+    throw e;
+  }
+}
+
+/**
+ * Update: Molly pulls latest code and refreshes scripts on Termux.
+ */
+export async function getTermuxUpdate(
+  relayUrl: string,
+  options: { token?: string; githubToken?: string } = {}
+): Promise<TermuxSelfSetupResult> {
+  try {
+    ensureApiKey();
+    await checkRateLimit('termux-update', 5000);
+    return await updateTermuxEnvironment(relayUrl, options);
+  } catch (e: unknown) {
+    MollyLogger.error('Termux update failed', 'getTermuxUpdate', {}, e);
+    throw e;
+  }
+}
+
+/**
+ * Get the one-liner bootstrap command for first-time Termux setup.
+ */
+export function getBootstrapCommand(githubToken?: string): string {
+  return getTermuxBootstrapCommand(githubToken);
 }
 
 export async function getEnhancedResearch(prompt: string, userId: string) {

@@ -66,6 +66,13 @@ export {
 // Pillar Pipeline — Autonomous Code Absorption
 export { getPillarPipelineResult, getPillarFilesList } from './ai-flows';
 
+// Termux Self-Setup — Molly installs herself on the phone
+export {
+  getTermuxSelfSetup,
+  getTermuxUpdate,
+  getBootstrapCommand,
+} from './ai-flows';
+
 // Problem Solving & Code Generation
 export {
   getAutonomousSolution,

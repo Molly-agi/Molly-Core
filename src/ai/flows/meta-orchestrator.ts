@@ -105,6 +105,8 @@ Available Flows:
 - codeIntegration: Take analyzed patterns and write adapted TypeScript into Molly-Core (src/ai/integrations/)
 - pillarPipeline: Full autonomy loop — read local Python scripts, execute on Termux (Eric's phone), validate results, analyze code, and integrate useful patterns into your own codebase
 - termuxExec: Execute commands on Eric's phone via Termux relay (shell, python, javascript)
+- termuxSelfSetup: Clone your own repo onto Termux, install relay + boot scripts, configure auto-start. Requires relay to already be running.
+- termuxUpdate: Pull latest code and refresh scripts on Termux (fast update)
 
 Consider:
 - Task complexity (simple queries don't need autonomous solution)
@@ -112,7 +114,8 @@ Consider:
 - Whether flows should run sequentially or in parallel
 - System thermal/CPU state for resource planning
 - Whether the user wants you to run code on their phone (Termux)
-- Whether the user wants you to analyze, test, or absorb external code (pillarPipeline)`,
+- Whether the user wants you to analyze, test, or absorb external code (pillarPipeline)
+- Whether the user wants you to install or update yourself on the phone (termuxSelfSetup / termuxUpdate)`,
           prompt: `Analyze this request and create an execution plan:
 
 USER REQUEST: "${userRequest}"
