@@ -83,6 +83,24 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
       window.speechSynthesis.removeEventListener('voiceschanged', load);
   }, []);
 
+  // Capture user gesture as EARLY as possible (on mount).
+  // The greeting takes ~4s to load. If the user taps the screen while it's
+  // loading, we need to capture that gesture so queueGreeting() can speak
+  // immediately when the text arrives instead of waiting for another tap.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const captureGesture = () => {
+      hasUserGestureRef.current = true;
+    };
+    // Listen for any interaction — covers tap, click, keyboard
+    window.addEventListener('pointerdown', captureGesture, { once: true });
+    window.addEventListener('keydown', captureGesture, { once: true });
+    return () => {
+      window.removeEventListener('pointerdown', captureGesture);
+      window.removeEventListener('keydown', captureGesture);
+    };
+  }, []);
+
   const handleAudioEnd = useCallback(() => {
     isVocalizingRef.current = false;
     setIsVocalizing(false);
