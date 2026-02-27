@@ -350,16 +350,7 @@ export default function Terminal({
 
       if (!summary) return;
 
-      if (
-        detail.payload?.type === 'family-story' ||
-        detail.payload?.type === 'static'
-      ) {
-        const label = detail.title || 'Memory Anchor';
-        setHistory((prev) => [...prev, `--- ${label} ---`, summary]);
-        void speakResponse(summary);
-        return;
-      }
-
+      // All anchor types go through processCommand so Molly absorbs them
       const prompt = `Recall this memory: ${detail.title || 'Memory'}. ${summary}`;
       void processCommand(prompt);
     },
