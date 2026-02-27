@@ -47,4 +47,6 @@ firestore-debug.log
 
 # Gallery image processing
 /public/molly-gallery/portraits-backup/
-/public/molly-gallery/portraits-clean/
+/public/molly-gallery/portraits-clean/molly_sentinel/
+eng.traineddata
+.molly-logs/
