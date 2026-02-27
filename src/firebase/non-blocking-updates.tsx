@@ -60,9 +60,9 @@ export function addDocumentNonBlocking(
  * Initiates an updateDoc operation for a document reference.
  * Does NOT await the write operation internally.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function updateDocumentNonBlocking(
   docRef: DocumentReference,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ) {
   updateDoc(docRef, data).catch(() => {
