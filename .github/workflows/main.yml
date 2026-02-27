@@ -42,7 +42,8 @@ jobs:
         run: npm run typecheck
 
       - name: Run tests
-        run: npm test -- --ci --forceExit --maxWorkers=2
+        run: npx jest --ci --forceExit --maxWorkers=2
+        timeout-minutes: 5
 
       - name: Build project
         run: npm run build
