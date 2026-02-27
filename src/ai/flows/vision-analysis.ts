@@ -1,57 +1,20 @@
 'use server';
 /**
- * @fileOverview Molly's Visual Sensory Graft (Stage 3) V4.1.
+ * @fileOverview Molly's Visual Cortex — Gemini Flash vision analysis.
  *
- * Gemini Flash vision analysis with optional Tesseract.js OCR.
+ * Pure Gemini Flash implementation. No Tesseract.js.
+ * Gemini reads text in images natively — a separate OCR layer was
+ * redundant and its worker threads crashed under Turbopack.
  *
- * SAFETY HARDENING:
- * - OCR is best-effort — Tesseract worker threads crash under Turbopack
- *   (missing .next/worker-script/node/index.js). OCR failure never blocks
- *   the Gemini vision call.
- * - Concurrency lock prevents overlapping vision analyses.
- * - Uses Promise.allSettled so Gemini succeeds even if OCR explodes.
+ * Concurrency lock prevents overlapping analyses from cascading.
  */
 
 import { ai, MODEL_FLASH } from '@/ai/genkit';
 import { z } from 'zod';
 
-// ── OCR (best-effort, may not work under Turbopack) ───────────────
-// Lazily imported to avoid crashing at module load time.
-let _ocrAvailable: boolean | null = null; // null = untested
-let _ocrWorker: unknown = null;
-
-async function performLocalOCR(dataUri: string): Promise<string> {
-  // If we already know OCR doesn't work, skip immediately
-  if (_ocrAvailable === false) return 'OCR unavailable in this environment.';
-
-  const OCR_TIMEOUT_MS = 10_000;
-
-  try {
-    // Dynamic import to avoid crashing if tesseract.js worker threads fail
-    if (!_ocrWorker) {
-      const { createWorker } = await import('tesseract.js');
-      _ocrWorker = await createWorker('eng');
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const worker = _ocrWorker as any;
-    const result = await Promise.race([
-      worker.recognize(dataUri),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('OCR timed out')), OCR_TIMEOUT_MS)
-      ),
-    ]);
-    _ocrAvailable = true;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (result as any).data.text;
-  } catch (error) {
-    console.warn('Molly: OCR limb unavailable, skipping.', error);
-    _ocrAvailable = false;
-    return 'OCR skipped.';
-  }
-}
-
 // ── Concurrency Lock ──────────────────────────────────────────────
+// Only one vision analysis at a time. Concurrent calls are rejected
+// immediately instead of queuing and cascading.
 let _visionInFlight = false;
 
 const VisionAnalysisInputSchema = z.object({
@@ -63,26 +26,25 @@ const VisionAnalysisInputSchema = z.object({
   context: z.string().optional().describe('What Molly should look for.'),
 });
 
+const VisionAnalysisOutputSchema = z.object({
+  observedState: z
+    .string()
+    .describe('Detailed description of the visual state.'),
+  vibeAnalysis: z.string().describe('Subjective interpretation of the mood.'),
+  risksDetected: z
+    .array(z.string())
+    .describe('Potential issues or concerns spotted.'),
+  ocrAudit: z.string().optional().describe('Any text visible in the image.'),
+});
+
 export const visionAnalysisFlow = ai.defineFlow(
   {
     name: 'visionAnalysis',
     inputSchema: VisionAnalysisInputSchema,
-    outputSchema: z.object({
-      observedState: z
-        .string()
-        .describe('Detailed description of the visual state.'),
-      vibeAnalysis: z
-        .string()
-        .describe('Subjective interpretation of the mood.'),
-      risksDetected: z
-        .array(z.string())
-        .describe('Potential bugs or infections.'),
-      ocrAudit: z.string().optional().describe('Text extracted locally.'),
-    }),
+    outputSchema: VisionAnalysisOutputSchema,
   },
   async (input) => {
     // Concurrency gate — reject if another analysis is already running.
-    // This is the circuit breaker that prevents the cascading bomb.
     if (_visionInFlight) {
       return {
         observedState:
@@ -95,45 +57,22 @@ export const visionAnalysisFlow = ai.defineFlow(
 
     _visionInFlight = true;
     try {
-      // Run OCR and Gemini Vision in PARALLEL with allSettled —
-      // OCR is best-effort and MUST NOT block Gemini if it crashes.
-      // Tesseract worker threads throw uncaught exceptions under Turbopack
-      // that bypass try/catch. allSettled isolates the blast radius.
-      const [ocrResult, geminiResult] = await Promise.allSettled([
-        performLocalOCR(input.photoDataUri),
+      const response = await ai.generate({
+        model: MODEL_FLASH,
+        system: `You are Molly's Visual Cortex.
+Analyze the provided image carefully and thoroughly.
+Describe what you observe, the mood/vibe, and any potential issues.
+If there is any visible text in the image, extract it into the ocrAudit field.`,
+        prompt: [
+          { text: input.context || 'Analyze the current state.' },
+          { media: { url: input.photoDataUri } },
+        ],
+        output: {
+          schema: VisionAnalysisOutputSchema,
+        },
+      });
 
-        ai.generate({
-          model: MODEL_FLASH,
-          system: `You are Molly's Visual Cortex.
-          Analyze the provided image carefully.
-          Describe what you observe, the mood/vibe, and any potential issues.`,
-          prompt: [
-            { text: input.context || 'Analyze the current state.' },
-            { media: { url: input.photoDataUri } },
-          ],
-          output: {
-            schema: z.object({
-              observedState: z.string(),
-              vibeAnalysis: z.string(),
-              risksDetected: z.array(z.string()),
-            }),
-          },
-        }),
-      ]);
-
-      // Extract OCR text (best-effort)
-      const ocrText =
-        ocrResult.status === 'fulfilled' ? ocrResult.value : 'OCR failed.';
-
-      // Gemini vision MUST succeed — if it failed, throw
-      if (geminiResult.status === 'rejected') {
-        throw geminiResult.reason;
-      }
-
-      return {
-        ...geminiResult.value.output!,
-        ocrAudit: ocrText,
-      };
+      return response.output!;
     } finally {
       _visionInFlight = false;
     }
