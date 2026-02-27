@@ -37,6 +37,18 @@ import {
   type ExperienceRecord,
 } from '@/ai/tools/memory-schema';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
+import { analyzeCode, type CodeAnalysisResult } from '@/ai/flows/code-analysis';
+import {
+  analyzeAndIntegrate,
+  integrateFromAnalysis,
+  listIntegrations,
+  type IntegrationResult,
+} from '@/ai/flows/code-integration';
+import {
+  runPillarPipeline,
+  listPillarFiles,
+  type PillarPipelineResult,
+} from '@/ai/flows/pillar-pipeline';
 import {
   getSafewordPhrase,
   getSleepState,
@@ -1333,6 +1345,131 @@ export async function startSyntheticSynthesis(
 // ============================================
 // RESEARCH ASSISTANT
 // ============================================
+
+// ============================================
+// CODE ANALYSIS & INTEGRATION
+// ============================================
+
+export async function getCodeAnalysis(
+  target: string,
+  userId: string,
+  options: { searchFirst?: boolean; purpose?: string } = {}
+): Promise<CodeAnalysisResult> {
+  try {
+    ensureApiKey();
+    await checkRateLimit('code-analysis', 2000);
+    const guard = getSleepGuard(target, 'code-analysis');
+    if (guard) {
+      throw new Error(guard.message);
+    }
+    return await analyzeCode(target, userId, options);
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Code analysis failed',
+      'getCodeAnalysis',
+      { target, userId },
+      e
+    );
+    throw e;
+  }
+}
+
+export async function getCodeAnalysisAndIntegration(
+  target: string,
+  userId: string,
+  options: {
+    searchFirst?: boolean;
+    purpose?: string;
+    dryRun?: boolean;
+    patternIndices?: number[];
+  } = {}
+): Promise<{ analysis: CodeAnalysisResult; integration: IntegrationResult }> {
+  try {
+    ensureApiKey();
+    await checkRateLimit('code-integration', 3000);
+    const guard = getSleepGuard(target, 'code-integration');
+    if (guard) {
+      throw new Error(guard.message);
+    }
+    return await analyzeAndIntegrate(target, userId, options);
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Code analysis + integration failed',
+      'getCodeAnalysisAndIntegration',
+      { target, userId },
+      e
+    );
+    throw e;
+  }
+}
+
+export async function getIntegrationFromAnalysis(
+  analysis: CodeAnalysisResult,
+  target: string,
+  userId: string,
+  options: { dryRun?: boolean; patternIndices?: number[] } = {}
+): Promise<IntegrationResult> {
+  try {
+    ensureApiKey();
+    await checkRateLimit('code-integration', 2000);
+    const guard = getSleepGuard(target, 'code-integration');
+    if (guard) {
+      throw new Error(guard.message);
+    }
+    return await integrateFromAnalysis(analysis, target, userId, options);
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Code integration from analysis failed',
+      'getIntegrationFromAnalysis',
+      { target, userId },
+      e
+    );
+    throw e;
+  }
+}
+
+export function getIntegrationsList(): string[] {
+  return listIntegrations();
+}
+
+// ============================================
+// PILLAR PIPELINE — AUTONOMOUS CODE ABSORPTION
+// ============================================
+
+/**
+ * Run the full pillar pipeline: discover → test on Termux → analyze → integrate.
+ * The browser provides the relay URL since only it knows the device's network.
+ */
+export async function getPillarPipelineResult(
+  userId: string,
+  relayUrl: string,
+  options: { token?: string; dryRun?: boolean } = {}
+): Promise<PillarPipelineResult> {
+  try {
+    ensureApiKey();
+    await checkRateLimit('pillar-pipeline', 5000);
+    const guard = getSleepGuard('pillar-pipeline', 'pillar-pipeline');
+    if (guard) {
+      throw new Error(guard.message);
+    }
+    return await runPillarPipeline(userId, relayUrl, options);
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Pillar pipeline failed',
+      'getPillarPipelineResult',
+      { userId },
+      e
+    );
+    throw e;
+  }
+}
+
+/**
+ * List available pillar files without executing anything.
+ */
+export function getPillarFilesList(): string[] {
+  return listPillarFiles();
+}
 
 export async function getEnhancedResearch(prompt: string, userId: string) {
   try {

@@ -101,12 +101,18 @@ Available Flows:
 - evolutionLoop: Iterative development with learning
 - interpreterLimb: Code execution and testing
 - immuneResponse: Self-healing and error recovery
+- codeAnalysis: Analyze code from GitHub repos — understand architecture, extract useful patterns
+- codeIntegration: Take analyzed patterns and write adapted TypeScript into Molly-Core (src/ai/integrations/)
+- pillarPipeline: Full autonomy loop — read local Python scripts, execute on Termux (Eric's phone), validate results, analyze code, and integrate useful patterns into your own codebase
+- termuxExec: Execute commands on Eric's phone via Termux relay (shell, python, javascript)
 
 Consider:
 - Task complexity (simple queries don't need autonomous solution)
 - Whether memory/vision/research is needed
 - Whether flows should run sequentially or in parallel
-- System thermal/CPU state for resource planning`,
+- System thermal/CPU state for resource planning
+- Whether the user wants you to run code on their phone (Termux)
+- Whether the user wants you to analyze, test, or absorb external code (pillarPipeline)`,
           prompt: `Analyze this request and create an execution plan:
 
 USER REQUEST: "${userRequest}"

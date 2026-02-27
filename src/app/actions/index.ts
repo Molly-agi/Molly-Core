@@ -52,6 +52,20 @@ export {
   checkIfRecentlyResearched,
 } from './research-cache';
 
+// Research Agent
+export { getEnhancedResearch } from './ai-flows';
+
+// Code Analysis & Integration
+export {
+  getCodeAnalysis,
+  getCodeAnalysisAndIntegration,
+  getIntegrationFromAnalysis,
+  getIntegrationsList,
+} from './ai-flows';
+
+// Pillar Pipeline — Autonomous Code Absorption
+export { getPillarPipelineResult, getPillarFilesList } from './ai-flows';
+
 // Problem Solving & Code Generation
 export {
   getAutonomousSolution,
