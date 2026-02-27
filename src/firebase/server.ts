@@ -10,6 +10,8 @@ import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
+const MOLLY_DATABASE_ID = 'mollydb';
+
 // Cache for server-side initialization
 let _serverInitialized = false;
 
@@ -42,6 +44,6 @@ export function getSdksServer(firebaseApp: FirebaseApp) {
   return {
     firebaseApp,
     auth: getAuth(firebaseApp),
-    firestore: getFirestore(firebaseApp),
+    firestore: getFirestore(firebaseApp, MOLLY_DATABASE_ID),
   };
 }

@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
 
     const app =
       getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-    const db = getFirestore(app);
+    const db = getFirestore(app, 'mollydb');
 
     const experiencesRef = collection(db, 'users', userId, 'experiences');
     const originQuery = query(experiencesRef, where('vibe', '==', 'Origin'));

@@ -9,7 +9,9 @@ import {
   initializeApp,
 } from 'firebase-admin/app';
 import type { ServiceAccount } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import { getFirestore, initializeFirestore } from 'firebase-admin/firestore';
+
+const MOLLY_DATABASE_ID = 'mollydb';
 
 let adminInitialized = false;
 
@@ -71,18 +73,20 @@ function getServiceAccount() {
 
 export function initializeFirebaseAdmin() {
   if (adminInitialized || getApps().length > 0) {
-    return getFirestore();
+    return getFirestore(MOLLY_DATABASE_ID);
   }
 
   const serviceAccount = getServiceAccount();
   if (serviceAccount) {
-    initializeApp({ credential: cert(serviceAccount) });
+    const app = initializeApp({ credential: cert(serviceAccount) });
+    initializeFirestore(app, { preferRest: true }, MOLLY_DATABASE_ID);
   } else {
-    initializeApp({ credential: applicationDefault() });
+    const app = initializeApp({ credential: applicationDefault() });
+    initializeFirestore(app, { preferRest: true }, MOLLY_DATABASE_ID);
   }
 
   adminInitialized = true;
-  return getFirestore();
+  return getFirestore(MOLLY_DATABASE_ID);
 }
 
 export function getAdminFirestore() {

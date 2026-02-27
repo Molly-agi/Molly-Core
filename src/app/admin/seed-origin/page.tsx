@@ -11,6 +11,7 @@ import {
   writeBatch,
   doc,
 } from 'firebase/firestore';
+import { getApp } from 'firebase/app';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -95,7 +96,7 @@ export default function SeedOriginPage() {
 
       const content = await response.text();
       const hash = simpleHash(content);
-      const db = getFirestore();
+      const db = getFirestore(getApp(), 'mollydb');
       const context = `origin story:${hash}`;
 
       // Check if already seeded

@@ -10,6 +10,7 @@ import {
   getDocs,
   writeBatch,
 } from 'firebase/firestore';
+import { getApp } from 'firebase/app';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -39,7 +40,7 @@ export default function ClearMemoriesPage() {
     setResult(null);
 
     try {
-      const db = getFirestore();
+      const db = getFirestore(getApp(), 'mollydb');
       const experiencesRef = collection(db, 'users', user.uid, 'experiences');
       const originQuery = query(experiencesRef, where('vibe', '==', 'Origin'));
 
