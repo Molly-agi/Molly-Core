@@ -1154,11 +1154,11 @@ export async function getVisionAnalysis(dataUri: string, context?: string) {
     return await withRetry(
       () =>
         withTimeout(() => analyzeVision(dataUri, context), {
-          timeoutMs: TIMEOUT_PRESETS.NORMAL,
+          timeoutMs: TIMEOUT_PRESETS.LONG,
           operationName: 'vision-analysis',
         }),
       'vision-analysis',
-      RETRY_PRESETS.FAST
+      RETRY_PRESETS.STANDARD
     );
   } catch (e: unknown) {
     MollyLogger.error('Vision analysis failed', 'getVisionAnalysis', {}, e);
