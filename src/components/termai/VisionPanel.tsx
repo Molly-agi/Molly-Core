@@ -130,9 +130,7 @@ export function VisionPanel({
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [devices, setDevices] = useState<CameraDevice[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string>('');
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>(
-    'environment'
-  );
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [autoScan, setAutoScan] = useState(false);
 
@@ -152,6 +150,19 @@ export function VisionPanel({
   const CHANGE_THRESHOLD = 0.08;
   // Auto-scan interval in ms
   const AUTO_SCAN_INTERVAL = 15_000;
+
+  // --- Sync stream → video element ---
+  // This useEffect is the ONLY reliable way to wire the stream to the video.
+  // Inline assignments in startCamera/switchCamera race against React renders
+  // (the video element may not be mounted yet when isOpen just became true).
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+      videoRef.current.play().catch(() => {
+        // Autoplay blocked — user will see the video when they interact
+      });
+    }
+  }, [stream]);
 
   // --- Enumerate cameras ---
   const enumerateDevices = useCallback(async () => {
@@ -183,17 +194,12 @@ export function VisionPanel({
       const constraints: MediaStreamConstraints = {
         video: selectedDevice
           ? { deviceId: { exact: selectedDevice } }
-          : { facingMode },
+          : { facingMode: { ideal: facingMode } },
         audio: false,
       };
 
       const newStream = await navigator.mediaDevices.getUserMedia(constraints);
-      setStream(newStream);
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = newStream;
-        await videoRef.current.play();
-      }
+      setStream(newStream); // useEffect will wire it to the video element
 
       // Re-enumerate to get labels (granted after permission)
       await enumerateDevices();
@@ -236,14 +242,10 @@ export function VisionPanel({
       stream.getTracks().forEach((t) => t.stop());
       try {
         const newStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: next },
+          video: { facingMode: { ideal: next } },
           audio: false,
         });
-        setStream(newStream);
-        if (videoRef.current) {
-          videoRef.current.srcObject = newStream;
-          await videoRef.current.play();
-        }
+        setStream(newStream); // useEffect will wire it to the video element
       } catch (error) {
         console.error('[VisionPanel] Camera switch failed:', error);
       }
@@ -379,11 +381,7 @@ export function VisionPanel({
           video: { deviceId: { exact: deviceId } },
           audio: false,
         });
-        setStream(newStream);
-        if (videoRef.current) {
-          videoRef.current.srcObject = newStream;
-          await videoRef.current.play();
-        }
+        setStream(newStream); // useEffect will wire it to the video element
       } catch (error) {
         console.error('[VisionPanel] Device switch failed:', error);
       }
