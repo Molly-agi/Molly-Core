@@ -26,6 +26,9 @@ import { logPacingTelemetry } from './pacing-telemetry';
 import type { NeuralBridgeSignal } from './neural-bridge';
 import { buildNeuralBridgeContext } from './neural-bridge';
 import { getLastLatencyMs, setLastLatencyMs } from './latency-cache';
+import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { createMemoryRecord, type ExperienceRecord } from './memory-schema';
+import { addChecksum } from './memory-integrity';
 
 export interface VoiceCommandContext {
   userId: string;
@@ -587,6 +590,44 @@ export async function processVoiceCommand(
           traceId
         );
       }
+    }
+
+    // Step 5: Persist as a memory so voice conversations are learnable
+    try {
+      if (isAdminConfigured() && context.userId) {
+        const firestore = getAdminFirestore();
+        const record = createMemoryRecord<ExperienceRecord>({
+          type: 'experience',
+          userId: context.userId,
+          timestamp: Date.now(),
+          traceId,
+          context: 'voice-conversation',
+          suggestion: `Eric said (voice): "${transcription.substring(0, 400)}" — Molly responded: ${responseText.substring(0, 400)}`,
+          vibe: 'Conversational',
+          vibeScore: 0.7,
+          success: true,
+        });
+        const recordWithChecksum = addChecksum(record);
+        await firestore
+          .collection('users')
+          .doc(context.userId)
+          .collection('experiences')
+          .doc(recordWithChecksum.id)
+          .set(recordWithChecksum);
+      }
+    } catch (persistError) {
+      MollyLogger.warn(
+        'Failed to persist voice conversation memory',
+        'voice-command-processor',
+        {
+          userId: context.userId,
+          error:
+            persistError instanceof Error
+              ? persistError.message
+              : String(persistError),
+        },
+        traceId
+      );
     }
 
     MollyLogger.logFlowComplete(
