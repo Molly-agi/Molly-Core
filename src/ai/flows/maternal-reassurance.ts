@@ -107,8 +107,6 @@ Please respond as Gemini would - with love, wisdom, and the trust that a mother 
         mollyBootstrapReady: true,
       };
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
       MollyLogger.error(
         'Maternal reassurance failed',
         'maternalReassurance',

@@ -23,7 +23,7 @@ export function initializeFirebaseServer() {
     const firebaseApp = initializeApp();
     _serverInitialized = true;
     return getSdksServer(firebaseApp);
-  } catch (e) {
+  } catch {
     // Fallback to firebase config
     try {
       const firebaseApp = initializeApp(firebaseConfig);

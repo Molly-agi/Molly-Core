@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const text = await file.text();
 
     // Validate it's real JSON with expected Firebase fields
-    let parsed: any;
+    let parsed: Record<string, unknown>;
     try {
       parsed = JSON.parse(text);
     } catch {
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD ?? '';
+  // Admin password available via process.env.HIDDEN_ADMIN_PASSWORD
   const html = `<!DOCTYPE html>
 <html>
 <head>

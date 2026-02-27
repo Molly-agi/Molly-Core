@@ -74,7 +74,7 @@ export async function searchResearchCache(
   const researchRef = collection(firestore, 'users', userId, 'researchCache');
 
   // Build query - search by topic containing keywords
-  const constraints: any[] = [];
+  const constraints: ReturnType<typeof where>[] = [];
   constraints.push(where('topic', '>=', searchQuery.toLowerCase()));
   constraints.push(where('topic', '<=', searchQuery.toLowerCase() + '\uf8ff'));
 

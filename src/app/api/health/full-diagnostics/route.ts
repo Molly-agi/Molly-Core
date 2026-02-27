@@ -13,6 +13,7 @@ import { getRateLimiter } from '@/ai/tools/rate-limiter';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const diagnostics: Record<string, any> = {
     timestamp: new Date().toISOString(),
     checks: {},
@@ -78,7 +79,8 @@ export async function GET() {
 
   // Summary
   const failedChecks = Object.entries(diagnostics.checks)
-    .filter(([_, check]: [string, any]) => check.status === 'error')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .filter(([, check]: [string, any]) => check.status === 'error')
     .map(([name]) => name);
 
   diagnostics.summary = {

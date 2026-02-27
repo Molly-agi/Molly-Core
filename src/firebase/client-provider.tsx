@@ -13,7 +13,9 @@ export function FirebaseClientProvider({
 }: FirebaseClientProviderProps) {
   const firebaseServices = useMemo(() => {
     // Trace Firebase initialization
-    const trace = (globalThis as any).__MOLLY_TRACE;
+    const trace = (globalThis as Record<string, unknown>).__MOLLY_TRACE as
+      | ((...args: unknown[]) => void)
+      | undefined;
     if (trace) trace('FIREBASE', 'Starting initialization', 'start');
 
     const startTime = performance.now();

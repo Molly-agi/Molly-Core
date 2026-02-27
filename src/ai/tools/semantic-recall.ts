@@ -309,7 +309,7 @@ export const semanticRecall = ai.defineTool(
             similarity,
             priority,
           });
-        } catch (error) {
+        } catch {
           MollyLogger.warn(
             'Failed to process memory for similarity',
             'semantic-recall',

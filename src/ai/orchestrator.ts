@@ -13,13 +13,12 @@
  */
 
 import { MollyLogger, generateTraceId } from './logger';
-import { FlowError } from './errors';
 import { withTimeout } from './error-handler';
 
 /**
  * Flow execution result with metadata
  */
-export interface FlowResult<T = any> {
+export interface FlowResult<T = unknown> {
   flowName: string;
   success: boolean;
   output?: T;
@@ -31,9 +30,9 @@ export interface FlowResult<T = any> {
 /**
  * Flow definition for orchestration
  */
-export interface OrchestrableFlow<I = any, O = any> {
+export interface OrchestrableFlow<I = unknown, O = unknown> {
   name: string;
-  execute: (input: I | any) => Promise<O>;
+  execute: (input: I | unknown) => Promise<O>;
   timeoutMs?: number;
   retryOnFailure?: boolean;
 }
@@ -41,7 +40,7 @@ export interface OrchestrableFlow<I = any, O = any> {
 /**
  * Decision node for conditional flow selection
  */
-export interface FlowDecision<T = any> {
+export interface FlowDecision<T = unknown> {
   condition: (context: T) => boolean | Promise<boolean>;
   flowName: string;
   priority?: number; // Higher priority evaluated first
@@ -53,9 +52,9 @@ export interface FlowDecision<T = any> {
 export interface OrchestrationContext {
   userId: string;
   sessionId?: string;
-  initialInput: any;
+  initialInput: unknown;
   flowResults: Map<string, FlowResult>;
-  sharedData: Record<string, any>;
+  sharedData: Record<string, unknown>;
   traceId: string;
 }
 
@@ -107,7 +106,7 @@ export class FlowOrchestrator {
       }
     );
 
-    let currentInput: any = initialInput;
+    let currentInput: unknown = initialInput;
 
     for (const flowName of flowNames) {
       const flow = this.flows.get(flowName);
@@ -222,7 +221,8 @@ export class FlowOrchestrator {
   async executeConditional<T>(
     decisions: FlowDecision<T>[],
     context: T,
-    orchContext: Partial<OrchestrationContext> = {}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _orchContext: Partial<OrchestrationContext> = {}
   ): Promise<FlowResult | null> {
     const sortedDecisions = [...decisions].sort(
       (a, b) => (b.priority || 0) - (a.priority || 0)

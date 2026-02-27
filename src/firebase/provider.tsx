@@ -98,11 +98,10 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
     setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
 
-    let timeoutId: NodeJS.Timeout;
     let authCheckComplete = false;
 
     // Add timeout for auth check (prevent infinite loading)
-    timeoutId = setTimeout(() => {
+    const timeoutId: NodeJS.Timeout = setTimeout(() => {
       if (!authCheckComplete) {
         console.warn(
           '[FirebaseProvider] Auth state check timeout - proceeding anyway'
@@ -160,7 +159,9 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         console.log(
           '[FirebaseProvider] Attempting automatic anonymous sign-in'
         );
-        const trace = (globalThis as any).__MOLLY_TRACE;
+        const trace = (globalThis as Record<string, unknown>).__MOLLY_TRACE as
+          | ((...args: unknown[]) => void)
+          | undefined;
         if (trace) trace('AUTH', 'Auto sign-in attempt', 'start');
 
         const result = await signInAnonymously(auth);
@@ -175,7 +176,9 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         );
       } catch (error) {
         console.error('[FirebaseProvider] Auto sign-in failed:', error);
-        const trace = (globalThis as any).__MOLLY_TRACE;
+        const trace = (globalThis as Record<string, unknown>).__MOLLY_TRACE as
+          | ((...args: unknown[]) => void)
+          | undefined;
         if (trace)
           trace('AUTH', 'Auto sign-in failed', 'error', {
             error: String(error),

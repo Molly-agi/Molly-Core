@@ -58,6 +58,7 @@ export const interpreterLimbFlow = ai.defineFlow(
         await new Promise((resolve) => setTimeout(resolve, 1500)); // 1.5 second delay
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await ai.generate({
         model: MODEL_PRO,
         tools: [localInterpreter],
@@ -72,6 +73,7 @@ export const interpreterLimbFlow = ai.defineFlow(
       const toolCall = response.toolCalls?.[0];
 
       if (toolCall && toolCall.name === 'localInterpreter') {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const result = await localInterpreter(toolCall.input as any);
 
         let visualAudit = '';
@@ -82,16 +84,18 @@ export const interpreterLimbFlow = ai.defineFlow(
           if (bridge.screenshotUri) {
             const vision = await analyzeVision(
               bridge.screenshotUri,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               `Audit terminal result of command: ${(toolCall.input as any).code}`
             );
             visualAudit = vision.observedState;
           }
-        } catch (e) {
+        } catch {
           visualAudit = 'Visual cortex isolated.';
         }
 
         steps.push({
           thought: response.text,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           code: (toolCall.input as any).code,
           output: result.stdout || result.stderr,
           isSuccess: result.exitCode === 0,

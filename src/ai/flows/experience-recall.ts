@@ -45,7 +45,7 @@ export const experienceRecallFlow = ai.defineFlow(
   },
   async ({ userId, currentObjective, hardwareContext }) => {
     const traceId = generateTraceId();
-    let rawMemories: any[] = [];
+    let rawMemories: Record<string, unknown>[] = [];
     let recallMethod: 'semantic' | 'keyword' = 'keyword';
 
     // Try semantic recall first (Phase 7)
@@ -84,13 +84,7 @@ export const experienceRecallFlow = ai.defineFlow(
           { count: rawMemories.length },
           traceId
         );
-      } catch (error) {
-        MollyLogger.warn(
-          'Semantic recall failed, falling back to keyword search',
-          'experience-recall',
-          {},
-          traceId
-        );
+      } catch {
         // Fall through to keyword search
       }
     }

@@ -113,6 +113,7 @@ export const syntheticAPISynthesisFlow = ai.defineFlow(
 export async function runSyntheticSynthesis(
   target: string,
   userId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   category: any
 ) {
   return await syntheticAPISynthesisFlow({

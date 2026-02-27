@@ -4,14 +4,9 @@
  * Demonstrates practical uses of the orchestration system for common scenarios.
  */
 
-import {
-  FlowOrchestrator,
-  OrchestrableFlow,
-  FlowDecision,
-} from '../orchestrator';
+import { FlowOrchestrator, FlowDecision } from '../orchestrator';
 import { healthCheck } from './health-check';
 import { recallNeuralContext } from './experience-recall';
-import { analyzeVision } from './vision-analysis';
 
 /**
  * EXAMPLE 1: Self-Healing Pipeline
@@ -30,15 +25,19 @@ export async function selfHealingPipeline(
   // Register flows
   orchestrator.registerFlow({
     name: 'healthCheck',
-    execute: async (input: any) =>
-      await healthCheck(input.prompt, input.context),
+    execute: async (input: Record<string, unknown>) =>
+      await healthCheck(input.prompt as string, input.context as string),
     timeoutMs: 10000,
   });
 
   orchestrator.registerFlow({
     name: 'memoryRecall',
-    execute: async (input: any) =>
-      await recallNeuralContext(input.userId, input.objective, input.hardware),
+    execute: async (input: Record<string, unknown>) =>
+      await recallNeuralContext(
+        input.userId as string,
+        input.objective as string,
+        input.hardware as string
+      ),
     timeoutMs: 15000,
   });
 
@@ -73,17 +72,18 @@ export async function parallelIntelligenceGathering(
 
   orchestrator.registerFlow({
     name: 'memorySearch',
-    execute: async (input: any) =>
+    execute: async (input: Record<string, unknown>) =>
       await recallNeuralContext(
-        input.userId,
-        input.currentObjective,
-        input.hardwareContext
+        input.userId as string,
+        input.currentObjective as string,
+        input.hardwareContext as string
       ),
   });
 
   orchestrator.registerFlow({
     name: 'webResearch',
-    execute: async (input) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    execute: async (_input) => {
       // Would call webResearch tool
       return { findings: 'Research results...' };
     },
@@ -130,14 +130,15 @@ export async function adaptiveResponseSystem(
   // Register flows
   orchestrator.registerFlow({
     name: 'simpleChat',
-    execute: async (input: any) => {
+    execute: async (input: Record<string, unknown>) => {
       return { response: `Simple answer to: ${input.message}` };
     },
   });
 
   orchestrator.registerFlow({
     name: 'fullAutonomous',
-    execute: async (input) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    execute: async (_input) => {
       return { solution: 'Complex autonomous solution...' };
     },
   });
@@ -223,7 +224,8 @@ export async function hybridWorkflow(
 
   // PHASE 3: Conditional validation
   const needsValidation =
-    phase2.flowResults.get('autonomousSolution')?.output?.isThrottled;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (phase2.flowResults.get('autonomousSolution')?.output as any)?.isThrottled;
 
   if (needsValidation) {
     const validation = await orchestrator.executeConditional(
@@ -277,7 +279,8 @@ export async function selfDiagnosticChain() {
 
   orchestrator.registerFlow({
     name: 'healthCheck',
-    execute: async (input) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    execute: async (_input) => {
       return await healthCheck('Run comprehensive health check', undefined);
     },
   });

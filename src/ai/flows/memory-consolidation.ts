@@ -18,16 +18,8 @@ import {
 } from 'firebase/firestore';
 import { getEmbeddingProvider } from '@/ai/tools/embedding-provider';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
-import {
-  semanticPriority,
-  scoreVibe,
-  addChecksum,
-} from '@/ai/tools/memory-integrity';
-import {
-  ExperienceRecord,
-  validateMemoryRecord,
-  createMemoryRecord,
-} from '@/ai/tools/memory-schema';
+import { semanticPriority, addChecksum } from '@/ai/tools/memory-integrity';
+import { ExperienceRecord, createMemoryRecord } from '@/ai/tools/memory-schema';
 import { withGenerateErrorHandling } from '@/ai/error-handler';
 import { initializeFirebase } from '@/firebase';
 import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
@@ -56,9 +48,11 @@ const MemoryConsolidationOutputSchema = z.object({
  * Helper: Semantic Clustering using K-means on embeddings
  */
 function performSemanticClustering(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   memories: Array<any & { embedding: EmbeddingVector }>,
   provider: ReturnType<typeof getEmbeddingProvider>,
   k: number = Math.min(5, Math.ceil(memories.length / 10))
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Array<any[]> {
   if (memories.length === 0) return [];
   if (memories.length <= k) return memories.map((m) => [m]);
@@ -72,6 +66,7 @@ function performSemanticClustering(
   // K-means iterations
   for (let iter = 0; iter < 5; iter++) {
     // Assign memories to nearest cluster
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const clusters: Array<Array<any>> = Array.from({ length: k }, () => []);
 
     for (const memory of memories) {
@@ -113,7 +108,11 @@ function performSemanticClustering(
   }
 
   // Final clustering
-  const clusters: Array<Array<any>> = Array.from({ length: k }, () => []);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const clusters: Array<Array<any>> = Array.from(
+    { length: k },
+    () => [] as Record<string, unknown>[]
+  );
   for (const memory of memories) {
     let minDistance = Infinity;
     let bestCluster = 0;
@@ -136,6 +135,7 @@ function performSemanticClustering(
  * Helper: Calculate cluster density (average similarity within cluster)
  */
 function calculateClusterDensity(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cluster: Array<any>,
   provider: ReturnType<typeof getEmbeddingProvider>
 ): number {
@@ -160,6 +160,7 @@ function calculateClusterDensity(
 /**
  * Helper: Extract patterns from clusters
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractPatterns(clusters: Array<Array<any>>): string[] {
   const patterns: string[] = [];
 
@@ -236,7 +237,7 @@ function findCommonWords(texts: string[]): string[] {
   }
 
   return Object.entries(wordFreq)
-    .filter(([_, count]) => count >= Math.ceil(texts.length / 2))
+    .filter(([, count]) => count >= Math.ceil(texts.length / 2))
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
     .map(([word]) => word);

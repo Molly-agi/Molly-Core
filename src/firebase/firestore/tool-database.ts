@@ -61,7 +61,7 @@ export async function searchSavedTools(
     .doc(userId)
     .collection('foundTools');
 
-  let q = category
+  const q = category
     ? baseRef.where('category', '==', category).orderBy('savedAt', 'desc')
     : baseRef.orderBy('savedAt', 'desc').limit(20);
 
@@ -73,6 +73,7 @@ export async function searchSavedTools(
       savedAt: doc.data().savedAt?.toDate?.() || new Date(),
       lastAccessedAt: doc.data().lastAccessedAt?.toDate?.(),
     }))
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .filter((tool: any) => {
       if (!searchTerm) return true;
       const term = searchTerm.toLowerCase();

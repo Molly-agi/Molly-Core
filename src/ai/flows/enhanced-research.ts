@@ -73,7 +73,7 @@ export const enhancedResearchFlow = ai.defineFlow(
             traceId
           );
         }
-      } catch (error) {
+      } catch {
         MollyLogger.warn(
           'Memory recall failed, continuing without context',
           'enhancedResearch',

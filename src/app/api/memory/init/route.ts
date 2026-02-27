@@ -16,7 +16,8 @@ export const dynamic = 'force-dynamic';
  * POST /api/memory/init - Initialize memory evolution system
  * No authentication required - initializes global embedding provider only
  */
-export async function POST(request: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function POST(_request: NextRequest) {
   try {
     MollyLogger.info('Memory initialization requested', 'api/memory/init');
 

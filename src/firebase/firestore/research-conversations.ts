@@ -8,7 +8,6 @@ import {
   limit,
   getDocs,
   where,
-  Timestamp,
   deleteDoc,
 } from 'firebase/firestore';
 import { initializeFirebase } from '@/firebase';

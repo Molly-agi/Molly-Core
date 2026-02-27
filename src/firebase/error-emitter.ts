@@ -16,6 +16,7 @@ type Callback<T> = (data: T) => void;
  * A strongly-typed pub/sub event emitter.
  * It uses a generic type T that extends a record of event names to payload types.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createEventEmitter<T extends Record<string, any>>() {
   // The events object stores arrays of callbacks, keyed by event name.
   // The types ensure that a callback for a specific event matches its payload type.
@@ -43,7 +44,7 @@ function createEventEmitter<T extends Record<string, any>>() {
       if (!events[eventName]) {
         return;
       }
-      events[eventName] = events[eventName]?.filter(cb => cb !== callback);
+      events[eventName] = events[eventName]?.filter((cb) => cb !== callback);
     },
 
     /**
@@ -55,7 +56,7 @@ function createEventEmitter<T extends Record<string, any>>() {
       if (!events[eventName]) {
         return;
       }
-      events[eventName]?.forEach(callback => callback(data));
+      events[eventName]?.forEach((callback) => callback(data));
     },
   };
 }

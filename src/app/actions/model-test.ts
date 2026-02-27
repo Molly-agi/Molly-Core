@@ -21,7 +21,7 @@ export async function testModelAvailability() {
   // Test MODEL_FLASH
   try {
     const start = Date.now();
-    const response = await ai.generate({
+    await ai.generate({
       model: MODEL_FLASH,
       prompt: 'Say "Flash works" in one word.',
     });
@@ -53,7 +53,7 @@ export async function testModelAvailability() {
   // Test MODEL_PRO
   try {
     const start = Date.now();
-    const response = await ai.generate({
+    await ai.generate({
       model: MODEL_PRO,
       prompt: 'Say "Pro works" in one word.',
     });

@@ -1,16 +1,6 @@
 'use server';
 
-import {
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  Timestamp,
-  collection,
-  query,
-  where,
-  getDocs,
-} from 'firebase/firestore';
+import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import { initializeFirebaseServer } from '@/firebase/server';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type {

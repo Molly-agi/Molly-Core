@@ -5,7 +5,7 @@ import { searchGitHub } from '../tools/github';
 import { getSystemHealth, neuralBridgeUI, systemAudit } from '../tools/system';
 import { webResearch } from '../tools/web';
 import { z } from 'zod';
-import { logMethodologyStep, performStressTest } from '../methodology';
+import { performStressTest } from '../methodology';
 import { analyzeVision } from './vision-analysis';
 import {
   withGenerateErrorHandling,
@@ -54,7 +54,7 @@ const evolutionSubroutine = ai.defineFlow(
     }),
     outputSchema: z.object({ code: z.string(), explanation: z.string() }),
   },
-  async ({ task, hardwareContext, isCritical, riskLevel }) => {
+  async ({ task, hardwareContext, riskLevel }) => {
     const traceId = generateTraceId();
     try {
       const response = await withGenerateErrorHandling(
@@ -108,7 +108,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     MollyLogger.logFlowStart('autonomousSolution', { userId, prompt }, traceId);
 
     const errors: string[] = [];
-    let peripheralIssues: string[] = [];
+    const peripheralIssues: string[] = [];
     let visualFindings: string[] = [];
 
     // 1. Sensory Audit (Proprioception Stage 3.5)
@@ -179,6 +179,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     const isThrottled =
       (health.temperature > 48 ||
         health.throttlingStatus !== 'Normal' ||
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (health as any).cpuUsage > 70) && // CPU check for process overload
       !isRiskOverride;
     const riskLevelUsed = isRiskOverride

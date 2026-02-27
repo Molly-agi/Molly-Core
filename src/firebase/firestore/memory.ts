@@ -19,7 +19,7 @@ export type LearnedCommand = {
   id?: string;
   prompt: string;
   command: string;
-  createdAt: any;
+  createdAt: unknown;
 };
 
 export type SavedRepo = {
@@ -29,7 +29,7 @@ export type SavedRepo = {
   description: string | null;
   stars: number;
   voiceCommandId?: string;
-  createdAt: any;
+  createdAt: unknown;
 };
 
 /**
@@ -54,7 +54,7 @@ export function saveLearnedCommand(
     createdAt: serverTimestamp(),
   };
 
-  addDoc(memoryCollectionRef, newMemory).catch(async (serverError) => {
+  addDoc(memoryCollectionRef, newMemory).catch(async () => {
     const permissionError = new FirestorePermissionError({
       path: memoryCollectionRef.path,
       operation: 'create',
@@ -95,8 +95,10 @@ export async function getLearnedCommand(
 
     const doc = querySnapshot.docs[0];
     return doc.data().command as string;
-  } catch (serverError: any) {
-    if (serverError.code === 'failed-precondition') {
+  } catch (serverError: unknown) {
+    if (
+      (serverError as Record<string, unknown>).code === 'failed-precondition'
+    ) {
       return getLearnedCommandWithoutOrder(db, userId, prompt);
     }
     const permissionError = new FirestorePermissionError({
@@ -130,7 +132,7 @@ async function getLearnedCommandWithoutOrder(
       return null;
     }
     return querySnapshot.docs[0].data().command as string;
-  } catch (e) {
+  } catch {
     const permissionError = new FirestorePermissionError({
       path: `users/${userId}/learnedCommands`,
       operation: 'list',
@@ -154,7 +156,7 @@ export function saveGitHubRepoMemory(
     createdAt: serverTimestamp(),
   };
 
-  addDoc(repoCollectionRef, data).catch(async (error) => {
+  addDoc(repoCollectionRef, data).catch(async () => {
     const permissionError = new FirestorePermissionError({
       path: repoCollectionRef.path,
       operation: 'create',

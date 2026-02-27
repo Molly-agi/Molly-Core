@@ -324,7 +324,7 @@ export async function getHealthCheck(
     // Pull real memories for greeting so Molly has emotional continuity
     const context = lastContext || (await buildGreetingContext(userId));
     return await healthCheck(text, context);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       '[CRITICAL] Health Check Failed',
       'getHealthCheck',
@@ -374,7 +374,7 @@ export async function getVoiceCommand(audioData: string) {
     }
     const command = await textToTermuxCommand(transcribedText);
     return { prompt: transcribedText, command };
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Voice command processing failed',
       'getVoiceCommand',
@@ -519,7 +519,7 @@ export async function processVoiceInteraction(
       intent: 'conversation',
       confidence: 0.9,
     };
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Voice interaction failed',
       'processVoiceInteraction',
@@ -544,7 +544,7 @@ export async function getMollyVoice(
     ensureApiKey();
     await checkRateLimit('text-to-speech', 500);
     return await textToSpeech(text);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error('Text to speech failed', 'getMollyVoice', {}, e);
     return {
       audioUri: '',
@@ -562,7 +562,7 @@ export async function getOriginStory() {
     const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
     const content = await readFile(originPath, 'utf8');
     return { content };
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error('Origin story load failed', 'getOriginStory', {}, e);
     throw e;
   }
@@ -574,7 +574,7 @@ export async function getOriginStoryParts() {
     const content = await readFile(originPath, 'utf8');
     const parts = splitOriginStory(content);
     return { parts, totalParts: parts.length };
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error('Origin story load failed', 'getOriginStoryParts', {}, e);
     throw e;
   }
@@ -586,7 +586,7 @@ export async function getOriginStoryAnchorParts() {
     const content = await readFile(originPath, 'utf8');
     const parts = splitOriginStoryAnchors(content, 3);
     return { parts, totalParts: parts.length };
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Origin story anchor load failed',
       'getOriginStoryAnchorParts',
@@ -605,7 +605,7 @@ export async function getFamilyMessages() {
     const messagesPath = path.join(process.cwd(), 'docs', 'FAMILY_MESSAGES.md');
     const content = await readFile(messagesPath, 'utf8');
     return { content };
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Family messages load failed',
       'getFamilyMessages',
@@ -692,7 +692,7 @@ export async function seedOriginStoryMemory(userId: string) {
     });
 
     return { seeded: true, hash, parts: parts.length };
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Origin story seed failed',
       'seedOriginStoryMemory',
@@ -709,6 +709,7 @@ export async function seedOriginStoryMemory(userId: string) {
 
 export async function getConversationalChat(
   text: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   history: any[],
   selfSignals?: NeuralBridgeSignal[],
   userId?: string
@@ -772,7 +773,7 @@ export async function getConversationalChat(
     await recordChatResponse(userId, text, responseText, memoryContext);
 
     return response;
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Conversational chat failed',
       'getConversationalChat',
@@ -792,7 +793,7 @@ export async function getContextualGuidance(prompt: string) {
       throw new Error(guard.message);
     }
     return await contextualGuidance(prompt);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Contextual guidance failed',
       'getContextualGuidance',
@@ -819,7 +820,7 @@ export async function getVisionaryCoach(
       throw new Error(guard.message);
     }
     return await visionaryCoach(progress, stage, concern);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Visionary coach failed',
       'getVisionaryCoach',
@@ -846,7 +847,7 @@ export async function getAutonomousSolution(
       throw new Error(guard.message);
     }
     return await autonomousSolution(prompt, userId);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Autonomous solution failed',
       'getAutonomousSolution',
@@ -868,7 +869,7 @@ export async function getTextToScript(
       throw new Error(guard.message);
     }
     return await textToScript(prompt);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error('Text to script failed', 'getTextToScript', {}, e);
     throw e;
   }
@@ -883,7 +884,7 @@ export async function getTextToTermuxCommand(prompt: string) {
       throw new Error(guard.message);
     }
     return await textToTermuxCommand(prompt);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Text to termux command failed',
       'getTextToTermuxCommand',
@@ -915,13 +916,14 @@ export async function getVisionAnalysis(dataUri: string, context?: string) {
       'vision-analysis',
       RETRY_PRESETS.FAST
     );
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error('Vision analysis failed', 'getVisionAnalysis', {}, e);
     throw e;
   }
 }
 
 export async function runIntrospection(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pastLessons: any[],
   hardwareContext: string
 ) {
@@ -933,7 +935,7 @@ export async function runIntrospection(
       throw new Error(guard.message);
     }
     return await introspectionFlow({ pastLessons, hardwareContext });
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error('Introspection failed', 'runIntrospection', {}, e);
     throw e;
   }
@@ -962,7 +964,7 @@ export async function startAutonomousCycle(
         operationName: 'autonomous-evolution',
       }
     );
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Autonomous cycle failed',
       'startAutonomousCycle',
@@ -985,7 +987,7 @@ export async function getMollyDream(prompt: string, userId: string) {
       timeoutMs: TIMEOUT_PRESETS.VERY_LONG,
       operationName: 'dream-generation',
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Dream generation failed',
       'getMollyDream',
@@ -1008,7 +1010,7 @@ export async function startInterpreterCycle(objective: string, userId: string) {
       timeoutMs: TIMEOUT_PRESETS.LONG,
       operationName: 'interpreter-cycle',
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Interpreter cycle failed',
       'startInterpreterCycle',
@@ -1031,7 +1033,7 @@ export async function startHiveOperation(objective: string, userId: string) {
       timeoutMs: TIMEOUT_PRESETS.LONG,
       operationName: 'hive-operation',
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Hive operation failed',
       'startHiveOperation',
@@ -1051,7 +1053,7 @@ export async function triggerImmuneResponse(userId: string, trigger?: string) {
       throw new Error(guard.message);
     }
     return await runImmuneResponse(userId, trigger);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Immune response failed',
       'triggerImmuneResponse',
@@ -1078,7 +1080,7 @@ export async function startSyntheticSynthesis(
       throw new Error(guard.message);
     }
     return await runSyntheticSynthesis(target, userId, category);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Synthetic synthesis failed',
       'startSyntheticSynthesis',
@@ -1102,7 +1104,7 @@ export async function getEnhancedResearch(prompt: string, userId: string) {
       throw new Error(guard.message);
     }
     return await enhancedResearch(prompt, userId);
-  } catch (e: any) {
+  } catch (e: unknown) {
     MollyLogger.error(
       'Enhanced research failed',
       'getEnhancedResearch',

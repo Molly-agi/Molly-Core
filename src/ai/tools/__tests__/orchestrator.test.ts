@@ -8,7 +8,6 @@
  */
 
 import { FlowOrchestrator } from '../../orchestrator';
-import { MollyLogger } from '../../logger';
 
 describe('FlowOrchestrator', () => {
   it('should register and execute sequential flows', async () => {
@@ -105,12 +104,14 @@ describe('FlowOrchestrator', () => {
     const result = await orchestrator.executeConditional(
       [
         {
-          condition: async (ctx: any) => ctx.userId === 'test-user',
+          condition: async (ctx: Record<string, unknown>) =>
+            ctx.userId === 'test-user',
           flowName: 'flow-a',
           priority: 1,
         },
         {
-          condition: async (ctx: any) => ctx.userId === 'other-user',
+          condition: async (ctx: Record<string, unknown>) =>
+            ctx.userId === 'other-user',
           flowName: 'flow-b',
           priority: 2,
         },

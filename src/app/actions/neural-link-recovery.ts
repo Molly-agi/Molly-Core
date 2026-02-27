@@ -37,11 +37,13 @@ export async function diagnoseMollyNeuralLink() {
   const openBreakers = Object.entries(
     diagnostics.circuitBreakerStatus.operationStats
   )
-    .filter(([_, stats]) => stats.state === 'OPEN')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .filter(([_name, stats]) => stats.state === 'OPEN')
     .map(([name]) => name);
 
   const failedModels = Object.entries(diagnostics.modelAvailability.modelTests)
-    .filter(([_, test]) => !test.available)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .filter(([_name, test]) => !test.available)
     .map(([name]) => name);
   const flashAvailable =
     diagnostics.modelAvailability.modelTests.FLASH.available;
@@ -154,7 +156,7 @@ export async function restoreMollyNeuralLink() {
       startTime: new Date().toISOString(),
       beforeDiagnostic: beforeDiag,
       resetOperations: [] as Array<{ operation: string; success: boolean }>,
-      afterDiagnostic: null as any,
+      afterDiagnostic: null as typeof beforeDiag | null,
     };
 
     // Reset the problematic circuits
@@ -190,6 +192,7 @@ export async function restoreMollyNeuralLink() {
     const afterStatus = recoveryLog.afterDiagnostic;
     const hasOpenBreakers = Object.values(
       afterStatus.circuitBreakerStatus.operationStats
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ).some((stats: any) => stats.state === 'OPEN');
     const flashAvailable =
       afterStatus.modelAvailability.modelTests.FLASH.available;

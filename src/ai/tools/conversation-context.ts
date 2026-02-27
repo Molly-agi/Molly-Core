@@ -204,7 +204,8 @@ export async function getOrCreateConversation(
   conversationId: string
 ): Promise<ConversationContext> {
   try {
-    const { firestore } = initializeFirebase();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { firestore: _firestore } = initializeFirebase();
 
     // Try to get existing conversation by ID
     // In a real implementation, you'd fetch by docId directly
@@ -300,7 +301,8 @@ export async function cleanupOldConversations(
 ): Promise<number> {
   try {
     const { firestore } = initializeFirebase();
-    const ref = collection(firestore, 'users', userId, 'conversations');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _ref = collection(firestore, 'users', userId, 'conversations');
 
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - olderThanDays);
@@ -314,7 +316,7 @@ export async function cleanupOldConversations(
     );
 
     return 0; // Would return number deleted
-  } catch (error: any) {
+  } catch (error: unknown) {
     MollyLogger.error(
       'Failed to cleanup old conversations',
       'conversation-context',

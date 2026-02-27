@@ -9,7 +9,7 @@ export async function recordSensoryLogServer(
   userId: string,
   sensorType: 'vision' | 'voice' | 'vibe',
   description: string,
-  metadata: any
+  metadata: Record<string, unknown>
 ) {
   const firestore = getAdminFirestore();
   const ref = firestore

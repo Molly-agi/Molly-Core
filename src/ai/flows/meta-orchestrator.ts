@@ -11,15 +11,10 @@
 
 import { ai, MODEL_PRO } from '@/ai/genkit';
 import { z } from 'zod';
-import {
-  FlowOrchestrator,
-  OrchestrationContext,
-  FlowDecision,
-} from '../orchestrator';
+import { FlowOrchestrator, OrchestrationContext } from '../orchestrator';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
-import { getSystemHealth, systemAudit } from '../tools/system';
-import { recallExperiences } from '../tools/memory';
+import { getSystemHealth } from '../tools/system';
 
 /**
  * Intent classification for flow selection
@@ -81,7 +76,7 @@ export const metaOrchestratorFlow = ai.defineFlow(
     inputSchema: MetaOrchestratorInputSchema,
     outputSchema: MetaOrchestratorOutputSchema,
   },
-  async ({ userRequest, userId, sessionId, contextWindow, screenshotUri }) => {
+  async ({ userRequest, userId, contextWindow, screenshotUri }) => {
     const traceId = generateTraceId();
     MollyLogger.logFlowStart(
       'metaOrchestrator',
@@ -139,7 +134,7 @@ Determine the intent, required capabilities, and optimal flow composition.`,
     let systemHealth;
     try {
       systemHealth = await getSystemHealth({});
-    } catch (e) {
+    } catch {
       systemHealth = {
         temperature: 50,
         cpuUsage: 50,
@@ -224,8 +219,10 @@ Determine the intent, required capabilities, and optimal flow composition.`,
  */
 async function buildExecutionPlan(
   intent: z.infer<typeof IntentSchema>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   systemHealth: any,
-  context: any
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _context: Record<string, unknown>
 ): Promise<{
   strategy: 'single' | 'pipeline' | 'parallel' | 'hybrid';
   flows: string[];
@@ -283,11 +280,11 @@ async function buildExecutionPlan(
 async function executeSingleStrategy(
   orchestrator: FlowOrchestrator,
   flowName: string,
-  input: any
+  input: Record<string, unknown>
 ): Promise<OrchestrationContext> {
   // In real implementation, would dynamically import and execute the flow
   return {
-    userId: input.userId,
+    userId: input.userId as string,
     initialInput: input,
     flowResults: new Map(),
     sharedData: {},
@@ -301,10 +298,10 @@ async function executeSingleStrategy(
 async function executePipelineStrategy(
   orchestrator: FlowOrchestrator,
   flows: string[],
-  input: any
+  input: Record<string, unknown>
 ): Promise<OrchestrationContext> {
   return await orchestrator.executePipeline(flows, input, {
-    userId: input.userId,
+    userId: input.userId as string,
   });
 }
 
@@ -314,11 +311,11 @@ async function executePipelineStrategy(
 async function executeParallelStrategy(
   orchestrator: FlowOrchestrator,
   flows: string[],
-  input: any
+  input: Record<string, unknown>
 ): Promise<OrchestrationContext> {
   const inputs = new Map(flows.map((f) => [f, input]));
   return await orchestrator.executeParallel(flows, inputs, {
-    userId: input.userId,
+    userId: input.userId as string,
   });
 }
 
@@ -328,18 +325,18 @@ async function executeParallelStrategy(
 async function executeHybridStrategy(
   orchestrator: FlowOrchestrator,
   flows: string[],
-  input: any
+  input: Record<string, unknown>
 ): Promise<OrchestrationContext> {
   // Example: Run memory recall + research in parallel, then feed into autonomous solution
   const phase1 = await orchestrator.executeParallel(
     flows.slice(0, 2),
     new Map(flows.slice(0, 2).map((f) => [f, input])),
-    { userId: input.userId }
+    { userId: input.userId as string }
   );
 
   // Phase 2: Use aggregated results in main flow
   return await orchestrator.executePipeline(flows.slice(2), phase1.sharedData, {
-    userId: input.userId,
+    userId: input.userId as string,
     sharedData: phase1.sharedData,
   });
 }
@@ -349,7 +346,9 @@ async function executeHybridStrategy(
  */
 function generateRecommendation(
   intent: z.infer<typeof IntentSchema>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   summary: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   systemHealth: any
 ): string {
   if (summary.failed > 0) {
@@ -372,7 +371,7 @@ export async function orchestrateTask(
   userId: string,
   options?: {
     sessionId?: string;
-    contextWindow?: any[];
+    contextWindow?: Record<string, unknown>[];
     screenshotUri?: string;
   }
 ) {

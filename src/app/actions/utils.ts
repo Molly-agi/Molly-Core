@@ -60,7 +60,7 @@ export async function fetchLastContext(userId: string): Promise<string> {
     const q = query(ref, orderBy('timestamp', 'desc'), limit(1));
     const snapshot = await getDocs(q);
     return snapshot.docs[0]?.data()?.responseText || 'First ignition.';
-  } catch (e) {
+  } catch {
     MollyLogger.warn('Failed to fetch last context', 'fetchLastContext', {
       userId,
     });
@@ -73,8 +73,8 @@ export async function fetchLastContext(userId: string): Promise<string> {
  * Next.js Server Actions can only pass serializable types
  */
 export function serializeHistoryForServer(
-  history: any[]
-): Array<string | { type: string; data: any }> {
+  history: Record<string, unknown>[]
+): Array<string | { type: string; data: unknown }> {
   return history.map((item) => {
     // Already a string, safe to pass
     if (typeof item === 'string') {

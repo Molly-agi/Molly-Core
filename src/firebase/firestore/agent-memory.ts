@@ -51,7 +51,7 @@ export async function recordSensoryLog(
   userId: string,
   sensorType: 'vision' | 'voice' | 'vibe',
   description: string,
-  metadata: any
+  metadata: Record<string, unknown>
 ) {
   const { firestore } = initializeFirebase();
   const ref = collection(firestore, 'users', userId, 'sensoryMemory');

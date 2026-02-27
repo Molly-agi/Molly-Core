@@ -639,7 +639,7 @@ export class NeuralEngramSystem {
   checkHealth(): {
     status: 'healthy' | 'stressed' | 'overloaded';
     recommendation: string;
-    stats: any;
+    stats: Record<string, unknown>;
   } {
     const assessment = this.hypothalamus.assessHealth(this);
     const stats = this.hypothalamus.getStats();

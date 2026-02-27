@@ -25,6 +25,7 @@ export interface RetryConfig {
   /** Add random jitter to prevent thundering herd */
   jitter: boolean;
   /** Function to determine if error is retryable */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   shouldRetry?: (error: any, attempt: number) => boolean;
 }
 
@@ -41,12 +42,14 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
   maxDelayMs: 10000,
   backoffMultiplier: 2,
   jitter: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   shouldRetry: (error: any) => {
     // Retry on network errors, rate limits, and 5xx status codes
+    const err = error as Record<string, unknown>;
     return (
       error instanceof NetworkError ||
-      error.code === 'RATE_LIMIT_ERROR' ||
-      error.status >= 500
+      err.code === 'RATE_LIMIT_ERROR' ||
+      (typeof err.status === 'number' && err.status >= 500)
     );
   },
 };
@@ -118,7 +121,7 @@ export async function withRetry<T>(
   config: Partial<RetryConfig> = {}
 ): Promise<T> {
   const finalConfig = { ...DEFAULT_RETRY_CONFIG, ...config };
-  let lastError: any;
+  let lastError: unknown;
 
   for (let attempt = 1; attempt <= finalConfig.maxAttempts; attempt++) {
     try {
@@ -139,7 +142,7 @@ export async function withRetry<T>(
       }
 
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
       lastError = error;
 
       const shouldRetry = finalConfig.shouldRetry
@@ -161,7 +164,11 @@ export async function withRetry<T>(
       MollyLogger.warn(
         `Operation "${operationName}" failed (attempt ${attempt}), retrying in ${Math.round(delayMs)}ms`,
         'timeout-retry',
-        { attempt, delayMs, error: error.message }
+        {
+          attempt,
+          delayMs,
+          error: error instanceof Error ? error.message : String(error),
+        }
       );
 
       await sleep(delayMs);

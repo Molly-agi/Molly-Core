@@ -16,6 +16,7 @@ export async function GET() {
   const status = {
     timestamp: new Date().toISOString(),
     globalStats: breaker.getStats('GLOBAL'),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     operationStats: {} as Record<string, any>,
   };
 

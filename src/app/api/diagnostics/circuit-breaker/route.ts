@@ -11,7 +11,8 @@ export const dynamic = 'force-dynamic';
 /**
  * GET /api/diagnostics/circuit-breaker - Get circuit breaker status
  */
-export async function GET(request: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function GET(_request: NextRequest) {
   try {
     const breaker = getCircuitBreaker();
     const status = breaker.getStatus();
@@ -35,7 +36,8 @@ export async function GET(request: NextRequest) {
 /**
  * POST /api/diagnostics/circuit-breaker - Reset all circuit breakers
  */
-export async function POST(request: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function POST(_request: NextRequest) {
   try {
     const breaker = getCircuitBreaker();
 

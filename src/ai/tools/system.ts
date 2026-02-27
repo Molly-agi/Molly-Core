@@ -47,7 +47,8 @@ export const getSystemHealth = ai.defineTool(
       const memInfo = execSync('free -m').toString();
       const memLines = memInfo.split('\n');
       const memData = (memLines[1] || '').split(/\s+/);
-      const totalRam = parseInt(memData[1] || '8000');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const _totalRam = parseInt(memData[1] || '8000');
       const availableRam = parseInt(memData[6] || '2000');
 
       // Estimate temperature based on CPU load (simulated sensor)
@@ -80,7 +81,7 @@ export const getSystemHealth = ai.defineTool(
         availableRam,
         model: process.env.DEVICE_MODEL || 'Dev Container (Ubuntu 24.04)',
       };
-    } catch (error) {
+    } catch {
       // Fallback to safe defaults if commands fail
       return {
         batteryLevel: 80,
@@ -116,7 +117,7 @@ export const listAvailableModels = ai.defineTool(
         'imagen-3.0-generate-001',
         'text-embedding-004',
       ];
-    } catch (e) {
+    } catch {
       return ['Error: Neural pulse failed.'];
     }
   }
@@ -138,7 +139,8 @@ export const systemAudit = ai.defineTool(
       vibeCheck: z.string(),
     }),
   },
-  async ({ depth }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async ({ depth: _depth }) => {
     return {
       integrityScore: 0.98,
       locksDetected: [],
@@ -214,7 +216,7 @@ export const localInterpreter = ai.defineTool(
       vibe: z.string().describe("Molly's interpretation of the result."),
     }),
   },
-  async ({ language, code }) => {
+  async ({ language }) => {
     return {
       stdout: `Simulation: ${language} executed successfully.`,
       stderr: '',

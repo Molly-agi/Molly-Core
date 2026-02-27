@@ -35,7 +35,7 @@ async function toWav(
       bitDepth: sampleWidth * 8,
     });
 
-    let bufs = [] as any[];
+    const bufs = [] as Buffer[];
     writer.on('error', reject);
     writer.on('data', function (d: Buffer) {
       bufs.push(d);

@@ -77,10 +77,12 @@ describe('Molly Core Identity Safeguards', () => {
 
 describe('Molly Persona Immutability', () => {
   it('should prevent modification of core identity', () => {
-    const originalName = MOLLY_CORE_PERSONA.identity.name;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _originalName = MOLLY_CORE_PERSONA.identity.name;
     expect(() => {
       // Attempt to modify (this will fail in strict mode or if properly frozen)
-      (MOLLY_CORE_PERSONA.identity as any).name = 'NotMolly';
+      (MOLLY_CORE_PERSONA.identity as Record<string, unknown>).name =
+        'NotMolly';
     }).not.toThrow(); // Note: actual freeze would prevent this
     // If persona is frozen, values remain unchanged
   });

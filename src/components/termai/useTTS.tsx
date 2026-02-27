@@ -72,19 +72,61 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
                 preloadedVoicesRef.current.length > 0
                   ? preloadedVoicesRef.current
                   : window.speechSynthesis.getVoices();
-              const femaleVoice = voices.find(
-                (voice) =>
-                  voice.name.toLowerCase().includes('female') ||
-                  voice.name.toLowerCase().includes('samantha') ||
-                  voice.name.toLowerCase().includes('zira') ||
-                  voice.name.toLowerCase().includes('google us english')
-              );
-              if (femaleVoice) {
-                utterance.voice = femaleVoice;
+
+              // Priority-ordered search for a feminine voice across platforms
+              const femalePatterns = [
+                // Exact known female voices
+                'samantha', // macOS/iOS
+                'zira', // Windows
+                'hazel', // Windows UK
+                'susan', // Windows UK
+                'karen', // macOS Australian
+                'moira', // macOS Irish
+                'tessa', // macOS South African
+                'fiona', // macOS Scottish
+                'victoria', // macOS
+                'allison', // macOS
+                'ava', // macOS
+                // Google voices
+                'google us english',
+                'google uk english female',
+                // Generic pattern
+                'female',
+                // Android Google TTS female voice IDs
+                'en-us-x-sfg', // Samantha-like on Android
+                'en-us-x-tpc', // Female on Android
+                'en-us-x-iom', // Female on Android
+                'en-gb-x-fis', // UK Female on Android
+              ];
+
+              let selectedVoice: SpeechSynthesisVoice | undefined;
+              for (const pattern of femalePatterns) {
+                selectedVoice = voices.find((v) =>
+                  v.name.toLowerCase().includes(pattern)
+                );
+                if (selectedVoice) break;
+              }
+
+              // Fallback: prefer any English voice, set higher pitch for feminine tone
+              if (!selectedVoice) {
+                selectedVoice = voices.find(
+                  (v) => v.lang.startsWith('en') && v.localService
+                );
+              }
+
+              if (selectedVoice) {
+                utterance.voice = selectedVoice;
               }
 
               utterance.rate = 1.0;
-              utterance.pitch = 1.0;
+              // Slightly higher pitch when we couldn't confirm a female voice
+              utterance.pitch =
+                selectedVoice &&
+                femalePatterns.some((p) =>
+                  selectedVoice!.name.toLowerCase().includes(p)
+                )
+                  ? 1.0
+                  : 1.15;
               utterance.volume = 1.0;
 
               const watchdog = window.setTimeout(() => {

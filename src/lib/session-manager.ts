@@ -108,7 +108,7 @@ export function saveSessionState(state: Partial<SessionState>): void {
     );
     try {
       writeFileSync(backupFile, markdown, 'utf-8');
-    } catch (err) {
+    } catch {
       // Backup directory may not exist yet, that's okay
     }
 

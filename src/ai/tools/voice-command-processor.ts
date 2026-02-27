@@ -124,7 +124,8 @@ intent is 'remember' and info is about thermal management.`,
 async function handleRememberIntent(
   transcription: string,
   context: VoiceCommandContext,
-  extracted: string
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _extracted: string
 ): Promise<string> {
   const traceId = generateTraceId();
 
@@ -578,7 +579,7 @@ export async function processVoiceCommand(
     if (synthesizeSpeech) {
       try {
         audioResponse = await textToSpeech(responseText);
-      } catch (error) {
+      } catch {
         MollyLogger.warn(
           'Speech synthesis failed, returning text only',
           'voice-command-processor',

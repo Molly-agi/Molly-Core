@@ -108,8 +108,15 @@ export function ToolLibrary() {
   return (
     <div className="space-y-4">
       {toolError && (
-        <div className="rounded border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200">
-          {toolError}
+        <div className="rounded border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-200 space-y-1">
+          <p className="font-semibold">Firestore Unavailable</p>
+          <p>Tool library requires Cloud Firestore to be enabled.</p>
+          {toolError.includes('PERMISSION_DENIED') && (
+            <p className="text-amber-300/70 mt-1">
+              Enable Firestore API in Google Cloud Console for your project,
+              then reload.
+            </p>
+          )}
         </div>
       )}
 

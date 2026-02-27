@@ -25,7 +25,7 @@ export async function getCircuitBreakerStatus() {
 
   const status = {
     timestamp: new Date().toISOString(),
-    operationStats: {} as Record<string, any>,
+    operationStats: {} as Record<string, Record<string, unknown>>,
   };
 
   for (const op of operations) {

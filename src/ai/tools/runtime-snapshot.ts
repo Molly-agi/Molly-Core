@@ -162,16 +162,20 @@ export async function collectRuntimeSnapshot(
   const operationEntries = Object.entries(breakerStatus.operations || {});
 
   const openOperations = operationEntries
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .filter(([, stats]: any) => stats.state === CircuitState.OPEN)
     .map(([name]) => name);
 
   const halfOpenOperations = operationEntries
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .filter(([, stats]: any) => stats.state === CircuitState.HALF_OPEN)
     .map(([name]) => name);
 
   const recentFailureOperations = operationEntries
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .filter(([, stats]: any) => (stats.failureCount || 0) > 0)
     .sort(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (a: any, b: any) => (b[1].failureCount || 0) - (a[1].failureCount || 0)
     )
     .slice(0, 5)
@@ -221,6 +225,7 @@ export async function collectRuntimeSnapshot(
       openOperations,
       halfOpenOperations,
       failureCount: operationEntries.reduce(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (sum: number, [, stats]: any) => sum + (stats.failureCount || 0),
         0
       ),

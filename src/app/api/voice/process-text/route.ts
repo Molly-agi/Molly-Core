@@ -9,7 +9,7 @@ import { MollyLogger } from '@/ai/logger';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { transcription, userId, lastResponse, hardwareState } = body;
+    const { transcription, userId, lastResponse } = body;
 
     if (!transcription || typeof transcription !== 'string') {
       return NextResponse.json(

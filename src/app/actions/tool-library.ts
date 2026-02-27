@@ -14,6 +14,17 @@ import { isAdminConfigured } from '@/firebase/admin';
 import { ensureApiKey } from './utils';
 import { MollyLogger } from '@/ai/logger';
 
+function cleanFirestoreError(e: unknown): string {
+  const msg = e instanceof Error ? e.message : String(e);
+  if (
+    msg.includes('PERMISSION_DENIED') ||
+    msg.includes('has not been used in project')
+  ) {
+    return 'Cloud Firestore API is not enabled. Enable it in Google Cloud Console, then reload.';
+  }
+  return msg;
+}
+
 /**
  * Save a newly discovered tool to Molly's database
  */
@@ -124,7 +135,7 @@ export async function getRecentFoundTools(userId: string, count?: number) {
     );
     return {
       success: false,
-      error: e instanceof Error ? e.message : 'Failed to get recent tools',
+      error: cleanFirestoreError(e),
       tools: [],
     };
   }
@@ -148,7 +159,7 @@ export async function getToolLibraryStats(userId: string) {
     MollyLogger.error('Failed to get tool stats', 'getToolLibraryStats', {}, e);
     return {
       success: false,
-      error: e instanceof Error ? e.message : 'Failed to get tool stats',
+      error: cleanFirestoreError(e),
       stats: null,
     };
   }

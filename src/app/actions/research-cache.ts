@@ -1,6 +1,6 @@
 'use server';
 
-import { ensureApiKey, checkRateLimit } from './utils';
+import { ensureApiKey } from './utils';
 import { MollyLogger } from '@/ai/logger';
 import {
   saveResearchFinding,
