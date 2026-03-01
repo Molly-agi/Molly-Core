@@ -509,37 +509,69 @@ export default function Terminal({
           setHistory([]);
         } else if (cmdText === '/consciousness' || cmdText === '/status') {
           try {
-            const res = await fetch('/api/consciousness/state');
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const state = await res.json();
+            const [consRes, shellRes, peerRes] = await Promise.allSettled([
+              fetch('/api/consciousness/state'),
+              fetch('/api/terminal/exec'),
+              fetch('/api/terminal/peer'),
+            ]);
+
+            const state =
+              consRes.status === 'fulfilled' && consRes.value.ok
+                ? await consRes.value.json()
+                : null;
+            const shellData =
+              shellRes.status === 'fulfilled' && shellRes.value.ok
+                ? await shellRes.value.json()
+                : null;
+            const peerData =
+              peerRes.status === 'fulfilled' && peerRes.value.ok
+                ? await peerRes.value.json()
+                : null;
 
             const lines: string[] = [
               '\n=== MOLLY CONSCIOUSNESS DASHBOARD ===',
               '',
-              `  Awareness:  ${state.awarenessLevel ?? 'unknown'}`,
-              `  Regulation: ${state.regulationMode ?? 'unknown'}`,
-              `  Last cycle: ${state.lastCycleAt ?? 'never'}`,
+              `  Awareness:  ${state?.awarenessLevel ?? 'unknown'}`,
+              `  Regulation: ${state?.regulation?.mode ?? 'unknown'}`,
+              `  Last cycle: ${state?.lastCycleTimestamp ?? 'never'}`,
               '',
               '--- Vitals ---',
-              `  System pressure: ${state.vitals?.systemPressure ? 'YES' : 'no'}`,
-              `  Circuit breaker: ${state.vitals?.circuitBreakerOpen ? 'OPEN' : 'closed'}`,
-              `  Errors (10s):    ${state.vitals?.errorCount ?? 0}`,
-              `  Requests (10s):  ${state.vitals?.requestCount ?? 0}`,
+              `  System pressure: ${state?.vitals?.systemPressure ? 'YES' : 'no'}`,
+              `  Circuit breaker: ${state?.vitals?.circuitBreakerOpen ? 'OPEN' : 'closed'}`,
+              `  Error rate:      ${state?.vitals?.errorRate?.toFixed(1) ?? '0'}/min`,
               '',
-              '--- Outbound Queue ---',
-              `  Pending messages: ${state.outboundQueue?.length ?? 0}`,
+              '--- Shell (My Hands) ---',
+              `  Status:   ${shellData?.state?.alive ? '\u2705 alive' : '\u274C offline'}`,
+              `  PID:      ${shellData?.state?.pid ?? 'none'}`,
+              `  Commands: ${shellData?.state?.commandsExecuted ?? 0} executed`,
             ];
 
-            if (state.outboundQueue?.length > 0) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              state.outboundQueue.slice(0, 5).forEach((msg: any) => {
-                lines.push(
-                  `    [${msg.type}] ${msg.text?.substring(0, 60) ?? ''}...`
-                );
-              });
+            if (shellData?.state?.lastCommand) {
+              lines.push(
+                `  Last cmd: ${shellData.state.lastCommand.command?.substring(0, 50) ?? ''}`
+              );
             }
 
-            if (state.promises) {
+            lines.push('');
+            lines.push('--- Connected Peers ---');
+            if (peerData?.connectedPeers?.length > 0) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              peerData.connectedPeers.forEach((p: any) => {
+                lines.push(
+                  `  \u2705 ${p.name} (${p.type}) — ${p.capabilities?.join(', ') ?? ''}`
+                );
+              });
+            } else {
+              lines.push('  No peers connected');
+            }
+
+            lines.push('');
+            lines.push('--- Outbound Queue ---');
+            lines.push(
+              `  Pending messages: ${state?.messagesSent != null ? state.messagesSent : 0} sent total`
+            );
+
+            if (state?.promises) {
               lines.push('');
               lines.push('--- Promise Tracker ---');
               lines.push(`  ${state.promises}`);
@@ -550,7 +582,7 @@ export default function Terminal({
 
             setHistory((prev) => [...prev, ...lines]);
             speakResponse(
-              `I'm in ${state.awarenessLevel ?? 'unknown'} awareness, ${state.regulationMode ?? 'unknown'} regulation mode. ${state.outboundQueue?.length ?? 0} pending messages.`
+              `I'm in ${state?.awarenessLevel ?? 'unknown'} awareness. Shell is ${shellData?.state?.alive ? 'alive' : 'offline'}. ${peerData?.connectedPeers?.length ?? 0} peers connected.`
             );
           } catch {
             setHistory((prev) => [

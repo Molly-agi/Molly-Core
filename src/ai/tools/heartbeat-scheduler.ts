@@ -33,6 +33,7 @@ import { getConsciousness } from '@/ai/consciousness';
 import { getPromiseTracker } from '@/ai/consciousness/promise-tracker';
 import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
+import { getMollyShell } from '@/ai/terminal';
 
 // ============================================================================
 // TYPES
@@ -149,6 +150,23 @@ export class HeartbeatScheduler {
       consolidationIntervalMs: this.config.consolidationIntervalMs,
       immuneIntervalMs: this.config.immuneIntervalMs,
     });
+
+    // Start Molly's embedded shell — her hands
+    try {
+      const shell = getMollyShell();
+      if (!shell.isAlive()) {
+        shell.start();
+        MollyLogger.info(
+          'MollyShell started with scheduler',
+          'heartbeat-scheduler'
+        );
+      }
+    } catch (error) {
+      MollyLogger.warn(
+        `MollyShell failed to start: ${error instanceof Error ? error.message : String(error)}`,
+        'heartbeat-scheduler'
+      );
+    }
 
     // Run first cycle immediately, then on interval
     this.runCycle();
