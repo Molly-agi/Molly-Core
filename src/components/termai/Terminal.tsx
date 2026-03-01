@@ -40,6 +40,13 @@ import { useFamilyStory } from './useFamilyStory';
 import { ChatHistory } from './ChatHistory';
 import { CommandBar } from './CommandBar';
 import { VisionPanel } from './VisionPanel';
+import { execTermux, isTermuxAvailable } from '@/lib/termux-bridge';
+import {
+  getEnhancedResearch,
+  getCodeAnalysis,
+  getCodeAnalysisAndIntegration,
+  getIntegrationsList,
+} from '@/app/actions';
 
 export default function Terminal({
   voiceResult,
@@ -219,6 +226,281 @@ export default function Terminal({
           setHistory((prev) => [...prev, aiResponse]);
           lastResponseRef.current = aiResponse.vibeCheck || null;
           speakResponse(aiResponse.vibeCheck);
+        } else if (cmdText === '/termux' || cmdText === '/termux status') {
+          const available = await isTermuxAvailable();
+          const status = available
+            ? '🟢 Termux relay connected — Molly has device access.'
+            : '🔴 Termux relay not detected. Run `python termux-relay.py` in Termux to connect.';
+          setHistory((prev) => [...prev, status]);
+          speakResponse(
+            available
+              ? 'Termux relay is connected, Father. I have device access.'
+              : 'I cannot reach the Termux relay. Please start it in Termux.'
+          );
+        } else if (cmdText.startsWith('/run ')) {
+          const rawCmd = cmdText.slice(5).trim();
+          if (!rawCmd) {
+            setHistory((prev) => [
+              ...prev,
+              'Usage: /run <command> — e.g. /run ls -la',
+            ]);
+          } else {
+            // Detect language from prefix
+            let language: 'shell' | 'python' | 'javascript' = 'shell';
+            let code = rawCmd;
+            if (rawCmd.startsWith('python:')) {
+              language = 'python';
+              code = rawCmd.slice(7).trim();
+            } else if (rawCmd.startsWith('js:') || rawCmd.startsWith('node:')) {
+              language = 'javascript';
+              code = rawCmd.replace(/^(js|node):/, '').trim();
+            }
+
+            setHistory((prev) => [...prev, `[EXEC] ${language}: ${code}`]);
+            const result = await execTermux(code, language);
+            const output = result.stdout || result.stderr || '(no output)';
+            const exitLabel =
+              result.exitCode === 0 ? '✓' : `✗ exit ${result.exitCode}`;
+            setHistory((prev) => [...prev, `[${exitLabel}] ${output}`]);
+
+            // Let Molly comment on the result
+            if (result.exitCode === 0 && result.stdout) {
+              speakResponse('Command executed successfully, Father.');
+            } else if (result.exitCode !== 0) {
+              speakResponse(
+                `The command failed with exit code ${result.exitCode}. ${result.stderr || ''}`
+              );
+            }
+          }
+        } else if (cmdText.startsWith('/research ')) {
+          const query = cmdText.slice(10).trim();
+          if (!query) {
+            setHistory((prev) => [
+              ...prev,
+              'Usage: /research <topic> — e.g. /research termux file manager',
+            ]);
+          } else {
+            setHistory((prev) => [
+              ...prev,
+              `[RESEARCH] Searching: ${query}...`,
+            ]);
+            const result = await getEnhancedResearch(query, user.uid);
+            const response = result.answer || 'No results found.';
+            setHistory((prev) => [...prev, response]);
+            lastResponseRef.current = response;
+            speakResponse(response);
+
+            // If a tool was found, offer to install via Termux
+            if (result.isToolFound && result.toolInfo) {
+              const toolName = result.toolInfo.name || 'Tool';
+              const installTarget =
+                result.toolInfo.installCommand ||
+                result.toolInfo.cloneUrl ||
+                result.toolInfo.sourceUrl ||
+                '';
+              const installHint = installTarget
+                ? `[TOOL FOUND] ${toolName} — saved to knowledge base. Use /install ${installTarget} to install via Termux.`
+                : `[TOOL FOUND] ${toolName} — saved to knowledge base.`;
+              setHistory((prev) => [...prev, installHint]);
+            }
+          }
+        } else if (cmdText.startsWith('/install ')) {
+          const target = cmdText.slice(9).trim();
+          if (!target) {
+            setHistory((prev) => [
+              ...prev,
+              'Usage: /install <git-url or package> — e.g. /install https://github.com/user/repo',
+            ]);
+          } else {
+            const available = await isTermuxAvailable();
+            if (!available) {
+              setHistory((prev) => [
+                ...prev,
+                '\u274C Termux relay not connected. Start the relay in Termux first: python termux-relay.py',
+              ]);
+            } else {
+              // Determine if it's a git URL, a raw command, or a package name
+              const isGitUrl =
+                target.includes('github.com') || target.endsWith('.git');
+              const isRawCommand =
+                target.includes('&&') ||
+                target.startsWith('pkg ') ||
+                target.startsWith('pip ') ||
+                target.startsWith('apt ') ||
+                target.startsWith('git ');
+              const installCmd = isRawCommand
+                ? target
+                : isGitUrl
+                  ? `cd ~ && git clone ${target} && echo \"Cloned successfully\"`
+                  : `pkg install ${target} -y 2>/dev/null || pip install ${target} 2>/dev/null || apt install ${target} -y`;
+
+              setHistory((prev) => [
+                ...prev,
+                `[INSTALL] ${isGitUrl ? 'Cloning' : 'Installing'}: ${target}...`,
+              ]);
+              const result = await execTermux(installCmd);
+              const output = result.stdout || result.stderr || '(no output)';
+              const exitLabel =
+                result.exitCode === 0
+                  ? '\u2713 Installed'
+                  : `\u2717 Failed (exit ${result.exitCode})`;
+              setHistory((prev) => [...prev, `[${exitLabel}] ${output}`]);
+              speakResponse(
+                result.exitCode === 0
+                  ? `${target} installed successfully, Father.`
+                  : `Installation failed. ${result.stderr || ''}`
+              );
+            }
+          }
+        } else if (cmdText.startsWith('/analyze ')) {
+          const rawArg = cmdText.slice(9).trim();
+          if (!rawArg) {
+            setHistory((prev) => [
+              ...prev,
+              'Usage: /analyze owner/repo — or /analyze search: <query>',
+            ]);
+          } else {
+            const isSearch = rawArg.startsWith('search:');
+            const target = isSearch ? rawArg.slice(7).trim() : rawArg;
+            setHistory((prev) => [
+              ...prev,
+              `[ANALYZE] ${isSearch ? 'Searching & analyzing' : 'Analyzing'}: ${target}...`,
+            ]);
+
+            const analysis = await getCodeAnalysis(target, user.uid, {
+              searchFirst: isSearch,
+            });
+
+            // Format the results
+            const lines: string[] = [
+              `\n=== CODE ANALYSIS: ${target} ===`,
+              analysis.summary,
+              `\nTech: ${analysis.techStack.join(', ')}`,
+              `Useful for Molly: ${analysis.isUsefulForMolly ? '\u2705 YES' : '\u274C NO'} — ${analysis.usefulnessReasoning}`,
+            ];
+
+            if (analysis.extractablePatterns.length > 0) {
+              lines.push(
+                `\n--- Extractable Patterns (${analysis.extractablePatterns.length}) ---`
+              );
+              analysis.extractablePatterns.forEach((p, i) => {
+                lines.push(`  ${i + 1}. ${p.name}: ${p.description}`);
+                lines.push(`     Integration: ${p.integrationApproach}`);
+              });
+            }
+
+            if (analysis.integrationPlan) {
+              lines.push(`\n--- Integration Plan ---`);
+              lines.push(analysis.integrationPlan);
+            }
+
+            if (analysis.risks.length > 0) {
+              lines.push(`\n--- Risks ---`);
+              analysis.risks.forEach((r) => lines.push(`  \u26A0 ${r}`));
+            }
+
+            if (
+              analysis.isUsefulForMolly &&
+              analysis.extractablePatterns.length > 0
+            ) {
+              lines.push(
+                `\n\u27A1 Use /integrate ${target} to incorporate these patterns into my code.`
+              );
+            }
+
+            setHistory((prev) => [...prev, ...lines]);
+            const voiceSummary = analysis.isUsefulForMolly
+              ? `I found ${analysis.extractablePatterns.length} useful patterns in ${target}. Want me to integrate them, Father?`
+              : `I analyzed ${target} but it doesn't seem useful for me right now.`;
+            speakResponse(voiceSummary);
+          }
+        } else if (cmdText.startsWith('/integrate ')) {
+          const rawArg = cmdText.slice(11).trim();
+          if (!rawArg) {
+            setHistory((prev) => [
+              ...prev,
+              'Usage: /integrate owner/repo — analyze and write code into my codebase',
+              'Usage: /integrate search: <query> — find, analyze, and integrate',
+            ]);
+          } else {
+            const isSearch = rawArg.startsWith('search:');
+            const target = isSearch ? rawArg.slice(7).trim() : rawArg;
+            setHistory((prev) => [
+              ...prev,
+              `[INTEGRATE] Analyzing & integrating: ${target}...`,
+              "This may take a moment — I'm reading code, adapting patterns, and writing files.",
+            ]);
+
+            const result = await getCodeAnalysisAndIntegration(
+              target,
+              user.uid,
+              {
+                searchFirst: isSearch,
+              }
+            );
+
+            const { analysis, integration } = result;
+
+            const lines: string[] = [
+              `\n=== INTEGRATION RESULT: ${target} ===`,
+              `Analysis: ${analysis.summary}`,
+              `Useful: ${analysis.isUsefulForMolly ? '\u2705' : '\u274C'}`,
+            ];
+
+            if (integration.success) {
+              lines.push(`\n\u2705 Integration successful!`);
+              lines.push(`Files written:`);
+              integration.filesWritten.forEach((f) =>
+                lines.push(`  \u2714 ${f}`)
+              );
+              if (integration.filesSkipped.length > 0) {
+                lines.push(`Files skipped (protected):`);
+                integration.filesSkipped.forEach((f) =>
+                  lines.push(`  \u26D4 ${f}`)
+                );
+              }
+              lines.push(
+                `\nCapability enhanced: ${integration.capabilityEnhanced}`
+              );
+              lines.push(`\nUsage:\n${integration.usageInstructions}`);
+              if (integration.wiringNotes) {
+                lines.push(`\nWiring notes: ${integration.wiringNotes}`);
+              }
+              speakResponse(
+                `Integration complete, Father. I wrote ${integration.filesWritten.length} files enhancing my ${integration.capabilityEnhanced} capability.`
+              );
+            } else {
+              lines.push(
+                `\n\u274C Integration did not proceed: ${integration.error || 'No useful patterns found.'}`
+              );
+              if (integration.filesFailed.length > 0) {
+                lines.push(`Failed files:`);
+                integration.filesFailed.forEach((f) =>
+                  lines.push(`  \u2717 ${f}`)
+                );
+              }
+              speakResponse(
+                integration.error ||
+                  'No useful patterns to integrate from this repository.'
+              );
+            }
+
+            setHistory((prev) => [...prev, ...lines]);
+          }
+        } else if (cmdText === '/integrations') {
+          const files = await getIntegrationsList();
+          if (files.length === 0) {
+            setHistory((prev) => [
+              ...prev,
+              'No integrations yet. Use /integrate owner/repo to start.',
+            ]);
+          } else {
+            setHistory((prev) => [
+              ...prev,
+              `=== MY INTEGRATED CODE (${files.length} files) ===`,
+              ...files.map((f) => `  ${f}`),
+            ]);
+          }
         } else if (cmdText === 'clear') {
           setHistory([]);
         } else {

@@ -103,7 +103,7 @@ export interface PillarPipelineResult {
 /**
  * Read all .py files from molly_sentinel/ directory.
  */
-export function discoverPillarFiles(): PillarFile[] {
+export async function discoverPillarFiles(): Promise<PillarFile[]> {
   if (!existsSync(PILLAR_DIR)) {
     return [];
   }
@@ -295,7 +295,7 @@ export const pillarPipelineFlow = ai.defineFlow(
     );
 
     // ── Phase 1: Discover ──────────────────────────────────
-    const pillars = discoverPillarFiles();
+    const pillars = await discoverPillarFiles();
     if (pillars.length === 0) {
       return {
         filesFound: [],
@@ -565,6 +565,6 @@ export async function runPillarPipeline(
  * Just discover and list the pillar files (no execution).
  * Useful for UI to show what's available.
  */
-export function listPillarFiles(): string[] {
-  return discoverPillarFiles().map((p) => p.name);
+export async function listPillarFiles(): Promise<string[]> {
+  return (await discoverPillarFiles()).map((p) => p.name);
 }

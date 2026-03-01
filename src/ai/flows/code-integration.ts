@@ -475,7 +475,7 @@ export async function integrateFromAnalysis(
 /**
  * List all files that have been integrated.
  */
-export function listIntegrations(): string[] {
+export async function listIntegrations(): Promise<string[]> {
   if (!existsSync(INTEGRATIONS_DIR)) return [];
 
   const { readdirSync, statSync } = require('fs') as typeof import('fs');

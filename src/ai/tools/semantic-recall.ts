@@ -273,17 +273,15 @@ export const semanticRecall = ai.defineTool(
 
       // STEP 3: Calculate similarity for each memory
       const memoriesWithSimilarity: SemanticRecallResult[] = [];
+      const corruptedIds: string[] = [];
+      const MAX_REEMBEDS_PER_QUERY = 3;
+      let reembedCount = 0;
 
       for (const memory of filteredMemories) {
         try {
           // Verify integrity if checksum exists
           if (memory.crc32 && !verifyRecordIntegrity(memory)) {
-            MollyLogger.warn(
-              'Corrupted memory detected - skipping',
-              'semantic-recall',
-              { memoryId: memory.id },
-              traceId
-            );
+            corruptedIds.push(memory.id);
             continue;
           }
 
@@ -295,6 +293,10 @@ export const semanticRecall = ai.defineTool(
           // If no embedding OR dimension mismatch (stale from old provider), re-embed
           const expectedDim = queryEmbedding.vector.length;
           if (!memoryEmbedding || memoryEmbedding.length !== expectedDim) {
+            // Cap re-embedding to avoid API overload / hangs
+            if (reembedCount >= MAX_REEMBEDS_PER_QUERY) {
+              continue; // skip — will get embedded on a future query
+            }
             if (memoryEmbedding && memoryEmbedding.length !== expectedDim) {
               MollyLogger.debug(
                 `Stale embedding (${memoryEmbedding.length}d vs ${expectedDim}d) — re-embedding`,
@@ -306,6 +308,7 @@ export const semanticRecall = ai.defineTool(
             const memoryText = buildMemoryText(memory);
             const result = await embeddingProvider.embed(memoryText);
             memoryEmbedding = result.vector;
+            reembedCount++;
 
             // Cache the embedding for future use
             await cacheEmbedding(
@@ -375,6 +378,16 @@ export const semanticRecall = ai.defineTool(
           );
           continue;
         }
+      }
+
+      // Log corrupted memories as a batch summary instead of per-record
+      if (corruptedIds.length > 0) {
+        MollyLogger.warn(
+          `Skipped ${corruptedIds.length} corrupted memories`,
+          'semantic-recall',
+          { count: corruptedIds.length, sample: corruptedIds.slice(0, 5) },
+          traceId
+        );
       }
 
       // STEP 4: Sort by priority and return top results

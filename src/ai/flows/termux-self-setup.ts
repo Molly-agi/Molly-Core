@@ -440,7 +440,9 @@ export async function updateTermuxEnvironment(
  * Generate the bootstrap one-liner for first-time Termux setup.
  * The relay must be manually started once before Molly can take over.
  */
-export function getTermuxBootstrapCommand(githubToken?: string): string {
+export async function getTermuxBootstrapCommand(
+  githubToken?: string
+): Promise<string> {
   if (githubToken) {
     // Private repo — clone with token, start relay
     return [

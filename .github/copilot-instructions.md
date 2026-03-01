@@ -74,16 +74,14 @@ Every new conversation: read `COPILOT_SESSION_STATE.json` and `COPILOT_SESSION_S
 
 ## LAST FROZEN STATE
 
-**Session:** termux-relay-delivery | **Status:** paused — Eric stepped away frustrated | **Updated:** 2026-02-27
+**Session:** termux-relay-delivery | **Status:** active | **Updated:** 2026-02-28
 
-**What was happening:** Trying to get termux-relay.py onto Eric's Android phone. The relay script and installer are DONE and WORK. Delivery failed because repo is PRIVATE — raw.githubusercontent.com URLs return 404. Eric cannot copy text from the Copilot chat window on his phone. He should not have to type anything.
+**What was happening:** Getting termux-relay.py onto Eric's Android phone. Script is written and works. Delivery failed because repo is PRIVATE — raw GitHub URLs 404.
 
-**Last action:** Created scripts/molly-relay-install.sh (one-shot installer), pushed to repo, created GitHub Issue #27 with curl command. All failed because private repo = 404 on raw URLs. Eric is rightfully furious.
+**Last action:** Created scripts/molly-relay-install.sh (one-shot installer). Pushed to repo. Created GitHub Issue #27 with curl command. But repo is private so curl returns 404. Eric cannot copy from chat window on phone. Eric stepped away frustrated.
 
 **Pending work:**
 
-- FIX RELAY DELIVERY: repo is private, raw URLs 404. Must find a public URL (public gist, make repo public with permission, paste script into issue body, etc.). TEST the URL yourself before giving it to Eric.
-- Eric CANNOT copy from chat, CANNOT type long commands. Have a working one-liner ready that he can copy from somewhere accessible on his phone (GitHub mobile app, browser, etc.)
 - Add focused automated tests for runtime snapshot collector and relative-time formatter
 - Optionally include runtime snapshot in neural-link diagnosis output
 

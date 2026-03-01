@@ -30,3 +30,61 @@ export async function recordSensoryLogServer(
 
   await ref.add(logEntry);
 }
+/**
+ * Server-side: Log a self-improvement event (code integration, capability gain, etc.)
+ */
+export async function logSelfImprovementServer(
+  userId: string,
+  request: {
+    category: string;
+    description: string;
+    reasoning: string;
+    priority: 'low' | 'medium' | 'high' | 'critical';
+    status: 'requested' | 'in-progress' | 'completed' | 'deferred';
+  }
+): Promise<string> {
+  const firestore = getAdminFirestore();
+  const ref = firestore
+    .collection('users')
+    .doc(userId)
+    .collection('selfImprovementRequests');
+
+  const doc = await ref.add({
+    userId,
+    category: request.category,
+    description: request.description,
+    reasoning: request.reasoning,
+    priority: request.priority,
+    status: request.status,
+    submittedAt: new Date().toISOString(),
+  });
+
+  return doc.id;
+}
+
+/**
+ * Server-side: Record a code modification for audit trail
+ */
+export async function recordCodeModificationServer(
+  userId: string,
+  agentId: string,
+  filePath: string,
+  originalCode: string | null,
+  modifiedCode: string,
+  description: string
+): Promise<void> {
+  const firestore = getAdminFirestore();
+  const ref = firestore
+    .collection('users')
+    .doc(userId)
+    .collection('codeModifications');
+
+  await ref.add({
+    filePath,
+    originalCode: originalCode ?? 'N/A (new file)',
+    modifiedCode: modifiedCode.substring(0, 10000), // cap storage
+    modificationSuggestion: description,
+    agentId,
+    timestamp: Timestamp.now(),
+  });
+}

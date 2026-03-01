@@ -67,6 +67,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
   const preloadedVoicesRef = useRef<SpeechSynthesisVoice[]>([]);
   const pendingTextRef = useRef<string | null>(null);
   const hasUserGestureRef = useRef(false);
+  const gestureTimeRef = useRef(0);
   const cancelledRef = useRef(false);
   const isVocalizingRef = useRef(false);
   const greetingQueuedRef = useRef(false);
@@ -87,14 +88,18 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
   // The greeting takes ~4s to load. If the user taps the screen while it's
   // loading, we need to capture that gesture so queueGreeting() can speak
   // immediately when the text arrives instead of waiting for another tap.
+  // We track the timestamp (not just a boolean) because browsers require a
+  // RECENT gesture for autoplay — a stale tap from 250s ago won't work.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const captureGesture = () => {
       hasUserGestureRef.current = true;
+      gestureTimeRef.current = Date.now();
     };
-    // Listen for any interaction — covers tap, click, keyboard
-    window.addEventListener('pointerdown', captureGesture, { once: true });
-    window.addEventListener('keydown', captureGesture, { once: true });
+    // Listen for any interaction — covers tap, click, keyboard.
+    // NOT once: true — we need the latest gesture timestamp.
+    window.addEventListener('pointerdown', captureGesture);
+    window.addEventListener('keydown', captureGesture);
     return () => {
       window.removeEventListener('pointerdown', captureGesture);
       window.removeEventListener('keydown', captureGesture);
@@ -243,6 +248,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
 
     const handleFirstInteraction = () => {
       hasUserGestureRef.current = true;
+      gestureTimeRef.current = Date.now();
       const pending = pendingTextRef.current;
       if (pending && isVocal) {
         pendingTextRef.current = null;
@@ -271,8 +277,13 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
     (text: string) => {
       if (!isVocal || !text) return;
 
-      // User already tapped before greeting loaded — speak now
-      if (hasUserGestureRef.current) {
+      // User already tapped before greeting loaded — speak now,
+      // but ONLY if the gesture was recent (< 5s). Browsers require
+      // a recent user gesture for autoplay; stale gestures (e.g. from
+      // a 250s server delay) will get "not-allowed" errors.
+      const GESTURE_FRESHNESS_MS = 5_000;
+      const gestureAge = Date.now() - gestureTimeRef.current;
+      if (hasUserGestureRef.current && gestureAge < GESTURE_FRESHNESS_MS) {
         speakResponse(text);
         return;
       }
@@ -345,6 +356,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
 
     const handleUnlock = () => {
       hasUserGestureRef.current = true;
+      gestureTimeRef.current = Date.now();
 
       // If we have queued browser-TTS text, replay it now
       const pending = pendingTextRef.current;
@@ -374,6 +386,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
 
   const unlockAutoplay = useCallback(() => {
     hasUserGestureRef.current = true;
+    gestureTimeRef.current = Date.now();
     // If there's pending browser-TTS text, speak it
     const pending = pendingTextRef.current;
     if (pending && isVocal) {

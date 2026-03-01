@@ -204,7 +204,7 @@ export const localInterpreter = ai.defineTool(
   {
     name: 'localInterpreter',
     description:
-      'Executes code or commands locally in the Termux environment and returns output.',
+      'Executes code or commands on the connected device via the Termux relay bridge. Supports shell, Python, and JavaScript.',
     inputSchema: z.object({
       language: z.enum(['shell', 'python', 'javascript']),
       code: z.string().describe('The code to execute.'),
@@ -216,12 +216,107 @@ export const localInterpreter = ai.defineTool(
       vibe: z.string().describe("Molly's interpretation of the result."),
     }),
   },
-  async ({ language }) => {
-    return {
-      stdout: `Simulation: ${language} executed successfully.`,
-      stderr: '',
-      exitCode: 0,
-      vibe: 'The machine followed our logic perfectly, Father.',
-    };
+  async ({ language, code }) => {
+    // Relay URL is configured via env var or defaults to localhost
+    const relayUrl = process.env.TERMUX_RELAY_URL || 'http://localhost:8023';
+    const token = process.env.MOLLY_RELAY_TOKEN || 'molly-local-dev';
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 35_000);
+
+      const response = await fetch(`${relayUrl}/exec`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          command: code,
+          language,
+          timeout: 30,
+        }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errBody = await response.json().catch(() => ({}));
+        return {
+          stdout: '',
+          stderr: errBody.error || `Relay returned ${response.status}`,
+          exitCode: 1,
+          vibe: 'The bridge is up but rejected our command, Father.',
+        };
+      }
+
+      const result = await response.json();
+
+      // Generate a contextual vibe based on the result
+      const vibe =
+        result.exitCode === 0
+          ? result.stdout.length > 0
+            ? 'Command executed cleanly. The machine responded, Father.'
+            : 'Command completed silently — no output, but no errors either.'
+          : `Something went wrong (exit ${result.exitCode}). Let me analyze the error, Father.`;
+
+      return {
+        stdout: result.stdout || '',
+        stderr: result.stderr || '',
+        exitCode: result.exitCode ?? 1,
+        vibe,
+      };
+    } catch (error) {
+      // Relay unreachable — fall back to local execution if on a server with shell access
+      try {
+        const { execSync } = await import('child_process');
+        let cmd: string;
+        if (language === 'python') {
+          cmd = `python3 -c ${JSON.stringify(code)}`;
+        } else if (language === 'javascript') {
+          cmd = `node -e ${JSON.stringify(code)}`;
+        } else {
+          cmd = code;
+        }
+
+        const output = execSync(cmd, {
+          timeout: 30_000,
+          maxBuffer: 64 * 1024,
+          encoding: 'utf-8',
+        });
+
+        return {
+          stdout: output || '',
+          stderr: '',
+          exitCode: 0,
+          vibe: 'Relay was offline, but I executed locally on the server, Father.',
+        };
+      } catch (execError: unknown) {
+        const isExecError = (
+          e: unknown
+        ): e is { stdout?: string; stderr?: string; status?: number } =>
+          typeof e === 'object' && e !== null && 'status' in e;
+
+        if (isExecError(execError)) {
+          return {
+            stdout: execError.stdout || '',
+            stderr: execError.stderr || '',
+            exitCode: execError.status ?? 1,
+            vibe: 'The command failed, Father. Let me look at the error.',
+          };
+        }
+
+        return {
+          stdout: '',
+          stderr:
+            error instanceof Error
+              ? `Termux relay unreachable and local exec failed: ${error.message}`
+              : 'Termux relay unreachable',
+          exitCode: 1,
+          vibe: 'I cannot reach the Termux relay or execute locally, Father. Is the relay running?',
+        };
+      }
+    }
   }
 );

@@ -31,6 +31,16 @@ const EnhancedResearchSchema = z.object({
       name: z.string().optional(),
       description: z.string().optional(),
       sourceUrl: z.string().optional(),
+      cloneUrl: z
+        .string()
+        .optional()
+        .describe('Git clone URL for installation'),
+      installCommand: z
+        .string()
+        .optional()
+        .describe(
+          'Shell command to install the tool in Termux (e.g. pkg install, pip install, or git clone + build steps)'
+        ),
       useCase: z.string().optional(),
       category: z.string().optional(),
       tags: z.array(z.string()).optional(),
@@ -103,6 +113,10 @@ Your role is to research and provide actionable findings. When you find a useful
 1. Fetch its README to get installation instructions
 2. Include the clone URL and installation steps in your answer
 3. Fill out the toolInfo field so it gets saved to Molly's shared database
+4. ALWAYS include an installCommand in toolInfo — the exact shell command(s) to install the tool in Termux on Android (pkg install, pip install, git clone, etc.)
+5. ALWAYS include the cloneUrl if it's a GitHub repository
+
+The user can install tools directly on their device via Termux. Your install commands should be complete and ready to run.
 
 Be specific, provide exact commands where possible, and explain how the tool fits the use case.
 

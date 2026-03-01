@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2026-02-27",
+  "lastUpdated": "2026-03-01T00:08:03.625Z",
   "sessionId": "termux-relay-delivery",
-  "status": "paused",
+  "status": "active",
   "activeConversation": {
     "topic": "Getting termux-relay.py onto Eric's Android phone. Script is written and works. Delivery failed because repo is PRIVATE — raw GitHub URLs 404.",
     "lastAction": "Created scripts/molly-relay-install.sh (one-shot installer). Pushed to repo. Created GitHub Issue #27 with curl command. But repo is private so curl returns 404. Eric cannot copy from chat window on phone. Eric stepped away frustrated.",
@@ -95,207 +95,253 @@
     "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
     "events": [
       {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:35:48.241Z"
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.519Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.430Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.496Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.390Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.539Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.476Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.402Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.373Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.524Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.504Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.492Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.356Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.510Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.528Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.471Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.494Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.507Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.512Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.488Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.541Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.543Z"
+      },
+      {
+        "event": "unhandled-rejection",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "TypeError: Failed to fetch\n    at sendSessionEvent (webpack-internal:///(app-pages-browser)/./src/components/ClientErrorReporter.tsx:22:10)\n    at ClientErrorReporter.useEffect.handleRejection (webpack-internal:///(app-pages-browser)/./src/components/ClientErrorReporter.tsx:70:21)",
+        "timestamp": "2026-02-28T23:41:25.546Z"
+      },
+      {
+        "event": "client-error",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "details": "Failed to fetch",
+        "timestamp": "2026-02-28T23:41:25.545Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:36:48.243Z"
+        "timestamp": "2026-02-28T23:42:03.543Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:37:48.243Z"
+        "timestamp": "2026-02-28T23:43:03.546Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:38:48.244Z"
+        "timestamp": "2026-02-28T23:44:03.550Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:39:48.246Z"
+        "timestamp": "2026-02-28T23:45:03.554Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:40:48.249Z"
+        "timestamp": "2026-02-28T23:46:03.558Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:41:48.250Z"
+        "timestamp": "2026-02-28T23:47:03.561Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:42:48.253Z"
+        "timestamp": "2026-02-28T23:48:03.565Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:43:48.255Z"
+        "timestamp": "2026-02-28T23:49:03.568Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:44:48.257Z"
+        "timestamp": "2026-02-28T23:50:03.572Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:45:48.258Z"
+        "timestamp": "2026-02-28T23:51:03.576Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:46:48.260Z"
+        "timestamp": "2026-02-28T23:52:03.579Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:47:48.260Z"
+        "timestamp": "2026-02-28T23:53:03.583Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:48:48.262Z"
+        "timestamp": "2026-02-28T23:54:03.586Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:49:48.263Z"
+        "timestamp": "2026-02-28T23:55:03.589Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:50:48.264Z"
+        "timestamp": "2026-02-28T23:56:03.592Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:51:48.266Z"
+        "timestamp": "2026-02-28T23:57:03.596Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:52:48.267Z"
+        "timestamp": "2026-02-28T23:58:03.600Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:53:48.269Z"
+        "timestamp": "2026-02-28T23:59:03.601Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:54:48.271Z"
+        "timestamp": "2026-03-01T00:00:03.604Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:55:48.272Z"
+        "timestamp": "2026-03-01T00:01:03.607Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:56:48.273Z"
+        "timestamp": "2026-03-01T00:02:03.610Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:57:48.274Z"
+        "timestamp": "2026-03-01T00:03:03.613Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:58:48.276Z"
+        "timestamp": "2026-03-01T00:04:03.616Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T21:59:48.277Z"
+        "timestamp": "2026-03-01T00:05:03.619Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:00:48.277Z"
+        "timestamp": "2026-03-01T00:06:03.622Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:01:48.279Z"
+        "timestamp": "2026-03-01T00:07:03.625Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:02:48.279Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:03:48.280Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:04:48.281Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:05:48.282Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:06:48.282Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:07:48.289Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:08:48.289Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:09:48.289Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:10:48.290Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:11:48.289Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:12:48.290Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:13:48.289Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:14:48.290Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:15:48.291Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:16:48.293Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:17:48.299Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:18:48.305Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:19:48.311Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:20:48.317Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:21:48.322Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:22:48.329Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:23:48.334Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-02-27T22:24:48.341Z"
+        "timestamp": "2026-03-01T00:08:03.625Z"
       }
     ],
-    "lastHeartbeat": "2026-02-27T19:24:52.544Z"
+    "lastHeartbeat": "2026-02-28T23:10:42.930Z"
   },
   "reminders": [
     "**ALWAYS read this file first** when restored - this IS your memory",

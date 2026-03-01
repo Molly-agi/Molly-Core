@@ -1434,7 +1434,7 @@ export async function getIntegrationFromAnalysis(
   }
 }
 
-export function getIntegrationsList(): string[] {
+export async function getIntegrationsList(): Promise<string[]> {
   return listIntegrations();
 }
 
@@ -1473,7 +1473,7 @@ export async function getPillarPipelineResult(
 /**
  * List available pillar files without executing anything.
  */
-export function getPillarFilesList(): string[] {
+export async function getPillarFilesList(): Promise<string[]> {
   return listPillarFiles();
 }
 
@@ -1515,7 +1515,9 @@ export async function getTermuxUpdate(
 /**
  * Get the one-liner bootstrap command for first-time Termux setup.
  */
-export function getBootstrapCommand(githubToken?: string): string {
+export async function getBootstrapCommand(
+  githubToken?: string
+): Promise<string> {
   return getTermuxBootstrapCommand(githubToken);
 }
 

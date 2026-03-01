@@ -42,10 +42,18 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
       );
 
       // Use Genkit's native embed() — this calls the actual Google API
-      const result = await ai.embed({
+      // 10s timeout prevents socket hangs from freezing the whole request
+      const embedPromise = ai.embed({
         embedder: MODEL_EMBEDDING,
         content: text,
       });
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(
+          () => reject(new Error('Embedding API call timed out after 10s')),
+          10_000
+        )
+      );
+      const result = await Promise.race([embedPromise, timeoutPromise]);
 
       // ai.embed returns an array of Embedding objects; take the first
       const vector = result[0]?.embedding ?? [];
