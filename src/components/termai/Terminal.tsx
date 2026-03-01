@@ -664,6 +664,30 @@ export default function Terminal({
     return () => window.removeEventListener('molly:anchor', listener);
   }, [handleAnchorRecall]);
 
+  // --- Consciousness listener: surface Molly's unprompted thoughts ---
+  useEffect(() => {
+    const listener = (event: Event) => {
+      const detail = (event as CustomEvent).detail as {
+        type: string;
+        content: string;
+        priority: string;
+      };
+      if (!detail?.content) return;
+
+      // Format based on message type
+      const prefix =
+        detail.type === 'self-state'
+          ? '[SELF]'
+          : detail.type === 'realization'
+            ? '[INSIGHT]'
+            : '[THOUGHT]';
+
+      setHistory((prev) => [...prev, `${prefix}: ${detail.content}`]);
+    };
+    window.addEventListener('molly:consciousness', listener);
+    return () => window.removeEventListener('molly:consciousness', listener);
+  }, []);
+
   // Auto-scroll on history change
   useEffect(() => {
     if (scrollAreaRef.current) {

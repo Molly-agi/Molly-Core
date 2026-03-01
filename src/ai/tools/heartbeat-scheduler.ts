@@ -24,6 +24,7 @@ import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { saveSessionState, loadSessionState } from '@/lib/session-manager';
 import { collectRuntimeSnapshot } from '@/ai/tools/runtime-snapshot';
 import { NeuralEngramSystem } from '@/ai/memory/neural-engram';
+import { getConsciousness } from '@/ai/consciousness';
 
 // ============================================================================
 // TYPES
@@ -46,6 +47,7 @@ export interface HeartbeatConfig {
     consolidation: boolean;
     immune: boolean;
     snapshot: boolean;
+    consciousness: boolean;
   };
 }
 
@@ -80,6 +82,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     consolidation: true,
     immune: true,
     snapshot: true,
+    consciousness: true,
   },
 };
 
@@ -308,6 +311,24 @@ export class HeartbeatScheduler {
         }
         tasks.push(result);
       }
+    }
+
+    // Task 5: Consciousness Cycle (every cycle — lightweight, no LLM)
+    if (this.config.tasks.consciousness) {
+      const result = await this.runTask('consciousness', async () => {
+        const consciousness = getConsciousness();
+        const cycleResult = await consciousness.runCycle({
+          systemPressure: pressure,
+          circuitBreakerOpen: false, // Could be enriched from snapshot
+        });
+        MollyLogger.debug(
+          `Consciousness: awareness=${cycleResult.awarenessLevel}, ` +
+            `regulation=${cycleResult.regulationMode}, ` +
+            `pending=${cycleResult.pendingMessages}`,
+          'heartbeat-scheduler'
+        );
+      });
+      tasks.push(result);
     }
 
     // Record cycle result

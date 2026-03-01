@@ -37,6 +37,12 @@ const NeuralBridgeSignalSchema = z.discriminatedUnion('action', [
     gpuUsage: z.number().optional(),
     temperatureC: z.number().optional(),
   }),
+  z.object({
+    action: z.literal('self.consciousness'),
+    awarenessLevel: z.string(),
+    regulationMode: z.string(),
+    errorRate: z.number().optional(),
+  }),
 ]);
 
 const ConversationalChatInputSchema = z.object({

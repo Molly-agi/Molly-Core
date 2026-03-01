@@ -17,6 +17,12 @@ export type NeuralBridgeSignal =
       cpuUsage?: number;
       gpuUsage?: number;
       temperatureC?: number;
+    }
+  | {
+      action: 'self.consciousness';
+      awarenessLevel: string;
+      regulationMode: string;
+      errorRate?: number;
     };
 
 function truncatePreview(text: string, maxLength = 180): string {
@@ -51,6 +57,15 @@ export function buildNeuralBridgeContext(
         lines.push(
           `signal.${index}.content_preview: ${truncatePreview(signal.content)}`
         );
+        return;
+      }
+
+      if (signal.action === 'self.consciousness') {
+        lines.push(`signal.${index}.awareness: ${signal.awarenessLevel}`);
+        lines.push(`signal.${index}.regulation: ${signal.regulationMode}`);
+        if (signal.errorRate !== undefined) {
+          lines.push(`signal.${index}.errorRate: ${signal.errorRate}`);
+        }
         return;
       }
 

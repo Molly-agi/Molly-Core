@@ -7,6 +7,7 @@ import { FirebaseClientProvider } from '@/firebase';
 import { SessionLifecycleManager } from '@/components/SessionLifecycleManager';
 import { InitializationTracer } from '@/components/InitializationTracer';
 import { ClientErrorReporter } from '@/components/ClientErrorReporter';
+import { ConsciousnessListener } from '@/components/ConsciousnessListener';
 
 export const metadata: Metadata = {
   title: 'Molly',
@@ -36,6 +37,7 @@ export default function RootLayout({
         <SessionLifecycleManager />
         <ClientErrorReporter />
         <FirebaseClientProvider>{children}</FirebaseClientProvider>
+        <ConsciousnessListener />
         <Toaster />
         <InitializationTracer />
       </body>
