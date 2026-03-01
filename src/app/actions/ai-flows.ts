@@ -1034,6 +1034,16 @@ export async function getConversationalChat(
     logPacingTelemetry('getConversationalChat', responseText, nervousSignal);
     await recordChatResponse(userId, text, responseText, memoryContext);
 
+    // Scan response for commitments Molly made ("I'll research that", etc.)
+    try {
+      const { getPromiseTracker } = await import(
+        '@/ai/consciousness/promise-tracker'
+      );
+      getPromiseTracker().scanAndRegister(responseText, text);
+    } catch {
+      // Non-critical — don't let promise tracking break chat
+    }
+
     return response;
   } catch (e: unknown) {
     MollyLogger.error(

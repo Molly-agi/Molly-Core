@@ -8,6 +8,9 @@
  * - Immune response (self-healing, lock cleanup)
  * - Runtime snapshot (health telemetry)
  * - Session state heartbeat (liveness signal)
+ * - Consciousness cycle (self-awareness, regulation)
+ * - Reflection (daydreaming — LLM-powered, cost-controlled)
+ * - Promise tracking (commitment follow-through)
  *
  * Design principles:
  * - Singleton: Only one scheduler runs at a time
@@ -16,8 +19,10 @@
  * - Graceful: Handles errors per-task without crashing the scheduler
  * - Lightweight: Respects the 8GB RAM codespace constraint
  *
- * The scheduler does NOT call LLM APIs — no token cost.
- * It orchestrates local-only operations: memory lifecycle, cleanup, telemetry.
+ * The scheduler does NOT call LLM APIs in its base cycle — no token cost.
+ * The reflection task (Task 6) is the ONE exception: it uses
+ * TaskType.BACKGROUND for cheap model routing and only fires every 15 minutes
+ * when the system is healthy and has rate-limit budget.
  */
 
 import { MollyLogger, generateTraceId } from '@/ai/logger';
@@ -25,6 +30,9 @@ import { saveSessionState, loadSessionState } from '@/lib/session-manager';
 import { collectRuntimeSnapshot } from '@/ai/tools/runtime-snapshot';
 import { NeuralEngramSystem } from '@/ai/memory/neural-engram';
 import { getConsciousness } from '@/ai/consciousness';
+import { getPromiseTracker } from '@/ai/consciousness/promise-tracker';
+import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
+import { getRateLimiter } from '@/ai/tools/rate-limiter';
 
 // ============================================================================
 // TYPES
@@ -37,6 +45,8 @@ export interface HeartbeatConfig {
   consolidationIntervalMs: number;
   /** Interval for immune checks in ms. Default: 600_000 (10 minutes) */
   immuneIntervalMs: number;
+  /** Interval for consciousness reflection in ms. Default: 900_000 (15 minutes) */
+  reflectionIntervalMs: number;
   /** CPU usage threshold to skip non-critical tasks. Default: 70 */
   cpuPressureThreshold: number;
   /** Memory usage % threshold to skip non-critical tasks. Default: 85 */
@@ -48,6 +58,8 @@ export interface HeartbeatConfig {
     immune: boolean;
     snapshot: boolean;
     consciousness: boolean;
+    reflection: boolean;
+    promiseCheck: boolean;
   };
 }
 
@@ -75,6 +87,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   intervalMs: 60_000, // 1 minute
   consolidationIntervalMs: 300_000, // 5 minutes
   immuneIntervalMs: 600_000, // 10 minutes
+  reflectionIntervalMs: 900_000, // 15 minutes
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
   tasks: {
@@ -83,6 +96,8 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     immune: true,
     snapshot: true,
     consciousness: true,
+    reflection: true,
+    promiseCheck: true,
   },
 };
 
@@ -97,6 +112,8 @@ export class HeartbeatScheduler {
   private cycleCount = 0;
   private lastConsolidation = 0;
   private lastImmune = 0;
+  private lastReflection = 0;
+  private lastReflectionText = '';
   private engramSystem: NeuralEngramSystem | null = null;
   private history: HeartbeatCycleResult[] = [];
   private readonly MAX_HISTORY = 30;
@@ -317,9 +334,19 @@ export class HeartbeatScheduler {
     if (this.config.tasks.consciousness) {
       const result = await this.runTask('consciousness', async () => {
         const consciousness = getConsciousness();
+
+        // Enrich with real circuit breaker state
+        let circuitBreakerOpen = false;
+        try {
+          const cbStatus = getCircuitBreaker().getStatus();
+          circuitBreakerOpen = cbStatus.global.state !== CircuitState.CLOSED;
+        } catch {
+          // Circuit breaker not initialized — default to closed
+        }
+
         const cycleResult = await consciousness.runCycle({
           systemPressure: pressure,
-          circuitBreakerOpen: false, // Could be enriched from snapshot
+          circuitBreakerOpen,
         });
         MollyLogger.debug(
           `Consciousness: awareness=${cycleResult.awarenessLevel}, ` +
@@ -327,6 +354,138 @@ export class HeartbeatScheduler {
             `pending=${cycleResult.pendingMessages}`,
           'heartbeat-scheduler'
         );
+      });
+      tasks.push(result);
+    }
+
+    // Task 6: Consciousness Reflection (on its own interval — uses LLM)
+    if (this.config.tasks.reflection) {
+      const timeSinceReflection = cycleStart - this.lastReflection;
+      if (timeSinceReflection < this.config.reflectionIntervalMs) {
+        tasks.push({
+          name: 'reflection',
+          executed: false,
+          skipped: `Not due (${Math.round((this.config.reflectionIntervalMs - timeSinceReflection) / 1000)}s remaining)`,
+        });
+      } else if (pressure) {
+        tasks.push({
+          name: 'reflection',
+          executed: false,
+          skipped: 'System under pressure',
+        });
+      } else {
+        // Check rate limiter budget before spending tokens
+        let hasBudget = true;
+        try {
+          const rlStatus = getRateLimiter().getStatus();
+          hasBudget = rlStatus.percentageUsed < 80;
+        } catch {
+          // Rate limiter not initialized — allow reflection
+        }
+
+        if (!hasBudget) {
+          tasks.push({
+            name: 'reflection',
+            executed: false,
+            skipped: 'Rate limit budget >80% used',
+          });
+        } else {
+          const result = await this.runTask('reflection', async () => {
+            const { reflect } = await import(
+              '@/ai/flows/consciousness-reflection'
+            );
+            const consciousness = getConsciousness();
+            const state = consciousness.getState();
+            const promiseTracker = getPromiseTracker();
+
+            // Build context from live system data
+            const pendingCount = consciousness.getPendingMessageCount();
+            const systemContext = [
+              `Awareness: ${state.awarenessLevel}`,
+              `Regulation: ${state.regulation.mode}`,
+              `Uptime cycles: ${this.cycleCount}`,
+              `Circuit breaker: ${state.vitals.circuitBreakerOpen ? 'OPEN' : 'closed'}`,
+              `System pressure: ${pressure ? 'YES' : 'no'}`,
+              `Active promises: ${promiseTracker.getSummary()}`,
+            ].join('\n');
+
+            const recentPatterns = [
+              `Error rate: ${state.vitals.errorRate.toFixed(1)}/min`,
+              `Pending outbound: ${pendingCount} messages`,
+            ].join('\n');
+
+            const consciousnessState = [
+              `Last cycle: ${state.lastCycleTimestamp || 'never'}`,
+              `Mood: ${state.awarenessLevel === 'dormant' ? 'calm/quiet' : state.awarenessLevel}`,
+            ].join('\n');
+
+            const output = await reflect(
+              systemContext,
+              recentPatterns,
+              consciousnessState,
+              this.lastReflectionText || undefined
+            );
+
+            if (output) {
+              this.lastReflectionText = output.observation;
+
+              // If Molly has something worth sharing, queue it
+              if (output.shouldShare && output.messageForEric) {
+                consciousness.queueMessage({
+                  type:
+                    output.sentiment === 'concerned'
+                      ? 'observation'
+                      : 'thought',
+                  content: output.messageForEric,
+                  priority:
+                    output.sentiment === 'concerned' ? 'high' : 'normal',
+                });
+              }
+
+              MollyLogger.info(
+                `Reflection complete: ${output.sentiment} — "${output.observation.substring(0, 60)}..."`,
+                'heartbeat-scheduler'
+              );
+            }
+          });
+          if (result.executed) {
+            this.lastReflection = Date.now();
+          }
+          tasks.push(result);
+        }
+      }
+    }
+
+    // Task 7: Promise Check (every cycle — lightweight, no LLM)
+    if (this.config.tasks.promiseCheck) {
+      const result = await this.runTask('promise-check', async () => {
+        const promiseTracker = getPromiseTracker();
+
+        // Expire stale promises
+        const expired = promiseTracker.expireOld();
+        if (expired > 0) {
+          MollyLogger.info(
+            `Expired ${expired} stale promise(s)`,
+            'heartbeat-scheduler'
+          );
+        }
+
+        // Check for due promises
+        const due = promiseTracker.getDuePromises();
+        if (due.length > 0) {
+          const consciousness = getConsciousness();
+          for (const promise of due) {
+            consciousness.queueMessage({
+              type: 'thought',
+              content: `I still need to follow up on: "${promise.commitment}"`,
+              priority: 'normal',
+            });
+          }
+          MollyLogger.info(
+            `${due.length} promise(s) due for follow-up`,
+            'heartbeat-scheduler'
+          );
+        }
       });
       tasks.push(result);
     }

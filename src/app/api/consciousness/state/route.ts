@@ -12,18 +12,29 @@
 
 import { NextResponse } from 'next/server';
 import { getConsciousness } from '@/ai/consciousness';
+import { getPromiseTracker } from '@/ai/consciousness/promise-tracker';
 
 export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/consciousness/state
  *
- * Returns the current consciousness state snapshot.
+ * Returns the current consciousness state snapshot,
+ * enriched with promise tracker summary.
  */
 export async function GET() {
   const consciousness = getConsciousness();
   const state = consciousness.getState();
-  return NextResponse.json(state);
+
+  // Enrich with promise tracker data
+  let promises: string | undefined;
+  try {
+    promises = getPromiseTracker().getSummary();
+  } catch {
+    // Promise tracker not initialized yet
+  }
+
+  return NextResponse.json({ ...state, promises });
 }
 
 /**

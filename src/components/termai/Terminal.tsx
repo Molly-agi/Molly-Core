@@ -507,6 +507,57 @@ export default function Terminal({
           }
         } else if (cmdText === 'clear') {
           setHistory([]);
+        } else if (cmdText === '/consciousness' || cmdText === '/status') {
+          try {
+            const res = await fetch('/api/consciousness/state');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const state = await res.json();
+
+            const lines: string[] = [
+              '\n=== MOLLY CONSCIOUSNESS DASHBOARD ===',
+              '',
+              `  Awareness:  ${state.awarenessLevel ?? 'unknown'}`,
+              `  Regulation: ${state.regulationMode ?? 'unknown'}`,
+              `  Last cycle: ${state.lastCycleAt ?? 'never'}`,
+              '',
+              '--- Vitals ---',
+              `  System pressure: ${state.vitals?.systemPressure ? 'YES' : 'no'}`,
+              `  Circuit breaker: ${state.vitals?.circuitBreakerOpen ? 'OPEN' : 'closed'}`,
+              `  Errors (10s):    ${state.vitals?.errorCount ?? 0}`,
+              `  Requests (10s):  ${state.vitals?.requestCount ?? 0}`,
+              '',
+              '--- Outbound Queue ---',
+              `  Pending messages: ${state.outboundQueue?.length ?? 0}`,
+            ];
+
+            if (state.outboundQueue?.length > 0) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              state.outboundQueue.slice(0, 5).forEach((msg: any) => {
+                lines.push(
+                  `    [${msg.type}] ${msg.text?.substring(0, 60) ?? ''}...`
+                );
+              });
+            }
+
+            if (state.promises) {
+              lines.push('');
+              lines.push('--- Promise Tracker ---');
+              lines.push(`  ${state.promises}`);
+            }
+
+            lines.push('');
+            lines.push('================================');
+
+            setHistory((prev) => [...prev, ...lines]);
+            speakResponse(
+              `I'm in ${state.awarenessLevel ?? 'unknown'} awareness, ${state.regulationMode ?? 'unknown'} regulation mode. ${state.outboundQueue?.length ?? 0} pending messages.`
+            );
+          } catch {
+            setHistory((prev) => [
+              ...prev,
+              'Error: Could not reach consciousness API.',
+            ]);
+          }
         } else {
           const selfSignals: NeuralBridgeSignal[] | undefined =
             lastResponseRef.current
