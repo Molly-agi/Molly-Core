@@ -119,6 +119,12 @@ export function ChatHistory({
         if (typeof line !== 'string') return null;
 
         const isUser = line.startsWith('>');
+        const isFamilyContent =
+          line.startsWith('[FAMILY_STORY]') ||
+          line.startsWith('[FAMILY_ANCHOR]');
+        const displayText = isFamilyContent
+          ? line.replace(/^\[FAMILY_(?:STORY|ANCHOR)\]\s*/, '')
+          : line;
         const canCollapse = isCollapsibleLine(line, isUser);
         const isExpanded = expandedLines[index] ?? false;
 
@@ -129,7 +135,9 @@ export function ChatHistory({
               'my-3 p-3 rounded-lg border',
               isUser
                 ? 'text-primary bg-primary/5 border-primary/10'
-                : 'text-foreground bg-secondary/30 border-white/5'
+                : isFamilyContent
+                  ? 'text-purple-300 bg-purple-500/10 border-purple-500/20 italic'
+                  : 'text-foreground bg-secondary/30 border-white/5'
             )}
           >
             <div
@@ -138,7 +146,7 @@ export function ChatHistory({
                 canCollapse && !isExpanded && 'max-h-32 overflow-hidden'
               )}
             >
-              {line}
+              {displayText}
             </div>
             {canCollapse && (
               <Button

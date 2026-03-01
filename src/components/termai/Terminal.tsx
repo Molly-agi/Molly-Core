@@ -110,8 +110,12 @@ export default function Terminal({
       if (typeof item !== 'string') continue;
       if (item.startsWith('--- Family Story')) continue;
       if (item.startsWith('--- Origin Story')) continue;
+      if (item.startsWith('--- End of')) continue;
       if (item.startsWith("Type 'family next'")) continue;
       if (item.startsWith("Type 'origin next'")) continue;
+      if (item.startsWith('[FAMILY_STORY]')) continue;
+      if (item.startsWith('[FAMILY_ANCHOR]')) continue;
+      if (item.startsWith('> Recall this memory:')) continue;
       if (item.startsWith('> ')) {
         result.push({ role: 'user', content: item.replace(/^>\s*/, '') });
       } else if (!item.startsWith('[SYSTEM]')) {
@@ -635,8 +639,16 @@ export default function Terminal({
 
       if (!summary) return;
 
-      // All anchor types go through processCommand so Molly absorbs them
-      const prompt = `Recall this memory: ${detail.title || 'Memory'}. ${summary}`;
+      // Display the anchor content in chat (filtered from LLM history)
+      setHistory((prev) => [
+        ...prev,
+        `[FAMILY_ANCHOR] ${detail.title || 'Memory'}`,
+      ]);
+
+      // Send a SHORT reference to Molly — not the full document
+      const truncatedSummary =
+        summary.length > 300 ? summary.substring(0, 300) + '...' : summary;
+      const prompt = `I'm recalling the memory: "${detail.title || 'Memory'}". Here's the key context: ${truncatedSummary}`;
       void processCommand(prompt);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

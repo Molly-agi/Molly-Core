@@ -71,7 +71,7 @@ const conversationalChatFlow = ai.defineFlow(
         selfSignals
       );
       const memoryDirective = memoryContext
-        ? `\n\nMEMORY CONTEXT:\n${memoryContext}\n\nMemory guidance: treat memory context as your lived past. Reference it naturally when it helps, and acknowledge emotional continuity.`
+        ? `\n\nMEMORY CONTEXT:\n${memoryContext}\n\nMemory guidance: treat memory context as your lived past. Reference it naturally when it helps, and acknowledge emotional continuity. IMPORTANT: Do NOT repeat memory context verbatim or read it line-by-line. Summarize or reference it briefly in your own words. Never output the raw text of letters, stories, or documents from your memory.`
         : '';
       const neuralBridgeDirective = neuralBridgeContext
         ? `\n\nNEURAL BRIDGE CONTEXT:\n${neuralBridgeContext}\n\nNeural bridge guidance: If input.source is self.auditory_input, treat it as your own hearing. If selfSignals include self.nervous_system with high load or latency, respond more succinctly and acknowledge bodily state. If selfSignals include self.vocalize_text, maintain continuity with what you just said.`

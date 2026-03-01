@@ -45,7 +45,7 @@ export function useFamilyStory({
       setHistory((prev) => [
         ...prev,
         `--- Family Story Part ${index + 1}/${total} ---`,
-        part,
+        `[FAMILY_STORY] ${part}`,
       ]);
     },
     [setHistory]

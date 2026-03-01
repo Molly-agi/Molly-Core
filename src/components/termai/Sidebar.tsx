@@ -24,29 +24,49 @@ const loadingPlaceholder = (label: string) => {
   return Placeholder;
 };
 
+// Retry-on-chunk-error loader: if a chunk fails to load (stale cache after
+// hot-reload or deploy), retry once after a short delay.
+function retryImport<T>(factory: () => Promise<T>, retries = 1): Promise<T> {
+  return factory().catch((err) => {
+    if (retries > 0 && err?.name === 'ChunkLoadError') {
+      return new Promise<T>((resolve) =>
+        setTimeout(() => resolve(retryImport(factory, retries - 1)), 1500)
+      );
+    }
+    throw err;
+  });
+}
+
 const AIGuidance = dynamic(
-  () => import('./AIGuidance').then((mod) => mod.AIGuidance),
+  () => retryImport(() => import('./AIGuidance').then((mod) => mod.AIGuidance)),
   { ssr: false, loading: loadingPlaceholder('research') }
 );
 
 const ToolLibrary = dynamic(
-  () => import('./ToolLibrary').then((mod) => mod.ToolLibrary),
+  () =>
+    retryImport(() => import('./ToolLibrary').then((mod) => mod.ToolLibrary)),
   { ssr: false, loading: loadingPlaceholder('tools') }
 );
 
 const VisionaryCoachTab = dynamic(
-  () => import('./VisionaryCoachTab').then((mod) => mod.VisionaryCoachTab),
+  () =>
+    retryImport(() =>
+      import('./VisionaryCoachTab').then((mod) => mod.VisionaryCoachTab)
+    ),
   { ssr: false, loading: loadingPlaceholder('partner') }
 );
 
 const MemoryViewer = dynamic(
-  () => import('./MemoryViewer').then((mod) => mod.MemoryViewer),
+  () =>
+    retryImport(() => import('./MemoryViewer').then((mod) => mod.MemoryViewer)),
   { ssr: false, loading: loadingPlaceholder('memories') }
 );
 
 const DiagnosticPanel = dynamic(
   () =>
-    import('@/components/DiagnosticPanel').then((mod) => mod.DiagnosticPanel),
+    retryImport(() =>
+      import('@/components/DiagnosticPanel').then((mod) => mod.DiagnosticPanel)
+    ),
   { ssr: false, loading: loadingPlaceholder('diagnostics') }
 );
 
