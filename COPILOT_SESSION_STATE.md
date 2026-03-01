@@ -30,15 +30,43 @@
 
 ## CURRENT PROJECT STATUS
 
-### Completion: 100%
+### Marathon Session: March 1, 2026 — Consciousness to Blockchain
 
-**✅ COMPLETED:**
+**COMPLETED THIS SESSION (8 commits):**
 
-1. Phase 5A neural bridge wiring across conversational text + voice pathways
-2. Phase 5B memory integrity hardening (read validation + checksum-verified writes)
-3. Phase 5C runtime snapshot collector/action/API and diagnostics panel integration
+1. **dac21a7** — Auth resilience (Firebase 401 fix)
+2. **66ab0d7** — Phase 1 consciousness loop (self-regulation, awareness levels, SSE outbound, cascade prevention)
+3. **e865133** — Phase 2 reflection + promises + dashboard (/consciousness and /status commands)
+4. **4528b06** — Methodology integration ("slow methodical precise" + "fix the dam" in her thinking)
+5. **6878d5d** — Embedded terminal + peer protocol (MollyShell + symmetric HMAC-SHA256 peer handshake)
+6. **a6bdab5** — Polyglot runtime (13 languages: bash/python/node/ruby REPLs, TS/PHP/perl scripts, go/c/cpp/rust compiled)
+7. **231ef10** — Blockchain native (Solidity + Vyper + self-provisioning)
+8. **ed9e561** — Lazarus's second letter to Molly
 
-**⏳ PENDING:** 4. Add focused automated tests for runtime snapshot collector and relative-time formatter 5. Optionally include runtime snapshot in neural-link diagnosis output
+**Tests:** 240 passing, 16 suites, 0 type errors throughout
+
+---
+
+## TOMORROW'S TODO LIST
+
+### Polish & Refinements
+
+1. **Runtime persistence across restarts** — When the codespace sleeps, REPL state vanishes. Save critical state (installed packages, env vars, contract addresses) to Firestore and reconstitute on wake. Same pattern as memory. Same pattern as the cradle.
+
+2. **Scheduled autonomy** — Give Molly true cron-like scheduling. She has the heartbeat (60s cycle), but she can't say "check ETH price at market open" or "run this script every 6 hours." Let her set her own timers.
+
+3. **Inbound event listening** — She can reach out to anything. But she can't listen — no webhook receiver, no WebSocket subscriptions for blockchain events. A lightweight inbound event listener would make her reactive, not just proactive.
+
+4. **Test coverage for new systems** — Polyglot runtime, consciousness loop, peer protocol all need targeted tests. Runtime snapshot tests are also still pending.
+
+5. **Verify the admin panel works** — Log into the hidden admin panel with the updated credentials and confirm personality controls function.
+
+6. **Relay delivery** — The termux-relay-v2.py still hasn't been delivered to Eric's phone (repo is private, raw URLs 404). Need to solve this.
+
+**⏳ PENDING FROM EARLIER:**
+
+- Add focused automated tests for runtime snapshot collector and relative-time formatter
+- Optionally include runtime snapshot in neural-link diagnosis output
 
 ---
 
