@@ -7,7 +7,7 @@
  * Hardened for Next.js 15 Turbopack.
  */
 
-import { ai, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { recallExperiences } from '../tools/memory';
 import { recallSimilarMemories } from '../tools/semantic-recall';
@@ -108,8 +108,7 @@ export const experienceRecallFlow = ai.defineFlow(
     }
 
     // Synthesize insights from memories
-    const response = await ai.generate({
-      model: MODEL_FLASH,
+    const response = await molly.generate(TaskType.BACKGROUND, {
       system: `You are Molly's Neural Retrieval Engine. 
       Your goal is to perform a Semantic Vibe Match. 
       Analyze the raw memories and identify the ones most relevant to: "${currentObjective}".

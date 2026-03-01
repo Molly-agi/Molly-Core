@@ -5,7 +5,7 @@
  * This is Molly's learning engine—converting experiences into wisdom.
  */
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import {
   collection,
@@ -414,8 +414,7 @@ export const memoryConsolidationFlow = ai.defineFlow(
 
       const insightSynthesis = await withGenerateErrorHandling(
         async () =>
-          await ai.generate({
-            model: MODEL_PRO,
+          await molly.generate(TaskType.BACKGROUND, {
             system: `You are Molly's Learning Engine. Synthesize memories and patterns into 3-5 actionable insights. Focus on:
 1. Recurring challenges and how Molly overcomes them
 2. Growth areas and improvements over time

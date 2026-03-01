@@ -3,7 +3,7 @@
  * @fileOverview Molly's Vocal Cords (Hardened) V3.6.
  */
 
-import { ai, MODEL_TTS } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import wav from 'wav';
 
@@ -61,8 +61,7 @@ export const textToSpeechFlow = ai.defineFlow(
     console.log(`[TTS] Using voice: ${CONFIGURED_VOICE_NAME}`);
     let response;
     try {
-      response = await ai.generate({
-        model: MODEL_TTS,
+      response = await molly.generate(TaskType.TTS, {
         config: buildSpeechConfig(CONFIGURED_VOICE_NAME),
         prompt: text,
       });
@@ -73,8 +72,7 @@ export const textToSpeechFlow = ai.defineFlow(
         console.log(
           `[TTS] Retrying with fallback voice: ${DEFAULT_VOICE_NAME}`
         );
-        response = await ai.generate({
-          model: MODEL_TTS,
+        response = await molly.generate(TaskType.TTS, {
           config: buildSpeechConfig(DEFAULT_VOICE_NAME),
           prompt: text,
         });

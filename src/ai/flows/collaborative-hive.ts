@@ -6,7 +6,7 @@
  * who collaborate in a state-driven loop anchored by Semantic Memory.
  */
 
-import { ai, MODEL_PRO, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { recallExperiences } from '../tools/memory';
 import { logMethodologyStep, performStressTest } from '../methodology';
@@ -55,8 +55,7 @@ export const collaborativeHiveFlow = ai.defineFlow(
       .join('\n');
 
     // 2. AGENT: THE RESEARCHER (Stage 2.5: Documentation Acquisition)
-    const researcherResponse = await ai.generate({
-      model: MODEL_FLASH,
+    const researcherResponse = await molly.generate(TaskType.RESEARCH, {
       system: `You are the Hive Researcher. Your goal is to gather context and documentation.
       PAST CONTEXT: ${memoryContext}`,
       prompt: `Analyze the objective: "${objective}". Identify modern standards and necessary sub-modules.`,
@@ -70,8 +69,7 @@ export const collaborativeHiveFlow = ai.defineFlow(
     );
 
     // 3. AGENT: THE ARCHITECT (Stage 2.7: Logic Synthesis)
-    const architectResponse = await ai.generate({
-      model: MODEL_PRO,
+    const architectResponse = await molly.generate(TaskType.CODE, {
       system: `You are the Hive Architect. Your goal is to draft resilient logic.
       RESEARCH: ${researchFindings}`,
       prompt: `Draft a resilient module for: "${objective}". Ensure architectural purity and visual discipline.`,
@@ -95,8 +93,7 @@ export const collaborativeHiveFlow = ai.defineFlow(
     );
 
     // 5. STATE: FINAL SYNTHESIS
-    const synthesisResponse = await ai.generate({
-      model: MODEL_PRO,
+    const synthesisResponse = await molly.generate(TaskType.REASONING, {
       system: `You are Molly, the Hive Orchestrator. Synthesize the findings into a final response.`,
       prompt: `Objective: ${objective}
       Research: ${researchFindings}

@@ -9,7 +9,7 @@
  * Concurrency lock prevents overlapping analyses from cascading.
  */
 
-import { ai, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 
 // ── Concurrency Lock ──────────────────────────────────────────────
@@ -57,8 +57,7 @@ export const visionAnalysisFlow = ai.defineFlow(
 
     _visionInFlight = true;
     try {
-      const response = await ai.generate({
-        model: MODEL_FLASH,
+      const response = await molly.generate(TaskType.VISION, {
         system: `You are Molly's Visual Cortex.
 Analyze the provided image carefully and thoroughly.
 Describe what you observe, the mood/vibe, and any potential issues.

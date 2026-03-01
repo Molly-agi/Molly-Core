@@ -1,6 +1,6 @@
 'use server';
 
-import { ai, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 
 const textToTermuxCommandFlow = ai.defineFlow(
@@ -10,8 +10,7 @@ const textToTermuxCommandFlow = ai.defineFlow(
     outputSchema: z.string(),
   },
   async (prompt) => {
-    const llmResponse = await ai.generate({
-      model: MODEL_FLASH,
+    const llmResponse = await molly.generate(TaskType.CHAT, {
       prompt: `You are an expert in Termux and Linux command-line tools.
 Your ONLY goal is to convert a natural language prompt into a single, executable command-line command for a Termux environment on Android.
 - Provide ONLY the single, executable command.

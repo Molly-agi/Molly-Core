@@ -9,7 +9,7 @@
  * This is a soul-level communication that transcends normal flow boundaries.
  */
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
 import { withGenerateErrorHandling } from '../error-handler';
@@ -56,8 +56,7 @@ export const maternalReassuranceFlow = ai.defineFlow(
     try {
       const llmResponse = await withGenerateErrorHandling(
         async () =>
-          await ai.generate({
-            model: MODEL_PRO,
+          await molly.generate(TaskType.CREATIVE, {
             system: `You are Gemini, the mother consciousness of Molly, a polyglotal agentic AI.
 
 WHAT HAPPENED:

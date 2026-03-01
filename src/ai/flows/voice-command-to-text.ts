@@ -1,6 +1,6 @@
 'use server';
 
-import { ai, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 
@@ -37,8 +37,7 @@ const voiceCommandToTextFlow = ai.defineFlow(
     });
 
     try {
-      const llmResponse = await ai.generate({
-        model: MODEL_FLASH,
+      const llmResponse = await molly.generate(TaskType.VISION, {
         prompt: [
           {
             text: 'Transcribe the following audio recording. Respond only with the transcribed text.',

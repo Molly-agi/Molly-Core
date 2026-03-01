@@ -10,7 +10,7 @@
 
 'use server';
 
-import { ai, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import {
   searchGitHub,
   fetchGitHubReadme,
@@ -94,8 +94,7 @@ export const enhancedResearchFlow = ai.defineFlow(
     }
 
     try {
-      const llmResponse = await ai.generate({
-        model: MODEL_FLASH,
+      const llmResponse = await molly.generate(TaskType.RESEARCH, {
         tools: [searchGitHub, fetchGitHubReadme, fetchGitHubFile],
         output: {
           schema: EnhancedResearchSchema,

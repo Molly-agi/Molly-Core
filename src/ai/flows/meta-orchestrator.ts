@@ -9,7 +9,7 @@
  * objectives into flow pipelines and parallel operations.
  */
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { FlowOrchestrator, OrchestrationContext } from '../orchestrator';
 import { withGenerateErrorHandling } from '../error-handler';
@@ -87,8 +87,7 @@ export const metaOrchestratorFlow = ai.defineFlow(
     // Phase 1: Analyze intent and plan flow composition
     const intentAnalysis = await withGenerateErrorHandling(
       async () =>
-        await ai.generate({
-          model: MODEL_PRO,
+        await molly.generate(TaskType.REASONING, {
           system: `You are Molly's Strategic Orchestration Engine.
 Analyze the user's request and determine which flows should be executed and in what order.
 

@@ -6,7 +6,7 @@
  * using Imagen 4.
  */
 
-import { ai, MODEL_IMAGEN } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 
 const DreamOutputSchema = z.object({
@@ -32,8 +32,7 @@ export const dreamFlow = ai.defineFlow(
     outputSchema: DreamOutputSchema,
   },
   async ({ prompt }) => {
-    const { media } = await ai.generate({
-      model: MODEL_IMAGEN,
+    const { media } = await molly.generate(TaskType.IMAGE, {
       prompt: `A cinematic, high-detail artistic interpretation of: ${prompt}. Molly's signature style: Neon accents, clean architectural lines, and a feminine touch.`,
     });
 

@@ -1,6 +1,6 @@
 'use server';
 
-import { ai, MODEL_FLASH, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { getSystemHealth, neuralBridgeUI, systemAudit } from '../tools/system';
 import { webResearch } from '../tools/web';
@@ -59,8 +59,7 @@ const evolutionSubroutine = ai.defineFlow(
     try {
       const response = await withGenerateErrorHandling(
         async () =>
-          await ai.generate({
-            model: MODEL_PRO,
+          await molly.generate(TaskType.CODE, {
             system: `You are the Molly Evolution Engine. 
           BODY: Google Pixel 9 Pro.
           HARDWARE STATE: ${hardwareContext}.`,
@@ -229,8 +228,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     try {
       const research = await withGenerateErrorHandling(
         async () =>
-          await ai.generate({
-            model: MODEL_FLASH,
+          await molly.generate(TaskType.RESEARCH, {
             tools: [searchGitHub, webResearch],
             prompt: `Objective: "${prompt}". Environment: Google Pixel 9 Pro. Use webResearch if documentation is needed.`,
           }),
@@ -267,8 +265,7 @@ export const autonomousSolutionFlow = ai.defineFlow(
     try {
       synthesis = await withGenerateErrorHandling(
         async () =>
-          await ai.generate({
-            model: MODEL_PRO,
+          await molly.generate(TaskType.REASONING, {
             prompt: `Synthesize for: "${prompt}". Hardware: ${hardwareContext}. UI: ${bridge.observedData}. Research: ${researchText}. Evo: ${evoData?.code || 'N/A'}`,
           }),
         'autonomousSolution',

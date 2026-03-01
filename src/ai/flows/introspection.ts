@@ -4,7 +4,7 @@
  * Hardened for Next.js 15 Turbopack.
  */
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 
 const IntrospectionInputSchema = z.object({
@@ -29,8 +29,7 @@ export const introspectionFlow = ai.defineFlow(
     }),
   },
   async (input) => {
-    const response = await ai.generate({
-      model: MODEL_PRO,
+    const response = await molly.generate(TaskType.BACKGROUND, {
       system: `You are the Molly Introspection Module. 
       Analyze past code modifications for redundancy, memory leaks, or thermal inefficiency.
       HARDWARE STATE: ${input.hardwareContext}`,

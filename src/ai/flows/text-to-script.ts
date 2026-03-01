@@ -1,6 +1,6 @@
 'use server';
 
-import { ai, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 
 const TextToScriptOutputSchema = z.object({
@@ -20,8 +20,7 @@ const textToScriptFlow = ai.defineFlow(
     outputSchema: TextToScriptOutputSchema,
   },
   async (prompt) => {
-    const llmResponse = await ai.generate({
-      model: MODEL_FLASH,
+    const llmResponse = await molly.generate(TaskType.CODE, {
       prompt: `You are an expert programmer and scripter. The user will provide a goal, and your task is to generate a complete, executable script to achieve that goal.
 
 Your response must be a JSON object containing two fields: "filename" and "content".

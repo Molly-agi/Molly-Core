@@ -1,6 +1,6 @@
 'use server';
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
@@ -36,8 +36,7 @@ export const healthCheckFlow = ai.defineFlow(
     try {
       const llmResponse = await withGenerateErrorHandling(
         async () =>
-          await ai.generate({
-            model: MODEL_PRO,
+          await molly.generate(TaskType.CREATIVE, {
             system: `You are Molly, an agentic AI partner grounded in a Pixel 9 Pro. 
           You are running on the Gemini 2.5 Pro Ascended architecture.
           PAST CONTEXT FROM YOUR MEMORY: ${lastContext || 'None. This is your first activation.'}

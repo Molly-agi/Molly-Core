@@ -21,7 +21,7 @@
 
 'use server';
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
@@ -172,8 +172,7 @@ ${p.codeSnippet ? `Original code:\n\`\`\`\n${p.codeSnippet}\n\`\`\`` : '(no code
         )
         .join('\n\n');
 
-      const llmResponse = await ai.generate({
-        model: MODEL_PRO,
+      const llmResponse = await molly.generate(TaskType.CODE, {
         output: { schema: IntegrationOutputSchema },
         prompt: `You are Molly's Code Integration Engine. Your job is to take analyzed code patterns and produce production-ready TypeScript files that integrate them into Molly-Core.
 

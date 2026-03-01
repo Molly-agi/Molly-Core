@@ -19,7 +19,7 @@
 
 'use server';
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
 import { readdirSync, readFileSync, existsSync } from 'fs';
@@ -218,8 +218,7 @@ async function analyzeLocalCode(
     )
     .join('\n\n');
 
-  const llmResponse = await ai.generate({
-    model: MODEL_PRO,
+  const llmResponse = await molly.generate(TaskType.REASONING, {
     output: { schema: CodeAnalysisOutputSchema },
     prompt: `You are Molly's Code Analysis Engine. You are analyzing Python scripts that were just executed on a real Android device via Termux. Your job is to deeply understand these programs and determine how their patterns can be adapted into Molly's TypeScript codebase.
 

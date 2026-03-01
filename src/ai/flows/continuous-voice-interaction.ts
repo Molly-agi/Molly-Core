@@ -9,7 +9,7 @@
 
 'use server';
 
-import { ai } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import {
   processVoiceCommand,
@@ -162,8 +162,7 @@ export const continuousVoiceInteractionFlow = ai.defineFlow(
       .map((t) => `User: ${t.userSpeech}\nMolly: ${t.mollyResponse}`)
       .join('\n\n');
 
-    const summaryResponse = await ai.generate({
-      model: 'gemini-2.0-flash-exp',
+    const summaryResponse = await molly.generate(TaskType.CHAT, {
       system:
         'Summarize this voice conversation in 1-2 sentences. Focus on key topics and decisions.',
       prompt: conversationText,

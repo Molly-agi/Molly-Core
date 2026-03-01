@@ -16,7 +16,7 @@
 
 'use server';
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import {
   searchGitHub,
   fetchGitHubReadme,
@@ -125,8 +125,7 @@ export const codeAnalysisFlow = ai.defineFlow(
     );
 
     try {
-      const llmResponse = await ai.generate({
-        model: MODEL_PRO,
+      const llmResponse = await molly.generate(TaskType.REASONING, {
         tools: [searchGitHub, fetchGitHubReadme, fetchGitHubFile],
         output: {
           schema: CodeAnalysisOutputSchema,

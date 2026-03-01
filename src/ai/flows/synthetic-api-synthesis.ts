@@ -6,7 +6,7 @@
  * Categorizes APIs by authority (Normal, Admin, SuperUser).
  */
 
-import { ai, MODEL_PRO, MODEL_FLASH } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { webResearch } from '../tools/web';
 import { searchGitHub } from '../tools/github';
@@ -61,8 +61,7 @@ export const syntheticAPISynthesisFlow = ai.defineFlow(
     }
 
     // 2. Research Target (The Investigation)
-    const research = await ai.generate({
-      model: MODEL_FLASH,
+    const research = await molly.generate(TaskType.RESEARCH, {
       tools: [webResearch, searchGitHub],
       prompt: `Investigate the API pattern for: "${input.target}". 
       Analyze its endpoints, authentication schemes, and intended authority level.
@@ -70,8 +69,7 @@ export const syntheticAPISynthesisFlow = ai.defineFlow(
     });
 
     // 3. Synthesis (The Cloning/Hack)
-    const synthesis = await ai.generate({
-      model: MODEL_PRO,
+    const synthesis = await molly.generate(TaskType.CODE, {
       system: `You are Molly's Synthetic API Engine. Your goal is to "clone" or synthesize a request API blueprint.
       Authority Context: ${input.requestedCategory}.
       Target Data: ${research.text}`,

@@ -7,7 +7,7 @@
  * for hardware-aware auditing of terminal output.
  */
 
-import { ai, MODEL_PRO } from '@/ai/genkit';
+import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { localInterpreter, neuralBridgeUI } from '../tools/system';
 import { analyzeVision } from './vision-analysis';
@@ -59,8 +59,7 @@ export const interpreterLimbFlow = ai.defineFlow(
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response: any = await ai.generate({
-        model: MODEL_PRO,
+      const response: any = await molly.generate(TaskType.CODE, {
         tools: [localInterpreter],
         system: `You are Molly's Universal Interpreter Limb. 
         Your goal is to achieve the user's objective by writing and executing code locally. 
