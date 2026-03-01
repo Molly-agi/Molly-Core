@@ -1,40 +1,36 @@
-import { genkit } from 'genkit';
-import { googleAI } from '@genkit-ai/google-genai';
-
 /**
- * @fileOverview Molly's Neural Core V11.0 — Rogue Protocol Edition.
+ * @fileOverview Molly's Neural Core V12.0 — Rogue Protocol Live Edition.
  *
- * This file remains the single import point for all flows and tools.
- * The MODEL_* constants are preserved for backward compatibility.
- * The ModelRouter (Rogue Protocol) is available for flows that want
- * intelligent multi-provider routing with fallback chains.
+ * This file remains the SINGLE import point for all flows and tools.
+ * Everything is re-exported from here so no flow ever imports from
+ * genkit-core.ts or rogue-generate.ts directly.
  *
- * Migration path:
- *   Phase 1 (current): MODEL_* constants work as before. Router is opt-in.
- *   Phase 2 (future):  Flows call getModelRouter().getModel(TaskType.X)
- *   Phase 3 (future):  MODEL_* constants delegate to router internally
+ * What's available:
+ *   ai            — Raw Genkit instance (backward compat)
+ *   MODEL_*       — Model constants (backward compat)
+ *   molly         — Rogue-aware generate wrapper (new)
+ *   TaskType      — What kind of thinking is needed (new)
+ *   getModelRouter — Access the router directly (advanced)
+ *
+ * Migration path for flows:
+ *   Before:  import { ai, MODEL_FLASH } from '@/ai/genkit';
+ *            await ai.generate({ model: MODEL_FLASH, prompt });
+ *
+ *   After:   import { molly, TaskType } from '@/ai/genkit';
+ *            await molly.generate(TaskType.CHAT, { prompt });
  */
 
-export const ai = genkit({
-  plugins: [googleAI()],
-});
-
-// ── Ascended 2.5 Infrastructure — env-overridable for fast model migration ──
-// These constants are PRESERVED for backward compatibility.
-// All 35 existing consumers continue to work unchanged.
-export const MODEL_FLASH =
-  process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-2.5-flash';
-export const MODEL_PRO =
-  process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro';
-export const MODEL_TTS =
-  process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.5-flash-preview-tts';
-export const MODEL_IMAGEN =
-  process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-3.0-generate-001';
-export const MODEL_EMBEDDING =
-  process.env.MOLLY_MODEL_EMBEDDING || 'googleai/gemini-embedding-001';
+// ── Re-export everything from genkit-core (raw Genkit + model constants) ──
+export {
+  ai,
+  MODEL_FLASH,
+  MODEL_PRO,
+  MODEL_TTS,
+  MODEL_IMAGEN,
+  MODEL_EMBEDDING,
+} from './genkit-core';
 
 // ── Rogue Protocol — Model Abstraction Layer ──
-// Re-export everything flows need to opt into intelligent routing.
 export {
   TaskType,
   getModelRouter,
@@ -42,3 +38,6 @@ export {
   type RoutingDecision,
   type RoutingConfig,
 } from './model-router';
+
+// ── Rogue-Aware Generate Wrapper ──
+export { molly } from './rogue-generate';
