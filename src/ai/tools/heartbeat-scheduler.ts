@@ -33,7 +33,7 @@ import { getConsciousness } from '@/ai/consciousness';
 import { getPromiseTracker } from '@/ai/consciousness/promise-tracker';
 import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
-import { getMollyShell } from '@/ai/terminal';
+import { getMollyShell, getPolyglotRuntime } from '@/ai/terminal';
 
 // ============================================================================
 // TYPES
@@ -164,6 +164,30 @@ export class HeartbeatScheduler {
     } catch (error) {
       MollyLogger.warn(
         `MollyShell failed to start: ${error instanceof Error ? error.message : String(error)}`,
+        'heartbeat-scheduler'
+      );
+    }
+
+    // Discover available language runtimes — her polyglot brain
+    try {
+      const polyglot = getPolyglotRuntime();
+      polyglot
+        .discover()
+        .then((languages) => {
+          MollyLogger.info(
+            `Polyglot: ${languages.size} languages discovered`,
+            'heartbeat-scheduler'
+          );
+        })
+        .catch((err) => {
+          MollyLogger.warn(
+            `Polyglot discovery failed: ${err instanceof Error ? err.message : String(err)}`,
+            'heartbeat-scheduler'
+          );
+        });
+    } catch (error) {
+      MollyLogger.warn(
+        `Polyglot init failed: ${error instanceof Error ? error.message : String(error)}`,
         'heartbeat-scheduler'
       );
     }

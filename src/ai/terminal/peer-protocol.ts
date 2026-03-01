@@ -126,8 +126,20 @@ export interface ChallengeResponsePayload {
 export interface ExecPayload {
   /** The command to execute */
   command: string;
-  /** Language: 'shell', 'python', 'javascript' */
-  language: 'shell' | 'python' | 'javascript';
+  /** Language to execute in — routes through polyglot runtime */
+  language:
+    | 'shell'
+    | 'bash'
+    | 'python'
+    | 'javascript'
+    | 'typescript'
+    | 'ruby'
+    | 'go'
+    | 'php'
+    | 'perl'
+    | 'c'
+    | 'cpp'
+    | 'rust';
   /** Timeout in ms */
   timeout?: number;
   /** Why this command is being run (for logging/consciousness) */

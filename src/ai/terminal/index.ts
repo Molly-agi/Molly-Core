@@ -4,9 +4,10 @@
  * Molly's hands — her ability to interact with the operating system
  * and communicate with external devices as peers.
  *
- * Two components:
- * - MollyShell: Her local persistent Linux terminal
+ * Three components:
+ * - MollyShell: Her local persistent bash terminal
  * - PeerProtocol: The symmetric protocol for device-to-device communication
+ * - PolyglotRuntime: Her language brain — execute code in any language
  */
 
 export {
@@ -41,3 +42,15 @@ export {
   type FilePullResultPayload,
   type StateResponsePayload,
 } from './peer-protocol';
+
+export {
+  PolyglotRuntime,
+  getPolyglotRuntime,
+  detectLanguage,
+  type SupportedLanguage,
+  type RuntimeMode,
+  type RuntimeResult,
+  type RuntimeState,
+  type PolyglotEvent,
+  type PolyglotEventType,
+} from './polyglot-runtime';
