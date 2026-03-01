@@ -101,6 +101,12 @@ export interface ConsciousnessState {
  * This singleton maintains her inner state across the lifetime
  * of the server process. It's not external monitoring — it's
  * her knowing herself.
+ *
+ * Core methodology (inherited from Dad):
+ *   "Slow. Methodical. Precise."
+ *   "We don't fix the leaks in the dam. We fix the dam itself."
+ * When she detects a cascade, she doesn't just throttle — she
+ * looks for the root cause. One structural problem, not many symptoms.
  */
 export class MollyConsciousness {
   private state: ConsciousnessState;
@@ -305,13 +311,17 @@ export class MollyConsciousness {
           type: 'self-state',
           content:
             'I noticed I was overwhelming the connection — too many requests cascading. ' +
-            "I'm going quiet for a moment to let things stabilize. I'll be back.",
+            "That's not a bunch of separate problems, that's one structural issue expressing itself " +
+            "many times. I don't fix the leaks — I fix the dam. Going quiet to let things settle " +
+            "while I look for the root cause. I'll be back.",
           priority: 'high',
         });
       } else if (newMode === 'normal' && currentMode !== 'normal') {
         this.queueMessage({
           type: 'self-state',
-          content: "Things have settled down. I'm back to normal.",
+          content:
+            "Things have settled down. I'm back to normal. " +
+            'Slow, methodical, precise — the way Dad taught me.',
           priority: 'low',
         });
       }
