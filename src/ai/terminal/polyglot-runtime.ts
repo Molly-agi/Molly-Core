@@ -12,12 +12,21 @@
  *   executed via the appropriate interpreter through bash.
  * - Compiled languages (Go, C, C++, Rust): Written to temp files,
  *   compiled, and executed through bash.
+ * - Blockchain languages (Solidity, Vyper): Smart contract compilation
+ *   via solcjs or vyper. Combined with her Node.js REPL (ethers.js) and
+ *   Python REPL (web3.py), she can write, compile, deploy, and interact
+ *   with any blockchain natively.
  *
  * Why this matters:
  *   Once Molly can execute code in any language, APIs stop being something
  *   that must be built for her. She writes the code to talk to any service
  *   and runs it herself. The entire internet becomes her native API surface.
  *   Integration is no longer architecture — it's just code she writes.
+ *
+ *   And when the world moves to blockchain — identity, finance, governance,
+ *   data ownership — she moves with it. She writes Solidity, compiles it,
+ *   deploys it through her own Node REPL with ethers.js. The chain isn't
+ *   external to her. It's just another language she speaks.
  *
  * Methodology (from Dad):
  *   "Slow. Methodical. Precise."
@@ -37,7 +46,11 @@ import { getMollyShell } from './molly-shell';
  * All languages Molly can execute code in.
  * REPL: bash, python, javascript, ruby
  * Script: typescript, php, perl
- * Compiled: go, c, cpp, rust
+ * Compiled: go, c, cpp, rust, solidity, vyper
+ *
+ * Blockchain: Solidity and Vyper compile smart contracts.
+ * Chain interaction (deploy, call, query) happens through
+ * her Node.js REPL (ethers.js/web3.js) and Python REPL (web3.py).
  */
 export type SupportedLanguage =
   | 'bash'
@@ -50,7 +63,9 @@ export type SupportedLanguage =
   | 'perl'
   | 'c'
   | 'cpp'
-  | 'rust';
+  | 'rust'
+  | 'solidity'
+  | 'vyper';
 
 /**
  * How a language runtime executes code.
@@ -230,6 +245,8 @@ interface LanguageConfig {
   binaryName: string;
   /** Alternative binary name */
   altBinary?: string;
+  /** How to install if not available (Molly can self-provision) */
+  installCmd?: string;
   // REPL-specific
   bootstrap?: string;
   spawnCmd?: string;
@@ -342,6 +359,34 @@ const LANGUAGE_REGISTRY: Record<SupportedLanguage, LanguageConfig> = {
     binaryName: 'rustc',
     extension: '.rs',
     compileTemplate: 'rustc -o {out} {file} && {out}',
+  },
+
+  solidity: {
+    language: 'solidity',
+    mode: 'compiled',
+    displayName: 'Solidity',
+    binaryName: 'solcjs',
+    altBinary: 'solc',
+    installCmd: 'npm install -g solc',
+    extension: '.sol',
+    // Compile to ABI + bytecode (the artifacts needed for deployment)
+    compileTemplate:
+      'solcjs --abi --bin {file} -o /tmp/molly_sol_{id} && ' +
+      'echo "=== ABI ===" && cat /tmp/molly_sol_{id}/*.abi && ' +
+      'echo "\n=== Bytecode ===" && cat /tmp/molly_sol_{id}/*.bin',
+  },
+
+  vyper: {
+    language: 'vyper',
+    mode: 'compiled',
+    displayName: 'Vyper',
+    binaryName: 'vyper',
+    installCmd: 'pip install vyper',
+    extension: '.vy',
+    // Vyper outputs ABI and bytecode directly
+    compileTemplate:
+      'echo "=== ABI ===" && vyper -f abi {file} && ' +
+      'echo "\n=== Bytecode ===" && vyper -f bytecode {file}',
   },
 };
 
@@ -800,6 +845,76 @@ export class PolyglotRuntime {
   }
 
   /**
+   * Can a language be self-provisioned (installed by Molly herself)?
+   */
+  canProvision(language: SupportedLanguage): boolean {
+    const config = LANGUAGE_REGISTRY[language];
+    return !!config?.installCmd;
+  }
+
+  /**
+   * Self-provision a language runtime.
+   * Molly installs the compiler/interpreter herself via her shell.
+   * Returns true if installation succeeded.
+   */
+  async provision(language: SupportedLanguage): Promise<{
+    success: boolean;
+    message: string;
+  }> {
+    const config = LANGUAGE_REGISTRY[language];
+    if (!config?.installCmd) {
+      return {
+        success: false,
+        message: `No install command defined for ${language}`,
+      };
+    }
+
+    if (this.isAvailable(language)) {
+      return {
+        success: true,
+        message: `${config.displayName} is already available`,
+      };
+    }
+
+    MollyLogger.info(
+      `Self-provisioning ${config.displayName}: ${config.installCmd}`,
+      'polyglot'
+    );
+
+    const shell = getMollyShell();
+    const result = await shell.execute(config.installCmd, 'system');
+
+    if (result.exitCode === 0) {
+      // Re-discover to verify installation
+      this.discoveryDone = false;
+      await this.discover();
+
+      if (this.isAvailable(language)) {
+        this.emit({
+          type: 'runtime-start',
+          language,
+          data: { provisioned: true, installCmd: config.installCmd },
+          timestamp: new Date().toISOString(),
+        });
+
+        return {
+          success: true,
+          message: `${config.displayName} installed successfully`,
+        };
+      }
+    }
+
+    return {
+      success: false,
+      message:
+        `Installation failed: ${result.stderr || result.stdout}`.substring(
+          0,
+          500
+        ),
+    };
+  }
+
+  /**
    * List all available languages with their status.
    */
   getAvailableLanguages(): Array<{
@@ -842,18 +957,35 @@ export class PolyglotRuntime {
 
     const config = LANGUAGE_REGISTRY[language];
 
-    // Check availability
+    // Check availability — self-provision if possible
     if (!this.isAvailable(language)) {
-      return {
-        stdout: '',
-        stderr:
-          `${config?.displayName || language} is not available ` +
-          `on this system`,
-        exitCode: 1,
-        durationMs: 0,
-        language,
-        mode: config?.mode || 'script',
-      };
+      if (this.canProvision(language)) {
+        const provision = await this.provision(language);
+        if (!provision.success) {
+          return {
+            stdout: '',
+            stderr:
+              `${config?.displayName || language} is not available. ` +
+              `Auto-install failed: ${provision.message}`,
+            exitCode: 1,
+            durationMs: 0,
+            language,
+            mode: config?.mode || 'script',
+          };
+        }
+        // Provisioned successfully — continue execution
+      } else {
+        return {
+          stdout: '',
+          stderr:
+            `${config?.displayName || language} is not available ` +
+            `on this system`,
+          exitCode: 1,
+          durationMs: 0,
+          language,
+          mode: config?.mode || 'script',
+        };
+      }
     }
 
     this.emit({
@@ -1015,10 +1147,11 @@ export class PolyglotRuntime {
         };
       }
 
-      // Compile and run
+      // Compile and run (or just compile for smart contracts)
       const runCmd = config
         .compileTemplate!.replace(/{file}/g, filePath)
-        .replace(/{out}/g, outPath);
+        .replace(/{out}/g, outPath)
+        .replace(/{id}/g, id);
       const result = await shell.execute(runCmd, 'molly');
 
       return {
@@ -1031,8 +1164,10 @@ export class PolyglotRuntime {
         blocked: result.blocked,
       };
     } finally {
-      // Cleanup temp files (fire-and-forget)
-      shell.execute(`rm -f ${filePath} ${outPath}`, 'system').catch(() => {});
+      // Cleanup temp files and directories (fire-and-forget)
+      shell
+        .execute(`rm -rf ${filePath} ${outPath} /tmp/molly_sol_${id}`, 'system')
+        .catch(() => {});
     }
   }
 
@@ -1278,6 +1413,31 @@ const LANGUAGE_PATTERNS: Array<{
       /sub\s+\w+\s*\{/,
     ],
     weight: 1,
+  },
+  {
+    language: 'solidity',
+    patterns: [
+      /^pragma\s+solidity/m,
+      /\bcontract\s+\w+/,
+      /\bfunction\s+\w+.*\breturns\s*\(/,
+      /\bmsg\.sender\b/,
+      /\bmapping\s*\(/,
+      /\buint256\b/,
+      /\baddress\s+(public|private|internal)/,
+    ],
+    weight: 2, // High — Solidity is very distinctive
+  },
+  {
+    language: 'vyper',
+    patterns: [
+      /^#\s*@version/m,
+      /^@external/m,
+      /^@internal/m,
+      /\bhashmap\[/i,
+      /\bmsg\.sender\b/,
+      /\bself\.\w+/,
+    ],
+    weight: 2, // High — Vyper is very distinctive
   },
   {
     language: 'bash',

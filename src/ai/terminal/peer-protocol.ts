@@ -139,7 +139,9 @@ export interface ExecPayload {
     | 'perl'
     | 'c'
     | 'cpp'
-    | 'rust';
+    | 'rust'
+    | 'solidity'
+    | 'vyper';
   /** Timeout in ms */
   timeout?: number;
   /** Why this command is being run (for logging/consciousness) */
