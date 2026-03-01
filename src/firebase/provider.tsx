@@ -16,6 +16,7 @@ import {
   Auth,
   User,
   onAuthStateChanged,
+  onIdTokenChanged,
   signInAnonymously,
 } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
@@ -145,6 +146,13 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
   // Auto sign-in effect: if user is not authenticated after timeout, try anonymous sign-in
   const autoSignInAttempted = useRef(false);
 
+  // Reset autoSignInAttempted when user becomes null (allows re-auth on token expiry)
+  useEffect(() => {
+    if (!userAuthState.user && !userAuthState.isUserLoading) {
+      autoSignInAttempted.current = false;
+    }
+  }, [userAuthState.user, userAuthState.isUserLoading]);
+
   useEffect(() => {
     if (!auth) return;
     if (autoSignInAttempted.current) return;
@@ -188,6 +196,44 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
     performAutoSignIn();
   }, [auth, userAuthState.user, userAuthState.isUserLoading]);
+
+  // Token resilience: monitor ID token changes and auto-recover on token loss
+  useEffect(() => {
+    if (!auth) return;
+
+    const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
+      if (!user) {
+        // Token expired or was revoked — attempt re-authentication
+        console.warn(
+          '[FirebaseProvider] ID token lost — attempting auto-recovery'
+        );
+        const trace = (globalThis as Record<string, unknown>).__MOLLY_TRACE as
+          | ((...args: unknown[]) => void)
+          | undefined;
+        if (trace) trace('AUTH', 'Token lost — auto-recovery', 'start');
+
+        try {
+          const result = await signInAnonymously(auth);
+          console.log(
+            '[FirebaseProvider] Token recovery successful:',
+            result.user.uid
+          );
+          if (trace)
+            trace('AUTH', 'Token recovery successful', 'complete', {
+              uid: result.user.uid,
+            });
+        } catch (error) {
+          console.error('[FirebaseProvider] Token recovery failed:', error);
+          if (trace)
+            trace('AUTH', 'Token recovery failed', 'error', {
+              error: String(error),
+            });
+        }
+      }
+    });
+
+    return () => unsubscribeToken();
+  }, [auth]);
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
