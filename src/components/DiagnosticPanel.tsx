@@ -88,7 +88,6 @@ export function DiagnosticPanel() {
   const runtimeInFlight = useRef(false);
 
   const isActionActive = (key: ActionKey) => activeActions.has(key);
-  const anyActionActive = activeActions.size > 0;
 
   const startAction = useCallback((key: ActionKey) => {
     setActiveActions((prev) => new Set(prev).add(key));

@@ -867,14 +867,17 @@ export class NeuralEngramSystem {
 // ============================================================================
 
 let _globalBrain: NeuralEngramSystem | null = null;
+let _consolidationTimer: ReturnType<typeof setInterval> | null = null;
 
 export function getNeuralBrain(): NeuralEngramSystem {
   if (!_globalBrain) {
     _globalBrain = new NeuralEngramSystem();
 
     // Auto-consolidate every 5 minutes
-    setInterval(async () => {
-      await _globalBrain!.consolidate();
+    _consolidationTimer = setInterval(async () => {
+      if (_globalBrain) {
+        await _globalBrain.consolidate();
+      }
     }, 300000);
   }
 
@@ -892,6 +895,10 @@ export function clearNeuralPersistence(): void {
 }
 
 export function shutdownNeuralBrain(): void {
+  if (_consolidationTimer) {
+    clearInterval(_consolidationTimer);
+    _consolidationTimer = null;
+  }
   if (_globalBrain) {
     _globalBrain.destroy();
     _globalBrain = null;

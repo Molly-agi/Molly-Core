@@ -36,7 +36,6 @@ import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getMollyShell, getPolyglotRuntime } from '@/ai/terminal';
 import { getStatePersistence } from '@/ai/persistence';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
-import { getEventListener } from '@/ai/tools/event-listener';
 
 // ============================================================================
 // TYPES
