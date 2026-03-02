@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import {
   diagnoseMollyNeuralLink,
   restoreMollyNeuralLink,
@@ -47,8 +47,36 @@ function isFullSnapshot(s: RuntimeSnapshotState): s is RuntimeSnapshot {
   return 'circuitBreaker' in s;
 }
 
+/** Client-side timeout wrapper. Never lets a server action hang the UI forever. */
+const CLIENT_ACTION_TIMEOUT_MS = 25000;
+
+function withClientTimeout<T>(promise: Promise<T>, label: string): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) =>
+      setTimeout(
+        () =>
+          reject(
+            new Error(
+              `${label} — no response after ${CLIENT_ACTION_TIMEOUT_MS / 1000}s. The server may be overloaded.`
+            )
+          ),
+        CLIENT_ACTION_TIMEOUT_MS
+      )
+    ),
+  ]);
+}
+
+type ActionKey =
+  | 'diagnostic'
+  | 'recovery'
+  | 'circuitBreaker'
+  | 'models'
+  | 'reset';
+
 export function DiagnosticPanel() {
-  const [loading, setLoading] = useState(false);
+  // Per-action loading states — one stuck action can't lock out the others
+  const [activeActions, setActiveActions] = useState<Set<ActionKey>>(new Set());
   const [results, setResults] = useState<ResultEntry | null>(null);
   const [runtimeSnapshot, setRuntimeSnapshot] =
     useState<RuntimeSnapshotState | null>(null);
@@ -59,16 +87,33 @@ export function DiagnosticPanel() {
   const [showJson, setShowJson] = useState(false);
   const runtimeInFlight = useRef(false);
 
+  const isActionActive = (key: ActionKey) => activeActions.has(key);
+  const anyActionActive = activeActions.size > 0;
+
+  const startAction = useCallback((key: ActionKey) => {
+    setActiveActions((prev) => new Set(prev).add(key));
+  }, []);
+
+  const endAction = useCallback((key: ActionKey) => {
+    setActiveActions((prev) => {
+      const next = new Set(prev);
+      next.delete(key);
+      return next;
+    });
+  }, []);
+
   // ── helpers ────────────────────────────────────────────────
 
   const wrap = async (
+    actionKey: ActionKey,
     label: string,
     fn: () => Promise<Record<string, unknown>>
   ) => {
-    setLoading(true);
+    if (isActionActive(actionKey)) return; // prevent double-click
+    startAction(actionKey);
     setShowJson(false);
     try {
-      const data = await fn();
+      const data = await withClientTimeout(fn(), label);
       const summary =
         data?.diagnosis || data?.message || data?.globalState || 'Done';
       setResults({ label, status: 'ok', summary: String(summary), data });
@@ -79,23 +124,25 @@ export function DiagnosticPanel() {
         summary: e instanceof Error ? e.message : String(e),
       });
     } finally {
-      setLoading(false);
+      endAction(actionKey);
     }
   };
 
   // ── actions ────────────────────────────────────────────────
 
-  const runDiagnostic = () => wrap('Diagnostic', diagnoseMollyNeuralLink);
+  const runDiagnostic = () =>
+    wrap('diagnostic', 'Diagnostic', diagnoseMollyNeuralLink);
 
-  const runRecovery = () => wrap('Recovery', restoreMollyNeuralLink);
+  const runRecovery = () =>
+    wrap('recovery', 'Recovery', restoreMollyNeuralLink);
 
   const checkCircuitBreaker = () =>
-    wrap('Circuit Breaker', getCircuitBreakerStatus);
+    wrap('circuitBreaker', 'Circuit Breaker', getCircuitBreakerStatus);
 
-  const testModels = () => wrap('Model Test', testModelAvailability);
+  const testModels = () => wrap('models', 'Model Test', testModelAvailability);
 
   const resetBreaker = (op?: string) =>
-    wrap('Breaker Reset', async () => {
+    wrap('reset', 'Breaker Reset', async () => {
       await resetCircuitBreaker(op);
       return getCircuitBreakerStatus();
     });
@@ -105,14 +152,18 @@ export function DiagnosticPanel() {
     runtimeInFlight.current = true;
     setRuntimeLoading(true);
     try {
-      const snapshot = await getRuntimeSnapshot();
+      const snapshot = await withClientTimeout(
+        getRuntimeSnapshot(),
+        'Runtime Snapshot'
+      );
       setRuntimeSnapshot(snapshot);
       setRuntimeLastUpdated(new Date().toISOString());
     } catch (e) {
-      setResults({
-        label: 'Runtime',
+      setRuntimeSnapshot({
+        timestamp: new Date().toISOString(),
         status: 'error',
-        summary: e instanceof Error ? e.message : String(e),
+        timeoutMs: CLIENT_ACTION_TIMEOUT_MS,
+        message: e instanceof Error ? e.message : String(e),
       });
     } finally {
       setRuntimeLoading(false);
@@ -191,13 +242,13 @@ export function DiagnosticPanel() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {/* Emergency Reset */}
+          {/* Emergency Reset — NEVER disabled by other actions */}
           <Button
             onClick={() => resetBreaker()}
-            disabled={loading}
+            disabled={isActionActive('reset')}
             className="w-full gap-2 bg-orange-600 hover:bg-orange-700 text-white font-bold"
           >
-            {loading ? (
+            {isActionActive('reset') ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
               <RefreshCw className="w-4 h-4" />
@@ -209,37 +260,51 @@ export function DiagnosticPanel() {
           <div className="grid grid-cols-2 gap-2">
             <Button
               onClick={runDiagnostic}
-              disabled={loading}
+              disabled={isActionActive('diagnostic')}
               variant="outline"
               size="sm"
               className="gap-1"
             >
-              <AlertTriangle className="w-3 h-3" />
+              {isActionActive('diagnostic') ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <AlertTriangle className="w-3 h-3" />
+              )}
               Diagnostic
             </Button>
             <Button
               onClick={runRecovery}
-              disabled={loading}
+              disabled={isActionActive('recovery')}
               size="sm"
               className="gap-1 bg-green-600 hover:bg-green-700 text-white"
             >
-              <RefreshCw className="w-3 h-3" />
+              {isActionActive('recovery') ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <RefreshCw className="w-3 h-3" />
+              )}
               Restore Link
             </Button>
             <Button
               onClick={checkCircuitBreaker}
-              disabled={loading}
+              disabled={isActionActive('circuitBreaker')}
               variant="secondary"
               size="sm"
             >
+              {isActionActive('circuitBreaker') ? (
+                <Loader2 className="w-3 h-3 animate-spin mr-1" />
+              ) : null}
               Circuit Status
             </Button>
             <Button
               onClick={testModels}
-              disabled={loading}
+              disabled={isActionActive('models')}
               variant="secondary"
               size="sm"
             >
+              {isActionActive('models') ? (
+                <Loader2 className="w-3 h-3 animate-spin mr-1" />
+              ) : null}
               Test Models
             </Button>
           </div>

@@ -7,6 +7,31 @@ import {
 import { testModelAvailability } from './model-test';
 import { MollyLogger } from '@/ai/logger';
 
+/** Race a promise against a timeout. Returns fallback on timeout instead of throwing. */
+function withTimeoutFallback<T>(
+  promise: Promise<T>,
+  ms: number,
+  fallback: T,
+  label: string
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) =>
+      setTimeout(() => {
+        MollyLogger.warn(
+          `${label} timed out after ${ms}ms — using fallback`,
+          'diagnostics',
+          {}
+        );
+        resolve(fallback);
+      }, ms)
+    ),
+  ]);
+}
+
+const DIAGNOSTIC_STEP_TIMEOUT_MS = 10000;
+const FULL_DIAGNOSTIC_TIMEOUT_MS = 20000;
+
 /**
  * Comprehensive diagnostic and recovery for Molly's neural link
  *
@@ -17,11 +42,41 @@ import { MollyLogger } from '@/ai/logger';
  * 4. Recommends fixes based on findings
  */
 export async function diagnoseMollyNeuralLink() {
+  const fallbackCircuitBreaker = {
+    timestamp: new Date().toISOString(),
+    operationStats: {},
+    error: 'Circuit breaker status timed out',
+  };
+
+  const fallbackModelAvail = {
+    timestamp: new Date().toISOString(),
+    modelTests: {
+      FLASH: { available: false, error: 'Model test timed out', latencyMs: 0 },
+      PRO: { available: false, error: 'Model test timed out', latencyMs: 0 },
+    },
+    apiKeyConfigured: !!process.env.GOOGLE_GENAI_API_KEY,
+  };
+
   const [circuitBreakerStatus, modelAvailability, runtimeSnapshot] =
     await Promise.all([
-      getCircuitBreakerStatus(),
-      testModelAvailability(),
-      getRuntimeSnapshot().catch(() => null),
+      withTimeoutFallback(
+        getCircuitBreakerStatus(),
+        DIAGNOSTIC_STEP_TIMEOUT_MS,
+        fallbackCircuitBreaker,
+        'getCircuitBreakerStatus'
+      ),
+      withTimeoutFallback(
+        testModelAvailability(),
+        DIAGNOSTIC_STEP_TIMEOUT_MS,
+        fallbackModelAvail,
+        'testModelAvailability'
+      ),
+      withTimeoutFallback(
+        getRuntimeSnapshot().catch(() => null),
+        DIAGNOSTIC_STEP_TIMEOUT_MS,
+        null,
+        'getRuntimeSnapshot'
+      ),
     ]);
 
   const diagnostics = {
@@ -147,7 +202,36 @@ export async function diagnoseMollyNeuralLink() {
  * 2. Reset the immune-response circuit breaker
  * 3. Verify communication is restored
  */
-export async function restoreMollyNeuralLink() {
+type RecoveryResult = {
+  success: boolean;
+  message: string | null;
+  recoveryLog: {
+    startTime: string;
+    beforeDiagnostic: unknown;
+    resetOperations: Array<{ operation: string; success: boolean }>;
+    afterDiagnostic: unknown;
+  } | null;
+};
+
+export async function restoreMollyNeuralLink(): Promise<RecoveryResult> {
+  // Wrap the entire recovery in a timeout so it can never hang the UI
+  const recoveryPromise = _restoreMollyNeuralLinkInner();
+  return withTimeoutFallback(
+    recoveryPromise,
+    FULL_DIAGNOSTIC_TIMEOUT_MS,
+    {
+      success: false,
+      message:
+        'Recovery timed out after ' +
+        FULL_DIAGNOSTIC_TIMEOUT_MS / 1000 +
+        's. Circuit breakers may have been partially reset.',
+      recoveryLog: null,
+    },
+    'restoreMollyNeuralLink'
+  );
+}
+
+async function _restoreMollyNeuralLinkInner(): Promise<RecoveryResult> {
   try {
     // Get current status
     const beforeDiag = await diagnoseMollyNeuralLink();

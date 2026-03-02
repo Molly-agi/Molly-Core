@@ -6,6 +6,21 @@ import { verifyRecordIntegrity } from '@/ai/tools/memory-integrity';
 import { loadSessionState } from '@/lib/session-manager';
 import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 
+/** Race a promise against a timeout — returns fallback on timeout. */
+function withTimeoutFallback<T>(
+  promise: Promise<T>,
+  ms: number,
+  fallback: T
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
+const FIRESTORE_QUERY_TIMEOUT_MS = 5000;
+const SYSTEM_HEALTH_TIMEOUT_MS = 3000;
+
 export interface RuntimeSnapshot {
   timestamp: string;
   heartbeat: {
@@ -87,13 +102,29 @@ async function collectMemoryHealth(userId?: string) {
 
   try {
     const firestore = getAdminFirestore();
-    const snapshot = await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('aiResponses')
-      .orderBy('timestamp', 'desc')
-      .limit(20)
-      .get();
+    const snapshot = await withTimeoutFallback(
+      firestore
+        .collection('users')
+        .doc(userId)
+        .collection('aiResponses')
+        .orderBy('timestamp', 'desc')
+        .limit(20)
+        .get(),
+      FIRESTORE_QUERY_TIMEOUT_MS,
+      null
+    );
+
+    if (!snapshot) {
+      return {
+        status: 'degraded' as const,
+        userId,
+        checkedRecords: 0,
+        validChecksums: 0,
+        invalidChecksums: 0,
+        missingChecksums: 0,
+        warning: 'Memory health check timed out — Firestore may be slow.',
+      };
+    }
 
     let validChecksums = 0;
     let invalidChecksums = 0;
@@ -151,9 +182,13 @@ export async function collectRuntimeSnapshot(
   const heartbeatMs = parseTimestampMs(runtime.lastHeartbeat);
 
   const [systemHealthResult, memoryHealth] = await Promise.all([
-    getSystemHealth({})
-      .then((health) => ({ ok: true as const, health }))
-      .catch(() => ({ ok: false as const })),
+    withTimeoutFallback(
+      getSystemHealth({})
+        .then((health) => ({ ok: true as const, health }))
+        .catch(() => ({ ok: false as const })),
+      SYSTEM_HEALTH_TIMEOUT_MS,
+      { ok: false as const }
+    ),
     collectMemoryHealth(userId),
   ]);
 

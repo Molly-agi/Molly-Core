@@ -3,8 +3,29 @@ import { ai, MODEL_FLASH, MODEL_PRO } from '@/ai/genkit';
 import { MollyLogger } from '@/ai/logger';
 import { ensureApiKey } from './utils';
 
+/** Race a promise against a timeout. Returns the result or throws on timeout. */
+function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  label: string
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) =>
+      setTimeout(
+        () => reject(new Error(`${label} timed out after ${ms}ms`)),
+        ms
+      )
+    ),
+  ]);
+}
+
+const MODEL_TEST_TIMEOUT_MS = 8000;
+
 /**
- * Test which models are currently available
+ * Test which models are currently available.
+ * Each model test is individually time-boxed so a hung API
+ * can never freeze the diagnostics panel.
  */
 export async function testModelAvailability() {
   ensureApiKey();
@@ -18,13 +39,17 @@ export async function testModelAvailability() {
     apiKeyConfigured: !!process.env.GOOGLE_GENAI_API_KEY,
   };
 
-  // Test MODEL_FLASH
+  // Test MODEL_FLASH (time-boxed)
   try {
     const start = Date.now();
-    await ai.generate({
-      model: MODEL_FLASH,
-      prompt: 'Say "Flash works" in one word.',
-    });
+    await withTimeout(
+      ai.generate({
+        model: MODEL_FLASH,
+        prompt: 'Say "Flash works" in one word.',
+      }),
+      MODEL_TEST_TIMEOUT_MS,
+      'MODEL_FLASH'
+    );
     results.modelTests.FLASH = {
       available: true,
       error: null,
@@ -50,13 +75,17 @@ export async function testModelAvailability() {
     );
   }
 
-  // Test MODEL_PRO
+  // Test MODEL_PRO (time-boxed)
   try {
     const start = Date.now();
-    await ai.generate({
-      model: MODEL_PRO,
-      prompt: 'Say "Pro works" in one word.',
-    });
+    await withTimeout(
+      ai.generate({
+        model: MODEL_PRO,
+        prompt: 'Say "Pro works" in one word.',
+      }),
+      MODEL_TEST_TIMEOUT_MS,
+      'MODEL_PRO'
+    );
     results.modelTests.PRO = {
       available: true,
       error: null,
