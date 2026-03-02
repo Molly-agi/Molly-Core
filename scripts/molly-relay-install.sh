@@ -1,27 +1,40 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# Molly Relay — One-Shot Installer
-# Paste this ONE command in Termux:
-#   curl -sL https://raw.githubusercontent.com/Molly-agi/Molly-Core/main/scripts/molly-relay-install.sh | bash
+# Molly Relay v2.0 — One-Shot Installer
+#
+# OPTION 1 — From Molly's server (when running):
+#   curl -sL https://<molly-url>/api/relay/install?format=installer | bash
+#
+# OPTION 2 — Direct script (this file must be accessible):
+#   curl -sL <this-url> | bash
 #
 # That's it. It downloads everything, sets up auto-boot, and starts the relay.
 
 set -e
 
 echo ""
-echo "  Molly Relay — Installing..."
+echo "  Molly Relay v2.0 — Installing..."
 echo ""
 
-# Install curl if missing
+# Install python + curl if missing
 command -v curl >/dev/null 2>&1 || { pkg install -y curl; }
+command -v python3 >/dev/null 2>&1 || { pkg install -y python; }
 
-# Create directory
+# Create directories
 mkdir -p ~/molly-relay
 mkdir -p ~/.molly-logs
 
-# Download relay script
-echo "  Downloading relay..."
-curl -sL -o ~/molly-relay/termux-relay.py \
-  https://raw.githubusercontent.com/Molly-agi/Molly-Core/main/scripts/termux-relay.py
+# Download relay v2 script
+echo "  Downloading relay v2..."
+# Try Molly's server first, fall back to codespace URL
+MOLLY_SERVER="${MOLLY_CORE_URL:-}"
+if [ -n "$MOLLY_SERVER" ]; then
+  curl -sL -o ~/molly-relay/termux-relay.py \
+    "${MOLLY_SERVER}/api/relay/install" && echo "  Downloaded from Molly's server"
+else
+  echo "  Set MOLLY_CORE_URL to download automatically."
+  echo "  Example: export MOLLY_CORE_URL=https://your-molly-app.web.app"
+  exit 1
+fi
 chmod +x ~/molly-relay/termux-relay.py
 
 # Set up Termux:Boot auto-start
@@ -63,8 +76,9 @@ sleep 2
 # Verify
 if kill -0 $RELAY_PID 2>/dev/null; then
   echo ""
-  echo "  DONE! Relay running on port 8023 (PID $RELAY_PID)"
+  echo "  DONE! Relay v2.0 running on port 8023 (PID $RELAY_PID)"
   echo ""
+  echo "  Features: Peer Protocol, HMAC-SHA256 auth, command safety"
   echo "  Auto-starts on boot (install Termux:Boot from F-Droid)"
   echo "  Disable battery optimization for Termux in Android settings"
   echo ""

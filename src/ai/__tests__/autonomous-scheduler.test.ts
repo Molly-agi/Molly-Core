@@ -202,7 +202,7 @@ describe('AutonomousScheduler', () => {
 
       const originalTimeout = AbortSignal.timeout;
       if (!AbortSignal.timeout) {
-        (AbortSignal as Record<string, unknown>).timeout = () =>
+        (AbortSignal as unknown as Record<string, unknown>).timeout = () =>
           new AbortController().signal;
       }
 
@@ -230,7 +230,8 @@ describe('AutonomousScheduler', () => {
         expect(mockFetch).toHaveBeenCalled();
       } finally {
         global.fetch = originalFetch;
-        (AbortSignal as Record<string, unknown>).timeout = originalTimeout;
+        (AbortSignal as unknown as Record<string, unknown>).timeout =
+          originalTimeout;
       }
     });
   });
