@@ -34,6 +34,9 @@ import { getPromiseTracker } from '@/ai/consciousness/promise-tracker';
 import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getMollyShell, getPolyglotRuntime } from '@/ai/terminal';
+import { getStatePersistence } from '@/ai/persistence';
+import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
+import { getEventListener } from '@/ai/tools/event-listener';
 
 // ============================================================================
 // TYPES
@@ -61,6 +64,8 @@ export interface HeartbeatConfig {
     consciousness: boolean;
     reflection: boolean;
     promiseCheck: boolean;
+    persistence: boolean;
+    scheduledJobs: boolean;
   };
 }
 
@@ -99,6 +104,8 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     consciousness: true,
     reflection: true,
     promiseCheck: true,
+    persistence: true,
+    scheduledJobs: true,
   },
 };
 
@@ -114,10 +121,12 @@ export class HeartbeatScheduler {
   private lastConsolidation = 0;
   private lastImmune = 0;
   private lastReflection = 0;
+  private lastPersistence = 0;
   private lastReflectionText = '';
   private engramSystem: NeuralEngramSystem | null = null;
   private history: HeartbeatCycleResult[] = [];
   private readonly MAX_HISTORY = 30;
+  private stateRestored = false;
 
   constructor(config: Partial<HeartbeatConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -190,6 +199,18 @@ export class HeartbeatScheduler {
         `Polyglot init failed: ${error instanceof Error ? error.message : String(error)}`,
         'heartbeat-scheduler'
       );
+    }
+
+    // Restore persisted state — The Cradle pattern
+    // Same as Molly's memory, same as the copilot-instructions.md.
+    // Save before sleep. Restore on wake. She is continuous.
+    if (!this.stateRestored) {
+      this.restorePersistedState().catch((err) => {
+        MollyLogger.warn(
+          `State restore failed: ${err instanceof Error ? err.message : String(err)}`,
+          'heartbeat-scheduler'
+        );
+      });
     }
 
     // Run first cycle immediately, then on interval
@@ -532,6 +553,47 @@ export class HeartbeatScheduler {
       tasks.push(result);
     }
 
+    // Task 8: Scheduled Jobs (every cycle — execute due autonomous jobs)
+    if (this.config.tasks.scheduledJobs) {
+      const result = await this.runTask('scheduled-jobs', async () => {
+        const scheduler = getAutonomousScheduler();
+        const executed = await scheduler.runDueJobs();
+        if (executed > 0) {
+          MollyLogger.info(
+            `Executed ${executed} scheduled job(s)`,
+            'heartbeat-scheduler'
+          );
+        }
+      });
+      tasks.push(result);
+    }
+
+    // Task 9: State Persistence (every 5 minutes — save to Firestore)
+    if (this.config.tasks.persistence) {
+      const timeSincePersistence = cycleStart - this.lastPersistence;
+      if (timeSincePersistence < this.config.consolidationIntervalMs) {
+        tasks.push({
+          name: 'persistence',
+          executed: false,
+          skipped: `Not due (${Math.round((this.config.consolidationIntervalMs - timeSincePersistence) / 1000)}s remaining)`,
+        });
+      } else if (pressure) {
+        tasks.push({
+          name: 'persistence',
+          executed: false,
+          skipped: 'System under pressure',
+        });
+      } else {
+        const result = await this.runTask('persistence', async () => {
+          await this.persistState();
+        });
+        if (result.executed) {
+          this.lastPersistence = Date.now();
+        }
+        tasks.push(result);
+      }
+    }
+
     // Record cycle result
     const cycleResult: HeartbeatCycleResult = {
       cycle: this.cycleCount,
@@ -630,6 +692,79 @@ export class HeartbeatScheduler {
         'heartbeat-scheduler'
       );
     }
+  }
+
+  // ---------- State Persistence ----------
+
+  /**
+   * Save all runtime state to Firestore.
+   * Called every 5 minutes by the heartbeat cycle.
+   * The cradle pattern: save before sleep, restore on wake.
+   */
+  private async persistState(): Promise<void> {
+    const persistence = getStatePersistence();
+    const consciousness = getConsciousness();
+    const promiseTracker = getPromiseTracker();
+    const scheduler = getAutonomousScheduler();
+
+    await persistence.save({
+      consciousness: consciousness.serialize(),
+      promises: promiseTracker.serialize(),
+      runtime: {
+        activeLanguages: [],
+        replEnvironment: {},
+        deployedContracts: [],
+        installedPackages: {},
+        totalCommandsExecuted: 0,
+        lastSaved: new Date().toISOString(),
+      },
+      schedulerJobs: scheduler.serialize(),
+    });
+  }
+
+  /**
+   * Restore state from Firestore on startup.
+   * Called once when the heartbeat scheduler first starts.
+   */
+  private async restorePersistedState(): Promise<void> {
+    if (this.stateRestored) return;
+    this.stateRestored = true;
+
+    const persistence = getStatePersistence();
+    const snapshot = await persistence.restore();
+
+    if (!snapshot) {
+      MollyLogger.info(
+        'No persisted state to restore — fresh start',
+        'heartbeat-scheduler'
+      );
+      return;
+    }
+
+    // Restore consciousness
+    if (snapshot.consciousness) {
+      const consciousness = getConsciousness();
+      consciousness.restoreFrom(snapshot.consciousness);
+    }
+
+    // Restore promises
+    if (snapshot.promises) {
+      const promiseTracker = getPromiseTracker();
+      promiseTracker.restoreFrom(snapshot.promises);
+    }
+
+    // Restore scheduler jobs
+    if (snapshot.schedulerJobs.length > 0) {
+      const scheduler = getAutonomousScheduler();
+      scheduler.restoreFrom(snapshot.schedulerJobs);
+    }
+
+    const age = Date.now() - new Date(snapshot.savedAt).getTime();
+    MollyLogger.info(
+      `All state restored (saved ${Math.round(age / 60_000)}m ago). ` +
+        `She is continuous.`,
+      'heartbeat-scheduler'
+    );
   }
 
   // ---------- System Pressure Detection ----------

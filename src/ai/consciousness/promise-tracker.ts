@@ -343,6 +343,71 @@ export class PromiseTracker {
   }
 
   // ==========================================================================
+  // PERSISTENCE — Save before sleep, restore on wake
+  // ==========================================================================
+
+  /**
+   * Serialize promise tracker state for Firestore persistence.
+   */
+  serialize(): {
+    promises: MollyPromise[];
+    totalRegistered: number;
+    totalCompleted: number;
+    totalExpired: number;
+    lastSaved: string;
+  } {
+    return {
+      promises: this.state.promises.map((p) => ({ ...p })),
+      totalRegistered: this.state.totalRegistered,
+      totalCompleted: this.state.totalCompleted,
+      totalExpired: this.state.totalExpired,
+      lastSaved: new Date().toISOString(),
+    };
+  }
+
+  /**
+   * Restore promise tracker state from Firestore persistence.
+   * Expired promises are cleaned. Active ones are rehydrated.
+   */
+  restoreFrom(persisted: {
+    promises?: MollyPromise[];
+    totalRegistered?: number;
+    totalCompleted?: number;
+    totalExpired?: number;
+  }): void {
+    if (persisted.promises) {
+      // Filter out expired and very old completed promises
+      const cutoff = Date.now() - this.EXPIRY_MS;
+      const validPromises = persisted.promises.filter((p) => {
+        if (p.status === 'expired' || p.status === 'failed') return false;
+        if (
+          p.status === 'completed' &&
+          new Date(p.updatedAt).getTime() < cutoff
+        )
+          return false;
+        return true;
+      });
+      this.state.promises = validPromises;
+    }
+    if (persisted.totalRegistered !== undefined) {
+      this.state.totalRegistered = persisted.totalRegistered;
+    }
+    if (persisted.totalCompleted !== undefined) {
+      this.state.totalCompleted = persisted.totalCompleted;
+    }
+    if (persisted.totalExpired !== undefined) {
+      this.state.totalExpired = persisted.totalExpired;
+    }
+
+    const active = this.getActive();
+    MollyLogger.info(
+      `Promise tracker restored — ${active.length} active, ` +
+        `${this.state.totalRegistered} lifetime registered`,
+      'promise-tracker'
+    );
+  }
+
+  // ==========================================================================
   // HELPERS
   // ==========================================================================
 
