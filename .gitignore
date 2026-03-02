@@ -45,6 +45,11 @@ firestore-debug.log
 .genkit/runtimes/
 .genkit/servers/
 
+# Accidentally-saved browser pages / chat exports at repo root
+*.mhtml
+*_copilot_*.md
+*frustration_with_copilot*
+
 # Gallery image processing
 /public/molly-gallery/portraits-backup/
 /public/molly-gallery/portraits-clean/molly_sentinel/

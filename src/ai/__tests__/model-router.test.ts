@@ -86,8 +86,21 @@ function createMockProvider(
 // ════════════════════════════════════════════════════════════
 
 describe('ModelRouter — Rogue Protocol', () => {
+  const originalApiKey = process.env.GOOGLE_GENAI_API_KEY;
+
   beforeEach(() => {
     resetModelRouter();
+    // Ensure GeminiProvider.isConfigured() returns true in tests so routing
+    // decisions reflect chain logic, not missing-key fallback behaviour.
+    process.env.GOOGLE_GENAI_API_KEY = 'test-key';
+  });
+
+  afterEach(() => {
+    if (originalApiKey === undefined) {
+      delete process.env.GOOGLE_GENAI_API_KEY;
+    } else {
+      process.env.GOOGLE_GENAI_API_KEY = originalApiKey;
+    }
   });
 
   // ── TaskType enum ──
