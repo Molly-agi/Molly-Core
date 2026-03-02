@@ -24,7 +24,14 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
+import {
+  writeFileSync,
+  readFileSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  statSync,
+} from 'fs';
 import { join, dirname } from 'path';
 import type { CodeAnalysisResult } from './code-analysis';
 import {
@@ -477,14 +484,11 @@ export async function integrateFromAnalysis(
 export async function listIntegrations(): Promise<string[]> {
   if (!existsSync(INTEGRATIONS_DIR)) return [];
 
-  const { readdirSync, statSync } = require('fs') as typeof import('fs');
-  const { join: pJoin } = require('path') as typeof import('path');
-
   const results: string[] = [];
 
   function walk(dir: string) {
     for (const entry of readdirSync(dir)) {
-      const full = pJoin(dir, entry);
+      const full = join(dir, entry);
       if (statSync(full).isDirectory()) {
         walk(full);
       } else if (entry.endsWith('.ts') || entry.endsWith('.tsx')) {

@@ -102,6 +102,7 @@ export function MemoryViewer() {
                       className="flex gap-2 rounded-md border border-white/10 bg-black/40 p-2"
                     >
                       {anchor.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img
                           src={anchor.imageUrl}
                           alt={anchor.title}

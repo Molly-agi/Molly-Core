@@ -23,7 +23,7 @@ import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
 import { readdirSync, readFileSync, existsSync } from 'fs';
-import { join, basename } from 'path';
+import { join } from 'path';
 import type { CodeAnalysisResult } from './code-analysis';
 import { codeIntegrationFlow } from './code-integration';
 import {
@@ -198,7 +198,8 @@ const CodeAnalysisOutputSchema = z.object({
 async function analyzeLocalCode(
   pillars: PillarFile[],
   testResults: PillarTestResult[],
-  traceId: string
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _traceId: string
 ): Promise<CodeAnalysisResult> {
   const codeBundle = pillars
     .map(

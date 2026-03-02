@@ -88,6 +88,7 @@ export function ChatHistory({
                     Visual Cortex Report
                   </h5>
                   {r.thumbnailUri && (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={r.thumbnailUri}
                       alt="Captured frame"

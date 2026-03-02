@@ -385,7 +385,8 @@ export class ClaudeProvider implements ModelProvider {
     this.model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
   }
 
-  resolveModel(taskType: TaskType): string {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  resolveModel(_taskType: TaskType): string {
     // Claude excels at reasoning and code — use the same model for all
     return `anthropic/${this.model}`;
   }

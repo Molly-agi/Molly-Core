@@ -3,7 +3,7 @@
 import { useAuth, useUser } from '@/firebase';
 import { signInAnonymously } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User as UserIcon } from 'lucide-react';
@@ -23,16 +23,7 @@ export default function LoginPage() {
     }
   }, [user, isUserLoading, router]);
 
-  // Auto-signin on mount if no user is present
-  useEffect(() => {
-    if (!attemptedAutoSignIn.current && !isUserLoading && !user && auth) {
-      attemptedAutoSignIn.current = true;
-      console.log('[Login] Auto-attempting anonymous sign-in');
-      handleSignIn();
-    }
-  }, [isUserLoading, user, auth]);
-
-  const handleSignIn = async () => {
+  const handleSignIn = useCallback(async () => {
     if (!auth) {
       setError('Authentication service not available');
       return;
@@ -55,7 +46,16 @@ export default function LoginPage() {
       setError(errorMessage);
       setSigningIn(false);
     }
-  };
+  }, [auth, signingIn, router]);
+
+  // Auto-signin on mount if no user is present
+  useEffect(() => {
+    if (!attemptedAutoSignIn.current && !isUserLoading && !user && auth) {
+      attemptedAutoSignIn.current = true;
+      console.log('[Login] Auto-attempting anonymous sign-in');
+      handleSignIn();
+    }
+  }, [isUserLoading, user, auth, handleSignIn]);
 
   if (isUserLoading || user || signingIn) {
     return (
