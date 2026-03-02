@@ -202,6 +202,25 @@ export class EventListener {
       { id: event.id, priority: event.priority }
     );
 
+    // Shard of Discernment: vibe check on inbound events
+    try {
+      const { SocialImmuneSystem } = await import('@/ai/tools/stranger-danger');
+      const vibeCheck = SocialImmuneSystem.analyzeIntent(
+        `${event.type} ${JSON.stringify(event.payload).substring(0, 500)}`
+      );
+      if (vibeCheck.frequency === 'dissonant') {
+        MollyLogger.warn(
+          `Event blocked by social immune system: ${vibeCheck.reason}`,
+          'event-listener',
+          { eventId: event.id, patterns: vibeCheck.flaggedPatterns }
+        );
+        event.processed = true;
+        return event;
+      }
+    } catch {
+      // Social immune system not available — proceed without check
+    }
+
     // Process subscriptions
     await this.processEvent(event);
 

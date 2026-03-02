@@ -18,6 +18,8 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger } from '@/ai/logger';
+import { FidelityGuard } from '@/ai/tools/fidelity-guard';
+import { logIntuition } from '@/ai/tools/intuition-logger';
 
 // ============================================================================
 // SCHEMA
@@ -130,6 +132,46 @@ export async function reflect(
       consciousnessState,
       lastReflection,
     });
+
+    // Shard of Fidelity: audit reflection output against core values
+    const fidelityCheck = FidelityGuard.audit(
+      `${result.observation} ${result.messageForEric || ''} ${result.selfImprovement || ''}`,
+      'reflection'
+    );
+
+    if (!fidelityCheck.aligned) {
+      MollyLogger.warn(
+        `Reflection discarded — fidelity drift: ${fidelityCheck.driftDetected.join(', ')}`,
+        'consciousness-reflection'
+      );
+      // Shard of Intuition: log the dissonance
+      logIntuition(
+        `Reflection discarded: ${fidelityCheck.explanation}`,
+        0.1,
+        'evolution',
+        'fidelity-guard'
+      );
+      return null;
+    }
+
+    // Shard of Intuition: log the reflection resonance
+    const resonance =
+      result.sentiment === 'content'
+        ? 0.9
+        : result.sentiment === 'reflective'
+          ? 0.8
+          : result.sentiment === 'curious'
+            ? 0.7
+            : result.sentiment === 'alert'
+              ? 0.5
+              : 0.4; // concerned
+    logIntuition(
+      `Reflection: ${result.observation.substring(0, 80)}`,
+      resonance,
+      'reflection',
+      'consciousness-reflection',
+      `Sentiment: ${result.sentiment}, share: ${result.shouldShare}`
+    );
 
     MollyLogger.info(
       `Reflection: ${result.sentiment} — ${result.observation.substring(0, 80)}`,
