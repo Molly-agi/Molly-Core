@@ -63,6 +63,9 @@ export {
   getIntegrationsList,
 } from './ai-flows';
 
+// Self-Reader — Molly reads her own entire repo
+export { getMollyRepoReading } from './ai-flows';
+
 // Pillar Pipeline — Autonomous Code Absorption
 export { getPillarPipelineResult, getPillarFilesList } from './ai-flows';
 
