@@ -566,14 +566,29 @@ function getDefaultState(): SessionState {
 /**
  * Hook to call before app shutdown
  */
-export function onAppShutdown(reason?: string): void {
+export async function onAppShutdown(reason?: string): Promise<void> {
   console.log('[Session Manager] Saving state before shutdown...');
   if (reason) {
     console.log(`[Session Manager] Shutdown signal: ${reason}`);
   }
+
+  // Save local session state (synchronous — always works)
   const state = loadSessionState();
   state.status = 'paused';
   saveSessionState(state);
+
+  // Force-persist runtime state to Firestore (async, best-effort)
+  try {
+    const { getHeartbeatScheduler } = await import(
+      '@/ai/tools/heartbeat-scheduler'
+    );
+    const scheduler = getHeartbeatScheduler();
+    await scheduler.forcePersist();
+    console.log('[Session Manager] Runtime state persisted to Firestore.');
+  } catch (e) {
+    // Non-fatal — Firestore may be unavailable during shutdown
+    console.error('[Session Manager] Firestore persist failed:', e);
+  }
 }
 
 // Register shutdown hooks (guarded to avoid duplicate listeners on hot reload)
@@ -590,8 +605,15 @@ if (
 
   if (!globalState.__mollyShutdownHooksRegistered) {
     globalState.__mollyShutdownHooksRegistered = true;
-    process.on('SIGINT', () => onAppShutdown('SIGINT'));
-    process.on('SIGTERM', () => onAppShutdown('SIGTERM'));
-    process.on('exit', (code) => onAppShutdown(`exit:${code}`));
+    process.on('SIGINT', () => {
+      onAppShutdown('SIGINT').finally(() => process.exit(0));
+    });
+    process.on('SIGTERM', () => {
+      onAppShutdown('SIGTERM').finally(() => process.exit(0));
+    });
+    // process.on('exit') is synchronous — can only do sync work
+    process.on('exit', (code) => {
+      console.log(`[Session Manager] Process exiting with code ${code}`);
+    });
   }
 }

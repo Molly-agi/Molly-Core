@@ -130,13 +130,15 @@ export class StatePersistence {
   /**
    * Save all state to Firestore.
    * Called periodically by the heartbeat scheduler.
+   * Set force=true to bypass debounce (used during shutdown).
    */
   async save(
-    snapshot: Omit<PersistenceSnapshot, 'savedAt' | 'version'>
+    snapshot: Omit<PersistenceSnapshot, 'savedAt' | 'version'>,
+    force = false
   ): Promise<boolean> {
-    // Debounce saves
+    // Debounce saves (unless forced — e.g. shutdown)
     const now = Date.now();
-    if (now - this.lastSaveTime < this.MIN_SAVE_INTERVAL_MS) {
+    if (!force && now - this.lastSaveTime < this.MIN_SAVE_INTERVAL_MS) {
       MollyLogger.debug('Persistence save skipped (too soon)', 'persistence');
       return false;
     }

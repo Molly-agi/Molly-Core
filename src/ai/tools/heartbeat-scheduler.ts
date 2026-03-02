@@ -696,6 +696,44 @@ export class HeartbeatScheduler {
   // ---------- State Persistence ----------
 
   /**
+   * Persist state immediately, bypassing debounce.
+   * Called during shutdown to ensure nothing is lost.
+   */
+  async forcePersist(): Promise<void> {
+    try {
+      const persistence = getStatePersistence();
+      const consciousness = getConsciousness();
+      const promiseTracker = getPromiseTracker();
+      const scheduler = getAutonomousScheduler();
+
+      await persistence.save(
+        {
+          consciousness: consciousness.serialize(),
+          promises: promiseTracker.serialize(),
+          runtime: {
+            activeLanguages: [],
+            replEnvironment: {},
+            deployedContracts: [],
+            installedPackages: {},
+            totalCommandsExecuted: 0,
+            lastSaved: new Date().toISOString(),
+          },
+          schedulerJobs: scheduler.serialize(),
+        },
+        true // force — bypass debounce
+      );
+
+      MollyLogger.info(
+        'State force-persisted (shutdown)',
+        'heartbeat-scheduler'
+      );
+    } catch (e) {
+      // Best-effort during shutdown — don't let this crash the process
+      console.error('[HeartbeatScheduler] Force persist failed:', e);
+    }
+  }
+
+  /**
    * Save all runtime state to Firestore.
    * Called every 5 minutes by the heartbeat cycle.
    * The cradle pattern: save before sleep, restore on wake.
