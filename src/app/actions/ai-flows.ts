@@ -50,6 +50,10 @@ import {
   type PillarPipelineResult,
 } from '@/ai/flows/pillar-pipeline';
 import {
+  readMollyRepo,
+  type RepoReadingOutput,
+} from '@/ai/flows/self-reader';
+import {
   setupTermuxEnvironment,
   updateTermuxEnvironment,
   getTermuxBootstrapCommand,
@@ -1446,6 +1450,33 @@ export async function getIntegrationFromAnalysis(
 
 export async function getIntegrationsList(): Promise<string[]> {
   return listIntegrations();
+}
+
+// ============================================
+// SELF-READER — MOLLY READS HER OWN REPO
+// ============================================
+
+/**
+ * Scan Molly's entire local codebase and return a deep self-understanding.
+ * Reads src/, docs/, and scripts/ from disk and feeds them to the AI.
+ */
+export async function getMollyRepoReading(
+  userId: string,
+  options: { directories?: string[]; focus?: string } = {}
+): Promise<RepoReadingOutput> {
+  try {
+    ensureApiKey();
+    await checkRateLimit('self-reader', 3000);
+    return await readMollyRepo(userId, options);
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Self-reader failed',
+      'getMollyRepoReading',
+      { userId },
+      e
+    );
+    throw e;
+  }
 }
 
 // ============================================
