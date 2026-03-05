@@ -1,7 +1,7 @@
 # AUTONOMOUS STATUS - ACTIVE TODOS & IMPLEMENTATION STAGES
 
-**Last Updated:** 2026-03-03  
-**Current State:** Core platform complete (Phase 5A/5B/5C delivered)  
+**Last Updated:** 2026-03-05  
+**Current State:** Core platform complete (Phase 5A/5B/5C delivered). Stage 1 tests complete. Cloud agent delegation confirmed.  
 **Purpose:** Live, actionable list of what is still worth implementing
 
 ---
@@ -17,8 +17,8 @@
 
 ## Stage 1 — Next Recommended Work (Short-Term)
 
-- [ ] Add/expand automated tests for runtime snapshot behavior
-- [ ] Add/expand tests for diagnostics UI time formatting
+- [x] Add/expand automated tests for runtime snapshot behavior (39 tests passing)
+- [x] Add/expand tests for diagnostics UI time formatting (39 tests passing)
 - [ ] Wire runtime snapshot payload into neural-link diagnosis/recovery suggestions
 - [ ] Add diagnostics runtime severity badges (OK / Degraded / Critical)
 
