@@ -12,6 +12,7 @@ describe('MollyConsciousness', () => {
   beforeEach(() => {
     jest.resetModules();
     // Re-require to get fresh singleton
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('@/ai/consciousness/consciousness-state');
     MollyConsciousness = mod.MollyConsciousness;
   });

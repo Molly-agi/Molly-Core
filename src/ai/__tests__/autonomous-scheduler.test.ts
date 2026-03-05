@@ -29,6 +29,7 @@ describe('AutonomousScheduler', () => {
 
   beforeEach(() => {
     jest.resetModules();
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('@/ai/tools/autonomous-scheduler');
     AutonomousScheduler = mod.AutonomousScheduler;
   });

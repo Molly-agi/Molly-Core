@@ -24,7 +24,6 @@ import type {
   AccountType,
   RoutingInstruction,
   DiscoveredAsset,
-  AuditEntry,
 } from './types';
 
 const FLOW_NAME = 'fund-router';

@@ -3,19 +3,10 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
-import {
-  getRecoveryOrchestrator,
-  JURISDICTION_CONFIGS,
-} from '../recovery/recovery-orchestrator';
-import { getIdentityVault } from '../recovery/identity-vault';
+import { getRecoveryOrchestrator } from '../recovery/recovery-orchestrator';
 import { getUSRegistryScanner } from '../recovery/scanners/us-registry-scanner';
 import { getCryptoRecoveryScanner } from '../recovery/scanners/crypto-recovery-scanner';
-import type {
-  IdentityProfile,
-  ScanResult,
-  RecoveryState,
-  DiscoveredAsset,
-} from '../recovery/types';
+import type { IdentityProfile } from '../recovery/types';
 import type { OperatingMode } from '../recovery/recovery-orchestrator';
 
 const FLOW_NAME = 'asset-recovery';
@@ -330,7 +321,19 @@ export async function runAssetRecoveryScan(input: {
 
 export async function getAssetRecoveryStatus(statusFilter?: string) {
   return assetRecoveryStatusFlow({
-    statusFilter: statusFilter as any,
+    statusFilter: statusFilter as
+      | 'discovered'
+      | 'verified'
+      | 'claim-prepared'
+      | 'claim-filed'
+      | 'pending-review'
+      | 'human-gate'
+      | 'approved'
+      | 'transferred'
+      | 'routed'
+      | 'rejected'
+      | 'expired'
+      | undefined,
   });
 }
 

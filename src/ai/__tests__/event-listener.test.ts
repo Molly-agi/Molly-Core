@@ -38,6 +38,7 @@ describe('EventListener', () => {
     jest.resetModules();
     // Clear env
     delete process.env.MOLLY_WEBHOOK_SECRET;
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('@/ai/tools/event-listener');
     EventListener = mod.EventListener;
   });

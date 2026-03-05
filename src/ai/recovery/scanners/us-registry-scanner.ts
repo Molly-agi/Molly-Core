@@ -565,10 +565,14 @@ export class USRegistryScanner extends BaseScanner {
   ): Promise<DiscoveredAsset[]> {
     const assets: DiscoveredAsset[] = [];
 
-    MollyLogger.info(`Searching state portal: ${portal.state}`, FLOW_NAME, {
-      url: portal.url,
-      hasApi: portal.hasApi,
-    });
+    MollyLogger.info(
+      `Searching state portal: ${portal.state} for ${profile.fullName}`,
+      FLOW_NAME,
+      {
+        url: portal.url,
+        hasApi: portal.hasApi,
+      }
+    );
 
     if (portal.hasApi) {
       // States with programmatic access
@@ -588,7 +592,8 @@ export class USRegistryScanner extends BaseScanner {
    * Search federal unclaimed asset sources.
    */
   private async searchFederal(
-    profile: IdentityProfile
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _profile: IdentityProfile
   ): Promise<DiscoveredAsset[]> {
     const assets: DiscoveredAsset[] = [];
 

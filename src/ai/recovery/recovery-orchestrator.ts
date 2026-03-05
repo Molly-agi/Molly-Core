@@ -34,15 +34,7 @@ import { IdentityVault, getIdentityVault } from './identity-vault';
 import { ClaimTracker, getClaimTracker } from './claim-tracker';
 import { FundRouter, getFundRouter } from './fund-router';
 import { BaseScanner } from './base-scanner';
-import type {
-  RecoveryState,
-  DiscoveredAsset,
-  ScanResult,
-  ScanSchedule,
-  ScannerType,
-  IdentityProfile,
-  ManagedAccount,
-} from './types';
+import type { ScanResult, ScanSchedule, IdentityProfile } from './types';
 
 const FLOW_NAME = 'recovery-orchestrator';
 

@@ -9,6 +9,7 @@ describe('PromiseTracker', () => {
 
   beforeEach(() => {
     jest.resetModules();
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('@/ai/consciousness/promise-tracker');
     PromiseTracker = mod.PromiseTracker;
   });

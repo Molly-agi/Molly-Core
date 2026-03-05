@@ -22,12 +22,7 @@
 
 import { BaseScanner } from '../base-scanner';
 import { MollyLogger } from '@/ai/logger';
-import type {
-  DiscoveredAsset,
-  IdentityProfile,
-  ScannerType,
-  AssetSource,
-} from '../types';
+import type { DiscoveredAsset, IdentityProfile } from '../types';
 
 const FLOW_NAME = 'crypto-recovery-scanner';
 
@@ -248,7 +243,8 @@ export class CryptoRecoveryScanner extends BaseScanner {
    * These are public processes — creditors are WANTED to come forward.
    */
   private async searchSettlements(
-    profile: IdentityProfile
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _profile: IdentityProfile
   ): Promise<DiscoveredAsset[]> {
     const assets: DiscoveredAsset[] = [];
 
