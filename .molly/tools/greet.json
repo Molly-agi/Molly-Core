@@ -1,0 +1,8 @@
+{
+  "name": "greet",
+  "description": "Says hello",
+  "type": "shell",
+  "source": "echo Hello from custom capability!",
+  "createdAt": "2026-03-05T11:57:41.121Z",
+  "useCount": 1
+}
