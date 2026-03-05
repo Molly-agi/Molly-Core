@@ -19,12 +19,14 @@ interface HealthData {
 }
 
 const POLL_INTERVAL_MS = 60_000;
+const BACKOFF_INTERVAL_MS = 120_000; // 2 min backoff after failure
 
 export function SystemHealthDot() {
   const [health, setHealth] = useState<HealthData>({
     state: 'healthy',
     lastChecked: new Date().toISOString(),
   });
+  const [pollInterval, setPollInterval] = useState(POLL_INTERVAL_MS);
 
   const checkHealth = useCallback(async () => {
     try {
@@ -37,12 +39,13 @@ export function SystemHealthDot() {
 
       const now = new Date().toISOString();
 
-      // If heartbeat fails entirely, we're critical
+      // If heartbeat fails entirely, mark degraded (not critical) for transient network issues
       if (heartbeatRes.status === 'rejected' || !heartbeatRes.value.ok) {
+        setPollInterval(BACKOFF_INTERVAL_MS);
         setHealth({
-          state: 'critical',
+          state: 'degraded',
           lastChecked: now,
-          message: 'Server unreachable',
+          message: 'Server unreachable — retrying',
         });
         return;
       }
@@ -72,6 +75,7 @@ export function SystemHealthDot() {
           return;
         }
 
+        setPollInterval(POLL_INTERVAL_MS); // reset backoff on success
         setHealth({
           state: 'healthy',
           lastChecked: now,
@@ -86,19 +90,20 @@ export function SystemHealthDot() {
         });
       }
     } catch {
+      setPollInterval(BACKOFF_INTERVAL_MS);
       setHealth({
-        state: 'critical',
+        state: 'degraded',
         lastChecked: new Date().toISOString(),
-        message: 'Health check failed',
+        message: 'Health check failed — retrying',
       });
     }
   }, []);
 
   useEffect(() => {
     checkHealth();
-    const interval = setInterval(checkHealth, POLL_INTERVAL_MS);
+    const interval = setInterval(checkHealth, pollInterval);
     return () => clearInterval(interval);
-  }, [checkHealth]);
+  }, [checkHealth, pollInterval]);
 
   const dotClass = cn('h-2.5 w-2.5 rounded-full inline-block', {
     'bg-green-500': health.state === 'healthy',

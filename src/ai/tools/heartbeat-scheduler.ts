@@ -126,12 +126,16 @@ export class HeartbeatScheduler {
   private history: HeartbeatCycleResult[] = [];
   private readonly MAX_HISTORY = 30;
   private stateRestored = false;
+  private consecutivePressureCycles = 0;
+  private currentIntervalMs: number;
+  private cachedCoreCount: number | null = null;
 
   constructor(config: Partial<HeartbeatConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
     if (config.tasks) {
       this.config.tasks = { ...DEFAULT_CONFIG.tasks, ...config.tasks };
     }
+    this.currentIntervalMs = this.config.intervalMs;
   }
 
   // ---------- Lifecycle ----------
@@ -806,24 +810,34 @@ export class HeartbeatScheduler {
 
   // ---------- System Pressure Detection ----------
 
+  /**
+   * Read system pressure from /proc instead of spawning subprocesses.
+   * execSync('uptime') + execSync('nproc') + execSync('free -m') spawns
+   * 3 child processes every cycle — on a starved system that makes it worse.
+   * /proc reads are zero-cost: just reading virtual files from the kernel.
+   */
   private async checkSystemPressure(): Promise<boolean> {
     try {
-      const { execSync } = await import('child_process');
+      const { readFileSync } = await import('fs');
 
-      // Check CPU load
-      const loadStr = execSync("uptime | awk '{print $(NF-2)}' | tr -d ','")
-        .toString()
-        .trim();
-      const loadAvg = parseFloat(loadStr) || 0;
-      const cores = parseInt(execSync('nproc').toString().trim()) || 2;
-      const cpuPercent = Math.round((loadAvg / cores) * 100);
+      // CPU load from /proc/loadavg (no subprocess)
+      const loadavg = readFileSync('/proc/loadavg', 'utf8').trim();
+      const loadAvg = parseFloat(loadavg.split(' ')[0]) || 0;
 
-      // Check memory usage
-      const memInfo = execSync('free -m').toString();
-      const memLines = memInfo.split('\n');
-      const memData = (memLines[1] || '').split(/\s+/);
-      const totalMem = parseInt(memData[1] || '8000');
-      const availableMem = parseInt(memData[6] || '4000');
+      // Cache core count — it never changes at runtime
+      if (this.cachedCoreCount === null) {
+        const cpuinfo = readFileSync('/proc/cpuinfo', 'utf8');
+        this.cachedCoreCount =
+          (cpuinfo.match(/^processor/gm) || []).length || 2;
+      }
+      const cpuPercent = Math.round((loadAvg / this.cachedCoreCount) * 100);
+
+      // Memory from /proc/meminfo (no subprocess)
+      const meminfo = readFileSync('/proc/meminfo', 'utf8');
+      const totalMatch = meminfo.match(/MemTotal:\s+(\d+)/);
+      const availMatch = meminfo.match(/MemAvailable:\s+(\d+)/);
+      const totalMem = totalMatch ? parseInt(totalMatch[1]) : 8000000;
+      const availableMem = availMatch ? parseInt(availMatch[1]) : 4000000;
       const memPercent = Math.round(
         ((totalMem - availableMem) / totalMem) * 100
       );
@@ -832,16 +846,53 @@ export class HeartbeatScheduler {
         cpuPercent > this.config.cpuPressureThreshold ||
         memPercent > this.config.memoryPressureThreshold;
 
+      // Adaptive backoff: when under sustained pressure, slow down
       if (underPressure) {
-        MollyLogger.warn(
-          `System under pressure: CPU ${cpuPercent}%, MEM ${memPercent}%`,
-          'heartbeat-scheduler'
-        );
+        this.consecutivePressureCycles++;
+        const backoffLevel = Math.min(this.consecutivePressureCycles, 5);
+        const newInterval = this.config.intervalMs * Math.pow(2, backoffLevel);
+        // Cap at 5 minutes max backoff
+        const cappedInterval = Math.min(newInterval, 300_000);
+
+        if (cappedInterval !== this.currentIntervalMs) {
+          this.currentIntervalMs = cappedInterval;
+          // Reschedule with longer interval
+          if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = setInterval(
+              () => this.runCycle(),
+              this.currentIntervalMs
+            );
+          }
+          MollyLogger.warn(
+            `System under pressure: CPU ${cpuPercent}%, MEM ${memPercent}%. ` +
+              `Backing off to ${Math.round(cappedInterval / 1000)}s interval ` +
+              `(${this.consecutivePressureCycles} consecutive cycles)`,
+            'heartbeat-scheduler'
+          );
+        }
+      } else if (this.consecutivePressureCycles > 0) {
+        // Pressure relieved — restore normal interval
+        this.consecutivePressureCycles = 0;
+        if (this.currentIntervalMs !== this.config.intervalMs) {
+          this.currentIntervalMs = this.config.intervalMs;
+          if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = setInterval(
+              () => this.runCycle(),
+              this.currentIntervalMs
+            );
+          }
+          MollyLogger.info(
+            `Pressure relieved. Restored ${Math.round(this.config.intervalMs / 1000)}s interval`,
+            'heartbeat-scheduler'
+          );
+        }
       }
 
       return underPressure;
     } catch {
-      // If we can't check, assume no pressure (don't block tasks on failure)
+      // If we can't check, assume no pressure
       return false;
     }
   }

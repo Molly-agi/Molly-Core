@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Immune Response Subroutine V2.0.
  *

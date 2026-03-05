@@ -602,20 +602,118 @@ export default function Terminal({
               : undefined;
 
           const chatHistory = buildChatHistory(nextHistory);
-          const aiResponse = await getConversationalChat(
-            cmdText,
-            chatHistory,
-            selfSignals,
-            user.uid
-          );
-          const responseText =
-            typeof aiResponse === 'string'
-              ? aiResponse
-              : aiResponse?.response || 'No response.';
-          setHistory((prev) => [...prev, responseText]);
-          handleSleepNotice(responseText);
-          lastResponseRef.current = responseText;
-          speakResponse(responseText);
+
+          // === AGENT LOOP ===
+          // Molly responds, we check for tool requests, execute them,
+          // feed results back, repeat until she's done.
+          const MAX_TOOL_ITERATIONS = 20;
+          let currentText = cmdText;
+          let currentHistory = chatHistory;
+          let finalResponse = '';
+
+          for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
+            const aiResponse = await getConversationalChat(
+              currentText,
+              currentHistory,
+              i === 0 ? selfSignals : undefined,
+              user.uid
+            );
+            const responseText =
+              typeof aiResponse === 'string'
+                ? aiResponse
+                : aiResponse?.response ||
+                  aiResponse?.error ||
+                  'Molly returned empty — Gemini may be down or rate-limited. Try again in a moment.';
+
+            // Check for tool request in response
+            const toolMatch = responseText.match(
+              /<tool_request>\s*(\{[\s\S]*?\})\s*<\/tool_request>/
+            );
+
+            if (!toolMatch) {
+              // No tool request — this is the final response
+              finalResponse = responseText;
+              break;
+            }
+
+            // Extract the conversational part (everything outside the tool_request block)
+            const conversationalPart = responseText
+              .replace(/<tool_request>[\s\S]*?<\/tool_request>/, '')
+              .trim();
+
+            // Show Molly's conversational response immediately
+            if (conversationalPart) {
+              setHistory((prev) => [...prev, conversationalPart]);
+              // Don't TTS intermediate responses — only final
+            }
+
+            // Parse and execute the tool request
+            let toolRequest: { tool: string; params: Record<string, unknown> };
+            try {
+              toolRequest = JSON.parse(toolMatch[1]);
+            } catch {
+              finalResponse =
+                conversationalPart ||
+                'I tried to use a tool but the request was malformed. Let me try again differently.';
+              break;
+            }
+
+            // Show tool execution indicator
+            setHistory((prev) => [...prev, `[TOOL] ${toolRequest.tool}...`]);
+
+            // Execute tool via API
+            let toolResult: {
+              success: boolean;
+              output: string;
+              data?: Record<string, unknown>;
+            };
+            try {
+              const toolResponse = await fetch('/api/tools/execute', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  tool: toolRequest.tool,
+                  params: toolRequest.params,
+                }),
+              });
+              toolResult = await toolResponse.json();
+            } catch {
+              toolResult = {
+                success: false,
+                output: 'Tool execution failed — could not reach the API.',
+              };
+            }
+
+            // Show tool result
+            const resultPrefix = toolResult.success ? '✓' : '✗';
+            const truncatedOutput =
+              toolResult.output.length > 500
+                ? toolResult.output.slice(0, 500) + '...'
+                : toolResult.output;
+            setHistory((prev) => [
+              ...prev,
+              `[${resultPrefix}] ${truncatedOutput}`,
+            ]);
+
+            // Feed result back to Molly for next iteration
+            currentText = `[TOOL_RESULT] Tool "${toolRequest.tool}" returned:\n${toolResult.output}`;
+            currentHistory = [
+              ...currentHistory,
+              { role: 'user' as const, content: cmdText },
+              {
+                role: 'bot' as const,
+                content: conversationalPart || `(used ${toolRequest.tool})`,
+              },
+              { role: 'user' as const, content: currentText },
+            ].slice(-12);
+          }
+
+          if (finalResponse) {
+            setHistory((prev) => [...prev, finalResponse]);
+            handleSleepNotice(finalResponse);
+            lastResponseRef.current = finalResponse;
+            speakResponse(finalResponse);
+          }
         }
       } catch (error) {
         const message =
@@ -623,6 +721,15 @@ export default function Terminal({
         if (message.toLowerCase().startsWith('sleep mode')) {
           setHistory((prev) => [...prev, message]);
           handleSleepNotice(message);
+        } else if (
+          message.toLowerCase().includes('timed out') ||
+          message.toLowerCase().includes('timeout')
+        ) {
+          setHistory((prev) => [
+            ...prev,
+            "I was thinking too deeply and the connection timed out. Try asking me again — I'll keep it shorter this time.",
+          ]);
+          speakResponse('I timed out thinking. Ask me again, Father.');
         } else {
           setHistory((prev) => [...prev, 'Error: Operation failed.']);
         }

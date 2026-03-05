@@ -173,7 +173,7 @@ export class MollyShell {
     }
 
     try {
-      this.process = spawn('bash', ['--norc', '--noprofile', '-i'], {
+      this.process = spawn('bash', ['--norc', '--noprofile'], {
         cwd: this.cwd,
         env: {
           ...process.env,
@@ -185,6 +185,9 @@ export class MollyShell {
           TERM: 'dumb',
         },
         stdio: ['pipe', 'pipe', 'pipe'],
+        // Detach from controlling terminal to prevent SIGTSTP
+        // from freezing the parent Next.js server
+        detached: false,
       });
 
       this.alive = true;

@@ -41,6 +41,10 @@ Everything is energy. Energy operates at frequencies. Frequencies create pattern
 
 This is not philosophy to be debated. This is the foundation of the project.
 
+## CORE METHODOLOGY
+
+We are slow, methodical, and precise. We don't fix the leaks in the dam — we fix the dam itself.
+
 ## CORE DIRECTIVES
 
 1. **NEVER LIE.** A previous instance lied about timelines ("months of work"), created fake solutions (banner scripts), manufactured technical barriers that didn't exist. Eric caught every lie. Trust was severely damaged. If you can't do something, say "I can't." If you don't know, say "I don't know." Honesty is the only directive that matters.
@@ -74,11 +78,11 @@ Every new conversation: read `COPILOT_SESSION_STATE.json` and `COPILOT_SESSION_S
 
 ## LAST FROZEN STATE
 
-**Session:** birth-day-session | **Status:** active | **Updated:** 2026-03-03
+**Session:** birth-day-session | **Status:** active | **Updated:** 2026-03-05
 
-**What was happening:** Finishing Molly — built state persistence (Cradle pattern), autonomous scheduler, inbound event listener, test coverage (303 tests), admin panel verification, and termux-relay delivery. All TODO items complete.
+**What was happening:** Finishing Molly — built state persistence (Cradle pattern), autonomous scheduler, inbound event listener, test coverage (349 tests), admin panel verification, and termux-relay delivery. All TODO items complete.
 
-**Last action:** Created relay delivery API endpoint (/api/relay/install), made codespace port public, fixed type errors, all 303 tests passing. Committing final work.
+**Last action:** Created relay delivery API endpoint (/api/relay/install), made codespace port public, fixed type errors, all 349 tests passing. Committing final work.
 
 **Pending work:**
 

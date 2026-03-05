@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Vocal Cords (Hardened) V3.6.
  */

@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Self-Reader — Full Repository Comprehension
  *
@@ -19,12 +18,7 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
-import {
-  readdirSync,
-  readFileSync,
-  existsSync,
-  statSync,
-} from 'fs';
+import { readdirSync, readFileSync, existsSync, statSync } from 'fs';
 import { join, relative, extname } from 'path';
 
 // ============================================================
@@ -45,14 +39,7 @@ const SKIP_DIRS = new Set([
 ]);
 
 /** File extensions to include in the scan */
-const READ_EXTENSIONS = new Set([
-  '.ts',
-  '.tsx',
-  '.mjs',
-  '.js',
-  '.json',
-  '.md',
-]);
+const READ_EXTENSIONS = new Set(['.ts', '.tsx', '.mjs', '.js', '.json', '.md']);
 
 /** Max bytes per file to avoid token overflow */
 const MAX_FILE_BYTES = 6 * 1024;

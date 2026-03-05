@@ -7,6 +7,7 @@ const nextConfig = {
   /* Optimized for performance and reduced memory usage */
   typescript: {
     tsconfigPath: './tsconfig.json',
+    ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,

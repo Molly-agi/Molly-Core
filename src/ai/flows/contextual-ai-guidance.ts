@@ -1,5 +1,3 @@
-'use server';
-
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { searchGitHub } from '../tools/github';
 import { z } from 'zod';

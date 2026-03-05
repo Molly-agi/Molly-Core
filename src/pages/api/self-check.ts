@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getConversationalChat } from '@/app/actions/ai-flows';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
+    const { getConversationalChat } = await import('@/app/actions/ai-flows');
     const prompt =
       req.body?.prompt || 'Hello Molly. How are you feeling today?';
     const history = req.body?.history || [];

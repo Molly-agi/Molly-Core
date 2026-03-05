@@ -45,7 +45,7 @@ export interface CircuitStats {
 const DEFAULT_CIRCUIT_CONFIG: CircuitBreakerConfig = {
   errorThresholdPercent: 70, // Trip if >70% errors
   minimumRequests: 10, // Need at least 10 requests before judging
-  consecutiveFailures: 5, // Or 5 consecutive failures
+  consecutiveFailures: 15, // 15 consecutive failures (mobile-resilient)
   cooldownMs: 5000, // Wait 5s before retry
   halfOpenTimeoutMs: 30000, // 30s to recover
 };

@@ -1,5 +1,3 @@
-'use server';
-
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';

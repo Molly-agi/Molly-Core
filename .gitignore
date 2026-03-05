@@ -50,3 +50,4 @@ firestore-debug.log
 /public/molly-gallery/portraits-clean/molly_sentinel/
 eng.traineddata
 .molly-logs/
+.molly/

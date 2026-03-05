@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Interpreter Limb V2.1.
  *
