@@ -71,6 +71,11 @@ import {
   TIMEOUT_PRESETS,
   RETRY_PRESETS,
 } from '@/ai/tools/timeout-retry';
+import {
+  runAssetRecoveryScan,
+  getAssetRecoveryStatus,
+  setAssetRecoveryMode,
+} from '@/ai/flows/asset-recovery';
 import { ensureApiKey, checkRateLimit } from './utils';
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -1578,6 +1583,56 @@ export async function getEnhancedResearch(prompt: string, userId: string) {
       { userId },
       e
     );
+    throw e;
+  }
+}
+
+// ============================================================================
+// ASSET RECOVERY — Mission Alpha
+// ============================================================================
+
+/**
+ * Run an asset recovery scan across unclaimed property databases.
+ * Searches by name, entities, and jurisdictions.
+ */
+export async function runRecoveryScan(input: {
+  names: string[];
+  priorityStates?: string[];
+  entities?: string[];
+  scanScope?: 'all' | 'us' | 'crypto';
+}) {
+  try {
+    await checkRateLimit('recovery-scan', 300);
+    return await runAssetRecoveryScan(input);
+  } catch (e: unknown) {
+    MollyLogger.error('Recovery scan failed', 'runRecoveryScan', {}, e);
+    throw e;
+  }
+}
+
+/**
+ * Get the current status of the recovery pipeline.
+ */
+export async function getRecoveryStatus(statusFilter?: string) {
+  try {
+    return await getAssetRecoveryStatus(statusFilter);
+  } catch (e: unknown) {
+    MollyLogger.error('Recovery status failed', 'getRecoveryStatus', {}, e);
+    throw e;
+  }
+}
+
+/**
+ * Set the recovery operating mode.
+ * discovery-only → discovery-contact → full-operation → paused
+ */
+export async function setRecoveryMode(
+  mode: 'discovery-only' | 'discovery-contact' | 'full-operation' | 'paused'
+) {
+  try {
+    return await setAssetRecoveryMode(mode);
+  } catch (e: unknown) {
+    MollyLogger.error('Set recovery mode failed', 'setRecoveryMode', {}, e);
     throw e;
   }
 }

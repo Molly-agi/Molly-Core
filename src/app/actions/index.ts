@@ -114,3 +114,10 @@ export {
   applyPersonalityDelta,
   addManualEngram,
 } from './personality-engrams';
+
+// Asset Recovery — Mission Alpha
+export {
+  runRecoveryScan,
+  getRecoveryStatus,
+  setRecoveryMode,
+} from './ai-flows';

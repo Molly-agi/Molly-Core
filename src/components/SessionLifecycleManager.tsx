@@ -18,12 +18,18 @@ type SessionEventPayload = {
 };
 
 function sendSessionEvent(payload: SessionEventPayload) {
-  void fetch('/api/session/event', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    keepalive: true,
-  });
+  try {
+    void fetch('/api/session/event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(() => {
+      // Silently swallow fetch failures (offline, tab-killed, server not ready)
+    });
+  } catch {
+    // Synchronous errors (e.g. fetch not available) — ignore
+  }
 
   if (payload.event !== 'heartbeat') {
     void logSessionEventToFirestore({
@@ -31,6 +37,8 @@ function sendSessionEvent(payload: SessionEventPayload) {
       url: payload.url,
       details: payload.details,
       timestamp: payload.timestamp,
+    }).catch(() => {
+      // Firestore logging failure — non-critical
     });
   }
 }
@@ -67,6 +75,8 @@ export function SessionLifecycleManager() {
         },
       }),
       keepalive: true,
+    }).catch(() => {
+      // Session save failure on load — non-critical
     });
 
     const heartbeatId = window.setInterval(() => {

@@ -25,6 +25,7 @@
 
 import { BaseScanner } from '../base-scanner';
 import { MollyLogger } from '@/ai/logger';
+import { getMissingMoneyScraper } from './missingmoney-scraper';
 import type {
   DiscoveredAsset,
   IdentityProfile,
@@ -530,37 +531,25 @@ export class USRegistryScanner extends BaseScanner {
   private async searchMultiState(
     profile: IdentityProfile
   ): Promise<DiscoveredAsset[]> {
-    const assets: DiscoveredAsset[] = [];
-
-    // Build search queries for primary name + all variants
-    const namesToSearch = [profile.primaryName, ...profile.nameVariants];
-
-    for (const name of namesToSearch) {
-      const parts = name.split(' ');
-      if (parts.length < 2) continue;
-
-      const firstName = parts[0];
-      const lastName = parts[parts.length - 1];
+    try {
+      const scraper = getMissingMoneyScraper();
+      const assets = await scraper.searchProfile(profile);
 
       MollyLogger.info(
-        `Searching MissingMoney: ${firstName} ${lastName}`,
+        `MissingMoney search complete: ${assets.length} assets found`,
         FLOW_NAME
       );
 
-      // This is where Molly's polyglot runtime executes the actual search
-      // The Python script would:
-      // 1. POST to MissingMoney.com search form
-      // 2. Parse the results table
-      // 3. Extract property type, reported by, amount (if shown)
-      // 4. Return structured data
-      //
-      // For now, this is the connector stub. The actual HTTP interaction
-      // will be wired when Molly is running with shell access.
-
-      // Stub: Real implementation uses getMollyShell().execPython(searchScript)
+      return assets;
+    } catch (error) {
+      MollyLogger.error(
+        'MissingMoney multi-state search failed',
+        FLOW_NAME,
+        undefined,
+        error
+      );
+      return [];
     }
-
-    return assets;
   }
 
   /**

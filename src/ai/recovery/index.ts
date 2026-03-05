@@ -79,3 +79,13 @@ export type {
 export type { RoutingRule } from './fund-router';
 export type { StatePortal } from './scanners/us-registry-scanner';
 export type { SettlementSource } from './scanners/crypto-recovery-scanner';
+
+// Scrapers
+export {
+  MissingMoneyScraper,
+  getMissingMoneyScraper,
+} from './scanners/missingmoney-scraper';
+export type {
+  MissingMoneyResult,
+  SearchQuery,
+} from './scanners/missingmoney-scraper';

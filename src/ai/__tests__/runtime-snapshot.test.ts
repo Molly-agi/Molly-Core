@@ -44,7 +44,7 @@ jest.mock('@/lib/session-manager', () => ({
 }));
 
 jest.mock('@/firebase/admin', () => ({
-  isAdminConfigured: () => false,
+  isAdminConfigured: jest.fn(() => false),
   getAdminFirestore: jest.fn(),
 }));
 
@@ -55,14 +55,19 @@ import { getCircuitBreaker } from '../tools/circuit-breaker';
 import { getRateLimiter } from '../tools/rate-limiter';
 import { getLatencyStats } from '../tools/latency-cache';
 import { getSystemHealth } from '../tools/system';
+import { verifyRecordIntegrity } from '../tools/memory-integrity';
 import { loadSessionState } from '@/lib/session-manager';
+import { isAdminConfigured, getAdminFirestore } from '@/firebase/admin';
 
 // Narrowed mock handles
 const mockGetCircuitBreaker = getCircuitBreaker as jest.Mock;
 const mockGetRateLimiter = getRateLimiter as jest.Mock;
 const mockGetLatencyStats = getLatencyStats as jest.Mock;
 const mockGetSystemHealth = getSystemHealth as unknown as jest.Mock;
+const mockVerifyRecordIntegrity = verifyRecordIntegrity as jest.Mock;
 const mockLoadSessionState = loadSessionState as jest.Mock;
+const mockIsAdminConfigured = isAdminConfigured as jest.Mock;
+const mockGetAdminFirestore = getAdminFirestore as jest.Mock;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -183,6 +188,19 @@ describe('collectRuntimeSnapshot', () => {
     expect(snap.heartbeat.freshnessMs).toBeNull();
   });
 
+  it('clamps freshness to zero when heartbeat timestamp is in the future', async () => {
+    const twoMinFuture = new Date(Date.now() + 2 * 60_000).toISOString();
+
+    mockLoadSessionState.mockReturnValue(
+      sessionState({ runtime: { lastHeartbeat: twoMinFuture, events: [] } })
+    );
+
+    const snap = await collectRuntimeSnapshot();
+
+    expect(snap.heartbeat.lastHeartbeat).toBe(twoMinFuture);
+    expect(snap.heartbeat.freshnessMs).toBe(0);
+  });
+
   it('handles garbage heartbeat timestamp gracefully', async () => {
     mockLoadSessionState.mockReturnValue(
       sessionState({ runtime: { lastHeartbeat: 'not-a-date', events: [] } })
@@ -248,6 +266,35 @@ describe('collectRuntimeSnapshot', () => {
 
     const snap = await collectRuntimeSnapshot();
     expect(snap.circuitBreaker.globalState).toBe(CircuitState.OPEN);
+  });
+
+  it('sorts recent failure operations by failure count and limits to top 5', async () => {
+    mockGetCircuitBreaker.mockReturnValue({
+      getStatus: jest.fn(() => ({
+        global: { state: CircuitState.CLOSED },
+        operations: {
+          opA: { state: CircuitState.CLOSED, failureCount: 1 },
+          opB: { state: CircuitState.CLOSED, failureCount: 9 },
+          opC: { state: CircuitState.OPEN, failureCount: 4 },
+          opD: { state: CircuitState.HALF_OPEN, failureCount: 7 },
+          opE: { state: CircuitState.CLOSED, failureCount: 3 },
+          opF: { state: CircuitState.CLOSED, failureCount: 2 },
+          opG: { state: CircuitState.CLOSED, failureCount: 6 },
+        },
+        timestamp: '2026-02-20T00:00:00.000Z',
+      })),
+    });
+
+    const snap = await collectRuntimeSnapshot();
+
+    expect(snap.circuitBreaker.recentFailureOperations).toEqual([
+      'opB',
+      'opD',
+      'opG',
+      'opC',
+      'opE',
+    ]);
+    expect(snap.circuitBreaker.recentFailureOperations).toHaveLength(5);
   });
 
   // ----- Rate Limiter -----
@@ -341,6 +388,55 @@ describe('collectRuntimeSnapshot', () => {
     // Our mock returns isAdminConfigured = false
     expect(snap.memoryHealth.status).toBe('unavailable');
     expect(snap.memoryHealth.warning).toMatch(/Admin Firestore/);
+  });
+
+  it('reports memory health ok when Firestore records all pass checksum integrity', async () => {
+    mockIsAdminConfigured.mockReturnValue(true);
+    mockVerifyRecordIntegrity.mockReturnValue(true);
+
+    const docs = [
+      { data: () => ({ id: '1', crc32: 'abc', responseText: 'ok-1' }) },
+      { data: () => ({ id: '2', crc32: 'def', responseText: 'ok-2' }) },
+    ];
+
+    const getMock = jest.fn().mockResolvedValue({ size: docs.length, docs });
+    const limitMock = jest.fn().mockReturnValue({ get: getMock });
+    const orderByMock = jest.fn().mockReturnValue({ limit: limitMock });
+    const collectionMock = jest.fn().mockReturnValue({ orderBy: orderByMock });
+    const docMock = jest.fn().mockReturnValue({ collection: collectionMock });
+
+    mockGetAdminFirestore.mockReturnValue({
+      collection: jest.fn().mockReturnValue({ doc: docMock }),
+    });
+
+    const snap = await collectRuntimeSnapshot('user-123');
+
+    expect(snap.memoryHealth.status).toBe('ok');
+    expect(snap.memoryHealth.checkedRecords).toBe(2);
+    expect(snap.memoryHealth.validChecksums).toBe(2);
+    expect(snap.memoryHealth.invalidChecksums).toBe(0);
+    expect(snap.memoryHealth.missingChecksums).toBe(0);
+    expect(snap.memoryHealth.warning).toBeUndefined();
+  });
+
+  it('reports degraded memory health when Firestore query throws', async () => {
+    mockIsAdminConfigured.mockReturnValue(true);
+
+    const getMock = jest.fn().mockRejectedValue(new Error('Firestore down'));
+    const limitMock = jest.fn().mockReturnValue({ get: getMock });
+    const orderByMock = jest.fn().mockReturnValue({ limit: limitMock });
+    const collectionMock = jest.fn().mockReturnValue({ orderBy: orderByMock });
+    const docMock = jest.fn().mockReturnValue({ collection: collectionMock });
+
+    mockGetAdminFirestore.mockReturnValue({
+      collection: jest.fn().mockReturnValue({ doc: docMock }),
+    });
+
+    const snap = await collectRuntimeSnapshot('user-123');
+
+    expect(snap.memoryHealth.status).toBe('degraded');
+    expect(snap.memoryHealth.checkedRecords).toBe(0);
+    expect(snap.memoryHealth.error).toMatch(/Firestore down/);
   });
 
   // ----- Session without runtime -----
