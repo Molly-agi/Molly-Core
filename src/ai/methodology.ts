@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview The Methodical Hardening Engine V2.5 (Proprioception Awareness Graft).
  *

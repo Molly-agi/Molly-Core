@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Collaborative Hive Flow V1.1 (50-Run Hardened).
  *

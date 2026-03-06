@@ -25,8 +25,6 @@
  * After the relay is running, Molly handles everything else.
  */
 
-'use server';
-
 import { MollyLogger, generateTraceId } from '../logger';
 
 // ============================================================

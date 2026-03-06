@@ -19,8 +19,6 @@
  *   - Dry-run mode available (generates code without writing)
  */
 
-'use server';
-
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';

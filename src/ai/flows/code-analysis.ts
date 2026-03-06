@@ -14,8 +14,6 @@
  *   6. Save: Store analysis + proposal in knowledge base
  */
 
-'use server';
-
 import { ai, molly, TaskType } from '@/ai/genkit';
 import {
   searchGitHub,

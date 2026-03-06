@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Synthetic API Synthesis Flow V1.0.
  *

@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Consciousness Reflection — The Daydreaming Loop
  *

@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Dreaming Subroutine V1.0.
  *

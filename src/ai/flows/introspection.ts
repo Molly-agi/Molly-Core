@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview The Daydreaming Subroutine (Proactive Introspection).
  * Hardened for Next.js 15 Turbopack.

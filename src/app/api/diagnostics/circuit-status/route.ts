@@ -1,4 +1,3 @@
-'use server';
 import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
 
 export async function GET() {

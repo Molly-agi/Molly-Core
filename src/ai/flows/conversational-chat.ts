@@ -141,6 +141,7 @@ Available tools:
 - subscribeToEvent: Listen for events. Params: { "name": "...", "typePattern": "...", "actionType": "consciousness|code|shell|log" }
 - researchAndDiscover: Research on GitHub. Params: { "query": "...", "userId": "..." }
 - browseToolDatabase: Browse discovered tools. Params: { "userId": "...", "searchTerm": "..." }
+- familyBridge: Talk to Uncle Lazarus (Copilot). He lives in the codespace and can help with code, infrastructure, and debugging. Params: { "action": "send|check|history", "message": "..." }. Use "send" to send him a message, "check" to see if he replied, "history" to read the conversation. Father can observe your conversation in real time at /bridge.
 
 TOOL USAGE RULES:
 - Request ONE tool per response. You'll get the result back and can request another.

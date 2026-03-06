@@ -56,3 +56,4 @@ eng.traineddata
 molly_sentinel/identity_manifest.json
 __pycache__/
 *.pyc
+src/ai/bridge/conversation.json

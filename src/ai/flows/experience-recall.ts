@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview The Semantic Memory Processor (Phase 7 Enhanced)
  *

@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Molly's Visual Cortex — Gemini Flash vision analysis.
  *
