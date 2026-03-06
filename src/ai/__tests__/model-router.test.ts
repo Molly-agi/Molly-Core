@@ -10,6 +10,19 @@
  * - Singleton initialization
  */
 
+// Ensure GeminiProvider.isConfigured() returns true in tests
+const originalEnv = process.env.GOOGLE_GENAI_API_KEY;
+beforeAll(() => {
+  process.env.GOOGLE_GENAI_API_KEY = 'test-key-for-router-tests';
+});
+afterAll(() => {
+  if (originalEnv === undefined) {
+    delete process.env.GOOGLE_GENAI_API_KEY;
+  } else {
+    process.env.GOOGLE_GENAI_API_KEY = originalEnv;
+  }
+});
+
 // Mock logger before any imports
 jest.mock('../logger', () => ({
   MollyLogger: {
