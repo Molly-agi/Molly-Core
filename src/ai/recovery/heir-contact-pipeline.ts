@@ -45,6 +45,8 @@ import {
   type FinderAgreement,
 } from './agreement-generator';
 import { getClientManager } from './client-manager';
+import { sendEmail } from './email-delivery';
+import { findContactEmail } from './contact-finder';
 import type { DiscoveredAsset, IdentityProfile, ServiceClient } from './types';
 
 const FLOW_NAME = 'heir-contact-pipeline';
@@ -108,14 +110,14 @@ export interface PipelineStatus {
  * The compliance layer is the safeguard. If it passes compliance,
  * it goes out. No human bottleneck needed.
  */
-export function onboardProspect(
+export async function onboardProspect(
   heirName: string,
   heirEmail: string,
   country: string,
   searchProfile: IdentityProfile,
   discoveredAssets: DiscoveredAsset[],
   requestedFeePercent: number = 25
-): ProspectOnboardResult {
+): Promise<ProspectOnboardResult> {
   const clientManager = getClientManager();
   const contactTracker = getContactTracker();
   const business = getBusinessConfig();
@@ -172,25 +174,58 @@ export function onboardProspect(
 
       // AUTO-SEND if compliance passes — the compliance layer is the review
       if (outreach.readyToSend) {
-        // Record the sent attempt in the contact tracker
-        contactTracker.recordAttempt(client.id, outreach, true);
-        outreachSent = true;
+        // Actually deliver the email via SendGrid
+        try {
+          const delivery = await sendEmail(
+            heirEmail,
+            heirName,
+            outreach,
+            client.id
+          );
 
-        // Update client status
-        clientManager.updateStatus(
-          client.id,
-          'contacted',
-          'Auto-sent: compliant outreach'
-        );
-
-        MollyLogger.info(
-          `Auto-sent outreach to ${heirName} — compliance passed`,
-          FLOW_NAME,
-          {
-            clientId: client.id,
-            jurisdiction: outreach.compliance.jurisdiction,
+          if (delivery.success) {
+            contactTracker.recordAttempt(client.id, outreach, true);
+            outreachSent = true;
+            clientManager.updateStatus(
+              client.id,
+              'contacted',
+              `Auto-sent via SendGrid (${delivery.messageId})`
+            );
+            MollyLogger.info(
+              `Auto-sent outreach to ${heirName} — compliance passed, delivered via SendGrid`,
+              FLOW_NAME,
+              {
+                clientId: client.id,
+                jurisdiction: outreach.compliance.jurisdiction,
+                messageId: delivery.messageId,
+              }
+            );
+          } else {
+            // Email send failed (rate limited, API error, etc.)
+            contactTracker.recordAttempt(client.id, outreach, false);
+            warnings.push(
+              `Outreach generated but delivery failed: ${delivery.error || delivery.status}`
+            );
+            MollyLogger.warn(
+              `Outreach delivery failed for ${heirName}: ${delivery.status}`,
+              FLOW_NAME,
+              { clientId: client.id, status: delivery.status }
+            );
           }
-        );
+        } catch (deliveryError) {
+          // SendGrid not configured or other delivery error
+          contactTracker.recordAttempt(client.id, outreach, false);
+          const msg =
+            deliveryError instanceof Error
+              ? deliveryError.message
+              : String(deliveryError);
+          warnings.push(`Email delivery not available: ${msg}`);
+          MollyLogger.warn(
+            `Email delivery unavailable for ${heirName}: ${msg}`,
+            FLOW_NAME,
+            { clientId: client.id }
+          );
+        }
       } else {
         // Compliance blocked — hold and log why
         contactTracker.recordAttempt(client.id, outreach, false);
@@ -225,6 +260,105 @@ export function onboardProspect(
     outreach,
     outreachSent,
     complianceWarnings: warnings,
+  };
+}
+
+/**
+ * STEP 1B: Discover heir email and onboard automatically.
+ *
+ * The full autonomous flow:
+ *   1. Scanner finds unclaimed property for "John Smith, Oregon"
+ *   2. We don't have his email — just his name and state
+ *   3. Contact finder searches public records, social media, etc.
+ *   4. If email found → onboardProspect is called automatically
+ *   5. If not found → prospect created in 'needs-contact-info' state
+ *
+ * This is the critical bridge between "we found money" and
+ * "we contacted the heir."
+ */
+export async function discoverAndOnboardProspect(
+  heirName: string,
+  state: string,
+  searchProfile: IdentityProfile,
+  discoveredAssets: DiscoveredAsset[],
+  requestedFeePercent: number = 20, // Launch state default
+  lastKnownCity?: string,
+  lastKnownAddress?: string
+): Promise<
+  ProspectOnboardResult & {
+    contactSearchResult?: import('./contact-finder').ContactSearchResult;
+  }
+> {
+  MollyLogger.info(
+    `Discovering contact info for ${heirName} (${state})`,
+    FLOW_NAME
+  );
+
+  // Step 1: Find heir's email
+  const searchResult = await findContactEmail(
+    heirName,
+    state,
+    lastKnownAddress,
+    lastKnownCity
+  );
+
+  if (searchResult.found && searchResult.bestEmail) {
+    // Email found — proceed with full onboarding
+    MollyLogger.info(
+      `Contact found for ${heirName}: proceeding with onboarding`,
+      FLOW_NAME,
+      {
+        source: searchResult.emails[0]?.source,
+        confidence: searchResult.emails[0]?.confidence,
+      }
+    );
+
+    const result = await onboardProspect(
+      heirName,
+      searchResult.bestEmail,
+      'US',
+      searchProfile,
+      discoveredAssets,
+      requestedFeePercent
+    );
+
+    return { ...result, contactSearchResult: searchResult };
+  }
+
+  // Email not found — create prospect record but can't send outreach yet
+  const clientManager = getClientManager();
+  const contactTracker = getContactTracker();
+
+  const client = clientManager.addProspect(
+    heirName,
+    '', // No email yet
+    'US',
+    searchProfile,
+    requestedFeePercent
+  );
+
+  for (const asset of discoveredAssets) {
+    clientManager.linkAsset(client.id, asset);
+  }
+
+  const contactRecord = contactTracker.createRecord(client.id, heirName, '');
+
+  MollyLogger.info(
+    `Prospect created without email: ${heirName} — ${searchResult.sourcesChecked.length} sources checked, no email found`,
+    FLOW_NAME,
+    { clientId: client.id, sourcesChecked: searchResult.sourcesChecked }
+  );
+
+  return {
+    client,
+    contactRecord,
+    outreach: null,
+    outreachSent: false,
+    complianceWarnings: [
+      `No email found for ${heirName}. ${searchResult.sourcesChecked.length} sources checked. ` +
+        `Prospect created — will retry contact discovery or use paid APIs when available.`,
+    ],
+    contactSearchResult: searchResult,
   };
 }
 

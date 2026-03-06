@@ -67,6 +67,7 @@ export {
 } from './agreement-generator';
 export {
   onboardProspect,
+  discoverAndOnboardProspect,
   approveAndSendOutreach,
   recordProspectResponse,
   generateAndSendAgreement,
@@ -152,6 +153,32 @@ export type {
   ProspectOnboardResult,
   PipelineStatus,
 } from './heir-contact-pipeline';
+
+// Email Delivery — SendGrid Integration
+export {
+  sendEmail,
+  configureEmail,
+  configureEmailFromEnv,
+  getRemainingCapacity,
+} from './email-delivery';
+export type {
+  DeliveryResult,
+  DeliveryStatus,
+  EmailConfig,
+} from './email-delivery';
+
+// Contact Finder — Automated Email Discovery
+export {
+  findContactEmail,
+  batchFindContacts,
+  configureContactFinder,
+} from './contact-finder';
+export type {
+  FoundContact,
+  ContactSearchResult,
+  ContactSource,
+  ContactFinderConfig,
+} from './contact-finder';
 
 // Scrapers
 export {
