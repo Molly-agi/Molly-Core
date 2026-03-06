@@ -466,6 +466,188 @@ for (const rule of US_STATE_RULES) {
 }
 
 // ============================================================================
+// LAUNCH STATES — Zero paperwork, zero registration, zero barriers
+// ============================================================================
+
+/** States where we can operate TODAY with no paperwork or fees */
+export const LAUNCH_STATES = ['OR', 'WA', 'AZ', 'NV'] as const;
+
+/**
+ * Recommended fee schedule — undercuts competition while staying profitable.
+ *
+ * Industry standard: 25-33% (manual operations with human labor costs).
+ * Our advantage: Molly works for free. We can undercut everyone and
+ * still make money because our per-search cost is near zero.
+ *
+ * Strategy: Set fees just below the competition in each tier.
+ */
+export interface FeeSchedule {
+  /** State code */
+  state: string;
+  /** Our fee for this state */
+  ourFeePercent: number;
+  /** What competitors typically charge */
+  competitorFeePercent: string;
+  /** Whether this state is in our launch group */
+  launchState: boolean;
+}
+
+export const FEE_SCHEDULE: FeeSchedule[] = [
+  // Tier 1 — Launch states, no cap, undercut the 25-33% industry standard
+  {
+    state: 'OR',
+    ourFeePercent: 20,
+    competitorFeePercent: '25-33%',
+    launchState: true,
+  },
+  {
+    state: 'WA',
+    ourFeePercent: 20,
+    competitorFeePercent: '25-33%',
+    launchState: true,
+  },
+  {
+    state: 'AZ',
+    ourFeePercent: 20,
+    competitorFeePercent: '25-33%',
+    launchState: true,
+  },
+  {
+    state: 'NV',
+    ourFeePercent: 20,
+    competitorFeePercent: '25-33%',
+    launchState: true,
+  },
+  // Tier 2 — 20% cap states, undercut by 2%
+  {
+    state: 'GA',
+    ourFeePercent: 18,
+    competitorFeePercent: '20%',
+    launchState: false,
+  },
+  {
+    state: 'NC',
+    ourFeePercent: 18,
+    competitorFeePercent: '20%',
+    launchState: false,
+  },
+  {
+    state: 'CO',
+    ourFeePercent: 18,
+    competitorFeePercent: '20%',
+    launchState: false,
+  },
+  {
+    state: 'WI',
+    ourFeePercent: 18,
+    competitorFeePercent: '20%',
+    launchState: false,
+  },
+  {
+    state: 'FL',
+    ourFeePercent: 18,
+    competitorFeePercent: '20%',
+    launchState: false,
+  },
+  // Tier 3 — 15% cap states, undercut by 2%
+  {
+    state: 'PA',
+    ourFeePercent: 13,
+    competitorFeePercent: '15%',
+    launchState: false,
+  },
+  {
+    state: 'NJ',
+    ourFeePercent: 13,
+    competitorFeePercent: '15%',
+    launchState: false,
+  },
+  {
+    state: 'MI',
+    ourFeePercent: 13,
+    competitorFeePercent: '15%',
+    launchState: false,
+  },
+  {
+    state: 'MN',
+    ourFeePercent: 13,
+    competitorFeePercent: '15%',
+    launchState: false,
+  },
+  {
+    state: 'NY',
+    ourFeePercent: 13,
+    competitorFeePercent: '15%',
+    launchState: false,
+  },
+  // Tier 4 — 10% cap states, undercut by 2%
+  {
+    state: 'VA',
+    ourFeePercent: 8,
+    competitorFeePercent: '10%',
+    launchState: false,
+  },
+  {
+    state: 'OH',
+    ourFeePercent: 8,
+    competitorFeePercent: '10%',
+    launchState: false,
+  },
+  {
+    state: 'TX',
+    ourFeePercent: 8,
+    competitorFeePercent: '10%',
+    launchState: false,
+  },
+  {
+    state: 'CA',
+    ourFeePercent: 8,
+    competitorFeePercent: '10%',
+    launchState: false,
+  },
+  {
+    state: 'IN',
+    ourFeePercent: 8,
+    competitorFeePercent: '10%',
+    launchState: false,
+  },
+  {
+    state: 'IL',
+    ourFeePercent: 8,
+    competitorFeePercent: '10%',
+    launchState: false,
+  },
+];
+
+const FEE_BY_STATE = new Map<string, number>();
+for (const entry of FEE_SCHEDULE) {
+  FEE_BY_STATE.set(entry.state, entry.ourFeePercent);
+}
+
+/**
+ * Get our recommended fee for a state.
+ * Returns the optimized fee that undercuts competition.
+ * Falls back to 20% for unknown states (conservative but competitive).
+ */
+export function getRecommendedFee(stateCode: string): number {
+  return FEE_BY_STATE.get(stateCode.toUpperCase()) ?? 20;
+}
+
+/**
+ * Check if a state is in our launch group (zero paperwork).
+ */
+export function isLaunchState(stateCode: string): boolean {
+  return (LAUNCH_STATES as readonly string[]).includes(stateCode.toUpperCase());
+}
+
+/**
+ * Get all launch states with their fee schedules.
+ */
+export function getLaunchStates(): FeeSchedule[] {
+  return FEE_SCHEDULE.filter((f) => f.launchState);
+}
+
+// ============================================================================
 // COMPLIANCE ENGINE
 // ============================================================================
 

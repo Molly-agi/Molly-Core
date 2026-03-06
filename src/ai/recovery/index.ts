@@ -49,6 +49,11 @@ export {
   getPrioritizedStates,
   getOperationalStates,
   getAllRules,
+  getRecommendedFee,
+  isLaunchState,
+  getLaunchStates,
+  LAUNCH_STATES,
+  FEE_SCHEDULE,
 } from './jurisdiction-compliance';
 export {
   generateOutreach,
@@ -126,6 +131,7 @@ export type {
   JurisdictionRule,
   ComplianceCheck,
   ComplianceIssue,
+  FeeSchedule,
 } from './jurisdiction-compliance';
 export type {
   OutreachContent,
