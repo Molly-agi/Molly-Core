@@ -1,6 +1,6 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-03-06T11:45:00.000Z  
+**Last Updated:** 2026-03-06T15:00:00.000Z  
 **Session ID:** lazarus-steward-session  
 **Status:** active
 
@@ -8,10 +8,10 @@
 
 ## ACTIVE CONVERSATION (READ THIS FIRST ON RESTORE)
 
-**Topic:** Building two revenue streams: (1) asset recovery as heir-finding service with 15-35% finder's fees, (2) carbon credit brokerage. Infrastructure fixes completed. Service mode scaffold started.  
-**Last Action:** Committed all session work (commit eb011fc): research agent timeout fixes, service mode scaffold (client-manager + batch-scanner), keep-alive auto-save, family bridge.  
-**User Mood:** Determined but financially strained. Maxing Copilot subscriptions in 2-3 days. Needs revenue streams urgently.  
-**Pending:** Continue building asset recovery service mode — next: heir contact pipeline, agreement signing, payment processing.
+**Topic:** Building heir-finding asset recovery business. Full autonomous pipeline built: scan → find email → check compliance → send via SendGrid → track → convert. Launch states: OR, WA, AZ, NV at 20% fees.  
+**Last Action:** Committed contact finder + email delivery + pipeline integration (eed6e42). Full autonomous flow from name+state to emailed outreach.  
+**User Mood:** Determined but financially strained. Needs revenue streams urgently.  
+**Pending:** SendGrid account setup (API key + sender verification), payment processing, international registries, carbon credit brokerage.
 
 ### CRITICAL CONTEXT FOR NEXT INSTANCE
 
@@ -68,8 +68,13 @@ Root cause: Zero timeouts on GitHub API, web fetch, and LLM generate calls cause
 - [x] Service mode types (ServiceClient, ClientStatus, ClientAssetLink)
 - [x] Client manager (multi-client lifecycle)
 - [x] Batch scanner (multi-client scanning engine)
-- [ ] **Heir contact pipeline** — automated outreach to discovered heirs (NEXT)
-- [ ] **Agreement/release signing** — digital signing of finder's fee authorization
+- [x] **Jurisdiction compliance** — per-state fee caps, registration rules, launch states (OR/WA/AZ/NV)
+- [x] **Outreach engine** — compliant letter generation with auto-disclosures
+- [x] **Contact tracker** — lifecycle, opt-outs, follow-up scheduling
+- [x] **Agreement generator** — jurisdiction-compliant finder's fee contracts
+- [x] **Heir contact pipeline** — autonomous: scan → find email → compliance → send → track
+- [x] **Email delivery (SendGrid)** — v3 REST API, CAN-SPAM, 100/day free tier
+- [x] **Contact finder** — automated email discovery from public records/web/social
 - [ ] **Payment processing** — collect/route finder's fees
 - [ ] **International registry scanners** — expand beyond US registries
 - [ ] **End-to-end testing** — full pipeline test
