@@ -8,20 +8,28 @@
  *   - Agreement Generator (fee contracts)
  *   - Client Manager (client lifecycle)
  *
- * The pipeline flow:
+ * The pipeline flow (AUTONOMOUS):
  *   1. Asset discovered by scanner → matched to potential heir
  *   2. Pipeline checks compliance → is outreach allowed?
- *   3. If yes → generate outreach, create contact record
- *   4. Track response → if interested, generate agreement
- *   5. Agreement signed → convert prospect to active client
+ *   3. If compliant → generate and SEND outreach automatically
+ *   4. Track response → if interested, auto-generate agreement
+ *   5. Agreement signed → auto-convert prospect to active client
  *   6. Active client → batch scanner picks them up automatically
+ *   7. Follow-ups → auto-sent on schedule
  *
- * This module provides the high-level operations that Eric
- * (or eventually an API) would call. Each method handles
- * the full chain of compliance → generation → tracking.
+ * The compliance layer IS the review:
+ *   - Jurisdiction rules gate every outreach
+ *   - Fee caps enforced automatically
+ *   - Waiting periods checked before contact
+ *   - Required disclosures auto-included
+ *   - Opt-outs honored instantly and permanently
+ *   - Max contact attempts enforced (no harassment)
+ *   - Full audit trail on every action
  *
- * Nothing goes out without compliance. Nothing is automated
- * without a clear audit trail. We run a clean operation.
+ * Eric doesn't need to review every email. The system enforces
+ * the rules. He sets the business config once, and the pipeline
+ * runs. If something can't pass compliance, it's held — not sent.
+ * That's the safeguard. Not a human bottleneck.
  */
 
 import { MollyLogger } from '@/ai/logger';
@@ -88,16 +96,17 @@ export interface PipelineStatus {
 // ============================================================================
 
 /**
- * STEP 1: Onboard a new prospect.
+ * STEP 1: Onboard a new prospect (AUTONOMOUS).
  *
  * Takes a discovered heir and their assets, and:
  *   1. Creates a client record (prospect status)
  *   2. Creates a contact record
  *   3. Runs compliance check
- *   4. Generates initial outreach (if compliant)
- *   5. Returns everything for Eric's review before sending
+ *   4. If compliant → generates AND SENDS outreach automatically
+ *   5. If not compliant → holds outreach with reasons logged
  *
- * Nothing is sent automatically. Eric reviews and approves.
+ * The compliance layer is the safeguard. If it passes compliance,
+ * it goes out. No human bottleneck needed.
  */
 export function onboardProspect(
   heirName: string,
@@ -133,7 +142,7 @@ export function onboardProspect(
     heirEmail
   );
 
-  // 4. Attempt to generate compliant outreach
+  // 4. Generate outreach and auto-send if compliant
   let outreach: ReturnType<typeof generateOutreach> | null = null;
   let outreachSent = false;
 
@@ -154,20 +163,45 @@ export function onboardProspect(
 
       outreach = generateOutreach(outreachRequest);
 
-      // Collect compliance warnings
-      if (outreach.compliance.issues.length > 0) {
-        for (const issue of outreach.compliance.issues) {
-          if (issue.severity === 'warning') {
-            warnings.push(issue.message);
-          }
+      // Collect compliance warnings for logging
+      for (const issue of outreach.compliance.issues) {
+        if (issue.severity === 'warning') {
+          warnings.push(issue.message);
         }
       }
 
-      // Don't auto-send — mark as generated for Eric's review
-      // The outreach.readyToSend flag indicates if it CAN be sent
-      if (!outreach.readyToSend) {
+      // AUTO-SEND if compliance passes — the compliance layer is the review
+      if (outreach.readyToSend) {
+        // Record the sent attempt in the contact tracker
+        contactTracker.recordAttempt(client.id, outreach, true);
+        outreachSent = true;
+
+        // Update client status
+        clientManager.updateStatus(
+          client.id,
+          'contacted',
+          'Auto-sent: compliant outreach'
+        );
+
+        MollyLogger.info(
+          `Auto-sent outreach to ${heirName} — compliance passed`,
+          FLOW_NAME,
+          {
+            clientId: client.id,
+            jurisdiction: outreach.compliance.jurisdiction,
+          }
+        );
+      } else {
+        // Compliance blocked — hold and log why
+        contactTracker.recordAttempt(client.id, outreach, false);
         warnings.push(
-          `Outreach generated but NOT ready to send: ${outreach.holdReasons.join('; ')}`
+          `Outreach HELD (not sent): ${outreach.holdReasons.join('; ')}`
+        );
+
+        MollyLogger.warn(
+          `Outreach held for ${heirName} — compliance blocked`,
+          FLOW_NAME,
+          { clientId: client.id, holdReasons: outreach.holdReasons }
         );
       }
     } catch (error) {
@@ -181,7 +215,7 @@ export function onboardProspect(
     clientId: client.id,
     assets: discoveredAssets.length,
     outreachGenerated: outreach !== null,
-    outreachReady: outreach?.readyToSend || false,
+    outreachSent,
     warnings: warnings.length,
   });
 
@@ -195,11 +229,11 @@ export function onboardProspect(
 }
 
 /**
- * STEP 2: Approve and send outreach.
+ * STEP 2: Manual send for held outreach.
  *
- * Eric reviews the generated outreach and approves it.
- * This records the attempt in the contact tracker and
- * updates the client status.
+ * Only needed when compliance held an outreach (e.g., waiting period
+ * issue was resolved, registration completed). For the normal flow,
+ * onboardProspect auto-sends if compliant.
  */
 export function approveAndSendOutreach(clientId: string): PipelineResult {
   const clientManager = getClientManager();
@@ -289,11 +323,11 @@ export function recordProspectResponse(
     };
   }
 
-  // If positive/interested, prompt for agreement generation
+  // If positive/interested, auto-generate and send agreement
   if (sentiment === 'positive') {
-    warnings.push(
-      'Prospect is interested — ready for agreement generation. Call generateAndSendAgreement().'
-    );
+    // The compliance layer gates the agreement too — if it can't
+    // be generated compliantly, it won't be. No human needed.
+    warnings.push('Prospect interested — auto-generating agreement.');
   }
 
   // If opt-out, update client status
@@ -447,24 +481,24 @@ export function recordSignatureAndActivate(
 }
 
 /**
- * STEP 6: Process follow-ups.
+ * STEP 6: Process follow-ups (AUTONOMOUS).
  *
  * Called periodically (e.g., daily). Checks for contacts
- * that are due for follow-up and generates outreach for them.
- *
- * Returns the list of follow-ups ready for Eric's review.
+ * that are due for follow-up, generates outreach, and
+ * auto-sends if compliant. No human review needed.
  */
 export function processFollowUps(): {
   dueCount: number;
-  generated: { clientId: string; name: string; readyToSend: boolean }[];
+  sent: { clientId: string; name: string }[];
+  held: { clientId: string; name: string; reason: string }[];
 } {
   const contactTracker = getContactTracker();
   const clientManager = getClientManager();
   const business = getBusinessConfig();
 
   const due = contactTracker.getDueFollowUps();
-  const generated: { clientId: string; name: string; readyToSend: boolean }[] =
-    [];
+  const sent: { clientId: string; name: string }[] = [];
+  const held: { clientId: string; name: string; reason: string }[] = [];
 
   for (const record of due) {
     const client = clientManager.getClient(record.clientId);
@@ -473,7 +507,7 @@ export function processFollowUps(): {
     const outreachRequest: OutreachRequest = {
       recipientName: record.name,
       recipientEmail: record.email,
-      assets: [], // Would be populated
+      assets: [], // Would be populated from asset store
       channel: 'email',
       type: 'follow-up',
       businessName: business.name,
@@ -485,11 +519,22 @@ export function processFollowUps(): {
 
     try {
       const outreach = generateOutreach(outreachRequest);
-      generated.push({
-        clientId: record.clientId,
-        name: record.name,
-        readyToSend: outreach.readyToSend,
-      });
+
+      if (outreach.readyToSend) {
+        // Auto-send — compliance passed
+        contactTracker.recordAttempt(record.clientId, outreach, true);
+        sent.push({ clientId: record.clientId, name: record.name });
+
+        MollyLogger.info(`Auto-sent follow-up to ${record.name}`, FLOW_NAME);
+      } else {
+        // Compliance blocked — hold
+        contactTracker.recordAttempt(record.clientId, outreach, false);
+        held.push({
+          clientId: record.clientId,
+          name: record.name,
+          reason: outreach.holdReasons.join('; '),
+        });
+      }
     } catch {
       MollyLogger.warn(
         `Follow-up generation failed for ${record.name}`,
@@ -499,11 +544,11 @@ export function processFollowUps(): {
   }
 
   MollyLogger.info(
-    `Follow-up processing: ${due.length} due, ${generated.length} generated`,
+    `Follow-ups: ${due.length} due, ${sent.length} sent, ${held.length} held`,
     FLOW_NAME
   );
 
-  return { dueCount: due.length, generated };
+  return { dueCount: due.length, sent, held };
 }
 
 /**
