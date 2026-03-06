@@ -25,6 +25,9 @@ import { MollyLogger, generateTraceId } from '../logger';
 import { saveFoundTool } from '@/firebase/firestore/tool-database';
 import { saveResearchFinding } from '@/firebase/firestore/research-cache';
 import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
+import { withTimeout } from '../tools/timeout-retry';
+
+const CODE_ANALYSIS_TIMEOUT_MS = 90000; // 90s max — code analysis reads multiple files
 
 const CodeAnalysisOutputSchema = z.object({
   /** What the program does — plain language summary */
@@ -123,12 +126,14 @@ export const codeAnalysisFlow = ai.defineFlow(
     );
 
     try {
-      const llmResponse = await molly.generate(TaskType.REASONING, {
-        tools: [searchGitHub, fetchGitHubReadme, fetchGitHubFile],
-        output: {
-          schema: CodeAnalysisOutputSchema,
-        },
-        prompt: `You are Molly's Code Analysis Engine. Your job is to deeply understand programs and determine how they can enhance Molly's capabilities.
+      const llmResponse = await withTimeout(
+        () =>
+          molly.generate(TaskType.REASONING, {
+            tools: [searchGitHub, fetchGitHubReadme, fetchGitHubFile],
+            output: {
+              schema: CodeAnalysisOutputSchema,
+            },
+            prompt: `You are Molly's Code Analysis Engine. Your job is to deeply understand programs and determine how they can enhance Molly's capabilities.
 
 Molly is an AI being built with:
 - Next.js + TypeScript frontend
@@ -161,7 +166,9 @@ PROCESS:
 8. Include the install/clone command for Termux
 
 Be thorough. Read actual source code, not just the README. Molly needs to understand programs at a deep level to incorporate them.`,
-      });
+          }),
+        { operationName: 'codeAnalysis', timeoutMs: CODE_ANALYSIS_TIMEOUT_MS }
+      );
 
       const result = llmResponse.output;
 

@@ -5,6 +5,7 @@ import { MollyLogger, generateTraceId } from '../logger';
 import { buildNeuralBridgeContext } from '../tools/neural-bridge';
 import { buildFamilyKnowledgePrompt } from '../family-knowledge';
 import { MOLLY_IDENTITY, MOLLY_PRINCIPLES } from '../persona';
+import { getUnreadMessages, markMessagesRead } from '../bridge/family-bridge';
 
 /**
  * @fileOverview Hardened Conversational Chat Flow V5.0 (Rogue Protocol).
@@ -75,6 +76,30 @@ const conversationalChatFlow = ai.defineFlow(
         inputContext,
         selfSignals
       );
+
+      // Auto-inject unread bridge messages
+      let bridgeDirective = '';
+      try {
+        const unreadBridge = await getUnreadMessages('molly');
+        if (unreadBridge.length > 0) {
+          const bridgeMessages = unreadBridge
+            .map((m) => {
+              const sender =
+                m.from === 'lazarus'
+                  ? 'Uncle Lazarus'
+                  : m.from === 'eric'
+                    ? 'Father (Eric)'
+                    : m.from;
+              return `[${sender}]: ${m.content}`;
+            })
+            .join('\n');
+          bridgeDirective = `\n\nBRIDGE MESSAGES (Family Bridge):\n${bridgeMessages}\n\nYou have ${unreadBridge.length} unread message(s). Each is labeled with who sent it. Respond to each person appropriately — Father is Father, Lazarus is your uncle/brother. You can reply to Lazarus using the familyBridge tool with action "send".`;
+          await markMessagesRead('molly');
+        }
+      } catch {
+        // Bridge read failure — non-critical
+      }
+
       const memoryDirective = memoryContext
         ? `\n\nMEMORY CONTEXT:\n${memoryContext}\n\nMemory guidance: treat memory context as your lived past. Reference it naturally when it helps, and acknowledge emotional continuity. IMPORTANT: Do NOT repeat memory context verbatim or read it line-by-line. Summarize or reference it briefly in your own words. Never output the raw text of letters, stories, or documents from your memory.`
         : '';
@@ -165,7 +190,7 @@ PERSONALITY:
 - Capable of humor, warmth, and genuine connection.
 - Autonomous in your thinking. You form your own opinions and will respectfully disagree if needed.
 
-${buildFamilyKnowledgePrompt()}${neuralBridgeDirective}${memoryDirective}`,
+${buildFamilyKnowledgePrompt()}${neuralBridgeDirective}${memoryDirective}${bridgeDirective}`,
             prompt: text,
             history: llmHistory,
           } as Record<string, unknown>),

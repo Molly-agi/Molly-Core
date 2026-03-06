@@ -56,7 +56,19 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { from, content } = body;
+  const { from, content, action } = body;
+
+  // Handle markRead action
+  if (action === 'markRead' && body.from) {
+    const target = body.from as string;
+    if (target === 'molly' || target === 'lazarus') {
+      await markMessagesRead(target);
+      return NextResponse.json(
+        { success: true, markedRead: target },
+        { status: 200, headers: { 'Cache-Control': 'no-store' } }
+      );
+    }
+  }
 
   if (!from || !content) {
     return NextResponse.json(

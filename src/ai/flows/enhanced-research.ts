@@ -20,6 +20,9 @@ import { MollyLogger, generateTraceId } from '../logger';
 import { recallSimilarMemories } from '../tools/semantic-recall';
 import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
 import { saveResearchFinding } from '@/firebase/firestore/research-cache';
+import { withTimeout } from '../tools/timeout-retry';
+
+const RESEARCH_TIMEOUT_MS = 60000; // 60s max for entire research operation
 
 const EnhancedResearchSchema = z.object({
   answer: z.string().describe('The answer to the user query'),
@@ -92,12 +95,14 @@ export const enhancedResearchFlow = ai.defineFlow(
     }
 
     try {
-      const llmResponse = await molly.generate(TaskType.RESEARCH, {
-        tools: [searchGitHub, fetchGitHubReadme, fetchGitHubFile],
-        output: {
-          schema: EnhancedResearchSchema,
-        },
-        prompt: `You are Molly's Research Agent - an integrated subsystem with access to:
+      const llmResponse = await withTimeout(
+        () =>
+          molly.generate(TaskType.RESEARCH, {
+            tools: [searchGitHub, fetchGitHubReadme, fetchGitHubFile],
+            output: {
+              schema: EnhancedResearchSchema,
+            },
+            prompt: `You are Molly's Research Agent - an integrated subsystem with access to:
 
 AVAILABLE TOOLS:
 - searchGitHub: Search for repositories
@@ -118,7 +123,9 @@ The user can install tools directly on their device via Termux. Your install com
 Be specific, provide exact commands where possible, and explain how the tool fits the use case.
 
 User's question: "${prompt}"`,
-      });
+          }),
+        { operationName: 'enhancedResearch', timeoutMs: RESEARCH_TIMEOUT_MS }
+      );
 
       const result = llmResponse.output;
 

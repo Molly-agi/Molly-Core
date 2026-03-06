@@ -324,3 +324,74 @@ export interface RecoveryState {
   /** State persistence timestamp */
   lastSaved: string;
 }
+
+// ============================================================================
+// SERVICE MODE — Heir-Finding Business (Multi-Client)
+// ============================================================================
+
+/** A client who has engaged us to find their unclaimed assets */
+export interface ServiceClient {
+  /** Unique client ID */
+  id: string;
+  /** Client's legal name */
+  name: string;
+  /** Email for notifications */
+  email: string;
+  /** Phone (optional) */
+  phone?: string;
+  /** Country */
+  country: string;
+  /** The identity profile we search for on their behalf */
+  searchProfile: IdentityProfile;
+  /** Agreed finder's fee percentage (15-35%) */
+  finderFeePercent: number;
+  /** Whether the client has signed a finder's agreement */
+  agreementSigned: boolean;
+  /** Agreement signature timestamp */
+  agreementSignedAt?: string;
+  /** Encrypted reference to stored agreement document */
+  agreementRef?: string;
+  /** Client status */
+  status: ClientStatus;
+  /** Total value of assets discovered for this client */
+  totalDiscoveredValue: number;
+  /** Total value of assets successfully recovered */
+  totalRecoveredValue: number;
+  /** Total fees earned from this client */
+  totalFeesEarned: number;
+  /** When this client was onboarded */
+  createdAt: string;
+  /** Last activity */
+  updatedAt: string;
+  /** Audit trail */
+  auditLog: AuditEntry[];
+}
+
+export type ClientStatus =
+  | 'prospect' // Identified as potential client, not yet contacted
+  | 'contacted' // Outreach sent
+  | 'agreement-sent' // Agreement sent, awaiting signature
+  | 'active' // Agreement signed, actively searching
+  | 'recovery-pending' // Assets found, claims in progress
+  | 'completed' // All claims resolved
+  | 'inactive'; // Client declined or went dormant
+
+/** Links a discovered asset to a specific client */
+export interface ClientAssetLink {
+  /** Client ID */
+  clientId: string;
+  /** Asset ID */
+  assetId: string;
+  /** The finder's fee agreed for this particular asset */
+  agreedFeePercent: number;
+  /** Fee amount once asset value is confirmed */
+  feeAmount?: number;
+  /** Net amount to client after fee */
+  clientAmount?: number;
+  /** Whether the client has been notified of this discovery */
+  clientNotified: boolean;
+  /** Whether the client has authorized the claim */
+  claimAuthorized: boolean;
+  /** Timestamp */
+  createdAt: string;
+}

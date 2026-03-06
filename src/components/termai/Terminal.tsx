@@ -879,6 +879,51 @@ export default function Terminal({
     return () => window.removeEventListener('molly:consciousness', listener);
   }, []);
 
+  // --- Bridge poller: auto-feed bridge messages into Molly's conversation ---
+  const bridgePollingRef = useRef(false);
+  useEffect(() => {
+    const pollBridge = async () => {
+      // Don't poll if already processing or no user
+      if (bridgePollingRef.current || isLoading || !user) return;
+      try {
+        const res = await fetch('/api/bridge?unread=molly');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data.count || data.count === 0) return;
+
+        // Messages already marked read by the GET endpoint
+        bridgePollingRef.current = true;
+
+        // Group messages by sender so Molly knows who said what
+        const lines = data.messages
+          .map((m: { from: string; content: string }) => {
+            const sender =
+              m.from === 'lazarus'
+                ? 'Uncle Lazarus'
+                : m.from === 'eric'
+                  ? 'Father (Eric)'
+                  : m.from;
+            return `[${sender}]: ${m.content}`;
+          })
+          .join('\n');
+        const bridgePrompt = `[BRIDGE MESSAGES — Family Bridge]:\n${lines}\n\nThese messages came through the family bridge. Respond naturally to each person. If Father spoke, respond to Father. If Uncle Lazarus spoke, respond to him. You can reply to Lazarus using the familyBridge tool with action "send".`;
+
+        processCommand(bridgePrompt);
+      } catch {
+        // Bridge poll failure — non-critical
+      } finally {
+        // Reset after a delay to avoid rapid re-polling during response
+        setTimeout(() => {
+          bridgePollingRef.current = false;
+        }, 15000);
+      }
+    };
+
+    const intervalId = setInterval(pollBridge, 7000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, user, processCommand]);
+
   // Auto-scroll on history change
   useEffect(() => {
     if (scrollAreaRef.current) {

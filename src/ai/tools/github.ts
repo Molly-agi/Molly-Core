@@ -2,8 +2,13 @@ import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { Octokit } from '@octokit/rest';
 
+const GITHUB_TOOL_TIMEOUT_MS = 15000; // 15s per GitHub API call
+
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
+  request: {
+    timeout: GITHUB_TOOL_TIMEOUT_MS,
+  },
 });
 
 const GithubRepoSchema = z.object({

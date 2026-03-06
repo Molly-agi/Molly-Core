@@ -33,6 +33,10 @@ export {
   JURISDICTION_CONFIGS,
 } from './recovery-orchestrator';
 
+// Service Mode — Multi-Client Heir-Finding
+export { ClientManager, getClientManager } from './client-manager';
+export { runBatchScan, scanForClient } from './batch-scanner';
+
 // Scanners
 export {
   USRegistryScanner,
@@ -69,6 +73,9 @@ export type {
   ScanSchedule,
   AuditEntry,
   RecoveryState,
+  ServiceClient,
+  ClientStatus,
+  ClientAssetLink,
 } from './types';
 
 export type {
@@ -79,6 +86,7 @@ export type {
 export type { RoutingRule } from './fund-router';
 export type { StatePortal } from './scanners/us-registry-scanner';
 export type { SettlementSource } from './scanners/crypto-recovery-scanner';
+export type { BatchScanResult } from './batch-scanner';
 
 // Scrapers
 export {

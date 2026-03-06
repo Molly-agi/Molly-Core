@@ -30,8 +30,11 @@ export const webResearch = ai.defineTool(
   },
   async ({ url }) => {
     try {
-      const response = await fetch(url);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000); // 15s max
+      const response = await fetch(url, { signal: controller.signal });
       const html = await response.text();
+      clearTimeout(timeout);
       const $ = cheerio.load(html);
 
       // Clean up common noise
