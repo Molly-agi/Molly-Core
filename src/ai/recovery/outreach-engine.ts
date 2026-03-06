@@ -319,8 +319,7 @@ function generateFollowUp(
   request: OutreachRequest,
   effectiveFee: number,
   disclosures: string[],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _rule: JurisdictionRule
+  rule: JurisdictionRule
 ): { subject: string; body: string } {
   const totalValue = request.assets.reduce(
     (sum, a) => sum + a.estimatedValue,
@@ -330,7 +329,7 @@ function generateFollowUp(
   const businessEmail = request.businessEmail || currentBusinessConfig.email;
   const businessPhone = request.businessPhone || currentBusinessConfig.phone;
 
-  const subject = `Follow-Up: Unclaimed Property Recovery — $${totalValue.toLocaleString()} May Be Yours`;
+  const subject = `Follow-Up: Unclaimed Property Recovery in ${rule.name} — $${totalValue.toLocaleString()} May Be Yours`;
 
   const disclosureBlock =
     disclosures.length > 0

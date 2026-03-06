@@ -305,8 +305,7 @@ async function searchVoterRecords(
 async function searchWeb(
   name: string,
   state: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _city?: string
+  city?: string
 ): Promise<FoundContact[]> {
   const results: FoundContact[] = [];
 
@@ -314,9 +313,10 @@ async function searchWeb(
   // For now, we use a simple web fetch approach against
   // public directory sites that don't require API keys
 
+  const location = city ? `${city}, ${state}` : state;
   const searchTargets = [
     // Whitepages-style public lookups
-    `https://www.whitepages.com/name/${encodeURIComponent(name)}/${encodeURIComponent(state)}`,
+    `https://www.whitepages.com/name/${encodeURIComponent(name)}/${encodeURIComponent(location)}`,
   ];
 
   for (const url of searchTargets) {
@@ -365,13 +365,11 @@ async function searchWeb(
 /**
  * Search public records aggregators.
  */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 async function searchPublicRecords(
-  _name: string,
-  _state: string,
-  _address?: string
+  name: string,
+  state: string,
+  address?: string
 ): Promise<FoundContact | null> {
-  /* eslint-enable @typescript-eslint/no-unused-vars */
   // Public records aggregators that offer free basic lookups:
   // - TruePeopleSearch
   // - FastPeopleSearch
@@ -380,10 +378,14 @@ async function searchPublicRecords(
   // These sites surface publicly available data.
   // We scrape them responsibly (rate limited, User-Agent identified).
 
-  // For now, returning null. This is the integration point.
-  // When we add specific scrapers for these sites, they plug in here.
+  // Log the search attempt for future integration
+  MollyLogger.info(
+    `Public records search: ${name} in ${state}${address ? ` near ${address}` : ''}`,
+    FLOW_NAME
+  );
 
-  return null; // TODO: Add specific public record site scrapers
+  // Integration point — when specific scrapers are built, they plug in here.
+  return null;
 }
 
 /**

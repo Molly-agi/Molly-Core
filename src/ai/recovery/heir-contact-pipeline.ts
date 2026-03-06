@@ -394,10 +394,7 @@ export function approveAndSendOutreach(clientId: string): PipelineResult {
   }
 
   // Re-generate outreach (ensures latest compliance rules)
-  // In production, we'd use the actual DiscoveredAsset objects
-  // For now, generate a minimal outreach request
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _outreachRequest: OutreachRequest = {
+  const outreachRequest: OutreachRequest = {
     recipientName: client.name,
     recipientEmail: client.email,
     assets: [], // Would be populated from asset store
@@ -409,6 +406,19 @@ export function approveAndSendOutreach(clientId: string): PipelineResult {
     businessAddress: business.address,
     requestedFeePercent: client.finderFeePercent,
   };
+
+  const outreach = generateOutreach(outreachRequest);
+
+  if (!outreach.readyToSend) {
+    return {
+      success: false,
+      action: 'send-outreach',
+      clientId,
+      details: `Outreach held by compliance: ${outreach.holdReasons.join('; ')}`,
+      warnings: outreach.holdReasons,
+      complianceBlockers: outreach.holdReasons,
+    };
+  }
 
   // Update client status
   clientManager.updateStatus(clientId, 'contacted', 'Initial outreach sent');
@@ -493,8 +503,7 @@ export function generateAndSendAgreement(
   assets: DiscoveredAsset[]
 ): PipelineResult & { agreement?: FinderAgreement } {
   const clientManager = getClientManager();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _contactTracker = getContactTracker();
+  const contactTracker = getContactTracker();
   const agreementGen = getAgreementGenerator();
 
   const client = clientManager.getClient(clientId);
@@ -529,6 +538,9 @@ export function generateAndSendAgreement(
 
   // Mark as sent
   agreementGen.markSent(agreement.id);
+
+  // Record agreement delivery in contact tracker
+  contactTracker.recordDelivery(clientId);
 
   // Update client status
   clientManager.updateStatus(
