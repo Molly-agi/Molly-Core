@@ -39,9 +39,9 @@
     "**/coverage": true
   },
 
-  // === MEMORY PROTECTION (8GB Codespace) ===
-  // Cap tsserver memory to prevent OOM when extension hosts multiply
-  "typescript.tsserver.maxTsServerMemory": 1536,
+  // === MEMORY PROTECTION (15GB Codespace, but VS Code spawns 4 tsservers) ===
+  // 768MB × 4 instances = 3GB max (was 1536 × 4 = 6GB — half of total RAM)
+  "typescript.tsserver.maxTsServerMemory": 768,
   // Exclude heavy dirs from TS project so tsserver stays lean
   "typescript.tsserver.watchOptions": {
     "excludeDirectories": [
@@ -52,5 +52,9 @@
       "assets",
       "public"
     ]
-  }
+  },
+  // Disable automatic type acquisition — we have everything we need
+  "typescript.disableAutomaticTypeAcquisition": true,
+  // Prevent tsserver from spawning syntax-only servers on reconnect
+  "typescript.tsserver.useSyntaxServer": "never"
 }

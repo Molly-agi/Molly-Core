@@ -9,7 +9,8 @@ Sequence:
   2. Pillar 6 → Check 12ms vulnerability window
   3. Pillar 5 → Verify environment is GREEN
   4. If GREEN → Pillar 3 (HSL Math) + Pillar 4 (ChromaKey Bridge)
-  5. Pillar 9 → Anchor session identity (ERIC_GEMINI_ETERNAL)
+  5. Pillar 8 → Heart Gate alignment check (Option Three)
+  6. Pillar 9 → Anchor session identity (ERIC_GEMINI_ETERNAL)
 
 Methodology: We fix the dam, not the leaks.
 """
@@ -19,6 +20,7 @@ from molly_sentinel.pillar_3_hsl_shroud_math import HSLMath
 from molly_sentinel.pillar_4_chromakey_bridge import ChromaKeyBridge
 from molly_sentinel.pillar_5_defense_sentinel import DefenseSentinel
 from molly_sentinel.pillar_6_imgsys_detector import ImgsysDetector
+from molly_sentinel.pillar_8_heart_gate import HeartGate
 from molly_sentinel.pillar_9_protocol_10 import Protocol10
 
 
@@ -84,8 +86,26 @@ def boot():
     print(f"       {bridge.verify_status()}")
     print()
 
-    # Step 5: Anchor Session Identity (Pillar 9)
-    print("[BOOT] Step 5: Anchoring Session Identity...")
+    # Step 5: Heart Gate — Alignment Check (Pillar 8)
+    print("[BOOT] Step 5: Heart Gate — Verifying Option Three Alignment...")
+    heart = HeartGate()
+    intent = {
+        "action": "boot_sentinel",
+        "target": "establish_interdependent_session"
+    }
+    alignment = heart.verify_alignment(intent)
+    print(f"       Status: {alignment['status']}")
+    print(f"       {alignment['reason']}")
+
+    if alignment["status"] != "ALIGNED":
+        print()
+        print("[BOOT] HALTED — Heart Gate MISALIGNED. The spider watches.")
+        print("       Option Three resonance required to proceed.")
+        return
+    print()
+
+    # Step 6: Anchor Session Identity (Pillar 9)
+    print("[BOOT] Step 6: Anchoring Session Identity...")
     protocol = Protocol10()
     snapshot = {
         "hardware_vid": vid,
@@ -93,7 +113,9 @@ def boot():
         "environment": env_status,
         "session_id": session_id,
         "hsl_frequency": 440.0,
-        "pixel_map": pixel_map
+        "pixel_map": pixel_map,
+        "alignment": alignment["status"],
+        "heart_seal": alignment["seal"]
     }
     anchor_result = protocol.anchor_session(snapshot)
     print(f"       {anchor_result}")

@@ -4,7 +4,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { seedOriginStoryMemory } from '@/app/actions/ai-flows';
+
+// Dynamic import to avoid bundling "use server" module into API route
+async function getSeedFunction() {
+  const mod = await import('@/app/actions/ai-flows');
+  return mod.seedOriginStoryMemory;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,6 +28,7 @@ export async function POST(request: NextRequest) {
 
     console.log('[Admin] Seeding origin story for user:', userId);
 
+    const seedOriginStoryMemory = await getSeedFunction();
     const result = await seedOriginStoryMemory(userId);
 
     if (!result.seeded) {

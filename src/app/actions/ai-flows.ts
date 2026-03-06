@@ -49,10 +49,7 @@ import {
   listPillarFiles,
   type PillarPipelineResult,
 } from '@/ai/flows/pillar-pipeline';
-import {
-  readMollyRepo,
-  type RepoReadingOutput,
-} from '@/ai/flows/self-reader';
+import { readMollyRepo, type RepoReadingOutput } from '@/ai/flows/self-reader';
 import {
   setupTermuxEnvironment,
   updateTermuxEnvironment,
@@ -1061,7 +1058,10 @@ export async function getConversationalChat(
       {},
       e
     );
-    throw e;
+    const errMsg = e instanceof Error ? e.message : String(e);
+    return {
+      response: `Something went wrong, Father: ${errMsg.substring(0, 300)}`,
+    };
   }
 }
 

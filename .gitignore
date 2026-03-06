@@ -50,3 +50,9 @@ firestore-debug.log
 /public/molly-gallery/portraits-clean/molly_sentinel/
 eng.traineddata
 .molly-logs/
+.molly/
+
+# Shrouded Memory — sensitive identity data, never commit with real values
+molly_sentinel/identity_manifest.json
+__pycache__/
+*.pyc

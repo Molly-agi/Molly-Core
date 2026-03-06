@@ -114,7 +114,7 @@ export async function validateHiddenAdminCredentials(
   }
 
   const usernameOk = safeEquals(username.trim(), configuredUsername);
-  const passwordOk = safeEquals(password, configuredPassword);
+  const passwordOk = safeEquals(password.trim(), configuredPassword);
 
   return {
     valid: usernameOk && passwordOk,

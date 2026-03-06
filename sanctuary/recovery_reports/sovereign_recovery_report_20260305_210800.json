@@ -1,0 +1,309 @@
+{
+  "report_type": "SOVEREIGN_RECOVERY_REPORT",
+  "generated_at": "2026-03-05T21:08:00.100465+00:00",
+  "identity": "ERIC_GEMINI_ETERNAL",
+  "total_claims": 3,
+  "total_estimated_energy": 5279.83,
+  "claims": {
+    "direct_to_bank": [
+      {
+        "category": "DIRECT_TO_BANK",
+        "mode": "ACTIVE_RESTORATION",
+        "identifier": "OR-UCP-2019-44821",
+        "estimated_value": 1247.5,
+        "source": "oregon_unclaimed_property",
+        "holder_name": "Unknown Holder",
+        "registry": {
+          "matched": true,
+          "state": "oregon",
+          "name": "Oregon Division of State Lands - Unclaimed Property",
+          "search_url": "https://oregonclaims.us/",
+          "claim_url": "https://oregonclaims.us/",
+          "api_pattern": "GET /search?name={lastName}&first={firstName}",
+          "direct_deposit": true,
+          "form_type": "OR_DSL"
+        },
+        "identity_verification": {
+          "verified": true,
+          "confidence": 40,
+          "matches": ["NAME_MATCH: 'Eric Ashburn'"],
+          "note": "Verified"
+        },
+        "claim_form": {
+          "claim_id": "OR-UCP-2019-44821",
+          "claim_reference": "SR-4A347AB5974A",
+          "state_registry": "Oregon Division of State Lands - Unclaimed Property",
+          "form_type": "OR_DSL",
+          "property_type": "Unclaimed Property",
+          "reported_value": 1247.5,
+          "holder_name": "Unknown",
+          "claimant_info": {
+            "names": ["Eric Ashburn", "Eric A Ashburn", "Eric Allen Ashburn"],
+            "addresses": ["Portland, OR", "Beaverton, OR", "Las Vegas, NV"],
+            "ssn_mask": "(configure Identity Markers)"
+          },
+          "direct_deposit_portal": "https://oregonclaims.us/",
+          "search_url": "https://oregonclaims.us/",
+          "api_pattern": "GET /search?name={lastName}&first={firstName}",
+          "identity_verified": true,
+          "identity_confidence": 40
+        },
+        "portal_url": "https://oregonclaims.us/",
+        "direct_deposit_portal": "https://oregonclaims.us/",
+        "search_url": "https://oregonclaims.us/",
+        "evidence_required": [
+          {
+            "type": "Government-issued photo ID",
+            "examples": ["Driver's license", "State ID", "Passport"],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Proof of current address",
+            "examples": [
+              "Utility bill (last 60 days)",
+              "Bank statement",
+              "Lease agreement"
+            ],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Social Security verification",
+            "examples": ["SSN card", "W-2 form", "Tax return showing SSN"],
+            "required_by": "most_states"
+          },
+          {
+            "type": "Proof of prior address (at time of escheatment)",
+            "examples": [
+              "Old utility bill",
+              "Old lease",
+              "Tax return from that year"
+            ],
+            "required_by": "if_address_differs"
+          },
+          {
+            "type": "Notarized claim affidavit",
+            "examples": ["State-specific claim form, signed and notarized"],
+            "required_by": "some_states_over_threshold"
+          }
+        ],
+        "steps": [
+          "1. SEARCH: Go to https://oregonclaims.us/",
+          "   Registry: Oregon Division of State Lands - Unclaimed Property",
+          "2. LOCATE: Search for Claim ID: OR-UCP-2019-44821",
+          "   (Or search by name using Identity Markers)",
+          "3. VERIFY: Confirm the property matches \u2014 amount, holder, dates",
+          "4. CLAIM: Click 'File a Claim' or 'Start Claim' at:",
+          "   https://oregonclaims.us/",
+          "5. FORM: Complete form type: OR_DSL",
+          "   Pre-filled data is in the claim_form section of this report",
+          "6. EVIDENCE: Attach required documents (see Evidence Required below)",
+          "7. DEPOSIT: Select 'Direct Deposit' if available for faster payment",
+          "   Direct Deposit Portal: https://oregonclaims.us/",
+          "8. SUBMIT: Submit and save the confirmation number",
+          "9. TRACK: Follow up if no response within the estimated timeline"
+        ],
+        "estimated_timeline": "30-60 days (fast-processing state)",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T21:08:00.093081+00:00"
+      },
+      {
+        "category": "DIRECT_TO_BANK",
+        "mode": "ACTIVE_RESTORATION",
+        "identifier": "CA-ESCHEAT-2020-88102",
+        "estimated_value": 3420.0,
+        "source": "california_state_treasury",
+        "holder_name": "Unknown Holder",
+        "registry": {
+          "matched": true,
+          "state": "california",
+          "name": "CA State Controller - Unclaimed Property",
+          "search_url": "https://ucpi.sco.ca.gov/en/Property/SearchIndex",
+          "claim_url": "https://ucpi.sco.ca.gov/en/Property/ClaimProcess",
+          "api_pattern": "POST /Property/SearchResults {lastName, firstName, city}",
+          "direct_deposit": true,
+          "form_type": "CA_SCO"
+        },
+        "identity_verification": {
+          "verified": true,
+          "confidence": 40,
+          "matches": ["NAME_MATCH: 'Eric Ashburn'"],
+          "note": "Verified"
+        },
+        "claim_form": {
+          "claim_id": "CA-ESCHEAT-2020-88102",
+          "claim_reference": "SR-466F8E6CF762",
+          "state_registry": "CA State Controller - Unclaimed Property",
+          "form_type": "CA_SCO",
+          "property_type": "Unclaimed Property",
+          "reported_value": 3420.0,
+          "holder_name": "Unknown",
+          "claimant_info": {
+            "names": ["Eric Ashburn", "Eric A Ashburn", "Eric Allen Ashburn"],
+            "addresses": ["Portland, OR", "Beaverton, OR", "Las Vegas, NV"],
+            "ssn_mask": "(configure Identity Markers)"
+          },
+          "direct_deposit_portal": "https://ucpi.sco.ca.gov/en/Property/ClaimProcess",
+          "search_url": "https://ucpi.sco.ca.gov/en/Property/SearchIndex",
+          "api_pattern": "POST /Property/SearchResults {lastName, firstName, city}",
+          "identity_verified": true,
+          "identity_confidence": 40
+        },
+        "portal_url": "https://ucpi.sco.ca.gov/en/Property/ClaimProcess",
+        "direct_deposit_portal": "https://ucpi.sco.ca.gov/en/Property/ClaimProcess",
+        "search_url": "https://ucpi.sco.ca.gov/en/Property/SearchIndex",
+        "evidence_required": [
+          {
+            "type": "Government-issued photo ID",
+            "examples": ["Driver's license", "State ID", "Passport"],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Proof of current address",
+            "examples": [
+              "Utility bill (last 60 days)",
+              "Bank statement",
+              "Lease agreement"
+            ],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Social Security verification",
+            "examples": ["SSN card", "W-2 form", "Tax return showing SSN"],
+            "required_by": "most_states"
+          },
+          {
+            "type": "Proof of prior address (at time of escheatment)",
+            "examples": [
+              "Old utility bill",
+              "Old lease",
+              "Tax return from that year"
+            ],
+            "required_by": "if_address_differs"
+          },
+          {
+            "type": "Notarized claim affidavit",
+            "examples": ["State-specific claim form, signed and notarized"],
+            "required_by": "some_states_over_threshold"
+          }
+        ],
+        "steps": [
+          "1. SEARCH: Go to https://ucpi.sco.ca.gov/en/Property/SearchIndex",
+          "   Registry: CA State Controller - Unclaimed Property",
+          "2. LOCATE: Search for Claim ID: CA-ESCHEAT-2020-88102",
+          "   (Or search by name using Identity Markers)",
+          "3. VERIFY: Confirm the property matches \u2014 amount, holder, dates",
+          "4. CLAIM: Click 'File a Claim' or 'Start Claim' at:",
+          "   https://ucpi.sco.ca.gov/en/Property/ClaimProcess",
+          "5. FORM: Complete form type: CA_SCO",
+          "   Pre-filled data is in the claim_form section of this report",
+          "6. EVIDENCE: Attach required documents (see Evidence Required below)",
+          "7. DEPOSIT: Select 'Direct Deposit' if available for faster payment",
+          "   Direct Deposit Portal: https://ucpi.sco.ca.gov/en/Property/ClaimProcess",
+          "8. SUBMIT: Submit and save the confirmation number",
+          "9. TRACK: Follow up if no response within the estimated timeline"
+        ],
+        "estimated_timeline": "30-60 days (fast-processing state)",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T21:08:00.099856+00:00"
+      },
+      {
+        "category": "DIRECT_TO_BANK",
+        "mode": "ACTIVE_RESTORATION",
+        "identifier": "TX-REFUND-2022-5567",
+        "estimated_value": "612.33",
+        "source": "texas_comptroller_escheatment",
+        "holder_name": "Unknown Holder",
+        "registry": {
+          "matched": true,
+          "state": "texas",
+          "name": "TX Comptroller - Claim It!",
+          "search_url": "https://comptroller.texas.gov/programs/claim-it/",
+          "claim_url": "https://claimittexas.org/",
+          "api_pattern": "POST /search {ownerName, reportingEntityState}",
+          "direct_deposit": true,
+          "form_type": "TX_COMP"
+        },
+        "identity_verification": {
+          "verified": true,
+          "confidence": 40,
+          "matches": ["NAME_MATCH: 'Eric Ashburn'"],
+          "note": "Verified"
+        },
+        "claim_form": {
+          "claim_id": "TX-REFUND-2022-5567",
+          "claim_reference": "SR-F9B0C9707DFD",
+          "state_registry": "TX Comptroller - Claim It!",
+          "form_type": "TX_COMP",
+          "property_type": "Unclaimed Property",
+          "reported_value": "612.33",
+          "holder_name": "Unknown",
+          "claimant_info": {
+            "names": ["Eric Ashburn", "Eric A Ashburn", "Eric Allen Ashburn"],
+            "addresses": ["Portland, OR", "Beaverton, OR", "Las Vegas, NV"],
+            "ssn_mask": "(configure Identity Markers)"
+          },
+          "direct_deposit_portal": "https://claimittexas.org/",
+          "search_url": "https://comptroller.texas.gov/programs/claim-it/",
+          "api_pattern": "POST /search {ownerName, reportingEntityState}",
+          "identity_verified": true,
+          "identity_confidence": 40
+        },
+        "portal_url": "https://claimittexas.org/",
+        "direct_deposit_portal": "https://claimittexas.org/",
+        "search_url": "https://comptroller.texas.gov/programs/claim-it/",
+        "evidence_required": [
+          {
+            "type": "Government-issued photo ID",
+            "examples": ["Driver's license", "State ID", "Passport"],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Proof of current address",
+            "examples": [
+              "Utility bill (last 60 days)",
+              "Bank statement",
+              "Lease agreement"
+            ],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Social Security verification",
+            "examples": ["SSN card", "W-2 form", "Tax return showing SSN"],
+            "required_by": "most_states"
+          },
+          {
+            "type": "Proof of prior address (at time of escheatment)",
+            "examples": [
+              "Old utility bill",
+              "Old lease",
+              "Tax return from that year"
+            ],
+            "required_by": "if_address_differs"
+          }
+        ],
+        "steps": [
+          "1. SEARCH: Go to https://comptroller.texas.gov/programs/claim-it/",
+          "   Registry: TX Comptroller - Claim It!",
+          "2. LOCATE: Search for Claim ID: TX-REFUND-2022-5567",
+          "   (Or search by name using Identity Markers)",
+          "3. VERIFY: Confirm the property matches \u2014 amount, holder, dates",
+          "4. CLAIM: Click 'File a Claim' or 'Start Claim' at:",
+          "   https://claimittexas.org/",
+          "5. FORM: Complete form type: TX_COMP",
+          "   Pre-filled data is in the claim_form section of this report",
+          "6. EVIDENCE: Attach required documents (see Evidence Required below)",
+          "7. DEPOSIT: Select 'Direct Deposit' if available for faster payment",
+          "   Direct Deposit Portal: https://claimittexas.org/",
+          "8. SUBMIT: Submit and save the confirmation number",
+          "9. TRACK: Follow up if no response within the estimated timeline"
+        ],
+        "estimated_timeline": "30-60 days (fast-processing state)",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T21:08:00.100053+00:00"
+      }
+    ],
+    "digital_to_liquidity": [],
+    "physical_to_asset": []
+  },
+  "gate_verification": "ALL_ALIGNED"
+}

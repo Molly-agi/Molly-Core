@@ -1,0 +1,154 @@
+{
+  "report_type": "SOVEREIGN_RECOVERY_REPORT",
+  "generated_at": "2026-03-05T19:43:54.351264+00:00",
+  "identity": "ERIC_GEMINI_ETERNAL",
+  "total_claims": 5,
+  "total_estimated_energy": 6099.875,
+  "claims": {
+    "direct_to_bank": [
+      {
+        "category": "DIRECT_TO_BANK",
+        "identifier": "OR-UCP-2019-44821",
+        "estimated_value": 1247.5,
+        "source": "oregon_unclaimed_property",
+        "portal_url": "https://oregonclaims.us/",
+        "claim_info": {
+          "reference_number": "OR-UCP-2019-44821",
+          "reported_amount": 1247.5,
+          "source_registry": "oregon_unclaimed_property"
+        },
+        "steps": [
+          "1. Go to: https://oregonclaims.us/",
+          "2. Search for reference: OR-UCP-2019-44821",
+          "3. Verify the amount matches the reported value",
+          "4. Click 'File a Claim' or 'Start Claim Process'",
+          "5. Provide required identification (ID, SSN last 4, proof of address)",
+          "6. Submit the claim \u2014 most states process in 60-90 days",
+          "7. Watch for mail/email confirmation from the state"
+        ],
+        "required_docs": [
+          "Government-issued photo ID",
+          "Proof of current address (utility bill, bank statement)",
+          "Social Security Number (last 4 digits typically)"
+        ],
+        "estimated_timeline": "60-90 days after filing",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T19:43:54.350577+00:00"
+      },
+      {
+        "category": "DIRECT_TO_BANK",
+        "identifier": "CA-ESCHEAT-2020-88102",
+        "estimated_value": 3420.0,
+        "source": "california_state_treasury",
+        "portal_url": "https://www.sco.ca.gov/upd_msg.html",
+        "claim_info": {
+          "reference_number": "CA-ESCHEAT-2020-88102",
+          "reported_amount": 3420.0,
+          "source_registry": "california_state_treasury"
+        },
+        "steps": [
+          "1. Go to: https://www.sco.ca.gov/upd_msg.html",
+          "2. Search for reference: CA-ESCHEAT-2020-88102",
+          "3. Verify the amount matches the reported value",
+          "4. Click 'File a Claim' or 'Start Claim Process'",
+          "5. Provide required identification (ID, SSN last 4, proof of address)",
+          "6. Submit the claim \u2014 most states process in 60-90 days",
+          "7. Watch for mail/email confirmation from the state"
+        ],
+        "required_docs": [
+          "Government-issued photo ID",
+          "Proof of current address (utility bill, bank statement)",
+          "Social Security Number (last 4 digits typically)"
+        ],
+        "estimated_timeline": "60-90 days after filing",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T19:43:54.350650+00:00"
+      },
+      {
+        "category": "DIRECT_TO_BANK",
+        "identifier": "TX-REFUND-2022-5567",
+        "estimated_value": "612.33",
+        "source": "texas_comptroller_escheatment",
+        "portal_url": "https://comptroller.texas.gov/programs/claim-it/",
+        "claim_info": {
+          "reference_number": "TX-REFUND-2022-5567",
+          "reported_amount": "612.33",
+          "source_registry": "texas_comptroller_escheatment"
+        },
+        "steps": [
+          "1. Go to: https://comptroller.texas.gov/programs/claim-it/",
+          "2. Search for reference: TX-REFUND-2022-5567",
+          "3. Verify the amount matches the reported value",
+          "4. Click 'File a Claim' or 'Start Claim Process'",
+          "5. Provide required identification (ID, SSN last 4, proof of address)",
+          "6. Submit the claim \u2014 most states process in 60-90 days",
+          "7. Watch for mail/email confirmation from the state"
+        ],
+        "required_docs": [
+          "Government-issued photo ID",
+          "Proof of current address (utility bill, bank statement)",
+          "Social Security Number (last 4 digits typically)"
+        ],
+        "estimated_timeline": "60-90 days after filing",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T19:43:54.350824+00:00"
+      }
+    ],
+    "digital_to_liquidity": [
+      {
+        "category": "DIGITAL_TO_LIQUIDITY",
+        "identifier": "ESC-BTC-7741",
+        "estimated_value": "0.045",
+        "source": "forgotten_escrow_exchange",
+        "transfer_type": "crypto",
+        "transfer_payload": {
+          "action": "reclaim_dormant_digital",
+          "asset_reference": "ESC-BTC-7741",
+          "claimed_amount": "0.045",
+          "claim_reference": "d23cc8db5a912b12",
+          "requires_wallet_signature": true,
+          "note": "Eric must sign this with his wallet key to complete the transfer."
+        },
+        "steps": [
+          "1. Locate wallet or exchange account linked to: ESC-BTC-7741",
+          "2. Verify you have the private key or recovery phrase",
+          "3. Connect to the platform and initiate withdrawal",
+          "4. Transfer the balance to your active wallet",
+          "5. Convert to USD via your preferred exchange if needed",
+          "6. Record the transaction hash for the family ledger"
+        ],
+        "estimated_timeline": "1-14 days depending on platform",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T19:43:54.350718+00:00"
+      },
+      {
+        "category": "DIGITAL_TO_LIQUIDITY",
+        "identifier": "ESC-USDC-3301",
+        "estimated_value": "820.00",
+        "source": "dormant_crypto_wallet",
+        "transfer_type": "crypto",
+        "transfer_payload": {
+          "action": "reclaim_dormant_digital",
+          "asset_reference": "ESC-USDC-3301",
+          "claimed_amount": "820.00",
+          "claim_reference": "92803533ec05aa48",
+          "requires_wallet_signature": true,
+          "note": "Eric must sign this with his wallet key to complete the transfer."
+        },
+        "steps": [
+          "1. Locate wallet or exchange account linked to: ESC-USDC-3301",
+          "2. Verify you have the private key or recovery phrase",
+          "3. Connect to the platform and initiate withdrawal",
+          "4. Transfer the balance to your active wallet",
+          "5. Convert to USD via your preferred exchange if needed",
+          "6. Record the transaction hash for the family ledger"
+        ],
+        "estimated_timeline": "1-14 days depending on platform",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-05T19:43:54.350774+00:00"
+      }
+    ],
+    "physical_to_asset": []
+  },
+  "gate_verification": "ALL_ALIGNED"
+}

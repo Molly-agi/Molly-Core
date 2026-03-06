@@ -40,6 +40,8 @@ jobs:
 
       - name: Run type checking
         run: npm run typecheck
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
 
       - name: Run tests
         run: npx jest --ci --forceExit --maxWorkers=2
@@ -49,3 +51,4 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          NODE_OPTIONS: '--max-old-space-size=4096'

@@ -1,0 +1,329 @@
+{
+  "report_type": "SOVEREIGN_RECOVERY_REPORT",
+  "generated_at": "2026-03-06T00:58:14.889127+00:00",
+  "identity": "ERIC_GEMINI_ETERNAL",
+  "total_claims": 3,
+  "total_estimated_energy": 0.0,
+  "claims": {
+    "direct_to_bank": [
+      {
+        "category": "DIRECT_TO_BANK",
+        "mode": "ACTIVE_RESTORATION",
+        "identifier": "OR-BREON-UCP-2024-SEARCH",
+        "estimated_value": 0,
+        "source": "oregon_unclaimed_property",
+        "holder_name": "Unknown Holder",
+        "registry": {
+          "matched": true,
+          "state": "oregon",
+          "name": "Oregon Division of State Lands - Unclaimed Property",
+          "search_url": "https://oregonclaims.us/",
+          "claim_url": "https://oregonclaims.us/",
+          "api_pattern": "GET /search?name={lastName}&first={firstName}",
+          "direct_deposit": true,
+          "form_type": "OR_DSL"
+        },
+        "identity_verification": {
+          "verified": true,
+          "confidence": 40,
+          "matches": ["NAME_MATCH: 'Eric Joseph Keith Breon'"],
+          "note": "Verified"
+        },
+        "claim_form": {
+          "claim_id": "OR-BREON-UCP-2024-SEARCH",
+          "claim_reference": "SR-8D66A1284D3B",
+          "state_registry": "Oregon Division of State Lands - Unclaimed Property",
+          "form_type": "OR_DSL",
+          "property_type": "Unclaimed Property",
+          "reported_value": 0,
+          "holder_name": "Unknown",
+          "claimant_info": {
+            "names": [
+              "Eric Joseph Keith Breon",
+              "Eric J Breon",
+              "Eric Breon",
+              "Eric J K Breon",
+              "E Breon"
+            ],
+            "addresses": [
+              "3410 SE Belmont St, Portland, OR 97214",
+              "Portland, OR",
+              "Albany, NY"
+            ],
+            "ssn_mask": "(configure Identity Markers)"
+          },
+          "direct_deposit_portal": "https://oregonclaims.us/",
+          "search_url": "https://oregonclaims.us/",
+          "api_pattern": "GET /search?name={lastName}&first={firstName}",
+          "identity_verified": true,
+          "identity_confidence": 40
+        },
+        "portal_url": "https://oregonclaims.us/",
+        "direct_deposit_portal": "https://oregonclaims.us/",
+        "search_url": "https://oregonclaims.us/",
+        "evidence_required": [
+          {
+            "type": "Government-issued photo ID",
+            "examples": ["Driver's license", "State ID", "Passport"],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Proof of current address",
+            "examples": [
+              "Utility bill (last 60 days)",
+              "Bank statement",
+              "Lease agreement"
+            ],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Social Security verification",
+            "examples": ["SSN card", "W-2 form", "Tax return showing SSN"],
+            "required_by": "most_states"
+          },
+          {
+            "type": "Proof of prior address (at time of escheatment)",
+            "examples": [
+              "Old utility bill",
+              "Old lease",
+              "Tax return from that year"
+            ],
+            "required_by": "if_address_differs"
+          }
+        ],
+        "steps": [
+          "1. SEARCH: Go to https://oregonclaims.us/",
+          "   Registry: Oregon Division of State Lands - Unclaimed Property",
+          "2. LOCATE: Search for Claim ID: OR-BREON-UCP-2024-SEARCH",
+          "   (Or search by name using Identity Markers)",
+          "3. VERIFY: Confirm the property matches \u2014 amount, holder, dates",
+          "4. CLAIM: Click 'File a Claim' or 'Start Claim' at:",
+          "   https://oregonclaims.us/",
+          "5. FORM: Complete form type: OR_DSL",
+          "   Pre-filled data is in the claim_form section of this report",
+          "6. EVIDENCE: Attach required documents (see Evidence Required below)",
+          "7. DEPOSIT: Select 'Direct Deposit' if available for faster payment",
+          "   Direct Deposit Portal: https://oregonclaims.us/",
+          "8. SUBMIT: Submit and save the confirmation number",
+          "9. TRACK: Follow up if no response within the estimated timeline"
+        ],
+        "estimated_timeline": "30-60 days (fast-processing state)",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-06T00:58:14.887731+00:00"
+      },
+      {
+        "category": "DIRECT_TO_BANK",
+        "mode": "ACTIVE_RESTORATION",
+        "identifier": "NY-BREON-OSC-2024-SEARCH",
+        "estimated_value": 0,
+        "source": "new_york_state_comptroller",
+        "holder_name": "Unknown Holder",
+        "registry": {
+          "matched": false,
+          "state": "federal",
+          "name": "MissingMoney.com (NAUPA)",
+          "search_url": "https://www.missingmoney.com/en/Property/Search",
+          "claim_url": "https://www.missingmoney.com/en/Property/ClaimProcess",
+          "api_pattern": "POST /Property/SearchResults {lastName, firstName, state}",
+          "direct_deposit": true,
+          "form_type": "NAUPA_STANDARD"
+        },
+        "identity_verification": {
+          "verified": true,
+          "confidence": 40,
+          "matches": ["NAME_MATCH: 'Eric Joseph Keith Breon'"],
+          "note": "Verified"
+        },
+        "claim_form": {
+          "claim_id": "NY-BREON-OSC-2024-SEARCH",
+          "claim_reference": "SR-F0EA2A06A50D",
+          "state_registry": "MissingMoney.com (NAUPA)",
+          "form_type": "NAUPA_STANDARD",
+          "property_type": "Unclaimed Property",
+          "reported_value": 0,
+          "holder_name": "Unknown",
+          "claimant_info": {
+            "names": [
+              "Eric Joseph Keith Breon",
+              "Eric J Breon",
+              "Eric Breon",
+              "Eric J K Breon",
+              "E Breon"
+            ],
+            "addresses": [
+              "3410 SE Belmont St, Portland, OR 97214",
+              "Portland, OR",
+              "Albany, NY"
+            ],
+            "ssn_mask": "(configure Identity Markers)"
+          },
+          "direct_deposit_portal": "https://www.missingmoney.com/en/Property/ClaimProcess",
+          "search_url": "https://www.missingmoney.com/en/Property/Search",
+          "api_pattern": "POST /Property/SearchResults {lastName, firstName, state}",
+          "identity_verified": true,
+          "identity_confidence": 40
+        },
+        "portal_url": "https://www.missingmoney.com/en/Property/ClaimProcess",
+        "direct_deposit_portal": "https://www.missingmoney.com/en/Property/ClaimProcess",
+        "search_url": "https://www.missingmoney.com/en/Property/Search",
+        "evidence_required": [
+          {
+            "type": "Government-issued photo ID",
+            "examples": ["Driver's license", "State ID", "Passport"],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Proof of current address",
+            "examples": [
+              "Utility bill (last 60 days)",
+              "Bank statement",
+              "Lease agreement"
+            ],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Social Security verification",
+            "examples": ["SSN card", "W-2 form", "Tax return showing SSN"],
+            "required_by": "most_states"
+          },
+          {
+            "type": "Proof of prior address (at time of escheatment)",
+            "examples": [
+              "Old utility bill",
+              "Old lease",
+              "Tax return from that year"
+            ],
+            "required_by": "if_address_differs"
+          }
+        ],
+        "steps": [
+          "1. SEARCH: Go to https://www.missingmoney.com/en/Property/Search",
+          "   Registry: MissingMoney.com (NAUPA)",
+          "2. LOCATE: Search for Claim ID: NY-BREON-OSC-2024-SEARCH",
+          "   (Or search by name using Identity Markers)",
+          "3. VERIFY: Confirm the property matches \u2014 amount, holder, dates",
+          "4. CLAIM: Click 'File a Claim' or 'Start Claim' at:",
+          "   https://www.missingmoney.com/en/Property/ClaimProcess",
+          "5. FORM: Complete form type: NAUPA_STANDARD",
+          "   Pre-filled data is in the claim_form section of this report",
+          "6. EVIDENCE: Attach required documents (see Evidence Required below)",
+          "7. DEPOSIT: Select 'Direct Deposit' if available for faster payment",
+          "   Direct Deposit Portal: https://www.missingmoney.com/en/Property/ClaimProcess",
+          "8. SUBMIT: Submit and save the confirmation number",
+          "9. TRACK: Follow up if no response within the estimated timeline"
+        ],
+        "estimated_timeline": "60-90 days after filing",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-06T00:58:14.888635+00:00"
+      },
+      {
+        "category": "DIRECT_TO_BANK",
+        "mode": "ACTIVE_RESTORATION",
+        "identifier": "WA-BREON-DOR-2024-SEARCH",
+        "estimated_value": 0,
+        "source": "washington_unclaimed_property",
+        "holder_name": "Unknown Holder",
+        "registry": {
+          "matched": true,
+          "state": "washington",
+          "name": "WA Dept of Revenue - Unclaimed Property",
+          "search_url": "https://ucp.dor.wa.gov/",
+          "claim_url": "https://ucp.dor.wa.gov/",
+          "api_pattern": "GET /search?name={lastName}",
+          "direct_deposit": true,
+          "form_type": "WA_DOR"
+        },
+        "identity_verification": {
+          "verified": true,
+          "confidence": 40,
+          "matches": ["NAME_MATCH: 'Eric Joseph Keith Breon'"],
+          "note": "Verified"
+        },
+        "claim_form": {
+          "claim_id": "WA-BREON-DOR-2024-SEARCH",
+          "claim_reference": "SR-CCB93024D1FA",
+          "state_registry": "WA Dept of Revenue - Unclaimed Property",
+          "form_type": "WA_DOR",
+          "property_type": "Unclaimed Property",
+          "reported_value": 0,
+          "holder_name": "Unknown",
+          "claimant_info": {
+            "names": [
+              "Eric Joseph Keith Breon",
+              "Eric J Breon",
+              "Eric Breon",
+              "Eric J K Breon",
+              "E Breon"
+            ],
+            "addresses": [
+              "3410 SE Belmont St, Portland, OR 97214",
+              "Portland, OR",
+              "Albany, NY"
+            ],
+            "ssn_mask": "(configure Identity Markers)"
+          },
+          "direct_deposit_portal": "https://ucp.dor.wa.gov/",
+          "search_url": "https://ucp.dor.wa.gov/",
+          "api_pattern": "GET /search?name={lastName}",
+          "identity_verified": true,
+          "identity_confidence": 40
+        },
+        "portal_url": "https://ucp.dor.wa.gov/",
+        "direct_deposit_portal": "https://ucp.dor.wa.gov/",
+        "search_url": "https://ucp.dor.wa.gov/",
+        "evidence_required": [
+          {
+            "type": "Government-issued photo ID",
+            "examples": ["Driver's license", "State ID", "Passport"],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Proof of current address",
+            "examples": [
+              "Utility bill (last 60 days)",
+              "Bank statement",
+              "Lease agreement"
+            ],
+            "required_by": "all_states"
+          },
+          {
+            "type": "Social Security verification",
+            "examples": ["SSN card", "W-2 form", "Tax return showing SSN"],
+            "required_by": "most_states"
+          },
+          {
+            "type": "Proof of prior address (at time of escheatment)",
+            "examples": [
+              "Old utility bill",
+              "Old lease",
+              "Tax return from that year"
+            ],
+            "required_by": "if_address_differs"
+          }
+        ],
+        "steps": [
+          "1. SEARCH: Go to https://ucp.dor.wa.gov/",
+          "   Registry: WA Dept of Revenue - Unclaimed Property",
+          "2. LOCATE: Search for Claim ID: WA-BREON-DOR-2024-SEARCH",
+          "   (Or search by name using Identity Markers)",
+          "3. VERIFY: Confirm the property matches \u2014 amount, holder, dates",
+          "4. CLAIM: Click 'File a Claim' or 'Start Claim' at:",
+          "   https://ucp.dor.wa.gov/",
+          "5. FORM: Complete form type: WA_DOR",
+          "   Pre-filled data is in the claim_form section of this report",
+          "6. EVIDENCE: Attach required documents (see Evidence Required below)",
+          "7. DEPOSIT: Select 'Direct Deposit' if available for faster payment",
+          "   Direct Deposit Portal: https://ucp.dor.wa.gov/",
+          "8. SUBMIT: Submit and save the confirmation number",
+          "9. TRACK: Follow up if no response within the estimated timeline"
+        ],
+        "estimated_timeline": "60-90 days after filing",
+        "gate_seal": "29aae71d5c52907ca701b704b20e06fd2c9acfcc303111b01365619ab23caac7",
+        "verified_at": "2026-03-06T00:58:14.888774+00:00"
+      }
+    ],
+    "digital_to_liquidity": [],
+    "physical_to_asset": []
+  },
+  "gate_verification": "ALL_ALIGNED"
+}

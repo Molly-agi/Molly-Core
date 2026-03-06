@@ -95,35 +95,31 @@ export function SessionLifecycleManager() {
       });
     };
 
-    const handleBeforeUnload = async () => {
-      // Try to save session state before unload
-      try {
-        sendSessionEvent({
-          event: 'page-unload',
-          url: window.location.href,
-          timestamp: new Date().toISOString(),
-        });
-        await fetch('/api/session/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            state: {
-              lastUpdated: new Date().toISOString(),
-              status: 'paused',
-              runtime: {
-                lastUrl: window.location.href,
-              },
-            },
-          }),
-          // Use keepalive to ensure request completes even if page unloads
-          keepalive: true,
-        });
-      } catch (error) {
-        console.error(
-          '[SessionLifecycle] Error saving session on unload:',
-          error
+    const handleBeforeUnload = () => {
+      // Fire-and-forget with sendBeacon — never blocks unload.
+      // await fetch() on beforeunload is the #1 cause of "Failed to fetch"
+      // on Android: the browser kills the tab before the promise resolves.
+      sendSessionEvent({
+        event: 'page-unload',
+        url: window.location.href,
+        timestamp: new Date().toISOString(),
+      });
+      const payload = JSON.stringify({
+        state: {
+          lastUpdated: new Date().toISOString(),
+          status: 'paused',
+          runtime: {
+            lastUrl: window.location.href,
+          },
+        },
+      });
+      // sendBeacon is designed for unload — it's fire-and-forget,
+      // guaranteed to be queued even as the page dies.
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(
+          '/api/session/save',
+          new Blob([payload], { type: 'application/json' })
         );
-        // Silently fail - don't block unload
       }
     };
 

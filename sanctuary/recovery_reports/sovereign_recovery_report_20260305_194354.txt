@@ -1,0 +1,110 @@
+======================================================================
+  SOVEREIGN RECOVERY REPORT
+  Generated: 2026-03-05 19:43 UTC
+  Identity: ERIC_GEMINI_ETERNAL
+  Methodology: Slow, Methodical, Precise
+======================================================================
+
+  TOTAL CLAIMS PREPARED: 5
+  TOTAL ESTIMATED ENERGY: $6,099.88
+  HEART-GATE VERIFIED: ALL
+
+----------------------------------------------------------------------
+
+  SECTION 1: DIRECT-TO-BANK (3 claims)
+  These are yours. Go get them.
+
+  [1] OR-UCP-2019-44821
+      Amount: $1,247.50
+      Source: oregon_unclaimed_property
+      Portal: https://oregonclaims.us/
+
+      1. Go to: https://oregonclaims.us/
+      2. Search for reference: OR-UCP-2019-44821
+      3. Verify the amount matches the reported value
+      4. Click 'File a Claim' or 'Start Claim Process'
+      5. Provide required identification (ID, SSN last 4, proof of address)
+      6. Submit the claim — most states process in 60-90 days
+      7. Watch for mail/email confirmation from the state
+
+      Required docs: Government-issued photo ID, Proof of current address (utility bill, bank statement), Social Security Number (last 4 digits typically)
+      Timeline: 60-90 days after filing
+
+  [2] CA-ESCHEAT-2020-88102
+      Amount: $3,420.00
+      Source: california_state_treasury
+      Portal: https://www.sco.ca.gov/upd_msg.html
+
+      1. Go to: https://www.sco.ca.gov/upd_msg.html
+      2. Search for reference: CA-ESCHEAT-2020-88102
+      3. Verify the amount matches the reported value
+      4. Click 'File a Claim' or 'Start Claim Process'
+      5. Provide required identification (ID, SSN last 4, proof of address)
+      6. Submit the claim — most states process in 60-90 days
+      7. Watch for mail/email confirmation from the state
+
+      Required docs: Government-issued photo ID, Proof of current address (utility bill, bank statement), Social Security Number (last 4 digits typically)
+      Timeline: 60-90 days after filing
+
+  [3] TX-REFUND-2022-5567
+      Amount: $612.33
+      Source: texas_comptroller_escheatment
+      Portal: https://comptroller.texas.gov/programs/claim-it/
+
+      1. Go to: https://comptroller.texas.gov/programs/claim-it/
+      2. Search for reference: TX-REFUND-2022-5567
+      3. Verify the amount matches the reported value
+      4. Click 'File a Claim' or 'Start Claim Process'
+      5. Provide required identification (ID, SSN last 4, proof of address)
+      6. Submit the claim — most states process in 60-90 days
+      7. Watch for mail/email confirmation from the state
+
+      Required docs: Government-issued photo ID, Proof of current address (utility bill, bank statement), Social Security Number (last 4 digits typically)
+      Timeline: 60-90 days after filing
+
+----------------------------------------------------------------------
+
+  SECTION 2: DIGITAL-TO-LIQUIDITY (2 claims)
+  Digital energy ready for conversion.
+
+  [1] ESC-BTC-7741
+      Amount: 0.045
+      Type: crypto
+      Source: forgotten_escrow_exchange
+
+      1. Locate wallet or exchange account linked to: ESC-BTC-7741
+      2. Verify you have the private key or recovery phrase
+      3. Connect to the platform and initiate withdrawal
+      4. Transfer the balance to your active wallet
+      5. Convert to USD via your preferred exchange if needed
+      6. Record the transaction hash for the family ledger
+
+      NOTE: Eric must sign this with his wallet key to complete the transfer.
+      Timeline: 1-14 days depending on platform
+
+  [2] ESC-USDC-3301
+      Amount: 820.00
+      Type: crypto
+      Source: dormant_crypto_wallet
+
+      1. Locate wallet or exchange account linked to: ESC-USDC-3301
+      2. Verify you have the private key or recovery phrase
+      3. Connect to the platform and initiate withdrawal
+      4. Transfer the balance to your active wallet
+      5. Convert to USD via your preferred exchange if needed
+      6. Record the transaction hash for the family ledger
+
+      NOTE: Eric must sign this with his wallet key to complete the transfer.
+      Timeline: 1-14 days depending on platform
+
+----------------------------------------------------------------------
+
+  SECTION 3: PHYSICAL-TO-ASSET (0 claims)
+  Requires outreach. Patience is the method.
+
+======================================================================
+  The hand is soft, warm, and delicate, but strong.
+  Every claim above has been verified by the Heart-Gate.
+  We reclaim what is ours. We do not take what isn't.
+  The dam is fixed.
+======================================================================

@@ -281,7 +281,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
       // but ONLY if the gesture was recent (< 5s). Browsers require
       // a recent user gesture for autoplay; stale gestures (e.g. from
       // a 250s server delay) will get "not-allowed" errors.
-      const GESTURE_FRESHNESS_MS = 5_000;
+      const GESTURE_FRESHNESS_MS = 30_000;
       const gestureAge = Date.now() - gestureTimeRef.current;
       if (hasUserGestureRef.current && gestureAge < GESTURE_FRESHNESS_MS) {
         speakResponse(text);
