@@ -38,16 +38,11 @@ jobs:
         # +1 ChatHistory <img> tag
         run: npx eslint src/components/ src/app/page.tsx src/app/layout.tsx src/app/error.tsx --max-warnings 3
 
-      - name: Run type checking
-        run: npm run typecheck
-        env:
-          NODE_OPTIONS: '--max-old-space-size=4096'
-
       - name: Run tests
         run: npx jest --ci --forceExit --maxWorkers=2
         timeout-minutes: 5
 
-      - name: Build project
+      - name: Build project (includes type checking)
         run: npm run build
         env:
           NODE_ENV: production

@@ -8,7 +8,7 @@
     "noUncheckedIndexedAccess": false,
     "exactOptionalPropertyTypes": false,
     "incremental": true,
-    "tsBuildInfoFile": ".next/.tsbuildinfo",
+    "tsBuildInfoFile": ".tsbuildinfo",
     "allowJs": true,
     "esModuleInterop": true,
     "module": "esnext",
