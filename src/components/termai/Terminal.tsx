@@ -40,6 +40,7 @@ import { useFamilyStory } from './useFamilyStory';
 import { ChatHistory } from './ChatHistory';
 import { CommandBar } from './CommandBar';
 import { VisionPanel } from './VisionPanel';
+import BridgePanel from './BridgePanel';
 import { execTermux, isTermuxAvailable } from '@/lib/termux-bridge';
 import {
   getEnhancedResearch,
@@ -923,6 +924,8 @@ export default function Terminal({
         onManualHeal={handleManualHeal}
         onClearHistory={() => setHistory([])}
       />
+
+      <BridgePanel />
     </div>
   );
 }
