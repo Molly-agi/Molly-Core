@@ -13,7 +13,7 @@
 import { MollyLogger } from '@/ai/logger';
 import { getRecoveryOrchestrator } from './recovery-orchestrator';
 import { getClientManager } from './client-manager';
-import type { ScanResult, DiscoveredAsset } from './types';
+import type { ScanResult } from './types';
 
 const FLOW_NAME = 'batch-scanner';
 

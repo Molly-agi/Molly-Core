@@ -33,7 +33,6 @@
  */
 
 import { MollyLogger } from '@/ai/logger';
-import { checkCompliance } from './jurisdiction-compliance';
 import {
   generateOutreach,
   getBusinessConfig,
@@ -371,7 +370,6 @@ export async function discoverAndOnboardProspect(
  */
 export function approveAndSendOutreach(clientId: string): PipelineResult {
   const clientManager = getClientManager();
-  const contactTracker = getContactTracker();
   const business = getBusinessConfig();
 
   const client = clientManager.getClient(clientId);
@@ -398,7 +396,8 @@ export function approveAndSendOutreach(clientId: string): PipelineResult {
   // Re-generate outreach (ensures latest compliance rules)
   // In production, we'd use the actual DiscoveredAsset objects
   // For now, generate a minimal outreach request
-  const outreachRequest: OutreachRequest = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _outreachRequest: OutreachRequest = {
     recipientName: client.name,
     recipientEmail: client.email,
     assets: [], // Would be populated from asset store
@@ -494,7 +493,8 @@ export function generateAndSendAgreement(
   assets: DiscoveredAsset[]
 ): PipelineResult & { agreement?: FinderAgreement } {
   const clientManager = getClientManager();
-  const contactTracker = getContactTracker();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _contactTracker = getContactTracker();
   const agreementGen = getAgreementGenerator();
 
   const client = clientManager.getClient(clientId);

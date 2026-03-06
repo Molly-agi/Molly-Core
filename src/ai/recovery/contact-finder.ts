@@ -305,7 +305,8 @@ async function searchVoterRecords(
 async function searchWeb(
   name: string,
   state: string,
-  city?: string
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _city?: string
 ): Promise<FoundContact[]> {
   const results: FoundContact[] = [];
 
@@ -364,11 +365,13 @@ async function searchWeb(
 /**
  * Search public records aggregators.
  */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 async function searchPublicRecords(
-  name: string,
-  state: string,
-  address?: string
+  _name: string,
+  _state: string,
+  _address?: string
 ): Promise<FoundContact | null> {
+  /* eslint-enable @typescript-eslint/no-unused-vars */
   // Public records aggregators that offer free basic lookups:
   // - TruePeopleSearch
   // - FastPeopleSearch

@@ -20,11 +20,10 @@
 import { MollyLogger } from '@/ai/logger';
 import {
   checkCompliance,
-  getJurisdictionRule,
   type ComplianceCheck,
   type JurisdictionRule,
 } from './jurisdiction-compliance';
-import type { DiscoveredAsset, ServiceClient } from './types';
+import type { DiscoveredAsset } from './types';
 
 const FLOW_NAME = 'outreach-engine';
 
@@ -256,7 +255,6 @@ function generateInitialDiscovery(
     0
   );
   const assetCount = request.assets.length;
-  const stateName = rule.name;
   const businessName = request.businessName || currentBusinessConfig.name;
   const businessEmail = request.businessEmail || currentBusinessConfig.email;
   const businessPhone = request.businessPhone || currentBusinessConfig.phone;
@@ -321,7 +319,8 @@ function generateFollowUp(
   request: OutreachRequest,
   effectiveFee: number,
   disclosures: string[],
-  rule: JurisdictionRule
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _rule: JurisdictionRule
 ): { subject: string; body: string } {
   const totalValue = request.assets.reduce(
     (sum, a) => sum + a.estimatedValue,
