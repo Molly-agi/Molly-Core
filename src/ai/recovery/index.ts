@@ -180,6 +180,21 @@ export type {
   ContactFinderConfig,
 } from './contact-finder';
 
+// SMS Delivery — Twilio Integration
+export {
+  sendSms,
+  configureSms,
+  configureSmsFromEnv,
+  getSmsRemainingCapacity,
+  buildSmsMessage,
+  buildFollowUpSms,
+} from './sms-delivery';
+export type {
+  SmsResult,
+  SmsStatus,
+  SmsConfig,
+} from './sms-delivery';
+
 // Scrapers
 export {
   MissingMoneyScraper,
