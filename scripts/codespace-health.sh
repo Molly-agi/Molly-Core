@@ -123,7 +123,55 @@ fi
 echo ""
 TS_SERVERS=$(ps aux | grep "tsserver.js" | grep -v grep | wc -l)
 TS_MEM=$(ps aux | grep "tsserver.js" | grep -v grep | awk '{sum+=$6} END {printf "%.0f", sum/1024}')
-echo "TS SERVERS: ${TS_SERVERS} instances using ~${TS_MEM}MB"
+
+if [ "$TS_SERVERS" -gt 2 ]; then
+  echo -e "${RED}TS SERVERS: ${TS_SERVERS} instances using ~${TS_MEM}MB - EXCESS DETECTED${NC}"
+  
+  # Keep only the 2 newest tsserver processes (syntax + semantic)
+  TS_PIDS=$(ps aux | grep "tsserver.js" | grep -v grep | sort -k9 | awk '{print $2}')
+  KEEP_PIDS=$(echo "$TS_PIDS" | tail -2)
+  
+  for PID in $TS_PIDS; do
+    if ! echo "$KEEP_PIDS" | grep -q "^${PID}$"; then
+      echo -e "  ${YELLOW}Killing orphan tsserver: PID ${PID}${NC}"
+      kill "$PID" 2>/dev/null || true
+    fi
+  done
+  
+  sleep 1
+  NEW_TS=$(ps aux | grep "tsserver.js" | grep -v grep | wc -l)
+  echo -e "  ${GREEN}tsserver cleanup: ${TS_SERVERS} → ${NEW_TS}${NC}"
+elif [ "$TS_SERVERS" -le 2 ]; then
+  echo -e "${GREEN}TS SERVERS: ${TS_SERVERS} instances using ~${TS_MEM}MB - OK${NC}"
+fi
+
+# --- Stale tsserver temp dirs ---
+if [ -d "/tmp/vscode-typescript1000" ]; then
+  TS_TEMP_DIRS=$(ls -1 /tmp/vscode-typescript1000/ 2>/dev/null | wc -l)
+  if [ "$TS_TEMP_DIRS" -gt 2 ]; then
+    echo -e "  ${YELLOW}Stale tsserver temp dirs: ${TS_TEMP_DIRS} (expected ≤2)${NC}"
+    
+    # Find which cancellation dirs are actually referenced by live tsserver processes
+    ACTIVE_DIRS=""
+    for PID in $(ps aux | grep "tsserver.js" | grep -v grep | awk '{print $2}'); do
+      DIR=$(ps -o args= -p "$PID" 2>/dev/null | grep -oP 'vscode-typescript1000/\K[a-f0-9]+' || true)
+      if [ -n "$DIR" ]; then
+        ACTIVE_DIRS="${ACTIVE_DIRS} ${DIR}"
+      fi
+    done
+    
+    # Remove dirs not referenced by any live process
+    for DIR in $(ls -1 /tmp/vscode-typescript1000/ 2>/dev/null); do
+      if ! echo "$ACTIVE_DIRS" | grep -q "$DIR"; then
+        rm -rf "/tmp/vscode-typescript1000/${DIR}" 2>/dev/null
+        echo -e "  ${YELLOW}Removed stale temp: ${DIR}${NC}"
+      fi
+    done
+    
+    REMAINING=$(ls -1 /tmp/vscode-typescript1000/ 2>/dev/null | wc -l)
+    echo -e "  ${GREEN}Temp dir cleanup: ${TS_TEMP_DIRS} → ${REMAINING}${NC}"
+  fi
+fi
 
 # --- Next.js Dev Server ---
 echo ""
