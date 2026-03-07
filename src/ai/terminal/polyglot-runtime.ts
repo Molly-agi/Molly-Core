@@ -1105,7 +1105,9 @@ export class PolyglotRuntime {
       };
     } finally {
       // Cleanup temp file (fire-and-forget)
-      shell.execute(`rm -f ${filePath}`, 'system').catch(() => {});
+      shell.execute(`rm -f ${filePath}`, 'system').catch((e: unknown) => {
+        console.warn('[polyglot] Temp file cleanup failed:', e);
+      });
     }
   }
 
@@ -1167,7 +1169,9 @@ export class PolyglotRuntime {
       // Cleanup temp files and directories (fire-and-forget)
       shell
         .execute(`rm -rf ${filePath} ${outPath} /tmp/molly_sol_${id}`, 'system')
-        .catch(() => {});
+        .catch((e: unknown) => {
+          console.warn('[polyglot] Compiled artifact cleanup failed:', e);
+        });
     }
   }
 

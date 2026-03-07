@@ -1,12 +1,34 @@
 /**
  * Admin API to clear old origin story memories
  * POST /api/admin/clear-origin-memories
+ *
+ * Protected by HIDDEN_ADMIN_PASSWORD.
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
 import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 
-export async function POST() {
+function isAuthorized(request: NextRequest): boolean {
+  const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
+  if (!adminPassword) return false;
+  const provided = request.headers.get('x-admin-password') || '';
+  if (provided.length !== adminPassword.length) return false;
+  try {
+    return timingSafeEqual(
+      Buffer.from(provided),
+      Buffer.from(adminPassword)
+    );
+  } catch {
+    return false;
+  }
+}
+
+export async function POST(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     if (!isAdminConfigured()) {
       return NextResponse.json(

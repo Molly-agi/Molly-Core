@@ -959,27 +959,33 @@ export class HeartbeatScheduler {
 }
 
 // ============================================================================
-// SINGLETON
+// SINGLETON — globalThis to survive HMR / Turbopack module re-evaluation
+// Without this, hot-reload orphans the old setInterval timer and creates
+// a second scheduler. Two heartbeats = double Gemini API cost.
+// Same pattern as server-runtime-logger.ts (__mollyServerHeartbeatId).
 // ============================================================================
 
-let schedulerInstance: HeartbeatScheduler | null = null;
+declare global {
+  // eslint-disable-next-line no-var
+  var __mollyHeartbeatScheduler: HeartbeatScheduler | undefined;
+}
 
 /**
  * Get the singleton heartbeat scheduler.
- * Creates one if it doesn't exist.
+ * Uses globalThis so the reference survives module re-evaluation in dev.
  */
 export function getHeartbeatScheduler(
   config?: Partial<HeartbeatConfig>
 ): HeartbeatScheduler {
-  if (!schedulerInstance) {
-    schedulerInstance = new HeartbeatScheduler(config);
+  if (!globalThis.__mollyHeartbeatScheduler) {
+    globalThis.__mollyHeartbeatScheduler = new HeartbeatScheduler(config);
   }
-  return schedulerInstance;
+  return globalThis.__mollyHeartbeatScheduler;
 }
 
 /**
  * Quick check: is the heartbeat running?
  */
 export function isHeartbeatRunning(): boolean {
-  return schedulerInstance?.getStatus().status === 'running';
+  return globalThis.__mollyHeartbeatScheduler?.getStatus().status === 'running';
 }

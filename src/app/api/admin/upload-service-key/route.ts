@@ -5,15 +5,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
+import { timingSafeEqual } from 'crypto';
 
 const ENV_PATH = join(process.cwd(), '.env.local');
 
+function isAuthorized(request: NextRequest): boolean {
+  const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
+  const provided = request.headers.get('x-admin-password');
+  if (!adminPassword || !provided) return false;
+  try {
+    return timingSafeEqual(Buffer.from(provided), Buffer.from(adminPassword));
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
-    // Password protect - requires admin password from env
-    const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
-    const authHeader = request.headers.get('x-admin-password');
-    if (!adminPassword || authHeader !== adminPassword) {
+    if (!isAuthorized(request)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

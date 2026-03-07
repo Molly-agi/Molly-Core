@@ -1,9 +1,12 @@
 /**
  * NUCLEAR OPTION: Delete ALL origin story memories
  * GET /api/admin/nuke-origins?userId=YOUR_USER_ID
+ *
+ * Protected by HIDDEN_ADMIN_PASSWORD.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
 import { initializeApp, getApps } from 'firebase/app';
 import {
   getFirestore,
@@ -15,15 +18,34 @@ import {
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDdyQP0EEaY6xz_1_ZdaT-UiYS1GyYqE8g',
-  authDomain: 'molly-core-fbasd.firebaseapp.com',
-  projectId: 'molly-core-fbasd',
-  storageBucket: 'molly-core-fbasd.firebasestorage.app',
-  messagingSenderId: '287710486746',
-  appId: '1:287710486746:web:5f52f02ca56a3d9f2a0acf',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || '',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
 };
 
+function isAuthorized(request: NextRequest): boolean {
+  const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
+  if (!adminPassword) return false;
+  const provided = request.headers.get('x-admin-password') || '';
+  if (provided.length !== adminPassword.length) return false;
+  try {
+    return timingSafeEqual(
+      Buffer.from(provided),
+      Buffer.from(adminPassword)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function GET(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const userId = searchParams.get('userId');
 

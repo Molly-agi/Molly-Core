@@ -86,9 +86,12 @@ function performSemanticClustering(
 
     // Recalculate centers
     const newCenters: EmbeddingVector[] = [];
-    for (const cluster of clusters) {
+    for (let ci = 0; ci < clusters.length; ci++) {
+      const cluster = clusters[ci];
       if (cluster.length === 0) {
-        newCenters.push(centers[newCenters.length]);
+        // Reuse old center if cluster became empty
+        const oldCenter = centers[ci];
+        newCenters.push(oldCenter ?? centers[0]);
       } else {
         const dim = cluster[0]?.embedding?.length || 768;
         const center = Array(dim).fill(0);

@@ -36,28 +36,37 @@ const WORKSPACE_ROOT = process.cwd();
 function resolveSafePath(relativePath: string): string | null {
   const resolved = path.resolve(WORKSPACE_ROOT, relativePath);
   if (!resolved.startsWith(WORKSPACE_ROOT)) return null;
-  // Block sensitive files
-  const blocked = ['.env', '.env.local', '.env.production'];
-  const basename = path.basename(resolved);
-  if (blocked.includes(basename)) return null;
+  // Block any path containing .env anywhere (not just basename)
+  if (/\.env/i.test(resolved)) return null;
+  // Block other sensitive patterns
+  const sensitivePatterns = [/\.pem$/i, /service.account/i, /credentials/i];
+  if (sensitivePatterns.some((p) => p.test(resolved))) return null;
   return resolved;
 }
 
-// Security: block dangerous commands
+// Security: allowlist of safe command prefixes Molly can run.
+// Anything not on this list is rejected. This is a whitelist approach —
+// safer than trying to block dangerous patterns.
+const ALLOWED_COMMANDS = [
+  'ls', 'cat', 'head', 'tail', 'wc', 'grep', 'find', 'echo',
+  'pwd', 'whoami', 'date', 'uptime', 'df', 'du', 'free',
+  'ps', 'top', 'which', 'file', 'stat', 'tree',
+  'node', 'npx', 'npm run', 'npm test', 'npm run typecheck',
+  'npm run lint', 'npm run format', 'npm run harden',
+  'git status', 'git log', 'git diff', 'git branch', 'git show',
+  'git --no-pager',
+  'python3', 'pip', 'curl',
+  'mkdir', 'touch', 'cp', 'mv',
+];
+
 function isCommandSafe(command: string): boolean {
-  const dangerous = [
-    /rm\s+(-rf?|--force)\s+[\/~]/i,
-    /mkfs/i,
-    /dd\s+if=/i,
-    />\s*\/dev\//i,
-    /chmod\s+777/i,
-    /curl.*\|\s*(ba)?sh/i,
-    /wget.*\|\s*(ba)?sh/i,
-    /git\s+push\s+--force/i,
-    /git\s+reset\s+--hard/i,
-    /npm\s+publish/i,
-  ];
-  return !dangerous.some((pattern) => pattern.test(command));
+  const trimmed = command.trim();
+  // Allow piped commands only if every segment starts with an allowed prefix
+  const segments = trimmed.split(/\s*\|\s*/);
+  return segments.every((segment) => {
+    const seg = segment.trim();
+    return ALLOWED_COMMANDS.some((allowed) => seg.startsWith(allowed));
+  });
 }
 
 async function executeTool(

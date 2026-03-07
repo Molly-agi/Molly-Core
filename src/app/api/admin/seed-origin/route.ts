@@ -1,9 +1,12 @@
 /**
  * Admin API to seed origin story memories (3 parts)
  * POST /api/admin/seed-origin
+ *
+ * Protected by HIDDEN_ADMIN_PASSWORD.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
 
 // Dynamic import to avoid bundling "use server" module into API route
 async function getSeedFunction() {
@@ -11,7 +14,26 @@ async function getSeedFunction() {
   return mod.seedOriginStoryMemory;
 }
 
+function isAuthorized(request: NextRequest): boolean {
+  const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
+  if (!adminPassword) return false;
+  const provided = request.headers.get('x-admin-password') || '';
+  if (provided.length !== adminPassword.length) return false;
+  try {
+    return timingSafeEqual(
+      Buffer.from(provided),
+      Buffer.from(adminPassword)
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { userId } = body;
