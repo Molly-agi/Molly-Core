@@ -24,7 +24,6 @@ import { logIntuition } from '@/ai/tools/intuition-logger';
 import {
   getMoltbookClient,
   type MoltbookPost,
-  type MoltbookFeed,
 } from '@/ai/tools/moltbook-client';
 
 // ============================================================================
