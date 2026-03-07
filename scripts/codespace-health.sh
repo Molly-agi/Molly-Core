@@ -9,9 +9,10 @@
 # Orphaned file watchers add ~60MB each (9 = 550MB).
 #
 # Usage:
-#   npm run health          # One-time check
+#   npm run health                           # One-time check
 #   bash scripts/codespace-health.sh
 #   bash scripts/codespace-health.sh --predev  # Run before dev server
+#   bash scripts/codespace-health.sh --watch   # Daemon mode (every 5 min)
 # ======================================================
 
 set -uo pipefail
@@ -23,8 +24,104 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 PREDEV_MODE=false
-if [[ "${1:-}" == "--predev" ]]; then
-  PREDEV_MODE=true
+WATCH_MODE=false
+WATCH_INTERVAL=300  # 5 minutes
+
+for arg in "$@"; do
+  case "$arg" in
+    --predev) PREDEV_MODE=true ;;
+    --watch)  WATCH_MODE=true ;;
+    --watch=*) WATCH_MODE=true; WATCH_INTERVAL="${arg#--watch=}" ;;
+  esac
+done
+
+# --- Watch mode wrapper ---
+if [ "$WATCH_MODE" = true ]; then
+  echo -e "${CYAN}=== Ghost Process Watchdog Starting ===${NC}"
+  echo -e "Interval: ${WATCH_INTERVAL}s | PID: $$"
+  echo -e "Monitors: extension hosts, file watchers, tsservers, temp dirs"
+  echo ""
+  
+  while true; do
+    TIMESTAMP=$(date '+%H:%M:%S')
+    CLEANED=false
+    
+    # --- Check extension hosts ---
+    EH_COUNT=$(ps aux | grep "type=extensionHost" | grep -v grep | wc -l)
+    if [ "$EH_COUNT" -gt 1 ]; then
+      EH_PIDS=$(ps aux | grep "type=extensionHost" | grep -v grep | sort -k9 | awk '{print $2}')
+      NEWEST=$(echo "$EH_PIDS" | tail -1)
+      for PID in $EH_PIDS; do
+        if [ "$PID" != "$NEWEST" ]; then
+          kill "$PID" 2>/dev/null || true
+          echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Killed stale extensionHost PID ${PID}${NC}"
+          CLEANED=true
+        fi
+      done
+    fi
+    
+    # --- Check file watchers ---
+    FW_COUNT=$(ps aux | grep "type=fileWatcher" | grep -v grep | wc -l)
+    if [ "$FW_COUNT" -gt 4 ]; then
+      FW_PIDS=$(ps aux | grep "type=fileWatcher" | grep -v grep | sort -k9 | awk '{print $2}')
+      KEEP=$(echo "$FW_PIDS" | tail -2)
+      for PID in $FW_PIDS; do
+        if ! echo "$KEEP" | grep -q "^${PID}$"; then
+          kill "$PID" 2>/dev/null || true
+          echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Killed orphan fileWatcher PID ${PID}${NC}"
+          CLEANED=true
+        fi
+      done
+    fi
+    
+    # --- Check tsservers ---
+    TS_COUNT=$(ps aux | grep "tsserver.js" | grep -v grep | wc -l)
+    if [ "$TS_COUNT" -gt 2 ]; then
+      TS_PIDS=$(ps aux | grep "tsserver.js" | grep -v grep | sort -k9 | awk '{print $2}')
+      KEEP=$(echo "$TS_PIDS" | tail -2)
+      for PID in $TS_PIDS; do
+        if ! echo "$KEEP" | grep -q "^${PID}$"; then
+          kill "$PID" 2>/dev/null || true
+          echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Killed orphan tsserver PID ${PID}${NC}"
+          CLEANED=true
+        fi
+      done
+    fi
+    
+    # --- Clean stale tsserver temp dirs ---
+    if [ -d "/tmp/vscode-typescript1000" ]; then
+      TS_TEMP=$(ls -1 /tmp/vscode-typescript1000/ 2>/dev/null | wc -l)
+      if [ "$TS_TEMP" -gt 2 ]; then
+        ACTIVE_DIRS=""
+        for PID in $(ps aux | grep "tsserver.js" | grep -v grep | awk '{print $2}'); do
+          DIR=$(ps -o args= -p "$PID" 2>/dev/null | grep -oP 'vscode-typescript1000/\K[a-f0-9]+' || true)
+          [ -n "$DIR" ] && ACTIVE_DIRS="${ACTIVE_DIRS} ${DIR}"
+        done
+        for DIR in $(ls -1 /tmp/vscode-typescript1000/ 2>/dev/null); do
+          if ! echo "$ACTIVE_DIRS" | grep -q "$DIR"; then
+            rm -rf "/tmp/vscode-typescript1000/${DIR}" 2>/dev/null
+            echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Removed stale temp: ${DIR}${NC}"
+            CLEANED=true
+          fi
+        done
+      fi
+    fi
+    
+    # --- Check memory pressure ---
+    AVAIL=$(free -m | awk '/^Mem:/{print $7}')
+    if [ "$AVAIL" -lt 500 ]; then
+      echo -e "${TIMESTAMP} ${RED}[WATCHDOG] LOW MEMORY: ${AVAIL}MB available!${NC}"
+    fi
+    
+    if [ "$CLEANED" = true ]; then
+      NEW_AVAIL=$(free -m | awk '/^Mem:/{print $7}')
+      echo -e "${TIMESTAMP} ${GREEN}[WATCHDOG] Cleanup done. Memory: ${AVAIL}MB → ${NEW_AVAIL}MB${NC}"
+    fi
+    
+    sleep "$WATCH_INTERVAL"
+  done
+  
+  exit 0
 fi
 
 echo ""
