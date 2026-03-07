@@ -25,6 +25,7 @@
     "health": "bash scripts/codespace-health.sh",
     "health:watch": "bash scripts/codespace-health.sh --watch",
     "keep-alive": "nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
+    "watchdog": "nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
     "save-session": "node scripts/save-session.mjs",
     "save-session:pause": "node scripts/save-session.mjs --status paused"
   },

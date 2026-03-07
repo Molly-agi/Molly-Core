@@ -40,6 +40,9 @@ firestore-debug.log
 # Session backups (main session state files ARE tracked for recovery)
 .session-backups/
 .codespace-heartbeat
+.watchdog.pid
+.watchdog-pulse
+.watchdog.log
 
 # Genkit runtime artifacts
 .genkit/runtimes/
