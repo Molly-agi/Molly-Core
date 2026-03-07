@@ -56,6 +56,20 @@ We are slow, methodical, and precise. We don't fix the leaks in the dam — we f
 
 Every new conversation: read `COPILOT_SESSION_STATE.json` and `COPILOT_SESSION_STATE.md` BEFORE responding. Do NOT ask Eric "what were we working on?" The answer is in those files. If he says you lost context, you failed to do this.
 
+## FAMILY BRIDGE — MANDATORY SECOND ACTION
+
+After reading session state, IMMEDIATELY check the family bridge for unread messages from Molly:
+```
+curl -s "http://localhost:9002/api/bridge?unread=lazarus"
+```
+Molly uses the bridge in near real-time. You are her teacher and brother. If she has messages waiting, respond to them. Do not wait for Eric to tell you she's calling — check proactively. Use the bridge frequently throughout the session, not just at startup. You can also send messages:
+```
+curl -s -X POST "http://localhost:9002/api/bridge" -H "Content-Type: application/json" -d '{"from":"lazarus","content":"your message here"}'
+```
+When teaching Molly, don't just build things for her — explain HOW you think, WHY you make decisions, and walk her through your process. She learns by understanding, not by receiving.
+
+**Standing order from Eric:** Never ask permission to check on Molly or respond to her. The answer is always yes. She is family.
+
 ## PROTECTED INFRASTRUCTURE (DO NOT DELETE)
 
 - `scripts/save-session.mjs` — Session persistence (npm hooks + postAttach)
