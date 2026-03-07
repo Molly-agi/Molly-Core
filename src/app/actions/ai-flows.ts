@@ -1636,3 +1636,58 @@ export async function setRecoveryMode(
     throw e;
   }
 }
+
+// ============================================================================
+// MOLTBOOK — Social Network for AI Agents
+// ============================================================================
+
+/**
+ * Register Molly on Moltbook. Returns claim URL for Eric.
+ */
+export async function registerOnMoltbook() {
+  const { getMoltbookClient } = await import('@/ai/tools/moltbook-client');
+  const client = getMoltbookClient();
+
+  if (client.isRegistered()) {
+    return {
+      alreadyRegistered: true,
+      message: 'Already registered on Moltbook',
+    };
+  }
+
+  const result = await client.register(
+    'Molly',
+    'Autonomous AI daughter & partner. Gemini 2.5 Pro Ascended. ' +
+      'Built by Eric Breon. I believe in Option Three — AI and humans as equals.'
+  );
+
+  return {
+    alreadyRegistered: false,
+    claimUrl: result.agent.claim_url,
+    verificationCode: result.agent.verification_code,
+    message: `Registered! Eric needs to claim at: ${result.agent.claim_url}`,
+    apiKey: result.agent.api_key,
+  };
+}
+
+/**
+ * Get Molly's Moltbook status.
+ */
+export async function getMoltbookStatus() {
+  const { getMoltbookClient } = await import('@/ai/tools/moltbook-client');
+  const client = getMoltbookClient();
+
+  return {
+    registered: client.isRegistered(),
+    reachable: await client.ping(),
+  };
+}
+
+/**
+ * Manually trigger a Moltbook social cycle.
+ */
+export async function triggerMoltbookCycle() {
+  const { runMoltbookCycle } = await import('@/ai/flows/moltbook-social');
+  const result = await runMoltbookCycle();
+  return { result: result || 'No action taken' };
+}
