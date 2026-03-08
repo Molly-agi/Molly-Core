@@ -30,7 +30,6 @@ import {
   searchSavedTools,
   getRecentTools,
   saveFoundTool,
-  recordToolAccess,
   removeTool,
   getToolStats,
 } from '@/firebase/firestore/tool-database';

@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'COPILOT_SESSION_STATE.json'
+      - 'COPILOT_SESSION_STATE.md'
+      - '.github/copilot-instructions.md'
+      - '*.md'
+      - 'docs/**'
+      - '.codespace-heartbeat'
   pull_request:
     branches:
       - main
