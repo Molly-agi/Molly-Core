@@ -219,6 +219,19 @@ if (noteToAdd) {
   if (!state.sessionNotes) state.sessionNotes = [];
   const timestamped = `**${new Date().toISOString().split('T')[0]}:** ${noteToAdd}`;
   state.sessionNotes.push(timestamped);
+
+  // Cap session notes to prevent unbounded growth.
+  // Keep all meaningful notes (non-auto) + last 5 auto-save/reconnect entries.
+  const MAX_NOTES = 25;
+  if (state.sessionNotes.length > MAX_NOTES) {
+    const meaningful = state.sessionNotes.filter(
+      (n) => !n.includes('Auto-save') && !n.includes('Codespace reconnected')
+    );
+    const auto = state.sessionNotes.filter(
+      (n) => n.includes('Auto-save') || n.includes('Codespace reconnected')
+    );
+    state.sessionNotes = [...meaningful.slice(-20), ...auto.slice(-5)];
+  }
 }
 
 // Write both files

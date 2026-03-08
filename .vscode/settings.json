@@ -19,7 +19,9 @@
     "**/public/molly-gallery/**": true,
     "**/.git/objects/**": true,
     "**/.git/subtree-cache/**": true,
-    "**/logs/**": true
+    "**/logs/**": true,
+    "**/COPILOT_SESSION_STATE.*": true,
+    "**/.codespace-heartbeat": true
   },
 
   "search.exclude": {
