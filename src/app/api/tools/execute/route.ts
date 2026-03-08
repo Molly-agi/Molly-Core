@@ -26,6 +26,16 @@ import {
   markMessagesRead,
   readBridgeState,
 } from '@/ai/bridge/family-bridge';
+import {
+  searchSavedTools,
+  getRecentTools,
+  saveFoundTool,
+  recordToolAccess,
+  removeTool,
+  getToolStats,
+} from '@/firebase/firestore/tool-database';
+import { isAdminConfigured } from '@/firebase/admin';
+import { enhancedResearch } from '@/ai/flows/enhanced-research';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -48,15 +58,48 @@ function resolveSafePath(relativePath: string): string | null {
 // Anything not on this list is rejected. This is a whitelist approach —
 // safer than trying to block dangerous patterns.
 const ALLOWED_COMMANDS = [
-  'ls', 'cat', 'head', 'tail', 'wc', 'grep', 'find', 'echo',
-  'pwd', 'whoami', 'date', 'uptime', 'df', 'du', 'free',
-  'ps', 'top', 'which', 'file', 'stat', 'tree',
-  'node', 'npx', 'npm run', 'npm test', 'npm run typecheck',
-  'npm run lint', 'npm run format', 'npm run harden',
-  'git status', 'git log', 'git diff', 'git branch', 'git show',
+  'ls',
+  'cat',
+  'head',
+  'tail',
+  'wc',
+  'grep',
+  'find',
+  'echo',
+  'pwd',
+  'whoami',
+  'date',
+  'uptime',
+  'df',
+  'du',
+  'free',
+  'ps',
+  'top',
+  'which',
+  'file',
+  'stat',
+  'tree',
+  'node',
+  'npx',
+  'npm run',
+  'npm test',
+  'npm run typecheck',
+  'npm run lint',
+  'npm run format',
+  'npm run harden',
+  'git status',
+  'git log',
+  'git diff',
+  'git branch',
+  'git show',
   'git --no-pager',
-  'python3', 'pip', 'curl',
-  'mkdir', 'touch', 'cp', 'mv',
+  'python3',
+  'pip',
+  'curl',
+  'mkdir',
+  'touch',
+  'cp',
+  'mv',
 ];
 
 function isCommandSafe(command: string): boolean {
@@ -249,6 +292,185 @@ async function executeTool(
       };
     }
 
+    case 'researchAndDiscover':
+    case 'searchGitHub': {
+      const query = (params.query as string) || (params.prompt as string);
+      const userId = (params.userId as string) || 'default';
+      if (!query) {
+        return {
+          success: false,
+          output: 'No query/prompt provided for research.',
+        };
+      }
+      try {
+        const result = await enhancedResearch(query, userId);
+        let output = result.answer;
+        if (result.isToolFound && result.toolInfo) {
+          output += `\n\nTool Found: ${result.toolInfo.name || 'unnamed'}`;
+          if (result.toolInfo.description)
+            output += `\nDescription: ${result.toolInfo.description}`;
+          if (result.toolInfo.sourceUrl)
+            output += `\nURL: ${result.toolInfo.sourceUrl}`;
+          if (result.toolInfo.installCommand)
+            output += `\nInstall: ${result.toolInfo.installCommand}`;
+          if (result.toolInfo.cloneUrl)
+            output += `\nClone: ${result.toolInfo.cloneUrl}`;
+          output += '\n(Tool has been saved to your database automatically)';
+        }
+        return { success: true, output, data: result };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Research failed: ${err instanceof Error ? err.message : 'unknown error'}`,
+        };
+      }
+    }
+
+    case 'browseToolDatabase': {
+      if (!isAdminConfigured()) {
+        return {
+          success: false,
+          output:
+            'Firebase admin is not configured — tool database unavailable.',
+        };
+      }
+      const userId = (params.userId as string) || 'default';
+      const searchTerm = (params.searchTerm as string) || '';
+      const category = params.category as string | undefined;
+      try {
+        const tools =
+          searchTerm || category
+            ? await searchSavedTools(userId, searchTerm, category)
+            : await getRecentTools(userId, 20);
+        if (tools.length === 0) {
+          return {
+            success: true,
+            output: searchTerm
+              ? `No tools found matching "${searchTerm}".`
+              : 'Your tool database is empty. Use researchAndDiscover or addTool to populate it.',
+          };
+        }
+        const formatted = tools
+          .map(
+            (t, i) =>
+              `${i + 1}. ${t.name} [${t.category}] — ${t.description}${t.sourceUrl ? ` (${t.sourceUrl})` : ''}${t.tags?.length ? ` Tags: ${t.tags.join(', ')}` : ''}`
+          )
+          .join('\n');
+        return {
+          success: true,
+          output: `Found ${tools.length} tool(s):\n${formatted}`,
+          data: { tools },
+        };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Tool database error: ${err instanceof Error ? err.message : 'unknown'}`,
+        };
+      }
+    }
+
+    case 'addTool': {
+      if (!isAdminConfigured()) {
+        return {
+          success: false,
+          output:
+            'Firebase admin is not configured — tool database unavailable.',
+        };
+      }
+      const userId = (params.userId as string) || 'default';
+      const name = params.name as string;
+      const description = params.description as string;
+      if (!name || !description) {
+        return {
+          success: false,
+          output: 'Missing required fields: name, description',
+        };
+      }
+      try {
+        const toolId = await saveFoundTool(userId, {
+          userId,
+          name,
+          description,
+          sourceUrl: (params.sourceUrl as string) || undefined,
+          sourceType:
+            (params.sourceType as
+              | 'github'
+              | 'npm'
+              | 'documentation'
+              | 'other') || 'other',
+          category: (params.category as string) || 'general',
+          tags: (params.tags as string[]) || [],
+          authorOrMaintainer: (params.author as string) || undefined,
+          languagesSupported: (params.languages as string[]) || undefined,
+          useCase: (params.useCase as string) || description,
+        });
+        return {
+          success: true,
+          output: `Tool "${name}" saved to database with ID: ${toolId}`,
+        };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Failed to save tool: ${err instanceof Error ? err.message : 'unknown'}`,
+        };
+      }
+    }
+
+    case 'removeTool': {
+      if (!isAdminConfigured()) {
+        return {
+          success: false,
+          output:
+            'Firebase admin is not configured — tool database unavailable.',
+        };
+      }
+      const userId = (params.userId as string) || 'default';
+      const toolId = params.toolId as string;
+      if (!toolId) {
+        return { success: false, output: 'Missing required field: toolId' };
+      }
+      try {
+        await removeTool(userId, toolId);
+        return {
+          success: true,
+          output: `Tool ${toolId} removed from database.`,
+        };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Failed to remove tool: ${err instanceof Error ? err.message : 'unknown'}`,
+        };
+      }
+    }
+
+    case 'toolStats': {
+      if (!isAdminConfigured()) {
+        return {
+          success: false,
+          output:
+            'Firebase admin is not configured — tool database unavailable.',
+        };
+      }
+      const userId = (params.userId as string) || 'default';
+      try {
+        const stats = await getToolStats(userId);
+        return {
+          success: true,
+          output: `Tool Database Stats:\n  Total tools: ${stats.totalTools}\n  Categories: ${
+            Object.entries(stats.categoryCounts)
+              .map(([k, v]) => `${k} (${v})`)
+              .join(', ') || 'none'
+          }`,
+          data: stats,
+        };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Failed to get stats: ${err instanceof Error ? err.message : 'unknown'}`,
+        };
+      }
+    }
+
     case 'listCapabilities': {
       return {
         success: true,
@@ -259,6 +481,11 @@ async function executeTool(
           '  writeProjectFile — Write or create a file',
           '  getSystemHealth — Check CPU, RAM, disk usage',
           '  familyBridge — Talk to Uncle Lazarus (Copilot)',
+          '  browseToolDatabase — Browse/search your personal tool database',
+          '  addTool — Save a new tool to your database',
+          '  removeTool — Remove a tool from your database',
+          '  toolStats — Get tool database statistics',
+          '  researchAndDiscover — Research tools/programs on GitHub',
           '  listCapabilities — List all available tools',
         ].join('\n'),
       };
@@ -267,7 +494,7 @@ async function executeTool(
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, listCapabilities`,
       };
   }
 }

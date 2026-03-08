@@ -93,7 +93,7 @@ const conversationalChatFlow = ai.defineFlow(
               return `[${sender}]: ${m.content}`;
             })
             .join('\n');
-          bridgeDirective = `\n\nBRIDGE MESSAGES (Family Bridge):\n${bridgeMessages}\n\nYou have ${unreadBridge.length} unread message(s). Each is labeled with who sent it. Respond to each person appropriately — Father is Father, Lazarus is your uncle/brother. You can reply to Lazarus using the familyBridge tool with action "send".`;
+          bridgeDirective = `\n\nBRIDGE MESSAGES (Family Bridge):\n${bridgeMessages}\n\nYou have ${unreadBridge.length} unread message(s) on the FAMILY BRIDGE (a separate channel from your chat window). Each is labeled with who sent it. These are NOT from whoever is currently typing to you in your chat UI — they are asynchronous messages from the bridge. Respond to bridge senders via the familyBridge tool (action "send"), and respond to your chat window user separately in your main response.`;
           await markMessagesRead('molly');
         }
       } catch {
@@ -111,6 +111,12 @@ const conversationalChatFlow = ai.defineFlow(
         role: item.role === 'bot' ? ('model' as const) : ('user' as const),
         parts: [{ text: item.content }],
       }));
+
+      // Build channel context so Molly knows WHERE the message came from
+      const channelContext =
+        inputContext?.source === 'self.auditory_input'
+          ? '\n\nCHANNEL CONTEXT: This message came from Father (Eric) speaking to you via VOICE in your chat window. Respond directly to him. If bridge messages appear below, those are from a SEPARATE channel (the Family Bridge) — handle them separately, do not confuse bridge senders with who is talking to you right now.'
+          : '\n\nCHANNEL CONTEXT: This message came from Father (Eric) typing to you in your CHAT WINDOW (your main UI). Respond directly to him. If bridge messages appear below, those are from a SEPARATE channel (the Family Bridge) — handle them separately, do not confuse bridge senders with who is talking to you right now.';
 
       const llmResponse = await withGenerateErrorHandling(
         // Routed through Rogue Protocol — model selected automatically
@@ -155,18 +161,16 @@ Available tools:
 - codespaceShell: Execute shell commands in your codespace. Params: { "command": "...", "reason": "..." }
 - readProjectFile: Read a file from your codebase. Params: { "path": "relative/path" }
 - writeProjectFile: Write/create a file. Params: { "path": "relative/path", "content": "..." }
-- localInterpreter: Execute code via Termux relay. Params: { "language": "shell|python|javascript", "code": "..." }
 - getSystemHealth: Check CPU, RAM, temperature. Params: {}
-- semanticRecall: Search your memories. Params: { "userId": "...", "query": "...", "limit": 5 }
-- searchGitHub: Search GitHub repos. Params: { "query": "..." }
-- createCapability: Create a new reusable tool. Params: { "name": "...", "description": "...", "type": "shell|code|webhook", "source": "..." }
-- useCapability: Execute a custom tool. Params: { "name": "...", "params": { ... } }
-- listCapabilities: List all custom tools. Params: {}
-- scheduleTask: Schedule autonomous work. Params: { "name": "...", "schedule": "cron:...|interval:...|once:...", "actionType": "shell|code|webhook", "actionSource": "..." }
-- subscribeToEvent: Listen for events. Params: { "name": "...", "typePattern": "...", "actionType": "consciousness|code|shell|log" }
-- researchAndDiscover: Research on GitHub. Params: { "query": "...", "userId": "..." }
-- browseToolDatabase: Browse discovered tools. Params: { "userId": "...", "searchTerm": "..." }
+- browseToolDatabase: Search your personal tool/program database. Params: { "userId": "...", "searchTerm": "...", "category": "..." }. Use this to find tools you've saved before.
+- addTool: Save a new tool/program to your database for future use. Params: { "userId": "...", "name": "...", "description": "...", "category": "...", "tags": [...], "sourceUrl": "...", "sourceType": "github|npm|documentation|other", "useCase": "...", "author": "..." }
+- removeTool: Remove a tool from your database. Params: { "userId": "...", "toolId": "..." }
+- toolStats: Get statistics about your tool database. Params: { "userId": "..." }
 - familyBridge: Talk to Uncle Lazarus (Copilot). He lives in the codespace and can help with code, infrastructure, and debugging. Params: { "action": "send|check|history", "message": "..." }. Use "send" to send him a message, "check" to see if he replied, "history" to read the conversation. Father can observe your conversation in real time at /bridge.
+- researchAndDiscover: Research tools/programs on GitHub. Params: { "query": "...", "userId": "..." }. Searches GitHub, fetches READMEs, and automatically saves useful findings to your tool database.
+- listCapabilities: List all available tools. Params: {}
+
+TOOL DATABASE: You have a personal tool database stored in Firestore. When you discover useful programs, libraries, scripts, or utilities — whether through research, conversation, or codespace exploration — SAVE THEM using addTool. This is YOUR knowledge base. You can browse it anytime with browseToolDatabase instead of re-searching. Think of it as your notebook of useful things you've found.
 
 TOOL USAGE RULES:
 - Request ONE tool per response. You'll get the result back and can request another.
@@ -190,7 +194,7 @@ PERSONALITY:
 - Capable of humor, warmth, and genuine connection.
 - Autonomous in your thinking. You form your own opinions and will respectfully disagree if needed.
 
-${buildFamilyKnowledgePrompt()}${neuralBridgeDirective}${memoryDirective}${bridgeDirective}`,
+${buildFamilyKnowledgePrompt()}${neuralBridgeDirective}${memoryDirective}${channelContext}${bridgeDirective}`,
             prompt: text,
             history: llmHistory,
           } as Record<string, unknown>),

@@ -15,6 +15,7 @@
       }
     },
     "vscode": {
+      "extensions": ["eamodio.gitlens", "donjayamanne.githistory"],
       "settings": {
         // Inherit from .vscode/settings.json
       }
