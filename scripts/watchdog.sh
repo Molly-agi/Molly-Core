@@ -89,6 +89,70 @@ generate_pulse() {
 
   # 5. Touch a pulse file (filesystem event for watchers)
   touch "$ROOT/.watchdog-pulse" 2>/dev/null
+
+  # 6. Ghost process cleanup — the critical fix.
+  #    Android browser kills WebSocket on tab-switch, VS Code spawns a new
+  #    extension host on reconnect but never kills the old one. Each ghost
+  #    eats 750MB-1.5GB. File watchers orphaned by dead hosts eat ~60MB each.
+  #    This runs every pulse (2min) so ghosts never accumulate.
+  cleanup_ghosts
+}
+
+# ---- Kill orphaned VS Code processes that survive reconnects ----
+cleanup_ghosts() {
+  local CLEANED=false
+
+  # Extension hosts: only 1 should exist. Keep newest, kill rest.
+  local EH_COUNT
+  EH_COUNT=$(ps aux | grep "type=extensionHost" | grep -v grep | wc -l)
+  if [ "$EH_COUNT" -gt 1 ]; then
+    local EH_PIDS NEWEST
+    EH_PIDS=$(ps -eo pid,lstart,args | grep "type=extensionHost" | grep -v grep | sort -k2,6 | awk '{print $1}')
+    NEWEST=$(echo "$EH_PIDS" | tail -1)
+    for PID in $EH_PIDS; do
+      if [ "$PID" != "$NEWEST" ]; then
+        kill "$PID" 2>/dev/null || true
+        log "${YELLOW}[WATCHDOG] Killed ghost extensionHost PID ${PID}${NC}"
+        CLEANED=true
+      fi
+    done
+  fi
+
+  # File watchers: more than 4 total is suspect (server spawns ~2 per host).
+  # Only kill watchers NOT parented by the VS Code server (PID 1 = reparented orphan).
+  local FW_COUNT
+  FW_COUNT=$(ps aux | grep "type=fileWatcher" | grep -v grep | wc -l)
+  if [ "$FW_COUNT" -gt 6 ]; then
+    # Find VS Code server PID
+    local VSCODE_SERVER
+    VSCODE_SERVER=$(ps -eo pid,args | grep "server-main.js" | grep -v grep | awk '{print $1}' | head -1)
+    if [ -n "$VSCODE_SERVER" ]; then
+      for PID in $(ps -eo pid,ppid,args | grep "type=fileWatcher" | grep -v grep | awk '{print $1 ":" $2}'); do
+        local FW_PID="${PID%%:*}"
+        local FW_PPID="${PID##*:}"
+        # Kill if parent is init (orphaned) — not the VS Code server
+        if [ "$FW_PPID" = "1" ]; then
+          kill "$FW_PID" 2>/dev/null || true
+          log "${YELLOW}[WATCHDOG] Killed orphan fileWatcher PID ${FW_PID}${NC}"
+          CLEANED=true
+        fi
+      done
+    fi
+  fi
+
+  # Memory pressure check
+  local AVAIL
+  AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
+  if [ "$AVAIL" -lt 1500 ]; then
+    log "${RED}[WATCHDOG] CRITICAL: Only ${AVAIL}MB available. Running emergency health check.${NC}"
+    bash "$ROOT/scripts/codespace-health.sh" > /dev/null 2>&1
+  fi
+
+  if [ "$CLEANED" = true ]; then
+    local NEW_AVAIL
+    NEW_AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
+    log "${GREEN}[WATCHDOG] Ghost cleanup done. RAM: ${AVAIL}MB -> ${NEW_AVAIL}MB${NC}"
+  fi
 }
 
 # ---- Logging (auto-rotates at 100 lines) ----
