@@ -53,8 +53,15 @@ if [ "$WATCH_MODE" = true ]; then
       NEWEST=$(echo "$EH_PIDS" | tail -1)
       for PID in $EH_PIDS; do
         if [ "$PID" != "$NEWEST" ]; then
+          # Kill entire process tree (children first) — not just the parent.
+          # Previous version left Pylance, JSON servers, and file watchers
+          # orphaned, still holding ports open.
+          CHILDREN=$(pstree -p "$PID" 2>/dev/null | grep -oP '\(\K[0-9]+(?=\))' | grep -v "^${PID}$" || true)
+          for CHILD in $CHILDREN; do
+            kill "$CHILD" 2>/dev/null || true
+          done
           kill "$PID" 2>/dev/null || true
-          echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Killed stale extensionHost PID ${PID}${NC}"
+          echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Killed stale extensionHost PID ${PID} + children${NC}"
           CLEANED=true
         fi
       done
@@ -83,6 +90,18 @@ if [ "$WATCH_MODE" = true ]; then
         if ! echo "$KEEP" | grep -q "^${PID}$"; then
           kill "$PID" 2>/dev/null || true
           echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Killed orphan tsserver PID ${PID}${NC}"
+          CLEANED=true
+        fi
+      done
+    fi
+
+    # --- Kill orphaned language servers not owned by active extension host ---
+    ACTIVE_HOST=$(ps aux | grep "type=extensionHost" | grep -v grep | sort -k9 | awk '{print $2}' | tail -1)
+    if [ -n "$ACTIVE_HOST" ]; then
+      for PID in $(ps -eo pid,args | grep -E "(pylance|jsonServerMain|serverWorkerMain)" | grep -v grep | awk '{print $1}'); do
+        if ! pstree -p "$ACTIVE_HOST" 2>/dev/null | grep -q "(${PID})"; then
+          kill "$PID" 2>/dev/null || true
+          echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] Killed orphan lang server PID ${PID}${NC}"
           CLEANED=true
         fi
       done

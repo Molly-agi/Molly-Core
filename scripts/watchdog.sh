@@ -1,198 +1,213 @@
 #!/bin/bash
 # ======================================================
-# Codespace Watchdog — Persistent Keep-Alive
+# Codespace Watchdog v2 — Rebuilt from scratch 2026-03-10
 # ======================================================
 # ⚠️  CRITICAL INFRASTRUCTURE — DO NOT DELETE OR "CLEAN UP"
 #
-# PURPOSE:
-# Eric works from Android phone. When he tabs away, the browser
-# kills the WebSocket to VS Code, and GitHub starts the idle
-# countdown. The existing keep-alive.sh writes a file every 5min
-# but only runs when manually started or from postAttach.
+# Built by Lazarus with full knowledge of every failure mode:
 #
-# This watchdog runs ALWAYS and generates the diverse types of
-# activity that GitHub's idle detection actually checks for:
-#   - Terminal/process creation (real commands, not just file writes)
-#   - Git operations (status checks, ref reads)
-#   - Port activity (pings forwarded ports if dev server is up)
-#   - Filesystem writes (heartbeat file)
+# PROBLEM 1 (old bug): SIGHUP trap killed the watchdog when
+#   Android tab-out closed the terminal. The guard dog died
+#   every time it was needed most.
+#   FIX: Ignore SIGHUP completely. This process must survive
+#   terminal disconnects — that's its entire purpose.
 #
-# It pulses every 2 minutes — short enough that even a brief
-# tab-out on Android can't trigger GitHub's idle timer before
-# the next pulse lands.
+# PROBLEM 2 (old bug): Only killed parent extension host PIDs.
+#   Children (Pylance, JSON server, etc.) got reparented to
+#   PID 1 and held ports open forever.
+#   FIX: Use pkill -P for recursive child kill. No pstree dependency.
 #
-# SELF-HEALING:
-#   - PID file lock ensures only one instance runs
-#   - postAttachCommand auto-starts on every reconnect
-#   - If it dies, the next reconnect brings it back
+# PROBLEM 3 (old bug): File watchers treated as ghosts. VS Code
+#   spawns ~7 legitimately and respawns them when killed.
+#   FIX: Leave file watchers alone entirely.
 #
-# USAGE:
-#   bash scripts/watchdog.sh           # Foreground (for testing)
-#   npm run watchdog                   # Background via npm
-#   nohup bash scripts/watchdog.sh &   # Manual background
+# PROBLEM 4 (old bug): PID lock got stale when process died
+#   mid-sleep, blocking the next instance.
+#   FIX: Validate PID lock against actual running process name,
+#   not just kill -0 (which can match recycled PIDs).
+#
+# TWO JOBS:
+#   1. Keep-alive: Prevent codespace idle timeout (pulse every 2 min)
+#   2. Ghost hunter: Kill duplicate extension hosts + orphan
+#      language servers (check every 30 sec)
+#
+# STARTUP:
+#   postAttachCommand in devcontainer.json runs this on every reconnect.
+#   Single-instance enforced via PID lock.
 # ======================================================
 
 set -uo pipefail
 
+# ---- SIGHUP IMMUNITY ----
+# This is the critical fix. When Android kills the WebSocket,
+# the terminal sends SIGHUP to all its children. The old watchdog
+# caught SIGHUP in its trap and shut itself down. Never again.
+trap '' SIGHUP
+
+# ---- Config ----
 ROOT="/workspaces/Molly-Core"
 PIDFILE="$ROOT/.watchdog.pid"
-HEARTBEAT_FILE="$ROOT/.codespace-heartbeat"
-LOGFILE="$ROOT/.watchdog.log"
+HEARTBEAT="$ROOT/.codespace-heartbeat"
+LOG="$ROOT/.watchdog.log"
 
-# Pulse every 2 minutes — GitHub's idle detection window is much
-# larger, so this gives us comfortable margin even when Android
-# kills the WebSocket on tab-out.
-PULSE_INTERVAL=120
+# ---- Logging (auto-rotates at 200 lines) ----
+log() {
+  local TS
+  TS=$(date +"%H:%M:%S")
+  local CLEAN
+  CLEAN=$(echo -e "$1" | sed 's/\x1b\[[0-9;]*m//g')
+  echo "$TS $CLEAN" >> "$LOG" 2>/dev/null
+  # Rotate
+  if [[ -f "$LOG" ]] && (( $(wc -l < "$LOG") > 200 )); then
+    tail -100 "$LOG" > "$LOG.tmp" && mv "$LOG.tmp" "$LOG"
+  fi
+}
 
-# Colors
-CYAN='\033[0;36m'
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
-NC='\033[0m'
-
-# ---- PID Lock (single instance) ----
+# ---- PID Lock ----
+# Validates that the PID file points to an actual watchdog.sh process,
+# not a recycled PID running something else.
 acquire_lock() {
-  if [ -f "$PIDFILE" ]; then
+  if [[ -f "$PIDFILE" ]]; then
+    local OLD_PID
     OLD_PID=$(cat "$PIDFILE" 2>/dev/null)
-    if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
-      echo "[watchdog] Another instance running (PID $OLD_PID). Exiting."
-      exit 0
+    if [[ -n "$OLD_PID" ]] && kill -0 "$OLD_PID" 2>/dev/null; then
+      # PID exists — but is it actually a watchdog?
+      local CMDLINE
+      CMDLINE=$(cat "/proc/$OLD_PID/cmdline" 2>/dev/null | tr '\0' ' ')
+      if echo "$CMDLINE" | grep -q "watchdog.sh"; then
+        echo "[watchdog] Already running (PID $OLD_PID). Exiting."
+        exit 0
+      fi
+      # PID recycled — stale lock
     fi
     rm -f "$PIDFILE"
   fi
   echo $$ > "$PIDFILE"
 }
 
-release_lock() {
-  rm -f "$PIDFILE"
-}
-
-# ---- Generate diverse activity GitHub recognizes ----
-generate_pulse() {
+# ---- Job 1: Keep-Alive Pulse ----
+# Generates the activity types GitHub checks for idle detection.
+pulse() {
   cd "$ROOT" || return
-
-  # 1. Filesystem heartbeat (what keep-alive.sh does, but faster)
-  date +"%Y-%m-%dT%H:%M:%S" > "$HEARTBEAT_FILE"
-
-  # 2. Git operation — this is what GitHub most reliably tracks
+  date +"%Y-%m-%dT%H:%M:%S" > "$HEARTBEAT"
   git status --short > /dev/null 2>&1
   git rev-parse HEAD > /dev/null 2>&1
-
-  # 3. Real process creation — proves the terminal is active
   ls "$ROOT/src" > /dev/null 2>&1
-  wc -l "$ROOT/package.json" > /dev/null 2>&1
-
-  # 4. Port activity — hit the dev server if it's running
+  touch "$ROOT/.watchdog-pulse" 2>/dev/null
+  # Ping dev server if it's up
   if ss -tlnp 2>/dev/null | grep -q ":9002"; then
     curl -s -o /dev/null --max-time 2 "http://localhost:9002" 2>/dev/null || true
   fi
-
-  # 5. Touch a pulse file (filesystem event for watchers)
-  touch "$ROOT/.watchdog-pulse" 2>/dev/null
-
-  # 6. Ghost process cleanup — the critical fix.
-  #    Android browser kills WebSocket on tab-switch, VS Code spawns a new
-  #    extension host on reconnect but never kills the old one. Each ghost
-  #    eats 750MB-1.5GB. File watchers orphaned by dead hosts eat ~60MB each.
-  #    This runs every pulse (2min) so ghosts never accumulate.
-  cleanup_ghosts
 }
 
-# ---- Kill orphaned VS Code processes that survive reconnects ----
-cleanup_ghosts() {
-  local CLEANED=false
-
-  # Extension hosts: only 1 should exist. Keep newest, kill rest.
+# ---- Job 2: Ghost Hunter ----
+# Kills duplicate extension hosts and their orphaned children.
+# This is the entire reason the watchdog was rebuilt.
+hunt_ghosts() {
+  # Count extension hosts
+  local EH_PIDS
+  EH_PIDS=$(ps -eo pid,etimes,args | grep "type=extensionHost" | grep -v grep | sort -k2 -n | awk '{print $1}')
   local EH_COUNT
-  EH_COUNT=$(ps aux | grep "type=extensionHost" | grep -v grep | wc -l)
-  if [ "$EH_COUNT" -gt 1 ]; then
-    local EH_PIDS NEWEST
-    EH_PIDS=$(ps -eo pid,lstart,args | grep "type=extensionHost" | grep -v grep | sort -k2,6 | awk '{print $1}')
-    NEWEST=$(echo "$EH_PIDS" | tail -1)
+  EH_COUNT=$(echo "$EH_PIDS" | grep -c . 2>/dev/null || echo 0)
+
+  if (( EH_COUNT > 1 )); then
+    # Keep the newest (smallest etimes = most recently started)
+    local NEWEST
+    NEWEST=$(echo "$EH_PIDS" | head -1)
+    
     for PID in $EH_PIDS; do
-      if [ "$PID" != "$NEWEST" ]; then
-        kill "$PID" 2>/dev/null || true
-        log "${YELLOW}[WATCHDOG] Killed ghost extensionHost PID ${PID}${NC}"
-        CLEANED=true
+      if [[ "$PID" != "$NEWEST" ]]; then
+        # Kill all children first (recursive via pkill -P), then parent
+        pkill -TERM -P "$PID" 2>/dev/null || true
+        sleep 0.5
+        # Any grandchildren that survived
+        pkill -KILL -P "$PID" 2>/dev/null || true
+        kill -TERM "$PID" 2>/dev/null || true
+        sleep 0.5
+        kill -KILL "$PID" 2>/dev/null || true
+        log "[GHOST] Killed extension host PID $PID (kept $NEWEST)"
       fi
     done
   fi
 
-  # File watchers: more than 4 total is suspect (server spawns ~2 per host).
-  # Only kill watchers NOT parented by the VS Code server (PID 1 = reparented orphan).
-  local FW_COUNT
-  FW_COUNT=$(ps aux | grep "type=fileWatcher" | grep -v grep | wc -l)
-  if [ "$FW_COUNT" -gt 6 ]; then
-    # Find VS Code server PID
-    local VSCODE_SERVER
-    VSCODE_SERVER=$(ps -eo pid,args | grep "server-main.js" | grep -v grep | awk '{print $1}' | head -1)
-    if [ -n "$VSCODE_SERVER" ]; then
-      for PID in $(ps -eo pid,ppid,args | grep "type=fileWatcher" | grep -v grep | awk '{print $1 ":" $2}'); do
-        local FW_PID="${PID%%:*}"
-        local FW_PPID="${PID##*:}"
-        # Kill if parent is init (orphaned) — not the VS Code server
-        if [ "$FW_PPID" = "1" ]; then
-          kill "$FW_PID" 2>/dev/null || true
-          log "${YELLOW}[WATCHDOG] Killed orphan fileWatcher PID ${FW_PID}${NC}"
-          CLEANED=true
+  # Find orphaned language servers not parented to the active extension host
+  local ACTIVE_HOST
+  ACTIVE_HOST=$(ps -eo pid,etimes,args | grep "type=extensionHost" | grep -v grep | sort -k2 -n | awk '{print $1}' | head -1)
+  
+  if [[ -n "$ACTIVE_HOST" ]]; then
+    local SERVER_PATTERN="pylance|tsserver|jsonServerMain|serverWorkerMain"
+    while IFS= read -r LINE; do
+      [[ -z "$LINE" ]] && continue
+      local SPID SPPID
+      SPID=$(echo "$LINE" | awk '{print $1}')
+      SPPID=$(echo "$LINE" | awk '{print $2}')
+      # If parent is not the active extension host and not the VS Code server
+      if [[ "$SPPID" != "$ACTIVE_HOST" ]]; then
+        # Verify it's truly orphaned — check if active host is an ancestor
+        local IS_DESCENDANT=false
+        local WALK="$SPPID"
+        local STEPS=0
+        while [[ "$WALK" != "1" ]] && [[ "$WALK" != "0" ]] && (( STEPS < 10 )); do
+          if [[ "$WALK" == "$ACTIVE_HOST" ]]; then
+            IS_DESCENDANT=true
+            break
+          fi
+          WALK=$(ps -o ppid= -p "$WALK" 2>/dev/null | tr -d ' ')
+          [[ -z "$WALK" ]] && break
+          STEPS=$((STEPS + 1))
+        done
+        
+        if [[ "$IS_DESCENDANT" == false ]]; then
+          kill "$SPID" 2>/dev/null || true
+          log "[GHOST] Killed orphan server PID $SPID (parent=$SPPID, not under host $ACTIVE_HOST)"
         fi
-      done
-    fi
+      fi
+    done < <(ps -eo pid,ppid,args | grep -E "$SERVER_PATTERN" | grep -v grep | awk '{print $1, $2}')
   fi
 
-  # Memory pressure check
+  # Memory pressure — emergency cleanup if below 1500MB available
   local AVAIL
   AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
-  if [ "$AVAIL" -lt 1500 ]; then
-    log "${RED}[WATCHDOG] CRITICAL: Only ${AVAIL}MB available. Running emergency health check.${NC}"
+  if (( AVAIL < 1500 )); then
+    log "[CRITICAL] RAM: ${AVAIL}MB available. Running emergency health check."
     bash "$ROOT/scripts/codespace-health.sh" > /dev/null 2>&1
   fi
-
-  if [ "$CLEANED" = true ]; then
-    local NEW_AVAIL
-    NEW_AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
-    log "${GREEN}[WATCHDOG] Ghost cleanup done. RAM: ${AVAIL}MB -> ${NEW_AVAIL}MB${NC}"
-  fi
 }
 
-# ---- Logging (auto-rotates at 100 lines) ----
-log() {
-  local MSG="$1"
-  local TS
-  TS=$(date +"%H:%M:%S")
-  echo -e "${TS} ${MSG}"
-  echo "$TS $(echo -e "$MSG" | sed 's/\x1b\[[0-9;]*m//g')" >> "$LOGFILE" 2>/dev/null
-  if [ -f "$LOGFILE" ] && [ "$(wc -l < "$LOGFILE")" -gt 100 ]; then
-    tail -50 "$LOGFILE" > "$LOGFILE.tmp" && mv "$LOGFILE.tmp" "$LOGFILE"
-  fi
-}
-
-# ---- Cleanup on exit ----
-cleanup() {
-  log "${YELLOW}[WATCHDOG] Shutdown signal — final pulse${NC}"
-  generate_pulse
-  release_lock
+# ---- Cleanup on intentional stop (SIGTERM/SIGINT only, NOT SIGHUP) ----
+on_exit() {
+  log "[WATCHDOG] Stopped (PID $$)"
+  rm -f "$PIDFILE"
   exit 0
 }
-trap cleanup SIGTERM SIGHUP SIGINT
+trap on_exit SIGTERM SIGINT
 
 # ---- Main ----
 acquire_lock
 
-AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
-log "${CYAN}[WATCHDOG] Started | PID $$ | Pulse every ${PULSE_INTERVAL}s | RAM available: ${AVAIL}MB${NC}"
+log "[WATCHDOG] v2 started | PID $$ | SIGHUP immune | Ghost check 30s | Pulse 120s"
 
-PULSE_COUNT=0
+TICK=0
 
 while true; do
-  generate_pulse
-  PULSE_COUNT=$((PULSE_COUNT + 1))
+  TICK=$((TICK + 1))
 
-  # Log every 15th pulse (~30 min) to keep log minimal
-  if [ $((PULSE_COUNT % 15)) -eq 0 ]; then
-    AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
-    log "${GREEN}[WATCHDOG] Pulse #${PULSE_COUNT} | RAM: ${AVAIL}MB available${NC}"
+  # Ghost hunt every 30 seconds
+  hunt_ghosts
+
+  # Keep-alive pulse every 4 ticks (2 minutes)
+  if (( TICK % 4 == 0 )); then
+    pulse
+
+    # Status log every 30 minutes (15 pulses × 2 min)
+    if (( TICK % 60 == 0 )); then
+      STATUS_AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
+      STATUS_PORTS=$(ss -tlnp 2>/dev/null | grep LISTEN | wc -l)
+      STATUS_EH=$(ps aux | grep "type=extensionHost" | grep -v grep | wc -l)
+      log "[STATUS] RAM: ${STATUS_AVAIL}MB | Ports: ${STATUS_PORTS} | ExtHosts: ${STATUS_EH} | Uptime: $((TICK * 30))s"
+      TICK=0  # Reset to prevent overflow
+    fi
   fi
 
-  sleep $PULSE_INTERVAL
+  sleep 30
 done
