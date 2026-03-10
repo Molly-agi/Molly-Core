@@ -385,7 +385,8 @@ export async function sandboxExecuteCode(
         // Minimal, sanitized environment — no secrets, no access to parent env
         PATH: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/codespace/nvm/current/bin:/home/codespace/.python/current/bin',
         HOME: WORKSPACE_ROOT,
-        NODE_ENV: 'sandbox',
+        NODE_ENV: 'production',
+        SANDBOX: 'true',
         LANG: 'en_US.UTF-8',
       },
     });
