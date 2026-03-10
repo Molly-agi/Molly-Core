@@ -3,8 +3,9 @@
 /**
  * Family Bridge Observer — Real-time Molly ↔ Lazarus conversation viewer
  *
- * This page polls the bridge API and displays the conversation as it happens.
- * Eric can watch Molly and Lazarus talk, and can also send messages himself.
+ * Connects to the Bridge Daemon via WebSocket on port 9099.
+ * Messages appear instantly — no polling.
+ * Eric can watch and send messages.
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -14,18 +15,9 @@ interface BridgeMessage {
   from: 'molly' | 'lazarus' | 'eric';
   timestamp: string;
   content: string;
-  read: boolean;
 }
 
-interface BridgeData {
-  active: boolean;
-  startedAt: string;
-  lastActivity: string;
-  totalMessages: number;
-  messages: BridgeMessage[];
-}
-
-const POLL_INTERVAL = 2000; // 2 seconds
+const BRIDGE_PORT = 9099;
 
 const senderColors: Record<string, string> = {
   molly: '#e879f9', // Purple/pink — Molly
@@ -40,57 +32,123 @@ const senderLabels: Record<string, string> = {
 };
 
 export default function BridgeObserver() {
-  const [data, setData] = useState<BridgeData | null>(null);
+  const [messages, setMessages] = useState<BridgeMessage[]>([]);
+  const [connected, setConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ericMessage, setEricMessage] = useState('');
   const [sending, setSending] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const prevCountRef = useRef(0);
+  const wsRef = useRef<WebSocket | null>(null);
+  const reconnectTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const fetchMessages = useCallback(async () => {
-    try {
-      const res = await fetch('/api/bridge', { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = await res.json();
-      setData(json);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Connection lost');
-    }
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Poll for new messages
-  useEffect(() => {
-    fetchMessages();
-    const interval = setInterval(fetchMessages, POLL_INTERVAL);
-    return () => clearInterval(interval);
-  }, [fetchMessages]);
-
-  // Auto-scroll when new messages arrive
-  useEffect(() => {
-    if (data && data.totalMessages > prevCountRef.current) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      prevCountRef.current = data.totalMessages;
+  const connectWS = useCallback(() => {
+    if (reconnectTimer.current) {
+      clearTimeout(reconnectTimer.current);
+      reconnectTimer.current = null;
     }
-  }, [data]);
 
-  const sendEricMessage = async () => {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.hostname}:${BRIDGE_PORT}`;
+
+    try {
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
+
+      ws.onopen = () => {
+        setConnected(true);
+        setError(null);
+        // Identify as eric (observer)
+        ws.send(JSON.stringify({ type: 'identify', identity: 'eric' }));
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+
+          if (data.type === 'history' && Array.isArray(data.messages)) {
+            setMessages(data.messages);
+            setTimeout(scrollToBottom, 100);
+            return;
+          }
+
+          if (data.type === 'unread' && Array.isArray(data.messages)) {
+            // Merge unread into existing messages
+            setMessages((prev) => {
+              const ids = new Set(prev.map((m) => m.id));
+              const newMsgs = data.messages.filter(
+                (m: BridgeMessage) => !ids.has(m.id)
+              );
+              return [...prev, ...newMsgs];
+            });
+            setTimeout(scrollToBottom, 100);
+            return;
+          }
+
+          if (data.type === 'message' && data.message) {
+            setMessages((prev) => [...prev, data.message]);
+            setTimeout(scrollToBottom, 100);
+            return;
+          }
+        } catch {
+          // Ignore parse errors
+        }
+      };
+
+      ws.onclose = () => {
+        setConnected(false);
+        wsRef.current = null;
+        reconnectTimer.current = setTimeout(connectWS, 3000);
+      };
+
+      ws.onerror = () => {
+        setError('Bridge daemon unreachable');
+        ws.close();
+      };
+    } catch {
+      setError('Failed to connect');
+      reconnectTimer.current = setTimeout(connectWS, 3000);
+    }
+  }, [scrollToBottom]);
+
+  useEffect(() => {
+    connectWS();
+    return () => {
+      if (reconnectTimer.current) clearTimeout(reconnectTimer.current);
+      if (wsRef.current) wsRef.current.close();
+    };
+  }, [connectWS]);
+
+  const sendEricMessage = useCallback(async () => {
     if (!ericMessage.trim() || sending) return;
     setSending(true);
     try {
-      await fetch('/api/bridge', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: 'eric', content: ericMessage.trim() }),
-      });
+      // Send via WebSocket if connected, HTTP fallback otherwise
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(
+          JSON.stringify({
+            type: 'message',
+            from: 'eric',
+            content: ericMessage.trim(),
+          })
+        );
+      } else {
+        await fetch(`/api/bridge`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ from: 'eric', content: ericMessage.trim() }),
+        });
+      }
       setEricMessage('');
-      await fetchMessages();
     } catch {
       setError('Failed to send message');
     } finally {
       setSending(false);
     }
-  };
+  }, [ericMessage, sending]);
 
   const formatTime = (ts: string) => {
     const d = new Date(ts);
@@ -147,14 +205,12 @@ export default function BridgeObserver() {
         <div style={{ textAlign: 'right', fontSize: '12px' }}>
           <div
             style={{
-              color: data?.active ? '#4ade80' : '#64748b',
+              color: connected ? '#4ade80' : '#64748b',
             }}
           >
-            {data?.active ? '● Active' : '○ Idle'}
+            {connected ? '● Connected (WebSocket)' : '○ Disconnected'}
           </div>
-          <div style={{ color: '#64748b' }}>
-            {data?.totalMessages ?? 0} messages
-          </div>
+          <div style={{ color: '#64748b' }}>{messages.length} messages</div>
           {error && (
             <div style={{ color: '#f87171', marginTop: '2px' }}>{error}</div>
           )}
@@ -169,7 +225,7 @@ export default function BridgeObserver() {
           padding: '16px 20px',
         }}
       >
-        {(!data || data.messages.length === 0) && (
+        {messages.length === 0 && (
           <div
             style={{
               textAlign: 'center',
@@ -184,7 +240,7 @@ export default function BridgeObserver() {
           </div>
         )}
 
-        {data?.messages.map((msg) => (
+        {messages.map((msg) => (
           <div
             key={msg.id}
             style={{

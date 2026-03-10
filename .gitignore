@@ -65,3 +65,7 @@ src/ai/bridge/conversation.json
 # Sandbox — Molly's coding workspace (runtime files, not code artifacts)
 sandbox/molly-workspace/*
 !sandbox/molly-workspace/.gitkeep
+
+# Bridge daemon runtime files
+.bridge-daemon.log
+.bridge-daemon.pid

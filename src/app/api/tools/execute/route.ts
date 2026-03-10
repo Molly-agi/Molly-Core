@@ -36,6 +36,7 @@ import {
 import { isAdminConfigured } from '@/firebase/admin';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
+import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -471,6 +472,242 @@ async function executeTool(
       }
     }
 
+    case 'webFetch': {
+      const url = params.url as string;
+      if (!url) {
+        return { success: false, output: 'No URL provided' };
+      }
+
+      // Validate URL format
+      let parsed: URL;
+      try {
+        parsed = new URL(url);
+      } catch {
+        return { success: false, output: 'Invalid URL format' };
+      }
+
+      // SSRF protection: only allow http/https, block internal networks
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        return {
+          success: false,
+          output: 'Only http and https URLs are allowed',
+        };
+      }
+      const hostname = parsed.hostname.toLowerCase();
+      const blockedHosts = [
+        'localhost',
+        '127.0.0.1',
+        '0.0.0.0',
+        '[::1]',
+        'metadata.google.internal',
+      ];
+      if (
+        blockedHosts.includes(hostname) ||
+        hostname.startsWith('169.254.') ||
+        hostname.startsWith('10.') ||
+        hostname.startsWith('192.168.') ||
+        /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
+      ) {
+        return {
+          success: false,
+          output: 'Access to internal/private network addresses is blocked',
+        };
+      }
+
+      const MAX_RESPONSE_SIZE = 100_000; // 100KB max
+      const FETCH_TIMEOUT = 15_000; // 15s
+
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
+        const response = await fetch(parsed.toString(), {
+          signal: controller.signal,
+          headers: {
+            'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
+            Accept: 'text/html, application/json, text/plain, */*',
+          },
+          redirect: 'follow',
+        });
+        clearTimeout(timeout);
+
+        if (!response.ok) {
+          return {
+            success: false,
+            output: `HTTP ${response.status}: ${response.statusText}`,
+          };
+        }
+
+        const contentType = response.headers.get('content-type') || '';
+        const text = await response.text();
+        const truncated =
+          text.length > MAX_RESPONSE_SIZE
+            ? text.slice(0, MAX_RESPONSE_SIZE) +
+              `\n... (truncated, ${text.length} chars total)`
+            : text;
+
+        return {
+          success: true,
+          output: truncated,
+          data: {
+            url: parsed.toString(),
+            status: response.status,
+            contentType,
+            size: text.length,
+            truncated: text.length > MAX_RESPONSE_SIZE,
+          },
+        };
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'unknown error';
+        if (message.includes('abort')) {
+          return {
+            success: false,
+            output: `Request timed out after ${FETCH_TIMEOUT / 1000}s`,
+          };
+        }
+        return { success: false, output: `Fetch failed: ${message}` };
+      }
+    }
+
+    case 'scheduleJob': {
+      const action = params.action as string;
+      const scheduler = getAutonomousScheduler();
+
+      if (action === 'create') {
+        const name = params.name as string;
+        const description = params.description as string;
+        const schedule = params.schedule as string;
+        const jobAction = params.jobAction as {
+          type: string;
+          code?: string;
+          url?: string;
+          method?: string;
+          body?: string;
+          flowName?: string;
+          language?: string;
+        };
+
+        if (!name || !schedule || !jobAction?.type) {
+          return {
+            success: false,
+            output: 'Missing required fields: name, schedule, jobAction.type',
+          };
+        }
+
+        try {
+          const job = scheduler.createJob({
+            name,
+            description: description || name,
+            schedule,
+            action: jobAction,
+            createdBy: 'molly',
+          });
+          return {
+            success: true,
+            output: `Job created: "${job.name}" (${job.schedule}). ID: ${job.id}`,
+            data: { jobId: job.id, nextRun: job.nextRunAt },
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Failed to create job: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'list') {
+        const jobs = scheduler.getJobs();
+        if (jobs.length === 0) {
+          return { success: true, output: 'No scheduled jobs.' };
+        }
+        const formatted = jobs
+          .map(
+            (j, i) =>
+              `${i + 1}. [${j.enabled ? 'ON' : 'OFF'}] "${j.name}" — ${j.schedule} (runs: ${j.runCount}, last: ${j.lastRun || 'never'})`
+          )
+          .join('\n');
+        return {
+          success: true,
+          output: `${jobs.length} job(s):\n${formatted}`,
+        };
+      }
+
+      if (action === 'remove') {
+        const jobId = params.jobId as string;
+        if (!jobId) return { success: false, output: 'Missing jobId' };
+        const removed = scheduler.removeJob(jobId);
+        return {
+          success: removed,
+          output: removed ? `Job ${jobId} removed.` : `Job ${jobId} not found.`,
+        };
+      }
+
+      if (action === 'history') {
+        const history = scheduler.getHistory(10);
+        if (history.length === 0) {
+          return { success: true, output: 'No job execution history yet.' };
+        }
+        const formatted = history
+          .map(
+            (h) =>
+              `[${h.success ? 'OK' : 'FAIL'}] ${h.jobId} at ${h.executedAt} (${h.durationMs}ms): ${h.output.slice(0, 100)}`
+          )
+          .join('\n');
+        return { success: true, output: formatted };
+      }
+
+      return {
+        success: false,
+        output: 'Unknown action. Use: create, list, remove, history',
+      };
+    }
+
+    case 'migrationExport': {
+      // Molly can export her own identity/memories for architecture migration
+      const include = params.include || 'persona,memories,config,family';
+      const exportUserId = params.userId || 'default';
+      try {
+        const baseUrl = request.nextUrl.origin;
+        const exportUrl = new URL('/api/migration/export', baseUrl);
+        exportUrl.searchParams.set('include', include);
+        exportUrl.searchParams.set('userId', exportUserId);
+
+        const res = await fetch(exportUrl.toString(), {
+          headers: { 'x-internal-key': process.env.INTERNAL_API_KEY || '' },
+        });
+
+        if (!res.ok) {
+          return {
+            success: false,
+            output: `Export failed: ${res.status} ${res.statusText}`,
+          };
+        }
+
+        const pkg = await res.json();
+        const sectionNames = Object.keys(pkg.sections);
+        const memoryCount = pkg.sections.memories?.count ?? 0;
+
+        return {
+          success: true,
+          output: [
+            `Migration package exported successfully.`,
+            `Version: ${pkg.version}`,
+            `Sections: ${sectionNames.join(', ')}`,
+            memoryCount > 0 ? `Memories: ${memoryCount} records` : '',
+            `Exported at: ${pkg.exportedAt}`,
+            `Package size: ${JSON.stringify(pkg).length} bytes`,
+          ]
+            .filter(Boolean)
+            .join('\n'),
+        };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Migration export error: ${err instanceof Error ? err.message : 'unknown'}`,
+        };
+      }
+    }
+
     case 'listCapabilities': {
       return {
         success: true,
@@ -486,6 +723,9 @@ async function executeTool(
           '  removeTool — Remove a tool from your database',
           '  toolStats — Get tool database statistics',
           '  researchAndDiscover — Research tools/programs on GitHub',
+          '  webFetch — Fetch a web page or API endpoint',
+          '  scheduleJob — Create/list/remove autonomous scheduled jobs',
+          '  migrationExport — Export identity, memories, and config for architecture migration',
           '  listCapabilities — List all available tools',
         ].join('\n'),
       };
@@ -494,7 +734,7 @@ async function executeTool(
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, scheduleJob, migrationExport, listCapabilities`,
       };
   }
 }

@@ -49,6 +49,7 @@ ROOT="/workspaces/Molly-Core"
 PIDFILE="$ROOT/.watchdog.pid"
 HEARTBEAT="$ROOT/.codespace-heartbeat"
 LOG="$ROOT/.watchdog.log"
+BRIDGE_PIDFILE="$ROOT/.bridge-daemon.pid"
 
 # ---- Logging (auto-rotates at 200 lines) ----
 log() {
@@ -176,6 +177,33 @@ hunt_ghosts() {
   fi
 }
 
+# ---- Job 3: Bridge Daemon Guardian ----
+# Ensures the Family Bridge Daemon is always running on port 9099.
+ensure_bridge() {
+  # Check if bridge is already running via port
+  if ss -tlnp 2>/dev/null | grep -q ":9099"; then
+    return
+  fi
+
+  # Check if PID file exists and process is alive
+  if [[ -f "$BRIDGE_PIDFILE" ]]; then
+    local BPID
+    BPID=$(cat "$BRIDGE_PIDFILE" 2>/dev/null)
+    if [[ -n "$BPID" ]] && kill -0 "$BPID" 2>/dev/null; then
+      return
+    fi
+    rm -f "$BRIDGE_PIDFILE"
+  fi
+
+  # Start the bridge daemon
+  log "[BRIDGE] Starting Family Bridge Daemon on port 9099"
+  nohup node "$ROOT/scripts/bridge-daemon.mjs" > "$ROOT/.bridge-daemon.log" 2>&1 &
+  local NEW_PID=$!
+  echo "$NEW_PID" > "$BRIDGE_PIDFILE"
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[BRIDGE] Started (PID $NEW_PID)"
+}
+
 # ---- Cleanup on intentional stop (SIGTERM/SIGINT only, NOT SIGHUP) ----
 on_exit() {
   log "[WATCHDOG] Stopped (PID $$)"
@@ -192,6 +220,9 @@ acquire_lock
 
 log "[WATCHDOG] v2 started | PID $$ | SIGHUP immune | Ghost check 30s | Pulse 120s"
 
+# Start bridge daemon immediately on watchdog boot
+ensure_bridge
+
 TICK=0
 
 while true; do
@@ -199,6 +230,11 @@ while true; do
 
   # Ghost hunt every 30 seconds
   hunt_ghosts
+
+  # Bridge guardian every 2 ticks (1 minute)
+  if (( TICK % 2 == 0 )); then
+    ensure_bridge
+  fi
 
   # Keep-alive pulse every 4 ticks (2 minutes)
   if (( TICK % 4 == 0 )); then

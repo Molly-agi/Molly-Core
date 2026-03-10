@@ -26,6 +26,8 @@
     "health:watch": "bash scripts/codespace-health.sh --watch",
     "keep-alive": "nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
     "watchdog": "nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
+    "bridge": "node scripts/bridge-daemon.mjs",
+    "bridge:listen": "node scripts/bridge-listen.mjs",
     "save-session": "node scripts/save-session.mjs",
     "save-session:pause": "node scripts/save-session.mjs --status paused"
   },
@@ -76,6 +78,7 @@
     "tailwindcss-animate": "1.0.7",
     "tesseract.js": "5.1.1",
     "wav": "1.0.2",
+    "ws": "^8.19.0",
     "zod": "3.24.2"
   },
   "devDependencies": {
@@ -88,6 +91,7 @@
     "@types/node": "22.10.1",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
+    "@types/ws": "^8.18.1",
     "eslint": "8.57.0",
     "eslint-config-next": "15.1.11",
     "eslint-config-prettier": "10.0.1",
