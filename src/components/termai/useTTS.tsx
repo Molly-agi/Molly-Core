@@ -114,6 +114,16 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
   const speakResponse = useCallback(
     async (text: string) => {
       if (!isVocal || !text || isVocalizingRef.current) return;
+
+      // Guard: cap spoken text to ~2000 chars (~300 words / ~2 min speech).
+      // Prevents runaway vocalization from long responses (e.g. file recitation).
+      const MAX_SPEAK_CHARS = 2000;
+      const spokenText =
+        text.length > MAX_SPEAK_CHARS
+          ? text.substring(0, MAX_SPEAK_CHARS) +
+            '... I wrote more in the chat window, but I will stop talking here so I do not ramble.'
+          : text;
+
       isVocalizingRef.current = true;
       setIsVocalizing(true);
       cancelledRef.current = false;
@@ -123,7 +133,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
         if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
           // Split text into sentence-sized chunks to avoid Chrome's
           // long-utterance bug (silently stops after ~15s).
-          const chunks = splitIntoChunks(text);
+          const chunks = splitIntoChunks(spokenText);
 
           for (const chunk of chunks) {
             if (cancelledRef.current) break;
@@ -223,7 +233,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
         }
 
         // Fallback: server TTS (Gemini) — only if browser TTS unavailable
-        const voiceResponse = await getMollyVoice(text);
+        const voiceResponse = await getMollyVoice(spokenText);
         if (!voiceResponse.audioUri) {
           console.warn('Vocal cords returned no audio:', voiceResponse.error);
           isVocalizingRef.current = false;
