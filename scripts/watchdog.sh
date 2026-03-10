@@ -106,9 +106,11 @@ pulse() {
 hunt_ghosts() {
   # Count extension hosts
   local EH_PIDS
-  EH_PIDS=$(ps -eo pid,etimes,args | grep "type=extensionHost" | grep -v grep | sort -k2 -n | awk '{print $1}')
-  local EH_COUNT
-  EH_COUNT=$(echo "$EH_PIDS" | grep -c . 2>/dev/null || echo 0)
+  EH_PIDS=$(ps -eo pid,etimes,args | grep "type=extensionHost" | grep -v grep | sort -k2 -n | awk '{print $1}') || true
+  local EH_COUNT=0
+  if [[ -n "$EH_PIDS" ]]; then
+    EH_COUNT=$(echo "$EH_PIDS" | wc -l)
+  fi
 
   if (( EH_COUNT > 1 )); then
     # Keep the newest (smallest etimes = most recently started)
@@ -177,7 +179,10 @@ hunt_ghosts() {
 # ---- Cleanup on intentional stop (SIGTERM/SIGINT only, NOT SIGHUP) ----
 on_exit() {
   log "[WATCHDOG] Stopped (PID $$)"
-  rm -f "$PIDFILE"
+  # Only delete the PID file if it's ours — don't clobber a replacement instance
+  if [[ -f "$PIDFILE" ]] && [[ "$(cat "$PIDFILE" 2>/dev/null)" == "$$" ]]; then
+    rm -f "$PIDFILE"
+  fi
   exit 0
 }
 trap on_exit SIGTERM SIGINT
