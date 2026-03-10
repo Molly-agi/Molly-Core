@@ -65,6 +65,7 @@ import {
 import {
   withTimeout,
   withRetry,
+  withTimeoutAndRetry,
   TIMEOUT_PRESETS,
   RETRY_PRESETS,
 } from '@/ai/tools/timeout-retry';
@@ -1017,7 +1018,7 @@ export async function getConversationalChat(
 
     const memoryContext = await buildMemoryContext(userId, text);
     const startTime = Date.now();
-    const response = await withRetry(
+    const response = await withTimeoutAndRetry(
       () =>
         conversationalChat({
           text,
@@ -1031,6 +1032,7 @@ export async function getConversationalChat(
           memoryContext,
         }),
       'conversational-chat',
+      TIMEOUT_PRESETS.LONG,
       RETRY_PRESETS.FAST
     );
     setLastLatencyMs(latencyKey, Date.now() - startTime);

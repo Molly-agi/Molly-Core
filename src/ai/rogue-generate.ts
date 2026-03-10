@@ -18,6 +18,10 @@
 import { ai } from './genkit-core';
 import { TaskType, getModelRouter } from './model-router';
 import { MollyLogger, generateTraceId } from './logger';
+import { TimeoutError } from './errors';
+
+/** Maximum time (ms) any single LLM call may take before we abort it */
+const LLM_TIMEOUT_MS = 60_000;
 
 /**
  * Options for molly.generate() — same as ai.generate() but without `model`
@@ -78,12 +82,28 @@ export const molly = {
       }
     );
 
+    let llmTimer: ReturnType<typeof setTimeout> | undefined;
     try {
-      // Call Genkit's ai.generate() with the routed model
-      const response = await ai.generate({
-        ...options,
-        model: modelString,
-      } as Record<string, unknown>);
+      // Call Genkit's ai.generate() with the routed model — guarded by timeout
+      const response = await Promise.race([
+        ai.generate({
+          ...options,
+          model: modelString,
+        } as Record<string, unknown>),
+        new Promise<never>((_, reject) => {
+          llmTimer = setTimeout(
+            () =>
+              reject(
+                new TimeoutError('molly.generate', LLM_TIMEOUT_MS, {
+                  taskType,
+                  provider: provider.id,
+                })
+              ),
+            LLM_TIMEOUT_MS
+          );
+        }),
+      ]);
+      clearTimeout(llmTimer);
 
       // Report success to the router
       const responseMs = performance.now() - startTime;
@@ -102,6 +122,7 @@ export const molly = {
 
       return response;
     } catch (error) {
+      clearTimeout(llmTimer);
       const responseMs = performance.now() - startTime;
 
       // Report failure to the router
@@ -133,10 +154,27 @@ export const molly = {
             { traceId }
           );
 
-          const fallbackResponse = await ai.generate({
-            ...options,
-            model: fallbackDecision.modelString,
-          } as Record<string, unknown>);
+          let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
+          const fallbackResponse = await Promise.race([
+            ai.generate({
+              ...options,
+              model: fallbackDecision.modelString,
+            } as Record<string, unknown>),
+            new Promise<never>((_, reject) => {
+              fallbackTimer = setTimeout(
+                () =>
+                  reject(
+                    new TimeoutError(
+                      'molly.generate.fallback',
+                      LLM_TIMEOUT_MS,
+                      { taskType }
+                    )
+                  ),
+                LLM_TIMEOUT_MS
+              );
+            }),
+          ]);
+          clearTimeout(fallbackTimer);
 
           const totalMs = performance.now() - startTime;
           router.reportSuccess(

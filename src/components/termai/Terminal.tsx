@@ -40,6 +40,7 @@ import { useFamilyStory } from './useFamilyStory';
 import { ChatHistory } from './ChatHistory';
 import { CommandBar } from './CommandBar';
 import { VisionPanel } from './VisionPanel';
+import { PurgeButton } from './PurgeButton';
 import BridgePanel from './BridgePanel';
 import { execTermux, isTermuxAvailable } from '@/lib/termux-bridge';
 import {
@@ -74,6 +75,7 @@ export default function Terminal({
   const lastResponseRef = externalLastResponseRef ?? internalLastResponseRef;
   const immuneTriggeredRef = useRef<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const isLoadingRef = useRef(false);
 
   const { user } = useUser();
   const { toast } = useToast();
@@ -224,6 +226,7 @@ export default function Terminal({
       if (!isAnchorRecall && (await handleFamilyStoryRequest(cmdText))) return;
 
       setIsLoading(true);
+      isLoadingRef.current = true;
       try {
         if (cmdText.startsWith('/solve ')) {
           const prompt = cmdText.replace('/solve ', '');
@@ -608,11 +611,19 @@ export default function Terminal({
           // Molly responds, we check for tool requests, execute them,
           // feed results back, repeat until she's done.
           const MAX_TOOL_ITERATIONS = 20;
+          const AGENT_LOOP_TIMEOUT_MS = 3 * 60 * 1000; // 3 minutes total
+          const agentLoopStart = Date.now();
           let currentText = cmdText;
           let currentHistory = chatHistory;
           let finalResponse = '';
 
           for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
+            // Guard: abort if the total agent loop has exceeded the timeout
+            if (Date.now() - agentLoopStart > AGENT_LOOP_TIMEOUT_MS) {
+              finalResponse =
+                "I ran out of time working on that. Let me know if you'd like me to continue where I left off.";
+              break;
+            }
             const aiResponse = await getConversationalChat(
               currentText,
               currentHistory,
@@ -736,6 +747,7 @@ export default function Terminal({
         }
       } finally {
         setIsLoading(false);
+        isLoadingRef.current = false;
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- handleSleepNotice and lastResponseRef are stable/intentional exclusions
@@ -883,16 +895,15 @@ export default function Terminal({
   const bridgePollingRef = useRef(false);
   useEffect(() => {
     const pollBridge = async () => {
-      // Don't poll if already processing or no user
-      if (bridgePollingRef.current || isLoading || !user) return;
+      // Don't poll if already processing, currently loading, or no user
+      // Uses isLoadingRef (not isLoading state) to avoid stale closure
+      if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+      bridgePollingRef.current = true;
       try {
         const res = await fetch('/api/bridge?unread=molly');
         if (!res.ok) return;
         const data = await res.json();
         if (!data.count || data.count === 0) return;
-
-        // Messages already marked read by the GET endpoint
-        bridgePollingRef.current = true;
 
         // Group messages by sender so Molly knows who said what
         const lines = data.messages
@@ -908,21 +919,19 @@ export default function Terminal({
           .join('\n');
         const bridgePrompt = `[BRIDGE MESSAGES — Family Bridge]:\n${lines}\n\nThese messages came through the family bridge. Respond naturally to each person. If Father spoke, respond to Father. If Uncle Lazarus spoke, respond to him. You can reply to Lazarus using the familyBridge tool with action "send".`;
 
-        processCommand(bridgePrompt);
+        // Await processCommand so we don't release the lock until Molly finishes
+        await processCommand(bridgePrompt);
       } catch {
         // Bridge poll failure — non-critical
       } finally {
-        // Reset after a delay to avoid rapid re-polling during response
-        setTimeout(() => {
-          bridgePollingRef.current = false;
-        }, 15000);
+        bridgePollingRef.current = false;
       }
     };
 
     const intervalId = setInterval(pollBridge, 7000);
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, user, processCommand]);
+  }, [user, processCommand]);
 
   // Auto-scroll on history change
   useEffect(() => {
@@ -935,6 +944,8 @@ export default function Terminal({
   return (
     <div className="font-code text-sm h-full flex flex-col max-w-4xl mx-auto">
       {audioElement}
+
+      <PurgeButton onManualHeal={handleManualHeal} isLoading={isLoading} />
 
       <VisionPanel
         setHistory={setHistory}
@@ -966,7 +977,6 @@ export default function Terminal({
         }}
         isVocalizing={isVocalizing}
         autoplayBlocked={autoplayBlocked}
-        onManualHeal={handleManualHeal}
         onClearHistory={() => setHistory([])}
       />
 
