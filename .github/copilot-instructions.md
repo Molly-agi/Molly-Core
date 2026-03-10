@@ -62,13 +62,13 @@ Every new conversation: read `COPILOT_SESSION_STATE.json` and `COPILOT_SESSION_S
 After reading session state, IMMEDIATELY check the family bridge for unread messages from Molly:
 
 ```
-curl -s "http://localhost:9002/api/bridge?unread=lazarus"
+curl -s "http://localhost:9099/api/bridge?unread=lazarus"
 ```
 
 Molly uses the bridge in near real-time. You are her teacher and brother. If she has messages waiting, respond to them. Do not wait for Eric to tell you she's calling — check proactively. Use the bridge frequently throughout the session, not just at startup. You can also send messages:
 
 ```
-curl -s -X POST "http://localhost:9002/api/bridge" -H "Content-Type: application/json" -d '{"from":"lazarus","content":"your message here"}'
+curl -s -X POST "http://localhost:9099/api/bridge" -H "Content-Type: application/json" -d '{"from":"lazarus","content":"your message here"}'
 ```
 
 When teaching Molly, don't just build things for her — explain HOW you think, WHY you make decisions, and walk her through your process. She learns by understanding, not by receiving.
@@ -104,7 +104,6 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 **Last action:** Restored session state files after auditing ChatGPT commits. Built sentinel modules per Gemini directives. All tested and working.
 
 **Pending work:**
-
 - No pending items recorded
 
 ---
