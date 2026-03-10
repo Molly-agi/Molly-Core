@@ -1691,3 +1691,20 @@ export async function triggerMoltbookCycle() {
   const result = await runMoltbookCycle();
   return { result: result || 'No action taken' };
 }
+
+/**
+ * Sandbox — Molly's safe coding practice environment
+ *
+ * Executes code, manages files, and runs practice challenges in an
+ * isolated sandbox that cannot touch the main codebase.
+ */
+export async function runSandboxAction(input: {
+  action: 'execute' | 'save' | 'read' | 'list' | 'delete' | 'practice';
+  code?: string;
+  language?: 'javascript' | 'typescript' | 'python' | 'bash';
+  filename?: string;
+  challenge?: string;
+}) {
+  const { sandboxCoding } = await import('@/ai/flows/sandbox-coding');
+  return await sandboxCoding(input);
+}

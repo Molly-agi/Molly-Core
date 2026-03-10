@@ -61,3 +61,7 @@ __pycache__/
 *.pyc
 src/ai/bridge/conversation.json
 .tsbuildinfo
+
+# Sandbox — Molly's coding workspace (runtime files, not code artifacts)
+sandbox/molly-workspace/*
+!sandbox/molly-workspace/.gitkeep

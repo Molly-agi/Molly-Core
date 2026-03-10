@@ -121,3 +121,6 @@ export {
   getRecoveryStatus,
   setRecoveryMode,
 } from './ai-flows';
+
+// Sandbox — Molly's Safe Coding Playground
+export { runSandboxAction } from './ai-flows';
