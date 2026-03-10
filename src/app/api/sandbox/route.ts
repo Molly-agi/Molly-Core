@@ -17,6 +17,7 @@ import {
   sandboxDeleteFile,
   getSandboxInfo,
 } from '@/ai/sandbox/sandbox-engine';
+import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +39,10 @@ const VALID_ACTIONS = new Set<SandboxAction>([
 ]);
 
 export async function POST(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const body = await request.json();
     const { action } = body as { action: string };
@@ -120,7 +125,11 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   const info = await getSandboxInfo();
   return NextResponse.json(info);
 }

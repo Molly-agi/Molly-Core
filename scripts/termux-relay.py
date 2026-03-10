@@ -34,7 +34,9 @@ from urllib.parse import urlparse
 
 # --- Configuration ---
 PORT = int(os.environ.get('MOLLY_RELAY_PORT', '8023'))
-TOKEN = os.environ.get('MOLLY_RELAY_TOKEN', 'molly-local-dev')
+TOKEN = os.environ.get('MOLLY_RELAY_TOKEN', '')
+if not TOKEN:
+    print('WARNING: MOLLY_RELAY_TOKEN not set. Set it for production use.')
 MAX_OUTPUT = 64 * 1024  # 64KB max output
 COMMAND_TIMEOUT = 30     # seconds
 MAX_COMMAND_LENGTH = 4096

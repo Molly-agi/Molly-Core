@@ -7,31 +7,61 @@
  * and this route forwards the command.
  *
  * POST /api/termux/exec
- * Body: { command, language?, relayUrl?, token?, timeout? }
+ * Body: { command, language?, relayUrl?, timeout? }
  *
  * GET /api/termux/status
  * Query: ?relayUrl=...
+ *
+ * Protected by internal auth (MOLLY_INTERNAL_SECRET).
+ * relayUrl restricted to localhost to prevent SSRF.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 const DEFAULT_RELAY_URL = 'http://localhost:8023';
-const DEFAULT_TOKEN = 'molly-local-dev';
+
+/** Only allow relayUrl pointing to localhost to prevent SSRF */
+function isLocalhostUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname;
+    return (
+      host === 'localhost' ||
+      host === '127.0.0.1' ||
+      host === '::1' ||
+      host === '0.0.0.0'
+    );
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const body = await request.json();
     const {
       command,
       language = 'shell',
       relayUrl = DEFAULT_RELAY_URL,
-      token = DEFAULT_TOKEN,
+      token = process.env.MOLLY_RELAY_TOKEN || '',
       timeout = 30,
     } = body;
 
     if (!command || typeof command !== 'string') {
       return NextResponse.json(
         { error: 'No command provided' },
+        { status: 400 }
+      );
+    }
+
+    if (!isLocalhostUrl(relayUrl)) {
+      return NextResponse.json(
+        { error: 'relayUrl must point to localhost' },
         { status: 400 }
       );
     }
@@ -83,8 +113,19 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   const relayUrl =
     request.nextUrl.searchParams.get('relayUrl') || DEFAULT_RELAY_URL;
+
+  if (!isLocalhostUrl(relayUrl)) {
+    return NextResponse.json(
+      { error: 'relayUrl must point to localhost' },
+      { status: 400 }
+    );
+  }
 
   try {
     const controller = new AbortController();

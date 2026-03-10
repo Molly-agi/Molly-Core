@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
+import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,9 +36,14 @@ export async function GET(_request: NextRequest) {
 
 /**
  * POST /api/diagnostics/circuit-breaker - Reset all circuit breakers
+ * Protected — only Molly's frontend or admin can reset breakers.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function POST(_request: NextRequest) {
+export async function POST(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const breaker = getCircuitBreaker();
 

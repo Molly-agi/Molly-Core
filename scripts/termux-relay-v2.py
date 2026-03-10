@@ -46,7 +46,9 @@ from urllib.parse import urlparse
 
 # --- Configuration ---
 PORT = int(os.environ.get('MOLLY_RELAY_PORT', '8023'))
-TOKEN = os.environ.get('MOLLY_RELAY_TOKEN', 'molly-local-dev')
+TOKEN = os.environ.get('MOLLY_RELAY_TOKEN', '')
+if not TOKEN:
+    print('WARNING: MOLLY_RELAY_TOKEN not set. Set it for production use.')
 PEER_SECRET = os.environ.get('MOLLY_PEER_SECRET', '')
 MOLLY_URL = os.environ.get('MOLLY_CORE_URL', 'http://localhost:9002')
 PEER_NAME = os.environ.get('MOLLY_PEER_NAME', '')

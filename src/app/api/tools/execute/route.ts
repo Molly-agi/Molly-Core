@@ -35,6 +35,7 @@ import {
 } from '@/firebase/firestore/tool-database';
 import { isAdminConfigured } from '@/firebase/admin';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
+import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -499,6 +500,10 @@ async function executeTool(
 }
 
 export async function POST(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const body = await request.json();
     const { tool, params } = body;

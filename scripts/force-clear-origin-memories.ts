@@ -14,24 +14,22 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 
-// Firebase config from environment or hardcoded default
+// Firebase config from environment — no hardcoded fallbacks
 const firebaseConfig = {
-  apiKey:
-    process.env.NEXT_PUBLIC_FIREBASE_API_KEY ||
-    'AIzaSyDdyQP0EEaY6xz_1_ZdaT-UiYS1GyYqE8g',
-  authDomain:
-    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
-    'molly-core-fbasd.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'molly-core-fbasd',
-  storageBucket:
-    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
-    'molly-core-fbasd.firebasestorage.app',
-  messagingSenderId:
-    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '287710486746',
-  appId:
-    process.env.NEXT_PUBLIC_FIREBASE_APP_ID ||
-    '1:287710486746:web:5f52f02ca56a3d9f2a0acf',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || '',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
 };
+
+if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+  console.error(
+    '❌ Missing Firebase config. Set NEXT_PUBLIC_FIREBASE_* env vars.'
+  );
+  process.exit(1);
+}
 
 async function forceClearOriginMemories() {
   try {
