@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Trash2, Volume2, VolumeX, Shield, Zap, RefreshCw } from 'lucide-react';
+import { Trash2, Volume2, VolumeX, Shield, Zap } from 'lucide-react';
 
 interface CommandBarProps {
   command: string;
@@ -28,7 +28,6 @@ interface CommandBarProps {
   onToggleVocal: () => void;
   isVocalizing: boolean;
   autoplayBlocked: boolean;
-  onManualHeal: () => void;
   onClearHistory: () => void;
 }
 
@@ -44,21 +43,12 @@ export function CommandBar({
   onToggleVocal,
   isVocalizing,
   autoplayBlocked,
-  onManualHeal,
   onClearHistory,
 }: CommandBarProps) {
   return (
     <>
       <div className="flex flex-col gap-4 mb-4 bg-secondary/10 p-4 rounded-xl border border-white/5 backdrop-blur-sm">
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onManualHeal}
-            className="h-9 flex-1 gap-2 font-bold uppercase text-[11px] tracking-widest border-green-500/30 text-green-400"
-          >
-            <RefreshCw className="size-4" /> Manual Purge
-          </Button>
           <div className="flex items-center space-x-3 px-4">
             <Switch
               id="risk-mode"

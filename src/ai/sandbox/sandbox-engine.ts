@@ -462,3 +462,78 @@ export async function getSandboxInfo(): Promise<{
     fileCount: files.length,
   };
 }
+
+// ── Project Scaffolding ────────────────────────────────────────────────────
+
+export interface ScaffoldFile {
+  path: string;
+  content: string;
+}
+
+export interface ScaffoldResult {
+  success: boolean;
+  projectPath: string;
+  filesCreated: string[];
+  errors: string[];
+}
+
+/**
+ * Create a multi-file project in the sandbox in a single operation.
+ * Files are created inside a named project folder under the sandbox workspace.
+ */
+export async function sandboxScaffoldProject(
+  projectName: string,
+  files: ScaffoldFile[]
+): Promise<ScaffoldResult> {
+  const errors: string[] = [];
+  const filesCreated: string[] = [];
+
+  // Validate project name (alphanumeric, dashes, underscores only)
+  if (!/^[a-zA-Z0-9_-]+$/.test(projectName)) {
+    return {
+      success: false,
+      projectPath: projectName,
+      filesCreated: [],
+      errors: [
+        'Project name must be alphanumeric (dashes and underscores allowed)',
+      ],
+    };
+  }
+
+  if (files.length === 0) {
+    return {
+      success: false,
+      projectPath: projectName,
+      filesCreated: [],
+      errors: ['No files provided'],
+    };
+  }
+
+  if (files.length > MAX_FILES_IN_WORKSPACE) {
+    return {
+      success: false,
+      projectPath: projectName,
+      filesCreated: [],
+      errors: [
+        `Too many files: ${files.length} exceeds limit of ${MAX_FILES_IN_WORKSPACE}`,
+      ],
+    };
+  }
+
+  for (const file of files) {
+    const relativePath = `${projectName}/${file.path}`;
+    const result = await sandboxWriteFile(relativePath, file.content);
+    if (result.success) {
+      filesCreated.push(relativePath);
+    } else {
+      errors.push(`${file.path}: ${result.error}`);
+    }
+  }
+
+  return {
+    success: errors.length === 0,
+    projectPath: projectName,
+    filesCreated,
+    errors,
+  };
+}

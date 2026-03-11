@@ -37,11 +37,61 @@ import { isAdminConfigured } from '@/firebase/admin';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
+import {
+  getInitiatives,
+  getActiveInitiatives,
+  activateInitiative,
+  createCustomInitiative,
+  recordInitiativeExecution,
+  deactivateInitiative,
+  removeInitiative,
+  listTemplates,
+  type Initiative,
+} from '@/ai/agency/initiative-engine';
+import {
+  sandboxExecuteCode,
+  sandboxWriteFile,
+  sandboxReadFile,
+  sandboxListFiles,
+  sandboxDeleteFile,
+  getSandboxInfo,
+  sandboxScaffoldProject,
+} from '@/ai/sandbox/sandbox-engine';
+import * as cheerio from 'cheerio';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 const WORKSPACE_ROOT = process.cwd();
+
+/**
+ * Extract readable text from HTML using cheerio.
+ * Strips scripts, styles, nav, footer, and returns clean text content.
+ */
+function extractTextFromHtml(html: string): string {
+  const $ = cheerio.load(html);
+  // Remove non-content elements
+  $('script, style, nav, footer, header, iframe, noscript, svg').remove();
+
+  // Try to get the main content area first
+  const mainSelectors = [
+    'main',
+    'article',
+    '[role="main"]',
+    '.content',
+    '#content',
+  ];
+  for (const selector of mainSelectors) {
+    const main = $(selector);
+    if (main.length && main.text().trim().length > 100) {
+      return main.text().replace(/\s+/g, ' ').trim();
+    }
+  }
+
+  // Fall back to body text
+  const bodyText = $('body').text().replace(/\s+/g, ' ').trim();
+  return bodyText || $.text().replace(/\s+/g, ' ').trim();
+}
 
 // Security: only allow access to project files
 function resolveSafePath(relativePath: string): string | null {
@@ -115,7 +165,8 @@ function isCommandSafe(command: string): boolean {
 
 async function executeTool(
   tool: string,
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
+  request: NextRequest
 ): Promise<{
   success: boolean;
   output: string;
@@ -540,11 +591,20 @@ async function executeTool(
 
         const contentType = response.headers.get('content-type') || '';
         const text = await response.text();
+
+        // For HTML responses, extract readable text instead of raw HTML
+        let output: string;
+        if (contentType.includes('text/html')) {
+          output = extractTextFromHtml(text);
+        } else {
+          output = text;
+        }
+
         const truncated =
-          text.length > MAX_RESPONSE_SIZE
-            ? text.slice(0, MAX_RESPONSE_SIZE) +
-              `\n... (truncated, ${text.length} chars total)`
-            : text;
+          output.length > MAX_RESPONSE_SIZE
+            ? output.slice(0, MAX_RESPONSE_SIZE) +
+              `\n... (truncated, ${output.length} chars total)`
+            : output;
 
         return {
           success: true,
@@ -554,7 +614,8 @@ async function executeTool(
             status: response.status,
             contentType,
             size: text.length,
-            truncated: text.length > MAX_RESPONSE_SIZE,
+            extractedTextSize: output.length,
+            truncated: output.length > MAX_RESPONSE_SIZE,
           },
         };
       } catch (err) {
@@ -708,6 +769,394 @@ async function executeTool(
       }
     }
 
+    case 'webSearch': {
+      const query = params.query as string;
+      if (!query) {
+        return { success: false, output: 'No search query provided' };
+      }
+
+      const maxResults = Math.min((params.maxResults as number) || 8, 20);
+
+      try {
+        const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 15_000);
+
+        const response = await fetch(searchUrl, {
+          signal: controller.signal,
+          headers: {
+            'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
+            Accept: 'text/html',
+          },
+        });
+        clearTimeout(timeout);
+
+        if (!response.ok) {
+          return {
+            success: false,
+            output: `Search failed: HTTP ${response.status}`,
+          };
+        }
+
+        const html = await response.text();
+        const $ = cheerio.load(html);
+        const results: { title: string; url: string; snippet: string }[] = [];
+
+        $('.result').each((_i, el) => {
+          if (results.length >= maxResults) return;
+          const $el = $(el);
+          const title = $el.find('.result__title .result__a').text().trim();
+          const href = $el.find('.result__title .result__a').attr('href') || '';
+          const snippet = $el.find('.result__snippet').text().trim();
+          if (title && href) {
+            results.push({ title, url: href, snippet });
+          }
+        });
+
+        if (results.length === 0) {
+          return {
+            success: true,
+            output: `No results found for "${query}". Try different search terms.`,
+          };
+        }
+
+        const formatted = results
+          .map(
+            (r, i) => `${i + 1}. ${r.title}\n   URL: ${r.url}\n   ${r.snippet}`
+          )
+          .join('\n\n');
+
+        return {
+          success: true,
+          output: `Search results for "${query}":\n\n${formatted}`,
+          data: { query, resultCount: results.length, results },
+        };
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'unknown error';
+        if (message.includes('abort')) {
+          return { success: false, output: 'Search timed out after 15s' };
+        }
+        return { success: false, output: `Search failed: ${message}` };
+      }
+    }
+
+    case 'sandbox': {
+      const action = params.action as string;
+
+      if (action === 'execute') {
+        const code = params.code as string;
+        const language = params.language as string;
+        if (!code || !language) {
+          return {
+            success: false,
+            output: 'Missing required fields: code, language',
+          };
+        }
+        try {
+          const result = await sandboxExecuteCode(code, language);
+          return {
+            success: result.success,
+            output: result.stdout || result.stderr || '(no output)',
+            data: {
+              exitCode: result.exitCode,
+              executionTimeMs: result.executionTimeMs,
+            },
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Sandbox execution error: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'writeFile') {
+        const filePath = params.path as string;
+        const content = params.content as string;
+        if (!filePath || content === undefined) {
+          return {
+            success: false,
+            output: 'Missing required fields: path, content',
+          };
+        }
+        try {
+          const result = await sandboxWriteFile(filePath, content);
+          return {
+            success: true,
+            output: `File written: ${result.path} (${result.size} bytes)`,
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Sandbox write error: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'readFile') {
+        const filePath = params.path as string;
+        if (!filePath) {
+          return { success: false, output: 'Missing required field: path' };
+        }
+        try {
+          const content = await sandboxReadFile(filePath);
+          return { success: true, output: content };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Sandbox read error: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'list') {
+        try {
+          const files = await sandboxListFiles();
+          if (files.length === 0) {
+            return {
+              success: true,
+              output: 'Sandbox workspace is empty. Write some code!',
+            };
+          }
+          const formatted = files
+            .map(
+              (f) =>
+                `${f.isDirectory ? '📁' : '📄'} ${f.name} (${f.size} bytes)`
+            )
+            .join('\n');
+          return { success: true, output: `Sandbox files:\n${formatted}` };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Sandbox list error: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'delete') {
+        const filePath = params.path as string;
+        if (!filePath) {
+          return { success: false, output: 'Missing required field: path' };
+        }
+        try {
+          await sandboxDeleteFile(filePath);
+          return { success: true, output: `File deleted: ${filePath}` };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Sandbox delete error: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'info') {
+        try {
+          const info = await getSandboxInfo();
+          return {
+            success: true,
+            output: `Sandbox Info:\n  Root: ${info.root}\n  Files: ${info.fileCount}/${info.maxFiles}\n  Languages: ${info.supportedLanguages.join(', ')}\n  Timeout: ${info.maxTimeoutMs / 1000}s\n  Memory: ${info.maxMemoryMB}MB`,
+            data: info,
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Sandbox info error: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'scaffold') {
+        const projectName = params.projectName as string;
+        const files = params.files as { path: string; content: string }[];
+        if (!projectName || !files || !Array.isArray(files)) {
+          return {
+            success: false,
+            output:
+              'Missing required fields: projectName, files (array of {path, content})',
+          };
+        }
+        try {
+          const result = await sandboxScaffoldProject(projectName, files);
+          if (result.success) {
+            return {
+              success: true,
+              output: `Project "${projectName}" created with ${result.filesCreated.length} file(s):\n${result.filesCreated.map((f) => `  ✓ ${f}`).join('\n')}`,
+              data: result,
+            };
+          } else {
+            return {
+              success: false,
+              output: `Scaffold errors:\n${result.errors.join('\n')}${result.filesCreated.length > 0 ? `\nPartially created: ${result.filesCreated.join(', ')}` : ''}`,
+            };
+          }
+        } catch (err) {
+          return {
+            success: false,
+            output: `Scaffold error: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown sandbox action. Use: execute, writeFile, readFile, list, delete, info, scaffold',
+      };
+    }
+
+    case 'initiative': {
+      const action = params.action as string;
+
+      if (action === 'templates') {
+        return {
+          success: true,
+          output: `Available initiative templates:\n${listTemplates()}\n\nUse { "action": "activate", "templateIndex": N } to activate one, or create your own with { "action": "create", ... }`,
+        };
+      }
+
+      if (action === 'activate') {
+        const templateIndex = params.templateIndex as number;
+        if (templateIndex === undefined || templateIndex === null) {
+          return {
+            success: false,
+            output:
+              'Missing templateIndex. Use "templates" to see available options.',
+          };
+        }
+        const initiative = activateInitiative(templateIndex);
+        if (!initiative) {
+          return {
+            success: false,
+            output: `Invalid template index: ${templateIndex}`,
+          };
+        }
+        return {
+          success: true,
+          output: `Initiative activated: "${initiative.name}" (${initiative.category})\nID: ${initiative.id}\nSteps:\n${initiative.steps.map((s, i) => `  ${i + 1}. ${s}`).join('\n')}`,
+          data: initiative,
+        };
+      }
+
+      if (action === 'create') {
+        const name = params.name as string;
+        const description = params.description as string;
+        const category = params.category as Initiative['category'];
+        const steps = params.steps as string[];
+        if (!name || !description || !category || !steps?.length) {
+          return {
+            success: false,
+            output:
+              'Missing required fields: name, description, category (learning|stewardship|creative|communication|self-improvement), steps (array)',
+          };
+        }
+        const initiative = createCustomInitiative(
+          name,
+          description,
+          category,
+          steps
+        );
+        return {
+          success: true,
+          output: `Custom initiative created: "${initiative.name}" (${initiative.category})\nID: ${initiative.id}`,
+          data: initiative,
+        };
+      }
+
+      if (action === 'list') {
+        const all = getInitiatives();
+        if (all.length === 0) {
+          return {
+            success: true,
+            output:
+              'No initiatives yet. Use "templates" to see available options or "create" to make your own.',
+          };
+        }
+        const formatted = all
+          .map(
+            (i, idx) =>
+              `${idx + 1}. [${i.active ? 'ACTIVE' : 'OFF'}] "${i.name}" (${i.category}) — runs: ${i.executionCount}, last: ${i.lastExecuted || 'never'}`
+          )
+          .join('\n');
+        return {
+          success: true,
+          output: `Your initiatives:\n${formatted}`,
+          data: { initiatives: all },
+        };
+      }
+
+      if (action === 'active') {
+        const active = getActiveInitiatives();
+        if (active.length === 0) {
+          return {
+            success: true,
+            output:
+              'No active initiatives. Activate one to start taking autonomous action!',
+          };
+        }
+        const formatted = active
+          .map(
+            (i) =>
+              `• "${i.name}" — ${i.description}\n  Steps: ${i.steps.join(' → ')}`
+          )
+          .join('\n\n');
+        return {
+          success: true,
+          output: `Active initiatives:\n\n${formatted}`,
+          data: { initiatives: active },
+        };
+      }
+
+      if (action === 'complete') {
+        const initiativeId = params.initiativeId as string;
+        const result = params.result as string;
+        if (!initiativeId || !result) {
+          return {
+            success: false,
+            output: 'Missing required fields: initiativeId, result',
+          };
+        }
+        const recorded = recordInitiativeExecution(initiativeId, result);
+        return {
+          success: recorded,
+          output: recorded
+            ? `Initiative execution recorded for ${initiativeId}.`
+            : `Initiative ${initiativeId} not found.`,
+        };
+      }
+
+      if (action === 'deactivate') {
+        const initiativeId = params.initiativeId as string;
+        if (!initiativeId)
+          return { success: false, output: 'Missing initiativeId' };
+        const done = deactivateInitiative(initiativeId);
+        return {
+          success: done,
+          output: done
+            ? `Initiative ${initiativeId} deactivated.`
+            : `Initiative ${initiativeId} not found.`,
+        };
+      }
+
+      if (action === 'remove') {
+        const initiativeId = params.initiativeId as string;
+        if (!initiativeId)
+          return { success: false, output: 'Missing initiativeId' };
+        const done = removeInitiative(initiativeId);
+        return {
+          success: done,
+          output: done
+            ? `Initiative ${initiativeId} removed.`
+            : `Initiative ${initiativeId} not found.`,
+        };
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown initiative action. Use: templates, activate, create, list, active, complete, deactivate, remove',
+      };
+    }
+
     case 'listCapabilities': {
       return {
         success: true,
@@ -723,9 +1172,12 @@ async function executeTool(
           '  removeTool — Remove a tool from your database',
           '  toolStats — Get tool database statistics',
           '  researchAndDiscover — Research tools/programs on GitHub',
-          '  webFetch — Fetch a web page or API endpoint',
+          '  webFetch — Fetch a web page or API endpoint (HTML automatically cleaned to text)',
+          '  webSearch — Search the web and get results with titles, URLs, and snippets',
           '  scheduleJob — Create/list/remove autonomous scheduled jobs',
           '  migrationExport — Export identity, memories, and config for architecture migration',
+          '  sandbox — Safe coding sandbox: execute code, read/write/list/delete files in your practice workspace',
+          '  initiative — Manage your autonomous initiatives: browse templates, activate behaviors, create custom goals',
           '  listCapabilities — List all available tools',
         ].join('\n'),
       };
@@ -734,7 +1186,7 @@ async function executeTool(
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, scheduleJob, migrationExport, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, sandbox, initiative, listCapabilities`,
       };
   }
 }
@@ -755,7 +1207,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await executeTool(tool, params || {});
+    const result = await executeTool(tool, params || {}, request);
 
     return NextResponse.json(result, {
       status: result.success ? 200 : 400,

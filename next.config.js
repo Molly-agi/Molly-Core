@@ -5,6 +5,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* Optimized for performance and reduced memory usage */
+
+  // Set aggressive keep-alive timeout to prevent CLOSE-WAIT connection buildup.
+  // Eric's Android browser kills WebSocket/HTTP connections on every tab switch.
+  // Without this, the server holds dead sockets indefinitely.
+  httpAgentOptions: {
+    keepAlive: true,
+  },
   typescript: {
     tsconfigPath: './tsconfig.json',
     ignoreBuildErrors: true,

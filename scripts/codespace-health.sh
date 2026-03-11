@@ -126,6 +126,20 @@ if [ "$WATCH_MODE" = true ]; then
       fi
     fi
     
+    # --- Clean CLOSE-WAIT connections on Next.js (port 9002) ---
+    # Eric's Android browser kills tabs constantly, leaving orphaned connections.
+    # CLOSE-WAIT means the client closed but the server never did. These pile up
+    # and hold file descriptors + memory until the Next.js process is restarted.
+    # The instrumentation.ts fix (keepAliveTimeout=30s) prevents new buildup,
+    # but if they still accumulate past 50, the server needs a restart.
+    CLOSE_WAIT_COUNT=$(ss -tnp 2>/dev/null | grep CLOSE-WAIT | grep -c ":9002" || true)
+    if [ "$CLOSE_WAIT_COUNT" -gt 50 ]; then
+      echo -e "${TIMESTAMP} ${RED}[WATCHDOG] ${CLOSE_WAIT_COUNT} CLOSE-WAIT on :9002 — CRITICAL. Server may need restart.${NC}"
+      CLEANED=true
+    elif [ "$CLOSE_WAIT_COUNT" -gt 10 ]; then
+      echo -e "${TIMESTAMP} ${YELLOW}[WATCHDOG] ${CLOSE_WAIT_COUNT} CLOSE-WAIT on :9002 — elevated but manageable${NC}"
+    fi
+
     # --- Check memory pressure ---
     AVAIL=$(free -m | awk '/^Mem:/{print $7}')
     if [ "$AVAIL" -lt 500 ]; then
@@ -311,6 +325,20 @@ if [ "$NEXT_COUNT" -gt 0 ]; then
   fi
 else
   echo -e "${YELLOW}NEXT.JS: Not running${NC}"
+fi
+
+# --- CLOSE-WAIT Connections ---
+echo ""
+CLOSE_WAIT_TOTAL=$(ss -tnp 2>/dev/null | grep -c CLOSE-WAIT || true)
+CLOSE_WAIT_9002=$(ss -tnp 2>/dev/null | grep CLOSE-WAIT | grep -c ":9002" || true)
+if [ "$CLOSE_WAIT_TOTAL" -gt 10 ]; then
+  echo -e "${RED}CLOSE-WAIT: ${CLOSE_WAIT_TOTAL} stale connections (${CLOSE_WAIT_9002} on :9002) - EXCESS${NC}"
+  echo -e "  ${YELLOW}Orphaned from Android tab switches. Server timeouts should prevent buildup.${NC}"
+  if [ "$CLOSE_WAIT_9002" -gt 50 ]; then
+    echo -e "  ${RED}CRITICAL: Over 50 stale sockets. Consider restarting Next.js (npm run dev).${NC}"
+  fi
+else
+  echo -e "${GREEN}CLOSE-WAIT: ${CLOSE_WAIT_TOTAL} stale connections - OK${NC}"
 fi
 
 # --- Port 9002 Guard (predev mode) ---
