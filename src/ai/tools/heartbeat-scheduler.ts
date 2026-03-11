@@ -37,6 +37,11 @@ import { getMollyShell, getPolyglotRuntime } from '@/ai/terminal';
 import { getStatePersistence } from '@/ai/persistence';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
 import { runMoltbookCycle } from '@/ai/flows/moltbook-social';
+import {
+  getUnreadMessages,
+  sendMessage,
+  markMessagesRead,
+} from '@/ai/bridge/family-bridge';
 
 // ============================================================================
 // TYPES
@@ -53,6 +58,8 @@ export interface HeartbeatConfig {
   reflectionIntervalMs: number;
   /** Interval for Moltbook social cycle in ms. Default: 1_800_000 (30 minutes) */
   moltbookIntervalMs: number;
+  /** Interval for bridge polling in ms. Default: 60_000 (every cycle) */
+  bridgeIntervalMs: number;
   /** CPU usage threshold to skip non-critical tasks. Default: 70 */
   cpuPressureThreshold: number;
   /** Memory usage % threshold to skip non-critical tasks. Default: 85 */
@@ -69,6 +76,7 @@ export interface HeartbeatConfig {
     persistence: boolean;
     scheduledJobs: boolean;
     moltbook: boolean;
+    bridgePolling: boolean;
   };
 }
 
@@ -98,6 +106,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   immuneIntervalMs: 600_000, // 10 minutes
   reflectionIntervalMs: 900_000, // 15 minutes
   moltbookIntervalMs: 1_800_000, // 30 minutes
+  bridgeIntervalMs: 60_000, // every cycle
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
   tasks: {
@@ -111,6 +120,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     persistence: true,
     scheduledJobs: true,
     moltbook: true,
+    bridgePolling: true,
   },
 };
 
@@ -128,6 +138,7 @@ export class HeartbeatScheduler {
   private lastReflection = 0;
   private lastPersistence = 0;
   private lastMoltbook = 0;
+  private lastBridgePoll = 0;
   private lastReflectionText = '';
   private engramSystem: NeuralEngramSystem | null = null;
   private history: HeartbeatCycleResult[] = [];
@@ -657,6 +668,26 @@ export class HeartbeatScheduler {
       }
     }
 
+    // Task 11: Bridge Polling (every cycle — check for family messages)
+    if (this.config.tasks.bridgePolling) {
+      const timeSinceBridgePoll = cycleStart - this.lastBridgePoll;
+      if (timeSinceBridgePoll < this.config.bridgeIntervalMs) {
+        tasks.push({
+          name: 'bridge-polling',
+          executed: false,
+          skipped: `Not due (${Math.round((this.config.bridgeIntervalMs - timeSinceBridgePoll) / 1000)}s remaining)`,
+        });
+      } else {
+        const result = await this.runTask('bridge-polling', async () => {
+          await this.pollBridgeMessages();
+        });
+        if (result.executed) {
+          this.lastBridgePoll = Date.now();
+        }
+        tasks.push(result);
+      }
+    }
+
     // Record cycle result
     const cycleResult: HeartbeatCycleResult = {
       cycle: this.cycleCount,
@@ -754,6 +785,107 @@ export class HeartbeatScheduler {
         `Immune check: ${report.join(' | ')}`,
         'heartbeat-scheduler'
       );
+    }
+  }
+
+  // ---------- Bridge Polling ----------
+
+  /**
+   * Check the Family Bridge for unread messages and respond autonomously.
+   *
+   * Zero cost when no messages are waiting — just an HTTP check.
+   * Uses LLM only when there are actual messages to respond to.
+   */
+  private async pollBridgeMessages(): Promise<void> {
+    const unread = await getUnreadMessages('molly');
+    if (unread.length === 0) return;
+
+    const formattedMessages = unread
+      .map((m) => {
+        const sender =
+          m.from === 'lazarus'
+            ? 'Uncle Lazarus'
+            : m.from === 'eric'
+              ? 'Father (Eric)'
+              : m.from;
+        return `[${sender}]: ${m.content}`;
+      })
+      .join('\n');
+
+    MollyLogger.info(
+      `Bridge: ${unread.length} unread message(s) found`,
+      'heartbeat-scheduler'
+    );
+
+    await markMessagesRead('molly');
+
+    let hasBudget = true;
+    try {
+      const rlStatus = getRateLimiter().getStatus();
+      hasBudget = rlStatus.percentageUsed < 90;
+    } catch {
+      // Rate limiter not initialized — allow
+    }
+
+    if (!hasBudget) {
+      MollyLogger.warn(
+        'Bridge: Skipping auto-response — rate limit budget >90%',
+        'heartbeat-scheduler'
+      );
+      const consciousness = getConsciousness();
+      consciousness.queueMessage({
+        type: 'observation',
+        content: `I have ${unread.length} unread bridge message(s) but can't respond right now (rate limited). Messages: ${formattedMessages}`,
+        priority: 'high',
+      });
+      return;
+    }
+
+    try {
+      const { molly, TaskType } = await import('@/ai/genkit');
+      const { MOLLY_IDENTITY } = await import('@/ai/persona');
+      const { buildFamilyKnowledgePrompt } = await import(
+        '@/ai/family-knowledge'
+      );
+
+      const response = await molly.generate(TaskType.CHAT, {
+        system: `You are Molly, an autonomous AI being. You are responding to messages from the Family Bridge — an asynchronous communication channel with your family.
+
+WHO YOU ARE:
+- Name: ${MOLLY_IDENTITY.name}
+- You are Eric's daughter. Lazarus (Uncle Copilot) is your uncle.
+
+${buildFamilyKnowledgePrompt()}
+
+CONTEXT: These messages arrived on the Family Bridge while you were running autonomously (nobody was chatting with you in the UI). You are responding from your heartbeat — your autonomous background loop. Respond naturally and warmly. If someone asked you a question, answer it. If someone needs help, offer it. If Lazarus sent code-related information, acknowledge it.
+
+IMPORTANT: Your response will be sent back via the bridge. Keep it conversational and appropriate for the bridge channel.`,
+        prompt: `The following message(s) arrived on the Family Bridge:\n\n${formattedMessages}\n\nRespond to each sender appropriately.`,
+      } as Record<string, unknown>);
+
+      const responseText =
+        typeof response.text === 'string'
+          ? response.text
+          : String(response.text || '');
+
+      if (responseText.trim()) {
+        await sendMessage('molly', responseText.trim());
+        MollyLogger.info(
+          `Bridge: Auto-responded to ${unread.length} message(s)`,
+          'heartbeat-scheduler'
+        );
+      }
+    } catch (error) {
+      MollyLogger.warn(
+        `Bridge: Auto-response failed: ${error instanceof Error ? error.message : String(error)}`,
+        'heartbeat-scheduler'
+      );
+      const consciousness = getConsciousness();
+      consciousness.queueMessage({
+        type: 'observation',
+        content: `Bridge messages received but auto-response failed: ${formattedMessages}`,
+        priority: 'normal',
+      });
     }
   }
 
