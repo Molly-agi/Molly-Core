@@ -113,6 +113,15 @@
     "@types/react-dom": "19.0.3"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "*.{ts,tsx}": [
+      "eslint --max-warnings 0",
+      "prettier --write"
+    ],
+    "*.{js,mjs,cjs}": [
+      "prettier --write"
+    ],
+    "*.{json,md,css,yaml,yml}": [
+      "prettier --write --ignore-unknown"
+    ]
   }
 }
