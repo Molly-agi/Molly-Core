@@ -30,7 +30,7 @@
  */
 
 import http from 'http';
-import { promises as fs } from 'fs';
+import os from 'os';
 import path from 'path';
 import { LocalStorageProvider } from '../lib/local-storage-provider.js';
 import { DeviceSyncEngine } from '../lib/device-sync-engine.js';
@@ -52,9 +52,7 @@ const CONFIG = {
   /** Shared secret for peer authentication */
   peerSecret: process.env.MOLLY_PEER_SECRET || '',
   /** Node identity */
-  nodeName:
-    process.env.MOLLY_NODE_NAME ||
-    `molly-${require('os').hostname().slice(0, 8)}`,
+  nodeName: process.env.MOLLY_NODE_NAME || `molly-${os.hostname().slice(0, 8)}`,
   nodeRole: (process.env.MOLLY_NODE_ROLE || 'primary') as 'primary' | 'replica',
 };
 
@@ -626,7 +624,6 @@ export async function startEdgeServer(): Promise<http.Server> {
   const server = http.createServer(handleRequest);
 
   server.listen(CONFIG.port, CONFIG.host, () => {
-    const nodeId = syncEngine?.getNodeIdentity().nodeId || 'unknown';
     const addrs = syncEngine?.getLocalAddresses() || [];
     console.log(`
 ╔══════════════════════════════════════════╗

@@ -8,6 +8,8 @@
 import { computeSeverity } from '@/components/diagnostic-severity';
 import type { RuntimeSnapshot } from '@/ai/tools/runtime-snapshot';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 function makeSnapshot(
   overrides: Partial<RuntimeSnapshot> = {}
 ): RuntimeSnapshot {

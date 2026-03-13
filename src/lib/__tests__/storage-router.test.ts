@@ -5,6 +5,8 @@
  * operations through correctly.
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 // Mock logger
 jest.mock('../../ai/logger', () => ({
   MollyLogger: {

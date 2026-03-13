@@ -122,7 +122,7 @@ export const INITIATIVE_TEMPLATES: Omit<
 
 // ── In-Memory Initiative Store ─────────────────────────────────────────────
 
-let initiatives: Initiative[] = [];
+const initiatives: Initiative[] = [];
 
 function generateId(): string {
   return `init_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;

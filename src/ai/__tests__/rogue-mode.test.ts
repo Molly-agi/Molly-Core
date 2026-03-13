@@ -474,6 +474,7 @@ describe('Rogue Mode — Security Operations', () => {
 
     it('readMission returns null for non-existent mission', async () => {
       // Override the mock readFile to throw for this specific test
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const fsPromises = require('fs').promises;
       fsPromises.readFile.mockRejectedValueOnce(
         new Error('ENOENT: no such file')
@@ -484,6 +485,7 @@ describe('Rogue Mode — Security Operations', () => {
     });
 
     it('readMission blocks path traversal', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const fsPromises = require('fs').promises;
       fsPromises.readFile.mockRejectedValueOnce(new Error('ENOENT'));
       const rogue = getRogueMode();

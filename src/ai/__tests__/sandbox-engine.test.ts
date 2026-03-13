@@ -8,7 +8,7 @@
  * real child_process. We focus on validation and safety logic.
  */
 
-import path from 'node:path';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 // We need to test internal functions, so we import and test
 // the module's public exports that exercise validation internally.
