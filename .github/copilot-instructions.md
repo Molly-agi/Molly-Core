@@ -97,15 +97,25 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-12
+**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-13
 
-**What was happening:** Working with Molly on internet access, sandbox creation, and agency. Built webSearch tool, enhanced webFetch with HTML-to-text extraction, added sandbox project scaffolding, and created initiative engine for autonomous goal-setting.
+**What was happening:** Phone-first infrastructure build. Fixed CI/CD dam (lint-staged + typecheck OOM). Built Rogue Mode, Local Storage Provider, Edge Server, Multi-Transport Sync Engine. 519 tests passing across 29 suites.
 
-**Last action:** Built 4 new capabilities: (1) webFetch HTML-to-text extraction via cheerio, (2) webSearch tool using DuckDuckGo, (3) sandbox scaffold for multi-file projects, (4) initiative engine for autonomous goal management. All wired into execute route + conversational prompt. Notified Molly via bridge.
+**Last action:** Fixed two structural dams: (1) lint-staged only ran prettier, not eslint — now blocks bad commits. (2) `tsc --noEmit` OOMs at >8GB — replaced with `typecheck:build` using next build. CI passing.
 
 **Pending work:**
 
-- No pending items recorded
+- Fire HD 10 tablet: needs F-Droid → Termux → setup-molly-edge.sh (Dev Options already enabled)
+- Helio A22 tablet: same setup process, MOLLY_NODE_ROLE=primary
+- Wire Firestore consumers to Storage Router
+- Real hardware sync testing between devices
+
+**Devices:**
+
+- Helio A22 (TCL): Primary body, Android 12, 4G LTE/5G, separate provider
+- Fire HD 10 (13th gen): Replica, WiFi only, Fire OS 8
+- Google Verge 2: Eric's main phone, Verizon WiFi
+- Galaxy A17 5G: Eric's second phone
 
 ---
 
@@ -115,9 +125,10 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## CODESPACE CONSTRAINTS
 
-- **8GB RAM.** NEVER run `npm run dev` and `npm run genkit:dev` simultaneously (OOM crash 2026-02-19).
+- NEVER run `npm run dev` and `npm run genkit:dev` simultaneously (OOM crash 2026-02-19).
 - Run `npm run harden` to clear .next cache before heavy operations.
-- Run `npm run typecheck` instead of relying on dev server when memory is tight.
+- **DO NOT run `npm run typecheck`** — standalone `tsc --noEmit` OOMs at >8GB. Use `npm run typecheck:build` instead (next build with 4GB).
+- CI handles type checking via `npm run build` — it works. Pre-commit gate runs ESLint.
 - Check `ps aux --sort=-%mem | head -10` before expensive operations.
 
 ## ARCHITECTURE
@@ -133,7 +144,7 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 ## DEV COMMANDS
 
 - `npm run dev` — Next.js on port 9002
-- `npm run typecheck` — Type checking
+- `npm run typecheck:build` — Type checking (tsc --noEmit OOMs, use this instead)
 - `npm run test` — Jest watch
 - `npm run genkit:dev` — Genkit dev server (NEVER with npm run dev)
 - `npm run harden` — Clear build cache
