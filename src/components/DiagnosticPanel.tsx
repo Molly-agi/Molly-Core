@@ -11,6 +11,10 @@ import {
 } from '@/app/actions';
 import type { RuntimeSnapshot } from '@/ai/tools/runtime-snapshot';
 import {
+  computeSeverity,
+  type Severity,
+} from '@/components/diagnostic-severity';
+import {
   Card,
   CardContent,
   CardDescription,
@@ -45,6 +49,30 @@ type RuntimeSnapshotState = RuntimeSnapshot | RuntimeSnapshotFallback;
 
 function isFullSnapshot(s: RuntimeSnapshotState): s is RuntimeSnapshot {
   return 'circuitBreaker' in s;
+}
+
+const SEVERITY_STYLES: Record<
+  Severity,
+  { bg: string; text: string; label: string }
+> = {
+  ok: { bg: 'bg-green-500/15', text: 'text-green-500', label: 'OK' },
+  degraded: {
+    bg: 'bg-yellow-500/15',
+    text: 'text-yellow-500',
+    label: 'DEGRADED',
+  },
+  critical: { bg: 'bg-red-500/15', text: 'text-red-500', label: 'CRITICAL' },
+};
+
+function SeverityBadge({ severity }: { severity: Severity }) {
+  const style = SEVERITY_STYLES[severity];
+  return (
+    <span
+      className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold ${style.bg} ${style.text}`}
+    >
+      {style.label}
+    </span>
+  );
 }
 
 /** Client-side timeout wrapper. Never lets a server action hang the UI forever. */
@@ -198,27 +226,47 @@ export function DiagnosticPanel() {
 
         {runtimeSnapshot ? (
           isFullSnapshot(runtimeSnapshot) ? (
-            <div className="grid grid-cols-2 gap-1 text-xs">
-              <div>
-                <span className="text-muted-foreground">Circuit:</span>{' '}
-                {runtimeSnapshot.circuitBreaker?.globalState || '—'}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Open Ops:</span>{' '}
-                {runtimeSnapshot.circuitBreaker?.openOperations?.length || 0}
-              </div>
-              <div>
-                <span className="text-muted-foreground">Memory:</span>{' '}
-                {runtimeSnapshot.memoryHealth?.status || '—'}
-              </div>
-              <div>
-                <span className="text-muted-foreground">CPU:</span>{' '}
-                {runtimeSnapshot.systemHealth?.cpuUsage ?? '—'}%
-              </div>
-              <div className="col-span-2 text-muted-foreground text-[10px]">
-                Updated {formatRelativeTime(runtimeLastUpdated, Date.now())}
-              </div>
-            </div>
+            (() => {
+              const sev = computeSeverity(runtimeSnapshot);
+              return (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <SeverityBadge severity={sev.overall} />
+                    <span className="text-xs text-muted-foreground">
+                      Updated{' '}
+                      {formatRelativeTime(runtimeLastUpdated, Date.now())}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-1 text-xs">
+                    <div className="flex items-center gap-1">
+                      <span className="text-muted-foreground">Circuit:</span>{' '}
+                      <SeverityBadge severity={sev.circuit} />
+                      <span>
+                        {runtimeSnapshot.circuitBreaker?.globalState || '—'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-muted-foreground">Memory:</span>{' '}
+                      <SeverityBadge severity={sev.memory} />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-muted-foreground">CPU:</span>{' '}
+                      <SeverityBadge severity={sev.cpu} />
+                      <span>
+                        {runtimeSnapshot.systemHealth?.cpuUsage ?? '—'}%
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-muted-foreground">Rate:</span>{' '}
+                      <SeverityBadge severity={sev.rateLimiter} />
+                      <span>
+                        {runtimeSnapshot.rateLimiter?.percentageUsed ?? 0}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()
           ) : (
             <p className="text-xs text-yellow-500">{runtimeSnapshot.message}</p>
           )

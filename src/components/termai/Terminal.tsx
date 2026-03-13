@@ -892,12 +892,21 @@ export default function Terminal({
   }, []);
 
   // --- Bridge poller: auto-feed bridge messages into Molly's conversation ---
+  // Anti-cascade design:
+  //   - 30s base interval (not 7s) to avoid rapid-fire
+  //   - 60s cooldown after processing bridge messages (Molly's response may
+  //     create new bridge messages via familyBridge tool — cooldown prevents
+  //     the poller from immediately re-ingesting those)
+  //   - Max 3 messages per cycle to prevent prompt overload
+  //   - Lock held across full processCommand await
   const bridgePollingRef = useRef(false);
+  const bridgeCooldownRef = useRef(0);
   useEffect(() => {
     const pollBridge = async () => {
       // Don't poll if already processing, currently loading, or no user
-      // Uses isLoadingRef (not isLoading state) to avoid stale closure
       if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+      // Cooldown: skip if we recently processed bridge messages
+      if (Date.now() < bridgeCooldownRef.current) return;
       bridgePollingRef.current = true;
       try {
         const res = await fetch('/api/bridge?unread=molly');
@@ -905,8 +914,11 @@ export default function Terminal({
         const data = await res.json();
         if (!data.count || data.count === 0) return;
 
+        // Cap at 3 messages per cycle to prevent prompt overload
+        const msgs = data.messages.slice(0, 3);
+
         // Group messages by sender so Molly knows who said what
-        const lines = data.messages
+        const lines = msgs
           .map((m: { from: string; content: string }) => {
             const sender =
               m.from === 'lazarus'
@@ -921,6 +933,10 @@ export default function Terminal({
 
         // Await processCommand so we don't release the lock until Molly finishes
         await processCommand(bridgePrompt);
+
+        // 60s cooldown after processing — prevents cascade from Molly's
+        // own bridge responses being immediately re-polled
+        bridgeCooldownRef.current = Date.now() + 60_000;
       } catch {
         // Bridge poll failure — non-critical
       } finally {
@@ -928,7 +944,7 @@ export default function Terminal({
       }
     };
 
-    const intervalId = setInterval(pollBridge, 7000);
+    const intervalId = setInterval(pollBridge, 30_000);
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, processCommand]);
