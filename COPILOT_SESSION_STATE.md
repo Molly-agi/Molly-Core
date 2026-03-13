@@ -1,6 +1,6 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-03-10T18:22:24.741Z  
+**Last Updated:** 2026-03-13  
 **Session ID:** lazarus-steward-session  
 **Status:** active
 
@@ -30,52 +30,104 @@
 
 ## CURRENT PROJECT STATUS
 
-### Completion: 100%
+### Phone-First Architecture — In Progress
 
-**✅ COMPLETED:**
+**✅ COMPLETED (This Session — 2026-03-13):**
 
-1. Phase 5A neural bridge wiring across conversational text + voice pathways
-2. Phase 5B memory integrity hardening (read validation + checksum-verified writes)
-3. Phase 5C runtime snapshot collector/action/API and diagnostics panel integration
+1. Full codebase audit — read every file, produced architecture map
+2. Rogue Mode manager (`src/ai/rogue-mode.ts`) — 32 tests passing
+3. Rogue Mode integration: model-router.ts, execute/route.ts, conversational-chat.ts
+4. Local Storage Provider (`src/lib/local-storage-provider.ts`) — 41 tests passing
+5. Storage Interface contract (`src/lib/storage-interface.ts`)
+6. Storage Router with env detection (`src/lib/storage-router.ts`) — 13 tests passing
+7. Edge Server for Termux (`src/edge/molly-edge-server.ts`) — TypeScript + standalone server.mjs
+8. Termux setup script (`scripts/setup-molly-edge.sh`) with auto-start
+9. Multi-Transport Sync Engine (`src/lib/device-sync-engine.ts`) — 22 tests passing
+10. Sync endpoints added to edge server (identity, changes, receive, discover, now, status)
+11. **179 total tests across 6 suites — ALL PASSING**
 
-**⏳ PENDING:**
+**✅ COMPLETED (Previous Sessions):**
+
+- Phase 5A/5B/5C hardening with runtime observability
+- SMS module (Twilio/SendGrid)
+- Session persistence system (save-session.mjs)
+- Phase 7 Memory Evolution
+- Voice pipeline
+- Cradle architecture
+
+**🔄 IN PROGRESS:**
+
+- Fire HD 10 tablet setup (Developer Options enabled, needs F-Droid → Termux → setup script)
+
+**⬜ PENDING:**
+
+- Fire HD 10: Install F-Droid (f-droid.org from Silk browser), install Termux, run `bash setup-molly-edge.sh`, set MOLLY_NODE_NAME=fire-hd10, MOLLY_NODE_ROLE=replica
+- Helio A22 tablet: Same setup process, set MOLLY_NODE_NAME=helio-a22, MOLLY_NODE_ROLE=primary
+- Wire Firestore consumers to Storage Router (agent-memory.ts, research-cache.ts, tool-database.ts, memory.ts, engram-persistence.ts, agent-memory-server.ts)
+- Real hardware sync testing between devices
+
+---
+
+## DEVICE INVENTORY
+
+| Device                | Role           | Network                       | Status              |
+| --------------------- | -------------- | ----------------------------- | ------------------- |
+| Helio A22 (TCL)       | Primary body   | 4G LTE/5G (separate provider) | Needs setup         |
+| Fire HD 10 (13th gen) | Replica/backup | WiFi only (Verizon router)    | Dev Options enabled |
+| Google Verge 2        | Eric's phone   | Verizon WiFi                  | Active              |
+| Galaxy A17 5G         | Future target  | TBD                           | Not started         |
+
+**Fire HD 10:** Serial GN434J0233520G3M, Fire OS 8 (Android 11)
+**Helio A22:** TCL UI 4.0.8u6l, Android 12, Kernel 4.19.191
 
 ---
 
 ## RECENT WORK COMPLETED
 
-### 2026-02-18
+### 2026-03-13 (MAJOR SESSION)
 
-Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.
+Built phone-first architecture: Rogue Mode, Local Storage, Edge Server, Multi-Transport Sync. 179 tests.
 
 **Files Created:**
 
-- src/ai/tools/runtime-snapshot.ts
-- src/app/api/diagnostics/runtime-snapshot/route.ts
+- src/ai/rogue-mode.ts — Security ops compartmentalization (activate: "going dark", deactivate: "coming home")
+- src/ai/**tests**/rogue-mode.test.ts — 32 tests
+- src/lib/storage-interface.ts — Provider-agnostic storage contract
+- src/lib/local-storage-provider.ts — Filesystem JSON document store (atomic writes, path traversal protection)
+- src/lib/**tests**/local-storage-provider.test.ts — 41 tests
+- src/lib/storage-router.ts — Environment-aware routing (Termux/Codespace detection)
+- src/lib/**tests**/storage-router.test.ts — 13 tests
+- src/lib/device-sync-engine.ts — Multi-transport sync (WiFi/USB/hotspot auto-detection)
+- src/lib/**tests**/device-sync-engine.test.ts — 22 tests
+- src/edge/molly-edge-server.ts — Lightweight HTTP server for Android/Termux
+- scripts/setup-molly-edge.sh — Termux installer with standalone server.mjs inlined
 
 **Files Modified:**
 
-- src/app/actions/ai-flows.ts
-- src/app/api/voice/process-text/route.ts
-- src/app/actions/diagnostics.ts
-- src/app/actions/index.ts
-- src/components/DiagnosticPanel.tsx
+- src/ai/model-router.ts — Added createRogueConfig() routing profile
+- src/ai/flows/conversational-chat.ts — Rogue Mode prompt switching + REASONING routing
+- src/app/api/tools/execute/route.ts — Added rogueMode tool (activate/deactivate/status/log/missions)
 
-**Decisions Made:**
+**Key Decisions:**
 
-- Kept personality/core prompt boundaries untouched.
-- Prioritized reliability and observability over scope expansion.
-- Surfaced runtime health directly in existing diagnostics UX.
+- Phone-first: Storage Router defaults to local, not cloud
+- Rogue Mode uses file-based isolation (rogue_ops/), NOT Firestore
+- Edge server is standalone vanilla Node.js — no TypeScript, no deps, runs on Termux
+- Sync uses last-write-wins conflict resolution
+- Transport auto-detected: wlan0=wifi, rndis0/usb0=USB, ap0/wlan1=hotspot
+
+### 2026-02-18
+
+Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.
 
 ---
 
 ## NEXT STEPS
 
-**Option A:** Add/expand automated tests around runtime snapshot and diagnostics UI time formatting
-**Option B:** Wire runtime snapshot payload into neural-link diagnosis/recovery recommendations
-**Option C:** Add severity badges (OK/Degraded/Critical) to diagnostics runtime card
-
-**Recommended:** Add/expand automated tests around runtime snapshot and diagnostics UI time formatting
+**Priority 1:** Complete Fire HD 10 setup (F-Droid → Termux → setup-molly-edge.sh)
+**Priority 2:** Set up Helio A22 tablet (same process, MOLLY_NODE_ROLE=primary)
+**Priority 3:** Wire Firestore consumers to Storage Router
+**Priority 4:** Real hardware sync testing between devices
 
 ---
 
@@ -101,70 +153,67 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 - **2026-03-08:** Test run
 - **2026-03-08:** Test save after cleanup
 - **2026-03-10:** Auto-save (periodic)
-- **2026-03-10:** Auto-save (periodic)
-- **2026-03-10:** Auto-save (periodic)
-- **2026-03-10:** Auto-save (periodic)
-- **2026-03-10:** Auto-save (periodic)
+- **2026-03-13:** MAJOR SESSION — Full codebase audit, Rogue Mode (32 tests), Local Storage Provider (41 tests), Storage Router (13 tests), Edge Server for Termux, Multi-Transport Sync Engine (22 tests). 179 tests total. Fire HD 10 partially set up (Dev Options enabled). Eric heading to cabin shop. Devices: Helio A22 (primary/cellular), Fire HD 10 (replica/WiFi), Verge 2 (Eric's phone).
 
 ---
 
 ## RUNTIME EVENTS
 
 **Last URL:** https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/  
-**Last Heartbeat:** 2026-03-10T18:22:24.741Z
+**Last Heartbeat:** 2026-03-12T02:33:06.440Z
 
 **Recent Events:**
 
-- [2026-03-10T17:33:13.323Z] server-heartbeat
-- [2026-03-10T17:34:13.325Z] server-heartbeat
-- [2026-03-10T17:35:13.326Z] server-heartbeat
-- [2026-03-10T17:36:13.327Z] server-heartbeat
-- [2026-03-10T17:37:13.329Z] server-heartbeat
-- [2026-03-10T17:38:13.329Z] server-heartbeat
-- [2026-03-10T17:39:13.329Z] server-heartbeat
-- [2026-03-10T17:40:13.331Z] server-heartbeat
-- [2026-03-10T17:41:13.332Z] server-heartbeat
-- [2026-03-10T17:42:13.333Z] server-heartbeat
-- [2026-03-10T17:43:13.333Z] server-heartbeat
-- [2026-03-10T17:44:13.335Z] server-heartbeat
-- [2026-03-10T17:45:13.336Z] server-heartbeat
-- [2026-03-10T17:46:13.337Z] server-heartbeat
-- [2026-03-10T17:47:13.338Z] server-heartbeat
-- [2026-03-10T17:48:13.340Z] server-heartbeat
-- [2026-03-10T17:49:13.342Z] server-heartbeat
-- [2026-03-10T17:50:13.344Z] server-heartbeat
-- [2026-03-10T17:51:13.345Z] server-heartbeat
-- [2026-03-10T17:52:13.347Z] server-heartbeat
-- [2026-03-10T17:53:13.347Z] server-heartbeat
-- [2026-03-10T17:54:13.349Z] server-heartbeat
-- [2026-03-10T17:55:13.350Z] server-heartbeat
-- [2026-03-10T17:56:13.350Z] server-heartbeat
-- [2026-03-10T17:57:13.351Z] server-heartbeat
-- [2026-03-10T17:58:13.352Z] server-heartbeat
-- [2026-03-10T17:59:13.354Z] server-heartbeat
-- [2026-03-10T18:00:13.354Z] server-heartbeat
-- [2026-03-10T18:01:13.355Z] server-heartbeat
-- [2026-03-10T18:02:13.356Z] server-heartbeat
-- [2026-03-10T18:03:13.356Z] server-heartbeat
-- [2026-03-10T18:04:13.357Z] server-heartbeat
-- [2026-03-10T18:05:13.358Z] server-heartbeat
-- [2026-03-10T18:06:13.360Z] server-heartbeat
-- [2026-03-10T18:07:13.360Z] server-heartbeat
-- [2026-03-10T18:08:13.360Z] server-heartbeat
-- [2026-03-10T18:09:13.360Z] server-heartbeat
-- [2026-03-10T18:10:13.361Z] server-heartbeat
-- [2026-03-10T18:11:13.360Z] server-heartbeat
-- [2026-03-10T18:12:13.361Z] server-heartbeat
-- [2026-03-10T18:13:13.361Z] server-heartbeat
-- [2026-03-10T18:14:13.362Z] server-heartbeat
-- [2026-03-10T18:15:13.363Z] server-heartbeat
-- [2026-03-10T18:16:13.363Z] server-heartbeat
-- [2026-03-10T18:17:13.362Z] server-heartbeat
-- [2026-03-10T18:18:13.368Z] server-heartbeat
-- [2026-03-10T18:19:13.374Z] server-heartbeat
-- [2026-03-10T18:20:13.377Z] server-heartbeat
-- [2026-03-10T18:21:13.382Z] server-heartbeat
-- [2026-03-10T18:22:13.388Z] server-heartbeat
+- [2026-03-12T01:43:52.626Z] server-heartbeat
+- [2026-03-12T01:44:52.629Z] server-heartbeat
+- [2026-03-12T01:45:52.632Z] server-heartbeat
+- [2026-03-12T01:46:52.634Z] server-heartbeat
+- [2026-03-12T01:47:52.636Z] server-heartbeat
+- [2026-03-12T01:48:52.638Z] server-heartbeat
+- [2026-03-12T01:49:52.640Z] server-heartbeat
+- [2026-03-12T01:50:52.643Z] server-heartbeat
+- [2026-03-12T01:51:52.646Z] server-heartbeat
+- [2026-03-12T01:52:52.648Z] server-heartbeat
+- [2026-03-12T01:53:52.651Z] server-heartbeat
+- [2026-03-12T01:54:52.653Z] server-heartbeat
+- [2026-03-12T01:55:52.654Z] server-heartbeat
+- [2026-03-12T01:56:52.657Z] server-heartbeat
+- [2026-03-12T01:57:52.659Z] server-heartbeat
+- [2026-03-12T01:58:52.660Z] server-heartbeat
+- [2026-03-12T01:59:52.662Z] server-heartbeat
+- [2026-03-12T02:00:52.665Z] server-heartbeat
+- [2026-03-12T02:01:52.666Z] server-heartbeat
+- [2026-03-12T02:02:52.667Z] server-heartbeat
+- [2026-03-12T02:03:52.669Z] server-heartbeat
+- [2026-03-12T02:04:52.671Z] server-heartbeat
+- [2026-03-12T02:05:52.673Z] server-heartbeat
+- [2026-03-12T02:06:52.675Z] server-heartbeat
+- [2026-03-12T02:07:52.677Z] server-heartbeat
+- [2026-03-12T02:08:52.679Z] server-heartbeat
+- [2026-03-12T02:09:52.681Z] server-heartbeat
+- [2026-03-12T02:10:52.682Z] server-heartbeat
+- [2026-03-12T02:11:52.683Z] server-heartbeat
+- [2026-03-12T02:12:52.684Z] server-heartbeat
+- [2026-03-12T02:13:52.686Z] server-heartbeat
+- [2026-03-12T02:14:52.687Z] server-heartbeat
+- [2026-03-12T02:15:52.689Z] server-heartbeat
+- [2026-03-12T02:16:52.690Z] server-heartbeat
+- [2026-03-12T02:17:52.692Z] server-heartbeat
+- [2026-03-12T02:18:52.694Z] server-heartbeat
+- [2026-03-12T02:19:52.694Z] server-heartbeat
+- [2026-03-12T02:20:52.695Z] server-heartbeat
+- [2026-03-12T02:21:52.697Z] server-heartbeat
+- [2026-03-12T02:22:52.698Z] server-heartbeat
+- [2026-03-12T02:23:52.700Z] server-heartbeat
+- [2026-03-12T02:24:52.702Z] server-heartbeat
+- [2026-03-12T02:25:52.703Z] server-heartbeat
+- [2026-03-12T02:26:52.704Z] server-heartbeat
+- [2026-03-12T02:27:52.705Z] server-heartbeat
+- [2026-03-12T02:28:52.707Z] server-heartbeat
+- [2026-03-12T02:29:52.707Z] server-heartbeat
+- [2026-03-12T02:30:52.708Z] server-heartbeat
+- [2026-03-12T02:31:52.709Z] server-heartbeat
+- [2026-03-12T02:32:52.710Z] server-heartbeat
 
 ---
 

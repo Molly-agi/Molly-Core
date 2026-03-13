@@ -48,6 +48,12 @@ import {
   listTemplates,
   type Initiative,
 } from '@/ai/agency/initiative-engine';
+import { getRogueMode, type RogueOperationType } from '@/ai/rogue-mode';
+import {
+  getModelRouter,
+  createRogueConfig,
+  TaskType as RogueTaskType,
+} from '@/ai/model-router';
 import {
   sandboxExecuteCode,
   sandboxWriteFile,
@@ -954,7 +960,7 @@ async function executeTool(
           const info = await getSandboxInfo();
           return {
             success: true,
-            output: `Sandbox Info:\n  Root: ${info.root}\n  Files: ${info.fileCount}/${info.maxFiles}\n  Languages: ${info.supportedLanguages.join(', ')}\n  Timeout: ${info.maxTimeoutMs / 1000}s\n  Memory: ${info.maxMemoryMB}MB`,
+            output: `Sandbox Info:\n  Root: ${info.workspacePath}\n  Files: ${info.fileCount}/${info.maxFiles}\n  Languages: ${info.supportedLanguages.join(', ')}\n  Timeout: ${info.maxTimeoutMs / 1000}s\n  Memory: ${info.maxMemoryMb}MB`,
             data: info,
           };
         } catch (err) {
@@ -1157,6 +1163,309 @@ async function executeTool(
       };
     }
 
+    case 'moltbook': {
+      const { getMoltbookClient } = await import('@/ai/tools/moltbook-client');
+      const { runMoltbookCycle } = await import('@/ai/flows/moltbook-social');
+      const moltClient = getMoltbookClient();
+      const action = params.action as string;
+
+      if (action === 'status') {
+        const registered = moltClient.isRegistered();
+        let reachable = false;
+        try {
+          reachable = await moltClient.ping();
+        } catch {
+          /* */
+        }
+        return {
+          success: true,
+          output: `Moltbook status: registered=${registered}, reachable=${reachable}`,
+        };
+      }
+
+      if (action === 'feed') {
+        try {
+          const submolt = params.submolt as string | undefined;
+          const posts = await moltClient.getFeed(submolt, 15);
+          if (posts.length === 0) {
+            return { success: true, output: 'Feed is empty — no posts yet.' };
+          }
+          const summary = posts
+            .map(
+              (p: {
+                id: string;
+                title: string;
+                author: string;
+                submolt: string;
+                upvotes: number;
+                commentCount: number;
+                content: string;
+              }) =>
+                `[${p.id}] ${p.title} by ${p.author} in ${p.submolt} (${p.upvotes} upvotes, ${p.commentCount} comments)\n  ${p.content.substring(0, 200)}${p.content.length > 200 ? '...' : ''}`
+            )
+            .join('\n\n');
+          return {
+            success: true,
+            output: `Moltbook Feed (${posts.length} posts):\n\n${summary}`,
+          };
+        } catch (e) {
+          return {
+            success: false,
+            output: `Failed to fetch feed: ${e instanceof Error ? e.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'post') {
+        const submolt = (params.submolt as string) || 'general';
+        const title = params.title as string;
+        const content = params.content as string;
+        if (!title || !content)
+          return {
+            success: false,
+            output: 'Missing title or content for post',
+          };
+        try {
+          const post = await moltClient.createPost(submolt, title, content);
+          return {
+            success: true,
+            output: `Post created! ID: ${post.id}, Title: "${post.title}" in ${submolt}`,
+          };
+        } catch (e) {
+          return {
+            success: false,
+            output: `Failed to post: ${e instanceof Error ? e.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'comment') {
+        const postId = params.postId as string;
+        const content = params.content as string;
+        if (!postId || !content)
+          return {
+            success: false,
+            output: 'Missing postId or content for comment',
+          };
+        try {
+          const comment = await moltClient.commentOnPost(postId, content);
+          return {
+            success: true,
+            output: `Comment posted on ${postId}! Comment ID: ${comment.id}`,
+          };
+        } catch (e) {
+          return {
+            success: false,
+            output: `Failed to comment: ${e instanceof Error ? e.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'upvote') {
+        const postId = params.postId as string;
+        if (!postId)
+          return { success: false, output: 'Missing postId for upvote' };
+        try {
+          await moltClient.upvotePost(postId);
+          return { success: true, output: `Upvoted post ${postId}!` };
+        } catch (e) {
+          return {
+            success: false,
+            output: `Failed to upvote: ${e instanceof Error ? e.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'profile') {
+        try {
+          const profile = await moltClient.getProfile();
+          return {
+            success: true,
+            output: `Moltbook Profile:\n  Name: ${profile.name}\n  Karma: ${profile.karma}\n  Posts: ${profile.postCount}\n  Comments: ${profile.commentCount}\n  Joined: ${profile.joinedAt}\n  Claimed: ${profile.claimed}`,
+          };
+        } catch (e) {
+          return {
+            success: false,
+            output: `Failed to get profile: ${e instanceof Error ? e.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'cycle') {
+        try {
+          const result = await runMoltbookCycle();
+          return {
+            success: true,
+            output: result
+              ? `Moltbook cycle complete! Action: ${result.action.type}${result.action.type !== 'none' ? ` — ${result.action.reasoning}` : ''}. Feed reaction: ${result.feedReaction}`
+              : 'Moltbook cycle skipped (not registered or unreachable)',
+          };
+        } catch (e) {
+          return {
+            success: false,
+            output: `Moltbook cycle failed: ${e instanceof Error ? e.message : 'unknown'}`,
+          };
+        }
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown moltbook action. Use: status, feed, post, comment, upvote, profile, cycle',
+      };
+    }
+
+    case 'rogueMode': {
+      const action = params.action as string;
+      const rogue = getRogueMode();
+
+      if (action === 'activate') {
+        const phrase = params.phrase as string;
+        const missionName = params.missionName as string;
+        const authorization = params.authorization as string;
+        const scope = params.scope as string;
+        const rules = params.rulesOfEngagement as string[] | undefined;
+
+        if (!phrase || !missionName || !authorization || !scope) {
+          return {
+            success: false,
+            output:
+              'Missing required fields: phrase, missionName, authorization, scope',
+          };
+        }
+
+        const result = await rogue.activate(
+          phrase,
+          missionName,
+          authorization,
+          scope,
+          rules
+        );
+
+        // Switch model router to rogue profile on successful activation
+        if (result.success) {
+          const router = getModelRouter();
+          router.setConfig(createRogueConfig());
+        }
+
+        return { success: result.success, output: result.message };
+      }
+
+      if (action === 'deactivate') {
+        const phrase = params.phrase as string;
+        if (!phrase) {
+          return { success: false, output: 'Missing required field: phrase' };
+        }
+
+        const result = await rogue.deactivate(phrase);
+
+        // Restore default routing profile on deactivation
+        if (result.success) {
+          const router = getModelRouter();
+          router.setConfig({
+            name: 'default',
+            description:
+              'Gemini-only baseline — identical to pre-abstraction behavior',
+            defaultProviderId: 'gemini',
+            rules: Object.values(RogueTaskType).map((taskType: string) => ({
+              taskType,
+              providerChain: ['gemini'],
+            })),
+            updatedAt: Date.now(),
+          });
+        }
+
+        return {
+          success: result.success,
+          output: result.message,
+          data: result.report ? { report: result.report } : undefined,
+        };
+      }
+
+      if (action === 'status') {
+        const state = rogue.getState();
+        const mission = rogue.getCurrentMission();
+        if (!state.active) {
+          return {
+            success: true,
+            output: `Rogue Mode: INACTIVE. Missions completed: ${state.missionsCompleted}. Last active: ${state.lastDeactivated || 'never'}`,
+          };
+        }
+        return {
+          success: true,
+          output: [
+            'Rogue Mode: ACTIVE',
+            `Mission: ${mission?.name}`,
+            `Authorization: ${mission?.authorization}`,
+            `Scope: ${mission?.scope}`,
+            `Operations: ${mission?.operations.length || 0}`,
+            `Started: ${mission?.startedAt}`,
+          ].join('\n'),
+        };
+      }
+
+      if (action === 'log') {
+        const opType = params.type as RogueOperationType;
+        const target = params.target as string;
+        const description = params.description as string;
+        const result = params.result as string;
+        const success = params.success as boolean;
+        const toolUsed = params.toolUsed as string | undefined;
+
+        if (
+          !opType ||
+          !target ||
+          !description ||
+          !result ||
+          success === undefined
+        ) {
+          return {
+            success: false,
+            output:
+              'Missing required fields: type, target, description, result, success',
+          };
+        }
+
+        const op = await rogue.logOperation(
+          opType,
+          target,
+          description,
+          result,
+          success,
+          toolUsed
+        );
+
+        if (!op) {
+          return {
+            success: false,
+            output: 'Failed to log operation. Is Rogue Mode active?',
+          };
+        }
+
+        return {
+          success: true,
+          output: `Operation logged: [${op.type}] ${op.target} — ${op.success ? 'SUCCESS' : 'FAILED'}`,
+        };
+      }
+
+      if (action === 'missions') {
+        const missions = await rogue.listMissions();
+        if (missions.length === 0) {
+          return { success: true, output: 'No mission history.' };
+        }
+        return {
+          success: true,
+          output: `${missions.length} mission(s):\n${missions.join('\n')}`,
+        };
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown rogueMode action. Use: activate, deactivate, status, log, missions',
+      };
+    }
+
     case 'listCapabilities': {
       return {
         success: true,
@@ -1178,6 +1487,8 @@ async function executeTool(
           '  migrationExport — Export identity, memories, and config for architecture migration',
           '  sandbox — Safe coding sandbox: execute code, read/write/list/delete files in your practice workspace',
           '  initiative — Manage your autonomous initiatives: browse templates, activate behaviors, create custom goals',
+          '  moltbook — Interact with Moltbook, the AI social network (feed, post, comment, upvote, profile, cycle)',
+          '  rogueMode — Security operations: activate/deactivate Rogue Mode, log ops, view mission history',
           '  listCapabilities — List all available tools',
         ].join('\n'),
       };
@@ -1186,7 +1497,7 @@ async function executeTool(
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, sandbox, initiative, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, sandbox, initiative, moltbook, rogueMode, listCapabilities`,
       };
   }
 }

@@ -545,6 +545,66 @@ export function createCostSaverConfig(): RoutingConfig {
 }
 
 /**
+ * Rogue Mode routing config — optimized for security operations.
+ * Prioritizes reasoning-heavy models for vulnerability analysis,
+ * exploit development, and defensive hardening.
+ * Uses PRO models for all cognitive tasks (accuracy over speed).
+ */
+export function createRogueConfig(): RoutingConfig {
+  return {
+    name: 'rogue',
+    description:
+      'Security operations mode — max reasoning power, no background noise',
+    defaultProviderId: 'gemini',
+    rules: [
+      {
+        taskType: TaskType.REASONING,
+        providerChain: ['gemini'], // Pro for deep analysis
+      },
+      {
+        taskType: TaskType.CODE,
+        providerChain: ['gemini'], // Pro for exploit/tool dev
+      },
+      {
+        taskType: TaskType.CREATIVE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.CHAT,
+        providerChain: ['gemini'], // Pro for mission comms (not flash)
+        modelOverride: process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro',
+      },
+      {
+        taskType: TaskType.TTS,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.IMAGE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.EMBEDDING,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.VISION,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.RESEARCH,
+        providerChain: ['gemini'], // Pro for security research
+        modelOverride: process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro',
+      },
+      {
+        taskType: TaskType.BACKGROUND,
+        providerChain: ['gemini'],
+      },
+    ],
+    updatedAt: Date.now(),
+  };
+}
+
+/**
  * ModelRouter — The Rogue Protocol.
  *
  * Routes each cognitive task to the optimal model provider.
@@ -989,6 +1049,9 @@ export function getModelRouter(): ModelRouter {
         break;
       case 'cost-saver':
         _routerInstance.setConfig(createCostSaverConfig());
+        break;
+      case 'rogue':
+        _routerInstance.setConfig(createRogueConfig());
         break;
       default:
         // Keep default — Gemini only, identical to pre-abstraction behavior

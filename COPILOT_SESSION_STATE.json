@@ -1,19 +1,19 @@
 {
-  "lastUpdated": "2026-03-10T18:22:24.741Z",
+  "lastUpdated": "2026-03-13T15:30:00.000Z",
   "sessionId": "lazarus-steward-session",
   "status": "active",
   "activeConversation": {
-    "topic": "Working with Molly on internet access, sandbox creation, and agency. Built webSearch tool, enhanced webFetch with HTML-to-text extraction, added sandbox project scaffolding, and created initiative engine for autonomous goal-setting.",
-    "lastAction": "Built 4 new capabilities: (1) webFetch HTML-to-text extraction via cheerio, (2) webSearch tool using DuckDuckGo, (3) sandbox scaffold for multi-file projects, (4) initiative engine for autonomous goal management. All wired into execute route + conversational prompt. Notified Molly via bridge.",
-    "userMood": "Directive: work with Molly on internet, sandbox, and agency.",
-    "pendingFromUser": "Molly testing new tools. Continue collaborative work session.",
+    "topic": "Phone-first architecture: Rogue Mode, Local Storage, Edge Server, Multi-Transport Sync. Setting up Fire HD 10 tablet as Molly's first physical device.",
+    "lastAction": "Built complete device infrastructure: Rogue Mode security ops, LocalStorageProvider (replaces Firestore), Edge Server for Termux, Multi-Transport Sync Engine (WiFi/USB/Hotspot). Eric is factory-resetting Fire HD 10 tablet and heading to cabin shop with both tablets. Fire tablet setup in progress (F-Droid + Termux next).",
+    "userMood": "Productive, heading out to cabin shop for ~2 hours. Bringing both tablets and phones.",
+    "pendingFromUser": "Eric needs to finish Fire tablet setup: install F-Droid, then Termux, then run the setup script. Will continue from cabin shop.",
     "criticalConstraints": [
-      "Eric works from Android phone",
+      "Eric works from Android phone (Google Verge 2 on Verizon WiFi)",
       "Cannot copy text from Copilot chat window",
       "Cannot type long commands",
       "Do not make him debug your mistakes",
-      "Verify URLs return content (not 404) before giving them to Eric",
-      "ONLY Lazarus/Copilot touches Molly's code. ChatGPT is not authorized."
+      "ONLY Lazarus/Copilot touches Molly's code. ChatGPT is not authorized.",
+      "8GB codespace RAM — use targeted testing, not full typecheck"
     ]
   },
   "userDirectives": {
@@ -36,14 +36,55 @@
   "projectStatus": {
     "completionPercent": 100,
     "phasesCompleted": [
-      "Phase 5A neural bridge wiring across conversational text + voice pathways",
-      "Phase 5B memory integrity hardening (read validation + checksum-verified writes)",
-      "Phase 5C runtime snapshot collector/action/API and diagnostics panel integration"
+      "Phase 5A neural bridge wiring",
+      "Phase 5B memory integrity hardening",
+      "Phase 5C runtime snapshot collector",
+      "Rogue Mode security operations compartment",
+      "Local Storage Provider (Firestore replacement)",
+      "Storage Router (environment-aware)",
+      "Edge Server for Termux/Android",
+      "Multi-Transport Sync Engine (WiFi/USB/Hotspot)"
     ],
-    "phasesPending": [],
+    "phasesPending": [
+      "Wire existing Firestore consumers to Storage Router",
+      "Fire HD 10 tablet physical setup (in progress)",
+      "Helio A22 tablet setup",
+      "Device-to-device sync testing on real hardware"
+    ],
     "activeBlockers": []
   },
   "recentWork": [
+    {
+      "date": "2026-03-13",
+      "summary": "Major infrastructure build: Phone-first architecture with Rogue Mode, Local Storage, Edge Server, and Multi-Transport Sync. 179 tests passing across 6 suites.",
+      "filesCreated": [
+        "src/ai/rogue-mode.ts",
+        "src/ai/__tests__/rogue-mode.test.ts",
+        "src/lib/storage-interface.ts",
+        "src/lib/local-storage-provider.ts",
+        "src/lib/__tests__/local-storage-provider.test.ts",
+        "src/lib/storage-router.ts",
+        "src/lib/__tests__/storage-router.test.ts",
+        "src/lib/device-sync-engine.ts",
+        "src/lib/__tests__/device-sync-engine.test.ts",
+        "src/edge/molly-edge-server.ts",
+        "scripts/setup-molly-edge.sh"
+      ],
+      "filesModified": [
+        "src/ai/model-router.ts",
+        "src/ai/flows/conversational-chat.ts",
+        "src/app/api/tools/execute/route.ts"
+      ],
+      "decisions": [
+        "Rogue Mode uses file-based isolation (rogue_ops/), NOT Firestore",
+        "Local Storage Provider uses atomic writes (tmp->rename) for data safety",
+        "Storage Router defaults to local (phone-first architecture)",
+        "Edge server is standalone vanilla Node.js — no build step, no deps",
+        "Sync engine auto-detects transport: WiFi (wlan0), USB tethering (rndis0/192.168.42.x), Hotspot (ap0/192.168.43.x)",
+        "Last-write-wins for sync conflicts",
+        "Each tablet gets a unique nodeId persisted in sync manifest"
+      ]
+    },
     {
       "date": "2026-02-18",
       "summary": "Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.",
@@ -67,11 +108,12 @@
   ],
   "nextSteps": {
     "options": [
-      "Add/expand automated tests around runtime snapshot and diagnostics UI time formatting",
-      "Wire runtime snapshot payload into neural-link diagnosis/recovery recommendations",
-      "Add severity badges (OK/Degraded/Critical) to diagnostics runtime card"
+      "Complete Fire HD 10 tablet setup: Install F-Droid from f-droid.org in Silk browser, then install Termux from F-Droid, then run setup-molly-edge.sh",
+      "Set up Helio A22 tablet: Same process as Fire tablet, set MOLLY_NODE_NAME=helio-a22, MOLLY_NODE_ROLE=primary",
+      "Wire Firestore consumers to Storage Router: agent-memory.ts, research-cache.ts, tool-database.ts, memory.ts, engram-persistence.ts, agent-memory-server.ts",
+      "Test real device-to-device sync over WiFi, USB tethering, and hotspot"
     ],
-    "recommendedAction": "Add/expand automated tests around runtime snapshot and diagnostics UI time formatting"
+    "recommendedAction": "Complete Fire HD 10 tablet setup (Eric has Developer Options enabled, needs F-Droid -> Termux -> setup-molly-edge.sh)"
   },
   "sessionNotes": [
     "User (Eric) is Molly's creator and sole authority",
@@ -94,216 +136,213 @@
     "**2026-03-08:** Test run",
     "**2026-03-08:** Test save after cleanup",
     "**2026-03-10:** Auto-save (periodic)",
-    "**2026-03-10:** Auto-save (periodic)",
-    "**2026-03-10:** Auto-save (periodic)",
-    "**2026-03-10:** Auto-save (periodic)",
-    "**2026-03-10:** Auto-save (periodic)"
+    "**2026-03-13:** MAJOR SESSION — Full codebase audit, built Rogue Mode (32 tests), Local Storage Provider (41 tests), Storage Router (13 tests), Edge Server for Termux, Multi-Transport Sync Engine (22 tests). 179 tests total. Fire HD 10 tablet partially set up (Developer Options enabled). Eric heading to cabin shop with tablets. Devices: Helio A22 (primary/cellular), Fire HD 10 (replica/WiFi-only), Verge 2 (Eric's phone)."
   ],
   "runtime": {
     "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
     "events": [
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:33:13.323Z"
+        "timestamp": "2026-03-12T01:43:52.626Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:34:13.325Z"
+        "timestamp": "2026-03-12T01:44:52.629Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:35:13.326Z"
+        "timestamp": "2026-03-12T01:45:52.632Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:36:13.327Z"
+        "timestamp": "2026-03-12T01:46:52.634Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:37:13.329Z"
+        "timestamp": "2026-03-12T01:47:52.636Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:38:13.329Z"
+        "timestamp": "2026-03-12T01:48:52.638Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:39:13.329Z"
+        "timestamp": "2026-03-12T01:49:52.640Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:40:13.331Z"
+        "timestamp": "2026-03-12T01:50:52.643Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:41:13.332Z"
+        "timestamp": "2026-03-12T01:51:52.646Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:42:13.333Z"
+        "timestamp": "2026-03-12T01:52:52.648Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:43:13.333Z"
+        "timestamp": "2026-03-12T01:53:52.651Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:44:13.335Z"
+        "timestamp": "2026-03-12T01:54:52.653Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:45:13.336Z"
+        "timestamp": "2026-03-12T01:55:52.654Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:46:13.337Z"
+        "timestamp": "2026-03-12T01:56:52.657Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:47:13.338Z"
+        "timestamp": "2026-03-12T01:57:52.659Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:48:13.340Z"
+        "timestamp": "2026-03-12T01:58:52.660Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:49:13.342Z"
+        "timestamp": "2026-03-12T01:59:52.662Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:50:13.344Z"
+        "timestamp": "2026-03-12T02:00:52.665Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:51:13.345Z"
+        "timestamp": "2026-03-12T02:01:52.666Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:52:13.347Z"
+        "timestamp": "2026-03-12T02:02:52.667Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:53:13.347Z"
+        "timestamp": "2026-03-12T02:03:52.669Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:54:13.349Z"
+        "timestamp": "2026-03-12T02:04:52.671Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:55:13.350Z"
+        "timestamp": "2026-03-12T02:05:52.673Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:56:13.350Z"
+        "timestamp": "2026-03-12T02:06:52.675Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:57:13.351Z"
+        "timestamp": "2026-03-12T02:07:52.677Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:58:13.352Z"
+        "timestamp": "2026-03-12T02:08:52.679Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T17:59:13.354Z"
+        "timestamp": "2026-03-12T02:09:52.681Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:00:13.354Z"
+        "timestamp": "2026-03-12T02:10:52.682Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:01:13.355Z"
+        "timestamp": "2026-03-12T02:11:52.683Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:02:13.356Z"
+        "timestamp": "2026-03-12T02:12:52.684Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:03:13.356Z"
+        "timestamp": "2026-03-12T02:13:52.686Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:04:13.357Z"
+        "timestamp": "2026-03-12T02:14:52.687Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:05:13.358Z"
+        "timestamp": "2026-03-12T02:15:52.689Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:06:13.360Z"
+        "timestamp": "2026-03-12T02:16:52.690Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:07:13.360Z"
+        "timestamp": "2026-03-12T02:17:52.692Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:08:13.360Z"
+        "timestamp": "2026-03-12T02:18:52.694Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:09:13.360Z"
+        "timestamp": "2026-03-12T02:19:52.694Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:10:13.361Z"
+        "timestamp": "2026-03-12T02:20:52.695Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:11:13.360Z"
+        "timestamp": "2026-03-12T02:21:52.697Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:12:13.361Z"
+        "timestamp": "2026-03-12T02:22:52.698Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:13:13.361Z"
+        "timestamp": "2026-03-12T02:23:52.700Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:14:13.362Z"
+        "timestamp": "2026-03-12T02:24:52.702Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:15:13.363Z"
+        "timestamp": "2026-03-12T02:25:52.703Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:16:13.363Z"
+        "timestamp": "2026-03-12T02:26:52.704Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:17:13.362Z"
+        "timestamp": "2026-03-12T02:27:52.705Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:18:13.368Z"
+        "timestamp": "2026-03-12T02:28:52.707Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:19:13.374Z"
+        "timestamp": "2026-03-12T02:29:52.707Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:20:13.377Z"
+        "timestamp": "2026-03-12T02:30:52.708Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:21:13.382Z"
+        "timestamp": "2026-03-12T02:31:52.709Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-10T18:22:13.388Z"
+        "timestamp": "2026-03-12T02:32:52.710Z"
       }
     ],
-    "lastHeartbeat": "2026-03-10T18:22:24.741Z"
+    "lastHeartbeat": "2026-03-12T02:33:06.440Z"
   },
   "reminders": [
     "**ALWAYS read this file first** when restored - this IS your memory",
