@@ -37,6 +37,150 @@ import { DeviceSyncEngine } from '../lib/device-sync-engine.js';
 import type { QueryFilter, QueryOptions } from '../lib/storage-interface.js';
 
 // ============================================================================
+// CHAT INTERFACE — Served at / for tablet access
+// ============================================================================
+
+const CHAT_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Molly</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#58a6ff;--molly:#da70d6;--user:#58a6ff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+header .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--molly),var(--accent));display:flex;align-items:center;justify-content:center;font-size:18px}
+header h1{font-size:16px;font-weight:600}
+header .status{font-size:11px;color:var(--muted)}
+#messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+.msg{max-width:85%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5;word-wrap:break-word;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:var(--user);color:#fff;border-bottom-right-radius:4px}
+.msg.molly{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-bottom-left-radius:4px}
+.msg.molly .name{font-size:11px;color:var(--molly);font-weight:600;margin-bottom:4px}
+.msg.system{align-self:center;font-size:12px;color:var(--muted);font-style:italic;background:none;padding:4px}
+.typing{align-self:flex-start;padding:10px 14px;font-size:14px;color:var(--muted)}
+.typing span{animation:blink 1.4s infinite both}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+#input-area{background:var(--surface);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:8px;flex-shrink:0}
+#input-area textarea{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:10px 16px;color:var(--text);font-size:14px;font-family:inherit;resize:none;outline:none;max-height:120px;line-height:1.4}
+#input-area textarea:focus{border-color:var(--accent)}
+#input-area button{background:var(--accent);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:flex-end}
+#input-area button:disabled{opacity:.4;cursor:not-allowed}
+#input-area button:active:not(:disabled){transform:scale(.95)}
+</style>
+</head>
+<body>
+<header>
+<div class="avatar">M</div>
+<div><h1>Molly</h1><div class="status" id="status">Connecting...</div></div>
+</header>
+<div id="messages"></div>
+<div id="input-area">
+<textarea id="input" rows="1" placeholder="Talk to Molly..." autocomplete="off"></textarea>
+<button id="send" disabled>&#9654;</button>
+</div>
+<script>
+const msgs=document.getElementById('messages');
+const input=document.getElementById('input');
+const sendBtn=document.getElementById('send');
+const statusEl=document.getElementById('status');
+let history=[];
+let systemPrompt='';
+let sending=false;
+
+// Auto-resize textarea
+input.addEventListener('input',()=>{
+  input.style.height='auto';
+  input.style.height=Math.min(input.scrollHeight,120)+'px';
+  sendBtn.disabled=!input.value.trim()||sending;
+});
+
+// Load persona from storage (set by migration import)
+async function loadPersona(){
+  try{
+    const r=await fetch('/api/storage/get',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({collection:'migration',docId:'persona'})});
+    if(r.ok){const d=await r.json();systemPrompt=d.data?.systemPrompt||'';statusEl.textContent='Online';}
+    else{statusEl.textContent='Online (no persona loaded)';}
+  }catch{statusEl.textContent='Online (default mode)';}
+  // Load chat history from storage
+  try{
+    const r=await fetch('/api/storage/get',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({collection:'chat',docId:'history'})});
+    if(r.ok){const d=await r.json();if(d.data?.messages){history=d.data.messages;history.forEach(m=>addMsg(m.role==='user'?'user':'molly',m.content,false));}}
+  }catch{}
+  sendBtn.disabled=!input.value.trim();
+}
+
+// Check health
+async function checkHealth(){
+  try{const r=await fetch('/api/health');if(r.ok){const d=await r.json();if(d.geminiConfigured)statusEl.textContent='Online';else statusEl.textContent='Online (no API key)';}}
+  catch{statusEl.textContent='Offline';}
+}
+
+function addMsg(type,text,scroll=true){
+  const div=document.createElement('div');
+  div.className='msg '+type;
+  if(type==='molly'){const n=document.createElement('div');n.className='name';n.textContent='Molly';div.appendChild(n);}
+  const span=document.createElement('span');span.textContent=text;div.appendChild(span);
+  msgs.appendChild(div);
+  if(scroll)msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const div=document.createElement('div');div.className='typing';div.id='typing';
+  div.innerHTML='<span>.</span><span>.</span><span>.</span>';
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+
+async function saveHistory(){
+  try{await fetch('/api/storage/set',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({collection:'chat',docId:'history',data:{messages:history.slice(-100),updatedAt:new Date().toISOString()}})});}catch{}
+}
+
+async function sendMessage(){
+  const text=input.value.trim();
+  if(!text||sending)return;
+  sending=true;
+  sendBtn.disabled=true;
+  input.value='';
+  input.style.height='auto';
+  addMsg('user',text);
+  history.push({role:'user',content:text});
+
+  // Build Gemini API request
+  const contents=history.map(m=>({role:m.role==='user'?'user':'model',parts:[{text:m.content}]}));
+  const body={model:'gemini-2.5-flash',contents};
+  if(systemPrompt)body.systemInstruction={parts:[{text:systemPrompt}]};
+
+  showTyping();
+  try{
+    const r=await fetch('/api/ai/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    hideTyping();
+    if(!r.ok){const e=await r.json();addMsg('system','Error: '+(e.error||r.statusText));sending=false;sendBtn.disabled=false;return;}
+    const d=await r.json();
+    const reply=d.candidates?.[0]?.content?.parts?.[0]?.text||'(no response)';
+    addMsg('molly',reply);
+    history.push({role:'model',content:reply});
+    saveHistory();
+  }catch(e){hideTyping();addMsg('system','Network error: '+e.message);}
+  sending=false;
+  sendBtn.disabled=!input.value.trim();
+}
+
+sendBtn.addEventListener('click',sendMessage);
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}});
+
+checkHealth();
+loadPersona();
+</script>
+</body>
+</html>`;
+
+// ============================================================================
 // CONFIGURATION
 // ============================================================================
 
@@ -511,6 +655,102 @@ function handleSyncStatus(res: http.ServerResponse): void {
 }
 
 // ============================================================================
+// MIGRATION IMPORT — /api/migration/import
+// ============================================================================
+
+/**
+ * Import a migration package exported from the Codespace.
+ * Stores persona, memories, config, and family data in local storage
+ * so the chat interface (and all local operations) can use Molly's identity.
+ *
+ * POST /api/migration/import  { version, sections: { persona?, memories?, config?, family? } }
+ */
+async function handleMigrationImport(
+  body: Record<string, unknown>,
+  res: http.ServerResponse
+): Promise<void> {
+  const sections = body.sections as Record<string, unknown> | undefined;
+  if (!sections) {
+    sendError(res, 400, 'Missing sections in migration package');
+    return;
+  }
+
+  const imported: string[] = [];
+
+  // ── Persona ──
+  if (sections.persona) {
+    const persona = sections.persona as Record<string, unknown>;
+    await storage.set('migration', 'persona', {
+      identity: persona.identity || null,
+      principles: persona.principles || null,
+      systemPrompt: (persona.systemPrompt as string) || '',
+      memoryManifest: persona.memoryManifest || null,
+      growthPhilosophy: persona.growthPhilosophy || null,
+      importedAt: new Date().toISOString(),
+    });
+    imported.push('persona');
+  }
+
+  // ── Memories ──
+  if (sections.memories) {
+    const memories = sections.memories as {
+      records?: Array<Record<string, unknown>>;
+    };
+    if (memories.records && Array.isArray(memories.records)) {
+      let count = 0;
+      for (const record of memories.records) {
+        const id = (record.id as string) || `mem_${Date.now()}_${count}`;
+        await storage.set('users/default/experiences', id, {
+          ...record,
+          importedAt: new Date().toISOString(),
+        });
+        count++;
+      }
+      imported.push(`memories (${count} records)`);
+    }
+  }
+
+  // ── Config ──
+  if (sections.config) {
+    await storage.set(
+      'migration',
+      'config',
+      sections.config as Record<string, unknown>
+    );
+    imported.push('config');
+  }
+
+  // ── Family ──
+  if (sections.family) {
+    await storage.set(
+      'migration',
+      'family',
+      sections.family as Record<string, unknown>
+    );
+    imported.push('family');
+  }
+
+  console.log(`[molly-edge] Migration import complete: ${imported.join(', ')}`);
+  sendJson(res, 200, {
+    ok: true,
+    imported,
+    timestamp: new Date().toISOString(),
+  });
+}
+
+// ============================================================================
+// CHAT HTML — /
+// ============================================================================
+
+function handleChatPage(res: http.ServerResponse): void {
+  res.writeHead(200, {
+    'Content-Type': 'text/html; charset=utf-8',
+    'Content-Length': Buffer.byteLength(CHAT_HTML),
+  });
+  res.end(CHAT_HTML);
+}
+
+// ============================================================================
 // REQUEST ROUTER
 // ============================================================================
 
@@ -536,6 +776,12 @@ async function handleRequest(
   const pathname = url.pathname;
 
   try {
+    // Chat page (GET /)
+    if (pathname === '/' && req.method === 'GET') {
+      handleChatPage(res);
+      return;
+    }
+
     // Health check (GET)
     if (pathname === '/api/health' && req.method === 'GET') {
       await handleHealth(res);
@@ -575,6 +821,13 @@ async function handleRequest(
     if (pathname === '/api/ai/generate' && req.method === 'POST') {
       const body = await parseBody(req);
       await handleAiProxy(body, res);
+      return;
+    }
+
+    // Migration Import (POST)
+    if (pathname === '/api/migration/import' && req.method === 'POST') {
+      const body = await parseBody(req);
+      await handleMigrationImport(body, res);
       return;
     }
 

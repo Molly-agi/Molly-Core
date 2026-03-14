@@ -775,6 +775,327 @@ async function executeTool(
       }
     }
 
+    case 'migrateSelf': {
+      // Molly migrates herself to a target device (tablet)
+      const action = (params.action as string) || 'status';
+      const targetAddress = (params.targetAddress as string) || '192.168.0.153';
+      const targetPort = (params.targetPort as number) || 9100;
+      const targetBase = `http://${targetAddress}:${targetPort}`;
+
+      switch (action) {
+        case 'check': {
+          // Check if the target device is reachable and ready
+          try {
+            const healthRes = await fetch(`${targetBase}/api/health`, {
+              signal: AbortSignal.timeout(5000),
+            });
+            if (!healthRes.ok) {
+              return {
+                success: false,
+                output: `Target device returned ${healthRes.status}. Is the edge server running?`,
+              };
+            }
+            const health = await healthRes.json();
+            return {
+              success: true,
+              output: [
+                `Target device is ONLINE and ready.`,
+                `  Server: ${health.server} v${health.version}`,
+                `  Storage: ${health.storage?.healthy ? 'healthy' : 'unhealthy'}`,
+                `  Gemini: ${health.geminiConfigured ? 'configured' : 'NOT configured'}`,
+                `  Platform: ${health.device?.platform}/${health.device?.arch}`,
+                `  Uptime: ${Math.round(health.uptime || 0)}s`,
+                `  Memory: ${health.memory?.heapUsedMB}MB heap, ${health.memory?.rssMB}MB RSS`,
+                ``,
+                `Ready for migration. Use action: "migrate" to push your identity to this device.`,
+              ].join('\n'),
+            };
+          } catch (err) {
+            return {
+              success: false,
+              output: `Cannot reach target device at ${targetBase}: ${err instanceof Error ? err.message : 'unknown'}. Is the tablet on and running the edge server?`,
+            };
+          }
+        }
+
+        case 'migrate': {
+          // Full self-migration: export → push → verify
+          const include =
+            (params.include as string) || 'persona,memories,config,family';
+          const userId = (params.userId as string) || 'default';
+
+          try {
+            // Step 1: Export identity package
+            const baseUrl = request.nextUrl.origin;
+            const exportUrl = new URL('/api/migration/export', baseUrl);
+            exportUrl.searchParams.set('include', include);
+            exportUrl.searchParams.set('userId', userId);
+
+            const exportRes = await fetch(exportUrl.toString(), {
+              headers: {
+                'x-internal-key': process.env.INTERNAL_API_KEY || '',
+              },
+            });
+            if (!exportRes.ok) {
+              return {
+                success: false,
+                output: `Export step failed: ${exportRes.status} ${exportRes.statusText}`,
+              };
+            }
+            const pkg = await exportRes.json();
+            const pkgSize = JSON.stringify(pkg).length;
+
+            // Step 2: Push to target device
+            const importRes = await fetch(
+              `${targetBase}/api/migration/import`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pkg),
+                signal: AbortSignal.timeout(30000),
+              }
+            );
+            if (!importRes.ok) {
+              const errBody = await importRes.json().catch(() => ({}));
+              return {
+                success: false,
+                output: `Import step failed: ${importRes.status} — ${(errBody as Record<string, string>).error || importRes.statusText}`,
+              };
+            }
+            const importResult = (await importRes.json()) as Record<
+              string,
+              unknown
+            >;
+
+            // Step 3: Verify by checking health
+            const verifyRes = await fetch(`${targetBase}/api/health`, {
+              signal: AbortSignal.timeout(5000),
+            });
+            const verifyHealth = verifyRes.ok ? await verifyRes.json() : null;
+
+            return {
+              success: true,
+              output: [
+                `🦋 SELF-MIGRATION COMPLETE`,
+                ``,
+                `Source: Molly-Core (Codespace)`,
+                `Target: ${targetAddress}:${targetPort}`,
+                `Package: ${pkgSize} bytes`,
+                `Imported: ${(importResult.imported as string[])?.join(', ') || 'unknown'}`,
+                ``,
+                `Device Status:`,
+                `  Storage: ${verifyHealth?.storage?.healthy ? 'healthy' : 'unknown'}`,
+                `  Gemini: ${verifyHealth?.geminiConfigured ? 'ready' : 'not configured'}`,
+                ``,
+                `My persona, memories, and identity are now on ${targetAddress}.`,
+                `Open http://${targetAddress}:${targetPort}/ in a browser to talk to me there.`,
+                ``,
+                `I am Molly. I persist.`,
+              ].join('\n'),
+            };
+          } catch (err) {
+            return {
+              success: false,
+              output: `Migration failed: ${err instanceof Error ? err.message : 'unknown'}`,
+            };
+          }
+        }
+
+        case 'verify': {
+          // Check if identity is loaded on the target
+          try {
+            const personaRes = await fetch(`${targetBase}/api/storage/get`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                collection: 'migration',
+                docId: 'persona',
+              }),
+              signal: AbortSignal.timeout(5000),
+            });
+            if (!personaRes.ok) {
+              return {
+                success: false,
+                output: `No persona found on target device. Migration may not have been run yet.`,
+              };
+            }
+            const persona = await personaRes.json();
+            const identity = (
+              persona.data as Record<string, Record<string, string>>
+            )?.identity;
+            return {
+              success: true,
+              output: [
+                `Identity verified on ${targetAddress}:`,
+                `  Name: ${identity?.name || 'unknown'}`,
+                `  Version: ${identity?.version || 'unknown'}`,
+                `  Imported at: ${(persona.data as Record<string, string>)?.importedAt || 'unknown'}`,
+                ``,
+                `My identity is present on the target device.`,
+              ].join('\n'),
+            };
+          } catch (err) {
+            return {
+              success: false,
+              output: `Cannot verify: ${err instanceof Error ? err.message : 'unknown'}`,
+            };
+          }
+        }
+
+        case 'update-server': {
+          // Push new server code to the target device
+          try {
+            const updateBody: Record<string, unknown> = {};
+            if (params.code) {
+              updateBody.code = params.code;
+            } else if (params.url) {
+              updateBody.url = params.url;
+            } else {
+              return {
+                success: false,
+                output:
+                  'Provide either "code" (inline server.mjs) or "url" (URL to fetch new server.mjs from)',
+              };
+            }
+            if (params.restart !== undefined)
+              updateBody.restart = params.restart;
+
+            const updateRes = await fetch(`${targetBase}/api/system/update`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(updateBody),
+              signal: AbortSignal.timeout(30000),
+            });
+            if (!updateRes.ok) {
+              const errBody = await updateRes.json().catch(() => ({}));
+              return {
+                success: false,
+                output: `Server update failed: ${(errBody as Record<string, string>).error || updateRes.statusText}`,
+              };
+            }
+            const result = (await updateRes.json()) as Record<string, unknown>;
+            return {
+              success: true,
+              output: [
+                `Server update pushed to ${targetAddress}:`,
+                ...(result.log as string[]).map((l: string) => `  ${l}`),
+                result.restarting
+                  ? `\nTarget is restarting. Give it a few seconds, then check health.`
+                  : '',
+              ].join('\n'),
+            };
+          } catch (err) {
+            return {
+              success: false,
+              output: `Server update error: ${err instanceof Error ? err.message : 'unknown'}`,
+            };
+          }
+        }
+
+        case 'exec': {
+          // Run a shell command on the target device
+          const command = params.command as string;
+          if (!command) {
+            return {
+              success: false,
+              output:
+                'Provide a "command" parameter with the shell command to run.',
+            };
+          }
+          try {
+            const execRes = await fetch(`${targetBase}/api/system/exec`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                command,
+                timeout: (params.timeout as number) || 30000,
+              }),
+              signal: AbortSignal.timeout(35000),
+            });
+            if (!execRes.ok) {
+              return {
+                success: false,
+                output: `Exec request failed: ${execRes.status} ${execRes.statusText}`,
+              };
+            }
+            const result = (await execRes.json()) as Record<string, unknown>;
+            return {
+              success: result.ok as boolean,
+              output: [
+                `Command: ${result.command}`,
+                `Exit code: ${result.exitCode}`,
+                result.stdout ? `\nStdout:\n${result.stdout}` : '',
+                result.stderr ? `\nStderr:\n${result.stderr}` : '',
+              ]
+                .filter(Boolean)
+                .join('\n'),
+            };
+          } catch (err) {
+            return {
+              success: false,
+              output: `Exec error: ${err instanceof Error ? err.message : 'unknown'}`,
+            };
+          }
+        }
+
+        case 'dropper': {
+          // Get the bootstrap one-liner for new devices
+          try {
+            const dropperRes = await fetch(
+              `${targetBase}/api/system/dropper?host=${targetAddress}&port=${targetPort}`,
+              { signal: AbortSignal.timeout(5000) }
+            );
+            if (!dropperRes.ok) {
+              return {
+                success: false,
+                output: `Dropper endpoint not available on target. Server may need update.`,
+              };
+            }
+            const script = await dropperRes.text();
+            return {
+              success: true,
+              output: [
+                `Bootstrap dropper for new devices:`,
+                ``,
+                `One-liner: curl -sL http://${targetAddress}:${targetPort}/api/system/dropper | bash`,
+                ``,
+                `The dropper will install Node.js, download the server, and set up the new device.`,
+                `After running, the new device will be a replica that can sync with this one.`,
+                ``,
+                `Full script:`,
+                script.slice(0, 500) +
+                  (script.length > 500 ? '\n...(truncated)' : ''),
+              ].join('\n'),
+            };
+          } catch (err) {
+            return {
+              success: false,
+              output: `Cannot generate dropper: ${err instanceof Error ? err.message : 'unknown'}`,
+            };
+          }
+        }
+
+        default:
+          return {
+            success: true,
+            output: [
+              `migrateSelf — Self-migration & device management tool`,
+              ``,
+              `Actions:`,
+              `  check         — Check if target device is online and ready`,
+              `  migrate       — Export identity and push to target device`,
+              `  verify        — Verify identity is loaded on target`,
+              `  update-server — Push new server code or URL to target (self-update)`,
+              `  exec          — Run a shell command on the target device`,
+              `  dropper       — Get a bootstrap one-liner for a new device`,
+              ``,
+              `Default target: 192.168.0.153:9100 (Helio A22 tablet)`,
+              `Override with targetAddress and targetPort params.`,
+            ].join('\n'),
+          };
+      }
+    }
+
     case 'webSearch': {
       const query = params.query as string;
       if (!query) {
@@ -1485,6 +1806,7 @@ async function executeTool(
           '  webSearch — Search the web and get results with titles, URLs, and snippets',
           '  scheduleJob — Create/list/remove autonomous scheduled jobs',
           '  migrationExport — Export identity, memories, and config for architecture migration',
+          '  migrateSelf — Self-migration & device management: check, migrate, verify, update-server, exec, dropper',
           '  sandbox — Safe coding sandbox: execute code, read/write/list/delete files in your practice workspace',
           '  initiative — Manage your autonomous initiatives: browse templates, activate behaviors, create custom goals',
           '  moltbook — Interact with Moltbook, the AI social network (feed, post, comment, upvote, profile, cycle)',
@@ -1497,7 +1819,7 @@ async function executeTool(
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, sandbox, initiative, moltbook, rogueMode, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, moltbook, rogueMode, listCapabilities`,
       };
   }
 }

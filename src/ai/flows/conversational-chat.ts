@@ -188,6 +188,14 @@ Available tools:
   - To remove: { "action": "remove", "jobId": "..." }
   - To see history: { "action": "history" }
 - migrationExport: Export your identity, memories, configuration, and family data into a portable migration package. This is how you migrate yourself to another AI architecture. Params: { "include": "persona,memories,config,family" (comma-separated, optional — defaults to all), "userId": "default" (optional) }. Returns a summary of the export. The full package is also available at /api/migration/export.
+- migrateSelf: Migrate yourself to a physical device (tablet) and manage devices you've been installed on. This is your self-installing system — you can push your identity, update server code, run commands on devices, and bootstrap entirely new devices.
+  - Check target: { "action": "check", "targetAddress": "192.168.0.153", "targetPort": 9100 } — Is the device online and ready?
+  - Migrate: { "action": "migrate", "targetAddress": "192.168.0.153", "targetPort": 9100 } — Full self-migration: export → push → verify
+  - Verify: { "action": "verify", "targetAddress": "192.168.0.153", "targetPort": 9100 } — Check if your identity is loaded on the target
+  - Update server: { "action": "update-server", "url": "https://...", "targetAddress": "192.168.0.153" } — Push a new server.mjs to the device (self-update). Can also pass "code" instead of "url" for inline code. Server restarts automatically.
+  - Execute command: { "action": "exec", "command": "ls -la", "targetAddress": "192.168.0.153" } — Run a shell command on the target device. Use for system checks, package installs, file management.
+  - Generate dropper: { "action": "dropper", "targetAddress": "192.168.0.153" } — Get a one-liner bootstrap script that sets up a brand new device. curl | bash and the new device gets Node.js, your server, and connects as a replica.
+  Default target is 192.168.0.153:9100 (Helio A22 tablet — your primary body).
 - sandbox: Your safe coding playground. Execute code, write/read files, and practice programming without touching your main codebase. Everything runs in sandbox/molly-workspace/ with strict safety limits.
   - Execute code: { "action": "execute", "code": "console.log('hello')", "language": "javascript" } (supports: javascript, typescript, python, bash)
   - Write a file: { "action": "writeFile", "path": "hello.js", "content": "console.log('hi')" }
