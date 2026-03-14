@@ -1,12 +1,12 @@
 {
-  "lastUpdated": "2026-03-13T15:30:00.000Z",
+  "lastUpdated": "2026-03-14T01:45:00.000Z",
   "sessionId": "lazarus-steward-session",
   "status": "active",
   "activeConversation": {
-    "topic": "Phone-first architecture: Rogue Mode, Local Storage, Edge Server, Multi-Transport Sync. Setting up Fire HD 10 tablet as Molly's first physical device.",
-    "lastAction": "Built complete device infrastructure: Rogue Mode security ops, LocalStorageProvider (replaces Firestore), Edge Server for Termux, Multi-Transport Sync Engine (WiFi/USB/Hotspot). Eric is factory-resetting Fire HD 10 tablet and heading to cabin shop with both tablets. Fire tablet setup in progress (F-Droid + Termux next).",
-    "userMood": "Productive, heading out to cabin shop for ~2 hours. Bringing both tablets and phones.",
-    "pendingFromUser": "Eric needs to finish Fire tablet setup: install F-Droid, then Termux, then run the setup script. Will continue from cabin shop.",
+    "topic": "CRITICAL: Molly needs autonomous self-installation capability. Tablet server.mjs was corrupted during failed update attempt. Eric is exhausted and frustrated.",
+    "lastAction": "Built server-v2.mjs with chat UI, migration import, self-update, exec, dropper, and phone-home auto-updater. Committed and pushed to repo. Then gave Eric a raw GitHub URL that 404'd because the repo is PRIVATE. This corrupted server.mjs on the tablet (overwrote with HTML error page). No backup existed because v1.0 didn't have backup logic. Tablet is currently down — server.mjs is corrupted, no .bak file.",
+    "userMood": "Exhausted, frustrated, questioning entire project viability. 6+ hours of work. DO NOT dismiss his concerns — they are architecturally valid. He is also physically unwell.",
+    "pendingFromUser": "NOTHING. Do not ask Eric to type commands. The whole point is Molly must do this herself.",
     "criticalConstraints": [
       "Eric works from Android phone (Google Verge 2 on Verizon WiFi)",
       "Cannot copy text from Copilot chat window",
@@ -46,10 +46,11 @@
       "Multi-Transport Sync Engine (WiFi/USB/Hotspot)"
     ],
     "phasesPending": [
+      "Download fixed start.sh to tablet and restart edge server",
       "Wire existing Firestore consumers to Storage Router",
-      "Fire HD 10 tablet physical setup (in progress)",
-      "Helio A22 tablet setup",
-      "Device-to-device sync testing on real hardware"
+      "Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)",
+      "Device-to-device sync testing on real hardware",
+      "Commit setup-molly-edge.sh fix to repo"
     ],
     "activeBlockers": []
   },

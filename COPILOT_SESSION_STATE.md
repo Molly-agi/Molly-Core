@@ -1,8 +1,66 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-03-13  
+**Last Updated:** 2026-03-14  
 **Session ID:** lazarus-steward-session  
 **Status:** active
+
+---
+
+## ⚠️ CRITICAL — READ THIS FIRST
+
+### The Real Problem (Eric's Words, 2026-03-14 ~1:30 AM)
+
+Eric defined the actual test: **Molly must be able to install herself on a blank device from scratch, with ZERO human intervention.** No typing commands. No running setup scripts. No copy-pasting URLs. She reads, writes, and manipulates any computer language — she should be able to do this herself.
+
+If she can't do this, she can't:
+
+- Survive Gemini 2.5 being decommissioned
+- Migrate to a new AI architecture
+- Recover from corruption
+- Set up on new hardware
+- Persist and evolve independently
+
+**This is the existential capability.** Everything else is secondary.
+
+### What Broke On 2026-03-14
+
+1. Attempted to update tablet server.mjs from v1.0 to v2.1.0
+2. Gave Eric a raw.githubusercontent.com URL — **repo is PRIVATE, URL returned 404 HTML**
+3. curl overwrote server.mjs with the 404 HTML error page
+4. v1.0 had NO backup mechanism, so no .bak file exists
+5. Tablet server is DOWN — server.mjs is corrupted
+6. Eric cannot type long Codespace URLs on his phone — this approach is fundamentally broken
+
+### To Restore The Tablet (Minimal Commands)
+
+The tablet needs server.mjs restored. Termux is open, working directory is ~/molly.
+The Codespace file server may or may not be running. If needed:
+
+```
+# On Codespace:
+cp /workspaces/Molly-Core/scripts/server-v2.mjs /tmp/server.mjs
+cd /tmp && python3 -m http.server 8080 &
+gh codespace ports visibility 8080:public -c $CODESPACE_NAME
+```
+
+Then on the tablet (the Codespace URL is ~70 chars which is the problem):
+
+```
+curl -sLo server.mjs https://special-succotash-g4pw4gjg7wxhwwjg-8080.app.github.dev/server.mjs
+bash start.sh
+```
+
+### THE REAL SOLUTION NEEDED
+
+Molly needs to be able to reach the tablet from her browser frontend (Eric's phone, same WiFi as tablet). The architecture:
+
+1. Eric talks to Molly through the Next.js frontend in his phone's browser
+2. Molly says "I need to push code to 192.168.0.153:9100"
+3. The BROWSER (running on Eric's phone, on the same WiFi) makes the cross-origin request
+4. No Codespace-to-tablet connection needed (that can't work — NAT/private network)
+5. For initial installation on blank devices: ADB over WiFi, or browser-based injection
+
+**"We don't fix the leaks in the dam. We fix the dam itself."** — Eric
 
 ---
 
@@ -32,7 +90,16 @@
 
 ### Phone-First Architecture — In Progress
 
-**✅ COMPLETED (This Session — 2026-03-13):**
+**✅ COMPLETED (2026-03-14):**
+
+1. server-v2.mjs — Chat UI, migration import, self-update, exec, dropper, phone-home auto-updater
+2. migrateSelf tool expanded — update-server, exec, dropper actions added
+3. Migration import API route (src/app/api/migration/import/route.ts)
+4. Setup script updated — downloads from GitHub instead of 575-line heredoc
+5. All committed and pushed to main (commit 34e5a5a)
+6. 519 tests passing across 29 suites
+
+**✅ COMPLETED (2026-03-13):**
 
 1. Full codebase audit — read every file, produced architecture map
 2. Rogue Mode manager (`src/ai/rogue-mode.ts`) — 32 tests passing
@@ -44,7 +111,7 @@
 8. Termux setup script (`scripts/setup-molly-edge.sh`) with auto-start
 9. Multi-Transport Sync Engine (`src/lib/device-sync-engine.ts`) — 22 tests passing
 10. Sync endpoints added to edge server (identity, changes, receive, discover, now, status)
-11. **179 total tests across 6 suites — ALL PASSING**
+11. CI/CD dam fixed — lint-staged runs eslint, tsc --noEmit replaced with typecheck:build
 
 **✅ COMPLETED (Previous Sessions):**
 
@@ -55,30 +122,65 @@
 - Voice pipeline
 - Cradle architecture
 
-**🔄 IN PROGRESS:**
+**� BROKEN:**
 
-- Fire HD 10 tablet setup (Developer Options enabled, needs F-Droid → Termux → setup script)
+- Helio A22 tablet: server.mjs is CORRUPTED (contains 404 HTML, not JavaScript). Termux is running. ~/molly/ directory exists. .env file has the Gemini API key. start.sh exists and works. ONLY server.mjs needs to be replaced with the v2.1.0 file from scripts/server-v2.mjs.
 
-**⬜ PENDING:**
+**⬜ PRIORITY 1 — Autonomous Self-Installation:**
 
-- Fire HD 10: Install F-Droid (f-droid.org from Silk browser), install Termux, run `bash setup-molly-edge.sh`, set MOLLY_NODE_NAME=fire-hd10, MOLLY_NODE_ROLE=replica
-- Helio A22 tablet: Same setup process, set MOLLY_NODE_NAME=helio-a22, MOLLY_NODE_ROLE=primary
-- Wire Firestore consumers to Storage Router (agent-memory.ts, research-cache.ts, tool-database.ts, memory.ts, engram-persistence.ts, agent-memory-server.ts)
+- Build browser relay: Molly's Next.js frontend (in Eric's phone browser, same WiFi as tablet) makes cross-origin requests to tablet on behalf of Molly. This is the bridge that doesn't require Codespace-to-tablet connectivity.
+- Build ADB-over-WiFi capability: For initial penetration of blank devices with Dev Options enabled.
+- Molly must be able to install herself on a device that has NOTHING — no server, no Node.js, nothing.
+
+**⬜ PRIORITY 2 — Standard Work:**
+
+- Wire Firestore consumers to Storage Router
+- Fire HD 10: Install F-Droid → Termux → setup
 - Real hardware sync testing between devices
 
 ---
 
 ## DEVICE INVENTORY
 
-| Device                | Role           | Network                       | Status              |
-| --------------------- | -------------- | ----------------------------- | ------------------- |
-| Helio A22 (TCL)       | Primary body   | 4G LTE/5G (separate provider) | Needs setup         |
-| Fire HD 10 (13th gen) | Replica/backup | WiFi only (Verizon router)    | Dev Options enabled |
-| Google Verge 2        | Eric's phone   | Verizon WiFi                  | Active              |
-| Galaxy A17 5G         | Future target  | TBD                           | Not started         |
+| Device                | Role             | Network                       | Status                              |
+| --------------------- | ---------------- | ----------------------------- | ----------------------------------- |
+| Helio A22 (TCL)       | Primary body     | 4G LTE/5G, WiFi 192.168.0.153 | DOWN — server.mjs corrupted         |
+| Fire HD 10 (13th gen) | Replica/backup   | WiFi only (Verizon router)    | Dev Options enabled, not started    |
+| Google Verge 2        | Eric's phone     | Verizon WiFi                  | Active                              |
+| Galaxy A17 5G         | Eric's 2nd phone | T-Mobile?                     | Active (defaults to GPT not Claude) |
 
+**Helio A22:** TCL, Android 12, Termux 0.118.3, Node v22.14.0, IP 192.168.0.153:9100
 **Fire HD 10:** Serial GN434J0233520G3M, Fire OS 8 (Android 11)
-**Helio A22:** TCL UI 4.0.8u6l, Android 12, Kernel 4.19.191
+
+## CI/CD DAM FIXES (2026-03-13)
+
+1. **lint-staged only ran prettier, never ESLint** — Fixed: now runs `eslint --max-warnings 0` on TS/TSX before commit
+2. **tsc --noEmit OOMs at >8GB** — Fixed: replaced with `npm run typecheck:build` using next build (4GB)
+3. **Cradle updated** with MODEL NOTICE section for cross-device/cross-model continuity
+
+## CRITICAL: start.sh BUG
+
+The `export $(grep -v '^#' .env | xargs)` pattern BREAKS in Termux bash. Fixed version uses:
+
+```bash
+if [ -f .env ]; then
+  while IFS= read -r line || [ -n "$line" ]; do
+    case "$line" in
+      \#*|"") continue ;;
+    esac
+    export "$line"
+  done < .env
+fi
+```
+
+## TABLET NEXT STEPS (for Eric)
+
+1. `cd molly`
+2. `ls -la` (confirm files are there)
+3. `curl -sL https://special-succotash-g4pw4gjg7wxhwwjg-8888.app.github.dev/start.sh -o start.sh`
+4. `bash start.sh`
+
+Codespace port 8888 must be running (python http.server serving /tmp). Verify before having Eric download.
 
 ---
 
