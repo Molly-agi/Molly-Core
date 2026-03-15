@@ -62,6 +62,8 @@ export interface HeartbeatConfig {
   bridgeIntervalMs: number;
   /** Interval for autonomous agency cycle in ms. Default: 300_000 (5 minutes) */
   autonomousCycleIntervalMs: number;
+  /** Interval for LLM memory learning in ms. Default: 3_600_000 (1 hour) */
+  memoryLearningIntervalMs: number;
   /** CPU usage threshold to skip non-critical tasks. Default: 70 */
   cpuPressureThreshold: number;
   /** Memory usage % threshold to skip non-critical tasks. Default: 85 */
@@ -80,6 +82,7 @@ export interface HeartbeatConfig {
     moltbook: boolean;
     bridgePolling: boolean;
     autonomousCycle: boolean;
+    memoryLearning: boolean;
   };
 }
 
@@ -111,6 +114,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   moltbookIntervalMs: 1_800_000, // 30 minutes
   bridgeIntervalMs: 60_000, // every cycle
   autonomousCycleIntervalMs: 300_000, // 5 minutes
+  memoryLearningIntervalMs: 3_600_000, // 1 hour
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
   tasks: {
@@ -126,6 +130,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     moltbook: true,
     bridgePolling: true,
     autonomousCycle: true,
+    memoryLearning: true,
   },
 };
 
@@ -145,6 +150,7 @@ export class HeartbeatScheduler {
   private lastMoltbook = 0;
   private lastBridgePoll = 0;
   private lastAutonomousCycle = 0;
+  private lastMemoryLearning = 0;
   private lastReflectionText = '';
   private engramSystem: NeuralEngramSystem | null = null;
   private history: HeartbeatCycleResult[] = [];
@@ -720,6 +726,53 @@ export class HeartbeatScheduler {
           this.lastAutonomousCycle = Date.now();
         }
         tasks.push(result);
+      }
+    }
+
+    // Task 13: Memory Learning (hourly — LLM-powered consolidation)
+    if (this.config.tasks.memoryLearning && !pressure) {
+      const timeSinceLearning = cycleStart - this.lastMemoryLearning;
+      if (timeSinceLearning < this.config.memoryLearningIntervalMs) {
+        tasks.push({
+          name: 'memory-learning',
+          executed: false,
+          skipped: `Not due (${Math.round((this.config.memoryLearningIntervalMs - timeSinceLearning) / 60000)}m remaining)`,
+        });
+      } else {
+        // Check rate limiter budget before spending tokens
+        let hasBudget = true;
+        try {
+          const rlStatus = getRateLimiter().getStatus();
+          hasBudget = rlStatus.percentageUsed < 70;
+        } catch {
+          // Rate limiter not initialized — allow
+        }
+
+        if (!hasBudget) {
+          tasks.push({
+            name: 'memory-learning',
+            executed: false,
+            skipped: 'Rate limit budget >70% used',
+          });
+        } else {
+          const result = await this.runTask('memory-learning', async () => {
+            const { executeMemoryConsolidation } = await import(
+              '@/ai/flows/memory-consolidation'
+            );
+            const consolidationResult = await executeMemoryConsolidation(
+              'default',
+              { timeWindowDays: 7, minConfidence: 0.5 }
+            );
+            MollyLogger.info(
+              `Memory learning complete: ${JSON.stringify(consolidationResult).substring(0, 200)}`,
+              'heartbeat-scheduler'
+            );
+          });
+          if (result.executed) {
+            this.lastMemoryLearning = Date.now();
+          }
+          tasks.push(result);
+        }
       }
     }
 

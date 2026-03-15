@@ -63,6 +63,12 @@ const BLOCKED_PATTERNS = [
   /import\s+.*from\s+['"]net['"]/,
   /import\s+.*from\s+['"]http['"]/,
   /import\s+.*from\s+['"]https['"]/,
+  // Dynamic imports — bypass static pattern matching
+  /await\s+import\s*\(/,
+  /import\s*\(/,
+  // String concatenation tricks: require('child' + '_process')
+  /require\s*\([^)]*\+/,
+  /require\s*\(`/,
   /process\.env/,
   /process\.exit/,
   /process\.kill/,

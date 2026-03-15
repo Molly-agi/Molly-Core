@@ -46,27 +46,6 @@ export class MollyError extends Error {
 }
 
 /**
- * Thrown when a tool fails to execute (e.g., system call, API call)
- */
-export class ToolError extends MollyError {
-  constructor(
-    toolName: string,
-    message: string,
-    context: Record<string, unknown> = {},
-    traceId?: string
-  ) {
-    super(
-      `TOOL_ERROR_${toolName.toUpperCase()}`,
-      `Tool '${toolName}' failed: ${message}`,
-      'high',
-      { toolName, ...context },
-      traceId
-    );
-    Object.setPrototypeOf(this, ToolError.prototype);
-  }
-}
-
-/**
  * Thrown when a flow fails to complete or encounters a fatal error
  */
 export class FlowError extends MollyError {
@@ -173,27 +152,6 @@ export class NetworkError extends MollyError {
 }
 
 /**
- * Thrown when input validation fails
- */
-export class ValidationError extends MollyError {
-  constructor(
-    fieldName: string,
-    message: string,
-    context: Record<string, unknown> = {},
-    traceId?: string
-  ) {
-    super(
-      'VALIDATION_ERROR',
-      `Validation failed for '${fieldName}': ${message}`,
-      'medium',
-      { fieldName, ...context },
-      traceId
-    );
-    Object.setPrototypeOf(this, ValidationError.prototype);
-  }
-}
-
-/**
  * Thrown when GenAI API returns an error
  */
 export class GenerativeAIError extends MollyError {
@@ -212,47 +170,4 @@ export class GenerativeAIError extends MollyError {
     );
     Object.setPrototypeOf(this, GenerativeAIError.prototype);
   }
-}
-
-/**
- * Thrown when Firebase/Firestore operation fails
- */
-export class FirebaseError extends MollyError {
-  constructor(
-    operation: string,
-    message: string,
-    context: Record<string, unknown> = {},
-    traceId?: string
-  ) {
-    super(
-      `FIREBASE_ERROR_${operation.toUpperCase()}`,
-      `Firebase operation '${operation}' failed: ${message}`,
-      'high',
-      { operation, ...context },
-      traceId
-    );
-    Object.setPrototypeOf(this, FirebaseError.prototype);
-  }
-}
-
-/**
- * Type guard to check if error is a MollyError
- */
-export function isMollyError(error: unknown): error is MollyError {
-  return error instanceof MollyError;
-}
-
-/**
- * Extract a user-friendly error message from any error
- */
-export function getUserFriendlyMessage(error: unknown): string {
-  if (isMollyError(error)) {
-    return error.message;
-  }
-
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return 'An unexpected error occurred. Please try again.';
 }

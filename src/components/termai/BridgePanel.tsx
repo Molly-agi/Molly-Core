@@ -23,7 +23,7 @@ interface BridgeData {
   messages: BridgeMessage[];
 }
 
-const POLL_INTERVAL = 3000;
+const POLL_INTERVAL = 10_000; // 10s — Terminal.tsx handles fast 3s notify polling
 
 const senderStyle: Record<string, { color: string; label: string }> = {
   molly: { color: '#e879f9', label: '🧠 Molly' },
@@ -57,9 +57,11 @@ export default function BridgePanel() {
 
   useEffect(() => {
     fetchMessages();
+    // Only poll when the panel is open — Terminal.tsx handles background processing
+    if (!isOpen) return;
     const interval = setInterval(fetchMessages, POLL_INTERVAL);
     return () => clearInterval(interval);
-  }, [fetchMessages]);
+  }, [fetchMessages, isOpen]);
 
   useEffect(() => {
     if (isOpen) {

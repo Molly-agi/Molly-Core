@@ -217,3 +217,27 @@ export function listTemplates(): string {
     (t, i) => `${i}. [${t.category}] ${t.name} — ${t.description}`
   ).join('\n');
 }
+
+// ── Persistence ────────────────────────────────────────────────────────────
+
+/**
+ * Serialize current initiatives to JSON (for state persistence)
+ */
+export function serializeInitiatives(): string {
+  return JSON.stringify(initiatives);
+}
+
+/**
+ * Restore initiatives from serialized JSON (on startup)
+ */
+export function restoreInitiatives(json: string): number {
+  try {
+    const restored: Initiative[] = JSON.parse(json);
+    if (!Array.isArray(restored)) return 0;
+    initiatives.length = 0;
+    initiatives.push(...restored);
+    return restored.length;
+  } catch {
+    return 0;
+  }
+}

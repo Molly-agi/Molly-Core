@@ -1,9 +1,10 @@
 /**
  * @fileOverview Persistence helpers for engram consolidation.
+ * Uses Firebase Admin SDK for server-side writes.
  */
 
-import { doc, writeBatch, Timestamp } from 'firebase/firestore';
-import { initializeFirebaseServer } from '@/firebase/server';
+import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { Timestamp } from 'firebase-admin/firestore';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type { MemoryEngram } from '@/ai/memory/neural-engram';
 import { encryptEngramData } from '@/ai/memory/engram-crypto';
@@ -33,6 +34,16 @@ export async function persistEngramBatch(
     return { saved: 0, failed: 0, errors };
   }
 
+  if (!isAdminConfigured()) {
+    return {
+      saved: 0,
+      failed: engrams.length,
+      errors: [
+        'Firebase admin not configured — engram persistence unavailable',
+      ],
+    };
+  }
+
   MollyLogger.info(
     'Persisting engram batch',
     'engram-persistence',
@@ -40,12 +51,12 @@ export async function persistEngramBatch(
     traceId
   );
 
-  const { firestore } = initializeFirebaseServer();
+  const firestore = getAdminFirestore();
   let saved = 0;
 
   for (let i = 0; i < engrams.length; i += MAX_BATCH_SIZE) {
     const slice = engrams.slice(i, i + MAX_BATCH_SIZE);
-    const batch = writeBatch(firestore);
+    const batch = firestore.batch();
 
     for (const engram of slice) {
       try {
@@ -56,7 +67,11 @@ export async function persistEngramBatch(
           password
         );
 
-        const docRef = doc(firestore, 'users', userId, 'engrams', engram.id);
+        const docRef = firestore
+          .collection('users')
+          .doc(userId)
+          .collection('engrams')
+          .doc(engram.id);
 
         batch.set(docRef, {
           encrypted,
