@@ -20,7 +20,7 @@ import {
   type ExperienceRecord,
 } from '../tools/memory-schema';
 import { addChecksum } from '../tools/memory-integrity';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
 
 const EvolutionLoopInputSchema = z.object({
   objective: z.string(),
@@ -177,10 +177,8 @@ async function persistEvolutionExperience(
     recalledInsights?: string;
   }
 ): Promise<void> {
-  if (!isAdminConfigured()) return;
-
   try {
-    const firestore = getAdminFirestore();
+    const storage = getStorageRouter();
     const record = createMemoryRecord<ExperienceRecord>({
       type: 'experience',
       userId,
@@ -194,12 +192,11 @@ async function persistEvolutionExperience(
     });
 
     const withChecksum = addChecksum(record);
-    await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('experiences')
-      .doc(withChecksum.id)
-      .set(withChecksum);
+    await storage.set(
+      `users/${userId}/experiences`,
+      withChecksum.id,
+      withChecksum as unknown as Record<string, unknown>
+    );
 
     MollyLogger.info('Evolution experience persisted', 'evolution-loop', {
       objective: objective.substring(0, 50),

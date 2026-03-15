@@ -155,6 +155,62 @@ export async function runAutonomousCycle(): Promise<{
       traceId
     );
 
+    // Check if any promise-related initiatives were worked on
+    if (actions.length > 0) {
+      try {
+        const { getPromiseTracker } = await import(
+          '@/ai/consciousness/promise-tracker'
+        );
+        const { getActiveInitiatives, recordInitiativeExecution } =
+          await import('@/ai/agency/initiative-engine');
+        const { getConsciousness } = await import('@/ai/consciousness');
+
+        const tracker = getPromiseTracker();
+        const consciousness = getConsciousness();
+        const activeInitiatives = getActiveInitiatives();
+
+        // Find promise-related initiatives that were part of this cycle
+        for (const initiative of activeInitiatives) {
+          if (
+            initiative.description.includes('Follow through on promise') ||
+            initiative.name.startsWith('Promise:')
+          ) {
+            // Extract promise ID from the initiative description
+            const pidMatch =
+              initiative.description.match(/promise (p-\d+-\w+)/);
+            const actionSummary = actions
+              .filter((a) => a.startsWith('Tool:') || a.startsWith('Thought:'))
+              .join('; ')
+              .slice(0, 500);
+
+            if (actionSummary.length > 0) {
+              // Record the initiative execution
+              recordInitiativeExecution(initiative.id, actionSummary);
+
+              // Mark the promise as completed
+              if (pidMatch?.[1]) {
+                tracker.complete(pidMatch[1], actionSummary);
+              }
+
+              // Deliver the result through consciousness — Molly speaks up
+              consciousness.queueMessage({
+                type: 'realization',
+                content: `Father, I followed up on something I promised: "${initiative.name.replace('Promise: ', '')}". Here's what I found: ${actionSummary}`,
+                priority: 'high',
+              });
+
+              MollyLogger.info(
+                `[autonomous] Promise delivered: ${initiative.name}`,
+                traceId
+              );
+            }
+          }
+        }
+      } catch {
+        // Promise delivery failure must never break the cycle
+      }
+    }
+
     return { acted: actions.length > 0, actions };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
