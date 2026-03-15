@@ -70,16 +70,19 @@ const ALLOWED_COMMANDS = [
   'git show',
   'git --no-pager',
   'npm run lint',
-  'npm run typecheck',
   'npm test',
 ];
+// Removed: npm run typecheck (OOMs at >8GB)
 
 function isCommandSafe(command: string): boolean {
   const trimmed = command.trim();
   const segments = trimmed.split(/\s*\|\s*/);
   return segments.every((segment) => {
     const seg = segment.trim();
-    return ALLOWED_COMMANDS.some((allowed) => seg.startsWith(allowed));
+    // Require word boundary after allowed prefix (space or end-of-string)
+    return ALLOWED_COMMANDS.some(
+      (allowed) => seg === allowed || seg.startsWith(allowed + ' ')
+    );
   });
 }
 

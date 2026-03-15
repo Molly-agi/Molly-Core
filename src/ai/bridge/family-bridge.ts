@@ -25,6 +25,20 @@ export interface BridgeState {
 
 const BRIDGE_DIR = path.join(process.cwd(), 'src', 'ai', 'bridge');
 const BRIDGE_FILE = path.join(BRIDGE_DIR, 'conversation.json');
+const MAX_MESSAGES = 500;
+
+// ---- Write serialization ----
+// Prevents TOCTOU race conditions on concurrent read→modify→write cycles
+let writeLock: Promise<void> = Promise.resolve();
+
+function withLock<T>(fn: () => Promise<T>): Promise<T> {
+  const next = writeLock.then(fn, fn);
+  writeLock = next.then(
+    () => {},
+    () => {}
+  );
+  return next;
+}
 
 // ---- File I/O helpers ----
 
@@ -68,19 +82,25 @@ export async function sendMessage(
   from: BridgeMessage['from'],
   content: string
 ): Promise<BridgeMessage> {
-  const state = await readFile();
-  const message: BridgeMessage = {
-    id: generateId(),
-    from,
-    timestamp: new Date().toISOString(),
-    content,
-    read: { [from]: true },
-  };
-  state.active = true;
-  state.lastActivity = message.timestamp;
-  state.messages.push(message);
-  await writeFile(state);
-  return message;
+  return withLock(async () => {
+    const state = await readFile();
+    const message: BridgeMessage = {
+      id: generateId(),
+      from,
+      timestamp: new Date().toISOString(),
+      content,
+      read: { [from]: true },
+    };
+    state.active = true;
+    state.lastActivity = message.timestamp;
+    state.messages.push(message);
+    // Cap message history to prevent unbounded growth
+    if (state.messages.length > MAX_MESSAGES) {
+      state.messages = state.messages.slice(-MAX_MESSAGES);
+    }
+    await writeFile(state);
+    return message;
+  });
 }
 
 export async function getUnreadMessages(
@@ -95,20 +115,22 @@ export async function getUnreadMessages(
 export async function markMessagesRead(
   recipient: 'molly' | 'lazarus'
 ): Promise<number> {
-  const state = await readFile();
-  let count = 0;
-  for (const msg of state.messages) {
-    if (msg.from !== recipient && !isReadBy(msg, recipient)) {
-      if (typeof msg.read === 'object' && msg.read !== null) {
-        (msg.read as Record<string, boolean>)[recipient] = true;
-      } else {
-        msg.read = { [msg.from]: true, [recipient]: true };
+  return withLock(async () => {
+    const state = await readFile();
+    let count = 0;
+    for (const msg of state.messages) {
+      if (msg.from !== recipient && !isReadBy(msg, recipient)) {
+        if (typeof msg.read === 'object' && msg.read !== null) {
+          (msg.read as Record<string, boolean>)[recipient] = true;
+        } else {
+          msg.read = { [msg.from]: true, [recipient]: true };
+        }
+        count++;
       }
-      count++;
     }
-  }
-  if (count > 0) await writeFile(state);
-  return count;
+    if (count > 0) await writeFile(state);
+    return count;
+  });
 }
 
 export async function getRecentMessages(limit = 20): Promise<BridgeMessage[]> {

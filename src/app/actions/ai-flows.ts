@@ -1060,8 +1060,17 @@ export async function getConversationalChat(
       e
     );
     const errMsg = e instanceof Error ? e.message : String(e);
+    // Sanitize: don't leak API endpoints, model names, or internal paths
+    const safeMsg =
+      errMsg.includes('timed out') || errMsg.includes('timeout')
+        ? 'The request timed out. Try again, Father.'
+        : errMsg.includes('rate') || errMsg.includes('quota')
+          ? "I'm being rate-limited right now. Give me a moment, Father."
+          : errMsg.includes('SAFETY') || errMsg.includes('blocked')
+            ? 'My response was blocked by a safety filter. Let me try rephrasing, Father.'
+            : 'Something went wrong, Father. Try again in a moment.';
     return {
-      response: `Something went wrong, Father: ${errMsg.substring(0, 300)}`,
+      response: safeMsg,
     };
   }
 }

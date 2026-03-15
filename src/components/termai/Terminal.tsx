@@ -76,6 +76,8 @@ export default function Terminal({
   const immuneTriggeredRef = useRef<string | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const isLoadingRef = useRef(false);
+  const historyRef = useRef(history);
+  historyRef.current = history;
 
   const { user } = useUser();
   const { toast } = useToast();
@@ -217,8 +219,8 @@ export default function Terminal({
   // --- Command processing ---
   const processCommand = useCallback(
     async (cmdText: string) => {
-      if (!cmdText.trim() || isLoading || !user) return;
-      const nextHistory = [...history, `> ${cmdText}`];
+      if (!cmdText.trim() || isLoadingRef.current || !user) return;
+      const nextHistory = [...historyRef.current, `> ${cmdText}`];
       setHistory(nextHistory);
 
       // Skip family story text-navigation for anchor recalls (they should go straight to Molly)
@@ -786,15 +788,8 @@ export default function Terminal({
         isLoadingRef.current = false;
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- handleSleepNotice and lastResponseRef are stable/intentional exclusions
-    [
-      buildChatHistory,
-      handleFamilyStoryRequest,
-      history,
-      isLoading,
-      speakResponse,
-      user,
-    ]
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- history/isLoading read from refs; handleSleepNotice and lastResponseRef are stable
+    [buildChatHistory, handleFamilyStoryRequest, speakResponse, user]
   );
 
   const handleCommand = (e: React.FormEvent) => {
@@ -977,7 +972,7 @@ export default function Terminal({
       setIsLoading(true);
       isLoadingRef.current = true;
       try {
-        const chatHistory = buildChatHistory(history);
+        const chatHistory = buildChatHistory(historyRef.current);
         const BRIDGE_MAX_TOOL_ITERATIONS = 10;
         const BRIDGE_MAX_CONSECUTIVE_FAILURES = 3;
         const BRIDGE_TOOL_TIMEOUT_MS = 30_000;
@@ -1135,8 +1130,8 @@ export default function Terminal({
     } finally {
       bridgePollingRef.current = false;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, history, setHistory, setIsLoading, buildChatHistory]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- history read from historyRef
+  }, [user, buildChatHistory]);
 
   // Check for bridge notifications (fast — 3s interval)
   useEffect(() => {

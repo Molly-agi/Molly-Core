@@ -16,12 +16,15 @@ import {
   readBridgeState,
 } from '@/ai/bridge/family-bridge';
 import { setPendingNotification } from '@/app/api/bridge/notify/route';
+import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 
 const VALID_SENDERS = new Set(['molly', 'lazarus', 'eric']);
 
 export async function GET(request: NextRequest) {
+  if (!isInternalAuthorized(request)) return unauthorizedResponse();
+
   const unreadFor = request.nextUrl.searchParams.get('unread');
   const limit = parseInt(request.nextUrl.searchParams.get('limit') || '50', 10);
 
@@ -56,6 +59,8 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  if (!isInternalAuthorized(request)) return unauthorizedResponse();
+
   const body = await request.json();
   const { from, content, action } = body;
 

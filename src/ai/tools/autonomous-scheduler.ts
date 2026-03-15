@@ -403,6 +403,36 @@ export class AutonomousScheduler {
     const url = job.action.url;
     if (!url) throw new Error('No URL specified for webhook job');
 
+    // SSRF protection: validate URL before fetching
+    let parsed: URL;
+    try {
+      parsed = new URL(url);
+    } catch {
+      throw new Error('Invalid URL format');
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      throw new Error('Only http and https URLs are allowed');
+    }
+    const hostname = parsed.hostname.toLowerCase();
+    const blockedHosts = [
+      'localhost',
+      '127.0.0.1',
+      '0.0.0.0',
+      '[::1]',
+      'metadata.google.internal',
+    ];
+    if (
+      blockedHosts.includes(hostname) ||
+      hostname.startsWith('169.254.') ||
+      hostname.startsWith('10.') ||
+      hostname.startsWith('192.168.') ||
+      /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
+    ) {
+      throw new Error(
+        'Access to internal/private network addresses is blocked'
+      );
+    }
+
     const method = job.action.method || 'GET';
     const headers: Record<string, string> = {
       'User-Agent': 'Molly/1.0',

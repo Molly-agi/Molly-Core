@@ -131,16 +131,13 @@ const ALLOWED_COMMANDS = [
   'du',
   'free',
   'ps',
-  'top',
   'which',
   'file',
   'stat',
   'tree',
-  'node',
   'npx',
   'npm run',
   'npm test',
-  'npm run typecheck',
   'npm run lint',
   'npm run format',
   'npm run harden',
@@ -150,22 +147,23 @@ const ALLOWED_COMMANDS = [
   'git branch',
   'git show',
   'git --no-pager',
-  'python3',
-  'pip',
-  'curl',
   'mkdir',
   'touch',
-  'cp',
-  'mv',
 ];
+// Removed: node, python3 (bypass all safety via -e/-c), curl (bypasses SSRF),
+// cp, mv (can overwrite protected files), top (interactive, hangs),
+// npm run typecheck (OOMs at >8GB), pip (installs arbitrary packages)
 
 function isCommandSafe(command: string): boolean {
   const trimmed = command.trim();
-  // Allow piped commands only if every segment starts with an allowed prefix
+  // Allow piped commands only if every segment matches an allowed prefix
   const segments = trimmed.split(/\s*\|\s*/);
   return segments.every((segment) => {
     const seg = segment.trim();
-    return ALLOWED_COMMANDS.some((allowed) => seg.startsWith(allowed));
+    // Require word boundary after the allowed prefix (space or end-of-string)
+    return ALLOWED_COMMANDS.some(
+      (allowed) => seg === allowed || seg.startsWith(allowed + ' ')
+    );
   });
 }
 

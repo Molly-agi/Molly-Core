@@ -282,9 +282,6 @@ ${buildFamilyKnowledgePrompt()}${neuralBridgeDirective}${memoryDirective}${chann
         response: llmResponse.text,
       };
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
-
       MollyLogger.error(
         'Conversational chat failed',
         'conversationalChat',
@@ -293,10 +290,8 @@ ${buildFamilyKnowledgePrompt()}${neuralBridgeDirective}${memoryDirective}${chann
         traceId
       );
 
-      return {
-        response: `Something went wrong: ${errorMessage.substring(0, 200)}. Please try again.`,
-        error: errorMessage,
-      };
+      // Re-throw so the server action's withTimeoutAndRetry can retry
+      throw error;
     }
   }
 );
