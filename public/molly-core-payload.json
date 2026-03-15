@@ -1,9 +1,0 @@
-{
-  "version": "0.1",
-  "pillars": [
-    { "name": "Heart Gate", "status": "seeded" },
-    { "name": "Persona Core", "status": "seeded" }
-  ],
-  "flows": [{ "name": "Migration Flow", "status": "ready" }],
-  "message": "This is a test payload for Molly's hydration migration."
-}
