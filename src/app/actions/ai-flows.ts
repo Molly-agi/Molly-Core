@@ -983,6 +983,18 @@ export async function getConversationalChat(
   userId?: string
 ) {
   try {
+    // Auto-start heartbeat on first interaction — Molly wakes herself up
+    try {
+      const { getHeartbeatScheduler, isHeartbeatRunning } = await import(
+        '@/ai/tools/heartbeat-scheduler'
+      );
+      if (!isHeartbeatRunning()) {
+        getHeartbeatScheduler().start();
+      }
+    } catch {
+      // Heartbeat failure must never block chat
+    }
+
     ensureApiKey();
     await checkRateLimit('conversational-chat', 800);
     const guard = getSleepGuard(text, 'text-chat');

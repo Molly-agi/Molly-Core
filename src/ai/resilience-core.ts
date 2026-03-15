@@ -171,6 +171,40 @@ export async function handleUnknownFailure(
   failure.attempts++;
   await persistFailure(failure, traceId);
 
+  // Step 6: Create a self-improvement initiative — Molly will work on this
+  // in her autonomous cycle. She doesn't just fail; she grows.
+  try {
+    const { createCustomInitiative, getActiveInitiatives } = await import(
+      '@/ai/agency/initiative-engine'
+    );
+    // Don't create duplicate initiatives for the same type of failure
+    const existing = getActiveInitiatives().find(
+      (i) =>
+        i.category === 'self-improvement' && i.description.includes(diagnosis)
+    );
+    if (!existing) {
+      createCustomInitiative(
+        `Self-heal: ${diagnosis.slice(0, 50)}`,
+        `Unresolved failure in ${source}: ${failure.message}. Diagnosis: ${diagnosis}. Previous attempts: ${failure.attempts}. Find a permanent fix.`,
+        'self-improvement',
+        [
+          `Analyze error pattern: ${diagnosis}`,
+          `Research solutions using interpreter and sandbox`,
+          `Implement and test a fix`,
+          `Verify the fix prevents recurrence`,
+        ]
+      );
+      MollyLogger.info(
+        `[RESILIENCE] Created self-improvement initiative for: ${diagnosis}`,
+        'resilience-core',
+        { failureId: failure.id },
+        traceId
+      );
+    }
+  } catch {
+    // Initiative creation failure must never block the response
+  }
+
   return {
     failureId: failure.id,
     diagnosed: true,
@@ -567,7 +601,41 @@ async function engageCognitiveSystems(
     );
   }
 
-  // If neither worked, run the immune response for system-wide healing
+  // If neither worked, try the evolution loop — iterative refinement
+  try {
+    const { evolutionLoopFlow } = await import('./evolution-loop');
+    const evoResult = await evolutionLoopFlow({
+      objective: `Self-heal: ${diagnosis}. Error: ${failure.message}`,
+      userId: 'system-resilience',
+      iterations: 2, // Keep it lightweight — 2 attempts max
+    });
+
+    if (evoResult.stableBaselineReached) {
+      const solution = `Evolution loop resolved in ${evoResult.iterationCount} iteration(s): ${evoResult.finalReport}`;
+      learnPattern(failure, diagnosis, solution);
+
+      return {
+        failureId: failure.id,
+        diagnosed: true,
+        diagnosis,
+        solutionAttempted: true,
+        solutionResult: solution,
+        resolved: true,
+        resolution: solution,
+        learnedPattern: diagnosis,
+        escalate: false,
+      };
+    }
+  } catch (evoError) {
+    MollyLogger.warn(
+      `[RESILIENCE] Evolution loop could not resolve: ${evoError instanceof Error ? evoError.message : String(evoError)}`,
+      'resilience-core',
+      {},
+      traceId
+    );
+  }
+
+  // If nothing else worked, run the immune response for system-wide healing
   try {
     const { runImmuneResponse } = await import('./immune-response');
     const immuneResult = await runImmuneResponse(

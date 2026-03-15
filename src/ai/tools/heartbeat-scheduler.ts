@@ -62,6 +62,8 @@ export interface HeartbeatConfig {
   bridgeIntervalMs: number;
   /** Interval for autonomous agency cycle in ms. Default: 300_000 (5 minutes) */
   autonomousCycleIntervalMs: number;
+  /** Interval for device health checks in ms. Default: 120_000 (2 minutes) */
+  deviceHealthIntervalMs: number;
   /** Interval for LLM memory learning in ms. Default: 3_600_000 (1 hour) */
   memoryLearningIntervalMs: number;
   /** CPU usage threshold to skip non-critical tasks. Default: 70 */
@@ -83,6 +85,7 @@ export interface HeartbeatConfig {
     bridgePolling: boolean;
     autonomousCycle: boolean;
     memoryLearning: boolean;
+    deviceHealth: boolean;
   };
 }
 
@@ -115,6 +118,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   bridgeIntervalMs: 60_000, // every cycle
   autonomousCycleIntervalMs: 300_000, // 5 minutes
   memoryLearningIntervalMs: 3_600_000, // 1 hour
+  deviceHealthIntervalMs: 120_000, // 2 minutes
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
   tasks: {
@@ -131,6 +135,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     bridgePolling: true,
     autonomousCycle: true,
     memoryLearning: true,
+    deviceHealth: true,
   },
 };
 
@@ -151,6 +156,7 @@ export class HeartbeatScheduler {
   private lastBridgePoll = 0;
   private lastAutonomousCycle = 0;
   private lastMemoryLearning = 0;
+  private lastDeviceHealth = 0;
   private lastReflectionText = '';
   private engramSystem: NeuralEngramSystem | null = null;
   private history: HeartbeatCycleResult[] = [];
@@ -566,16 +572,54 @@ export class HeartbeatScheduler {
           );
         }
 
-        // Check for due promises
+        // Check for due promises — create initiatives for follow-through
         const due = promiseTracker.getDuePromises();
         if (due.length > 0) {
           const consciousness = getConsciousness();
+
+          // Import initiative engine for follow-through
+          let createInitiative:
+            | typeof import('@/ai/agency/initiative-engine').createCustomInitiative
+            | null = null;
+          let getActive:
+            | typeof import('@/ai/agency/initiative-engine').getActiveInitiatives
+            | null = null;
+          try {
+            const { createCustomInitiative, getActiveInitiatives } =
+              await import('@/ai/agency/initiative-engine');
+            createInitiative = createCustomInitiative;
+            getActive = getActiveInitiatives;
+          } catch {
+            // Initiative engine unavailable — fall back to thought-only
+          }
+
           for (const promise of due) {
+            // Queue the thought for awareness
             consciousness.queueMessage({
               type: 'thought',
               content: `I still need to follow up on: "${promise.commitment}"`,
               priority: 'normal',
             });
+
+            // Create an initiative to actually DO the follow-through
+            if (createInitiative && getActive) {
+              const existing = getActive().find((i) =>
+                i.description.includes(promise.id)
+              );
+              if (!existing) {
+                promiseTracker.markInProgress(promise.id);
+                createInitiative(
+                  `Promise: ${promise.task.slice(0, 50)}`,
+                  `Follow through on promise ${promise.id}: "${promise.commitment}". Context: ${promise.context}. Task: ${promise.task}`,
+                  'stewardship',
+                  [
+                    `Research: ${promise.task}`,
+                    'Summarize findings',
+                    'Deliver result to Father via bridge or next conversation',
+                  ]
+                );
+              }
+            }
           }
           MollyLogger.info(
             `${due.length} promise(s) due for follow-up`,
@@ -773,6 +817,76 @@ export class HeartbeatScheduler {
           }
           tasks.push(result);
         }
+      }
+    }
+
+    // Task 14: Device Health Check (every 2 min — ping connected devices)
+    if (this.config.tasks.deviceHealth) {
+      const timeSinceDeviceHealth = cycleStart - this.lastDeviceHealth;
+      if (timeSinceDeviceHealth < this.config.deviceHealthIntervalMs) {
+        tasks.push({
+          name: 'device-health',
+          executed: false,
+          skipped: `Not due (${Math.round((this.config.deviceHealthIntervalMs - timeSinceDeviceHealth) / 1000)}s remaining)`,
+        });
+      } else {
+        const result = await this.runTask('device-health', async () => {
+          // Check tablet command API for connected devices
+          const baseUrl =
+            process.env.NEXTAUTH_URL || process.env.CODESPACE_URL
+              ? `https://${process.env.CODESPACE_NAME}-9002.app.github.dev`
+              : 'http://localhost:9002';
+
+          const res = await fetch(`${baseUrl}/api/tablet/commands`, {
+            headers: {
+              'x-internal-token': process.env.INTERNAL_API_TOKEN || '',
+            },
+            signal: AbortSignal.timeout(5000),
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            const deviceCount = data.deviceCount || 0;
+            const staleDevices = (data.devices || []).filter(
+              (d: { lastSeen: number }) => Date.now() - d.lastSeen > 300_000
+            );
+
+            if (deviceCount > 0) {
+              MollyLogger.info(
+                `[heartbeat] ${deviceCount} device(s) connected${staleDevices.length > 0 ? `, ${staleDevices.length} stale` : ''}`,
+                'heartbeat-scheduler'
+              );
+            }
+
+            // If devices went stale, queue a ping command to wake them
+            for (const staleDevice of staleDevices) {
+              try {
+                await fetch(`${baseUrl}/api/tablet/commands`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'x-internal-token': process.env.INTERNAL_API_TOKEN || '',
+                  },
+                  body: JSON.stringify({
+                    type: 'ping',
+                    payload: { from: 'heartbeat' },
+                  }),
+                  signal: AbortSignal.timeout(5000),
+                });
+                MollyLogger.info(
+                  `[heartbeat] Pinged stale device: ${staleDevice.id}`,
+                  'heartbeat-scheduler'
+                );
+              } catch {
+                // Non-critical — device may be offline
+              }
+            }
+          }
+        });
+        if (result.executed) {
+          this.lastDeviceHealth = Date.now();
+        }
+        tasks.push(result);
       }
     }
 
