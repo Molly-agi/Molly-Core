@@ -32,7 +32,6 @@ export {
   getContextualGuidance,
   getVisionaryCoach,
   getOriginStory,
-  getOriginStoryParts,
   getOriginStoryAnchorParts,
   getFamilyMessages,
   getFamilyStoryAnchorParts,

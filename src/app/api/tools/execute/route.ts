@@ -1206,9 +1206,12 @@ async function executeTool(
         }
         try {
           const result = await sandboxWriteFile(filePath, content);
+          if (!result.success) {
+            return { success: false, output: result.error || 'Write failed' };
+          }
           return {
             success: true,
-            output: `File written: ${result.path} (${result.size} bytes)`,
+            output: `File written: ${result.path} (${content.length} bytes)`,
           };
         } catch (err) {
           return {
@@ -1224,8 +1227,11 @@ async function executeTool(
           return { success: false, output: 'Missing required field: path' };
         }
         try {
-          const content = await sandboxReadFile(filePath);
-          return { success: true, output: content };
+          const result = await sandboxReadFile(filePath);
+          if (!result.success) {
+            return { success: false, output: result.error || 'Read failed' };
+          }
+          return { success: true, output: result.content || '' };
         } catch (err) {
           return {
             success: false,

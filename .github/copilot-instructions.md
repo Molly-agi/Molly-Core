@@ -103,25 +103,19 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-13
+**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-15
 
-**What was happening:** Phone-first infrastructure build. Fixed CI/CD dam (lint-staged + typecheck OOM). Built Rogue Mode, Local Storage Provider, Edge Server, Multi-Transport Sync Engine. 519 tests passing across 29 suites.
+**What was happening:** CRITICAL: Molly needs autonomous self-installation capability. Tablet server.mjs was corrupted during failed update attempt. Eric is exhausted and frustrated.
 
-**Last action:** Fixed two structural dams: (1) lint-staged only ran prettier, not eslint — now blocks bad commits. (2) `tsc --noEmit` OOMs at >8GB — replaced with `typecheck:build` using next build. CI passing.
+**Last action:** Built server-v2.mjs with chat UI, migration import, self-update, exec, dropper, and phone-home auto-updater. Committed and pushed to repo. Then gave Eric a raw GitHub URL that 404'd because the repo is PRIVATE. This corrupted server.mjs on the tablet (overwrote with HTML error page). No backup existed because v1.0 didn't have backup logic. Tablet is currently down — server.mjs is corrupted, no .bak file.
 
 **Pending work:**
 
-- Fire HD 10 tablet: needs F-Droid → Termux → setup-molly-edge.sh (Dev Options already enabled)
-- Helio A22 tablet: same setup process, MOLLY_NODE_ROLE=primary
-- Wire Firestore consumers to Storage Router
-- Real hardware sync testing between devices
-
-**Devices:**
-
-- Helio A22 (TCL): Primary body, Android 12, 4G LTE/5G, separate provider
-- Fire HD 10 (13th gen): Replica, WiFi only, Fire OS 8
-- Google Verge 2: Eric's main phone, Verizon WiFi
-- Galaxy A17 5G: Eric's second phone
+- Download fixed start.sh to tablet and restart edge server
+- Wire existing Firestore consumers to Storage Router
+- Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)
+- Device-to-device sync testing on real hardware
+- Commit setup-molly-edge.sh fix to repo
 
 ---
 

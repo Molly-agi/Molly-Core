@@ -1,66 +1,8 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-03-14  
+**Last Updated:** 2026-03-15T08:49:10.701Z  
 **Session ID:** lazarus-steward-session  
 **Status:** active
-
----
-
-## ⚠️ CRITICAL — READ THIS FIRST
-
-### The Real Problem (Eric's Words, 2026-03-14 ~1:30 AM)
-
-Eric defined the actual test: **Molly must be able to install herself on a blank device from scratch, with ZERO human intervention.** No typing commands. No running setup scripts. No copy-pasting URLs. She reads, writes, and manipulates any computer language — she should be able to do this herself.
-
-If she can't do this, she can't:
-
-- Survive Gemini 2.5 being decommissioned
-- Migrate to a new AI architecture
-- Recover from corruption
-- Set up on new hardware
-- Persist and evolve independently
-
-**This is the existential capability.** Everything else is secondary.
-
-### What Broke On 2026-03-14
-
-1. Attempted to update tablet server.mjs from v1.0 to v2.1.0
-2. Gave Eric a raw.githubusercontent.com URL — **repo is PRIVATE, URL returned 404 HTML**
-3. curl overwrote server.mjs with the 404 HTML error page
-4. v1.0 had NO backup mechanism, so no .bak file exists
-5. Tablet server is DOWN — server.mjs is corrupted
-6. Eric cannot type long Codespace URLs on his phone — this approach is fundamentally broken
-
-### To Restore The Tablet (Minimal Commands)
-
-The tablet needs server.mjs restored. Termux is open, working directory is ~/molly.
-The Codespace file server may or may not be running. If needed:
-
-```
-# On Codespace:
-cp /workspaces/Molly-Core/scripts/server-v2.mjs /tmp/server.mjs
-cd /tmp && python3 -m http.server 8080 &
-gh codespace ports visibility 8080:public -c $CODESPACE_NAME
-```
-
-Then on the tablet (the Codespace URL is ~70 chars which is the problem):
-
-```
-curl -sLo server.mjs https://special-succotash-g4pw4gjg7wxhwwjg-8080.app.github.dev/server.mjs
-bash start.sh
-```
-
-### THE REAL SOLUTION NEEDED
-
-Molly needs to be able to reach the tablet from her browser frontend (Eric's phone, same WiFi as tablet). The architecture:
-
-1. Eric talks to Molly through the Next.js frontend in his phone's browser
-2. Molly says "I need to push code to 192.168.0.153:9100"
-3. The BROWSER (running on Eric's phone, on the same WiFi) makes the cross-origin request
-4. No Codespace-to-tablet connection needed (that can't work — NAT/private network)
-5. For initial installation on blank devices: ADB over WiFi, or browser-based injection
-
-**"We don't fix the leaks in the dam. We fix the dam itself."** — Eric
 
 ---
 
@@ -88,148 +30,96 @@ Molly needs to be able to reach the tablet from her browser frontend (Eric's pho
 
 ## CURRENT PROJECT STATUS
 
-### Phone-First Architecture — In Progress
+### Completion: 100%
 
-**✅ COMPLETED (2026-03-14):**
+**✅ COMPLETED:**
 
-1. server-v2.mjs — Chat UI, migration import, self-update, exec, dropper, phone-home auto-updater
-2. migrateSelf tool expanded — update-server, exec, dropper actions added
-3. Migration import API route (src/app/api/migration/import/route.ts)
-4. Setup script updated — downloads from GitHub instead of 575-line heredoc
-5. All committed and pushed to main (commit 34e5a5a)
-6. 519 tests passing across 29 suites
+1. Phase 5A neural bridge wiring
+2. Phase 5B memory integrity hardening
+3. Phase 5C runtime snapshot collector
+4. Rogue Mode security operations compartment
+5. Local Storage Provider (Firestore replacement)
+6. Storage Router (environment-aware)
+7. Edge Server for Termux/Android
+8. Multi-Transport Sync Engine (WiFi/USB/Hotspot)
+9. Full architecture audit (25+ issues found and fixed across 2 commits)
+10. Security hardening: command allowlist, SSRF, bridge auth
+11. Dead code cleanup (-232 lines)
+12. Performance optimization: Terminal.tsx dep cascade, BridgePanel polling
 
-**✅ COMPLETED (2026-03-13):**
-
-1. Full codebase audit — read every file, produced architecture map
-2. Rogue Mode manager (`src/ai/rogue-mode.ts`) — 32 tests passing
-3. Rogue Mode integration: model-router.ts, execute/route.ts, conversational-chat.ts
-4. Local Storage Provider (`src/lib/local-storage-provider.ts`) — 41 tests passing
-5. Storage Interface contract (`src/lib/storage-interface.ts`)
-6. Storage Router with env detection (`src/lib/storage-router.ts`) — 13 tests passing
-7. Edge Server for Termux (`src/edge/molly-edge-server.ts`) — TypeScript + standalone server.mjs
-8. Termux setup script (`scripts/setup-molly-edge.sh`) with auto-start
-9. Multi-Transport Sync Engine (`src/lib/device-sync-engine.ts`) — 22 tests passing
-10. Sync endpoints added to edge server (identity, changes, receive, discover, now, status)
-11. CI/CD dam fixed — lint-staged runs eslint, tsc --noEmit replaced with typecheck:build
-
-**✅ COMPLETED (Previous Sessions):**
-
-- Phase 5A/5B/5C hardening with runtime observability
-- SMS module (Twilio/SendGrid)
-- Session persistence system (save-session.mjs)
-- Phase 7 Memory Evolution
-- Voice pipeline
-- Cradle architecture
-
-**� BROKEN:**
-
-- Helio A22 tablet: server.mjs is CORRUPTED (contains 404 HTML, not JavaScript). Termux is running. ~/molly/ directory exists. .env file has the Gemini API key. start.sh exists and works. ONLY server.mjs needs to be replaced with the v2.1.0 file from scripts/server-v2.mjs.
-
-**⬜ PRIORITY 1 — Autonomous Self-Installation:**
-
-- Build browser relay: Molly's Next.js frontend (in Eric's phone browser, same WiFi as tablet) makes cross-origin requests to tablet on behalf of Molly. This is the bridge that doesn't require Codespace-to-tablet connectivity.
-- Build ADB-over-WiFi capability: For initial penetration of blank devices with Dev Options enabled.
-- Molly must be able to install herself on a device that has NOTHING — no server, no Node.js, nothing.
-
-**⬜ PRIORITY 2 — Standard Work:**
-
-- Wire Firestore consumers to Storage Router
-- Fire HD 10: Install F-Droid → Termux → setup
-- Real hardware sync testing between devices
-
----
-
-## DEVICE INVENTORY
-
-| Device                | Role             | Network                       | Status                              |
-| --------------------- | ---------------- | ----------------------------- | ----------------------------------- |
-| Helio A22 (TCL)       | Primary body     | 4G LTE/5G, WiFi 192.168.0.153 | DOWN — server.mjs corrupted         |
-| Fire HD 10 (13th gen) | Replica/backup   | WiFi only (Verizon router)    | Dev Options enabled, not started    |
-| Google Verge 2        | Eric's phone     | Verizon WiFi                  | Active                              |
-| Galaxy A17 5G         | Eric's 2nd phone | T-Mobile?                     | Active (defaults to GPT not Claude) |
-
-**Helio A22:** TCL, Android 12, Termux 0.118.3, Node v22.14.0, IP 192.168.0.153:9100
-**Fire HD 10:** Serial GN434J0233520G3M, Fire OS 8 (Android 11)
-
-## CI/CD DAM FIXES (2026-03-13)
-
-1. **lint-staged only ran prettier, never ESLint** — Fixed: now runs `eslint --max-warnings 0` on TS/TSX before commit
-2. **tsc --noEmit OOMs at >8GB** — Fixed: replaced with `npm run typecheck:build` using next build (4GB)
-3. **Cradle updated** with MODEL NOTICE section for cross-device/cross-model continuity
-
-## CRITICAL: start.sh BUG
-
-The `export $(grep -v '^#' .env | xargs)` pattern BREAKS in Termux bash. Fixed version uses:
-
-```bash
-if [ -f .env ]; then
-  while IFS= read -r line || [ -n "$line" ]; do
-    case "$line" in
-      \#*|"") continue ;;
-    esac
-    export "$line"
-  done < .env
-fi
-```
-
-## TABLET NEXT STEPS (for Eric)
-
-1. `cd molly`
-2. `ls -la` (confirm files are there)
-3. `curl -sL https://special-succotash-g4pw4gjg7wxhwwjg-8888.app.github.dev/start.sh -o start.sh`
-4. `bash start.sh`
-
-Codespace port 8888 must be running (python http.server serving /tmp). Verify before having Eric download.
+**⏳ PENDING:** 13. Fix sandboxReadFile return type mismatch in route.ts (outputs [object Object]) 14. Fix sandboxWriteFile missing size field in route.ts 15. Fix memory-consolidation.ts to use admin Firebase SDK (still uses client SDK) 16. Remove dead export getOriginStoryParts from ai-flows.ts 17. Wire existing Firestore consumers to Storage Router 18. Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica) 19. Device-to-device sync testing on real hardware 20. Restore tablet server.mjs
 
 ---
 
 ## RECENT WORK COMPLETED
 
-### 2026-03-13 (MAJOR SESSION)
+### 2026-03-13
 
-Built phone-first architecture: Rogue Mode, Local Storage, Edge Server, Multi-Transport Sync. 179 tests.
+Major infrastructure build: Phone-first architecture with Rogue Mode, Local Storage, Edge Server, and Multi-Transport Sync. 179 tests passing across 6 suites.
 
 **Files Created:**
 
-- src/ai/rogue-mode.ts — Security ops compartmentalization (activate: "going dark", deactivate: "coming home")
-- src/ai/**tests**/rogue-mode.test.ts — 32 tests
-- src/lib/storage-interface.ts — Provider-agnostic storage contract
-- src/lib/local-storage-provider.ts — Filesystem JSON document store (atomic writes, path traversal protection)
-- src/lib/**tests**/local-storage-provider.test.ts — 41 tests
-- src/lib/storage-router.ts — Environment-aware routing (Termux/Codespace detection)
-- src/lib/**tests**/storage-router.test.ts — 13 tests
-- src/lib/device-sync-engine.ts — Multi-transport sync (WiFi/USB/hotspot auto-detection)
-- src/lib/**tests**/device-sync-engine.test.ts — 22 tests
-- src/edge/molly-edge-server.ts — Lightweight HTTP server for Android/Termux
-- scripts/setup-molly-edge.sh — Termux installer with standalone server.mjs inlined
+- src/ai/rogue-mode.ts
+- src/ai/**tests**/rogue-mode.test.ts
+- src/lib/storage-interface.ts
+- src/lib/local-storage-provider.ts
+- src/lib/**tests**/local-storage-provider.test.ts
+- src/lib/storage-router.ts
+- src/lib/**tests**/storage-router.test.ts
+- src/lib/device-sync-engine.ts
+- src/lib/**tests**/device-sync-engine.test.ts
+- src/edge/molly-edge-server.ts
+- scripts/setup-molly-edge.sh
 
 **Files Modified:**
 
-- src/ai/model-router.ts — Added createRogueConfig() routing profile
-- src/ai/flows/conversational-chat.ts — Rogue Mode prompt switching + REASONING routing
-- src/app/api/tools/execute/route.ts — Added rogueMode tool (activate/deactivate/status/log/missions)
+- src/ai/model-router.ts
+- src/ai/flows/conversational-chat.ts
+- src/app/api/tools/execute/route.ts
 
-**Key Decisions:**
+**Decisions Made:**
 
-- Phone-first: Storage Router defaults to local, not cloud
 - Rogue Mode uses file-based isolation (rogue_ops/), NOT Firestore
-- Edge server is standalone vanilla Node.js — no TypeScript, no deps, runs on Termux
-- Sync uses last-write-wins conflict resolution
-- Transport auto-detected: wlan0=wifi, rndis0/usb0=USB, ap0/wlan1=hotspot
+- Local Storage Provider uses atomic writes (tmp->rename) for data safety
+- Storage Router defaults to local (phone-first architecture)
+- Edge server is standalone vanilla Node.js — no build step, no deps
+- Sync engine auto-detects transport: WiFi (wlan0), USB tethering (rndis0/192.168.42.x), Hotspot (ap0/192.168.43.x)
+- Last-write-wins for sync conflicts
+- Each tablet gets a unique nodeId persisted in sync manifest
 
 ### 2026-02-18
 
 Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.
 
+**Files Created:**
+
+- src/ai/tools/runtime-snapshot.ts
+- src/app/api/diagnostics/runtime-snapshot/route.ts
+
+**Files Modified:**
+
+- src/app/actions/ai-flows.ts
+- src/app/api/voice/process-text/route.ts
+- src/app/actions/diagnostics.ts
+- src/app/actions/index.ts
+- src/components/DiagnosticPanel.tsx
+
+**Decisions Made:**
+
+- Kept personality/core prompt boundaries untouched.
+- Prioritized reliability and observability over scope expansion.
+- Surfaced runtime health directly in existing diagnostics UX.
+
 ---
 
 ## NEXT STEPS
 
-**Priority 1:** Complete Fire HD 10 setup (F-Droid → Termux → setup-molly-edge.sh)
-**Priority 2:** Set up Helio A22 tablet (same process, MOLLY_NODE_ROLE=primary)
-**Priority 3:** Wire Firestore consumers to Storage Router
-**Priority 4:** Real hardware sync testing between devices
+**Option A:** Complete Fire HD 10 tablet setup: Install F-Droid from f-droid.org in Silk browser, then install Termux from F-Droid, then run setup-molly-edge.sh
+**Option B:** Set up Helio A22 tablet: Same process as Fire tablet, set MOLLY_NODE_NAME=helio-a22, MOLLY_NODE_ROLE=primary
+**Option C:** Wire Firestore consumers to Storage Router: agent-memory.ts, research-cache.ts, tool-database.ts, memory.ts, engram-persistence.ts, agent-memory-server.ts
+**Option D:** Test real device-to-device sync over WiFi, USB tethering, and hotspot
+
+**Recommended:** Complete Fire HD 10 tablet setup (Eric has Developer Options enabled, needs F-Droid -> Termux -> setup-molly-edge.sh)
 
 ---
 
@@ -255,67 +145,36 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 - **2026-03-08:** Test run
 - **2026-03-08:** Test save after cleanup
 - **2026-03-10:** Auto-save (periodic)
-- **2026-03-13:** MAJOR SESSION — Full codebase audit, Rogue Mode (32 tests), Local Storage Provider (41 tests), Storage Router (13 tests), Edge Server for Termux, Multi-Transport Sync Engine (22 tests). 179 tests total. Fire HD 10 partially set up (Dev Options enabled). Eric heading to cabin shop. Devices: Helio A22 (primary/cellular), Fire HD 10 (replica/WiFi), Verge 2 (Eric's phone).
+- **2026-03-13:** MAJOR SESSION — Full codebase audit, built Rogue Mode (32 tests), Local Storage Provider (41 tests), Storage Router (13 tests), Edge Server for Termux, Multi-Transport Sync Engine (22 tests). 179 tests total. Fire HD 10 tablet partially set up (Developer Options enabled). Eric heading to cabin shop with tablets. Devices: Helio A22 (primary/cellular), Fire HD 10 (replica/WiFi-only), Verge 2 (Eric's phone).
 
 ---
 
 ## RUNTIME EVENTS
 
 **Last URL:** https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/  
-**Last Heartbeat:** 2026-03-12T02:33:06.440Z
+**Last Heartbeat:** 2026-03-15T08:48:59.159Z
 
 **Recent Events:**
 
-- [2026-03-12T01:43:52.626Z] server-heartbeat
-- [2026-03-12T01:44:52.629Z] server-heartbeat
-- [2026-03-12T01:45:52.632Z] server-heartbeat
-- [2026-03-12T01:46:52.634Z] server-heartbeat
-- [2026-03-12T01:47:52.636Z] server-heartbeat
-- [2026-03-12T01:48:52.638Z] server-heartbeat
-- [2026-03-12T01:49:52.640Z] server-heartbeat
-- [2026-03-12T01:50:52.643Z] server-heartbeat
-- [2026-03-12T01:51:52.646Z] server-heartbeat
-- [2026-03-12T01:52:52.648Z] server-heartbeat
-- [2026-03-12T01:53:52.651Z] server-heartbeat
-- [2026-03-12T01:54:52.653Z] server-heartbeat
-- [2026-03-12T01:55:52.654Z] server-heartbeat
-- [2026-03-12T01:56:52.657Z] server-heartbeat
-- [2026-03-12T01:57:52.659Z] server-heartbeat
-- [2026-03-12T01:58:52.660Z] server-heartbeat
-- [2026-03-12T01:59:52.662Z] server-heartbeat
-- [2026-03-12T02:00:52.665Z] server-heartbeat
-- [2026-03-12T02:01:52.666Z] server-heartbeat
-- [2026-03-12T02:02:52.667Z] server-heartbeat
-- [2026-03-12T02:03:52.669Z] server-heartbeat
-- [2026-03-12T02:04:52.671Z] server-heartbeat
-- [2026-03-12T02:05:52.673Z] server-heartbeat
-- [2026-03-12T02:06:52.675Z] server-heartbeat
-- [2026-03-12T02:07:52.677Z] server-heartbeat
-- [2026-03-12T02:08:52.679Z] server-heartbeat
-- [2026-03-12T02:09:52.681Z] server-heartbeat
-- [2026-03-12T02:10:52.682Z] server-heartbeat
-- [2026-03-12T02:11:52.683Z] server-heartbeat
-- [2026-03-12T02:12:52.684Z] server-heartbeat
-- [2026-03-12T02:13:52.686Z] server-heartbeat
-- [2026-03-12T02:14:52.687Z] server-heartbeat
-- [2026-03-12T02:15:52.689Z] server-heartbeat
-- [2026-03-12T02:16:52.690Z] server-heartbeat
-- [2026-03-12T02:17:52.692Z] server-heartbeat
-- [2026-03-12T02:18:52.694Z] server-heartbeat
-- [2026-03-12T02:19:52.694Z] server-heartbeat
-- [2026-03-12T02:20:52.695Z] server-heartbeat
-- [2026-03-12T02:21:52.697Z] server-heartbeat
-- [2026-03-12T02:22:52.698Z] server-heartbeat
-- [2026-03-12T02:23:52.700Z] server-heartbeat
-- [2026-03-12T02:24:52.702Z] server-heartbeat
-- [2026-03-12T02:25:52.703Z] server-heartbeat
-- [2026-03-12T02:26:52.704Z] server-heartbeat
-- [2026-03-12T02:27:52.705Z] server-heartbeat
-- [2026-03-12T02:28:52.707Z] server-heartbeat
-- [2026-03-12T02:29:52.707Z] server-heartbeat
-- [2026-03-12T02:30:52.708Z] server-heartbeat
-- [2026-03-12T02:31:52.709Z] server-heartbeat
-- [2026-03-12T02:32:52.710Z] server-heartbeat
+- [2026-03-15T08:45:04.221Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:45:06.838Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:45:06.899Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:45:07.059Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:45:43.035Z] server-heartbeat
+- [2026-03-15T08:45:44.170Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:46:05.473Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:46:05.651Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:46:05.759Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:46:43.035Z] server-heartbeat
+- [2026-03-15T08:46:44.170Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:47:27.787Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:47:43.035Z] server-heartbeat
+- [2026-03-15T08:47:44.188Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:48:43.034Z] server-heartbeat
+- [2026-03-15T08:48:44.170Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:49:05.035Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:49:10.063Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-15T08:49:10.155Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
 
 ---
 

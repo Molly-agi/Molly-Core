@@ -7,21 +7,12 @@
 
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  getDocs,
-  writeBatch,
-  doc,
-} from 'firebase/firestore';
+import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 import { getEmbeddingProvider } from '@/ai/tools/embedding-provider';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { semanticPriority, addChecksum } from '@/ai/tools/memory-integrity';
 import { ExperienceRecord, createMemoryRecord } from '@/ai/tools/memory-schema';
 import { withGenerateErrorHandling } from '@/ai/error-handler';
-import { initializeFirebase } from '@/firebase';
 import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
 
 const MemoryConsolidationOutputSchema = z.object({
@@ -325,7 +316,18 @@ export const memoryConsolidationFlow = ai.defineFlow(
     );
 
     try {
-      const { firestore } = initializeFirebase();
+      if (!isAdminConfigured()) {
+        return {
+          summary:
+            'Firebase Admin not configured — cannot consolidate memories',
+          keyPatterns: [],
+          insights: [],
+          tokensUsed: 0,
+          semanticDensity: 0,
+          recommendations: ['Configure Firebase Admin SDK'],
+        };
+      }
+      const firestore = getAdminFirestore();
       const embeddingProvider = getEmbeddingProvider();
 
       // STEP 1: Fetch Memories
@@ -337,13 +339,14 @@ export const memoryConsolidationFlow = ai.defineFlow(
       const timeWindowMs = timeWindowDays * 24 * 60 * 60 * 1000;
       const cutoffTime = Date.now() - timeWindowMs;
 
-      const memoriesRef = collection(firestore, 'users', userId, 'experiences');
-      const q = query(
-        memoriesRef,
-        where('timestamp', '>=', cutoffTime),
-        orderBy('timestamp', 'desc')
-      );
-      const snapshot = await getDocs(q);
+      const memoriesRef = firestore
+        .collection('users')
+        .doc(userId)
+        .collection('experiences');
+      const snapshot = await memoriesRef
+        .where('timestamp', '>=', cutoffTime)
+        .orderBy('timestamp', 'desc')
+        .get();
 
       const memories = snapshot.docs
         .map((doc) => doc.data())
@@ -465,11 +468,13 @@ Generate insights for Molly's continued growth.`,
       const recordWithChecksum = addChecksum(consolidatedRecord);
 
       // Store in Firestore
-      const batch = writeBatch(firestore);
-      batch.set(
-        doc(firestore, 'users', userId, 'experiences', recordWithChecksum.id),
-        recordWithChecksum
-      );
+      const batch = firestore.batch();
+      const docRef = firestore
+        .collection('users')
+        .doc(userId)
+        .collection('experiences')
+        .doc(recordWithChecksum.id);
+      batch.set(docRef, recordWithChecksum);
       await batch.commit();
 
       // STEP 7: Return Results
