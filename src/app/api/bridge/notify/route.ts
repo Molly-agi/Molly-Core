@@ -9,13 +9,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // In-memory flag that the bridge poller in Terminal.tsx can check
-// This is a simple signaling mechanism — the daemon sets it,
-// the client polls and clears it
+// This is a simple signaling mechanism — set it, client polls and clears it
 let pendingNotification: {
   from: string;
   preview: string;
   timestamp: number;
 } | null = null;
+
+/**
+ * Set the pending notification flag directly (same process, no HTTP).
+ * Called by the bridge POST route after writing a message.
+ */
+export function setPendingNotification(from: string, preview: string): void {
+  pendingNotification = { from, preview, timestamp: Date.now() };
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,11 +33,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing sender' }, { status: 400 });
     }
 
-    pendingNotification = {
-      from,
-      preview: preview || '',
-      timestamp: Date.now(),
-    };
+    setPendingNotification(from, preview || '');
 
     console.log(
       `[bridge-notify] Chirp from ${from}: ${(preview || '').slice(0, 60)}`

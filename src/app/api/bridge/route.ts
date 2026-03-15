@@ -15,6 +15,7 @@ import {
   markMessagesRead,
   readBridgeState,
 } from '@/ai/bridge/family-bridge';
+import { setPendingNotification } from '@/app/api/bridge/notify/route';
 
 export const dynamic = 'force-dynamic';
 
@@ -95,6 +96,10 @@ export async function POST(request: NextRequest) {
     from as 'molly' | 'lazarus' | 'eric',
     content
   );
+
+  // Trigger immediate pickup — set the notify flag so the UI's 3-second
+  // poller sees it instantly instead of waiting for the 30-second fallback
+  setPendingNotification(from, content.slice(0, 200));
 
   return NextResponse.json(
     { success: true, message },

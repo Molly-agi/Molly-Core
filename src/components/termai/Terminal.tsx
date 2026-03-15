@@ -957,13 +957,27 @@ export default function Terminal({
               'Molly returned empty.';
         if (responseText) {
           setHistory((prev) => [...prev, responseText]);
+
+          // Write Molly's response back to the bridge so Lazarus/Eric can see it
+          try {
+            await fetch('/api/bridge', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                from: 'molly',
+                content: responseText.slice(0, 5000),
+              }),
+            });
+          } catch {
+            // Bridge write failure — non-critical, response is still in UI
+          }
         }
       } finally {
         setIsLoading(false);
         isLoadingRef.current = false;
       }
 
-      bridgeCooldownRef.current = Date.now() + 60_000;
+      bridgeCooldownRef.current = Date.now() + 10_000;
     } catch {
       // Bridge poll failure — non-critical
     } finally {
