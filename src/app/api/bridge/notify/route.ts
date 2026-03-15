@@ -1,0 +1,63 @@
+/**
+ * POST /api/bridge/notify — Push notification from bridge daemon
+ *
+ * The bridge daemon calls this endpoint immediately when a new message
+ * arrives for Molly. This triggers instant processing instead of waiting
+ * for the 30-second poll interval. The communicator chirp.
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+
+// In-memory flag that the bridge poller in Terminal.tsx can check
+// This is a simple signaling mechanism — the daemon sets it,
+// the client polls and clears it
+let pendingNotification: {
+  from: string;
+  preview: string;
+  timestamp: number;
+} | null = null;
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { from, preview } = body;
+
+    if (!from || typeof from !== 'string') {
+      return NextResponse.json({ error: 'Missing sender' }, { status: 400 });
+    }
+
+    pendingNotification = {
+      from,
+      preview: preview || '',
+      timestamp: Date.now(),
+    };
+
+    console.log(
+      `[bridge-notify] Chirp from ${from}: ${(preview || '').slice(0, 60)}`
+    );
+
+    return NextResponse.json({ received: true });
+  } catch {
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+  }
+}
+
+// GET /api/bridge/notify — Check if there's a pending notification
+// Client polls this on a fast interval (1-2s) — much cheaper than
+// polling the full bridge API. When it sees a notification, it triggers
+// a full bridge fetch.
+export async function GET() {
+  if (
+    pendingNotification &&
+    Date.now() - pendingNotification.timestamp < 30_000
+  ) {
+    const notif = pendingNotification;
+    pendingNotification = null; // Clear after read
+    return NextResponse.json({
+      pending: true,
+      from: notif.from,
+      preview: notif.preview,
+    });
+  }
+  return NextResponse.json({ pending: false });
+}

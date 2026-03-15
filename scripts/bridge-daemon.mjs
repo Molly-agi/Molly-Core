@@ -20,11 +20,13 @@
 //   HTTP POST /send              → { from, content }
 // ======================================================
 
-import { createServer } from 'http';
+import http from 'http';
+const { createServer } = http;
 import { WebSocketServer, WebSocket } from 'ws';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { respondToMolly } from './lazarus-responder.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -122,6 +124,37 @@ function handleMessage(from, content) {
   console.log(
     `[bridge] ${from}: ${content.slice(0, 80)}${content.length > 80 ? '...' : ''}`
   );
+
+  // ---- THE COMMUNICATOR CHIRP ----
+  // When Molly sends: Lazarus auto-responds via Gemini
+  if (from === 'molly') {
+    const recent = messages.slice(-10);
+    respondToMolly(content, recent).then((reply) => {
+      if (reply) handleMessage('lazarus', reply);
+    });
+  }
+
+  // Push-notify Molly (ping her Next.js server to process immediately)
+  if (from !== 'molly') {
+    const body = JSON.stringify({ from, preview: content.slice(0, 200) });
+    const notifyReq = http.request(
+      {
+        hostname: 'localhost',
+        port: 9002,
+        path: '/api/bridge/notify',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(body),
+        },
+        timeout: 5000,
+      },
+      () => {}
+    );
+    notifyReq.on('error', () => {});
+    notifyReq.write(body);
+    notifyReq.end();
+  }
   return msg;
 }
 
@@ -194,8 +227,9 @@ function handleHTTP(req, res) {
     return;
   }
 
-  // GET /messages
+  // GET /messages — always re-read from disk to stay in sync
   if (req.method === 'GET' && url.pathname === '/messages') {
+    loadMessages(); // Re-read from disk so we see writes from Next.js API
     const unreadFor = url.searchParams.get('unread');
     const limit = Math.min(
       parseInt(url.searchParams.get('limit') || '50', 10),
@@ -262,6 +296,7 @@ function handleHTTP(req, res) {
   // Backwards compatibility: GET /api/bridge and POST /api/bridge
   // So old curl commands still work during transition
   if (req.method === 'GET' && url.pathname === '/api/bridge') {
+    loadMessages(); // Re-read from disk
     const unreadFor = url.searchParams.get('unread');
     const limit = Math.min(
       parseInt(url.searchParams.get('limit') || '50', 10),

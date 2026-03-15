@@ -17,6 +17,11 @@ export interface VisionReport {
   thumbnailUri?: string;
 }
 
+export interface BridgeMessage {
+  bridgeSender: 'lazarus' | 'eric' | 'molly';
+  bridgeContent: string;
+}
+
 export type HistoryItem =
   | string
   | AutonomousSolutionOutput
@@ -24,7 +29,8 @@ export type HistoryItem =
   | HiveOutput
   | { immuneReport: string; isHealthy: boolean }
   | { syntheticReport: string; implementation: string; authority: string }
-  | { visionReport: VisionReport };
+  | { visionReport: VisionReport }
+  | BridgeMessage;
 
 export type AnchorRecallDetail = {
   title?: string;
@@ -64,4 +70,8 @@ export function isVisionReport(
   item: HistoryItem
 ): item is { visionReport: VisionReport } {
   return typeof item === 'object' && item !== null && 'visionReport' in item;
+}
+
+export function isBridgeMessage(item: HistoryItem): item is BridgeMessage {
+  return typeof item === 'object' && item !== null && 'bridgeSender' in item;
 }

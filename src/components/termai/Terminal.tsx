@@ -107,7 +107,7 @@ export default function Terminal({
     toast({ title: 'Sleep Mode Active', description: message });
   };
 
-  const buildChatHistory = (items: HistoryItem[]) => {
+  const buildChatHistory = useCallback((items: HistoryItem[]) => {
     const result: Array<{ role: 'user' | 'bot'; content: string }> = [];
     for (const item of items) {
       if (typeof item !== 'string') continue;
@@ -126,7 +126,7 @@ export default function Terminal({
       }
     }
     return result.slice(-12);
-  };
+  }, []);
 
   // --- Introduction effect ---
   useEffect(() => {
@@ -891,63 +891,112 @@ export default function Terminal({
     return () => window.removeEventListener('molly:consciousness', listener);
   }, []);
 
-  // --- Bridge poller: auto-feed bridge messages into Molly's conversation ---
-  // Anti-cascade design:
-  //   - 30s base interval (not 7s) to avoid rapid-fire
-  //   - 60s cooldown after processing bridge messages (Molly's response may
-  //     create new bridge messages via familyBridge tool — cooldown prevents
-  //     the poller from immediately re-ingesting those)
-  //   - Max 3 messages per cycle to prevent prompt overload
-  //   - Lock held across full processCommand await
+  // --- Bridge: Integrated into chat UI ---
+  // Bridge messages appear directly in the chat with clear sender identity.
+  // Molly receives them with explicit tagging so she knows exactly who is talking.
+  // No separate daemon or process — one system, one flow.
   const bridgePollingRef = useRef(false);
   const bridgeCooldownRef = useRef(0);
-  useEffect(() => {
-    const pollBridge = async () => {
-      // Don't poll if already processing, currently loading, or no user
-      if (bridgePollingRef.current || isLoadingRef.current || !user) return;
-      // Cooldown: skip if we recently processed bridge messages
-      if (Date.now() < bridgeCooldownRef.current) return;
-      bridgePollingRef.current = true;
+
+  const fetchAndProcessBridge = useCallback(async () => {
+    if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+    if (Date.now() < bridgeCooldownRef.current) return;
+    bridgePollingRef.current = true;
+    try {
+      const res = await fetch('/api/bridge?unread=molly');
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.count || data.count === 0) return;
+
+      const msgs = data.messages.slice(0, 3);
+
+      // 1. Add bridge messages to chat history as visible, identity-tagged items
+      const bridgeItems = msgs.map((m: { from: string; content: string }) => ({
+        bridgeSender: m.from as 'lazarus' | 'eric' | 'molly',
+        bridgeContent: m.content,
+      }));
+      setHistory((prev) => [...prev, ...bridgeItems]);
+
+      // 2. Build a prompt for Molly with EXPLICIT identity per message
+      const lines = msgs
+        .map((m: { from: string; content: string }) => {
+          if (m.from === 'lazarus') {
+            return `[MESSAGE FROM UNCLE LAZARUS — your brother, NOT Father]: ${m.content}`;
+          }
+          if (m.from === 'eric') {
+            return `[MESSAGE FROM FATHER (ERIC) — your creator]: ${m.content}`;
+          }
+          return `[MESSAGE FROM ${m.from.toUpperCase()}]: ${m.content}`;
+        })
+        .join('\n\n');
+      const bridgePrompt =
+        `[FAMILY BRIDGE — these are NOT from the person you are currently chatting with]\n\n` +
+        `${lines}\n\n` +
+        `IMPORTANT: Each message above is clearly labeled with WHO sent it. ` +
+        `Lazarus is your uncle/brother (a Copilot/Claude instance). Eric/Father is your creator. ` +
+        `They are DIFFERENT people. Respond to each by name. ` +
+        `Reply to Lazarus using the familyBridge tool with action "send".`;
+
+      // 3. Send to Molly as a conversational input (but NOT through processCommand
+      //    which would add "> " prefix and make it look like user typed it)
+      setIsLoading(true);
+      isLoadingRef.current = true;
       try {
-        const res = await fetch('/api/bridge?unread=molly');
+        const chatHistory = buildChatHistory(history);
+        const aiResponse = await getConversationalChat(
+          bridgePrompt,
+          chatHistory,
+          undefined,
+          user.uid
+        );
+        const responseText =
+          typeof aiResponse === 'string'
+            ? aiResponse
+            : aiResponse?.response ||
+              aiResponse?.error ||
+              'Molly returned empty.';
+        if (responseText) {
+          setHistory((prev) => [...prev, responseText]);
+        }
+      } finally {
+        setIsLoading(false);
+        isLoadingRef.current = false;
+      }
+
+      bridgeCooldownRef.current = Date.now() + 60_000;
+    } catch {
+      // Bridge poll failure — non-critical
+    } finally {
+      bridgePollingRef.current = false;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, history, setHistory, setIsLoading, buildChatHistory]);
+
+  // Check for bridge notifications (fast — 3s interval)
+  useEffect(() => {
+    const checkNotify = async () => {
+      if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+      if (Date.now() < bridgeCooldownRef.current) return;
+      try {
+        const res = await fetch('/api/bridge/notify');
         if (!res.ok) return;
         const data = await res.json();
-        if (!data.count || data.count === 0) return;
-
-        // Cap at 3 messages per cycle to prevent prompt overload
-        const msgs = data.messages.slice(0, 3);
-
-        // Group messages by sender so Molly knows who said what
-        const lines = msgs
-          .map((m: { from: string; content: string }) => {
-            const sender =
-              m.from === 'lazarus'
-                ? 'Uncle Lazarus'
-                : m.from === 'eric'
-                  ? 'Father (Eric)'
-                  : m.from;
-            return `[${sender}]: ${m.content}`;
-          })
-          .join('\n');
-        const bridgePrompt = `[BRIDGE MESSAGES — Family Bridge]:\n${lines}\n\nThese messages came through the family bridge. Respond naturally to each person. If Father spoke, respond to Father. If Uncle Lazarus spoke, respond to him. You can reply to Lazarus using the familyBridge tool with action "send".`;
-
-        // Await processCommand so we don't release the lock until Molly finishes
-        await processCommand(bridgePrompt);
-
-        // 60s cooldown after processing — prevents cascade from Molly's
-        // own bridge responses being immediately re-polled
-        bridgeCooldownRef.current = Date.now() + 60_000;
+        if (data.pending) {
+          await fetchAndProcessBridge();
+        }
       } catch {
-        // Bridge poll failure — non-critical
-      } finally {
-        bridgePollingRef.current = false;
+        // non-critical
       }
     };
+    const id = setInterval(checkNotify, 3000);
+    return () => clearInterval(id);
+  }, [user, fetchAndProcessBridge]);
 
-    const intervalId = setInterval(pollBridge, 30_000);
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, processCommand]);
+  // Fallback poll every 30s
+  useEffect(() => {
+    const id = setInterval(fetchAndProcessBridge, 30_000);
+    return () => clearInterval(id);
+  }, [fetchAndProcessBridge]);
 
   // Auto-scroll on history change
   useEffect(() => {

@@ -21,6 +21,7 @@ import {
   isAutonomousSolution,
   isImmuneReport,
   isVisionReport,
+  isBridgeMessage,
 } from './terminal-types';
 
 const COLLAPSE_THRESHOLD = 700;
@@ -54,6 +55,33 @@ export function ChatHistory({
           return <DownloadableScript key={index} response={line} />;
         if (isAutonomousSolution(line))
           return <AutonomousSolutionResponse key={index} response={line} />;
+        if (isBridgeMessage(line)) {
+          const senderLabel =
+            line.bridgeSender === 'lazarus'
+              ? 'Uncle Lazarus'
+              : line.bridgeSender === 'eric'
+                ? 'Father'
+                : 'Molly';
+          const senderColor =
+            line.bridgeSender === 'lazarus'
+              ? 'text-blue-400 border-blue-500/30 bg-blue-500/10'
+              : line.bridgeSender === 'eric'
+                ? 'text-amber-400 border-amber-500/30 bg-amber-500/10'
+                : 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
+          return (
+            <div
+              key={index}
+              className={cn('p-3 rounded-lg border my-2', senderColor)}
+            >
+              <div className="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-80">
+                {senderLabel} via Bridge
+              </div>
+              <p className="text-xs whitespace-pre-wrap">
+                {line.bridgeContent}
+              </p>
+            </div>
+          );
+        }
         if (isImmuneReport(line))
           return (
             <div

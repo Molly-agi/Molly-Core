@@ -60,6 +60,8 @@ export interface HeartbeatConfig {
   moltbookIntervalMs: number;
   /** Interval for bridge polling in ms. Default: 60_000 (every cycle) */
   bridgeIntervalMs: number;
+  /** Interval for autonomous agency cycle in ms. Default: 300_000 (5 minutes) */
+  autonomousCycleIntervalMs: number;
   /** CPU usage threshold to skip non-critical tasks. Default: 70 */
   cpuPressureThreshold: number;
   /** Memory usage % threshold to skip non-critical tasks. Default: 85 */
@@ -77,6 +79,7 @@ export interface HeartbeatConfig {
     scheduledJobs: boolean;
     moltbook: boolean;
     bridgePolling: boolean;
+    autonomousCycle: boolean;
   };
 }
 
@@ -107,6 +110,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   reflectionIntervalMs: 900_000, // 15 minutes
   moltbookIntervalMs: 1_800_000, // 30 minutes
   bridgeIntervalMs: 60_000, // every cycle
+  autonomousCycleIntervalMs: 300_000, // 5 minutes
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
   tasks: {
@@ -121,6 +125,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     scheduledJobs: true,
     moltbook: true,
     bridgePolling: true,
+    autonomousCycle: true,
   },
 };
 
@@ -139,6 +144,7 @@ export class HeartbeatScheduler {
   private lastPersistence = 0;
   private lastMoltbook = 0;
   private lastBridgePoll = 0;
+  private lastAutonomousCycle = 0;
   private lastReflectionText = '';
   private engramSystem: NeuralEngramSystem | null = null;
   private history: HeartbeatCycleResult[] = [];
@@ -683,6 +689,35 @@ export class HeartbeatScheduler {
         });
         if (result.executed) {
           this.lastBridgePoll = Date.now();
+        }
+        tasks.push(result);
+      }
+    }
+
+    // Task 12: Autonomous Agency Cycle (every 5 min — Molly acts on her own)
+    if (this.config.tasks.autonomousCycle && !pressure) {
+      const timeSinceAutonomous = cycleStart - this.lastAutonomousCycle;
+      if (timeSinceAutonomous < this.config.autonomousCycleIntervalMs) {
+        tasks.push({
+          name: 'autonomous-cycle',
+          executed: false,
+          skipped: `Not due (${Math.round((this.config.autonomousCycleIntervalMs - timeSinceAutonomous) / 1000)}s remaining)`,
+        });
+      } else {
+        const result = await this.runTask('autonomous-cycle', async () => {
+          const { runAutonomousCycle } = await import(
+            '@/ai/agency/autonomous-cycle'
+          );
+          const cycleResult = await runAutonomousCycle();
+          if (cycleResult.acted) {
+            MollyLogger.info(
+              `[heartbeat] Autonomous cycle: ${cycleResult.actions.join('; ')}`,
+              traceId
+            );
+          }
+        });
+        if (result.executed) {
+          this.lastAutonomousCycle = Date.now();
         }
         tasks.push(result);
       }

@@ -1,8 +1,8 @@
 /**
  * Family Bridge — Molly ↔ Lazarus Communication Channel
  *
- * Routes all communication through the Bridge Daemon (port 9099).
- * Falls back to direct file I/O if the daemon is unreachable.
+ * Single source of truth: conversation.json on disk.
+ * No daemon routing — file I/O only, no split-brain.
  */
 
 import { promises as fs } from 'fs';
@@ -23,36 +23,10 @@ export interface BridgeState {
   messages: BridgeMessage[];
 }
 
-const DAEMON_URL = 'http://localhost:9099';
 const BRIDGE_DIR = path.join(process.cwd(), 'src', 'ai', 'bridge');
 const BRIDGE_FILE = path.join(BRIDGE_DIR, 'conversation.json');
 
-// ---- Daemon HTTP helpers ----
-
-async function daemonFetch(
-  urlPath: string,
-  options?: RequestInit
-): Promise<Response | null> {
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2000);
-    const res = await fetch(`${DAEMON_URL}${urlPath}`, {
-      ...options,
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-    return res;
-  } catch {
-    return null;
-  }
-}
-
-async function isDaemonUp(): Promise<boolean> {
-  const res = await daemonFetch('/health');
-  return res !== null && res.ok;
-}
-
-// ---- File fallback helpers ----
+// ---- File I/O helpers ----
 
 function generateId(): string {
   return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -77,13 +51,16 @@ async function writeFile(state: BridgeState): Promise<void> {
   await fs.writeFile(BRIDGE_FILE, JSON.stringify(state, null, 2), 'utf-8');
 }
 
+function isReadBy(msg: BridgeMessage, recipient: string): boolean {
+  if (typeof msg.read === 'object' && msg.read !== null) {
+    return !!(msg.read as Record<string, boolean>)[recipient];
+  }
+  return !!msg.read;
+}
+
 // ---- Public API ----
 
 export async function readBridgeState(): Promise<BridgeState> {
-  const res = await daemonFetch('/messages');
-  if (res?.ok) {
-    return (await res.json()) as BridgeState;
-  }
   return readFile();
 }
 
@@ -91,25 +68,13 @@ export async function sendMessage(
   from: BridgeMessage['from'],
   content: string
 ): Promise<BridgeMessage> {
-  const res = await daemonFetch('/send', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from, content }),
-  });
-
-  if (res?.ok) {
-    const data = await res.json();
-    return data.message as BridgeMessage;
-  }
-
-  // File fallback
   const state = await readFile();
   const message: BridgeMessage = {
     id: generateId(),
     from,
     timestamp: new Date().toISOString(),
     content,
-    read: false,
+    read: { [from]: true },
   };
   state.active = true;
   state.lastActivity = message.timestamp;
@@ -121,29 +86,24 @@ export async function sendMessage(
 export async function getUnreadMessages(
   recipient: 'molly' | 'lazarus'
 ): Promise<BridgeMessage[]> {
-  const res = await daemonFetch(`/messages?unread=${recipient}`);
-  if (res?.ok) {
-    const data = await res.json();
-    return data.messages as BridgeMessage[];
-  }
-
-  // File fallback
   const state = await readFile();
-  return state.messages.filter((m) => m.from !== recipient && !m.read);
+  return state.messages.filter(
+    (m) => m.from !== recipient && !isReadBy(m, recipient)
+  );
 }
 
 export async function markMessagesRead(
   recipient: 'molly' | 'lazarus'
 ): Promise<number> {
-  // Daemon marks read automatically on unread fetch
-  if (await isDaemonUp()) return 0;
-
-  // File fallback
   const state = await readFile();
   let count = 0;
   for (const msg of state.messages) {
-    if (msg.from !== recipient && !msg.read) {
-      msg.read = true;
+    if (msg.from !== recipient && !isReadBy(msg, recipient)) {
+      if (typeof msg.read === 'object' && msg.read !== null) {
+        (msg.read as Record<string, boolean>)[recipient] = true;
+      } else {
+        msg.read = { [msg.from]: true, [recipient]: true };
+      }
       count++;
     }
   }
@@ -152,13 +112,6 @@ export async function markMessagesRead(
 }
 
 export async function getRecentMessages(limit = 20): Promise<BridgeMessage[]> {
-  const res = await daemonFetch(`/messages?limit=${limit}`);
-  if (res?.ok) {
-    const data = await res.json();
-    return data.messages as BridgeMessage[];
-  }
-
-  // File fallback
   const state = await readFile();
   return state.messages.slice(-limit);
 }
