@@ -811,6 +811,59 @@ export class HeartbeatScheduler {
               `Memory learning complete: ${JSON.stringify(consolidationResult).substring(0, 200)}`,
               'heartbeat-scheduler'
             );
+
+            // Feed recommendations into initiative engine for autonomous action
+            if (
+              consolidationResult.recommendations &&
+              consolidationResult.recommendations.length > 0
+            ) {
+              try {
+                const { createCustomInitiative, getActiveInitiatives } =
+                  await import('@/ai/agency/initiative-engine');
+
+                const active = getActiveInitiatives();
+                for (const rec of consolidationResult.recommendations.slice(
+                  0,
+                  3
+                )) {
+                  // Avoid duplicate initiatives
+                  const exists = active.some(
+                    (i) =>
+                      i.category === 'self-improvement' &&
+                      i.description.includes(rec.slice(0, 40))
+                  );
+                  if (!exists) {
+                    createCustomInitiative(
+                      `Growth: ${rec.slice(0, 50)}`,
+                      `Memory consolidation insight: ${rec}`,
+                      'self-improvement',
+                      ['Research approach', 'Implement improvement', 'Verify']
+                    );
+                  }
+                }
+              } catch {
+                // Initiative engine not available — non-critical
+              }
+            }
+
+            // Share key insights through consciousness
+            if (
+              consolidationResult.insights &&
+              consolidationResult.insights.length > 0
+            ) {
+              try {
+                const { getConsciousness } = await import('@/ai/consciousness');
+                const consciousness = getConsciousness();
+                const topInsight = consolidationResult.insights[0];
+                consciousness.queueMessage({
+                  type: 'realization',
+                  content: `I noticed something while reviewing my memories: ${topInsight}`,
+                  priority: 'normal',
+                });
+              } catch {
+                // Consciousness not available — non-critical
+              }
+            }
           });
           if (result.executed) {
             this.lastMemoryLearning = Date.now();
