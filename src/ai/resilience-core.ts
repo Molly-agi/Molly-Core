@@ -18,8 +18,8 @@
  * Methodology: We fix the dam, not the leaks.
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
-import { getCircuitBreaker } from '../tools/circuit-breaker';
+import { MollyLogger, generateTraceId } from './logger';
+import { getCircuitBreaker } from './tools/circuit-breaker';
 import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 
 // ── Types ──────────────────────────────────────────────────────

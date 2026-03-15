@@ -1059,6 +1059,21 @@ export async function getConversationalChat(
       {},
       e
     );
+    // Route through resilience core — the dam catches what nothing else does
+    try {
+      const { handleUnknownFailure } = await import('@/ai/resilience-core');
+      const report = await handleUnknownFailure(e, 'getConversationalChat', {
+        text,
+        historyLength: history?.length,
+      });
+      if (report.quickFix?.applied && report.quickFix.result) {
+        // Resilience core found a fix — return its result
+        return { response: String(report.quickFix.result) };
+      }
+    } catch {
+      // Resilience core itself cannot break the response path
+    }
+
     const errMsg = e instanceof Error ? e.message : String(e);
     // Sanitize: don't leak API endpoints, model names, or internal paths
     const safeMsg =

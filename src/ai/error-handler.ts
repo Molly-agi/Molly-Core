@@ -7,6 +7,7 @@
 
 import { MollyError, GenerativeAIError, TimeoutError } from './errors';
 import { MollyLogger, generateTraceId } from './logger';
+import { handleUnknownFailure } from './resilience-core';
 
 type ErrorWithStatus = {
   statusCode?: number | string;
@@ -60,6 +61,12 @@ export async function withToolErrorHandling<T>(
       actualTraceId
     );
 
+    // Route through resilience core for diagnosis and learning
+    handleUnknownFailure(error, `tool:${toolName}`, {
+      flowName,
+      traceId: actualTraceId,
+    }).catch(() => {});
+
     if (error instanceof MollyError) {
       throw error;
     }
@@ -105,6 +112,12 @@ export async function withGenerateErrorHandling<T>(
       error,
       traceId
     );
+
+    // Route through resilience core for diagnosis and learning
+    handleUnknownFailure(error, `generate:${flowName}`, {
+      statusCode,
+      traceId,
+    }).catch(() => {});
 
     throw new GenerativeAIError(message, statusCode, { flowName }, traceId);
   }
