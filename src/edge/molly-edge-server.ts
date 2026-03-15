@@ -308,6 +308,7 @@ async function handleStorage(
         return;
       }
       const result = await storage.add(collection, data);
+      syncEngine?.logChange(collection, result.id, 'set', data).catch(() => {});
       sendJson(res, 201, result);
       break;
     }
@@ -318,6 +319,7 @@ async function handleStorage(
         return;
       }
       await storage.set(collection, docId, data);
+      syncEngine?.logChange(collection, docId, 'set', data).catch(() => {});
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -342,6 +344,7 @@ async function handleStorage(
         return;
       }
       await storage.update(collection, docId, data);
+      syncEngine?.logChange(collection, docId, 'set', data).catch(() => {});
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -352,6 +355,7 @@ async function handleStorage(
         return;
       }
       await storage.delete(collection, docId);
+      syncEngine?.logChange(collection, docId, 'delete', null).catch(() => {});
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -376,6 +380,17 @@ async function handleStorage(
         return;
       }
       await storage.batchWrite(operations);
+      // Log each batch operation for sync
+      for (const op of operations) {
+        syncEngine
+          ?.logChange(
+            op.collectionPath,
+            op.docId,
+            op.type === 'delete' ? 'delete' : 'set',
+            op.type === 'delete' ? null : op.data || null
+          )
+          .catch(() => {});
+      }
       sendJson(res, 200, { ok: true, count: operations.length });
       break;
     }
@@ -903,6 +918,25 @@ export async function startEdgeServer(): Promise<http.Server> {
   server.on('error', (err) => {
     console.error('[molly-edge] Server error:', err.message);
   });
+
+  // Auto-sync with peers every 5 minutes
+  const SYNC_INTERVAL_MS = 5 * 60 * 1000;
+  setInterval(async () => {
+    if (!syncEngine) return;
+    try {
+      const results = await syncEngine.syncAll(CONFIG.port);
+      const successful = results.filter((r) => r.success);
+      if (successful.length > 0) {
+        const totalPushed = successful.reduce((s, r) => s + r.pushed, 0);
+        const totalPulled = successful.reduce((s, r) => s + r.pulled, 0);
+        console.log(
+          `[molly-edge] Auto-sync: ${successful.length} peer(s), pushed ${totalPushed}, pulled ${totalPulled}`
+        );
+      }
+    } catch {
+      // Non-critical — peers may be offline
+    }
+  }, SYNC_INTERVAL_MS);
 
   return server;
 }
