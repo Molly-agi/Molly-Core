@@ -22,6 +22,7 @@ import type {
   BatchOperation,
 } from './storage-interface';
 import { LocalStorageProvider } from './local-storage-provider';
+import { FirestoreStorageProvider } from './firestore-storage-provider';
 import { MollyLogger } from '../ai/logger';
 
 // ============================================================================
@@ -84,13 +85,7 @@ class StorageRouter implements StorageProvider {
         return new LocalStorageProvider();
 
       case 'firestore':
-        // For now, still use local — Firestore adapter can be added later
-        // when we need cloud sync. The interface is ready.
-        MollyLogger.warn(
-          'Firestore provider not yet implemented — falling back to local',
-          'storage-router'
-        );
-        return new LocalStorageProvider();
+        return new FirestoreStorageProvider();
     }
   }
 

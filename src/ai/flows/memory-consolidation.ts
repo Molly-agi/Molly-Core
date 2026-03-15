@@ -7,7 +7,7 @@
 
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
 import { getEmbeddingProvider } from '@/ai/tools/embedding-provider';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { semanticPriority, addChecksum } from '@/ai/tools/memory-integrity';
@@ -327,7 +327,7 @@ export const memoryConsolidationFlow = ai.defineFlow(
           recommendations: ['Configure Firebase Admin SDK'],
         };
       }
-      const firestore = getAdminFirestore();
+      const storage = getStorageRouter();
       const embeddingProvider = getEmbeddingProvider();
 
       // STEP 1: Fetch Memories
@@ -339,18 +339,15 @@ export const memoryConsolidationFlow = ai.defineFlow(
       const timeWindowMs = timeWindowDays * 24 * 60 * 60 * 1000;
       const cutoffTime = Date.now() - timeWindowMs;
 
-      const memoriesRef = firestore
-        .collection('users')
-        .doc(userId)
-        .collection('experiences');
-      const snapshot = await memoriesRef
-        .where('timestamp', '>=', cutoffTime)
-        .orderBy('timestamp', 'desc')
-        .get();
+      const experienceDocs = await storage.query(
+        `users/${userId}/experiences`,
+        [{ field: 'timestamp', operator: '>=', value: cutoffTime }],
+        { orderBy: { field: 'timestamp', direction: 'desc' } }
+      );
 
-      const memories = snapshot.docs
-        .map((doc) => doc.data())
-        .filter((m) => !m.vibeScore || m.vibeScore >= minConfidence)
+      const memories = experienceDocs
+        .map((doc) => doc.data)
+        .filter((m) => !m.vibeScore || (m.vibeScore as number) >= minConfidence)
         .slice(0, 200); // Limit to 200 memories per consolidation
 
       if (memories.length === 0) {
@@ -467,15 +464,15 @@ Generate insights for Molly's continued growth.`,
       // Add checksum for integrity
       const recordWithChecksum = addChecksum(consolidatedRecord);
 
-      // Store in Firestore
-      const batch = firestore.batch();
-      const docRef = firestore
-        .collection('users')
-        .doc(userId)
-        .collection('experiences')
-        .doc(recordWithChecksum.id);
-      batch.set(docRef, recordWithChecksum);
-      await batch.commit();
+      // Store in Storage Router
+      await storage.batchWrite([
+        {
+          type: 'set',
+          collectionPath: `users/${userId}/experiences`,
+          docId: recordWithChecksum.id,
+          data: recordWithChecksum as unknown as Record<string, unknown>,
+        },
+      ]);
 
       // STEP 7: Return Results
       MollyLogger.logFlowComplete(
