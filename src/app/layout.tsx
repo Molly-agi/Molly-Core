@@ -8,6 +8,7 @@ import { SessionLifecycleManager } from '@/components/SessionLifecycleManager';
 import { InitializationTracer } from '@/components/InitializationTracer';
 import { ClientErrorReporter } from '@/components/ClientErrorReporter';
 import { ConsciousnessListener } from '@/components/ConsciousnessListener';
+import { MollyErrorBoundary } from '@/components/MollyErrorBoundary';
 
 export const metadata: Metadata = {
   title: 'Molly',
@@ -37,7 +38,9 @@ export default function RootLayout({
       <body className={cn('font-body antialiased min-h-screen bg-background')}>
         <SessionLifecycleManager />
         <ClientErrorReporter />
-        <FirebaseClientProvider>{children}</FirebaseClientProvider>
+        <MollyErrorBoundary>
+          <FirebaseClientProvider>{children}</FirebaseClientProvider>
+        </MollyErrorBoundary>
         <ConsciousnessListener />
         <Toaster />
         <InitializationTracer />

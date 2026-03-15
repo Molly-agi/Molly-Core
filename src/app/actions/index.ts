@@ -123,3 +123,6 @@ export {
 
 // Sandbox — Molly's Safe Coding Playground
 export { runSandboxAction } from './ai-flows';
+
+// Tablet Control — Molly's Hands into Browser Devices
+export { sendTabletCommand, getTabletStatus } from './ai-flows';
