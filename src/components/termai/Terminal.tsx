@@ -611,11 +611,14 @@ export default function Terminal({
           // Molly responds, we check for tool requests, execute them,
           // feed results back, repeat until she's done.
           const MAX_TOOL_ITERATIONS = 20;
+          const MAX_CONSECUTIVE_FAILURES = 3;
+          const TOOL_FETCH_TIMEOUT_MS = 30_000; // 30s per tool call
           const AGENT_LOOP_TIMEOUT_MS = 3 * 60 * 1000; // 3 minutes total
           const agentLoopStart = Date.now();
           let currentText = cmdText;
           let currentHistory = chatHistory;
           let finalResponse = '';
+          let consecutiveFailures = 0;
 
           for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
             // Guard: abort if the total agent loop has exceeded the timeout
@@ -673,13 +676,18 @@ export default function Terminal({
             // Show tool execution indicator
             setHistory((prev) => [...prev, `[TOOL] ${toolRequest.tool}...`]);
 
-            // Execute tool via API
+            // Execute tool via API (with timeout)
             let toolResult: {
               success: boolean;
               output: string;
               data?: Record<string, unknown>;
             };
             try {
+              const toolAbort = new AbortController();
+              const toolTimeout = setTimeout(
+                () => toolAbort.abort(),
+                TOOL_FETCH_TIMEOUT_MS
+              );
               const toolResponse = await fetch('/api/tools/execute', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -687,13 +695,41 @@ export default function Terminal({
                   tool: toolRequest.tool,
                   params: toolRequest.params,
                 }),
+                signal: toolAbort.signal,
               });
+              clearTimeout(toolTimeout);
               toolResult = await toolResponse.json();
-            } catch {
+            } catch (fetchErr) {
+              const isTimeout =
+                fetchErr instanceof Error && fetchErr.name === 'AbortError';
               toolResult = {
                 success: false,
-                output: 'Tool execution failed — could not reach the API.',
+                output: isTimeout
+                  ? 'Tool execution timed out.'
+                  : 'Tool execution failed — could not reach the API.',
               };
+            }
+
+            // Track consecutive failures — break if too many
+            if (!toolResult.success) {
+              consecutiveFailures++;
+              if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+                const resultPrefix = '✗';
+                const truncatedOutput =
+                  toolResult.output.length > 500
+                    ? toolResult.output.slice(0, 500) + '...'
+                    : toolResult.output;
+                setHistory((prev) => [
+                  ...prev,
+                  `[${resultPrefix}] ${truncatedOutput}`,
+                ]);
+                finalResponse =
+                  conversationalPart ||
+                  "I hit a wall — my tools keep getting blocked. Let me try a different approach, or let me know how you'd like to handle this.";
+                break;
+              }
+            } else {
+              consecutiveFailures = 0;
             }
 
             // Show tool result
@@ -937,26 +973,142 @@ export default function Terminal({
         `They are DIFFERENT people. Respond to each by name. ` +
         `Reply to Lazarus using the familyBridge tool with action "send".`;
 
-      // 3. Send to Molly as a conversational input (but NOT through processCommand
-      //    which would add "> " prefix and make it look like user typed it)
+      // 3. Send to Molly with full agent loop (tool execution support)
       setIsLoading(true);
       isLoadingRef.current = true;
       try {
         const chatHistory = buildChatHistory(history);
-        const aiResponse = await getConversationalChat(
-          bridgePrompt,
-          chatHistory,
-          undefined,
-          user.uid
-        );
-        const responseText =
-          typeof aiResponse === 'string'
-            ? aiResponse
-            : aiResponse?.response ||
-              aiResponse?.error ||
-              'Molly returned empty.';
-        if (responseText) {
-          setHistory((prev) => [...prev, responseText]);
+        const BRIDGE_MAX_TOOL_ITERATIONS = 10;
+        const BRIDGE_MAX_CONSECUTIVE_FAILURES = 3;
+        const BRIDGE_TOOL_TIMEOUT_MS = 30_000;
+        const BRIDGE_LOOP_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
+        const bridgeLoopStart = Date.now();
+        let currentBridgeText = bridgePrompt;
+        let currentBridgeHistory = chatHistory;
+        let bridgeFinalResponse = '';
+        let bridgeConsecFailures = 0;
+
+        for (let bi = 0; bi < BRIDGE_MAX_TOOL_ITERATIONS; bi++) {
+          if (Date.now() - bridgeLoopStart > BRIDGE_LOOP_TIMEOUT_MS) {
+            bridgeFinalResponse =
+              'I ran out of time working on that bridge request.';
+            break;
+          }
+
+          const aiResponse = await getConversationalChat(
+            currentBridgeText,
+            currentBridgeHistory,
+            undefined,
+            user.uid
+          );
+          const responseText =
+            typeof aiResponse === 'string'
+              ? aiResponse
+              : aiResponse?.response ||
+                aiResponse?.error ||
+                'Molly returned empty.';
+
+          const toolMatch = responseText.match(
+            /<tool_request>\s*(\{[\s\S]*?\})\s*<\/tool_request>/
+          );
+
+          if (!toolMatch) {
+            bridgeFinalResponse = responseText;
+            break;
+          }
+
+          const conversationalPart = responseText
+            .replace(/<tool_request>[\s\S]*?<\/tool_request>/, '')
+            .trim();
+          if (conversationalPart) {
+            setHistory((prev) => [...prev, conversationalPart]);
+          }
+
+          let toolRequest: { tool: string; params: Record<string, unknown> };
+          try {
+            toolRequest = JSON.parse(toolMatch[1]);
+          } catch {
+            bridgeFinalResponse =
+              conversationalPart || 'Tool request was malformed.';
+            break;
+          }
+
+          setHistory((prev) => [...prev, `[TOOL] ${toolRequest.tool}...`]);
+
+          let toolResult: {
+            success: boolean;
+            output: string;
+            data?: Record<string, unknown>;
+          };
+          try {
+            const toolAbort = new AbortController();
+            const toolTimeout = setTimeout(
+              () => toolAbort.abort(),
+              BRIDGE_TOOL_TIMEOUT_MS
+            );
+            const toolResponse = await fetch('/api/tools/execute', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                tool: toolRequest.tool,
+                params: toolRequest.params,
+              }),
+              signal: toolAbort.signal,
+            });
+            clearTimeout(toolTimeout);
+            toolResult = await toolResponse.json();
+          } catch (fetchErr) {
+            const isTimeout =
+              fetchErr instanceof Error && fetchErr.name === 'AbortError';
+            toolResult = {
+              success: false,
+              output: isTimeout
+                ? 'Tool execution timed out.'
+                : 'Tool execution failed — could not reach the API.',
+            };
+          }
+
+          if (!toolResult.success) {
+            bridgeConsecFailures++;
+            if (bridgeConsecFailures >= BRIDGE_MAX_CONSECUTIVE_FAILURES) {
+              const truncOut =
+                toolResult.output.length > 500
+                  ? toolResult.output.slice(0, 500) + '...'
+                  : toolResult.output;
+              setHistory((prev) => [...prev, `[✗] ${truncOut}`]);
+              bridgeFinalResponse =
+                conversationalPart ||
+                "I hit a wall with my tools on that bridge request. I'll try a different approach next time.";
+              break;
+            }
+          } else {
+            bridgeConsecFailures = 0;
+          }
+
+          const resultPrefix = toolResult.success ? '✓' : '✗';
+          const truncatedOutput =
+            toolResult.output.length > 500
+              ? toolResult.output.slice(0, 500) + '...'
+              : toolResult.output;
+          setHistory((prev) => [
+            ...prev,
+            `[${resultPrefix}] ${truncatedOutput}`,
+          ]);
+
+          currentBridgeText = `[TOOL_RESULT] Tool "${toolRequest.tool}" returned:\n${toolResult.output}`;
+          currentBridgeHistory = [
+            ...currentBridgeHistory,
+            { role: 'user' as const, content: bridgePrompt },
+            {
+              role: 'bot' as const,
+              content: conversationalPart || `(used ${toolRequest.tool})`,
+            },
+            { role: 'user' as const, content: currentBridgeText },
+          ].slice(-12);
+        }
+
+        if (bridgeFinalResponse) {
+          setHistory((prev) => [...prev, bridgeFinalResponse]);
 
           // Write Molly's response back to the bridge so Lazarus/Eric can see it
           try {
@@ -965,7 +1117,7 @@ export default function Terminal({
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 from: 'molly',
-                content: responseText.slice(0, 5000),
+                content: bridgeFinalResponse.slice(0, 5000),
               }),
             });
           } catch {
