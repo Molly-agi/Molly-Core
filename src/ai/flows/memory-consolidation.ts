@@ -13,6 +13,7 @@ import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { semanticPriority, addChecksum } from '@/ai/tools/memory-integrity';
 import { ExperienceRecord, createMemoryRecord } from '@/ai/tools/memory-schema';
 import { withGenerateErrorHandling } from '@/ai/error-handler';
+import { isAdminConfigured } from '@/firebase/admin';
 import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
 
 const MemoryConsolidationOutputSchema = z.object({

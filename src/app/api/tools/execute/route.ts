@@ -1211,7 +1211,7 @@ async function executeTool(
           }
           return {
             success: true,
-            output: `File written: ${result.path} (${content.length} bytes)`,
+            output: `File written: ${result.path} (${result.size ?? content.length} bytes)`,
           };
         } catch (err) {
           return {
