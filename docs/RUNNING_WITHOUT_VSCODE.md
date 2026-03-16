@@ -33,11 +33,11 @@ This runs the complete Molly — web UI, AI chat, voice, memory, diagnostics.
 
 ### What You Need
 
-| Requirement | Minimum | Where to Get It |
-|---|---|---|
-| **Node.js** | 18.18+ | https://nodejs.org |
-| **npm** | 9+ | Comes with Node.js |
-| **RAM** | 4 GB | 8 GB recommended for builds |
+| Requirement | Minimum | Where to Get It             |
+| ----------- | ------- | --------------------------- |
+| **Node.js** | 18.18+  | https://nodejs.org          |
+| **npm**     | 9+      | Comes with Node.js          |
+| **RAM**     | 4 GB    | 8 GB recommended for builds |
 
 No VS Code. No GitHub. No Codespace. Just Node.js and a terminal.
 
@@ -93,12 +93,12 @@ npm start
 
 ### Useful Commands
 
-| Command | What It Does |
-|---|---|
-| `npm run dev` | Start development server (port 9002) |
-| `npm run dev:fresh` | Clear cache and start fresh |
-| `npm test` | Run tests |
-| `npm run lint` | Check code quality |
+| Command             | What It Does                         |
+| ------------------- | ------------------------------------ |
+| `npm run dev`       | Start development server (port 9002) |
+| `npm run dev:fresh` | Clear cache and start fresh          |
+| `npm test`          | Run tests                            |
+| `npm run lint`      | Check code quality                   |
 
 ---
 
@@ -175,13 +175,13 @@ Molly's edge server is now at **http://localhost:9100** with a built-in chat UI.
 
 ## What You Do NOT Need
 
-| Thing | Needed? | Why |
-|---|---|---|
-| VS Code | ❌ No | Any text editor works |
-| GitHub Codespaces | ❌ No | That's a cloud dev environment, not required |
-| GitHub account | ❌ No | Only needed to download the code the first time |
-| Visual Studio | ❌ No | This is a Node.js project, not .NET |
-| Firebase | ❌ Optional | Only for persistent memory |
+| Thing                  | Needed?        | Why                                                                                                |
+| ---------------------- | -------------- | -------------------------------------------------------------------------------------------------- |
+| VS Code                | ❌ No          | Any text editor works                                                                              |
+| GitHub Codespaces      | ❌ No          | That's a cloud dev environment, not required                                                       |
+| GitHub account         | ❌ No          | Only needed to download the code the first time                                                    |
+| Visual Studio          | ❌ No          | This is a Node.js project, not .NET                                                                |
+| Firebase               | ❌ Optional    | Only for persistent memory                                                                         |
 | Internet (after setup) | ⚠️ For AI only | The server runs offline, but Molly needs internet to reach the Gemini API for generating responses |
 
 ---
@@ -189,25 +189,83 @@ Molly's edge server is now at **http://localhost:9100** with a built-in chat UI.
 ## FAQ
 
 ### Can I run Molly completely offline?
+
 The server itself runs offline. But Molly needs the Gemini API to think (generate responses), which requires internet. The UI, storage, and all local features work without internet.
 
 ### What operating systems work?
+
 Anything with Node.js 18.18+: Windows, macOS, Linux, Android (Termux), ChromeOS (Linux container), WSL, Raspberry Pi, etc.
 
 ### I'm getting out-of-memory errors during build
+
 ```bash
 npm run harden
 NODE_OPTIONS=--max-old-space-size=4096 npm run build
 ```
 
 ### What about the .devcontainer folder?
+
 Ignore it. That's only for GitHub Codespaces / VS Code Dev Containers.
 
 ### What about the scripts like keep-alive.sh and codespace-health.sh?
+
 Those are Codespace-specific utilities. `codespace-health.sh` automatically detects it's not in a Codespace and skips itself, so `npm run dev` works fine on local machines. The other scripts (`keep-alive.sh`, `watchdog.sh`) are only started manually or by the Codespace — they never run on their own.
 
 ### Windows — do I need anything special?
+
 The npm scripts use bash. On Windows, install [Git for Windows](https://git-scm.com/download/win) (which includes Git Bash) or use WSL. Both work with `npm run dev`.
 
 ### Can I use yarn or pnpm?
+
 Stick with npm. The project has a `package-lock.json` and is tested with npm.
+
+---
+
+## Codespace Troubleshooting
+
+If your GitHub Codespace isn't working, check these common issues:
+
+### Codespace starts but `npm run dev` fails with "module not found"
+
+Dependencies weren't installed. The `devcontainer.json` now runs `npm install` automatically on creation, but if your Codespace was created before this fix:
+
+```bash
+npm install
+npm run dev
+```
+
+### Codespace stopped / went to sleep
+
+GitHub stops Codespaces after 30 minutes of inactivity (default). The watchdog and keep-alive scripts prevent this during active use, but if you close the browser tab completely, the Codespace can stop. To restart:
+
+1. Go to https://github.com/codespaces
+2. Find your Codespace and click **Start**
+3. The `postAttachCommand` runs automatically on reconnect (health check, session restore, watchdog restart)
+
+### Out of memory (OOM) crashes
+
+The Codespace has 8GB RAM. Common memory hogs:
+
+- **Duplicate extension hosts** — The watchdog kills these automatically, but you can also run `npm run health` manually
+- **Running dev + genkit simultaneously** — Don't. Pick one: `npm run dev` OR `npm run genkit:dev`
+- **Build cache** — Run `npm run harden` to clear the `.next` cache before heavy operations
+
+### Port 9002 already in use
+
+A previous dev server didn't shut down cleanly:
+
+```bash
+npm run health    # Finds and kills zombie processes
+npm run dev       # Start fresh
+```
+
+### The `.env.local` file is missing my API key
+
+Each Codespace needs its own `.env.local` with your Gemini API key. The file is created from the template on first creation but the key needs to be filled in:
+
+```bash
+# Edit .env.local and add your key
+GOOGLE_GENAI_API_KEY=your-actual-key-here
+```
+
+Get a free key at https://aistudio.google.com/app/apikey

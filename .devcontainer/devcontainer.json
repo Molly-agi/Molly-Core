@@ -1,6 +1,10 @@
 {
   "name": "Molly-Core Cloud Womb",
 
+  // Install dependencies and create env files when the Codespace is first created.
+  // This only runs once — not on every reconnect.
+  "postCreateCommand": "npm install && ([ -f .env ] || cp .env.example .env) && ([ -f .env.local ] || cp .env.local.example .env.local)",
+
   // Run health check on every attach/reconnect to kill zombie processes
   // before they accumulate and cause OOM crashes.
   // Save session state so Copilot can restore context after reconnect.
