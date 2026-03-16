@@ -17,6 +17,13 @@
 
 set -uo pipefail
 
+# Skip entirely when not running inside a GitHub Codespace.
+# The predev hook calls this script, so it must exit 0 on local machines
+# where commands like free, pstree, and ss don't exist (macOS, Windows/WSL).
+if [ "${CODESPACES:-}" != "true" ]; then
+  exit 0
+fi
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'

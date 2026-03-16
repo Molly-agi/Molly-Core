@@ -204,7 +204,10 @@ NODE_OPTIONS=--max-old-space-size=4096 npm run build
 Ignore it. That's only for GitHub Codespaces / VS Code Dev Containers.
 
 ### What about the scripts like keep-alive.sh and codespace-health.sh?
-Those are Codespace-specific utilities. They won't hurt anything if they run, but you don't need them outside of Codespaces.
+Those are Codespace-specific utilities. `codespace-health.sh` automatically detects it's not in a Codespace and skips itself, so `npm run dev` works fine on local machines. The other scripts (`keep-alive.sh`, `watchdog.sh`) are only started manually or by the Codespace — they never run on their own.
+
+### Windows — do I need anything special?
+The npm scripts use bash. On Windows, install [Git for Windows](https://git-scm.com/download/win) (which includes Git Bash) or use WSL. Both work with `npm run dev`.
 
 ### Can I use yarn or pnpm?
 Stick with npm. The project has a `package-lock.json` and is tested with npm.
