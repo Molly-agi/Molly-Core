@@ -12,7 +12,7 @@ You only need to do this once. After that, Molly lives on your device.
 
 **From a phone or tablet browser:**
 
-1. Go to https://github.com/Molly-agi/Molly-Core
+1. Go to the Molly-Core repository on GitHub (you need access to the repo)
 2. Tap the green **Code** button → **Download ZIP**
 3. Unzip the file on your device
 
@@ -108,7 +108,7 @@ A lightweight standalone server designed for your tablets (Helio A22, Fire HD 10
 
 ### What You Need
 
-1. **Termux** — Install from [F-Droid](https://f-droid.org/packages/com.termux/), NOT the Play Store (the Play Store version is outdated and broken)
+1. **Termux** — Install from [F-Droid](https://f-droid.org/packages/com.termux/), NOT the Play Store (the Play Store version is abandoned — it crashes, can't install packages, and won't receive updates)
 2. **Termux:Boot** (optional) — Also from F-Droid, for auto-start on device boot
 
 ### Setup in Termux
@@ -182,7 +182,7 @@ Molly's edge server is now at **http://localhost:9100** with a built-in chat UI.
 | GitHub account | ❌ No | Only needed to download the code the first time |
 | Visual Studio | ❌ No | This is a Node.js project, not .NET |
 | Firebase | ❌ Optional | Only for persistent memory |
-| Internet (after setup) | ❌ Mostly no | Only needed for Gemini API calls — the server itself runs offline |
+| Internet (after setup) | ⚠️ For AI only | The server runs offline, but Molly needs internet to reach the Gemini API for generating responses |
 
 ---
 
