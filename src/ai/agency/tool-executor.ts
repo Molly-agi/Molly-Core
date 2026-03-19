@@ -128,6 +128,19 @@ import {
   configureFamilyRecognition,
   loadFamilyRegistry,
 } from '../vision/family-recognition';
+import {
+  compareImages,
+  parseScreenshot,
+  detectScreenErrors,
+  scanDocument,
+  extractText,
+  extractFormFields,
+  describeImage,
+  imageContains,
+  formatComparisonResult,
+  formatScreenshotAnalysis,
+  formatDocumentScan,
+} from '../vision/vision-tools';
 
 const WORKSPACE_ROOT = process.cwd();
 
@@ -1836,6 +1849,148 @@ async function executeToolInternal(
           return {
             success: false,
             output: `Unknown familyRecognition action: ${action}. Available: register, recognize, detectFaces, isPersonInImage, listFamily, getMember, addReferenceImage, removeMember, updateMember, configure, loadRegistry`,
+          };
+      }
+    }
+
+    // ── VISION TOOLS ────────────────────────────────────────────────
+    // "The spider sees all."
+
+    case 'visionTools': {
+      const action = params.action as string;
+
+      switch (action) {
+        case 'compare': {
+          const image1 = params.image1 as string;
+          const image2 = params.image2 as string;
+          const context = params.context as string | undefined;
+
+          if (!image1 || !image2) {
+            return {
+              success: false,
+              output: 'Two images required (image1, image2)',
+            };
+          }
+
+          const result = await compareImages(image1, image2, context);
+          return { success: true, output: formatComparisonResult(result) };
+        }
+
+        case 'parseScreenshot': {
+          const imageUri = params.imageUri as string;
+          const context = params.context as string | undefined;
+
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+
+          const result = await parseScreenshot(imageUri, context);
+          return { success: true, output: formatScreenshotAnalysis(result) };
+        }
+
+        case 'detectErrors': {
+          const imageUri = params.imageUri as string;
+
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+
+          const errors = await detectScreenErrors(imageUri);
+          if (errors.length === 0) {
+            return {
+              success: true,
+              output: 'No errors detected in screenshot.',
+            };
+          }
+
+          const formatted = errors
+            .map(
+              (e) =>
+                `[${e.type.toUpperCase()}] ${e.message}${e.suggestedFix ? ` — Fix: ${e.suggestedFix}` : ''}`
+            )
+            .join('\n');
+          return { success: true, output: `Errors detected:\n${formatted}` };
+        }
+
+        case 'scanDocument': {
+          const imageUri = params.imageUri as string;
+          const docType = params.documentType as string | undefined;
+
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+
+          const result = await scanDocument(
+            imageUri,
+            docType as Parameters<typeof scanDocument>[1]
+          );
+          return { success: true, output: formatDocumentScan(result) };
+        }
+
+        case 'extractText': {
+          const imageUri = params.imageUri as string;
+
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+
+          const text = await extractText(imageUri);
+          return {
+            success: true,
+            output: text || 'No text extracted from image.',
+          };
+        }
+
+        case 'extractFormFields': {
+          const imageUri = params.imageUri as string;
+
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+
+          const fields = await extractFormFields(imageUri);
+          if (fields.length === 0) {
+            return { success: true, output: 'No form fields extracted.' };
+          }
+
+          const formatted = fields
+            .map((f) => `${f.name}: ${f.value} [${f.type}]`)
+            .join('\n');
+          return { success: true, output: `Form Fields:\n${formatted}` };
+        }
+
+        case 'describe': {
+          const imageUri = params.imageUri as string;
+
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+
+          const description = await describeImage(imageUri);
+          return { success: true, output: description };
+        }
+
+        case 'contains': {
+          const imageUri = params.imageUri as string;
+          const query = params.query as string;
+
+          if (!imageUri || !query) {
+            return { success: false, output: 'Missing imageUri or query' };
+          }
+
+          const result = await imageContains(imageUri, query);
+          return {
+            success: true,
+            output: result.found
+              ? `Yes, "${query}" found (${Math.round(result.confidence * 100)}% confidence): ${result.details}`
+              : `No, "${query}" not found: ${result.details}`,
+          };
+        }
+
+        default:
+          return {
+            success: false,
+            output: `Unknown visionTools action: ${action}. Available: compare, parseScreenshot, detectErrors, scanDocument, extractText, extractFormFields, describe, contains`,
           };
       }
     }
