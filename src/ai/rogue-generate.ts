@@ -212,16 +212,33 @@ export const molly = {
     const router = getModelRouter();
     const decision = await router.resolveModel(TaskType.EMBEDDING);
     const startTime = performance.now();
+    const EMBED_TIMEOUT_MS = 30_000; // 30s timeout for embeddings
 
+    let embedTimer: ReturnType<typeof setTimeout> | undefined;
     try {
-      const result = await ai.embed({
-        embedder: decision.modelString,
-        content: options.content,
-      });
+      const result = await Promise.race([
+        ai.embed({
+          embedder: decision.modelString,
+          content: options.content,
+        }),
+        new Promise<never>((_, reject) => {
+          embedTimer = setTimeout(
+            () =>
+              reject(
+                new TimeoutError('molly.embed', EMBED_TIMEOUT_MS, {
+                  provider: decision.provider.id,
+                })
+              ),
+            EMBED_TIMEOUT_MS
+          );
+        }),
+      ]);
+      clearTimeout(embedTimer);
 
       router.reportSuccess(decision.provider.id, performance.now() - startTime);
       return result;
     } catch (error) {
+      clearTimeout(embedTimer);
       router.reportFailure(
         decision.provider.id,
         error instanceof Error ? error : new Error(String(error))

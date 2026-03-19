@@ -270,8 +270,13 @@ export function withResilienceSync<T>(
   try {
     return { result: fn(), resilient: false };
   } catch (error) {
-    // Fire-and-forget the async handler
-    handleUnknownFailure(error, source).catch(() => {});
+    // Fire-and-forget the async handler with error logging
+    handleUnknownFailure(error, source).catch((resilErr) => {
+      console.error(
+        '[resilience-core] Self-failure in sync handler:',
+        resilErr instanceof Error ? resilErr.message : String(resilErr)
+      );
+    });
     return { result: fallback, resilient: true };
   }
 }

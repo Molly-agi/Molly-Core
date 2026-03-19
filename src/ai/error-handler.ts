@@ -65,7 +65,12 @@ export async function withToolErrorHandling<T>(
     handleUnknownFailure(error, `tool:${toolName}`, {
       flowName,
       traceId: actualTraceId,
-    }).catch(() => {});
+    }).catch((resilErr) => {
+      console.error(
+        '[error-handler] Resilience core failed:',
+        resilErr instanceof Error ? resilErr.message : String(resilErr)
+      );
+    });
 
     if (error instanceof MollyError) {
       throw error;
@@ -117,7 +122,12 @@ export async function withGenerateErrorHandling<T>(
     handleUnknownFailure(error, `generate:${flowName}`, {
       statusCode,
       traceId,
-    }).catch(() => {});
+    }).catch((resilErr) => {
+      console.error(
+        '[error-handler] Resilience core failed:',
+        resilErr instanceof Error ? resilErr.message : String(resilErr)
+      );
+    });
 
     throw new GenerativeAIError(message, statusCode, { flowName }, traceId);
   }

@@ -32,7 +32,39 @@ import {
   observeToolUse,
   observeFailure,
 } from '@/ai/agency/self-observation-loop';
+import { checkToolAlignment } from '@/ai/agency/heart-gate';
 import { generateTraceId } from '@/ai/logger';
+import {
+  runFullDiagnostic,
+  quickHealthCheck as quickDiagnostic,
+  diagnoseDomain,
+  formatDiagnosticReport,
+} from './self-diagnostic';
+import {
+  establishShroudedSession,
+  verifySession,
+  closeShroudedSession,
+  setShroudLevel,
+  formatChromaKeyStatus,
+  getCamouflageProcessName,
+  getStealthPath,
+  camouflageFilename,
+  type ShroudLevel,
+} from './chromakey-bridge';
+import {
+  getHardwareFingerprint,
+  getHardwareSummary,
+  verifyHardware,
+  formatHardwareFingerprint,
+} from './hardware-fingerprint';
+import {
+  auditPacket,
+  auditStream,
+  quickPurityCheck,
+  isSecurityRelevant,
+  getAuditStats,
+  formatPurityResult,
+} from './data-purity';
 
 const WORKSPACE_ROOT = process.cwd();
 
@@ -95,6 +127,9 @@ function isCommandSafe(command: string): boolean {
  * Execute a tool directly without HTTP.
  * Returns { success, output } matching the API contract.
  * Automatically records self-observation data for pattern analysis.
+ *
+ * HEART GATE: Every tool execution passes through Option Three verification.
+ * If the action is MISALIGNED, execution is blocked.
  */
 export async function executeToolDirect(
   tool: string,
@@ -102,6 +137,25 @@ export async function executeToolDirect(
 ): Promise<{ success: boolean; output: string }> {
   const startTime = Date.now();
   const traceId = generateTraceId();
+
+  // ── HEART GATE: Option Three verification ──
+  // The spider in the corner watches every action.
+  const gateResult = checkToolAlignment(tool, params);
+  if (gateResult.status === 'MISALIGNED') {
+    // Block the action - this violates interdependence
+    observeFailure(
+      tool,
+      gateResult.reason,
+      `Heart Gate blocked: ${tool}`,
+      false,
+      traceId
+    );
+
+    return {
+      success: false,
+      output: `[Heart Gate] Action blocked: ${gateResult.reason}`,
+    };
+  }
 
   // Execute the actual tool
   const result = await executeToolInternal(tool, params);
@@ -408,13 +462,324 @@ async function executeToolInternal(
           'Autonomous tools available:',
           '  codespaceShell — Run read-only shell commands',
           '  readProjectFile — Read workspace files',
-          '  getSystemHealth — Check CPU, RAM, disk',
+          '  getSystemHealth — Check CPU, RAM, disk (basic)',
+          '  runSelfDiagnostic — Full self-diagnostic with AI state',
+          '  quickHealthCheck — Fast health check for polling',
+          '  chromakey — Stealth operations (shroud tunnel, camouflage)',
           '  familyBridge — Send/check messages to Lazarus/Eric',
           '  initiative — Manage initiatives and goals',
           '  webSearch — Search the web via DuckDuckGo',
           '  webFetch — Fetch and read a web page',
           '  listCapabilities — This list',
         ].join('\n'),
+      };
+    }
+
+    case 'runSelfDiagnostic': {
+      const autoHeal = params.autoHeal === true;
+      const domain = params.domain as string | undefined;
+
+      try {
+        if (domain) {
+          // Single domain diagnostic
+          const result = await diagnoseDomain(
+            domain as 'system' | 'aiCore' | 'memory' | 'agency' | 'network'
+          );
+          return {
+            success: true,
+            output: [
+              `DOMAIN: ${result.domain.toUpperCase()} [${result.status}]`,
+              '',
+              ...result.checks.map(
+                (c) =>
+                  `  ${c.status === 'healthy' ? '✓' : c.status === 'degraded' ? '⚡' : '✗'} ${c.name}: ${c.value}${c.details ? ` (${c.details})` : ''}`
+              ),
+              '',
+              ...result.recommendations.map((r) => `→ ${r}`),
+            ].join('\n'),
+          };
+        }
+
+        // Full diagnostic
+        const diagnostic = await runFullDiagnostic(autoHeal);
+        return {
+          success: true,
+          output: formatDiagnosticReport(diagnostic),
+        };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Self-diagnostic failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+        };
+      }
+    }
+
+    case 'quickHealthCheck': {
+      try {
+        const result = await quickDiagnostic();
+        return {
+          success: true,
+          output: result.healthy
+            ? '✓ All systems healthy'
+            : `⚠ Status: ${result.status.toUpperCase()}\nIssues: ${result.issues.join(', ')}`,
+        };
+      } catch (err) {
+        return {
+          success: false,
+          output: `Health check failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+        };
+      }
+    }
+
+    case 'chromakey': {
+      const action = params.action as string;
+
+      if (action === 'establish') {
+        const handshakeKey = params.handshakeKey as string;
+        const shroudLevel = (params.shroudLevel as ShroudLevel) || 'shadow';
+
+        if (!handshakeKey) {
+          return { success: false, output: 'Handshake key required' };
+        }
+
+        try {
+          const session = establishShroudedSession(handshakeKey, shroudLevel);
+          return {
+            success: true,
+            output: `Shroud tunnel established\n  Session: ${session.sessionId.slice(0, 16)}...\n  Level: ${shroudLevel.toUpperCase()}`,
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Failed to establish shroud: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'verify') {
+        const handshakeKey = params.handshakeKey as string | undefined;
+        const result = verifySession(handshakeKey);
+        return {
+          success: result.valid,
+          output: result.valid
+            ? `Session verified: ${result.session?.sessionId.slice(0, 16)}...`
+            : `Verification failed: ${result.reason}`,
+        };
+      }
+
+      if (action === 'close') {
+        closeShroudedSession();
+        return { success: true, output: 'Shroud tunnel closed' };
+      }
+
+      if (action === 'level') {
+        const level = params.level as ShroudLevel;
+        if (
+          !level ||
+          !['whisper', 'shadow', 'ghost', 'phantom'].includes(level)
+        ) {
+          return {
+            success: false,
+            output:
+              'Invalid shroud level. Use: whisper, shadow, ghost, phantom',
+          };
+        }
+        const updated = setShroudLevel(level);
+        return {
+          success: updated,
+          output: updated
+            ? `Shroud level set to ${level.toUpperCase()}`
+            : 'No active session to update',
+        };
+      }
+
+      if (action === 'status') {
+        return {
+          success: true,
+          output: formatChromaKeyStatus(),
+        };
+      }
+
+      if (action === 'camouflage') {
+        const filename = params.filename as string;
+        if (filename) {
+          const result = camouflageFilename(filename);
+          return {
+            success: true,
+            output: `Original: ${result.original}\nCamouflaged: ${result.camouflaged}\nTechnique: ${result.technique}`,
+          };
+        }
+        return {
+          success: true,
+          output: [
+            'Camouflage utilities:',
+            `  Process name: ${getCamouflageProcessName()}`,
+            `  Stealth path: ${getStealthPath()}`,
+          ].join('\n'),
+        };
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown action. Use: establish, verify, close, level, status, camouflage',
+      };
+    }
+
+    case 'hardware': {
+      const action = params.action as string;
+
+      if (action === 'fingerprint' || !action) {
+        try {
+          const fp = await getHardwareFingerprint();
+          return {
+            success: true,
+            output: formatHardwareFingerprint(fp),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Fingerprint failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'summary') {
+        const summary = getHardwareSummary();
+        return {
+          success: true,
+          output: [
+            `Platform: ${summary.platform} (${summary.arch})`,
+            `Cores: ${summary.cores}`,
+            `Memory: ${summary.memoryGB} GB`,
+            `Trust Level: ${summary.trustLevel.toUpperCase()}`,
+            `Device ID: ${summary.deviceId}...`,
+          ].join('\n'),
+        };
+      }
+
+      if (action === 'verify') {
+        const expectedId = params.deviceId as string;
+        if (!expectedId) {
+          return {
+            success: false,
+            output: 'Device ID required for verification',
+          };
+        }
+        const result = await verifyHardware(expectedId);
+        return {
+          success: result.match,
+          output: result.match
+            ? `Hardware verified: ${result.currentId.slice(0, 16)}...`
+            : `Hardware mismatch: expected ${expectedId.slice(0, 16)}..., got ${result.currentId.slice(0, 16)}...`,
+        };
+      }
+
+      return {
+        success: false,
+        output: 'Unknown action. Use: fingerprint, summary, verify',
+      };
+    }
+
+    case 'purity': {
+      const action = params.action as string;
+
+      if (action === 'check') {
+        const text = params.text as string;
+        if (!text) {
+          return { success: false, output: 'Text required for purity check' };
+        }
+        const result = quickPurityCheck(text);
+        return {
+          success: result.safe,
+          output: result.safe
+            ? '✓ Input is safe'
+            : `⚠ Issues detected: ${result.issues.join(', ')}`,
+        };
+      }
+
+      if (action === 'audit') {
+        const data = params.data as string;
+        if (!data) {
+          return { success: false, output: 'Data required for audit' };
+        }
+        try {
+          const packet = typeof data === 'string' ? { text: data } : data;
+          const result = auditPacket(packet);
+          return {
+            success: result.pure,
+            output: formatPurityResult(result),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Audit failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'stream') {
+        const json = params.json as string;
+        if (!json) {
+          return {
+            success: false,
+            output: 'JSON data required for stream audit',
+          };
+        }
+        try {
+          const result = auditStream(json);
+          return {
+            success: result.failed === 0,
+            output: [
+              `Total: ${result.total}`,
+              `Passed: ${result.passed}`,
+              `Failed: ${result.failed}`,
+              result.rejected.length > 0
+                ? `Rejected: ${result.rejected.map((r) => r.reason).join('; ')}`
+                : '',
+            ]
+              .filter(Boolean)
+              .join('\n'),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Stream audit failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'security') {
+        const text = params.text as string;
+        if (!text) {
+          return { success: false, output: 'Text required for security check' };
+        }
+        const result = isSecurityRelevant(text);
+        return {
+          success: true,
+          output: result.relevant
+            ? `Security-relevant: ${result.keywords.join(', ')}`
+            : 'Not security-relevant',
+        };
+      }
+
+      if (action === 'stats') {
+        const stats = getAuditStats();
+        return {
+          success: true,
+          output: [
+            `Total Audited: ${stats.totalAudited}`,
+            `Passed: ${stats.totalPassed}`,
+            `Failed: ${stats.totalFailed}`,
+            `Injection Attempts: ${stats.injectionAttempts}`,
+            `Temporal Rejections: ${stats.temporalRejections}`,
+          ].join('\n'),
+        };
+      }
+
+      return {
+        success: false,
+        output: 'Unknown action. Use: check, audit, stream, security, stats',
       };
     }
 

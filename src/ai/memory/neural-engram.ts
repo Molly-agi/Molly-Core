@@ -875,8 +875,13 @@ export function getNeuralBrain(): NeuralEngramSystem {
 
     // Auto-consolidate every 5 minutes
     _consolidationTimer = setInterval(async () => {
-      if (_globalBrain) {
-        await _globalBrain.consolidate();
+      try {
+        if (_globalBrain) {
+          await _globalBrain.consolidate();
+        }
+      } catch (error) {
+        // Graceful degradation: log but don't crash the consolidation loop
+        console.error('[NeuralEngram] Consolidation error:', error);
       }
     }, 300000);
   }

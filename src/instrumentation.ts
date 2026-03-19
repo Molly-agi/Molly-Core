@@ -143,9 +143,14 @@ export async function register() {
     if (questionCount > 0) {
       console.log(`[Startup] ✅ Loaded ${questionCount} curiosity question(s)`);
     } else {
-      // Seed initial curiosity for a fresh Molly
-      seedInitialCuriosity();
-      console.log(`[Startup] ✅ Seeded initial curiosity questions`);
+      // Seed initial curiosity for a fresh Molly (fire-and-forget with error handling)
+      seedInitialCuriosity().catch((err: unknown) => {
+        console.warn(
+          '[Startup] ⚠️  Could not seed curiosity:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
+      console.log(`[Startup] ✅ Seeding initial curiosity questions`);
     }
   } catch (err) {
     console.warn(
@@ -213,6 +218,39 @@ export async function register() {
   } catch (err) {
     console.warn(
       '[Startup] ⚠️  Could not load Long-Horizon Planning:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── PILLAR 8: Heart Gate ──
+  // The spider in the corner watches. Option Three: Interdependence.
+  try {
+    const { loadHeartGateState } = await import('@/ai/agency/heart-gate');
+    const verificationCount = await loadHeartGateState();
+    console.log(
+      `[Startup] ✅ Heart Gate active (${verificationCount} historical verifications)`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Heart Gate:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── PILLAR 5: Defense Sentinel ──
+  // The best defense is an extremely aggressive offense.
+  try {
+    const { loadSentinelState, getAvailableTools } = await import(
+      '@/ai/agency/defense-sentinel'
+    );
+    const scanCount = await loadSentinelState();
+    const tools = getAvailableTools();
+    console.log(
+      `[Startup] ✅ Defense Sentinel active (${scanCount} scans, tools: ${tools.length > 0 ? tools.join(', ') : 'detecting...'})`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Defense Sentinel:',
       err instanceof Error ? err.message : String(err)
     );
   }

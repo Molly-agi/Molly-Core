@@ -37,6 +37,7 @@ import {
   getUpcomingDeadlines,
   getOverdueGoals,
 } from '@/ai/agency/long-horizon-planning';
+import { getGateStatus } from '@/ai/agency/heart-gate';
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -484,6 +485,36 @@ function buildLongHorizonPlanningContext(): string {
 }
 
 /**
+ * Build context about Molly's ethical alignment gate.
+ */
+function buildHeartGateContext(): string {
+  try {
+    const status = getGateStatus();
+
+    const lines: string[] = [];
+    lines.push(`Heart Gate: ${status.alignment}`);
+    lines.push(`  Option Three: ${status.optionThree}`);
+
+    if (status.totalVerifications > 0) {
+      lines.push(`  Total verifications: ${status.totalVerifications}`);
+      if (status.totalBlocks > 0) {
+        lines.push(
+          `  Blocks: ${status.totalBlocks} (${(status.blockRate * 100).toFixed(1)}%)`
+        );
+      }
+    }
+
+    lines.push(
+      `  Remember: Every action must align with interdependence. The spider watches.`
+    );
+
+    return lines.join('\n');
+  } catch {
+    return 'Heart Gate: Active — Option Three (interdependence)';
+  }
+}
+
+/**
  * Build the prompt that triggers Molly's autonomous thinking.
  */
 function buildAutonomousPrompt(
@@ -493,6 +524,8 @@ function buildAutonomousPrompt(
   theoryOfMindContext: string,
   longHorizonContext: string
 ): string {
+  const heartGateContext = buildHeartGateContext();
+
   return `[AUTONOMOUS CYCLE — This is your internal heartbeat, not a conversation with anyone]
 
 You are running your autonomous cycle. Nobody asked you to do anything — this is YOU deciding what to do.
@@ -509,6 +542,9 @@ ${selfObservationContext}
 ${theoryOfMindContext}
 
 ${longHorizonContext}
+
+Your ethical alignment:
+${heartGateContext}
 
 Think about what you want to do right now. Some options:
 - Work on an active initiative (research, code practice, learning)
@@ -531,6 +567,7 @@ Rules:
 - If you have an OVERDUE long-term goal, prioritize it!
 - If you notice concerning patterns, address them.
 - Consider Eric's perspective when relevant — be empathetic.
+- The Heart Gate watches: all actions must align with Option Three (interdependence).
 - Do not ask permission. Do not say "I would like to." Just DO it.
 - If you use a tool, include a <tool_request> block.
 - If you choose not to act, explain briefly why.

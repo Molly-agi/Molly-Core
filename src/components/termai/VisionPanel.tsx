@@ -330,23 +330,31 @@ export function VisionPanel({
   useEffect(() => {
     if (autoScan && stream) {
       autoScanTimerRef.current = setInterval(async () => {
-        // Guard via REF — never stale
-        if (!videoRef.current || isAnalyzingRef.current) return;
+        try {
+          // Guard via REF — never stale
+          if (!videoRef.current || isAnalyzingRef.current) return;
 
-        const frameUri = captureFrame(videoRef.current);
-        if (!frameUri) return;
+          const frameUri = captureFrame(videoRef.current);
+          if (!frameUri) return;
 
-        // Check if scene changed enough to warrant analysis (ref, not state)
-        if (lastFrameUriRef.current) {
-          const diff = await frameDifference(lastFrameUriRef.current, frameUri);
-          if (diff < CHANGE_THRESHOLD) {
-            return; // Scene hasn't changed enough — skip
+          // Check if scene changed enough to warrant analysis (ref, not state)
+          if (lastFrameUriRef.current) {
+            const diff = await frameDifference(
+              lastFrameUriRef.current,
+              frameUri
+            );
+            if (diff < CHANGE_THRESHOLD) {
+              return; // Scene hasn't changed enough — skip
+            }
           }
-        }
 
-        await captureAndAnalyze(
-          'Auto-scan: Describe any changes or notable observations.'
-        );
+          await captureAndAnalyze(
+            'Auto-scan: Describe any changes or notable observations.'
+          );
+        } catch (error) {
+          // Graceful degradation: log but don't crash the auto-scan loop
+          console.error('[VisionPanel] Auto-scan error:', error);
+        }
       }, AUTO_SCAN_INTERVAL);
     }
 

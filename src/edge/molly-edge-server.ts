@@ -318,7 +318,12 @@ async function handleStorage(
         return;
       }
       const result = await storage.add(collection, data);
-      syncEngine?.logChange(collection, result.id, 'set', data).catch(() => {});
+      syncEngine?.logChange(collection, result.id, 'set', data).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for add:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 201, result);
       break;
     }
@@ -329,7 +334,12 @@ async function handleStorage(
         return;
       }
       await storage.set(collection, docId, data);
-      syncEngine?.logChange(collection, docId, 'set', data).catch(() => {});
+      syncEngine?.logChange(collection, docId, 'set', data).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for set:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -354,7 +364,12 @@ async function handleStorage(
         return;
       }
       await storage.update(collection, docId, data);
-      syncEngine?.logChange(collection, docId, 'set', data).catch(() => {});
+      syncEngine?.logChange(collection, docId, 'set', data).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for set:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -365,7 +380,12 @@ async function handleStorage(
         return;
       }
       await storage.delete(collection, docId);
-      syncEngine?.logChange(collection, docId, 'delete', null).catch(() => {});
+      syncEngine?.logChange(collection, docId, 'delete', null).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for delete:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -399,7 +419,12 @@ async function handleStorage(
             op.type === 'delete' ? 'delete' : 'set',
             op.type === 'delete' ? null : op.data || null
           )
-          .catch(() => {});
+          .catch((err) => {
+            console.error(
+              '[molly-edge] Sync log failed for batch:',
+              err instanceof Error ? err.message : String(err)
+            );
+          });
       }
       sendJson(res, 200, { ok: true, count: operations.length });
       break;
