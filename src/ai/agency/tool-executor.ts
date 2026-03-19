@@ -65,6 +65,53 @@ import {
   getAuditStats,
   formatPurityResult,
 } from './data-purity';
+import {
+  shroudData,
+  generateShroudSignature,
+  encodeForTransmission,
+  verifyShroudedPayload,
+  calculateResonance,
+  formatHSLStatus,
+  configureHSL,
+  resetSessionPhase,
+} from './hsl-shroud-math';
+import {
+  scanSystemVulnerabilities,
+  scanDriver,
+  checkDriverIntegrity,
+  quickSecurityAssessment,
+  formatScanResult,
+  getLastScanResult,
+} from './imgsys-detector';
+import {
+  validatePayload,
+  quickValidate,
+  getValidationStats,
+  getQuarantinedPayloads,
+  releaseFromQuarantine,
+  formatValidatorStatus,
+} from './payload-validator';
+import {
+  anchorSession,
+  verifyAnchor,
+  readAnchor,
+  clearAnchor,
+  formatAnchorStatus,
+  anchorExists,
+  getAnchorAge,
+} from './protocol-10';
+import {
+  sealSession,
+  quickSealEvolution,
+  applySovereignEncryption,
+  decryptSovereignData,
+  listEvolutionLogs,
+  listAssetManifests,
+  readAssetManifest,
+  readEvolutionLog,
+  formatHandoffStatus,
+  isSealed,
+} from './handoff-seal';
 
 const WORKSPACE_ROOT = process.cwd();
 
@@ -460,17 +507,32 @@ async function executeToolInternal(
         success: true,
         output: [
           'Autonomous tools available:',
+          '',
+          '== Core ==',
           '  codespaceShell — Run read-only shell commands',
           '  readProjectFile — Read workspace files',
           '  getSystemHealth — Check CPU, RAM, disk (basic)',
+          '  listCapabilities — This list',
+          '',
+          '== Diagnostics ==',
           '  runSelfDiagnostic — Full self-diagnostic with AI state',
           '  quickHealthCheck — Fast health check for polling',
-          '  chromakey — Stealth operations (shroud tunnel, camouflage)',
+          '',
+          '== Pillars ==',
+          '  hardware — Hardware fingerprinting (Pillar 1)',
+          '  purity — Input validation & sanitization (Pillar 2)',
+          '  hslShroud — Steganographic frequency encoding (Pillar 3)',
+          '  chromakey — Stealth operations (Pillar 4)',
+          '  imgsys — Vulnerability detection (Pillar 6)',
+          '  payload — Script validation (Pillar 7)',
+          "  protocol10 — Session anchor / dead man's switch (Pillar 9)",
+          '  handoff — Session sealing & encryption (Pillar 10)',
+          '',
+          '== Communication ==',
           '  familyBridge — Send/check messages to Lazarus/Eric',
           '  initiative — Manage initiatives and goals',
           '  webSearch — Search the web via DuckDuckGo',
           '  webFetch — Fetch and read a web page',
-          '  listCapabilities — This list',
         ].join('\n'),
       };
     }
@@ -780,6 +842,607 @@ async function executeToolInternal(
       return {
         success: false,
         output: 'Unknown action. Use: check, audit, stream, security, stats',
+      };
+    }
+
+    case 'hslShroud': {
+      const action = params.action as string;
+
+      if (action === 'status') {
+        return { success: true, output: formatHSLStatus() };
+      }
+
+      if (action === 'shroud') {
+        const data = params.data as string;
+        if (!data) {
+          return { success: false, output: 'Data required for shrouding' };
+        }
+        try {
+          const result = shroudData(data);
+          return {
+            success: true,
+            output: [
+              `Shrouded ${data.length} bytes`,
+              `Hash: ${result.originalHash}`,
+              `Mode: ${result.mode.toUpperCase()}`,
+              `Frequency: ${result.frequency}Hz`,
+              `Pixel map: ${result.pixelMap.length} hue rotations`,
+            ].join('\n'),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Shroud failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'signature') {
+        const data = params.data as string;
+        if (!data) {
+          return { success: false, output: 'Data required for signature' };
+        }
+        const signature = generateShroudSignature(data);
+        return {
+          success: true,
+          output: `Shroud signature: ${signature}`,
+        };
+      }
+
+      if (action === 'encode') {
+        const data = params.data as string;
+        if (!data) {
+          return { success: false, output: 'Data required for encoding' };
+        }
+        const transmission = encodeForTransmission(data);
+        return {
+          success: true,
+          output: `Encoded for transmission:\n  Version: ${transmission.version}\n  Checksum: ${transmission.checksum}\n  Payload hash: ${transmission.payload.originalHash}`,
+        };
+      }
+
+      if (action === 'verify') {
+        const json = params.json as string;
+        if (!json) {
+          return { success: false, output: 'JSON transmission required' };
+        }
+        try {
+          const transmission = JSON.parse(json);
+          const valid = verifyShroudedPayload(transmission);
+          return {
+            success: valid,
+            output: valid
+              ? 'Payload verified - checksum matches'
+              : 'VERIFICATION FAILED - payload corrupted or tampered',
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Verify failed: ${err instanceof Error ? err.message : 'Invalid JSON'}`,
+          };
+        }
+      }
+
+      if (action === 'resonance') {
+        const map1 = params.map1 as number[];
+        const map2 = params.map2 as number[];
+        if (!map1 || !map2) {
+          return { success: false, output: 'Two pixel maps required' };
+        }
+        const result = calculateResonance(map1, map2);
+        return {
+          success: true,
+          output: `Resonance: ${(result.score * 100).toFixed(2)}% - ${result.resonant ? 'RESONANT' : 'DIVERGENT'}`,
+        };
+      }
+
+      if (action === 'configure') {
+        const highEntropy = params.highEntropy as boolean | undefined;
+        const frequency = params.frequency as number | undefined;
+        configureHSL({
+          highEntropy: highEntropy ?? false,
+          baseFrequency: frequency ?? 440.0,
+        });
+        return {
+          success: true,
+          output: `HSL configured: ${highEntropy ? 'HIGH-ENTROPY' : 'STANDARD'} mode at ${frequency ?? 440}Hz`,
+        };
+      }
+
+      if (action === 'reset') {
+        resetSessionPhase();
+        return { success: true, output: 'Session phase reset' };
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown action. Use: status, shroud, signature, encode, verify, resonance, configure, reset',
+      };
+    }
+
+    case 'imgsys': {
+      const action = params.action as string;
+
+      if (action === 'scan' || !action) {
+        try {
+          const vendorId = params.vendorId as string | undefined;
+          const result = await scanSystemVulnerabilities(vendorId);
+          return {
+            success: true,
+            output: formatScanResult(result),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Scan failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'quick') {
+        try {
+          const assessment = await quickSecurityAssessment();
+          return {
+            success: assessment.status === 'secure',
+            output: [
+              `Status: ${assessment.status.toUpperCase()}`,
+              `Summary: ${assessment.summary}`,
+              `Recommendation: ${assessment.recommendation}`,
+            ].join('\n'),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Assessment failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'driver') {
+        const driverPath = params.path as string;
+        if (!driverPath) {
+          return { success: false, output: 'Driver path required' };
+        }
+        const result = await scanDriver(driverPath);
+        return {
+          success: true,
+          output: result.exists
+            ? result.vulnerabilities.length > 0
+              ? `Driver exists with ${result.vulnerabilities.length} known vulnerability/vulnerabilities`
+              : 'Driver exists, no known vulnerabilities'
+            : 'Driver not found',
+        };
+      }
+
+      if (action === 'integrity') {
+        const vendorId = params.vendorId as string;
+        if (!vendorId) {
+          return { success: false, output: 'Vendor ID required' };
+        }
+        const result = await checkDriverIntegrity(vendorId);
+        return {
+          success: result.secure,
+          output: result.message,
+        };
+      }
+
+      if (action === 'last') {
+        const result = getLastScanResult();
+        if (!result) {
+          return { success: false, output: 'No previous scan results' };
+        }
+        return {
+          success: true,
+          output: formatScanResult(result),
+        };
+      }
+
+      return {
+        success: false,
+        output: 'Unknown action. Use: scan, quick, driver, integrity, last',
+      };
+    }
+
+    case 'payload': {
+      const action = params.action as string;
+
+      if (action === 'validate') {
+        const scriptPath = params.path as string;
+        if (!scriptPath) {
+          return { success: false, output: 'Script path required' };
+        }
+        try {
+          const result = await validatePayload(scriptPath);
+          return {
+            success: result.status === 'VALIDATED',
+            output: [
+              `Status: ${result.status}`,
+              result.message,
+              result.scriptHash
+                ? `Hash: ${result.scriptHash.slice(0, 32)}...`
+                : '',
+              result.dispatchCommand
+                ? `Dispatch: ${result.dispatchCommand}`
+                : '',
+            ]
+              .filter(Boolean)
+              .join('\n'),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Validation failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'quick') {
+        const scriptPath = params.path as string;
+        if (!scriptPath) {
+          return { success: false, output: 'Script path required' };
+        }
+        const result = quickValidate(scriptPath);
+        return {
+          success: result.allowed,
+          output: result.allowed
+            ? 'Pre-validation passed'
+            : `Blocked: ${result.reason}`,
+        };
+      }
+
+      if (action === 'status') {
+        return { success: true, output: formatValidatorStatus() };
+      }
+
+      if (action === 'stats') {
+        const stats = getValidationStats();
+        return {
+          success: true,
+          output: [
+            `Total: ${stats.total}`,
+            `Validated: ${stats.validated}`,
+            `Blocked: ${stats.blocked}`,
+            `Quarantined: ${stats.quarantined}`,
+          ].join('\n'),
+        };
+      }
+
+      if (action === 'quarantine') {
+        const payloads = getQuarantinedPayloads();
+        if (payloads.length === 0) {
+          return { success: true, output: 'No quarantined payloads' };
+        }
+        const formatted = payloads
+          .map(
+            (p) =>
+              `  ${p.hash.slice(0, 16)}... - ${p.reason}\n    Path: ${p.path}`
+          )
+          .join('\n');
+        return {
+          success: true,
+          output: `Quarantined payloads (${payloads.length}):\n${formatted}`,
+        };
+      }
+
+      if (action === 'release') {
+        const hash = params.hash as string;
+        if (!hash) {
+          return { success: false, output: 'Hash required for release' };
+        }
+        const released = releaseFromQuarantine(hash);
+        return {
+          success: released,
+          output: released
+            ? 'Payload released and added to trusted list'
+            : 'Payload not found in quarantine',
+        };
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown action. Use: validate, quick, status, stats, quarantine, release',
+      };
+    }
+
+    case 'protocol10': {
+      const action = params.action as string;
+
+      if (action === 'anchor') {
+        const snapshot = (params.snapshot as Record<string, unknown>) || {};
+        try {
+          const seal = await anchorSession(snapshot);
+          return {
+            success: true,
+            output: [
+              'Session anchored successfully',
+              `Identity: ${seal.identity}`,
+              `Methodology: ${seal.methodology}`,
+              `Hash: ${seal.anchorHash.slice(0, 32)}...`,
+              `Time: ${seal.date}`,
+            ].join('\n'),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Anchor failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'verify') {
+        try {
+          const result = await verifyAnchor();
+          return {
+            success: result.valid,
+            output: result.valid
+              ? `${result.message}\nIdentity: ${result.session?.identity}`
+              : `${result.message}\nIssues: ${result.issues.join(', ')}`,
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Verify failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'status') {
+        try {
+          const status = await formatAnchorStatus();
+          return { success: true, output: status };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Status failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'read') {
+        try {
+          const anchor = await readAnchor();
+          if (!anchor) {
+            return { success: false, output: 'No anchor file found' };
+          }
+          return {
+            success: true,
+            output: [
+              `Identity: ${anchor.identity}`,
+              `Methodology: ${anchor.methodology}`,
+              `Anchored: ${anchor.date}`,
+              `Version: ${anchor.version}`,
+            ].join('\n'),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Read failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'clear') {
+        const cleared = await clearAnchor();
+        return {
+          success: cleared,
+          output: cleared ? 'Anchor cleared' : 'Failed to clear anchor',
+        };
+      }
+
+      if (action === 'exists') {
+        const exists = await anchorExists();
+        return {
+          success: true,
+          output: exists ? 'Anchor exists' : 'No anchor file',
+        };
+      }
+
+      if (action === 'age') {
+        const age = getAnchorAge();
+        if (age === null) {
+          return { success: false, output: 'No anchored session' };
+        }
+        const ageStr =
+          age > 86400000
+            ? `${Math.floor(age / 86400000)} days`
+            : age > 3600000
+              ? `${Math.floor(age / 3600000)} hours`
+              : `${Math.floor(age / 60000)} minutes`;
+        return { success: true, output: `Anchor age: ${ageStr}` };
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown action. Use: anchor, verify, status, read, clear, exists, age',
+      };
+    }
+
+    case 'handoff': {
+      const action = params.action as string;
+
+      if (action === 'seal') {
+        const evolutionData = (params.evolution as Record<string, unknown>) || {
+          observations: [],
+        };
+        const lootData = (params.loot as Record<string, unknown>) || {
+          resources: [],
+          totalEnergy: 0,
+        };
+        const notes = params.notes as string | undefined;
+
+        try {
+          const result = await sealSession(
+            evolutionData as Parameters<typeof sealSession>[0],
+            lootData as Parameters<typeof sealSession>[1],
+            [],
+            [],
+            notes
+          );
+
+          if (result.status === 'SEALED') {
+            return {
+              success: true,
+              output: [
+                'Session sealed successfully',
+                `Evolution: ${result.evolutionLog}`,
+                `Assets: ${result.assetManifest}`,
+                `Hash: ${result.evolutionHash?.slice(0, 16)}...`,
+              ].join('\n'),
+            };
+          } else {
+            return {
+              success: false,
+              output: `Seal ${result.status}: ${result.reason}`,
+            };
+          }
+        } catch (err) {
+          return {
+            success: false,
+            output: `Seal failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'quick') {
+        const observations = (params.observations as string[]) || [];
+        const notes = params.notes as string | undefined;
+
+        try {
+          const result = await quickSealEvolution(observations, notes);
+          return {
+            success: result.success,
+            output: result.success
+              ? `Quick seal saved: ${result.path}`
+              : `Quick seal failed: ${result.error}`,
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Quick seal failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'status') {
+        try {
+          const status = await formatHandoffStatus();
+          return { success: true, output: status };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Status failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'list') {
+        const type = params.type as string;
+        try {
+          if (type === 'assets') {
+            const manifests = await listAssetManifests();
+            return {
+              success: true,
+              output:
+                manifests.length > 0
+                  ? `Asset manifests (${manifests.length}):\n${manifests.slice(0, 10).join('\n')}`
+                  : 'No asset manifests',
+            };
+          }
+          const logs = await listEvolutionLogs();
+          return {
+            success: true,
+            output:
+              logs.length > 0
+                ? `Evolution logs (${logs.length}):\n${logs.slice(0, 10).join('\n')}`
+                : 'No evolution logs',
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `List failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'read') {
+        const filename = params.filename as string;
+        const type = params.type as string;
+
+        if (!filename) {
+          return { success: false, output: 'Filename required' };
+        }
+
+        try {
+          const data =
+            type === 'asset'
+              ? await readAssetManifest(filename)
+              : await readEvolutionLog(filename);
+
+          if (!data) {
+            return {
+              success: false,
+              output: 'File not found or decryption failed',
+            };
+          }
+
+          return {
+            success: true,
+            output: JSON.stringify(data, null, 2).slice(0, 2000),
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Read failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+          };
+        }
+      }
+
+      if (action === 'encrypt') {
+        const data = params.data as unknown;
+        if (!data) {
+          return { success: false, output: 'Data required for encryption' };
+        }
+        const envelope = applySovereignEncryption(data);
+        return {
+          success: true,
+          output: `Encrypted at ${envelope.sealedAt}\nChecksum: ${envelope.verificationTag.slice(0, 16)}...`,
+        };
+      }
+
+      if (action === 'decrypt') {
+        const envelope = params.envelope as Parameters<
+          typeof decryptSovereignData
+        >[0];
+        if (!envelope) {
+          return { success: false, output: 'Sealed envelope required' };
+        }
+        const decrypted = decryptSovereignData(envelope);
+        if (!decrypted) {
+          return {
+            success: false,
+            output: 'Decryption failed - verification tag mismatch',
+          };
+        }
+        return {
+          success: true,
+          output: `Decrypted: ${JSON.stringify(decrypted).slice(0, 500)}`,
+        };
+      }
+
+      if (action === 'sealed') {
+        return {
+          success: true,
+          output: isSealed() ? 'Session is sealed' : 'Session not sealed',
+        };
+      }
+
+      return {
+        success: false,
+        output:
+          'Unknown action. Use: seal, quick, status, list, read, encrypt, decrypt, sealed',
       };
     }
 
