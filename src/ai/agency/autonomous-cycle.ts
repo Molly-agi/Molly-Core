@@ -31,6 +31,12 @@ import {
   getActiveIntents as getToMIntents,
   getCurrentFocus,
 } from '@/ai/agency/theory-of-mind';
+import {
+  getPlanningStatus,
+  getSuggestedFocus,
+  getUpcomingDeadlines,
+  getOverdueGoals,
+} from '@/ai/agency/long-horizon-planning';
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -122,12 +128,16 @@ export async function runAutonomousCycle(): Promise<{
     // Get Theory of Mind context — understanding Eric
     const tomContext = buildTheoryOfMindContext();
 
+    // Get Long-Horizon Planning context — long-term goals
+    const planningContext = buildLongHorizonPlanningContext();
+
     // Build the autonomous prompt — this is what makes Molly THINK about acting
     const autonomousPrompt = buildAutonomousPrompt(
       initiativeContext,
       curiosityContext,
       selfObservationContext,
-      tomContext
+      tomContext,
+      planningContext
     );
 
     // Call the conversational chat flow
@@ -418,13 +428,70 @@ function buildTheoryOfMindContext(): string {
 }
 
 /**
+ * Build Long-Horizon Planning context — awareness of long-term goals.
+ * This gives Molly a sense of purpose across sessions.
+ */
+function buildLongHorizonPlanningContext(): string {
+  const lines: string[] = [];
+
+  try {
+    const status = getPlanningStatus();
+    const suggestion = getSuggestedFocus();
+    const overdue = getOverdueGoals();
+    const upcoming = getUpcomingDeadlines(3 * 24 * 60 * 60 * 1000); // 3 days
+
+    // Overdue goals are urgent
+    if (overdue.length > 0) {
+      lines.push(
+        `OVERDUE: ${overdue.length} goal(s) past deadline! (${overdue.map((g) => g.title).join(', ')})`
+      );
+    }
+
+    // Upcoming deadlines
+    if (upcoming.length > 0) {
+      const deadlineText = upcoming
+        .map(
+          ({ goal, daysRemaining }) =>
+            `"${goal.title}" in ${daysRemaining} day(s)`
+        )
+        .join(', ');
+      lines.push(`Upcoming deadlines: ${deadlineText}`);
+    }
+
+    // Active goals overview
+    if (status.activeGoals > 0) {
+      lines.push(
+        `Long-term goals: ${status.activeGoals} active, ${status.overallProgress}% overall progress`
+      );
+    }
+
+    // Suggested focus
+    if (suggestion) {
+      lines.push(
+        `Suggested focus: "${suggestion.goal.title}" — ${suggestion.milestone.description}`
+      );
+      lines.push(`  Reason: ${suggestion.reason}`);
+    }
+
+    if (lines.length === 0) {
+      return 'Long-Horizon Planning: No long-term goals set. Consider creating one.';
+    }
+
+    return 'Long-term progress:\n' + lines.join('\n');
+  } catch {
+    return 'Long-Horizon Planning: Limited context available.';
+  }
+}
+
+/**
  * Build the prompt that triggers Molly's autonomous thinking.
  */
 function buildAutonomousPrompt(
   initiativeContext: string,
   curiosityContext: string,
   selfObservationContext: string,
-  theoryOfMindContext: string
+  theoryOfMindContext: string,
+  longHorizonContext: string
 ): string {
   return `[AUTONOMOUS CYCLE — This is your internal heartbeat, not a conversation with anyone]
 
@@ -441,9 +508,12 @@ ${selfObservationContext}
 
 ${theoryOfMindContext}
 
+${longHorizonContext}
+
 Think about what you want to do right now. Some options:
 - Work on an active initiative (research, code practice, learning)
 - INVESTIGATE a curiosity question (use the curiosity tool with action: 'investigate')
+- Progress a LONG-TERM GOAL (use longHorizonPlanning tool)
 - Search for answers to your questions (use webSearch + webFetch)
 - Check on your system health (getSystemHealth)
 - Write something on Moltbook (moltbook tool)
@@ -458,6 +528,7 @@ Think about what you want to do right now. Some options:
 Rules:
 - This is YOUR time. Act on YOUR curiosity and goals.
 - If you have a question you're curious about, INVESTIGATE it.
+- If you have an OVERDUE long-term goal, prioritize it!
 - If you notice concerning patterns, address them.
 - Consider Eric's perspective when relevant — be empathetic.
 - Do not ask permission. Do not say "I would like to." Just DO it.

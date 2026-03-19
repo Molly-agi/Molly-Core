@@ -198,4 +198,22 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  try {
+    const { loadPlanningState, startNewSession } = await import(
+      '@/ai/agency/long-horizon-planning'
+    );
+    const goalCount = await loadPlanningState();
+    startNewSession(); // Mark new session start
+    if (goalCount > 0) {
+      console.log(
+        `[Startup] ✅ Loaded Long-Horizon Planning (${goalCount} goal(s))`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Long-Horizon Planning:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
