@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773920030234_cn1c",
+  "severity": "critical",
+  "source": "freq-test-1773920030212",
+  "message": "Self-healing failed: UNKNOWN: Unclassified failure in freq-test-1773920030212 — \"freq 1\"",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773920030213_muvz1n",
+  "timestamp": "2026-03-19T11:33:50.234Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-19T11:33:50.234Z",
+  "_id": "mmxe6nfe_s6sgzl",
+  "_createdAt": "2026-03-19T11:33:50.234Z",
+  "_updatedAt": "2026-03-19T11:33:50.234Z"
+}

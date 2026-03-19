@@ -1,0 +1,16 @@
+{
+  "id": "experience_1773610024446_0zab6en08",
+  "timestamp": 1773610024446,
+  "userId": "dvu4O6PoUIX9JJSgMzwk7o28boA3",
+  "traceId": "trace_1773610024446_mon2hbu",
+  "type": "experience",
+  "context": "immune_startup",
+  "suggestion": "Immune scan (Startup): No infections found.",
+  "vibe": "The machine feels clean and responsive, Father.",
+  "vibeScore": 0.8,
+  "success": true,
+  "crc32": "fdf1d70a",
+  "_id": "experience_1773610024446_0zab6en08",
+  "_updatedAt": "2026-03-15T21:27:04.447Z",
+  "_createdAt": "2026-03-15T21:27:04.448Z"
+}
