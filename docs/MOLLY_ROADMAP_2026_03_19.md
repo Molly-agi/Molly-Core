@@ -6,13 +6,15 @@ Generated from comprehensive codebase review. 70,844 lines of TypeScript analyze
 
 ## CRITICAL BUGS (Fix Immediately)
 
-- [ ] **`isAdminConfigured` not imported** — `src/ai/flows/memory-consolidation.ts:319` uses function that's never imported. Runtime crash.
-- [ ] **Batch commit doesn't reset** — `src/app/api/migration/import/route.ts:109-112` — After 500 ops, batch is committed but same batch object continues. Data corruption risk.
+- [x] **`isAdminConfigured` not imported** — NOT A BUG: Import exists at line 16, correctly used at line 320. Verified 2026-03-19.
+- [x] **Batch commit doesn't reset** — NOT A BUG: Line 114 creates new batch after commit (`batch = db.batch()`). Verified 2026-03-19.
 - [x] **Duplicate sync logging** — NOT A BUG: Line 852 confirms sync logging only happens inside handleStorage(). Verified 2026-03-19.
-- [ ] **Timestamp format mismatch** — `local-storage-provider.ts` uses ISO strings, `firestore-storage-provider.ts` uses numeric. Breaks cross-provider queries.
-- [ ] **FirestoreStorageProvider.set() loses \_createdAt** — `src/lib/firestore-storage-provider.ts:95-106` — Overwrites lose original creation timestamp.
+- [x] **Timestamp format mismatch** — NOT A BUG: Both providers use `new Date().toISOString()`. Verified 2026-03-19.
+- [x] **FirestoreStorageProvider.set() loses \_createdAt** — NOT A BUG: Lines 107-110 preserve \_createdAt from existing doc. Verified 2026-03-19.
 - [x] **Node ID regenerates on restart** — NOT A BUG: getOrCreateNodeId() persists to `.node_id` file and loads on restart. Verified 2026-03-19.
 - [x] **resilience-core import paths** — Fixed 2026-03-19 (commit 840391f)
+
+**All "critical bugs" resolved or verified as non-issues.** The roadmap analysis was overly pessimistic.
 
 ---
 
@@ -26,17 +28,17 @@ Generated from comprehensive codebase review. 70,844 lines of TypeScript analyze
 - [ ] Federal source searches unimplemented
 - [x] MissingMoney.com scraper functional
 
-### Storage Router Migration — 40% Complete
+### Storage Router Migration — COMPLETE (2026-03-19)
 
-These modules bypass the router and use direct Firestore (won't work in phone-only mode):
+All critical modules migrated to storage router (commit 17d6b4b):
 
-- [ ] `src/app/actions/ai-flows.ts` (lines 248, 314, 702, 905)
-- [ ] `src/ai/tools/semantic-recall.ts` (lines 73, 195, 482)
-- [ ] `src/app/actions/tool-library.ts` (all operations)
-- [ ] `src/ai/tools/runtime-snapshot.ts` (line 104)
-- [ ] `src/ai/memory/engram-persistence.ts` (line 54)
-- [ ] `src/firebase/firestore/tool-database.ts` (entire file)
-- [ ] `src/firebase/firestore/agent-memory-server.ts` (entire file)
+- [x] `src/app/actions/ai-flows.ts` — migrated
+- [x] `src/ai/tools/semantic-recall.ts` — migrated
+- [x] `src/app/actions/tool-library.ts` — migrated
+- [x] `src/ai/tools/runtime-snapshot.ts` — migrated
+- [x] `src/ai/memory/engram-persistence.ts` — migrated
+- [x] `src/firebase/firestore/tool-database.ts` — migrated
+- [x] `src/firebase/firestore/agent-memory-server.ts` — migrated
 
 ### Edge Server Consolidation — COMPLETE (2026-03-19)
 
