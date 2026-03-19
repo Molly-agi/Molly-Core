@@ -8,10 +8,10 @@ Generated from comprehensive codebase review. 70,844 lines of TypeScript analyze
 
 - [ ] **`isAdminConfigured` not imported** — `src/ai/flows/memory-consolidation.ts:319` uses function that's never imported. Runtime crash.
 - [ ] **Batch commit doesn't reset** — `src/app/api/migration/import/route.ts:109-112` — After 500 ops, batch is committed but same batch object continues. Data corruption risk.
-- [ ] **Duplicate sync logging** — `src/edge/molly-edge-server.ts:311 & 817` — Every write operation logged twice, doubling sync traffic.
+- [x] **Duplicate sync logging** — NOT A BUG: Line 852 confirms sync logging only happens inside handleStorage(). Verified 2026-03-19.
 - [ ] **Timestamp format mismatch** — `local-storage-provider.ts` uses ISO strings, `firestore-storage-provider.ts` uses numeric. Breaks cross-provider queries.
 - [ ] **FirestoreStorageProvider.set() loses \_createdAt** — `src/lib/firestore-storage-provider.ts:95-106` — Overwrites lose original creation timestamp.
-- [ ] **Node ID regenerates on restart** — `src/edge/molly-edge-server.ts:545-548` — Breaks sync identity after edge server restart.
+- [x] **Node ID regenerates on restart** — NOT A BUG: getOrCreateNodeId() persists to `.node_id` file and loads on restart. Verified 2026-03-19.
 - [x] **resilience-core import paths** — Fixed 2026-03-19 (commit 840391f)
 
 ---
@@ -38,18 +38,19 @@ These modules bypass the router and use direct Firestore (won't work in phone-on
 - [ ] `src/firebase/firestore/tool-database.ts` (entire file)
 - [ ] `src/firebase/firestore/agent-memory-server.ts` (entire file)
 
-### Edge Server Consolidation
+### Edge Server Consolidation — COMPLETE (2026-03-19)
 
-Two implementations have diverged:
+Two implementations now have feature parity:
 
-- [ ] `src/edge/molly-edge-server.ts` (TypeScript, 954 lines)
-- [ ] `scripts/server-v2.mjs` (JavaScript, 700+ lines)
+- [x] `src/edge/molly-edge-server.ts` (TypeScript, v2.1.0)
+- [x] `scripts/server-v2.mjs` (JavaScript, v2.1.0, standalone deployment)
 
-server-v2.mjs has features TS version lacks:
+Added to TS version (commit 8852439):
 
-- [ ] `/api/system/exec` — remote command execution
-- [ ] `/api/system/update` — self-update
-- [ ] `/api/system/dropper` — bootstrap script generator
+- [x] `/api/system/exec` — remote command execution
+- [x] `/api/system/update` — self-update
+- [x] `/api/system/dropper` — bootstrap script generator
+- [x] `/api/system/server-code` — serve own source for device sync
 
 ---
 
