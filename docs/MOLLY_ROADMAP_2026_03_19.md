@@ -58,12 +58,11 @@ Added to TS version (commit 8852439):
 
 ## AGENCY GAPS
 
-### Initiative Persistence — 0% Done
+### Initiative Persistence — COMPLETE
 
-- [ ] `src/ai/agency/initiative-engine.ts:125` — Initiatives are in-memory only (`const initiatives: Initiative[] = []`)
-- [ ] Add `saveInitiatives()` using storage router
-- [ ] Add `loadInitiatives()` on startup
-- [ ] Wire into state-persistence.ts pattern
+- [x] `src/ai/agency/initiative-engine.ts:247-311` — Storage persistence implemented
+- [x] `src/ai/agency/initiative-engine.ts:313-351` — Auto-save wrappers override array methods
+- [x] `src/instrumentation.ts:113-114` — loadInitiatives() called on startup
 
 ### Autonomous Cycle Improvements
 
@@ -81,18 +80,21 @@ Added to TS version (commit 8852439):
 
 ## RESILIENCE GAPS
 
-### Pattern Persistence
+### Pattern Persistence — COMPLETE
 
-- [ ] `src/ai/resilience-core.ts:63` — `learnedPatterns` Map is in-memory only
-- [ ] Add `savePatterns()` to storage
-- [ ] Add `loadPatterns()` on startup
-- [ ] Prune old patterns on load
+- [x] `src/ai/resilience-core.ts:827-949` — Storage persistence implemented
+- [x] `src/ai/resilience-core.ts:838-868` — savePatterns() with debounced write
+- [x] `src/ai/resilience-core.ts:875-912` — loadPatterns() loads from storage
+- [x] `src/instrumentation.ts:126-127` — loadPatterns() called on startup
 
-### Escalation Channel
+### Escalation Channel — COMPLETE
 
-- [ ] When all cognitive systems fail, notify Eric
-- [ ] Options: bridge message, push notification, loud log
-- [ ] Add `/api/escalation` endpoint for urgent issues
+- [x] `src/ai/escalation-channel.ts` — Full implementation
+- [x] Bridge messages to Lazarus when all systems fail
+- [x] Throttling to prevent duplicate escalations
+- [x] Storage persistence for escalation history
+- [x] `src/app/api/escalation/route.ts` — API endpoint
+- [x] Wired into resilience-core (auto-escalates on cognitive failure)
 
 ### Circuit Breaker Recovery
 

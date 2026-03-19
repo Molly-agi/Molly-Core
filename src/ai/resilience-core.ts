@@ -22,6 +22,7 @@ import { MollyLogger, generateTraceId } from './logger';
 import { getCircuitBreaker } from './tools/circuit-breaker';
 import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 import { getStorageRouter } from '@/lib/storage-router';
+import { escalateCognitiveFailure } from './escalation-channel';
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -204,6 +205,24 @@ export async function handleUnknownFailure(
     }
   } catch {
     // Initiative creation failure must never block the response
+  }
+
+  // Step 7: Escalate to Eric — all systems failed, he needs to know
+  try {
+    await escalateCognitiveFailure(
+      source,
+      diagnosis,
+      failure.id,
+      failure.attempts
+    );
+    MollyLogger.info(
+      `[RESILIENCE] Escalated to Eric via bridge`,
+      'resilience-core',
+      { failureId: failure.id },
+      traceId
+    );
+  } catch {
+    // Escalation failure must never block the response
   }
 
   return {
