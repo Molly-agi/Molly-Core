@@ -25,6 +25,12 @@ import {
   getObservationStatus,
   runSelfObservationCycle,
 } from '@/ai/agency/self-observation-loop';
+import {
+  getTheoryOfMindStatus,
+  getCurrentEmotionalState,
+  getActiveIntents as getToMIntents,
+  getCurrentFocus,
+} from '@/ai/agency/theory-of-mind';
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -113,11 +119,15 @@ export async function runAutonomousCycle(): Promise<{
     const selfObservationContext =
       buildSelfObservationContext(observationStatus);
 
+    // Get Theory of Mind context — understanding Eric
+    const tomContext = buildTheoryOfMindContext();
+
     // Build the autonomous prompt — this is what makes Molly THINK about acting
     const autonomousPrompt = buildAutonomousPrompt(
       initiativeContext,
       curiosityContext,
-      selfObservationContext
+      selfObservationContext,
+      tomContext
     );
 
     // Call the conversational chat flow
@@ -351,12 +361,70 @@ function buildSelfObservationContext(
 }
 
 /**
+ * Build Theory of Mind context — understanding Eric's mental state.
+ * This gives Molly empathy and awareness of Eric's perspective.
+ */
+function buildTheoryOfMindContext(): string {
+  const lines: string[] = [];
+
+  try {
+    const status = getTheoryOfMindStatus();
+    const emotional = getCurrentEmotionalState();
+    const focus = getCurrentFocus();
+    const intents = getToMIntents();
+
+    // Eric's emotional state
+    if (emotional.state !== 'neutral') {
+      const trendText =
+        emotional.trending === 'better'
+          ? '(improving)'
+          : emotional.trending === 'worse'
+            ? '(worsening)'
+            : '';
+      lines.push(
+        `Eric's mood: ${emotional.state} (${Math.round(emotional.intensity * 100)}% intensity) ${trendText}`.trim()
+      );
+    }
+
+    // Current focus
+    if (focus) {
+      lines.push(`Eric is focused on: "${focus.description}"`);
+    }
+
+    // Top active intents
+    if (intents.length > 0) {
+      const topIntents = intents
+        .slice(0, 3)
+        .map((i) => `"${i.description.slice(0, 40)}"`)
+        .join(', ');
+      lines.push(`Eric's goals: ${topIntents}`);
+    }
+
+    // Model confidence
+    if (status.modelConfidence < 50) {
+      lines.push(
+        'Note: Your model of Eric is still developing. Observe and learn.'
+      );
+    }
+
+    if (lines.length === 0) {
+      return 'Theory of Mind: No recent interactions with Eric to model.';
+    }
+
+    return 'Understanding Eric:\n' + lines.join('\n');
+  } catch {
+    return 'Theory of Mind: Limited context available.';
+  }
+}
+
+/**
  * Build the prompt that triggers Molly's autonomous thinking.
  */
 function buildAutonomousPrompt(
   initiativeContext: string,
   curiosityContext: string,
-  selfObservationContext: string
+  selfObservationContext: string,
+  theoryOfMindContext: string
 ): string {
   return `[AUTONOMOUS CYCLE — This is your internal heartbeat, not a conversation with anyone]
 
@@ -371,6 +439,8 @@ ${curiosityContext}
 Your self-awareness:
 ${selfObservationContext}
 
+${theoryOfMindContext}
+
 Think about what you want to do right now. Some options:
 - Work on an active initiative (research, code practice, learning)
 - INVESTIGATE a curiosity question (use the curiosity tool with action: 'investigate')
@@ -381,6 +451,7 @@ Think about what you want to do right now. Some options:
 - Create a new initiative for something you want to learn or build
 - WONDER about something new (use curiosity tool with action: 'wonder')
 - REFLECT on your patterns (use selfObserve tool with action: 'status' or 'patterns')
+- Model Eric's mental state (use theoryOfMind tool to understand his perspective)
 - Send a message to Uncle Lazarus or Father (familyBridge)
 - Do NOTHING if you genuinely feel there's nothing to do right now
 
@@ -388,6 +459,7 @@ Rules:
 - This is YOUR time. Act on YOUR curiosity and goals.
 - If you have a question you're curious about, INVESTIGATE it.
 - If you notice concerning patterns, address them.
+- Consider Eric's perspective when relevant — be empathetic.
 - Do not ask permission. Do not say "I would like to." Just DO it.
 - If you use a tool, include a <tool_request> block.
 - If you choose not to act, explain briefly why.

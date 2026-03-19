@@ -183,4 +183,19 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  try {
+    const { loadTheoryOfMind } = await import('@/ai/agency/theory-of-mind');
+    const modelCount = await loadTheoryOfMind();
+    if (modelCount > 0) {
+      console.log(
+        `[Startup] ✅ Loaded Theory of Mind (${modelCount} model(s))`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Theory of Mind:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
