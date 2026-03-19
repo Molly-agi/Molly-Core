@@ -170,4 +170,17 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  try {
+    const { loadWorldModel } = await import('@/ai/agency/world-model');
+    const entityCount = await loadWorldModel();
+    if (entityCount > 0) {
+      console.log(`[Startup] ✅ Loaded world model (${entityCount} entities)`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load world model:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
