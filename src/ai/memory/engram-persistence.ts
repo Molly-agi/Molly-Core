@@ -1,10 +1,11 @@
 /**
  * @fileOverview Persistence helpers for engram consolidation.
- * Uses Firebase Admin SDK for server-side writes.
+ * Uses storage router for environment-aware writes.
  */
 
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
-import { Timestamp } from 'firebase-admin/firestore';
+import { getStorageRouter } from '@/lib/storage-router';
+import { isAdminConfigured } from '@/firebase/admin';
+import type { BatchOperation } from '@/lib/storage-interface';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type { MemoryEngram } from '@/ai/memory/neural-engram';
 import { encryptEngramData } from '@/ai/memory/engram-crypto';
@@ -34,7 +35,9 @@ export async function persistEngramBatch(
     return { saved: 0, failed: 0, errors };
   }
 
-  if (!isAdminConfigured()) {
+  // In Firestore mode, check if admin is configured
+  const storage = getStorageRouter();
+  if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     return {
       saved: 0,
       failed: engrams.length,
@@ -51,12 +54,12 @@ export async function persistEngramBatch(
     traceId
   );
 
-  const firestore = getAdminFirestore();
+  const collectionPath = `users/${userId}/engrams`;
   let saved = 0;
 
   for (let i = 0; i < engrams.length; i += MAX_BATCH_SIZE) {
     const slice = engrams.slice(i, i + MAX_BATCH_SIZE);
-    const batch = firestore.batch();
+    const batchOps: BatchOperation[] = [];
 
     for (const engram of slice) {
       try {
@@ -67,22 +70,21 @@ export async function persistEngramBatch(
           password
         );
 
-        const docRef = firestore
-          .collection('users')
-          .doc(userId)
-          .collection('engrams')
-          .doc(engram.id);
-
-        batch.set(docRef, {
-          encrypted,
-          iv,
-          authTag,
-          timestamp: Timestamp.fromDate(engram.timestamp),
-          contentPreview: engram.content.substring(0, 100),
-          importance: engram.importance,
-          emotionalValence: engram.emotionalValence,
-          consolidationState: engram.consolidationState,
-          source: options.source || 'consolidation',
+        batchOps.push({
+          type: 'set',
+          collectionPath,
+          docId: engram.id,
+          data: {
+            encrypted,
+            iv,
+            authTag,
+            timestamp: engram.timestamp.toISOString(),
+            contentPreview: engram.content.substring(0, 100),
+            importance: engram.importance,
+            emotionalValence: engram.emotionalValence,
+            consolidationState: engram.consolidationState,
+            source: options.source || 'consolidation',
+          },
         });
       } catch (error) {
         const message =
@@ -92,7 +94,7 @@ export async function persistEngramBatch(
     }
 
     try {
-      await batch.commit();
+      await storage.batchWrite(batchOps);
       saved += slice.length;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Commit failed';

@@ -8,7 +8,8 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
+import { isAdminConfigured } from '@/firebase/admin';
 import {
   getEmbeddingProvider,
   isEmbeddingProviderReady,
@@ -60,7 +61,7 @@ function asNumberArray(value: unknown): number[] | null {
  */
 
 /**
- * Cache embedding vector to Firestore for future use
+ * Cache embedding vector to storage for future use
  */
 async function cacheEmbedding(
   userId: string,
@@ -70,20 +71,16 @@ async function cacheEmbedding(
   traceId: string
 ): Promise<void> {
   try {
-    const firestore = getAdminFirestore();
-    const docRef = firestore
-      .collection('users')
-      .doc(userId)
-      .collection(collectionName)
-      .doc(docId);
+    const storage = getStorageRouter();
+    const collectionPath = `users/${userId}/${collectionName}`;
 
-    await docRef.update({
+    await storage.update(collectionPath, docId, {
       embeddingVector: embeddingVector,
       embeddingCachedAt: new Date().toISOString(),
     });
 
     MollyLogger.debug(
-      'Embedding cached to Firestore',
+      'Embedding cached to storage',
       'semantic-recall',
       { collectionName, docId, vectorLength: embeddingVector.length },
       traceId
@@ -149,7 +146,9 @@ export const semanticRecall = ai.defineTool(
     const traceId = generateTraceId();
 
     try {
-      if (!isAdminConfigured()) {
+      // In Firestore mode, check if admin is configured
+      const storage = getStorageRouter();
+      if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
         MollyLogger.warn(
           'Admin Firestore not configured - skipping semantic recall',
           'semantic-recall',
@@ -192,7 +191,6 @@ export const semanticRecall = ai.defineTool(
         }
       }
 
-      const firestore = getAdminFirestore();
       const embeddingProvider = getEmbeddingProvider();
 
       MollyLogger.info(
@@ -211,29 +209,27 @@ export const semanticRecall = ai.defineTool(
       const allMemories: RawMemory[] = [];
 
       for (const collectionName of collections) {
-        const ref = firestore
-          .collection('users')
-          .doc(userId)
-          .collection(collectionName);
-        let firestoreQuery = ref.orderBy('timestamp', 'desc').limit(100);
+        const collectionPath = `users/${userId}/${collectionName}`;
+        const filters = contextFilter
+          ? [
+              {
+                field: 'context',
+                operator: '==' as const,
+                value: contextFilter,
+              },
+            ]
+          : [];
 
-        // Apply context filter if provided
-        if (contextFilter) {
-          firestoreQuery = ref
-            .where('context', '==', contextFilter)
-            .orderBy('timestamp', 'desc')
-            .limit(100);
-        }
-
-        const snapshot = await firestoreQuery.get();
-        const memories = snapshot.docs.map((doc) => {
-          const data = doc.data() as Record<string, unknown>;
-          return {
-            id: doc.id,
-            collection: collectionName,
-            ...data,
-          } as RawMemory;
+        const results = await storage.query(collectionPath, filters, {
+          orderBy: { field: 'timestamp', direction: 'desc' },
+          limit: 100,
         });
+
+        const memories = results.map((doc) => ({
+          id: doc.id,
+          collection: collectionName,
+          ...doc.data,
+        })) as RawMemory[];
 
         allMemories.push(...memories);
       }
@@ -469,7 +465,9 @@ async function fallbackKeywordSearch(
 ): Promise<SemanticRecallResult[]> {
   const traceId = generateTraceId();
 
-  if (!isAdminConfigured()) {
+  // In Firestore mode, check if admin is configured
+  const storage = getStorageRouter();
+  if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     MollyLogger.warn(
       'Admin Firestore not configured - skipping keyword search',
       'semantic-recall',
@@ -478,8 +476,6 @@ async function fallbackKeywordSearch(
     );
     return [];
   }
-
-  const firestore = getAdminFirestore();
 
   MollyLogger.info(
     'Using fallback keyword search',
@@ -494,18 +490,15 @@ async function fallbackKeywordSearch(
   const queryLower = queryText.toLowerCase();
 
   for (const collectionName of collections) {
-    const ref = firestore
-      .collection('users')
-      .doc(userId)
-      .collection(collectionName);
-    const snapshot = await ref
-      .orderBy('timestamp', 'desc')
-      .limit(resultLimit * 3)
-      .get();
+    const collectionPath = `users/${userId}/${collectionName}`;
+    const results = await storage.query(collectionPath, [], {
+      orderBy: { field: 'timestamp', direction: 'desc' },
+      limit: resultLimit * 3,
+    });
 
-    const matches = snapshot.docs
+    const matches = results
       .map((doc) => {
-        const data = doc.data() as Record<string, unknown>;
+        const data = doc.data;
         const text = buildMemoryText(data).toLowerCase();
 
         // Simple keyword matching
@@ -540,7 +533,7 @@ async function fallbackKeywordSearch(
           context: asString(data.context, 'general'),
           suggestion,
           code: asString(data.code) || asString(data.modifiedCode) || undefined,
-          timestamp: asNumber(data.timestamp, Date.now()),
+          timestamp: asNumber(data.timestamp as number, Date.now()),
           vibe: asString(data.vibe) || undefined,
           vibeScore:
             typeof data.vibeScore === 'number' ? data.vibeScore : undefined,

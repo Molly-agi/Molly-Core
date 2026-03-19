@@ -2,8 +2,7 @@
  * @fileOverview Server-side memory logging for agent actions.
  */
 
-import { getAdminFirestore } from '@/firebase/admin';
-import { Timestamp } from 'firebase-admin/firestore';
+import { getStorageRouter } from '@/lib/storage-router';
 
 export async function recordSensoryLogServer(
   userId: string,
@@ -11,11 +10,8 @@ export async function recordSensoryLogServer(
   description: string,
   metadata: Record<string, unknown>
 ) {
-  const firestore = getAdminFirestore();
-  const ref = firestore
-    .collection('users')
-    .doc(userId)
-    .collection('sensoryMemory');
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/sensoryMemory`;
 
   const logEntry = {
     sensorType,
@@ -25,10 +21,10 @@ export async function recordSensoryLogServer(
       vibeScore: metadata?.vibeScore || 0.5,
       isHardened: true,
     },
-    timestamp: Timestamp.now(),
+    timestamp: new Date().toISOString(),
   };
 
-  await ref.add(logEntry);
+  await storage.add(collectionPath, logEntry);
 }
 /**
  * Server-side: Log a self-improvement event (code integration, capability gain, etc.)
@@ -43,13 +39,10 @@ export async function logSelfImprovementServer(
     status: 'requested' | 'in-progress' | 'completed' | 'deferred';
   }
 ): Promise<string> {
-  const firestore = getAdminFirestore();
-  const ref = firestore
-    .collection('users')
-    .doc(userId)
-    .collection('selfImprovementRequests');
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/selfImprovementRequests`;
 
-  const doc = await ref.add({
+  const doc = await storage.add(collectionPath, {
     userId,
     category: request.category,
     description: request.description,
@@ -73,18 +66,15 @@ export async function recordCodeModificationServer(
   modifiedCode: string,
   description: string
 ): Promise<void> {
-  const firestore = getAdminFirestore();
-  const ref = firestore
-    .collection('users')
-    .doc(userId)
-    .collection('codeModifications');
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/codeModifications`;
 
-  await ref.add({
+  await storage.add(collectionPath, {
     filePath,
     originalCode: originalCode ?? 'N/A (new file)',
     modifiedCode: modifiedCode.substring(0, 10000), // cap storage
     modificationSuggestion: description,
     agentId,
-    timestamp: Timestamp.now(),
+    timestamp: new Date().toISOString(),
   });
 }

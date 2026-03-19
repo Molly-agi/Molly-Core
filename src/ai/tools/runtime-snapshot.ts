@@ -4,7 +4,8 @@ import { getLatencyStats } from '@/ai/tools/latency-cache';
 import { getSystemHealth } from '@/ai/tools/system';
 import { verifyRecordIntegrity } from '@/ai/tools/memory-integrity';
 import { loadSessionState } from '@/lib/session-manager';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
+import { isAdminConfigured } from '@/firebase/admin';
 
 /** Race a promise against a timeout — returns fallback on timeout. */
 function withTimeoutFallback<T>(
@@ -88,7 +89,9 @@ async function collectMemoryHealth(userId?: string) {
     };
   }
 
-  if (!isAdminConfigured()) {
+  // In Firestore mode, check if admin is configured
+  const storage = getStorageRouter();
+  if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     return {
       status: 'unavailable' as const,
       userId,
@@ -101,20 +104,17 @@ async function collectMemoryHealth(userId?: string) {
   }
 
   try {
-    const firestore = getAdminFirestore();
-    const snapshot = await withTimeoutFallback(
-      firestore
-        .collection('users')
-        .doc(userId)
-        .collection('aiResponses')
-        .orderBy('timestamp', 'desc')
-        .limit(20)
-        .get(),
+    const collectionPath = `users/${userId}/aiResponses`;
+    const results = await withTimeoutFallback(
+      storage.query(collectionPath, [], {
+        orderBy: { field: 'timestamp', direction: 'desc' },
+        limit: 20,
+      }),
       FIRESTORE_QUERY_TIMEOUT_MS,
       null
     );
 
-    if (!snapshot) {
+    if (!results) {
       return {
         status: 'degraded' as const,
         userId,
@@ -122,7 +122,7 @@ async function collectMemoryHealth(userId?: string) {
         validChecksums: 0,
         invalidChecksums: 0,
         missingChecksums: 0,
-        warning: 'Memory health check timed out — Firestore may be slow.',
+        warning: 'Memory health check timed out — storage may be slow.',
       };
     }
 
@@ -130,8 +130,8 @@ async function collectMemoryHealth(userId?: string) {
     let invalidChecksums = 0;
     let missingChecksums = 0;
 
-    snapshot.docs.forEach((doc) => {
-      const data = doc.data() as Record<string, unknown>;
+    results.forEach((doc) => {
+      const data = doc.data as Record<string, unknown>;
       if (!('crc32' in data) || typeof data.crc32 !== 'string') {
         missingChecksums += 1;
         return;
@@ -153,7 +153,7 @@ async function collectMemoryHealth(userId?: string) {
     return {
       status,
       userId,
-      checkedRecords: snapshot.size,
+      checkedRecords: results.length,
       validChecksums,
       invalidChecksums,
       missingChecksums,

@@ -11,15 +11,23 @@
  */
 
 // Ensure GeminiProvider.isConfigured() returns true in tests
-const originalEnv = process.env.GOOGLE_GENAI_API_KEY;
+// And ClaudeProvider.isConfigured() returns false for fallback tests
+const originalGoogleKey = process.env.GOOGLE_GENAI_API_KEY;
+const originalAnthropicKey = process.env.ANTHROPIC_API_KEY;
 beforeAll(() => {
   process.env.GOOGLE_GENAI_API_KEY = 'test-key-for-router-tests';
+  delete process.env.ANTHROPIC_API_KEY; // Ensure Claude isn't configured for fallback tests
 });
 afterAll(() => {
-  if (originalEnv === undefined) {
+  if (originalGoogleKey === undefined) {
     delete process.env.GOOGLE_GENAI_API_KEY;
   } else {
-    process.env.GOOGLE_GENAI_API_KEY = originalEnv;
+    process.env.GOOGLE_GENAI_API_KEY = originalGoogleKey;
+  }
+  if (originalAnthropicKey === undefined) {
+    delete process.env.ANTHROPIC_API_KEY;
+  } else {
+    process.env.ANTHROPIC_API_KEY = originalAnthropicKey;
   }
 });
 

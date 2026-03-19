@@ -34,6 +34,10 @@ jest.mock('@/firebase/admin', () => ({
   getAdminFirestore: jest.fn(),
 }));
 
+jest.mock('@/lib/storage-router', () => ({
+  getStorageRouter: jest.fn(),
+}));
+
 /* eslint-disable @typescript-eslint/no-require-imports -- Jest mock handles need require() after jest.mock() hoisting */
 const { getCircuitBreaker } = require('@/ai/tools/circuit-breaker');
 const { getRateLimiter } = require('@/ai/tools/rate-limiter');
@@ -41,7 +45,8 @@ const { getLatencyStats } = require('@/ai/tools/latency-cache');
 const { getSystemHealth } = require('@/ai/tools/system');
 const { verifyRecordIntegrity } = require('@/ai/tools/memory-integrity');
 const { loadSessionState } = require('@/lib/session-manager');
-const { isAdminConfigured, getAdminFirestore } = require('@/firebase/admin');
+const { isAdminConfigured } = require('@/firebase/admin');
+const { getStorageRouter } = require('@/lib/storage-router');
 /* eslint-enable @typescript-eslint/no-require-imports */
 
 describe('runtime snapshot collector', () => {
@@ -127,24 +132,14 @@ describe('runtime snapshot collector', () => {
     );
 
     const docs = [
-      {
-        data: () => ({ id: 'good', crc32: 'ok', responseText: 'a' }),
-      },
-      {
-        data: () => ({ id: 'bad', crc32: 'ok', responseText: 'b' }),
-      },
-      {
-        data: () => ({ id: 'missing', responseText: 'c' }),
-      },
+      { id: 'good', data: { id: 'good', crc32: 'ok', responseText: 'a' } },
+      { id: 'bad', data: { id: 'bad', crc32: 'ok', responseText: 'b' } },
+      { id: 'missing', data: { id: 'missing', responseText: 'c' } },
     ];
 
-    const getMock = jest.fn().mockResolvedValue({ size: docs.length, docs });
-    const limitMock = jest.fn().mockReturnValue({ get: getMock });
-    const orderByMock = jest.fn().mockReturnValue({ limit: limitMock });
-    const collectionMock = jest.fn().mockReturnValue({ orderBy: orderByMock });
-    const docMock = jest.fn().mockReturnValue({ collection: collectionMock });
-    getAdminFirestore.mockReturnValue({
-      collection: jest.fn().mockReturnValue({ doc: docMock }),
+    getStorageRouter.mockReturnValue({
+      getMode: jest.fn(() => 'firestore'),
+      query: jest.fn().mockResolvedValue(docs),
     });
 
     const snapshot = await collectRuntimeSnapshot('user-1');

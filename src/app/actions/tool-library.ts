@@ -10,6 +10,7 @@ import {
   getToolStats,
   type FoundTool,
 } from '@/firebase/firestore/tool-database';
+import { getStorageRouter } from '@/lib/storage-router';
 import { isAdminConfigured } from '@/firebase/admin';
 import { ensureApiKey } from './utils';
 import { MollyLogger } from '@/ai/logger';
@@ -26,6 +27,17 @@ function cleanFirestoreError(e: unknown): string {
 }
 
 /**
+ * Check if storage is available (either local mode or configured Firestore)
+ */
+function isStorageAvailable(): boolean {
+  const storage = getStorageRouter();
+  // Local mode is always available
+  if (storage.getMode() === 'local') return true;
+  // Firestore mode requires admin to be configured
+  return isAdminConfigured();
+}
+
+/**
  * Save a newly discovered tool to Molly's database
  */
 export async function addToolToDatabase(
@@ -33,10 +45,10 @@ export async function addToolToDatabase(
   tool: Omit<FoundTool, 'id' | 'savedAt' | 'accessCount' | 'lastAccessedAt'>
 ) {
   try {
-    if (!isAdminConfigured()) {
+    if (!isStorageAvailable()) {
       return {
         success: false,
-        error: 'Firebase admin is not configured in this environment.',
+        error: 'Storage is not configured in this environment.',
       };
     }
     ensureApiKey();
@@ -64,10 +76,10 @@ export async function searchTools(
   category?: string
 ) {
   try {
-    if (!isAdminConfigured()) {
+    if (!isStorageAvailable()) {
       return {
         success: false,
-        error: 'Firebase admin is not configured in this environment.',
+        error: 'Storage is not configured in this environment.',
         tools: [],
       };
     }
@@ -88,10 +100,10 @@ export async function searchTools(
  */
 export async function getToolsBycat(userId: string, category: string) {
   try {
-    if (!isAdminConfigured()) {
+    if (!isStorageAvailable()) {
       return {
         success: false,
-        error: 'Firebase admin is not configured in this environment.',
+        error: 'Storage is not configured in this environment.',
         tools: [],
       };
     }
@@ -117,10 +129,10 @@ export async function getToolsBycat(userId: string, category: string) {
  */
 export async function getRecentFoundTools(userId: string, count?: number) {
   try {
-    if (!isAdminConfigured()) {
+    if (!isStorageAvailable()) {
       return {
         success: false,
-        error: 'Firebase admin is not configured in this environment.',
+        error: 'Storage is not configured in this environment.',
         tools: [],
       };
     }
@@ -146,10 +158,10 @@ export async function getRecentFoundTools(userId: string, count?: number) {
  */
 export async function getToolLibraryStats(userId: string) {
   try {
-    if (!isAdminConfigured()) {
+    if (!isStorageAvailable()) {
       return {
         success: false,
-        error: 'Firebase admin is not configured in this environment.',
+        error: 'Storage is not configured in this environment.',
         stats: null,
       };
     }
@@ -170,10 +182,10 @@ export async function getToolLibraryStats(userId: string) {
  */
 export async function accessTool(userId: string, toolId: string) {
   try {
-    if (!isAdminConfigured()) {
+    if (!isStorageAvailable()) {
       return {
         success: false,
-        error: 'Firebase admin is not configured in this environment.',
+        error: 'Storage is not configured in this environment.',
       };
     }
     await recordToolAccess(userId, toolId);
@@ -193,10 +205,10 @@ export async function accessTool(userId: string, toolId: string) {
  */
 export async function deleteToolFromDatabase(userId: string, toolId: string) {
   try {
-    if (!isAdminConfigured()) {
+    if (!isStorageAvailable()) {
       return {
         success: false,
-        error: 'Firebase admin is not configured in this environment.',
+        error: 'Storage is not configured in this environment.',
       };
     }
     await removeTool(userId, toolId);

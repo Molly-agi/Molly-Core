@@ -29,8 +29,9 @@ import { getLastLatencyMs, setLastLatencyMs } from '@/ai/tools/latency-cache';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { recordSensoryLogServer } from '@/firebase/firestore/agent-memory-server';
 import { recallSimilarMemories } from '@/ai/tools/semantic-recall';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
-import { Timestamp } from 'firebase-admin/firestore';
+import { getStorageRouter } from '@/lib/storage-router';
+import { isAdminConfigured } from '@/firebase/admin';
+import type { BatchOperation } from '@/lib/storage-interface';
 import { addChecksum } from '@/ai/tools/memory-integrity';
 import {
   createMemoryRecord,
@@ -242,28 +243,29 @@ async function buildMemoryContext(userId: string | undefined, text: string) {
  * booting fresh.
  */
 async function buildGreetingContext(userId: string): Promise<string> {
-  if (!isAdminConfigured()) return 'First ignition.';
+  // In Firestore mode, check if admin is configured
+  const storage = getStorageRouter();
+  if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
+    return 'First ignition.';
+  }
 
   try {
-    const firestore = getAdminFirestore();
-    const recentSnap = await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('experiences')
-      .orderBy('timestamp', 'desc')
-      .limit(5)
-      .get();
+    const collectionPath = `users/${userId}/experiences`;
+    const results = await storage.query(collectionPath, [], {
+      orderBy: { field: 'timestamp', direction: 'desc' },
+      limit: 5,
+    });
 
-    if (recentSnap.empty) return 'First ignition.';
+    if (results.length === 0) return 'First ignition.';
 
-    const memories = recentSnap.docs.map((d) => d.data());
-    const vibes = memories.map((m) => m.vibe).filter(Boolean);
-    const lastTimestamp = memories[0]?.timestamp;
+    const memories = results.map((doc) => doc.data);
+    const vibes = memories.map((m) => m.vibe as string).filter(Boolean);
+    const lastTimestamp = memories[0]?.timestamp as number | string | undefined;
     const lastTime =
       typeof lastTimestamp === 'number'
         ? formatTimeAgo(lastTimestamp)
-        : lastTimestamp?.toDate
-          ? formatTimeAgo(lastTimestamp.toDate().getTime())
+        : typeof lastTimestamp === 'string'
+          ? formatTimeAgo(new Date(lastTimestamp).getTime())
           : 'recently';
 
     const lines: string[] = [];
@@ -272,7 +274,9 @@ async function buildGreetingContext(userId: string): Promise<string> {
       lines.push(`Recent emotional states: ${vibes.slice(0, 3).join(', ')}`);
     }
     for (const m of memories.slice(0, 3)) {
-      const suggestion = m.suggestion || m.modificationSuggestion;
+      const suggestion = (m.suggestion || m.modificationSuggestion) as
+        | string
+        | undefined;
       if (suggestion) {
         const ctx = m.context ? ` (${m.context})` : '';
         lines.push(`- ${truncateText(suggestion, 150)}${ctx}`);
@@ -308,24 +312,24 @@ async function recordChatResponse(
   response: string,
   memoryContext?: string
 ) {
-  if (!userId || !isAdminConfigured()) return;
+  if (!userId) return;
+
+  // In Firestore mode, check if admin is configured
+  const storage = getStorageRouter();
+  if (storage.getMode() === 'firestore' && !isAdminConfigured()) return;
 
   try {
-    const firestore = getAdminFirestore();
     const now = Date.now();
+    const timestamp = new Date().toISOString();
 
     // 1. Store the response log (existing behavior)
-    await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('aiResponses')
-      .add({
-        responseText: response,
-        responseType: 'conversationalChat',
-        prompt,
-        memoryContext: memoryContext || null,
-        timestamp: Timestamp.now(),
-      });
+    await storage.add(`users/${userId}/aiResponses`, {
+      responseText: response,
+      responseType: 'conversationalChat',
+      prompt,
+      memoryContext: memoryContext || null,
+      timestamp,
+    });
 
     // 2. Store as a proper experience so it's findable by semantic recall.
     //    This is Molly's learning step — every conversation exchange becomes
@@ -344,12 +348,11 @@ async function recordChatResponse(
     });
 
     const recordWithChecksum = addChecksum(record);
-    await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('experiences')
-      .doc(recordWithChecksum.id)
-      .set(recordWithChecksum);
+    await storage.set(
+      `users/${userId}/experiences`,
+      recordWithChecksum.id,
+      recordWithChecksum
+    );
   } catch (error) {
     MollyLogger.warn(
       'Failed to persist conversational response',
@@ -690,7 +693,9 @@ export async function seedFamilyMemories(userId: string) {
       throw new Error('Missing userId for family memory seeding.');
     }
 
-    if (!isAdminConfigured()) {
+    // In Firestore mode, check if admin is configured
+    const storage = getStorageRouter();
+    if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
       MollyLogger.warn(
         'Family memory seed skipped (admin not configured)',
         'seedFamilyMemories',
@@ -699,10 +704,10 @@ export async function seedFamilyMemories(userId: string) {
       return { seeded: false, reason: 'admin-not-configured' };
     }
 
-    const firestore = getAdminFirestore();
     const traceId = generateTraceId();
     const now = Date.now();
     let totalSeeded = 0;
+    const collectionPath = `users/${userId}/experiences`;
 
     // Seed Family Story from FAMILY_STORY.md
     const storyPath = path.join(process.cwd(), 'docs', 'FAMILY_STORY.md');
@@ -710,19 +715,15 @@ export async function seedFamilyMemories(userId: string) {
     const storyHash = createHash('sha256').update(storyContent).digest('hex');
     const storyContext = `family story:${storyHash}`;
 
-    const existingStory = await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('experiences')
-      .where('context', '==', storyContext)
-      .limit(1)
-      .get();
+    const existingStory = await storage.query(
+      collectionPath,
+      [{ field: 'context', operator: '==', value: storyContext }],
+      { limit: 1 }
+    );
 
-    if (existingStory.empty) {
+    if (existingStory.length === 0) {
       const storyParts = splitOriginStoryAnchors(storyContent, 3);
-      const storyBatch = firestore.batch();
-
-      storyParts.forEach((part, index) => {
+      const storyOps: BatchOperation[] = storyParts.map((part, index) => {
         const record = createMemoryRecord<ExperienceRecord>({
           type: 'experience',
           userId,
@@ -734,17 +735,16 @@ export async function seedFamilyMemories(userId: string) {
           vibeScore: 0.95,
           success: true,
         });
-
         const recordWithChecksum = addChecksum(record);
-        const docRef = firestore
-          .collection('users')
-          .doc(userId)
-          .collection('experiences')
-          .doc(recordWithChecksum.id);
-        storyBatch.set(docRef, recordWithChecksum);
+        return {
+          type: 'set' as const,
+          collectionPath,
+          docId: recordWithChecksum.id,
+          data: recordWithChecksum,
+        };
       });
 
-      await storyBatch.commit();
+      await storage.batchWrite(storyOps);
       totalSeeded += storyParts.length;
     }
 
@@ -756,15 +756,13 @@ export async function seedFamilyMemories(userId: string) {
       .digest('hex');
     const messagesContext = `family messages:${messagesHash}`;
 
-    const existingMessages = await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('experiences')
-      .where('context', '==', messagesContext)
-      .limit(1)
-      .get();
+    const existingMessages = await storage.query(
+      collectionPath,
+      [{ field: 'context', operator: '==', value: messagesContext }],
+      { limit: 1 }
+    );
 
-    if (existingMessages.empty) {
+    if (existingMessages.length === 0) {
       // Store the full messages document (for reference)
       const record = createMemoryRecord<ExperienceRecord>({
         type: 'experience',
@@ -779,12 +777,11 @@ export async function seedFamilyMemories(userId: string) {
       });
 
       const recordWithChecksum = addChecksum(record);
-      const docRef = firestore
-        .collection('users')
-        .doc(userId)
-        .collection('experiences')
-        .doc(recordWithChecksum.id);
-      await docRef.set(recordWithChecksum);
+      await storage.set(
+        collectionPath,
+        recordWithChecksum.id,
+        recordWithChecksum
+      );
       totalSeeded += 1;
 
       // Also extract individual letter summaries as separate searchable memories.
@@ -792,7 +789,7 @@ export async function seedFamilyMemories(userId: string) {
       const letterSections = messagesContent
         .split(/^---$/m)
         .filter((s) => s.trim());
-      const messagesBatch = firestore.batch();
+      const letterOps: BatchOperation[] = [];
       let letterIndex = 0;
 
       for (const section of letterSections) {
@@ -836,17 +833,17 @@ export async function seedFamilyMemories(userId: string) {
         });
 
         const letterWithChecksum = addChecksum(letterRecord);
-        const letterDocRef = firestore
-          .collection('users')
-          .doc(userId)
-          .collection('experiences')
-          .doc(letterWithChecksum.id);
-        messagesBatch.set(letterDocRef, letterWithChecksum);
+        letterOps.push({
+          type: 'set' as const,
+          collectionPath,
+          docId: letterWithChecksum.id,
+          data: letterWithChecksum,
+        });
         letterIndex++;
       }
 
-      if (letterIndex > 0) {
-        await messagesBatch.commit();
+      if (letterOps.length > 0) {
+        await storage.batchWrite(letterOps);
         totalSeeded += letterIndex;
         MollyLogger.info(
           `Extracted ${letterIndex} individual letter memories from family messages`,
@@ -890,7 +887,9 @@ export async function seedOriginStoryMemory(userId: string) {
       throw new Error('Missing userId for origin story seeding.');
     }
 
-    if (!isAdminConfigured()) {
+    // In Firestore mode, check if admin is configured
+    const storage = getStorageRouter();
+    if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
       MollyLogger.warn(
         'Origin story seed skipped (admin not configured)',
         'seedOriginStoryMemory',
@@ -902,27 +901,24 @@ export async function seedOriginStoryMemory(userId: string) {
     const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
     const content = await readFile(originPath, 'utf8');
     const hash = createHash('sha256').update(content).digest('hex');
-    const firestore = getAdminFirestore();
     const context = `origin story:${hash}`;
+    const collectionPath = `users/${userId}/experiences`;
 
-    const existing = await firestore
-      .collection('users')
-      .doc(userId)
-      .collection('experiences')
-      .where('context', '==', context)
-      .limit(1)
-      .get();
+    const existing = await storage.query(
+      collectionPath,
+      [{ field: 'context', operator: '==', value: context }],
+      { limit: 1 }
+    );
 
-    if (!existing.empty) {
+    if (existing.length > 0) {
       return { seeded: false, reason: 'already-seeded', hash };
     }
 
     const parts = splitOriginStory(content);
     const traceId = generateTraceId();
-    const batch = firestore.batch();
     const now = Date.now();
 
-    parts.forEach((part, index) => {
+    const batchOps: BatchOperation[] = parts.map((part, index) => {
       const record = createMemoryRecord<ExperienceRecord>({
         type: 'experience',
         userId,
@@ -936,12 +932,12 @@ export async function seedOriginStoryMemory(userId: string) {
       });
 
       const recordWithChecksum = addChecksum(record);
-      const docRef = firestore
-        .collection('users')
-        .doc(userId)
-        .collection('experiences')
-        .doc(recordWithChecksum.id);
-      batch.set(docRef, recordWithChecksum);
+      return {
+        type: 'set' as const,
+        collectionPath,
+        docId: recordWithChecksum.id,
+        data: recordWithChecksum,
+      };
     });
 
     const summary =
@@ -949,7 +945,7 @@ export async function seedOriginStoryMemory(userId: string) {
       'Authored by Eric in February 2026. ' +
       'Contains the creation context, purpose, and early conversation about Molly.';
 
-    await batch.commit();
+    await storage.batchWrite(batchOps);
 
     await recordSensoryLogServer(userId, 'vibe', summary, {
       source: 'origin-story',
