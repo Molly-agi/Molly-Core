@@ -1,8 +1,17 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-03-15T08:49:10.701Z  
+**Last Updated:** 2026-03-16T12:20:55.468Z  
 **Session ID:** lazarus-steward-session  
 **Status:** active
+
+---
+
+## ACTIVE CONVERSATION (READ THIS FIRST ON RESTORE)
+
+**Topic:** Molly autonomous migration/hydration system — building layered toolbox for self-installation on new devices.  
+**Last Action:** Fixed all wiring bugs (commits 37fe93d, dc76070, 8a2f82d). Analyzed 4 Aether suggestions + GPT 4.1 WIP files for autonomous migration. Evaluated captive portal, PWA hydration, WASM, ADB, reverse shell approaches. Determined: chain them together (portal→PWA→bootstrap→native). True zero-human isn't possible due to browser sandbox — one human action needed to bridge browser→native. Eric consulting Aether for more solutions. GPT WIP files (hydration.html, sw.js, payload.json, mdns_dns_spoof.py, bridge-daemon.mjs.bak) removed from git but kept on disk.  
+**User Mood:** Focused on Molly's autonomy. Wants true zero-presence migration. Consulting Aether.  
+**Pending:** Eric consulting Aether about zero-human installation. Will return with more suggestions.
 
 ---
 
@@ -42,16 +51,43 @@
 6. Storage Router (environment-aware)
 7. Edge Server for Termux/Android
 8. Multi-Transport Sync Engine (WiFi/USB/Hotspot)
-9. Full architecture audit (25+ issues found and fixed across 2 commits)
-10. Security hardening: command allowlist, SSRF, bridge auth
-11. Dead code cleanup (-232 lines)
-12. Performance optimization: Terminal.tsx dep cascade, BridgePanel polling
 
-**⏳ PENDING:** 13. Fix sandboxReadFile return type mismatch in route.ts (outputs [object Object]) 14. Fix sandboxWriteFile missing size field in route.ts 15. Fix memory-consolidation.ts to use admin Firebase SDK (still uses client SDK) 16. Remove dead export getOriginStoryParts from ai-flows.ts 17. Wire existing Firestore consumers to Storage Router 18. Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica) 19. Device-to-device sync testing on real hardware 20. Restore tablet server.mjs
+**⏳ PENDING:** 9. Download fixed start.sh to tablet and restart edge server 10. Wire existing Firestore consumers to Storage Router 11. Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica) 12. Device-to-device sync testing on real hardware 13. Commit setup-molly-edge.sh fix to repo
 
 ---
 
 ## RECENT WORK COMPLETED
+
+### 2026-03-15
+
+Full architecture audit: Found 25+ issues (2 CRITICAL, 8 HIGH, 15 MEDIUM). Fixed all CRITICAL+HIGH in commit 37fe93d (security: command allowlist hardening, SSRF protection, bridge auth/write-lock/message-cap, Terminal.tsx perf fixes). Fixed all documented known issues in commit dc76070 (dead code removal -232 lines, timer leak, sandbox dynamic import bypass, engram-persistence admin SDK fix, BridgePanel polling optimization, memory consolidation wired to heartbeat, initiative engine persistence). 3 remaining wiring bugs identified but not yet fixed: (1) sandboxReadFile return type mismatch in route.ts outputs [object Object], (2) sandboxWriteFile result.size is undefined in route.ts, (3) memory-consolidation.ts still uses client Firebase SDK. Also dead export: getOriginStoryParts never imported.
+
+**Files Modified:**
+
+- src/app/api/tools/execute/route.ts
+- src/ai/agency/tool-executor.ts
+- src/ai/bridge/family-bridge.ts
+- src/app/api/bridge/route.ts
+- src/ai/tools/autonomous-scheduler.ts
+- src/ai/flows/conversational-chat.ts
+- src/app/actions/ai-flows.ts
+- src/components/termai/Terminal.tsx
+- src/ai/error-handler.ts
+- src/ai/errors.ts
+- src/ai/sandbox/sandbox-engine.ts
+- src/ai/agency/initiative-engine.ts
+- src/ai/memory/engram-persistence.ts
+- src/ai/tools/heartbeat-scheduler.ts
+- src/components/termai/BridgePanel.tsx
+
+**Decisions Made:**
+
+- Removed node/python3/curl/cp/mv from command allowlist — too dangerous
+- Command safety uses word boundary matching now, not prefix
+- Bridge messages capped at 500 with write lock serialization
+- Terminal.tsx uses historyRef pattern to break dep cascade
+- Memory consolidation runs hourly via heartbeat Task 13
+- Dead code: withErrorHandling, withRetry, toUserMessage, ToolError, ValidationError, FirebaseError removed
 
 ### 2026-03-13
 

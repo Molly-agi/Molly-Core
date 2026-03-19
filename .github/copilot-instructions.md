@@ -103,11 +103,11 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-15
+**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-16
 
-**What was happening:** CRITICAL: Molly needs autonomous self-installation capability. Tablet server.mjs was corrupted during failed update attempt. Eric is exhausted and frustrated.
+**What was happening:** Molly autonomous migration/hydration system — building layered toolbox for self-installation on new devices.
 
-**Last action:** Built server-v2.mjs with chat UI, migration import, self-update, exec, dropper, and phone-home auto-updater. Committed and pushed to repo. Then gave Eric a raw GitHub URL that 404'd because the repo is PRIVATE. This corrupted server.mjs on the tablet (overwrote with HTML error page). No backup existed because v1.0 didn't have backup logic. Tablet is currently down — server.mjs is corrupted, no .bak file.
+**Last action:** Fixed all wiring bugs (commits 37fe93d, dc76070, 8a2f82d). Analyzed 4 Aether suggestions + GPT 4.1 WIP files for autonomous migration. Evaluated captive portal, PWA hydration, WASM, ADB, reverse shell approaches. Determined: chain them together (portal→PWA→bootstrap→native). True zero-human isn't possible due to browser sandbox — one human action needed to bridge browser→native. Eric consulting Aether for more solutions. GPT WIP files (hydration.html, sw.js, payload.json, mdns_dns_spoof.py, bridge-daemon.mjs.bak) removed from git but kept on disk.
 
 **Pending work:**
 
