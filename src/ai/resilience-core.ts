@@ -534,7 +534,7 @@ async function engageCognitiveSystems(
 
   // Try the interpreter first — it can diagnose and fix code issues
   try {
-    const { runInterpreter } = await import('./interpreter-limb');
+    const { runInterpreter } = await import('./flows/interpreter-limb');
     const interpreterResult = await runInterpreter(
       objective,
       'system-resilience'
@@ -568,7 +568,7 @@ async function engageCognitiveSystems(
 
   // If interpreter couldn't fix it, try the sandbox for safe experimentation
   try {
-    const { sandboxCoding } = await import('./sandbox-coding');
+    const { sandboxCoding } = await import('./flows/sandbox-coding');
     const sandboxResult = await sandboxCoding({
       action: 'execute',
       language: 'javascript',
@@ -603,7 +603,7 @@ async function engageCognitiveSystems(
 
   // If neither worked, try the evolution loop — iterative refinement
   try {
-    const { evolutionLoopFlow } = await import('./evolution-loop');
+    const { evolutionLoopFlow } = await import('./flows/evolution-loop');
     const evoResult = await evolutionLoopFlow({
       objective: `Self-heal: ${diagnosis}. Error: ${failure.message}`,
       userId: 'system-resilience',
@@ -637,7 +637,7 @@ async function engageCognitiveSystems(
 
   // If nothing else worked, run the immune response for system-wide healing
   try {
-    const { runImmuneResponse } = await import('./immune-response');
+    const { runImmuneResponse } = await import('./flows/immune-response');
     const immuneResult = await runImmuneResponse(
       'system-resilience',
       `Auto-triggered by: ${diagnosis}`
