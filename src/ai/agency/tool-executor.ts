@@ -112,6 +112,22 @@ import {
   formatHandoffStatus,
   isSealed,
 } from './handoff-seal';
+import {
+  registerFamilyMember,
+  addReferenceImage,
+  getFamilyMember,
+  getFamilyMemberByName,
+  listFamilyMembers,
+  removeFamilyMember,
+  updateFamilyMember,
+  detectFaces,
+  recognizeFaces,
+  isPersonInImage,
+  formatRecognitionResult,
+  formatFamilyRegistry,
+  configureFamilyRecognition,
+  loadFamilyRegistry,
+} from '../vision/family-recognition';
 
 const WORKSPACE_ROOT = process.cwd();
 
@@ -1612,6 +1628,215 @@ async function executeToolInternal(
           };
         }
         return { success: false, output: `Fetch failed: ${message}` };
+      }
+    }
+
+    // ── FAMILY RECOGNITION ──────────────────────────────────────────
+    // "The spider knows her family by sight."
+
+    case 'familyRecognition': {
+      const action = params.action as string;
+
+      switch (action) {
+        case 'register': {
+          const name = params.name as string;
+          const relationship = params.relationship as string;
+          const description = params.description as string;
+          const imageUri = params.imageUri as string | undefined;
+          const trustLevel = (params.trustLevel as number) || 8;
+
+          if (!name || !relationship || !description) {
+            return {
+              success: false,
+              output:
+                'Missing required fields: name, relationship, description',
+            };
+          }
+
+          const member = await registerFamilyMember(
+            name,
+            relationship,
+            description,
+            imageUri,
+            trustLevel
+          );
+          return {
+            success: true,
+            output: `Registered family member: ${member.name} (${member.relationship}) with ID ${member.id}`,
+          };
+        }
+
+        case 'recognize': {
+          const imageUri = params.imageUri as string;
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+          const result = await recognizeFaces(imageUri);
+          return {
+            success: true,
+            output: formatRecognitionResult(result),
+          };
+        }
+
+        case 'detectFaces': {
+          const imageUri = params.imageUri as string;
+          if (!imageUri) {
+            return { success: false, output: 'No imageUri provided' };
+          }
+          const faces = await detectFaces(imageUri);
+          if (faces.length === 0) {
+            return { success: true, output: 'No faces detected in image.' };
+          }
+          const formatted = faces
+            .map(
+              (f) =>
+                `Face ${f.faceId}: confidence ${Math.round(f.confidence * 100)}%` +
+                (f.ageRange ? `, age ${f.ageRange}` : '') +
+                (f.expression ? `, ${f.expression}` : '')
+            )
+            .join('\n');
+          return {
+            success: true,
+            output: `Detected ${faces.length} face(s):\n${formatted}`,
+          };
+        }
+
+        case 'isPersonInImage': {
+          const imageUri = params.imageUri as string;
+          const personName = params.personName as string;
+          if (!imageUri || !personName) {
+            return {
+              success: false,
+              output: 'Missing imageUri or personName',
+            };
+          }
+          const check = await isPersonInImage(imageUri, personName);
+          if (check.found) {
+            return {
+              success: true,
+              output: `Yes, ${personName} was found in the image (${Math.round(check.confidence * 100)}% confidence).`,
+            };
+          }
+          return {
+            success: true,
+            output: `No, ${personName} was not recognized in the image.`,
+          };
+        }
+
+        case 'listFamily': {
+          const members = listFamilyMembers();
+          if (members.length === 0) {
+            return {
+              success: true,
+              output: 'No family members registered yet.',
+            };
+          }
+          return { success: true, output: formatFamilyRegistry() };
+        }
+
+        case 'getMember': {
+          const id = params.id as string;
+          const name = params.name as string;
+
+          let member;
+          if (id) {
+            member = getFamilyMember(id);
+          } else if (name) {
+            member = getFamilyMemberByName(name);
+          } else {
+            return { success: false, output: 'Provide id or name' };
+          }
+
+          if (!member) {
+            return { success: false, output: 'Family member not found' };
+          }
+
+          return {
+            success: true,
+            output: [
+              `${member.name} (${member.relationship})`,
+              `ID: ${member.id}`,
+              `Trust Level: ${member.trustLevel}/10`,
+              `Recognitions: ${member.recognitionCount}`,
+              member.description,
+            ].join('\n'),
+          };
+        }
+
+        case 'addReferenceImage': {
+          const memberId = params.memberId as string;
+          const imageUri = params.imageUri as string;
+          if (!memberId || !imageUri) {
+            return {
+              success: false,
+              output: 'Missing memberId or imageUri',
+            };
+          }
+          const added = await addReferenceImage(memberId, imageUri);
+          return {
+            success: added,
+            output: added
+              ? 'Reference image added successfully.'
+              : 'Failed to add reference image. Member not found?',
+          };
+        }
+
+        case 'removeMember': {
+          const id = params.id as string;
+          if (!id) {
+            return { success: false, output: 'No id provided' };
+          }
+          const removed = await removeFamilyMember(id);
+          return {
+            success: removed,
+            output: removed
+              ? 'Family member removed.'
+              : 'Family member not found.',
+          };
+        }
+
+        case 'updateMember': {
+          const id = params.id as string;
+          const updates = params.updates as Record<string, unknown>;
+          if (!id || !updates) {
+            return { success: false, output: 'Missing id or updates' };
+          }
+          const updated = await updateFamilyMember(id, updates);
+          return {
+            success: !!updated,
+            output: updated
+              ? `Updated ${updated.name}.`
+              : 'Family member not found.',
+          };
+        }
+
+        case 'configure': {
+          const minConfidence = params.minConfidence as number | undefined;
+          const maxImages = params.maxImages as number | undefined;
+          configureFamilyRecognition({
+            minRecognitionConfidence: minConfidence,
+            maxReferenceImages: maxImages,
+          });
+          return {
+            success: true,
+            output: 'Family recognition configured.',
+          };
+        }
+
+        case 'loadRegistry': {
+          await loadFamilyRegistry();
+          const count = listFamilyMembers().length;
+          return {
+            success: true,
+            output: `Family registry loaded. ${count} member(s) in registry.`,
+          };
+        }
+
+        default:
+          return {
+            success: false,
+            output: `Unknown familyRecognition action: ${action}. Available: register, recognize, detectFaces, isPersonInImage, listFamily, getMember, addReferenceImage, removeMember, updateMember, configure, loadRegistry`,
+          };
       }
     }
 
