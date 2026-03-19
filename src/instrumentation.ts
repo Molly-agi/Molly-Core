@@ -104,4 +104,34 @@ export async function register() {
   } else {
     console.log('[Startup] ✅ All required environment variables present.');
   }
+
+  // ── Load Persistent State ──────────────────────────────────────────────────
+  // Load initiatives and learned patterns from storage so Molly remembers
+  // her goals and failure patterns across restarts.
+
+  try {
+    const { loadInitiatives } = await import('@/ai/agency/initiative-engine');
+    const initiativeCount = await loadInitiatives();
+    if (initiativeCount > 0) {
+      console.log(`[Startup] ✅ Loaded ${initiativeCount} initiative(s)`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load initiatives:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadPatterns } = await import('@/ai/resilience-core');
+    const patternCount = await loadPatterns();
+    if (patternCount > 0) {
+      console.log(`[Startup] ✅ Loaded ${patternCount} learned pattern(s)`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load patterns:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }

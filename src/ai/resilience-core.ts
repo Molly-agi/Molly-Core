@@ -21,6 +21,7 @@
 import { MollyLogger, generateTraceId } from './logger';
 import { getCircuitBreaker } from './tools/circuit-breaker';
 import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -821,4 +822,128 @@ export function getFailureFrequency(
   return failureHistory.filter(
     (f) => f.source === source && f.timestamp > cutoff
   ).length;
+}
+
+// ── Pattern Persistence ─────────────────────────────────────────────────────
+
+const PATTERNS_COLLECTION = 'system';
+const PATTERNS_DOC_ID = 'learned_patterns';
+
+let patternPersistenceEnabled = false;
+let patternSaveTimer: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * Save learned patterns to persistent storage (debounced).
+ */
+async function savePatterns(): Promise<void> {
+  if (!patternPersistenceEnabled) return;
+
+  // Debounce saves to avoid excessive writes
+  if (patternSaveTimer) {
+    clearTimeout(patternSaveTimer);
+  }
+
+  patternSaveTimer = setTimeout(async () => {
+    try {
+      const storage = getStorageRouter();
+      const patternsArray = Array.from(learnedPatterns.entries()).map(
+        ([key, value]) => ({
+          key,
+          ...value,
+        })
+      );
+
+      await storage.set(PATTERNS_COLLECTION, PATTERNS_DOC_ID, {
+        patterns: patternsArray,
+        savedAt: new Date().toISOString(),
+        count: patternsArray.length,
+      });
+    } catch (err) {
+      // Non-fatal: patterns still work in-memory
+      MollyLogger.warn(
+        `[RESILIENCE] Failed to save patterns: ${err instanceof Error ? err.message : String(err)}`,
+        'resilience-core'
+      );
+    }
+  }, 1000);
+}
+
+/**
+ * Load learned patterns from persistent storage.
+ * Should be called on startup.
+ */
+export async function loadPatterns(): Promise<number> {
+  try {
+    const storage = getStorageRouter();
+    const doc = await storage.get(PATTERNS_COLLECTION, PATTERNS_DOC_ID);
+
+    if (!doc?.data?.patterns || !Array.isArray(doc.data.patterns)) {
+      patternPersistenceEnabled = true;
+      return 0;
+    }
+
+    learnedPatterns.clear();
+    for (const p of doc.data.patterns) {
+      if (p.key && p.pattern && p.solution) {
+        learnedPatterns.set(p.key, {
+          pattern: p.pattern,
+          solution: p.solution,
+          successCount: p.successCount || 0,
+          lastUsed: p.lastUsed || Date.now(),
+        });
+      }
+    }
+
+    patternPersistenceEnabled = true;
+    MollyLogger.info(
+      `[RESILIENCE] Loaded ${learnedPatterns.size} learned patterns`,
+      'resilience-core'
+    );
+    return learnedPatterns.size;
+  } catch (err) {
+    // Non-fatal: start with empty patterns
+    MollyLogger.warn(
+      `[RESILIENCE] Failed to load patterns: ${err instanceof Error ? err.message : String(err)}`,
+      'resilience-core'
+    );
+    patternPersistenceEnabled = true;
+    return 0;
+  }
+}
+
+// ── Auto-save wrapper for pattern learning ──────────────────────────────────
+
+/**
+ * Learn a pattern and auto-save to persistent storage.
+ * Use this instead of the internal learnPattern() when persistence is needed.
+ */
+export function learnPatternWithSave(
+  failure: UnknownFailure,
+  diagnosis: string,
+  solution: string
+): void {
+  // Call original function (it modifies learnedPatterns directly)
+  const key = `${diagnosis}:${failure.message.slice(0, 50)}`;
+  learnedPatterns.set(key, {
+    pattern: diagnosis,
+    solution,
+    successCount: 1,
+    lastUsed: Date.now(),
+  });
+
+  // Enforce max patterns
+  if (learnedPatterns.size > MAX_PATTERNS) {
+    let oldest: string | null = null;
+    let oldestTime = Infinity;
+    for (const [k, v] of learnedPatterns) {
+      if (v.lastUsed < oldestTime) {
+        oldestTime = v.lastUsed;
+        oldest = k;
+      }
+    }
+    if (oldest) learnedPatterns.delete(oldest);
+  }
+
+  // Auto-save
+  savePatterns();
 }

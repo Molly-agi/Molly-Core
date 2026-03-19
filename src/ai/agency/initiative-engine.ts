@@ -241,3 +241,111 @@ export function restoreInitiatives(json: string): number {
     return 0;
   }
 }
+
+// ── Storage Persistence ─────────────────────────────────────────────────────
+
+import { getStorageRouter } from '@/lib/storage-router';
+
+const INITIATIVES_COLLECTION = 'system';
+const INITIATIVES_DOC_ID = 'initiatives';
+
+let persistenceEnabled = false;
+let saveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * Save initiatives to persistent storage (debounced).
+ * Called automatically after any mutation.
+ */
+async function saveInitiatives(): Promise<void> {
+  if (!persistenceEnabled) return;
+
+  // Debounce saves to avoid excessive writes
+  if (saveDebounceTimer) {
+    clearTimeout(saveDebounceTimer);
+  }
+
+  saveDebounceTimer = setTimeout(async () => {
+    try {
+      const storage = getStorageRouter();
+      await storage.set(INITIATIVES_COLLECTION, INITIATIVES_DOC_ID, {
+        initiatives: JSON.parse(serializeInitiatives()),
+        savedAt: new Date().toISOString(),
+        count: initiatives.length,
+      });
+    } catch (err) {
+      // Non-fatal: initiatives still work in-memory
+      console.error(
+        '[initiative-engine] Failed to save initiatives:',
+        err instanceof Error ? err.message : String(err)
+      );
+    }
+  }, 500);
+}
+
+/**
+ * Load initiatives from persistent storage.
+ * Should be called on startup.
+ */
+export async function loadInitiatives(): Promise<number> {
+  try {
+    const storage = getStorageRouter();
+    const doc = await storage.get(INITIATIVES_COLLECTION, INITIATIVES_DOC_ID);
+
+    if (!doc?.data?.initiatives) {
+      persistenceEnabled = true;
+      return 0;
+    }
+
+    const restored = restoreInitiatives(JSON.stringify(doc.data.initiatives));
+    persistenceEnabled = true;
+    return restored;
+  } catch (err) {
+    // Non-fatal: start with empty initiatives
+    console.error(
+      '[initiative-engine] Failed to load initiatives:',
+      err instanceof Error ? err.message : String(err)
+    );
+    persistenceEnabled = true;
+    return 0;
+  }
+}
+
+// ── Auto-save wrappers ──────────────────────────────────────────────────────
+
+// Wrap mutation functions to auto-save
+
+const originalPush = initiatives.push.bind(initiatives);
+const originalSplice = initiatives.splice.bind(initiatives);
+
+// Override array methods to trigger saves
+Object.defineProperty(initiatives, 'push', {
+  value: function (...items: Initiative[]) {
+    const result = originalPush(...items);
+    saveInitiatives();
+    return result;
+  },
+});
+
+Object.defineProperty(initiatives, 'splice', {
+  value: function (start: number, deleteCount?: number) {
+    const result = originalSplice(start, deleteCount ?? 0);
+    saveInitiatives();
+    return result;
+  },
+});
+
+// Also save after status updates
+export function recordInitiativeExecutionWithSave(
+  initiativeId: string,
+  result: string
+): boolean {
+  const success = recordInitiativeExecution(initiativeId, result);
+  if (success) saveInitiatives();
+  return success;
+}
+
+export function deactivateInitiativeWithSave(initiativeId: string): boolean {
+  const success = deactivateInitiative(initiativeId);
+  if (success) saveInitiatives();
+  return success;
+}
