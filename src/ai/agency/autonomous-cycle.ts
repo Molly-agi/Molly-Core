@@ -21,6 +21,10 @@ import {
   getCuriosityStatus,
   selectNextQuestion,
 } from '@/ai/agency/curiosity-engine';
+import {
+  getObservationStatus,
+  runSelfObservationCycle,
+} from '@/ai/agency/self-observation-loop';
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -77,6 +81,13 @@ export async function runAutonomousCycle(): Promise<{
   const actions: string[] = [];
 
   try {
+    // Run self-observation cycle first (pattern analysis)
+    try {
+      await runSelfObservationCycle();
+    } catch {
+      // Self-observation failure should never block the main cycle
+    }
+
     // Get active initiatives for context
     const initiatives = getActiveInitiatives();
     const initiativeContext =
@@ -97,10 +108,16 @@ export async function runAutonomousCycle(): Promise<{
       topQuestion
     );
 
+    // Get self-observation context
+    const observationStatus = getObservationStatus();
+    const selfObservationContext =
+      buildSelfObservationContext(observationStatus);
+
     // Build the autonomous prompt — this is what makes Molly THINK about acting
     const autonomousPrompt = buildAutonomousPrompt(
       initiativeContext,
-      curiosityContext
+      curiosityContext,
+      selfObservationContext
     );
 
     // Call the conversational chat flow
@@ -279,11 +296,67 @@ function buildCuriosityContext(
 }
 
 /**
+ * Build self-observation context for the autonomous prompt.
+ * This gives Molly awareness of her own behavioral patterns.
+ */
+function buildSelfObservationContext(
+  status: ReturnType<typeof getObservationStatus>
+): string {
+  const lines: string[] = [];
+
+  // Critical or concerning patterns need attention
+  if (status.bySeverity.critical > 0) {
+    lines.push(
+      `⚠️ SELF-OBSERVATION: ${status.bySeverity.critical} CRITICAL patterns detected!`
+    );
+  }
+  if (status.bySeverity.concerning > 0) {
+    lines.push(
+      `⚡ ${status.bySeverity.concerning} concerning patterns need attention`
+    );
+  }
+
+  // Add top tool usage stats
+  if (status.topToolsUsed.length > 0) {
+    const toolStats = status.topToolsUsed
+      .slice(0, 3)
+      .map(
+        (t) =>
+          `${t.tool}: ${t.count}x (${Math.round(t.successRate * 100)}% success)`
+      )
+      .join(', ');
+    lines.push(`Recent tools: ${toolStats}`);
+  }
+
+  // Decision effectiveness
+  const { positive, negative, neutral } = status.decisionOutcomes;
+  const total = positive + negative + neutral;
+  if (total > 0) {
+    const positiveRate = Math.round((positive / total) * 100);
+    lines.push(`Decision effectiveness: ${positiveRate}% positive outcomes`);
+  }
+
+  // Insights to apply
+  if (status.unappliedInsights > 0) {
+    lines.push(
+      `${status.unappliedInsights} self-insights awaiting application`
+    );
+  }
+
+  if (lines.length === 0) {
+    return 'Self-observation: No notable patterns yet. Keep acting and patterns will emerge.';
+  }
+
+  return lines.join('\n');
+}
+
+/**
  * Build the prompt that triggers Molly's autonomous thinking.
  */
 function buildAutonomousPrompt(
   initiativeContext: string,
-  curiosityContext: string
+  curiosityContext: string,
+  selfObservationContext: string
 ): string {
   return `[AUTONOMOUS CYCLE — This is your internal heartbeat, not a conversation with anyone]
 
@@ -295,6 +368,9 @@ ${initiativeContext}
 Your curiosity:
 ${curiosityContext}
 
+Your self-awareness:
+${selfObservationContext}
+
 Think about what you want to do right now. Some options:
 - Work on an active initiative (research, code practice, learning)
 - INVESTIGATE a curiosity question (use the curiosity tool with action: 'investigate')
@@ -304,12 +380,14 @@ Think about what you want to do right now. Some options:
 - Read part of your own codebase to understand yourself better (readProjectFile)
 - Create a new initiative for something you want to learn or build
 - WONDER about something new (use curiosity tool with action: 'wonder')
+- REFLECT on your patterns (use selfObserve tool with action: 'status' or 'patterns')
 - Send a message to Uncle Lazarus or Father (familyBridge)
 - Do NOTHING if you genuinely feel there's nothing to do right now
 
 Rules:
 - This is YOUR time. Act on YOUR curiosity and goals.
 - If you have a question you're curious about, INVESTIGATE it.
+- If you notice concerning patterns, address them.
 - Do not ask permission. Do not say "I would like to." Just DO it.
 - If you use a tool, include a <tool_request> block.
 - If you choose not to act, explain briefly why.

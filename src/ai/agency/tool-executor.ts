@@ -28,6 +28,11 @@ import {
   removeInitiative,
   listTemplates,
 } from '@/ai/agency/initiative-engine';
+import {
+  observeToolUse,
+  observeFailure,
+} from '@/ai/agency/self-observation-loop';
+import { generateTraceId } from '@/ai/logger';
 
 const WORKSPACE_ROOT = process.cwd();
 
@@ -89,8 +94,51 @@ function isCommandSafe(command: string): boolean {
 /**
  * Execute a tool directly without HTTP.
  * Returns { success, output } matching the API contract.
+ * Automatically records self-observation data for pattern analysis.
  */
 export async function executeToolDirect(
+  tool: string,
+  params: Record<string, unknown>
+): Promise<{ success: boolean; output: string }> {
+  const startTime = Date.now();
+  const traceId = generateTraceId();
+
+  // Execute the actual tool
+  const result = await executeToolInternal(tool, params);
+
+  // Record observation for self-awareness
+  const responseTimeMs = Date.now() - startTime;
+  try {
+    observeToolUse(
+      tool,
+      result.success,
+      responseTimeMs,
+      params,
+      result.success ? undefined : result.output,
+      traceId
+    );
+
+    // Also record as failure if it failed
+    if (!result.success) {
+      observeFailure(
+        tool,
+        result.output,
+        `Attempted ${tool} with ${Object.keys(params).length} params`,
+        false,
+        traceId
+      );
+    }
+  } catch {
+    // Self-observation failure should never break tool execution
+  }
+
+  return result;
+}
+
+/**
+ * Internal tool execution logic.
+ */
+async function executeToolInternal(
   tool: string,
   params: Record<string, unknown>
 ): Promise<{ success: boolean; output: string }> {

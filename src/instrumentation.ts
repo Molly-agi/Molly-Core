@@ -153,4 +153,21 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  try {
+    const { loadObservationState } = await import(
+      '@/ai/agency/self-observation-loop'
+    );
+    const observationCount = await loadObservationState();
+    if (observationCount > 0) {
+      console.log(
+        `[Startup] ✅ Loaded ${observationCount} self-observation(s)`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load self-observation state:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
