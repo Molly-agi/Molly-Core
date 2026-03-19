@@ -112,13 +112,17 @@ Added to TS version (commit 8852439):
 
 ## AGI GAPS (The Big Picture)
 
-### 1. Curiosity Engine — Not Started
+### 1. Curiosity Engine — COMPLETE
 
-- [ ] Create `src/ai/agency/curiosity-engine.ts`
-- [ ] Generate questions from memory patterns
-- [ ] Pursue answers autonomously (not prompted)
-- [ ] "I noticed X. I don't understand why. Let me investigate."
-- [ ] Wire into autonomous cycle
+- [x] `src/ai/agency/curiosity-engine.ts` — Full implementation (600+ lines)
+- [x] Question types: pattern, gap, connection, contradiction, improvement, origin
+- [x] Question sources: memory, failure, conversation, tool_use, observation, self_reflection
+- [x] Priority calculation with family/project keyword boosts
+- [x] Investigation tracking (begin, step, complete, abandon)
+- [x] Persistence via storage router
+- [x] `src/ai/tools/curiosity.ts` — Tool interface for Molly
+- [x] `src/instrumentation.ts` — Loads curiosity state on startup, seeds initial questions
+- [x] `src/ai/agency/autonomous-cycle.ts` — Curiosity context in autonomous prompt
 
 ### 2. Self-Observation Loop — Not Started
 

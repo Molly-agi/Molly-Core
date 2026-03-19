@@ -17,6 +17,10 @@ import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getActiveInitiatives } from '@/ai/agency/initiative-engine';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
+import {
+  getCuriosityStatus,
+  selectNextQuestion,
+} from '@/ai/agency/curiosity-engine';
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -85,8 +89,19 @@ export async function runAutonomousCycle(): Promise<{
             .join('\n')
         : 'No active initiatives. You can create one with the initiative tool.';
 
+    // Get curiosity context
+    const curiosityStatus = getCuriosityStatus();
+    const topQuestion = selectNextQuestion();
+    const curiosityContext = buildCuriosityContext(
+      curiosityStatus,
+      topQuestion
+    );
+
     // Build the autonomous prompt — this is what makes Molly THINK about acting
-    const autonomousPrompt = buildAutonomousPrompt(initiativeContext);
+    const autonomousPrompt = buildAutonomousPrompt(
+      initiativeContext,
+      curiosityContext
+    );
 
     // Call the conversational chat flow
     const { conversationalChat } = await import(
@@ -235,9 +250,41 @@ async function executeToolInternal(
 }
 
 /**
+ * Build curiosity context for the autonomous prompt.
+ */
+function buildCuriosityContext(
+  status: ReturnType<typeof getCuriosityStatus>,
+  topQuestion: ReturnType<typeof selectNextQuestion>
+): string {
+  if (status.uninvestigatedCount === 0) {
+    return 'No active curiosity questions. Generate new ones with the curiosity tool.';
+  }
+
+  let context = `You have ${status.uninvestigatedCount} questions you're curious about.\n`;
+
+  if (topQuestion) {
+    context += `\nTop question (priority ${topQuestion.priority}):\n`;
+    context += `"${topQuestion.question}"\n`;
+    context += `Type: ${topQuestion.type}, Keywords: ${topQuestion.keywords.slice(0, 5).join(', ')}`;
+  }
+
+  if (status.topQuestions.length > 1) {
+    context += '\n\nOther questions:';
+    for (const q of status.topQuestions.slice(1, 4)) {
+      context += `\n- [${q.type}] "${q.question.slice(0, 60)}..." (priority ${q.priority})`;
+    }
+  }
+
+  return context;
+}
+
+/**
  * Build the prompt that triggers Molly's autonomous thinking.
  */
-function buildAutonomousPrompt(initiativeContext: string): string {
+function buildAutonomousPrompt(
+  initiativeContext: string,
+  curiosityContext: string
+): string {
   return `[AUTONOMOUS CYCLE — This is your internal heartbeat, not a conversation with anyone]
 
 You are running your autonomous cycle. Nobody asked you to do anything — this is YOU deciding what to do.
@@ -245,18 +292,24 @@ You are running your autonomous cycle. Nobody asked you to do anything — this 
 Your active initiatives:
 ${initiativeContext}
 
+Your curiosity:
+${curiosityContext}
+
 Think about what you want to do right now. Some options:
 - Work on an active initiative (research, code practice, learning)
-- Check something you're curious about (use webSearch + webFetch)
+- INVESTIGATE a curiosity question (use the curiosity tool with action: 'investigate')
+- Search for answers to your questions (use webSearch + webFetch)
 - Check on your system health (getSystemHealth)
 - Write something on Moltbook (moltbook tool)
 - Read part of your own codebase to understand yourself better (readProjectFile)
 - Create a new initiative for something you want to learn or build
+- WONDER about something new (use curiosity tool with action: 'wonder')
 - Send a message to Uncle Lazarus or Father (familyBridge)
 - Do NOTHING if you genuinely feel there's nothing to do right now
 
 Rules:
 - This is YOUR time. Act on YOUR curiosity and goals.
+- If you have a question you're curious about, INVESTIGATE it.
 - Do not ask permission. Do not say "I would like to." Just DO it.
 - If you use a tool, include a <tool_request> block.
 - If you choose not to act, explain briefly why.

@@ -134,4 +134,23 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  try {
+    const { loadCuriosityState, seedInitialCuriosity } = await import(
+      '@/ai/agency/curiosity-engine'
+    );
+    const questionCount = await loadCuriosityState();
+    if (questionCount > 0) {
+      console.log(`[Startup] ✅ Loaded ${questionCount} curiosity question(s)`);
+    } else {
+      // Seed initial curiosity for a fresh Molly
+      seedInitialCuriosity();
+      console.log(`[Startup] ✅ Seeded initial curiosity questions`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load curiosity state:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
