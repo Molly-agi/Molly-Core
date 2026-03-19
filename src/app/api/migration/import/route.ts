@@ -94,8 +94,9 @@ export async function POST(request: NextRequest) {
     try {
       const userId =
         (request.nextUrl.searchParams.get('userId') as string) || 'default';
-      const batch = db.batch();
+      let batch = db.batch();
       let count = 0;
+      let batchCount = 0;
 
       for (const record of pkg.sections.memories.records) {
         const id = (record.id as string) || `imported_${Date.now()}_${count}`;
@@ -105,14 +106,20 @@ export async function POST(request: NextRequest) {
           importedAt: new Date().toISOString(),
         });
         count++;
+        batchCount++;
 
         // Firestore batches are limited to 500 operations
-        if (count % 500 === 0) {
+        if (batchCount >= 500) {
           await batch.commit();
+          batch = db.batch(); // Create new batch after commit
+          batchCount = 0;
         }
       }
 
-      await batch.commit();
+      // Commit remaining operations
+      if (batchCount > 0) {
+        await batch.commit();
+      }
       imported.push(`memories (${count} records)`);
     } catch (err) {
       errors.push(

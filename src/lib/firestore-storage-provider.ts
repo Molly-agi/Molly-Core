@@ -81,14 +81,16 @@ export class FirestoreStorageProvider implements StorageProvider {
   ): Promise<StorageDocument> {
     const db = this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
+    const now = new Date().toISOString();
     const docRef = await colRef.add({
       ...data,
-      _createdAt: Date.now(),
+      _createdAt: now,
+      _updatedAt: now,
     });
 
     return {
       id: docRef.id,
-      data: { ...data, _createdAt: Date.now() },
+      data: { ...data, _createdAt: now, _updatedAt: now },
     };
   }
 
@@ -99,9 +101,18 @@ export class FirestoreStorageProvider implements StorageProvider {
   ): Promise<void> {
     const db = this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
-    await colRef.doc(docId).set({
+    const docRef = colRef.doc(docId);
+    const now = new Date().toISOString();
+
+    // Preserve _createdAt if doc already exists
+    const existing = await docRef.get();
+    const existingData = existing.exists ? existing.data() : null;
+    const createdAt = existingData?._createdAt || now;
+
+    await docRef.set({
       ...data,
-      _updatedAt: Date.now(),
+      _createdAt: createdAt,
+      _updatedAt: now,
     });
   }
 
@@ -130,7 +141,7 @@ export class FirestoreStorageProvider implements StorageProvider {
     const colRef = getCollectionRef(db, collectionPath);
     await colRef.doc(docId).update({
       ...updates,
-      _updatedAt: Date.now(),
+      _updatedAt: new Date().toISOString(),
     });
   }
 
@@ -179,6 +190,7 @@ export class FirestoreStorageProvider implements StorageProvider {
   async batchWrite(operations: BatchOperation[]): Promise<void> {
     const db = this.getDb();
     const batch = db.batch();
+    const now = new Date().toISOString();
 
     for (const op of operations) {
       const colRef = getCollectionRef(db, op.collectionPath);
@@ -186,10 +198,10 @@ export class FirestoreStorageProvider implements StorageProvider {
 
       switch (op.type) {
         case 'set':
-          batch.set(docRef, { ...op.data, _updatedAt: Date.now() });
+          batch.set(docRef, { ...op.data, _updatedAt: now });
           break;
         case 'update':
-          batch.update(docRef, { ...op.data, _updatedAt: Date.now() });
+          batch.update(docRef, { ...op.data, _updatedAt: now });
           break;
         case 'delete':
           batch.delete(docRef);

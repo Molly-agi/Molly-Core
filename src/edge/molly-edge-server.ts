@@ -538,11 +538,46 @@ function handleCapabilities(res: http.ServerResponse): void {
 // ============================================================================
 
 import crypto from 'crypto';
+import fs from 'fs';
 
 let syncEngine: DeviceSyncEngine | null = null;
 
+/**
+ * Load or generate a persistent node ID.
+ * The ID is stored in the data directory so it survives restarts.
+ */
+function getOrCreateNodeId(): string {
+  const nodeIdPath = path.join(CONFIG.dataDir, '.node_id');
+
+  try {
+    // Try to read existing node ID
+    if (fs.existsSync(nodeIdPath)) {
+      const existingId = fs.readFileSync(nodeIdPath, 'utf-8').trim();
+      if (existingId && existingId.startsWith('node_')) {
+        return existingId;
+      }
+    }
+  } catch {
+    // Fall through to generate new ID
+  }
+
+  // Generate new node ID and persist it
+  const newId = `node_${crypto.randomBytes(8).toString('hex')}`;
+  try {
+    // Ensure data directory exists
+    if (!fs.existsSync(CONFIG.dataDir)) {
+      fs.mkdirSync(CONFIG.dataDir, { recursive: true });
+    }
+    fs.writeFileSync(nodeIdPath, newId, 'utf-8');
+  } catch (err) {
+    console.error('[molly-edge] Failed to persist node ID:', err);
+  }
+
+  return newId;
+}
+
 async function initSyncEngine(): Promise<void> {
-  const nodeId = `node_${crypto.randomBytes(8).toString('hex')}`;
+  const nodeId = getOrCreateNodeId();
 
   syncEngine = new DeviceSyncEngine(CONFIG.dataDir, {
     nodeId,
@@ -814,21 +849,7 @@ async function handleRequest(
       const action = pathname.replace('/api/storage/', '');
       const body = await parseBody(req);
       await handleStorage(action, body, res);
-      // Log changes for sync (non-blocking)
-      if (
-        ['add', 'set', 'update', 'delete'].includes(action) &&
-        body.collection &&
-        syncEngine
-      ) {
-        syncEngine
-          .logChange(
-            body.collection as string,
-            (body.docId as string) || 'auto',
-            action === 'delete' ? 'delete' : 'set',
-            (body.data as Record<string, unknown>) || null
-          )
-          .catch(() => {});
-      }
+      // Note: sync logging is handled inside handleStorage() — no duplicate logging here
       return;
     }
 
