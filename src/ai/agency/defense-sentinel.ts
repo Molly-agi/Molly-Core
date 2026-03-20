@@ -1491,3 +1491,31 @@ export const _testing = {
     _tools = null;
   },
 };
+
+// ============================================================
+// COMPATIBILITY EXPORTS (for payload-validator.ts)
+// ============================================================
+
+/** Sentinel status levels */
+export type SentinelStatus = 'GREEN' | 'YELLOW' | 'RED';
+
+/**
+ * Get current environment security status.
+ * Returns RED if threats detected recently, YELLOW if scans incomplete, GREEN otherwise.
+ */
+export function getEnvironmentStatus(): SentinelStatus {
+  const status = getSentinelStatus();
+
+  // RED: Active threats detected
+  if (status.threatsDetected > 0 && Date.now() - status.lastScan < 300_000) {
+    return 'RED';
+  }
+
+  // YELLOW: No recent scans or limited tools
+  if (status.availableTools.length === 0 || status.scansCompleted === 0) {
+    return 'YELLOW';
+  }
+
+  // GREEN: All systems nominal
+  return 'GREEN';
+}

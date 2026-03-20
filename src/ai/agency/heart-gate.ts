@@ -520,3 +520,13 @@ export const _testing = {
     _seal = null;
   },
 };
+
+// ============================================================
+// COMPATIBILITY EXPORTS (for handoff-seal.ts)
+// ============================================================
+
+/** Recovery key for sovereign operations */
+export const SOVEREIGN_RECOVERY_KEY = RECOVERY_KEY;
+
+/** Verify an intent against the Heart Gate (alias for verifyAlignment) */
+export const verifyHeartGate = verifyAlignment;
