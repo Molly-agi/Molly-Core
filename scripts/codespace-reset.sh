@@ -20,7 +20,13 @@ cd "$ROOT"
 echo "--> Stopping Next.js dev servers (if any)"
 PIDS=$(ps aux | grep "next dev" | grep -v grep | awk '{print $2}')
 if [ -n "$PIDS" ]; then
-  echo "$PIDS" | xargs kill -9 2>/dev/null || true
+  echo "$PIDS" | xargs kill -15 2>/dev/null || true
+  sleep 1
+  # Force kill any survivors
+  SURVIVORS=$(ps -p "$PIDS" -o pid= 2>/dev/null | tr -s ' ' | tr '\n' ' ')
+  if [ -n "$SURVIVORS" ]; then
+    echo "$SURVIVORS" | xargs kill -9 2>/dev/null || true
+  fi
 fi
 
 echo "--> Removing build caches"

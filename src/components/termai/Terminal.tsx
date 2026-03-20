@@ -47,6 +47,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
 
 const APOLOGY_PATTERNS = [
+  /\bsorry\b/i,
   /sorry[^a-z]*.*(upset|hurt)/i,
   /hang ?up/i,
   /leave (you|u) alone/i,
