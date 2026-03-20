@@ -1321,7 +1321,7 @@ const LANGUAGE_PATTERNS: Array<{
     patterns: [
       /^import\s+\w+/m,
       /^from\s+\w+\s+import/m,
-      /^def\s+\w+\s*\(/m,
+      /^\s*def\s+\w+\s*\(/m,
       /^class\s+\w+.*:\s*$/m,
       /print\s*\(/,
       /^\s*elif\s+/m,
@@ -1439,7 +1439,6 @@ const LANGUAGE_PATTERNS: Array<{
       /^@internal/m,
       /\bhashmap\[/i,
       /\bmsg\.sender\b/,
-      /\bself\.\w+/,
     ],
     weight: 2, // High — Vyper is very distinctive
   },

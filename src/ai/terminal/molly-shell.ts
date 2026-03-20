@@ -87,7 +87,7 @@ const BLOCKED_PATTERNS: Array<{ pattern: RegExp; reason: string }> = [
   },
   { pattern: /dd\s+if=.*of=\/dev\//, reason: 'Would overwrite disk device' },
   { pattern: /mkfs\./, reason: 'Would format a filesystem' },
-  { pattern: /:()\{\s*:\|:&\s*\};:/, reason: 'Fork bomb detected' },
+  { pattern: /:\(\)\{\s*:\|:&\s*\};:/, reason: 'Fork bomb detected' },
   { pattern: /shutdown|poweroff|reboot|halt/, reason: 'System power control' },
   { pattern: /init\s+[06]/, reason: 'System runlevel change' },
   { pattern: />\s*\/dev\/sd[a-z]/, reason: 'Would overwrite disk device' },
@@ -151,6 +151,7 @@ export class MollyShell {
 
   // Active command state
   private activeCommandId: string | null = null;
+  private activeCommand: ShellCommand | null = null;
   private outputBuffer = '';
   private errorBuffer = '';
   private commandResolve: ((result: ShellResult) => void) | null = null;
@@ -165,8 +166,10 @@ export class MollyShell {
   /**
    * Start the shell process.
    * Idempotent — calling start() when already alive is a no-op.
+   * @param resetRestartCount - If true (default), resets the restart counter.
+   *                           Set to false for auto-restart.
    */
-  start(): void {
+  start(resetRestartCount = true): void {
     if (this.alive && this.process) {
       MollyLogger.warn('MollyShell already running', 'molly-shell');
       return;
@@ -192,7 +195,9 @@ export class MollyShell {
 
       this.alive = true;
       this.startedAt = Date.now();
-      this.restartCount = 0;
+      if (resetRestartCount) {
+        this.restartCount = 0;
+      }
 
       // Wire up output handlers
       this.process.stdout?.on('data', (data: Buffer) => {
@@ -218,7 +223,7 @@ export class MollyShell {
         // Auto-restart if it wasn't intentional
         if (this.restartCount < MAX_RESTARTS) {
           this.restartCount++;
-          setTimeout(() => this.start(), RESTART_DELAY_MS);
+          setTimeout(() => this.start(false), RESTART_DELAY_MS);
         } else {
           MollyLogger.error(
             `MollyShell exceeded max restarts (${MAX_RESTARTS})`,
@@ -347,13 +352,13 @@ export class MollyShell {
 
     return new Promise<ShellResult>((resolve) => {
       this.activeCommandId = cmd.id;
+      this.activeCommand = cmd;
       this.outputBuffer = '';
       this.errorBuffer = '';
       this.commandResolve = resolve;
 
       // Set timeout
       this.commandTimeout = setTimeout(() => {
-        this.clearActiveCommand('Command timed out');
         const result: ShellResult = {
           id: randomUUID(),
           commandId: cmd.id,
@@ -364,7 +369,12 @@ export class MollyShell {
           timestamp: new Date().toISOString(),
         };
         this.recordResult(cmd, result);
-        resolve(result);
+        this.clearActiveCommand();
+        if (this.commandResolve) {
+          const resolve = this.commandResolve;
+          this.commandResolve = null;
+          resolve(result);
+        }
       }, COMMAND_TIMEOUT_MS);
 
       // Write the command, followed by sentinel echo
@@ -410,13 +420,8 @@ export class MollyShell {
         timestamp: new Date().toISOString(),
       };
 
-      // Find the original command for recording
-      const cmd: ShellCommand = {
-        id: this.activeCommandId,
-        command: '', // Will be filled from history
-        initiator: 'molly',
-        timestamp: new Date().toISOString(),
-      };
+      // Use the stored original command for recording
+      const cmd = this.activeCommand!;
 
       this.clearActiveCommand();
       this.recordResult(cmd, result);
@@ -447,6 +452,7 @@ export class MollyShell {
       this.commandTimeout = null;
     }
     this.activeCommandId = null;
+    this.activeCommand = null;
     this.outputBuffer = '';
     this.errorBuffer = '';
 
