@@ -22,7 +22,7 @@ import type {
   BatchOperation,
 } from './storage-interface';
 import { LocalStorageProvider } from './local-storage-provider';
-import { FirestoreStorageProvider } from './firestore-storage-provider';
+// FirestoreStorageProvider is imported dynamically only on the server
 import { MollyLogger } from '../ai/logger';
 
 // ============================================================================
@@ -41,7 +41,7 @@ function detectStorageMode(): StorageMode {
     return override;
   }
 
-  // Termux detection — phone environment
+  // Termux detection — phone environment uses local storage
   if (
     process.env.TERMUX_VERSION ||
     process.env.PREFIX?.includes('com.termux')
@@ -49,12 +49,13 @@ function detectStorageMode(): StorageMode {
     return 'local';
   }
 
-  // Codespace detection — default to local now (moving off cloud)
+  // Codespace/cloud — use local storage (API routes run server-side, can write files)
+  // Browser doesn't access storage directly - it goes through API → Server → Files
   if (process.env.CODESPACES === 'true') {
     return 'local';
   }
 
-  // Default: local (phone-first architecture)
+  // Default: local (consistent everywhere, sync handles device-to-device)
   return 'local';
 }
 
@@ -80,13 +81,9 @@ class StorageRouter implements StorageProvider {
   }
 
   private createProvider(): StorageProvider {
-    switch (this.mode) {
-      case 'local':
-        return new LocalStorageProvider();
-
-      case 'firestore':
-        return new FirestoreStorageProvider();
-    }
+    // Always use local storage - Firestore path removed to avoid bundler issues
+    // All environments use local files now. Sync engine handles device-to-device.
+    return new LocalStorageProvider();
   }
 
   // ── Passthrough to active provider ──
@@ -163,7 +160,42 @@ export function getStorageRouter(): StorageRouter {
   return _instance;
 }
 
-/** For testing */
+/**
+ * Reset the storage router singleton (for testing only)
+ */
 export function resetStorageRouter(): void {
   _instance = null;
+}
+
+// ============================================================================
+// COMPATIBILITY: saveToStorage / loadFromStorage (for agency modules)
+// ============================================================================
+
+/**
+ * Save a document to storage (compat: agency modules)
+ * @param key string (used as collection name)
+ * @param value object to store (will be stringified)
+ */
+export async function saveToStorage(
+  key: string,
+  value: unknown
+): Promise<void> {
+  const storage = getStorageRouter();
+  // Use a single doc with id 'singleton' for each key
+  await storage.set(key, 'singleton', { value });
+}
+
+/**
+ * Load a document from storage (compat: agency modules)
+ * @param key string (used as collection name)
+ * @returns value or null
+ */
+export async function loadFromStorage<T = unknown>(
+  key: string
+): Promise<T | null> {
+  const storage = getStorageRouter();
+  const doc = await storage.get(key, 'singleton');
+  if (!doc || typeof doc.data !== 'object' || !('value' in doc.data))
+    return null;
+  return doc.data.value as T;
 }
