@@ -12,6 +12,9 @@ const nextConfig = {
   httpAgentOptions: {
     keepAlive: true,
   },
+  // Prevent firebase-admin from being bundled for client/edge.
+  // It uses Node.js core modules (stream, net, etc.) that don't exist there.
+  serverExternalPackages: ['firebase-admin'],
   typescript: {
     tsconfigPath: './tsconfig.json',
     ignoreBuildErrors: true,
