@@ -23,7 +23,7 @@ if [ -n "$PIDS" ]; then
   echo "$PIDS" | xargs kill -15 2>/dev/null || true
   sleep 1
   # Force kill any survivors
-  PID_LIST=$(echo "$PIDS" | tr '\n' ',' | sed 's/,$//')
+  PID_LIST=$(echo "$PIDS" | tr '\n' ' ')
   SURVIVORS=$(ps -p "$PID_LIST" -o pid= 2>/dev/null | tr -s ' ' | tr '\n' ' ')
   if [ -n "$SURVIVORS" ]; then
     echo "$SURVIVORS" | xargs kill -9 2>/dev/null || true
