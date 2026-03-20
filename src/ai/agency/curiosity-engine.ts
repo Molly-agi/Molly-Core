@@ -923,3 +923,17 @@ export function seedInitialCuriosity(): void {
     'curiosity-engine'
   );
 }
+
+// ── Testing Utilities ──────────────────────────────────────────
+
+/**
+ * Reset curiosity state (for testing).
+ */
+export function resetCuriosityState(): void {
+  state.questions = [];
+  state.activeInvestigations = [];
+  state.totalGenerated = 0;
+  state.totalInvestigated = 0;
+  state.insightsCount = 0;
+  state.lastCycleAt = null;
+}
