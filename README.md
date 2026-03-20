@@ -40,7 +40,7 @@ What it does:
 
 - stops any stray Next.js dev servers
 - clears `.next` and `node_modules/.cache`
-- clears the TypeScript cache (`/home/codespace/.cache/typescript`)
+- clears the TypeScript cache (`$HOME/.cache/typescript`)
 - reinstalls dependencies with `npm ci`
 
 After it completes, start the app again with:
