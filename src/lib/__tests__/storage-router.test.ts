@@ -229,7 +229,7 @@ describe('StorageRouter — Firestore Fallback', () => {
     expect(result!.data.name).toBe('Molly');
   });
 
-  it('detects firestore mode from MOLLY_STORAGE_PROVIDER env var', () => {
+  it('logs warning when firestore requested but unavailable', () => {
     process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
     // Even though it falls back, detectStorageMode returns 'firestore'
     // We can verify this by checking that warn was called

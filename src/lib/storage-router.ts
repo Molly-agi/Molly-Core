@@ -91,10 +91,11 @@ class StorageRouter implements StorageProvider {
             'Firebase Admin SDK not configured (missing credentials)'
           );
         }
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        /* eslint-disable @typescript-eslint/no-require-imports */
         const {
           FirestoreStorageProvider,
         } = require('./firestore-storage-provider');
+        /* eslint-enable @typescript-eslint/no-require-imports */
         return new FirestoreStorageProvider();
       } catch (err) {
         MollyLogger.warn(
@@ -103,6 +104,7 @@ class StorageRouter implements StorageProvider {
           }`,
           'storage-router'
         );
+        // Update mode to reflect actual provider so getMode()/getProviderInfo() stay consistent
         this.mode = 'local';
         return new LocalStorageProvider();
       }
