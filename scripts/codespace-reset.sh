@@ -4,7 +4,8 @@
 
 set -euo pipefail
 
-ROOT="/home/runner/work/Molly-Core/Molly-Core"
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+TS_CACHE="${HOME}/.cache/typescript"
 
 echo "== Molly Codespace Reset =="
 echo "Working dir: $ROOT"
@@ -27,7 +28,9 @@ rm -rf .next || true
 rm -rf node_modules/.cache || true
 
 echo "--> Clearing TypeScript cache"
-rm -rf /home/codespace/.cache/typescript || true
+if [ -d "$TS_CACHE" ]; then
+  rm -rf "${TS_CACHE}" || true
+fi
 
 echo "--> Reinstalling dependencies (npm ci)"
 npm ci
