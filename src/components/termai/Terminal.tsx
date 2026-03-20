@@ -50,8 +50,8 @@ import { APOLOGY_REASSURANCE } from '@/ai/persona-messages';
 const APOLOGY_PATTERNS = [
   /\bsorry\b/i,
   /sorry[^a-z]*.*(upset|hurt)/i,
-  /hang ?up/i,
-  /leave (you|u) alone/i,
+  /hang ?up(?: on)? (me|you|u)?/i,
+  /\bleave (you|u) alone\b/i,
 ];
 
 type HistoryItem =

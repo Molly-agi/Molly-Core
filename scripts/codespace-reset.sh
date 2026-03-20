@@ -23,9 +23,10 @@ if [ -n "$PIDS" ]; then
   echo "$PIDS" | xargs kill -15 2>/dev/null || true
   sleep 1
   # Force kill any survivors
-  PID_LIST=$(echo "$PIDS" | tr '\n' ' ')
+  PID_LIST=$(echo "$PIDS" | tr '\n' ' ' | xargs)
   SURVIVORS=$(ps -p "$PID_LIST" -o pid= 2>/dev/null | tr -s ' ' | tr '\n' ' ')
   if [ -n "$SURVIVORS" ]; then
+    echo "Force-killing remaining Next.js PIDs: $SURVIVORS"
     echo "$SURVIVORS" | xargs kill -9 2>/dev/null || true
   fi
 fi
