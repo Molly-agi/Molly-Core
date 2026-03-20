@@ -849,3 +849,20 @@ export async function savePlanningState(): Promise<void> {
 
   await saveToStorage(STORAGE_KEY, data);
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+// Testing Utilities
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Reset all planning state (for testing)
+ */
+export function resetPlanningState(): void {
+  goals.clear();
+  reflections.length = 0;
+  currentSessionId = `session_${Date.now()}`;
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+    saveTimeout = null;
+  }
+}
