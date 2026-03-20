@@ -328,6 +328,28 @@ const DocumentSchema = z.object({
   summary: z.string(),
 });
 
+const VideoFrameSchema = z.object({
+  keyFrames: z.array(
+    z.object({
+      timestampSec: z.number(),
+      reason: z.string(),
+      description: z.string(),
+    })
+  ),
+  motionEvents: z.array(
+    z.object({
+      startSec: z.number(),
+      endSec: z.number(),
+      type: z.enum(['person', 'vehicle', 'object', 'camera', 'unknown']),
+      description: z.string(),
+    })
+  ),
+  sceneChanges: z.array(z.number()),
+  transcript: z.string().optional(),
+  durationSec: z.number(),
+  summary: z.string(),
+});
+
 // ============================================================
 // CONFIGURATION
 // ============================================================
@@ -685,6 +707,247 @@ export async function extractFormFields(
 }
 
 // ============================================================
+// VIDEO FRAME EXTRACTION
+// ============================================================
+
+export interface VideoFrameExtractionResult extends VideoFrameExtraction {
+  /** Processing time in ms */
+  processingTimeMs: number;
+}
+
+/**
+ * Extract key frames, motion events, and analyze video content.
+ * Works with video files or sequences of frame images.
+ *
+ * When given multiple frame images, analyzes them as a video sequence.
+ * Can detect scene changes, motion events, and extract key moments.
+ */
+export async function extractVideoFrames(
+  frameUris: string[],
+  options: {
+    /** Expected total duration in seconds (for frame-based input) */
+    durationSec?: number;
+    /** Focus on specific types of motion */
+    motionTypes?: MotionEvent['type'][];
+    /** Extract transcript from audio (if available) */
+    extractTranscript?: boolean;
+    /** Context for analysis */
+    context?: string;
+  } = {}
+): Promise<VideoFrameExtractionResult> {
+  const traceId = generateTraceId();
+  const startTime = Date.now();
+  const {
+    durationSec = frameUris.length,
+    motionTypes,
+    extractTranscript = false,
+    context,
+  } = options;
+
+  MollyLogger.info(
+    'Extracting video frames',
+    'vision-tools',
+    { frameCount: frameUris.length, durationSec, context },
+    traceId
+  );
+
+  try {
+    const motionFocus = motionTypes
+      ? `Focus on detecting: ${motionTypes.join(', ')}.`
+      : '';
+    const transcriptNote = extractTranscript
+      ? 'Also transcribe any visible speech or text that appears over time.'
+      : '';
+
+    const response = await molly.generate(TaskType.VISION, {
+      system: `You are an expert video analyst. Analyze these video frames and extract:
+
+1. Key frames - identify the most important moments and why
+2. Motion events - detect movement of people, vehicles, objects, or camera motion
+3. Scene changes - timestamps where the scene significantly changes
+4. Duration - estimate or use provided duration
+5. Summary - overall description of what happens in the video
+
+${motionFocus}
+${transcriptNote}
+
+Be precise with timestamps. Identify key frames that represent significant moments.
+For motion events, categorize them as: person, vehicle, object, camera, or unknown.`,
+      prompt: context
+        ? `Analyze this video sequence with context: ${context}\n\nTotal duration: ${durationSec} seconds.`
+        : `Analyze this video sequence. Total duration: ${durationSec} seconds. Identify key frames and motion events.`,
+      images: frameUris,
+      output: { schema: VideoFrameSchema },
+    });
+
+    if (!response.output) {
+      throw new Error('No video frame analysis output received');
+    }
+
+    const result = response.output;
+
+    // Add frame URIs to key frames (using closest frame index)
+    const keyFrames: KeyFrame[] = result.keyFrames.map((kf) => {
+      const frameIndex = Math.min(
+        Math.floor((kf.timestampSec / durationSec) * frameUris.length),
+        frameUris.length - 1
+      );
+      return {
+        ...kf,
+        frameUri: frameUris[frameIndex] || '',
+      };
+    });
+
+    MollyLogger.info(
+      'Video frames extracted',
+      'vision-tools',
+      {
+        keyFrameCount: keyFrames.length,
+        motionEventCount: result.motionEvents.length,
+        sceneChangeCount: result.sceneChanges.length,
+      },
+      traceId
+    );
+
+    return {
+      keyFrames,
+      motionEvents: result.motionEvents,
+      sceneChanges: result.sceneChanges,
+      transcript: result.transcript,
+      durationSec: result.durationSec || durationSec,
+      summary: result.summary,
+      processingTimeMs: Date.now() - startTime,
+    };
+  } catch (error) {
+    MollyLogger.error(
+      'Video frame extraction failed',
+      'vision-tools',
+      {},
+      error,
+      traceId
+    );
+
+    return {
+      keyFrames: [],
+      motionEvents: [],
+      sceneChanges: [],
+      durationSec: durationSec,
+      summary: 'Failed to extract video frames.',
+      processingTimeMs: Date.now() - startTime,
+    };
+  }
+}
+
+/**
+ * Detect motion events in a video sequence.
+ * Optimized path for security/surveillance workflows.
+ */
+export async function detectMotion(
+  frameUris: string[],
+  durationSec?: number
+): Promise<MotionEvent[]> {
+  const traceId = generateTraceId();
+
+  try {
+    const result = await extractVideoFrames(frameUris, {
+      durationSec,
+      context: 'Focus on detecting all motion events.',
+    });
+    return result.motionEvents;
+  } catch (error) {
+    MollyLogger.error(
+      'Motion detection failed',
+      'vision-tools',
+      {},
+      error,
+      traceId
+    );
+    return [];
+  }
+}
+
+/**
+ * Detect scene changes in a video sequence.
+ * Returns timestamps (in seconds) where significant scene changes occur.
+ */
+export async function detectSceneChanges(
+  frameUris: string[],
+  durationSec?: number
+): Promise<number[]> {
+  const traceId = generateTraceId();
+
+  try {
+    const result = await extractVideoFrames(frameUris, {
+      durationSec,
+      context: 'Focus on detecting scene transitions and cuts.',
+    });
+    return result.sceneChanges;
+  } catch (error) {
+    MollyLogger.error(
+      'Scene change detection failed',
+      'vision-tools',
+      {},
+      error,
+      traceId
+    );
+    return [];
+  }
+}
+
+/**
+ * Extract key frames from a video sequence.
+ * Returns the most important moments.
+ */
+export async function extractKeyFrames(
+  frameUris: string[],
+  durationSec?: number,
+  maxFrames: number = 5
+): Promise<KeyFrame[]> {
+  const traceId = generateTraceId();
+
+  try {
+    const result = await extractVideoFrames(frameUris, {
+      durationSec,
+      context: `Identify the ${maxFrames} most important key frames.`,
+    });
+    return result.keyFrames.slice(0, maxFrames);
+  } catch (error) {
+    MollyLogger.error(
+      'Key frame extraction failed',
+      'vision-tools',
+      {},
+      error,
+      traceId
+    );
+    return [];
+  }
+}
+
+/**
+ * Summarize video content.
+ */
+export async function summarizeVideo(
+  frameUris: string[],
+  durationSec?: number
+): Promise<string> {
+  const traceId = generateTraceId();
+
+  try {
+    const result = await extractVideoFrames(frameUris, { durationSec });
+    return result.summary;
+  } catch (error) {
+    MollyLogger.error(
+      'Video summarization failed',
+      'vision-tools',
+      {},
+      error,
+      traceId
+    );
+    return 'Unable to summarize video.';
+  }
+}
+
+// ============================================================
 // QUICK ANALYSIS HELPERS
 // ============================================================
 
@@ -908,6 +1171,65 @@ export function formatDocumentScan(result: DocumentScan): string {
     const preview = result.fullText.substring(0, 500);
     lines.push(`  ${preview}${result.fullText.length > 500 ? '...' : ''}`);
   }
+
+  return lines.join('\n');
+}
+
+/**
+ * Format video frame extraction for display.
+ */
+export function formatVideoFrameExtraction(
+  result: VideoFrameExtractionResult
+): string {
+  const lines: string[] = [
+    '╔══════════════════════════════════════════════════════════════╗',
+    '║               VIDEO FRAME ANALYSIS                           ║',
+    '╚══════════════════════════════════════════════════════════════╝',
+    '',
+    `Duration: ${result.durationSec} seconds`,
+    `Processing Time: ${result.processingTimeMs}ms`,
+    '',
+  ];
+
+  if (result.keyFrames.length > 0) {
+    lines.push('KEY FRAMES:');
+    result.keyFrames.forEach((kf, i) => {
+      lines.push(`  ${i + 1}. [${kf.timestampSec.toFixed(1)}s] ${kf.reason}`);
+      lines.push(`      ${kf.description}`);
+    });
+    lines.push('');
+  }
+
+  if (result.motionEvents.length > 0) {
+    lines.push('MOTION EVENTS:');
+    result.motionEvents.forEach((me) => {
+      const duration = (me.endSec - me.startSec).toFixed(1);
+      lines.push(
+        `  [${me.startSec.toFixed(1)}s - ${me.endSec.toFixed(1)}s] ${me.type.toUpperCase()} (${duration}s)`
+      );
+      lines.push(`      ${me.description}`);
+    });
+    lines.push('');
+  }
+
+  if (result.sceneChanges.length > 0) {
+    lines.push('SCENE CHANGES:');
+    const changes = result.sceneChanges
+      .map((t) => `${t.toFixed(1)}s`)
+      .join(', ');
+    lines.push(`  At: ${changes}`);
+    lines.push('');
+  }
+
+  if (result.transcript) {
+    lines.push('TRANSCRIPT:');
+    const preview = result.transcript.substring(0, 300);
+    lines.push(`  ${preview}${result.transcript.length > 300 ? '...' : ''}`);
+    lines.push('');
+  }
+
+  lines.push('SUMMARY:');
+  lines.push(`  ${result.summary}`);
 
   return lines.join('\n');
 }

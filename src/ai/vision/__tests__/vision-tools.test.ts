@@ -522,6 +522,258 @@ describe('Vision Tools', () => {
       }).not.toThrow();
     });
   });
+
+  describe('extractVideoFrames', () => {
+    it('should extract key frames and motion events from video sequence', async () => {
+      molly.generate.mockResolvedValue({
+        output: {
+          keyFrames: [
+            {
+              timestampSec: 2.5,
+              reason: 'Person enters frame',
+              description: 'A person walks into view from the left side.',
+            },
+            {
+              timestampSec: 8.0,
+              reason: 'Key action',
+              description: 'Person picks up an object from the table.',
+            },
+          ],
+          motionEvents: [
+            {
+              startSec: 2.0,
+              endSec: 6.0,
+              type: 'person',
+              description: 'Person walking across room.',
+            },
+          ],
+          sceneChanges: [0.0, 5.0],
+          transcript: 'Hello, welcome to the demo.',
+          durationSec: 10,
+          summary:
+            'Video shows a person entering a room and picking up an object.',
+        },
+      });
+
+      const result = await visionTools.extractVideoFrames(
+        ['frame1.jpg', 'frame2.jpg', 'frame3.jpg', 'frame4.jpg', 'frame5.jpg'],
+        { durationSec: 10 }
+      );
+
+      expect(result.keyFrames).toHaveLength(2);
+      expect(result.keyFrames[0].timestampSec).toBe(2.5);
+      expect(result.keyFrames[0].frameUri).toBe('frame2.jpg'); // index 1 for ~2.5s
+      expect(result.motionEvents).toHaveLength(1);
+      expect(result.motionEvents[0].type).toBe('person');
+      expect(result.sceneChanges).toContain(5.0);
+      expect(result.transcript).toContain('Hello');
+      expect(result.durationSec).toBe(10);
+      expect(result.processingTimeMs).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should handle video extraction failure gracefully', async () => {
+      molly.generate.mockRejectedValue(new Error('Video analysis failed'));
+
+      const result = await visionTools.extractVideoFrames(['frame1.jpg']);
+
+      expect(result.keyFrames).toHaveLength(0);
+      expect(result.motionEvents).toHaveLength(0);
+      expect(result.summary).toContain('Failed');
+    });
+
+    it('should handle missing output', async () => {
+      molly.generate.mockResolvedValue({ output: null });
+
+      const result = await visionTools.extractVideoFrames(['frame1.jpg']);
+
+      expect(result.keyFrames).toHaveLength(0);
+      expect(result.summary).toContain('Failed');
+    });
+
+    it('should accept motion type filtering', async () => {
+      molly.generate.mockResolvedValue({
+        output: {
+          keyFrames: [],
+          motionEvents: [
+            {
+              startSec: 1.0,
+              endSec: 3.0,
+              type: 'vehicle',
+              description: 'Car driving by.',
+            },
+          ],
+          sceneChanges: [],
+          durationSec: 5,
+          summary: 'Vehicle motion detected.',
+        },
+      });
+
+      const result = await visionTools.extractVideoFrames(['frame1.jpg'], {
+        motionTypes: ['vehicle'],
+        durationSec: 5,
+      });
+
+      expect(result.motionEvents).toHaveLength(1);
+      expect(result.motionEvents[0].type).toBe('vehicle');
+    });
+  });
+
+  describe('detectMotion', () => {
+    it('should return motion events from video', async () => {
+      molly.generate.mockResolvedValue({
+        output: {
+          keyFrames: [],
+          motionEvents: [
+            { startSec: 0, endSec: 2, type: 'person', description: 'Walking' },
+            {
+              startSec: 3,
+              endSec: 4,
+              type: 'object',
+              description: 'Ball rolling',
+            },
+          ],
+          sceneChanges: [],
+          durationSec: 5,
+          summary: 'Motion detected.',
+        },
+      });
+
+      const events = await visionTools.detectMotion(['f1.jpg', 'f2.jpg']);
+
+      expect(events).toHaveLength(2);
+      expect(events[0].type).toBe('person');
+      expect(events[1].type).toBe('object');
+    });
+  });
+
+  describe('detectSceneChanges', () => {
+    it('should return scene change timestamps', async () => {
+      molly.generate.mockResolvedValue({
+        output: {
+          keyFrames: [],
+          motionEvents: [],
+          sceneChanges: [0, 3.5, 7.2, 12.0],
+          durationSec: 15,
+          summary: 'Video with scene cuts.',
+        },
+      });
+
+      const changes = await visionTools.detectSceneChanges(
+        ['f1.jpg', 'f2.jpg', 'f3.jpg'],
+        15
+      );
+
+      expect(changes).toHaveLength(4);
+      expect(changes).toContain(3.5);
+      expect(changes).toContain(7.2);
+    });
+  });
+
+  describe('extractKeyFrames', () => {
+    it('should return limited key frames', async () => {
+      molly.generate.mockResolvedValue({
+        output: {
+          keyFrames: [
+            { timestampSec: 1, reason: 'Start', description: 'Opening' },
+            { timestampSec: 5, reason: 'Middle', description: 'Action' },
+            { timestampSec: 10, reason: 'End', description: 'Closing' },
+          ],
+          motionEvents: [],
+          sceneChanges: [],
+          durationSec: 12,
+          summary: 'Video summary.',
+        },
+      });
+
+      const frames = await visionTools.extractKeyFrames(
+        ['f1.jpg', 'f2.jpg'],
+        12,
+        2
+      );
+
+      expect(frames).toHaveLength(2); // Limited to maxFrames
+      expect(frames[0].reason).toBe('Start');
+    });
+  });
+
+  describe('summarizeVideo', () => {
+    it('should return video summary', async () => {
+      molly.generate.mockResolvedValue({
+        output: {
+          keyFrames: [],
+          motionEvents: [],
+          sceneChanges: [],
+          durationSec: 30,
+          summary: 'A tutorial video showing how to install software.',
+        },
+      });
+
+      const summary = await visionTools.summarizeVideo(['f1.jpg']);
+
+      expect(summary).toContain('tutorial');
+      expect(summary).toContain('software');
+    });
+  });
+
+  describe('formatVideoFrameExtraction', () => {
+    it('should format video extraction for display', () => {
+      const result: visionTools.VideoFrameExtractionResult = {
+        keyFrames: [
+          {
+            timestampSec: 3.0,
+            reason: 'Important moment',
+            description: 'Key action occurs.',
+            frameUri: 'frame3.jpg',
+          },
+        ],
+        motionEvents: [
+          {
+            startSec: 1.0,
+            endSec: 4.0,
+            type: 'person',
+            description: 'Person walking.',
+          },
+        ],
+        sceneChanges: [0, 5.5],
+        transcript: 'Hello world.',
+        durationSec: 10,
+        summary: 'Short clip with activity.',
+        processingTimeMs: 500,
+      };
+
+      const formatted = visionTools.formatVideoFrameExtraction(result);
+
+      expect(formatted).toContain('VIDEO FRAME ANALYSIS');
+      expect(formatted).toContain('10 seconds');
+      expect(formatted).toContain('500ms');
+      expect(formatted).toContain('KEY FRAMES');
+      expect(formatted).toContain('Important moment');
+      expect(formatted).toContain('MOTION EVENTS');
+      expect(formatted).toContain('PERSON');
+      expect(formatted).toContain('SCENE CHANGES');
+      expect(formatted).toContain('5.5s');
+      expect(formatted).toContain('TRANSCRIPT');
+      expect(formatted).toContain('Hello world');
+    });
+
+    it('should handle minimal results', () => {
+      const result: visionTools.VideoFrameExtractionResult = {
+        keyFrames: [],
+        motionEvents: [],
+        sceneChanges: [],
+        durationSec: 5,
+        summary: 'Empty video.',
+        processingTimeMs: 100,
+      };
+
+      const formatted = visionTools.formatVideoFrameExtraction(result);
+
+      expect(formatted).toContain('VIDEO FRAME ANALYSIS');
+      expect(formatted).toContain('Empty video');
+      expect(formatted).not.toContain('KEY FRAMES');
+      expect(formatted).not.toContain('MOTION EVENTS');
+    });
+  });
 });
 
 describe('Type interfaces', () => {
@@ -566,5 +818,34 @@ describe('Type interfaces', () => {
       processingTimeMs: 0,
     };
     expect(result.documentType).toBe('receipt');
+  });
+
+  it('should have correct VideoFrameExtractionResult structure', () => {
+    const result: visionTools.VideoFrameExtractionResult = {
+      keyFrames: [
+        {
+          timestampSec: 1.0,
+          frameUri: 'frame.jpg',
+          reason: 'Key moment',
+          description: 'Something happens',
+        },
+      ],
+      motionEvents: [
+        {
+          startSec: 0,
+          endSec: 2,
+          type: 'person',
+          description: 'Movement',
+        },
+      ],
+      sceneChanges: [0, 5],
+      transcript: 'Speech text',
+      durationSec: 10,
+      summary: 'Video summary',
+      processingTimeMs: 200,
+    };
+    expect(result.durationSec).toBe(10);
+    expect(result.keyFrames[0].frameUri).toBe('frame.jpg');
+    expect(result.motionEvents[0].type).toBe('person');
   });
 });

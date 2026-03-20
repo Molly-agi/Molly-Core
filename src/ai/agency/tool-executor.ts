@@ -137,9 +137,15 @@ import {
   extractFormFields,
   describeImage,
   imageContains,
+  extractVideoFrames,
+  detectMotion,
+  detectSceneChanges,
+  extractKeyFrames,
+  summarizeVideo,
   formatComparisonResult,
   formatScreenshotAnalysis,
   formatDocumentScan,
+  formatVideoFrameExtraction,
 } from '../vision/vision-tools';
 import {
   express,
@@ -2001,10 +2007,114 @@ async function executeToolInternal(
           };
         }
 
+        case 'extractVideoFrames': {
+          const frameUris = params.frameUris as string[];
+          const durationSec = params.durationSec as number | undefined;
+          const motionTypes = params.motionTypes as string[] | undefined;
+          const context = params.context as string | undefined;
+
+          if (!frameUris || frameUris.length === 0) {
+            return {
+              success: false,
+              output: 'No frameUris provided (array of frame image URIs)',
+            };
+          }
+
+          const result = await extractVideoFrames(frameUris, {
+            durationSec,
+            motionTypes: motionTypes as Parameters<
+              typeof extractVideoFrames
+            >[1]['motionTypes'],
+            context,
+          });
+          return { success: true, output: formatVideoFrameExtraction(result) };
+        }
+
+        case 'detectMotion': {
+          const frameUris = params.frameUris as string[];
+          const durationSec = params.durationSec as number | undefined;
+
+          if (!frameUris || frameUris.length === 0) {
+            return { success: false, output: 'No frameUris provided' };
+          }
+
+          const events = await detectMotion(frameUris, durationSec);
+          if (events.length === 0) {
+            return { success: true, output: 'No motion events detected.' };
+          }
+
+          const formatted = events
+            .map(
+              (e) =>
+                `[${e.startSec.toFixed(1)}s - ${e.endSec.toFixed(1)}s] ${e.type.toUpperCase()}: ${e.description}`
+            )
+            .join('\n');
+          return { success: true, output: `Motion Events:\n${formatted}` };
+        }
+
+        case 'detectSceneChanges': {
+          const frameUris = params.frameUris as string[];
+          const durationSec = params.durationSec as number | undefined;
+
+          if (!frameUris || frameUris.length === 0) {
+            return { success: false, output: 'No frameUris provided' };
+          }
+
+          const changes = await detectSceneChanges(frameUris, durationSec);
+          if (changes.length === 0) {
+            return { success: true, output: 'No scene changes detected.' };
+          }
+
+          const timestamps = changes.map((t) => `${t.toFixed(1)}s`).join(', ');
+          return {
+            success: true,
+            output: `Scene changes at: ${timestamps}`,
+          };
+        }
+
+        case 'extractKeyFrames': {
+          const frameUris = params.frameUris as string[];
+          const durationSec = params.durationSec as number | undefined;
+          const maxFrames = (params.maxFrames as number) ?? 5;
+
+          if (!frameUris || frameUris.length === 0) {
+            return { success: false, output: 'No frameUris provided' };
+          }
+
+          const keyFrames = await extractKeyFrames(
+            frameUris,
+            durationSec,
+            maxFrames
+          );
+          if (keyFrames.length === 0) {
+            return { success: true, output: 'No key frames identified.' };
+          }
+
+          const formatted = keyFrames
+            .map(
+              (kf, i) =>
+                `${i + 1}. [${kf.timestampSec.toFixed(1)}s] ${kf.reason}\n   ${kf.description}`
+            )
+            .join('\n');
+          return { success: true, output: `Key Frames:\n${formatted}` };
+        }
+
+        case 'summarizeVideo': {
+          const frameUris = params.frameUris as string[];
+          const durationSec = params.durationSec as number | undefined;
+
+          if (!frameUris || frameUris.length === 0) {
+            return { success: false, output: 'No frameUris provided' };
+          }
+
+          const summary = await summarizeVideo(frameUris, durationSec);
+          return { success: true, output: `Video Summary:\n${summary}` };
+        }
+
         default:
           return {
             success: false,
-            output: `Unknown visionTools action: ${action}. Available: compare, parseScreenshot, detectErrors, scanDocument, extractText, extractFormFields, describe, contains`,
+            output: `Unknown visionTools action: ${action}. Available: compare, parseScreenshot, detectErrors, scanDocument, extractText, extractFormFields, describe, contains, extractVideoFrames, detectMotion, detectSceneChanges, extractKeyFrames, summarizeVideo`,
           };
       }
     }
