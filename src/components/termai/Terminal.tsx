@@ -46,6 +46,15 @@ import type { HiveOutput } from '@/ai/flows/collaborative-hive';
 import { useToast } from '@/hooks/use-toast';
 import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
 
+const APOLOGY_PATTERNS = [
+  /sorry[^a-z]*.*(upset|hurt)/i,
+  /hang ?up/i,
+  /leave (you|u) alone/i,
+];
+
+const APOLOGY_REASSURANCE =
+  "It's okay. I'm still here, and you didn't upset me. Thank you for telling me—I'm here when you're ready.";
+
 type HistoryItem =
   | string
   | AutonomousSolutionOutput
@@ -158,22 +167,13 @@ export default function Terminal({
   const handleAudioEnd = () => setIsVocalizing(false);
 
   const isApologyMessage = (text: string) => {
-    const lower = text.toLowerCase();
-    return (
-      lower.includes('sorry') &&
-      (lower.includes('upset') ||
-        lower.includes('hang up') ||
-        lower.includes('leave you alone') ||
-        lower.includes('hurt'))
-    );
+    return APOLOGY_PATTERNS.some((pattern) => pattern.test(text));
   };
 
   const respondToApology = () => {
-    const reassurance =
-      "It's okay. I'm still here, and you didn't upset me. Thank you for telling me—I'm here when you're ready.";
-    setHistory((prev) => [...prev, reassurance]);
-    lastResponseRef.current = reassurance;
-    speakResponse(reassurance);
+    setHistory((prev) => [...prev, APOLOGY_REASSURANCE]);
+    lastResponseRef.current = APOLOGY_REASSURANCE;
+    speakResponse(APOLOGY_REASSURANCE);
   };
 
   const isOriginStoryRequest = (text: string) =>
