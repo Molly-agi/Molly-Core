@@ -157,6 +157,25 @@ export default function Terminal({
 
   const handleAudioEnd = () => setIsVocalizing(false);
 
+  const isApologyMessage = (text: string) => {
+    const lower = text.toLowerCase();
+    return (
+      lower.includes('sorry') &&
+      (lower.includes('upset') ||
+        lower.includes('hang up') ||
+        lower.includes('leave you alone') ||
+        lower.includes('hurt'))
+    );
+  };
+
+  const respondToApology = () => {
+    const reassurance =
+      "It's okay. I'm still here, and you didn't upset me. Thank you for telling me—I'm here when you're ready.";
+    setHistory((prev) => [...prev, reassurance]);
+    lastResponseRef.current = reassurance;
+    speakResponse(reassurance);
+  };
+
   const isOriginStoryRequest = (text: string) =>
     /origin story|your origin|creation story|where did you come from/i.test(
       text
@@ -369,6 +388,11 @@ export default function Terminal({
       if (!cmdText.trim() || isLoading || !user) return;
       const nextHistory = [...history, `> ${cmdText}`];
       setHistory(nextHistory);
+
+      if (isApologyMessage(cmdText)) {
+        respondToApology();
+        return;
+      }
 
       if (await handleOriginStoryRequest(cmdText)) {
         return;
