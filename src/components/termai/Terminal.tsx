@@ -161,7 +161,7 @@ export default function Terminal({
 
   const handleAudioEnd = () => setIsVocalizing(false);
 
-  const matchesApologyPattern = (text: string) => {
+  const containsApologyPattern = (text: string) => {
     return APOLOGY_PATTERNS.some((pattern) => pattern.test(text));
   };
 
@@ -384,7 +384,7 @@ export default function Terminal({
       const nextHistory = [...history, `> ${cmdText}`];
       setHistory(nextHistory);
 
-      if (matchesApologyPattern(cmdText)) {
+      if (containsApologyPattern(cmdText)) {
         respondToApology();
         return;
       }
