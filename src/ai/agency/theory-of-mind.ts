@@ -1040,3 +1040,18 @@ export async function saveTheoryOfMind(): Promise<void> {
 
   await saveToStorage(STORAGE_KEY, serializable);
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+// Testing Utilities
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Reset all mental models (for testing)
+ */
+export function resetTheoryOfMind(): void {
+  mentalModels.clear();
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+    saveTimeout = null;
+  }
+}
