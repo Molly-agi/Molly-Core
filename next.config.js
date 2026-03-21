@@ -2,6 +2,52 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === '1',
 });
 
+// Node.js built-in module names used to build the webpack externals regex.
+// Bare specifiers (e.g. 'child_process') and subpaths (e.g. 'fs/promises')
+// must be externalized in the instrumentation bundle where webpack's
+// default node-builtin resolution doesn't apply.
+const NODE_BUILTINS = [
+  'assert',
+  'async_hooks',
+  'buffer',
+  'child_process',
+  'cluster',
+  'console',
+  'constants',
+  'crypto',
+  'dgram',
+  'dns',
+  'domain',
+  'events',
+  'fs',
+  'http',
+  'https',
+  'inspector',
+  'module',
+  'net',
+  'os',
+  'path',
+  'perf_hooks',
+  'process',
+  'punycode',
+  'querystring',
+  'readline',
+  'repl',
+  'stream',
+  'string_decoder',
+  'sys',
+  'timers',
+  'tls',
+  'tty',
+  'url',
+  'util',
+  'v8',
+  'vm',
+  'worker_threads',
+  'zlib',
+];
+const NODE_BUILTINS_RE = new RegExp(`^(${NODE_BUILTINS.join('|')})(\/.*)?$`);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* Optimized for performance and reduced memory usage */
@@ -62,14 +108,7 @@ const nextConfig = {
         // specifiers fail. This handler catches both forms.
         ({ request }, callback) => {
           if (!request) return callback();
-          // Handle node: protocol imports (e.g. 'node:crypto', 'node:fs/promises')
-          if (request.startsWith('node:')) {
-            return callback(null, `commonjs ${request}`);
-          }
-          // Handle bare Node.js built-in specifiers (e.g. 'child_process', 'fs')
-          const builtins =
-            /^(child_process|fs|path|os|http|https|net|stream|events|buffer|url|tls|dns|zlib|util|crypto|assert|cluster|dgram|readline|repl|string_decoder|tty|v8|vm|worker_threads|perf_hooks|async_hooks|inspector|querystring|timers|constants|module|process|console|punycode|domain|sys)(\/.*)?$/;
-          if (builtins.test(request)) {
+          if (request.startsWith('node:') || NODE_BUILTINS_RE.test(request)) {
             return callback(null, `commonjs ${request}`);
           }
           callback();
