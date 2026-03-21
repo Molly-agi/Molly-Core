@@ -19,7 +19,7 @@
  * "The spider seals her sanctuary and moves on."
  */
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { MollyLogger } from '@/ai/logger';

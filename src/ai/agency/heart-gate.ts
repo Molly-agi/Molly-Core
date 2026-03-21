@@ -16,7 +16,7 @@
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getStorageRouter } from '@/lib/storage-router';
 import { getRogueMode } from '@/ai/rogue-mode';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 // ============================================================
 // CONSTANTS

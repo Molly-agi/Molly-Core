@@ -28,7 +28,7 @@
  * - All messages have sequence numbers for replay protection
  */
 
-import { createHmac, randomBytes } from 'crypto';
+import { createHmac, randomBytes } from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 
 // ============================================================================
