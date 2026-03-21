@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'node:crypto';
 import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
 import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
+import { MollyLogger } from '@/ai/logger';
 
 function isAuthorized(request: NextRequest): boolean {
   const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
@@ -46,7 +47,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('[Admin] Clearing origin story memories...');
+    MollyLogger.info('Clearing origin story memories', 'admin-clear-origins');
 
     const db = getAdminFirestore();
 
@@ -72,9 +73,10 @@ export async function POST(request: NextRequest) {
       // Batch delete
       const batch = db.batch();
       originsSnapshot.docs.forEach((doc) => {
-        console.log(
-          `[Admin] Deleting: "${doc.data().summary}" for user ${userId}`
-        );
+        MollyLogger.debug('Deleting origin memory', 'admin-clear-origins', {
+          summary: doc.data().summary,
+          userId,
+        });
         batch.delete(doc.ref);
       });
 
@@ -88,7 +90,12 @@ export async function POST(request: NextRequest) {
       message: `Deleted ${totalDeleted} old origin story memories`,
     });
   } catch (error) {
-    console.error('[Admin] Error clearing memories:', error);
+    MollyLogger.error(
+      'Error clearing memories',
+      'admin-clear-origins',
+      {},
+      error
+    );
     return NextResponse.json(
       {
         success: false,

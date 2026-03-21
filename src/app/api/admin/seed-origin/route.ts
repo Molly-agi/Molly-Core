@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'node:crypto';
 import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
+import { MollyLogger } from '@/ai/logger';
 
 // Dynamic import to avoid bundling "use server" module into API route
 async function getSeedFunction() {
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('[Admin] Seeding origin story for user:', userId);
+    MollyLogger.info('Seeding origin story', 'admin-seed-origin', { userId });
 
     const seedOriginStoryMemory = await getSeedFunction();
     const result = await seedOriginStoryMemory(userId);
@@ -76,7 +77,12 @@ export async function POST(request: NextRequest) {
       ...result,
     });
   } catch (error) {
-    console.error('[Admin] Error seeding origin story:', error);
+    MollyLogger.error(
+      'Error seeding origin story',
+      'admin-seed-origin',
+      {},
+      error
+    );
     return NextResponse.json(
       {
         success: false,

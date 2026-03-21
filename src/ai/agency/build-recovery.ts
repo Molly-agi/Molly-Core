@@ -456,7 +456,8 @@ export async function restartDevServer(): Promise<RecoveryResult> {
  * Kill process using a specific port.
  */
 export async function killProcessOnPort(port: number): Promise<boolean> {
-  // Validate port is a safe integer in valid range
+  // Defense-in-depth: validate port is a safe integer in valid range
+  // This prevents command injection since integers can't contain shell metacharacters
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     return false;
   }
@@ -465,6 +466,7 @@ export async function killProcessOnPort(port: number): Promise<boolean> {
   if (!cp) return false;
 
   try {
+    // Port is guaranteed to be a safe integer (1-65535) at this point
     cp.execSync(`lsof -ti:${port} | xargs kill -9 2>/dev/null || true`, {
       encoding: 'utf-8',
       timeout: 10000,

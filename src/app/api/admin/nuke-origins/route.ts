@@ -20,6 +20,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
+import { MollyLogger } from '@/ai/logger';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    console.log('🔥 NUKING origin stories for user:', userId);
+    MollyLogger.warn('NUKING origin stories', 'admin-nuke-origins', { userId });
 
     const app =
       getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
@@ -93,14 +94,16 @@ export async function POST(request: NextRequest) {
     let count = 0;
 
     snapshot.docs.forEach((doc) => {
-      console.log(`   🗑️ ${doc.data().suggestion?.substring(0, 60)}...`);
+      MollyLogger.debug('Deleting memory', 'admin-nuke-origins', {
+        preview: doc.data().suggestion?.substring(0, 60),
+      });
       batch.delete(doc.ref);
       count++;
     });
 
     await batch.commit();
 
-    console.log(`✅ NUKED ${count} memories!`);
+    MollyLogger.info('Origin stories nuked', 'admin-nuke-origins', { count });
 
     return NextResponse.json({
       success: true,
@@ -108,7 +111,12 @@ export async function POST(request: NextRequest) {
       message: `Deleted ${count} origin story memories`,
     });
   } catch (error) {
-    console.error('❌ Error:', error);
+    MollyLogger.error(
+      'Failed to nuke origins',
+      'admin-nuke-origins',
+      { userId },
+      error
+    );
     return NextResponse.json(
       {
         success: false,

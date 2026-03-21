@@ -651,7 +651,9 @@ export async function listAssetManifests(): Promise<string[]> {
 export async function readAssetManifest(
   filename: string
 ): Promise<unknown | null> {
-  const manifestPath = path.join(config.projectRoot, config.vaultDir, filename);
+  // Compute paths at runtime to avoid Turbopack static analysis
+  const baseDir = config.projectRoot || process.cwd();
+  const manifestPath = path.resolve(baseDir, config.vaultDir, filename);
 
   try {
     const content = await fs.readFile(manifestPath, 'utf-8');
@@ -676,7 +678,9 @@ export async function readAssetManifest(
 export async function readEvolutionLog(
   filename: string
 ): Promise<unknown | null> {
-  const logPath = path.join(config.projectRoot, config.evolutionDir, filename);
+  // Compute paths at runtime to avoid Turbopack static analysis
+  const baseDir = config.projectRoot || process.cwd();
+  const logPath = path.resolve(baseDir, config.evolutionDir, filename);
 
   try {
     const content = await fs.readFile(logPath, 'utf-8');
