@@ -16,7 +16,7 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 
 // ============================================================

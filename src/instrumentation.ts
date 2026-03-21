@@ -18,7 +18,7 @@ export async function register() {
   // Node's defaults (no timeout) cause the server to hold dead sockets forever.
   // We find the active HTTP server by polling for it after startup.
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    const net = await import('net');
+    const net = await import('node:net');
     const applyTimeouts = () => {
       // Find all TCP servers in this process
       // @ts-expect-error -- accessing internal Node.js API to find active servers

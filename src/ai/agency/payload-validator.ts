@@ -16,7 +16,7 @@
 
 import path from 'path';
 import { promises as fs } from 'fs';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 import { getEnvironmentStatus, SentinelStatus } from './defense-sentinel';
 

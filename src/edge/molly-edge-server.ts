@@ -580,7 +580,7 @@ function handleCapabilities(res: http.ServerResponse): void {
 // SYNC ENGINE
 // ============================================================================
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 let syncEngine: DeviceSyncEngine | null = null;
 

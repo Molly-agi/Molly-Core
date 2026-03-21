@@ -18,7 +18,7 @@
  * "The spider's web vibrates at frequencies only she can feel."
  */
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 
 // ============================================================

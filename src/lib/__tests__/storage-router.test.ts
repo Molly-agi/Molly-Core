@@ -182,3 +182,64 @@ describe('StorageRouter — Environment Detection', () => {
     expect(getStorageRouter().getMode()).toBe('local');
   });
 });
+
+describe('StorageRouter — Firestore Fallback', () => {
+  let testDir: string;
+
+  beforeEach(async () => {
+    testDir = await fs.mkdtemp(path.join(os.tmpdir(), 'molly-firestore-'));
+    process.env.MOLLY_LOCAL_DATA_DIR = testDir;
+  });
+
+  afterEach(async () => {
+    const { resetStorageRouter } = require('../storage-router');
+    resetStorageRouter();
+    delete process.env.MOLLY_STORAGE_PROVIDER;
+    delete process.env.MOLLY_LOCAL_DATA_DIR;
+    delete process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    delete process.env.FIREBASE_PROJECT_ID;
+    delete process.env.FIREBASE_CLIENT_EMAIL;
+    delete process.env.FIREBASE_PRIVATE_KEY;
+    delete process.env.GOOGLE_CLOUD_PROJECT;
+    delete process.env.GCLOUD_PROJECT;
+    await fs.rm(testDir, { recursive: true, force: true });
+    jest.resetModules();
+  });
+
+  it('falls back to local when firestore requested but admin not configured', () => {
+    process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
+    // No Firebase credentials set — isAdminConfigured() returns false
+    const { getStorageRouter } = require('../storage-router');
+    const router = getStorageRouter();
+
+    // Should have fallen back to local
+    expect(router.getMode()).toBe('local');
+    expect(router.getProviderInfo().id).toBe('local');
+  });
+
+  it('still works for CRUD after firestore fallback', async () => {
+    process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
+    const { getStorageRouter } = require('../storage-router');
+    const router = getStorageRouter();
+
+    // Verify the fallback provider actually works
+    await router.set('test', 'doc1', { name: 'Molly' });
+    const result = await router.get('test', 'doc1');
+    expect(result).not.toBeNull();
+    expect(result!.data.name).toBe('Molly');
+  });
+
+  it('logs warning when firestore requested but unavailable', () => {
+    process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
+    // Even though it falls back, detectStorageMode returns 'firestore'
+    // We can verify this by checking that warn was called
+    const { MollyLogger } = require('../../ai/logger');
+    const { getStorageRouter } = require('../storage-router');
+    getStorageRouter();
+
+    expect(MollyLogger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Firestore requested but unavailable'),
+      'storage-router'
+    );
+  });
+});

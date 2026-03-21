@@ -34,7 +34,7 @@
  */
 
 import { ChildProcess, spawn } from 'child_process';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 import { getMollyShell } from './molly-shell';
 

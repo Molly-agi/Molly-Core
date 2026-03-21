@@ -81,8 +81,35 @@ class StorageRouter implements StorageProvider {
   }
 
   private createProvider(): StorageProvider {
-    // Always use local storage - Firestore path removed to avoid bundler issues
-    // All environments use local files now. Sync engine handles device-to-device.
+    if (this.mode === 'firestore') {
+      try {
+        // Dynamic require avoids bundler pulling firebase-admin into client bundles
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { isAdminConfigured } = require('../firebase/admin');
+        if (!isAdminConfigured()) {
+          throw new Error(
+            'Firebase Admin SDK not configured (missing credentials)'
+          );
+        }
+        /* eslint-disable @typescript-eslint/no-require-imports */
+        const {
+          FirestoreStorageProvider,
+        } = require('./firestore-storage-provider');
+        /* eslint-enable @typescript-eslint/no-require-imports */
+        return new FirestoreStorageProvider();
+      } catch (err) {
+        MollyLogger.warn(
+          `Firestore requested but unavailable, falling back to local storage: ${
+            err instanceof Error ? err.message : String(err)
+          }`,
+          'storage-router'
+        );
+        // Update mode to reflect actual provider so getMode()/getProviderInfo() stay consistent
+        this.mode = 'local';
+        return new LocalStorageProvider();
+      }
+    }
+
     return new LocalStorageProvider();
   }
 

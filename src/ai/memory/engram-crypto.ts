@@ -2,7 +2,7 @@
  * @fileOverview Encryption helpers for personality and engram data.
  */
 
-import * as crypto from 'crypto';
+import * as crypto from 'node:crypto';
 
 /**
  * Derive encryption key from userId + password using PBKDF2.
