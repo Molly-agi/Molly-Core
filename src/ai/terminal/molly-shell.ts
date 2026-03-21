@@ -22,7 +22,7 @@
  *   "We don't fix the leaks in the dam. We fix the dam itself."
  */
 
-import { ChildProcess, spawn } from 'child_process';
+import { ChildProcess, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 

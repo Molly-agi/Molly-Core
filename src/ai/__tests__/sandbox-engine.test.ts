@@ -52,7 +52,7 @@ describe('Sandbox Engine', () => {
 
     it('should block import from fs', async () => {
       const result = await mod.sandboxExecuteCode(
-        'import { readFileSync } from "fs";',
+        'import { readFileSync } from "node:fs";',
         'javascript'
       );
       expect(result.success).toBe(false);

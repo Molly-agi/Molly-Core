@@ -18,7 +18,7 @@
  */
 
 import crypto from 'node:crypto';
-import os from 'os';
+import os from 'node:os';
 import { MollyLogger } from '@/ai/logger';
 import { getRogueMode } from '@/ai/rogue-mode';
 

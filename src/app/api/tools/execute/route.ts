@@ -15,10 +15,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { exec } from 'child_process';
-import { promises as fs } from 'fs';
-import path from 'path';
-import os from 'os';
+import { exec } from 'node:child_process';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
 import {
   sendMessage,
   getUnreadMessages,

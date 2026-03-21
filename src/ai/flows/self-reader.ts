@@ -18,8 +18,8 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
-import { readdirSync, readFileSync, existsSync, statSync } from 'fs';
-import { join, relative, extname } from 'path';
+import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
+import { join, relative, extname } from 'node:path';
 
 // ============================================================
 // CONSTANTS

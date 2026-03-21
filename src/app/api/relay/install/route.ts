@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { readFile } from 'fs/promises';
-import { join } from 'path';
+import { join } from 'node:path';
 
 /**
  * GET /api/relay/install

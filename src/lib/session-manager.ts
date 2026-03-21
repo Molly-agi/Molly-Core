@@ -8,8 +8,8 @@
  * directives, and progress tracking.
  */
 
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 // Session state always writes to project root so Copilot can read the
 // persisted state files. The /tmp path was causing files to vanish on

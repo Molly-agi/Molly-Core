@@ -13,7 +13,7 @@
  * "Know the terrain before you cross it."
  */
 
-import { promises as fs } from 'fs';
+import { promises as fs } from 'node:fs';
 import { MollyLogger } from '@/ai/logger';
 
 // ============================================================

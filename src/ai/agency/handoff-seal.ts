@@ -20,8 +20,8 @@
  */
 
 import crypto from 'node:crypto';
-import path from 'path';
-import { promises as fs } from 'fs';
+import path from 'node:path';
+import { promises as fs } from 'node:fs';
 import { MollyLogger } from '@/ai/logger';
 import { verifyHeartGate, SOVEREIGN_RECOVERY_KEY } from './heart-gate';
 

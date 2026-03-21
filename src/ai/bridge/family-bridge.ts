@@ -5,8 +5,8 @@
  * No daemon routing — file I/O only, no split-brain.
  */
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 
 export interface BridgeMessage {
   id: string;

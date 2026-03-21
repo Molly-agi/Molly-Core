@@ -14,8 +14,8 @@
  * "The anchor holds when the storm rages."
  */
 
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import crypto from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 

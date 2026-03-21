@@ -28,10 +28,10 @@
  * The fix: devices sync directly, no cloud middleman.
  */
 
-import { promises as fs } from 'fs';
-import path from 'path';
-import os from 'os';
-import http from 'http';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import http from 'node:http';
 
 // ============================================================================
 // TYPES

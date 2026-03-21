@@ -15,8 +15,8 @@
  * Methodology: We fix the dam, not the leaks.
  */
 
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { exec } from 'node:child_process';
+import { promisify } from 'node:util';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getRogueMode } from '@/ai/rogue-mode';
 import { getStorageRouter } from '@/lib/storage-router';

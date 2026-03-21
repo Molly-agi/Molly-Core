@@ -100,9 +100,9 @@ jest.mock('@/ai/logger', () => ({
   generateTraceId: jest.fn(() => 'trace-12345'),
 }));
 
-import { execSync } from 'child_process';
-import { promises as fs } from 'fs';
-import os from 'os';
+import { execSync } from 'node:child_process';
+import { promises as fs } from 'node:fs';
+import os from 'node:os';
 import { getGateStatus, loadHeartGateState } from '../heart-gate';
 import {
   getObservationStatus,

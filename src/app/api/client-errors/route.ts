@@ -4,8 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { appendSessionEvent } from '@/lib/session-manager';
-import { appendFileSync, existsSync, readFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { appendFileSync, existsSync, readFileSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 export const dynamic = 'force-dynamic';
 

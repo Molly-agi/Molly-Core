@@ -25,7 +25,7 @@ import {
 } from '@/ai/terminal';
 import { MollyLogger } from '@/ai/logger';
 import { writeFile, mkdir, chmod } from 'fs/promises';
-import { dirname } from 'path';
+import { dirname } from 'node:path';
 
 export const dynamic = 'force-dynamic';
 

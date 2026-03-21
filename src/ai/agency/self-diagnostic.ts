@@ -17,10 +17,10 @@
  *   7. Self-Healing     — Reset stuck states, clear caches, restart
  */
 
-import { execSync } from 'child_process';
-import os from 'os';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { execSync } from 'node:child_process';
+import os from 'node:os';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getGateStatus, loadHeartGateState } from './heart-gate';
 import {

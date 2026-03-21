@@ -17,9 +17,9 @@ jest.mock('../../ai/logger', () => ({
   },
 }));
 
-import { promises as fs } from 'fs';
-import path from 'path';
-import os from 'os';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
 
 describe('StorageRouter', () => {
   let testDir: string;

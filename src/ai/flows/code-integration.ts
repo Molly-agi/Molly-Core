@@ -29,8 +29,8 @@ import {
   mkdirSync,
   readdirSync,
   statSync,
-} from 'fs';
-import { join, dirname } from 'path';
+} from 'node:fs';
+import { join, dirname } from 'node:path';
 import type { CodeAnalysisResult } from './code-analysis';
 import {
   recordSensoryLogServer,

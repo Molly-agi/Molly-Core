@@ -17,7 +17,7 @@
  * - Process lifecycle is controlled via mock events
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'node:events';
 
 // ============================================================================
 // MOCK SETUP
@@ -68,7 +68,7 @@ jest.mock('crypto', () => ({
 
 // Import after mocks are set up
 import { MollyShell, ShellEvent } from '../molly-shell';
-import { spawn } from 'child_process';
+import { spawn } from 'node:child_process';
 
 // ============================================================================
 // HELPER FUNCTIONS

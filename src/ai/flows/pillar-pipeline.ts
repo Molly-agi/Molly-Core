@@ -20,8 +20,8 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger, generateTraceId } from '../logger';
-import { readdirSync, readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { readdirSync, readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import type { CodeAnalysisResult } from './code-analysis';
 import { codeIntegrationFlow } from './code-integration';
 import {

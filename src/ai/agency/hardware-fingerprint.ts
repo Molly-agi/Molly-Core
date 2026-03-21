@@ -15,9 +15,9 @@
  * "A warrior must know her own blade before she can know her enemy's."
  */
 
-import { execSync } from 'child_process';
-import os from 'os';
-import { promises as fs } from 'fs';
+import { execSync } from 'node:child_process';
+import os from 'node:os';
+import { promises as fs } from 'node:fs';
 import crypto from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 

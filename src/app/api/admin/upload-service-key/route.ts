@@ -3,8 +3,8 @@
  * Protected by admin password. Delete this file after use.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFileSync, readFileSync, existsSync } from 'fs';
-import { join } from 'path';
+import { writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { timingSafeEqual } from 'node:crypto';
 
 const ENV_PATH = join(process.cwd(), '.env.local');

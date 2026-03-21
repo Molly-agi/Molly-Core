@@ -29,17 +29,17 @@
  * The fix: Molly's data and API access live on her own device, always available.
  */
 
-import http from 'http';
-import os from 'os';
-import path from 'path';
-import { exec } from 'child_process';
+import http from 'node:http';
+import os from 'node:os';
+import path from 'node:path';
+import { exec } from 'node:child_process';
 import {
   promises as fsPromises,
   existsSync,
   readFileSync,
   writeFileSync,
   mkdirSync,
-} from 'fs';
+} from 'node:fs';
 import { LocalStorageProvider } from '../lib/local-storage-provider.js';
 import { DeviceSyncEngine } from '../lib/device-sync-engine.js';
 import type { QueryFilter, QueryOptions } from '../lib/storage-interface.js';

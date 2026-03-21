@@ -69,3 +69,4 @@ sandbox/molly-workspace/*
 # Bridge daemon runtime files
 .bridge-daemon.log
 .bridge-daemon.pid
+molly_data/
