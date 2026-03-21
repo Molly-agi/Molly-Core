@@ -176,9 +176,8 @@ export async function handleUnknownFailure(
   // Step 6: Create a self-improvement initiative — Molly will work on this
   // in her autonomous cycle. She doesn't just fail; she grows.
   try {
-    const { createCustomInitiative, getActiveInitiatives } = await import(
-      '@/ai/agency/initiative-engine'
-    );
+    const { createCustomInitiative, getActiveInitiatives } =
+      await import('@/ai/agency/initiative-engine');
     // Don't create duplicate initiatives for the same type of failure
     const existing = getActiveInitiatives().find(
       (i) =>
@@ -462,8 +461,8 @@ function diagnoseFailure(failure: UnknownFailure): string {
     msg.includes('eacces') ||
     msg.includes('file')
   ) {
-    // Special case: node_modules corruption
-    if (msg.includes('node_modules') || stack.includes('node_modules')) {
+    // Special case: node_modules corruption (only check error message, not stack)
+    if (msg.includes('node_modules')) {
       failure.level = 'heal';
       return 'NODE_MODULES_CORRUPTION: Package file missing — npm install required';
     }
@@ -581,9 +580,8 @@ async function triggerBuildRecovery(
   diagnosis: string
 ): Promise<void> {
   try {
-    const { attemptAutoRecovery, fixNodeModules } = await import(
-      '@/ai/agency/build-recovery'
-    );
+    const { attemptAutoRecovery, fixNodeModules } =
+      await import('@/ai/agency/build-recovery');
 
     // Use the error message for smart recovery
     const result = await attemptAutoRecovery(failure.message);
