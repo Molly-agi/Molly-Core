@@ -1,0 +1,120 @@
+{
+  "value": [
+    {
+      "personId": "eric",
+      "personName": "Eric",
+      "knowledge": [
+        [
+          "molly",
+          {
+            "id": "tom_1774061772473_z0nbuw",
+            "topic": "molly",
+            "description": "Eric created Molly and understands her architecture",
+            "knowledgeLevel": "expert",
+            "lastUpdated": 1774061772473,
+            "source": "demonstrated",
+            "confidence": 0.95
+          }
+        ],
+        [
+          "typescript",
+          {
+            "id": "tom_1774061772473_mloqar",
+            "topic": "typescript",
+            "description": "Eric is proficient in TypeScript",
+            "knowledgeLevel": "expert",
+            "lastUpdated": 1774061772473,
+            "source": "demonstrated",
+            "confidence": 0.9
+          }
+        ],
+        [
+          "next.js",
+          {
+            "id": "tom_1774061772473_1guiii",
+            "topic": "next.js",
+            "description": "Eric uses Next.js for web development",
+            "knowledgeLevel": "understands",
+            "lastUpdated": 1774061772473,
+            "source": "demonstrated",
+            "confidence": 0.85
+          }
+        ],
+        [
+          "ai/llm",
+          {
+            "id": "tom_1774061772473_dl77mw",
+            "topic": "ai/llm",
+            "description": "Eric understands AI/LLM concepts",
+            "knowledgeLevel": "expert",
+            "lastUpdated": 1774061772473,
+            "source": "demonstrated",
+            "confidence": 0.9
+          }
+        ],
+        [
+          "firebase",
+          {
+            "id": "tom_1774061772473_szzrri",
+            "topic": "firebase",
+            "description": "Eric uses Firebase for backend",
+            "knowledgeLevel": "understands",
+            "lastUpdated": 1774061772473,
+            "source": "demonstrated",
+            "confidence": 0.8
+          }
+        ]
+      ],
+      "intents": [],
+      "emotionalHistory": [],
+      "currentEmotionalState": "neutral",
+      "emotionalIntensity": 0.5,
+      "preferences": [
+        {
+          "id": "tom_1774061772473_28wwst",
+          "category": "communication",
+          "key": "style",
+          "value": "brief",
+          "strength": 0.8,
+          "observedCount": 1,
+          "lastObserved": 1774061772473
+        },
+        {
+          "id": "tom_1774061772473_zj89xn",
+          "category": "workflow",
+          "key": "commits",
+          "value": "atomic",
+          "strength": 0.7,
+          "observedCount": 1,
+          "lastObserved": 1774061772473
+        },
+        {
+          "id": "tom_1774061772473_qyjlqd",
+          "category": "technical",
+          "key": "error_handling",
+          "value": "explicit",
+          "strength": 0.7,
+          "observedCount": 1,
+          "lastObserved": 1774061772473
+        },
+        {
+          "id": "tom_1774061772473_v1xffk",
+          "category": "interaction",
+          "key": "confirmation",
+          "value": "minimal",
+          "strength": 0.75,
+          "observedCount": 1,
+          "lastObserved": 1774061772473
+        }
+      ],
+      "communicationStyle": "brief",
+      "lastInteraction": 1774061772473,
+      "interactionCount": 0,
+      "modelConfidence": 0.5,
+      "lastUpdated": 1774061772473
+    }
+  ],
+  "_id": "singleton",
+  "_updatedAt": "2026-03-21T02:56:17.475Z",
+  "_createdAt": "2026-03-21T02:56:17.476Z"
+}
