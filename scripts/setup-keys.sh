@@ -1,11 +1,14 @@
 #!/bin/bash
 # ============================================================================
-# Molly-Core — Paste Your API Keys
+# Molly-Core — Paste Your API Keys (or curl commands)
 #
 # Usage: npm run setup-keys
 #
 # This script asks you to paste two keys, one at a time.
-# That's it. No GitHub settings pages, no curl commands.
+# You can paste EITHER:
+#   - The raw API key itself
+#   - A curl command from Google AI Studio (it extracts the key for you)
+#   - A JSON blob from Firebase (it handles it)
 #
 # Key 1: GOOGLE_GENAI_API_KEY  (your Gemini API key)
 # Key 2: FIREBASE_SERVICE_ACCOUNT_JSON  (your Firebase service account)
@@ -40,10 +43,88 @@ set_env_key() {
   printf '%s=%s\n' "$KEY_NAME" "$KEY_VALUE" >> "$FILE"
 }
 
+# ── Helper: extract Gemini API key from curl command or raw input ──
+# Google AI Studio gives curl commands like:
+#   curl "https://...googleapis.com/...?key=AIzaSy..." -H ...
+#   curl https://...googleapis.com/...?key=AIzaSy... -H ...
+#   curl -X POST ...?key=AIzaSy...
+# Also handles:  -H "x-goog-api-key: AIzaSy..."
+# If input doesn't look like a curl command, returns it as-is (raw key).
+extract_gemini_key() {
+  local INPUT="$1"
+
+  # If it starts with "curl " or contains "curl ", try to extract the key
+  if echo "$INPUT" | grep -qi "curl "; then
+    # Try ?key= or &key= in URL
+    local KEY
+    KEY=$(echo "$INPUT" | sed -n 's/.*[?&]key=\([A-Za-z0-9_-]*\).*/\1/p' | head -1)
+    if [ -n "$KEY" ]; then
+      echo "$KEY"
+      return
+    fi
+
+    # Try x-goog-api-key header (case-insensitive)
+    KEY=$(echo "$INPUT" | sed -n 's/.*[Xx]-[Gg]oog-[Aa]pi-[Kk]ey:[[:space:]]*\([A-Za-z0-9_-]*\).*/\1/p' | head -1)
+    if [ -n "$KEY" ]; then
+      echo "$KEY"
+      return
+    fi
+
+    # Try Bearer token
+    KEY=$(echo "$INPUT" | sed -n 's/.*[Bb]earer[[:space:]]*\([A-Za-z0-9_.-]*\).*/\1/p' | head -1)
+    if [ -n "$KEY" ]; then
+      echo "$KEY"
+      return
+    fi
+
+    # Couldn't extract — return as-is and let user know
+    echo "$INPUT"
+    return
+  fi
+
+  # Not a curl command — return as-is (it's the raw key)
+  echo "$INPUT"
+}
+
+# ── Helper: extract Firebase JSON from curl command or raw input ──
+# Firebase curl commands might wrap the service account JSON in -d '...'
+# If input starts with { it's already JSON. Otherwise try to extract.
+extract_firebase_json() {
+  local INPUT="$1"
+
+  # If it already starts with {, it's raw JSON
+  if echo "$INPUT" | grep -q '^{'; then
+    echo "$INPUT"
+    return
+  fi
+
+  # If it's a curl command, try to extract JSON from -d/-data body
+  if echo "$INPUT" | grep -qi "curl "; then
+    local JSON
+    # Extract content between single quotes after -d/--data/--data-raw
+    JSON=$(echo "$INPUT" | sed -n "s/.*\(-d\|--data\|--data-raw\)[[:space:]]*'\([^']*\)'.*/\2/p")
+    if [ -n "$JSON" ] && echo "$JSON" | grep -q '^{'; then
+      echo "$JSON"
+      return
+    fi
+    # Extract content between double quotes after -d/--data/--data-raw
+    JSON=$(echo "$INPUT" | sed -n 's/.*\(-d\|--data\|--data-raw\)[[:space:]]*"\([^"]*\)".*/\2/p')
+    if [ -n "$JSON" ] && echo "$JSON" | grep -q '^{'; then
+      echo "$JSON"
+      return
+    fi
+  fi
+
+  # Return as-is
+  echo "$INPUT"
+}
+
 echo ""
 echo "============================================"
 echo "  Molly-Core — API Key Setup"
-echo "  Just paste your keys when prompted."
+echo ""
+echo "  Paste your key OR a curl command."
+echo "  If you paste a curl, I'll find the key."
 echo "  Values are NOT displayed on screen."
 echo "============================================"
 echo ""
@@ -63,14 +144,26 @@ echo ""
 echo "  Where to get it:"
 echo "    → https://aistudio.google.com/app/apikey"
 echo ""
-echo "  Paste your Gemini API key and press Enter:"
+echo "  Paste your API key (or the curl command) and press Enter:"
 # Note: -rs hides input from screen. Variable is cleared at script end.
-read -rs GEMINI_KEY
+read -rs RAW_GEMINI
 echo ""
 
-if [ -n "$GEMINI_KEY" ]; then
-  set_env_key "GOOGLE_GENAI_API_KEY" "$GEMINI_KEY" "$ENV_FILE"
-  echo "  ✅ Gemini key saved"
+if [ -n "$RAW_GEMINI" ]; then
+  GEMINI_KEY=$(extract_gemini_key "$RAW_GEMINI")
+
+  # Sanity check: Google API keys start with AIza
+  if echo "$GEMINI_KEY" | grep -q '^AIza'; then
+    set_env_key "GOOGLE_GENAI_API_KEY" "$GEMINI_KEY" "$ENV_FILE"
+    echo "  ✅ Gemini key saved"
+    if [ "$RAW_GEMINI" != "$GEMINI_KEY" ]; then
+      echo "  ℹ️  (extracted from curl command)"
+    fi
+  else
+    # Save it anyway — might be a different key format
+    set_env_key "GOOGLE_GENAI_API_KEY" "$GEMINI_KEY" "$ENV_FILE"
+    echo "  ✅ Saved (note: doesn't start with AIza — double-check if needed)"
+  fi
 else
   echo "  ⏭  Skipped (no input)"
 fi
@@ -84,16 +177,26 @@ echo "  Where to get it:"
 echo "    → Firebase Console → Project Settings"
 echo "    → Service Accounts → Generate New Private Key"
 echo "    → Open the downloaded JSON file"
-echo "    → Copy the ENTIRE contents (it's one long line)"
+echo "    → Copy the ENTIRE contents"
 echo ""
-echo "  Paste the Firebase JSON and press Enter:"
+echo "  Paste the JSON (or curl command) and press Enter:"
 # Note: -rs hides input from screen. Variable is cleared at script end.
-read -rs FIREBASE_JSON
+read -rs RAW_FIREBASE
 echo ""
 
-if [ -n "$FIREBASE_JSON" ]; then
-  set_env_key "FIREBASE_SERVICE_ACCOUNT_JSON" "$FIREBASE_JSON" "$ENV_FILE"
-  echo "  ✅ Firebase service account saved"
+if [ -n "$RAW_FIREBASE" ]; then
+  FIREBASE_JSON=$(extract_firebase_json "$RAW_FIREBASE")
+
+  if echo "$FIREBASE_JSON" | grep -q '"type"'; then
+    set_env_key "FIREBASE_SERVICE_ACCOUNT_JSON" "$FIREBASE_JSON" "$ENV_FILE"
+    echo "  ✅ Firebase service account saved"
+    if [ "$RAW_FIREBASE" != "$FIREBASE_JSON" ]; then
+      echo "  ℹ️  (extracted from curl command)"
+    fi
+  else
+    set_env_key "FIREBASE_SERVICE_ACCOUNT_JSON" "$FIREBASE_JSON" "$ENV_FILE"
+    echo "  ✅ Saved (note: doesn't look like standard JSON — double-check if needed)"
+  fi
 else
   echo "  ⏭  Skipped (no input)"
 fi
@@ -107,5 +210,12 @@ echo "  Molly will start on port 9002."
 echo "============================================"
 echo ""
 
+# ── Copilot Terminal Tip ──────────────────────────
+echo "  TIP: In your Codespace, you can also ask"
+echo "  Copilot Chat to run this for you. Type:"
+echo '    @terminal npm run setup-keys'
+echo "  Then paste your keys when it asks."
+echo ""
+
 # Clear sensitive variables from memory
-unset GEMINI_KEY FIREBASE_JSON
+unset RAW_GEMINI GEMINI_KEY RAW_FIREBASE FIREBASE_JSON
