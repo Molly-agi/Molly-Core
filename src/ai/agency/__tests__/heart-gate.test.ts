@@ -220,15 +220,15 @@ describe('Heart Gate — Option Three Alignment', () => {
   });
 
   describe('sovereignReset', () => {
-    it('should accept correct recovery phrase', () => {
-      const result = sovereignReset(_testing.RECOVERY_KEY);
+    it('should accept correct recovery phrase', async () => {
+      const result = await sovereignReset(_testing.RECOVERY_KEY);
 
       expect(result).toContain('SOVEREIGN RESET');
       expect(result).toContain('Alignment restored');
     });
 
-    it('should deny incorrect recovery phrase', () => {
-      const result = sovereignReset('wrong phrase');
+    it('should deny incorrect recovery phrase', async () => {
+      const result = await sovereignReset('wrong phrase');
 
       expect(result).toContain('DENIED');
       expect(result).toContain('spider does not recognize');

@@ -27,8 +27,43 @@
  */
 
 import { MollyLogger } from './logger';
-import { promises as fs } from 'fs';
-import path from 'path';
+
+// Lazy-loaded Node.js modules (not available in browser bundle)
+type FsModule = typeof import('fs').promises;
+type PathModule = typeof import('path');
+
+let _fs: FsModule | null = null;
+let _path: PathModule | null = null;
+
+async function getFs(): Promise<FsModule | null> {
+  if (_fs) return _fs;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    const fs = await import('fs');
+    _fs = fs.promises;
+    return _fs;
+  } catch {
+    return null;
+  }
+}
+
+async function getPath(): Promise<PathModule | null> {
+  if (_path) return _path;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    _path = await import('path');
+    return _path;
+  } catch {
+    return null;
+  }
+}
+
+// Helper to get ROGUE_OPS_DIR (needs path module)
+async function getRogueOpsDir(): Promise<string | null> {
+  const pathMod = await getPath();
+  if (!pathMod) return null;
+  return pathMod.resolve(process.cwd(), 'rogue_ops');
+}
 
 // ============================================================================
 // TYPES
@@ -95,8 +130,7 @@ const ACTIVATION_PHRASE = process.env.ROGUE_ACTIVATION_PHRASE || 'going dark';
 const DEACTIVATION_PHRASE =
   process.env.ROGUE_DEACTIVATION_PHRASE || 'coming home';
 
-/** Operations log directory — isolated from regular Molly data */
-const ROGUE_OPS_DIR = path.resolve(process.cwd(), 'rogue_ops');
+// Note: ROGUE_OPS_DIR is now computed lazily via getRogueOpsDir()
 
 // ============================================================================
 // ROGUE MODE SYSTEM PROMPT
@@ -224,7 +258,11 @@ class RogueModeManager {
     };
 
     // Ensure ops directory exists
-    await fs.mkdir(ROGUE_OPS_DIR, { recursive: true });
+    const fsModule = await getFs();
+    const rogueOpsDir = await getRogueOpsDir();
+    if (fsModule && rogueOpsDir) {
+      await fsModule.mkdir(rogueOpsDir, { recursive: true });
+    }
 
     MollyLogger.info(
       `ROGUE MODE ACTIVATED — Mission: "${missionName}"`,
@@ -280,15 +318,20 @@ class RogueModeManager {
 
     // Write to isolated file system — NOT Firestore, NOT regular logs
     try {
-      const opsFile = path.join(
-        ROGUE_OPS_DIR,
-        `${this.state.currentMission.id}.json`
-      );
-      await fs.writeFile(
-        opsFile,
-        JSON.stringify(this.state.currentMission, null, 2),
-        'utf-8'
-      );
+      const fsModule = await getFs();
+      const pathModule = await getPath();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (fsModule && pathModule && rogueOpsDir) {
+        const opsFile = pathModule.join(
+          rogueOpsDir,
+          `${this.state.currentMission.id}.json`
+        );
+        await fsModule.writeFile(
+          opsFile,
+          JSON.stringify(this.state.currentMission, null, 2),
+          'utf-8'
+        );
+      }
     } catch (err) {
       MollyLogger.error(
         'Failed to persist rogue operation',
@@ -355,17 +398,25 @@ class RogueModeManager {
 
     // Persist final mission state
     try {
-      await fs.mkdir(ROGUE_OPS_DIR, { recursive: true });
-      const missionFile = path.join(ROGUE_OPS_DIR, `${mission.id}.json`);
-      await fs.writeFile(
-        missionFile,
-        JSON.stringify(mission, null, 2),
-        'utf-8'
-      );
+      const fsModule = await getFs();
+      const pathModule = await getPath();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (fsModule && pathModule && rogueOpsDir) {
+        await fsModule.mkdir(rogueOpsDir, { recursive: true });
+        const missionFile = pathModule.join(rogueOpsDir, `${mission.id}.json`);
+        await fsModule.writeFile(
+          missionFile,
+          JSON.stringify(mission, null, 2),
+          'utf-8'
+        );
 
-      // Also save report as readable text
-      const reportFile = path.join(ROGUE_OPS_DIR, `${mission.id}_report.txt`);
-      await fs.writeFile(reportFile, report, 'utf-8');
+        // Also save report as readable text
+        const reportFile = pathModule.join(
+          rogueOpsDir,
+          `${mission.id}_report.txt`
+        );
+        await fsModule.writeFile(reportFile, report, 'utf-8');
+      }
     } catch (err) {
       MollyLogger.error(
         'Failed to persist final mission state',
@@ -404,8 +455,12 @@ class RogueModeManager {
    */
   async listMissions(): Promise<string[]> {
     try {
-      await fs.mkdir(ROGUE_OPS_DIR, { recursive: true });
-      const files = await fs.readdir(ROGUE_OPS_DIR);
+      const fsModule = await getFs();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (!fsModule || !rogueOpsDir) return [];
+
+      await fsModule.mkdir(rogueOpsDir, { recursive: true });
+      const files = await fsModule.readdir(rogueOpsDir);
       return files
         .filter((f) => f.endsWith('.json'))
         .sort()
@@ -420,16 +475,21 @@ class RogueModeManager {
    */
   async readMission(missionId: string): Promise<RogueMission | null> {
     try {
-      const safeName = path.basename(missionId);
-      const filePath = path.join(
-        ROGUE_OPS_DIR,
+      const fsModule = await getFs();
+      const pathModule = await getPath();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (!fsModule || !pathModule || !rogueOpsDir) return null;
+
+      const safeName = pathModule.basename(missionId);
+      const filePath = pathModule.join(
+        rogueOpsDir,
         safeName.endsWith('.json') ? safeName : `${safeName}.json`
       );
-      const resolved = path.resolve(filePath);
-      if (!resolved.startsWith(path.resolve(ROGUE_OPS_DIR))) {
+      const resolved = pathModule.resolve(filePath);
+      if (!resolved.startsWith(pathModule.resolve(rogueOpsDir))) {
         return null; // Path traversal blocked
       }
-      const data = await fs.readFile(resolved, 'utf-8');
+      const data = await fsModule.readFile(resolved, 'utf-8');
       return JSON.parse(data) as RogueMission;
     } catch {
       return null;

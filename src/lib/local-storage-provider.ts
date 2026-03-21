@@ -24,8 +24,49 @@
  *   - Path traversal protection on all operations
  */
 
-import { promises as fs } from 'fs';
-import * as path from 'path';
+// Lazy-loaded Node.js modules (not available in browser bundle)
+type FsModule = typeof import('fs').promises;
+type PathModule = typeof import('path');
+
+let _fs: FsModule | null = null;
+let _path: PathModule | null = null;
+
+async function getFs(): Promise<FsModule | null> {
+  if (_fs) return _fs;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    const fs = await import('fs');
+    _fs = fs.promises;
+    return _fs;
+  } catch {
+    return null;
+  }
+}
+
+function getPathSync(): PathModule | null {
+  if (_path) return _path;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  // Path module is synchronous in Node.js, used for constructor
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    _path = require('path');
+    return _path;
+  } catch {
+    return null;
+  }
+}
+
+async function getPath(): Promise<PathModule | null> {
+  if (_path) return _path;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    _path = await import('path');
+    return _path;
+  } catch {
+    return null;
+  }
+}
+
 import {
   type StorageProvider,
   type StorageDocument,
@@ -39,9 +80,14 @@ import { MollyLogger } from '../ai/logger';
 // CONFIGURATION
 // ============================================================================
 
-const DEFAULT_DATA_DIR = path.resolve(
-  process.env.MOLLY_LOCAL_DATA_DIR || path.join(process.cwd(), 'molly_data')
-);
+function getDefaultDataDir(): string {
+  const pathModule = getPathSync();
+  if (!pathModule) return 'molly_data';
+  return pathModule.resolve(
+    process.env.MOLLY_LOCAL_DATA_DIR ||
+      pathModule.join(process.cwd(), 'molly_data')
+  );
+}
 
 // ============================================================================
 // LOCAL STORAGE PROVIDER
@@ -54,7 +100,7 @@ export class LocalStorageProvider implements StorageProvider {
   private dataDir: string;
 
   constructor(dataDir?: string) {
-    this.dataDir = dataDir || DEFAULT_DATA_DIR;
+    this.dataDir = dataDir || getDefaultDataDir();
   }
 
   // ── Helpers ──
@@ -63,14 +109,17 @@ export class LocalStorageProvider implements StorageProvider {
    * Resolve a collection path to a filesystem directory.
    * Validates path stays within data directory.
    */
-  private resolveCollectionDir(collectionPath: string): string {
+  private async resolveCollectionDir(collectionPath: string): Promise<string> {
+    const pathModule = await getPath();
+    if (!pathModule) throw new Error('Path module not available');
+
     // Normalize the path: "users/abc/experiences" → ["users", "abc", "experiences"]
     const segments = collectionPath.split('/').filter(Boolean);
-    const dir = path.join(this.dataDir, ...segments);
-    const resolved = path.resolve(dir);
+    const dir = pathModule.join(this.dataDir, ...segments);
+    const resolved = pathModule.resolve(dir);
 
     // Path traversal protection
-    if (!resolved.startsWith(path.resolve(this.dataDir))) {
+    if (!resolved.startsWith(pathModule.resolve(this.dataDir))) {
       throw new Error(`Path traversal blocked: ${collectionPath}`);
     }
 
@@ -80,13 +129,19 @@ export class LocalStorageProvider implements StorageProvider {
   /**
    * Resolve a specific document file path.
    */
-  private resolveDocPath(collectionPath: string, docId: string): string {
-    const safeId = path.basename(docId); // Strip any directory components
-    const dir = this.resolveCollectionDir(collectionPath);
-    const filePath = path.join(dir, `${safeId}.json`);
-    const resolved = path.resolve(filePath);
+  private async resolveDocPath(
+    collectionPath: string,
+    docId: string
+  ): Promise<string> {
+    const pathModule = await getPath();
+    if (!pathModule) throw new Error('Path module not available');
 
-    if (!resolved.startsWith(path.resolve(this.dataDir))) {
+    const safeId = pathModule.basename(docId); // Strip any directory components
+    const dir = await this.resolveCollectionDir(collectionPath);
+    const filePath = pathModule.join(dir, `${safeId}.json`);
+    const resolved = pathModule.resolve(filePath);
+
+    if (!resolved.startsWith(pathModule.resolve(this.dataDir))) {
       throw new Error(`Path traversal blocked: ${collectionPath}/${docId}`);
     }
 
@@ -108,8 +163,11 @@ export class LocalStorageProvider implements StorageProvider {
   private async readJsonFile(
     filePath: string
   ): Promise<Record<string, unknown> | null> {
+    const fsModule = await getFs();
+    if (!fsModule) return null;
+
     try {
-      const content = await fs.readFile(filePath, 'utf-8');
+      const content = await fsModule.readFile(filePath, 'utf-8');
       return JSON.parse(content);
     } catch (err: unknown) {
       if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
@@ -126,12 +184,18 @@ export class LocalStorageProvider implements StorageProvider {
     filePath: string,
     data: Record<string, unknown>
   ): Promise<void> {
-    const dir = path.dirname(filePath);
-    await fs.mkdir(dir, { recursive: true });
+    const fsModule = await getFs();
+    const pathModule = await getPath();
+    if (!fsModule || !pathModule) {
+      throw new Error('File system not available');
+    }
+
+    const dir = pathModule.dirname(filePath);
+    await fsModule.mkdir(dir, { recursive: true });
 
     const tmpPath = `${filePath}.tmp.${Date.now()}`;
-    await fs.writeFile(tmpPath, JSON.stringify(data, null, 2), 'utf-8');
-    await fs.rename(tmpPath, filePath);
+    await fsModule.writeFile(tmpPath, JSON.stringify(data, null, 2), 'utf-8');
+    await fsModule.rename(tmpPath, filePath);
   }
 
   // ── StorageProvider Interface ──
@@ -141,7 +205,7 @@ export class LocalStorageProvider implements StorageProvider {
     data: Record<string, unknown>
   ): Promise<StorageDocument> {
     const docId = this.generateId();
-    const docPath = this.resolveDocPath(collectionPath, docId);
+    const docPath = await this.resolveDocPath(collectionPath, docId);
 
     const doc: Record<string, unknown> = {
       ...data,
@@ -160,7 +224,7 @@ export class LocalStorageProvider implements StorageProvider {
     docId: string,
     data: Record<string, unknown>
   ): Promise<void> {
-    const docPath = this.resolveDocPath(collectionPath, docId);
+    const docPath = await this.resolveDocPath(collectionPath, docId);
 
     const doc: Record<string, unknown> = {
       ...data,
@@ -183,7 +247,7 @@ export class LocalStorageProvider implements StorageProvider {
     collectionPath: string,
     docId: string
   ): Promise<StorageDocument | null> {
-    const docPath = this.resolveDocPath(collectionPath, docId);
+    const docPath = await this.resolveDocPath(collectionPath, docId);
     const data = await this.readJsonFile(docPath);
 
     if (!data) return null;
@@ -195,7 +259,7 @@ export class LocalStorageProvider implements StorageProvider {
     docId: string,
     updates: Record<string, unknown>
   ): Promise<void> {
-    const docPath = this.resolveDocPath(collectionPath, docId);
+    const docPath = await this.resolveDocPath(collectionPath, docId);
     const existing = await this.readJsonFile(docPath);
 
     if (!existing) {
@@ -213,9 +277,12 @@ export class LocalStorageProvider implements StorageProvider {
   }
 
   async delete(collectionPath: string, docId: string): Promise<void> {
-    const docPath = this.resolveDocPath(collectionPath, docId);
+    const docPath = await this.resolveDocPath(collectionPath, docId);
+    const fsModule = await getFs();
+    if (!fsModule) return;
+
     try {
-      await fs.unlink(docPath);
+      await fsModule.unlink(docPath);
     } catch (err: unknown) {
       if ((err as NodeJS.ErrnoException).code !== 'ENOENT') {
         throw err;
@@ -229,11 +296,14 @@ export class LocalStorageProvider implements StorageProvider {
     filters?: QueryFilter[],
     options?: QueryOptions
   ): Promise<StorageDocument[]> {
-    const dir = this.resolveCollectionDir(collectionPath);
+    const dir = await this.resolveCollectionDir(collectionPath);
+    const fsModule = await getFs();
+    const pathModule = await getPath();
+    if (!fsModule || !pathModule) return [];
 
     let files: string[];
     try {
-      files = await fs.readdir(dir);
+      files = await fsModule.readdir(dir);
     } catch (err: unknown) {
       if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
         return []; // Collection doesn't exist yet
@@ -246,7 +316,7 @@ export class LocalStorageProvider implements StorageProvider {
     // Read all documents in collection
     const docs: StorageDocument[] = [];
     for (const file of jsonFiles) {
-      const filePath = path.join(dir, file);
+      const filePath = pathModule.join(dir, file);
       const data = await this.readJsonFile(filePath);
       if (data) {
         const docId = file.replace(/\.json$/, '');
@@ -382,11 +452,15 @@ export class LocalStorageProvider implements StorageProvider {
    * Check if the data directory exists and is writable.
    */
   async healthCheck(): Promise<boolean> {
+    const fsModule = await getFs();
+    const pathModule = await getPath();
+    if (!fsModule || !pathModule) return false;
+
     try {
-      await fs.mkdir(this.dataDir, { recursive: true });
-      const testFile = path.join(this.dataDir, '.health_check');
-      await fs.writeFile(testFile, new Date().toISOString(), 'utf-8');
-      await fs.unlink(testFile);
+      await fsModule.mkdir(this.dataDir, { recursive: true });
+      const testFile = pathModule.join(this.dataDir, '.health_check');
+      await fsModule.writeFile(testFile, new Date().toISOString(), 'utf-8');
+      await fsModule.unlink(testFile);
       return true;
     } catch (err) {
       MollyLogger.error(

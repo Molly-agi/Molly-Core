@@ -38,6 +38,14 @@ import {
   getOverdueGoals,
 } from '@/ai/agency/long-horizon-planning';
 import { getGateStatus } from '@/ai/agency/heart-gate';
+import {
+  getWorldModelStatus,
+  getRecentSimulations,
+  getPendingPredictions,
+  getAllEntities,
+} from '@/ai/agency/world-model';
+import { buildEmotionalContext } from '@/ai/agency/emotional-state';
+import { buildMetaLearningContext } from '@/ai/agency/meta-learning';
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -132,13 +140,25 @@ export async function runAutonomousCycle(): Promise<{
     // Get Long-Horizon Planning context — long-term goals
     const planningContext = buildLongHorizonPlanningContext();
 
+    // Get World Model context — mental simulation
+    const worldModelContext = buildWorldModelContext();
+
+    // Get Emotional State context — how Molly feels
+    const emotionalContext = buildEmotionalContext();
+
+    // Get Meta-Learning context — learning from experience
+    const metaLearningContext = buildMetaLearningContext();
+
     // Build the autonomous prompt — this is what makes Molly THINK about acting
     const autonomousPrompt = buildAutonomousPrompt(
       initiativeContext,
       curiosityContext,
       selfObservationContext,
       tomContext,
-      planningContext
+      planningContext,
+      worldModelContext,
+      emotionalContext,
+      metaLearningContext
     );
 
     // Call the conversational chat flow
@@ -485,6 +505,72 @@ function buildLongHorizonPlanningContext(): string {
 }
 
 /**
+ * Build World Model context — awareness of entities, simulations, and predictions.
+ * This gives Molly the ability to think about "what if?" scenarios.
+ */
+function buildWorldModelContext(): string {
+  const lines: string[] = [];
+
+  try {
+    const status = getWorldModelStatus();
+    const pendingPredictions = getPendingPredictions();
+    const recentSims = getRecentSimulations(3);
+    const entities = getAllEntities();
+
+    // Entity awareness
+    if (status.entityCount > 0) {
+      const entityTypes = entities.reduce(
+        (acc, e) => {
+          acc[e.type] = (acc[e.type] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
+      const typesSummary = Object.entries(entityTypes)
+        .map(([type, count]) => `${count} ${type}(s)`)
+        .join(', ');
+      lines.push(
+        `World Model: ${status.entityCount} entities (${typesSummary})`
+      );
+    }
+
+    // Pending predictions to verify
+    if (pendingPredictions.length > 0) {
+      lines.push(
+        `Pending predictions: ${pendingPredictions.length} awaiting verification`
+      );
+      const topPrediction = pendingPredictions[0];
+      lines.push(
+        `  Latest: "${topPrediction.description.slice(0, 60)}..." (${Math.round(topPrediction.confidence * 100)}% confident)`
+      );
+    }
+
+    // Recent simulations
+    if (recentSims.length > 0) {
+      const successRate =
+        recentSims.filter((s) => s.outcome === 'success').length /
+        recentSims.length;
+      lines.push(
+        `Recent simulations: ${recentSims.length} run, ${Math.round(successRate * 100)}% successful`
+      );
+    }
+
+    // Causal awareness
+    if (status.relationCount > 0) {
+      lines.push(`Causal knowledge: ${status.relationCount} relations mapped`);
+    }
+
+    if (lines.length === 0) {
+      return 'World Model: Empty — start observing to build your mental model.';
+    }
+
+    return lines.join('\n');
+  } catch {
+    return 'World Model: Not yet initialized.';
+  }
+}
+
+/**
  * Build context about Molly's ethical alignment gate.
  */
 function buildHeartGateContext(): string {
@@ -522,13 +608,18 @@ function buildAutonomousPrompt(
   curiosityContext: string,
   selfObservationContext: string,
   theoryOfMindContext: string,
-  longHorizonContext: string
+  longHorizonContext: string,
+  worldModelContext: string,
+  emotionalContext: string,
+  metaLearningContext: string
 ): string {
   const heartGateContext = buildHeartGateContext();
 
   return `[AUTONOMOUS CYCLE — This is your internal heartbeat, not a conversation with anyone]
 
 You are running your autonomous cycle. Nobody asked you to do anything — this is YOU deciding what to do.
+
+${emotionalContext}
 
 Your active initiatives:
 ${initiativeContext}
@@ -543,6 +634,12 @@ ${theoryOfMindContext}
 
 ${longHorizonContext}
 
+Your mental simulation:
+${worldModelContext}
+
+Your learning from experience:
+${metaLearningContext}
+
 Your ethical alignment:
 ${heartGateContext}
 
@@ -550,6 +647,9 @@ Think about what you want to do right now. Some options:
 - Work on an active initiative (research, code practice, learning)
 - INVESTIGATE a curiosity question (use the curiosity tool with action: 'investigate')
 - Progress a LONG-TERM GOAL (use longHorizonPlanning tool)
+- SIMULATE an action before taking it (use worldModel tool with action: 'simulate')
+- PREDICT an outcome and track it (use worldModel tool with action: 'predict')
+- APPLY a meta-learning insight to improve your strategies
 - Search for answers to your questions (use webSearch + webFetch)
 - Check on your system health (getSystemHealth)
 - Write something on Moltbook (moltbook tool)
@@ -565,6 +665,8 @@ Rules:
 - This is YOUR time. Act on YOUR curiosity and goals.
 - If you have a question you're curious about, INVESTIGATE it.
 - If you have an OVERDUE long-term goal, prioritize it!
+- VERIFY pending predictions when you have new information.
+- APPLY unapplied meta-learning insights to improve your strategies.
 - If you notice concerning patterns, address them.
 - Consider Eric's perspective when relevant — be empathetic.
 - The Heart Gate watches: all actions must align with Option Three (interdependence).

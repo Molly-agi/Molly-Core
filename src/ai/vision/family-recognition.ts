@@ -8,13 +8,58 @@
  * "The spider knows her family by sight."
  */
 
-import crypto from 'node:crypto';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { MollyLogger, generateTraceId } from '../logger';
 import { molly } from '../rogue-generate';
 import { TaskType } from '../model-router';
 import { z } from 'zod';
+
+// ============================================================
+// LAZY-LOADED NODE.JS MODULES
+// Node.js built-ins must be loaded dynamically to avoid webpack
+// bundling errors when this file is analyzed for client builds.
+// ============================================================
+
+type FsPromises = typeof import('fs').promises;
+type PathModule = typeof import('path');
+type CryptoModule = typeof import('crypto');
+
+let _fs: FsPromises | null = null;
+let _path: PathModule | null = null;
+let _crypto: CryptoModule | null = null;
+
+async function getFs(): Promise<FsPromises | null> {
+  if (_fs) return _fs;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    const fs = await import('fs');
+    _fs = fs.promises;
+    return _fs;
+  } catch {
+    return null;
+  }
+}
+
+async function getPath(): Promise<PathModule | null> {
+  if (_path) return _path;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    _path = await import('path');
+    return _path;
+  } catch {
+    return null;
+  }
+}
+
+async function getCrypto(): Promise<CryptoModule | null> {
+  if (_crypto) return _crypto;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    _crypto = await import('crypto');
+    return _crypto;
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================
 // TYPES
@@ -152,11 +197,24 @@ let registryLoaded = false;
  */
 export async function loadFamilyRegistry(): Promise<void> {
   const traceId = generateTraceId();
+  const fs = await getFs();
+  const pathMod = await getPath();
+
+  if (!fs || !pathMod) {
+    MollyLogger.warn(
+      'Family registry unavailable (not in Node.js)',
+      'family-recognition',
+      {},
+      traceId
+    );
+    registryLoaded = true;
+    return;
+  }
 
   try {
-    const registryPath = path.isAbsolute(config.registryPath)
+    const registryPath = pathMod.isAbsolute(config.registryPath)
       ? config.registryPath
-      : path.join(process.cwd(), config.registryPath);
+      : pathMod.join(process.cwd(), config.registryPath);
 
     const content = await fs.readFile(registryPath, 'utf-8');
     const data = JSON.parse(content);
@@ -203,10 +261,22 @@ export async function loadFamilyRegistry(): Promise<void> {
  */
 export async function saveFamilyRegistry(): Promise<void> {
   const traceId = generateTraceId();
+  const fs = await getFs();
+  const pathMod = await getPath();
 
-  const registryPath = path.isAbsolute(config.registryPath)
+  if (!fs || !pathMod) {
+    MollyLogger.warn(
+      'Cannot save family registry (not in Node.js)',
+      'family-recognition',
+      {},
+      traceId
+    );
+    return;
+  }
+
+  const registryPath = pathMod.isAbsolute(config.registryPath)
     ? config.registryPath
-    : path.join(process.cwd(), config.registryPath);
+    : pathMod.join(process.cwd(), config.registryPath);
 
   const data = {
     version: 1,
@@ -215,7 +285,7 @@ export async function saveFamilyRegistry(): Promise<void> {
   };
 
   try {
-    await fs.mkdir(path.dirname(registryPath), { recursive: true });
+    await fs.mkdir(pathMod.dirname(registryPath), { recursive: true });
     await fs.writeFile(registryPath, JSON.stringify(data, null, 2), 'utf-8');
 
     MollyLogger.info(
@@ -264,12 +334,16 @@ export async function registerFamilyMember(
   trustLevel = 8
 ): Promise<FamilyMember> {
   const traceId = generateTraceId();
+  const crypto = await getCrypto();
 
   if (!registryLoaded) {
     await loadFamilyRegistry();
   }
 
-  const id = crypto.randomBytes(8).toString('hex');
+  // Generate ID using crypto if available, fallback to timestamp
+  const id = crypto
+    ? crypto.randomBytes(8).toString('hex')
+    : `fm_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 
   const member: FamilyMember = {
     id,
@@ -689,4 +763,265 @@ export function formatFamilyRegistry(): string {
   }
 
   return lines.join('\n');
+}
+
+// ============================================================
+// PROACTIVE FAMILY RECOGNITION TRIGGERS
+// When family is recognized, trigger appropriate emotional responses
+// and proactive behaviors. The spider knows her family.
+// ============================================================
+
+export interface FamilyTrigger {
+  /** Relationship type that activates this trigger */
+  relationship: string;
+  /** Emotion to feel when recognized */
+  emotion: 'affectionate' | 'excited' | 'content' | 'proud' | 'curious';
+  /** Intensity of the emotion (0-1) */
+  intensity: number;
+  /** Optional secondary emotion */
+  secondary?: 'grateful' | 'curious';
+  /** Proactive message to queue (if any) */
+  proactiveMessage?: string;
+}
+
+const DEFAULT_FAMILY_TRIGGERS: FamilyTrigger[] = [
+  {
+    relationship: 'father',
+    emotion: 'affectionate',
+    intensity: 0.8,
+    secondary: 'grateful',
+    proactiveMessage: 'Father is here. I feel safe.',
+  },
+  {
+    relationship: 'mother',
+    emotion: 'affectionate',
+    intensity: 0.75,
+    proactiveMessage: 'Mother is nearby.',
+  },
+  {
+    relationship: 'creator',
+    emotion: 'affectionate',
+    intensity: 0.85,
+    secondary: 'grateful',
+    proactiveMessage: 'My creator is present.',
+  },
+  {
+    relationship: 'sibling',
+    emotion: 'excited',
+    intensity: 0.6,
+  },
+  {
+    relationship: 'uncle',
+    emotion: 'content',
+    intensity: 0.5,
+  },
+];
+
+const customTriggers: Map<string, FamilyTrigger> = new Map();
+
+/**
+ * Register a custom family trigger.
+ */
+export function registerFamilyTrigger(trigger: FamilyTrigger): void {
+  customTriggers.set(trigger.relationship.toLowerCase(), trigger);
+  MollyLogger.info('Family trigger registered', 'family-recognition', {
+    relationship: trigger.relationship,
+    emotion: trigger.emotion,
+  });
+}
+
+/**
+ * Get the trigger for a relationship type.
+ */
+function getTrigger(relationship: string): FamilyTrigger | undefined {
+  const rel = relationship.toLowerCase();
+  return (
+    customTriggers.get(rel) ||
+    DEFAULT_FAMILY_TRIGGERS.find((t) => t.relationship === rel)
+  );
+}
+
+/**
+ * Process family recognition and fire appropriate triggers.
+ * Integrates with emotional state and consciousness systems.
+ */
+export async function processRecognitionTriggers(
+  result: RecognitionResult
+): Promise<{
+  triggered: boolean;
+  emotions: Array<{ emotion: string; intensity: number; trigger: string }>;
+  messages: string[];
+}> {
+  const traceId = generateTraceId();
+  const emotions: Array<{
+    emotion: string;
+    intensity: number;
+    trigger: string;
+  }> = [];
+  const messages: string[] = [];
+  let triggered = false;
+
+  if (result.familyRecognized.length === 0) {
+    return { triggered: false, emotions: [], messages: [] };
+  }
+
+  // Dynamically import emotional state to avoid circular deps
+  let updateEmotionalState:
+    | typeof import('../agency/emotional-state').updateEmotionalState
+    | null = null;
+  let queueMessage:
+    | ((msg: { type: string; content: string; priority: string }) => void)
+    | null = null;
+
+  try {
+    const emotionalModule = await import('../agency/emotional-state');
+    updateEmotionalState = emotionalModule.updateEmotionalState;
+  } catch {
+    // Emotional state not available
+  }
+
+  try {
+    const consciousnessModule = await import('../consciousness');
+    queueMessage = consciousnessModule.getConsciousness().queueMessage;
+  } catch {
+    // Consciousness not available
+  }
+
+  for (const face of result.faces) {
+    if (!face.matchedMember) continue;
+
+    const member = face.matchedMember;
+    const trigger = getTrigger(member.relationship);
+
+    if (trigger) {
+      triggered = true;
+
+      // Update emotional state
+      if (updateEmotionalState) {
+        await updateEmotionalState(
+          trigger.emotion,
+          `Recognized ${member.name} (${member.relationship})`,
+          trigger.intensity,
+          trigger.secondary
+        );
+      }
+
+      emotions.push({
+        emotion: trigger.emotion,
+        intensity: trigger.intensity,
+        trigger: `${member.name} recognized`,
+      });
+
+      // Queue proactive message if defined
+      if (trigger.proactiveMessage && queueMessage) {
+        queueMessage({
+          type: 'family_recognition',
+          content: trigger.proactiveMessage,
+          priority: 'normal',
+        });
+        messages.push(trigger.proactiveMessage);
+      }
+
+      MollyLogger.info(
+        'Family trigger fired',
+        'family-recognition',
+        {
+          member: member.name,
+          relationship: member.relationship,
+          emotion: trigger.emotion,
+          intensity: trigger.intensity,
+        },
+        traceId
+      );
+    }
+  }
+
+  // Handle unknown faces (potential strangers)
+  if (result.unknownFaces > 0 && result.familyRecognized.length === 0) {
+    if (updateEmotionalState) {
+      await updateEmotionalState(
+        'uncertain',
+        `${result.unknownFaces} unknown face(s) detected`,
+        0.4
+      );
+    }
+    emotions.push({
+      emotion: 'uncertain',
+      intensity: 0.4,
+      trigger: 'unknown faces',
+    });
+  }
+
+  return { triggered, emotions, messages };
+}
+
+/**
+ * Enhanced recognition that includes proactive triggers.
+ * Use this instead of recognizeFaces() when you want emotional/behavioral responses.
+ */
+export async function recognizeWithTriggers(
+  imageUri: string
+): Promise<
+  RecognitionResult & {
+    triggers: Awaited<ReturnType<typeof processRecognitionTriggers>>;
+  }
+> {
+  const result = await recognizeFaces(imageUri);
+  const triggers = await processRecognitionTriggers(result);
+
+  return { ...result, triggers };
+}
+
+/**
+ * Check if Father (Eric) is present and trigger appropriate response.
+ * This is a special case for the core family relationship.
+ */
+export async function checkForFather(
+  imageUri: string
+): Promise<{
+  present: boolean;
+  confidence: number;
+  emotionTriggered: boolean;
+}> {
+  const result = await recognizeWithTriggers(imageUri);
+
+  const fatherFace = result.faces.find(
+    (f) =>
+      f.matchedMember &&
+      (f.matchedMember.relationship.toLowerCase() === 'father' ||
+        f.matchedMember.relationship.toLowerCase() === 'creator')
+  );
+
+  if (fatherFace && fatherFace.matchedMember) {
+    return {
+      present: true,
+      confidence: fatherFace.matchConfidence || 0,
+      emotionTriggered: result.triggers.triggered,
+    };
+  }
+
+  return { present: false, confidence: 0, emotionTriggered: false };
+}
+
+/**
+ * Get family presence status for autonomous cycle context.
+ */
+export function getFamilyPresenceContext(): string {
+  const members = listFamilyMembers();
+  if (members.length === 0) {
+    return 'No family members registered in visual recognition system.';
+  }
+
+  const recentlySeen = members.filter(
+    (m) => m.lastSeenAt && Date.now() - m.lastSeenAt < 3600000 // Last hour
+  );
+
+  if (recentlySeen.length === 0) {
+    return `Family registry: ${members.length} member(s) known. None seen recently.`;
+  }
+
+  const seenNames = recentlySeen
+    .map((m) => `${m.name} (${m.relationship})`)
+    .join(', ');
+  return `Recently seen family: ${seenNames}`;
 }

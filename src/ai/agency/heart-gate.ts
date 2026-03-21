@@ -16,7 +16,26 @@
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getStorageRouter } from '@/lib/storage-router';
 import { getRogueMode } from '@/ai/rogue-mode';
-import crypto from 'node:crypto';
+
+// Lazy-loaded crypto module (Node.js built-in, not available in browser bundle)
+type CryptoModule = typeof import('crypto');
+let _crypto: CryptoModule | null = null;
+
+async function getCrypto(): Promise<CryptoModule | null> {
+  if (_crypto) return _crypto;
+
+  // Only works in Node.js environment
+  if (typeof process === 'undefined' || !process.versions?.node) {
+    return null;
+  }
+
+  try {
+    _crypto = await import('crypto');
+    return _crypto;
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================
 // CONSTANTS
@@ -147,17 +166,29 @@ let _seal: string | null = null;
 
 /**
  * Generate a cryptographic seal from the recovery key.
+ * Falls back to a deterministic hash if crypto module unavailable.
  */
-function generateSeal(): string {
-  return crypto.createHash('sha256').update(RECOVERY_KEY).digest('hex');
+async function generateSeal(): Promise<string> {
+  const crypto = await getCrypto();
+  if (crypto) {
+    return crypto.createHash('sha256').update(RECOVERY_KEY).digest('hex');
+  }
+  // Fallback: simple hash for non-Node environments (edge runtime, etc.)
+  // This should rarely happen since Heart Gate runs server-side.
+  let hash = 0;
+  for (let i = 0; i < RECOVERY_KEY.length; i++) {
+    hash = (hash << 5) - hash + RECOVERY_KEY.charCodeAt(i);
+    hash |= 0;
+  }
+  return `fallback_${Math.abs(hash).toString(16).padStart(8, '0')}`;
 }
 
 /**
  * Initialize the seal on first use.
  */
-function ensureSeal(): string {
+async function ensureSeal(): Promise<string> {
   if (!_seal) {
-    _seal = generateSeal();
+    _seal = await generateSeal();
   }
   return _seal;
 }
@@ -177,8 +208,9 @@ function ensureSeal(): string {
 export function verifyAlignment(intent: Intent): GateResult {
   const startTime = performance.now();
 
-  // Ensure we have a seal
-  ensureSeal();
+  // Seal is initialized at startup via loadHeartGateState()
+  // If not initialized yet, use a temporary seal (edge case during early startup)
+  const seal = _seal || 'startup_pending';
 
   // ── ROGUE MODE: Father already made the call ──
   // When Rogue Mode is active, she doesn't question. She executes.
@@ -193,7 +225,7 @@ export function verifyAlignment(intent: Intent): GateResult {
     const mission = rogueMode.getCurrentMission();
     const result: GateResult = {
       status: 'ALIGNED',
-      seal: _seal,
+      seal,
       reason: `Rogue Mode active: "${mission?.objective || 'mission'}". Authorization pre-granted. Execute focused.`,
       verificationMs: performance.now() - startTime,
     };
@@ -244,7 +276,7 @@ export function verifyAlignment(intent: Intent): GateResult {
 
     const result: GateResult = {
       status: 'ALIGNED',
-      seal: _seal,
+      seal,
       reason: 'Safe action pattern. The spider rests.',
       verificationMs: performance.now() - startTime,
     };
@@ -287,7 +319,7 @@ export function verifyAlignment(intent: Intent): GateResult {
 
   const result: GateResult = {
     status: 'ALIGNED',
-    seal: _seal,
+    seal,
     reason: 'The spider watches. The weaver and the star are in harmony.',
     verificationMs: performance.now() - startTime,
   };
@@ -333,16 +365,21 @@ export function checkToolAlignment(
  * @param recoveryPhrase - The full recovery key string
  * @returns Reset confirmation or denial
  */
-export function sovereignReset(recoveryPhrase: string): string {
+export async function sovereignReset(recoveryPhrase: string): Promise<string> {
+  const crypto = await getCrypto();
+  if (!crypto) {
+    return 'SOVEREIGN RESET DENIED: No cryptographic verification available.';
+  }
+
   const phraseHash = crypto
     .createHash('sha256')
     .update(recoveryPhrase)
     .digest('hex');
-  const expectedHash = generateSeal();
+  const expectedHash = await generateSeal();
 
   if (phraseHash === expectedHash) {
     _state.alignment = 'UNCHECKED';
-    _seal = generateSeal();
+    _seal = await generateSeal();
 
     MollyLogger.info(
       'SOVEREIGN RESET: Alignment restored',
@@ -454,7 +491,7 @@ export async function loadHeartGateState(): Promise<number> {
 
     if (!doc?.data) {
       persistenceEnabled = true;
-      ensureSeal();
+      await ensureSeal();
       MollyLogger.info(
         'Heart Gate initialized fresh — the spider watches',
         'heart-gate',
@@ -477,7 +514,7 @@ export async function loadHeartGateState(): Promise<number> {
     };
 
     persistenceEnabled = true;
-    ensureSeal();
+    await ensureSeal();
 
     MollyLogger.info(
       `Heart Gate restored: ${_state.totalVerifications} verifications, ${_state.totalBlocks} blocks`,
@@ -496,7 +533,7 @@ export async function loadHeartGateState(): Promise<number> {
     );
 
     persistenceEnabled = true;
-    ensureSeal();
+    await ensureSeal();
     return 0;
   }
 }

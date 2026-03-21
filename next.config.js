@@ -49,13 +49,33 @@ const nextConfig = {
   // Prevent hot-reload restarts when session state files are written to project root.
   // Without this, writing COPILOT_SESSION_STATE.md/.json triggers Next.js file
   // watcher which does a clean server restart — looks like a silent crash.
-  webpack: (config, { dev }) => {
+  webpack: (config, { isServer, dev }) => {
     if (dev) {
       config.watchOptions = {
         ...config.watchOptions,
         ignored: /COPILOT_SESSION_STATE|\.session-backups|AUTONOMOUS_STATUS/,
       };
     }
+
+    // Mark Node.js built-in modules as external for non-server builds
+    // This prevents "Module not found: Can't resolve 'fs'" errors when
+    // instrumentation.ts imports server-only modules that use fs/path/crypto
+    if (!isServer) {
+      config.resolve = config.resolve || {};
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+        child_process: false,
+        util: false,
+        net: false,
+        tls: false,
+        stream: false,
+        os: false,
+      };
+    }
+
     return config;
   },
   // Keep compiled pages in memory long enough for slow codespace compiles.

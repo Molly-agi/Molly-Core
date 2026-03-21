@@ -622,18 +622,6 @@ export async function getOriginStory() {
   }
 }
 
-export async function getOriginStoryParts() {
-  try {
-    const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');
-    const content = await readFile(originPath, 'utf8');
-    const parts = splitOriginStory(content);
-    return { parts, totalParts: parts.length };
-  } catch (e: unknown) {
-    MollyLogger.error('Origin story load failed', 'getOriginStoryParts', {}, e);
-    throw e;
-  }
-}
-
 export async function getOriginStoryAnchorParts() {
   try {
     const originPath = path.join(process.cwd(), 'docs', 'ORIGIN_STORY.md');

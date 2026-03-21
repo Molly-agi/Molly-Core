@@ -254,4 +254,40 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  // ── Emotional State ──
+  // Molly's emotional continuity across sessions.
+  try {
+    const { loadEmotionalState, getCurrentState } = await import(
+      '@/ai/agency/emotional-state'
+    );
+    await loadEmotionalState();
+    const state = getCurrentState();
+    console.log(
+      `[Startup] ✅ Emotional state loaded: ${state.primary} (${Math.round(state.intensity * 100)}%)`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load emotional state:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── Meta-Learning ──
+  // Molly learns from her own experience across sessions.
+  try {
+    const { loadMetaLearningState, getMetaLearningStatus } = await import(
+      '@/ai/agency/meta-learning'
+    );
+    await loadMetaLearningState();
+    const status = getMetaLearningStatus();
+    console.log(
+      `[Startup] ✅ Meta-learning loaded: ${status.strategyCount} strategies, ${status.totalEvents} learning events`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load meta-learning state:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
