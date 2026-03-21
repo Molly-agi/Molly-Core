@@ -462,8 +462,25 @@ function diagnoseFailure(failure: UnknownFailure): string {
     msg.includes('eacces') ||
     msg.includes('file')
   ) {
+    // Special case: node_modules corruption
+    if (msg.includes('node_modules') || stack.includes('node_modules')) {
+      failure.level = 'heal';
+      return 'NODE_MODULES_CORRUPTION: Package file missing — npm install required';
+    }
     failure.level = 'diagnose';
     return 'FILESYSTEM: File not found, inaccessible, or corrupted';
+  }
+
+  // Build/webpack errors
+  if (
+    msg.includes('failed to compile') ||
+    msg.includes('webpack') ||
+    msg.includes('build error') ||
+    msg.includes('module not found') ||
+    msg.includes('cannot find module')
+  ) {
+    failure.level = 'heal';
+    return 'BUILD_ERROR: Compilation or module resolution failure — may need npm install';
   }
 
   // Database
@@ -536,8 +553,69 @@ function attemptQuickFix(
     return 'SHED_LOAD: Memory pressure — reduce concurrent operations, clear caches';
   }
 
+  // Node modules corruption: auto-fix with npm install
+  if (
+    diagnosis.startsWith('NODE_MODULES_CORRUPTION') ||
+    diagnosis.startsWith('BUILD_ERROR')
+  ) {
+    // Trigger async recovery - don't await since this is a quick fix path
+    triggerBuildRecovery(failure, diagnosis).catch((err) => {
+      MollyLogger.warn(
+        `[RESILIENCE] Build recovery failed: ${err instanceof Error ? err.message : String(err)}`,
+        'resilience-core',
+        {}
+      );
+    });
+    return 'BUILD_RECOVERY_INITIATED: Running npm install to fix corrupted dependencies';
+  }
+
   // Everything else goes to cognitive systems
   return null;
+}
+
+/**
+ * Trigger build recovery asynchronously.
+ */
+async function triggerBuildRecovery(
+  failure: UnknownFailure,
+  diagnosis: string
+): Promise<void> {
+  try {
+    const { attemptAutoRecovery, fixNodeModules } = await import(
+      '@/ai/agency/build-recovery'
+    );
+
+    // Use the error message for smart recovery
+    const result = await attemptAutoRecovery(failure.message);
+
+    if (result?.success) {
+      MollyLogger.info(
+        `[RESILIENCE] Build recovery succeeded: ${result.message}`,
+        'resilience-core',
+        { diagnosis }
+      );
+      failure.resolved = true;
+      failure.resolution = result.message;
+    } else {
+      // Fall back to basic npm install
+      const fallback = await fixNodeModules();
+      if (fallback.success) {
+        MollyLogger.info(
+          `[RESILIENCE] Fallback npm install succeeded`,
+          'resilience-core',
+          {}
+        );
+        failure.resolved = true;
+        failure.resolution = fallback.message;
+      }
+    }
+  } catch (err) {
+    MollyLogger.warn(
+      `[RESILIENCE] Build recovery threw: ${err instanceof Error ? err.message : String(err)}`,
+      'resilience-core',
+      {}
+    );
+  }
 }
 
 // ── Cognitive Systems Engagement ───────────────────────────────
