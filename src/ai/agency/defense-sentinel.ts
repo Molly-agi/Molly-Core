@@ -13,12 +13,52 @@
  *
  * All operations require Rogue Mode authorization or explicit scope.
  * Methodology: We fix the dam, not the leaks.
+ *
+ * Types are defined in ./sentinel/types.ts for reusability.
  */
 
 // child_process is imported dynamically to avoid bundler issues
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getRogueMode } from '@/ai/rogue-mode';
 import { getStorageRouter } from '@/lib/storage-router';
+
+// Re-export types from sentinel module for backward compatibility
+export type {
+  ScanType,
+  ThreatLevel,
+  ScanTarget,
+  ScanResult,
+  PortInfo,
+  ServiceInfo,
+  VulnInfo,
+  ThreatIndicator,
+  ToolAvailability,
+  HashInfo,
+  CodeLanguage,
+  CodePurpose,
+  CodeForgeRequest,
+  CodeForgeResult,
+  SentinelStatus,
+} from './sentinel/types';
+
+import type {
+  ScanType,
+  ThreatLevel,
+  ScanTarget,
+  ScanResult,
+  PortInfo,
+  ServiceInfo,
+  VulnInfo,
+  ThreatIndicator,
+  SentinelState,
+  ToolAvailability,
+  HashInfo,
+  CodeLanguage,
+  CodePurpose,
+  CodeForgeRequest,
+  CodeForgeResult,
+  SentinelStatus,
+} from './sentinel/types';
 
 // Lazy-loaded exec function
 type ExecAsyncFn = (
@@ -43,86 +83,6 @@ async function getExecAsync(): Promise<ExecAsyncFn | null> {
   } catch {
     return null;
   }
-}
-
-// ============================================================
-// TYPES
-// ============================================================
-
-export type ScanType =
-  | 'quick' // Fast port scan
-  | 'full' // All ports
-  | 'stealth' // SYN scan, less detectable
-  | 'service' // Service/version detection
-  | 'vuln' // Vulnerability scripts
-  | 'aggressive'; // Full enumeration
-
-export type ThreatLevel = 'critical' | 'high' | 'medium' | 'low' | 'info';
-
-export interface ScanTarget {
-  host: string;
-  ports?: string; // e.g., "22,80,443" or "1-1000"
-  authorized: boolean;
-  scope?: string; // Authorization scope description
-}
-
-export interface ScanResult {
-  target: string;
-  scanType: ScanType;
-  startTime: number;
-  endTime: number;
-  openPorts: PortInfo[];
-  services: ServiceInfo[];
-  vulnerabilities: VulnInfo[];
-  rawOutput: string;
-  success: boolean;
-  error?: string;
-}
-
-export interface PortInfo {
-  port: number;
-  protocol: 'tcp' | 'udp';
-  state: 'open' | 'closed' | 'filtered';
-  service?: string;
-}
-
-export interface ServiceInfo {
-  port: number;
-  service: string;
-  version?: string;
-  banner?: string;
-}
-
-export interface VulnInfo {
-  id: string; // CVE or vuln ID
-  title: string;
-  severity: ThreatLevel;
-  port?: number;
-  description: string;
-  exploitable: boolean;
-}
-
-export interface ThreatIndicator {
-  type: 'port_scan' | 'brute_force' | 'malware' | 'exfiltration' | 'anomaly';
-  severity: ThreatLevel;
-  source: string;
-  target?: string;
-  timestamp: number;
-  details: string;
-  mitigated: boolean;
-}
-
-interface SentinelState {
-  scansCompleted: number;
-  threatsDetected: number;
-  lastScan: number;
-  activeHunts: string[];
-  recentScans: Array<{
-    target: string;
-    type: ScanType;
-    timestamp: number;
-    findings: number;
-  }>;
 }
 
 // ============================================================
