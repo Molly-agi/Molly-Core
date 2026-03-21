@@ -1519,15 +1519,19 @@ async function executeToolInternal(
       }
       const maxResults = Math.min((params.maxResults as number) || 8, 20);
       try {
-        const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+        // DuckDuckGo HTML search requires POST, not GET
+        const searchUrl = 'https://html.duckduckgo.com/html/';
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 15_000);
         const response = await fetch(searchUrl, {
+          method: 'POST',
           signal: controller.signal,
           headers: {
             'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
             Accept: 'text/html',
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
+          body: `q=${encodeURIComponent(query)}`,
         });
         clearTimeout(timeout);
         if (!response.ok) {
