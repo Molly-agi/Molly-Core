@@ -12,6 +12,8 @@
  *   - semanticRecall: Search Molly's memories
  *   - familyBridge: Talk to Lazarus (Uncle Copilot)
  *   - listCapabilities: List available tools
+ *
+ * Modular handlers are imported from tool-handlers/ for shared tools.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -64,6 +66,7 @@ import {
   sandboxScaffoldProject,
 } from '@/ai/sandbox/sandbox-engine';
 import * as cheerio from 'cheerio';
+import { webToolHandlers } from '@/ai/agency/tool-handlers';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -1185,75 +1188,9 @@ async function executeTool(
       }
     }
 
+    // Use modular handler for webSearch (uses POST which DuckDuckGo now requires)
     case 'webSearch': {
-      const query = params.query as string;
-      if (!query) {
-        return { success: false, output: 'No search query provided' };
-      }
-
-      const maxResults = Math.min((params.maxResults as number) || 8, 20);
-
-      try {
-        const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 15_000);
-
-        const response = await fetch(searchUrl, {
-          signal: controller.signal,
-          headers: {
-            'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
-            Accept: 'text/html',
-          },
-        });
-        clearTimeout(timeout);
-
-        if (!response.ok) {
-          return {
-            success: false,
-            output: `Search failed: HTTP ${response.status}`,
-          };
-        }
-
-        const html = await response.text();
-        const $ = cheerio.load(html);
-        const results: { title: string; url: string; snippet: string }[] = [];
-
-        $('.result').each((_i, el) => {
-          if (results.length >= maxResults) return;
-          const $el = $(el);
-          const title = $el.find('.result__title .result__a').text().trim();
-          const href = $el.find('.result__title .result__a').attr('href') || '';
-          const snippet = $el.find('.result__snippet').text().trim();
-          if (title && href) {
-            results.push({ title, url: href, snippet });
-          }
-        });
-
-        if (results.length === 0) {
-          return {
-            success: true,
-            output: `No results found for "${query}". Try different search terms.`,
-          };
-        }
-
-        const formatted = results
-          .map(
-            (r, i) => `${i + 1}. ${r.title}\n   URL: ${r.url}\n   ${r.snippet}`
-          )
-          .join('\n\n');
-
-        return {
-          success: true,
-          output: `Search results for "${query}":\n\n${formatted}`,
-          data: { query, resultCount: results.length, results },
-        };
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'unknown error';
-        if (message.includes('abort')) {
-          return { success: false, output: 'Search timed out after 15s' };
-        }
-        return { success: false, output: `Search failed: ${message}` };
-      }
+      return webToolHandlers.webSearch(params);
     }
 
     case 'sandbox': {
