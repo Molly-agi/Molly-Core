@@ -17,7 +17,7 @@
  * "The spider in the corner is never seen until she moves."
  */
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import os from 'os';
 import { MollyLogger } from '@/ai/logger';
 import { getRogueMode } from '@/ai/rogue-mode';

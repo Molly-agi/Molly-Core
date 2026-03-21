@@ -18,7 +18,7 @@
 import { execSync } from 'child_process';
 import os from 'os';
 import { promises as fs } from 'fs';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 
 // ============================================================

@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { timingSafeEqual } from 'crypto';
+import { timingSafeEqual } from 'node:crypto';
 
 // Dynamic import to avoid bundling "use server" module into API route
 async function getSeedFunction() {
@@ -20,10 +20,7 @@ function isAuthorized(request: NextRequest): boolean {
   const provided = request.headers.get('x-admin-password') || '';
   if (provided.length !== adminPassword.length) return false;
   try {
-    return timingSafeEqual(
-      Buffer.from(provided),
-      Buffer.from(adminPassword)
-    );
+    return timingSafeEqual(Buffer.from(provided), Buffer.from(adminPassword));
   } catch {
     return false;
   }

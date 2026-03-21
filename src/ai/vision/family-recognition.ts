@@ -8,7 +8,7 @@
  * "The spider knows her family by sight."
  */
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { MollyLogger, generateTraceId } from '../logger';

@@ -31,7 +31,7 @@ import {
   createDecipheriv,
   randomBytes,
   pbkdf2Sync,
-} from 'crypto';
+} from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 import type {
   IdentityProfile,

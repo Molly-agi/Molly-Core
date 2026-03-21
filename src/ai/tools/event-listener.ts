@@ -31,7 +31,7 @@
  */
 
 import { MollyLogger } from '@/ai/logger';
-import { createHmac } from 'crypto';
+import { createHmac } from 'node:crypto';
 
 // ============================================================================
 // TYPES
