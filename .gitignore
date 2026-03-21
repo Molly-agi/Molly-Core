@@ -69,3 +69,6 @@ sandbox/molly-workspace/*
 # Bridge daemon runtime files
 .bridge-daemon.log
 .bridge-daemon.pid
+
+# Local storage data (test artifacts / runtime state)
+molly_data/
