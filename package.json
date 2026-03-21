@@ -29,6 +29,7 @@
     "watchdog": "nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
     "bridge": "node scripts/bridge-daemon.mjs",
     "bridge:listen": "node scripts/bridge-listen.mjs",
+    "setup-keys": "bash scripts/setup-keys.sh",
     "save-session": "node scripts/save-session.mjs",
     "save-session:pause": "node scripts/save-session.mjs --status paused"
   },

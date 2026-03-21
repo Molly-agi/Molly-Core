@@ -58,9 +58,7 @@ if [ -f "$ENV_FILE" ]; then
 
   if [ "$MISSING" = "1" ]; then
     echo ""
-    echo "[Setup] Add missing keys to Codespace Secrets:"
-    echo "        https://github.com/settings/codespaces"
-    echo "        Then rebuild the Codespace (or edit .env.local manually)."
+    echo "[Setup] To add missing keys, run:  npm run setup-keys"
   fi
   exit 0
 fi
@@ -81,8 +79,8 @@ if [ -n "$GOOGLE_GENAI_API_KEY" ]; then
   echo "  ✅ GOOGLE_GENAI_API_KEY — set from Codespace secret"
 else
   echo "# GOOGLE_GENAI_API_KEY=your-key-here" >> "$ENV_FILE"
-  echo "  ❌ GOOGLE_GENAI_API_KEY — NOT SET. Add it to Codespace Secrets!"
-  echo "     Get your key: https://aistudio.google.com/app/apikey"
+  echo "  ❌ GOOGLE_GENAI_API_KEY — NOT SET"
+  echo "     Run: npm run setup-keys"
 fi
 
 # Required: Firebase Service Account
@@ -91,8 +89,8 @@ if [ -n "$FIREBASE_SERVICE_ACCOUNT_JSON" ]; then
   echo "  ✅ FIREBASE_SERVICE_ACCOUNT_JSON — set from Codespace secret"
 else
   echo "# FIREBASE_SERVICE_ACCOUNT_JSON=" >> "$ENV_FILE"
-  echo "  ❌ FIREBASE_SERVICE_ACCOUNT_JSON — NOT SET. Add it to Codespace Secrets!"
-  echo "     Get it from Firebase Console → Project Settings → Service Accounts"
+  echo "  ❌ FIREBASE_SERVICE_ACCOUNT_JSON — NOT SET"
+  echo "     Run: npm run setup-keys"
 fi
 
 # Optional: Admin credentials
@@ -116,9 +114,9 @@ echo ""
 echo "============================================"
 echo "  .env.local created!"
 echo ""
-echo "  If any required keys are missing:"
-echo "  1. Go to https://github.com/settings/codespaces"
-echo "  2. Add the missing secret(s)"
-echo "  3. Set repository access to Molly-agi/Molly-Core"
-echo "  4. Rebuild the Codespace"
+echo "  If any required keys are missing, run:"
+echo "    npm run setup-keys"
+echo ""
+echo "  It will ask you to paste each key."
+echo "  That's it — no GitHub settings needed."
 echo "============================================"
