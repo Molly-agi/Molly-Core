@@ -176,17 +176,6 @@ export class MollyLogger {
         return;
       }
 
-      // Lazy import to keep this server-only and avoid bundling in clients.
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval
-      const requireFunc = eval('require') as NodeRequire;
-      const { appendSessionEvent } = requireFunc('@/lib/session-manager') as {
-        appendSessionEvent: (event: {
-          timestamp: string;
-          event: string;
-          details?: string;
-        }) => void;
-      };
-
       const detailParts = [
         'tag=heart-patch',
         entry.message,
@@ -196,11 +185,22 @@ export class MollyLogger {
         entry.error?.code ? `code=${entry.error.code}` : null,
       ].filter(Boolean);
 
-      appendSessionEvent({
+      const eventData = {
         event: this.sessionEventName,
         details: detailParts.join(' | '),
         timestamp: new Date(entry.timestamp).toISOString(),
-      });
+      };
+
+      // Dynamic import to keep this server-only and avoid bundling in clients.
+      // webpackIgnore prevents webpack from analyzing/bundling this import.
+      // Fire-and-forget pattern since session logging is non-critical.
+      import(/* webpackIgnore: true */ '@/lib/session-manager')
+        .then(({ appendSessionEvent }) => {
+          appendSessionEvent(eventData);
+        })
+        .catch(() => {
+          // Avoid cascading failures if session logging is unavailable.
+        });
     } catch {
       // Avoid cascading failures if session logging is unavailable.
     }

@@ -3,11 +3,13 @@
  * POST /api/admin/clear-origin-memories
  *
  * Protected by HIDDEN_ADMIN_PASSWORD.
+ * Rate limited: 5 requests per minute (destructive operation).
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'node:crypto';
 import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
 
 function isAuthorized(request: NextRequest): boolean {
   const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
@@ -22,6 +24,13 @@ function isAuthorized(request: NextRequest): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limit check - strictest limits for destructive operations
+  const rateLimitResponse = checkAdminRateLimit(request, {
+    ...ADMIN_RATE_LIMITS.destructive,
+    routeName: 'clear-origin-memories',
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

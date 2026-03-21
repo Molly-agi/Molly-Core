@@ -207,8 +207,21 @@ const ALLOWED_COMMANDS = [
 ];
 // Removed: npm run typecheck (OOMs at >8GB)
 
+/**
+ * Shell metacharacters that enable command injection.
+ * These must be blocked even in "allowed" commands.
+ */
+const DANGEROUS_SHELL_CHARS = /[$`;&<>(){}[\]\n\\]/;
+
 function isCommandSafe(command: string): boolean {
   const trimmed = command.trim();
+
+  // Block shell metacharacters that enable injection attacks
+  // e.g., cat $(rm -rf /), cat `whoami`, cat ; rm -rf /
+  if (DANGEROUS_SHELL_CHARS.test(trimmed)) {
+    return false;
+  }
+
   const segments = trimmed.split(/\s*\|\s*/);
   return segments.every((segment) => {
     const seg = segment.trim();

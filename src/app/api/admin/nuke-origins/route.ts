@@ -1,8 +1,11 @@
 /**
  * NUCLEAR OPTION: Delete ALL origin story memories
- * GET /api/admin/nuke-origins?userId=YOUR_USER_ID
+ * POST /api/admin/nuke-origins
+ * Body: { userId: string }
  *
- * Protected by HIDDEN_ADMIN_PASSWORD.
+ * Protected by HIDDEN_ADMIN_PASSWORD header.
+ * Rate limited: 5 requests per minute (destructive operation).
+ * Uses POST because this is a destructive operation.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,6 +19,7 @@ import {
   getDocs,
   writeBatch,
 } from 'firebase/firestore';
+import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
@@ -38,17 +42,29 @@ function isAuthorized(request: NextRequest): boolean {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
+  // Rate limit check - strictest limits for destructive operations
+  const rateLimitResponse = checkAdminRateLimit(request, {
+    ...ADMIN_RATE_LIMITS.destructive,
+    routeName: 'nuke-origins',
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const searchParams = request.nextUrl.searchParams;
-  const userId = searchParams.get('userId');
+  let userId: string | null = null;
+  try {
+    const body = await request.json();
+    userId = body.userId;
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+  }
 
   if (!userId) {
     return NextResponse.json(
-      { error: 'Missing userId parameter' },
+      { error: 'Missing userId in request body' },
       { status: 400 }
     );
   }

@@ -3,10 +3,12 @@
  * POST /api/admin/seed-origin
  *
  * Protected by HIDDEN_ADMIN_PASSWORD.
+ * Rate limited: 10 requests per minute (write operation).
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'node:crypto';
+import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
 
 // Dynamic import to avoid bundling "use server" module into API route
 async function getSeedFunction() {
@@ -27,6 +29,13 @@ function isAuthorized(request: NextRequest): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limit check - moderate limits for write operations
+  const rateLimitResponse = checkAdminRateLimit(request, {
+    ...ADMIN_RATE_LIMITS.write,
+    routeName: 'seed-origin',
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

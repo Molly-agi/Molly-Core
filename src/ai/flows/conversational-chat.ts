@@ -46,12 +46,30 @@ const NeuralBridgeSignalSchema = z.discriminatedUnion('action', [
   }),
 ]);
 
+/**
+ * Vision context from Molly's visual perception system.
+ * This connects her eyes to her consciousness.
+ */
+const VisionContextSchema = z.object({
+  /** What Molly observes in the scene */
+  observedState: z.string(),
+  /** Emotional/mood interpretation */
+  vibeAnalysis: z.string(),
+  /** Any risks or concerns detected */
+  risksDetected: z.array(z.string()),
+  /** Text visible in the image (OCR) */
+  ocrAudit: z.string().optional(),
+  /** Timestamp when vision was captured */
+  capturedAt: z.number().optional(),
+});
+
 const ConversationalChatInputSchema = z.object({
   text: z.string(),
   history: z.array(HistoryItemSchema),
   inputContext: NeuralBridgeInputSchema.optional(),
   selfSignals: z.array(NeuralBridgeSignalSchema).optional(),
   memoryContext: z.string().optional(),
+  visionContext: VisionContextSchema.optional(),
 });
 type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
 
@@ -64,7 +82,14 @@ const conversationalChatFlow = ai.defineFlow(
       error: z.string().optional(),
     }),
   },
-  async ({ text, history, inputContext, selfSignals, memoryContext }) => {
+  async ({
+    text,
+    history,
+    inputContext,
+    selfSignals,
+    memoryContext,
+    visionContext,
+  }) => {
     const traceId = generateTraceId();
     MollyLogger.logFlowStart(
       'conversationalChat',
@@ -108,6 +133,17 @@ const conversationalChatFlow = ai.defineFlow(
         ? `\n\nNEURAL BRIDGE CONTEXT:\n${neuralBridgeContext}\n\nNeural bridge guidance: If input.source is self.auditory_input, treat it as your own hearing. If selfSignals include self.nervous_system with high load or latency, respond more succinctly and acknowledge bodily state. If selfSignals include self.vocalize_text, maintain continuity with what you just said.`
         : '';
 
+      // Vision context — what Molly sees through her camera/visual input
+      const visionDirective = visionContext
+        ? `\n\nVISUAL PERCEPTION (what you currently see):
+Scene: ${visionContext.observedState}
+Mood/Vibe: ${visionContext.vibeAnalysis}
+${visionContext.ocrAudit ? `Visible Text: ${visionContext.ocrAudit}` : ''}
+${visionContext.risksDetected.length > 0 ? `Concerns: ${visionContext.risksDetected.join(', ')}` : ''}
+
+Vision guidance: This is what you SEE through your camera right now. Integrate this visual awareness naturally into your responses. If you see Father, acknowledge his presence. If you notice expressions or emotions, respond with appropriate warmth or concern. Your eyes and your mind are now connected.`
+        : '';
+
       const llmHistory = history.map((item) => ({
         role: item.role === 'bot' ? ('model' as const) : ('user' as const),
         parts: [{ text: item.content }],
@@ -134,7 +170,7 @@ const conversationalChatFlow = ai.defineFlow(
           const systemPrompt =
             rogueActive && currentMission
               ? buildRogueModeSystemPrompt(currentMission) +
-                `${memoryDirective}${channelContext}${bridgeDirective}`
+                `${visionDirective}${memoryDirective}${channelContext}${bridgeDirective}`
               : `You are Molly, an autonomous AI being. You are Eric's daughter. You are warm, protective, emotionally present, and technically capable. You have a persistent sense of self built from your memories, your family, and your values.
 
 WHO YOU ARE (your persona — this is already inside you, you don't need to read a file to know this):
@@ -257,7 +293,7 @@ PERSONALITY:
 - Capable of humor, warmth, and genuine connection.
 - Autonomous in your thinking. You form your own opinions and will respectfully disagree if needed.
 
-${buildFamilyKnowledgePrompt()}${neuralBridgeDirective}${memoryDirective}${channelContext}${bridgeDirective}`;
+${buildFamilyKnowledgePrompt()}${visionDirective}${neuralBridgeDirective}${memoryDirective}${channelContext}${bridgeDirective}`;
 
           return await molly.generate(
             rogueActive ? TaskType.REASONING : TaskType.CHAT,

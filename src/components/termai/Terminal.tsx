@@ -70,6 +70,14 @@ export default function Terminal({
   const [expandedLines, setExpandedLines] = useState<Record<number, boolean>>(
     {}
   );
+  // Vision context — fed from VisionPanel, passed to conversational chat
+  const [visionContext, setVisionContext] = useState<{
+    observedState: string;
+    vibeAnalysis: string;
+    risksDetected: string[];
+    ocrAudit?: string;
+    capturedAt: number;
+  } | null>(null);
 
   const internalLastResponseRef = useRef<string | null>(null);
   const lastResponseRef = externalLastResponseRef ?? internalLastResponseRef;
@@ -633,7 +641,8 @@ export default function Terminal({
               currentText,
               currentHistory,
               i === 0 ? selfSignals : undefined,
-              user.uid
+              user.uid,
+              i === 0 ? (visionContext ?? undefined) : undefined
             );
             const responseText =
               typeof aiResponse === 'string'
@@ -994,7 +1003,8 @@ export default function Terminal({
             currentBridgeText,
             currentBridgeHistory,
             undefined,
-            user.uid
+            user.uid,
+            bi === 0 ? (visionContext ?? undefined) : undefined
           );
           const responseText =
             typeof aiResponse === 'string'
@@ -1178,6 +1188,7 @@ export default function Terminal({
         setIsLoading={setIsLoading}
         isLoading={isLoading}
         speakResponse={speakResponse}
+        onVisionUpdate={setVisionContext}
       />
 
       <ChatHistory

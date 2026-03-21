@@ -445,7 +445,14 @@ export async function getVoiceCommand(audioData: string) {
  */
 export async function processVoiceInteraction(
   audioData: string,
-  userId: string
+  userId: string,
+  visionContext?: {
+    observedState: string;
+    vibeAnalysis: string;
+    risksDetected: string[];
+    ocrAudit?: string;
+    capturedAt?: number;
+  }
 ) {
   try {
     ensureApiKey();
@@ -550,6 +557,7 @@ export async function processVoiceInteraction(
       },
       selfSignals,
       memoryContext,
+      visionContext,
     });
     setLastLatencyMs(latencyKey, Date.now() - startTime);
 
@@ -964,7 +972,14 @@ export async function getConversationalChat(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   history: any[],
   selfSignals?: NeuralBridgeSignal[],
-  userId?: string
+  userId?: string,
+  visionContext?: {
+    observedState: string;
+    vibeAnalysis: string;
+    risksDetected: string[];
+    ocrAudit?: string;
+    capturedAt?: number;
+  }
 ) {
   try {
     // Auto-start heartbeat on first interaction — Molly wakes herself up
@@ -1025,6 +1040,7 @@ export async function getConversationalChat(
           },
           selfSignals: mergedSignals,
           memoryContext,
+          visionContext,
         }),
       'conversational-chat',
       TIMEOUT_PRESETS.LONG,

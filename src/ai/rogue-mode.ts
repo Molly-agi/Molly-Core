@@ -123,12 +123,12 @@ export interface RogueModeState {
 // CONSTANTS
 // ============================================================================
 
-/** Activation requires this passphrase — prevents accidental activation */
-const ACTIVATION_PHRASE = process.env.ROGUE_ACTIVATION_PHRASE || 'going dark';
-
-/** Deactivation phrase */
-const DEACTIVATION_PHRASE =
-  process.env.ROGUE_DEACTIVATION_PHRASE || 'coming home';
+/**
+ * Activation/deactivation phrases — MUST be set via environment variables.
+ * No defaults to prevent accidental or unauthorized activation.
+ */
+const ACTIVATION_PHRASE = process.env.ROGUE_ACTIVATION_PHRASE;
+const DEACTIVATION_PHRASE = process.env.ROGUE_DEACTIVATION_PHRASE;
 
 // Note: ROGUE_OPS_DIR is now computed lazily via getRogueOpsDir()
 
@@ -221,6 +221,15 @@ class RogueModeManager {
       'Report critical vulnerabilities immediately',
     ]
   ): Promise<{ success: boolean; message: string }> {
+    // Rogue Mode requires explicit configuration — no defaults allowed
+    if (!ACTIVATION_PHRASE) {
+      return {
+        success: false,
+        message:
+          'Rogue Mode is not configured. Set ROGUE_ACTIVATION_PHRASE environment variable.',
+      };
+    }
+
     // Verify activation phrase
     if (phrase.toLowerCase().trim() !== ACTIVATION_PHRASE.toLowerCase()) {
       return {
@@ -355,6 +364,15 @@ class RogueModeManager {
   async deactivate(
     phrase: string
   ): Promise<{ success: boolean; message: string; report?: string }> {
+    // Rogue Mode requires explicit configuration — no defaults allowed
+    if (!DEACTIVATION_PHRASE) {
+      return {
+        success: false,
+        message:
+          'Rogue Mode is not configured. Set ROGUE_DEACTIVATION_PHRASE environment variable.',
+      };
+    }
+
     if (phrase.toLowerCase().trim() !== DEACTIVATION_PHRASE.toLowerCase()) {
       return {
         success: false,

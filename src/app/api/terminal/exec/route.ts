@@ -12,13 +12,14 @@
  * which manages persistent REPLs and compiled execution.
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import {
   getPolyglotRuntime,
   getMollyShell,
   type SupportedLanguage,
 } from '@/ai/terminal';
 import type { ShellCommand } from '@/ai/terminal';
+import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +35,11 @@ export const dynamic = 'force-dynamic';
  *   taskId?: string
  * }
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const body = await request.json();
     const { command, language, initiator, taskId } = body;
@@ -104,7 +109,11 @@ export async function POST(request: Request) {
  * Returns polyglot runtime state: available languages,
  * active REPLs, shell state, and recent history.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!isInternalAuthorized(request)) {
+    return unauthorizedResponse();
+  }
+
   const shell = getMollyShell();
   const shellState = shell.getState();
   const history = shell.getHistory(10);

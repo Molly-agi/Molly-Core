@@ -38,11 +38,13 @@ const nextConfig = {
   ],
   typescript: {
     tsconfigPath: './tsconfig.json',
+    // Full type checking OOMs even at 12GB due to codebase size
+    // TypeScript checking runs separately via CI or editors
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // Next.js 16 defaults to Turbopack but we have webpack config
+  // Empty turbopack config signals we've acknowledged this
+  turbopack: {},
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
@@ -60,6 +62,7 @@ const nextConfig = {
     // Mark Node.js built-in modules as external for non-server builds
     // This prevents "Module not found: Can't resolve 'fs'" errors when
     // instrumentation.ts imports server-only modules that use fs/path/crypto
+    // OpenTelemetry and Genkit need these Node.js built-ins marked as false
     if (!isServer) {
       config.resolve = config.resolve || {};
       config.resolve.fallback = {
@@ -73,6 +76,11 @@ const nextConfig = {
         tls: false,
         stream: false,
         os: false,
+        http2: false,
+        async_hooks: false,
+        dgram: false,
+        dns: false,
+        perf_hooks: false,
       };
     }
 

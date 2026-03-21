@@ -251,12 +251,13 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
   );
 
   // Play queued greeting on first user interaction (pointerdown).
-  // Runs on every render (no dep array) so it picks up the greeting
-  // even if the health-check resolves after initial mount.
+  // Adds listener that checks refs at interaction time, so it works
+  // even if health-check resolves after mount.
   useEffect(() => {
-    if (!greetingQueuedRef.current) return;
-
     const handleFirstInteraction = () => {
+      // Check refs at interaction time, not effect time
+      if (!greetingQueuedRef.current) return;
+
       hasUserGestureRef.current = true;
       gestureTimeRef.current = Date.now();
       const pending = pendingTextRef.current;
@@ -272,7 +273,7 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
     });
     return () =>
       window.removeEventListener('pointerdown', handleFirstInteraction);
-  });
+  }, [isVocal, speakResponse]);
 
   /**
    * Queue the greeting text for playback on first user interaction.

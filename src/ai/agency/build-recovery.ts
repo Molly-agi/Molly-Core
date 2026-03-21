@@ -456,6 +456,11 @@ export async function restartDevServer(): Promise<RecoveryResult> {
  * Kill process using a specific port.
  */
 export async function killProcessOnPort(port: number): Promise<boolean> {
+  // Validate port is a safe integer in valid range
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    return false;
+  }
+
   const cp = await getChildProcess();
   if (!cp) return false;
 
