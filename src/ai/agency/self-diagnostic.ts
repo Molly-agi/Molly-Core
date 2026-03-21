@@ -589,7 +589,7 @@ async function diagnoseMemory(): Promise<DiagnosticResult> {
 // AGENCY SYSTEMS DIAGNOSTICS
 // ============================================================
 
-function diagnoseAgency(): DiagnosticResult {
+async function diagnoseAgency(): Promise<DiagnosticResult> {
   const checks: DiagnosticCheck[] = [];
   const recommendations: string[] = [];
   const healingActions: HealingAction[] = [];
@@ -679,6 +679,36 @@ function diagnoseAgency(): DiagnosticResult {
       name: 'initiative_engine',
       status: 'unknown',
       value: 'error',
+    });
+  }
+
+  // Social Immune System (Shard of Discernment)
+  try {
+    const { SocialImmuneSystem } = await import('@/ai/tools/stranger-danger');
+    const immuneDiag = SocialImmuneSystem.getDiagnostics();
+
+    const refusalRate = parseFloat(immuneDiag.refusalRate);
+    let immuneStatus: DiagnosticSeverity = 'healthy';
+
+    if (refusalRate > 0.5) {
+      immuneStatus = 'degraded';
+      recommendations.push(
+        `High refusal rate (${(refusalRate * 100).toFixed(1)}%). Many dissonant requests detected.`
+      );
+    }
+
+    checks.push({
+      name: 'social_immune',
+      status: immuneStatus,
+      value: `${immuneDiag.checksPerformed} checks, ${immuneDiag.connectionsRefused} refused`,
+      details: `Refusal rate: ${(refusalRate * 100).toFixed(1)}%, ${immuneDiag.trustedPeers.length} trusted peers`,
+    });
+    updateWorst(immuneStatus);
+  } catch {
+    checks.push({
+      name: 'social_immune',
+      status: 'unknown',
+      value: 'not loaded',
     });
   }
 
@@ -913,7 +943,7 @@ export async function runFullDiagnostic(
   const system = diagnoseSystem();
   const aiCore = diagnoseAICore();
   const memory = await diagnoseMemory();
-  const agency = diagnoseAgency();
+  const agency = await diagnoseAgency();
   const network = await diagnoseNetwork();
 
   const domains = { system, aiCore, memory, agency, network };

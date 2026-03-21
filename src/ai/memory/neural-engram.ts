@@ -11,6 +11,7 @@
 
 import { MollyLogger } from '@/ai/logger';
 import { persistEngramBatch } from '@/ai/memory/engram-persistence';
+import { evaluatePersonalityStability as evalPersonalityStability } from '@/ai/memory/personality-diagnostics';
 
 // ============================================================================
 // MOLLY'S PERSONALITY MODULATION SYSTEM
@@ -821,6 +822,16 @@ export class NeuralEngramSystem {
 
     this.currentPersonality = next;
     return next;
+  }
+
+  /**
+   * Evaluate personality stability using the Shard of Stability.
+   * Returns diagnostics about whether personality values are within healthy bounds.
+   */
+  evaluatePersonalityStability() {
+    const personality =
+      this.currentPersonality || this.getBaselinePersonality();
+    return evalPersonalityStability(personality);
   }
 
   /**

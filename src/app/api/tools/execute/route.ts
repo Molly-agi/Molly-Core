@@ -527,6 +527,97 @@ async function executeTool(
       }
     }
 
+    case 'apiVault': {
+      if (!isAdminConfigured()) {
+        return {
+          success: false,
+          output: 'Firebase admin is not configured — API vault unavailable.',
+        };
+      }
+      const action = params.action as string;
+      const userId = (params.userId as string) || 'default';
+
+      if (action === 'register') {
+        const name = params.name as string;
+        const category = params.category as
+          | 'Normal'
+          | 'Administrator'
+          | 'SuperUser';
+        const description = params.description as string;
+        const implementation = params.implementation as string;
+        const targetUrl = params.targetUrl as string | undefined;
+
+        if (!name || !category || !description || !implementation) {
+          return {
+            success: false,
+            output:
+              'Missing required fields: name, category, description, implementation',
+          };
+        }
+
+        try {
+          const { registerAPIBlueprint } = await import('@/ai/tools/api-vault');
+          const result = await registerAPIBlueprint({
+            userId,
+            name,
+            category,
+            description,
+            implementation,
+            targetUrl,
+          });
+          return {
+            success: result.success,
+            output: result.success
+              ? `API blueprint "${name}" saved to vault (ID: ${result.id})`
+              : 'Failed to save blueprint',
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Failed to register API: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'search') {
+        const query = params.query as string;
+        if (!query) {
+          return { success: false, output: 'Missing required field: query' };
+        }
+        try {
+          const { searchAPIVault } = await import('@/ai/tools/api-vault');
+          const results = await searchAPIVault({ userId, query });
+          if (results.length === 0) {
+            return {
+              success: true,
+              output: `No API blueprints found matching "${query}". Use apiVault register to add new blueprints.`,
+            };
+          }
+          const formatted = results
+            .map(
+              (r, i) =>
+                `${i + 1}. ${r.name} [${r.category}]\n   ${r.description}`
+            )
+            .join('\n\n');
+          return {
+            success: true,
+            output: `Found ${results.length} API blueprint(s):\n\n${formatted}`,
+            data: results,
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Failed to search vault: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      return {
+        success: false,
+        output: 'Unknown action. Use: register, search',
+      };
+    }
+
     case 'webFetch': {
       const url = params.url as string;
       if (!url) {

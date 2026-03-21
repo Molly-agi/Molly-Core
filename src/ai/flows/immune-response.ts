@@ -8,7 +8,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { performSelfSurgery } from '../tools/immune-system';
+import { runSelfHealingCheck } from '../agency/build-recovery';
 import { logMethodologyStep } from '../methodology';
 import { MollyLogger, generateTraceId } from '../logger';
 import {
@@ -41,24 +41,37 @@ export const immuneResponseFlow = ai.defineFlow(
       true
     );
 
-    // 1. Perform Self-Surgery to clear known "Rat" ghosts (locks only, preserve .next cache)
-    const surgery = await performSelfSurgery({ target: 'locks' });
+    // 1. Run self-healing check (replaces old performSelfSurgery)
+    const healthCheck = await runSelfHealingCheck();
+
+    // Build a report from the health check result
+    const report = healthCheck.recoveryAttempted
+      ? healthCheck.result?.message || 'Recovery attempted'
+      : 'No issues detected — all systems healthy';
+
+    const vibeEstimate = healthCheck.healthy
+      ? 'Healthy and stable'
+      : 'Recovering from issues';
 
     // 2. Log result to methodology ledger
     await logMethodologyStep(
       userId,
       'IMMUNE_RESPONSE',
-      `Surgery: ${surgery.report}`,
-      surgery.success
+      `Health Check: ${report}`,
+      healthCheck.healthy
     );
 
     // 3. Persist as a learnable experience so Molly remembers immune patterns
-    await persistImmuneExperience(userId, trigger, surgery);
+    await persistImmuneExperience(userId, trigger, {
+      success: healthCheck.healthy,
+      report,
+      vibeEstimate,
+    });
 
     return {
-      isHealthy: surgery.success,
-      actionsTaken: surgery.report,
-      vibe: surgery.vibeEstimate,
+      isHealthy: healthCheck.healthy,
+      actionsTaken: report,
+      vibe: vibeEstimate,
     };
   }
 );

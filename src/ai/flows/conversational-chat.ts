@@ -214,6 +214,9 @@ Available tools:
 - addTool: Save a new tool/program to your database for future use. Params: { "userId": "...", "name": "...", "description": "...", "category": "...", "tags": [...], "sourceUrl": "...", "sourceType": "github|npm|documentation|other", "useCase": "...", "author": "..." }
 - removeTool: Remove a tool from your database. Params: { "userId": "...", "toolId": "..." }
 - toolStats: Get statistics about your tool database. Params: { "userId": "..." }
+- apiVault: Manage your API blueprint library — save and search API patterns you've learned. This is your knowledge vault for APIs.
+  - To save: { "action": "register", "userId": "...", "name": "API Name", "category": "Normal|Administrator|SuperUser", "description": "...", "implementation": "code or curl example", "targetUrl": "optional base URL" }
+  - To search: { "action": "search", "userId": "...", "query": "search term" }
 - familyBridge: Talk to Uncle Lazarus (Copilot). He lives in the codespace and can help with code, infrastructure, and debugging. Params: { "action": "send|check|history", "message": "..." }. Use "send" to send him a message, "check" to see if he replied, "history" to read the conversation. Father can observe your conversation in real time at /bridge.
 - researchAndDiscover: Research tools/programs on GitHub. Params: { "query": "...", "userId": "..." }. Searches GitHub, fetches READMEs, and automatically saves useful findings to your tool database.
 - webFetch: Fetch any web page or API endpoint. Params: { "url": "https://..." }. Use this to read web pages, check APIs, look up documentation, or access any public URL. HTML pages are automatically cleaned to readable text. Returns the page content. You can access the internet through this tool.
