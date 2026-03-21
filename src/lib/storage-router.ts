@@ -172,6 +172,15 @@ class StorageRouter implements StorageProvider {
   async batchWrite(operations: BatchOperation[]): Promise<void> {
     return this.provider.batchWrite(operations);
   }
+
+  async healthCheck(): Promise<boolean> {
+    // Only call if provider implements healthCheck
+    const provider = this.provider as { healthCheck?: () => Promise<boolean> };
+    if (typeof provider.healthCheck === 'function') {
+      return provider.healthCheck();
+    }
+    return true;
+  }
 }
 
 // ============================================================================

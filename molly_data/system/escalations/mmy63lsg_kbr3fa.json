@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773966917392_n854",
+  "severity": "critical",
+  "source": "string-throw-test",
+  "message": "Self-healing failed: UNKNOWN: Unclassified failure in string-throw-test — \"string throw\"",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773966917381_7fg965",
+  "timestamp": "2026-03-20T00:35:17.392Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-20T00:35:17.392Z",
+  "_id": "mmy63lsg_kbr3fa",
+  "_createdAt": "2026-03-20T00:35:17.393Z",
+  "_updatedAt": "2026-03-20T00:35:17.393Z"
+}

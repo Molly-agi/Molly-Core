@@ -14,7 +14,28 @@ const nextConfig = {
   },
   // Prevent firebase-admin from being bundled for client/edge.
   // It uses Node.js core modules (stream, net, etc.) that don't exist there.
-  serverExternalPackages: ['firebase-admin'],
+  // Also exclude dependencies that use WebAssembly or Node-specific modules.
+  serverExternalPackages: [
+    // Firebase ecosystem
+    'firebase-admin',
+    '@google-cloud/firestore',
+    'farmhash-modern',
+    // gRPC ecosystem
+    '@grpc/grpc-js',
+    '@grpc/proto-loader',
+    // OpenTelemetry ecosystem (all of it)
+    '@opentelemetry/sdk-node',
+    '@opentelemetry/otlp-grpc-exporter-base',
+    '@opentelemetry/exporter-trace-otlp-grpc',
+    '@opentelemetry/exporter-jaeger',
+    '@opentelemetry/instrumentation',
+    '@opentelemetry/core',
+    '@opentelemetry/api',
+    // Genkit ecosystem
+    '@genkit-ai/core',
+    '@genkit-ai/ai',
+    'genkit',
+  ],
   typescript: {
     tsconfigPath: './tsconfig.json',
     ignoreBuildErrors: true,

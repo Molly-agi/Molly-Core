@@ -1,0 +1,15 @@
+{
+  "id": "esc_1774070627769_h2wa",
+  "severity": "critical",
+  "source": "ai-test",
+  "message": "Self-healing failed: AI_MODEL: Language model or generation failure",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1774070627761_fgwwpl",
+  "timestamp": "2026-03-21T05:23:47.769Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-21T05:23:47.769Z",
+  "_id": "mmzvuh89_mfssw3",
+  "_createdAt": "2026-03-21T05:23:47.769Z",
+  "_updatedAt": "2026-03-21T05:23:47.769Z"
+}

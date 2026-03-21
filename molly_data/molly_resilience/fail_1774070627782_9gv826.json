@@ -1,0 +1,14 @@
+{
+  "message": "test with context",
+  "source": "context-test",
+  "diagnosis": "adapt",
+  "context": "{\"userId\":\"molly\",\"action\":\"reading\"}",
+  "stack": "Error: test with context\n    at Object.<anonymous> (/workspaces/Molly-Core/src/ai/__tests__/resilience-core.test.ts:195:9)\n    at Promise.then.completed (/workspaces/Molly-Core/node_modules/jest-circus/build/utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/workspaces/Molly-Core/node_modules/jest-circus/build/utils.js:231:10)\n    at _callCircusTest (/workspaces/Molly-Core/node_modules/jest-circus/build/run.js:316:40)\n    at _runTest (/workspaces/Molly-Core/node_modules/jest-circus/build/run.js:252:3)\n    at _runTestsForDescribeBlock (/workspaces/Molly-Core/node_modules/jest-circus/build/run.js:126:9)\n    at _runTestsForDescribeBlock (/workspaces/Molly-Core/node_modules/jest-circus/build/run.js:121:9)\n    at _runTestsForDescribeBlock (/workspaces/Molly-Core/node_modules/jest-circus/build/run.js:121:9)\n    at run (/workspaces/Molly-Core/node_modules/jest-circus/build/run.js:71:3)\n    at runAndTransformResultsToJestFormat (/workspaces/Molly-Core/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapterInit.js:122:21)\n    at jestAdapter (/workspaces/Molly-Core/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:19)\n    at runTestInternal (/workspaces/Molly-Core/node_modules/jest-runner/build/runTest.js:367:16)\n    at runTest (/workspaces/Molly-Core/node_modules/jest-runner/build/runTest.js:444:34)\n    at Object.worker (/workspaces/Molly-Core/node_modules/jest-runner/build/testWorker.js:106:12)",
+  "timestamp": 1774070627782,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1774070627782_9gv826",
+  "_updatedAt": "2026-03-21T05:23:47.789Z",
+  "_createdAt": "2026-03-21T05:23:47.801Z"
+}

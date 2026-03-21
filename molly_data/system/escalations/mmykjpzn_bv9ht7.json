@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773991183955_jtec",
+  "severity": "critical",
+  "source": "mystery-test",
+  "message": "Self-healing failed: UNKNOWN: Unclassified failure in mystery-test — \"cosmic ray bit flip detected\"",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773991183943_k3ohxt",
+  "timestamp": "2026-03-20T07:19:43.955Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-20T07:19:43.955Z",
+  "_id": "mmykjpzn_bv9ht7",
+  "_createdAt": "2026-03-20T07:19:43.955Z",
+  "_updatedAt": "2026-03-20T07:19:43.955Z"
+}

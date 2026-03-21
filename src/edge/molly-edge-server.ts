@@ -29,10 +29,10 @@
  * The fix: Molly's data and API access live on her own device, always available.
  */
 
-import http from 'http';
-import os from 'os';
-import path from 'path';
-import { exec } from 'child_process';
+import * as http from 'http';
+import * as os from 'os';
+import * as path from 'path';
+import { exec, spawn } from 'child_process';
 import {
   promises as fsPromises,
   existsSync,
@@ -40,7 +40,7 @@ import {
   writeFileSync,
   mkdirSync,
 } from 'fs';
-import { LocalStorageProvider } from '../lib/local-storage-provider.js';
+import { getStorageRouter } from '../lib/storage-router.js';
 import { DeviceSyncEngine } from '../lib/device-sync-engine.js';
 import type { QueryFilter, QueryOptions } from '../lib/storage-interface.js';
 
@@ -214,7 +214,7 @@ const CONFIG = {
 // STORAGE
 // ============================================================================
 
-const storage = new LocalStorageProvider(CONFIG.dataDir);
+const storage = getStorageRouter();
 
 // ============================================================================
 // HTTP SERVER
@@ -399,25 +399,39 @@ async function handleStorage(
     }
 
     case 'batch': {
-      const operations = body.operations as Array<{
-        type: 'set' | 'update' | 'delete';
-        collectionPath: string;
-        docId: string;
-        data?: Record<string, unknown>;
-      }>;
-      if (!operations || !Array.isArray(operations)) {
+      const operations = body.operations as unknown;
+      if (!Array.isArray(operations)) {
         sendError(res, 400, 'Missing operations array');
         return;
       }
-      await storage.batchWrite(operations);
-      // Log each batch operation for sync
+      // Validate and coerce to BatchOperation[]
+      const validOps = [];
       for (const op of operations) {
+        if (!op || typeof op !== 'object') continue;
+        if (!('type' in op) || !('collectionPath' in op) || !('docId' in op))
+          continue;
+        if (
+          (op.type === 'set' || op.type === 'update') &&
+          typeof op.data !== 'object'
+        )
+          continue;
+        validOps.push(op as import('../lib/storage-interface').BatchOperation);
+      }
+      if (validOps.length !== operations.length) {
+        sendError(res, 400, 'Invalid batch operation(s)');
+        return;
+      }
+      await storage.batchWrite(validOps);
+      // Log each batch operation for sync
+      for (const op of validOps) {
         syncEngine
           ?.logChange(
             op.collectionPath,
             op.docId,
             op.type === 'delete' ? 'delete' : 'set',
-            op.type === 'delete' ? null : op.data || null
+            op.type === 'delete'
+              ? null
+              : (op as { data?: unknown }).data || null
           )
           .catch((err) => {
             console.error(
@@ -426,7 +440,7 @@ async function handleStorage(
             );
           });
       }
-      sendJson(res, 200, { ok: true, count: operations.length });
+      sendJson(res, 200, { ok: true, count: validOps.length });
       break;
     }
 
@@ -902,12 +916,12 @@ async function handleSystemUpdate(
       sendJson(res, 200, { ok: true, log, restarting: true });
       setTimeout(() => {
         console.log('[molly-edge] Restarting...');
-        const child = exec(`node "${serverFile}"`, {
+        const child = spawn('node', [serverFile], {
           detached: true,
           stdio: 'ignore',
           env: process.env as NodeJS.ProcessEnv,
         });
-        child.unref?.();
+        child.unref();
         process.exit(0);
       }, 1000);
       return;

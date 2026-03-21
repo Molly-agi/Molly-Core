@@ -20,7 +20,7 @@
 
 import { MollyLogger, generateTraceId } from './logger';
 import { getCircuitBreaker } from './tools/circuit-breaker';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+// firebase-admin is imported dynamically in persistFailure() to avoid bundler issues
 import { getStorageRouter } from '@/lib/storage-router';
 import { escalateCognitiveFailure } from './escalation-channel';
 
@@ -771,24 +771,21 @@ async function persistFailure(
   failure: UnknownFailure,
   traceId: string
 ): Promise<void> {
-  if (!isAdminConfigured()) return;
-
+  // Use the storage router for persistence — it handles local vs remote transparently
+  // No direct firebase-admin usage here to avoid bundler issues
   try {
-    const db = getAdminFirestore();
-    await db
-      .collection('molly_resilience')
-      .doc(failure.id)
-      .set({
-        message: failure.message,
-        source: failure.source,
-        diagnosis: failure.level,
-        context: JSON.stringify(failure.context).slice(0, 1000),
-        stack: failure.stack?.slice(0, 2000),
-        timestamp: failure.timestamp,
-        resolved: failure.resolved,
-        resolution: failure.resolution || null,
-        attempts: failure.attempts,
-      });
+    const storage = getStorageRouter();
+    await storage.set('molly_resilience', failure.id, {
+      message: failure.message,
+      source: failure.source,
+      diagnosis: failure.level,
+      context: JSON.stringify(failure.context).slice(0, 1000),
+      stack: failure.stack?.slice(0, 2000),
+      timestamp: failure.timestamp,
+      resolved: failure.resolved,
+      resolution: failure.resolution || null,
+      attempts: failure.attempts,
+    });
   } catch (persistError) {
     // The persistence layer itself can't crash the dam
     MollyLogger.warn(

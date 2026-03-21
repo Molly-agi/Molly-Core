@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773990007403_j8gk",
+  "severity": "critical",
+  "source": "fs-test",
+  "message": "Self-healing failed: FILESYSTEM: File not found, inaccessible, or corrupted",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773990007390_l2ox18",
+  "timestamp": "2026-03-20T07:00:07.403Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-20T07:00:07.403Z",
+  "_id": "mmyjui5n_f0jm0u",
+  "_createdAt": "2026-03-20T07:00:07.403Z",
+  "_updatedAt": "2026-03-20T07:00:07.403Z"
+}

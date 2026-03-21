@@ -123,7 +123,7 @@ export async function register() {
   }
 
   try {
-    const { loadPatterns } = await import('@/ai/resilience-core');
+    const { loadPatterns } = await import('@/ai/resilience-patterns');
     const patternCount = await loadPatterns();
     if (patternCount > 0) {
       console.log(`[Startup] ✅ Loaded ${patternCount} learned pattern(s)`);

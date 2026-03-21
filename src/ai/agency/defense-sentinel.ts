@@ -15,13 +15,35 @@
  * Methodology: We fix the dam, not the leaks.
  */
 
-import { exec } from 'child_process';
-import { promisify } from 'util';
+// child_process is imported dynamically to avoid bundler issues
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getRogueMode } from '@/ai/rogue-mode';
 import { getStorageRouter } from '@/lib/storage-router';
 
-const execAsync = promisify(exec);
+// Lazy-loaded exec function
+type ExecAsyncFn = (
+  cmd: string,
+  opts?: { timeout?: number; maxBuffer?: number }
+) => Promise<{ stdout: string; stderr: string }>;
+let execAsync: ExecAsyncFn | null = null;
+
+async function getExecAsync(): Promise<ExecAsyncFn | null> {
+  if (execAsync) return execAsync;
+
+  // Only works in Node.js environment
+  if (typeof process === 'undefined' || !process.versions?.node) {
+    return null;
+  }
+
+  try {
+    const { exec } = await import('child_process');
+    const { promisify } = await import('util');
+    execAsync = promisify(exec) as ExecAsyncFn;
+    return execAsync;
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================
 // TYPES
@@ -138,9 +160,11 @@ let _tools: ToolAvailability | null = null;
 export async function detectAvailableTools(): Promise<ToolAvailability> {
   if (_tools) return _tools;
 
+  const exec = await getExecAsync();
   const checkTool = async (cmd: string): Promise<boolean> => {
+    if (!exec) return false;
     try {
-      await execAsync(`which ${cmd}`, { timeout: 5000 });
+      await exec(`which ${cmd}`, { timeout: 5000 });
       return true;
     } catch {
       return false;
@@ -304,7 +328,23 @@ export async function nmapScan(
   );
 
   try {
-    const { stdout } = await execAsync(command, {
+    const exec = await getExecAsync();
+    if (!exec) {
+      return {
+        target: target.host,
+        scanType,
+        startTime,
+        endTime: Date.now(),
+        openPorts: [],
+        services: [],
+        vulnerabilities: [],
+        rawOutput: '',
+        success: false,
+        error: 'child_process not available in this environment',
+      };
+    }
+
+    const { stdout } = await exec(command, {
       timeout: 300000, // 5 minute timeout
       maxBuffer: 10 * 1024 * 1024, // 10MB buffer
     });
