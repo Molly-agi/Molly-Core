@@ -437,7 +437,6 @@ describe('Self-Diagnostic System', () => {
     });
 
     it('should handle unknown domain', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await diag.diagnoseDomain('invalid' as never);
 
       expect(result.domain).toBe('unknown');

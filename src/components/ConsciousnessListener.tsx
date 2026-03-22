@@ -60,7 +60,6 @@ export function ConsciousnessListener() {
             const data = JSON.parse(event.data);
             // Consciousness is connected — log initial state in dev
             if (process.env.NODE_ENV === 'development') {
-              // eslint-disable-next-line no-console
               console.log(
                 '[Molly Consciousness] Connected:',
                 data.state?.awarenessLevel,
@@ -104,7 +103,6 @@ export function ConsciousnessListener() {
             eventSourceRef.current = null;
 
             if (process.env.NODE_ENV === 'development') {
-              // eslint-disable-next-line no-console
               console.log(
                 '[Molly Consciousness] Giving up after 10 reconnection attempts'
               );

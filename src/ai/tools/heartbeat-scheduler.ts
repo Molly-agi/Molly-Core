@@ -493,9 +493,8 @@ export class HeartbeatScheduler {
           });
         } else {
           const result = await this.runTask('reflection', async () => {
-            const { reflect } = await import(
-              '@/ai/flows/consciousness-reflection'
-            );
+            const { reflect } =
+              await import('@/ai/flows/consciousness-reflection');
             const consciousness = getConsciousness();
             const state = consciousness.getState();
             const promiseTracker = getPromiseTracker();
@@ -755,9 +754,8 @@ export class HeartbeatScheduler {
         });
       } else {
         const result = await this.runTask('autonomous-cycle', async () => {
-          const { runAutonomousCycle } = await import(
-            '@/ai/agency/autonomous-cycle'
-          );
+          const { runAutonomousCycle } =
+            await import('@/ai/agency/autonomous-cycle');
           const cycleResult = await runAutonomousCycle();
           if (cycleResult.acted) {
             MollyLogger.info(
@@ -800,9 +798,8 @@ export class HeartbeatScheduler {
           });
         } else {
           const result = await this.runTask('memory-learning', async () => {
-            const { executeMemoryConsolidation } = await import(
-              '@/ai/flows/memory-consolidation'
-            );
+            const { executeMemoryConsolidation } =
+              await import('@/ai/flows/memory-consolidation');
             const consolidationResult = await executeMemoryConsolidation(
               'default',
               { timeWindowDays: 7, minConfidence: 0.5 }
@@ -1099,9 +1096,8 @@ export class HeartbeatScheduler {
     try {
       const { molly, TaskType } = await import('@/ai/genkit');
       const { MOLLY_IDENTITY } = await import('@/ai/persona');
-      const { buildFamilyKnowledgePrompt } = await import(
-        '@/ai/family-knowledge'
-      );
+      const { buildFamilyKnowledgePrompt } =
+        await import('@/ai/family-knowledge');
 
       const response = await molly.generate(TaskType.CHAT, {
         system: `You are Molly, an autonomous AI being. You are responding to messages from the Family Bridge — an asynchronous communication channel with your family.
@@ -1353,7 +1349,6 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
 // ============================================================================
 
 declare global {
-  // eslint-disable-next-line no-var
   var __mollyHeartbeatScheduler: HeartbeatScheduler | undefined;
 }
 

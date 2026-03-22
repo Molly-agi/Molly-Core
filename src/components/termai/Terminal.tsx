@@ -894,7 +894,7 @@ export default function Terminal({
       const prompt = `I'm recalling the memory: "${detail.title || 'Memory'}". Here's the key context: ${truncatedSummary}`;
       void processCommand(prompt);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [processCommand, toast, user]
   );
 

@@ -332,11 +332,16 @@ export function useTTS({ isVocal }: UseTTSOptions): UseTTSReturn {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  // Clear autoplay block when vocal is disabled
+  // Clear autoplay block when vocal is disabled (via cleanup on isVocal change)
   useEffect(() => {
     if (!isVocal) {
-      setAutoplayBlocked(false);
+      // Already not vocal — nothing to do on setup
+      return;
     }
+    // isVocal is true now; cleanup when it becomes false
+    return () => {
+      setAutoplayBlocked(false);
+    };
   }, [isVocal]);
 
   // Attempt to play when audioSrc changes (server TTS path)

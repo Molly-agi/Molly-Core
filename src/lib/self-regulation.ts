@@ -263,7 +263,6 @@ function evaluateRegulation(): void {
 
   if (newMode !== currentMode) {
     if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'test') {
-      // eslint-disable-next-line no-console
       console.log(
         `[Molly Consciousness] ${currentMode} → ${newMode}: ${reason}`
       );

@@ -100,7 +100,10 @@ export function SystemHealthDot() {
   }, []);
 
   useEffect(() => {
-    checkHealth();
+    // Defer initial check to avoid synchronous setState cascade
+    queueMicrotask(() => {
+      checkHealth();
+    });
     const interval = setInterval(checkHealth, pollInterval);
     return () => clearInterval(interval);
   }, [checkHealth, pollInterval]);

@@ -58,20 +58,24 @@ export default function Dashboard() {
     }
   }, [user, isUserLoading, router]);
 
+  // Auth stall detection - only runs timeout when loading
   useEffect(() => {
-    if (!isUserLoading) {
-      setAuthStalled(false);
+    const isDev = process.env.NODE_ENV === 'development';
+
+    // Only set up stall timeout if we're actually loading (in dev)
+    if (!isUserLoading || !isDev) {
       return;
     }
-
-    const isDev = process.env.NODE_ENV === 'development';
-    if (!isDev) return;
 
     const timeout = setTimeout(() => {
       setAuthStalled(true);
     }, 12000);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+      // Reset stalled state when loading completes (cleanup runs on re-render)
+      setAuthStalled(false);
+    };
   }, [isUserLoading]);
 
   // Handle authentication errors with retry
