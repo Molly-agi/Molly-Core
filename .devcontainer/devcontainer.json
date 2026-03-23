@@ -22,11 +22,15 @@
     }
   },
 
-  // Forward Molly's port
-  "forwardPorts": [9002],
+  // Forward Molly's ports
+  "forwardPorts": [9002, 9099],
   "portsAttributes": {
     "9002": {
       "label": "Molly Dev Server",
+      "onAutoForward": "notify"
+    },
+    "9099": {
+      "label": "Family Bridge (WebSocket)",
       "onAutoForward": "notify"
     }
   }

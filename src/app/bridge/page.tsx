@@ -51,8 +51,30 @@ export default function BridgeObserver() {
       reconnectTimer.current = null;
     }
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.hostname}:${BRIDGE_PORT}`;
+    // Construct WebSocket URL — handle Codespaces port forwarding
+    let wsUrl: string;
+    const hostname = window.location.hostname;
+
+    if (
+      hostname.includes('.app.github.dev') ||
+      hostname.includes('.github.dev')
+    ) {
+      // Codespaces: ports are forwarded via xxx-PORT.app.github.dev
+      // e.g., xxx-9002.app.github.dev -> xxx-9099.app.github.dev
+      const baseHost = hostname
+        .replace(/-\d+\.app\.github\.dev$/, '')
+        .replace(/\.github\.dev$/, '');
+      wsUrl = `wss://${baseHost}-${BRIDGE_PORT}.app.github.dev`;
+    } else if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      // Local development
+      wsUrl = `ws://${hostname}:${BRIDGE_PORT}`;
+    } else {
+      // Generic fallback
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      wsUrl = `${protocol}//${hostname}:${BRIDGE_PORT}`;
+    }
+
+    console.log('[Bridge] Connecting to:', wsUrl);
 
     try {
       const ws = new WebSocket(wsUrl);
@@ -98,14 +120,19 @@ export default function BridgeObserver() {
         }
       };
 
-      ws.onclose = () => {
+      ws.onclose = (event) => {
         setConnected(false);
         wsRef.current = null;
-        reconnectTimer.current = setTimeout(connectWS, 3000);
+        console.log('[Bridge] Connection closed:', event.code, event.reason);
+        // Only auto-reconnect on unexpected close
+        if (event.code !== 1000) {
+          reconnectTimer.current = setTimeout(connectWS, 3000);
+        }
       };
 
-      ws.onerror = () => {
-        setError('Bridge daemon unreachable');
+      ws.onerror = (event) => {
+        console.error('[Bridge] WebSocket error:', event);
+        setError('Bridge daemon unreachable — ensure port 9099 is forwarded');
         ws.close();
       };
     } catch {
