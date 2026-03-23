@@ -404,7 +404,17 @@ export function getGateStatus(): {
   totalVerifications: number;
   totalBlocks: number;
   blockRate: number;
+  // Compatibility aliases
+  gateClosed: boolean;
+  overallAlignment: AlignmentStatus;
+  totalChecks: number;
+  recentBlocks: number;
 } {
+  // Count recent blocks (last 50 verifications)
+  const recentBlocks = _state.recentVerifications.filter(
+    (v) => v.status === 'MISALIGNED'
+  ).length;
+
   return {
     alignment: _state.alignment,
     sealActive: _seal !== null,
@@ -415,6 +425,11 @@ export function getGateStatus(): {
       _state.totalVerifications > 0
         ? _state.totalBlocks / _state.totalVerifications
         : 0,
+    // Compatibility aliases
+    gateClosed: _state.alignment === 'MISALIGNED',
+    overallAlignment: _state.alignment,
+    totalChecks: _state.totalVerifications,
+    recentBlocks,
   };
 }
 

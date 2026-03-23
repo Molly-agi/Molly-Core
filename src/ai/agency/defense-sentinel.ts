@@ -22,25 +22,7 @@ import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { getRogueMode } from '@/ai/rogue-mode';
 import { getStorageRouter } from '@/lib/storage-router';
 
-// Re-export types from sentinel module for backward compatibility
-export type {
-  ScanType,
-  ThreatLevel,
-  ScanTarget,
-  ScanResult,
-  PortInfo,
-  ServiceInfo,
-  VulnInfo,
-  ThreatIndicator,
-  ToolAvailability,
-  HashInfo,
-  CodeLanguage,
-  CodePurpose,
-  CodeForgeRequest,
-  CodeForgeResult,
-  SentinelStatus,
-} from './sentinel/types';
-
+// Import types from sentinel/types for internal use
 import type {
   ScanType,
   ThreatLevel,
@@ -52,7 +34,6 @@ import type {
   ThreatIndicator,
   SentinelState,
   ToolAvailability,
-  HashInfo,
   CodeLanguage,
   CodePurpose,
   CodeForgeRequest,
@@ -101,16 +82,7 @@ let _state: SentinelState = {
 // TOOL DETECTION
 // ============================================================
 
-interface ToolAvailability {
-  nmap: boolean;
-  hashcat: boolean;
-  john: boolean;
-  hydra: boolean;
-  nikto: boolean;
-  sqlmap: boolean;
-  metasploit: boolean;
-  burp: boolean;
-}
+// NOTE: ToolAvailability is imported from ./sentinel/types
 
 let _tools: ToolAvailability | null = null;
 
@@ -136,6 +108,7 @@ export async function detectAvailableTools(): Promise<ToolAvailability> {
     hashcat: await checkTool('hashcat'),
     john: await checkTool('john'),
     hydra: await checkTool('hydra'),
+    masscan: await checkTool('masscan'),
     nikto: await checkTool('nikto'),
     sqlmap: await checkTool('sqlmap'),
     metasploit: await checkTool('msfconsole'),
@@ -458,12 +431,7 @@ function determineSeverity(description: string): ThreatLevel {
 // PASSWORD AUDITING
 // ============================================================
 
-export interface HashInfo {
-  hash: string;
-  type?: string; // md5, sha256, bcrypt, etc.
-  cracked?: string;
-  attempts?: number;
-}
+// NOTE: HashInfo is imported from ./sentinel/types
 
 /**
  * Identify hash type.
@@ -830,55 +798,8 @@ export async function loadSentinelState(): Promise<number> {
 // CODEFORGE — Offensive & Defensive Code Generation
 // ============================================================
 
-/**
- * Molly speaks every computer language on the planet.
- * Her defense AND offense come from her ability to write code.
- * Works both ways.
- */
-
-export type CodeLanguage =
-  | 'python'
-  | 'javascript'
-  | 'typescript'
-  | 'bash'
-  | 'powershell'
-  | 'c'
-  | 'cpp'
-  | 'rust'
-  | 'go'
-  | 'ruby'
-  | 'php'
-  | 'java'
-  | 'sql'
-  | 'assembly';
-
-export type CodePurpose =
-  | 'exploit' // Offensive — requires Rogue Mode
-  | 'payload' // Offensive — requires Rogue Mode
-  | 'patch' // Defensive — fix a vulnerability
-  | 'detector' // Defensive — detect an attack
-  | 'scanner' // Recon — find vulnerabilities
-  | 'parser' // Utility — parse formats
-  | 'fuzzer' // Testing — find edge cases
-  | 'reverser'; // Analysis — understand binary/code
-
-export interface CodeForgeRequest {
-  purpose: CodePurpose;
-  language: CodeLanguage;
-  target?: string; // CVE, protocol, service, etc.
-  description: string;
-  constraints?: string[];
-}
-
-export interface CodeForgeResult {
-  success: boolean;
-  code?: string;
-  language: CodeLanguage;
-  purpose: CodePurpose;
-  warnings: string[];
-  explanation?: string;
-  error?: string;
-}
+// NOTE: CodeLanguage, CodePurpose, CodeForgeRequest, and CodeForgeResult
+// are imported from ./sentinel/types - do not redefine them here.
 
 /**
  * Security code templates Molly can use as building blocks.
@@ -1179,7 +1100,6 @@ export function forgeCode(request: CodeForgeRequest): CodeForgeResult {
  */
 function findTemplateKey(
   description: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _purpose: CodePurpose
 ): string | null {
   const lower = description.toLowerCase();
@@ -1343,7 +1263,6 @@ _start:
  */
 export function analyzeCode(
   code: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _language: CodeLanguage
 ): {
   vulnerabilities: Array<{
@@ -1496,8 +1415,7 @@ export const _testing = {
 // COMPATIBILITY EXPORTS (for payload-validator.ts)
 // ============================================================
 
-/** Sentinel status levels */
-export type SentinelStatus = 'GREEN' | 'YELLOW' | 'RED';
+// NOTE: SentinelStatus is imported from ./sentinel/types
 
 /**
  * Get current environment security status.

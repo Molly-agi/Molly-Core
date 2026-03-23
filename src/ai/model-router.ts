@@ -385,7 +385,6 @@ export class ClaudeProvider implements ModelProvider {
     this.model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   resolveModel(_taskType: TaskType): string {
     // Claude excels at reasoning and code — use the same model for all
     return `anthropic/${this.model}`;
@@ -899,6 +898,10 @@ export class ModelRouter {
     byTaskType: Record<string, number>;
     fallbackRate: number;
     avgRoutingLatencyMs: number;
+    // Compatibility aliases
+    totalCalls: number;
+    failedCalls: number;
+    averageLatency: number;
   } {
     const byProvider: Record<string, number> = {};
     const byTaskType: Record<string, number> = {};
@@ -913,18 +916,19 @@ export class ModelRouter {
       totalLatency += decision.routingLatencyMs;
     }
 
+    const totalDecisions = this.routingHistory.length;
+    const avgLatency = totalDecisions > 0 ? totalLatency / totalDecisions : 0;
+
     return {
-      totalDecisions: this.routingHistory.length,
+      totalDecisions,
       byProvider,
       byTaskType,
-      fallbackRate:
-        this.routingHistory.length > 0
-          ? fallbackCount / this.routingHistory.length
-          : 0,
-      avgRoutingLatencyMs:
-        this.routingHistory.length > 0
-          ? totalLatency / this.routingHistory.length
-          : 0,
+      fallbackRate: totalDecisions > 0 ? fallbackCount / totalDecisions : 0,
+      avgRoutingLatencyMs: avgLatency,
+      // Compatibility aliases
+      totalCalls: totalDecisions,
+      failedCalls: fallbackCount, // Fallbacks count as "failed" first attempts
+      averageLatency: avgLatency,
     };
   }
 

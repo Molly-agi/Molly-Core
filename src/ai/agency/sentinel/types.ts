@@ -103,6 +103,9 @@ export interface ToolAvailability {
   hydra: boolean;
   masscan: boolean;
   nikto: boolean;
+  sqlmap: boolean;
+  metasploit: boolean;
+  burp: boolean;
 }
 
 // ============================================================
@@ -110,11 +113,16 @@ export interface ToolAvailability {
 // ============================================================
 
 export interface HashInfo {
+  // Hash identification fields
   type: string;
-  length: number;
-  format: string;
+  length?: number;
+  format?: string;
   hashcatMode?: number;
   johnFormat?: string;
+  // Cracking progress fields
+  hash?: string;
+  cracked?: string;
+  attempts?: number;
 }
 
 // ============================================================
@@ -134,7 +142,9 @@ export type CodeLanguage =
   | 'ruby'
   | 'php'
   | 'java'
-  | 'csharp';
+  | 'csharp'
+  | 'sql'
+  | 'assembly';
 
 export type CodePurpose =
   | 'recon'
@@ -143,23 +153,34 @@ export type CodePurpose =
   | 'persistence'
   | 'defense'
   | 'analysis'
-  | 'utility';
+  | 'utility'
+  // Additional purposes from defense-sentinel
+  | 'patch'
+  | 'detector'
+  | 'scanner'
+  | 'parser'
+  | 'fuzzer'
+  | 'reverser';
 
 export interface CodeForgeRequest {
   language: CodeLanguage;
   purpose: CodePurpose;
   description: string;
+  target?: string;
   constraints?: string[];
   targetPlatform?: string;
 }
 
 export interface CodeForgeResult {
+  success: boolean;
   code: string;
   language: CodeLanguage;
   purpose: CodePurpose;
   warnings: string[];
   dependencies: string[];
   usage: string;
+  explanation?: string;
+  error?: string;
 }
 
 export type SentinelStatus = 'GREEN' | 'YELLOW' | 'RED';

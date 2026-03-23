@@ -18,7 +18,8 @@ import path from 'path';
 import { promises as fs } from 'fs';
 import crypto from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
-import { getEnvironmentStatus, SentinelStatus } from './defense-sentinel';
+import { getEnvironmentStatus } from './defense-sentinel';
+import type { SentinelStatus } from './sentinel/types';
 
 // ============================================================
 // TYPES

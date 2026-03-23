@@ -853,6 +853,11 @@ export function getObservationStatus() {
     bySeverity[p.severity]++;
   }
 
+  // Count failure observations
+  const failureCount = state.observations.filter(
+    (o) => o.type === 'failure'
+  ).length;
+
   return {
     observationsInWindow: state.observations.length,
     totalObservations: state.stats.totalObservations,
@@ -871,6 +876,9 @@ export function getObservationStatus() {
       })),
     decisionOutcomes: state.stats.decisionOutcomes,
     lastAnalysisAt: state.lastAnalysisAt,
+    // Compatibility aliases
+    failureCount,
+    patternCount: state.patterns.length,
   };
 }
 

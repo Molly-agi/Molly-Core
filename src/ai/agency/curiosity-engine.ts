@@ -750,6 +750,9 @@ export function getCuriosityStatus() {
     activeInvestigations: state.activeInvestigations.length,
     totalGenerated: state.totalGenerated,
     totalInvestigated: state.totalInvestigated,
+    // Compatibility aliases
+    activeQuestions: uninvestigated.length,
+    totalInvestigations: state.totalInvestigated,
     byType,
     bySource,
     topQuestions: uninvestigated

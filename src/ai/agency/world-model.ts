@@ -131,6 +131,8 @@ export interface Prediction {
   id: string;
   /** What was predicted */
   prediction: string;
+  /** Alias for prediction (backward compatibility) */
+  description?: string;
   /** Confidence at time of prediction */
   confidence: number;
   /** When it was made */
@@ -688,6 +690,7 @@ export function predict(
   const pred: Prediction = {
     id: generateId('pred'),
     prediction,
+    description: prediction, // Alias for backward compatibility
     confidence: Math.max(0, Math.min(1, confidence)),
     madeAt: new Date().toISOString(),
     resolveBy: new Date(Date.now() + resolveByMs).toISOString(),
@@ -1044,9 +1047,15 @@ export function seedWorldModel(): void {
 // ── Status / Observability ─────────────────────────────────────
 
 export function getWorldModelStatus() {
+  const entityCount = state.entities.length;
+  const relationCount = state.relations.length;
   return {
-    entities: state.entities.length,
-    relations: state.relations.length,
+    // New canonical names
+    entityCount,
+    relationCount,
+    // Legacy aliases (keep both for backward compatibility)
+    entities: entityCount,
+    relations: relationCount,
     simulations: state.simulations.length,
     pendingPredictions: state.predictions.filter((p) => !p.verified).length,
     predictionAccuracy: Math.round(state.stats.predictionAccuracy * 100),
