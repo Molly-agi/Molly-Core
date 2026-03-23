@@ -1,4 +1,8 @@
-import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
+import {
+  getCircuitBreaker,
+  CircuitState,
+  CircuitStats,
+} from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getLatencyStats } from '@/ai/tools/latency-cache';
 import { getSystemHealth } from '@/ai/tools/system';
@@ -197,21 +201,21 @@ export async function collectRuntimeSnapshot(
   const operationEntries = Object.entries(breakerStatus.operations || {});
 
   const openOperations = operationEntries
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter(([, stats]: any) => stats.state === CircuitState.OPEN)
+    .filter(([, stats]) => (stats as CircuitStats).state === CircuitState.OPEN)
     .map(([name]) => name);
 
   const halfOpenOperations = operationEntries
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter(([, stats]: any) => stats.state === CircuitState.HALF_OPEN)
+    .filter(
+      ([, stats]) => (stats as CircuitStats).state === CircuitState.HALF_OPEN
+    )
     .map(([name]) => name);
 
   const recentFailureOperations = operationEntries
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter(([, stats]: any) => (stats.failureCount || 0) > 0)
+    .filter(([, stats]) => ((stats as CircuitStats).failureCount || 0) > 0)
     .sort(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (a: any, b: any) => (b[1].failureCount || 0) - (a[1].failureCount || 0)
+      (a, b) =>
+        ((b[1] as CircuitStats).failureCount || 0) -
+        ((a[1] as CircuitStats).failureCount || 0)
     )
     .slice(0, 5)
     .map(([name]) => name);
@@ -260,8 +264,8 @@ export async function collectRuntimeSnapshot(
       openOperations,
       halfOpenOperations,
       failureCount: operationEntries.reduce(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (sum: number, [, stats]: any) => sum + (stats.failureCount || 0),
+        (sum: number, [, stats]) =>
+          sum + ((stats as CircuitStats).failureCount || 0),
         0
       ),
       recentFailureOperations,

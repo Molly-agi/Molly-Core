@@ -10,6 +10,7 @@
 
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import { MollyLogger } from '@/ai/logger';
 
 // Session state always writes to project root so Copilot can read the
 // persisted state files. The /tmp path was causing files to vanish on
@@ -112,9 +113,9 @@ export function saveSessionState(state: Partial<SessionState>): void {
       // Backup directory may not exist yet, that's okay
     }
 
-    console.log('[Session Manager] State saved successfully');
+    MollyLogger.info('State saved successfully', 'session-manager');
   } catch (error) {
-    console.error('[Session Manager] Failed to save state:', error);
+    MollyLogger.error('Failed to save state', 'session-manager', {}, error);
   }
 }
 
@@ -229,72 +230,93 @@ function generateMarkdownFromState(state: SessionState): string {
     ? { ...state.runtime, events: state.runtime.events ?? [] }
     : { events: [] as SessionEvent[] };
 
+  // Defensive defaults for nested properties
+  const projectStatus = {
+    completionPercent: state.projectStatus?.completionPercent ?? 0,
+    phasesCompleted: state.projectStatus?.phasesCompleted ?? [],
+    phasesPending: state.projectStatus?.phasesPending ?? [],
+    activeBlockers: state.projectStatus?.activeBlockers ?? [],
+  };
+  const userDirectives = {
+    coreDirective: state.userDirectives?.coreDirective ?? 'None set',
+    requiresPermission: state.userDirectives?.requiresPermission ?? [],
+    autonomousActions: state.userDirectives?.autonomousActions ?? [],
+  };
+  const recentWork = state.recentWork ?? [];
+  const nextSteps = {
+    options: state.nextSteps?.options ?? [],
+    recommendedAction: state.nextSteps?.recommendedAction ?? 'None',
+  };
+  const sessionNotes = state.sessionNotes ?? [];
+
   return `# GitHub Copilot Session State & Memory
-**Last Updated:** ${state.lastUpdated}  
-**Session ID:** ${state.sessionId}  
+**Last Updated:** ${state.lastUpdated}
+**Session ID:** ${state.sessionId}
 **Status:** ${state.status}
 
 ---
 
 ## USER DIRECTIVES (PERMANENT)
 
-### Core Directive: ${state.userDirectives.coreDirective}
+### Core Directive: ${userDirectives.coreDirective}
 
 **What Requires Permission:**
-${state.userDirectives.requiresPermission.map((item) => `- ${item}`).join('\n')}
+${userDirectives.requiresPermission.map((item) => `- ${item}`).join('\n') || '- None specified'}
 
 **What Can Proceed Autonomously:**
-${state.userDirectives.autonomousActions.map((item) => `- ${item}`).join('\n')}
+${userDirectives.autonomousActions.map((item) => `- ${item}`).join('\n') || '- None specified'}
 
 ---
 
 ## CURRENT PROJECT STATUS
 
-### Completion: ${state.projectStatus.completionPercent}%
+### Completion: ${projectStatus.completionPercent}%
 
 **✅ COMPLETED:**
-${state.projectStatus.phasesCompleted.map((p, i) => `${i + 1}. ${p}`).join('\n')}
+${projectStatus.phasesCompleted.map((p, i) => `${i + 1}. ${p}`).join('\n') || '(none)'}
 
 **⏳ PENDING:**
-${state.projectStatus.phasesPending.map((p, i) => `${i + state.projectStatus.phasesCompleted.length + 1}. ${p}`).join('\n')}
+${projectStatus.phasesPending.map((p, i) => `${i + projectStatus.phasesCompleted.length + 1}. ${p}`).join('\n') || '(none)'}
 
-${state.projectStatus.activeBlockers.length > 0 ? `**🔴 ACTIVE BLOCKERS:**\n${state.projectStatus.activeBlockers.map((b) => `- ${b}`).join('\n')}` : ''}
+${projectStatus.activeBlockers.length > 0 ? `**🔴 ACTIVE BLOCKERS:**\n${projectStatus.activeBlockers.map((b) => `- ${b}`).join('\n')}` : ''}
 
 ---
 
 ## RECENT WORK COMPLETED
 
-${state.recentWork
-  .map(
-    (work) => `### ${work.date}
+${
+  recentWork
+    .map(
+      (work) => `### ${work.date}
 ${work.summary}
 
-${work.filesCreated.length > 0 ? `**Files Created:**\n${work.filesCreated.map((f) => `- ${f}`).join('\n')}\n` : ''}
-${work.filesModified.length > 0 ? `**Files Modified:**\n${work.filesModified.map((f) => `- ${f}`).join('\n')}\n` : ''}
-${work.decisions.length > 0 ? `**Decisions Made:**\n${work.decisions.map((d) => `- ${d}`).join('\n')}\n` : ''}
+${(work.filesCreated?.length ?? 0) > 0 ? `**Files Created:**\n${work.filesCreated.map((f) => `- ${f}`).join('\n')}\n` : ''}
+${(work.filesModified?.length ?? 0) > 0 ? `**Files Modified:**\n${work.filesModified.map((f) => `- ${f}`).join('\n')}\n` : ''}
+${(work.decisions?.length ?? 0) > 0 ? `**Decisions Made:**\n${work.decisions.map((d) => `- ${d}`).join('\n')}\n` : ''}
 `
-  )
-  .join('\n')}
+    )
+    .join('\n') || '(none recorded)'
+}
 
 ---
 
 ## NEXT STEPS
 
-${state.nextSteps.options.map((opt, i) => `**Option ${String.fromCharCode(65 + i)}:** ${opt}`).join('\n')}
+${nextSteps.options.map((opt, i) => `**Option ${String.fromCharCode(65 + i)}:** ${opt}`).join('\n') || '(none)'}
 
-**Recommended:** ${state.nextSteps.recommendedAction}
+**Recommended:** ${nextSteps.recommendedAction}
 
 ---
 
 ## SESSION NOTES
 
-${state.sessionNotes.map((note) => `- ${note}`).join('\n')}
+${sessionNotes.map((note) => `- ${note}`).join('\n') || '(none)'}
 
 ---
 
 ## RUNTIME EVENTS
 
-**Last URL:** ${runtime.lastUrl || 'unknown'}  
+**Last URL:** ${runtime.lastUrl || 'unknown'}
 **Last Heartbeat:** ${runtime.lastHeartbeat || 'unknown'}
 
 ${runtime.events.length > 0 ? '**Recent Events:**' : '**Recent Events:** (none)'}
@@ -567,9 +589,9 @@ function getDefaultState(): SessionState {
  * Hook to call before app shutdown
  */
 export async function onAppShutdown(reason?: string): Promise<void> {
-  console.log('[Session Manager] Saving state before shutdown...');
+  MollyLogger.info('Saving state before shutdown...', 'session-manager');
   if (reason) {
-    console.log(`[Session Manager] Shutdown signal: ${reason}`);
+    MollyLogger.info(`Shutdown signal: ${reason}`, 'session-manager');
   }
 
   // Save local session state (synchronous — always works)
@@ -579,15 +601,17 @@ export async function onAppShutdown(reason?: string): Promise<void> {
 
   // Force-persist runtime state to Firestore (async, best-effort)
   try {
-    const { getHeartbeatScheduler } = await import(
-      '@/ai/tools/heartbeat-scheduler'
-    );
+    const { getHeartbeatScheduler } =
+      await import('@/ai/tools/heartbeat-scheduler');
     const scheduler = getHeartbeatScheduler();
     await scheduler.forcePersist();
-    console.log('[Session Manager] Runtime state persisted to Firestore.');
+    MollyLogger.info(
+      'Runtime state persisted to Firestore.',
+      'session-manager'
+    );
   } catch (e) {
     // Non-fatal — Firestore may be unavailable during shutdown
-    console.error('[Session Manager] Firestore persist failed:', e);
+    MollyLogger.error('Firestore persist failed', 'session-manager', {}, e);
   }
 }
 
@@ -613,7 +637,7 @@ if (
     });
     // process.on('exit') is synchronous — can only do sync work
     process.on('exit', (code) => {
-      console.log(`[Session Manager] Process exiting with code ${code}`);
+      MollyLogger.info(`Process exiting with code ${code}`, 'session-manager');
     });
   }
 }

@@ -102,7 +102,7 @@ const nextConfig = {
         '*.app.github.dev:9002',
         'special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev',
       ],
-      bodySizeLimit: '2mb',
+      bodySizeLimit: '10mb',
     },
   },
   images: {

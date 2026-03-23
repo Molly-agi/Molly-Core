@@ -292,7 +292,11 @@ async function searchVoterRecords(
     FLOW_NAME
   );
 
-  return null; // TODO: Implement when voter files are downloaded
+  // DEFERRED: Voter file lookup requires downloading state voter registration files.
+  // Oregon and Washington provide these free with standard request forms.
+  // Until files are obtained and indexed, we return null.
+  // See: https://sos.oregon.gov/elections/Pages/voter-registration-data.aspx
+  return null;
 }
 
 /**

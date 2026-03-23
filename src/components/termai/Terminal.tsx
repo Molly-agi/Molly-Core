@@ -38,7 +38,7 @@ import { type HistoryItem, type AnchorRecallDetail } from './terminal-types';
 import { useTTS } from './useTTS';
 import { useFamilyStory } from './useFamilyStory';
 import { ChatHistory } from './ChatHistory';
-import { CommandBar } from './CommandBar';
+import { CommandBar, type UploadedFile } from './CommandBar';
 import { VisionPanel } from './VisionPanel';
 import { PurgeButton } from './PurgeButton';
 import BridgePanel from './BridgePanel';
@@ -78,6 +78,9 @@ export default function Terminal({
     ocrAudit?: string;
     capturedAt: number;
   } | null>(null);
+
+  // Uploaded image/video for analysis
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
 
   const internalLastResponseRef = useRef<string | null>(null);
   const lastResponseRef = externalLastResponseRef ?? internalLastResponseRef;
@@ -237,6 +240,53 @@ export default function Terminal({
 
       setIsLoading(true);
       isLoadingRef.current = true;
+
+      // If there's an uploaded file, analyze it first and include in vision context
+      let fileVisionContext = visionContext;
+      const currentUploadedFile = uploadedFile;
+      if (currentUploadedFile) {
+        try {
+          setHistory((prev) => [
+            ...prev,
+            `[Analyzing ${currentUploadedFile.type.startsWith('video/') ? 'video' : 'image'}: ${currentUploadedFile.name}...]`,
+          ]);
+
+          // Use API route instead of server action to bypass RSC serialization limits
+          const response = await fetch('/api/vision/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              dataUri: currentUploadedFile.dataUri,
+              context: cmdText || 'Analyze this image/video',
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP ${response.status}`);
+          }
+
+          const analysis = await response.json();
+          fileVisionContext = {
+            observedState: analysis.observedState || 'Image/video analyzed',
+            vibeAnalysis: analysis.vibeAnalysis || 'Visual content received',
+            risksDetected: analysis.risksDetected || [],
+            ocrAudit: analysis.ocrAudit,
+            capturedAt: Date.now(),
+          };
+          // Clear the uploaded file after analysis
+          setUploadedFile(null);
+        } catch (error) {
+          const errMsg =
+            error instanceof Error ? error.message : 'Unknown error';
+          setHistory((prev) => [
+            ...prev,
+            `[Vision analysis failed: ${errMsg}]`,
+          ]);
+          fileVisionContext = visionContext;
+        }
+      }
+
       try {
         if (cmdText.startsWith('/solve ')) {
           const prompt = cmdText.replace('/solve ', '');
@@ -569,12 +619,17 @@ export default function Terminal({
             lines.push('');
             lines.push('--- Connected Peers ---');
             if (peerData?.connectedPeers?.length > 0) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              peerData.connectedPeers.forEach((p: any) => {
-                lines.push(
-                  `  \u2705 ${p.name} (${p.type}) — ${p.capabilities?.join(', ') ?? ''}`
-                );
-              });
+              peerData.connectedPeers.forEach(
+                (p: {
+                  name: string;
+                  type: string;
+                  capabilities?: string[];
+                }) => {
+                  lines.push(
+                    `  \u2705 ${p.name} (${p.type}) — ${p.capabilities?.join(', ') ?? ''}`
+                  );
+                }
+              );
             } else {
               lines.push('  No peers connected');
             }
@@ -642,7 +697,7 @@ export default function Terminal({
               currentHistory,
               i === 0 ? selfSignals : undefined,
               user.uid,
-              i === 0 ? (visionContext ?? undefined) : undefined
+              i === 0 ? (fileVisionContext ?? undefined) : undefined
             );
             const responseText =
               typeof aiResponse === 'string'
@@ -798,7 +853,14 @@ export default function Terminal({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- history/isLoading read from refs; handleSleepNotice and lastResponseRef are stable
-    [buildChatHistory, handleFamilyStoryRequest, speakResponse, user]
+    [
+      buildChatHistory,
+      handleFamilyStoryRequest,
+      speakResponse,
+      user,
+      uploadedFile,
+      visionContext,
+    ]
   );
 
   const handleCommand = (e: React.FormEvent) => {
@@ -1215,6 +1277,9 @@ export default function Terminal({
         isVocalizing={isVocalizing}
         autoplayBlocked={autoplayBlocked}
         onClearHistory={() => setHistory([])}
+        onFileUpload={setUploadedFile}
+        uploadedFile={uploadedFile}
+        onClearUpload={() => setUploadedFile(null)}
       />
 
       <BridgePanel />

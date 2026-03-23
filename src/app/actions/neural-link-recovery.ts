@@ -92,12 +92,10 @@ export async function diagnoseMollyNeuralLink() {
   const openBreakers = Object.entries(
     diagnostics.circuitBreakerStatus.operationStats
   )
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(([_name, stats]) => stats.state === 'OPEN')
     .map(([name]) => name);
 
   const failedModels = Object.entries(diagnostics.modelAvailability.modelTests)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .filter(([_name, test]) => !test.available)
     .map(([name]) => name);
   const flashAvailable =
@@ -276,8 +274,7 @@ async function _restoreMollyNeuralLinkInner(): Promise<RecoveryResult> {
     const afterStatus = recoveryLog.afterDiagnostic;
     const hasOpenBreakers = Object.values(
       afterStatus.circuitBreakerStatus.operationStats
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ).some((stats: any) => stats.state === 'OPEN');
+    ).some((stats: { state?: string }) => stats.state === 'OPEN');
     const flashAvailable =
       afterStatus.modelAvailability.modelTests.FLASH.available;
     const recoverySucceeded = !hasOpenBreakers && flashAvailable;

@@ -147,29 +147,32 @@ export async function loadMetaLearningState(): Promise<void> {
 
   try {
     const storage = getStorageRouter();
-    const doc = await storage.getDoc(COLLECTION, STATE_DOC);
+    const doc = await storage.get(COLLECTION, STATE_DOC);
 
-    if (doc) {
+    if (doc && doc.data) {
       // Restore strategies
-      if (doc.strategies) {
+      const strategies = doc.data.strategies as Strategy[] | undefined;
+      if (strategies) {
         state.strategies.clear();
-        for (const s of doc.strategies) {
+        for (const s of strategies) {
           state.strategies.set(s.id, s);
         }
       }
 
       // Restore learning events
-      if (doc.learningEvents) {
-        state.learningEvents = doc.learningEvents;
+      const events = doc.data.learningEvents as LearningEvent[] | undefined;
+      if (events) {
+        state.learningEvents = events;
       }
 
       // Restore insights
-      if (doc.insights) {
-        state.insights = doc.insights;
+      const insights = doc.data.insights as MetaInsight[] | undefined;
+      if (insights) {
+        state.insights = insights;
       }
 
-      state.lastMetaReflection = doc.lastMetaReflection || 0;
-      state.totalLearningEvents = doc.totalLearningEvents || 0;
+      state.lastMetaReflection = (doc.data.lastMetaReflection as number) || 0;
+      state.totalLearningEvents = (doc.data.totalLearningEvents as number) || 0;
 
       MollyLogger.info(
         'Meta-learning state loaded',
@@ -204,7 +207,7 @@ async function saveState(): Promise<void> {
 
   try {
     const storage = getStorageRouter();
-    await storage.setDoc(COLLECTION, STATE_DOC, {
+    await storage.set(COLLECTION, STATE_DOC, {
       strategies: Array.from(state.strategies.values()),
       learningEvents: state.learningEvents,
       insights: state.insights,

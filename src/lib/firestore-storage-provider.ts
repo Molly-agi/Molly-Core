@@ -40,13 +40,16 @@ function getCollectionRef(
   }
 
   // Build the reference by alternating collection/doc
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let ref: any = db.collection(segments[0]);
+  let ref:
+    | FirebaseFirestore.CollectionReference
+    | FirebaseFirestore.DocumentReference = db.collection(segments[0]);
   for (let i = 1; i < segments.length; i++) {
     if (i % 2 === 1) {
-      ref = ref.doc(segments[i]);
+      ref = (ref as FirebaseFirestore.CollectionReference).doc(segments[i]);
     } else {
-      ref = ref.collection(segments[i]);
+      ref = (ref as FirebaseFirestore.DocumentReference).collection(
+        segments[i]
+      );
     }
   }
 
@@ -160,8 +163,7 @@ export class FirestoreStorageProvider implements StorageProvider {
     const colRef = getCollectionRef(db, collectionPath);
 
     // Build the query
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let q: any = colRef;
+    let q: FirebaseFirestore.Query = colRef;
 
     if (filters) {
       for (const filter of filters) {

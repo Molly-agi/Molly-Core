@@ -25,11 +25,13 @@ import {
   detectAvailableTools,
   forgeCode,
   analyzeCode,
-  type ScanType,
-  type ThreatLevel,
-  type CodeLanguage,
-  type CodePurpose,
 } from '@/ai/agency/defense-sentinel';
+import type {
+  ScanType,
+  ThreatLevel,
+  CodeLanguage,
+  CodePurpose,
+} from '@/ai/agency/sentinel/types';
 
 // ============================================================
 // SCHEMA

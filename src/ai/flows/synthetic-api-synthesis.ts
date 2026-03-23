@@ -110,8 +110,7 @@ export const syntheticAPISynthesisFlow = ai.defineFlow(
 export async function runSyntheticSynthesis(
   target: string,
   userId: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  category: any
+  category: 'Normal' | 'Administrator' | 'SuperUser' = 'Normal'
 ) {
   return await syntheticAPISynthesisFlow({
     target,

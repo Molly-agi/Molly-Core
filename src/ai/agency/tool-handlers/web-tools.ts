@@ -24,9 +24,14 @@ export const webSearch: ToolHandler = async (params) => {
       method: 'POST',
       signal: controller.signal,
       headers: {
-        'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
-        Accept: 'text/html',
+        // Use a browser-like User-Agent to avoid being blocked
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        Accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
         'Content-Type': 'application/x-www-form-urlencoded',
+        Referer: 'https://duckduckgo.com/',
       },
       body: `q=${encodeURIComponent(query)}`,
     });
@@ -131,8 +136,12 @@ export const webFetch: ToolHandler = async (params) => {
     const response = await fetch(parsed.toString(), {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
-        Accept: 'text/html, application/json, text/plain, */*',
+        // Use a browser-like User-Agent to ensure pages render correctly
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        Accept:
+          'text/html,application/json,text/plain,application/xhtml+xml,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
       },
       redirect: 'follow',
     });

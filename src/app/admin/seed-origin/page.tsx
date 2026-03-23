@@ -72,8 +72,7 @@ export default function SeedOriginPage() {
   const [result, setResult] = useState<{
     success: boolean;
     message: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    details?: any;
+    details?: Record<string, unknown>;
   } | null>(null);
 
   const seedOriginStory = async () => {

@@ -25,8 +25,7 @@ export interface RetryConfig {
   /** Add random jitter to prevent thundering herd */
   jitter: boolean;
   /** Function to determine if error is retryable */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  shouldRetry?: (error: any, attempt: number) => boolean;
+  shouldRetry?: (error: unknown, attempt: number) => boolean;
 }
 
 export interface TimeoutConfig {
@@ -42,8 +41,7 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
   maxDelayMs: 10000,
   backoffMultiplier: 2,
   jitter: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  shouldRetry: (error: any) => {
+  shouldRetry: (error: unknown) => {
     // Retry on network errors, rate limits, and 5xx status codes
     const err = error as Record<string, unknown>;
     return (

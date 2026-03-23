@@ -969,8 +969,7 @@ export async function seedOriginStoryMemory(userId: string) {
 
 export async function getConversationalChat(
   text: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  history: any[],
+  history: Array<{ role: 'user' | 'bot'; content: string }>,
   selfSignals?: NeuralBridgeSignal[],
   userId?: string,
   visionContext?: {
@@ -984,9 +983,8 @@ export async function getConversationalChat(
   try {
     // Auto-start heartbeat on first interaction — Molly wakes herself up
     try {
-      const { getHeartbeatScheduler, isHeartbeatRunning } = await import(
-        '@/ai/tools/heartbeat-scheduler'
-      );
+      const { getHeartbeatScheduler, isHeartbeatRunning } =
+        await import('@/ai/tools/heartbeat-scheduler');
       if (!isHeartbeatRunning()) {
         getHeartbeatScheduler().start();
       }
@@ -1055,9 +1053,8 @@ export async function getConversationalChat(
 
     // Scan response for commitments Molly made ("I'll research that", etc.)
     try {
-      const { getPromiseTracker } = await import(
-        '@/ai/consciousness/promise-tracker'
-      );
+      const { getPromiseTracker } =
+        await import('@/ai/consciousness/promise-tracker');
       getPromiseTracker().scanAndRegister(responseText, text);
     } catch {
       // Non-critical — don't let promise tracking break chat
@@ -1236,8 +1233,7 @@ export async function getVisionAnalysis(dataUri: string, context?: string) {
 }
 
 export async function runIntrospection(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  pastLessons: any[],
+  pastLessons: Array<{ lesson: string; timestamp: string }>,
   hardwareContext: string
 ) {
   try {

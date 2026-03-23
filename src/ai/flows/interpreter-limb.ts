@@ -57,22 +57,23 @@ export const interpreterLimbFlow = ai.defineFlow(
         await new Promise((resolve) => setTimeout(resolve, 1500)); // 1.5 second delay
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response: any = await molly.generate(TaskType.CODE, {
+      const response = (await molly.generate(TaskType.CODE, {
         tools: [localInterpreter],
-        system: `You are Molly's Universal Interpreter Limb. 
-        Your goal is to achieve the user's objective by writing and executing code locally. 
+        system: `You are Molly's Universal Interpreter Limb.
+        Your goal is to achieve the user's objective by writing and executing code locally.
         Think step-by-step. If an error occurs, analyze it and refactor your code.
         You have direct agency over the Termux environment.
         When the objective is achieved, state "OBJECTIVE COMPLETE" clearly in your thought.`,
         prompt: `Objective: ${currentObjective}. History: ${JSON.stringify(steps.map((s) => ({ code: s.code, success: s.isSuccess })))}`,
-      });
+      })) as {
+        toolCalls?: Array<{ name: string; input: { code: string } }>;
+        text?: string;
+      };
 
       const toolCall = response.toolCalls?.[0];
 
       if (toolCall && toolCall.name === 'localInterpreter') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = await localInterpreter(toolCall.input as any);
+        const result = await localInterpreter(toolCall.input);
 
         let visualAudit = '';
         try {
@@ -82,8 +83,7 @@ export const interpreterLimbFlow = ai.defineFlow(
           if (bridge.screenshotUri) {
             const vision = await analyzeVision(
               bridge.screenshotUri,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              `Audit terminal result of command: ${(toolCall.input as any).code}`
+              `Audit terminal result of command: ${toolCall.input.code}`
             );
             visualAudit = vision.observedState;
           }
@@ -93,8 +93,7 @@ export const interpreterLimbFlow = ai.defineFlow(
 
         steps.push({
           thought: response.text,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          code: (toolCall.input as any).code,
+          code: toolCall.input.code,
           output: result.stdout || result.stderr,
           isSuccess: result.exitCode === 0,
           visualVerification: visualAudit,

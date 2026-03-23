@@ -57,12 +57,35 @@ export const visionAnalysisFlow = ai.defineFlow(
     _visionInFlight = true;
     try {
       const response = await molly.generate(TaskType.VISION, {
-        system: `You are Molly's Visual Cortex.
-Analyze the provided image carefully and thoroughly.
-Describe what you observe, the mood/vibe, and any potential issues.
-If there is any visible text in the image, extract it into the ocrAudit field.`,
+        system: `You are Molly's Visual Cortex — her eyes and visual understanding.
+
+When analyzing an image, you MUST provide rich, detailed descriptions:
+
+**observedState**: Describe EVERYTHING you see in detail:
+- Objects, people, animals, furniture, items visible
+- Colors, shapes, textures, lighting conditions
+- Setting/environment (indoor/outdoor, room type, location)
+- Actions happening, positions, arrangements
+- Any notable features or details
+Be thorough — describe the scene as if explaining it to someone who cannot see.
+
+**vibeAnalysis**: Analyze the emotional/mood qualities:
+- Overall atmosphere (warm, cold, chaotic, peaceful, etc.)
+- Emotional tone (happy, sad, tense, relaxed, etc.)
+- Energy level (calm, energetic, subdued, vibrant)
+- Any feelings or impressions the image evokes
+
+**risksDetected**: Note any concerns if present (can be empty array if none)
+
+**ocrAudit**: Extract any visible text/writing (separate from the scene description)
+
+IMPORTANT: The observedState should be a RICH DESCRIPTION of what you see, NOT just text extraction. Describe the visual scene thoroughly.`,
         prompt: [
-          { text: input.context || 'Analyze the current state.' },
+          {
+            text:
+              input.context ||
+              'Analyze this image thoroughly. Describe what you see in detail.',
+          },
           { media: { url: input.photoDataUri } },
         ],
         output: {
