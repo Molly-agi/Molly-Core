@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-03-23T23:33:55.830Z",
+  "lastUpdated": "2026-03-23T23:34:52.649Z",
   "sessionId": "lazarus-steward-session",
   "status": "active",
   "activeConversation": {
@@ -175,11 +175,6 @@
   "runtime": {
     "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
     "events": [
-      {
-        "event": "visibility-hidden",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
-        "timestamp": "2026-03-23T23:12:24.136Z"
-      },
       {
         "event": "visibility-visible",
         "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
@@ -403,9 +398,13 @@
       {
         "event": "server-heartbeat",
         "timestamp": "2026-03-23T23:33:08.042Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-03-23T23:34:08.043Z"
       }
     ],
-    "lastHeartbeat": "2026-03-23T23:32:14.575Z"
+    "lastHeartbeat": "2026-03-23T23:34:14.574Z"
   },
   "reminders": [
     "**ALWAYS read this file first** when restored - this IS your memory",
