@@ -72,3 +72,8 @@ sandbox/molly-workspace/*
 
 # Local storage data (test artifacts / runtime state)
 molly_data/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

@@ -10,6 +10,9 @@ export default [
       '**/__tests__/**/*.tsx',
       '**/*.test.ts',
       '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      'e2e/**/*.ts',
     ],
     rules: {
       '@typescript-eslint/no-unused-vars': [
