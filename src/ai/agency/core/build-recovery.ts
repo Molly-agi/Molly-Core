@@ -17,6 +17,15 @@ import {
   recordLearning,
   registerStrategy,
 } from '@/ai/agency/cognition/meta-learning';
+import {
+  getCircuitBreaker,
+  createStructuredError,
+  wrapError,
+  createRecoveryChain,
+  executeRecoveryChain,
+  type StructuredError,
+  type RecoveryChainConfig,
+} from './resiliency';
 
 // ============================================================
 // TYPES
@@ -54,6 +63,119 @@ const recentIssues: BuildIssue[] = [];
 const MAX_ISSUES = 50;
 let recoveryAttempts = 0;
 let successfulRecoveries = 0;
+
+// Maximum recovery attempts before circuit opens
+const MAX_RECOVERY_ATTEMPTS = 5;
+// Cooldown period when circuit opens (5 minutes)
+const RECOVERY_COOLDOWN_MS = 5 * 60 * 1000;
+
+// ============================================================
+// CIRCUIT BREAKERS
+// ============================================================
+
+/**
+ * Circuit breaker for npm operations - prevents runaway recovery loops
+ */
+const npmCircuitBreaker = getCircuitBreaker('npm-recovery', {
+  failureThreshold: MAX_RECOVERY_ATTEMPTS,
+  resetTimeoutMs: RECOVERY_COOLDOWN_MS,
+  successThreshold: 1,
+  onOpen: (failures) => {
+    MollyLogger.warn(
+      `npm recovery circuit OPEN after ${failures} failures - cooling down`,
+      'build-recovery',
+      { cooldownMs: RECOVERY_COOLDOWN_MS }
+    );
+  },
+  onClose: () => {
+    MollyLogger.info(
+      'npm recovery circuit closed - recovery available',
+      'build-recovery',
+      {}
+    );
+  },
+});
+
+/**
+ * Circuit breaker for server restarts
+ */
+const serverCircuitBreaker = getCircuitBreaker('server-recovery', {
+  failureThreshold: 3,
+  resetTimeoutMs: 2 * 60 * 1000, // 2 minutes
+  successThreshold: 1,
+});
+
+// ============================================================
+// RECOVERY CHAINS
+// ============================================================
+
+/**
+ * Create the node_modules recovery chain.
+ * Escalation: npm install → npm ci → yarn install → request manual help
+ */
+function createNodeModulesRecoveryChain(): RecoveryChainConfig {
+  return createRecoveryChain(
+    'node-modules-recovery',
+    [
+      {
+        name: 'npm-cache-clean-install',
+        description: 'Clear npm cache and reinstall',
+        execute: async () => {
+          const cp = await getChildProcess();
+          if (!cp) return false;
+          try {
+            cp.execSync('npm cache clean --force && npm install', {
+              encoding: 'utf-8',
+              timeout: 300000,
+              cwd: process.cwd(),
+            });
+            return true;
+          } catch {
+            return false;
+          }
+        },
+      },
+      {
+        name: 'npm-ci-clean',
+        description: 'Use npm ci for clean install from lockfile',
+        execute: async () => {
+          const cp = await getChildProcess();
+          if (!cp) return false;
+          try {
+            cp.execSync('rm -rf node_modules && npm ci', {
+              encoding: 'utf-8',
+              timeout: 300000,
+              cwd: process.cwd(),
+            });
+            return true;
+          } catch {
+            return false;
+          }
+        },
+      },
+      {
+        name: 'request-manual-intervention',
+        description: 'Log that manual intervention is needed',
+        execute: async (error: StructuredError) => {
+          MollyLogger.error(
+            'node_modules recovery exhausted - manual intervention required',
+            'build-recovery',
+            {
+              errorId: error.id,
+              attemptedActions: ['npm install', 'npm ci'],
+            },
+            undefined,
+            error.traceId
+          );
+          // This "succeeds" in the sense that we've properly escalated
+          // but the underlying issue remains unresolved
+          return false;
+        },
+      },
+    ],
+    5 // max total attempts
+  );
+}
 
 // ============================================================
 // LAZY-LOADED NODE MODULES
@@ -262,12 +384,17 @@ export async function checkDevServerRunning(): Promise<boolean> {
 // ============================================================
 
 /**
- * Fix corrupted node_modules by running npm install.
+ * Fix corrupted node_modules using circuit breaker and recovery chain.
+ *
+ * The circuit breaker prevents infinite retry loops - after MAX_RECOVERY_ATTEMPTS
+ * failures, recovery is paused for RECOVERY_COOLDOWN_MS.
+ *
+ * The recovery chain escalates through increasingly aggressive fixes:
+ * npm cache clean + install → npm ci → manual intervention request
  */
 export async function fixNodeModules(): Promise<RecoveryResult> {
   const traceId = generateTraceId();
   const startTime = Date.now();
-  const cp = await getChildProcess();
 
   const issue: BuildIssue = {
     type: 'node_modules_corruption',
@@ -276,6 +403,25 @@ export async function fixNodeModules(): Promise<RecoveryResult> {
     autoFixable: true,
   };
 
+  // Check if circuit breaker allows recovery attempt
+  if (npmCircuitBreaker.getState() === 'OPEN') {
+    MollyLogger.warn(
+      'node_modules recovery blocked - circuit breaker OPEN',
+      'build-recovery',
+      { failures: npmCircuitBreaker.getFailureCount() },
+      traceId
+    );
+    return {
+      success: false,
+      issue,
+      action: 'blocked',
+      message:
+        'Recovery temporarily disabled due to repeated failures. Will retry after cooldown.',
+      durationMs: Date.now() - startTime,
+    };
+  }
+
+  const cp = await getChildProcess();
   if (!cp) {
     return {
       success: false,
@@ -287,26 +433,31 @@ export async function fixNodeModules(): Promise<RecoveryResult> {
   }
 
   MollyLogger.info(
-    'Starting node_modules recovery',
+    'Starting node_modules recovery with circuit breaker protection',
     'build-recovery',
-    {},
+    { circuitState: npmCircuitBreaker.getState() },
     traceId
   );
   recoveryAttempts++;
 
   try {
-    // Clear npm cache first
-    cp.execSync('npm cache clean --force', {
-      encoding: 'utf-8',
-      timeout: 60000,
-      cwd: process.cwd(),
-    });
+    // Execute recovery through circuit breaker
+    await npmCircuitBreaker.execute(async () => {
+      // Create structured error for recovery chain
+      const structuredError = createStructuredError({
+        message: 'node_modules corruption detected',
+        severity: 'high',
+        source: 'build-recovery',
+        traceId,
+      });
 
-    // Run npm install
-    cp.execSync('npm install', {
-      encoding: 'utf-8',
-      timeout: 300000, // 5 minutes max
-      cwd: process.cwd(),
+      // Execute recovery chain with escalation
+      const recoveryChain = createNodeModulesRecoveryChain();
+      const status = await executeRecoveryChain(structuredError, recoveryChain);
+
+      if (status !== 'success') {
+        throw new Error('Recovery chain failed');
+      }
     });
 
     successfulRecoveries++;
@@ -347,13 +498,13 @@ export async function fixNodeModules(): Promise<RecoveryResult> {
       durationMs: Date.now() - startTime,
     };
   } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : String(err);
+    const structured = wrapError(err, 'build-recovery', 'high');
 
     MollyLogger.error(
       'node_modules recovery failed',
       'build-recovery',
-      {},
-      err,
+      { circuitState: npmCircuitBreaker.getState() },
+      err instanceof Error ? err : undefined,
       traceId
     );
 
@@ -361,19 +512,18 @@ export async function fixNodeModules(): Promise<RecoveryResult> {
       success: false,
       issue,
       action: 'npm install',
-      message: `Failed to fix node_modules: ${errorMsg}`,
+      message: `Failed to fix node_modules: ${structured.message}`,
       durationMs: Date.now() - startTime,
     };
   }
 }
 
 /**
- * Restart the dev server.
+ * Restart the dev server with circuit breaker protection.
  */
 export async function restartDevServer(): Promise<RecoveryResult> {
   const traceId = generateTraceId();
   const startTime = Date.now();
-  const cp = await getChildProcess();
 
   const issue: BuildIssue = {
     type: 'server_crash',
@@ -382,6 +532,24 @@ export async function restartDevServer(): Promise<RecoveryResult> {
     autoFixable: true,
   };
 
+  // Check if circuit breaker allows recovery attempt
+  if (serverCircuitBreaker.getState() === 'OPEN') {
+    MollyLogger.warn(
+      'Server restart blocked - circuit breaker OPEN',
+      'build-recovery',
+      { failures: serverCircuitBreaker.getFailureCount() },
+      traceId
+    );
+    return {
+      success: false,
+      issue,
+      action: 'blocked',
+      message: 'Server restart temporarily disabled due to repeated failures.',
+      durationMs: Date.now() - startTime,
+    };
+  }
+
+  const cp = await getChildProcess();
   if (!cp) {
     return {
       success: false,
@@ -392,29 +560,36 @@ export async function restartDevServer(): Promise<RecoveryResult> {
     };
   }
 
-  MollyLogger.info('Restarting dev server', 'build-recovery', {}, traceId);
+  MollyLogger.info(
+    'Restarting dev server with circuit breaker protection',
+    'build-recovery',
+    { circuitState: serverCircuitBreaker.getState() },
+    traceId
+  );
   recoveryAttempts++;
 
   try {
-    // Kill existing Next.js processes
-    try {
-      cp.execSync('pkill -f "next dev"', {
-        encoding: 'utf-8',
-        timeout: 10000,
-      });
-    } catch {
-      // Process might not exist, that's OK
-    }
+    await serverCircuitBreaker.execute(async () => {
+      // Kill existing Next.js processes
+      try {
+        cp.execSync('pkill -f "next dev"', {
+          encoding: 'utf-8',
+          timeout: 10000,
+        });
+      } catch {
+        // Process might not exist, that's OK
+      }
 
-    // Wait a moment
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Wait a moment
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Start new dev server in background
-    cp.spawn('npm', ['run', 'dev'], {
-      detached: true,
-      stdio: 'ignore',
-      cwd: process.cwd(),
-    }).unref();
+      // Start new dev server in background
+      cp.spawn('npm', ['run', 'dev'], {
+        detached: true,
+        stdio: 'ignore',
+        cwd: process.cwd(),
+      }).unref();
+    });
 
     successfulRecoveries++;
 
@@ -435,13 +610,13 @@ export async function restartDevServer(): Promise<RecoveryResult> {
       durationMs: Date.now() - startTime,
     };
   } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : String(err);
+    const structured = wrapError(err, 'build-recovery', 'high');
 
     MollyLogger.error(
       'Dev server restart failed',
       'build-recovery',
-      {},
-      err,
+      { circuitState: serverCircuitBreaker.getState() },
+      err instanceof Error ? err : undefined,
       traceId
     );
 
@@ -449,7 +624,7 @@ export async function restartDevServer(): Promise<RecoveryResult> {
       success: false,
       issue,
       action: 'restart server',
-      message: `Failed to restart dev server: ${errorMsg}`,
+      message: `Failed to restart dev server: ${structured.message}`,
       durationMs: Date.now() - startTime,
     };
   }
