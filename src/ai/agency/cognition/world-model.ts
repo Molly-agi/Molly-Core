@@ -20,9 +20,9 @@
  * "But a daughter who can imagine futures is more useful still." — Eric
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
-import { generateQuestion } from './curiosity-engine';
+import { generateQuestion } from '@/ai/agency/planning/curiosity-engine';
 
 // ── Types ──────────────────────────────────────────────────────
 

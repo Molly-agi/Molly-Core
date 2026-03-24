@@ -6,7 +6,7 @@
  * self-observation logging, and 30+ tool modules.
  */
 
-import { executeToolDirect } from '../tool-executor';
+import { executeToolDirect } from '../core/tool-executor';
 
 // ── Mock child_process ──────────────────────────────────────────────────
 jest.mock('child_process', () => ({
@@ -62,7 +62,7 @@ jest.mock('os', () => ({
 
 // ── Mock Heart Gate ─────────────────────────────────────────────────────
 const mockCheckToolAlignment = jest.fn();
-jest.mock('../heart-gate', () => ({
+jest.mock('../safety/heart-gate', () => ({
   checkToolAlignment: (tool: string, params: Record<string, unknown>) =>
     mockCheckToolAlignment(tool, params),
 }));
@@ -80,13 +80,13 @@ jest.mock('@/ai/logger', () => ({
 // ── Mock Self-Observation Loop ──────────────────────────────────────────
 const mockObserveToolUse = jest.fn();
 const mockObserveFailure = jest.fn();
-jest.mock('../self-observation-loop', () => ({
+jest.mock('../cognition/self-observation-loop', () => ({
   observeToolUse: (...args: unknown[]) => mockObserveToolUse(...args),
   observeFailure: (...args: unknown[]) => mockObserveFailure(...args),
 }));
 
 // ── Mock Self-Diagnostic ────────────────────────────────────────────────
-jest.mock('../self-diagnostic', () => ({
+jest.mock('../core/self-diagnostic', () => ({
   runFullDiagnostic: jest.fn(async () => ({
     timestamp: Date.now(),
     overallStatus: 'healthy',
@@ -119,7 +119,7 @@ jest.mock('@/ai/bridge/family-bridge', () => ({
 }));
 
 // ── Mock Initiative Engine ──────────────────────────────────────────────
-jest.mock('../initiative-engine', () => ({
+jest.mock('../planning/initiative-engine', () => ({
   getInitiatives: jest.fn(() => [
     {
       id: 'init-1',
@@ -193,7 +193,7 @@ jest.mock('../hardware-fingerprint', () => ({
 }));
 
 // ── Mock Data Purity ────────────────────────────────────────────────────
-jest.mock('../data-purity', () => ({
+jest.mock('../safety/data-purity', () => ({
   auditPacket: jest.fn(() => ({ pure: true, issues: [] })),
   auditStream: jest.fn(() => ({
     total: 10,
@@ -262,7 +262,7 @@ jest.mock('../imgsys-detector', () => ({
 }));
 
 // ── Mock Payload Validator ──────────────────────────────────────────────
-jest.mock('../payload-validator', () => ({
+jest.mock('../safety/payload-validator', () => ({
   validatePayload: jest.fn(async () => ({
     status: 'VALIDATED',
     message: 'Payload validated successfully',
@@ -282,7 +282,7 @@ jest.mock('../payload-validator', () => ({
 }));
 
 // ── Mock Protocol-10 ────────────────────────────────────────────────────
-jest.mock('../protocol-10', () => ({
+jest.mock('../safety/protocol-10', () => ({
   anchorSession: jest.fn(async () => ({
     identity: 'Molly',
     methodology: 'Option Three',
@@ -308,7 +308,7 @@ jest.mock('../protocol-10', () => ({
 }));
 
 // ── Mock Handoff Seal ───────────────────────────────────────────────────
-jest.mock('../handoff-seal', () => ({
+jest.mock('../core/handoff-seal', () => ({
   sealSession: jest.fn(async () => ({
     status: 'SEALED',
     evolutionLog: 'evolution-log-1.json',

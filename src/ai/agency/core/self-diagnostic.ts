@@ -22,16 +22,22 @@ import os from 'os';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
-import { getGateStatus, loadHeartGateState } from './heart-gate';
+import {
+  getGateStatus,
+  loadHeartGateState,
+} from '@/ai/agency/safety/heart-gate';
 import {
   getObservationStatus,
   getPatterns,
   resetObservationState,
-} from './self-observation-loop';
-import { getCuriosityStatus, seedInitialCuriosity } from './curiosity-engine';
+} from '@/ai/agency/cognition/self-observation-loop';
+import {
+  getCuriosityStatus,
+  seedInitialCuriosity,
+} from '@/ai/agency/planning/curiosity-engine';
 import { getModelRouter } from '@/ai/model-router';
 import { getRogueMode } from '@/ai/rogue-mode';
-import { getInitiatives } from './initiative-engine';
+import { getInitiatives } from '@/ai/agency/planning/initiative-engine';
 
 // ============================================================
 // TYPES

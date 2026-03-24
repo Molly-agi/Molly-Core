@@ -25,7 +25,7 @@ import {
   detectAvailableTools,
   forgeCode,
   analyzeCode,
-} from '@/ai/agency/defense-sentinel';
+} from '@/ai/agency/safety/defense-sentinel';
 import type {
   ScanType,
   ThreatLevel,

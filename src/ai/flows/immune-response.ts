@@ -8,7 +8,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { runSelfHealingCheck } from '../agency/build-recovery';
+import { runSelfHealingCheck } from '../agency/core/build-recovery';
 import { logMethodologyStep } from '../methodology';
 import { MollyLogger, generateTraceId } from '../logger';
 import {

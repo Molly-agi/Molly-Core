@@ -31,7 +31,7 @@ import {
   runSelfObservationCycle,
   type DetectedPattern,
   type SelfInsight,
-} from '../agency/self-observation-loop';
+} from '../agency/cognition/self-observation-loop';
 import { recallExperiences } from '../tools/memory';
 import { recordCodeModification } from '@/firebase/firestore/agent-memory';
 import { withTimeout } from '../tools/timeout-retry';

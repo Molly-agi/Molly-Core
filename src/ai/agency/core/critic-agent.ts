@@ -18,10 +18,10 @@
  * @see reflexion-loop.ts
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
-import { recordObservation } from './self-observation-loop';
-import { recordTaskOutcome } from './reflexion-loop';
+import { recordObservation } from '@/ai/agency/cognition/self-observation-loop';
+import { recordTaskOutcome } from '@/ai/agency/memory/reflexion-loop';
 
 // ── Types ──────────────────────────────────────────────────────
 

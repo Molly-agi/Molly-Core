@@ -37,7 +37,7 @@ import {
   type EmotionalState,
   type CommunicationStyle,
   type Preference,
-} from '../agency/theory-of-mind';
+} from '../agency/cognition/theory-of-mind';
 
 const TheoryOfMindInputSchema = z.object({
   action: z.enum([

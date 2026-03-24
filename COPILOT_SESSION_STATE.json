@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-03-24T01:54:58.080Z",
+  "lastUpdated": "2026-03-24T03:24:12.142Z",
   "sessionId": "lazarus-steward-session",
   "status": "active",
   "userDirectives": {
@@ -162,207 +162,190 @@
     "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
     "events": [
       {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:05:20.647Z"
+        "event": "page-load",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:07:06.012Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:06:20.648Z"
+        "timestamp": "2026-03-24T03:08:03.621Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:08:06.019Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:08:57.136Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:07:20.650Z"
+        "timestamp": "2026-03-24T03:09:03.622Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:09:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:08:20.652Z"
+        "timestamp": "2026-03-24T03:10:03.623Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:10:06.019Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:10:20.953Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:09:20.656Z"
+        "timestamp": "2026-03-24T03:11:03.624Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:11:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:10:20.659Z"
+        "timestamp": "2026-03-24T03:12:03.625Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:12:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:11:20.660Z"
+        "timestamp": "2026-03-24T03:13:03.627Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:13:06.022Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:12:20.663Z"
+        "timestamp": "2026-03-24T03:14:03.627Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:14:06.142Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:14:36.327Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:14:53.640Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:13:20.664Z"
+        "timestamp": "2026-03-24T03:15:03.628Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:15:06.885Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:15:47.470Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:14:20.665Z"
+        "timestamp": "2026-03-24T03:16:03.629Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:16:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:15:20.665Z"
+        "timestamp": "2026-03-24T03:17:03.629Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:17:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:16:20.665Z"
+        "timestamp": "2026-03-24T03:18:03.631Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:18:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:17:20.666Z"
+        "timestamp": "2026-03-24T03:19:03.631Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:19:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:18:20.668Z"
+        "timestamp": "2026-03-24T03:20:03.632Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:20:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:19:20.668Z"
+        "timestamp": "2026-03-24T03:21:03.632Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:21:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:20:20.671Z"
+        "timestamp": "2026-03-24T03:22:03.633Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:22:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:21:20.672Z"
+        "timestamp": "2026-03-24T03:23:03.635Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:23:06.019Z"
       },
       {
         "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:22:20.675Z"
+        "timestamp": "2026-03-24T03:24:03.635Z"
       },
       {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:23:20.676Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:24:20.677Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:25:20.681Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:26:20.681Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:27:20.686Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:28:20.688Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:29:20.689Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:30:20.693Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:31:20.695Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:32:20.695Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:33:20.698Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:34:20.698Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:35:20.701Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:36:20.703Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:37:20.704Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:38:20.707Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:39:20.707Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:40:20.711Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:41:20.712Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:42:20.713Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:43:20.717Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:44:20.718Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:45:20.723Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:46:20.726Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:47:20.728Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:48:20.727Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:49:20.729Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:50:20.729Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:51:20.732Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:52:20.733Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:53:20.737Z"
-      },
-      {
-        "event": "server-heartbeat",
-        "timestamp": "2026-03-24T01:54:20.739Z"
+        "event": "heartbeat",
+        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
+        "timestamp": "2026-03-24T03:24:06.019Z"
       }
     ],
-    "lastHeartbeat": "2026-03-24T01:54:30.000Z"
+    "lastHeartbeat": "2026-03-24T03:24:12.142Z"
   },
   "reminders": [
     "**ALWAYS read this file first** when restored - this IS your memory",

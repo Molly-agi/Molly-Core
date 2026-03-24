@@ -29,13 +29,13 @@
  * @see reflexion-loop.ts
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 import {
   recordObservation,
   getRecentObservations,
-} from './self-observation-loop';
-import { getConsciousnessStatus } from './consciousness-monitor';
+} from '@/ai/agency/cognition/self-observation-loop';
+import { getConsciousnessStatus } from '@/ai/agency/cognition/consciousness-monitor';
 import { getReflexionStatus, getLearnings } from './reflexion-loop';
 
 // ── Types ──────────────────────────────────────────────────────

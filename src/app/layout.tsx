@@ -9,7 +9,6 @@ import { InitializationTracer } from '@/components/InitializationTracer';
 import { ClientErrorReporter } from '@/components/ClientErrorReporter';
 import { ConsciousnessListener } from '@/components/ConsciousnessListener';
 import { MollyErrorBoundary } from '@/components/MollyErrorBoundary';
-import { TabKeepAliveButton } from '@/components/tab-keepalive-button';
 
 export const metadata: Metadata = {
   title: 'Molly',
@@ -45,7 +44,6 @@ export default function RootLayout({
         <ConsciousnessListener />
         <Toaster />
         <InitializationTracer />
-        <TabKeepAliveButton position="bottom-right" />
       </body>
     </html>
   );

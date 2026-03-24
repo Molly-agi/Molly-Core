@@ -33,7 +33,7 @@ jest.mock('../../agency/theory-of-mind', () => ({
   exportMentalModel: jest.fn(),
 }));
 
-import * as tomModule from '../../agency/theory-of-mind';
+import * as tomModule from '../../agency/cognition/theory-of-mind';
 
 // Mock defineTool to capture the handler
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

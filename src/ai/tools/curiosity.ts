@@ -29,7 +29,7 @@ import {
   runCuriosityCycle,
   type CuriosityType,
   type CuriositySource,
-} from '../agency/curiosity-engine';
+} from '../agency/planning/curiosity-engine';
 
 const CuriosityInputSchema = z.object({
   action: z.enum([

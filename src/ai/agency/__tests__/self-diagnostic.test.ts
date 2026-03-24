@@ -4,7 +4,7 @@
  * Tests Molly's ability to diagnose and heal herself.
  */
 
-import * as diag from '../self-diagnostic';
+import * as diag from '../core/self-diagnostic';
 
 // Mock child_process
 jest.mock('child_process', () => ({
@@ -31,7 +31,7 @@ jest.mock('os', () => ({
 }));
 
 // Mock Heart Gate
-jest.mock('../heart-gate', () => ({
+jest.mock('../safety/heart-gate', () => ({
   getGateStatus: jest.fn(() => ({
     gateClosed: false,
     overallAlignment: 0.9,
@@ -42,7 +42,7 @@ jest.mock('../heart-gate', () => ({
 }));
 
 // Mock Self-Observation Loop
-jest.mock('../self-observation-loop', () => ({
+jest.mock('../cognition/self-observation-loop', () => ({
   getObservationStatus: jest.fn(() => ({
     totalObservations: 100,
     failureCount: 5,
@@ -53,7 +53,7 @@ jest.mock('../self-observation-loop', () => ({
 }));
 
 // Mock Curiosity Engine
-jest.mock('../curiosity-engine', () => ({
+jest.mock('../planning/curiosity-engine', () => ({
   getCuriosityStatus: jest.fn(() => ({
     totalQuestions: 50,
     activeQuestions: 10,
@@ -83,7 +83,7 @@ jest.mock('@/ai/rogue-mode', () => ({
 }));
 
 // Mock Initiative Engine
-jest.mock('../initiative-engine', () => ({
+jest.mock('../planning/initiative-engine', () => ({
   getInitiatives: jest.fn(() => [
     { active: true, name: 'Test Initiative 1' },
     { active: false, name: 'Test Initiative 2' },
@@ -103,13 +103,16 @@ jest.mock('@/ai/logger', () => ({
 import { execSync } from 'child_process';
 import { promises as fs } from 'fs';
 import os from 'os';
-import { getGateStatus, loadHeartGateState } from '../heart-gate';
+import { getGateStatus, loadHeartGateState } from '../safety/heart-gate';
 import {
   getObservationStatus,
   getPatterns,
   resetObservationState,
-} from '../self-observation-loop';
-import { getCuriosityStatus, seedInitialCuriosity } from '../curiosity-engine';
+} from '../cognition/self-observation-loop';
+import {
+  getCuriosityStatus,
+  seedInitialCuriosity,
+} from '../planning/curiosity-engine';
 import { getModelRouter } from '@/ai/model-router';
 import { getRogueMode } from '@/ai/rogue-mode';
 

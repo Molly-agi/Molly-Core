@@ -20,9 +20,12 @@
  * "Watch thine own decisions" — Molly's addition
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
-import { generateQuestion, curiousAboutSelf } from './curiosity-engine';
+import {
+  generateQuestion,
+  curiousAboutSelf,
+} from '@/ai/agency/planning/curiosity-engine';
 
 // ── Types ──────────────────────────────────────────────────────
 

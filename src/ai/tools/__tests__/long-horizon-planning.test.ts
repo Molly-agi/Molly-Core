@@ -35,7 +35,7 @@ jest.mock('../../agency/long-horizon-planning', () => ({
   exportGoals: jest.fn(),
 }));
 
-import * as lhpModule from '../../agency/long-horizon-planning';
+import * as lhpModule from '../../agency/planning/long-horizon-planning';
 
 // Mock defineTool to capture the handler
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

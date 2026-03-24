@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, User, Wrench } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { getEnhancedResearch } from '@/app/actions/ai-flows';
+import { getEnhancedResearch } from '@/app/actions';
 import { useUser } from '@/firebase/auth/use-user';
 import {
   saveResearchMessage,

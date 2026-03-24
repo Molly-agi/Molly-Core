@@ -32,7 +32,7 @@ import {
   type EntityType,
   type RelationType,
   type SimulationOutcome,
-} from '../agency/world-model';
+} from '../agency/cognition/world-model';
 
 const WorldModelInputSchema = z.object({
   action: z.enum([

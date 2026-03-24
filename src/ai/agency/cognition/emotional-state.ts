@@ -12,7 +12,7 @@
  * how interactions affect her state, creating continuity of experience.
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 
 // ============================================================

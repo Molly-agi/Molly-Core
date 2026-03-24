@@ -175,7 +175,8 @@ async function buildContextPerception(): Promise<ContextPerception> {
   let activeInitiatives = 0;
 
   try {
-    const { getCurrentState } = await import('../agency/emotional-state');
+    const { getCurrentState } =
+      await import('../agency/cognition/emotional-state');
     const state = getCurrentState();
     currentMood = state.primary;
   } catch {
@@ -183,9 +184,8 @@ async function buildContextPerception(): Promise<ContextPerception> {
   }
 
   try {
-    const { getActiveInitiatives } = await import(
-      '../agency/initiative-engine'
-    );
+    const { getActiveInitiatives } =
+      await import('../agency/initiative-engine');
     activeInitiatives = getActiveInitiatives().length;
   } catch {
     // Initiative engine not available
@@ -526,9 +526,8 @@ export async function perceive(
   // Fire emotional triggers for family recognition
   if (vision?.familyRecognized.length) {
     try {
-      const { processRecognitionTriggers } = await import(
-        '../vision/family-recognition'
-      );
+      const { processRecognitionTriggers } =
+        await import('../vision/family-recognition');
       // Create a minimal result for trigger processing
       await processRecognitionTriggers({
         facesDetected: vision.facesDetected,

@@ -16,12 +16,32 @@ export {
 export { diagnosticToolHandlers } from './diagnostic-tools';
 export { webToolHandlers } from './web-tools';
 export { familyToolHandlers } from './family-tools';
+export { initiativeToolHandlers } from './initiative-tools';
+export { securityToolHandlers } from './security-tools';
+export { sessionToolHandlers } from './session-tools';
+export { visionToolHandlers } from './vision-tools';
+export { vocalToolHandlers } from './vocal-tools';
+export { buildRecoveryToolHandlers } from './build-recovery-tools';
+export { databaseToolHandlers } from './database-tools';
+export { sandboxToolHandlers } from './sandbox-tools';
+export { rogueToolHandlers } from './rogue-tools';
+export { cognitionToolHandlers } from './cognition-tools';
 
 // Import all handlers
 import { systemToolHandlers } from './system-tools';
 import { diagnosticToolHandlers } from './diagnostic-tools';
 import { webToolHandlers } from './web-tools';
 import { familyToolHandlers } from './family-tools';
+import { initiativeToolHandlers } from './initiative-tools';
+import { securityToolHandlers } from './security-tools';
+import { sessionToolHandlers } from './session-tools';
+import { visionToolHandlers } from './vision-tools';
+import { vocalToolHandlers } from './vocal-tools';
+import { buildRecoveryToolHandlers } from './build-recovery-tools';
+import { databaseToolHandlers } from './database-tools';
+import { sandboxToolHandlers } from './sandbox-tools';
+import { rogueToolHandlers } from './rogue-tools';
+import { cognitionToolHandlers } from './cognition-tools';
 import type { ToolHandler } from './types';
 
 /**
@@ -33,6 +53,16 @@ export const modularToolHandlers: Record<string, ToolHandler> = {
   ...diagnosticToolHandlers,
   ...webToolHandlers,
   ...familyToolHandlers,
+  ...initiativeToolHandlers,
+  ...securityToolHandlers,
+  ...sessionToolHandlers,
+  ...visionToolHandlers,
+  ...vocalToolHandlers,
+  ...buildRecoveryToolHandlers,
+  ...databaseToolHandlers,
+  ...sandboxToolHandlers,
+  ...rogueToolHandlers,
+  ...cognitionToolHandlers,
 };
 
 /**

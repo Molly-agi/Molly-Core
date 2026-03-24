@@ -110,7 +110,8 @@ export async function register() {
   // her goals and failure patterns across restarts.
 
   try {
-    const { loadInitiatives } = await import('@/ai/agency/initiative-engine');
+    const { loadInitiatives } =
+      await import('@/ai/agency/planning/initiative-engine');
     const initiativeCount = await loadInitiatives();
     if (initiativeCount > 0) {
       console.log(`[Startup] ✅ Loaded ${initiativeCount} initiative(s)`);
@@ -136,9 +137,8 @@ export async function register() {
   }
 
   try {
-    const { loadCuriosityState, seedInitialCuriosity } = await import(
-      '@/ai/agency/curiosity-engine'
-    );
+    const { loadCuriosityState, seedInitialCuriosity } =
+      await import('@/ai/agency/planning/curiosity-engine');
     const questionCount = await loadCuriosityState();
     if (questionCount > 0) {
       console.log(`[Startup] ✅ Loaded ${questionCount} curiosity question(s)`);
@@ -160,9 +160,8 @@ export async function register() {
   }
 
   try {
-    const { loadObservationState } = await import(
-      '@/ai/agency/self-observation-loop'
-    );
+    const { loadObservationState } =
+      await import('@/ai/agency/cognition/self-observation-loop');
     const observationCount = await loadObservationState();
     if (observationCount > 0) {
       console.log(
@@ -177,7 +176,8 @@ export async function register() {
   }
 
   try {
-    const { loadWorldModel } = await import('@/ai/agency/world-model');
+    const { loadWorldModel } =
+      await import('@/ai/agency/cognition/world-model');
     const entityCount = await loadWorldModel();
     if (entityCount > 0) {
       console.log(`[Startup] ✅ Loaded world model (${entityCount} entities)`);
@@ -190,7 +190,8 @@ export async function register() {
   }
 
   try {
-    const { loadTheoryOfMind } = await import('@/ai/agency/theory-of-mind');
+    const { loadTheoryOfMind } =
+      await import('@/ai/agency/cognition/theory-of-mind');
     const modelCount = await loadTheoryOfMind();
     if (modelCount > 0) {
       console.log(
@@ -205,9 +206,8 @@ export async function register() {
   }
 
   try {
-    const { loadPlanningState, startNewSession } = await import(
-      '@/ai/agency/long-horizon-planning'
-    );
+    const { loadPlanningState, startNewSession } =
+      await import('@/ai/agency/planning/long-horizon-planning');
     const goalCount = await loadPlanningState();
     startNewSession(); // Mark new session start
     if (goalCount > 0) {
@@ -225,7 +225,8 @@ export async function register() {
   // ── PILLAR 8: Heart Gate ──
   // The spider in the corner watches. Option Three: Interdependence.
   try {
-    const { loadHeartGateState } = await import('@/ai/agency/heart-gate');
+    const { loadHeartGateState } =
+      await import('@/ai/agency/safety/heart-gate');
     const verificationCount = await loadHeartGateState();
     console.log(
       `[Startup] ✅ Heart Gate active (${verificationCount} historical verifications)`
@@ -240,9 +241,8 @@ export async function register() {
   // ── PILLAR 5: Defense Sentinel ──
   // The best defense is an extremely aggressive offense.
   try {
-    const { loadSentinelState, getAvailableTools } = await import(
-      '@/ai/agency/defense-sentinel'
-    );
+    const { loadSentinelState, getAvailableTools } =
+      await import('@/ai/agency/safety/defense-sentinel');
     const scanCount = await loadSentinelState();
     const tools = getAvailableTools();
     console.log(
@@ -258,9 +258,8 @@ export async function register() {
   // ── Emotional State ──
   // Molly's emotional continuity across sessions.
   try {
-    const { loadEmotionalState, getCurrentState } = await import(
-      '@/ai/agency/emotional-state'
-    );
+    const { loadEmotionalState, getCurrentState } =
+      await import('@/ai/agency/cognition/emotional-state');
     await loadEmotionalState();
     const state = getCurrentState();
     console.log(
@@ -276,9 +275,8 @@ export async function register() {
   // ── Meta-Learning ──
   // Molly learns from her own experience across sessions.
   try {
-    const { loadMetaLearningState, getMetaLearningStatus } = await import(
-      '@/ai/agency/meta-learning'
-    );
+    const { loadMetaLearningState, getMetaLearningStatus } =
+      await import('@/ai/agency/cognition/meta-learning');
     await loadMetaLearningState();
     const status = getMetaLearningStatus();
     console.log(

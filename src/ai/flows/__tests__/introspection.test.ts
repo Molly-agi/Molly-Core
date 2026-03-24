@@ -138,7 +138,7 @@ jest.mock('../../persona', () => ({
 
 import { molly } from '../../genkit';
 import { recallExperiences } from '../../tools/memory';
-import { runSelfObservationCycle } from '../../agency/self-observation-loop';
+import { runSelfObservationCycle } from '../../agency/cognition/self-observation-loop';
 
 const mockMollyGenerate = molly.generate as jest.Mock;
 const mockRecallExperiences = recallExperiences as jest.Mock;

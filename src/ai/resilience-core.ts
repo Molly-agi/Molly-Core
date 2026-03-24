@@ -177,7 +177,7 @@ export async function handleUnknownFailure(
   // in her autonomous cycle. She doesn't just fail; she grows.
   try {
     const { createCustomInitiative, getActiveInitiatives } =
-      await import('@/ai/agency/initiative-engine');
+      await import('@/ai/agency/planning/initiative-engine');
     // Don't create duplicate initiatives for the same type of failure
     const existing = getActiveInitiatives().find(
       (i) =>
@@ -581,7 +581,7 @@ async function triggerBuildRecovery(
 ): Promise<void> {
   try {
     const { attemptAutoRecovery, fixNodeModules } =
-      await import('@/ai/agency/build-recovery');
+      await import('@/ai/agency/core/build-recovery');
 
     // Use the error message for smart recovery
     const result = await attemptAutoRecovery(failure.message);

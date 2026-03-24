@@ -4,7 +4,7 @@
  * Tests Molly's intrinsic motivation to wonder and learn.
  */
 
-import * as curiosityEngine from '../curiosity-engine';
+import * as curiosityEngine from '../planning/curiosity-engine';
 
 // Mock dependencies
 jest.mock('../../logger', () => ({

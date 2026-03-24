@@ -26,7 +26,7 @@ import {
   observeDecision,
   type PatternSeverity,
   type ObservationType,
-} from '../agency/self-observation-loop';
+} from '../agency/cognition/self-observation-loop';
 
 const SelfObservationInputSchema = z.object({
   action: z.enum([

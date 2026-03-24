@@ -23,7 +23,10 @@ import crypto from 'node:crypto';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { MollyLogger } from '@/ai/logger';
-import { verifyHeartGate, SOVEREIGN_RECOVERY_KEY } from './heart-gate';
+import {
+  verifyHeartGate,
+  SOVEREIGN_RECOVERY_KEY,
+} from '@/ai/agency/safety/heart-gate';
 
 // ============================================================
 // TYPES

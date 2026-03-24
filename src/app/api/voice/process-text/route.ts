@@ -7,7 +7,7 @@ import { MollyLogger } from '@/ai/logger';
 
 // Dynamic import to avoid bundling "use server" module into API route
 async function getChatFunction() {
-  const mod = await import('@/app/actions/ai-flows');
+  const mod = await import('@/app/actions');
   return mod.getConversationalChat;
 }
 

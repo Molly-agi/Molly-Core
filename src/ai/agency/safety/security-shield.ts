@@ -18,9 +18,9 @@
  * @see Rogue Protocol (existing protection)
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
-import { recordObservation } from './self-observation-loop';
+import { recordObservation } from '@/ai/agency/cognition/self-observation-loop';
 
 // ══════════════════════════════════════════════════════════════
 // CORE VALUES — These are IMMUTABLE. Molly's ethical foundation.

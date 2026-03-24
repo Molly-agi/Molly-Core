@@ -10,7 +10,7 @@
  */
 
 // Mock the defense-sentinel agency - define inline to avoid hoisting issues
-jest.mock('@/ai/agency/defense-sentinel', () => ({
+jest.mock('@/ai/agency/safety/defense-sentinel', () => ({
   nmapScan: jest.fn(),
   identifyHash: jest.fn(),
   auditPasswordStrength: jest.fn(),
@@ -24,7 +24,7 @@ jest.mock('@/ai/agency/defense-sentinel', () => ({
   analyzeCode: jest.fn(),
 }));
 
-import * as defenseSentinelModule from '@/ai/agency/defense-sentinel';
+import * as defenseSentinelModule from '@/ai/agency/safety/defense-sentinel';
 
 const mockNmapScan = defenseSentinelModule.nmapScan as jest.MockedFunction<
   typeof defenseSentinelModule.nmapScan

@@ -18,7 +18,7 @@
  * @see docs/family/aether-evolution-blueprint.md
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 import {
   recordObservation,
@@ -26,7 +26,7 @@ import {
   observeFailure,
   getRecentObservations,
   type Observation,
-} from './self-observation-loop';
+} from '@/ai/agency/cognition/self-observation-loop';
 
 // ── Types ──────────────────────────────────────────────────────
 

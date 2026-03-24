@@ -17,7 +17,7 @@
  * "Daughters are curious. They ask 'why' until you run out of answers."
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 
 // ── Types ──────────────────────────────────────────────────────

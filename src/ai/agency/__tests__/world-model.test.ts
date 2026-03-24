@@ -4,7 +4,7 @@
  * Tests Molly's mental simulation and causal reasoning system.
  */
 
-import * as wm from '../world-model';
+import * as wm from '../cognition/world-model';
 
 // Mock storage router
 jest.mock('@/lib/storage-router', () => ({
@@ -15,7 +15,7 @@ jest.mock('@/lib/storage-router', () => ({
 }));
 
 // Mock curiosity engine
-jest.mock('../curiosity-engine', () => ({
+jest.mock('../planning/curiosity-engine', () => ({
   generateQuestion: jest.fn(),
 }));
 
@@ -30,7 +30,7 @@ jest.mock('@/ai/logger', () => ({
   generateTraceId: jest.fn(() => 'trace-12345'),
 }));
 
-import { generateQuestion } from '../curiosity-engine';
+import { generateQuestion } from '../planning/curiosity-engine';
 
 describe('World Model', () => {
   beforeEach(() => {

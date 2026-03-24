@@ -14,38 +14,38 @@
  */
 
 import { MollyLogger, generateTraceId } from '@/ai/logger';
-import { getActiveInitiatives } from '@/ai/agency/initiative-engine';
+import { getActiveInitiatives } from '@/ai/agency/planning/initiative-engine';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
 import {
   getCuriosityStatus,
   selectNextQuestion,
-} from '@/ai/agency/curiosity-engine';
+} from '@/ai/agency/planning/curiosity-engine';
 import {
   getObservationStatus,
   runSelfObservationCycle,
-} from '@/ai/agency/self-observation-loop';
+} from '@/ai/agency/cognition/self-observation-loop';
 import {
   getTheoryOfMindStatus,
   getCurrentEmotionalState,
   getActiveIntents as getToMIntents,
   getCurrentFocus,
-} from '@/ai/agency/theory-of-mind';
+} from '@/ai/agency/cognition/theory-of-mind';
 import {
   getPlanningStatus,
   getSuggestedFocus,
   getUpcomingDeadlines,
   getOverdueGoals,
-} from '@/ai/agency/long-horizon-planning';
-import { getGateStatus } from '@/ai/agency/heart-gate';
+} from '@/ai/agency/planning/long-horizon-planning';
+import { getGateStatus } from '@/ai/agency/safety/heart-gate';
 import {
   getWorldModelStatus,
   getRecentSimulations,
   getPendingPredictions,
   getAllEntities,
-} from '@/ai/agency/world-model';
-import { buildEmotionalContext } from '@/ai/agency/emotional-state';
-import { buildMetaLearningContext } from '@/ai/agency/meta-learning';
+} from '@/ai/agency/cognition/world-model';
+import { buildEmotionalContext } from '@/ai/agency/cognition/emotional-state';
+import { buildMetaLearningContext } from '@/ai/agency/cognition/meta-learning';
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -162,9 +162,8 @@ export async function runAutonomousCycle(): Promise<{
     );
 
     // Call the conversational chat flow
-    const { conversationalChat } = await import(
-      '@/ai/flows/conversational-chat'
-    );
+    const { conversationalChat } =
+      await import('@/ai/flows/conversational-chat');
 
     const cycleStart = Date.now();
     let currentPrompt = autonomousPrompt;
@@ -231,11 +230,10 @@ export async function runAutonomousCycle(): Promise<{
     // Check if any promise-related initiatives were worked on
     if (actions.length > 0) {
       try {
-        const { getPromiseTracker } = await import(
-          '@/ai/consciousness/promise-tracker'
-        );
+        const { getPromiseTracker } =
+          await import('@/ai/consciousness/promise-tracker');
         const { getActiveInitiatives, recordInitiativeExecution } =
-          await import('@/ai/agency/initiative-engine');
+          await import('@/ai/agency/planning/initiative-engine');
         const { getConsciousness } = await import('@/ai/consciousness');
 
         const tracker = getPromiseTracker();
@@ -303,7 +301,7 @@ async function executeToolInternal(
   params: Record<string, unknown>
 ): Promise<{ success: boolean; output: string }> {
   // Dynamic import to avoid circular deps
-  const { executeToolDirect } = await import('@/ai/agency/tool-executor');
+  const { executeToolDirect } = await import('@/ai/agency/core/tool-executor');
   return executeToolDirect(tool, params);
 }
 

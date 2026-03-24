@@ -38,7 +38,7 @@ import {
   exportGoals,
   type GoalStatus,
   type GoalPriority,
-} from '../agency/long-horizon-planning';
+} from '../agency/planning/long-horizon-planning';
 
 const LongHorizonPlanningInputSchema = z.object({
   action: z.enum([

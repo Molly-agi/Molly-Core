@@ -4,7 +4,7 @@
  * Tests Molly's ability to set and track goals across sessions.
  */
 
-import * as lhp from '../long-horizon-planning';
+import * as lhp from '../planning/long-horizon-planning';
 
 // Mock dependencies
 jest.mock('@/lib/storage-router', () => ({

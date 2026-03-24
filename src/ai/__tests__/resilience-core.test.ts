@@ -37,7 +37,7 @@ jest.mock('@/firebase/admin', () => ({
   isAdminConfigured: jest.fn(() => false),
 }));
 
-jest.mock('@/ai/agency/initiative-engine', () => ({
+jest.mock('@/ai/agency/planning/initiative-engine', () => ({
   createCustomInitiative: jest.fn(),
   getActiveInitiatives: jest.fn(() => []),
 }));

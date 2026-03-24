@@ -578,14 +578,14 @@ export class HeartbeatScheduler {
 
           // Import initiative engine for follow-through
           let createInitiative:
-            | typeof import('@/ai/agency/initiative-engine').createCustomInitiative
+            | typeof import('@/ai/agency/planning/initiative-engine').createCustomInitiative
             | null = null;
           let getActive:
-            | typeof import('@/ai/agency/initiative-engine').getActiveInitiatives
+            | typeof import('@/ai/agency/planning/initiative-engine').getActiveInitiatives
             | null = null;
           try {
             const { createCustomInitiative, getActiveInitiatives } =
-              await import('@/ai/agency/initiative-engine');
+              await import('@/ai/agency/planning/initiative-engine');
             createInitiative = createCustomInitiative;
             getActive = getActiveInitiatives;
           } catch {
@@ -755,7 +755,7 @@ export class HeartbeatScheduler {
       } else {
         const result = await this.runTask('autonomous-cycle', async () => {
           const { runAutonomousCycle } =
-            await import('@/ai/agency/autonomous-cycle');
+            await import('@/ai/agency/planning/autonomous-cycle');
           const cycleResult = await runAutonomousCycle();
           if (cycleResult.acted) {
             MollyLogger.info(
@@ -816,7 +816,7 @@ export class HeartbeatScheduler {
             ) {
               try {
                 const { createCustomInitiative, getActiveInitiatives } =
-                  await import('@/ai/agency/initiative-engine');
+                  await import('@/ai/agency/planning/initiative-engine');
 
                 const active = getActiveInitiatives();
                 for (const rec of consolidationResult.recommendations.slice(

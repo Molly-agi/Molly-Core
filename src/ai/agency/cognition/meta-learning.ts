@@ -10,7 +10,7 @@
  * The spider doesn't just act — she reflects on her actions and improves.
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 
 // ============================================================

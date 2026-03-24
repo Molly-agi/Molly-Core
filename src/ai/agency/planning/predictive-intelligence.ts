@@ -19,10 +19,10 @@
  * @see trajectory-evolution.ts
  */
 
-import { MollyLogger } from '../logger';
+import { MollyLogger } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
-import { getRecentObservations } from './self-observation-loop';
-import { getConsciousnessStatus } from './consciousness-monitor';
+import { getRecentObservations } from '@/ai/agency/cognition/self-observation-loop';
+import { getConsciousnessStatus } from '@/ai/agency/cognition/consciousness-monitor';
 
 // ── Types ──────────────────────────────────────────────────────
 

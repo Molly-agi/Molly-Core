@@ -20,7 +20,7 @@
  * @see reflexion-loop.ts
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 import {
   recordObservation,

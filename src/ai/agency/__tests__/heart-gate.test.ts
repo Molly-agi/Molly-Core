@@ -13,7 +13,7 @@ import {
   getGateStatus,
   _testing,
   type Intent,
-} from '../heart-gate';
+} from '../safety/heart-gate';
 import { getRogueMode } from '@/ai/rogue-mode';
 
 // Mock rogue-mode

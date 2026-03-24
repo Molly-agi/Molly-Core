@@ -13,7 +13,10 @@
  */
 
 import { MollyLogger, generateTraceId } from '@/ai/logger';
-import { recordLearning, registerStrategy } from './meta-learning';
+import {
+  recordLearning,
+  registerStrategy,
+} from '@/ai/agency/cognition/meta-learning';
 
 // ============================================================
 // TYPES

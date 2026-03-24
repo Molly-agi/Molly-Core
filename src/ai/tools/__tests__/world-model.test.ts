@@ -29,7 +29,7 @@ jest.mock('../../agency/world-model', () => ({
   getRecentSimulations: jest.fn(),
 }));
 
-import * as wmModule from '../../agency/world-model';
+import * as wmModule from '../../agency/cognition/world-model';
 
 // Mock defineTool to capture the handler
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

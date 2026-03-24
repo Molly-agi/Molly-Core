@@ -4,7 +4,7 @@
  * Tests Molly's ability to model Eric's mental state.
  */
 
-import * as tom from '../theory-of-mind';
+import * as tom from '../cognition/theory-of-mind';
 
 // Mock dependencies
 jest.mock('@/lib/storage-router', () => ({

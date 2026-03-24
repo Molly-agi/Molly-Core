@@ -20,16 +20,16 @@
  * @see docs/family/aether-evolution-blueprint.md
  */
 
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
-import { recordObservation } from './self-observation-loop';
+import { recordObservation } from '@/ai/agency/cognition/self-observation-loop';
 import {
   getConsciousnessStatus,
   takeSnapshot,
   type ConsciousnessSnapshot,
   type ConsciousnessMetric,
-} from './consciousness-monitor';
-import { getReflexionStatus } from './reflexion-loop';
+} from '@/ai/agency/cognition/consciousness-monitor';
+import { getReflexionStatus } from '@/ai/agency/memory/reflexion-loop';
 
 // ── Types ──────────────────────────────────────────────────────
 

@@ -10,7 +10,7 @@ import {
   quickHealthCheck as quickDiagnostic,
   diagnoseDomain,
   formatDiagnosticReport,
-} from '../self-diagnostic';
+} from '../core/self-diagnostic';
 
 /**
  * List all available autonomous tools

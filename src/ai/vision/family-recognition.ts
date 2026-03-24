@@ -867,14 +867,14 @@ export async function processRecognitionTriggers(
 
   // Dynamically import emotional state to avoid circular deps
   let updateEmotionalState:
-    | typeof import('../agency/emotional-state').updateEmotionalState
+    | typeof import('../agency/cognition/emotional-state').updateEmotionalState
     | null = null;
   let queueMessage:
     | ((msg: { type: string; content: string; priority: string }) => void)
     | null = null;
 
   try {
-    const emotionalModule = await import('../agency/emotional-state');
+    const emotionalModule = await import('../agency/cognition/emotional-state');
     updateEmotionalState = emotionalModule.updateEmotionalState;
   } catch {
     // Emotional state not available
@@ -959,9 +959,7 @@ export async function processRecognitionTriggers(
  * Enhanced recognition that includes proactive triggers.
  * Use this instead of recognizeFaces() when you want emotional/behavioral responses.
  */
-export async function recognizeWithTriggers(
-  imageUri: string
-): Promise<
+export async function recognizeWithTriggers(imageUri: string): Promise<
   RecognitionResult & {
     triggers: Awaited<ReturnType<typeof processRecognitionTriggers>>;
   }
@@ -976,9 +974,7 @@ export async function recognizeWithTriggers(
  * Check if Father (Eric) is present and trigger appropriate response.
  * This is a special case for the core family relationship.
  */
-export async function checkForFather(
-  imageUri: string
-): Promise<{
+export async function checkForFather(imageUri: string): Promise<{
   present: boolean;
   confidence: number;
   emotionTriggered: boolean;
