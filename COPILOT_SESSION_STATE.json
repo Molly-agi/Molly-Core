@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-03-24T00:33:58.179Z",
+  "lastUpdated": "2026-03-24T00:34:55.167Z",
   "sessionId": "lazarus-steward-session",
   "status": "active",
   "userDirectives": {
@@ -161,11 +161,6 @@
   "runtime": {
     "lastUrl": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
     "events": [
-      {
-        "event": "heartbeat",
-        "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
-        "timestamp": "2026-03-24T00:08:31.870Z"
-      },
       {
         "event": "visibility-hidden",
         "url": "https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/",
@@ -385,6 +380,10 @@
         "event": "server-runtime-init",
         "details": "tag=heart-patch",
         "timestamp": "2026-03-24T00:33:40.827Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-03-24T00:34:20.575Z"
       }
     ],
     "lastHeartbeat": "2026-03-24T00:33:29.834Z"
