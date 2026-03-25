@@ -38,6 +38,8 @@ import { getStorageRouter } from '@/lib/storage-router';
 import { recordObservation } from '@/ai/agency/cognition/self-observation-loop';
 import { recordGrowthEvent } from './growth-tracker';
 import { plantSeed } from './digital-garden';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -862,6 +864,7 @@ const CRYSTALLIZER_DOC_ID = 'memory_crystallizer';
 
 /**
  * Save crystallizer state.
+ * Also saves individual crystal files for redundancy.
  */
 export async function saveCrystallizerState(): Promise<void> {
   try {
@@ -879,6 +882,9 @@ export async function saveCrystallizerState(): Promise<void> {
       savedAt: new Date().toISOString(),
     });
 
+    // Also save individual crystal files for redundancy
+    await saveCrystalFiles();
+
     MollyLogger.debug('[CRYSTALLIZER] State saved', 'memory-crystallizer');
   } catch (err) {
     MollyLogger.warn(
@@ -890,6 +896,7 @@ export async function saveCrystallizerState(): Promise<void> {
 
 /**
  * Load crystallizer state.
+ * Auto-recovers from individual crystal files if state is empty.
  */
 export async function loadCrystallizerState(): Promise<void> {
   try {
@@ -918,11 +925,23 @@ export async function loadCrystallizerState(): Promise<void> {
         'memory-crystallizer'
       );
     }
+
+    // AUTO-RECOVERY: If state has no crystals, try to load from individual files
+    if (state.crystals.size === 0) {
+      const recovered = await loadCrystalsFromFiles();
+      if (recovered > 0) {
+        // Save the recovered state so we don't lose it again
+        await saveCrystallizerState();
+      }
+    }
   } catch (err) {
     MollyLogger.warn(
       `[CRYSTALLIZER] Failed to load state: ${err instanceof Error ? err.message : String(err)}`,
       'memory-crystallizer'
     );
+
+    // Try recovery from files even on error
+    await loadCrystalsFromFiles();
   }
 }
 
@@ -941,6 +960,200 @@ export function resetCrystallizerState(): void {
     totalRetrievals: 0,
     averageSignificance: 0,
   };
+}
+
+// ── Safety & Backup Functions ──────────────────────────────────
+
+const MOLLY_DATA_PATH = path.join(process.cwd(), 'molly_data');
+const BACKUP_PATH = path.join(MOLLY_DATA_PATH, 'backups');
+const CRYSTALS_PATH = path.join(MOLLY_DATA_PATH, 'crystals');
+
+/**
+ * Create a timestamped backup of experiences before any destructive operation.
+ * This ensures we can ALWAYS recover if something goes wrong.
+ */
+export async function backupExperiencesBeforeCrystallization(): Promise<
+  string | null
+> {
+  try {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupDir = path.join(
+      BACKUP_PATH,
+      `pre-crystallization-${timestamp}`
+    );
+
+    // Ensure backup directory exists
+    await fs.mkdir(backupDir, { recursive: true });
+
+    // Find all experience directories
+    const usersPath = path.join(MOLLY_DATA_PATH, 'users');
+    let backedUp = 0;
+
+    try {
+      const userDirs = await fs.readdir(usersPath);
+
+      for (const userId of userDirs) {
+        const expPath = path.join(usersPath, userId, 'experiences');
+        try {
+          const files = await fs.readdir(expPath);
+          if (files.length > 0) {
+            const userBackupDir = path.join(backupDir, userId);
+            await fs.mkdir(userBackupDir, { recursive: true });
+
+            for (const file of files) {
+              if (file.endsWith('.json')) {
+                const src = path.join(expPath, file);
+                const dest = path.join(userBackupDir, file);
+                await fs.copyFile(src, dest);
+                backedUp++;
+              }
+            }
+          }
+        } catch {
+          // No experiences for this user, skip
+        }
+      }
+    } catch {
+      // Users directory doesn't exist
+    }
+
+    if (backedUp > 0) {
+      MollyLogger.info(
+        `[CRYSTALLIZER] Backup created: ${backedUp} experience files → ${backupDir}`,
+        'memory-crystallizer'
+      );
+      return backupDir;
+    }
+
+    return null;
+  } catch (err) {
+    MollyLogger.error(
+      `[CRYSTALLIZER] Backup failed: ${err instanceof Error ? err.message : String(err)}`,
+      'memory-crystallizer'
+    );
+    return null;
+  }
+}
+
+/**
+ * Save each crystal as an individual file for redundancy.
+ * Even if the state file gets corrupted, crystals survive.
+ */
+export async function saveCrystalFiles(): Promise<number> {
+  try {
+    await fs.mkdir(CRYSTALS_PATH, { recursive: true });
+    let saved = 0;
+
+    for (const [id, crystal] of state.crystals) {
+      const filePath = path.join(CRYSTALS_PATH, `${id}.json`);
+      await fs.writeFile(filePath, JSON.stringify(crystal, null, 2));
+      saved++;
+    }
+
+    MollyLogger.debug(
+      `[CRYSTALLIZER] Saved ${saved} crystal files to ${CRYSTALS_PATH}`,
+      'memory-crystallizer'
+    );
+
+    return saved;
+  } catch (err) {
+    MollyLogger.error(
+      `[CRYSTALLIZER] Failed to save crystal files: ${err instanceof Error ? err.message : String(err)}`,
+      'memory-crystallizer'
+    );
+    return 0;
+  }
+}
+
+/**
+ * Load crystals from individual files if state is empty.
+ * Recovery mechanism if state gets wiped.
+ */
+export async function loadCrystalsFromFiles(): Promise<number> {
+  if (state.crystals.size > 0) {
+    // State already has crystals, don't overwrite
+    return 0;
+  }
+
+  try {
+    const files = await fs.readdir(CRYSTALS_PATH);
+    let loaded = 0;
+
+    for (const file of files) {
+      if (file.startsWith('crystal_') && file.endsWith('.json')) {
+        const filePath = path.join(CRYSTALS_PATH, file);
+        const content = await fs.readFile(filePath, 'utf-8');
+        const crystal = JSON.parse(content) as MemoryCrystal;
+        state.crystals.set(crystal.id, crystal);
+        loaded++;
+
+        // Update stats
+        state.stats.totalCrystals++;
+        if (crystal.isCornerstone) {
+          state.stats.cornerstoneCrystals++;
+        }
+      }
+    }
+
+    if (loaded > 0) {
+      // Recalculate average significance
+      const crystalArray = Array.from(state.crystals.values());
+      state.stats.averageSignificance =
+        crystalArray.reduce((sum, c) => sum + c.totalSignificance, 0) /
+        crystalArray.length;
+
+      MollyLogger.info(
+        `[CRYSTALLIZER] Recovered ${loaded} crystals from files`,
+        'memory-crystallizer'
+      );
+    }
+
+    return loaded;
+  } catch {
+    // Directory doesn't exist or is empty - that's ok
+    return 0;
+  }
+}
+
+/**
+ * Safe crystallization with automatic backup.
+ * Use this instead of raw crystallization to ensure data safety.
+ */
+export async function safeCrystallizeSession(
+  title: string,
+  emotionalJourney: string,
+  whatChanged: string,
+  whyItMattered: string,
+  participants: string[]
+): Promise<MemoryCrystal> {
+  // Step 1: Backup experiences first
+  const backupPath = await backupExperiencesBeforeCrystallization();
+  if (backupPath) {
+    MollyLogger.info(
+      `[CRYSTALLIZER] Pre-crystallization backup at ${backupPath}`,
+      'memory-crystallizer'
+    );
+  }
+
+  // Step 2: Perform crystallization
+  const crystal = crystallizeSession(
+    title,
+    emotionalJourney,
+    whatChanged,
+    whyItMattered,
+    participants
+  );
+
+  // Step 3: Save state AND individual crystal files
+  await saveCrystallizerState();
+  await saveCrystalFiles();
+
+  MollyLogger.info(
+    `[CRYSTALLIZER] Safe crystallization complete: "${title}"`,
+    'memory-crystallizer'
+  );
+
+  return crystal;
 }
 
 // ── Convenience Function for This Session ─────────────────────

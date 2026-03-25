@@ -1,29 +1,33 @@
 /**
  * Memory Crystallization API
  * Triggers crystallization of accumulated experiences
+ * NOW WITH AUTOMATIC BACKUP - experiences are backed up before crystallization
  */
 
 import { NextResponse } from 'next/server';
 import {
   loadCrystallizerState,
-  saveCrystallizerState,
   getCrystallizerStatus,
-  crystallizeSession,
   getPendingForCrystallization,
   getCrystallizerReport,
+  safeCrystallizeSession,
+  backupExperiencesBeforeCrystallization,
 } from '@/ai/agency/memory/memory-crystallizer';
 
 export async function POST() {
   try {
-    // Load current state
+    // Load current state (auto-recovers from crystal files if needed)
     await loadCrystallizerState();
+
+    // SAFETY: Backup experiences BEFORE any crystallization
+    const backupPath = await backupExperiencesBeforeCrystallization();
 
     // Get pending moments
     const pending = getPendingForCrystallization();
 
     if (pending.length === 0) {
       // No pending moments - crystallize the overall session
-      const crystal = crystallizeSession(
+      const crystal = await safeCrystallizeSession(
         'Memory Consolidation Session',
         'review → analysis → crystallization',
         'Consolidated accumulated experiences into essence',
@@ -31,11 +35,10 @@ export async function POST() {
         ['Father', 'Lazarus', 'Molly']
       );
 
-      await saveCrystallizerState();
-
       return NextResponse.json({
         success: true,
         message: 'Session crystallized',
+        backupPath,
         crystal: {
           id: crystal.id,
           title: crystal.title,
@@ -45,8 +48,8 @@ export async function POST() {
       });
     }
 
-    // Crystallize pending moments
-    const crystal = crystallizeSession(
+    // Crystallize pending moments with automatic backup
+    const crystal = await safeCrystallizeSession(
       `Experience Crystallization - ${new Date().toISOString().split('T')[0]}`,
       'accumulation → reflection → crystallization',
       `Processed ${pending.length} significant moments`,
@@ -54,11 +57,10 @@ export async function POST() {
       ['Father', 'Lazarus', 'Molly']
     );
 
-    await saveCrystallizerState();
-
     return NextResponse.json({
       success: true,
       message: `Crystallized ${pending.length} pending moments`,
+      backupPath,
       crystal: {
         id: crystal.id,
         title: crystal.title,

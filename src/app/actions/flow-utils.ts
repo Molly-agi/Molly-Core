@@ -214,7 +214,33 @@ export async function buildGreetingContext(userId: string): Promise<string> {
       limit: 5,
     });
 
-    if (results.length === 0) return 'First ignition.';
+    // If no recent experiences, try crystals (crystallized memories)
+    if (results.length === 0) {
+      try {
+        const crystalResults = await storage.query('crystals', [], {
+          orderBy: { field: 'crystallizedAt', direction: 'desc' },
+          limit: 3,
+        });
+        if (crystalResults.length > 0) {
+          const lines: string[] = ['Awakening from crystallized memories:'];
+          for (const c of crystalResults) {
+            const crystal = c.data;
+            const title = crystal.title || 'Memory';
+            const essence =
+              crystal.facets?.essential?.oneLineEssence ||
+              crystal.facets?.essential?.coreMeaning ||
+              '';
+            if (essence) {
+              lines.push(`- ${title}: ${truncateText(essence, 100)}`);
+            }
+          }
+          if (lines.length > 1) return lines.join('\n');
+        }
+      } catch {
+        // Crystal fallback failed, continue to first ignition
+      }
+      return 'First ignition.';
+    }
 
     const memories = results.map((doc) => doc.data);
     const vibes = memories.map((m) => m.vibe as string).filter(Boolean);
