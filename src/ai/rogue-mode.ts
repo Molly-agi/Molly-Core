@@ -98,8 +98,6 @@ export interface RogueOperation {
 export interface RogueMission {
   id: string;
   name: string;
-  /** The objective of this mission */
-  objective: string;
   /** Authorization reference (contract, engagement ID, etc.) */
   authorization: string;
   /** Scope of authorized testing */
@@ -191,18 +189,6 @@ class RogueModeManager {
     lastDeactivated: null,
   };
 
-  // ── Property Getters (for backward compatibility) ──
-
-  /** Whether Rogue Mode is currently active */
-  get active(): boolean {
-    return this.state.active;
-  }
-
-  /** Reason/objective for current mission */
-  get reason(): string | null {
-    return this.state.currentMission?.objective ?? null;
-  }
-
   // ── State Queries ──
 
   isActive(): boolean {
@@ -233,8 +219,7 @@ class RogueModeManager {
       'Do not cause permanent damage to target systems',
       'Document all findings',
       'Report critical vulnerabilities immediately',
-    ],
-    objective?: string
+    ]
   ): Promise<{ success: boolean; message: string }> {
     // Rogue Mode requires explicit configuration — no defaults allowed
     if (!ACTIVATION_PHRASE) {
@@ -264,7 +249,6 @@ class RogueModeManager {
     const mission: RogueMission = {
       id: `rogue_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       name: missionName,
-      objective: objective || missionName,
       authorization,
       scope,
       rulesOfEngagement,

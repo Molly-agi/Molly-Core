@@ -38,6 +38,11 @@ import {
 import { getModelRouter } from '@/ai/model-router';
 import { getRogueMode } from '@/ai/rogue-mode';
 import { getInitiatives } from '@/ai/agency/planning/initiative-engine';
+import {
+  getHealthMetrics,
+  getCircuitBreaker,
+  wrapError as _wrapError,
+} from './resiliency';
 
 // ============================================================
 // TYPES
@@ -82,6 +87,7 @@ export interface FullDiagnostic {
     memory: DiagnosticResult;
     agency: DiagnosticResult;
     network: DiagnosticResult;
+    resiliency: DiagnosticResult;
   };
   criticalIssues: string[];
   healingReport: HealingReport;
@@ -127,6 +133,19 @@ const THRESHOLDS = {
     critical: 15000, // 15 seconds
   },
 };
+
+// ============================================================
+// CIRCUIT BREAKERS
+// ============================================================
+
+/**
+ * Circuit breaker for healing operations - prevents repeated failed healing
+ */
+const healingCircuitBreaker = getCircuitBreaker('self-healing', {
+  failureThreshold: 3,
+  resetTimeoutMs: 2 * 60 * 1000, // 2 minute cooldown
+  successThreshold: 1,
+});
 
 // ============================================================
 // SYSTEM HEALTH DIAGNOSTICS
@@ -847,6 +866,164 @@ async function diagnoseNetwork(): Promise<DiagnosticResult> {
 }
 
 // ============================================================
+// RESILIENCY DIAGNOSTICS
+// ============================================================
+
+function diagnoseResiliency(): DiagnosticResult {
+  const checks: DiagnosticCheck[] = [];
+  const recommendations: string[] = [];
+  const healingActions: HealingAction[] = [];
+  let worstStatus: DiagnosticSeverity = 'healthy';
+
+  const updateWorst = (status: DiagnosticSeverity) => {
+    if (status === 'critical') worstStatus = 'critical';
+    else if (status === 'degraded' && worstStatus !== 'critical')
+      worstStatus = 'degraded';
+  };
+
+  // Health Metrics Check
+  try {
+    const metrics = getHealthMetrics();
+
+    // Error count check
+    let errorsStatus: DiagnosticSeverity = 'healthy';
+    if (metrics.totalErrors > 100) {
+      errorsStatus = 'degraded';
+      recommendations.push(
+        `WARNING: ${metrics.totalErrors} errors logged. Review error patterns.`
+      );
+    }
+    if (metrics.errorsBySeverity.critical > 0) {
+      errorsStatus = 'critical';
+      recommendations.push(
+        `CRITICAL: ${metrics.errorsBySeverity.critical} critical errors. Investigate immediately.`
+      );
+    }
+
+    checks.push({
+      name: 'error_tracking',
+      status: errorsStatus,
+      value: `${metrics.totalErrors} total errors`,
+      details: `Critical: ${metrics.errorsBySeverity.critical}, High: ${metrics.errorsBySeverity.high}, Recent rate: ${metrics.recentErrorRate}/hr`,
+    });
+    updateWorst(errorsStatus);
+
+    // Recovery rate check
+    let recoveryStatus: DiagnosticSeverity = 'healthy';
+    if (metrics.recoveryAttempts > 0) {
+      if (metrics.recoveryRate < 0.3) {
+        recoveryStatus = 'critical';
+        recommendations.push(
+          `CRITICAL: Recovery success rate is ${(metrics.recoveryRate * 100).toFixed(1)}%. Self-healing is failing.`
+        );
+      } else if (metrics.recoveryRate < 0.7) {
+        recoveryStatus = 'degraded';
+        recommendations.push(
+          `WARNING: Recovery success rate is ${(metrics.recoveryRate * 100).toFixed(1)}%. Monitor closely.`
+        );
+      }
+
+      checks.push({
+        name: 'recovery_rate',
+        status: recoveryStatus,
+        value: `${(metrics.recoveryRate * 100).toFixed(1)}%`,
+        expected: '> 70%',
+        details: `${metrics.successfulRecoveries}/${metrics.recoveryAttempts} recoveries succeeded`,
+      });
+      updateWorst(recoveryStatus);
+    }
+
+    // Health score check
+    let healthStatus: DiagnosticSeverity = 'healthy';
+    if (metrics.healthScore < 50) {
+      healthStatus = 'critical';
+      recommendations.push(
+        `CRITICAL: Overall health score is ${metrics.healthScore}/100. System needs attention.`
+      );
+    } else if (metrics.healthScore < 75) {
+      healthStatus = 'degraded';
+    }
+
+    checks.push({
+      name: 'health_score',
+      status: healthStatus,
+      value: metrics.healthScore,
+      expected: '> 75',
+    });
+    updateWorst(healthStatus);
+
+    // Circuit breakers check
+    const openCircuits = Object.entries(metrics.circuitBreakers).filter(
+      ([, state]) => state === 'OPEN'
+    );
+    if (openCircuits.length > 0) {
+      checks.push({
+        name: 'circuit_breakers',
+        status: 'degraded',
+        value: `${openCircuits.length} OPEN`,
+        details: `Open circuits: ${openCircuits.map(([name]) => name).join(', ')}`,
+      });
+      recommendations.push(
+        `WARNING: ${openCircuits.length} circuit breaker(s) are OPEN: ${openCircuits.map(([name]) => name).join(', ')}`
+      );
+      updateWorst('degraded');
+    } else {
+      checks.push({
+        name: 'circuit_breakers',
+        status: 'healthy',
+        value: 'All CLOSED',
+        details: `${Object.keys(metrics.circuitBreakers).length} circuit breakers active`,
+      });
+    }
+  } catch (err) {
+    checks.push({
+      name: 'health_metrics',
+      status: 'unknown',
+      value: 'error',
+      details: err instanceof Error ? err.message : 'Failed to read metrics',
+    });
+    updateWorst('unknown');
+  }
+
+  // Self-Healing Circuit Breaker Status
+  try {
+    const cbState = healingCircuitBreaker.getState();
+    let cbStatus: DiagnosticSeverity = 'healthy';
+
+    if (cbState === 'OPEN') {
+      cbStatus = 'degraded';
+      recommendations.push(
+        'Self-healing circuit breaker is OPEN. Healing actions temporarily disabled.'
+      );
+    } else if (cbState === 'HALF_OPEN') {
+      cbStatus = 'degraded';
+    }
+
+    checks.push({
+      name: 'healing_circuit_breaker',
+      status: cbStatus,
+      value: cbState,
+      expected: 'CLOSED',
+    });
+    updateWorst(cbStatus);
+  } catch {
+    checks.push({
+      name: 'healing_circuit_breaker',
+      status: 'unknown',
+      value: 'error',
+    });
+  }
+
+  return {
+    domain: 'resiliency',
+    status: worstStatus,
+    checks,
+    recommendations,
+    healingActions,
+  };
+}
+
+// ============================================================
 // SELF-HEALING
 // ============================================================
 
@@ -951,8 +1128,9 @@ export async function runFullDiagnostic(
   const memory = await diagnoseMemory();
   const agency = await diagnoseAgency();
   const network = await diagnoseNetwork();
+  const resiliency = diagnoseResiliency();
 
-  const domains = { system, aiCore, memory, agency, network };
+  const domains = { system, aiCore, memory, agency, network, resiliency };
 
   // Determine overall status
   let overallStatus: DiagnosticSeverity = 'healthy';
@@ -1077,7 +1255,7 @@ export async function quickHealthCheck(): Promise<{
  * Diagnose a specific domain.
  */
 export async function diagnoseDomain(
-  domain: 'system' | 'aiCore' | 'memory' | 'agency' | 'network'
+  domain: 'system' | 'aiCore' | 'memory' | 'agency' | 'network' | 'resiliency'
 ): Promise<DiagnosticResult> {
   switch (domain) {
     case 'system':
@@ -1090,6 +1268,8 @@ export async function diagnoseDomain(
       return diagnoseAgency();
     case 'network':
       return diagnoseNetwork();
+    case 'resiliency':
+      return diagnoseResiliency();
     default:
       return {
         domain: 'unknown',

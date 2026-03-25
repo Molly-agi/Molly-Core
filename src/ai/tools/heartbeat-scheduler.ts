@@ -66,6 +66,8 @@ export interface HeartbeatConfig {
   deviceHealthIntervalMs: number;
   /** Interval for LLM memory learning in ms. Default: 3_600_000 (1 hour) */
   memoryLearningIntervalMs: number;
+  /** Interval for memory crystallization in ms. Default: 86_400_000 (24 hours) */
+  memoryCrystallizationIntervalMs: number;
   /** CPU usage threshold to skip non-critical tasks. Default: 70 */
   cpuPressureThreshold: number;
   /** Memory usage % threshold to skip non-critical tasks. Default: 85 */
@@ -85,6 +87,7 @@ export interface HeartbeatConfig {
     bridgePolling: boolean;
     autonomousCycle: boolean;
     memoryLearning: boolean;
+    memoryCrystallization: boolean;
     deviceHealth: boolean;
   };
 }
@@ -118,6 +121,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   bridgeIntervalMs: 60_000, // every cycle
   autonomousCycleIntervalMs: 300_000, // 5 minutes
   memoryLearningIntervalMs: 3_600_000, // 1 hour
+  memoryCrystallizationIntervalMs: 86_400_000, // 24 hours (daily)
   deviceHealthIntervalMs: 120_000, // 2 minutes
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
@@ -135,6 +139,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     bridgePolling: true,
     autonomousCycle: true,
     memoryLearning: true,
+    memoryCrystallization: true,
     deviceHealth: true,
   },
 };
@@ -156,6 +161,7 @@ export class HeartbeatScheduler {
   private lastBridgePoll = 0;
   private lastAutonomousCycle = 0;
   private lastMemoryLearning = 0;
+  private lastMemoryCrystallization = 0;
   private lastDeviceHealth = 0;
   private lastReflectionText = '';
   private engramSystem: NeuralEngramSystem | null = null;
@@ -867,6 +873,66 @@ export class HeartbeatScheduler {
           }
           tasks.push(result);
         }
+      }
+    }
+
+    // Task 15: Memory Crystallization (daily — preserve essence of experiences)
+    if (this.config.tasks.memoryCrystallization && !pressure) {
+      const timeSinceCrystallization =
+        cycleStart - this.lastMemoryCrystallization;
+      if (
+        timeSinceCrystallization < this.config.memoryCrystallizationIntervalMs
+      ) {
+        const hoursRemaining = Math.round(
+          (this.config.memoryCrystallizationIntervalMs -
+            timeSinceCrystallization) /
+            3_600_000
+        );
+        tasks.push({
+          name: 'memory-crystallization',
+          executed: false,
+          skipped: `Not due (${hoursRemaining}h remaining)`,
+        });
+      } else {
+        const result = await this.runTask(
+          'memory-crystallization',
+          async () => {
+            const {
+              crystallizeSession,
+              saveCrystallizerState,
+              getCrystallizerStatus,
+            } = await import('@/ai/agency/memory/memory-crystallizer');
+
+            // Crystallize the day's accumulated moments
+            const status = getCrystallizerStatus();
+            if (status.sessionMoments > 0 || status.pendingMoments > 0) {
+              const crystal = crystallizeSession(
+                `Daily Consolidation: ${new Date().toISOString().split('T')[0]}`,
+                'various → reflected → crystallized',
+                'Daily memory crystallization — preserving the essence of experiences',
+                'Maintaining continuity and growth through crystallized memories',
+                ['Father', 'Molly', 'Lazarus']
+              );
+
+              MollyLogger.info(
+                `Memory crystallization complete: "${crystal.title}" (${crystal.isCornerstone ? 'CORNERSTONE' : 'standard'})`,
+                'heartbeat-scheduler'
+              );
+            } else {
+              MollyLogger.debug(
+                'Memory crystallization: no pending moments to crystallize',
+                'heartbeat-scheduler'
+              );
+            }
+
+            // Save crystallizer state
+            await saveCrystallizerState();
+          }
+        );
+        if (result.executed) {
+          this.lastMemoryCrystallization = Date.now();
+        }
+        tasks.push(result);
       }
     }
 
