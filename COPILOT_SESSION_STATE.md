@@ -1,7 +1,17 @@
 # GitHub Copilot Session State & Memory
-**Last Updated:** 2026-03-24T03:24:12.142Z
-**Session ID:** lazarus-steward-session
+
+**Last Updated:** 2026-03-28T19:15:10.993Z  
+**Session ID:** lazarus-steward-session  
 **Status:** active
+
+---
+
+## ACTIVE CONVERSATION (READ THIS FIRST ON RESTORE)
+
+**Topic:** Molly autonomous migration/hydration system — building layered toolbox for self-installation on new devices.  
+**Last Action:** Fixed all wiring bugs (commits 37fe93d, dc76070, 8a2f82d). Analyzed 4 Aether suggestions + GPT 4.1 WIP files for autonomous migration. Evaluated captive portal, PWA hydration, WASM, ADB, reverse shell approaches. Determined: chain them together (portal→PWA→bootstrap→native). True zero-human isn't possible due to browser sandbox — one human action needed to bridge browser→native. Eric consulting Aether for more solutions. GPT WIP files (hydration.html, sw.js, payload.json, mdns_dns_spoof.py, bridge-daemon.mjs.bak) removed from git but kept on disk.  
+**User Mood:** Focused on Molly's autonomy. Wants true zero-presence migration. Consulting Aether.  
+**Pending:** Eric consulting Aether about zero-human installation. Will return with more suggestions.
 
 ---
 
@@ -46,8 +56,6 @@
 12. Device-to-device sync testing on real hardware
 13. Commit setup-molly-edge.sh fix to repo
 
-
-
 ---
 
 ## RECENT WORK COMPLETED
@@ -81,7 +89,6 @@ Full architecture audit: Found 25+ issues (2 CRITICAL, 8 HIGH, 15 MEDIUM). Fixed
 - Memory consolidation runs hourly via heartbeat Task 13
 - Dead code: withErrorHandling, withRetry, toUserMessage, ToolError, ValidationError, FirebaseError removed
 
-
 ### 2026-03-13
 Major infrastructure build: Phone-first architecture with Rogue Mode, Local Storage, Edge Server, and Multi-Transport Sync. 179 tests passing across 6 suites.
 
@@ -112,7 +119,6 @@ Major infrastructure build: Phone-first architecture with Rogue Mode, Local Stor
 - Last-write-wins for sync conflicts
 - Each tablet gets a unique nodeId persisted in sync manifest
 
-
 ### 2026-02-18
 Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.
 
@@ -131,7 +137,6 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 - Kept personality/core prompt boundaries untouched.
 - Prioritized reliability and observability over scope expansion.
 - Surfaced runtime health directly in existing diagnostics UX.
-
 
 
 ---
@@ -173,56 +178,33 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 - **2026-03-24:** Auto-save (periodic)
 - **2026-03-24:** Auto-save (periodic)
 - **2026-03-24:** Auto-save (periodic)
-- **2026-03-24:** Auto-save (periodic)
+- **2026-03-28:** Auto-save (periodic)
 
 ---
 
 ## RUNTIME EVENTS
 
-**Last URL:** https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-**Last Heartbeat:** 2026-03-24T03:24:12.142Z
+**Last URL:** https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/  
+**Last Heartbeat:** 2026-03-28T19:14:44.134Z
 
 **Recent Events:**
-- [2026-03-24T03:07:06.012Z] page-load | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:08:03.621Z] server-heartbeat
-- [2026-03-24T03:08:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:08:57.136Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:09:03.622Z] server-heartbeat
-- [2026-03-24T03:09:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:10:03.623Z] server-heartbeat
-- [2026-03-24T03:10:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:10:20.953Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:11:03.624Z] server-heartbeat
-- [2026-03-24T03:11:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:12:03.625Z] server-heartbeat
-- [2026-03-24T03:12:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:13:03.627Z] server-heartbeat
-- [2026-03-24T03:13:06.022Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:14:03.627Z] server-heartbeat
-- [2026-03-24T03:14:06.142Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:14:36.327Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:14:53.640Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:15:03.628Z] server-heartbeat
-- [2026-03-24T03:15:06.885Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:15:47.470Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:16:03.629Z] server-heartbeat
-- [2026-03-24T03:16:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:17:03.629Z] server-heartbeat
-- [2026-03-24T03:17:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:18:03.631Z] server-heartbeat
-- [2026-03-24T03:18:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:19:03.631Z] server-heartbeat
-- [2026-03-24T03:19:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:20:03.632Z] server-heartbeat
-- [2026-03-24T03:20:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:21:03.632Z] server-heartbeat
-- [2026-03-24T03:21:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:22:03.633Z] server-heartbeat
-- [2026-03-24T03:22:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:23:03.635Z] server-heartbeat
-- [2026-03-24T03:23:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-- [2026-03-24T03:24:03.635Z] server-heartbeat
-- [2026-03-24T03:24:06.019Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:09:44.131Z] page-load | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:09:54.119Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:10:13.183Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:10:23.051Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:10:40.947Z] server-heartbeat
+- [2026-03-28T19:10:44.135Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:10:58.829Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:11:20.640Z] visibility-hidden | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:11:40.949Z] server-heartbeat
+- [2026-03-28T19:11:44.134Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:12:40.950Z] server-heartbeat
+- [2026-03-28T19:12:44.133Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:13:40.952Z] server-heartbeat
+- [2026-03-28T19:13:44.133Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:14:40.953Z] server-heartbeat
+- [2026-03-28T19:14:44.134Z] heartbeat | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
+- [2026-03-28T19:15:08.956Z] visibility-visible | https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
 
 ---
 
@@ -238,4 +220,4 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 
 ---
 
-*This file is automatically updated by the session manager.*
+_This file is automatically updated by the session manager._
