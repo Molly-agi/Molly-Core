@@ -26,9 +26,8 @@ export { databaseToolHandlers } from './database-tools';
 export { sandboxToolHandlers } from './sandbox-tools';
 export { rogueToolHandlers } from './rogue-tools';
 export { cognitionToolHandlers } from './cognition-tools';
-// TODO: Wire planning-tools and memory-tools after fixing API signatures
-// export { planningToolHandlers } from './planning-tools';
-// export { memoryToolHandlers } from './memory-tools';
+export { planningToolHandlers } from './planning-tools';
+export { memoryToolHandlers } from './memory-tools';
 
 // Import all handlers
 import { systemToolHandlers } from './system-tools';
@@ -45,8 +44,8 @@ import { databaseToolHandlers } from './database-tools';
 import { sandboxToolHandlers } from './sandbox-tools';
 import { rogueToolHandlers } from './rogue-tools';
 import { cognitionToolHandlers } from './cognition-tools';
-// import { planningToolHandlers } from './planning-tools';
-// import { memoryToolHandlers } from './memory-tools';
+import { planningToolHandlers } from './planning-tools';
+import { memoryToolHandlers } from './memory-tools';
 import type { ToolHandler } from './types';
 
 /**
@@ -68,8 +67,8 @@ export const modularToolHandlers: Record<string, ToolHandler> = {
   ...sandboxToolHandlers,
   ...rogueToolHandlers,
   ...cognitionToolHandlers,
-  // ...planningToolHandlers,
-  // ...memoryToolHandlers,
+  ...planningToolHandlers,
+  ...memoryToolHandlers,
 };
 
 /**
