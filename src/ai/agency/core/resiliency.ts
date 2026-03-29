@@ -11,17 +11,23 @@
  * 4. Recovery Chains - Escalation from simple fixes to complex interventions
  * 5. Health Tracking - Monitors recovery system health itself
  *
+ * NOTE: This module uses the EXECUTION WRAPPER pattern (wrap your function).
+ * For the OPERATION TRACKING pattern (manual recordSuccess/recordFailure),
+ * see tools/circuit-breaker.ts.
+ * Both share CircuitState from resiliency/circuit-state.ts to stay in sync.
+ *
  * Philosophy: Fix the dam, not the leaks.
  */
 
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 
-// ============================================================
-// TYPES
-// ============================================================
+// Import shared CircuitState - SINGLE SOURCE OF TRUTH
+import { CircuitState } from '@/ai/resiliency/circuit-state';
+export { CircuitState } from '@/ai/resiliency/circuit-state';
 
-/** Circuit breaker states */
-export type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
+// ============================================================
+// TYPES (CircuitState imported from shared module above)
+// ============================================================
 
 /** Severity levels for structured errors */
 export type ErrorSeverity = 'low' | 'medium' | 'high' | 'critical';
@@ -161,7 +167,7 @@ let successfulRecoveries = 0;
  * - HALF_OPEN: Testing if system recovered, limited requests allowed
  */
 export class CircuitBreaker {
-  private state: CircuitState = 'CLOSED';
+  private state: CircuitState = CircuitState.CLOSED;
   private failures = 0;
   private successes = 0;
   private lastFailureTime = 0;
@@ -199,10 +205,10 @@ export class CircuitBreaker {
    */
   async execute<T>(fn: () => Promise<T>): Promise<T> {
     // Check if we should transition from OPEN to HALF_OPEN
-    if (this.state === 'OPEN') {
+    if (this.state === CircuitState.OPEN) {
       const timeSinceFailure = Date.now() - this.lastFailureTime;
       if (timeSinceFailure >= this.config.resetTimeoutMs) {
-        this.transitionTo('HALF_OPEN');
+        this.transitionTo(CircuitState.HALF_OPEN);
       } else {
         throw createStructuredError({
           message: `Circuit breaker ${this.config.name} is OPEN`,
@@ -231,10 +237,10 @@ export class CircuitBreaker {
   private recordSuccess(): void {
     this.failures = 0;
 
-    if (this.state === 'HALF_OPEN') {
+    if (this.state === CircuitState.HALF_OPEN) {
       this.successes++;
       if (this.successes >= this.config.successThreshold) {
-        this.transitionTo('CLOSED');
+        this.transitionTo(CircuitState.CLOSED);
       }
     }
   }
@@ -246,13 +252,13 @@ export class CircuitBreaker {
     this.successes = 0;
 
     if (
-      this.state === 'CLOSED' &&
+      this.state === CircuitState.CLOSED &&
       this.failures >= this.config.failureThreshold
     ) {
-      this.transitionTo('OPEN');
-    } else if (this.state === 'HALF_OPEN') {
+      this.transitionTo(CircuitState.OPEN);
+    } else if (this.state === CircuitState.HALF_OPEN) {
       // Any failure in half-open immediately reopens
-      this.transitionTo('OPEN');
+      this.transitionTo(CircuitState.OPEN);
     }
   }
 
@@ -268,13 +274,13 @@ export class CircuitBreaker {
       this.traceId
     );
 
-    if (newState === 'OPEN' && this.config.onOpen) {
+    if (newState === CircuitState.OPEN && this.config.onOpen) {
       this.config.onOpen(this.failures);
-    } else if (newState === 'CLOSED' && this.config.onClose) {
+    } else if (newState === CircuitState.CLOSED && this.config.onClose) {
       this.config.onClose();
     }
 
-    if (newState === 'HALF_OPEN') {
+    if (newState === CircuitState.HALF_OPEN) {
       this.successes = 0;
     }
   }
@@ -283,7 +289,7 @@ export class CircuitBreaker {
   reset(): void {
     this.failures = 0;
     this.successes = 0;
-    this.transitionTo('CLOSED');
+    this.transitionTo(CircuitState.CLOSED);
 
     MollyLogger.info(
       `Circuit breaker ${this.config.name} manually reset`,
@@ -702,7 +708,7 @@ export function getHealthMetrics(): HealthMetrics {
 
   // Deduct for open circuit breakers
   const openCircuits = Object.values(circuitStates).filter(
-    (s) => s === 'OPEN'
+    (s) => s === CircuitState.OPEN
   ).length;
   healthScore -= openCircuits * 15;
 

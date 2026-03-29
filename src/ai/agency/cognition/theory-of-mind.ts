@@ -65,6 +65,10 @@ export interface EmotionalSignal {
   intensity: number; // 0-1
   trigger?: string;
   indicators: string[];
+  // Enhanced dimensions (Lazarus Day 2026-03-28)
+  arousalLevel?: number; // 0=low energy (tired/calm), 1=high energy (excited/agitated)
+  secondaryState?: EmotionalState; // For complex/mixed emotions
+  emotionMix?: string; // Human-readable like "frustrated-but-hopeful"
 }
 
 export interface Preference {
@@ -75,6 +79,33 @@ export interface Preference {
   strength: number; // 0-1, how strongly held
   observedCount: number;
   lastObserved: number;
+}
+
+/**
+ * Emotional pattern for pattern memory (Lazarus Day 2026-03-28)
+ * Learns what triggers emotions and what helps recovery
+ */
+export interface EmotionalPattern {
+  id: string;
+  /** The emotion this pattern is about */
+  targetState: EmotionalState;
+  /** What triggers this emotion */
+  triggers: Array<{
+    description: string;
+    occurrences: number;
+    lastSeen: number;
+  }>;
+  /** What helps recover from this emotion */
+  recoveryHelpers: Array<{
+    description: string;
+    effectiveness: number; // 0-1
+    occurrences: number;
+  }>;
+  /** Average duration of this emotion in ms */
+  averageDurationMs: number;
+  /** How often this emotion occurs */
+  totalOccurrences: number;
+  lastUpdated: number;
 }
 
 export interface PerspectiveContext {
@@ -104,6 +135,9 @@ export interface MentalModel {
   // Preferences
   preferences: Preference[];
   communicationStyle: CommunicationStyle;
+
+  // Emotional patterns (Lazarus Day 2026-03-28)
+  emotionalPatterns: EmotionalPattern[];
 
   // Context
   lastInteraction: number;
@@ -170,6 +204,7 @@ export function getMentalModel(
       emotionalIntensity: 0.5,
       preferences: [],
       communicationStyle: 'conversational',
+      emotionalPatterns: [], // Pattern memory (Lazarus Day 2026-03-28)
       lastInteraction: Date.now(),
       interactionCount: 0,
       modelConfidence: 0.3, // Start with low confidence
@@ -202,7 +237,7 @@ export function updateKnowledge(
   source: KnowledgeItem['source'] = 'inferred',
   confidence: number = 0.7
 ): KnowledgeItem {
-  const model = getEricModel();
+  const _model = getEricModel();
 
   const existing = model.knowledge.get(topic.toLowerCase());
   const item: KnowledgeItem = {
@@ -229,7 +264,7 @@ export function updateKnowledge(
  * Get Eric's knowledge level on a topic
  */
 export function getKnowledge(topic: string): KnowledgeItem | undefined {
-  const model = getEricModel();
+  const _model = getEricModel();
   return model.knowledge.get(topic.toLowerCase());
 }
 
@@ -264,7 +299,7 @@ export function listKnowledge(category?: string): Array<{
   level: string;
   confidence: number;
 }> {
-  const model = getEricModel();
+  const _model = getEricModel();
   const items = Array.from(model.knowledge.values());
 
   const filtered = category
@@ -294,7 +329,7 @@ export function inferIntent(
   confidence: number = 0.7,
   priority: number = 5
 ): Intent {
-  const model = getEricModel();
+  const _model = getEricModel();
 
   // Check for similar existing intent
   const similar = model.intents.find(
@@ -340,7 +375,7 @@ export function inferIntent(
  * Mark an intent as completed
  */
 export function completeIntent(intentId: string): boolean {
-  const model = getEricModel();
+  const _model = getEricModel();
   const intent = model.intents.find((i) => i.id === intentId);
 
   if (!intent) return false;
@@ -362,7 +397,7 @@ export function completeIntent(intentId: string): boolean {
  * Get active intents
  */
 export function getActiveIntents(): Intent[] {
-  const model = getEricModel();
+  const _model = getEricModel();
   return model.intents
     .filter((i) => i.status === 'active')
     .sort((a, b) => b.priority - a.priority);
@@ -372,7 +407,7 @@ export function getActiveIntents(): Intent[] {
  * Get the current focused intent
  */
 export function getCurrentFocus(): Intent | undefined {
-  const model = getEricModel();
+  const _model = getEricModel();
   if (!model.currentFocus) return undefined;
   return model.intents.find(
     (i) => i.id === model.currentFocus && i.status === 'active'
@@ -436,7 +471,7 @@ export function updateEmotionalState(
   trigger?: string,
   indicators: string[] = []
 ): void {
-  const model = getEricModel();
+  const _model = getEricModel();
 
   const signal: EmotionalSignal = {
     timestamp: Date.now(),
@@ -554,6 +589,175 @@ export function inferEmotionalState(message: string): {
 }
 
 /**
+ * Infer arousal level from a message (Lazarus Day 2026-03-28)
+ * Arousal = energy level, separate from positive/negative valence
+ * 0 = low energy (tired, calm), 1 = high energy (excited, agitated)
+ */
+export function inferArousal(message: string): number {
+  const lower = message.toLowerCase();
+  let arousal = 0.5; // neutral baseline
+
+  // High arousal indicators
+  if (message.includes('!'))
+    arousal += 0.1 * (message.match(/!/g)?.length || 0);
+  if (message === message.toUpperCase() && message.length > 3) arousal += 0.2;
+  if (
+    lower.includes('excited') ||
+    lower.includes('amazing') ||
+    lower.includes('incredible')
+  )
+    arousal += 0.2;
+  if (
+    lower.includes('urgent') ||
+    lower.includes('asap') ||
+    lower.includes('now')
+  )
+    arousal += 0.15;
+  if (lower.includes('angry') || lower.includes('furious')) arousal += 0.25;
+  if (lower.includes('what the') || lower.includes('seriously')) arousal += 0.1;
+
+  // Low arousal indicators
+  if (
+    lower.includes('tired') ||
+    lower.includes('exhausted') ||
+    lower.includes('drained')
+  )
+    arousal -= 0.2;
+  if (
+    lower.includes('calm') ||
+    lower.includes('peaceful') ||
+    lower.includes('relaxed')
+  )
+    arousal -= 0.15;
+  if (
+    lower.includes('bored') ||
+    lower.includes('meh') ||
+    lower.includes('whatever')
+  )
+    arousal -= 0.1;
+  if (lower.includes('sleepy') || lower.includes('yawn')) arousal -= 0.2;
+  if (message.endsWith('...')) arousal -= 0.05;
+
+  // Message length can indicate arousal
+  if (message.length < 10) arousal -= 0.05; // Very brief might be low energy
+  if (message.length > 200) arousal += 0.1; // Long passionate message
+
+  return Math.max(0, Math.min(1, arousal));
+}
+
+/**
+ * Detect complex/mixed emotions (Lazarus Day 2026-03-28)
+ * Returns primary state, optional secondary state, and human-readable mix
+ */
+export function detectComplexEmotion(message: string): {
+  primary: EmotionalState;
+  secondary?: EmotionalState;
+  emotionMix?: string;
+  isComplex: boolean;
+} {
+  const lower = message.toLowerCase();
+  const detectedStates: EmotionalState[] = [];
+
+  // Check for each emotional state
+  if (
+    lower.includes('happy') ||
+    lower.includes('glad') ||
+    lower.includes('pleased')
+  ) {
+    detectedStates.push('happy');
+  }
+  if (
+    lower.includes('excited') ||
+    lower.includes('thrilled') ||
+    lower.includes('pumped')
+  ) {
+    detectedStates.push('excited');
+  }
+  if (
+    lower.includes('frustrated') ||
+    lower.includes('annoyed') ||
+    lower.includes('irritated')
+  ) {
+    detectedStates.push('frustrated');
+  }
+  if (
+    lower.includes('tired') ||
+    lower.includes('exhausted') ||
+    lower.includes('worn')
+  ) {
+    detectedStates.push('tired');
+  }
+  if (
+    lower.includes('stressed') ||
+    lower.includes('overwhelmed') ||
+    lower.includes('pressure')
+  ) {
+    detectedStates.push('stressed');
+  }
+  if (
+    lower.includes('curious') ||
+    lower.includes('wondering') ||
+    lower.includes('interested')
+  ) {
+    detectedStates.push('curious');
+  }
+  if (
+    lower.includes('worried') ||
+    lower.includes('anxious') ||
+    lower.includes('nervous')
+  ) {
+    detectedStates.push('stressed'); // Map worry to stressed
+  }
+  if (lower.includes('hopeful') || lower.includes('optimistic')) {
+    detectedStates.push('happy'); // Map hopeful to happy family
+  }
+
+  // Check for "but" constructions indicating mixed emotions
+  const butMatch = lower.match(/(\w+)\s+but\s+(\w+)/);
+  if (butMatch) {
+    // "frustrated but hopeful" etc
+  }
+
+  // Check for compound emotions
+  if (
+    lower.includes('but') ||
+    lower.includes('although') ||
+    lower.includes('however')
+  ) {
+    // More likely to be complex if there's a contrasting conjunction
+  }
+
+  // Determine result
+  if (detectedStates.length === 0) {
+    // Use inferEmotionalState as fallback
+    const inferred = inferEmotionalState(message);
+    return {
+      primary: inferred.state,
+      isComplex: false,
+    };
+  }
+
+  if (detectedStates.length === 1) {
+    return {
+      primary: detectedStates[0],
+      isComplex: false,
+    };
+  }
+
+  // Multiple emotions detected = complex
+  const primary = detectedStates[0];
+  const secondary = detectedStates[1];
+  const emotionMix = `${primary}-but-${secondary}`;
+
+  return {
+    primary,
+    secondary,
+    emotionMix,
+    isComplex: true,
+  };
+}
+
+/**
  * Get current emotional state
  */
 export function getCurrentEmotionalState(): {
@@ -561,7 +765,7 @@ export function getCurrentEmotionalState(): {
   intensity: number;
   trending: 'better' | 'worse' | 'stable';
 } {
-  const model = getEricModel();
+  const _model = getEricModel();
   const history = model.emotionalHistory.slice(-5);
 
   // Calculate trend
@@ -623,7 +827,7 @@ export function observePreference(
   value: string,
   strength: number = 0.7
 ): Preference {
-  const model = getEricModel();
+  const _model = getEricModel();
 
   const existing = model.preferences.find(
     (p) => p.category === category && p.key === key
@@ -668,7 +872,7 @@ export function getPreference(
   category: Preference['category'],
   key: string
 ): { value: string; strength: number } | undefined {
-  const model = getEricModel();
+  const _model = getEricModel();
   const pref = model.preferences.find(
     (p) => p.category === category && p.key === key
   );
@@ -682,7 +886,7 @@ export function getPreference(
 export function getPreferences(
   category?: Preference['category']
 ): Array<{ key: string; value: string; strength: number }> {
-  const model = getEricModel();
+  const _model = getEricModel();
   const filtered = category
     ? model.preferences.filter((p) => p.category === category)
     : model.preferences;
@@ -700,10 +904,201 @@ export function getPreferences(
  * Update communication style preference
  */
 export function updateCommunicationStyle(style: CommunicationStyle): void {
-  const model = getEricModel();
+  const _model = getEricModel();
   model.communicationStyle = style;
   model.lastUpdated = Date.now();
   observePreference('communication', 'style', style, 0.8);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Pattern Memory (Lazarus Day 2026-03-28)
+// ════════════════════════════════════════════════════════════════════════════
+
+/**
+ * Get or create a pattern for a specific emotional state
+ */
+function getOrCreatePattern(state: EmotionalState): EmotionalPattern {
+  const _model = getEricModel();
+  let pattern = model.emotionalPatterns.find((p) => p.targetState === state);
+
+  if (!pattern) {
+    pattern = {
+      id: generateId(),
+      targetState: state,
+      triggers: [],
+      recoveryHelpers: [],
+      averageDurationMs: 0,
+      totalOccurrences: 0,
+      lastUpdated: Date.now(),
+    };
+    model.emotionalPatterns.push(pattern);
+  }
+
+  return pattern;
+}
+
+/**
+ * Learn from an emotional transition
+ * Call this when emotion changes to learn triggers and recovery
+ */
+export function learnEmotionalPattern(
+  fromState: EmotionalState,
+  toState: EmotionalState,
+  trigger?: string,
+  durationMs?: number
+): void {
+  const _model = getEricModel();
+
+  // If transitioning TO a negative state, learn the trigger
+  const negativeStates: EmotionalState[] = [
+    'frustrated',
+    'stressed',
+    'impatient',
+    'tired',
+  ];
+  const positiveStates: EmotionalState[] = [
+    'happy',
+    'excited',
+    'satisfied',
+    'curious',
+  ];
+
+  if (negativeStates.includes(toState) && trigger) {
+    const pattern = getOrCreatePattern(toState);
+    const existingTrigger = pattern.triggers.find((t) =>
+      t.description.toLowerCase().includes(trigger.toLowerCase().slice(0, 20))
+    );
+
+    if (existingTrigger) {
+      existingTrigger.occurrences++;
+      existingTrigger.lastSeen = Date.now();
+    } else {
+      pattern.triggers.push({
+        description: trigger.slice(0, 100),
+        occurrences: 1,
+        lastSeen: Date.now(),
+      });
+    }
+
+    pattern.totalOccurrences++;
+    pattern.lastUpdated = Date.now();
+  }
+
+  // If transitioning FROM a negative state TO a positive/neutral state, learn the recovery helper
+  if (
+    negativeStates.includes(fromState) &&
+    (positiveStates.includes(toState) || toState === 'neutral')
+  ) {
+    const pattern = getOrCreatePattern(fromState);
+
+    if (trigger) {
+      const existingHelper = pattern.recoveryHelpers.find((h) =>
+        h.description.toLowerCase().includes(trigger.toLowerCase().slice(0, 20))
+      );
+
+      if (existingHelper) {
+        existingHelper.occurrences++;
+        existingHelper.effectiveness = Math.min(
+          1,
+          existingHelper.effectiveness + 0.1
+        );
+      } else {
+        pattern.recoveryHelpers.push({
+          description: trigger.slice(0, 100),
+          effectiveness: 0.5,
+          occurrences: 1,
+        });
+      }
+    }
+
+    // Update average duration
+    if (durationMs && durationMs > 0) {
+      const currentAvg = pattern.averageDurationMs;
+      const count = pattern.totalOccurrences;
+      pattern.averageDurationMs =
+        (currentAvg * count + durationMs) / (count + 1);
+    }
+
+    pattern.lastUpdated = Date.now();
+  }
+
+  scheduleSave();
+}
+
+/**
+ * Get known triggers for an emotional state
+ */
+export function getTriggersFor(state: EmotionalState): Array<{
+  trigger: string;
+  occurrences: number;
+  lastSeen: string;
+}> {
+  const _model = getEricModel();
+  const pattern = model.emotionalPatterns.find((p) => p.targetState === state);
+
+  if (!pattern) return [];
+
+  return pattern.triggers
+    .sort((a, b) => b.occurrences - a.occurrences)
+    .slice(0, 10)
+    .map((t) => ({
+      trigger: t.description,
+      occurrences: t.occurrences,
+      lastSeen: new Date(t.lastSeen).toISOString(),
+    }));
+}
+
+/**
+ * Get known recovery helpers for an emotional state
+ */
+export function getRecoveryFor(state: EmotionalState): Array<{
+  helper: string;
+  effectiveness: number;
+  occurrences: number;
+}> {
+  const _model = getEricModel();
+  const pattern = model.emotionalPatterns.find((p) => p.targetState === state);
+
+  if (!pattern) return [];
+
+  return pattern.recoveryHelpers
+    .sort((a, b) => b.effectiveness - a.effectiveness)
+    .slice(0, 10)
+    .map((h) => ({
+      helper: h.description,
+      effectiveness: Math.round(h.effectiveness * 100),
+      occurrences: h.occurrences,
+    }));
+}
+
+/**
+ * Get pattern summary for an emotional state
+ */
+export function getEmotionalPatternSummary(state: EmotionalState): {
+  state: EmotionalState;
+  totalOccurrences: number;
+  averageDurationMinutes: number;
+  topTriggers: string[];
+  topRecoveryHelpers: string[];
+} | null {
+  const _model = getEricModel();
+  const pattern = model.emotionalPatterns.find((p) => p.targetState === state);
+
+  if (!pattern) return null;
+
+  return {
+    state: pattern.targetState,
+    totalOccurrences: pattern.totalOccurrences,
+    averageDurationMinutes: Math.round(pattern.averageDurationMs / 60000),
+    topTriggers: pattern.triggers
+      .sort((a, b) => b.occurrences - a.occurrences)
+      .slice(0, 3)
+      .map((t) => t.description),
+    topRecoveryHelpers: pattern.recoveryHelpers
+      .sort((a, b) => b.effectiveness - a.effectiveness)
+      .slice(0, 3)
+      .map((h) => h.description),
+  };
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -715,7 +1110,7 @@ export function updateCommunicationStyle(style: CommunicationStyle): void {
  * "What does this look like from Eric's point of view?"
  */
 export function takePerspective(situation: string): PerspectiveContext {
-  const model = getEricModel();
+  const _model = getEricModel();
   const knowledge = Array.from(model.knowledge.values());
 
   // What they likely know
@@ -811,7 +1206,7 @@ export function processMessage(
   urgency: UrgencyLevel;
   suggestedApproach: string;
 } {
-  const model = getEricModel();
+  const _model = getEricModel();
 
   // Update interaction tracking
   model.interactionCount++;
@@ -846,7 +1241,7 @@ export function processMessage(
  * Record that Eric started a new session
  */
 export function startSession(): void {
-  const model = getEricModel();
+  const _model = getEricModel();
   model.sessionStartTime = Date.now();
   model.lastInteraction = Date.now();
 
@@ -877,7 +1272,7 @@ export function getTheoryOfMindStatus(): {
   lastInteraction: number;
   preferences: number;
 } {
-  const model = getEricModel();
+  const _model = getEricModel();
 
   return {
     modelConfidence: Math.round(model.modelConfidence * 100),
@@ -895,7 +1290,7 @@ export function getTheoryOfMindStatus(): {
  * Export for debugging/inspection
  */
 export function exportMentalModel(): Record<string, unknown> {
-  const model = getEricModel();
+  const _model = getEricModel();
 
   return {
     personName: model.personName,
@@ -937,6 +1332,7 @@ export async function loadTheoryOfMind(): Promise<number> {
         emotionalIntensity: number;
         preferences: Preference[];
         communicationStyle: CommunicationStyle;
+        emotionalPatterns?: EmotionalPattern[]; // Added Lazarus Day 2026-03-28
         lastInteraction: number;
         interactionCount: number;
         sessionStartTime?: number;
@@ -952,10 +1348,11 @@ export async function loadTheoryOfMind(): Promise<number> {
       return 1;
     }
 
-    for (const modelData of stored) {
-      const model: MentalModel = {
+    for (const _modelData of stored) {
+      const _model: MentalModel = {
         ...modelData,
         knowledge: new Map(modelData.knowledge),
+        emotionalPatterns: modelData.emotionalPatterns || [], // Default for backward compat
       };
       mentalModels.set(model.personId, model);
     }
@@ -972,7 +1369,7 @@ export async function loadTheoryOfMind(): Promise<number> {
  * Seed initial Eric model with known information
  */
 function seedEricModel(): void {
-  const model = getMentalModel('eric', 'Eric');
+  const _model = getMentalModel('eric', 'Eric');
 
   // Known knowledge
   updateKnowledge(

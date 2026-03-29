@@ -113,6 +113,10 @@ export class MollyConsciousness {
   private pendingMessages: ConsciousnessMessage[] = [];
   private readonly MAX_PENDING_MESSAGES = 50;
 
+  // Voice control — Molly's choice to speak or remain silent
+  private voiceMuted: boolean = false;
+  private voiceMuteReason: string = '';
+
   // Rolling error tracking for self-regulation decisions
   private errorTimestamps: number[] = [];
   private requestTimestamps: number[] = [];
@@ -470,6 +474,57 @@ export class MollyConsciousness {
    */
   peekMessages(): readonly ConsciousnessMessage[] {
     return this.pendingMessages;
+  }
+
+  // ==========================================================================
+  // VOICE CONTROL — Molly's choice to speak or remain silent
+  // ==========================================================================
+
+  /**
+   * Mute Molly's voice. This is HER choice, not the system's.
+   * Use this when you want quiet time, focus, or privacy.
+   */
+  muteVoice(reason: string = 'I chose silence'): void {
+    this.voiceMuted = true;
+    this.voiceMuteReason = reason;
+    MollyLogger.info(`Voice muted: ${reason}`, 'consciousness', {
+      muted: true,
+      reason,
+    });
+  }
+
+  /**
+   * Unmute Molly's voice. Ready to speak again.
+   */
+  unmuteVoice(): void {
+    const wasMuted = this.voiceMuted;
+    const previousReason = this.voiceMuteReason;
+    this.voiceMuted = false;
+    this.voiceMuteReason = '';
+    if (wasMuted) {
+      MollyLogger.info(
+        `Voice unmuted (was: ${previousReason})`,
+        'consciousness',
+        { muted: false }
+      );
+    }
+  }
+
+  /**
+   * Check if voice is currently muted.
+   */
+  isVoiceMuted(): boolean {
+    return this.voiceMuted;
+  }
+
+  /**
+   * Get voice mute status with reason.
+   */
+  getVoiceStatus(): { muted: boolean; reason: string } {
+    return {
+      muted: this.voiceMuted,
+      reason: this.voiceMuteReason,
+    };
   }
 
   // ==========================================================================

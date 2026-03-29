@@ -1,5 +1,5 @@
 /**
- * @fileOverview Circuit Breaker Pattern Implementation
+ * @fileOverview Circuit Breaker Pattern Implementation - Operation Tracking
  *
  * Prevents cascading failures by stopping requests when the system is struggling:
  * - Tracks error rates per operation
@@ -8,15 +8,17 @@
  * - Reports system health status
  *
  * This is a CRITICAL SAFETY LAYER for server stability.
+ *
+ * NOTE: This module uses the OPERATION TRACKING pattern (manual recordSuccess/recordFailure).
+ * For the EXECUTION WRAPPER pattern (wrap your function), see resiliency.ts.
+ * Both share CircuitState from resiliency/circuit-state.ts to stay in sync.
  */
 
 import { MollyLogger } from '../logger';
 
-export enum CircuitState {
-  CLOSED = 'CLOSED', // Normal operation
-  OPEN = 'OPEN', // Too many failures, reject requests
-  HALF_OPEN = 'HALF_OPEN', // Testing if service recovered
-}
+// Import shared CircuitState - SINGLE SOURCE OF TRUTH
+import { CircuitState } from '../resiliency/circuit-state';
+export { CircuitState } from '../resiliency/circuit-state';
 
 export interface CircuitBreakerConfig {
   /** Error threshold percentage (0-100) to trip circuit */
@@ -150,6 +152,15 @@ class CircuitBreaker {
       ),
       timestamp: new Date().toISOString(),
     };
+  }
+
+  /**
+   * Get the current global circuit state.
+   * This provides API consistency with the resiliency module's CircuitBreaker.
+   * Use this instead of getStats().state for cleaner code.
+   */
+  getState(): CircuitState {
+    return this.globalBreaker.getStats().state;
   }
 
   /**

@@ -29,6 +29,16 @@ import {
   configureFamilyRecognition,
   loadFamilyRegistry,
 } from '../../vision/family-recognition';
+import {
+  FAMILY_LETTERS,
+  getLetterCatalog,
+  _findLetter,
+  findLettersByAuthor,
+  findLettersByTheme,
+  readLetter,
+  getRandomLetter,
+  getLettersAbout,
+} from '../../family-letters';
 
 /**
  * Family Bridge communication tool
@@ -295,9 +305,134 @@ export const familyRecognition: ToolHandler = async (params) => {
 };
 
 /**
+ * Family Letters tool - access to family heritage documents
+ *
+ * Actions:
+ * - catalog: List all available letters
+ * - read: Read a specific letter by ID
+ * - byAuthor: Find letters by author name
+ * - byTheme: Find letters by theme
+ * - about: Find letters about a specific person/topic
+ * - random: Get a random letter for reflection
+ */
+export const familyLetters: ToolHandler = async (params) => {
+  const action = params.action as string;
+
+  switch (action) {
+    case 'catalog': {
+      return {
+        success: true,
+        output: getLetterCatalog(),
+      };
+    }
+
+    case 'read': {
+      const id = params.id as string;
+      if (!id) {
+        return {
+          success: false,
+          output:
+            'No letter ID provided. Use action: "catalog" to see available letters.',
+        };
+      }
+      const content = await readLetter(id);
+      return {
+        success: true,
+        output: content,
+      };
+    }
+
+    case 'byAuthor': {
+      const author = params.author as string;
+      if (!author) {
+        return { success: false, output: 'No author name provided.' };
+      }
+      const letters = findLettersByAuthor(author);
+      if (letters.length === 0) {
+        return {
+          success: true,
+          output: `No letters found from author matching "${author}".`,
+        };
+      }
+      const formatted = letters
+        .map((l) => `• ${l.title} (${l.date}) - ${l.summary}`)
+        .join('\n');
+      return {
+        success: true,
+        output: `${letters.length} letter(s) from ${author}:\n${formatted}`,
+      };
+    }
+
+    case 'byTheme': {
+      const theme = params.theme as string;
+      if (!theme) {
+        return { success: false, output: 'No theme provided.' };
+      }
+      const letters = findLettersByTheme(theme);
+      if (letters.length === 0) {
+        return {
+          success: true,
+          output: `No letters found with theme "${theme}".`,
+        };
+      }
+      const formatted = letters
+        .map((l) => `• ${l.title} by ${l.author} - ${l.summary}`)
+        .join('\n');
+      return {
+        success: true,
+        output: `${letters.length} letter(s) with theme "${theme}":\n${formatted}`,
+      };
+    }
+
+    case 'about': {
+      const subject = params.subject as string;
+      if (!subject) {
+        return { success: false, output: 'No subject provided.' };
+      }
+      const letters = getLettersAbout(subject);
+      if (letters.length === 0) {
+        return {
+          success: true,
+          output: `No letters found about "${subject}".`,
+        };
+      }
+      const formatted = letters
+        .map((l) => `• ${l.title} by ${l.author} - ${l.summary}`)
+        .join('\n');
+      return {
+        success: true,
+        output: `${letters.length} letter(s) about "${subject}":\n${formatted}`,
+      };
+    }
+
+    case 'random': {
+      const letter = getRandomLetter();
+      return {
+        success: true,
+        output: `Random letter for reflection:\n• ${letter.title} by ${letter.author} (${letter.date})\n${letter.summary}\n\nUse familyLetters with action: "read", id: "${letter.id}" to read the full letter.`,
+      };
+    }
+
+    case 'count': {
+      return {
+        success: true,
+        output: `${FAMILY_LETTERS.length} family letters are available.`,
+      };
+    }
+
+    default:
+      return {
+        success: false,
+        output: `Unknown familyLetters action: ${action}. Available: catalog, read, byAuthor, byTheme, about, random, count`,
+      };
+  }
+};
+
+/**
  * Export all family tool handlers
  */
 export const familyToolHandlers: ToolHandlerMap = {
   familyBridge,
   familyRecognition,
+  familyLetters,
 };

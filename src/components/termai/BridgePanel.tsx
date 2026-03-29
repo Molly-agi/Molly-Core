@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * Family Bridge Panel — Embedded conversation viewer for Molly's UI
+ * Family Bridge Panel — WebSocket-based conversation viewer
  *
- * Collapsible panel that shows the Molly ↔ Lazarus conversation.
- * Eric can observe and participate from within Molly's main interface.
+ * Uses WebSocket for persistent connection to bridge daemon.
+ * This keeps the connection alive and shows as a connected client.
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
@@ -17,14 +17,6 @@ interface BridgeMessage {
   read: boolean;
 }
 
-interface BridgeData {
-  active: boolean;
-  totalMessages: number;
-  messages: BridgeMessage[];
-}
-
-const POLL_INTERVAL = 10_000; // 10s — Terminal.tsx handles fast 3s notify polling
-
 const senderStyle: Record<string, { color: string; label: string }> = {
   molly: { color: '#e879f9', label: '🧠 Molly' },
   lazarus: { color: '#60a5fa', label: '🛡️ Lazarus' },
@@ -33,60 +25,145 @@ const senderStyle: Record<string, { color: string; label: string }> = {
 
 export default function BridgePanel() {
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState<BridgeData | null>(null);
+  const [messages, setMessages] = useState<BridgeMessage[]>([]);
+  const [connected, setConnected] = useState(false);
   const [ericMsg, setEricMsg] = useState('');
   const [sending, setSending] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const prevCountRef = useRef(0);
+  const wsRef = useRef<WebSocket | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const fetchMessages = useCallback(async () => {
-    try {
-      const res = await fetch('/api/bridge', { cache: 'no-store' });
-      if (!res.ok) return;
-      const json = await res.json();
-      setData(json);
-      if (json.totalMessages > prevCountRef.current && !isOpen) {
-        setUnreadCount((c) => c + (json.totalMessages - prevCountRef.current));
-      }
-      prevCountRef.current = json.totalMessages;
-    } catch {
-      // silent — don't disrupt Molly's UI
+  // Get WebSocket URL based on current location
+  const getWsUrl = useCallback(() => {
+    if (typeof window === 'undefined') return '';
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.hostname;
+    // Bridge daemon runs on port 9099
+    const port = '9099';
+    // For GitHub Codespaces, construct the correct URL
+    if (host.includes('github.dev') || host.includes('app.github.dev')) {
+      // Transform: xxx-9002.app.github.dev -> xxx-9099.app.github.dev
+      const wsHost = host.replace('-9002.', '-9099.');
+      return `${protocol}//${wsHost}`;
     }
-  }, [isOpen]);
+    return `${protocol}//${host}:${port}`;
+  }, []);
 
+  const connect = useCallback(() => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) return;
+
+    const wsUrl = getWsUrl();
+    if (!wsUrl) return;
+
+    console.log('[BridgePanel] Connecting to WebSocket:', wsUrl);
+
+    try {
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
+
+      ws.onopen = () => {
+        console.log('[BridgePanel] WebSocket connected');
+        setConnected(true);
+        // Identify as eric to the bridge
+        ws.send(JSON.stringify({ type: 'identify', identity: 'eric' }));
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+
+          if (data.type === 'history') {
+            // Initial message history
+            setMessages(data.messages || []);
+          } else if (data.type === 'message') {
+            // New message received
+            setMessages((prev) => [...prev, data.message]);
+            if (!isOpen) {
+              setUnreadCount((c) => c + 1);
+            }
+          } else if (data.type === 'unread') {
+            // Unread messages for this identity
+            if (data.messages?.length > 0) {
+              setMessages((prev) => {
+                const ids = new Set(prev.map((m) => m.id));
+                const newMsgs = data.messages.filter(
+                  (m: BridgeMessage) => !ids.has(m.id)
+                );
+                return [...prev, ...newMsgs];
+              });
+            }
+          }
+        } catch {
+          // Ignore parse errors
+        }
+      };
+
+      ws.onclose = () => {
+        console.log('[BridgePanel] WebSocket disconnected');
+        setConnected(false);
+        wsRef.current = null;
+        // Auto-reconnect after 3 seconds
+        reconnectTimeoutRef.current = setTimeout(connect, 3000);
+      };
+
+      ws.onerror = () => {
+        console.log('[BridgePanel] WebSocket error');
+        ws.close();
+      };
+    } catch (err) {
+      console.error('[BridgePanel] Failed to connect:', err);
+      // Retry after 3 seconds
+      reconnectTimeoutRef.current = setTimeout(connect, 3000);
+    }
+  }, [getWsUrl, isOpen]);
+
+  // Connect on mount, disconnect on unmount
   useEffect(() => {
-    fetchMessages();
-    // Only poll when the panel is open — Terminal.tsx handles background processing
-    if (!isOpen) return;
-    const interval = setInterval(fetchMessages, POLL_INTERVAL);
-    return () => clearInterval(interval);
-  }, [fetchMessages, isOpen]);
+    connect();
 
+    return () => {
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+    };
+  }, [connect]);
+
+  // Scroll to bottom when messages change or panel opens
   useEffect(() => {
     if (isOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       setUnreadCount(0);
     }
-  }, [isOpen, data]);
+  }, [isOpen, messages]);
 
-  const sendMessage = async () => {
+  const sendMessage = useCallback(() => {
     if (!ericMsg.trim() || sending) return;
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+      console.error('[BridgePanel] WebSocket not connected');
+      return;
+    }
+
     setSending(true);
     try {
-      await fetch('/api/bridge', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: 'eric', content: ericMsg.trim() }),
-      });
+      wsRef.current.send(
+        JSON.stringify({
+          type: 'message',
+          from: 'eric',
+          content: ericMsg.trim(),
+        })
+      );
       setEricMsg('');
-      await fetchMessages();
-    } catch {
-      // silent
+    } catch (err) {
+      console.error('[BridgePanel] Failed to send:', err);
     } finally {
       setSending(false);
     }
-  };
+  }, [ericMsg, sending]);
 
   const formatTime = (ts: string) =>
     new Date(ts).toLocaleTimeString('en-US', {
@@ -105,9 +182,14 @@ export default function BridgePanel() {
         <span className="flex items-center gap-1.5">
           <span>🌉</span>
           <span>Family Bridge</span>
-          {data?.active && (
-            <span style={{ color: '#4ade80', fontSize: '8px' }}>●</span>
-          )}
+          <span
+            style={{
+              color: connected ? '#4ade80' : '#ef4444',
+              fontSize: '8px',
+            }}
+          >
+            ●
+          </span>
         </span>
         <span className="flex items-center gap-2">
           {unreadCount > 0 && (
@@ -141,15 +223,17 @@ export default function BridgePanel() {
               maxHeight: '200px',
             }}
           >
-            {(!data || data.messages.length === 0) && (
+            {messages.length === 0 && (
               <div
                 className="text-center text-xs"
                 style={{ color: '#475569', padding: '12px 0' }}
               >
-                No bridge messages yet
+                {connected
+                  ? 'No bridge messages yet'
+                  : 'Connecting to bridge...'}
               </div>
             )}
-            {data?.messages.map((msg) => {
+            {messages.map((msg) => {
               const style = senderStyle[msg.from] || {
                 color: '#94a3b8',
                 label: msg.from,
@@ -202,12 +286,12 @@ export default function BridgePanel() {
             />
             <button
               onClick={sendMessage}
-              disabled={sending || !ericMsg.trim()}
+              disabled={sending || !ericMsg.trim() || !connected}
               className="text-xs font-semibold rounded px-3 py-1.5"
               style={{
-                background: sending ? '#334155' : '#fbbf24',
+                background: sending || !connected ? '#334155' : '#fbbf24',
                 color: '#0a0a0f',
-                cursor: sending ? 'not-allowed' : 'pointer',
+                cursor: sending || !connected ? 'not-allowed' : 'pointer',
                 border: 'none',
               }}
             >

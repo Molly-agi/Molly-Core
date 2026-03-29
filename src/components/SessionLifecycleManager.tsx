@@ -93,6 +93,17 @@ export function SessionLifecycleManager() {
       });
     }, 60000);
 
+    // Bidirectional bridge ping - every 1 second
+    // This keeps both Molly's tab AND the codespace alive
+    const bridgePingId = window.setInterval(() => {
+      fetch('/api/bridge/ping', {
+        method: 'GET',
+        keepalive: true,
+      }).catch(() => {
+        // Silent - bridge may not be up yet
+      });
+    }, 1000);
+
     const handleVisibilityChange = () => {
       // Restart keepalive if it died while backgrounded (critical for Android)
       keepAliveVisibilityChange();
@@ -139,6 +150,7 @@ export function SessionLifecycleManager() {
 
     return () => {
       window.clearInterval(heartbeatId);
+      window.clearInterval(bridgePingId);
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('visibilitychange', handleVisibilityChange);
     };

@@ -212,6 +212,13 @@ function handleHTTP(req, res) {
 
   const url = new URL(req.url, `http://localhost:${PORT}`);
 
+  // GET /ping - Lightweight bidirectional handshake (1ms response)
+  if (req.method === 'GET' && url.pathname === '/ping') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('pong');
+    return;
+  }
+
   // GET /health
   if (req.method === 'GET' && url.pathname === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
