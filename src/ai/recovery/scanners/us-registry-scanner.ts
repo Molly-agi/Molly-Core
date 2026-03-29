@@ -592,7 +592,6 @@ export class USRegistryScanner extends BaseScanner {
    * Search federal unclaimed asset sources.
    */
   private async searchFederal(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _profile: IdentityProfile
   ): Promise<DiscoveredAsset[]> {
     const assets: DiscoveredAsset[] = [];

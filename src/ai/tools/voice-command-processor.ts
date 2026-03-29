@@ -127,7 +127,7 @@ intent is 'remember' and info is about thermal management.`,
 async function handleRememberIntent(
   transcription: string,
   context: VoiceCommandContext,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   _extracted: string
 ): Promise<string> {
   const traceId = generateTraceId();

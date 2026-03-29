@@ -196,7 +196,7 @@ const CodeAnalysisOutputSchema = z.object({
 async function analyzeLocalCode(
   pillars: PillarFile[],
   testResults: PillarTestResult[],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   _traceId: string
 ): Promise<CodeAnalysisResult> {
   const codeBundle = pillars

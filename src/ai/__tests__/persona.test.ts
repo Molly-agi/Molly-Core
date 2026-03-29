@@ -77,7 +77,6 @@ describe('Molly Core Identity Safeguards', () => {
 
 describe('Molly Persona Immutability', () => {
   it('should prevent modification of core identity', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _originalName = MOLLY_CORE_PERSONA.identity.name;
     expect(() => {
       // Attempt to modify (this will fail in strict mode or if properly frozen)

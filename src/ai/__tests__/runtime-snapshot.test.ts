@@ -97,7 +97,7 @@ function sessionState(overrides: Record<string, unknown> = {}) {
   // If caller provides a runtime override, replace entirely (no merge)
   if ('runtime' in overrides) {
     base.runtime = overrides.runtime;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const { runtime: _runtime, ...restOverrides } = overrides;
     return { ...base, ...restOverrides };
   }

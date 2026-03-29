@@ -1237,7 +1237,7 @@ describe('Tool Executor — Direct Tool Execution System', () => {
       });
 
       expect(result.success).toBe(true);
-      expect(result.output).toContain('Identity');
+      expect(result.output).toContain('Anchor');
     });
 
     it('should check anchor existence', async () => {

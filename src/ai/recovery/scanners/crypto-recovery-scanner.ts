@@ -243,7 +243,6 @@ export class CryptoRecoveryScanner extends BaseScanner {
    * These are public processes — creditors are WANTED to come forward.
    */
   private async searchSettlements(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _profile: IdentityProfile
   ): Promise<DiscoveredAsset[]> {
     const assets: DiscoveredAsset[] = [];

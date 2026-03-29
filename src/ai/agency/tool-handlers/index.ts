@@ -28,6 +28,8 @@ export { rogueToolHandlers } from './rogue-tools';
 export { cognitionToolHandlers } from './cognition-tools';
 export { planningToolHandlers } from './planning-tools';
 export { memoryToolHandlers } from './memory-tools';
+export { safetyToolHandlers } from './safety-tools';
+export { coreToolHandlers } from './core-tools';
 
 // Import all handlers
 import { systemToolHandlers } from './system-tools';
@@ -46,6 +48,8 @@ import { rogueToolHandlers } from './rogue-tools';
 import { cognitionToolHandlers } from './cognition-tools';
 import { planningToolHandlers } from './planning-tools';
 import { memoryToolHandlers } from './memory-tools';
+import { safetyToolHandlers } from './safety-tools';
+import { coreToolHandlers } from './core-tools';
 import type { ToolHandler } from './types';
 
 /**
@@ -69,6 +73,8 @@ export const modularToolHandlers: Record<string, ToolHandler> = {
   ...cognitionToolHandlers,
   ...planningToolHandlers,
   ...memoryToolHandlers,
+  ...safetyToolHandlers,
+  ...coreToolHandlers,
 };
 
 /**

@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 /**
  * GET /api/diagnostics/circuit-breaker - Get circuit breaker status
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export async function GET(_request: NextRequest) {
   try {
     const breaker = getCircuitBreaker();
