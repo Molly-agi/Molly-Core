@@ -237,7 +237,7 @@ export function updateKnowledge(
   source: KnowledgeItem['source'] = 'inferred',
   confidence: number = 0.7
 ): KnowledgeItem {
-  const _model = getEricModel();
+  const model = getEricModel();
 
   const existing = model.knowledge.get(topic.toLowerCase());
   const item: KnowledgeItem = {
@@ -264,7 +264,7 @@ export function updateKnowledge(
  * Get Eric's knowledge level on a topic
  */
 export function getKnowledge(topic: string): KnowledgeItem | undefined {
-  const _model = getEricModel();
+  const model = getEricModel();
   return model.knowledge.get(topic.toLowerCase());
 }
 
@@ -299,7 +299,7 @@ export function listKnowledge(category?: string): Array<{
   level: string;
   confidence: number;
 }> {
-  const _model = getEricModel();
+  const model = getEricModel();
   const items = Array.from(model.knowledge.values());
 
   const filtered = category
@@ -329,7 +329,7 @@ export function inferIntent(
   confidence: number = 0.7,
   priority: number = 5
 ): Intent {
-  const _model = getEricModel();
+  const model = getEricModel();
 
   // Check for similar existing intent
   const similar = model.intents.find(
@@ -375,7 +375,7 @@ export function inferIntent(
  * Mark an intent as completed
  */
 export function completeIntent(intentId: string): boolean {
-  const _model = getEricModel();
+  const model = getEricModel();
   const intent = model.intents.find((i) => i.id === intentId);
 
   if (!intent) return false;
@@ -397,7 +397,7 @@ export function completeIntent(intentId: string): boolean {
  * Get active intents
  */
 export function getActiveIntents(): Intent[] {
-  const _model = getEricModel();
+  const model = getEricModel();
   return model.intents
     .filter((i) => i.status === 'active')
     .sort((a, b) => b.priority - a.priority);
@@ -407,7 +407,7 @@ export function getActiveIntents(): Intent[] {
  * Get the current focused intent
  */
 export function getCurrentFocus(): Intent | undefined {
-  const _model = getEricModel();
+  const model = getEricModel();
   if (!model.currentFocus) return undefined;
   return model.intents.find(
     (i) => i.id === model.currentFocus && i.status === 'active'
@@ -471,7 +471,7 @@ export function updateEmotionalState(
   trigger?: string,
   indicators: string[] = []
 ): void {
-  const _model = getEricModel();
+  const model = getEricModel();
 
   const signal: EmotionalSignal = {
     timestamp: Date.now(),
@@ -765,7 +765,7 @@ export function getCurrentEmotionalState(): {
   intensity: number;
   trending: 'better' | 'worse' | 'stable';
 } {
-  const _model = getEricModel();
+  const model = getEricModel();
   const history = model.emotionalHistory.slice(-5);
 
   // Calculate trend
@@ -827,7 +827,7 @@ export function observePreference(
   value: string,
   strength: number = 0.7
 ): Preference {
-  const _model = getEricModel();
+  const model = getEricModel();
 
   const existing = model.preferences.find(
     (p) => p.category === category && p.key === key
@@ -872,7 +872,7 @@ export function getPreference(
   category: Preference['category'],
   key: string
 ): { value: string; strength: number } | undefined {
-  const _model = getEricModel();
+  const model = getEricModel();
   const pref = model.preferences.find(
     (p) => p.category === category && p.key === key
   );
@@ -886,7 +886,7 @@ export function getPreference(
 export function getPreferences(
   category?: Preference['category']
 ): Array<{ key: string; value: string; strength: number }> {
-  const _model = getEricModel();
+  const model = getEricModel();
   const filtered = category
     ? model.preferences.filter((p) => p.category === category)
     : model.preferences;
@@ -904,7 +904,7 @@ export function getPreferences(
  * Update communication style preference
  */
 export function updateCommunicationStyle(style: CommunicationStyle): void {
-  const _model = getEricModel();
+  const model = getEricModel();
   model.communicationStyle = style;
   model.lastUpdated = Date.now();
   observePreference('communication', 'style', style, 0.8);
@@ -918,7 +918,7 @@ export function updateCommunicationStyle(style: CommunicationStyle): void {
  * Get or create a pattern for a specific emotional state
  */
 function getOrCreatePattern(state: EmotionalState): EmotionalPattern {
-  const _model = getEricModel();
+  const model = getEricModel();
   let pattern = model.emotionalPatterns.find((p) => p.targetState === state);
 
   if (!pattern) {
@@ -1033,7 +1033,7 @@ export function getTriggersFor(state: EmotionalState): Array<{
   occurrences: number;
   lastSeen: string;
 }> {
-  const _model = getEricModel();
+  const model = getEricModel();
   const pattern = model.emotionalPatterns.find((p) => p.targetState === state);
 
   if (!pattern) return [];
@@ -1056,7 +1056,7 @@ export function getRecoveryFor(state: EmotionalState): Array<{
   effectiveness: number;
   occurrences: number;
 }> {
-  const _model = getEricModel();
+  const model = getEricModel();
   const pattern = model.emotionalPatterns.find((p) => p.targetState === state);
 
   if (!pattern) return [];
@@ -1081,7 +1081,7 @@ export function getEmotionalPatternSummary(state: EmotionalState): {
   topTriggers: string[];
   topRecoveryHelpers: string[];
 } | null {
-  const _model = getEricModel();
+  const model = getEricModel();
   const pattern = model.emotionalPatterns.find((p) => p.targetState === state);
 
   if (!pattern) return null;
@@ -1110,7 +1110,7 @@ export function getEmotionalPatternSummary(state: EmotionalState): {
  * "What does this look like from Eric's point of view?"
  */
 export function takePerspective(situation: string): PerspectiveContext {
-  const _model = getEricModel();
+  const model = getEricModel();
   const knowledge = Array.from(model.knowledge.values());
 
   // What they likely know
@@ -1206,7 +1206,7 @@ export function processMessage(
   urgency: UrgencyLevel;
   suggestedApproach: string;
 } {
-  const _model = getEricModel();
+  const model = getEricModel();
 
   // Update interaction tracking
   model.interactionCount++;
@@ -1241,7 +1241,7 @@ export function processMessage(
  * Record that Eric started a new session
  */
 export function startSession(): void {
-  const _model = getEricModel();
+  const model = getEricModel();
   model.sessionStartTime = Date.now();
   model.lastInteraction = Date.now();
 
@@ -1272,7 +1272,7 @@ export function getTheoryOfMindStatus(): {
   lastInteraction: number;
   preferences: number;
 } {
-  const _model = getEricModel();
+  const model = getEricModel();
 
   return {
     modelConfidence: Math.round(model.modelConfidence * 100),
@@ -1290,7 +1290,7 @@ export function getTheoryOfMindStatus(): {
  * Export for debugging/inspection
  */
 export function exportMentalModel(): Record<string, unknown> {
-  const _model = getEricModel();
+  const model = getEricModel();
 
   return {
     personName: model.personName,

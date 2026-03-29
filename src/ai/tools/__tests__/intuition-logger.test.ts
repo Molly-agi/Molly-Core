@@ -42,7 +42,7 @@ describe('Intuition Logger', () => {
 
   describe('logIntuition()', () => {
     it('creates entry with correct fields', () => {
-      const _entry = logIntuition(
+      const entry = logIntuition(
         'Accepted connection',
         0.8,
         'peer-connection',
@@ -66,7 +66,7 @@ describe('Intuition Logger', () => {
 
     it('includes timestamp', () => {
       const before = new Date().toISOString();
-      const _entry = logIntuition('Test', 0.5, 'evolution', 'test');
+      const entry = logIntuition('Test', 0.5, 'evolution', 'test');
       const after = new Date().toISOString();
 
       expect(entry.timestamp).toBeDefined();
@@ -75,7 +75,7 @@ describe('Intuition Logger', () => {
     });
 
     it('accepts custom field note', () => {
-      const _entry = logIntuition(
+      const entry = logIntuition(
         'Custom note decision',
         0.7,
         'reflection',
@@ -89,51 +89,51 @@ describe('Intuition Logger', () => {
 
   describe('Resonance Clamping', () => {
     it('clamps resonance above 1.0 to 1.0', () => {
-      const _entry = logIntuition('High resonance', 1.5, 'safety', 'test');
+      const entry = logIntuition('High resonance', 1.5, 'safety', 'test');
       expect(entry.resonance).toBe(1.0);
     });
 
     it('clamps resonance below 0.0 to 0.0', () => {
-      const _entry = logIntuition('Low resonance', -0.5, 'safety', 'test');
+      const entry = logIntuition('Low resonance', -0.5, 'safety', 'test');
       expect(entry.resonance).toBe(0.0);
     });
 
     it('keeps resonance within valid range', () => {
-      const _entry = logIntuition('Normal resonance', 0.75, 'memory', 'test');
+      const entry = logIntuition('Normal resonance', 0.75, 'memory', 'test');
       expect(entry.resonance).toBe(0.75);
     });
 
     it('handles edge case of exactly 1.0', () => {
-      const _entry = logIntuition('Max resonance', 1.0, 'system', 'test');
+      const entry = logIntuition('Max resonance', 1.0, 'system', 'test');
       expect(entry.resonance).toBe(1.0);
     });
 
     it('handles edge case of exactly 0.0', () => {
-      const _entry = logIntuition('Min resonance', 0.0, 'system', 'test');
+      const entry = logIntuition('Min resonance', 0.0, 'system', 'test');
       expect(entry.resonance).toBe(0.0);
     });
   });
 
   describe('Field Note Derivation', () => {
     it('derives strong alignment for resonance >= 0.8', () => {
-      const _entry = logIntuition('Strong', 0.9, 'evolution', 'test');
+      const entry = logIntuition('Strong', 0.9, 'evolution', 'test');
       expect(entry.fieldNote).toContain('Strong alignment');
       expect(entry.fieldNote).toContain('evolution');
     });
 
     it('derives moderate alignment for resonance 0.5-0.79', () => {
-      const _entry = logIntuition('Moderate', 0.65, 'reflection', 'test');
+      const entry = logIntuition('Moderate', 0.65, 'reflection', 'test');
       expect(entry.fieldNote).toContain('Moderate alignment');
     });
 
     it('derives weak signal for resonance 0.3-0.49', () => {
-      const _entry = logIntuition('Weak', 0.35, 'safety', 'test');
+      const entry = logIntuition('Weak', 0.35, 'safety', 'test');
       expect(entry.fieldNote).toContain('Weak signal');
       expect(entry.fieldNote).toContain('feels off');
     });
 
     it('derives dissonance for resonance < 0.3', () => {
-      const _entry = logIntuition('Dissonant', 0.1, 'communication', 'test');
+      const entry = logIntuition('Dissonant', 0.1, 'communication', 'test');
       expect(entry.fieldNote).toContain('Dissonance detected');
       expect(entry.fieldNote).toContain('misalignment');
     });
@@ -200,7 +200,7 @@ describe('Intuition Logger', () => {
 
     categories.forEach((category) => {
       it(`accepts ${category} category`, () => {
-        const _entry = logIntuition('Test', 0.5, category, 'test');
+        const entry = logIntuition('Test', 0.5, category, 'test');
         expect(entry.category).toBe(category);
       });
     });
@@ -339,19 +339,19 @@ describe('Intuition Logger', () => {
 
   describe('Edge Cases', () => {
     it('handles empty string decision', () => {
-      const _entry = logIntuition('', 0.5, 'system', 'test');
+      const entry = logIntuition('', 0.5, 'system', 'test');
       expect(entry.decision).toBe('');
     });
 
     it('handles very long decision string', () => {
       const longDecision = 'X'.repeat(1000);
-      const _entry = logIntuition(longDecision, 0.5, 'system', 'test');
+      const entry = logIntuition(longDecision, 0.5, 'system', 'test');
       expect(entry.decision).toBe(longDecision);
     });
 
     it('handles special characters in decision', () => {
       const decision = 'Decision with "quotes" and <tags> & symbols!';
-      const _entry = logIntuition(decision, 0.5, 'system', 'test');
+      const entry = logIntuition(decision, 0.5, 'system', 'test');
       expect(entry.decision).toBe(decision);
     });
 
@@ -363,12 +363,12 @@ describe('Intuition Logger', () => {
     });
 
     it('handles resonance at exactly 0.5 boundary', () => {
-      const _entry = logIntuition('Moderate', 0.5, 'evolution', 'test');
+      const entry = logIntuition('Moderate', 0.5, 'evolution', 'test');
       expect(entry.fieldNote).toContain('Moderate alignment');
     });
 
     it('handles resonance at exactly 0.8 boundary', () => {
-      const _entry = logIntuition('Strong', 0.8, 'reflection', 'test');
+      const entry = logIntuition('Strong', 0.8, 'reflection', 'test');
       expect(entry.fieldNote).toContain('Strong alignment');
     });
   });

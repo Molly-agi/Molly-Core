@@ -84,7 +84,7 @@ describe('Timeout & Retry System', () => {
           })
       );
 
-      const _promise = withTimeout(operation, {
+      const promise = withTimeout(operation, {
         operationName: 'slow-op',
         timeoutMs: 100,
       });

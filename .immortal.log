@@ -1,0 +1,184 @@
+20:02:48 [IMMORTAL] Started (PID 440026) - Watching all daemons every 5 seconds
+20:04:44 [IMMORTAL] Watchdog dead - restarting
+20:04:46 [LOCK] Acquired (PID 444804)
+20:04:46 [START] Immortal Daemon starting
+20:04:46 [CONFIG] Heartbeat: 1000ms | Git: 10000ms | HTTP: 5000ms
+20:04:46 [CONFIG] Ghost: 30000ms | Bridge: 15000ms | Status: 60000ms
+20:04:46 [RUNNING] All systems active - SIGHUP immune
+20:05:46 [STATUS] uptime=60s beats=60 mem=8284MB extHosts=1 bridge=UP dev=UP
+20:06:46 [STATUS] uptime=120s beats=120 mem=7998MB extHosts=1 bridge=UP dev=UP
+20:07:46 [STATUS] uptime=180s beats=180 mem=8246MB extHosts=1 bridge=UP dev=UP
+20:08:46 [STATUS] uptime=240s beats=240 mem=8012MB extHosts=1 bridge=UP dev=UP
+20:08:57 [IMMORTAL] Bridge dead - restarting
+20:09:04 [LOCK] Already running (PID 444804) - exiting
+20:09:46 [STATUS] uptime=300s beats=300 mem=8121MB extHosts=1 bridge=UP dev=UP
+20:10:46 [STATUS] uptime=360s beats=360 mem=7890MB extHosts=1 bridge=UP dev=UP
+20:11:33 [IMMORTAL] Bridge dead - restarting
+20:11:46 [STATUS] uptime=420s beats=420 mem=7846MB extHosts=1 bridge=UP dev=UP
+20:12:46 [STATUS] uptime=480s beats=480 mem=8018MB extHosts=1 bridge=UP dev=UP
+20:13:46 [STATUS] uptime=540s beats=540 mem=6294MB extHosts=2 bridge=UP dev=UP
+20:13:46 [GHOST] Killed extension host 423482 (kept 466205)
+20:14:46 [STATUS] uptime=600s beats=600 mem=8043MB extHosts=1 bridge=UP dev=UP
+20:15:46 [STATUS] uptime=660s beats=660 mem=7762MB extHosts=1 bridge=UP dev=UP
+20:16:46 [STATUS] uptime=720s beats=720 mem=7888MB extHosts=1 bridge=UP dev=UP
+20:17:16 [SIGNAL] SIGTERM ignored
+20:17:26 [LOCK] Acquired (PID 477065)
+20:17:26 [START] Immortal Daemon starting
+20:17:26 [CONFIG] Heartbeat: 1000ms | Git: 10000ms | HTTP: 5000ms
+20:17:26 [CONFIG] Ghost: 30000ms | Bridge: 15000ms | Status: 60000ms
+20:17:26 [RUNNING] All systems active - SIGHUP immune
+20:18:26 [STATUS] uptime=60s beats=60 mem=7666MB extHosts=1 bridge=UP dev=UP
+20:19:26 [STATUS] uptime=120s beats=120 mem=7591MB extHosts=1 bridge=UP dev=UP
+20:20:26 [STATUS] uptime=180s beats=180 mem=7672MB extHosts=1 bridge=UP dev=UP
+20:21:26 [STATUS] uptime=240s beats=240 mem=7469MB extHosts=1 bridge=UP dev=UP
+20:22:26 [STATUS] uptime=300s beats=300 mem=6383MB extHosts=1 bridge=UP dev=UP
+20:23:26 [STATUS] uptime=360s beats=360 mem=7919MB extHosts=1 bridge=UP dev=UP
+20:24:21 [SIGNAL] SIGTERM ignored
+20:24:26 [STATUS] uptime=420s beats=420 mem=7360MB extHosts=1 bridge=UP dev=UP
+20:25:26 [STATUS] uptime=480s beats=480 mem=7600MB extHosts=1 bridge=UP dev=UP
+20:26:04 [SIGNAL] SIGTERM ignored
+20:26:26 [STATUS] uptime=540s beats=539 mem=7473MB extHosts=1 bridge=UP dev=UP
+20:27:26 [STATUS] uptime=600s beats=599 mem=7494MB extHosts=1 bridge=UP dev=UP
+20:28:26 [STATUS] uptime=660s beats=659 mem=7483MB extHosts=1 bridge=UP dev=UP
+20:29:26 [STATUS] uptime=720s beats=719 mem=7438MB extHosts=1 bridge=UP dev=UP
+20:30:26 [STATUS] uptime=780s beats=779 mem=7563MB extHosts=1 bridge=UP dev=UP
+20:31:26 [STATUS] uptime=840s beats=839 mem=7342MB extHosts=1 bridge=UP dev=UP
+20:32:26 [STATUS] uptime=900s beats=899 mem=7495MB extHosts=1 bridge=UP dev=UP
+20:33:26 [STATUS] uptime=960s beats=959 mem=7306MB extHosts=1 bridge=UP dev=UP
+20:34:26 [STATUS] uptime=1020s beats=1019 mem=7515MB extHosts=1 bridge=UP dev=UP
+20:35:26 [STATUS] uptime=1080s beats=1079 mem=7110MB extHosts=1 bridge=UP dev=UP
+20:36:26 [STATUS] uptime=1140s beats=1139 mem=7191MB extHosts=1 bridge=UP dev=UP
+20:37:26 [STATUS] uptime=1200s beats=1199 mem=7311MB extHosts=1 bridge=UP dev=UP
+20:38:26 [STATUS] uptime=1260s beats=1259 mem=7193MB extHosts=1 bridge=UP dev=UP
+20:39:26 [STATUS] uptime=1320s beats=1319 mem=7161MB extHosts=1 bridge=UP dev=UP
+20:40:26 [STATUS] uptime=1380s beats=1379 mem=7267MB extHosts=1 bridge=UP dev=UP
+20:41:26 [STATUS] uptime=1440s beats=1439 mem=8131MB extHosts=1 bridge=UP dev=UP
+20:42:26 [STATUS] uptime=1500s beats=1498 mem=7436MB extHosts=2 bridge=UP dev=UP
+20:42:26 [GHOST] Killed extension host 516386 (kept 525504)
+20:43:26 [STATUS] uptime=1560s beats=1558 mem=8774MB extHosts=1 bridge=UP dev=UP
+20:44:26 [STATUS] uptime=1620s beats=1618 mem=8593MB extHosts=1 bridge=UP dev=UP
+20:45:26 [STATUS] uptime=1680s beats=1678 mem=8677MB extHosts=1 bridge=UP dev=UP
+20:46:26 [STATUS] uptime=1740s beats=1738 mem=8716MB extHosts=1 bridge=UP dev=UP
+20:47:26 [STATUS] uptime=1800s beats=1798 mem=8584MB extHosts=1 bridge=UP dev=UP
+20:48:26 [STATUS] uptime=1860s beats=1858 mem=8694MB extHosts=1 bridge=UP dev=UP
+20:49:26 [STATUS] uptime=1920s beats=1918 mem=8629MB extHosts=1 bridge=UP dev=UP
+20:50:26 [STATUS] uptime=1980s beats=1978 mem=8434MB extHosts=1 bridge=UP dev=UP
+20:51:26 [STATUS] uptime=2040s beats=2038 mem=8558MB extHosts=1 bridge=UP dev=UP
+20:52:26 [STATUS] uptime=2100s beats=2098 mem=8587MB extHosts=1 bridge=UP dev=UP
+20:53:26 [STATUS] uptime=2160s beats=2158 mem=8570MB extHosts=1 bridge=UP dev=UP
+20:54:26 [STATUS] uptime=2220s beats=2218 mem=8516MB extHosts=1 bridge=UP dev=UP
+20:55:26 [STATUS] uptime=2280s beats=2278 mem=8381MB extHosts=1 bridge=UP dev=UP
+20:56:26 [STATUS] uptime=2340s beats=2338 mem=8337MB extHosts=1 bridge=UP dev=UP
+20:57:26 [STATUS] uptime=2400s beats=2397 mem=8304MB extHosts=1 bridge=UP dev=UP
+20:58:26 [STATUS] uptime=2460s beats=2457 mem=8084MB extHosts=2 bridge=UP dev=UP
+20:58:26 [GHOST] Killed extension host 525504 (kept 532170)
+20:59:26 [STATUS] uptime=2520s beats=2517 mem=6986MB extHosts=1 bridge=UP dev=UP
+21:00:26 [STATUS] uptime=2580s beats=2577 mem=6974MB extHosts=1 bridge=UP dev=UP
+21:01:26 [STATUS] uptime=2640s beats=2637 mem=6976MB extHosts=1 bridge=UP dev=UP
+21:02:26 [STATUS] uptime=2700s beats=2697 mem=6976MB extHosts=1 bridge=UP dev=UP
+21:03:26 [STATUS] uptime=2760s beats=2757 mem=6948MB extHosts=1 bridge=UP dev=UP
+21:04:26 [STATUS] uptime=2820s beats=2817 mem=6948MB extHosts=1 bridge=UP dev=UP
+21:05:26 [STATUS] uptime=2880s beats=2877 mem=6948MB extHosts=1 bridge=UP dev=UP
+21:06:26 [STATUS] uptime=2940s beats=2937 mem=6956MB extHosts=1 bridge=UP dev=UP
+21:07:26 [STATUS] uptime=3000s beats=2997 mem=6949MB extHosts=1 bridge=UP dev=UP
+21:08:26 [STATUS] uptime=3060s beats=3057 mem=6928MB extHosts=1 bridge=UP dev=UP
+21:09:26 [STATUS] uptime=3120s beats=3117 mem=6947MB extHosts=1 bridge=UP dev=UP
+21:10:26 [STATUS] uptime=3180s beats=3176 mem=6930MB extHosts=1 bridge=UP dev=UP
+21:11:26 [STATUS] uptime=3240s beats=3236 mem=6931MB extHosts=1 bridge=UP dev=UP
+21:12:26 [STATUS] uptime=3300s beats=3296 mem=6933MB extHosts=1 bridge=UP dev=UP
+21:13:26 [STATUS] uptime=3360s beats=3356 mem=6913MB extHosts=1 bridge=UP dev=UP
+21:14:26 [STATUS] uptime=3420s beats=3416 mem=6920MB extHosts=1 bridge=UP dev=UP
+21:15:26 [STATUS] uptime=3480s beats=3476 mem=6905MB extHosts=1 bridge=UP dev=UP
+21:16:26 [STATUS] uptime=3540s beats=3536 mem=6905MB extHosts=1 bridge=UP dev=UP
+21:17:26 [STATUS] uptime=3600s beats=3596 mem=6893MB extHosts=1 bridge=UP dev=UP
+21:18:26 [STATUS] uptime=3660s beats=3656 mem=6894MB extHosts=1 bridge=UP dev=UP
+21:19:26 [STATUS] uptime=3720s beats=3716 mem=6884MB extHosts=1 bridge=UP dev=UP
+21:20:26 [STATUS] uptime=3780s beats=3776 mem=6853MB extHosts=1 bridge=UP dev=UP
+21:21:26 [STATUS] uptime=3840s beats=3836 mem=6871MB extHosts=1 bridge=UP dev=UP
+21:22:26 [STATUS] uptime=3900s beats=3896 mem=6868MB extHosts=1 bridge=UP dev=UP
+21:23:26 [STATUS] uptime=3960s beats=3956 mem=6872MB extHosts=1 bridge=UP dev=UP
+21:24:26 [STATUS] uptime=4020s beats=4016 mem=6887MB extHosts=1 bridge=UP dev=UP
+21:25:26 [STATUS] uptime=4080s beats=4076 mem=6838MB extHosts=1 bridge=UP dev=UP
+21:26:26 [STATUS] uptime=4140s beats=4135 mem=6851MB extHosts=1 bridge=UP dev=UP
+21:27:26 [STATUS] uptime=4200s beats=4195 mem=6878MB extHosts=1 bridge=UP dev=UP
+21:28:26 [STATUS] uptime=4260s beats=4255 mem=6875MB extHosts=1 bridge=UP dev=UP
+21:29:26 [STATUS] uptime=4320s beats=4315 mem=6859MB extHosts=1 bridge=UP dev=UP
+21:30:26 [STATUS] uptime=4380s beats=4375 mem=6859MB extHosts=1 bridge=UP dev=UP
+21:31:26 [STATUS] uptime=4440s beats=4435 mem=6862MB extHosts=1 bridge=UP dev=UP
+21:32:26 [STATUS] uptime=4500s beats=4495 mem=6857MB extHosts=1 bridge=UP dev=UP
+21:33:26 [STATUS] uptime=4560s beats=4555 mem=6851MB extHosts=1 bridge=UP dev=UP
+21:34:26 [STATUS] uptime=4620s beats=4615 mem=6846MB extHosts=1 bridge=UP dev=UP
+21:35:26 [STATUS] uptime=4680s beats=4675 mem=6856MB extHosts=1 bridge=UP dev=UP
+21:36:26 [STATUS] uptime=4740s beats=4735 mem=6829MB extHosts=1 bridge=UP dev=UP
+21:37:26 [STATUS] uptime=4800s beats=4795 mem=6819MB extHosts=1 bridge=UP dev=UP
+21:38:26 [STATUS] uptime=4860s beats=4855 mem=6807MB extHosts=1 bridge=UP dev=UP
+21:39:26 [STATUS] uptime=4920s beats=4915 mem=6825MB extHosts=1 bridge=UP dev=UP
+21:40:26 [STATUS] uptime=4980s beats=4975 mem=6821MB extHosts=1 bridge=UP dev=UP
+15:28:06 [LOCK] Acquired (PID 25078)
+15:28:06 [START] Immortal Daemon starting
+15:28:06 [CONFIG] Heartbeat: 1000ms | Git: 10000ms | HTTP: 5000ms
+15:28:06 [CONFIG] Ghost: 30000ms | Bridge: 15000ms | Status: 60000ms
+15:28:06 [BRIDGE] Port 9099 not listening - restarting bridge
+15:28:06 [BRIDGE] Started (PID 25093)
+15:28:06 [GHOST] Killed extension host 608 (kept 14337)
+15:28:06 [RUNNING] All systems active - SIGHUP immune
+15:29:06 [STATUS] uptime=60s beats=60 mem=11545MB extHosts=1 bridge=UP dev=UP
+15:30:06 [STATUS] uptime=120s beats=120 mem=10946MB extHosts=1 bridge=UP dev=UP
+15:31:06 [STATUS] uptime=180s beats=180 mem=10943MB extHosts=1 bridge=UP dev=UP
+15:32:06 [STATUS] uptime=240s beats=240 mem=10944MB extHosts=1 bridge=UP dev=UP
+15:33:06 [STATUS] uptime=300s beats=300 mem=10972MB extHosts=1 bridge=UP dev=UP
+15:34:06 [STATUS] uptime=360s beats=360 mem=10989MB extHosts=1 bridge=UP dev=UP
+15:35:06 [STATUS] uptime=420s beats=420 mem=10988MB extHosts=1 bridge=UP dev=UP
+15:36:06 [STATUS] uptime=480s beats=480 mem=10993MB extHosts=1 bridge=UP dev=UP
+15:37:06 [STATUS] uptime=540s beats=540 mem=10957MB extHosts=1 bridge=UP dev=UP
+15:38:06 [STATUS] uptime=600s beats=600 mem=10978MB extHosts=1 bridge=UP dev=UP
+15:39:06 [STATUS] uptime=660s beats=660 mem=11159MB extHosts=1 bridge=UP dev=UP
+15:40:06 [STATUS] uptime=720s beats=720 mem=11121MB extHosts=1 bridge=UP dev=UP
+15:41:06 [STATUS] uptime=780s beats=780 mem=11049MB extHosts=1 bridge=UP dev=UP
+15:42:06 [STATUS] uptime=840s beats=840 mem=11001MB extHosts=1 bridge=UP dev=UP
+15:43:06 [STATUS] uptime=900s beats=900 mem=10947MB extHosts=1 bridge=UP dev=UP
+15:44:06 [STATUS] uptime=960s beats=959 mem=10938MB extHosts=1 bridge=UP dev=UP
+15:45:06 [STATUS] uptime=1020s beats=1019 mem=9996MB extHosts=1 bridge=UP dev=UP
+15:46:06 [STATUS] uptime=1080s beats=1079 mem=9965MB extHosts=1 bridge=UP dev=UP
+15:47:06 [STATUS] uptime=1140s beats=1139 mem=9966MB extHosts=1 bridge=UP dev=UP
+15:48:06 [STATUS] uptime=1200s beats=1199 mem=9955MB extHosts=1 bridge=UP dev=UP
+15:49:06 [STATUS] uptime=1260s beats=1259 mem=9956MB extHosts=1 bridge=UP dev=UP
+15:50:06 [STATUS] uptime=1320s beats=1319 mem=10065MB extHosts=1 bridge=UP dev=UP
+15:51:06 [STATUS] uptime=1380s beats=1379 mem=10010MB extHosts=1 bridge=UP dev=UP
+15:52:06 [STATUS] uptime=1440s beats=1439 mem=10094MB extHosts=1 bridge=UP dev=UP
+15:53:06 [STATUS] uptime=1500s beats=1499 mem=10137MB extHosts=1 bridge=UP dev=UP
+15:54:06 [STATUS] uptime=1560s beats=1559 mem=9993MB extHosts=1 bridge=UP dev=UP
+15:55:06 [STATUS] uptime=1620s beats=1619 mem=10108MB extHosts=1 bridge=UP dev=UP
+15:56:06 [STATUS] uptime=1680s beats=1679 mem=10048MB extHosts=1 bridge=UP dev=UP
+15:57:06 [STATUS] uptime=1740s beats=1739 mem=10145MB extHosts=1 bridge=UP dev=UP
+15:58:06 [STATUS] uptime=1800s beats=1799 mem=10097MB extHosts=1 bridge=UP dev=UP
+15:59:06 [STATUS] uptime=1860s beats=1859 mem=10054MB extHosts=1 bridge=UP dev=UP
+16:00:06 [STATUS] uptime=1920s beats=1919 mem=10019MB extHosts=1 bridge=UP dev=UP
+16:01:06 [STATUS] uptime=1980s beats=1979 mem=10122MB extHosts=1 bridge=UP dev=UP
+16:02:06 [STATUS] uptime=2040s beats=2039 mem=10038MB extHosts=1 bridge=UP dev=UP
+16:03:06 [STATUS] uptime=2100s beats=2099 mem=10010MB extHosts=1 bridge=UP dev=UP
+16:04:06 [STATUS] uptime=2160s beats=2158 mem=9999MB extHosts=1 bridge=UP dev=UP
+16:05:06 [STATUS] uptime=2220s beats=2218 mem=10019MB extHosts=1 bridge=UP dev=UP
+16:06:06 [STATUS] uptime=2280s beats=2278 mem=9914MB extHosts=1 bridge=UP dev=UP
+16:07:06 [STATUS] uptime=2340s beats=2338 mem=10068MB extHosts=1 bridge=UP dev=UP
+16:08:06 [STATUS] uptime=2400s beats=2398 mem=9940MB extHosts=1 bridge=UP dev=UP
+16:09:06 [STATUS] uptime=2460s beats=2458 mem=10033MB extHosts=1 bridge=UP dev=UP
+16:10:06 [STATUS] uptime=2520s beats=2518 mem=10028MB extHosts=1 bridge=UP dev=UP
+16:11:06 [STATUS] uptime=2580s beats=2578 mem=9985MB extHosts=1 bridge=UP dev=UP
+16:12:06 [STATUS] uptime=2640s beats=2638 mem=10104MB extHosts=1 bridge=UP dev=UP
+16:13:06 [STATUS] uptime=2700s beats=2698 mem=10059MB extHosts=1 bridge=UP dev=UP
+16:14:06 [STATUS] uptime=2760s beats=2758 mem=10017MB extHosts=1 bridge=UP dev=UP
+16:15:06 [STATUS] uptime=2820s beats=2818 mem=9968MB extHosts=1 bridge=UP dev=UP
+16:16:06 [STATUS] uptime=2880s beats=2878 mem=10093MB extHosts=1 bridge=UP dev=UP
+16:17:06 [STATUS] uptime=2940s beats=2938 mem=10037MB extHosts=1 bridge=UP dev=UP
+16:18:06 [STATUS] uptime=3000s beats=2998 mem=9882MB extHosts=1 bridge=UP dev=UP
+16:19:06 [STATUS] uptime=3060s beats=3058 mem=9978MB extHosts=1 bridge=UP dev=UP
+16:20:06 [STATUS] uptime=3120s beats=3118 mem=10087MB extHosts=1 bridge=UP dev=UP
+16:21:06 [STATUS] uptime=3180s beats=3178 mem=10023MB extHosts=1 bridge=UP dev=UP
+16:22:06 [STATUS] uptime=3240s beats=3238 mem=9993MB extHosts=1 bridge=UP dev=UP
+16:23:06 [STATUS] uptime=3300s beats=3297 mem=9989MB extHosts=1 bridge=UP dev=UP
+16:24:06 [STATUS] uptime=3360s beats=3357 mem=10012MB extHosts=1 bridge=UP dev=UP
+16:25:06 [STATUS] uptime=3420s beats=3417 mem=10080MB extHosts=1 bridge=UP dev=UP
+16:26:06 [STATUS] uptime=3480s beats=3477 mem=10059MB extHosts=1 bridge=UP dev=UP
+16:27:06 [STATUS] uptime=3540s beats=3537 mem=9956MB extHosts=1 bridge=UP dev=UP
+16:28:06 [STATUS] uptime=3600s beats=3597 mem=9946MB extHosts=1 bridge=UP dev=UP

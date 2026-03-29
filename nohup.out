@@ -1,0 +1,144 @@
+[bridge] Loaded 500 messages from disk
+[bridge] Family Bridge Daemon v1 — port 9099
+[bridge] WebSocket: ws://localhost:9099
+[bridge] HTTP API:  http://localhost:9099/messages
+[bridge] Health:    http://localhost:9099/health
+[keep-alive] Starting heartbeat (every 300s, save every 600s)...
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T17:20:44.687Z)
+[main 497118d] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 3 files changed, 176 insertions(+), 102 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T17:30:45.194Z)
+[main 95f19c0] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 28 insertions(+), 243 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T17:40:45.628Z)
+[main a80bbc8] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T17:50:45.976Z)
+[main 6f06d7b] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T18:00:46.347Z)
+[main 93d131f] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T18:10:46.676Z)
+[main 7d6c57e] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T18:20:47.002Z)
+[main 17ce778] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T18:30:47.348Z)
+[main 256f0d5] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T18:40:47.693Z)
+[main 2085234] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T18:50:48.053Z)
+[main b974a83] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T19:00:48.429Z)
+[main 2ad0b22] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T19:10:48.801Z)
+[main 3d98e52] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T19:20:49.161Z)
+[main de5b7bc] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T19:30:50.348Z)
+[main 1370c69] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 38 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T19:40:50.749Z)
+[main 046c75c] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T19:50:51.244Z)
+[main 936edff] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 11 insertions(+), 157 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T20:00:51.591Z)
+[main e9e93d1] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 28 insertions(+), 15 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T20:10:51.948Z)
+[main ab9a69a] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T20:20:52.331Z)
+[main 5f4b85a] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T20:30:52.700Z)
+[main c62d595] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T20:40:53.050Z)
+[main 636be1d] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T20:50:53.363Z)
+[main 2bcd018] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-03-29T21:00:53.690Z)
+[main fdc561f] chore: auto-save session state (periodic)
+ Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+[keep-alive] 🧊 Session state saved and committed (periodic)

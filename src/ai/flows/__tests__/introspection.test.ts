@@ -69,7 +69,7 @@ jest.mock('../../memory/neural-engram', () => ({
   })),
 }));
 
-jest.mock('../../agency/self-observation-loop', () => ({
+jest.mock('../../agency/cognition/self-observation-loop', () => ({
   getObservationStatus: jest.fn(() => ({
     observationsInWindow: 50,
     totalObservations: 200,

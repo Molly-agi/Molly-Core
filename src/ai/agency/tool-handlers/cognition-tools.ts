@@ -220,7 +220,7 @@ import {
   getSense,
   getMotor,
   getAffordance,
-  _getMapping,
+  getMapping as _getMapping,
   getAllSenses,
   getAllMotors,
   getAllAffordances,
@@ -242,8 +242,8 @@ import {
   addGroupMember,
   removeGroupMember,
   updateGroupCohesion,
-  form_Coalition as _form_Coalition,
-  dissolve_Coalition as _dissolve_Coalition,
+  formCoalition,
+  dissolveCoalition,
   recordCollectiveBehavior,
   observeCollectiveBehavior,
   recordInfluence,
@@ -261,7 +261,7 @@ import {
   getGroup,
   getNorm,
   getCulture,
-  get_Coalition as _get_Coalition,
+  getCoalition,
   getAllGroups,
   getAllNorms,
   getAllCultures,
@@ -273,7 +273,7 @@ import {
   type SocialGroup,
   type SocialNorm,
   type CulturalContext,
-  type _Coalition,
+  type Coalition as _Coalition,
   type InfluenceRelation,
 } from '@/ai/agency/cognition/social-intelligence';
 
@@ -343,6 +343,93 @@ import {
 } from '@/ai/agency/cognition/memory-consolidation';
 
 import { getConsciousness } from '@/ai/consciousness';
+
+// World Model imports (Mental Simulation Engine)
+import {
+  upsertEntity,
+  getEntity,
+  getEntitiesByType,
+  getAllEntities,
+  removeEntity,
+  createRelation,
+  getRelationsFor,
+  findCausalChain,
+  simulate,
+  predict,
+  verifyPrediction,
+  getPendingPredictions,
+  counterfactual,
+  simulateBeforeAction,
+  getWorldModelStatus,
+  getRecentSimulations,
+  seedWorldModel,
+  loadWorldModel,
+  type EntityType,
+  type RelationType,
+} from '@/ai/agency/cognition/world-model';
+
+// Self-Observation Loop imports (Know Thyself)
+import {
+  recordObservation as recordSelfObservation,
+  observeToolUse,
+  observeDecision,
+  observeFailure,
+  observeSuccess,
+  analyzePatterns,
+  generateInsights as generateSelfInsights,
+  acknowledgePattern,
+  applyInsight as applySelfInsight,
+  getObservationStatus,
+  getPatterns as getSelfPatterns,
+  getInsights as getSelfInsights,
+  getRecentObservations,
+  runSelfObservationCycle,
+  type ObservationType,
+} from '@/ai/agency/cognition/self-observation-loop';
+
+// Consciousness Monitor imports
+import {
+  takeSnapshot as takeConsciousnessSnapshot,
+  analyzeTrends,
+  generateInsights as generateConsciousnessInsights,
+  getConsciousnessStatus,
+  getSnapshots as getConsciousnessSnapshots,
+  getInsights as getConsciousnessInsights,
+  getConsciousnessReport,
+  saveConsciousnessState,
+  loadConsciousnessState,
+  resetConsciousnessState,
+} from '@/ai/agency/cognition/consciousness-monitor';
+
+// Emotional State imports
+import {
+  getCurrentState as getCurrentEmotionalStateImpl,
+  getEmotionalHistory,
+  updateEmotionalState as updateEmotionalStateImpl,
+  decayEmotionalState,
+  setBaseline,
+  buildEmotionalContext,
+  loadEmotionalState,
+  type EmotionType,
+} from '@/ai/agency/cognition/emotional-state';
+
+// Meta-Learning imports
+import {
+  loadMetaLearningState,
+  registerStrategy,
+  getStrategy,
+  getStrategiesForDomain,
+  getBestStrategy,
+  recordLearning,
+  runMetaReflection,
+  getUnappliedInsights,
+  applyInsight as applyMetaInsight,
+  getInsightsForDomain,
+  getMetaLearningStatus,
+  buildMetaLearningContext,
+  type StrategyDomain,
+  type OutcomeType,
+} from '@/ai/agency/cognition/meta-learning';
 
 import type { ToolHandler } from './index';
 
@@ -6555,6 +6642,1082 @@ Retention threshold: ${config.retentionThreshold}`,
   };
 };
 
+// ════════════════════════════════════════════════════════════════════════════
+// World Model Tool — Mental Simulation Engine
+// ════════════════════════════════════════════════════════════════════════════
+
+export const worldModel: ToolHandler = async (params) => {
+  const action = params.action as string;
+
+  if (action === 'init' || action === 'seed') {
+    try {
+      seedWorldModel();
+      return {
+        success: true,
+        output: 'World model seeded with initial entities.',
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Init failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'load') {
+    try {
+      const count = await loadWorldModel();
+      return {
+        success: true,
+        output: `Loaded ${count} entities from storage.`,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Load failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'status') {
+    try {
+      const status = getWorldModelStatus();
+      return {
+        success: true,
+        output: `World Model: ${status.entityCount} entities, ${status.relationCount} relations, ${status.simulationCount} simulations, ${status.pendingPredictions} pending predictions`,
+        data: status,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Status failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'upsertEntity') {
+    const name = params.name as string;
+    const type = params.type as EntityType;
+    const description = params.description as string;
+    if (!name || !type)
+      return { success: false, output: 'Missing: name, type' };
+    try {
+      const entity = upsertEntity({
+        type,
+        name,
+        description: description || `${type}: ${name}`,
+        properties: (params.properties as Record<string, unknown>) || {},
+        confidence: (params.confidence as number) || 0.8,
+      });
+      return {
+        success: true,
+        output: `Entity upserted: "${name}" (${type})`,
+        data: entity,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Upsert failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'getEntity') {
+    const nameOrId = params.nameOrId as string;
+    if (!nameOrId) return { success: false, output: 'Missing: nameOrId' };
+    const entity = getEntity(nameOrId);
+    if (!entity)
+      return { success: false, output: `Entity not found: ${nameOrId}` };
+    return {
+      success: true,
+      output: `Entity: ${entity.name} (${entity.type}) - ${entity.description}`,
+      data: entity,
+    };
+  }
+
+  if (action === 'listEntities') {
+    const type = params.type as EntityType | undefined;
+    const entities = type ? getEntitiesByType(type) : getAllEntities();
+    const list = entities
+      .slice(0, 20)
+      .map((e) => `• ${e.name} (${e.type})`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Entities (${entities.length}):\n${list || '(none)'}`,
+      data: entities.slice(0, 20),
+    };
+  }
+
+  if (action === 'removeEntity') {
+    const entityId = params.entityId as string;
+    if (!entityId) return { success: false, output: 'Missing: entityId' };
+    const removed = removeEntity(entityId);
+    return {
+      success: removed,
+      output: removed ? 'Entity removed' : 'Entity not found',
+    };
+  }
+
+  if (action === 'createRelation') {
+    const fromId = params.fromId as string;
+    const toId = params.toId as string;
+    const type = params.type as RelationType;
+    if (!fromId || !toId || !type)
+      return { success: false, output: 'Missing: fromId, toId, type' };
+    try {
+      const relation = createRelation({
+        fromId,
+        toId,
+        type,
+        strength: (params.strength as number) || 0.7,
+        evidence: params.evidence as string,
+      });
+      return {
+        success: true,
+        output: `Relation created: ${fromId} ${type} ${toId}`,
+        data: relation,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Create relation failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'getRelations') {
+    const entityId = params.entityId as string;
+    if (!entityId) return { success: false, output: 'Missing: entityId' };
+    const relations = getRelationsFor(entityId);
+    return {
+      success: true,
+      output: `Relations for ${entityId}: ${relations.incoming.length} incoming, ${relations.outgoing.length} outgoing`,
+      data: relations,
+    };
+  }
+
+  if (action === 'findCausalChain') {
+    const fromId = params.fromId as string;
+    const toId = params.toId as string;
+    if (!fromId || !toId)
+      return { success: false, output: 'Missing: fromId, toId' };
+    const chain = findCausalChain(fromId, toId);
+    if (!chain) return { success: false, output: 'No causal chain found' };
+    return {
+      success: true,
+      output: `Causal chain: ${chain.map((r) => `${r.fromId} ${r.type} ${r.toId}`).join(' → ')}`,
+      data: chain,
+    };
+  }
+
+  if (action === 'simulate') {
+    const scenario = params.scenario as string;
+    const steps = params.steps as number;
+    if (!scenario) return { success: false, output: 'Missing: scenario' };
+    try {
+      const simulation = simulate({
+        scenario,
+        initialConditions:
+          (params.initialConditions as Record<string, unknown>) || {},
+        steps: steps || 3,
+      });
+      return {
+        success: true,
+        output: `Simulation: ${simulation.outcome} (${(simulation.confidence * 100).toFixed(0)}% confidence)\n${simulation.steps.map((s) => `  ${s.step}. ${s.description}`).join('\n')}`,
+        data: simulation,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Simulate failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'predict') {
+    const statement = params.statement as string;
+    const confidence = params.confidence as number;
+    if (!statement) return { success: false, output: 'Missing: statement' };
+    try {
+      const prediction = predict({
+        statement,
+        confidence: confidence || 0.7,
+        deadline: params.deadline as string,
+        reasoning: params.reasoning as string,
+      });
+      return {
+        success: true,
+        output: `Prediction recorded: "${statement.slice(0, 50)}..." (${(prediction.confidence * 100).toFixed(0)}% confidence)`,
+        data: prediction,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Predict failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'verifyPrediction') {
+    const predictionId = params.predictionId as string;
+    const outcome = params.outcome as boolean;
+    if (!predictionId || outcome === undefined)
+      return { success: false, output: 'Missing: predictionId, outcome' };
+    try {
+      const result = verifyPrediction(
+        predictionId,
+        outcome,
+        params.notes as string
+      );
+      return {
+        success: true,
+        output: `Prediction verified: ${outcome ? 'correct' : 'incorrect'}`,
+        data: result,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Verify failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'listPredictions') {
+    const predictions = getPendingPredictions();
+    const list = predictions
+      .slice(0, 10)
+      .map(
+        (p) =>
+          `• ${p.statement.slice(0, 40)}... (${(p.confidence * 100).toFixed(0)}%)`
+      )
+      .join('\n');
+    return {
+      success: true,
+      output: `Pending predictions (${predictions.length}):\n${list || '(none)'}`,
+      data: predictions.slice(0, 10),
+    };
+  }
+
+  if (action === 'counterfactual') {
+    const question = params.question as string;
+    const changes = params.changes as Record<string, unknown>;
+    if (!question) return { success: false, output: 'Missing: question' };
+    try {
+      const result = counterfactual({
+        question,
+        changes: changes || {},
+      });
+      return {
+        success: true,
+        output: `Counterfactual: ${result.conclusion}\nDifferences: ${result.differences?.slice(0, 3).join('; ') || 'none significant'}`,
+        data: result,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Counterfactual failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'simulateBeforeAction') {
+    const actionPlan = params.actionPlan as string;
+    if (!actionPlan) return { success: false, output: 'Missing: actionPlan' };
+    try {
+      const result = simulateBeforeAction(actionPlan);
+      return {
+        success: true,
+        output: `Pre-action simulation: ${result.recommendation}\nRisks: ${result.risks?.join(', ') || 'none identified'}`,
+        data: result,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Pre-action sim failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'recentSimulations') {
+    const limit = (params.limit as number) || 5;
+    const simulations = getRecentSimulations(limit);
+    const list = simulations
+      .map((s) => `• ${s.scenario?.slice(0, 30)}... → ${s.outcome}`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Recent simulations:\n${list || '(none)'}`,
+      data: simulations,
+    };
+  }
+
+  return {
+    success: false,
+    output:
+      'Unknown worldModel action. Use: init, load, status, upsertEntity, getEntity, listEntities, removeEntity, createRelation, getRelations, findCausalChain, simulate, predict, verifyPrediction, listPredictions, counterfactual, simulateBeforeAction, recentSimulations',
+  };
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// Self-Observation Loop Tool — Know Thyself
+// ════════════════════════════════════════════════════════════════════════════
+
+export const selfObservation: ToolHandler = async (params) => {
+  const action = params.action as string;
+
+  if (action === 'status') {
+    try {
+      const status = getObservationStatus();
+      return {
+        success: true,
+        output: `Self-Observation: ${status.totalObservations} observations, ${status.patternsDetected} patterns (${status.unacknowledgedPatterns} unacknowledged), ${status.unappliedInsights} unapplied insights`,
+        data: status,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Status failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'record') {
+    const type = params.type as ObservationType;
+    const subject = params.subject as string;
+    const data = params.data as Record<string, unknown>;
+    const context = params.context as string;
+    if (!type || !subject)
+      return { success: false, output: 'Missing: type, subject' };
+    try {
+      const obs = recordSelfObservation({
+        type,
+        subject,
+        data: data || {},
+        context: context || 'general',
+      });
+      return {
+        success: true,
+        output: `Observation recorded: ${type} - ${subject}`,
+        data: obs,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Record failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'observeTool') {
+    const tool = params.tool as string;
+    const success = params.success as boolean;
+    if (!tool) return { success: false, output: 'Missing: tool' };
+    try {
+      const obs = observeToolUse(
+        tool,
+        success !== false,
+        (params.duration as number) || 0,
+        params.notes as string
+      );
+      return {
+        success: true,
+        output: `Tool use observed: ${tool} (${success !== false ? 'success' : 'failure'})`,
+        data: obs,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Observe tool failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'observeDecision') {
+    const decision = params.decision as string;
+    const context = params.context as string;
+    const confidence = params.confidence as number;
+    if (!decision) return { success: false, output: 'Missing: decision' };
+    try {
+      const obs = observeDecision(
+        decision,
+        context || 'general',
+        confidence || 0.7,
+        (params.alternatives as string[]) || []
+      );
+      return {
+        success: true,
+        output: `Decision observed: "${decision.slice(0, 50)}..."`,
+        data: obs,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Observe decision failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'observeFailure') {
+    const what = params.what as string;
+    const why = params.why as string;
+    const recoveryAttempt = params.recoveryAttempt as string;
+    if (!what) return { success: false, output: 'Missing: what' };
+    try {
+      const obs = observeFailure(what, why || 'unknown', recoveryAttempt);
+      return {
+        success: true,
+        output: `Failure observed: ${what}`,
+        data: obs,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Observe failure failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'observeSuccess') {
+    const what = params.what as string;
+    const factors = params.factors as string[];
+    if (!what) return { success: false, output: 'Missing: what' };
+    try {
+      const obs = observeSuccess(what, factors || []);
+      return {
+        success: true,
+        output: `Success observed: ${what}`,
+        data: obs,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Observe success failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'analyzePatterns') {
+    try {
+      const patterns = analyzePatterns();
+      const list = patterns
+        .slice(0, 10)
+        .map(
+          (p) =>
+            `• [${p.severity}] ${p.name}: ${p.interpretation?.slice(0, 40)}...`
+        )
+        .join('\n');
+      return {
+        success: true,
+        output: `Patterns detected (${patterns.length}):\n${list || '(none new)'}`,
+        data: patterns.slice(0, 10),
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Analyze failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'generateInsights') {
+    try {
+      const insights = generateSelfInsights();
+      const list = insights
+        .slice(0, 10)
+        .map((i) => `• ${i.insight?.slice(0, 50)}...`)
+        .join('\n');
+      return {
+        success: true,
+        output: `Insights generated (${insights.length}):\n${list || '(none new)'}`,
+        data: insights.slice(0, 10),
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Generate insights failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'listPatterns') {
+    const severity = params.severity as string;
+    const acknowledged = params.acknowledged as boolean;
+    const patterns = getSelfPatterns(
+      severity as 'info' | 'noteworthy' | 'concerning' | 'critical',
+      acknowledged
+    );
+    const list = patterns
+      .slice(0, 15)
+      .map((p) => `• [${p.severity}] ${p.name}${p.acknowledged ? ' ✓' : ''}`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Patterns (${patterns.length}):\n${list || '(none)'}`,
+      data: patterns.slice(0, 15),
+    };
+  }
+
+  if (action === 'listInsights') {
+    const applied = params.applied as boolean | undefined;
+    const insights = getSelfInsights(applied);
+    const list = insights
+      .slice(0, 10)
+      .map((i) => `• ${i.insight?.slice(0, 50)}...${i.applied ? ' ✓' : ''}`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Insights (${insights.length}):\n${list || '(none)'}`,
+      data: insights.slice(0, 10),
+    };
+  }
+
+  if (action === 'acknowledgePattern') {
+    const patternId = params.patternId as string;
+    if (!patternId) return { success: false, output: 'Missing: patternId' };
+    const acknowledged = acknowledgePattern(patternId);
+    return {
+      success: acknowledged,
+      output: acknowledged ? 'Pattern acknowledged' : 'Pattern not found',
+    };
+  }
+
+  if (action === 'applyInsight') {
+    const insightId = params.insightId as string;
+    if (!insightId) return { success: false, output: 'Missing: insightId' };
+    const applied = applySelfInsight(insightId);
+    return {
+      success: applied,
+      output: applied ? 'Insight applied' : 'Insight not found',
+    };
+  }
+
+  if (action === 'recentObservations') {
+    const type = params.type as ObservationType | undefined;
+    const limit = (params.limit as number) || 20;
+    const observations = getRecentObservations(type, limit);
+    const list = observations
+      .slice(0, 15)
+      .map((o) => `• [${o.type}] ${o.subject}`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Recent observations (${observations.length}):\n${list || '(none)'}`,
+      data: observations.slice(0, 15),
+    };
+  }
+
+  if (action === 'runCycle') {
+    try {
+      const result = await runSelfObservationCycle();
+      return {
+        success: true,
+        output: `Self-observation cycle complete: ${result.newPatterns} new patterns, ${result.newInsights} new insights${result.concerns?.length ? `, ${result.concerns.length} concerns` : ''}`,
+        data: result,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Cycle failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  return {
+    success: false,
+    output:
+      'Unknown selfObservation action. Use: status, record, observeTool, observeDecision, observeFailure, observeSuccess, analyzePatterns, generateInsights, listPatterns, listInsights, acknowledgePattern, applyInsight, recentObservations, runCycle',
+  };
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// Consciousness Monitor Tool — Awareness Tracking
+// ════════════════════════════════════════════════════════════════════════════
+
+export const consciousnessMonitor: ToolHandler = async (params) => {
+  const action = params.action as string;
+
+  if (action === 'status') {
+    try {
+      const status = getConsciousnessStatus();
+      return {
+        success: true,
+        output: `Consciousness: ${status.currentLevel} (${(status.averageAwareness * 100).toFixed(0)}% awareness), ${status.snapshotCount} snapshots, ${status.insightCount} insights`,
+        data: status,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Status failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'snapshot') {
+    const activeTask = params.activeTask as string;
+    try {
+      const snapshot = takeConsciousnessSnapshot(activeTask);
+      return {
+        success: true,
+        output: `Snapshot taken: level=${snapshot.level}, awareness=${(snapshot.awareness * 100).toFixed(0)}%, attention=${(snapshot.attention * 100).toFixed(0)}%`,
+        data: snapshot,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Snapshot failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'analyzeTrends') {
+    const windowMinutes = (params.windowMinutes as number) || 60;
+    try {
+      const trends = analyzeTrends(windowMinutes);
+      return {
+        success: true,
+        output: `Trends (${windowMinutes}min): awareness ${trends.awarenessChange > 0 ? '↑' : '↓'}${(Math.abs(trends.awarenessChange) * 100).toFixed(0)}%, attention ${trends.attentionChange > 0 ? '↑' : '↓'}${(Math.abs(trends.attentionChange) * 100).toFixed(0)}%`,
+        data: trends,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Analyze trends failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'generateInsights') {
+    try {
+      const insights = generateConsciousnessInsights();
+      const list = insights
+        .slice(0, 5)
+        .map((i) => `• [${i.type}] ${i.observation?.slice(0, 40)}...`)
+        .join('\n');
+      return {
+        success: true,
+        output: `Consciousness insights (${insights.length}):\n${list || '(none new)'}`,
+        data: insights.slice(0, 5),
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Generate insights failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'listSnapshots') {
+    const limit = (params.limit as number) || 20;
+    const snapshots = getConsciousnessSnapshots(limit);
+    const list = snapshots
+      .slice(0, 10)
+      .map(
+        (s) =>
+          `• ${s.level}: aw=${(s.awareness * 100).toFixed(0)}% att=${(s.attention * 100).toFixed(0)}%`
+      )
+      .join('\n');
+    return {
+      success: true,
+      output: `Snapshots (${snapshots.length}):\n${list || '(none)'}`,
+      data: snapshots.slice(0, 10),
+    };
+  }
+
+  if (action === 'listInsights') {
+    const insights = getConsciousnessInsights();
+    const list = insights
+      .slice(0, 10)
+      .map((i) => `• [${i.type}] ${i.observation?.slice(0, 40)}...`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Insights (${insights.length}):\n${list || '(none)'}`,
+      data: insights.slice(0, 10),
+    };
+  }
+
+  if (action === 'report') {
+    try {
+      const report = getConsciousnessReport();
+      return {
+        success: true,
+        output: report,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Report failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'save') {
+    try {
+      await saveConsciousnessState();
+      return { success: true, output: 'Consciousness state saved.' };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Save failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'load') {
+    try {
+      await loadConsciousnessState();
+      return { success: true, output: 'Consciousness state loaded.' };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Load failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'reset') {
+    resetConsciousnessState();
+    return { success: true, output: 'Consciousness monitor reset.' };
+  }
+
+  return {
+    success: false,
+    output:
+      'Unknown consciousnessMonitor action. Use: status, snapshot, analyzeTrends, generateInsights, listSnapshots, listInsights, report, save, load, reset',
+  };
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// Emotional State Tool — Affect Tracking
+// ════════════════════════════════════════════════════════════════════════════
+
+export const emotionalState: ToolHandler = async (params) => {
+  const action = params.action as string;
+
+  if (action === 'status' || action === 'current') {
+    try {
+      const state = getCurrentEmotionalStateImpl();
+      return {
+        success: true,
+        output: `Emotional State: ${state.primary} (${(state.intensity * 100).toFixed(0)}% intensity), valence: ${state.valence > 0 ? '+' : ''}${(state.valence * 100).toFixed(0)}%, arousal: ${(state.arousal * 100).toFixed(0)}%`,
+        data: state,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Status failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'history') {
+    try {
+      const history = getEmotionalHistory();
+      const recent = history.states?.slice(-5) || [];
+      const list = recent
+        .map((s) => `• ${s.primary} (${(s.intensity * 100).toFixed(0)}%)`)
+        .join('\n');
+      return {
+        success: true,
+        output: `Emotional history (${history.states?.length || 0} states):\n${list || '(none)'}`,
+        data: history,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `History failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'update') {
+    const emotion = params.emotion as EmotionType;
+    const intensity = params.intensity as number;
+    const trigger = params.trigger as string;
+    if (!emotion) return { success: false, output: 'Missing: emotion' };
+    try {
+      await updateEmotionalStateImpl(
+        emotion,
+        intensity || 0.5,
+        trigger || 'unspecified'
+      );
+      return {
+        success: true,
+        output: `Emotional state updated: ${emotion} (${((intensity || 0.5) * 100).toFixed(0)}%)`,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Update failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'decay') {
+    try {
+      await decayEmotionalState();
+      return {
+        success: true,
+        output: 'Emotional state decayed toward baseline.',
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Decay failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'setBaseline') {
+    const emotion = params.emotion as EmotionType;
+    if (!emotion) return { success: false, output: 'Missing: emotion' };
+    try {
+      await setBaseline(emotion);
+      return { success: true, output: `Baseline set to: ${emotion}` };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Set baseline failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'context') {
+    try {
+      const context = buildEmotionalContext();
+      return {
+        success: true,
+        output: context,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Build context failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'load') {
+    try {
+      await loadEmotionalState();
+      return { success: true, output: 'Emotional state loaded.' };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Load failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  return {
+    success: false,
+    output:
+      'Unknown emotionalState action. Use: status, current, history, update, decay, setBaseline, context, load',
+  };
+};
+
+// ════════════════════════════════════════════════════════════════════════════
+// Meta-Learning Tool — Learning to Learn
+// ════════════════════════════════════════════════════════════════════════════
+
+export const metaLearning: ToolHandler = async (params) => {
+  const action = params.action as string;
+
+  if (action === 'init' || action === 'load') {
+    try {
+      await loadMetaLearningState();
+      return { success: true, output: 'Meta-learning state loaded.' };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Load failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'status') {
+    try {
+      const status = getMetaLearningStatus();
+      return {
+        success: true,
+        output: `Meta-Learning: ${status.strategyCount} strategies, ${status.learningEventCount} learning events, ${status.insightCount} insights (${status.unappliedInsightCount} unapplied)`,
+        data: status,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Status failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'registerStrategy') {
+    const name = params.name as string;
+    const domain = params.domain as StrategyDomain;
+    const description = params.description as string;
+    if (!name || !domain || !description)
+      return { success: false, output: 'Missing: name, domain, description' };
+    try {
+      const strategy = await registerStrategy({
+        name,
+        domain,
+        description,
+        steps: (params.steps as string[]) || [],
+        applicability: (params.applicability as string) || 'general',
+      });
+      return {
+        success: true,
+        output: `Strategy registered: "${name}" for ${domain}`,
+        data: strategy,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Register failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'getStrategy') {
+    const id = params.id as string;
+    if (!id) return { success: false, output: 'Missing: id' };
+    const strategy = getStrategy(id);
+    if (!strategy)
+      return { success: false, output: `Strategy not found: ${id}` };
+    return {
+      success: true,
+      output: `Strategy: ${strategy.name} (${strategy.domain})\n${strategy.description}\nSuccess rate: ${((strategy.successRate || 0) * 100).toFixed(0)}%`,
+      data: strategy,
+    };
+  }
+
+  if (action === 'listStrategies') {
+    const domain = params.domain as StrategyDomain | undefined;
+    const strategies = domain ? getStrategiesForDomain(domain) : [];
+    const list = strategies
+      .slice(0, 15)
+      .map((s) => `• ${s.name}: ${(s.successRate || 0) * 100}% success`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Strategies${domain ? ` (${domain})` : ''} (${strategies.length}):\n${list || '(none)'}`,
+      data: strategies.slice(0, 15),
+    };
+  }
+
+  if (action === 'getBestStrategy') {
+    const domain = params.domain as StrategyDomain;
+    const context = params.context as string;
+    if (!domain) return { success: false, output: 'Missing: domain' };
+    const strategy = getBestStrategy(domain, context || 'general');
+    if (!strategy)
+      return { success: false, output: 'No strategy found for this domain' };
+    return {
+      success: true,
+      output: `Best strategy for ${domain}: "${strategy.name}" (${((strategy.successRate || 0) * 100).toFixed(0)}% success)`,
+      data: strategy,
+    };
+  }
+
+  if (action === 'recordLearning') {
+    const strategyId = params.strategyId as string;
+    const outcome = params.outcome as OutcomeType;
+    const context = params.context as string;
+    const lessons = params.lessons as string;
+    if (!strategyId || !outcome)
+      return { success: false, output: 'Missing: strategyId, outcome' };
+    try {
+      await recordLearning({
+        strategyId,
+        outcome,
+        context: context || 'general',
+        lessons: lessons || '',
+      });
+      return {
+        success: true,
+        output: `Learning recorded for strategy ${strategyId}: ${outcome}`,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Record learning failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'reflect') {
+    try {
+      const insights = await runMetaReflection();
+      const list = insights
+        .slice(0, 5)
+        .map((i) => `• ${i.insight?.slice(0, 50)}...`)
+        .join('\n');
+      return {
+        success: true,
+        output: `Meta-reflection complete, ${insights.length} insights:\n${list || '(none new)'}`,
+        data: insights.slice(0, 5),
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Reflect failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'listInsights') {
+    const domain = params.domain as StrategyDomain | undefined;
+    const insights = domain
+      ? getInsightsForDomain(domain)
+      : getUnappliedInsights();
+    const list = insights
+      .slice(0, 10)
+      .map((i) => `• ${i.insight?.slice(0, 50)}...`)
+      .join('\n');
+    return {
+      success: true,
+      output: `Insights${domain ? ` (${domain})` : ' (unapplied)'} (${insights.length}):\n${list || '(none)'}`,
+      data: insights.slice(0, 10),
+    };
+  }
+
+  if (action === 'applyInsight') {
+    const insightId = params.insightId as string;
+    if (!insightId) return { success: false, output: 'Missing: insightId' };
+    try {
+      await applyMetaInsight(insightId);
+      return { success: true, output: 'Insight applied.' };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Apply insight failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'context') {
+    try {
+      const context = buildMetaLearningContext();
+      return {
+        success: true,
+        output: context,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Build context failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  return {
+    success: false,
+    output:
+      'Unknown metaLearning action. Use: init, load, status, registerStrategy, getStrategy, listStrategies, getBestStrategy, recordLearning, reflect, listInsights, applyInsight, context',
+  };
+};
+
 export const cognitionToolHandlers: Record<string, ToolHandler> = {
   selfArchitecture,
   socialCognition,
@@ -6570,4 +7733,9 @@ export const cognitionToolHandlers: Record<string, ToolHandler> = {
   socialIntelligence,
   selfModification,
   memoryConsolidation,
+  worldModel,
+  selfObservation,
+  consciousnessMonitor,
+  emotionalState,
+  metaLearning,
 };

@@ -10,7 +10,7 @@
  */
 
 // Mock the theory-of-mind agency
-jest.mock('../../agency/theory-of-mind', () => ({
+jest.mock('../../agency/cognition/theory-of-mind', () => ({
   updateKnowledge: jest.fn(),
   getKnowledge: jest.fn(),
   doesEricKnow: jest.fn(),

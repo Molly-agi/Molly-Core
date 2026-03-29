@@ -24,7 +24,7 @@ const mockGenerateInsights = jest.fn();
 const mockRunSelfObservationCycle = jest.fn();
 const mockObserveDecision = jest.fn();
 
-jest.mock('../../agency/self-observation-loop', () => ({
+jest.mock('../../agency/cognition/self-observation-loop', () => ({
   getObservationStatus: mockGetObservationStatus,
   getPatterns: mockGetPatterns,
   getInsights: mockGetInsights,

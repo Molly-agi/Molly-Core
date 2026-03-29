@@ -10,7 +10,7 @@
  */
 
 // Mock the world-model agency
-jest.mock('../../agency/world-model', () => ({
+jest.mock('../../agency/cognition/world-model', () => ({
   upsertEntity: jest.fn(),
   getEntity: jest.fn(),
   getEntitiesByType: jest.fn(),

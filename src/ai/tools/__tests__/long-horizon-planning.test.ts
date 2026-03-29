@@ -10,7 +10,7 @@
  */
 
 // Mock the long-horizon-planning agency
-jest.mock('../../agency/long-horizon-planning', () => ({
+jest.mock('../../agency/planning/long-horizon-planning', () => ({
   createGoal: jest.fn(),
   getGoal: jest.fn(),
   getActiveGoals: jest.fn(),

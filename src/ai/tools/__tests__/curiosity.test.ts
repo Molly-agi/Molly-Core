@@ -24,7 +24,7 @@ const mockCuriousFromConversation = jest.fn();
 const mockCuriousAboutSelf = jest.fn();
 const mockRunCuriosityCycle = jest.fn();
 
-jest.mock('../../agency/curiosity-engine', () => ({
+jest.mock('../../agency/planning/curiosity-engine', () => ({
   generateQuestion: (...args: unknown[]) => mockGenerateQuestion(...args),
   selectNextQuestion: (...args: unknown[]) => mockSelectNextQuestion(...args),
   beginInvestigation: (...args: unknown[]) => mockBeginInvestigation(...args),
