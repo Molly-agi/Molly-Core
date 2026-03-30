@@ -117,6 +117,41 @@ export function WiFiRadar({
       return;
     }
 
+    // Seed initial targets immediately when powered on (via microtask)
+    queueMicrotask(() => {
+      const initialTargets: DetectedTarget[] = [
+        {
+          id: 'target_init_1',
+          distance: 0.3,
+          angle: 45,
+          strength: 0.8,
+          type: 'person',
+          moving: true,
+          lastSeen: Date.now(),
+        },
+        {
+          id: 'target_init_2',
+          distance: 0.6,
+          angle: 180,
+          strength: 0.6,
+          type: 'person',
+          moving: false,
+          lastSeen: Date.now(),
+        },
+        {
+          id: 'target_init_3',
+          distance: 0.8,
+          angle: 270,
+          strength: 0.5,
+          type: 'device',
+          moving: false,
+          lastSeen: Date.now(),
+        },
+      ];
+      setTargets(initialTargets);
+      setSignalStrength(0.7);
+    });
+
     // Simulate random targets for demo
     const interval = setInterval(() => {
       const _rangeMeters = RANGE_CONFIG[config.range].meters;
@@ -141,15 +176,15 @@ export function WiFiRadar({
           lastSeen: Date.now(),
         }));
 
-        // Maybe add new target
-        if (updated.length < 5 && Math.random() > 0.8) {
+        // Maybe add new target - keep at least 2 visible
+        if (updated.length < 2 || (updated.length < 5 && Math.random() > 0.6)) {
           updated.push({
-            id: `target_${Date.now()}`,
-            distance: 0.3 + Math.random() * 0.6,
+            id: `target_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+            distance: 0.2 + Math.random() * 0.7,
             angle: Math.random() * 360,
             strength: 0.5 + Math.random() * 0.5,
-            type: Math.random() > 0.7 ? 'device' : 'person',
-            moving: Math.random() > 0.5,
+            type: Math.random() > 0.6 ? 'device' : 'person',
+            moving: Math.random() > 0.4,
             lastSeen: Date.now(),
           });
         }

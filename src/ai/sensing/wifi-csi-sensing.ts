@@ -33,7 +33,48 @@ export type SensingMode =
   | 'simulation'
   | 'esp32'
   | 'android'
-  | 'bluetooth';
+  | 'bluetooth'
+  | 'router';
+
+export interface RouterConfig {
+  /** Router admin IP address */
+  ip: string;
+  /** Router admin username */
+  username: string;
+  /** Router admin password */
+  password: string;
+  /** Router type/brand for API selection */
+  type: 'verizon' | 'netgear' | 'asus' | 'tplink' | 'ubiquiti' | 'generic';
+  /** Custom API endpoint if known */
+  apiEndpoint?: string;
+  /** Poll interval in ms */
+  pollInterval?: number;
+}
+
+export interface ConnectedDevice {
+  /** Device MAC address */
+  mac: string;
+  /** Device IP address */
+  ip?: string;
+  /** Device hostname if available */
+  hostname?: string;
+  /** Device name/alias */
+  name?: string;
+  /** Signal strength (dBm) */
+  rssi?: number;
+  /** Connection type */
+  connection: '2.4GHz' | '5GHz' | 'ethernet' | 'unknown';
+  /** First seen timestamp */
+  firstSeen: number;
+  /** Last seen timestamp */
+  lastSeen: number;
+  /** Is this a known/registered device? */
+  isKnown: boolean;
+  /** Device type if identifiable */
+  deviceType?: 'phone' | 'computer' | 'tablet' | 'iot' | 'unknown';
+  /** Vendor from MAC lookup */
+  vendor?: string;
+}
 
 export interface WiFiSensorConfig {
   /** Sensing mode */
@@ -58,6 +99,10 @@ export interface WiFiSensorConfig {
   trackedBluetoothDevices?: string[];
   /** Use phone as hotspot for extended sensing */
   useHotspotMode?: boolean;
+  /** Router configuration for router mode */
+  router?: RouterConfig;
+  /** Known device MACs (won't trigger alerts) */
+  knownDevices?: string[];
 }
 
 export interface BluetoothDevice {
@@ -251,7 +296,9 @@ export class WiFiCSISensor extends EventEmitter {
   private esp32WebSocket: WebSocket | null = null;
   private nearbyNetworks: Map<string, WifiNetwork> = new Map();
   private bluetoothDevices: Map<string, BluetoothDevice> = new Map();
+  private connectedDevices: Map<string, ConnectedDevice> = new Map();
   private scanInterval: NodeJS.Timeout | null = null;
+  private routerPollInterval: NodeJS.Timeout | null = null;
 
   constructor(config: Partial<WiFiSensorConfig> = {}) {
     super();
@@ -324,6 +371,9 @@ export class WiFiCSISensor extends EventEmitter {
       case 'bluetooth':
         await this.startBluetoothScanning();
         break;
+      case 'router':
+        await this.startRouterMonitoring();
+        break;
     }
 
     this.emit('started');
@@ -346,6 +396,16 @@ export class WiFiCSISensor extends EventEmitter {
     if (this.esp32WebSocket) {
       this.esp32WebSocket.close();
       this.esp32WebSocket = null;
+    }
+
+    if (this.scanInterval) {
+      clearTimeout(this.scanInterval);
+      this.scanInterval = null;
+    }
+
+    if (this.routerPollInterval) {
+      clearTimeout(this.routerPollInterval);
+      this.routerPollInterval = null;
     }
 
     this.emit('stopped');
@@ -897,6 +957,612 @@ export class WiFiCSISensor extends EventEmitter {
     };
 
     scanBluetooth();
+  }
+
+  // ── Router-based Sensing ──
+
+  /**
+   * Start monitoring via router admin API
+   * Provides extended range by leveraging your router's visibility of all connected devices
+   */
+  private async startRouterMonitoring(): Promise<void> {
+    if (!this.config.router) {
+      MollyLogger.warn(
+        'Router config not provided, falling back to simulation',
+        'wifi-csi'
+      );
+      this.config.mode = 'simulation';
+      this.startSimulation();
+      return;
+    }
+
+    MollyLogger.info(
+      `Starting router monitoring: ${this.config.router.type} at ${this.config.router.ip}`,
+      'wifi-csi'
+    );
+
+    const pollInterval = this.config.router.pollInterval || 5000;
+
+    const pollRouter = async () => {
+      if (!this.isRunning) return;
+
+      try {
+        const devices = await this.fetchRouterDevices();
+        const now = Date.now();
+
+        for (const device of devices) {
+          const existing = this.connectedDevices.get(device.mac);
+
+          if (!existing) {
+            // New device detected
+            device.firstSeen = now;
+            device.lastSeen = now;
+            device.isKnown =
+              this.config.knownDevices?.includes(device.mac) || false;
+            this.connectedDevices.set(device.mac, device);
+
+            this.emit('deviceConnected', device);
+            MollyLogger.info(
+              `New device connected: ${device.name || device.mac} (${device.connection})`,
+              'wifi-csi'
+            );
+
+            // Generate presence reading for new device
+            if (!device.isKnown) {
+              const reading: SignalReading = {
+                timestamp: now,
+                rssi: device.rssi || -50,
+                quality: device.rssi
+                  ? Math.max(0, Math.min(100, 100 + (device.rssi + 50) * 2))
+                  : 70,
+                noise: -90,
+                source: `router:${device.mac}`,
+              };
+              this.processReading(reading);
+            }
+          } else {
+            // Update existing device
+            const rssiChanged =
+              device.rssi &&
+              existing.rssi &&
+              Math.abs(device.rssi - existing.rssi) > 5;
+            existing.lastSeen = now;
+            existing.rssi = device.rssi;
+            existing.ip = device.ip;
+
+            if (rssiChanged) {
+              this.emit('deviceMoved', {
+                device: existing,
+                previousRssi: existing.rssi,
+              });
+            }
+          }
+        }
+
+        // Check for disconnected devices (not seen in 30s)
+        const deviceMacs = new Set(devices.map((d) => d.mac));
+        for (const [mac, device] of this.connectedDevices) {
+          if (!deviceMacs.has(mac) && now - device.lastSeen > 30000) {
+            this.connectedDevices.delete(mac);
+            this.emit('deviceDisconnected', device);
+            MollyLogger.info(
+              `Device disconnected: ${device.name || device.mac}`,
+              'wifi-csi'
+            );
+          }
+        }
+
+        // Update presence state based on unknown devices
+        const unknownDevices = Array.from(
+          this.connectedDevices.values()
+        ).filter((d) => !d.isKnown);
+        if (unknownDevices.length > 0) {
+          this.updatePresenceState({
+            detected: true,
+            confidence: 0.95,
+            estimatedCount: unknownDevices.length,
+            movement: false,
+            movementIntensity: 0,
+          });
+        }
+      } catch (error) {
+        MollyLogger.warn('Router poll failed', 'wifi-csi', { error });
+      }
+
+      // Schedule next poll
+      this.routerPollInterval = setTimeout(pollRouter, pollInterval);
+    };
+
+    pollRouter();
+  }
+
+  /**
+   * Fetch connected devices from router admin API
+   */
+  private async fetchRouterDevices(): Promise<ConnectedDevice[]> {
+    const router = this.config.router;
+    if (!router) return [];
+
+    try {
+      switch (router.type) {
+        case 'verizon':
+          return await this.fetchVerizonDevices(router);
+        case 'netgear':
+          return await this.fetchNetgearDevices(router);
+        case 'asus':
+          return await this.fetchAsusDevices(router);
+        case 'ubiquiti':
+          return await this.fetchUbiquitiDevices(router);
+        default:
+          return await this.fetchGenericDevices(router);
+      }
+    } catch (error) {
+      MollyLogger.warn('Failed to fetch router devices', 'wifi-csi', { error });
+      return [];
+    }
+  }
+
+  /**
+   * Fetch devices from Verizon 5G router
+   */
+  private async fetchVerizonDevices(
+    router: RouterConfig
+  ): Promise<ConnectedDevice[]> {
+    // Verizon routers typically use a REST API
+    // Common endpoints: /api/v1/network/devices, /cgi-bin/qcmap_web_cgi
+    const endpoints = [
+      '/api/v1/network/devices',
+      '/api/devices',
+      '/cgi-bin/devices.cgi',
+    ];
+
+    for (const endpoint of endpoints) {
+      try {
+        const url = `http://${router.ip}${router.apiEndpoint || endpoint}`;
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Basic ${Buffer.from(`${router.username}:${router.password}`).toString('base64')}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          return this.parseVerizonResponse(data);
+        }
+      } catch {
+        continue;
+      }
+    }
+
+    // Fallback to ARP table scan
+    return this.scanArpTable();
+  }
+
+  /**
+   * Parse Verizon router API response
+   */
+  private parseVerizonResponse(data: unknown): ConnectedDevice[] {
+    const devices: ConnectedDevice[] = [];
+    const now = Date.now();
+
+    // Handle various Verizon response formats
+    const deviceList = Array.isArray(data)
+      ? data
+      : (data as Record<string, unknown>)?.devices ||
+        (data as Record<string, unknown>)?.clients ||
+        [];
+
+    for (const d of deviceList as Array<Record<string, unknown>>) {
+      devices.push({
+        mac: (d.mac || d.macAddress || d.MAC || '').toString().toUpperCase(),
+        ip: (d.ip || d.ipAddress || d.IP || '').toString(),
+        hostname: (d.hostname || d.hostName || d.name || '').toString(),
+        name: (d.name || d.deviceName || d.hostname || '').toString(),
+        rssi:
+          typeof d.rssi === 'number'
+            ? d.rssi
+            : typeof d.signalStrength === 'number'
+              ? d.signalStrength
+              : undefined,
+        connection: this.parseConnectionType(
+          d.band || d.frequency || d.interface
+        ),
+        firstSeen: now,
+        lastSeen: now,
+        isKnown: false,
+        deviceType: this.classifyDeviceType(d.type || d.deviceType || d.name),
+        vendor: this.lookupMacVendor((d.mac || '').toString()),
+      });
+    }
+
+    return devices;
+  }
+
+  /**
+   * Fetch devices from Netgear router
+   */
+  private async fetchNetgearDevices(
+    router: RouterConfig
+  ): Promise<ConnectedDevice[]> {
+    // Netgear uses SOAP API
+    const soapBody = `<?xml version="1.0" encoding="utf-8"?>
+      <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+        <soap:Body>
+          <GetAttachDevice xmlns="urn:NETGEAR-ROUTER:service:DeviceInfo:1"/>
+        </soap:Body>
+      </soap:Envelope>`;
+
+    try {
+      const response = await fetch(`http://${router.ip}/soap/server_sa/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/xml',
+          SOAPAction: 'urn:NETGEAR-ROUTER:service:DeviceInfo:1#GetAttachDevice',
+          Authorization: `Basic ${Buffer.from(`${router.username}:${router.password}`).toString('base64')}`,
+        },
+        body: soapBody,
+      });
+
+      if (response.ok) {
+        const text = await response.text();
+        return this.parseNetgearSoap(text);
+      }
+    } catch {
+      // Fall through to ARP scan
+    }
+
+    return this.scanArpTable();
+  }
+
+  /**
+   * Parse Netgear SOAP response
+   */
+  private parseNetgearSoap(xml: string): ConnectedDevice[] {
+    const devices: ConnectedDevice[] = [];
+    const now = Date.now();
+
+    // Simple regex parsing for device entries
+    const deviceRegex = /<NewDeviceInfo>([^<]+)<\/NewDeviceInfo>/g;
+    let match;
+
+    while ((match = deviceRegex.exec(xml)) !== null) {
+      const parts = match[1].split('@');
+      if (parts.length >= 4) {
+        devices.push({
+          mac: parts[1]?.toUpperCase() || '',
+          ip: parts[0] || '',
+          name: parts[2] || '',
+          hostname: parts[2] || '',
+          connection: parts[3]?.includes('5G')
+            ? '5GHz'
+            : parts[3]?.includes('2.4')
+              ? '2.4GHz'
+              : 'unknown',
+          firstSeen: now,
+          lastSeen: now,
+          isKnown: false,
+        });
+      }
+    }
+
+    return devices;
+  }
+
+  /**
+   * Fetch devices from ASUS router
+   */
+  private async fetchAsusDevices(
+    router: RouterConfig
+  ): Promise<ConnectedDevice[]> {
+    try {
+      // ASUS uses their own API format
+      const response = await fetch(
+        `http://${router.ip}/appGet.cgi?hook=get_clientlist()`,
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(`${router.username}:${router.password}`).toString('base64')}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return this.parseAsusResponse(data);
+      }
+    } catch {
+      // Fall through
+    }
+
+    return this.scanArpTable();
+  }
+
+  /**
+   * Parse ASUS router response
+   */
+  private parseAsusResponse(data: unknown): ConnectedDevice[] {
+    const devices: ConnectedDevice[] = [];
+    const now = Date.now();
+    const clientList =
+      (data as Record<string, unknown>)?.get_clientlist || data;
+
+    if (typeof clientList === 'object' && clientList !== null) {
+      for (const [mac, info] of Object.entries(
+        clientList as Record<string, unknown>
+      )) {
+        if (mac.includes(':') && typeof info === 'object' && info !== null) {
+          const client = info as Record<string, unknown>;
+          devices.push({
+            mac: mac.toUpperCase(),
+            ip: (client.ip || '').toString(),
+            name: (client.name || client.nickName || '').toString(),
+            hostname: (client.name || '').toString(),
+            rssi: typeof client.rssi === 'number' ? client.rssi : undefined,
+            connection:
+              client.isWL === 1
+                ? client.curTx === '5G'
+                  ? '5GHz'
+                  : '2.4GHz'
+                : 'ethernet',
+            firstSeen: now,
+            lastSeen: now,
+            isKnown: false,
+          });
+        }
+      }
+    }
+
+    return devices;
+  }
+
+  /**
+   * Fetch devices from Ubiquiti UniFi controller
+   */
+  private async fetchUbiquitiDevices(
+    router: RouterConfig
+  ): Promise<ConnectedDevice[]> {
+    try {
+      // UniFi API login
+      await fetch(`https://${router.ip}:8443/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: router.username,
+          password: router.password,
+        }),
+      });
+
+      // Get clients
+      const response = await fetch(
+        `https://${router.ip}:8443/api/s/default/stat/sta`,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        return this.parseUbiquitiResponse(data);
+      }
+    } catch {
+      // Fall through
+    }
+
+    return this.scanArpTable();
+  }
+
+  /**
+   * Parse Ubiquiti UniFi response
+   */
+  private parseUbiquitiResponse(data: unknown): ConnectedDevice[] {
+    const devices: ConnectedDevice[] = [];
+    const now = Date.now();
+    const clients = (data as Record<string, unknown>)?.data || [];
+
+    for (const client of clients as Array<Record<string, unknown>>) {
+      devices.push({
+        mac: (client.mac || '').toString().toUpperCase(),
+        ip: (client.ip || '').toString(),
+        hostname: (client.hostname || '').toString(),
+        name: (client.name || client.hostname || '').toString(),
+        rssi: typeof client.rssi === 'number' ? client.rssi : undefined,
+        connection: client.is_wired
+          ? 'ethernet'
+          : client.channel && (client.channel as number) > 14
+            ? '5GHz'
+            : '2.4GHz',
+        firstSeen: now,
+        lastSeen: now,
+        isKnown: false,
+        vendor: (client.oui || '').toString(),
+      });
+    }
+
+    return devices;
+  }
+
+  /**
+   * Generic device fetch using common endpoints
+   */
+  private async fetchGenericDevices(
+    router: RouterConfig
+  ): Promise<ConnectedDevice[]> {
+    const endpoints = [
+      '/api/devices',
+      '/api/v1/clients',
+      '/cgi-bin/luci/admin/status/clients',
+      '/status/clients',
+    ];
+
+    for (const endpoint of endpoints) {
+      try {
+        const url = `http://${router.ip}${router.apiEndpoint || endpoint}`;
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Basic ${Buffer.from(`${router.username}:${router.password}`).toString('base64')}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          return this.parseVerizonResponse(data); // Generic parser
+        }
+      } catch {
+        continue;
+      }
+    }
+
+    return this.scanArpTable();
+  }
+
+  /**
+   * Fallback: Scan local ARP table for devices
+   */
+  private async scanArpTable(): Promise<ConnectedDevice[]> {
+    const devices: ConnectedDevice[] = [];
+    const now = Date.now();
+
+    try {
+      const { exec } = await import('child_process');
+      const { promisify } = await import('util');
+      const execAsync = promisify(exec);
+
+      // Works on Linux/Mac
+      const { stdout } = await execAsync(
+        'arp -a 2>/dev/null || ip neigh show 2>/dev/null'
+      );
+      const lines = stdout.split('\n');
+
+      for (const line of lines) {
+        // Parse ARP output: hostname (ip) at mac [type] on interface
+        const arpMatch = line.match(
+          /\(?([\d.]+)\)?\s+(?:at|lladdr)\s+([0-9a-fA-F:]+)/
+        );
+        if (arpMatch) {
+          devices.push({
+            mac: arpMatch[2].toUpperCase(),
+            ip: arpMatch[1],
+            connection: 'unknown',
+            firstSeen: now,
+            lastSeen: now,
+            isKnown: false,
+          });
+        }
+      }
+    } catch {
+      MollyLogger.debug('ARP scan unavailable', 'wifi-csi');
+    }
+
+    return devices;
+  }
+
+  /**
+   * Parse connection type from various router formats
+   */
+  private parseConnectionType(band: unknown): ConnectedDevice['connection'] {
+    const str = String(band || '').toLowerCase();
+    if (str.includes('5') || str.includes('5g')) return '5GHz';
+    if (str.includes('2.4') || str.includes('2g')) return '2.4GHz';
+    if (str.includes('eth') || str.includes('lan')) return 'ethernet';
+    return 'unknown';
+  }
+
+  /**
+   * Classify device type from name/type string
+   */
+  private classifyDeviceType(type: unknown): ConnectedDevice['deviceType'] {
+    const str = String(type || '').toLowerCase();
+    if (
+      str.includes('phone') ||
+      str.includes('iphone') ||
+      str.includes('android') ||
+      str.includes('galaxy')
+    )
+      return 'phone';
+    if (
+      str.includes('laptop') ||
+      str.includes('macbook') ||
+      str.includes('pc') ||
+      str.includes('computer') ||
+      str.includes('desktop')
+    )
+      return 'computer';
+    if (str.includes('ipad') || str.includes('tablet')) return 'tablet';
+    if (
+      str.includes('ring') ||
+      str.includes('nest') ||
+      str.includes('alexa') ||
+      str.includes('echo') ||
+      str.includes('smart')
+    )
+      return 'iot';
+    return 'unknown';
+  }
+
+  /**
+   * Lookup vendor from MAC address prefix (OUI)
+   */
+  private lookupMacVendor(mac: string): string | undefined {
+    // Common OUI prefixes
+    const oui: Record<string, string> = {
+      '00:1A:2B': 'Ayecom',
+      'AC:DE:48': 'Apple',
+      '00:17:F2': 'Apple',
+      '00:1C:B3': 'Apple',
+      '00:50:E4': 'Apple',
+      '3C:22:FB': 'Apple',
+      'F0:DB:F8': 'Apple',
+      '00:50:F2': 'Microsoft',
+      '00:15:5D': 'Microsoft',
+      'B4:2E:99': 'Samsung',
+      '00:21:19': 'Samsung',
+      '94:35:0A': 'Samsung',
+      '00:26:5A': 'Dell',
+      '00:14:22': 'Dell',
+      'B0:BE:76': 'TP-Link',
+      'F8:1A:67': 'TP-Link',
+      '00:0C:29': 'VMware',
+      '00:50:56': 'VMware',
+      '08:00:27': 'VirtualBox',
+      'DC:A6:32': 'Raspberry Pi',
+      'B8:27:EB': 'Raspberry Pi',
+      '00:1E:C2': 'Apple',
+      '00:03:93': 'Apple',
+      '44:2A:60': 'Google',
+      'F4:F5:D8': 'Google',
+      '30:FD:38': 'Google',
+    };
+
+    const prefix = mac.substring(0, 8).toUpperCase();
+    return oui[prefix];
+  }
+
+  /**
+   * Get all connected devices from router monitoring
+   */
+  getConnectedDevices(): ConnectedDevice[] {
+    return Array.from(this.connectedDevices.values());
+  }
+
+  /**
+   * Get unknown (unregistered) devices
+   */
+  getUnknownDevices(): ConnectedDevice[] {
+    return Array.from(this.connectedDevices.values()).filter((d) => !d.isKnown);
+  }
+
+  /**
+   * Register a device as known (won't trigger alerts)
+   */
+  registerKnownDevice(mac: string): void {
+    const normalized = mac.toUpperCase();
+    this.config.knownDevices = this.config.knownDevices || [];
+    if (!this.config.knownDevices.includes(normalized)) {
+      this.config.knownDevices.push(normalized);
+    }
+    const device = this.connectedDevices.get(normalized);
+    if (device) {
+      device.isKnown = true;
+    }
   }
 
   /**
