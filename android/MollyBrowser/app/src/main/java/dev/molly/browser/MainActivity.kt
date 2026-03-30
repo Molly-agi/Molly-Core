@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.webkit.CookieManager
@@ -23,7 +24,9 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -42,10 +45,28 @@ import android.Manifest
  * - File upload/download support
  * - OAuth login support
  * - Camera/microphone for video calls
+ * - Multi-tab support (up to 6 tabs)
  */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var webView: WebView
+    // Tab data class
+    data class Tab(
+        val id: Int,
+        val webView: WebView,
+        var title: String = "New Tab",
+        var url: String = "",
+        var tabButton: View? = null
+    )
+
+    // Tab management
+    private val tabs = mutableListOf<Tab>()
+    private var activeTabId = -1
+    private var nextTabId = 0
+    private val maxTabs = 6
+
+    private lateinit var webViewContainer: FrameLayout
+    private lateinit var tabContainer: LinearLayout
+    private lateinit var newTabButton: ImageButton
     private lateinit var urlInput: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var statusText: TextView
@@ -82,21 +103,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Initialize views
-        webView = findViewById(R.id.webView)
+        webViewContainer = findViewById(R.id.webViewContainer)
+        tabContainer = findViewById(R.id.tabContainer)
+        newTabButton = findViewById(R.id.newTabButton)
         urlInput = findViewById(R.id.urlInput)
         progressBar = findViewById(R.id.progressBar)
         statusText = findViewById(R.id.statusText)
         refreshButton = findViewById(R.id.refreshButton)
 
+        // Setup new tab button
+        newTabButton.setOnClickListener { createNewTab(defaultUrl) }
+
         // Optional buttons (may not exist in layout)
         try {
             homeButton = findViewById(R.id.homeButton)
-            homeButton.setOnClickListener { loadUrl(defaultUrl) }
+            homeButton.setOnClickListener { loadUrlInActiveTab(defaultUrl) }
         } catch (e: Exception) { /* Button not in layout */ }
 
         try {
             githubButton = findViewById(R.id.githubButton)
-            githubButton.setOnClickListener { loadUrl(githubUrl) }
+            githubButton.setOnClickListener { loadUrlInActiveTab(githubUrl) }
         } catch (e: Exception) { /* Button not in layout */ }
 
         // Request permissions
@@ -108,26 +134,148 @@ class MainActivity : AppCompatActivity() {
         // Start the connection keeper service
         startConnectionKeeperService()
 
-        // Setup WebView with full capabilities
-        setupWebView()
-
         // Setup URL input
         setupUrlInput()
 
         // Setup refresh button
-        refreshButton.setOnClickListener { webView.reload() }
-
-        // Enable third-party cookies for OAuth
-        CookieManager.getInstance().apply {
-            setAcceptCookie(true)
-            setAcceptThirdPartyCookies(webView, true)
+        refreshButton.setOnClickListener {
+            getActiveTab()?.webView?.reload()
         }
 
-        // Load initial URL (from intent or default)
+        // Enable third-party cookies for OAuth
+        CookieManager.getInstance().setAcceptCookie(true)
+
+        // Create first tab with initial URL
         val intentUrl = intent?.data?.toString()
         val urlToLoad = intentUrl ?: defaultUrl
-        urlInput.setText(urlToLoad)
-        webView.loadUrl(urlToLoad)
+        createNewTab(urlToLoad)
+    }
+
+    private fun createNewTab(url: String): Tab? {
+        if (tabs.size >= maxTabs) {
+            Toast.makeText(this, "Maximum $maxTabs tabs reached", Toast.LENGTH_SHORT).show()
+            return null
+        }
+
+        val tabId = nextTabId++
+        val webView = WebView(this).apply {
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+            visibility = View.GONE
+        }
+
+        setupWebView(webView, tabId)
+        webViewContainer.addView(webView)
+
+        val tab = Tab(
+            id = tabId,
+            webView = webView,
+            url = url
+        )
+        tabs.add(tab)
+
+        // Create tab button
+        createTabButton(tab)
+
+        // Switch to the new tab
+        switchToTab(tabId)
+
+        // Load URL
+        webView.loadUrl(url)
+
+        return tab
+    }
+
+    private fun createTabButton(tab: Tab) {
+        val tabButton = LayoutInflater.from(this).inflate(R.layout.tab_button, tabContainer, false)
+        val titleView = tabButton.findViewById<TextView>(R.id.tabTitle)
+        val closeButton = tabButton.findViewById<ImageButton>(R.id.closeTabButton)
+
+        titleView.text = tab.title
+
+        tabButton.setOnClickListener {
+            switchToTab(tab.id)
+        }
+
+        closeButton.setOnClickListener {
+            closeTab(tab.id)
+        }
+
+        tab.tabButton = tabButton
+        tabContainer.addView(tabButton)
+    }
+
+    private fun switchToTab(tabId: Int) {
+        // Hide current tab
+        getActiveTab()?.let { currentTab ->
+            currentTab.webView.visibility = View.GONE
+            currentTab.tabButton?.isSelected = false
+        }
+
+        // Show new tab
+        val newTab = tabs.find { it.id == tabId } ?: return
+        newTab.webView.visibility = View.VISIBLE
+        newTab.tabButton?.isSelected = true
+        activeTabId = tabId
+
+        // Update URL bar
+        urlInput.setText(newTab.url)
+
+        // Enable cookies for this webview
+        CookieManager.getInstance().setAcceptThirdPartyCookies(newTab.webView, true)
+
+        updateStatus("Connected", true)
+    }
+
+    private fun closeTab(tabId: Int) {
+        val tabIndex = tabs.indexOfFirst { it.id == tabId }
+        if (tabIndex == -1) return
+
+        val tab = tabs[tabIndex]
+
+        // Don't allow closing the last tab
+        if (tabs.size == 1) {
+            Toast.makeText(this, "Can't close the last tab", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Remove tab button from container
+        tab.tabButton?.let { tabContainer.removeView(it) }
+
+        // Remove webview from container
+        webViewContainer.removeView(tab.webView)
+        tab.webView.destroy()
+
+        // Remove from list
+        tabs.removeAt(tabIndex)
+
+        // If we closed the active tab, switch to another
+        if (activeTabId == tabId) {
+            val newActiveTab = tabs.getOrNull(tabIndex.coerceAtMost(tabs.size - 1))
+            newActiveTab?.let { switchToTab(it.id) }
+        }
+    }
+
+    private fun getActiveTab(): Tab? = tabs.find { it.id == activeTabId }
+
+    private fun loadUrlInActiveTab(url: String) {
+        getActiveTab()?.webView?.let { loadUrl(url, it) }
+    }
+
+    private fun updateTabTitle(tabId: Int, title: String) {
+        val tab = tabs.find { it.id == tabId } ?: return
+        tab.title = title.take(20)
+        tab.tabButton?.findViewById<TextView>(R.id.tabTitle)?.text = tab.title
+    }
+
+    private fun updateTabUrl(tabId: Int, url: String) {
+        val tab = tabs.find { it.id == tabId } ?: return
+        tab.url = url
+        if (tabId == activeTabId) {
+            urlInput.setText(url)
+        }
     }
 
     private fun requestPermissions() {
@@ -171,7 +319,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebView() {
+    private fun setupWebView(webView: WebView, tabId: Int) {
         webView.settings.apply {
             // Enable JavaScript - required for modern web apps
             javaScriptEnabled = true
@@ -202,7 +350,6 @@ class MainActivity : AppCompatActivity() {
             cacheMode = WebSettings.LOAD_DEFAULT
 
             // User agent - identify as Chrome on Android (not WebView)
-            // This helps with GitHub OAuth and other services
             userAgentString = userAgentString
                 .replace("; wv", "")
                 .replace("Version/4.0 ", "")
@@ -215,7 +362,7 @@ class MainActivity : AppCompatActivity() {
 
             // Allow opening windows (for OAuth popups)
             javaScriptCanOpenWindowsAutomatically = true
-            setSupportMultipleWindows(false)  // Handle in same WebView
+            setSupportMultipleWindows(false)
         }
 
         // Handle page loading and OAuth redirects
@@ -225,7 +372,7 @@ class MainActivity : AppCompatActivity() {
 
                 // Handle OAuth callbacks - keep in WebView
                 if (url.contains("callback") || url.contains("oauth") || url.contains("authorize")) {
-                    return false  // Load in WebView
+                    return false
                 }
 
                 // Handle external app links (tel:, mailto:, etc.)
@@ -238,25 +385,27 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                // Load all other URLs in WebView
                 return false
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                urlInput.setText(url)
-                injectKeepalive()
+                url?.let { updateTabUrl(tabId, it) }
+                injectKeepalive(webView)
             }
 
             override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
-                updateStatus("Error: $description", false)
+                if (tabId == activeTabId) {
+                    updateStatus("Error: $description", false)
+                }
             }
         }
 
         // Handle progress, file uploads, permissions
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                if (tabId != activeTabId) return
                 if (newProgress < 100) {
                     progressBar.visibility = View.VISIBLE
                     progressBar.progress = newProgress
@@ -268,10 +417,9 @@ class MainActivity : AppCompatActivity() {
 
             override fun onReceivedTitle(view: WebView?, title: String?) {
                 super.onReceivedTitle(view, title)
-                // Could update title bar here
+                title?.let { updateTabTitle(tabId, it) }
             }
 
-            // Handle file upload
             override fun onShowFileChooser(
                 webView: WebView?,
                 filePathCallback: ValueCallback<Array<Uri>>?,
@@ -285,7 +433,6 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
-            // Handle geolocation permission
             override fun onGeolocationPermissionsShowPrompt(
                 origin: String?,
                 callback: GeolocationPermissions.Callback?
@@ -293,7 +440,6 @@ class MainActivity : AppCompatActivity() {
                 callback?.invoke(origin, true, false)
             }
 
-            // Handle camera/microphone permission for video calls
             override fun onPermissionRequest(request: PermissionRequest?) {
                 request?.let {
                     val resources = it.resources
@@ -355,7 +501,7 @@ class MainActivity : AppCompatActivity() {
         urlInput.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_GO ||
                 (event?.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
-                loadUrl(urlInput.text.toString())
+                getActiveTab()?.webView?.let { loadUrl(urlInput.text.toString(), it) }
                 true
             } else {
                 false
@@ -363,7 +509,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadUrl(url: String) {
+    private fun loadUrl(url: String, webView: WebView) {
         var finalUrl = url.trim()
 
         // Check for bookmark shortcuts
@@ -380,20 +526,17 @@ class MainActivity : AppCompatActivity() {
         webView.loadUrl(finalUrl)
     }
 
-    private fun injectKeepalive() {
-        // Inject JavaScript that keeps WebSocket connections alive
+    private fun injectKeepalive(webView: WebView) {
         val script = """
             (function() {
                 if (window.__mollyKeepalive) return;
                 window.__mollyKeepalive = true;
 
-                // Ping every 30 seconds
                 setInterval(function() {
                     window.postMessage({ type: 'molly-keepalive', timestamp: Date.now() }, '*');
                     console.log('[MollyBrowser] Keepalive ping');
                 }, 30000);
 
-                // Listen for online/offline events
                 window.addEventListener('online', function() {
                     console.log('[MollyBrowser] Network restored');
                     window.postMessage({ type: 'molly-online' }, '*');
@@ -421,8 +564,9 @@ class MainActivity : AppCompatActivity() {
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
+        val activeWebView = getActiveTab()?.webView
+        if (activeWebView != null && activeWebView.canGoBack()) {
+            activeWebView.goBack()
         } else {
             super.onBackPressed()
         }
@@ -431,14 +575,20 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.data?.toString()?.let { url ->
-            urlInput.setText(url)
-            webView.loadUrl(url)
+            // Open in new tab if we have room, otherwise load in current tab
+            if (tabs.size < maxTabs) {
+                createNewTab(url)
+            } else {
+                loadUrlInActiveTab(url)
+            }
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Don't stop the service - keep running in background
+        // Clean up all WebViews
+        tabs.forEach { it.webView.destroy() }
+        tabs.clear()
     }
 
     override fun onRequestPermissionsResult(
