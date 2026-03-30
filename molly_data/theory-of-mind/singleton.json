@@ -7,11 +7,11 @@
         [
           "molly",
           {
-            "id": "tom_1773986914646_b7y3zl",
+            "id": "tom_1774868306012_bxnr8e",
             "topic": "molly",
             "description": "Eric created Molly and understands her architecture",
             "knowledgeLevel": "expert",
-            "lastUpdated": 1773986914646,
+            "lastUpdated": 1774868306012,
             "source": "demonstrated",
             "confidence": 0.95
           }
@@ -19,11 +19,11 @@
         [
           "typescript",
           {
-            "id": "tom_1773986914646_mq9mvu",
+            "id": "tom_1774868306012_pqjo5y",
             "topic": "typescript",
             "description": "Eric is proficient in TypeScript",
             "knowledgeLevel": "expert",
-            "lastUpdated": 1773986914646,
+            "lastUpdated": 1774868306012,
             "source": "demonstrated",
             "confidence": 0.9
           }
@@ -31,11 +31,11 @@
         [
           "next.js",
           {
-            "id": "tom_1773986914646_4dwuev",
+            "id": "tom_1774868306012_2vsqpu",
             "topic": "next.js",
             "description": "Eric uses Next.js for web development",
             "knowledgeLevel": "understands",
-            "lastUpdated": 1773986914646,
+            "lastUpdated": 1774868306012,
             "source": "demonstrated",
             "confidence": 0.85
           }
@@ -43,11 +43,11 @@
         [
           "ai/llm",
           {
-            "id": "tom_1773986914646_4ch21p",
+            "id": "tom_1774868306012_pvgc5c",
             "topic": "ai/llm",
             "description": "Eric understands AI/LLM concepts",
             "knowledgeLevel": "expert",
-            "lastUpdated": 1773986914646,
+            "lastUpdated": 1774868306012,
             "source": "demonstrated",
             "confidence": 0.9
           }
@@ -55,11 +55,11 @@
         [
           "firebase",
           {
-            "id": "tom_1773986914646_z2n418",
+            "id": "tom_1774868306012_gp9j93",
             "topic": "firebase",
             "description": "Eric uses Firebase for backend",
             "knowledgeLevel": "understands",
-            "lastUpdated": 1773986914646,
+            "lastUpdated": 1774868306012,
             "source": "demonstrated",
             "confidence": 0.8
           }
@@ -71,50 +71,51 @@
       "emotionalIntensity": 0.5,
       "preferences": [
         {
-          "id": "tom_1773986914646_2310ni",
+          "id": "tom_1774868306012_v26735",
           "category": "communication",
           "key": "style",
           "value": "brief",
           "strength": 0.8,
           "observedCount": 1,
-          "lastObserved": 1773986914646
+          "lastObserved": 1774868306012
         },
         {
-          "id": "tom_1773986914646_hm5797",
+          "id": "tom_1774868306012_83lxro",
           "category": "workflow",
           "key": "commits",
           "value": "atomic",
           "strength": 0.7,
           "observedCount": 1,
-          "lastObserved": 1773986914646
+          "lastObserved": 1774868306012
         },
         {
-          "id": "tom_1773986914646_egqje5",
+          "id": "tom_1774868306012_dhm76o",
           "category": "technical",
           "key": "error_handling",
           "value": "explicit",
           "strength": 0.7,
           "observedCount": 1,
-          "lastObserved": 1773986914646
+          "lastObserved": 1774868306012
         },
         {
-          "id": "tom_1773986914646_rgf566",
+          "id": "tom_1774868306012_gg1302",
           "category": "interaction",
           "key": "confirmation",
           "value": "minimal",
           "strength": 0.75,
           "observedCount": 1,
-          "lastObserved": 1773986914646
+          "lastObserved": 1774868306012
         }
       ],
-      "communicationStyle": "brief",
-      "lastInteraction": 1773986914646,
+      "communicationStyle": "conversational",
+      "emotionalPatterns": [],
+      "lastInteraction": 1774868306011,
       "interactionCount": 0,
-      "modelConfidence": 0.5,
-      "lastUpdated": 1773986914646
+      "modelConfidence": 0.35000000000000003,
+      "lastUpdated": 1774868306012
     }
   ],
   "_id": "singleton",
-  "_updatedAt": "2026-03-20T06:08:39.647Z",
+  "_updatedAt": "2026-03-30T10:58:31.013Z",
   "_createdAt": "2026-03-20T06:08:39.647Z"
 }

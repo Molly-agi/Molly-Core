@@ -77,3 +77,10 @@ molly_data/
 test-results/
 playwright-report/
 playwright/.cache/
+
+# Android build artifacts
+android/MollyBrowser/.gradle/
+android/MollyBrowser/app/build/
+android/MollyBrowser/build/
+*.gradle/
+**/build/

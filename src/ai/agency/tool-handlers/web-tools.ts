@@ -7,8 +7,7 @@
 import type { ToolHandler } from './types';
 
 /**
- * Search the web using Brave Search
- * (Switched from DuckDuckGo which now requires captcha for server IPs)
+ * Search the web using DuckDuckGo
  */
 export const webSearch: ToolHandler = async (params) => {
   const query = params.query as string;
@@ -17,21 +16,24 @@ export const webSearch: ToolHandler = async (params) => {
   }
   const maxResults = Math.min((params.maxResults as number) || 8, 20);
   try {
-    const searchUrl =
-      'https://search.brave.com/search?q=' +
-      encodeURIComponent(query) +
-      '&source=web';
+    // DuckDuckGo HTML search requires POST, not GET
+    const searchUrl = 'https://html.duckduckgo.com/html/';
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15_000);
     const response = await fetch(searchUrl, {
+      method: 'POST',
       signal: controller.signal,
       headers: {
+        // Use a browser-like User-Agent to avoid being blocked
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         Accept:
           'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.5',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Referer: 'https://duckduckgo.com/',
       },
+      body: `q=${encodeURIComponent(query)}`,
     });
     clearTimeout(timeout);
     if (!response.ok) {
@@ -44,34 +46,16 @@ export const webSearch: ToolHandler = async (params) => {
     const cheerio = await import('cheerio');
     const $ = cheerio.load(html);
     const results: { title: string; url: string; snippet: string }[] = [];
-
-    // Brave uses data-type="web" for search results
-    $('[data-type="web"]').each((_i, el) => {
+    $('.result').each((_i, el) => {
       if (results.length >= maxResults) return;
       const $el = $(el);
-
-      // Extract title from various possible locations
-      const titleEl = $el.find('a[data-result]').first();
-      const title =
-        titleEl.text().trim() ||
-        $el.find('.snippet-title').text().trim() ||
-        $el.find('a').first().text().trim();
-
-      // Extract URL
-      const href =
-        titleEl.attr('href') || $el.find('a').first().attr('href') || '';
-
-      // Extract snippet from description
-      const snippet =
-        $el.find('.snippet-description').text().trim() ||
-        $el.find('[data-text-snippet]').text().trim();
-
-      // Filter out internal Brave links
-      if (title && href && !href.includes('brave.com')) {
+      const title = $el.find('.result__title .result__a').text().trim();
+      const href = $el.find('.result__title .result__a').attr('href') || '';
+      const snippet = $el.find('.result__snippet').text().trim();
+      if (title && href) {
         results.push({ title, url: href, snippet });
       }
     });
-
     if (results.length === 0) {
       return {
         success: true,

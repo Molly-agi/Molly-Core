@@ -30,7 +30,6 @@ export { planningToolHandlers } from './planning-tools';
 export { memoryToolHandlers } from './memory-tools';
 export { safetyToolHandlers } from './safety-tools';
 export { coreToolHandlers } from './core-tools';
-export { sensingToolHandlers } from './sensing-tools';
 
 // Import all handlers
 import { systemToolHandlers } from './system-tools';
@@ -51,7 +50,6 @@ import { planningToolHandlers } from './planning-tools';
 import { memoryToolHandlers } from './memory-tools';
 import { safetyToolHandlers } from './safety-tools';
 import { coreToolHandlers } from './core-tools';
-import { sensingToolHandlers } from './sensing-tools';
 import type { ToolHandler } from './types';
 
 /**
@@ -77,7 +75,6 @@ export const modularToolHandlers: Record<string, ToolHandler> = {
   ...memoryToolHandlers,
   ...safetyToolHandlers,
   ...coreToolHandlers,
-  ...sensingToolHandlers,
 };
 
 /**
