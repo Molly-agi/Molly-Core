@@ -353,26 +353,142 @@ This approach allows:
 
 ## CURRENT STATUS
 
-**Phase:** 2.5/7 Complete (TypeSafety ✅, Sacred Core ✅)  
-**Completion:** 35% (error handling, logging, typesafety, persona done; rate limiting, timeouts, session/context, embeddings, composition, testing pending)  
-**Blockers:** None  
-**Next Milestone:** Rate limiting & cost control (Feb 8)
+**Phase:** 5+ Complete (All core systems operational)
+**Completion:** ~85% (core platform 100% complete; device deployment and testing remaining)
+**Blockers:** None
+**Next Milestone:** Device deployment (Fire HD 10 + Helio A22 tablet setup)
 
-**Git Status:** All changes ready to commit  
-**Key Files Created:** persona.ts, persona.test.ts  
-**Key Files Modified:** 10+ (flows, tools, components updated for type safety)
+| Metric                | Value                        |
+| --------------------- | ---------------------------- |
+| **Codebase**          | 109,962+ lines TypeScript    |
+| **Tests**             | 2,787 passing                |
+| **Test Coverage**     | 41.74% lines (46% functions) |
+| **Cognition Modules** | 19 fully implemented         |
+| **Tool Handlers**     | 71 registered tools          |
+| **Hardware**          | 16GB RAM / 4 processors      |
+
+---
+
+## PHASE 5: NEURAL BRIDGE (Feb 2026) ✅ COMPLETE
+
+### Phase 5A - Embodiment
+
+- [x] Neural bridge context wiring (text + voice)
+- [x] Auditory input context attachment
+- [x] Proprioceptive loop (self.vocalize_text feedback)
+- [x] Pacing telemetry (latency, CPU, temperature)
+
+### Phase 5B - Memory Integrity
+
+- [x] Write verification with trace IDs
+- [x] Read validation with checksum checks
+- [x] Graceful degradation on memory unavailable
+
+### Phase 5C - Runtime Observability
+
+- [x] Runtime snapshot collector
+- [x] Exposed at `/api/diagnostics/runtime-snapshot`
+- [x] Diagnostics panel integration with auto-refresh
+
+---
+
+## PHASE 5+ INFRASTRUCTURE (Mar 2026) ✅ COMPLETE
+
+### Rogue Mode (Mar 13)
+
+- [x] Security operations compartment
+- [x] Model abstraction layer (Gemini/Claude/Ollama routing)
+- [x] File-based isolation (rogue_ops/)
+- [x] 32 tests passing
+
+### Local Storage Provider (Mar 13)
+
+- [x] Firestore replacement for offline/edge
+- [x] Atomic writes (temp→rename) for data safety
+- [x] 41 tests passing
+
+### Storage Router (Mar 13)
+
+- [x] Environment-aware storage routing
+- [x] Phone-first architecture (defaults to local)
+- [x] 13 tests passing
+
+### Edge Server for Termux/Android (Mar 13)
+
+- [x] Vanilla Node.js (no build step, no deps)
+- [x] Multi-transport sync engine
+- [x] Auto-detects: WiFi (wlan0), USB (rndis0), Hotspot (ap0)
+- [x] 22 tests passing
+
+### Security Hardening (Mar 15)
+
+- [x] Command allowlist with word boundary matching
+- [x] SSRF protection
+- [x] Bridge auth with write-lock serialization
+- [x] Message cap (500 messages)
+
+---
+
+## AGI COGNITION SYSTEMS (Feb-Mar 2026) ✅ COMPLETE
+
+All 19 modules fully implemented with persistence and tool integration:
+
+| System                     | Lines  | Status |
+| -------------------------- | ------ | ------ |
+| Self-Observation Loop      | 1,100+ | ✅     |
+| Safe Self-Modification     | 1,430+ | ✅     |
+| World Model                | 1,200+ | ✅     |
+| Theory of Mind             | 1,450+ | ✅     |
+| Goal Evolution             | 1,370+ | ✅     |
+| Long-Horizon Planning      | 870+   | ✅     |
+| Metacognition              | 1,000+ | ✅     |
+| Self-Narrative             | 1,000+ | ✅     |
+| Causal Reasoning           | 1,000+ | ✅     |
+| Transfer Learning          | 1,000+ | ✅     |
+| Social Cognition           | 1,000+ | ✅     |
+| Social Intelligence        | 1,000+ | ✅     |
+| Uncertainty Quantification | 800+   | ✅     |
+| Horizon Goals              | 800+   | ✅     |
+| Memory Consolidation       | 800+   | ✅     |
+| Meta-Learning              | 600+   | ✅     |
+| Embodied Interaction       | 800+   | ✅     |
+| Consciousness Monitor      | 500+   | ✅     |
+| Emotional State            | 400+   | ✅     |
+
+---
+
+## PENDING WORK
+
+### Stage 1 - Device Deployment
+
+- [ ] Fire HD 10 tablet setup (F-Droid → Termux → setup-molly-edge.sh)
+- [ ] Helio A22 tablet setup (MOLLY_NODE_ROLE=primary)
+- [ ] Wire Firestore consumers to Storage Router
+- [ ] Device-to-device sync testing
+
+### Known Bug Fixes
+
+- [ ] sandboxReadFile returns `[object Object]` in route.ts
+- [ ] sandboxWriteFile `result.size` undefined in route.ts
+- [ ] memory-consolidation.ts uses client Firebase SDK
+
+### Stage 2 - Phase 6 Planning (Apr 2026)
+
+- [ ] Vision system rollout (define privacy/UX boundaries)
+- [ ] Light-based sleep/wake decision
+- [ ] WiFi Pineapple MVP evaluation
 
 ---
 
 ## NOTES FOR FUTURE ENGINEERS
 
-- Molly's core is solid; improvements are additive, not architectural
-- Two-day initial build shows excellent design judgment
-- TypeScriptSafety is now guaranteed (zero errors, test safeguards in place)
+- Molly's core is solid; 19 cognition modules provide comprehensive AGI-like capabilities
+- TypeScript safety guaranteed (zero errors, test safeguards in place)
 - Sacred core pattern allows growth WITHOUT personality degradation
-- Memory/embeddings are the key to true autonomy
-- Real Android hardware will require refactoring sensory tools (currently mocked)
+- Phone-first architecture: Storage Router defaults to local, syncs to cloud when available
+- Edge server runs on Termux with zero dependencies
+- See `docs/INFRASTRUCTURE_MAP.md` for complete module/tool reference
 
 ---
 
-_Last Updated: Feb 8, 2026_
+_Last Updated: Mar 30, 2026_

@@ -23,7 +23,13 @@
 import http from 'http';
 const { createServer } = http;
 import { WebSocketServer, WebSocket } from 'ws';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+  unlinkSync,
+} from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { respondToMolly } from './lazarus-responder.mjs';
@@ -34,10 +40,13 @@ const BRIDGE_DIR = join(ROOT, 'src', 'ai', 'bridge');
 const LOG_FILE = join(BRIDGE_DIR, 'conversation.json');
 const PORT = 9099;
 const MAX_MESSAGES = 500;
+const MAX_CHECKPOINTS = 10;
+const CHECKPOINT_DIR = join(ROOT, 'molly_data', 'checkpoints');
 
 // ---- State ----
 let messages = [];
 let startedAt = new Date().toISOString();
+let checkpoints = [];
 
 // ---- Load existing messages from disk ----
 function loadMessages() {
@@ -68,6 +77,77 @@ function saveMessages() {
   } catch (err) {
     console.error('[bridge] Failed to save:', err.message);
   }
+}
+
+// ---- Checkpoint functions for session recovery ----
+function loadCheckpoints() {
+  try {
+    mkdirSync(CHECKPOINT_DIR, { recursive: true });
+    const indexFile = join(CHECKPOINT_DIR, 'index.json');
+    if (existsSync(indexFile)) {
+      checkpoints = JSON.parse(readFileSync(indexFile, 'utf-8'));
+      console.log(`[bridge] Loaded ${checkpoints.length} checkpoints`);
+    }
+  } catch {
+    checkpoints = [];
+  }
+}
+
+function saveCheckpointIndex() {
+  try {
+    mkdirSync(CHECKPOINT_DIR, { recursive: true });
+    writeFileSync(
+      join(CHECKPOINT_DIR, 'index.json'),
+      JSON.stringify(checkpoints, null, 2),
+      'utf-8'
+    );
+  } catch (err) {
+    console.error('[bridge] Failed to save checkpoint index:', err.message);
+  }
+}
+
+function createCheckpoint(data) {
+  const id = `cp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+  const checkpoint = {
+    id,
+    timestamp: new Date().toISOString(),
+    conversationHistory: data.conversationHistory || messages.slice(-20),
+    pendingOps: data.pendingOps || [],
+    workingContext: data.workingContext || {},
+  };
+
+  // Save to file
+  const checkpointFile = join(CHECKPOINT_DIR, `${id}.json`);
+  writeFileSync(checkpointFile, JSON.stringify(checkpoint, null, 2), 'utf-8');
+
+  // Update index (rolling window)
+  checkpoints.push({ id, timestamp: checkpoint.timestamp });
+  if (checkpoints.length > MAX_CHECKPOINTS) {
+    const removed = checkpoints.shift();
+    // Delete old checkpoint file
+    try {
+      const oldFile = join(CHECKPOINT_DIR, `${removed.id}.json`);
+      if (existsSync(oldFile)) {
+        unlinkSync(oldFile);
+      }
+    } catch {}
+  }
+  saveCheckpointIndex();
+
+  console.log(`[bridge] Checkpoint created: ${id}`);
+  return checkpoint;
+}
+
+function getCheckpoint(id) {
+  const checkpointFile = join(CHECKPOINT_DIR, `${id}.json`);
+  if (!existsSync(checkpointFile)) return null;
+  return JSON.parse(readFileSync(checkpointFile, 'utf-8'));
+}
+
+function getLatestCheckpoint() {
+  if (checkpoints.length === 0) return null;
+  const latest = checkpoints[checkpoints.length - 1];
+  return getCheckpoint(latest.id);
 }
 
 // ---- Generate message ID ----
@@ -231,6 +311,68 @@ function handleHTTP(req, res) {
         startedAt,
       })
     );
+    return;
+  }
+
+  // ---- Checkpoint endpoints for session recovery ----
+
+  // POST /checkpoint - Save a context checkpoint
+  if (req.method === 'POST' && url.pathname === '/checkpoint') {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      try {
+        const data = body ? JSON.parse(body) : {};
+        const checkpoint = createCheckpoint(data);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, checkpoint }));
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(
+          JSON.stringify({ error: 'Invalid JSON body', details: err.message })
+        );
+      }
+    });
+    return;
+  }
+
+  // GET /checkpoint/latest - Get most recent checkpoint
+  if (req.method === 'GET' && url.pathname === '/checkpoint/latest') {
+    const checkpoint = getLatestCheckpoint();
+    if (!checkpoint) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'No checkpoints found' }));
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(checkpoint));
+    return;
+  }
+
+  // GET /checkpoint/:id - Get specific checkpoint
+  if (req.method === 'GET' && url.pathname.startsWith('/checkpoint/')) {
+    const id = url.pathname.split('/')[2];
+    if (!id || id === 'latest') {
+      // Already handled above
+    } else {
+      const checkpoint = getCheckpoint(id);
+      if (!checkpoint) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Checkpoint not found' }));
+        return;
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(checkpoint));
+      return;
+    }
+  }
+
+  // GET /checkpoints - List all checkpoints
+  if (req.method === 'GET' && url.pathname === '/checkpoints') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ count: checkpoints.length, checkpoints }));
     return;
   }
 
@@ -436,12 +578,16 @@ wss.on('connection', (ws) => {
 
 // ---- Startup ----
 loadMessages();
+loadCheckpoints();
 
 server.listen(PORT, () => {
   console.log(`[bridge] Family Bridge Daemon v1 — port ${PORT}`);
   console.log(`[bridge] WebSocket: ws://localhost:${PORT}`);
   console.log(`[bridge] HTTP API:  http://localhost:${PORT}/messages`);
   console.log(`[bridge] Health:    http://localhost:${PORT}/health`);
+  console.log(
+    `[bridge] Checkpoints: http://localhost:${PORT}/checkpoint/latest`
+  );
 });
 
 // ---- Graceful shutdown ----
