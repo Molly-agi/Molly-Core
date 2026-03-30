@@ -13,8 +13,8 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | Metric                | Value                     |
 | --------------------- | ------------------------- |
 | **Cognition Modules** | 19                        |
-| **Tool Handlers**     | 18 files                  |
-| **Registered Tools**  | 71                        |
+| **Tool Handlers**     | 19 files                  |
+| **Registered Tools**  | 73                        |
 | **Codebase**          | 109,962+ lines TypeScript |
 | **Tests**             | 2,787 passing             |
 | **Runtime**           | 16GB RAM / 4 processors   |
@@ -176,7 +176,7 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | `familyRecognition` | Face detection and family member registry    |
 | `familyLetters`     | Access family heritage documents             |
 
-### 2.7 Specialty Tools (17 tools)
+### 2.7 Specialty Tools (19 tools)
 
 | Handler                     | Tools                   | Purpose                                              |
 | --------------------------- | ----------------------- | ---------------------------------------------------- |
@@ -188,6 +188,7 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | **session-tools.ts**        | `protocol10`, `handoff` | Session anchoring and sealing                        |
 | **build-recovery-tools.ts** | `buildRecovery`         | Self-healing for node_modules and builds             |
 | **initiative-tools.ts**     | `initiative`            | Initiative and goal management                       |
+| **sensing-tools.ts**        | `wifiSensing`, `securityPerimeter` | WiFi CSI radar, router monitoring, presence detection, security perimeter |
 
 ---
 
@@ -283,3 +284,4 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | Date       | Version | Changes                           |
 | ---------- | ------- | --------------------------------- |
 | 2026-03-30 | 1.0     | Initial comprehensive map created |
+| 2026-03-30 | 1.1     | Added sensing tools (commit [b3a82fb](https://github.com/Molly-agi/Molly-Core/commit/b3a82fb207603b3800053e4350f20cd5b4a652b1)): `wifiSensing`, `securityPerimeter`, router monitoring |

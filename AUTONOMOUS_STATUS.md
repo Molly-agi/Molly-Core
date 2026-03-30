@@ -1,7 +1,7 @@
 # AUTONOMOUS STATUS - ACTIVE TODOS & IMPLEMENTATION STAGES
 
 **Last Updated:** 2026-03-30
-**Current State:** Core platform 100% complete with 19 cognition modules and 71 tools
+**Current State:** Core platform 100% complete with 19 cognition modules and 73 tools
 **Purpose:** Live, actionable list of what is still worth implementing
 **Reference:** See `docs/INFRASTRUCTURE_MAP.md` for complete system inventory
 
@@ -21,6 +21,7 @@
 - [x] Multi-Transport Sync Engine — Mar 13, 2026
 - [x] Security hardening (command allowlist, SSRF protection, bridge auth) — Mar 15, 2026
 - [x] Infrastructure map and roadmap documentation — Mar 30, 2026
+- [x] WiFi CSI sensing + router monitoring integration (`wifiSensing`, `securityPerimeter`) — Mar 30, 2026
 
 ---
 
