@@ -9,9 +9,11 @@
  * 3. Returns safe stubs/mocks for client/edge environments
  *
  * This one file prevents all firebase-admin bundler issues.
+ *
+ * DATABASE: Uses the default Firestore database. Named databases require
+ * firebase-admin v11+. To use a named database, upgrade and pass the
+ * database ID to getFirestore(app, databaseId).
  */
-
-// const MOLLY_DATABASE_ID = 'mollydb';
 
 // ── Environment Detection ───────────────────────────────────────
 
@@ -43,16 +45,16 @@ export function isAdminConfigured(): boolean {
   );
   const hasSplitServiceAccount = Boolean(
     process.env.FIREBASE_PROJECT_ID &&
-      process.env.FIREBASE_CLIENT_EMAIL &&
-      process.env.FIREBASE_PRIVATE_KEY
+    process.env.FIREBASE_CLIENT_EMAIL &&
+    process.env.FIREBASE_PRIVATE_KEY
   );
 
   return Boolean(
     hasServiceAccountJson ||
-      hasSplitServiceAccount ||
-      process.env.GOOGLE_CLOUD_PROJECT ||
-      process.env.GCLOUD_PROJECT ||
-      process.env.FIREBASE_PROJECT_ID
+    hasSplitServiceAccount ||
+    process.env.GOOGLE_CLOUD_PROJECT ||
+    process.env.GCLOUD_PROJECT ||
+    process.env.FIREBASE_PROJECT_ID
   );
 }
 
@@ -121,25 +123,26 @@ async function ensureInitialized(): Promise<boolean> {
       'return import(m)'
     )(moduleName) as Promise<typeof import('firebase-admin')>);
 
+    let app;
     if (adminModule.apps.length === 0) {
       const serviceAccount = getServiceAccount();
 
       if (serviceAccount) {
-        const app = adminModule.initializeApp({
+        app = adminModule.initializeApp({
           credential: adminModule.credential.cert(serviceAccount),
         });
-        firestoreInstance = adminModule.firestore(app);
-        firestoreInstance.settings({ preferRest: true });
       } else {
-        const app = adminModule.initializeApp({
+        app = adminModule.initializeApp({
           credential: adminModule.credential.applicationDefault(),
         });
-        firestoreInstance = adminModule.firestore(app);
-        firestoreInstance.settings({ preferRest: true });
       }
     } else {
-      firestoreInstance = adminModule.firestore();
+      app = adminModule.app();
     }
+
+    // Get the default Firestore instance
+    firestoreInstance = adminModule.firestore(app);
+    firestoreInstance.settings({ preferRest: true });
 
     initialized = true;
     return true;

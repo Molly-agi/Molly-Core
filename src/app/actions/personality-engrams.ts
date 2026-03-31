@@ -1,7 +1,6 @@
 'use server';
 
-import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
-import { initializeFirebaseServer } from '@/firebase/server';
+import { getAdminFirestoreAsync } from '@/firebase/admin';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type {
   PersonalityModulation,
@@ -13,10 +12,6 @@ import {
 } from '@/ai/memory/engram-crypto';
 
 // ============================================================================
-// ENCRYPTION UTILITIES FOR PERSONALITY DATA
-// ============================================================================
-
-// ============================================================================
 // PERSONALITY STATE STORAGE STRUCTURE
 // ============================================================================
 
@@ -25,9 +20,22 @@ interface EncryptedPersonalityRecord {
   encrypted: string;
   iv: string;
   authTag: string;
-  timestamp: Timestamp;
+  timestamp: FirebaseFirestore.Timestamp | Date | string;
   version: number;
   lastModifiedBy: string;
+}
+
+// Helper to convert various timestamp formats to Date
+function toDate(
+  timestamp: FirebaseFirestore.Timestamp | Date | string | undefined
+): Date | undefined {
+  if (!timestamp) return undefined;
+  if (timestamp instanceof Date) return timestamp;
+  if (typeof timestamp === 'string') return new Date(timestamp);
+  if (typeof timestamp === 'object' && 'toDate' in timestamp) {
+    return timestamp.toDate();
+  }
+  return undefined;
 }
 
 // ============================================================================
@@ -48,17 +56,24 @@ export async function getPersonalityState(
       traceId,
     });
 
-    const { firestore } = initializeFirebaseServer();
-    const docRef = doc(
-      firestore,
-      'users',
-      userId,
-      'personalityState',
-      'current'
-    );
-    const docSnap = await getDoc(docRef);
+    const db = await getAdminFirestoreAsync();
+    if (!db) {
+      MollyLogger.warn(
+        'Firebase Admin not configured, personality state unavailable',
+        'getPersonalityState',
+        { userId }
+      );
+      return { personality: null };
+    }
 
-    if (!docSnap.exists()) {
+    const docRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('personalityState')
+      .doc('current');
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
       MollyLogger.warn(
         'No personality state found for user',
         'getPersonalityState',
@@ -89,7 +104,7 @@ export async function getPersonalityState(
 
         return {
           personality,
-          timestamp: record.timestamp?.toDate(),
+          timestamp: toDate(record.timestamp),
         };
       } catch (error) {
         MollyLogger.error(
@@ -132,7 +147,10 @@ export async function setPersonalityState(
       traceId,
     });
 
-    const { firestore } = initializeFirebaseServer();
+    const db = await getAdminFirestoreAsync();
+    if (!db) {
+      throw new Error('Firebase Admin not configured');
+    }
 
     // Encrypt the personality data
     const personalityJson = JSON.stringify(personality);
@@ -142,37 +160,35 @@ export async function setPersonalityState(
       password
     );
 
-    const docRef = doc(
-      firestore,
-      'users',
-      userId,
-      'personalityState',
-      'current'
-    );
-    const timestamp = Timestamp.now();
+    const docRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('personalityState')
+      .doc('current');
+    const now = new Date();
 
     const record: EncryptedPersonalityRecord = {
       userId,
       encrypted,
       iv,
       authTag,
-      timestamp,
+      timestamp: now.toISOString(),
       version: 1,
       lastModifiedBy: source,
     };
 
-    await setDoc(docRef, record);
+    await docRef.set(record);
 
     // Log engram of this personality update
     await logPersonalityEngram(userId, password, {
       id: `personality-update-${Date.now()}`,
       content: `Personality state updated via ${source}`,
-      timestamp: new Date(),
+      timestamp: now,
       emotionalValence: 0.5,
       arousal: 0.5,
       importance: 0.7,
       accessCount: 1,
-      lastAccessed: new Date(),
+      lastAccessed: now,
       consolidationState: 'consolidating' as const,
       contextTags: ['personality-update', source],
       relatedEngrams: [],
@@ -187,7 +203,7 @@ export async function setPersonalityState(
 
     return {
       success: true,
-      timestamp: timestamp.toDate(),
+      timestamp: now,
     };
   } catch (error) {
     MollyLogger.error(
@@ -268,7 +284,10 @@ export async function addManualEngram(
       contentLength: engram.content?.length,
     });
 
-    const { firestore } = initializeFirebaseServer();
+    const db = await getAdminFirestoreAsync();
+    if (!db) {
+      throw new Error('Firebase Admin not configured');
+    }
 
     // Get current personality context if requested
     let personalityContext: PersonalityModulation | undefined;
@@ -305,13 +324,17 @@ export async function addManualEngram(
     );
 
     // Store in Firestore
-    const docRef = doc(firestore, 'users', userId, 'engrams', engramId);
+    const docRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('engrams')
+      .doc(engramId);
 
-    await setDoc(docRef, {
+    await docRef.set({
       encrypted,
       iv,
       authTag,
-      timestamp: Timestamp.now(),
+      timestamp: now.toISOString(),
       contentPreview: engram.content?.substring(0, 100) || '',
       importance: fullEngram.importance,
       emotionalValence: fullEngram.emotionalValence,
@@ -348,7 +371,9 @@ async function logPersonalityEngram(
   engram: MemoryEngram
 ): Promise<void> {
   try {
-    const { firestore } = initializeFirebaseServer();
+    const db = await getAdminFirestoreAsync();
+    if (!db) return;
+
     const engramId = `personality-log-${Date.now()}`;
 
     const engramJson = JSON.stringify(engram);
@@ -358,13 +383,17 @@ async function logPersonalityEngram(
       password
     );
 
-    const docRef = doc(firestore, 'users', userId, 'personalityLogs', engramId);
+    const docRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('personalityLogs')
+      .doc(engramId);
 
-    await setDoc(docRef, {
+    await docRef.set({
       encrypted,
       iv,
       authTag,
-      timestamp: Timestamp.fromDate(engram.timestamp),
+      timestamp: engram.timestamp.toISOString(),
       contentPreview: engram.content.substring(0, 100),
       importance: engram.importance,
     });

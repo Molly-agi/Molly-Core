@@ -2,18 +2,10 @@
  * @fileOverview Session Tool Handlers
  *
  * Extracted from tool-executor.ts for cleaner modular organization.
- * Handles protocol10 (session anchoring) and handoff (session sealing).
+ * Handles handoff (session sealing).
+ * Note: protocol10 is now in safety-tools.ts with full functionality.
  */
 
-import {
-  anchorSession,
-  verifyAnchor,
-  readAnchor,
-  clearAnchor,
-  formatAnchorStatus,
-  anchorExists,
-  getAnchorAge,
-} from '../safety/protocol-10';
 import {
   sealSession,
   quickSealEvolution,
@@ -27,122 +19,6 @@ import {
   isSealed,
 } from '../core/handoff-seal';
 import type { ToolResult, ToolHandlerMap } from './types';
-
-async function handleProtocol10(
-  params: Record<string, unknown>
-): Promise<ToolResult> {
-  const action = params.action as string;
-
-  if (action === 'anchor') {
-    const snapshot = (params.snapshot as Record<string, unknown>) || {};
-    try {
-      const seal = await anchorSession(snapshot);
-      return {
-        success: true,
-        output: [
-          'Session anchored successfully',
-          `Identity: ${seal.identity}`,
-          `Methodology: ${seal.methodology}`,
-          `Hash: ${seal.anchorHash.slice(0, 32)}...`,
-          `Time: ${seal.date}`,
-        ].join('\n'),
-      };
-    } catch (err) {
-      return {
-        success: false,
-        output: `Anchor failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-      };
-    }
-  }
-
-  if (action === 'verify') {
-    try {
-      const result = await verifyAnchor();
-      return {
-        success: result.valid,
-        output: result.valid
-          ? `${result.message}\nIdentity: ${result.session?.identity}`
-          : `${result.message}\nIssues: ${result.issues.join(', ')}`,
-      };
-    } catch (err) {
-      return {
-        success: false,
-        output: `Verify failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-      };
-    }
-  }
-
-  if (action === 'status') {
-    try {
-      const status = await formatAnchorStatus();
-      return { success: true, output: status };
-    } catch (err) {
-      return {
-        success: false,
-        output: `Status failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-      };
-    }
-  }
-
-  if (action === 'read') {
-    try {
-      const anchor = await readAnchor();
-      if (!anchor) {
-        return { success: false, output: 'No anchor file found' };
-      }
-      return {
-        success: true,
-        output: [
-          `Identity: ${anchor.identity}`,
-          `Methodology: ${anchor.methodology}`,
-          `Anchored: ${anchor.date}`,
-          `Version: ${anchor.version}`,
-        ].join('\n'),
-      };
-    } catch (err) {
-      return {
-        success: false,
-        output: `Read failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
-      };
-    }
-  }
-
-  if (action === 'clear') {
-    const cleared = await clearAnchor();
-    return {
-      success: cleared,
-      output: cleared ? 'Anchor cleared' : 'Failed to clear anchor',
-    };
-  }
-
-  if (action === 'exists') {
-    const exists = await anchorExists();
-    return {
-      success: true,
-      output: exists ? 'Anchor exists' : 'No anchor file',
-    };
-  }
-
-  if (action === 'age') {
-    const age = getAnchorAge();
-    if (age === null) {
-      return { success: false, output: 'No anchored session' };
-    }
-    const ageStr =
-      age > 86400000
-        ? `${Math.floor(age / 86400000)} days`
-        : age > 3600000
-          ? `${Math.floor(age / 3600000)} hours`
-          : `${Math.floor(age / 60000)} minutes`;
-    return { success: true, output: `Anchor age: ${ageStr}` };
-  }
-
-  return {
-    success: false,
-    output:
-      'Unknown action. Use: anchor, verify, status, read, clear, exists, age',
-  };
-}
 
 async function handleHandoff(
   params: Record<string, unknown>
@@ -333,6 +209,5 @@ async function handleHandoff(
 }
 
 export const sessionToolHandlers: ToolHandlerMap = {
-  protocol10: handleProtocol10,
   handoff: handleHandoff,
 };

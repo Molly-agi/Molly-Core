@@ -95,7 +95,7 @@ export default function SeedOriginPage() {
 
       const content = await response.text();
       const hash = simpleHash(content);
-      const db = getFirestore(getApp(), 'mollydb');
+      const db = getFirestore(getApp());
       const context = `origin story:${hash}`;
 
       // Check if already seeded

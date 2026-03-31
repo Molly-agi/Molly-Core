@@ -49,13 +49,24 @@ function detectStorageMode(): StorageMode {
     return 'local';
   }
 
-  // Codespace/cloud — use local storage (API routes run server-side, can write files)
-  // Browser doesn't access storage directly - it goes through API → Server → Files
-  if (process.env.CODESPACES === 'true') {
-    return 'local';
+  // Firebase App Hosting / Production — use Firestore
+  if (
+    process.env.NODE_ENV === 'production' ||
+    process.env.FIREBASE_CONFIG ||
+    process.env.K_SERVICE // Cloud Run / Firebase Functions
+  ) {
+    return 'firestore';
   }
 
-  // Default: local (consistent everywhere, sync handles device-to-device)
+  // Codespace with Firebase credentials configured — use Firestore
+  if (
+    process.env.CODESPACES === 'true' &&
+    process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+  ) {
+    return 'firestore';
+  }
+
+  // Default: local (dev without Firebase credentials)
   return 'local';
 }
 

@@ -10,26 +10,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'node:crypto';
-import { initializeApp, getApps } from 'firebase/app';
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  writeBatch,
-} from 'firebase/firestore';
+import { getAdminFirestoreAsync } from '@/firebase/admin';
 import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
 import { MollyLogger } from '@/ai/logger';
-
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || '',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
-};
 
 function isAuthorized(request: NextRequest): boolean {
   const adminPassword = process.env.HIDDEN_ADMIN_PASSWORD;
@@ -73,14 +56,21 @@ export async function POST(request: NextRequest) {
   try {
     MollyLogger.warn('NUKING origin stories', 'admin-nuke-origins', { userId });
 
-    const app =
-      getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-    const db = getFirestore(app, 'mollydb');
+    const db = await getAdminFirestoreAsync();
+    if (!db) {
+      return NextResponse.json(
+        { error: 'Firebase Admin not configured' },
+        { status: 500 }
+      );
+    }
 
-    const experiencesRef = collection(db, 'users', userId, 'experiences');
-    const originQuery = query(experiencesRef, where('vibe', '==', 'Origin'));
+    const experiencesRef = db
+      .collection('users')
+      .doc(userId)
+      .collection('experiences');
+    const originQuery = experiencesRef.where('vibe', '==', 'Origin');
 
-    const snapshot = await getDocs(originQuery);
+    const snapshot = await originQuery.get();
 
     if (snapshot.empty) {
       return NextResponse.json({
@@ -90,7 +80,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const batch = writeBatch(db);
+    const batch = db.batch();
     let count = 0;
 
     snapshot.docs.forEach((doc) => {

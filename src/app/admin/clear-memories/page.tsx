@@ -40,7 +40,7 @@ export default function ClearMemoriesPage() {
     setResult(null);
 
     try {
-      const db = getFirestore(getApp(), 'mollydb');
+      const db = getFirestore(getApp());
       const experiencesRef = collection(db, 'users', user.uid, 'experiences');
 
       // Clear both Origin and Family story bulk memories

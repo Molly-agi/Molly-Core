@@ -4,14 +4,17 @@
  * This route handles tool_request calls from Molly's conversational flow.
  * The Terminal component sends { tool, params } and expects { success, output }.
  *
+ * All modular tools are delegated to executeToolDirect() which:
+ *   - Runs Heart Gate alignment checks (Option Three verification)
+ *   - Records self-observation data for learning
+ *   - Delegates to handlers in tool-handlers/
+ *
  * Route-specific tools (require HTTP context or are sensitive):
  *   - writeProjectFile: Write/create files in workspace
  *   - researchAndDiscover, searchGitHub: Enhanced research with web
  *   - apiVault: API key management
  *   - scheduleJob: Job scheduling
  *   - migrationExport, migrateSelf: Migration tools
- *
- * All other tools are delegated to modular handlers in tool-handlers/.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -21,10 +24,8 @@ import { isAdminConfigured } from '@/firebase/admin';
 import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
-import {
-  hasModularHandler,
-  getModularHandler,
-} from '@/ai/agency/tool-handlers';
+import { hasModularHandler } from '@/ai/agency/tool-handlers';
+import { executeToolDirect } from '@/ai/agency/core/tool-executor';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -63,12 +64,10 @@ async function executeTool(
     'migrateSelf',
   ]);
 
-  // Check modular handlers first (unless route-specific)
+  // Delegate to executeToolDirect for modular tools
+  // This ensures Heart Gate alignment checks and self-observation
   if (!routeSpecificTools.has(tool) && hasModularHandler(tool)) {
-    const handler = getModularHandler(tool);
-    if (handler) {
-      return handler(params);
-    }
+    return executeToolDirect(tool, params);
   }
 
   // Route-specific tools handled below
