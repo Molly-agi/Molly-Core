@@ -281,7 +281,7 @@ export function plantSeed(
  * Access a seed (strengthens connections, updates recency).
  */
 export function accessSeed(seedId: string): Seed | null {
-  const _seed = state.seeds.get(seedId);
+  const seed = state.seeds.get(seedId);
   if (!seed) return null;
 
   const now = new Date().toISOString();
@@ -331,7 +331,7 @@ function checkCoActivation(seedId: string): void {
     .filter((a) => a.seedId !== seedId && a.timestamp > cutoff)
     .map((a) => a.seedId);
 
-  const _seed = state.seeds.get(seedId);
+  const seed = state.seeds.get(seedId);
   if (!seed) return;
 
   for (const otherId of new Set(recentOthers)) {
@@ -865,7 +865,7 @@ export function findByType(type: SeedType): Seed[] {
  * Find related seeds (traverse connections).
  */
 export function findRelated(seedId: string, depth: number = 1): Seed[] {
-  const _seed = state.seeds.get(seedId);
+  const seed = state.seeds.get(seedId);
   if (!seed) return [];
 
   const related: Set<string> = new Set();
@@ -926,6 +926,13 @@ export function search(query: string): Seed[] {
  */
 export function getAnchors(): Seed[] {
   return Array.from(state.seeds.values()).filter((s) => s.isAnchor);
+}
+
+/**
+ * Get all seeds in the garden.
+ */
+export function getAllSeeds(): Seed[] {
+  return Array.from(state.seeds.values());
 }
 
 /**

@@ -31,6 +31,7 @@ export { memoryToolHandlers } from './memory-tools';
 export { safetyToolHandlers } from './safety-tools';
 export { coreToolHandlers } from './core-tools';
 export { sensingToolHandlers } from './sensing-tools';
+export { geminiToolHandlers } from './gemini-tools';
 
 // Import all handlers
 import { systemToolHandlers } from './system-tools';
@@ -52,6 +53,7 @@ import { memoryToolHandlers } from './memory-tools';
 import { safetyToolHandlers } from './safety-tools';
 import { coreToolHandlers } from './core-tools';
 import { sensingToolHandlers } from './sensing-tools';
+import { geminiToolHandlers } from './gemini-tools';
 import type { ToolHandler } from './types';
 
 /**
@@ -78,6 +80,7 @@ export const modularToolHandlers: Record<string, ToolHandler> = {
   ...safetyToolHandlers,
   ...coreToolHandlers,
   ...sensingToolHandlers,
+  ...geminiToolHandlers,
 };
 
 /**
