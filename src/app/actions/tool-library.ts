@@ -29,7 +29,7 @@ function cleanFirestoreError(e: unknown): string {
 /**
  * Check if storage is available (either local mode or configured Firestore)
  */
-function isStorageAvailable(): boolean {
+async function isStorageAvailable(): Promise<boolean> {
   const storage = await getStorageRouter();
   // Local mode is always available
   if (storage.getMode() === 'local') return true;
@@ -45,7 +45,7 @@ export async function addToolToDatabase(
   tool: Omit<FoundTool, 'id' | 'savedAt' | 'accessCount' | 'lastAccessedAt'>
 ) {
   try {
-    if (!isStorageAvailable()) {
+    if (!(await isStorageAvailable())) {
       return {
         success: false,
         error: 'Storage is not configured in this environment.',
@@ -76,7 +76,7 @@ export async function searchTools(
   category?: string
 ) {
   try {
-    if (!isStorageAvailable()) {
+    if (!(await isStorageAvailable())) {
       return {
         success: false,
         error: 'Storage is not configured in this environment.',
@@ -100,7 +100,7 @@ export async function searchTools(
  */
 export async function getToolsBycat(userId: string, category: string) {
   try {
-    if (!isStorageAvailable()) {
+    if (!(await isStorageAvailable())) {
       return {
         success: false,
         error: 'Storage is not configured in this environment.',
@@ -129,7 +129,7 @@ export async function getToolsBycat(userId: string, category: string) {
  */
 export async function getRecentFoundTools(userId: string, count?: number) {
   try {
-    if (!isStorageAvailable()) {
+    if (!(await isStorageAvailable())) {
       return {
         success: false,
         error: 'Storage is not configured in this environment.',
@@ -158,7 +158,7 @@ export async function getRecentFoundTools(userId: string, count?: number) {
  */
 export async function getToolLibraryStats(userId: string) {
   try {
-    if (!isStorageAvailable()) {
+    if (!(await isStorageAvailable())) {
       return {
         success: false,
         error: 'Storage is not configured in this environment.',
@@ -182,7 +182,7 @@ export async function getToolLibraryStats(userId: string) {
  */
 export async function accessTool(userId: string, toolId: string) {
   try {
-    if (!isStorageAvailable()) {
+    if (!(await isStorageAvailable())) {
       return {
         success: false,
         error: 'Storage is not configured in this environment.',
@@ -205,7 +205,7 @@ export async function accessTool(userId: string, toolId: string) {
  */
 export async function deleteToolFromDatabase(userId: string, toolId: string) {
   try {
-    if (!isStorageAvailable()) {
+    if (!(await isStorageAvailable())) {
       return {
         success: false,
         error: 'Storage is not configured in this environment.',

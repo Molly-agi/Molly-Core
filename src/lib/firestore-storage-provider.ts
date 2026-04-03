@@ -217,7 +217,7 @@ export class FirestoreStorageProvider implements StorageProvider {
   async healthCheck(): Promise<boolean> {
     try {
       const db = this.getDb();
-      // A lightweight read to verify connectivity
+      // Lightweight read on a dedicated health collection to verify connectivity
       await db.collection('_health').limit(1).get();
       return true;
     } catch {

@@ -249,6 +249,7 @@ export async function loadFromStorage<T = unknown>(
 ): Promise<T | null> {
   const storage = await getStorageRouter();
   const doc = await storage.get(key, 'singleton');
+  // `== null` intentionally uses loose equality to catch both null and undefined
   if (!doc || doc.data == null || typeof doc.data !== 'object' || !('value' in doc.data))
     return null;
   return doc.data.value as T;
