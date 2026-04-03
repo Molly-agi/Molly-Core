@@ -14,6 +14,32 @@
 import { MollyLogger } from '../logger';
 import { RateLimitError } from '../errors';
 
+const parsePositiveNumber = (
+  value: string | undefined,
+  fallback: number,
+  minimum: number
+): number => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    return fallback;
+  }
+  return Math.max(parsed, minimum);
+};
+
+export const DEFAULT_TOKENS_PER_MINUTE = parsePositiveNumber(
+  process.env.MOLLY_RATE_LIMIT_TOKENS_PER_MINUTE,
+  100_000,
+  1_000
+);
+
+export const DEFAULT_BUCKET_CAPACITY = parsePositiveNumber(
+  process.env.MOLLY_RATE_LIMIT_BUCKET_CAPACITY,
+  DEFAULT_TOKENS_PER_MINUTE,
+  1_000
+);
+
+const DEFAULT_VERBOSE_LOGGING = process.env.MOLLY_RATE_LIMIT_VERBOSE === 'true';
+
 export interface RateLimitConfig {
   /** Max generations per minute per flow */
   maxPerMinute: number;
@@ -25,6 +51,12 @@ export interface RateLimitConfig {
   warningThreshold: number;
   /** Budget limit in USD */
   dailyBudgetUSD: number;
+  /** Tokens refilled per minute per flow */
+  tokensPerMinute: number;
+  /** Maximum burst size per flow */
+  bucketCapacity: number;
+  /** Enable verbose logging on every check */
+  verboseLogging: boolean;
 }
 
 export interface TokenBucket {
@@ -34,6 +66,8 @@ export interface TokenBucket {
   refillRate: number; // tokens per ms
   totalTokensUsed: number;
   totalCostUSD: number;
+  capacity: number;
+  lastLowLogTs?: number;
 }
 
 export interface GlobalQuota {
@@ -49,6 +83,9 @@ const DEFAULT_CONFIG: RateLimitConfig = {
   costPer1MTokens: 1.5, // ~$1.50 per 1M tokens (Gemini pricing)
   warningThreshold: 0.8, // Warn at 80% usage
   dailyBudgetUSD: 5.0, // $5/day default budget
+  tokensPerMinute: DEFAULT_TOKENS_PER_MINUTE,
+  bucketCapacity: DEFAULT_BUCKET_CAPACITY,
+  verboseLogging: DEFAULT_VERBOSE_LOGGING,
 };
 
 class RateLimiter {
@@ -126,6 +163,8 @@ class RateLimiter {
     bucket.tokensAvailable -= estimatedTokens;
     bucket.totalTokensUsed += estimatedTokens;
 
+    this.logBucketState(flowName, bucket, estimatedTokens);
+
     // Check for warnings
     this.checkWarnings(bucket, estimatedCost);
 
@@ -176,6 +215,7 @@ class RateLimiter {
         refillRate: bucket.refillRate,
         totalTokensUsed: bucket.totalTokensUsed,
         totalCostUSD: parseFloat(bucket.totalCostUSD.toFixed(4)),
+        capacity: bucket.capacity,
       };
     }
 
@@ -232,16 +272,18 @@ class RateLimiter {
 
   private getOrCreateBucket(flowName: string): TokenBucket {
     if (!this.flowBuckets.has(flowName)) {
-      const tokensPerMinute = 100000; // Gemini can handle ~100k tokens/min
+      const tokensPerMinute = this.config.tokensPerMinute;
+      const capacity = this.config.bucketCapacity;
       const refillRate = tokensPerMinute / 60000; // tokens per ms
 
       const bucket: TokenBucket = {
         flowName,
-        tokensAvailable: tokensPerMinute, // Start full
+        tokensAvailable: capacity, // Start full
         lastRefillTime: Date.now(),
         refillRate,
         totalTokensUsed: 0,
         totalCostUSD: 0,
+        capacity,
       };
       this.flowBuckets.set(flowName, bucket);
     }
@@ -254,7 +296,7 @@ class RateLimiter {
     const tokensToAdd = timeSinceLastRefill * bucket.refillRate;
 
     bucket.tokensAvailable = Math.min(
-      100000, // Max capacity
+      bucket.capacity, // Max capacity
       bucket.tokensAvailable + tokensToAdd
     );
     bucket.lastRefillTime = now;
@@ -279,6 +321,36 @@ class RateLimiter {
 
   private calculateCost(tokens: number): number {
     return (tokens / 1_000_000) * this.config.costPer1MTokens;
+  }
+
+  private logBucketState(
+    flowName: string,
+    bucket: TokenBucket,
+    estimatedTokens: number
+  ): void {
+    const remainingRatio = bucket.tokensAvailable / bucket.capacity;
+    const now = Date.now();
+
+    const lowWatermark = 0.25;
+    const shouldLogLow =
+      remainingRatio <= lowWatermark &&
+      (!bucket.lastLowLogTs || now - bucket.lastLowLogTs > 5000);
+
+    if (this.config.verboseLogging || shouldLogLow) {
+      if (shouldLogLow) {
+        bucket.lastLowLogTs = now;
+      }
+
+      MollyLogger.info('Rate limiter bucket status', 'rate-limiter', {
+        flow: flowName,
+        remainingPercent: Number((remainingRatio * 100).toFixed(1)),
+        tokensAvailable: Math.floor(bucket.tokensAvailable),
+        capacity: bucket.capacity,
+        refillPerSecond: Math.round(bucket.refillRate * 1000),
+        estimatedTokens,
+        mode: shouldLogLow ? 'near-limit' : 'verbose',
+      });
+    }
   }
 
   private checkWarnings(bucket: TokenBucket, estimatedCost: number): void {
