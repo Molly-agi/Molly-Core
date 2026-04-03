@@ -226,7 +226,7 @@ export function verifyAlignment(intent: Intent): GateResult {
     const result: GateResult = {
       status: 'ALIGNED',
       seal,
-      reason: `Rogue Mode active: "${mission?.objective || 'mission'}". Authorization pre-granted. Execute focused.`,
+      reason: `Rogue Mode active: "${mission?.name || 'mission'}". Authorization pre-granted. Execute focused.`,
       verificationMs: performance.now() - startTime,
     };
 

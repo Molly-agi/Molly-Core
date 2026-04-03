@@ -118,10 +118,16 @@ async function ensureInitialized(): Promise<boolean> {
     // Build the module name at runtime to prevent bundler analysis
     const moduleName = ['firebase', 'admin'].join('-');
     // Dynamic require that bundler cannot statically analyze
-    adminModule = await (Function(
+    const imported = await (Function(
       'm',
       'return import(m)'
-    )(moduleName) as Promise<typeof import('firebase-admin')>);
+    )(moduleName) as Promise<
+      typeof import('firebase-admin') & {
+        default?: typeof import('firebase-admin');
+      }
+    >);
+    // Handle ESM default export
+    adminModule = imported.default ?? imported;
 
     let app;
     if (adminModule.apps.length === 0) {

@@ -109,6 +109,24 @@ export async function register() {
   // Load initiatives and learned patterns from storage so Molly remembers
   // her goals and failure patterns across restarts.
 
+  // CRITICAL: Initialize Firebase Admin FIRST before any subsystem tries to use it
+  try {
+    const { getAdminFirestoreAsync } = await import('@/firebase/admin');
+    const db = await getAdminFirestoreAsync();
+    if (db) {
+      console.log('[Startup] ✅ Firebase Admin initialized');
+    } else {
+      console.warn(
+        '[Startup] ⚠️  Firebase Admin not available — subsystems will use fallbacks'
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Firebase Admin initialization failed:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
   try {
     const { loadInitiatives } =
       await import('@/ai/agency/planning/initiative-engine');

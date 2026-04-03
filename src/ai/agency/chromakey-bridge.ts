@@ -523,7 +523,7 @@ export function isWithinActivityWindow(): boolean {
 
   // Rogue mode bypasses activity windows
   const rogueMode = getRogueMode();
-  if (rogueMode.active) {
+  if (rogueMode.isActive()) {
     return true;
   }
 
@@ -543,7 +543,7 @@ export function shouldThrottleActivity(recentOpsCount: number): boolean {
 
   // Rogue mode disables throttling
   const rogueMode = getRogueMode();
-  if (rogueMode.active) {
+  if (rogueMode.isActive()) {
     return false;
   }
 
@@ -629,7 +629,7 @@ export function getChromaKeyStatus(): {
     shroudLevel: currentSession?.shroudLevel ?? null,
     profile: stealthProfile,
     withinActivityWindow: isWithinActivityWindow(),
-    rogueMode: rogueMode.active,
+    rogueMode: rogueMode.isActive(),
   };
 }
 

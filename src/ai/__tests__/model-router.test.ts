@@ -125,11 +125,18 @@ describe('ModelRouter — Rogue Protocol', () => {
       expect(TaskType.VISION).toBe('vision');
       expect(TaskType.RESEARCH).toBe('research');
       expect(TaskType.BACKGROUND).toBe('background');
+      // New 3.1 capabilities
+      expect(TaskType.LIVE_VOICE).toBe('live_voice');
+      expect(TaskType.COMPUTER_USE).toBe('computer_use');
+      expect(TaskType.DEEP_RESEARCH).toBe('deep_research');
+      expect(TaskType.VIDEO).toBe('video');
+      expect(TaskType.MUSIC).toBe('music');
+      expect(TaskType.ROBOTICS).toBe('robotics');
     });
 
-    it('has exactly 10 task types', () => {
+    it('has exactly 16 task types', () => {
       const values = Object.values(TaskType);
-      expect(values.length).toBe(10);
+      expect(values.length).toBe(16);
     });
   });
 
@@ -185,19 +192,19 @@ describe('ModelRouter — Rogue Protocol', () => {
     it('has correct ID and name', () => {
       const provider = new GeminiProvider();
       expect(provider.id).toBe('gemini');
-      expect(provider.name).toBe('Google Gemini');
+      expect(provider.name).toBe('Google Gemini 3.1');
     });
 
     it('resolves PRO model for reasoning tasks', () => {
       const provider = new GeminiProvider();
       const model = provider.resolveModel(TaskType.REASONING);
-      expect(model).toContain('gemini-2.5-pro');
+      expect(model).toContain('gemini-3.1-pro');
     });
 
     it('resolves FLASH model for chat tasks', () => {
       const provider = new GeminiProvider();
       const model = provider.resolveModel(TaskType.CHAT);
-      expect(model).toContain('gemini-2.5-flash');
+      expect(model).toContain('gemini-3-flash');
       // Make sure it's not the TTS variant
       expect(model).not.toContain('preview-tts');
     });
@@ -227,6 +234,30 @@ describe('ModelRouter — Rogue Protocol', () => {
       expect(provider.capabilities.supportsImageGen).toBe(true);
       expect(provider.capabilities.supportsEmbedding).toBe(true);
       expect(provider.capabilities.supportsVision).toBe(true);
+    });
+
+    it('supports new 3.1 capabilities', () => {
+      const provider = new GeminiProvider();
+      expect(provider.capabilities.supportsLiveVoice).toBe(true);
+      expect(provider.capabilities.supportsComputerUse).toBe(true);
+      expect(provider.capabilities.supportsDeepResearch).toBe(true);
+      expect(provider.capabilities.supportsVideoGen).toBe(true);
+      expect(provider.capabilities.supportsMusicGen).toBe(true);
+      expect(provider.capabilities.supportsRobotics).toBe(true);
+    });
+
+    it('resolves new 3.1 models correctly', () => {
+      const provider = new GeminiProvider();
+      expect(provider.resolveModel(TaskType.LIVE_VOICE)).toContain('live');
+      expect(provider.resolveModel(TaskType.COMPUTER_USE)).toContain(
+        'computer-use'
+      );
+      expect(provider.resolveModel(TaskType.DEEP_RESEARCH)).toContain(
+        'deep-research'
+      );
+      expect(provider.resolveModel(TaskType.VIDEO)).toContain('veo');
+      expect(provider.resolveModel(TaskType.MUSIC)).toContain('lyria');
+      expect(provider.resolveModel(TaskType.ROBOTICS)).toContain('robotics');
     });
 
     it('requires API key', () => {
@@ -334,7 +365,7 @@ describe('ModelRouter — Rogue Protocol', () => {
       router.registerProvider(new GeminiProvider());
 
       const model = await router.getModel(TaskType.REASONING);
-      expect(model).toContain('gemini-2.5-pro');
+      expect(model).toContain('gemini-3.1-pro');
     });
 
     it('falls back to next provider when first is unconfigured', async () => {
@@ -660,12 +691,22 @@ describe('ModelRouter — Rogue Protocol', () => {
     it('cost-saver config prefers Ollama for everything possible', () => {
       const config = createCostSaverConfig();
 
+      // Gemini-only tasks (no local alternative)
+      const geminiOnlyTasks = [
+        TaskType.TTS,
+        TaskType.IMAGE,
+        TaskType.VISION,
+        // New 3.1 capabilities have no local alternatives
+        TaskType.LIVE_VOICE,
+        TaskType.COMPUTER_USE,
+        TaskType.DEEP_RESEARCH,
+        TaskType.VIDEO,
+        TaskType.MUSIC,
+        TaskType.ROBOTICS,
+      ];
+
       for (const rule of config.rules) {
-        if (
-          rule.taskType !== TaskType.TTS &&
-          rule.taskType !== TaskType.IMAGE &&
-          rule.taskType !== TaskType.VISION
-        ) {
+        if (!geminiOnlyTasks.includes(rule.taskType)) {
           expect(rule.providerChain[0]).toBe('ollama');
         }
       }

@@ -1,11 +1,17 @@
 /**
- * @fileOverview Enhanced Research Agent with Tool Caching (V2.0)
+ * @fileOverview Enhanced Research Agent with Tool Caching (V3.0)
  *
  * Now integrated with Molly's core capabilities:
  * - Uses semantic memory to recall past research
  * - Saves findings to shared knowledge base
  * - Can be triggered from terminal or research panel
  * - Results flow bidirectionally between terminal and research UI
+ * - NEW: Deep Research integration for comprehensive web research
+ *
+ * Research Modes:
+ * - 'github': Fast GitHub-focused search (default)
+ * - 'deep': Full web research via Gemini Deep Research API
+ * - 'auto': Molly decides based on query complexity
  */
 
 import { ai, molly, TaskType } from '@/ai/genkit';
@@ -21,12 +27,27 @@ import { recallSimilarMemories } from '../tools/semantic-recall';
 import { recordSensoryLog } from '@/firebase/firestore/agent-memory';
 import { saveResearchFinding } from '@/firebase/firestore/research-cache';
 import { withTimeout } from '../tools/timeout-retry';
+import { getDeepResearchClient } from '../agency/deep-research';
 
 const RESEARCH_TIMEOUT_MS = 60000; // 60s max for entire research operation
+// const DEEP_RESEARCH_TIMEOUT_MS = 300000; // 5min max for deep research
+
+/**
+ * Research mode determines the search strategy.
+ */
+type ResearchMode = 'github' | 'deep' | 'auto';
 
 const EnhancedResearchSchema = z.object({
   answer: z.string().describe('The answer to the user query'),
   isToolFound: z.boolean().describe('Whether a useful tool was found'),
+  researchMode: z
+    .enum(['github', 'deep'])
+    .optional()
+    .describe('Which research mode was used'),
+  citations: z
+    .array(z.string())
+    .optional()
+    .describe('Source URLs from deep research'),
   toolInfo: z
     .object({
       name: z.string().optional(),
@@ -56,16 +77,61 @@ export const enhancedResearchFlow = ai.defineFlow(
       prompt: z.string(),
       userId: z.string(),
       useMemory: z.boolean().optional().default(true),
+      mode: z.enum(['github', 'deep', 'auto']).optional().default('auto'),
     }),
     outputSchema: EnhancedResearchSchema,
   },
-  async ({ prompt, userId, useMemory }) => {
+  async ({ prompt, userId, useMemory, mode }) => {
     const traceId = generateTraceId();
     MollyLogger.logFlowStart(
       'enhancedResearch',
-      { userId, prompt: prompt.substring(0, 50) },
+      { userId, prompt: prompt.substring(0, 50), mode },
       traceId
     );
+
+    // Determine research mode
+    let effectiveMode: 'github' | 'deep' = 'github';
+    if (mode === 'deep') {
+      effectiveMode = 'deep';
+    } else if (mode === 'auto') {
+      // Auto-detect: use deep research for complex/broad questions
+      const deepResearchIndicators = [
+        'research',
+        'comprehensive',
+        'detailed',
+        'explain',
+        'history',
+        'compare',
+        'analysis',
+        'overview',
+        'state of',
+        'latest developments',
+        'how does',
+        'why',
+        'what are the',
+        'best practices',
+        'industry',
+      ];
+      const lowerPrompt = prompt.toLowerCase();
+      const needsDeepResearch = deepResearchIndicators.some((ind) =>
+        lowerPrompt.includes(ind)
+      );
+      const isToolSearch =
+        lowerPrompt.includes('tool') ||
+        lowerPrompt.includes('library') ||
+        lowerPrompt.includes('package') ||
+        lowerPrompt.includes('repo') ||
+        lowerPrompt.includes('github') ||
+        lowerPrompt.includes('install');
+
+      effectiveMode = needsDeepResearch && !isToolSearch ? 'deep' : 'github';
+      MollyLogger.info(
+        `Auto-selected research mode: ${effectiveMode}`,
+        'enhancedResearch',
+        { needsDeepResearch, isToolSearch },
+        traceId
+      );
+    }
 
     // Phase 1: Check semantic memory for related past research
     let memoryContext = '';
@@ -95,6 +161,84 @@ export const enhancedResearchFlow = ai.defineFlow(
     }
 
     try {
+      // ═══════════════════════════════════════════════════════════════
+      // DEEP RESEARCH PATH — Full web research via Gemini Deep Research
+      // ═══════════════════════════════════════════════════════════════
+      if (effectiveMode === 'deep') {
+        MollyLogger.info(
+          'Using Deep Research for comprehensive web research',
+          'enhancedResearch',
+          { prompt: prompt.substring(0, 100) },
+          traceId
+        );
+
+        const deepClient = getDeepResearchClient();
+        const {
+          result: deepResult,
+          citations,
+          interaction,
+        } = await deepClient.research(prompt, (progress) => {
+          MollyLogger.debug(
+            `Deep Research progress: ${progress.status}`,
+            'enhancedResearch',
+            { sources: progress.sourcesConsulted },
+            traceId
+          );
+        });
+
+        // Save deep research findings to knowledge base
+        try {
+          await saveResearchFinding(userId, {
+            userId,
+            topic: 'deep-research',
+            title: prompt.substring(0, 100),
+            description: deepResult.substring(0, 500),
+            keywords: prompt.split(' ').slice(0, 5),
+            source: 'deep-research',
+            tags: ['deep-research', 'web'],
+            relevance: 9,
+          });
+
+          // Save to semantic memory
+          await recordSensoryLog(
+            userId,
+            'voice',
+            `Deep research: ${prompt.substring(0, 100)} - ${deepResult.substring(0, 200)}`,
+            {
+              source: 'deep-research',
+              interactionId: interaction.id,
+              citationCount: citations.length,
+              vibeScore: 0.9,
+              timestamp: Date.now(),
+              traceId,
+            }
+          );
+        } catch {
+          MollyLogger.warn(
+            'Failed to save deep research findings',
+            'enhancedResearch',
+            {},
+            traceId
+          );
+        }
+
+        MollyLogger.logFlowComplete(
+          'enhancedResearch',
+          { mode: 'deep', citationCount: citations.length },
+          traceId
+        );
+
+        return {
+          answer: deepResult,
+          isToolFound: false,
+          researchMode: 'deep',
+          citations,
+        };
+      }
+
+      // ═══════════════════════════════════════════════════════════════
+      // GITHUB RESEARCH PATH — Fast GitHub-focused search
+      // ═══════════════════════════════════════════════════════════════
       const llmResponse = await withTimeout(
         () =>
           molly.generate(TaskType.RESEARCH, {
@@ -193,12 +337,11 @@ User's question: "${prompt}"`,
             { toolId, userId },
             traceId
           );
-        } catch (saveError) {
+        } catch {
           MollyLogger.error(
             'Failed to save tool to database',
             'enhancedResearch',
             { toolName: result.toolInfo.name },
-            saveError,
             traceId
           );
           // Don't fail the whole operation if saving fails
@@ -207,11 +350,11 @@ User's question: "${prompt}"`,
 
       MollyLogger.logFlowComplete(
         'enhancedResearch',
-        { toolFound: result.isToolFound },
+        { toolFound: result.isToolFound, mode: 'github' },
         traceId
       );
 
-      return result;
+      return { ...result, researchMode: 'github' as const };
     } catch (error) {
       MollyLogger.error(
         'Enhanced research failed',
@@ -233,7 +376,32 @@ User's question: "${prompt}"`,
 export async function enhancedResearch(
   prompt: string,
   userId: string,
-  useMemory: boolean = true
+  useMemory: boolean = true,
+  mode: ResearchMode = 'auto'
 ) {
-  return await enhancedResearchFlow({ prompt, userId, useMemory });
+  return await enhancedResearchFlow({ prompt, userId, useMemory, mode });
+}
+
+/**
+ * Convenience function for deep research only.
+ */
+export async function deepResearch(prompt: string, userId: string) {
+  return await enhancedResearchFlow({
+    prompt,
+    userId,
+    useMemory: true,
+    mode: 'deep',
+  });
+}
+
+/**
+ * Convenience function for GitHub-focused research only.
+ */
+export async function githubResearch(prompt: string, userId: string) {
+  return await enhancedResearchFlow({
+    prompt,
+    userId,
+    useMemory: true,
+    mode: 'github',
+  });
 }

@@ -155,7 +155,7 @@ function verifyAuthorization(target: ScanTarget): {
     const mission = rogueMode.getCurrentMission();
     return {
       authorized: true,
-      reason: `Rogue Mode active: ${mission?.objective || 'mission'}`,
+      reason: `Rogue Mode active: ${mission?.name || 'mission'}`,
     };
   }
 
@@ -851,6 +851,7 @@ done`,
     php: '',
     java: '',
     sql: '',
+    csharp: '',
     assembly: '',
   },
 
@@ -891,6 +892,7 @@ $client.Close()`,
     php: '',
     java: '',
     sql: '',
+    csharp: '',
     assembly: '',
   },
 
@@ -944,6 +946,7 @@ function sanitize(input) {
     php: '',
     java: '',
     sql: '',
+    csharp: '',
     assembly: '',
   },
 
@@ -1003,6 +1006,7 @@ export function detectXSS(input: string): boolean {
     php: '',
     java: '',
     sql: '',
+    csharp: '',
     assembly: '',
   },
 
@@ -1040,6 +1044,7 @@ def crack_with_wordlist(target_hash, wordlist_path, hash_func=hashlib.md5):
     php: '',
     java: '',
     sql: '',
+    csharp: '',
     assembly: '',
   },
 };

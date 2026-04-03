@@ -947,7 +947,7 @@ export function learnEmotionalPattern(
   trigger?: string,
   durationMs?: number
 ): void {
-  const _model = getEricModel();
+  // Model accessed via getOrCreatePattern which calls getEricModel internally
 
   // If transitioning TO a negative state, learn the trigger
   const negativeStates: EmotionalState[] = [
@@ -1348,10 +1348,36 @@ export async function loadTheoryOfMind(): Promise<number> {
       return 1;
     }
 
-    for (const _modelData of stored) {
-      const _model: MentalModel = {
+    for (const modelData of stored) {
+      // Deserialize knowledge - handle both old [key, value][] and new {key, item}[] formats
+      let knowledgeMap: Map<string, KnowledgeItem>;
+      if (Array.isArray(modelData.knowledge)) {
+        if (modelData.knowledge.length === 0) {
+          knowledgeMap = new Map();
+        } else if (Array.isArray(modelData.knowledge[0])) {
+          // Old format: [[key, value], ...]
+          knowledgeMap = new Map(
+            modelData.knowledge as [string, KnowledgeItem][]
+          );
+        } else if (modelData.knowledge[0] && 'key' in modelData.knowledge[0]) {
+          // New format: [{key, item}, ...]
+          const entries = (
+            modelData.knowledge as unknown as Array<{
+              key: string;
+              item: KnowledgeItem;
+            }>
+          ).map(({ key, item }): [string, KnowledgeItem] => [key, item]);
+          knowledgeMap = new Map(entries);
+        } else {
+          knowledgeMap = new Map();
+        }
+      } else {
+        knowledgeMap = new Map();
+      }
+
+      const model: MentalModel = {
         ...modelData,
-        knowledge: new Map(modelData.knowledge),
+        knowledge: knowledgeMap,
         emotionalPatterns: modelData.emotionalPatterns || [], // Default for backward compat
       };
       mentalModels.set(model.personId, model);
@@ -1369,7 +1395,7 @@ export async function loadTheoryOfMind(): Promise<number> {
  * Seed initial Eric model with known information
  */
 function seedEricModel(): void {
-  const _model = getMentalModel('eric', 'Eric');
+  const model = getMentalModel('eric', 'Eric');
 
   // Known knowledge
   updateKnowledge(
@@ -1430,9 +1456,28 @@ export async function saveTheoryOfMind(): Promise<void> {
     saveTimeout = null;
   }
 
+  // Explicitly serialize each field to avoid spreading non-serializable data
   const serializable = Array.from(mentalModels.entries()).map(([, model]) => ({
-    ...model,
-    knowledge: Array.from(model.knowledge.entries()),
+    personId: model.personId,
+    personName: model.personName,
+    // Convert Map to array of [key, value] pairs
+    knowledge: Array.from(model.knowledge.entries()).map(([key, item]) => ({
+      key,
+      item,
+    })),
+    intents: model.intents,
+    currentFocus: model.currentFocus,
+    emotionalHistory: model.emotionalHistory.slice(-20), // Keep last 20 only
+    currentEmotionalState: model.currentEmotionalState,
+    emotionalIntensity: model.emotionalIntensity,
+    preferences: model.preferences,
+    communicationStyle: model.communicationStyle,
+    emotionalPatterns: model.emotionalPatterns,
+    lastInteraction: model.lastInteraction,
+    interactionCount: model.interactionCount,
+    sessionStartTime: model.sessionStartTime,
+    modelConfidence: model.modelConfidence,
+    lastUpdated: model.lastUpdated,
   }));
 
   await saveToStorage(STORAGE_KEY, serializable);

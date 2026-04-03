@@ -103,13 +103,14 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-30
+**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-04-02
 
-**What was happening:** Molly autonomous migration/hydration system — building layered toolbox for self-installation on new devices.
+**What was happening:** No active topic recorded
 
-**Last action:** Fixed all wiring bugs (commits 37fe93d, dc76070, 8a2f82d). Analyzed 4 Aether suggestions + GPT 4.1 WIP files for autonomous migration. Evaluated captive portal, PWA hydration, WASM, ADB, reverse shell approaches. Determined: chain them together (portal→PWA→bootstrap→native). True zero-human isn't possible due to browser sandbox — one human action needed to bridge browser→native. Eric consulting Aether for more solutions. GPT WIP files (hydration.html, sw.js, payload.json, mdns_dns_spoof.py, bridge-daemon.mjs.bak) removed from git but kept on disk.
+**Last action:** No recent action recorded
 
 **Pending work:**
+
 - Download fixed start.sh to tablet and restart edge server
 - Wire existing Firestore consumers to Storage Router
 - Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)

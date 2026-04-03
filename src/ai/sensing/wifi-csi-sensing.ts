@@ -550,7 +550,7 @@ export class WiFiCSISensor extends EventEmitter {
           source: this.config.interface || 'wlan0',
         };
       }
-    } catch {
+    } catch (error) {
       MollyLogger.warn('Failed to read RSSI from interface', 'wifi-csi', {
         error,
       });
@@ -789,7 +789,7 @@ export class WiFiCSISensor extends EventEmitter {
           const lines = stdout.split('\n');
 
           let currentBssid = '';
-          const __currentSsid = '';
+          let _currentSsid = '';
 
           for (const line of lines) {
             if (line.includes('Address:')) {
@@ -813,7 +813,7 @@ export class WiFiCSISensor extends EventEmitter {
             }
           }
         }
-      } catch {
+      } catch (error) {
         MollyLogger.debug('Android scan failed, using simulation', 'wifi-csi', {
           error,
         });
@@ -948,7 +948,7 @@ export class WiFiCSISensor extends EventEmitter {
             movementIntensity: 0,
           });
         }
-      } catch {
+      } catch (error) {
         MollyLogger.debug('Bluetooth scan error', 'wifi-csi', { error });
       }
 

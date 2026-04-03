@@ -29,6 +29,7 @@ import { MollyLogger, generateTraceId } from './logger';
 /**
  * Categories of cognitive work Molly performs.
  * Each maps to a different optimal model profile.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export enum TaskType {
   /** Complex reasoning, code analysis, security work — needs highest IQ */
@@ -60,6 +61,26 @@ export enum TaskType {
 
   /** Memory consolidation, introspection — can be slow/cheap */
   BACKGROUND = 'background',
+
+  // ── New Gemini 3.1 Task Types ──
+
+  /** Real-time voice dialogue — sub-second latency */
+  LIVE_VOICE = 'live_voice',
+
+  /** Screen interaction, UI automation — computer use */
+  COMPUTER_USE = 'computer_use',
+
+  /** Multi-step agentic research across sources */
+  DEEP_RESEARCH = 'deep_research',
+
+  /** Video generation with sync audio */
+  VIDEO = 'video',
+
+  /** Music generation */
+  MUSIC = 'music',
+
+  /** Physical space reasoning for embodiment */
+  ROBOTICS = 'robotics',
 }
 
 // ============================================================
@@ -69,6 +90,7 @@ export enum TaskType {
 /**
  * Capabilities a provider supports.
  * Used for routing decisions and health checks.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export interface ProviderCapabilities {
   supportsChat: boolean;
@@ -83,6 +105,20 @@ export interface ProviderCapabilities {
   costTier: number;
   /** Average latency tier: 0 = instant/local, 1 = fast, 2 = standard, 3 = slow */
   latencyTier: number;
+
+  // ── New Gemini 3.1 Capabilities ──
+  /** Real-time voice dialogue with sub-second latency */
+  supportsLiveVoice?: boolean;
+  /** Screen interaction and UI automation */
+  supportsComputerUse?: boolean;
+  /** Multi-step agentic research */
+  supportsDeepResearch?: boolean;
+  /** Video generation */
+  supportsVideoGen?: boolean;
+  /** Music generation */
+  supportsMusicGen?: boolean;
+  /** Physical space/robotics reasoning */
+  supportsRobotics?: boolean;
 }
 
 /**
@@ -188,11 +224,11 @@ export interface RoutingDecision {
 
 /**
  * Gemini Provider — Molly's birth mother engine.
- * Handles all current task types as the baseline.
+ * Updated April 2026 for Gemini 3.1 with all new capabilities.
  */
 export class GeminiProvider implements ModelProvider {
   readonly id = 'gemini';
-  readonly name = 'Google Gemini';
+  readonly name = 'Google Gemini 3.1';
   readonly capabilities: ProviderCapabilities = {
     supportsChat: true,
     supportsStreaming: true,
@@ -200,9 +236,16 @@ export class GeminiProvider implements ModelProvider {
     supportsImageGen: true,
     supportsEmbedding: true,
     supportsVision: true,
-    maxContextTokens: 1_000_000,
+    maxContextTokens: 2_000_000, // Gemini 3.1 Pro has 2M context
     costTier: 2,
     latencyTier: 1,
+    // New 3.1 capabilities
+    supportsLiveVoice: true,
+    supportsComputerUse: true,
+    supportsDeepResearch: true,
+    supportsVideoGen: true,
+    supportsMusicGen: true,
+    supportsRobotics: true,
   };
 
   private health: ProviderHealth = {
@@ -215,17 +258,39 @@ export class GeminiProvider implements ModelProvider {
   private modelMap: Record<string, string>;
 
   constructor() {
-    // Use the same env-overridable pattern from genkit.ts
-    const flash = process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-2.5-flash';
-    const pro = process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro';
+    // Gemini 3.1 model defaults (April 2026)
+    const flash =
+      process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3-flash-preview';
+    const pro =
+      process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview';
+    const flashLite =
+      process.env.MOLLY_MODEL_FLASH_LITE ||
+      'googleai/gemini-3.1-flash-lite-preview';
     const tts =
       process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.5-flash-preview-tts';
-    const imagen =
-      process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-3.0-generate-001';
+    const imagen = process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen';
     const embedding =
-      process.env.MOLLY_MODEL_EMBEDDING || 'googleai/gemini-embedding-001';
+      process.env.MOLLY_MODEL_EMBEDDING ||
+      'googleai/gemini-embedding-2-preview';
+    const liveVoice =
+      process.env.MOLLY_MODEL_LIVE_VOICE ||
+      'googleai/gemini-3.1-flash-live-preview';
+    const computerUse =
+      process.env.MOLLY_MODEL_COMPUTER_USE ||
+      'googleai/gemini-2.5-computer-use-preview-10-2025';
+    const deepResearch =
+      process.env.MOLLY_MODEL_DEEP_RESEARCH ||
+      'googleai/deep-research-pro-preview-12-2025';
+    const video =
+      process.env.MOLLY_MODEL_VIDEO || 'googleai/veo-3.1-generate-preview';
+    const music =
+      process.env.MOLLY_MODEL_MUSIC || 'googleai/lyria-3-pro-preview';
+    const robotics =
+      process.env.MOLLY_MODEL_ROBOTICS ||
+      'googleai/gemini-robotics-er-1.5-preview';
 
     this.modelMap = {
+      // Core capabilities
       [TaskType.REASONING]: pro,
       [TaskType.CREATIVE]: pro,
       [TaskType.CHAT]: flash,
@@ -235,7 +300,14 @@ export class GeminiProvider implements ModelProvider {
       [TaskType.EMBEDDING]: embedding,
       [TaskType.VISION]: flash,
       [TaskType.RESEARCH]: flash,
-      [TaskType.BACKGROUND]: flash,
+      [TaskType.BACKGROUND]: flashLite,
+      // New 3.1 capabilities
+      [TaskType.LIVE_VOICE]: liveVoice,
+      [TaskType.COMPUTER_USE]: computerUse,
+      [TaskType.DEEP_RESEARCH]: deepResearch,
+      [TaskType.VIDEO]: video,
+      [TaskType.MUSIC]: music,
+      [TaskType.ROBOTICS]: robotics,
     };
   }
 
@@ -418,11 +490,12 @@ export class ClaudeProvider implements ModelProvider {
 /**
  * Default routing config — Gemini handles everything (current behavior).
  * This ensures zero breaking changes. Other providers are opt-in.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 function createDefaultConfig(): RoutingConfig {
   return {
     name: 'default',
-    description: 'Gemini-only baseline — identical to pre-abstraction behavior',
+    description: 'Gemini 3.1 baseline — full capability routing',
     defaultProviderId: 'gemini',
     rules: Object.values(TaskType).map((taskType) => ({
       taskType,
@@ -435,6 +508,7 @@ function createDefaultConfig(): RoutingConfig {
 /**
  * Hybrid routing config — best-of-breed for each task type.
  * Claude for engineering, Gemini for personality, Ollama for background.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export function createHybridConfig(): RoutingConfig {
   return {
@@ -483,6 +557,31 @@ export function createHybridConfig(): RoutingConfig {
         taskType: TaskType.BACKGROUND,
         providerChain: ['ollama', 'gemini'],
       },
+      // New 3.1 capabilities — Gemini only
+      {
+        taskType: TaskType.LIVE_VOICE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.COMPUTER_USE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.DEEP_RESEARCH,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.VIDEO,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.MUSIC,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.ROBOTICS,
+        providerChain: ['gemini'],
+      },
     ],
     updatedAt: Date.now(),
   };
@@ -490,6 +589,7 @@ export function createHybridConfig(): RoutingConfig {
 
 /**
  * Cost-saver config — prefer local/free providers wherever possible.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export function createCostSaverConfig(): RoutingConfig {
   return {
@@ -538,6 +638,31 @@ export function createCostSaverConfig(): RoutingConfig {
         taskType: TaskType.BACKGROUND,
         providerChain: ['ollama', 'gemini'],
       },
+      // New 3.1 capabilities — Gemini only (no local alternatives)
+      {
+        taskType: TaskType.LIVE_VOICE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.COMPUTER_USE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.DEEP_RESEARCH,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.VIDEO,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.MUSIC,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.ROBOTICS,
+        providerChain: ['gemini'],
+      },
     ],
     updatedAt: Date.now(),
   };
@@ -548,6 +673,7 @@ export function createCostSaverConfig(): RoutingConfig {
  * Prioritizes reasoning-heavy models for vulnerability analysis,
  * exploit development, and defensive hardening.
  * Uses PRO models for all cognitive tasks (accuracy over speed).
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export function createRogueConfig(): RoutingConfig {
   return {
@@ -571,7 +697,8 @@ export function createRogueConfig(): RoutingConfig {
       {
         taskType: TaskType.CHAT,
         providerChain: ['gemini'], // Pro for mission comms (not flash)
-        modelOverride: process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro',
+        modelOverride:
+          process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview',
       },
       {
         taskType: TaskType.TTS,
@@ -592,10 +719,36 @@ export function createRogueConfig(): RoutingConfig {
       {
         taskType: TaskType.RESEARCH,
         providerChain: ['gemini'], // Pro for security research
-        modelOverride: process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro',
+        modelOverride:
+          process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview',
       },
       {
         taskType: TaskType.BACKGROUND,
+        providerChain: ['gemini'],
+      },
+      // New 3.1 capabilities — all enabled for rogue mode
+      {
+        taskType: TaskType.LIVE_VOICE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.COMPUTER_USE,
+        providerChain: ['gemini'], // Critical for rogue ops
+      },
+      {
+        taskType: TaskType.DEEP_RESEARCH,
+        providerChain: ['gemini'], // Critical for OSINT
+      },
+      {
+        taskType: TaskType.VIDEO,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.MUSIC,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.ROBOTICS,
         providerChain: ['gemini'],
       },
     ],
@@ -962,6 +1115,13 @@ export class ModelRouter {
       if (p.capabilities.supportsImageGen) caps.push('image');
       if (p.capabilities.supportsEmbedding) caps.push('embedding');
       if (p.capabilities.supportsVision) caps.push('vision');
+      // New 3.1 capabilities
+      if (p.capabilities.supportsLiveVoice) caps.push('live-voice');
+      if (p.capabilities.supportsComputerUse) caps.push('computer-use');
+      if (p.capabilities.supportsDeepResearch) caps.push('deep-research');
+      if (p.capabilities.supportsVideoGen) caps.push('video');
+      if (p.capabilities.supportsMusicGen) caps.push('music');
+      if (p.capabilities.supportsRobotics) caps.push('robotics');
 
       return {
         id: p.id,
@@ -995,6 +1155,19 @@ export class ModelRouter {
         return caps.supportsEmbedding;
       case TaskType.VISION:
         return caps.supportsVision;
+      // New 3.1 capabilities
+      case TaskType.LIVE_VOICE:
+        return caps.supportsLiveVoice ?? false;
+      case TaskType.COMPUTER_USE:
+        return caps.supportsComputerUse ?? false;
+      case TaskType.DEEP_RESEARCH:
+        return caps.supportsDeepResearch ?? false;
+      case TaskType.VIDEO:
+        return caps.supportsVideoGen ?? false;
+      case TaskType.MUSIC:
+        return caps.supportsMusicGen ?? false;
+      case TaskType.ROBOTICS:
+        return caps.supportsRobotics ?? false;
       default:
         return caps.supportsChat;
     }

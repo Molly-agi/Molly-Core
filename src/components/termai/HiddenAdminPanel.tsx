@@ -162,7 +162,10 @@ export function HiddenAdminPanel({
     useState<PersonalityDiagnosticsResult | null>(null);
 
   void isAdmin;
-  const isReady = !!userId;
+  // Removed Firebase dependency - admin panel has its own auth
+  // Use provided userId or fall back to admin ID
+  const effectiveUserId = userId || 'admin-direct-access';
+  const isReady = true;
   const isAuthenticated = password !== null;
 
   // Attempt password authentication
@@ -211,7 +214,7 @@ export function HiddenAdminPanel({
     const load = async () => {
       setIsLoading(true);
       try {
-        const result = await getPersonalityState(userId as string, password);
+        const result = await getPersonalityState(effectiveUserId, password);
         if (mounted && result?.personality) {
           setPersonality(result.personality);
         }
@@ -229,7 +232,7 @@ export function HiddenAdminPanel({
     return () => {
       mounted = false;
     };
-  }, [open, isReady, isAuthenticated, password, userId]);
+  }, [open, isReady, isAuthenticated, password, effectiveUserId]);
 
   const fieldRows = useMemo(() => PERSONALITY_FIELDS, []);
 
@@ -254,12 +257,12 @@ export function HiddenAdminPanel({
 
     try {
       await setPersonalityState(
-        userId as string,
+        effectiveUserId,
         personality,
         password,
         'hidden-admin-panel'
       );
-      const refreshed = await getPersonalityState(userId as string, password);
+      const refreshed = await getPersonalityState(effectiveUserId, password);
       if (refreshed?.personality) {
         setPersonality(refreshed.personality);
       }
@@ -297,7 +300,7 @@ export function HiddenAdminPanel({
           return;
         }
         const result = await addManualEngram(
-          userId as string,
+          effectiveUserId,
           { content },
           password,
           true
@@ -316,7 +319,7 @@ export function HiddenAdminPanel({
         }
         const next = { ...personality, ...updates };
         await setPersonalityState(
-          userId as string,
+          effectiveUserId,
           next,
           password,
           'hidden-admin-panel-command'
@@ -333,7 +336,7 @@ export function HiddenAdminPanel({
           return;
         }
         const result = await applyPersonalityDelta(
-          userId as string,
+          effectiveUserId,
           updates,
           password,
           'hidden-admin-panel-delta'

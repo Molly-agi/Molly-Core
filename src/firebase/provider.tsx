@@ -179,7 +179,14 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
           | undefined;
         if (trace) trace('AUTH', 'Auto sign-in attempt', 'start');
 
-        const result = await signInAnonymously(auth);
+        // Timeout to prevent hanging when Firebase auth is unavailable
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Auth timeout after 5s')), 5000)
+        );
+        const result = await Promise.race([
+          signInAnonymously(auth),
+          timeoutPromise,
+        ]);
 
         if (trace)
           trace('AUTH', 'Auto sign-in successful', 'complete', {
@@ -220,7 +227,17 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         if (trace) trace('AUTH', 'Token lost — auto-recovery', 'start');
 
         try {
-          const result = await signInAnonymously(auth);
+          // Timeout to prevent hanging when Firebase auth is unavailable
+          const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(
+              () => reject(new Error('Token recovery timeout after 5s')),
+              5000
+            )
+          );
+          const result = await Promise.race([
+            signInAnonymously(auth),
+            timeoutPromise,
+          ]);
           console.log(
             '[FirebaseProvider] Token recovery successful:',
             result.user.uid
