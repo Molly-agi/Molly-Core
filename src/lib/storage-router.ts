@@ -83,30 +83,52 @@ class StorageRouter implements StorageProvider {
 
   constructor() {
     this.mode = detectStorageMode();
-    this.provider = this.createProvider();
+    // Start with a safe default provider synchronously
+    this.provider = new LocalStorageProvider();
 
-    MollyLogger.info(
-      `Storage Router initialized — mode: ${this.mode}, provider: ${this.provider.name}`,
-      'storage-router'
-    );
+    // If Firestore is requested, attempt to initialize it asynchronously
+    if (this.mode === 'firestore') {
+      this.createProvider()
+        .then((provider) => {
+          this.provider = provider;
+          MollyLogger.info(
+            `Storage Router initialized — mode: ${this.mode}, provider: ${this.provider.name}`,
+            'storage-router'
+          );
+        })
+        .catch((err) => {
+          MollyLogger.warn(
+            `Failed to initialize Firestore provider, continuing with local storage: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+            'storage-router'
+          );
+        });
+    } else {
+      MollyLogger.info(
+        `Storage Router initialized — mode: ${this.mode}, provider: ${this.provider.name}`,
+        'storage-router'
+      );
+    }
   }
 
-  private createProvider(): StorageProvider {
+  private async createProvider(): Promise<StorageProvider> {
     if (this.mode === 'firestore') {
       try {
-        // Dynamic require avoids bundler pulling firebase-admin into client bundles
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { isAdminConfigured } = require('../firebase/admin');
-        if (!isAdminConfigured()) {
+        // Dynamic import avoids bundler pulling firebase-admin into client bundles
+        const adminModule = await import('../firebase/admin');
+        const { isAdminConfigured } = adminModule;
+        if (typeof isAdminConfigured !== 'function' || !isAdminConfigured()) {
           throw new Error(
             'Firebase Admin SDK not configured (missing credentials)'
           );
         }
-        /* eslint-disable @typescript-eslint/no-require-imports */
-        const {
-          FirestoreStorageProvider,
-        } = require('./firestore-storage-provider');
-        /* eslint-enable @typescript-eslint/no-require-imports */
+
+        const firestoreModule = await import('./firestore-storage-provider');
+        const { FirestoreStorageProvider } = firestoreModule as {
+          FirestoreStorageProvider: new () => StorageProvider;
+        };
+
         return new FirestoreStorageProvider();
       } catch (err) {
         MollyLogger.warn(
@@ -186,9 +208,16 @@ class StorageRouter implements StorageProvider {
 
   async healthCheck(): Promise<boolean> {
     // Only call if provider implements healthCheck
-    const provider = this.provider as { healthCheck?: () => Promise<boolean> };
-    if (typeof provider.healthCheck === 'function') {
-      return provider.healthCheck();
+    const provider = this.provider as unknown;
+    if (
+      provider &&
+      typeof provider === 'object' &&
+      'healthCheck' in provider &&
+      typeof (provider as { healthCheck: unknown }).healthCheck === 'function'
+    ) {
+      return (
+        provider as { healthCheck: () => Promise<boolean> }
+      ).healthCheck();
     }
     return true;
   }
@@ -242,7 +271,14 @@ export async function loadFromStorage<T = unknown>(
 ): Promise<T | null> {
   const storage = getStorageRouter();
   const doc = await storage.get(key, 'singleton');
-  if (!doc || typeof doc.data !== 'object' || !('value' in doc.data))
+  if (!doc) {
     return null;
+  }
+  if (doc.data === null || typeof doc.data !== 'object') {
+    return null;
+  }
+  if (!('value' in doc.data)) {
+    return null;
+  }
   return doc.data.value as T;
 }
