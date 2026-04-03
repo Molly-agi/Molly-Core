@@ -195,11 +195,13 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 
 ### 3.1 Storage System
 
-| Component                  | Location                                              | Purpose                                      |
-| -------------------------- | ----------------------------------------------------- | -------------------------------------------- |
-| **Storage Router**         | `src/lib/storage-router.ts`                           | Routes storage calls to appropriate provider |
-| **Local Storage Provider** | `src/lib/storage-providers/local-storage-provider.ts` | File-based persistence for edge/offline      |
-| **Firestore Provider**     | `src/lib/storage-providers/firestore-provider.ts`     | Cloud persistence                            |
+| Component                  | Location                                                       | Purpose                                                                                                                        |
+| -------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Storage Router**         | `src/lib/storage-router.ts`                                    | Routes storage calls to appropriate provider (env: `MOLLY_STORAGE_PROVIDER`; falls back to local if Firestore admin is absent) |
+| **Local Storage Provider** | `src/lib/storage-providers/local-storage-provider.ts`          | File-based persistence for edge/offline                                                                                        |
+| **Firestore Provider**     | `src/lib/storage-providers/firestore-provider.ts`              | Cloud persistence                                                                                                              |
+| **Device Sync Engine**     | `src/lib/device-sync-engine.ts`                                | Multi-transport sync across WiFi/USB/hotspot                                                                                   |
+| **Edge Server Scripts**    | `scripts/setup-molly-edge.sh`, `scripts/start-edge-server.mjs` | Edge install/bootstrap and server entrypoint                                                                                   |
 
 ### 3.2 Model System
 
@@ -223,6 +225,8 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | **Self-Diagnostic**  | `src/ai/agency/core/self-diagnostic.ts`      | Runtime health monitoring                         |
 | **Tool Executor**    | `src/ai/agency/core/tool-executor.ts`        | Central tool dispatch with Heart Gate integration |
 | **Curiosity Engine** | `src/ai/agency/planning/curiosity-engine.ts` | Question generation and investigation             |
+| **Rate Limiter**     | `src/ai/tools/rate-limiter.ts`               | Token/cost guardrails per flow and global budget  |
+| **Circuit Breaker**  | `src/ai/tools/circuit-breaker.ts`            | Fast-fail safety for flaky/erroring flows         |
 
 ---
 
@@ -242,11 +246,11 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 
 ### 4.2 Runtime State Files
 
-| File                         | Purpose                             |
-| ---------------------------- | ----------------------------------- |
-| `COPILOT_SESSION_STATE.json` | Live session state                  |
-| `COPILOT_SESSION_STATE.md`   | Human-readable session state        |
-| `molly_data/`                | Runtime data directory (gitignored) |
+| File                         | Purpose                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| `COPILOT_SESSION_STATE.json` | Live session state                                                        |
+| `COPILOT_SESSION_STATE.md`   | Human-readable session state                                              |
+| `molly_data/`                | Runtime data directory (gitignored; used by snapshots/engram persistence) |
 
 ---
 
@@ -269,12 +273,14 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 
 ## 6. Key Entry Points
 
-| Entry Point                           | Purpose               |
-| ------------------------------------- | --------------------- |
-| `src/ai/flows/molly-chat.ts`          | Main chat flow        |
-| `src/app/api/tools/execute/route.ts`  | Tool execution API    |
-| `src/app/api/chat/route.ts`           | Chat API              |
-| `src/ai/agency/core/tool-executor.ts` | Direct tool execution |
+| Entry Point                           | Purpose                         |
+| ------------------------------------- | ------------------------------- |
+| `src/ai/flows/molly-chat.ts`          | Main chat flow                  |
+| `src/app/api/tools/execute/route.ts`  | Tool execution API              |
+| `src/app/api/chat/route.ts`           | Chat API                        |
+| `src/ai/agency/core/tool-executor.ts` | Direct tool execution           |
+| `src/app/actions/ai-flows.ts`         | Server Actions gateway to flows |
+| `src/ai/flows/index.ts`               | Flow export surface             |
 
 ---
 
@@ -283,3 +289,9 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | Date       | Version | Changes                           |
 | ---------- | ------- | --------------------------------- |
 | 2026-03-30 | 1.0     | Initial comprehensive map created |
+
+---
+
+## Stewardship Reminder
+
+- Keep this map current after any major infrastructure, safety, storage, or sync change, and at session end. This avoids drift and reduces handoff risk for future agents.
