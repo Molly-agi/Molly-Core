@@ -31,7 +31,7 @@ export async function saveFoundTool(
   userId: string,
   tool: Omit<FoundTool, 'id' | 'savedAt' | 'accessCount' | 'lastAccessedAt'>
 ): Promise<string> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/foundTools`;
   const now = new Date().toISOString();
 
@@ -53,7 +53,7 @@ export async function searchSavedTools(
   searchTerm: string,
   category?: string
 ): Promise<FoundTool[]> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/foundTools`;
 
   const filters = category
@@ -100,7 +100,7 @@ export async function getToolsByCategory(
   userId: string,
   category: string
 ): Promise<FoundTool[]> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/foundTools`;
 
   const results = await storage.query(
@@ -129,7 +129,7 @@ export async function getRecentTools(
   userId: string,
   count: number = 10
 ): Promise<FoundTool[]> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/foundTools`;
 
   const results = await storage.query(collectionPath, [], {
@@ -157,7 +157,7 @@ export async function recordToolAccess(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/foundTools`;
 
   // Get current tool data to increment access count
@@ -180,7 +180,7 @@ export async function removeTool(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   await storage.delete(`users/${userId}/foundTools`, toolId);
 }
 
@@ -193,7 +193,7 @@ export async function getToolStats(userId: string): Promise<{
   mostUsedTools: FoundTool[];
   recentlyAdded: FoundTool[];
 }> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/foundTools`;
 
   const results = await storage.query(collectionPath, [], {});

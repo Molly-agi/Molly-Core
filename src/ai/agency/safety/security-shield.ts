@@ -919,7 +919,7 @@ const SECURITY_DOC_ID = 'security_shield_state';
  */
 export async function saveSecurityState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(SECURITY_COLLECTION, SECURITY_DOC_ID, {
       threats: state.threats.slice(-50),
       stats: state.stats,
@@ -938,7 +938,7 @@ export async function saveSecurityState(): Promise<void> {
  */
 export async function loadSecurityState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(SECURITY_COLLECTION, SECURITY_DOC_ID);
 
     if (doc?.data) {

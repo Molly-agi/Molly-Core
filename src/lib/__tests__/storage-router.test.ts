@@ -41,10 +41,11 @@ describe('StorageRouter', () => {
     jest.resetModules();
   });
 
-  it('creates a singleton instance', () => {
+  it('creates a singleton promise', () => {
     const { getStorageRouter } = require('../storage-router');
     const a = getStorageRouter();
     const b = getStorageRouter();
+    // Both calls return the same Promise reference
     expect(a).toBe(b);
   });
 
@@ -59,9 +60,9 @@ describe('StorageRouter', () => {
     expect(a).not.toBe(b);
   });
 
-  it('reports provider info', () => {
+  it('reports provider info', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const info = router.getProviderInfo();
 
     expect(info.id).toBe('local');
@@ -69,15 +70,15 @@ describe('StorageRouter', () => {
     expect(info.mode).toBe('local');
   });
 
-  it('returns local mode', () => {
+  it('returns local mode', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     expect(router.getMode()).toBe('local');
   });
 
   it('passes add() through to provider', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     const result = await router.add('test-collection', { value: 42 });
     expect(result.id).toBeTruthy();
@@ -86,7 +87,7 @@ describe('StorageRouter', () => {
 
   it('passes set() and get() through to provider', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     await router.set('test', 'doc1', { name: 'Molly' });
     const result = await router.get('test', 'doc1');
@@ -97,7 +98,7 @@ describe('StorageRouter', () => {
 
   it('passes query() through to provider', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     await router.set('items', 'a', { type: 'x', score: 10 });
     await router.set('items', 'b', { type: 'y', score: 20 });
@@ -115,7 +116,7 @@ describe('StorageRouter', () => {
 
   it('passes update() through to provider', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     await router.set('test', 'doc1', { v: 1 });
     await router.update('test', 'doc1', { v: 2 });
@@ -126,7 +127,7 @@ describe('StorageRouter', () => {
 
   it('passes delete() through to provider', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     await router.set('test', 'doc1', { v: 1 });
     await router.delete('test', 'doc1');
@@ -137,7 +138,7 @@ describe('StorageRouter', () => {
 
   it('passes batchWrite() through to provider', async () => {
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     await router.batchWrite([
       { type: 'set', collectionPath: 'test', docId: 'a', data: { n: 1 } },
@@ -161,25 +162,28 @@ describe('StorageRouter — Environment Detection', () => {
     jest.resetModules();
   });
 
-  it('uses local when MOLLY_STORAGE_PROVIDER=local', () => {
+  it('uses local when MOLLY_STORAGE_PROVIDER=local', async () => {
     process.env.MOLLY_STORAGE_PROVIDER = 'local';
     const { getStorageRouter } = require('../storage-router');
-    expect(getStorageRouter().getMode()).toBe('local');
+    const router = await getStorageRouter();
+    expect(router.getMode()).toBe('local');
   });
 
-  it('uses local for Termux environment', () => {
+  it('uses local for Termux environment', async () => {
     delete process.env.MOLLY_STORAGE_PROVIDER;
     process.env.TERMUX_VERSION = '0.118.0';
     const { getStorageRouter } = require('../storage-router');
-    expect(getStorageRouter().getMode()).toBe('local');
+    const router = await getStorageRouter();
+    expect(router.getMode()).toBe('local');
   });
 
-  it('defaults to local (phone-first architecture)', () => {
+  it('defaults to local (phone-first architecture)', async () => {
     delete process.env.MOLLY_STORAGE_PROVIDER;
     delete process.env.TERMUX_VERSION;
     delete process.env.CODESPACES;
     const { getStorageRouter } = require('../storage-router');
-    expect(getStorageRouter().getMode()).toBe('local');
+    const router = await getStorageRouter();
+    expect(router.getMode()).toBe('local');
   });
 });
 
@@ -206,11 +210,11 @@ describe('StorageRouter — Firestore Fallback', () => {
     jest.resetModules();
   });
 
-  it('falls back to local when firestore requested but admin not configured', () => {
+  it('falls back to local when firestore requested but admin not configured', async () => {
     process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
     // No Firebase credentials set — isAdminConfigured() returns false
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     // Should have fallen back to local
     expect(router.getMode()).toBe('local');
@@ -220,7 +224,7 @@ describe('StorageRouter — Firestore Fallback', () => {
   it('still works for CRUD after firestore fallback', async () => {
     process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
     const { getStorageRouter } = require('../storage-router');
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
 
     // Verify the fallback provider actually works
     await router.set('test', 'doc1', { name: 'Molly' });
@@ -229,13 +233,13 @@ describe('StorageRouter — Firestore Fallback', () => {
     expect(result!.data.name).toBe('Molly');
   });
 
-  it('logs warning when firestore requested but unavailable', () => {
+  it('logs warning when firestore requested but unavailable', async () => {
     process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
     // Even though it falls back, detectStorageMode returns 'firestore'
     // We can verify this by checking that warn was called
     const { MollyLogger } = require('../../ai/logger');
     const { getStorageRouter } = require('../storage-router');
-    getStorageRouter();
+    await getStorageRouter();
 
     expect(MollyLogger.warn).toHaveBeenCalledWith(
       expect.stringContaining('Firestore requested but unavailable'),
@@ -243,3 +247,4 @@ describe('StorageRouter — Firestore Fallback', () => {
     );
   });
 });
+

@@ -720,7 +720,7 @@ async function saveSentinelState(): Promise<void> {
 
   saveDebounceTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       await storage.set(SENTINEL_COLLECTION, SENTINEL_DOC_ID, {
         scansCompleted: _state.scansCompleted,
         threatsDetected: _state.threatsDetected,
@@ -747,7 +747,7 @@ export async function loadSentinelState(): Promise<number> {
     // Detect available tools on startup
     await detectAvailableTools();
 
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(SENTINEL_COLLECTION, SENTINEL_DOC_ID);
 
     if (!doc?.data) {

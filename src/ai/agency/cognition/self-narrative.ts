@@ -1109,7 +1109,7 @@ async function saveNarrativeState(): Promise<void> {
   try {
     state.metadata.lastUpdated = new Date().toISOString();
 
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(NARRATIVE_COLLECTION, NARRATIVE_DOC_ID, {
       identityStatements: Array.from(state.identityStatements.entries()),
       lifeChapters: state.lifeChapters,
@@ -1136,7 +1136,7 @@ async function saveNarrativeState(): Promise<void> {
 
 async function loadNarrativeState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(NARRATIVE_COLLECTION, NARRATIVE_DOC_ID);
 
     if (doc?.data) {

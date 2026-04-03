@@ -738,7 +738,7 @@ const TRAJECTORY_DOC_ID = 'trajectory_state';
  */
 export async function saveTrajectoryState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(TRAJECTORY_COLLECTION, TRAJECTORY_DOC_ID, {
       predictions: state.predictions.slice(-50),
       correlations: state.correlations,
@@ -760,7 +760,7 @@ export async function saveTrajectoryState(): Promise<void> {
  */
 export async function loadTrajectoryState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(TRAJECTORY_COLLECTION, TRAJECTORY_DOC_ID);
 
     if (doc?.data) {

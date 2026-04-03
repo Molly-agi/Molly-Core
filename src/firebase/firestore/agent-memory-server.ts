@@ -10,7 +10,7 @@ export async function recordSensoryLogServer(
   description: string,
   metadata: Record<string, unknown>
 ) {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/sensoryMemory`;
 
   const logEntry = {
@@ -39,7 +39,7 @@ export async function logSelfImprovementServer(
     status: 'requested' | 'in-progress' | 'completed' | 'deferred';
   }
 ): Promise<string> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/selfImprovementRequests`;
 
   const doc = await storage.add(collectionPath, {
@@ -66,7 +66,7 @@ export async function recordCodeModificationServer(
   modifiedCode: string,
   description: string
 ): Promise<void> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const collectionPath = `users/${userId}/codeModifications`;
 
   await storage.add(collectionPath, {

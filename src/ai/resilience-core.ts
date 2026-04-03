@@ -850,7 +850,7 @@ async function persistFailure(
   // Use the storage router for persistence — it handles local vs remote transparently
   // No direct firebase-admin usage here to avoid bundler issues
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set('molly_resilience', failure.id, {
       message: failure.message,
       source: failure.source,
@@ -942,7 +942,7 @@ async function savePatterns(): Promise<void> {
 
   patternSaveTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       const patternsArray = Array.from(learnedPatterns.entries()).map(
         ([key, value]) => ({
           key,
@@ -971,7 +971,7 @@ async function savePatterns(): Promise<void> {
  */
 export async function loadPatterns(): Promise<number> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(PATTERNS_COLLECTION, PATTERNS_DOC_ID);
 
     if (!doc?.data?.patterns || !Array.isArray(doc.data.patterns)) {

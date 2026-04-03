@@ -20,7 +20,7 @@ jest.mock('@/ai/logger', () => ({
 
 // Mock storage router with inline mock to avoid hoisting issues
 jest.mock('@/lib/storage-router', () => ({
-  getStorageRouter: jest.fn().mockReturnValue({
+  getStorageRouter: jest.fn().mockResolvedValue({
     getMode: jest.fn().mockReturnValue('local'),
     batchWrite: jest.fn().mockResolvedValue(undefined),
   }),
@@ -71,7 +71,7 @@ describe('Engram Persistence', () => {
     // Create a fresh mock for batchWrite
     mockBatchWrite = jest.fn().mockResolvedValue(undefined);
 
-    (getStorageRouter as jest.Mock).mockReturnValue({
+    (getStorageRouter as jest.Mock).mockResolvedValue({
       getMode: jest.fn().mockReturnValue('local'),
       batchWrite: mockBatchWrite,
     });
@@ -152,7 +152,7 @@ describe('Engram Persistence', () => {
 
   describe('Firebase Mode', () => {
     it('fails when Firestore mode but admin not configured', async () => {
-      (getStorageRouter as jest.Mock).mockReturnValue({
+      (getStorageRouter as jest.Mock).mockResolvedValue({
         getMode: jest.fn().mockReturnValue('firestore'),
         batchWrite: mockBatchWrite,
       });
@@ -167,7 +167,7 @@ describe('Engram Persistence', () => {
     });
 
     it('succeeds when Firestore mode and admin configured', async () => {
-      (getStorageRouter as jest.Mock).mockReturnValue({
+      (getStorageRouter as jest.Mock).mockResolvedValue({
         getMode: jest.fn().mockReturnValue('firestore'),
         batchWrite: mockBatchWrite,
       });

@@ -473,7 +473,7 @@ export async function loadUncertaintyState(): Promise<UncertaintyState> {
   if (uqState) return uqState;
 
   try {
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const doc = await router.get(UQ_COLLECTION, UQ_DOC_ID);
     if (doc?.data) {
       const parsed = doc.data as Record<string, unknown>;
@@ -549,7 +549,7 @@ async function saveUncertaintyState(): Promise<void> {
     uqState.globalMetrics.uncertaintyCount = uqState.uncertainties.size;
     uqState.globalMetrics.blindSpotCount = uqState.blindSpots.size;
 
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const serializable = {
       domains: Array.from(uqState.domains.entries()),
       facts: Array.from(uqState.facts.entries()),

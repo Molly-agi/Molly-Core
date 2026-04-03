@@ -36,7 +36,7 @@ let patternSaveTimer: ReturnType<typeof setTimeout> | null = null;
  */
 export async function loadPatterns(): Promise<number> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(PATTERNS_COLLECTION, PATTERNS_DOC_ID);
 
     if (!doc?.data?.patterns || !Array.isArray(doc.data.patterns)) {
@@ -84,7 +84,7 @@ export async function savePatterns(): Promise<void> {
 
   patternSaveTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       const patternsArray = Array.from(learnedPatterns.entries()).map(
         ([key, value]) => ({
           key,

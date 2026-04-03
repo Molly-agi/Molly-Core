@@ -454,7 +454,7 @@ async function saveHeartGateState(): Promise<void> {
 
   saveDebounceTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       await storage.set(HEART_GATE_COLLECTION, HEART_GATE_DOC_ID, {
         alignment: _state.alignment,
         totalVerifications: _state.totalVerifications,
@@ -501,7 +501,7 @@ export async function loadHeartGateState(): Promise<number> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(HEART_GATE_COLLECTION, HEART_GATE_DOC_ID);
 
     if (!doc?.data) {

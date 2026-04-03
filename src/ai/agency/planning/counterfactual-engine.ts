@@ -385,7 +385,7 @@ export async function loadCounterfactualState(): Promise<CounterfactualEngineSta
   if (cfState) return cfState;
 
   try {
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const doc = await router.get(CF_COLLECTION, CF_DOC_ID);
     if (doc?.data) {
       const parsed = doc.data as Record<string, unknown>;
@@ -454,7 +454,7 @@ async function saveCounterfactualState(): Promise<void> {
 
   try {
     cfState.metadata.lastUpdated = new Date();
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const serializable = {
       decisionPoints: Array.from(cfState.decisionPoints.entries()),
       counterfactuals: Array.from(cfState.counterfactuals.entries()),

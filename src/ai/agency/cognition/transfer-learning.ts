@@ -1174,7 +1174,7 @@ async function saveTransferState(): Promise<void> {
   try {
     state.metadata.lastUpdated = new Date().toISOString();
 
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(TRANSFER_COLLECTION, TRANSFER_DOC_ID, {
       patterns: Array.from(state.patterns.entries()),
       analogies: Array.from(state.analogies.entries()),
@@ -1194,7 +1194,7 @@ async function saveTransferState(): Promise<void> {
 
 async function loadTransferState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(TRANSFER_COLLECTION, TRANSFER_DOC_ID);
 
     if (doc?.data) {

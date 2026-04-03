@@ -118,4 +118,10 @@ export interface StorageProvider {
    * Execute multiple write operations atomically (best-effort for local).
    */
   batchWrite(operations: BatchOperation[]): Promise<void>;
+
+  /**
+   * Check that the storage backend is reachable and writable.
+   * Returns true if healthy, false otherwise.
+   */
+  healthCheck(): Promise<boolean>;
 }

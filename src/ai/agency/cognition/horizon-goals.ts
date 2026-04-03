@@ -293,7 +293,7 @@ export async function loadGoalState(): Promise<GoalHorizonState> {
   if (goalState) return goalState;
 
   try {
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const doc = await router.get(GOALS_COLLECTION, GOALS_DOC_ID);
     if (doc?.data) {
       const parsed = doc.data as Record<string, unknown>;
@@ -360,7 +360,7 @@ async function saveGoalState(): Promise<void> {
 
   try {
     goalState.metadata.lastUpdated = new Date();
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     // Serialize Map as array of entries
     const lastReflectionSerialized: Record<string, string> = {};
     Object.keys(goalState.lastReflection).forEach((key) => {

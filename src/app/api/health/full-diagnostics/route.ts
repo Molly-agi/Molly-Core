@@ -46,7 +46,7 @@ export async function GET() {
 
   // 2. Check Storage Router
   try {
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const info = router.getProviderInfo();
     const healthy = await router.healthCheck();
     diagnostics.checks.storage = {

@@ -214,7 +214,8 @@ const CONFIG = {
 // STORAGE
 // ============================================================================
 
-const storage = getStorageRouter();
+// Shared promise — resolved once on first use; subsequent calls are instant
+const storagePromise = getStorageRouter();
 
 // ============================================================================
 // HTTP SERVER
@@ -317,7 +318,7 @@ async function handleStorage(
         sendError(res, 400, 'Missing data');
         return;
       }
-      const result = await storage.add(collection, data);
+      const result = await (await storagePromise).add(collection, data);
       syncEngine?.logChange(collection, result.id, 'set', data).catch((err) => {
         console.error(
           '[molly-edge] Sync log failed for add:',
@@ -333,7 +334,7 @@ async function handleStorage(
         sendError(res, 400, 'Missing docId or data');
         return;
       }
-      await storage.set(collection, docId, data);
+      await (await storagePromise).set(collection, docId, data);
       syncEngine?.logChange(collection, docId, 'set', data).catch((err) => {
         console.error(
           '[molly-edge] Sync log failed for set:',
@@ -349,7 +350,7 @@ async function handleStorage(
         sendError(res, 400, 'Missing docId');
         return;
       }
-      const doc = await storage.get(collection, docId);
+      const doc = await (await storagePromise).get(collection, docId);
       if (!doc) {
         sendError(res, 404, 'Document not found');
         return;
@@ -363,7 +364,7 @@ async function handleStorage(
         sendError(res, 400, 'Missing docId or data');
         return;
       }
-      await storage.update(collection, docId, data);
+      await (await storagePromise).update(collection, docId, data);
       syncEngine?.logChange(collection, docId, 'set', data).catch((err) => {
         console.error(
           '[molly-edge] Sync log failed for set:',
@@ -379,7 +380,7 @@ async function handleStorage(
         sendError(res, 400, 'Missing docId');
         return;
       }
-      await storage.delete(collection, docId);
+      await (await storagePromise).delete(collection, docId);
       syncEngine?.logChange(collection, docId, 'delete', null).catch((err) => {
         console.error(
           '[molly-edge] Sync log failed for delete:',
@@ -393,7 +394,7 @@ async function handleStorage(
     case 'query': {
       const filters = body.filters as QueryFilter[] | undefined;
       const options = body.options as QueryOptions | undefined;
-      const results = await storage.query(collection, filters, options);
+      const results = await (await storagePromise).query(collection, filters, options);
       sendJson(res, 200, { results, count: results.length });
       break;
     }
@@ -421,7 +422,7 @@ async function handleStorage(
         sendError(res, 400, 'Invalid batch operation(s)');
         return;
       }
-      await storage.batchWrite(validOps);
+      await (await storagePromise).batchWrite(validOps);
       // Log each batch operation for sync
       for (const op of validOps) {
         syncEngine
@@ -508,7 +509,7 @@ async function handleAiProxy(
  * Health / Info — /api/health
  */
 async function handleHealth(res: http.ServerResponse): Promise<void> {
-  const storageHealthy = await storage.healthCheck();
+  const storageHealthy = await (await storagePromise).healthCheck();
 
   let memUsage: NodeJS.MemoryUsage | null = null;
   try {
@@ -689,9 +690,9 @@ async function handleSyncReceive(
       const action = change.action as string;
 
       if (action === 'delete') {
-        await storage.delete(collection, docId);
+        await (await storagePromise).delete(collection, docId);
       } else if (change.data) {
-        await storage.set(
+        await (await storagePromise).set(
           collection,
           docId,
           change.data as Record<string, unknown>
@@ -786,7 +787,7 @@ async function handleMigrationImport(
   // ── Persona ──
   if (sections.persona) {
     const persona = sections.persona as Record<string, unknown>;
-    await storage.set('migration', 'persona', {
+    await (await storagePromise).set('migration', 'persona', {
       identity: persona.identity || null,
       principles: persona.principles || null,
       systemPrompt: (persona.systemPrompt as string) || '',
@@ -806,7 +807,7 @@ async function handleMigrationImport(
       let count = 0;
       for (const record of memories.records) {
         const id = (record.id as string) || `mem_${Date.now()}_${count}`;
-        await storage.set('users/default/experiences', id, {
+        await (await storagePromise).set('users/default/experiences', id, {
           ...record,
           importedAt: new Date().toISOString(),
         });
@@ -818,7 +819,7 @@ async function handleMigrationImport(
 
   // ── Config ──
   if (sections.config) {
-    await storage.set(
+    await (await storagePromise).set(
       'migration',
       'config',
       sections.config as Record<string, unknown>
@@ -828,7 +829,7 @@ async function handleMigrationImport(
 
   // ── Family ──
   if (sections.family) {
-    await storage.set(
+    await (await storagePromise).set(
       'migration',
       'family',
       sections.family as Record<string, unknown>

@@ -30,7 +30,7 @@ function cleanFirestoreError(e: unknown): string {
  * Check if storage is available (either local mode or configured Firestore)
  */
 function isStorageAvailable(): boolean {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   // Local mode is always available
   if (storage.getMode() === 'local') return true;
   // Firestore mode requires admin to be configured

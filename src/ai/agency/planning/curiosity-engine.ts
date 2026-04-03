@@ -796,7 +796,7 @@ async function saveCuriosityState(): Promise<void> {
 
   saveDebounceTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       await storage.set(CURIOSITY_COLLECTION, CURIOSITY_DOC_ID, {
         questions: state.questions,
         activeInvestigations: state.activeInvestigations,
@@ -821,7 +821,7 @@ async function saveCuriosityState(): Promise<void> {
  */
 export async function loadCuriosityState(): Promise<number> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(CURIOSITY_COLLECTION, CURIOSITY_DOC_ID);
 
     if (!doc?.data) {

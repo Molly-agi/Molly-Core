@@ -290,7 +290,7 @@ async function saveEmotionalState(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(COLLECTION, EMOTIONAL_STATE_DOC, {
       currentState: _currentState,
       history: _history,
@@ -310,7 +310,7 @@ export async function loadEmotionalState(): Promise<void> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, EMOTIONAL_STATE_DOC);
 
     if (doc?.data) {

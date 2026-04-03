@@ -26,7 +26,7 @@ jest.mock('@/firebase/admin', () => ({
 
 // Mock storage router
 jest.mock('@/lib/storage-router', () => ({
-  getStorageRouter: jest.fn().mockReturnValue({
+  getStorageRouter: jest.fn().mockResolvedValue({
     getMode: jest.fn().mockReturnValue('local'),
     query: jest.fn().mockResolvedValue([]),
     update: jest.fn().mockResolvedValue(undefined),
@@ -74,19 +74,27 @@ import { isAdminConfigured } from '@/firebase/admin';
 import { verifyRecordIntegrity } from '../memory-integrity';
 
 describe('Semantic Recall', () => {
-  const mockStorage = getStorageRouter() as jest.Mocked<
-    ReturnType<typeof getStorageRouter>
-  >;
+  // Access the resolved mock storage object via the mock function's resolved value
+  const mockGetStorageRouter = getStorageRouter as jest.Mock;
+  let mockStorage: {
+    getMode: jest.Mock;
+    query: jest.Mock;
+    update: jest.Mock;
+  };
   const mockEmbeddingProvider = getEmbeddingProvider() as jest.Mocked<
     ReturnType<typeof getEmbeddingProvider>
   >;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mockStorage = {
+      getMode: jest.fn().mockReturnValue('local'),
+      query: jest.fn().mockResolvedValue([]),
+      update: jest.fn().mockResolvedValue(undefined),
+    };
+    mockGetStorageRouter.mockResolvedValue(mockStorage);
     (isEmbeddingProviderReady as jest.Mock).mockReturnValue(true);
     (isAdminConfigured as jest.Mock).mockReturnValue(true);
-    mockStorage.getMode.mockReturnValue('local');
-    mockStorage.query.mockResolvedValue([]);
   });
 
   describe('semanticRecall', () => {

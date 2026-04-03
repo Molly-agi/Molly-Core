@@ -839,7 +839,7 @@ const CONSCIOUSNESS_DOC_ID = 'consciousness_state';
  */
 export async function saveConsciousnessState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(CONSCIOUSNESS_COLLECTION, CONSCIOUSNESS_DOC_ID, {
       snapshots: state.snapshots.slice(-100), // Keep recent 100
       insights: state.insights,
@@ -861,7 +861,7 @@ export async function saveConsciousnessState(): Promise<void> {
  */
 export async function loadConsciousnessState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(
       CONSCIOUSNESS_COLLECTION,
       CONSCIOUSNESS_DOC_ID

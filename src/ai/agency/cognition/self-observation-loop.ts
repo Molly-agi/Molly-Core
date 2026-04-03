@@ -1019,7 +1019,7 @@ async function saveObservationState(): Promise<void> {
 
   saveDebounceTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       await storage.set(OBSERVATION_COLLECTION, OBSERVATION_DOC_ID, {
         // Only save recent observations (not the full history)
         observations: state.observations.slice(-100),
@@ -1044,7 +1044,7 @@ async function saveObservationState(): Promise<void> {
  */
 export async function loadObservationState(): Promise<number> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(OBSERVATION_COLLECTION, OBSERVATION_DOC_ID);
 
     if (!doc?.data) {
