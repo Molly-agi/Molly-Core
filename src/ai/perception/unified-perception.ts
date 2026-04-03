@@ -381,7 +381,7 @@ function synthesize(
     if (dominantExpression) emotionalAtmosphere = dominantExpression;
   }
 
-  if (voice?.emotionalTone !== 'neutral') {
+  if (voice && voice.emotionalTone !== 'neutral') {
     emotionalAtmosphere = voice.emotionalTone;
   }
 
@@ -413,7 +413,7 @@ function synthesize(
   if (text?.questions.length) {
     suggestedResponseType = 'speak';
     insights.push(`${text.questions.length} question(s) to answer`);
-  } else if (text?.intent !== 'general') {
+  } else if (text && text.intent !== 'general') {
     suggestedResponseType = 'act';
     insights.push(`Detected intent: ${text.intent}`);
   } else if (presenceDetected.length > 0) {
