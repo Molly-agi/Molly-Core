@@ -102,6 +102,7 @@ let managerOptions: Required<McpManagerOptions> = {
   ...DEFAULT_MANAGER_OPTIONS,
 };
 let initialized = false;
+let cleanupRegistered = false;
 let healthCheckTimer: NodeJS.Timeout | null = null;
 const managedServers = new Map<string, ManagedServer>();
 
@@ -529,6 +530,11 @@ export function getManagedServerNames(): string[] {
  * Register cleanup handler for process exit.
  */
 function registerCleanupHandler(): void {
+  if (cleanupRegistered) {
+    return;
+  }
+  cleanupRegistered = true;
+
   const cleanup = async () => {
     await shutdownMcpManager();
   };
