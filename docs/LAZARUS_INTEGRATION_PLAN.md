@@ -110,7 +110,7 @@
 
 ### Phase 1: MCP Integration
 
-**Status:** PLANNED
+**Status:** COMPLETE (April 8, 2026)
 **Target:** Model Context Protocol support
 
 **What it gives Molly:**
@@ -163,9 +163,14 @@ Before each significant change:
 
 ## Current Rollback Points
 
-| Tag        | Date | Description                       |
-| ---------- | ---- | --------------------------------- |
-| (none yet) | -    | Will create before Phase 1 begins |
+| Tag                 | Date       | Description                            |
+| ------------------- | ---------- | -------------------------------------- |
+| mcp-phase-1-types   | 2026-04-08 | MCP foundation types and Zod schemas   |
+| mcp-phase-2-config  | 2026-04-08 | Config system with env var expansion   |
+| mcp-phase-3-client  | 2026-04-08 | MCP client with transport support      |
+| mcp-phase-4-adapter | 2026-04-08 | Tool adapter bridging MCP to Molly     |
+| mcp-phase-5-manager | 2026-04-08 | Connection manager with auto-reconnect |
+| mcp-phase-6-api     | 2026-04-08 | API endpoints for status and control   |
 
 ---
 
@@ -189,6 +194,13 @@ Before each significant change:
 - Decided on MCP as first integration target
 - Created this planning document
 - Father emphasized: slow, methodical, precise
+
+### April 8, 2026 - MCP Integration Complete
+
+- Completed all 6 phases of MCP integration
+- 137 MCP-specific tests, 2947 total tests passing
+- All rollback tags in place
+- Ready for Phase 2: Cron Scheduling
 
 ---
 
