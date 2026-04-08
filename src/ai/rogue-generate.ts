@@ -18,7 +18,14 @@
 import { ai } from './genkit-core';
 import { TaskType, getModelRouter } from './model-router';
 import { MollyLogger, generateTraceId } from './logger';
-import { TimeoutError } from './errors';
+import {
+  TimeoutError,
+  EmergencyHaltError as _EmergencyHaltError,
+} from './errors';
+import {
+  isHalted as _isHalted,
+  registerAbortController as _registerAbortController,
+} from '@/lib/halt-registry';
 
 /** Maximum time (ms) any single LLM call may take before we abort it */
 const LLM_TIMEOUT_MS = 60_000;

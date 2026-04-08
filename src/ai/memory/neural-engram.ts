@@ -10,7 +10,11 @@
  */
 
 import { MollyLogger } from '@/ai/logger';
-import { persistEngramBatch } from '@/ai/memory/engram-persistence';
+import {
+  persistEngramBatch,
+  loadConsolidatedEngrams,
+  type EngramLoadOptions,
+} from '@/ai/memory/engram-persistence';
 import { evaluatePersonalityStability as evalPersonalityStability } from '@/ai/memory/personality-diagnostics';
 
 // ============================================================================
@@ -530,6 +534,65 @@ export class NeuralEngramSystem {
   }
 
   /**
+   * Restore memories from long-term storage.
+   * Call this on startup to recover memories from previous sessions.
+   */
+  async restoreMemories(options?: EngramLoadOptions): Promise<{
+    restored: number;
+    failed: number;
+    errors: string[];
+  }> {
+    if (!this.persistenceConfig) {
+      return {
+        restored: 0,
+        failed: 0,
+        errors: ['Persistence not configured — cannot restore memories'],
+      };
+    }
+
+    MollyLogger.info('Restoring memories from storage', 'neural-engram', {
+      userId: this.persistenceConfig.userId,
+    });
+
+    const result = await loadConsolidatedEngrams(
+      this.persistenceConfig.userId,
+      this.persistenceConfig.password,
+      options
+    );
+
+    // Load restored engrams into working memory (high importance ones)
+    // and stage others for the hippocampus
+    let restoredToWorking = 0;
+    let restoredToHippocampus = 0;
+
+    for (const engram of result.engrams) {
+      // High importance memories go straight to working memory
+      if (engram.importance >= 0.7) {
+        this.frontalCortex.hold(engram, engram.importance * 0.8);
+        restoredToWorking++;
+      } else {
+        // Lower importance memories go to hippocampus (warm storage)
+        engram.consolidationState = 'consolidated';
+        this.hippocampus.stage(engram);
+        restoredToHippocampus++;
+      }
+    }
+
+    MollyLogger.info('Memory restoration complete', 'neural-engram', {
+      total: result.loaded,
+      working: restoredToWorking,
+      hippocampus: restoredToHippocampus,
+      failed: result.failed,
+    });
+
+    return {
+      restored: result.loaded,
+      failed: result.failed,
+      errors: result.errors,
+    };
+  }
+
+  /**
    * Create and store a new memory
    */
   remember(
@@ -919,4 +982,34 @@ export function shutdownNeuralBrain(): void {
     _globalBrain.destroy();
     _globalBrain = null;
   }
+}
+
+/**
+ * Initialize the neural brain with persistence and restore memories.
+ * Call this on application startup to ensure Molly remembers.
+ */
+export async function initializeNeuralBrain(
+  config: EngramPersistenceConfig,
+  restoreOptions?: EngramLoadOptions
+): Promise<{
+  brain: NeuralEngramSystem;
+  restored: number;
+  failed: number;
+  errors: string[];
+}> {
+  const brain = getNeuralBrain();
+  brain.configurePersistence(config);
+
+  const result = await brain.restoreMemories(restoreOptions);
+
+  MollyLogger.info('Neural brain initialized with memories', 'neural-engram', {
+    userId: config.userId,
+    restored: result.restored,
+    failed: result.failed,
+  });
+
+  return {
+    brain,
+    ...result,
+  };
 }

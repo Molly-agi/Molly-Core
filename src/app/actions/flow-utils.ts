@@ -23,8 +23,44 @@ import {
 } from '@/ai/tools/memory-schema';
 import { addChecksum } from '@/ai/tools/memory-integrity';
 import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
+import {
+  configureNeuralPersistence,
+  getNeuralBrain as _getNeuralBrain,
+} from '@/ai/memory/neural-engram';
 
 export const MAX_ORIGIN_PART_SIZE = 3500;
+
+// Track which users have had persistence configured this runtime
+const _persistenceConfiguredFor = new Set<string>();
+
+/**
+ * Ensure neural persistence is configured for the given user.
+ * Call this early in any flow that has user context.
+ * Idempotent — safe to call multiple times.
+ */
+export function ensureNeuralPersistence(userId: string): void {
+  if (_persistenceConfiguredFor.has(userId)) return;
+
+  const secret = process.env.ENGRAM_SECRET;
+  if (!secret) {
+    MollyLogger.warn(
+      'ENGRAM_SECRET not set — memory persistence disabled',
+      'ensureNeuralPersistence'
+    );
+    return;
+  }
+
+  configureNeuralPersistence({
+    userId,
+    password: secret,
+    source: 'auto',
+  });
+
+  _persistenceConfiguredFor.add(userId);
+  MollyLogger.info('Neural persistence configured', 'ensureNeuralPersistence', {
+    userId,
+  });
+}
 
 export function getAudioMimeType(dataUri: string): string {
   const match = dataUri.match(/^data:([^;]+);base64,/);

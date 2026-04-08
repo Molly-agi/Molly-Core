@@ -148,7 +148,13 @@ async function ensureInitialized(): Promise<boolean> {
 
     // Get the default Firestore instance
     firestoreInstance = adminModule.firestore(app);
-    firestoreInstance.settings({ preferRest: true });
+
+    // settings() can only be called once - catch if already configured
+    try {
+      firestoreInstance.settings({ preferRest: true });
+    } catch {
+      // Settings already applied, safe to continue
+    }
 
     initialized = true;
     return true;

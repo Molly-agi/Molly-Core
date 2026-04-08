@@ -8,7 +8,10 @@ import { isAdminConfigured } from '@/firebase/admin';
 import type { BatchOperation } from '@/lib/storage-interface';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type { MemoryEngram } from '@/ai/memory/neural-engram';
-import { encryptEngramData } from '@/ai/memory/engram-crypto';
+import {
+  encryptEngramData,
+  decryptEngramData,
+} from '@/ai/memory/engram-crypto';
 
 export interface EngramPersistenceResult {
   saved: number;
@@ -121,4 +124,128 @@ export async function persistEngramBatch(
   }
 
   return { saved, failed, errors };
+}
+
+export interface EngramLoadResult {
+  loaded: number;
+  failed: number;
+  errors: string[];
+  engrams: MemoryEngram[];
+}
+
+export interface EngramLoadOptions {
+  /** Only load engrams with importance >= this threshold (default: 0) */
+  minImportance?: number;
+  /** Maximum number of engrams to load (default: 100) */
+  limit?: number;
+  /** Load most recent first (default: true) */
+  mostRecentFirst?: boolean;
+}
+
+/**
+ * Load consolidated engrams from storage.
+ * Decrypts and restores memories for the given user.
+ */
+export async function loadConsolidatedEngrams(
+  userId: string,
+  password: string,
+  options: EngramLoadOptions = {}
+): Promise<EngramLoadResult> {
+  const traceId = generateTraceId();
+  const errors: string[] = [];
+  const engrams: MemoryEngram[] = [];
+
+  const { minImportance = 0, limit = 100, mostRecentFirst = true } = options;
+
+  const storage = getStorageRouter();
+  if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
+    return {
+      loaded: 0,
+      failed: 0,
+      errors: ['Firebase admin not configured — engram loading unavailable'],
+      engrams: [],
+    };
+  }
+
+  MollyLogger.info(
+    'Loading consolidated engrams',
+    'engram-persistence',
+    { userId, minImportance, limit },
+    traceId
+  );
+
+  const collectionPath = `users/${userId}/engrams`;
+
+  try {
+    const docs = await storage.query(
+      collectionPath,
+      minImportance > 0
+        ? [{ field: 'importance', operator: '>=', value: minImportance }]
+        : [],
+      {
+        orderBy: {
+          field: 'timestamp',
+          direction: mostRecentFirst ? 'desc' : 'asc',
+        },
+        limit,
+      }
+    );
+
+    for (const doc of docs) {
+      try {
+        const { encrypted, iv, authTag } = doc.data as {
+          encrypted: string;
+          iv: string;
+          authTag: string;
+        };
+
+        if (!encrypted || !iv || !authTag) {
+          errors.push(`${doc.id}: missing encryption fields`);
+          continue;
+        }
+
+        const decrypted = decryptEngramData(
+          encrypted,
+          userId,
+          password,
+          iv,
+          authTag
+        );
+        const engram = JSON.parse(decrypted) as MemoryEngram;
+
+        // Restore Date objects (JSON serialization converts them to strings)
+        engram.timestamp = new Date(engram.timestamp);
+        engram.lastAccessed = new Date(engram.lastAccessed);
+
+        engrams.push(engram);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Decryption failed';
+        errors.push(`${doc.id}: ${message}`);
+      }
+    }
+
+    MollyLogger.info(
+      'Engrams loaded successfully',
+      'engram-persistence',
+      { loaded: engrams.length, failed: errors.length },
+      traceId
+    );
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Query failed';
+    errors.push(`query: ${message}`);
+    MollyLogger.error(
+      'Failed to load engrams',
+      'engram-persistence',
+      { userId },
+      error
+    );
+  }
+
+  return {
+    loaded: engrams.length,
+    failed: errors.length,
+    errors,
+    engrams,
+  };
 }

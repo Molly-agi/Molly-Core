@@ -25,6 +25,7 @@ import {
   buildNervousSystemSignal,
   buildMemoryContext,
   recordChatResponse,
+  ensureNeuralPersistence,
 } from './flow-utils';
 
 /**
@@ -75,6 +76,9 @@ export async function processVoiceInteraction(
   }
 ) {
   try {
+    // Ensure memory persistence is configured for this user
+    ensureNeuralPersistence(userId);
+
     ensureApiKey();
     await checkRateLimit('voice-interaction', 500);
     const mimeType = getAudioMimeType(audioData);

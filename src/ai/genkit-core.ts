@@ -17,7 +17,7 @@ export const ai = genkit({
 });
 
 // ── Model constants — env-overridable ──
-// Core models (Gemini 3.1)
+// Core models (Gemini 3.1 - latest preview)
 export const MODEL_FLASH =
   process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3-flash-preview';
 export const MODEL_PRO =

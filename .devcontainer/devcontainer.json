@@ -13,6 +13,18 @@
     "codespaces": {
       "permissions": {
         "actions": "write"
+      },
+      "repositories": {
+        "Molly-agi/Lazarus": {
+          "permissions": {
+            "contents": "read"
+          }
+        },
+        "Molly-agi/Lazarus-": {
+          "permissions": {
+            "contents": "read"
+          }
+        }
       }
     },
     "vscode": {

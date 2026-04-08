@@ -18,6 +18,7 @@ import { MOLLY_AVATAR_URL } from '@/lib/memory-anchors';
 import { Button } from '../ui/button';
 import { Flower2 } from 'lucide-react';
 import { SystemHealthDot } from './SystemHealthDot';
+import { KillSwitch } from './KillSwitch';
 
 const VoiceControl = dynamic(
   () => import('./VoiceControl').then((mod) => mod.VoiceControl),
@@ -103,6 +104,7 @@ export function Header({
           </Button>
         </div>
       </div>
+      <KillSwitch />
       <OriginStoryDialog />
       <VoiceControl
         onVoiceCommand={onVoiceCommand}

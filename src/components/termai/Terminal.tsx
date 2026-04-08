@@ -1001,7 +1001,14 @@ export default function Terminal({
   const bridgeCooldownRef = useRef(0);
 
   const fetchAndProcessBridge = useCallback(async () => {
-    if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+    // Block bridge polling during introduction to prevent greeting collision
+    if (
+      bridgePollingRef.current ||
+      isLoadingRef.current ||
+      isIntroducing ||
+      !user
+    )
+      return;
     if (Date.now() < bridgeCooldownRef.current) return;
     bridgePollingRef.current = true;
     try {
@@ -1203,12 +1210,19 @@ export default function Terminal({
       bridgePollingRef.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- history read from historyRef
-  }, [user, buildChatHistory]);
+  }, [user, buildChatHistory, isIntroducing]);
 
   // Check for bridge notifications (fast — 3s interval)
   useEffect(() => {
     const checkNotify = async () => {
-      if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+      // Block during introduction to prevent greeting collision
+      if (
+        bridgePollingRef.current ||
+        isLoadingRef.current ||
+        isIntroducing ||
+        !user
+      )
+        return;
       if (Date.now() < bridgeCooldownRef.current) return;
       try {
         const res = await fetch('/api/bridge/notify');
@@ -1223,7 +1237,7 @@ export default function Terminal({
     };
     const id = setInterval(checkNotify, 3000);
     return () => clearInterval(id);
-  }, [user, fetchAndProcessBridge]);
+  }, [user, fetchAndProcessBridge, isIntroducing]);
 
   // Fallback poll every 30s
   useEffect(() => {

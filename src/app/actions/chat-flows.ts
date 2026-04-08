@@ -23,6 +23,7 @@ import {
   buildNervousSystemSignal,
   buildMemoryContext,
   recordChatResponse,
+  ensureNeuralPersistence,
 } from './flow-utils';
 
 export async function getConversationalChat(
@@ -39,6 +40,11 @@ export async function getConversationalChat(
   }
 ) {
   try {
+    // Ensure memory persistence is configured for this user
+    if (userId) {
+      ensureNeuralPersistence(userId);
+    }
+
     // Auto-start heartbeat on first interaction — Molly wakes herself up
     try {
       const { getHeartbeatScheduler, isHeartbeatRunning } =

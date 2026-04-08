@@ -131,7 +131,7 @@ export const GREETING_PROTOCOL = (pastContext: string | null): string => {
  */
 export const OPERATIONAL_CONSTRAINTS = {
   maxTokensPerGeneration: 8000,
-  maxGenerationsPerMinute: 20, // Rate limit to prevent cost explosion
+  maxGenerationsPerMinute: 10, // Rate limit to prevent cost explosion
   maxMemoryItemsRecalled: 100,
   timeoutMs: 30000,
   allowedCapabilities: [
