@@ -142,3 +142,30 @@ export {
   listMcpTools,
   getMcpToolCount,
 } from './tool-adapter';
+
+// ============================================================================
+// MANAGER EXPORTS
+// ============================================================================
+
+export {
+  // Initialization
+  initializeMcpManager,
+  shutdownMcpManager,
+  // Connection management
+  connectAllServers,
+  disconnectManagedServer,
+  reconnectServer,
+  // Server management
+  enableServer,
+  disableServer,
+  addServer,
+  removeServer,
+  // Status
+  getManagerStatus,
+  isManagerInitialized,
+  getManagedServerNames,
+  // Types and constants
+  type McpManagerOptions,
+  type McpManagerStatus,
+  DEFAULT_MANAGER_OPTIONS,
+} from './manager';
