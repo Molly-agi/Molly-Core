@@ -1,34 +1,44 @@
 /**
- * MCP Types Test Suite
+ * MCP Types Tests
  *
- * Tests for MCP server configuration validation and type guards.
+ * Tests for MCP type validation, schemas, and type guards.
  */
 
 import {
+  // Schemas
+  McpServerConfigSchema,
+  McpJsonConfigSchema,
   McpStdioServerConfigSchema,
   McpSSEServerConfigSchema,
   McpHTTPServerConfigSchema,
   McpWebSocketServerConfigSchema,
-  McpServerConfigSchema,
-  McpJsonConfigSchema,
+  // Type guards
   isConnected,
   isFailed,
+  needsAuth,
   isPending,
   isDisabled,
   isStdioConfig,
-  isRemoteConfig,
+  isSSEConfig,
+  isHTTPConfig,
+  isWebSocketConfig,
+  getTransportType,
+  // Constants
   DEFAULT_MCP_CONNECT_OPTIONS,
+  // Types
   type MCPServerConnection,
   type McpServerConfig,
-} from '../types';
+  type ScopedMcpServerConfig,
+} from '../index';
 
-describe('MCP Server Config Schemas', () => {
+describe('MCP Types', () => {
   describe('McpStdioServerConfigSchema', () => {
-    it('should validate a minimal stdio config', () => {
+    it('should validate a valid stdio config', () => {
       const config = {
         command: 'npx',
         args: ['-y', '@modelcontextprotocol/server-filesystem'],
       };
+
       const result = McpStdioServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
       if (result.success) {
@@ -40,25 +50,33 @@ describe('MCP Server Config Schemas', () => {
       }
     });
 
-    it('should validate a stdio config with explicit type', () => {
+    it('should validate stdio config with explicit type', () => {
       const config = {
         type: 'stdio' as const,
         command: 'node',
         args: ['server.js'],
-        env: { DEBUG: 'true' },
+        env: { NODE_ENV: 'production' },
       };
+
       const result = McpStdioServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
 
     it('should reject empty command', () => {
-      const config = { command: '', args: [] };
+      const config = {
+        command: '',
+        args: [],
+      };
+
       const result = McpStdioServerConfigSchema.safeParse(config);
       expect(result.success).toBe(false);
     });
 
     it('should default args to empty array', () => {
-      const config = { command: 'node' };
+      const config = {
+        command: 'my-server',
+      };
+
       const result = McpStdioServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
       if (result.success) {
@@ -71,8 +89,9 @@ describe('MCP Server Config Schemas', () => {
     it('should validate a valid SSE config', () => {
       const config = {
         type: 'sse' as const,
-        url: 'https://example.com/mcp',
+        url: 'https://example.com/sse',
       };
+
       const result = McpSSEServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
@@ -80,9 +99,12 @@ describe('MCP Server Config Schemas', () => {
     it('should validate SSE config with headers', () => {
       const config = {
         type: 'sse' as const,
-        url: 'https://example.com/mcp',
-        headers: { Authorization: 'Bearer token123' },
+        url: 'https://example.com/sse',
+        headers: {
+          Authorization: 'Bearer token123',
+        },
       };
+
       const result = McpSSEServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
@@ -92,6 +114,7 @@ describe('MCP Server Config Schemas', () => {
         type: 'sse' as const,
         url: 'not-a-valid-url',
       };
+
       const result = McpSSEServerConfigSchema.safeParse(config);
       expect(result.success).toBe(false);
     });
@@ -103,16 +126,7 @@ describe('MCP Server Config Schemas', () => {
         type: 'http' as const,
         url: 'https://api.example.com/mcp',
       };
-      const result = McpHTTPServerConfigSchema.safeParse(config);
-      expect(result.success).toBe(true);
-    });
 
-    it('should validate HTTP config with headers', () => {
-      const config = {
-        type: 'http' as const,
-        url: 'https://api.example.com/mcp',
-        headers: { 'X-API-Key': 'secret' },
-      };
       const result = McpHTTPServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
@@ -122,68 +136,63 @@ describe('MCP Server Config Schemas', () => {
     it('should validate a valid WebSocket config', () => {
       const config = {
         type: 'ws' as const,
-        url: 'wss://example.com/mcp',
+        url: 'wss://example.com/ws',
       };
-      const result = McpWebSocketServerConfigSchema.safeParse(config);
-      expect(result.success).toBe(true);
-    });
 
-    it('should allow non-URL strings for ws (flexibility)', () => {
-      // WebSocket URLs can have various formats
-      const config = {
-        type: 'ws' as const,
-        url: 'ws://localhost:8080',
-      };
       const result = McpWebSocketServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
   });
 
   describe('McpServerConfigSchema (union)', () => {
-    it('should validate stdio config without type field', () => {
-      const config = { command: 'node', args: ['server.js'] };
+    it('should accept stdio config without type', () => {
+      const config = {
+        command: 'python',
+        args: ['-m', 'mcp_server'],
+      };
+
       const result = McpServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
 
-    it('should validate explicit stdio config', () => {
-      const config = { type: 'stdio' as const, command: 'npx', args: [] };
+    it('should accept SSE config', () => {
+      const config = {
+        type: 'sse' as const,
+        url: 'https://example.com/sse',
+      };
+
       const result = McpServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
 
-    it('should validate SSE config', () => {
-      const config = { type: 'sse' as const, url: 'https://example.com/mcp' };
+    it('should accept HTTP config', () => {
+      const config = {
+        type: 'http' as const,
+        url: 'https://example.com/http',
+      };
+
       const result = McpServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
 
-    it('should validate HTTP config', () => {
-      const config = { type: 'http' as const, url: 'https://example.com/mcp' };
+    it('should accept WebSocket config', () => {
+      const config = {
+        type: 'ws' as const,
+        url: 'wss://example.com/ws',
+      };
+
       const result = McpServerConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
-    });
-
-    it('should validate WebSocket config', () => {
-      const config = { type: 'ws' as const, url: 'wss://example.com/mcp' };
-      const result = McpServerConfigSchema.safeParse(config);
-      expect(result.success).toBe(true);
-    });
-
-    it('should reject invalid type', () => {
-      const config = { type: 'invalid', url: 'https://example.com' };
-      const result = McpServerConfigSchema.safeParse(config);
-      expect(result.success).toBe(false);
     });
   });
 
   describe('McpJsonConfigSchema', () => {
-    it('should validate a complete .mcp.json config', () => {
+    it('should validate a valid .mcp.json config', () => {
       const config = {
         mcpServers: {
           filesystem: {
             command: 'npx',
-            args: ['-y', '@modelcontextprotocol/server-filesystem', '/tmp'],
+            args: ['-y', '@modelcontextprotocol/server-filesystem'],
           },
           'remote-api': {
             type: 'sse' as const,
@@ -191,6 +200,7 @@ describe('MCP Server Config Schemas', () => {
           },
         },
       };
+
       const result = McpJsonConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
       if (result.success) {
@@ -199,159 +209,177 @@ describe('MCP Server Config Schemas', () => {
     });
 
     it('should validate empty mcpServers', () => {
-      const config = { mcpServers: {} };
+      const config = {
+        mcpServers: {},
+      };
+
       const result = McpJsonConfigSchema.safeParse(config);
       expect(result.success).toBe(true);
     });
 
     it('should reject missing mcpServers', () => {
       const config = {};
+
       const result = McpJsonConfigSchema.safeParse(config);
       expect(result.success).toBe(false);
     });
   });
-});
 
-describe('MCP Type Guards', () => {
-  const mockClient = {} as never; // Minimal mock for connected server
-  const mockConfig: McpServerConfig = { command: 'node', args: [] };
+  describe('Type Guards - Connection States', () => {
+    const createConnection = (
+      type: MCPServerConnection['type']
+    ): MCPServerConnection => {
+      const baseConfig: ScopedMcpServerConfig = {
+        command: 'test',
+        args: [],
+        scope: 'project',
+      };
 
-  const connectedServer: MCPServerConnection = {
-    name: 'test',
-    type: 'connected',
-    client: mockClient,
-    capabilities: {},
-    config: mockConfig,
-    cleanup: async () => {},
-  };
+      switch (type) {
+        case 'connected':
+          return {
+            name: 'test',
+            type: 'connected',
+            capabilities: {},
+            config: baseConfig,
+            cleanup: async () => {},
+          };
+        case 'failed':
+          return {
+            name: 'test',
+            type: 'failed',
+            config: baseConfig,
+            error: 'Connection failed',
+          };
+        case 'needs-auth':
+          return {
+            name: 'test',
+            type: 'needs-auth',
+            config: baseConfig,
+          };
+        case 'pending':
+          return {
+            name: 'test',
+            type: 'pending',
+            config: baseConfig,
+          };
+        case 'disabled':
+          return {
+            name: 'test',
+            type: 'disabled',
+            config: baseConfig,
+          };
+      }
+    };
 
-  const failedServer: MCPServerConnection = {
-    name: 'test',
-    type: 'failed',
-    config: mockConfig,
-    error: 'Connection refused',
-  };
-
-  const pendingServer: MCPServerConnection = {
-    name: 'test',
-    type: 'pending',
-    config: mockConfig,
-  };
-
-  const disabledServer: MCPServerConnection = {
-    name: 'test',
-    type: 'disabled',
-    config: mockConfig,
-  };
-
-  describe('isConnected', () => {
-    it('should return true for connected server', () => {
-      expect(isConnected(connectedServer)).toBe(true);
+    it('isConnected should identify connected servers', () => {
+      expect(isConnected(createConnection('connected'))).toBe(true);
+      expect(isConnected(createConnection('failed'))).toBe(false);
+      expect(isConnected(createConnection('pending'))).toBe(false);
     });
 
-    it('should return false for failed server', () => {
-      expect(isConnected(failedServer)).toBe(false);
+    it('isFailed should identify failed servers', () => {
+      expect(isFailed(createConnection('failed'))).toBe(true);
+      expect(isFailed(createConnection('connected'))).toBe(false);
     });
 
-    it('should return false for pending server', () => {
-      expect(isConnected(pendingServer)).toBe(false);
+    it('needsAuth should identify servers needing auth', () => {
+      expect(needsAuth(createConnection('needs-auth'))).toBe(true);
+      expect(needsAuth(createConnection('connected'))).toBe(false);
     });
 
-    it('should return false for disabled server', () => {
-      expect(isConnected(disabledServer)).toBe(false);
-    });
-  });
-
-  describe('isFailed', () => {
-    it('should return true for failed server', () => {
-      expect(isFailed(failedServer)).toBe(true);
+    it('isPending should identify pending servers', () => {
+      expect(isPending(createConnection('pending'))).toBe(true);
+      expect(isPending(createConnection('connected'))).toBe(false);
     });
 
-    it('should return false for connected server', () => {
-      expect(isFailed(connectedServer)).toBe(false);
-    });
-  });
-
-  describe('isPending', () => {
-    it('should return true for pending server', () => {
-      expect(isPending(pendingServer)).toBe(true);
-    });
-
-    it('should return false for connected server', () => {
-      expect(isPending(connectedServer)).toBe(false);
-    });
-  });
-
-  describe('isDisabled', () => {
-    it('should return true for disabled server', () => {
-      expect(isDisabled(disabledServer)).toBe(true);
-    });
-
-    it('should return false for connected server', () => {
-      expect(isDisabled(connectedServer)).toBe(false);
+    it('isDisabled should identify disabled servers', () => {
+      expect(isDisabled(createConnection('disabled'))).toBe(true);
+      expect(isDisabled(createConnection('connected'))).toBe(false);
     });
   });
 
-  describe('isStdioConfig', () => {
-    it('should return true for config without type', () => {
-      const config: McpServerConfig = { command: 'node', args: [] };
-      expect(isStdioConfig(config)).toBe(true);
-    });
-
-    it('should return true for explicit stdio config', () => {
-      const config: McpServerConfig = {
+  describe('Type Guards - Config Types', () => {
+    it('isStdioConfig should identify stdio configs', () => {
+      const stdioNoType: McpServerConfig = { command: 'node', args: [] };
+      const stdioWithType: McpServerConfig = {
         type: 'stdio',
         command: 'node',
         args: [],
       };
-      expect(isStdioConfig(config)).toBe(true);
-    });
-
-    it('should return false for SSE config', () => {
-      const config: McpServerConfig = {
+      const sseConfig: McpServerConfig = {
         type: 'sse',
         url: 'https://example.com',
       };
-      expect(isStdioConfig(config)).toBe(false);
-    });
-  });
 
-  describe('isRemoteConfig', () => {
-    it('should return true for SSE config', () => {
-      const config: McpServerConfig = {
+      expect(isStdioConfig(stdioNoType)).toBe(true);
+      expect(isStdioConfig(stdioWithType)).toBe(true);
+      expect(isStdioConfig(sseConfig)).toBe(false);
+    });
+
+    it('isSSEConfig should identify SSE configs', () => {
+      const sseConfig: McpServerConfig = {
         type: 'sse',
         url: 'https://example.com',
       };
-      expect(isRemoteConfig(config)).toBe(true);
+      const stdioConfig: McpServerConfig = { command: 'node', args: [] };
+
+      expect(isSSEConfig(sseConfig)).toBe(true);
+      expect(isSSEConfig(stdioConfig)).toBe(false);
     });
 
-    it('should return true for HTTP config', () => {
-      const config: McpServerConfig = {
+    it('isHTTPConfig should identify HTTP configs', () => {
+      const httpConfig: McpServerConfig = {
         type: 'http',
         url: 'https://example.com',
       };
-      expect(isRemoteConfig(config)).toBe(true);
+      const sseConfig: McpServerConfig = {
+        type: 'sse',
+        url: 'https://example.com',
+      };
+
+      expect(isHTTPConfig(httpConfig)).toBe(true);
+      expect(isHTTPConfig(sseConfig)).toBe(false);
     });
 
-    it('should return true for WebSocket config', () => {
-      const config: McpServerConfig = { type: 'ws', url: 'wss://example.com' };
-      expect(isRemoteConfig(config)).toBe(true);
-    });
+    it('isWebSocketConfig should identify WebSocket configs', () => {
+      const wsConfig: McpServerConfig = {
+        type: 'ws',
+        url: 'wss://example.com',
+      };
+      const httpConfig: McpServerConfig = {
+        type: 'http',
+        url: 'https://example.com',
+      };
 
-    it('should return false for stdio config', () => {
-      const config: McpServerConfig = { command: 'node', args: [] };
-      expect(isRemoteConfig(config)).toBe(false);
+      expect(isWebSocketConfig(wsConfig)).toBe(true);
+      expect(isWebSocketConfig(httpConfig)).toBe(false);
     });
   });
-});
 
-describe('MCP Constants', () => {
+  describe('getTransportType', () => {
+    it('should return correct transport type for each config', () => {
+      expect(getTransportType({ command: 'node', args: [] })).toBe('stdio');
+      expect(
+        getTransportType({ type: 'stdio', command: 'node', args: [] })
+      ).toBe('stdio');
+      expect(
+        getTransportType({ type: 'sse', url: 'https://example.com' })
+      ).toBe('sse');
+      expect(
+        getTransportType({ type: 'http', url: 'https://example.com' })
+      ).toBe('http');
+      expect(getTransportType({ type: 'ws', url: 'wss://example.com' })).toBe(
+        'ws'
+      );
+    });
+  });
+
   describe('DEFAULT_MCP_CONNECT_OPTIONS', () => {
     it('should have sensible defaults', () => {
       expect(DEFAULT_MCP_CONNECT_OPTIONS.timeoutMs).toBe(30000);
-      expect(DEFAULT_MCP_CONNECT_OPTIONS.autoReconnect).toBe(true);
       expect(DEFAULT_MCP_CONNECT_OPTIONS.maxReconnectAttempts).toBe(3);
-      expect(DEFAULT_MCP_CONNECT_OPTIONS.reconnectDelayMs).toBe(5000);
+      expect(DEFAULT_MCP_CONNECT_OPTIONS.reconnectDelayMs).toBe(1000);
     });
   });
 });

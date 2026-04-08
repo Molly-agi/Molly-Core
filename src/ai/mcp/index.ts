@@ -1,79 +1,70 @@
 /**
- * MCP (Model Context Protocol) Integration for Molly-Core
+ * MCP (Model Context Protocol) Integration
  *
- * This module provides MCP client functionality, allowing Molly
- * to connect to external tool servers via the Model Context Protocol.
+ * Public API for Molly's MCP integration.
+ * Connects Molly to the MCP ecosystem of external tool servers.
  *
- * @example
- * ```typescript
- * import { McpServerConfigSchema, isConnected } from '@/ai/mcp';
- *
- * // Validate a server config
- * const config = McpServerConfigSchema.parse({
- *   type: 'stdio',
- *   command: 'npx',
- *   args: ['-y', '@modelcontextprotocol/server-filesystem']
- * });
- * ```
- *
- * @see https://modelcontextprotocol.io/
+ * @module ai/mcp
  */
 
 // ============================================================================
-// Schema Exports (for validation)
+// TYPE EXPORTS
 // ============================================================================
 
 export {
+  // Schemas
+  ConfigScopeSchema,
+  TransportTypeSchema,
   McpStdioServerConfigSchema,
   McpSSEServerConfigSchema,
   McpHTTPServerConfigSchema,
   McpWebSocketServerConfigSchema,
   McpServerConfigSchema,
   McpJsonConfigSchema,
-} from './types';
-
-// ============================================================================
-// Type Exports
-// ============================================================================
-
-export type {
-  // Server configs
-  McpStdioServerConfig,
-  McpSSEServerConfig,
-  McpHTTPServerConfig,
-  McpWebSocketServerConfig,
-  McpServerConfig,
-  McpJsonConfig,
-  // Connection states
-  ConnectedMCPServer,
-  FailedMCPServer,
-  PendingMCPServer,
-  DisabledMCPServer,
-  MCPServerConnection,
+  // Types
+  type ConfigScope,
+  type TransportType,
+  type McpStdioServerConfig,
+  type McpSSEServerConfig,
+  type McpHTTPServerConfig,
+  type McpWebSocketServerConfig,
+  type McpServerConfig,
+  type ScopedMcpServerConfig,
+  type McpJsonConfig,
+  // Connection types
+  type McpServerCapabilities,
+  type McpServerInfo,
+  type ConnectedMCPServer,
+  type FailedMCPServer,
+  type NeedsAuthMCPServer,
+  type PendingMCPServer,
+  type DisabledMCPServer,
+  type MCPServerConnection,
   // Tool types
-  McpSerializedTool,
-  McpToolCallResult,
-  // State
-  McpState,
-  // Options
-  McpConnectOptions,
-} from './types';
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-export { DEFAULT_MCP_CONNECT_OPTIONS } from './types';
-
-// ============================================================================
-// Type Guards
-// ============================================================================
-
-export {
+  type McpToolInputSchema,
+  type McpTool,
+  type McpTextContent,
+  type McpImageContent,
+  type McpResourceContent,
+  type McpContent,
+  type McpToolResult,
+  // Resource types
+  type McpResource,
+  type ServerResource,
+  // State types
+  type McpState,
+  type McpConnectOptions,
+  // Constants
+  DEFAULT_MCP_CONNECT_OPTIONS,
+  // Type guards
   isConnected,
   isFailed,
+  needsAuth,
   isPending,
   isDisabled,
   isStdioConfig,
-  isRemoteConfig,
+  isSSEConfig,
+  isHTTPConfig,
+  isWebSocketConfig,
+  getTransportType,
 } from './types';
