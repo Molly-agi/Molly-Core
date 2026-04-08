@@ -114,3 +114,31 @@ export {
   // Health check
   pingServer,
 } from './client';
+
+// ============================================================================
+// TOOL ADAPTER EXPORTS
+// ============================================================================
+
+export {
+  // Tool name utilities
+  normalizeMcpToolName,
+  parseMcpToolName,
+  isMcpToolName,
+  // Result conversion
+  mcpResultToToolResult,
+  // Handler creation
+  createMcpToolHandler,
+  mcpToolToHandlerEntry,
+  // Registry management
+  registerServerTools,
+  unregisterServerTools,
+  registerAllServerTools,
+  clearMcpToolRegistry,
+  // Handler access
+  getMcpToolHandler,
+  hasMcpToolHandler,
+  getMcpToolHandlers,
+  getMcpToolMetadata,
+  listMcpTools,
+  getMcpToolCount,
+} from './tool-adapter';

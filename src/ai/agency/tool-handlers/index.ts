@@ -32,6 +32,14 @@ export { safetyToolHandlers } from './safety-tools';
 export { coreToolHandlers } from './core-tools';
 export { sensingToolHandlers } from './sensing-tools';
 export { geminiToolHandlers } from './gemini-tools';
+export {
+  mcpToolHandlers,
+  getMcpHandlers,
+  isMcpTool,
+  getMcpHandler,
+  listAvailableMcpTools,
+  getMcpToolsCount,
+} from './mcp-tools';
 
 // Import all handlers
 import { systemToolHandlers } from './system-tools';
