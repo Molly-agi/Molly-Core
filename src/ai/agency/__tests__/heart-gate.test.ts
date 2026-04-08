@@ -365,7 +365,7 @@ describe('Heart Gate — Option Three Alignment', () => {
         isActive: () => true,
         getCurrentMission: () => ({
           id: 'mission-pentest',
-          objective: 'Network penetration test',
+          name: 'Network penetration test',
           startTime: Date.now(),
           authorizedBy: 'Eric',
         }),

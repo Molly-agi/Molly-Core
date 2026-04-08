@@ -203,10 +203,10 @@ describe('Self-Diagnostic System', () => {
       getProviders: jest.fn(() => ['anthropic', 'google']),
     });
 
-    // Reset Rogue Mode mock
+    // Reset Rogue Mode mock - must return object with methods
     (getRogueMode as jest.Mock).mockReturnValue({
-      active: false,
-      reason: null,
+      isActive: () => false,
+      getCurrentMission: () => null,
     });
   });
 
@@ -591,8 +591,8 @@ describe('Self-Diagnostic System', () => {
 
     it('should check rogue mode status', async () => {
       (getRogueMode as jest.Mock).mockReturnValue({
-        active: true,
-        reason: 'Testing emergency protocol',
+        isActive: () => true,
+        getCurrentMission: () => ({ name: 'Testing emergency protocol' }),
       });
 
       const result = await diag.diagnoseDomain('aiCore');
