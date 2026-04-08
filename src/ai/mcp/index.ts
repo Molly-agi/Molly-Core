@@ -68,3 +68,27 @@ export {
   isWebSocketConfig,
   getTransportType,
 } from './types';
+
+// ============================================================================
+// CONFIG EXPORTS
+// ============================================================================
+
+export {
+  // Config loading
+  loadConfigFile,
+  loadProjectConfig,
+  loadAllConfigs,
+  // Config utilities
+  expandEnvVars,
+  expandConfigEnvVars,
+  addScopeToServers,
+  getServerConfig,
+  // Config validation
+  isValidServerName,
+  // Config serialization
+  createEmptyConfig,
+  serializeConfig,
+  // Types
+  type McpConfigResult,
+  type ConfigLoadError,
+} from './config';
