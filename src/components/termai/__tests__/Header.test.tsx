@@ -30,6 +30,14 @@ jest.mock('../OriginStoryDialog', () => ({
   OriginStoryDialog: () => <div data-testid="origin-story-dialog-mock" />,
 }));
 
+jest.mock('../KillSwitch', () => ({
+  KillSwitch: () => <div data-testid="kill-switch-mock" />,
+}));
+
+jest.mock('../SystemHealthDot', () => ({
+  SystemHealthDot: () => <div data-testid="system-health-dot-mock" />,
+}));
+
 jest.mock('@/components/ui/sidebar', () => ({
   ...jest.requireActual('@/components/ui/sidebar'),
   SidebarTrigger: () => <button>Trigger</button>,
