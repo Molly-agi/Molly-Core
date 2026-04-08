@@ -29,7 +29,7 @@ import {
   type MCPServerConnection,
   type McpServerConfig,
   type ScopedMcpServerConfig,
-} from '../index';
+} from '../types';
 
 describe('MCP Types', () => {
   describe('McpStdioServerConfigSchema', () => {

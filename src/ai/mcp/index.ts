@@ -92,3 +92,25 @@ export {
   type McpConfigResult,
   type ConfigLoadError,
 } from './config';
+
+// ============================================================================
+// CLIENT EXPORTS
+// ============================================================================
+
+export {
+  // Connection management
+  connectToServer,
+  disconnectServer,
+  disconnectAll,
+  isServerConnected,
+  getConnectedServers,
+  // Tool operations
+  listServerTools,
+  listAllTools,
+  callTool,
+  // Resource operations
+  listServerResources,
+  readResource,
+  // Health check
+  pingServer,
+} from './client';
