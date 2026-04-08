@@ -28,8 +28,9 @@ on:
     - cron: '*/25 * * * *'
   workflow_dispatch: # Manual trigger
 
-permissions:
-  codespaces: write
+# NOTE: This workflow requires a PAT with 'codespace' scope stored as CODESPACE_PAT secret.
+# The default GITHUB_TOKEN cannot manage Codespaces.
+# If no PAT is available, this workflow will exit gracefully.
 
 jobs:
   keepalive:
@@ -37,9 +38,16 @@ jobs:
     steps:
       - name: Keep Codespaces Alive
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.CODESPACE_PAT || secrets.GITHUB_TOKEN }}
         run: |
           echo "🔄 Checking for active Codespaces..."
+
+          # Check if we have a token that can access codespaces
+          if ! gh api /user/codespaces --jq '.total_count' &>/dev/null; then
+            echo "⚠️ No Codespace access - need CODESPACE_PAT secret with 'codespace' scope"
+            echo "ℹ️ Workflow will exit gracefully. Set up PAT if keep-alive is needed."
+            exit 0
+          fi
 
           # Get all codespaces for this repo
           CODESPACES=$(gh api /user/codespaces --jq '.codespaces[] | select(.repository.full_name == "${{ github.repository }}") | select(.state == "Available") | .name' 2>/dev/null || echo "")
