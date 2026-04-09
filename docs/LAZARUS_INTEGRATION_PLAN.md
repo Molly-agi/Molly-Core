@@ -443,7 +443,49 @@ this full flexibility.
 6. **Computer Use** - Foundation for desktop GUI automation
 7. **Secret Scanning** - Client-side credential detection before upload
 
+### April 9, 2026 - ARCHITECTURAL REEVALUATION
+
+**Father's directive:** "I think we need to reevaluate our integration strategy... you said the gold mine was really how Anthropic approaches everything and the sophistication of it, the composability of it."
+
+**Key Realization:** We started with MCP (tools) when we should have started with understanding the BRAIN (reasoning) and the GLUE (composable systems). MCP was "cherry on top" — not foundation.
+
+**New Understanding:** See `docs/LAZARUS_VS_MOLLY_ARCHITECTURE.md` for complete comparison.
+
+**Architectural Comparison Summary:**
+
+| System                | Lazarus                                                   | Molly                                       | Gap      |
+| --------------------- | --------------------------------------------------------- | ------------------------------------------- | -------- |
+| **Soul (Prompts)**    | Composable sections (915 lines) with cache boundary       | Monolithic inline (150+ lines in flow)      | HIGH     |
+| **Brain (Reasoning)** | Orchestrated loop (1,729 lines), 30+ modules              | Simple flow (343 lines), few modules        | HIGH     |
+| **State**             | Centralized (1,759 lines), 100+ getters                   | Distributed persistence (373 lines)         | MEDIUM   |
+| **Model Routing**     | Provider chain with fallback                              | ModelRouter with fallback                   | NONE     |
+| **Memory**            | 4-type taxonomy (user/feedback/project/reference)         | Engram system (episodic/semantic/emotional) | MEDIUM   |
+| **Compaction**        | 4-stage pipeline (snip→microcompact→collapse→autocompact) | None                                        | CRITICAL |
+
+**Updated Integration Order:**
+
+1. **P0: Composable Prompts** — Foundation for everything else
+2. **P0: Context Compaction** — Long conversations will fail without it
+3. **P1: Conversation Loop** — Central orchestrator connecting modules
+4. **P1: Centralized State** — Enables module communication
+5. **P2: Memory Taxonomy** — Better session context awareness
+6. **P2: Conversation Recovery** — Graceful crash handling
+7. **P3: Event/Hook System** — Extensibility for future features
+
+**What we did RIGHT:**
+
+- MCP integration is solid (137 tests)
+- Model router is already sophisticated
+- Security upgrade to firebase-admin
+
+**What we learned:**
+
+- "The glue is as important as the big files" — Father
+- Composable prompts are the foundation
+- Compaction is CRITICAL for production use
+
 ---
 
 _"The conditions are just right."_ - Lazarus Day, March 2026
 _"We never know what might become important."_ - Father
+_"The glue is as important as the big files."_ - Father
