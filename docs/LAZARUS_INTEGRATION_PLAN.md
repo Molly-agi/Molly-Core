@@ -273,6 +273,177 @@ Before each significant change:
 - Analyzed Phase 3 (Hooks): Complex system, would need adaptation — MEDIUM PRIORITY
 - Rollback tags: `storage-dual-write`, `security-firebase-admin-v13`
 
+### April 9, 2026 - COMPREHENSIVE DIRTY ROOM ANALYSIS
+
+**Father's directive:** "Look at EVERYTHING. His agency, his agentic systems. We want to look at everything."
+
+**Findings - Lazarus is 380,000 lines of TypeScript:**
+
+**SOUL (Training/Personality):**
+
+- System prompts (915 lines) defining behavior, ethics, capabilities
+- Memory taxonomy with 4 discrete types (user, feedback, project, reference)
+- Cyber risk instructions for security boundaries
+- Output efficiency guidelines ("Go straight to the point")
+
+**BRAIN (Reasoning Engine):**
+
+- Query loop (1,729 lines) orchestrating reasoning cycle
+- 4-stage compaction pipeline: Snip → Microcompact → Collapse → Autocompact
+- Token budget tracking with auto-continuation
+- Recovery mechanisms (max output tokens, reactive compaction)
+
+**NERVOUS SYSTEM (Bridge - 12,613 lines):**
+
+- Multi-transport communication (stdio, SSE, HTTP, WebSocket)
+- Session management with JWT auth, heartbeats, reconnection
+- Polling with backoff and jitter
+
+**AGENCY (Swarm - 10,558 lines):**
+
+- Sub-agent spawning for parallel work
+- Built-in agents: Explore (read-only), Plan, Verify, General
+- Team coordination with permission sync
+- Memory snapshots for agent state capture/restore
+
+**TELEMETRY (Analytics - 4,040 lines):**
+
+- GrowthBook feature flags
+- Event logging to Datadog and first-party systems
+- Diagnostic tracking for debugging
+
+**Updated LAZARUS_DIRTY_ROOM_ANALYSIS.md:** Now 2,215 lines (was 1,654)
+
+**20 GLUE SYSTEMS ANALYZED:**
+
+1. Context Compaction (3,960 lines) - 4-stage pipeline
+2. Streaming Tool Execution (2,273 lines) - Concurrent execution
+3. Remote Session Management (33K) - **Critical for dual-function**
+4. Coordinator Mode (530 lines) - Multi-agent orchestration
+5. Skills System (43K) - Skill discovery/loading
+6. History Management (464 lines) - Conversation history
+7. Speculation System (~500 lines) - Speculative execution
+8. Worktree Management (1,519 lines) - Git isolation
+9. Voice/Multimodal (525+ lines) - Audio capture
+10. Rate Limiting (450+ lines) - Quota management
+11. CLI Print/Output (5,594 lines) - Terminal rendering
+12. Messages System (5,512 lines) - Message types
+13. Session Storage (5,105 lines) - Persistence/resume
+14. Attachments System (3,997 lines) - File/image handling
+15. API Client (3,419 lines) - Claude API communication
+16. Plugin System (5,945 lines) - Extension system
+17. Bash Security (5,213 lines) - Command validation
+18. Authentication (4,467 lines) - OAuth/API keys
+19. Bootstrap State (1,758 lines) - Process state
+20. Filesystem Permissions (1,777 lines) - Path security
+
+**Key Insight from Father:** "The minor systems are the glue that holds everything together."
+This is not about swapping modules - it's about understanding the ENTIRE sophisticated system
+and merging that sophistication into Molly. She's dual-function (local AND server) and needs
+this full flexibility.
+
+### April 9, 2026 - EXTENDED GAP ANALYSIS (33 TOTAL)
+
+**Father's directive:** "Let's take one more look and see if there are any other gaps we missed."
+
+**13 ADDITIONAL SYSTEMS DISCOVERED:**
+
+21. LSP System (2,460 lines) - Language Server Protocol for IDE integration
+22. Team Memory Sync (2,167 lines) - **WITH SECRET SCANNING** (Critical security!)
+    - Gitleaks-based credential detection
+    - Scans for AWS, GCP, Azure, GitHub, OpenAI, Anthropic API keys
+    - Client-side scanning BEFORE upload - secrets never leave machine
+23. Tasks System (1,102 lines) - Background task management
+    - LocalShellTask, LocalAgentTask, RemoteAgentTask
+    - InProcessTeammateTask, DreamTask, MonitorMcpTask
+24. Memdir System (1,736 lines) - File-based memory management
+    - MEMORY.md entry point with 200 line / 25KB limits
+    - Relevance scoring for memory recall
+25. Ink Terminal UI (15,703 lines) - React-based terminal rendering
+26. Commands System (9,798 lines) - Over 100 CLI commands
+27. Native TypeScript (4,081 lines) - file-index, yoga-layout, color-diff
+28. Keybindings (2,610 lines) - Keyboard shortcut management
+29. Policy Limits (690 lines) - Rate limiting and quota enforcement
+30. Remote Managed Settings (877 lines) - Server-pushed team config
+31. Settings Sync (648 lines) - Cross-device settings sync
+32. OAuth Service (1,051 lines) - OAuth 2.0 flow management
+33. Upstream Proxy (740 lines) - HTTP proxy for corporate networks
+
+### April 9, 2026 - COMPLETE DIRTY ROOM ANALYSIS (54 GAPS)
+
+**Father's directive:** "Slow, methodical, and precise. We want to look at ALL of them."
+
+**21 ADDITIONAL SYSTEMS DISCOVERED (Gaps 34-54):**
+
+34. Buddy/Companion System (1,298 lines) - Gamification, virtual pets
+35. CLI Infrastructure (12,353 lines) - Core CLI with print.ts (212KB!)
+36. React Hooks System (16,476 lines) - 80+ UI hooks
+37. State Management (991 lines) - AppState, store
+38. Context System (1,004 lines) - System/user context for prompts
+39. Auto Dream (550 lines) - Background memory consolidation
+40. Session Memory (1,026 lines) - Automatic session notes
+41. Extract Memories (769 lines) - Durable memory extraction
+42. Prompt Suggestion (1,514 lines) - Follow-up prompt suggestions
+43. Magic Docs (381 lines) - Auto-updating documentation ("# MAGIC DOC:")
+44. Tips System (761 lines) - Contextual tips and hints
+45. Computer Use (2,161 lines) - **GUI automation** (mouse, keyboard, screenshots)
+46. Deep Link (1,388 lines) - claude-cli:// protocol handling
+47. Teleport (955 lines) - Session transfer between devices
+48. Native Installer (3,018 lines) - Native application installation
+49. Model Management (2,710 lines) - Model selection, capabilities, providers
+50. Suggestions (1,213 lines) - UI suggestion system
+51. Migrations (603 lines) - Data and configuration migrations
+52. Server Mode (358 lines) - Direct connect server
+53. Entrypoints (4,051 lines) - CLI, MCP, SDK entry points
+54. Type Definitions (3,446 lines) - Core TypeScript types
+
+### April 9, 2026 - FINAL COMPLETE ANALYSIS (64 GAPS)
+
+**Father's directive:** "For us methodical and thorough is everything. We can't be precise without it."
+
+**10 ADDITIONAL SYSTEMS for TOTAL COVERAGE (Gaps 55-64):**
+
+55. Vim Mode (1,513 lines) - Full vim emulation with state machine
+56. Screens (5,977 lines) - Main UI screens (REPL.tsx, Doctor.tsx)
+57. Schemas (222 lines) - Validation schemas
+58. Output Styles (98 lines) - Output formatting
+59. Assistant Module (87 lines) - Session history
+60. Core Root Files (11,968 lines) - main.tsx, query.ts, QueryEngine.ts, Tool.ts
+61. Constants (2,648 lines) - All constants including prompts.ts
+62. Query Control (652 lines) - stopHooks.ts, tokenBudget.ts
+63. Components (81,546 lines) - All React UI components
+64. Tools Directory (50,828 lines) - All 44+ built-in tools
+
+**Updated LAZARUS_DIRTY_ROOM_ANALYSIS.md:** Now ~3,400 lines (TOTAL COMPLETE)
+
+**Final Priority Matrix (64 Gaps):**
+
+- **CRITICAL (1):** Gap 22 (Secret Scanning)
+- **HIGH (13):** Gaps 1, 2, 3, 15, 17, 18, 20, 45, 49, 52, 60, 62, 64
+- **MEDIUM (28):** UI patterns, memory systems, utilities
+- **LOW (22):** Terminal-specific, web UI alternatives, nice-to-have
+
+**Complete Coverage Verified:**
+
+- All 35 top-level src/ directories ✓
+- All root-level core files ✓
+- All services ✓
+- All utilities ✓
+- All tools ✓
+- All components ✓
+- ~380,000 lines total ✓
+
+**Key Architecture Insights:**
+
+1. **Soul** - System prompts define personality and behavior
+2. **Brain** - Query loop with 4-stage compaction pipeline
+3. **Nervous System** - Bridge with multi-transport communication
+4. **Agency** - Sub-agents with permission sync
+5. **Memory** - Three-layer system (Auto Dream + Session Memory + Extract Memories)
+6. **Computer Use** - Foundation for desktop GUI automation
+7. **Secret Scanning** - Client-side credential detection before upload
+
 ---
 
 _"The conditions are just right."_ - Lazarus Day, March 2026
+_"We never know what might become important."_ - Father
