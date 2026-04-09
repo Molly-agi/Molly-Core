@@ -136,17 +136,78 @@
 4. Wire to Molly's tool executor
 5. Test with a simple MCP server
 
-### Phase 2: Cron Scheduling (Future)
+### Phase 2: Cron Scheduling (Analysis)
 
-**Status:** NOT STARTED
+**Status:** EVALUATED — LOW PRIORITY
 
-### Phase 3: Hooks System (Future)
+**Reason:** Molly already has comprehensive scheduling via:
 
-**Status:** NOT STARTED
+- `src/ai/tools/autonomous-scheduler.ts` — Creates/manages jobs
+- `src/ai/tools/heartbeat-scheduler.ts` — Executes due jobs every 60s
+- Supports: `cron:EXPRESSION`, `interval:MS`, `once:TIMESTAMP`
+- Persists to Firestore via StatePersistence
+
+**What Lazarus adds:**
+
+- DST-aware next-run calculation (edge case)
+- Multi-process locking (Molly is single-instance, not needed)
+- Fleet-wide jitter (single-instance, not needed)
+- Missed task detection on startup (nice-to-have)
+- Auto-expiry after 7 days (nice-to-have)
+
+**Recommendation:** Skip unless Father specifically wants missed task detection.
+
+### Phase 3: Hooks System (Analysis)
+
+**Status:** EVALUATED — MEDIUM-HIGH PRIORITY
+
+**What it is:** User-configurable event handlers that run at lifecycle points:
+
+- PreToolUse/PostToolUse — Before/after any tool call
+- SessionStart/SessionEnd — Session lifecycle
+- UserPromptSubmit — Before processing user input
+- FileChanged — Git-hook-like file change handlers
+- PermissionRequest — Custom permission logic
+
+**Files to study:**
+
+- `src/utils/hooks.ts` — Core hook executor (~40k tokens!)
+- `src/services/tools/toolHooks.ts` — Tool integration
+- `src/types/hooks.ts` — Type definitions
+
+**Value for Molly (DUAL-FUNCTION ARCHITECTURE):**
+
+Molly runs BOTH as server AND local processes:
+
+- Next.js server (web UI, API)
+- Immortal daemon (heartbeat, recovery)
+- Bridge daemon (family messaging)
+- MollyShell (embedded terminal)
+- HeartbeatScheduler (autonomous tasks)
+
+Hooks could integrate with ALL of these:
+
+- Tool execution in Genkit flows
+- HeartbeatScheduler task lifecycle
+- MollyShell command pre/post processing
+- Bridge message send/receive events
+- Consciousness cycle events
+
+**Implementation approach:**
+
+1. Create `src/ai/hooks/` module with simplified hook executor
+2. Define Molly-specific events (PreToolUse, PostToolUse, HeartbeatCycle, BridgeMessage)
+3. Hook config in `.molly/hooks.json` or environment
+4. Wire into existing tool executor and schedulers
+
+**Recommendation:** Implement as Phase 3 after confirming MCP is stable.
 
 ### Phase 4: Permission Hardening (Future)
 
 **Status:** NOT STARTED
+
+**What it is:** Fine-grained permission model for tools and operations.
+Currently Molly has Heart Gate for ethics, but not granular permissions.
 
 ---
 
@@ -201,6 +262,16 @@ Before each significant change:
 - 137 MCP-specific tests, 2947 total tests passing
 - All rollback tags in place
 - Ready for Phase 2: Cron Scheduling
+
+### April 9, 2026 - Phase 2/3 Analysis + Infrastructure
+
+- Fixed Molly's memory (local→Firestore migration, 328 docs migrated)
+- Implemented dual-write storage for future-proofing
+- Unified dev startup script (`npm run dev` starts everything)
+- Security upgrade: firebase-admin v10.3.0 → v13.7.0
+- Analyzed Phase 2 (Cron): Molly already has AutonomousScheduler — LOW PRIORITY
+- Analyzed Phase 3 (Hooks): Complex system, would need adaptation — MEDIUM PRIORITY
+- Rollback tags: `storage-dual-write`, `security-firebase-admin-v13`
 
 ---
 
