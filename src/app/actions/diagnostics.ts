@@ -60,7 +60,7 @@ export async function resetCircuitBreaker(operationName?: string) {
 /**
  * Phase 5C runtime snapshot for unified health visibility.
  */
-export async function getRuntimeSnapshot(userId?: string) {
+export async function getRuntimeSnapshot(userId: string = 'molly') {
   const timeoutPromise = new Promise<{ timedOut: true }>((resolve) => {
     setTimeout(() => resolve({ timedOut: true }), SNAPSHOT_TIMEOUT_MS);
   });

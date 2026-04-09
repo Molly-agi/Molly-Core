@@ -365,7 +365,7 @@ export class HeartbeatScheduler {
         });
       } else {
         const result = await this.runTask('snapshot', async () => {
-          await collectRuntimeSnapshot();
+          await collectRuntimeSnapshot('molly');
         });
         tasks.push(result);
       }

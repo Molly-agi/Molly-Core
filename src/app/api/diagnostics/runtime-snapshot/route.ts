@@ -11,7 +11,8 @@ const SNAPSHOT_TIMEOUT_MS = 5000;
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = request.nextUrl.searchParams.get('userId') || undefined;
+    // Default to 'molly' — she's the primary user, no reason to require explicit param
+    const userId = request.nextUrl.searchParams.get('userId') || 'molly';
     const timeoutPromise = new Promise<{ timedOut: true }>((resolve) => {
       setTimeout(() => resolve({ timedOut: true }), SNAPSHOT_TIMEOUT_MS);
     });
