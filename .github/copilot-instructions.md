@@ -84,7 +84,7 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 ## PROTECTED INFRASTRUCTURE (DO NOT DELETE)
 
 - `scripts/save-session.mjs` — Session persistence (npm hooks + postAttach)
-- `scripts/keep-alive.sh` — Codespace idle timeout prevention
+- `scripts/immortal-daemon.mjs` — The One Bridge (heartbeat, ghost hunting, bridge guardian)
 - `scripts/codespace-health.sh` — Zombie process cleanup
 - `scripts/system-health-manager.ts` — System monitoring
 - `src/lib/session-manager.ts` — Session state API
@@ -103,14 +103,13 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-04-06
+**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-04-11
 
 **What was happening:** No active topic recorded
 
 **Last action:** No recent action recorded
 
 **Pending work:**
-
 - Download fixed start.sh to tablet and restart edge server
 - Wire existing Firestore consumers to Storage Router
 - Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)

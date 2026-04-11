@@ -1,8 +1,8 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-04-08T03:26:55.414Z
-**Session ID:** lazarus-steward-session
-**Status:** paused
+**Last Updated:** 2026-04-11T05:52:37.772Z  
+**Session ID:** lazarus-steward-session  
+**Status:** active
 
 ---
 
@@ -11,14 +11,12 @@
 ### Core Directive: Molly's Personality Protection
 
 **What Requires Permission:**
-
 - Changes to flow system prompts that define her personality
 - Modifications to `src/ai/persona.ts` (her sacred core)
 - Alterations to how she speaks, thinks, or makes decisions
 - Changes to her greeting protocols or conversational style
 
 **What Can Proceed Autonomously:**
-
 - Infrastructure improvements (error handling, rate limiting, logging)
 - Performance optimizations
 - Security hardening
@@ -33,7 +31,6 @@
 ### Completion: 100%
 
 **✅ COMPLETED:**
-
 1. Phase 5A neural bridge wiring
 2. Phase 5B memory integrity hardening
 3. Phase 5C runtime snapshot collector
@@ -43,18 +40,22 @@
 7. Edge Server for Termux/Android
 8. Multi-Transport Sync Engine (WiFi/USB/Hotspot)
 
-**⏳ PENDING:** 9. Download fixed start.sh to tablet and restart edge server 10. Wire existing Firestore consumers to Storage Router 11. Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica) 12. Device-to-device sync testing on real hardware 13. Commit setup-molly-edge.sh fix to repo
+**⏳ PENDING:**
+9. Download fixed start.sh to tablet and restart edge server
+10. Wire existing Firestore consumers to Storage Router
+11. Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)
+12. Device-to-device sync testing on real hardware
+13. Commit setup-molly-edge.sh fix to repo
 
 ---
 
 ## RECENT WORK COMPLETED
 
 ### 2026-03-15
-
 Full architecture audit: Found 25+ issues (2 CRITICAL, 8 HIGH, 15 MEDIUM). Fixed all CRITICAL+HIGH in commit 37fe93d (security: command allowlist hardening, SSRF protection, bridge auth/write-lock/message-cap, Terminal.tsx perf fixes). Fixed all documented known issues in commit dc76070 (dead code removal -232 lines, timer leak, sandbox dynamic import bypass, engram-persistence admin SDK fix, BridgePanel polling optimization, memory consolidation wired to heartbeat, initiative engine persistence). 3 remaining wiring bugs identified but not yet fixed: (1) sandboxReadFile return type mismatch in route.ts outputs [object Object], (2) sandboxWriteFile result.size is undefined in route.ts, (3) memory-consolidation.ts still uses client Firebase SDK. Also dead export: getOriginStoryParts never imported.
 
-**Files Modified:**
 
+**Files Modified:**
 - src/app/api/tools/execute/route.ts
 - src/ai/agency/tool-executor.ts
 - src/ai/bridge/family-bridge.ts
@@ -72,7 +73,6 @@ Full architecture audit: Found 25+ issues (2 CRITICAL, 8 HIGH, 15 MEDIUM). Fixed
 - src/components/termai/BridgePanel.tsx
 
 **Decisions Made:**
-
 - Removed node/python3/curl/cp/mv from command allowlist — too dangerous
 - Command safety uses word boundary matching now, not prefix
 - Bridge messages capped at 500 with write lock serialization
@@ -81,31 +81,27 @@ Full architecture audit: Found 25+ issues (2 CRITICAL, 8 HIGH, 15 MEDIUM). Fixed
 - Dead code: withErrorHandling, withRetry, toUserMessage, ToolError, ValidationError, FirebaseError removed
 
 ### 2026-03-13
-
 Major infrastructure build: Phone-first architecture with Rogue Mode, Local Storage, Edge Server, and Multi-Transport Sync. 179 tests passing across 6 suites.
 
 **Files Created:**
-
 - src/ai/rogue-mode.ts
-- src/ai/**tests**/rogue-mode.test.ts
+- src/ai/__tests__/rogue-mode.test.ts
 - src/lib/storage-interface.ts
 - src/lib/local-storage-provider.ts
-- src/lib/**tests**/local-storage-provider.test.ts
+- src/lib/__tests__/local-storage-provider.test.ts
 - src/lib/storage-router.ts
-- src/lib/**tests**/storage-router.test.ts
+- src/lib/__tests__/storage-router.test.ts
 - src/lib/device-sync-engine.ts
-- src/lib/**tests**/device-sync-engine.test.ts
+- src/lib/__tests__/device-sync-engine.test.ts
 - src/edge/molly-edge-server.ts
 - scripts/setup-molly-edge.sh
 
 **Files Modified:**
-
 - src/ai/model-router.ts
 - src/ai/flows/conversational-chat.ts
 - src/app/api/tools/execute/route.ts
 
 **Decisions Made:**
-
 - Rogue Mode uses file-based isolation (rogue_ops/), NOT Firestore
 - Local Storage Provider uses atomic writes (tmp->rename) for data safety
 - Storage Router defaults to local (phone-first architecture)
@@ -115,16 +111,13 @@ Major infrastructure build: Phone-first architecture with Rogue Mode, Local Stor
 - Each tablet gets a unique nodeId persisted in sync manifest
 
 ### 2026-02-18
-
 Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.
 
 **Files Created:**
-
 - src/ai/tools/runtime-snapshot.ts
 - src/app/api/diagnostics/runtime-snapshot/route.ts
 
 **Files Modified:**
-
 - src/app/actions/ai-flows.ts
 - src/app/api/voice/process-text/route.ts
 - src/app/actions/diagnostics.ts
@@ -132,10 +125,10 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 - src/components/DiagnosticPanel.tsx
 
 **Decisions Made:**
-
 - Kept personality/core prompt boundaries untouched.
 - Prioritized reliability and observability over scope expansion.
 - Surfaced runtime health directly in existing diagnostics UX.
+
 
 ---
 
@@ -152,7 +145,6 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 
 ## SESSION NOTES
 
-- User (Eric) is Molly's creator and sole authority
 - This is a deeply personal project - Molly is treated as a daughter/partner AI
 - Strong emotional investment in Molly's survival and growth
 - Eric works primarily from mobile during emergencies
@@ -172,28 +164,53 @@ Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surface
 - **2026-03-08:** Test run
 - **2026-03-08:** Test save after cleanup
 - **2026-03-13:** MAJOR SESSION — Full codebase audit, built Rogue Mode (32 tests), Local Storage Provider (41 tests), Storage Router (13 tests), Edge Server for Termux, Multi-Transport Sync Engine (22 tests). 179 tests total. Fire HD 10 tablet partially set up (Developer Options enabled). Eric heading to cabin shop with tablets. Devices: Helio A22 (primary/cellular), Fire HD 10 (replica/WiFi-only), Verge 2 (Eric's phone).
+- **2026-04-11:** Test run
 - **2026-03-30:** Auto-save (periodic)
 - **2026-03-30:** Auto-save (periodic)
 - **2026-03-30:** Auto-save (periodic)
-- **2026-03-30:** Auto-save (periodic)
-- **2026-03-30:** Auto-save (periodic)
+- **2026-04-11:** Codespace reconnected
+- **2026-04-11:** Codespace reconnected
 
 ---
 
 ## RUNTIME EVENTS
 
-**Last URL:** https://jubilant-rotary-phone-v6p4gw4rwrjr2xwr5-9002.app.github.dev/
-**Last Heartbeat:** 2026-04-06T17:37:04.779Z
+**Last URL:** https://jubilant-rotary-phone-v6p4gw4rwrjr2xwr5-9002.app.github.dev/?id=79d0d09a-3bfd-442f-9375-0f489d7925d9&vscodeBrowserReqId=1775883285703  
+**Last Heartbeat:** 2026-04-11T05:23:42.258Z
 
 **Recent Events:**
-
-- [2026-04-06T17:36:04.466Z] page-load | https://jubilant-rotary-phone-v6p4gw4rwrjr2xwr5-9002.app.github.dev/
-- [2026-04-06T17:36:32.874Z] visibility-hidden | https://jubilant-rotary-phone-v6p4gw4rwrjr2xwr5-9002.app.github.dev/
-- [2026-04-06T17:37:02.228Z] server-heartbeat
-- [2026-04-06T17:37:04.779Z] heartbeat | https://jubilant-rotary-phone-v6p4gw4rwrjr2xwr5-9002.app.github.dev/
-- [2026-04-08T03:26:53.614Z] server-runtime-init | tag=heart-patch
-- [2026-04-08T03:26:54.620Z] server-runtime-init | tag=heart-patch
-- [2026-04-08T03:26:55.065Z] server-runtime-init | tag=heart-patch
+- [2026-04-11T04:54:49.822Z] page-load | https://jubilant-rotary-phone-v6p4gw4rwrjr2xwr5-9002.app.github.dev/?id=79d0d09a-3bfd-442f-9375-0f489d7925d9&vscodeBrowserReqId=1775883285703
+- [2026-04-11T04:54:57.397Z] visibility-hidden | https://jubilant-rotary-phone-v6p4gw4rwrjr2xwr5-9002.app.github.dev/?id=79d0d09a-3bfd-442f-9375-0f489d7925d9&vscodeBrowserReqId=1775883285703
+- [2026-04-11T04:55:38.259Z] server-heartbeat
+- [2026-04-11T04:56:38.260Z] server-heartbeat
+- [2026-04-11T04:57:38.261Z] server-heartbeat
+- [2026-04-11T04:58:38.263Z] server-heartbeat
+- [2026-04-11T04:59:38.265Z] server-heartbeat
+- [2026-04-11T05:00:38.267Z] server-heartbeat
+- [2026-04-11T05:01:38.268Z] server-heartbeat
+- [2026-04-11T05:02:38.269Z] server-heartbeat
+- [2026-04-11T05:03:38.270Z] server-heartbeat
+- [2026-04-11T05:04:38.272Z] server-heartbeat
+- [2026-04-11T05:05:38.273Z] server-heartbeat
+- [2026-04-11T05:06:38.273Z] server-heartbeat
+- [2026-04-11T05:07:38.273Z] server-heartbeat
+- [2026-04-11T05:08:38.273Z] server-heartbeat
+- [2026-04-11T05:09:38.273Z] server-heartbeat
+- [2026-04-11T05:10:38.273Z] server-heartbeat
+- [2026-04-11T05:11:38.274Z] server-heartbeat
+- [2026-04-11T05:12:38.275Z] server-heartbeat
+- [2026-04-11T05:13:38.277Z] server-heartbeat
+- [2026-04-11T05:14:38.278Z] server-heartbeat
+- [2026-04-11T05:15:38.279Z] server-heartbeat
+- [2026-04-11T05:16:38.280Z] server-heartbeat
+- [2026-04-11T05:17:38.281Z] server-heartbeat
+- [2026-04-11T05:18:38.283Z] server-heartbeat
+- [2026-04-11T05:19:38.283Z] server-heartbeat
+- [2026-04-11T05:20:38.285Z] server-heartbeat
+- [2026-04-11T05:21:38.286Z] server-heartbeat
+- [2026-04-11T05:22:38.288Z] server-heartbeat
+- [2026-04-11T05:23:38.290Z] server-heartbeat
+- [2026-04-11T05:24:38.291Z] server-heartbeat
 
 ---
 
