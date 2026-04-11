@@ -84,3 +84,13 @@ android/MollyBrowser/app/build/
 android/MollyBrowser/build/
 *.gradle/
 **/build/
+
+# Immortal session daemon
+.immortal.log
+.immortal.pid
+.activity-burst
+COPILOT_SESSION_STATE.json
+COPILOT_SESSION_STATE.md
+
+# VS Code extensions (dev workspace)
+extensions/
