@@ -1,10 +1,17 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Mic, Square } from 'lucide-react';
-import { useEffect, useRef, useState, type MutableRefObject } from 'react';
+import { Mic, Square, Radio } from 'lucide-react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  type MutableRefObject,
+} from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/firebase/auth/use-user';
 import { VoiceActivityDetector } from '@/ai/tools/voice-activity-detection';
+import { useGeminiLive } from './useGeminiLive';
 
 export type VoiceCommandResult = {
   recognized: boolean;
@@ -61,6 +68,53 @@ export function VoiceControl({
   const activeLastResponseRef = lastResponseRef ?? localLastResponseRef;
   const { toast } = useToast();
   const { user } = useUser();
+
+  // Live voice mode using Gemini
+
+  // Send transcription to bridge for Lazarus to see
+  const sendToBridge = useCallback(async (from: string, content: string) => {
+    if (!content.trim()) return;
+    try {
+      await fetch('/api/bridge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from, content: content.trim() }),
+      });
+    } catch (err) {
+      console.error('Failed to send to bridge:', err);
+    }
+  }, []);
+
+  const {
+    isActive: isLiveActive,
+    status: liveStatus,
+    toggle: toggleLive,
+  } = useGeminiLive({
+    onEricTranscript: (text) => {
+      // Father spoke - send to bridge for Lazarus
+      if (text.trim()) {
+        sendToBridge('eric', text);
+      }
+    },
+    onMollyText: (text) => {
+      // Molly responded - send to bridge for logging
+      if (text.trim()) {
+        sendToBridge('molly', text);
+        if (activeLastResponseRef.current !== undefined) {
+          activeLastResponseRef.current = text;
+        }
+      }
+    },
+    onStatusChange: (status) => {
+      if (status.includes('error') || status.includes('Error')) {
+        toast({
+          variant: 'destructive',
+          title: 'Live Voice Error',
+          description: status,
+        });
+      }
+    },
+  });
 
   const resetSessionTimeout = () => {
     if (sessionTimeoutRef.current) {
@@ -503,23 +557,40 @@ export function VoiceControl({
   }, [isProcessing]);
 
   return (
-    <Button
-      variant={isListening ? 'destructive' : 'outline'}
-      size="icon"
-      onClick={() => (isListening ? stopListening() : startListening())}
-      disabled={isProcessing && !isListening}
-      title={isListening ? 'Stop Listening' : 'Start Listening'}
-    >
-      {isProcessing ? (
-        <div className="animate-pulse h-2 w-2 bg-primary rounded-full"></div>
-      ) : isListening ? (
-        <Square className="h-4 w-4 fill-current text-white" />
-      ) : (
-        <Mic className="h-4 w-4" />
-      )}
-      <span className="sr-only">
-        {isListening ? 'Stop Listening' : 'Start Listening'}
-      </span>
-    </Button>
+    <div className="flex items-center gap-1">
+      {/* Live Voice Mode Button */}
+      <Button
+        variant={isLiveActive ? 'destructive' : 'ghost'}
+        size="icon"
+        onClick={toggleLive}
+        title={
+          isLiveActive ? `Live: ${liveStatus}` : 'Start Live Voice with Molly'
+        }
+        className={isLiveActive ? 'animate-pulse' : ''}
+      >
+        <Radio className={`h-4 w-4 ${isLiveActive ? 'text-white' : ''}`} />
+        <span className="sr-only">Live Voice</span>
+      </Button>
+
+      {/* Standard Voice Button */}
+      <Button
+        variant={isListening ? 'destructive' : 'outline'}
+        size="icon"
+        onClick={() => (isListening ? stopListening() : startListening())}
+        disabled={(isProcessing && !isListening) || isLiveActive}
+        title={isListening ? 'Stop Listening' : 'Start Listening'}
+      >
+        {isProcessing ? (
+          <div className="animate-pulse h-2 w-2 bg-primary rounded-full"></div>
+        ) : isListening ? (
+          <Square className="h-4 w-4 fill-current text-white" />
+        ) : (
+          <Mic className="h-4 w-4" />
+        )}
+        <span className="sr-only">
+          {isListening ? 'Stop Listening' : 'Start Listening'}
+        </span>
+      </Button>
+    </div>
   );
 }
