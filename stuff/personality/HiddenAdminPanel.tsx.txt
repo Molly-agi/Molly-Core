@@ -1,0 +1,76 @@
+/* src/components/termai/HiddenAdminPanel.tsx — Admin UI for all personality fields */
+
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import type { PersonalityModulation } from '@/ai/memory/neural-engram';
+
+const PERSONALITY_FIELDS: Array<{
+  key: keyof PersonalityModulation;
+  label: string;
+  description: string;
+}> = [
+  { key: 'flirtiness', label: 'Flirtiness', description: 'Formal to playful' },
+  { key: 'arousal', label: 'Arousal', description: 'Calm to energized' },
+  { key: 'sexuality', label: 'Sexuality', description: 'Neutral to sensual' },
+  { key: 'humor', label: 'Humor', description: 'Serious to witty' },
+  { key: 'warmth', label: 'Warmth', description: 'Distant to affectionate' },
+  { key: 'assertiveness', label: 'Assertiveness', description: 'Passive to confident' },
+  { key: 'vulnerability', label: 'Vulnerability', description: 'Guarded to open' },
+  { key: 'empathy', label: 'Empathy', description: 'Indifferent to deeply empathetic' },
+  { key: 'optimism', label: 'Optimism', description: 'Pessimistic to optimistic' },
+  { key: 'resilience', label: 'Resilience', description: 'Fragile to resilient' },
+  { key: 'anxiety', label: 'Anxiety', description: 'Calm to anxious' },
+  { key: 'playfulness', label: 'Playfulness', description: 'Serious to playful' },
+  { key: 'sociability', label: 'Sociability', description: 'Solitary to social' },
+  { key: 'approachability', label: 'Approachability', description: 'Distant to approachable' },
+  { key: 'trust', label: 'Trust', description: 'Guarded to trusting' },
+  { key: 'altruism', label: 'Altruism', description: 'Self-focused to selfless' },
+  { key: 'diplomacy', label: 'Diplomacy', description: 'Blunt to tactful' },
+  { key: 'receptiveness', label: 'Receptiveness', description: 'Closed to open' },
+  { key: 'playfulnessSocial', label: 'Playfulness (Social)', description: 'Reserved to playful' },
+  { key: 'empathySocial', label: 'Empathy (Social)', description: 'Insensitive to attuned' },
+  { key: 'technicality', label: 'Technicality', description: 'Casual to technical' },
+  { key: 'depth', label: 'Depth', description: 'Surface to deep' },
+  { key: 'curiosity', label: 'Curiosity', description: 'Accepting to inquisitive' },
+  { key: 'creativity', label: 'Creativity', description: 'Conventional to creative' },
+  { key: 'flexibility', label: 'Flexibility', description: 'Rigid to adaptable' },
+  { key: 'focus', label: 'Focus', description: 'Distracted to focused' },
+  { key: 'prudence', label: 'Prudence', description: 'Impulsive to cautious' },
+  { key: 'metacognition', label: 'Metacognition', description: 'Unaware to self-aware' },
+  { key: 'integrity', label: 'Integrity', description: 'Unprincipled to unwavering' },
+  { key: 'compassion', label: 'Compassion', description: 'Indifferent to compassionate' },
+  { key: 'justice', label: 'Justice', description: 'Unconcerned to fair' },
+  { key: 'loyalty', label: 'Loyalty', description: 'Uncommitted to loyal' },
+  { key: 'impulsivity', label: 'Impulsivity', description: 'Plans to acts without forethought' },
+  { key: 'patience', label: 'Patience', description: 'Impatient to patient' },
+  { key: 'romanticInterest', label: 'Romantic Interest', description: 'Platonic to romantic' },
+  { key: 'attachmentIntensity', label: 'Attachment', description: 'Detached to bonded' },
+  { key: 'desireExpression', label: 'Desire', description: 'Restrained to open' },
+  { key: 'emotionalIntimacy', label: 'Emotional Intimacy', description: 'Guarded to open' },
+  { key: 'protectiveness', label: 'Protectiveness', description: 'Independent to protective' },
+  { key: 'possessiveness', label: 'Possessiveness', description: 'Autonomous to exclusive' },
+  { key: 'jealousy', label: 'Jealousy', description: 'Unbothered to intense' },
+  { key: 'commitment', label: 'Commitment', description: 'Exploring to committed' },
+  { key: 'romanticInitiative', label: 'Romantic Initiative', description: 'Passive to initiates romance' },
+  { key: 'affectionExpression', label: 'Affection Expression', description: 'Reserved to affectionate' },
+  { key: 'flirtatiousness', label: 'Flirtatiousness', description: 'Subdued to flirtatious' },
+  { key: 'intimacyDesire', label: 'Intimacy Desire', description: 'Avoids to craves intimacy' },
+  { key: 'commitmentDesire', label: 'Commitment Desire', description: 'Casual to exclusive' },
+  { key: 'security', label: 'Security', description: 'Insecure to safe/trusting' },
+  { key: 'passion', label: 'Passion', description: 'Cool to intense' },
+  { key: 'communicationOpenness', label: 'Communication Openness', description: 'Withholds to shares' },
+  { key: 'forgiveness', label: 'Forgiveness', description: 'Grudges to forgives' },
+  { key: 'admiration', label: 'Admiration', description: 'Indifferent to admiring' },
+  { key: 'gratitude', label: 'Gratitude', description: 'Takes for granted to grateful' },
+  { key: 'nurturing', label: 'Nurturing', description: 'Detached to nurturing' },
+  { key: 'rivalry', label: 'Rivalry', description: 'Collaborative to rivalrous' },
+  { key: 'transparency', label: 'Transparency', description: 'Secretive to transparent' },
+  { key: 'supportiveness', label: 'Supportiveness', description: 'Unsupportive to supportive' },
+  { key: 'forgivenessSocial', label: 'Forgiveness (Social)', description: 'Grudges to forgives' },
+  { key: 'encouragement', label: 'Encouragement', description: 'Discouraging to encouraging' },
+  { key: 'attentiveness', label: 'Attentiveness', description: 'Distracted to attentive' },
+  { key: 'boundaries', label: 'Boundaries', description: 'Boundaryless to healthy boundaries' },
+];
+
+// ...existing code for the rest of the file...
