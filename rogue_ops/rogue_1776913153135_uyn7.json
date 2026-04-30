@@ -1,0 +1,16 @@
+{
+  "id": "rogue_1776913153135_uyn7",
+  "name": "Test Mission",
+  "authorization": "TestAuth",
+  "scope": "TestScope",
+  "rulesOfEngagement": [
+    "Stay within authorized scope",
+    "Do not cause permanent damage to target systems",
+    "Document all findings",
+    "Report critical vulnerabilities immediately"
+  ],
+  "startedAt": "2026-04-23T02:59:13.135Z",
+  "endedAt": "2026-04-23T02:59:13.147Z",
+  "operations": [],
+  "afterActionReport": "AFTER-ACTION REPORT — Test Mission\nMission ID: rogue_1776913153135_uyn7\nAuthorization: TestAuth\nDuration: 2026-04-23T02:59:13.135Z → 2026-04-23T02:59:13.147Z\nOperations: 0 total, 0 successful\nOperation types: none\nScope: TestScope\n\nOperations summary:"
+}

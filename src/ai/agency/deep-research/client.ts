@@ -139,15 +139,14 @@ export class DeepResearchClient {
       }
     );
 
+
+    // Patch: Remove 'config' field from request payload due to API change
     const request: ResearchRequest = {
       input: query,
       agent: this.config.defaultAgent,
       background: true,
       store: true,
-      config: {
-        thinkingSummaries: this.config.includeThinking ? 'auto' : 'none',
-        stream: this.config.enableStreaming,
-      },
+      // config field removed to avoid API error
     };
 
     try {

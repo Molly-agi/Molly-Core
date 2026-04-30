@@ -324,4 +324,30 @@ setInterval(huntGhosts, GHOST_HUNT_MS);
 setInterval(ensureBridge, BRIDGE_CHECK_MS);
 setInterval(logStatus, STATUS_LOG_MS);
 
+// ===================== HEARTBEAT DASHBOARD AUTOSTART =====================
+function ensureHeartbeatDashboard() {
+  const DASHBOARD_PID_FILE = `${ROOT}/.heartbeat-dashboard.pid`;
+  const DASHBOARD_PATH = `${ROOT}/public/heartbeat-dashboard.html`;
+  const DASHBOARD_API_PATH = `${ROOT}/scripts/heartbeat-api.js`;
+  // Check if heartbeat-api is running (port 9100)
+  if (!isPortListening(9100)) {
+    log('[DASHBOARD] Heartbeat API not running - starting');
+    try {
+      const child = spawn('node', [DASHBOARD_API_PATH], {
+        cwd: ROOT,
+        stdio: ['ignore', 'pipe', 'pipe'],
+        detached: true,
+      });
+      child.unref();
+      writeFileSync(DASHBOARD_PID_FILE, child.pid.toString());
+      log(`[DASHBOARD] Heartbeat API started (PID ${child.pid})`);
+    } catch (e) {
+      log(`[ERROR] Failed to start Heartbeat API: ${e.message}`);
+    }
+  }
+  // Optionally, open dashboard in browser (uncomment if desired)
+  // spawn('xdg-open', [DASHBOARD_PATH], { detached: true });
+}
+setInterval(ensureHeartbeatDashboard, 10000); // Check every 10s
+
 log('[RUNNING] All systems active - SIGHUP immune');

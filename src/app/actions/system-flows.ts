@@ -8,7 +8,7 @@
 
 import { healthCheck } from '@/ai/flows/health-check';
 import { listAvailableModels } from '@/ai/tools/system';
-import { enhancedResearch } from '@/ai/flows/enhanced-research';
+import { enhancedResearchFlow } from '@/ai/flows/enhanced-research';
 import { readMollyRepo, type RepoReadingOutput } from '@/ai/flows/self-reader';
 import {
   runPillarPipeline,
@@ -174,7 +174,7 @@ export async function getEnhancedResearch(prompt: string, userId: string) {
     if (guard) {
       throw new Error(guard.message);
     }
-    return await enhancedResearch(prompt, userId);
+    return await enhancedResearchFlow(prompt, userId);
   } catch (e: unknown) {
     MollyLogger.error(
       'Enhanced research failed',

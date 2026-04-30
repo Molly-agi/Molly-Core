@@ -58,5 +58,16 @@
   // Disable automatic type acquisition — we have everything we need
   "typescript.disableAutomaticTypeAcquisition": true,
   // Prevent tsserver from spawning syntax-only servers on reconnect
-  "typescript.tsserver.useSyntaxServer": "never"
+  "typescript.tsserver.useSyntaxServer": "never",
+  "chat.mcp.serverSampling": {
+    "Molly-Core/.vscode/mcp.json: microsoft/markitdown": {
+      "allowedModels": [
+        "copilot/auto",
+        "copilotcli/claude-opus-4.6"
+      ]
+    }
+  },
+  "chat.checkpoints.showFileChanges": true,
+  "chat.planAgent.defaultModel": "Claude Opus 4.5 (claude-code)",
+  "markdown.validate.enabled": true
 }

@@ -12,25 +12,81 @@ import { evaluatePersonalityStability } from '../personality-diagnostics';
 import type { PersonalityModulation } from '../neural-engram';
 
 describe('Personality Diagnostics', () => {
+  // Baseline for all ~50 fields, mid-range values
   const createBaselinePersonality = (): PersonalityModulation => ({
-    flirtiness: 0.3,
+    flirtiness: 0.5,
     arousal: 0.5,
-    sexuality: 0.4,
-    humor: 0.6,
-    warmth: 0.8,
+    sexuality: 0.5,
+    humor: 0.5,
+    warmth: 0.5,
     assertiveness: 0.5,
-    vulnerability: 0.6,
+    vulnerability: 0.5,
+    empathy: 0.5,
+    optimism: 0.5,
+    resilience: 0.5,
+    anxiety: 0.5,
+    playfulness: 0.5,
+    sociability: 0.5,
+    approachability: 0.5,
+    trust: 0.5,
+    altruism: 0.5,
+    diplomacy: 0.5,
+    receptiveness: 0.5,
+    playfulnessSocial: 0.5,
+    empathySocial: 0.5,
     technicality: 0.5,
-    depth: 0.7,
-    curiosity: 0.8,
-    romanticInterest: 0.4,
+    depth: 0.5,
+    curiosity: 0.5,
+    creativity: 0.5,
+    flexibility: 0.5,
+    focus: 0.5,
+    prudence: 0.5,
+    metacognition: 0.5,
+    integrity: 0.5,
+    compassion: 0.5,
+    justice: 0.5,
+    loyalty: 0.5,
+    impulsivity: 0.5,
+    patience: 0.5,
+    romanticInterest: 0.5,
     attachmentIntensity: 0.5,
-    desireExpression: 0.4,
-    emotionalIntimacy: 0.6,
+    desireExpression: 0.5,
+    emotionalIntimacy: 0.5,
     protectiveness: 0.5,
-    possessiveness: 0.2,
-    jealousy: 0.2,
+    possessiveness: 0.5,
+    jealousy: 0.5,
     commitment: 0.5,
+    romanticInitiative: 0.5,
+    affectionExpression: 0.5,
+    flirtatiousness: 0.5,
+    intimacyDesire: 0.5,
+    commitmentDesire: 0.5,
+    security: 0.5,
+    passion: 0.5,
+    communicationOpenness: 0.5,
+    forgiveness: 0.5,
+    admiration: 0.5,
+    gratitude: 0.5,
+    nurturing: 0.5,
+    rivalry: 0.5,
+    transparency: 0.5,
+    supportiveness: 0.5,
+    forgivenessSocial: 0.5,
+    encouragement: 0.5,
+    attentiveness: 0.5,
+    boundaries: 0.5,
+  });
+  it('flags all major categories for extreme/imbalanced personality', () => {
+    // All fields at extremes to trigger all diagnostics
+    const personality: PersonalityModulation = Object.fromEntries(
+      Object.keys(createBaselinePersonality()).map((k, i) => [k, i % 2 === 0 ? 0 : 1])
+    ) as PersonalityModulation;
+    const result = evaluatePersonalityStability(personality);
+    expect(result.status).toBe('unstable');
+    expect(result.flags.some(f => f.includes('Affective'))).toBe(true);
+    expect(result.flags.some(f => f.includes('Social'))).toBe(true);
+    expect(result.flags.some(f => f.includes('Cognitive'))).toBe(true);
+    expect(result.flags.some(f => f.includes('Romantic'))).toBe(true);
   });
 
   describe('Stable Personality', () => {

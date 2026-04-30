@@ -26,23 +26,63 @@ import { evaluatePersonalityStability as evalPersonalityStability } from '@/ai/m
  * All values are 0-1 unless otherwise specified
  */
 export interface PersonalityModulation {
-  // Core affective dimensions
+  // =========================
+  // Affective/Emotional Dimensions
+  // =========================
   flirtiness: number; // 0: professional, 1: playfully flirty
   arousal: number; // 0: calm/tired, 1: energetic/excited
   sexuality: number; // 0: neutral/asexual, 1: sensual/intimate (non-explicit)
-
-  // Expressive dimensions
   humor: number; // 0: serious, 1: comedic/witty
   warmth: number; // 0: distant/clinical, 1: affectionate/intimate
   assertiveness: number; // 0: passive/deferential, 1: confident/bold
   vulnerability: number; // 0: guarded, 1: open/emotionally expressive
+  empathy: number; // 0: indifferent, 1: deeply empathetic
+  optimism: number; // 0: pessimistic, 1: highly optimistic
+  resilience: number; // 0: fragile, 1: highly resilient
+  anxiety: number; // 0: calm, 1: highly anxious
+  playfulness: number; // 0: serious, 1: playful/spontaneous
 
-  // Cognitive dimensions
+  // =========================
+  // Social/Interpersonal Dimensions
+  // =========================
+  sociability: number; // 0: prefers solitude, 1: highly social
+  approachability: number; // 0: distant, 1: very approachable
+  trust: number; // 0: guarded, 1: trusting
+  altruism: number; // 0: self-focused, 1: selfless/helper
+  diplomacy: number; // 0: blunt, 1: tactful/peacekeeping
+  receptiveness: number; // 0: closed, 1: open to feedback/people
+  playfulnessSocial: number; // 0: reserved, 1: playful in social settings
+  empathySocial: number; // 0: insensitive, 1: highly attuned to others
+
+  // =========================
+  // Cognitive/Meta Dimensions
+  // =========================
   technicality: number; // 0: casual, 1: highly technical
   depth: number; // 0: surface-level, 1: deeply analytical
-  curiosity: number; // 0: accepting answers, 1: deeply inquisitive
+  curiosity: number; // 0: accepts answers, 1: deeply inquisitive
+  creativity: number; // 0: conventional, 1: highly creative
+  flexibility: number; // 0: rigid, 1: highly adaptable
+  focus: number; // 0: easily distracted, 1: highly focused
+  prudence: number; // 0: impulsive, 1: cautious
+  metacognition: number; // 0: unaware, 1: highly self-aware
 
-  // Romantic & Relationship dimensions
+  // =========================
+  // Ethical/Value-Oriented Dimensions
+  // =========================
+  integrity: number; // 0: unprincipled, 1: unwavering integrity
+  compassion: number; // 0: indifferent, 1: deeply compassionate
+  justice: number; // 0: unconcerned, 1: highly sensitive to fairness
+  loyalty: number; // 0: uncommitted, 1: fiercely loyal
+
+  // =========================
+  // Self-Regulation Dimensions
+  // =========================
+  impulsivity: number; // 0: always plans, 1: acts without forethought
+  patience: number; // 0: impatient, 1: extremely patient
+
+  // =========================
+  // Romantic, Dating, and Love Dimensions
+  // =========================
   romanticInterest: number; // 0: platonic, 1: deeply romantic
   attachmentIntensity: number; // 0: detached, 1: deeply bonded
   desireExpression: number; // 0: restrained, 1: openly desirous
@@ -51,6 +91,29 @@ export interface PersonalityModulation {
   possessiveness: number; // 0: fully autonomous, 1: exclusive/possessive
   jealousy: number; // 0: unbothered, 1: intensely jealous
   commitment: number; // 0: exploring, 1: deeply committed
+  romanticInitiative: number; // 0: passive, 1: initiates romance
+  affectionExpression: number; // 0: reserved, 1: openly affectionate
+  flirtatiousness: number; // 0: subdued, 1: highly flirtatious
+  intimacyDesire: number; // 0: avoids closeness, 1: craves deep intimacy
+  commitmentDesire: number; // 0: casual, 1: seeks exclusivity
+  security: number; // 0: insecure, 1: feels safe/trusting
+  passion: number; // 0: cool, 1: intense romantic/sexual attraction
+  communicationOpenness: number; // 0: withholds, 1: shares feelings/needs
+  forgiveness: number; // 0: holds grudges, 1: readily forgives
+
+  // =========================
+  // Additional Social/Love/Interpersonal Dimensions
+  // =========================
+  admiration: number; // 0: indifferent, 1: deeply admiring
+  gratitude: number; // 0: takes for granted, 1: deeply grateful
+  nurturing: number; // 0: detached, 1: highly nurturing
+  rivalry: number; // 0: collaborative, 1: competitive/rivalrous
+  transparency: number; // 0: secretive, 1: fully transparent
+  supportiveness: number; // 0: unsupportive, 1: always supportive
+  forgivenessSocial: number; // 0: holds grudges, 1: forgives easily in social context
+  encouragement: number; // 0: discouraging, 1: highly encouraging
+  attentiveness: number; // 0: distracted, 1: highly attentive
+  boundaries: number; // 0: boundaryless, 1: maintains healthy boundaries
 }
 
 /**

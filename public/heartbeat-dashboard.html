@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heartbeat Dashboard</title>
+  <style>
+    body { font-family: sans-serif; background: #18181b; color: #f1f5f9; margin: 0; padding: 0; }
+    h1 { text-align: center; margin-top: 1.5rem; }
+    .servers { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
+    .server { background: #27272a; border-radius: 12px; padding: 1.5rem 2rem; min-width: 320px; box-shadow: 0 2px 8px #0002; }
+    .status { font-size: 1.2rem; margin-bottom: 1rem; }
+    .heartbeat { font-family: monospace; color: #22d3ee; }
+    .log { background: #18181b; color: #a3e635; font-size: 0.95rem; padding: 0.5rem; border-radius: 6px; margin-top: 1rem; max-height: 200px; overflow-y: auto; }
+    .error { color: #f87171; }
+    label { font-size: 0.95rem; color: #a1a1aa; }
+    input { width: 90%; margin-bottom: 0.5rem; padding: 0.3rem; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff; }
+  </style>
+</head>
+<body>
+  <h1>Aggregated Heartbeat Dashboard</h1>
+  <div style="text-align:center; margin-bottom:1rem;">
+    <label>Server 1 API Base URL: <input id="url1" value="http://localhost:9100" /></label>
+    <label>Server 2 API Base URL: <input id="url2" value="http://localhost:9101" /></label>
+    <button onclick="refreshAll()">Refresh Now</button>
+  </div>
+  <div class="servers">
+    <div class="server" id="server1">
+      <div class="status">Server 1: <span id="status1">Loading...</span></div>
+      <div>Heartbeat: <span class="heartbeat" id="heartbeat1">-</span></div>
+      <div class="log" id="log1">-</div>
+    </div>
+    <div class="server" id="server2">
+      <div class="status">Server 2: <span id="status2">Loading...</span></div>
+      <div>Heartbeat: <span class="heartbeat" id="heartbeat2">-</span></div>
+      <div class="log" id="log2">-</div>
+    </div>
+  </div>
+  <script>
+    async function fetchStatus(idx, baseUrl) {
+      const statusEl = document.getElementById('status'+idx);
+      const heartbeatEl = document.getElementById('heartbeat'+idx);
+      const logEl = document.getElementById('log'+idx);
+      try {
+        const [hb, st] = await Promise.all([
+          fetch(baseUrl + '/api/heartbeat').then(r => r.json()),
+          fetch(baseUrl + '/api/status').then(r => r.json())
+        ]);
+        if (hb.heartbeat) {
+          statusEl.textContent = 'Online';
+          statusEl.className = '';
+          heartbeatEl.textContent = hb.heartbeat;
+        } else {
+          statusEl.textContent = 'No Heartbeat';
+          statusEl.className = 'error';
+          heartbeatEl.textContent = '-';
+        }
+        if (st.status) {
+          logEl.textContent = st.status;
+        } else {
+          logEl.textContent = st.error || '-';
+        }
+      } catch (e) {
+        statusEl.textContent = 'Offline';
+        statusEl.className = 'error';
+        heartbeatEl.textContent = '-';
+        logEl.textContent = e.message;
+      }
+    }
+    function refreshAll() {
+      const url1 = document.getElementById('url1').value;
+      const url2 = document.getElementById('url2').value;
+      fetchStatus(1, url1);
+      fetchStatus(2, url2);
+    }
+    setInterval(refreshAll, 3000);
+    window.onload = refreshAll;
+  </script>
+</body>
+</html>
