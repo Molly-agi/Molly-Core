@@ -32,6 +32,7 @@ export { safetyToolHandlers } from './safety-tools';
 export { coreToolHandlers } from './core-tools';
 export { sensingToolHandlers } from './sensing-tools';
 export { geminiToolHandlers } from './gemini-tools';
+export { bugBountyToolHandlers } from './bug-bounty-tools';
 export {
   mcpToolHandlers,
   getMcpHandlers,
@@ -62,6 +63,7 @@ import { safetyToolHandlers } from './safety-tools';
 import { coreToolHandlers } from './core-tools';
 import { sensingToolHandlers } from './sensing-tools';
 import { geminiToolHandlers } from './gemini-tools';
+import { bugBountyToolHandlers } from './bug-bounty-tools';
 import type { ToolHandler } from './types';
 
 /**
@@ -89,6 +91,7 @@ export const modularToolHandlers: Record<string, ToolHandler> = {
   ...coreToolHandlers,
   ...sensingToolHandlers,
   ...geminiToolHandlers,
+  ...bugBountyToolHandlers,
 };
 
 /**
