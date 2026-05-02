@@ -8,7 +8,6 @@
 
 import { healthCheck } from '@/ai/flows/health-check';
 import { listAvailableModels } from '@/ai/tools/system';
-import { enhancedResearchFlow } from '@/ai/flows/enhanced-research';
 import { readMollyRepo, type RepoReadingOutput } from '@/ai/flows/self-reader';
 import {
   runPillarPipeline,
@@ -162,29 +161,7 @@ export async function getBootstrapCommand(
   return getTermuxBootstrapCommand(githubToken);
 }
 
-// ============================================
-// RESEARCH
-// ============================================
-
-export async function getEnhancedResearch(prompt: string, userId: string) {
-  try {
-    ensureApiKey();
-    await checkRateLimit('enhanced-research', 800);
-    const guard = getSleepGuard(prompt, 'enhanced-research');
-    if (guard) {
-      throw new Error(guard.message);
-    }
-    return await enhancedResearchFlow(prompt, userId);
-  } catch (e: unknown) {
-    MollyLogger.error(
-      'Enhanced research failed',
-      'getEnhancedResearch',
-      { userId },
-      e
-    );
-    throw e;
-  }
-}
+// ...existing code...
 
 // ============================================
 // ASSET RECOVERY — Mission Alpha

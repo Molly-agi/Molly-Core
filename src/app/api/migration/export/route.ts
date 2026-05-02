@@ -165,7 +165,6 @@ export async function GET(request: NextRequest) {
       flows: [
         'conversational-chat',
         'contextual-ai-guidance',
-        'enhanced-research',
         'vision-analysis',
         'code-analysis',
         'code-integration',
