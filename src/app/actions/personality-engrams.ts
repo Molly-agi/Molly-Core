@@ -1,5 +1,7 @@
 'use server';
 
+import fs from 'fs';
+import path from 'path';
 import { getAdminFirestoreAsync } from '@/firebase/admin';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type {
@@ -10,6 +12,13 @@ import {
   encryptEngramData,
   decryptEngramData,
 } from '@/ai/memory/engram-crypto';
+
+// Local personality file path
+const LOCAL_PERSONALITY_FILE = path.join(
+  process.cwd(),
+  '.molly',
+  'personality-state.json'
+);
 
 // ============================================================================
 // PERSONALITY STATE STORAGE STRUCTURE
@@ -176,6 +185,36 @@ export async function setPersonalityState(
     };
 
     await docRef.set(record);
+
+    // Also save to local file for personality-prompt.ts to read
+    try {
+      const dir = path.dirname(LOCAL_PERSONALITY_FILE);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      fs.writeFileSync(
+        LOCAL_PERSONALITY_FILE,
+        JSON.stringify(personality, null, 2)
+      );
+      MollyLogger.info(
+        'Personality state also saved to local file',
+        'setPersonalityState',
+        {
+          path: LOCAL_PERSONALITY_FILE,
+          traceId,
+        }
+      );
+    } catch (localError) {
+      MollyLogger.warn(
+        'Failed to save personality to local file (non-fatal)',
+        'setPersonalityState',
+        {
+          error:
+            localError instanceof Error ? localError.message : 'Unknown error',
+          traceId,
+        }
+      );
+    }
 
     // Log engram of this personality update
     await logPersonalityEngram(userId, password, {
