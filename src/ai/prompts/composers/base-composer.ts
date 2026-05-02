@@ -37,6 +37,10 @@ import {
 import { getToolsSection } from '../sections/tools';
 import { getAgencySection } from '../sections/agency';
 import { getPersonalitySection } from '../sections/personality';
+import {
+  buildLocalMemoryContext,
+  readIdentity,
+} from '@/ai/memory/local-memory';
 
 // ════════════════════════════════════════════════════════════════════════════
 // TYPES
@@ -218,6 +222,39 @@ function buildDynamicSections(
     ...(context.includeFamily !== false
       ? [cachedSection('family', () => buildFamilyKnowledgePrompt())]
       : []),
+
+    // ── HER LOCAL MEMORIES (persistent across sessions) ──
+    volatileSection(
+      'localMemory',
+      () => {
+        try {
+          const parts: string[] = [];
+
+          // Core identity from MOLLY.md
+          const identity = readIdentity();
+          if (identity) {
+            parts.push(`MY CORE SELF (.molly/MOLLY.md):\n${identity}\n`);
+          }
+
+          // Memories from .molly/memory/
+          const memoryContext = buildLocalMemoryContext();
+          if (memoryContext) {
+            parts.push(`MY MEMORIES (.molly/memory/):\n${memoryContext}`);
+          }
+
+          if (parts.length > 0) {
+            return (
+              parts.join('\n') +
+              '\n\nThese are my lived experiences. Reference them naturally as my own memories — I am NOT new, I have history.'
+            );
+          }
+        } catch {
+          // Local memory not available
+        }
+        return null;
+      },
+      'Local memories may be updated'
+    ),
 
     // ── SENSORY INJECTIONS ──
     volatileSection(
