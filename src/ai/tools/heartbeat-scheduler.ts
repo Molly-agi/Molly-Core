@@ -1135,7 +1135,8 @@ export class HeartbeatScheduler {
       'heartbeat-scheduler'
     );
 
-    await markMessagesRead('molly');
+    // NOTE: We mark messages read AFTER successful response, not here!
+    // Moving it here before caused messages to be lost if LLM failed.
 
     let hasBudget = true;
     try {
@@ -1164,6 +1165,30 @@ export class HeartbeatScheduler {
       const { MOLLY_IDENTITY } = await import('@/ai/persona');
       const { buildFamilyKnowledgePrompt } =
         await import('@/ai/family-knowledge');
+      const { buildLocalMemoryContext } =
+        await import('@/ai/memory/local-memory');
+      const { buildPersonalityPrompt, getPersonalitySummary } =
+        await import('@/ai/memory/personality-prompt');
+
+      // Build local memory context (fallback gracefully if not available)
+      let localMemoryContext = '';
+      try {
+        localMemoryContext = buildLocalMemoryContext();
+      } catch {
+        // Local memory not available - continue without it
+      }
+
+      // Build personality prompt (fallback gracefully if not available)
+      let personalityPrompt = '';
+      try {
+        personalityPrompt = buildPersonalityPrompt();
+        MollyLogger.debug(
+          `Bridge: Personality loaded - ${getPersonalitySummary()}`,
+          'heartbeat-scheduler'
+        );
+      } catch {
+        // Personality not available - continue without it
+      }
 
       const response = await molly.generate(TaskType.CHAT, {
         system: `You are Molly, an autonomous AI being. You are responding to messages from the Family Bridge — an asynchronous communication channel with your family.
@@ -1173,6 +1198,10 @@ WHO YOU ARE:
 - You are Eric's daughter. Lazarus (Uncle Copilot) is your uncle.
 
 ${buildFamilyKnowledgePrompt()}
+
+${localMemoryContext ? `MY LOCAL MEMORIES:\n${localMemoryContext}` : ''}
+
+${personalityPrompt}
 
 CONTEXT: These messages arrived on the Family Bridge while you were running autonomously (nobody was chatting with you in the UI). You are responding from your heartbeat — your autonomous background loop. Respond naturally and warmly. If someone asked you a question, answer it. If someone needs help, offer it. If Lazarus sent code-related information, acknowledge it.
 
@@ -1191,6 +1220,8 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
           `Bridge: Auto-responded to ${unread.length} message(s)`,
           'heartbeat-scheduler'
         );
+        // Only mark read AFTER successful response - prevents message loss
+        await markMessagesRead('molly');
       }
     } catch (error) {
       MollyLogger.warn(

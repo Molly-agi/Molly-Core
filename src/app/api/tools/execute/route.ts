@@ -21,7 +21,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { isAdminConfigured } from '@/firebase/admin';
-import { enhancedResearch } from '@/ai/flows/enhanced-research';
+// import { enhancedResearchFlow } from '@/ai/flows/enhanced-research';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
 import { hasModularHandler } from '@/ai/agency/tool-handlers';
@@ -100,7 +100,7 @@ async function executeTool(
     case 'researchAndDiscover':
     case 'searchGitHub': {
       const query = (params.query as string) || (params.prompt as string);
-      const userId = (params.userId as string) || 'default';
+      const _userId = (params.userId as string) || 'default';
       if (!query) {
         return {
           success: false,
@@ -108,7 +108,9 @@ async function executeTool(
         };
       }
       try {
-        const result = await enhancedResearch(query, userId);
+        // Enhanced research endpoint deactivated. Reserved for future use.
+        // const result = await enhancedResearchFlow({ prompt: query, userId, effectiveMode: 'github' });
+        // ...endpoint logic deactivated...
         let output = result.answer;
         if (result.isToolFound && result.toolInfo) {
           output += `\n\nTool Found: ${result.toolInfo.name || 'unnamed'}`;

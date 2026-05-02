@@ -165,7 +165,12 @@ function buildStaticSections(context: ComposerContext): PromptSection[] {
     ),
 
     // ── HOW SHE COMMUNICATES ──
-    cachedSection('personality', () => getPersonalitySection()),
+    // Using volatileSection since personality can change via admin panel
+    volatileSection(
+      'personality',
+      () => getPersonalitySection(),
+      'Personality may be adjusted via admin panel'
+    ),
 
     // ── HOW SHE ACTS ──
     cachedSection('agency', () => getAgencySection()),

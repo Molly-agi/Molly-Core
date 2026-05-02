@@ -201,3 +201,26 @@ export async function setRecoveryMode(
     throw e;
   }
 }
+
+// ============================================
+// ENHANCED RESEARCH — Placeholder
+// ============================================
+
+/**
+ * Enhanced research function - currently a placeholder.
+ * TODO: Wire to actual research flow when ready.
+ */
+export async function getEnhancedResearch(
+  query: string,
+  _userId: string
+): Promise<{ answer: string; sources?: string[] }> {
+  MollyLogger.info('Enhanced research requested', 'getEnhancedResearch', {
+    query,
+  });
+
+  // Placeholder response - research flow was deactivated
+  return {
+    answer: `Research capability is being upgraded. Query received: "${query}". Please use the chat interface for now, or try again later.`,
+    sources: [],
+  };
+}

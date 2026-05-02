@@ -14,7 +14,6 @@ import {
 // ============================================================================
 // PERSONALITY STATE STORAGE STRUCTURE
 // ============================================================================
-
 interface EncryptedPersonalityRecord {
   userId: string;
   encrypted: string;
@@ -41,7 +40,6 @@ function toDate(
 // ============================================================================
 // SERVER ACTIONS FOR PERSONALITY MANAGEMENT
 // ============================================================================
-
 /**
  * Get current personality state for user (requires password authentication)
  */

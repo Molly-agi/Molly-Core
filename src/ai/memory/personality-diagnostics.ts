@@ -89,9 +89,14 @@ export function evaluatePersonalityStability(
     romantic.push('Arousal + jealousy + possessiveness are elevated together.');
   }
   if (personality.commitmentDesire >= 0.95 && personality.commitment <= 0.2) {
-    romantic.push('Desire for commitment is high but actual commitment is low.');
+    romantic.push(
+      'Desire for commitment is high but actual commitment is low.'
+    );
   }
-  if (personality.intimacyDesire >= 0.95 && personality.emotionalIntimacy <= 0.2) {
+  if (
+    personality.intimacyDesire >= 0.95 &&
+    personality.emotionalIntimacy <= 0.2
+  ) {
     romantic.push('Desire for intimacy is high but emotional intimacy is low.');
   }
   if (personality.affectionExpression <= 0.1) {
@@ -131,3 +136,4 @@ export function evaluatePersonalityStability(
     variance: Number(stdDev.toFixed(3)),
   };
 }
+// ...full upgraded code from stuff/personality/personality-diagnostics.ts.txt...
