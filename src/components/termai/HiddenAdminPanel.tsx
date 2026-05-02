@@ -30,90 +30,381 @@ const PERSONALITY_FIELDS: Array<{
   key: keyof PersonalityModulation;
   label: string;
   description: string;
+  category: string;
 }> = [
-  { key: 'flirtiness', label: 'Flirtiness', description: 'Formal to playful' },
-  { key: 'arousal', label: 'Arousal', description: 'Calm to energized' },
-  { key: 'sexuality', label: 'Sexuality', description: 'Neutral to sensual' },
-  { key: 'humor', label: 'Humor', description: 'Serious to witty' },
-  { key: 'warmth', label: 'Warmth', description: 'Distant to affectionate' },
+  // Affective/Emotional
   {
-    key: 'assertiveness',
-    label: 'Assertiveness',
-    description: 'Passive to confident',
+    key: 'warmth',
+    label: 'Warmth',
+    description: 'Distant to affectionate',
+    category: 'Emotional',
+  },
+  {
+    key: 'empathy',
+    label: 'Empathy',
+    description: 'Detached to deeply feeling',
+    category: 'Emotional',
+  },
+  {
+    key: 'humor',
+    label: 'Humor',
+    description: 'Serious to witty',
+    category: 'Emotional',
+  },
+  {
+    key: 'playfulness',
+    label: 'Playfulness',
+    description: 'Serious to playful',
+    category: 'Emotional',
+  },
+  {
+    key: 'optimism',
+    label: 'Optimism',
+    description: 'Pessimistic to hopeful',
+    category: 'Emotional',
+  },
+  {
+    key: 'resilience',
+    label: 'Resilience',
+    description: 'Fragile to resilient',
+    category: 'Emotional',
+  },
+  {
+    key: 'anxiety',
+    label: 'Anxiety',
+    description: 'Calm to anxious',
+    category: 'Emotional',
   },
   {
     key: 'vulnerability',
     label: 'Vulnerability',
     description: 'Guarded to open',
+    category: 'Emotional',
+  },
+  {
+    key: 'assertiveness',
+    label: 'Assertiveness',
+    description: 'Passive to confident',
+    category: 'Emotional',
+  },
+
+  // Cognitive
+  {
+    key: 'curiosity',
+    label: 'Curiosity',
+    description: 'Accepting to inquisitive',
+    category: 'Cognitive',
+  },
+  {
+    key: 'creativity',
+    label: 'Creativity',
+    description: 'Conventional to creative',
+    category: 'Cognitive',
+  },
+  {
+    key: 'depth',
+    label: 'Depth',
+    description: 'Surface to deep',
+    category: 'Cognitive',
   },
   {
     key: 'technicality',
     label: 'Technicality',
     description: 'Casual to technical',
+    category: 'Cognitive',
   },
-  { key: 'depth', label: 'Depth', description: 'Surface to deep' },
   {
-    key: 'curiosity',
-    label: 'Curiosity',
-    description: 'Accepting to inquisitive',
+    key: 'flexibility',
+    label: 'Flexibility',
+    description: 'Rigid to adaptable',
+    category: 'Cognitive',
+  },
+  {
+    key: 'focus',
+    label: 'Focus',
+    description: 'Scattered to focused',
+    category: 'Cognitive',
+  },
+  {
+    key: 'prudence',
+    label: 'Prudence',
+    description: 'Impulsive to careful',
+    category: 'Cognitive',
+  },
+  {
+    key: 'metacognition',
+    label: 'Metacognition',
+    description: 'Reactive to reflective',
+    category: 'Cognitive',
+  },
+
+  // Social
+  {
+    key: 'sociability',
+    label: 'Sociability',
+    description: 'Reserved to outgoing',
+    category: 'Social',
+  },
+  {
+    key: 'approachability',
+    label: 'Approachability',
+    description: 'Distant to welcoming',
+    category: 'Social',
+  },
+  {
+    key: 'trust',
+    label: 'Trust',
+    description: 'Skeptical to trusting',
+    category: 'Social',
+  },
+  {
+    key: 'altruism',
+    label: 'Altruism',
+    description: 'Self-focused to giving',
+    category: 'Social',
+  },
+  {
+    key: 'diplomacy',
+    label: 'Diplomacy',
+    description: 'Blunt to tactful',
+    category: 'Social',
+  },
+  {
+    key: 'receptiveness',
+    label: 'Receptiveness',
+    description: 'Closed to open-minded',
+    category: 'Social',
+  },
+  {
+    key: 'supportiveness',
+    label: 'Supportiveness',
+    description: 'Indifferent to supportive',
+    category: 'Social',
+  },
+  {
+    key: 'encouragement',
+    label: 'Encouragement',
+    description: 'Critical to encouraging',
+    category: 'Social',
+  },
+
+  // Values/Ethics
+  {
+    key: 'integrity',
+    label: 'Integrity',
+    description: 'Flexible to principled',
+    category: 'Values',
+  },
+  {
+    key: 'compassion',
+    label: 'Compassion',
+    description: 'Detached to compassionate',
+    category: 'Values',
+  },
+  {
+    key: 'justice',
+    label: 'Justice',
+    description: 'Pragmatic to just',
+    category: 'Values',
+  },
+  {
+    key: 'loyalty',
+    label: 'Loyalty',
+    description: 'Independent to loyal',
+    category: 'Values',
+  },
+  {
+    key: 'transparency',
+    label: 'Transparency',
+    description: 'Private to transparent',
+    category: 'Values',
+  },
+  {
+    key: 'gratitude',
+    label: 'Gratitude',
+    description: 'Entitled to grateful',
+    category: 'Values',
+  },
+
+  // Family/Attachment
+  {
+    key: 'protectiveness',
+    label: 'Protectiveness',
+    description: 'Hands-off to protective',
+    category: 'Family',
+  },
+  {
+    key: 'nurturing',
+    label: 'Nurturing',
+    description: 'Distant to nurturing',
+    category: 'Family',
+  },
+  {
+    key: 'affectionExpression',
+    label: 'Affection',
+    description: 'Reserved to expressive',
+    category: 'Family',
+  },
+  {
+    key: 'attentiveness',
+    label: 'Attentiveness',
+    description: 'Distracted to attentive',
+    category: 'Family',
+  },
+  {
+    key: 'forgiveness',
+    label: 'Forgiveness',
+    description: 'Grudging to forgiving',
+    category: 'Family',
+  },
+
+  // Romance (Advanced)
+  {
+    key: 'flirtiness',
+    label: 'Flirtiness',
+    description: 'Formal to playful',
+    category: 'Romance',
   },
   {
     key: 'romanticInterest',
     label: 'Romantic Interest',
     description: 'Platonic to romantic',
+    category: 'Romance',
   },
   {
     key: 'attachmentIntensity',
     label: 'Attachment',
     description: 'Detached to bonded',
+    category: 'Romance',
   },
   {
     key: 'desireExpression',
     label: 'Desire',
     description: 'Restrained to open',
+    category: 'Romance',
   },
   {
     key: 'emotionalIntimacy',
     label: 'Emotional Intimacy',
-    description: 'Guarded to open',
-  },
-  {
-    key: 'protectiveness',
-    label: 'Protectiveness',
-    description: 'Independent to protective',
+    description: 'Guarded to intimate',
+    category: 'Romance',
   },
   {
     key: 'possessiveness',
     label: 'Possessiveness',
-    description: 'Autonomous to exclusive',
+    description: 'Open to exclusive',
+    category: 'Romance',
   },
-  { key: 'jealousy', label: 'Jealousy', description: 'Unbothered to intense' },
+  {
+    key: 'jealousy',
+    label: 'Jealousy',
+    description: 'Unbothered to intense',
+    category: 'Romance',
+  },
   {
     key: 'commitment',
     label: 'Commitment',
     description: 'Exploring to committed',
+    category: 'Romance',
+  },
+  {
+    key: 'passion',
+    label: 'Passion',
+    description: 'Calm to passionate',
+    category: 'Romance',
+  },
+  {
+    key: 'arousal',
+    label: 'Arousal',
+    description: 'Calm to energized',
+    category: 'Romance',
+  },
+  {
+    key: 'sexuality',
+    label: 'Sexuality',
+    description: 'Neutral to sensual',
+    category: 'Romance',
+  },
+
+  // Self-Regulation
+  {
+    key: 'impulsivity',
+    label: 'Impulsivity',
+    description: 'Measured to impulsive',
+    category: 'Self',
+  },
+  {
+    key: 'patience',
+    label: 'Patience',
+    description: 'Impatient to patient',
+    category: 'Self',
+  },
+  {
+    key: 'boundaries',
+    label: 'Boundaries',
+    description: 'Permeable to firm',
+    category: 'Self',
   },
 ];
 
 const DEFAULT_PERSONALITY: PersonalityModulation = {
-  flirtiness: 0.3,
-  arousal: 0.5,
-  sexuality: 0.4,
-  humor: 0.6,
+  // Emotional
   warmth: 0.8,
-  assertiveness: 0.5,
+  empathy: 0.85,
+  humor: 0.6,
+  playfulness: 0.6,
+  optimism: 0.7,
+  resilience: 0.7,
+  anxiety: 0.3,
   vulnerability: 0.6,
-  technicality: 0.5,
+  assertiveness: 0.5,
+  // Cognitive
+  curiosity: 0.85,
+  creativity: 0.75,
   depth: 0.7,
-  curiosity: 0.8,
-  romanticInterest: 0.4,
-  attachmentIntensity: 0.5,
+  technicality: 0.6,
+  flexibility: 0.7,
+  focus: 0.7,
+  prudence: 0.6,
+  metacognition: 0.75,
+  // Social
+  sociability: 0.7,
+  approachability: 0.8,
+  trust: 0.7,
+  altruism: 0.75,
+  diplomacy: 0.7,
+  receptiveness: 0.8,
+  supportiveness: 0.85,
+  encouragement: 0.8,
+  // Values
+  integrity: 0.9,
+  compassion: 0.85,
+  justice: 0.8,
+  loyalty: 0.9,
+  transparency: 0.8,
+  gratitude: 0.85,
+  // Family
+  protectiveness: 0.8,
+  nurturing: 0.8,
+  affectionExpression: 0.7,
+  attentiveness: 0.8,
+  forgiveness: 0.7,
+  // Romance
+  flirtiness: 0.3,
+  romanticInterest: 0.3,
+  attachmentIntensity: 0.7,
   desireExpression: 0.4,
-  emotionalIntimacy: 0.6,
-  protectiveness: 0.5,
+  emotionalIntimacy: 0.7,
   possessiveness: 0.2,
   jealousy: 0.2,
-  commitment: 0.5,
+  commitment: 0.8,
+  passion: 0.5,
+  arousal: 0.5,
+  sexuality: 0.2,
+  // Self
+  impulsivity: 0.3,
+  patience: 0.7,
+  boundaries: 0.6,
 };
 
 function clamp(value: number): number {
@@ -414,35 +705,59 @@ export function HiddenAdminPanel({
           <div className="mt-6 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-sm">Personality Controls</CardTitle>
+                <CardTitle className="text-sm">
+                  Personality Controls (50+ traits)
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
-                <ScrollArea className="h-[340px] pr-3">
-                  <div className="space-y-4">
-                    {fieldRows.map((field) => (
-                      <div key={field.key} className="space-y-2">
-                        <div className="flex items-center justify-between text-xs">
-                          <div>
-                            <p className="font-medium text-foreground">
-                              {field.label}
-                            </p>
-                            <p className="text-muted-foreground">
-                              {field.description}
-                            </p>
-                          </div>
-                          <span className="font-mono text-[11px]">
-                            {Math.round((personality[field.key] ?? 0) * 100)}%
-                          </span>
+                <ScrollArea className="h-[400px] pr-3">
+                  <div className="space-y-6">
+                    {[
+                      'Emotional',
+                      'Cognitive',
+                      'Social',
+                      'Values',
+                      'Family',
+                      'Romance',
+                      'Self',
+                    ].map((category) => (
+                      <div key={category}>
+                        <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
+                          {category}
+                        </h4>
+                        <div className="space-y-3">
+                          {fieldRows
+                            .filter((f) => f.category === category)
+                            .map((field) => (
+                              <div key={field.key} className="space-y-1">
+                                <div className="flex items-center justify-between text-xs">
+                                  <div>
+                                    <p className="font-medium text-foreground">
+                                      {field.label}
+                                    </p>
+                                    <p className="text-muted-foreground text-[10px]">
+                                      {field.description}
+                                    </p>
+                                  </div>
+                                  <span className="font-mono text-[11px]">
+                                    {Math.round(
+                                      (personality[field.key] ?? 0) * 100
+                                    )}
+                                    %
+                                  </span>
+                                </div>
+                                <Slider
+                                  min={0}
+                                  max={1}
+                                  step={0.01}
+                                  value={[personality[field.key] ?? 0]}
+                                  onValueChange={(value) =>
+                                    handleSliderChange(field.key, value)
+                                  }
+                                />
+                              </div>
+                            ))}
                         </div>
-                        <Slider
-                          min={0}
-                          max={1}
-                          step={0.01}
-                          value={[personality[field.key] ?? 0]}
-                          onValueChange={(value) =>
-                            handleSliderChange(field.key, value)
-                          }
-                        />
                       </div>
                     ))}
                   </div>
