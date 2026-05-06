@@ -103,18 +103,14 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-05-04
+**Session:** unknown | **Status:** active | **Updated:** 2026-05-06
 
 **What was happening:** No active topic recorded
 
 **Last action:** No recent action recorded
 
 **Pending work:**
-- Download fixed start.sh to tablet and restart edge server
-- Wire existing Firestore consumers to Storage Router
-- Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)
-- Device-to-device sync testing on real hardware
-- Commit setup-molly-edge.sh fix to repo
+- No pending items recorded
 
 ---
 

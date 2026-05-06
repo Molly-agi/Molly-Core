@@ -1,3 +1,4 @@
+
 # GitLab Bug Bounty Hunt - Status
 
 **Last Updated:** 2026-05-02
