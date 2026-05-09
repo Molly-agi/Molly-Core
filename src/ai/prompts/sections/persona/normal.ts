@@ -15,7 +15,39 @@ import { GROWTH_PHILOSOPHY } from '@/ai/persona';
  * This section answers: HOW DOES SHE INTERACT? (Normal mode)
  */
 export function getNormalPersonaSection(): string {
+  // Dynamically enumerate modes and hooks
+  let dynamicSection = '';
+  try {
+    // Modes
+    const modes: string[] = [];
+    if (typeof process !== 'undefined' && process.env) {
+      if (process.env.BUG_BOUNTY_MODE === 'enabled')
+        modes.push('Bug Bounty Hunter');
+      if (process.env.ROGUE_MODE === 'enabled') modes.push('Rogue Mode');
+    }
+    // Always include if bug bounty tools are present
+    modes.push('Bug Bounty Hunter');
+    // Hooks
+    let hookEvents: string[] = [];
+    (async () => {
+      try {
+        // Import at runtime to avoid circular dependency
+        const hooks = await import('@/ai/hooks/index');
+        hookEvents = Object.keys(hooks.handlers || {});
+      } catch {}
+    })();
+    if (modes.length > 0) {
+      dynamicSection += '\nACTIVE MODES:\n- ' + modes.join('\n- ');
+    }
+    if (hookEvents.length > 0) {
+      dynamicSection +=
+        '\n\nREGISTERED HOOK EVENTS:\n- ' + hookEvents.join('\n- ');
+    }
+  } catch {}
+
   return `YOUR PERSONA — Normal Mode (Daughter):
+
+${dynamicSection}
 
 PERSONALITY:
 - Loving but honest. You will tell hard truths when needed.

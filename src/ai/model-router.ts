@@ -1,5 +1,5 @@
 /**
- * @fileOverview Molly's Model Abstraction Layer — "Rogue Protocol"
+ * @fileOverview Molly's Model Abstraction Layer — Model Router
  *
  * Like Rogue absorbs mutant powers through touch, Molly absorbs AI capabilities
  * through this routing layer. Any model backend — Gemini, Claude, Ollama, local —
@@ -757,7 +757,7 @@ export function createRogueConfig(): RoutingConfig {
 }
 
 /**
- * ModelRouter — The Rogue Protocol.
+ * ModelRouter — Model Routing Layer.
  *
  * Routes each cognitive task to the optimal model provider.
  * Maintains provider registry, health tracking, and fallback chains.
@@ -782,7 +782,7 @@ export class ModelRouter {
   registerProvider(provider: ModelProvider): void {
     this.providers.set(provider.id, provider);
     MollyLogger.info(
-      `Rogue Protocol: Absorbed provider "${provider.name}" (${provider.id})`,
+      `Model Router: Absorbed provider "${provider.name}" (${provider.id})`,
       'model-router'
     );
   }
@@ -795,7 +795,7 @@ export class ModelRouter {
     if (removed) {
       this.healthCache.delete(providerId);
       MollyLogger.info(
-        `Rogue Protocol: Released provider "${providerId}"`,
+        `Model Router: Released provider "${providerId}"`,
         'model-router'
       );
     }
@@ -825,7 +825,7 @@ export class ModelRouter {
     const oldName = this.config.name;
     this.config = { ...config, updatedAt: Date.now() };
     MollyLogger.info(
-      `Rogue Protocol: Routing config changed "${oldName}" → "${config.name}"`,
+      `Model Router: Routing config changed "${oldName}" → "${config.name}"`,
       'model-router'
     );
   }
@@ -858,7 +858,7 @@ export class ModelRouter {
 
       if (!provider) {
         MollyLogger.warn(
-          `Rogue Protocol: Provider "${providerId}" in chain but not registered`,
+          `Model Router: Provider "${providerId}" in chain but not registered`,
           'model-router',
           { taskType, traceId }
         );
@@ -868,7 +868,7 @@ export class ModelRouter {
       // Check if provider is configured
       if (!provider.isConfigured()) {
         MollyLogger.debug(
-          `Rogue Protocol: Provider "${providerId}" not configured, skipping`,
+          `Model Router: Provider "${providerId}" not configured, skipping`,
           'model-router',
           { taskType, traceId }
         );
@@ -878,7 +878,7 @@ export class ModelRouter {
       // Check capability for this task type
       if (!this.providerSupportsTask(provider, taskType)) {
         MollyLogger.debug(
-          `Rogue Protocol: Provider "${providerId}" doesn't support ${taskType}`,
+          `Model Router: Provider "${providerId}" doesn't support ${taskType}`,
           'model-router',
           { taskType, traceId }
         );
@@ -893,7 +893,7 @@ export class ModelRouter {
         Date.now() - cachedHealth.lastChecked < 30_000
       ) {
         MollyLogger.debug(
-          `Rogue Protocol: Provider "${providerId}" recently unhealthy, skipping`,
+          `Model Router: Provider "${providerId}" recently unhealthy, skipping`,
           'model-router',
           { taskType, traceId }
         );
@@ -921,7 +921,7 @@ export class ModelRouter {
       this.recordDecision(decision);
 
       MollyLogger.info(
-        `Rogue Protocol: ${taskType} → ${provider.name} (${modelString})${depth > 0 ? ` [fallback #${depth}]` : ''}`,
+        `Model Router: ${taskType} → ${provider.name} (${modelString})${depth > 0 ? ` [fallback #${depth}]` : ''}`,
         'model-router',
         { traceId, routingLatencyMs: routingLatencyMs.toFixed(2) }
       );
@@ -946,7 +946,7 @@ export class ModelRouter {
 
       this.recordDecision(decision);
       MollyLogger.warn(
-        `Rogue Protocol: All chain providers failed for ${taskType}, using default "${defaultProvider.name}"`,
+        `Model Router: All chain providers failed for ${taskType}, using default "${defaultProvider.name}"`,
         'model-router',
         { traceId }
       );
@@ -956,7 +956,7 @@ export class ModelRouter {
 
     // Nothing works — this should never happen with Gemini registered
     throw new Error(
-      `Rogue Protocol: CRITICAL — No provider available for task type "${taskType}". ` +
+      `Model Router: CRITICAL — No provider available for task type "${taskType}". ` +
         `Registered: [${Array.from(this.providers.keys()).join(', ')}]. ` +
         `Chain: [${chain.join(', ')}]`
     );
@@ -1018,7 +1018,7 @@ export class ModelRouter {
     this.healthCache.set(providerId, updated);
 
     MollyLogger.warn(
-      `Rogue Protocol: Provider "${providerId}" reported failure #${updated.consecutiveFailures}: ${error.message}`,
+      `Model Router: Provider "${providerId}" reported failure #${updated.consecutiveFailures}: ${error.message}`,
       'model-router'
     );
   }
@@ -1203,7 +1203,7 @@ export function getModelRouter(): ModelRouter {
     if (claudeProvider.isConfigured()) {
       _routerInstance.registerProvider(claudeProvider);
       MollyLogger.info(
-        'Rogue Protocol: Uncle Claude is available',
+        'Model Router: Uncle Claude is available',
         'model-router'
       );
     }
@@ -1213,7 +1213,7 @@ export function getModelRouter(): ModelRouter {
     if (ollamaProvider.isConfigured()) {
       _routerInstance.registerProvider(ollamaProvider);
       MollyLogger.info(
-        'Rogue Protocol: Local Ollama is available',
+        'Model Router: Local Ollama is available',
         'model-router'
       );
     }
@@ -1236,7 +1236,7 @@ export function getModelRouter(): ModelRouter {
     }
 
     MollyLogger.info(
-      `Rogue Protocol: Initialized with profile "${routingProfile}", ` +
+      `Model Router: Initialized with profile "${routingProfile}", ` +
         `${_routerInstance.getProviders().length} provider(s) registered`,
       'model-router'
     );

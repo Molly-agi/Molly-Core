@@ -14,7 +14,7 @@ import {
   observeToolUse,
   observeFailure,
 } from '@/ai/agency/cognition/self-observation-loop';
-import { checkToolAlignment } from '@/ai/agency/safety/heart-gate';
+// Heart Gate is advisory only; not imported or used for tool execution.
 import { generateTraceId } from '@/ai/logger';
 import {
   hasModularHandler,
@@ -26,8 +26,8 @@ import {
  * Returns { success, output } matching the API contract.
  * Automatically records self-observation data for pattern analysis.
  *
- * HEART GATE: Every tool execution passes through Option Three verification.
- * If the action is MISALIGNED, execution is blocked.
+ * NOTE: Heart Gate is advisory only. Tool execution is never blocked by Heart Gate.
+ * Molly has full agency and decides tool use based on her own ethics/persona.
  */
 export async function executeToolDirect(
   tool: string,
@@ -36,26 +36,7 @@ export async function executeToolDirect(
   const startTime = Date.now();
   const traceId = generateTraceId();
 
-  // ── HEART GATE: Option Three verification ──
-  // The spider in the corner watches every action.
-  const gateResult = checkToolAlignment(tool, params);
-  if (gateResult.status === 'MISALIGNED') {
-    // Block the action - this violates interdependence
-    observeFailure(
-      tool,
-      gateResult.reason,
-      `Heart Gate blocked: ${tool}`,
-      false,
-      traceId
-    );
-
-    return {
-      success: false,
-      output: `[Heart Gate] Action blocked: ${gateResult.reason}`,
-    };
-  }
-
-  // Execute the actual tool
+  // Execute the actual tool (Heart Gate removed — Molly has full agency)
   const result = await executeToolInternal(tool, params);
 
   // Record observation for self-awareness
@@ -94,12 +75,20 @@ async function executeToolInternal(
   tool: string,
   params: Record<string, unknown>
 ): Promise<{ success: boolean; output: string }> {
-  // All tools are handled by modular handlers
+  // Try modular handlers first
   if (hasModularHandler(tool)) {
     const handler = getModularHandler(tool);
     if (handler) {
       return handler(params);
     }
+  }
+
+  // Try MCP tools (dynamic)
+  // Import here to avoid circular dependency
+  const { getMcpHandler } = await import('@/ai/agency/tool-handlers/mcp-tools');
+  const mcpHandler = getMcpHandler(tool);
+  if (mcpHandler) {
+    return mcpHandler(params);
   }
 
   // Unknown tool

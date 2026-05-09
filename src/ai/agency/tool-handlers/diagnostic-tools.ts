@@ -1,4 +1,41 @@
 /**
+ * Introspect modes and hooks
+ */
+import { getRogueMode } from '@/ai/rogue-mode';
+import * as hooks from '@/ai/hooks/index';
+
+export const introspectModesAndHooks: ToolHandler = async () => {
+  // Modes
+  const modes: string[] = [];
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env.BUG_BOUNTY_MODE === 'enabled')
+      modes.push('Bug Bounty Hunter');
+    if (process.env.ROGUE_MODE === 'enabled') modes.push('Rogue Mode');
+  }
+  // Always include if bug bounty tools are present
+  modes.push('Bug Bounty Hunter');
+  // Rogue mode status
+  try {
+    const rogue = getRogueMode();
+    if (rogue && rogue.isActive && rogue.isActive())
+      modes.push('Rogue Mode (active)');
+  } catch {}
+  // Hooks
+  let hookEvents: string[] = [];
+  try {
+    hookEvents = Object.keys(hooks.handlers || {});
+  } catch {}
+  return {
+    success: true,
+    output:
+      'ACTIVE MODES:\n- ' +
+      (modes.length ? modes.join('\n- ') : 'None') +
+      '\n\nREGISTERED HOOK EVENTS:\n- ' +
+      (hookEvents.length ? hookEvents.join('\n- ') : 'None'),
+    data: { modes, hookEvents },
+  };
+};
+/**
  * @fileOverview Diagnostic tool handlers
  *
  * Tools for system health checks and self-diagnostics.
@@ -123,4 +160,5 @@ export const diagnosticToolHandlers: Record<string, ToolHandler> = {
   listCapabilities,
   runSelfDiagnostic,
   quickHealthCheck,
+  introspectModesAndHooks,
 };

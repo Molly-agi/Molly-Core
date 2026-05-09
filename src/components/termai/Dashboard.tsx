@@ -16,6 +16,9 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
 import { Battery, Thermometer, Radio, Activity, Brain } from 'lucide-react';
 import { Badge } from '../ui/badge';
+import { ToolList } from '@/components/tools/ToolList';
+import { SkillRegistryPanelWithModal } from '@/components/skills';
+import { SkillDiagnosticsPanel } from '@/components/skills';
 
 export default function Dashboard() {
   const [voiceResult, setVoiceResult] = useState<VoiceCommandResult | null>(
@@ -302,6 +305,20 @@ export default function Dashboard() {
               Self-Evolution: Live
             </Badge>
           </div>
+        </div>
+
+        {/* Molly's Live Tool List */}
+        <div className="my-4">
+          <ToolList />
+        </div>
+        {/* Molly's Live Skill/Agent List */}
+        <div className="my-4">
+          <SkillRegistryPanelWithModal />
+        </div>
+
+        {/* Molly's Skill/Agent Diagnostics */}
+        <div className="my-4">
+          <SkillDiagnosticsPanel />
         </div>
 
         <div className="flex-1 p-4 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-secondary/20 via-background to-background">

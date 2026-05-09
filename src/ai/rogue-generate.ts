@@ -1,7 +1,7 @@
 /**
  * @fileOverview Molly's Rogue-Aware Generate Wrapper
  *
- * This is the bridge between the Rogue Protocol (model-router.ts) and
+ * This is the bridge between the Model Router (model-router.ts) and
  * Genkit's ai.generate(). It wraps every LLM call with:
  *   1. Automatic model resolution via the router
  *   2. Fallback on failure (re-route to next provider)
@@ -55,14 +55,14 @@ export interface RogueGenerateOptions {
  * Molly's Rogue-aware AI interface.
  *
  * Drop-in enhancement over `ai.generate()` that adds:
- * - Automatic model routing via Rogue Protocol
+ * - Automatic model routing via Model Router
  * - Fallback on provider failure
  * - Health tracking per provider
  * - Response timing
  */
 export const molly = {
   /**
-   * Generate a response using the Rogue Protocol router.
+   * Generate a response using the Model Router.
    *
    * @param taskType — What kind of thinking is needed (TaskType.CHAT, .REASONING, etc.)
    * @param options — Same as ai.generate() options, minus the `model` field
@@ -212,7 +212,7 @@ export const molly = {
   },
 
   /**
-   * Embed text using the Rogue Protocol router.
+   * Embed text using the Model Router.
    * Routes to the best embedding provider automatically.
    */
   async embed(options: { content: string; [key: string]: unknown }) {

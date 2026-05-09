@@ -1,3 +1,5 @@
+import { listAvailableMcpTools } from '@/ai/agency/tool-handlers/mcp-tools';
+
 /**
  * @fileOverview Tools Section — WHAT SHE CAN DO
  *
@@ -248,7 +250,7 @@ const MIGRATION_TOOLS: ToolDefinition[] = [
 /**
  * All tools combined
  */
-const ALL_TOOLS: ToolDefinition[] = [
+export const ALL_TOOLS: ToolDefinition[] = [
   ...CORE_TOOLS,
   ...SECURITY_TOOLS,
   ...MEMORY_TOOLS,
@@ -267,11 +269,40 @@ export type DeploymentContext = 'cloud' | 'local' | 'edge' | 'robot';
  * @param deployment - Current deployment context
  * @param isRogueMode - Whether Rogue Mode is active
  */
+
 export function getToolsSection(
   deployment: DeploymentContext = 'cloud',
   isRogueMode: boolean = false
 ): string {
-  // Filter tools by deployment
+  // If there are connected MCP servers but no MCP tools, log a warning (race condition)
+  (async () => {
+    try {
+      const mcpClient = await import('@/ai/mcp/client');
+      const { getConnectedServers } = mcpClient;
+      const connectedServers = getConnectedServers();
+      const mcpTools = listAvailableMcpTools();
+      if (connectedServers.length > 0 && mcpTools.length === 0) {
+        // Use MollyLogger if available, else console.warn
+        try {
+          const loggerModule = await import('@/ai/logger');
+          const { MollyLogger } = loggerModule;
+          MollyLogger.warn(
+            'MCP servers are connected but no MCP tools are registered. Tool registration may not be complete before prompt generation.',
+            'getToolsSection'
+          );
+        } catch {
+          // Fallback to console.warn
+          console.warn(
+            'MCP servers are connected but no MCP tools are registered. Tool registration may not be complete before prompt generation.'
+          );
+        }
+      }
+    } catch {
+      // Ignore errors in this check
+    }
+  })();
+
+  // Filter static tools by deployment
   let availableTools = ALL_TOOLS.filter((tool) => {
     switch (deployment) {
       case 'edge':
@@ -279,9 +310,28 @@ export function getToolsSection(
       case 'robot':
         return tool.availableRobot;
       default:
-        return true; // Cloud and local have all tools
+        return true;
     }
   });
+
+  // Add dynamically registered MCP tools
+  try {
+    // Use statically imported listAvailableMcpTools
+    const mcpTools = listAvailableMcpTools();
+    for (const mcp of mcpTools) {
+      availableTools.push({
+        name: mcp.name,
+        description: mcp.description || 'MCP tool',
+        category: 'mcp',
+        example: '{}',
+        availableOffline: false,
+        rogueHighlight: false,
+        availableRobot: false,
+      });
+    }
+  } catch {
+    // If MCP not available, skip
+  }
 
   // Sort: Rogue-highlighted tools first if in Rogue mode
   if (isRogueMode) {

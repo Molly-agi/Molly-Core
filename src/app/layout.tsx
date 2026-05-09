@@ -9,6 +9,8 @@ import { InitializationTracer } from '@/components/InitializationTracer';
 import { ClientErrorReporter } from '@/components/ClientErrorReporter';
 import { ConsciousnessListener } from '@/components/ConsciousnessListener';
 import { MollyErrorBoundary } from '@/components/MollyErrorBoundary';
+import { ToolRegistryProvider } from '@/components/tools/ToolRegistryContext';
+import { SkillRegistryProvider } from '@/components/skills/SkillRegistryContext';
 
 export const metadata: Metadata = {
   title: 'Molly',
@@ -39,7 +41,11 @@ export default function RootLayout({
         <SessionLifecycleManager />
         <ClientErrorReporter />
         <MollyErrorBoundary>
-          <FirebaseClientProvider>{children}</FirebaseClientProvider>
+          <ToolRegistryProvider>
+            <SkillRegistryProvider>
+              <FirebaseClientProvider>{children}</FirebaseClientProvider>
+            </SkillRegistryProvider>
+          </ToolRegistryProvider>
         </MollyErrorBoundary>
         <ConsciousnessListener />
         <Toaster />

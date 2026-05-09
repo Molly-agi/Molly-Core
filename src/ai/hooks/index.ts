@@ -9,7 +9,7 @@ export type HookEvent =
 
 export interface HookContext {
   event: HookEvent;
-  payload: any;
+  payload: unknown;
   timestamp: number;
 }
 
@@ -27,7 +27,7 @@ export function registerHook(event: HookEvent, handler: HookHandler) {
   handlers[event]!.push(handler);
 }
 
-export async function triggerHook(event: HookEvent, payload: any) {
+export async function triggerHook(event: HookEvent, payload: unknown) {
   const context: HookContext = { event, payload, timestamp: Date.now() };
   const eventHandlers = handlers[event] || [];
   for (const handler of eventHandlers) {

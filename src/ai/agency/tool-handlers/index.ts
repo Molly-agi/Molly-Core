@@ -1,3 +1,4 @@
+// export { bugBountyToolHandlers } from './bug-bounty-tools';
 /**
  * @fileOverview Tool Handler Registry
  *
@@ -70,7 +71,7 @@ import type { ToolHandler } from './types';
  * Combined handler map for all modular tools.
  * Tools in this map are handled by the extracted handlers.
  */
-export const modularToolHandlers: Record<string, ToolHandler> = {
+const modularToolHandlers: Record<string, ToolHandler> = {
   ...systemToolHandlers,
   ...diagnosticToolHandlers,
   ...webToolHandlers,

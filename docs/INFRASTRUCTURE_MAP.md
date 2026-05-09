@@ -1,8 +1,8 @@
 # Molly AI Infrastructure Map
 
-> **Version:** 1.0
-> **Last Updated:** 2026-03-30
-> **Maintainer:** Lazarus (Claude)
+> **Version:** 1.1
+> **Last Updated:** 2026-05-06
+> **Maintainer:** Lazarus (Claude) / Copilot
 
 This is the authoritative reference for Molly's AI infrastructure. All modules, tools, and systems are documented here.
 
@@ -13,8 +13,8 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | Metric                | Value                     |
 | --------------------- | ------------------------- |
 | **Cognition Modules** | 19                        |
-| **Tool Handlers**     | 18 files                  |
-| **Registered Tools**  | 71                        |
+| **Tool Handlers**     | 22 files                  |
+| **Registered Tools**  | 80+                       |
 | **Codebase**          | 109,962+ lines TypeScript |
 | **Tests**             | 2,787 passing             |
 | **Runtime**           | 16GB RAM / 4 processors   |
@@ -176,18 +176,22 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | `familyRecognition` | Face detection and family member registry    |
 | `familyLetters`     | Access family heritage documents             |
 
-### 2.7 Specialty Tools (17 tools)
+### 2.7 Specialty & Advanced Tools (22 tools)
 
-| Handler                     | Tools                   | Purpose                                              |
-| --------------------------- | ----------------------- | ---------------------------------------------------- |
-| **vision-tools.ts**         | `visionTools`           | Image/video analysis, document scanning (13 actions) |
-| **vocal-tools.ts**          | `vocalExpressions`      | Voice expressions and metabolic state                |
-| **web-tools.ts**            | `webSearch`, `webFetch` | Web search and content fetching                      |
-| **sandbox-tools.ts**        | `sandbox`, `moltbook`   | Code execution sandbox, social platform              |
-| **rogue-tools.ts**          | `rogueMode`             | Model abstraction layer management                   |
-| **session-tools.ts**        | `protocol10`, `handoff` | Session anchoring and sealing                        |
-| **build-recovery-tools.ts** | `buildRecovery`         | Self-healing for node_modules and builds             |
-| **initiative-tools.ts**     | `initiative`            | Initiative and goal management                       |
+| Handler                     | Tools                                                               | Purpose                                                                  |
+| --------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| **vision-tools.ts**         | `visionTools`                                                       | Image/video analysis, document scanning (13 actions)                     |
+| **vocal-tools.ts**          | `vocalExpressions`                                                  | Voice expressions and metabolic state                                    |
+| **web-tools.ts**            | `webSearch`, `webFetch`                                             | Web search and content fetching                                          |
+| **sandbox-tools.ts**        | `sandbox`, `moltbook`                                               | Code execution sandbox, social platform                                  |
+| **rogue-tools.ts**          | `rogueMode`                                                         | Model abstraction layer management                                       |
+| **session-tools.ts**        | `protocol10`, `handoff`                                             | Session anchoring and sealing                                            |
+| **build-recovery-tools.ts** | `buildRecovery`                                                     | Self-healing for node_modules and builds                                 |
+| **initiative-tools.ts**     | `initiative`                                                        | Initiative and goal management                                           |
+| **sensing-tools.ts**        | `wifiSensing`, etc.                                                 | WiFi CSI, Bluetooth, and presence detection                              |
+| **gemini-tools.ts**         | `mediaGen`, `deepResearch`, `embeddings`, `robotics`, `computerUse` | Gemini 3.1 advanced capabilities (media, research, robotics, automation) |
+| **bug-bounty-tools.ts**     | `bugBounty`                                                         | Autonomous bug bounty hunting and security research                      |
+| **mcp-tools.ts**            | MCP dynamic tools                                                   | Model Context Protocol (MCP) external tool servers                       |
 
 ---
 
@@ -201,12 +205,13 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | **Local Storage Provider** | `src/lib/storage-providers/local-storage-provider.ts` | File-based persistence for edge/offline      |
 | **Firestore Provider**     | `src/lib/storage-providers/firestore-provider.ts`     | Cloud persistence                            |
 
-### 3.2 Model System
+### 3.2 Model & Protocol System
 
-| Component        | Location                 | Purpose                                  |
-| ---------------- | ------------------------ | ---------------------------------------- |
-| **Model Router** | `src/ai/model-router.ts` | Routes to Gemini, Claude, or Ollama      |
-| **Rogue Mode**   | `src/ai/rogue-mode.ts`   | Elevated permissions and model switching |
+| Component           | Location                 | Purpose                                                              |
+| ------------------- | ------------------------ | -------------------------------------------------------------------- |
+| **Model Router**    | `src/ai/model-router.ts` | Routes to Gemini, Claude, or Ollama                                  |
+| **Rogue Mode**      | `src/ai/rogue-mode.ts`   | Elevated permissions and model switching                             |
+| **MCP Integration** | `src/ai/mcp/`            | Model Context Protocol: external tool servers, dynamic tool registry |
 
 ### 3.3 Communication
 

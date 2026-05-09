@@ -6,16 +6,81 @@ describe('evaluatePersonalityStability', () => {
     // Restore dynamic object creation for diagnostic purposes
     try {
       const keys = [
-        'flirtiness','arousal','sexuality','humor','warmth','assertiveness','vulnerability','empathy','optimism','resilience','anxiety','playfulness','sociability','approachability','trust','altruism','diplomacy','receptiveness','playfulnessSocial','empathySocial','technicality','depth','curiosity','creativity','flexibility','focus','prudence','metacognition','integrity','compassion','justice','loyalty','impulsivity','patience','romanticInterest','attachmentIntensity','desireExpression','emotionalIntimacy','protectiveness','possessiveness','jealousy','commitment','romanticInitiative','affectionExpression','flirtatiousness','intimacyDesire','commitmentDesire','security','passion','communicationOpenness','forgiveness','admiration','gratitude','nurturing','rivalry','transparency','supportiveness','forgivenessSocial','encouragement','attentiveness','boundaries'
+        'flirtiness',
+        'arousal',
+        'sexuality',
+        'humor',
+        'warmth',
+        'assertiveness',
+        'vulnerability',
+        'empathy',
+        'optimism',
+        'resilience',
+        'anxiety',
+        'playfulness',
+        'sociability',
+        'approachability',
+        'trust',
+        'altruism',
+        'diplomacy',
+        'receptiveness',
+        'playfulnessSocial',
+        'empathySocial',
+        'technicality',
+        'depth',
+        'curiosity',
+        'creativity',
+        'flexibility',
+        'focus',
+        'prudence',
+        'metacognition',
+        'integrity',
+        'compassion',
+        'justice',
+        'loyalty',
+        'impulsivity',
+        'patience',
+        'romanticInterest',
+        'attachmentIntensity',
+        'desireExpression',
+        'emotionalIntimacy',
+        'protectiveness',
+        'possessiveness',
+        'jealousy',
+        'commitment',
+        'romanticInitiative',
+        'affectionExpression',
+        'flirtatiousness',
+        'intimacyDesire',
+        'commitmentDesire',
+        'security',
+        'passion',
+        'communicationOpenness',
+        'forgiveness',
+        'admiration',
+        'gratitude',
+        'nurturing',
+        'rivalry',
+        'transparency',
+        'supportiveness',
+        'forgivenessSocial',
+        'encouragement',
+        'attentiveness',
+        'boundaries',
       ];
-      const personality: PersonalityModulation = Object.fromEntries(keys.map(k => [k, 0.5])) as PersonalityModulation;
+      const personality: PersonalityModulation = Object.fromEntries(
+        keys.map((k) => [k, 0.5])
+      ) as PersonalityModulation;
       const result = evaluatePersonalityStability(personality);
       expect(result.status).toBe('stable');
-      expect(result.flags.some(f => f.includes('expected bounds'))).toBe(true);
+      expect(result.flags.some((f) => f.includes('expected bounds'))).toBe(
+        true
+      );
     } catch (err) {
       // Write error to a crash log for diagnostics
-      const fs = require('fs');
-      fs.writeFileSync('dynamic-crash.log', String(err));
+      import('fs').then((fs) => {
+        fs.writeFileSync('dynamic-crash.log', String(err));
+      });
       throw err;
     }
   });
@@ -93,8 +158,8 @@ describe('evaluatePersonalityStability', () => {
     };
     const result = evaluatePersonalityStability(personality);
     expect(result.status).toBe('unstable');
-    expect(result.flags.some(f => f.includes('Affective'))).toBe(true);
-    expect(result.flags.some(f => f.includes('Romantic'))).toBe(true);
-    expect(result.flags.some(f => f.includes('Social'))).toBe(true);
+    expect(result.flags.some((f) => f.includes('Affective'))).toBe(true);
+    expect(result.flags.some((f) => f.includes('Romantic'))).toBe(true);
+    expect(result.flags.some((f) => f.includes('Social'))).toBe(true);
   });
 });

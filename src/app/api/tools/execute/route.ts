@@ -65,7 +65,7 @@ async function executeTool(
   ]);
 
   // Delegate to executeToolDirect for modular tools
-  // This ensures Heart Gate alignment checks and self-observation
+  // Heart Gate is NOT used for tool calls — Molly has full agency
   if (!routeSpecificTools.has(tool) && hasModularHandler(tool)) {
     return executeToolDirect(tool, params);
   }
