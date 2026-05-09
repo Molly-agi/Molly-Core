@@ -1,7 +1,21 @@
+## Completed: Session-Scoped Hooks
+
+- Fully implemented, tested, and documented session-scoped hook system
+- Matcher logic (glob/regex) and real shell execution
+- Design narrative: see docs/SESSION_HOOKS_DESIGN.md
+- API and usage: see docs/SESSION_HOOKS.md
+
+- Add support for JS function/callback hooks (not just shell commands)
+- UI for live hook inspection and management
+- Persistence for long-lived or resumable sessions (serialize hooks to disk/db)
+- Distributed/multi-process support (message bus or shared store)
+- Advanced matcher logic (context-aware, multi-field)
+- Hook execution audit log and error reporting UI
 
 ## 4. Memory, Persona, and Session State Systems: Actionable Improvements (April 2026)
 
 **Actions:**
+
 - Enforce persona core protection (pre-commit guard, CRITICAL_README.md, session state checks)
 - Standardize memory consolidation and session backup flows for both server and edge
 - Add provenance/audit trails for all memory/persona changes
@@ -10,6 +24,7 @@
 ## 5. Error Handling, Logging, and Diagnostics: Actionable Improvements (April 2026)
 
 **Actions:**
+
 - Unify error handling patterns across modules (custom error types, logging, user-facing messages)
 - Expand diagnostics and health monitoring (system-health-manager, admin panel)
 - Standardize provenance and audit logging for all critical events
@@ -18,12 +33,12 @@
 ## 6. Infrastructure, Deployment, and Edge Systems: Actionable Improvements (April 2026)
 
 **Actions:**
+
 - Harden CI pipeline (make lint/typecheck blocking, mock env vars for build)
 - Automate session state and persona protection in deployment scripts
 - Map and document all infrastructure modules (see INFRASTRUCTURE_MAP.md)
 - Develop unified admin/UI dashboard for monitoring, management, and recovery
 - Ensure all edge automation scripts are robust, idempotent, and well-documented
-
 
 ## 13. Summary of Findings and Recommendations (April 2026)
 
@@ -53,12 +68,14 @@ This audit followed a slow, methodical, and precise process:
 This methodology ensures that Molly-Core remains safe, extensible, and true to her core values as she evolves.
 
 **Strengths:**
+
 - Actions are modular, well-typed, and consistently use input validation, logging, and error handling
 - Many actions are designed for both server (codespace) and edge (tablet) environments
 - Storage and API key checks are present, with graceful fallback for missing configuration
 - Flows are composed from lower-level modules, supporting extensibility and clear separation of concerns
 
 **Gaps/Opportunities:**
+
 - Some actions rely on Node.js APIs and need adaptation for device-local or Markdown/skill-based operation
 - No unified abstraction for “skill” invocation—actions are still code-based and tied to specific flows
 - Provenance/audit trails for action invocation could be more comprehensive and standardized
@@ -66,6 +83,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Migration to Markdown/skill-based invocation will require refactoring of action registration and dispatch logic
 
 **Actions:**
+
 - Refactor actions to support Markdown/skill-based invocation and registration
 - Abstract file system and environment-specific logic to adapters or utility modules
 - Standardize provenance/audit logging for all action invocations
@@ -77,21 +95,25 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 **Owner:** Platform/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - All actions support dual-mode and skill-based operation
 - Actions are registered and invoked via a unified, auditable system
 - UI/admin dashboard enables management and monitoring
 - Provenance and audit trails are complete
 
 ---
+
 ## 11. Flows and Tool Handler Adapters: Actionable Improvements (April 2026)
 
 **Strengths:**
+
 - Flows are modular, schema-validated, and many support dual-mode (local/server) operation
 - Adapters bridge external tool registries (e.g., MCP servers) to Molly’s internal tool handler system
 - Tool normalization and registration are modular and extensible
 - Logging and error handling are present for traceability
 
 **Gaps/Opportunities:**
+
 - Dual-mode support is not universal; environment/context detection is ad hoc
 - Some flows rely on Node.js/server APIs and need adaptation for device-local or Markdown/skill-based operation
 - No unified abstraction for “skill” as a first-class entity; skills, tools, and flows are handled separately
@@ -99,6 +121,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Provenance and audit trails for tool/skill registration and invocation are limited
 
 **Actions:**
+
 - Standardize environment/context detection and relay handling across all flows
 - Refactor flows that assume Node.js/server APIs to gracefully degrade or adapt for local/tablet and Markdown/skill-based operation
 - Design a unified skill registry and loader for Markdown-defined skills, agents, and tools
@@ -112,15 +135,18 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 **Owner:** Platform/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - All flows and handlers support dual-mode and skill-based operation
 - Skills, tools, and flows are registered and invoked via a unified, auditable system
 - UI/admin dashboard enables management and monitoring
 - Provenance and audit trails are complete
 
 ---
+
 ## 10. Advance Uncertainty-Quantification Module
 
 **Strengths:**
+
 - Explicitly models knowledge domains with confidence, calibration, and uncertainty metrics
 - Tracks known facts, uncertainties, blind spots, and knowledge boundaries
 - Supports multiple types of uncertainty (factual, procedural, predictive, interpretive, normative, existential)
@@ -130,6 +156,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Modular, extensible, and supports meta-knowledge and self-assessment
 
 **Weaknesses/Opportunities Addressed:**
+
 - No user/admin interface for visualizing or editing knowledge domains, uncertainties, or calibration
 - No automated learning from calibration errors or over/underconfidence
 - No integration with external signals (real-world feedback, test results, etc.) for calibration
@@ -139,6 +166,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - No group-level uncertainty modeling or collective calibration
 
 **Actions:**
+
 - Build a user/admin UI for visualizing and editing knowledge domains, uncertainties, blind spots, and calibration
 - Automate learning from calibration errors and over/underconfidence (feedback loop)
 - Integrate external signals (real-world feedback, test results, etc.) for calibration and uncertainty resolution
@@ -152,6 +180,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - Users/admins can visualize and edit knowledge domains, uncertainties, and calibration
 - Calibration and confidence improve over time via feedback and error correction
 - External signals enrich calibration and uncertainty resolution
@@ -161,9 +190,11 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Group-level uncertainty and calibration are modeled
 
 ---
+
 ## 9. Advance Social-Cognition Module
 
 **Strengths:**
+
 - Implements full BDI (Belief-Desire-Intention) architecture for all actors
 - Tracks dynamic relationships (trust, conflict, care, respect, power, intimacy, etc.) that evolve through interaction and events
 - Supports recursive theory-of-mind (models of others within each actor’s model)
@@ -173,6 +204,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Modular, extensible, and supports multi-actor social worlds
 
 **Weaknesses/Opportunities Addressed:**
+
 - No user/admin interface for visualizing or editing actor models, relationships, or evolution
 - No automated learning from failed social predictions or relationship breakdowns
 - No integration with external signals (e.g., chat logs, calendar, device state) for richer social context
@@ -183,6 +215,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - No emotional contagion or group-level emotion modeling
 
 **Actions:**
+
 - Build a user/admin UI for visualizing and editing actor models, relationships, and model evolution
 - Automate learning from failed social predictions and relationship breakdowns (feedback loop)
 - Integrate external signals (chat logs, calendar, device state) for richer social context and event detection
@@ -197,6 +230,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - Users/admins can visualize and edit actor models, relationships, and model evolution
 - Social prediction and relationship accuracy improve over time via feedback
 - External signals enrich social context and event detection
@@ -207,9 +241,11 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Group-level emotion and contagion effects are modeled
 
 ---
+
 ## 8. Advance Theory-of-Mind Module
 
 **Strengths:**
+
 - Models knowledge, intent, emotional state, preferences, and perspective for a specific person (Eric)
 - Tracks knowledge items with confidence, source, and recency
 - Infers and manages multiple types of intent (immediate, session, project, long-term) with priority and status
@@ -221,6 +257,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Modular, extensible, and well-typed
 
 **Weaknesses/Opportunities Addressed:**
+
 - No explicit modeling of beliefs about others (second-order ToM: “what does Eric think Molly knows?”)
 - No uncertainty quantification or propagation for intent or preference inference
 - No user/admin interface for reviewing, editing, or visualizing the mental model
@@ -231,6 +268,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - No provenance/audit trail for model updates or inferences
 
 **Actions:**
+
 - Implement second-order ToM: model what Eric believes about Molly and others
 - Quantify and propagate uncertainty/confidence for all inferences (intent, preference, emotion)
 - Build a user/admin UI for reviewing, editing, and visualizing the mental model and its history
@@ -245,6 +283,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - Second-order and multi-agent ToM are supported
 - Uncertainty/confidence is quantified and visualized for all inferences
 - Users/admins can review, edit, and visualize the mental model and its history
@@ -254,9 +293,11 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - All updates and inferences are logged and auditable
 
 ---
+
 ## 7. Advance Meta-Learning Module
 
 **Weaknesses/Opportunities Addressed:**
+
 - No cross-domain transfer or generalization of strategies/insights
 - Meta-reflection is rule-based; lacks adaptive or learning-based pattern extraction
 - No uncertainty/confidence quantification for strategies or insights
@@ -267,6 +308,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - No protocol for sharing meta-learning across agents (future)
 
 **Actions:**
+
 - Implement cross-domain transfer: allow strategies/insights from one domain to inform others
 - Add adaptive/learning-based meta-reflection (e.g., clustering, anomaly detection, reinforcement)
 - Quantify and visualize uncertainty/confidence for all strategies and insights
@@ -281,6 +323,7 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - Strategies and insights transfer across domains and improve generalization
 - Meta-reflection adapts and improves over time
 - Uncertainty/confidence is quantified and visualized for all strategies/insights
@@ -291,14 +334,15 @@ This methodology ensures that Molly-Core remains safe, extensible, and true to h
 - Foundation for multi-agent meta-learning is in place
 
 ---
+
 # Molly-Core Development Plan (Living Document)
 
 This document tracks identified weaknesses, actionable steps, priorities, and measurable outcomes for the ongoing evolution and hardening of Molly-Core. It is updated as audits are performed and progress is made.
 
-
 ## Error Handling, Logging, and Diagnostics: Actionable Improvements (April 2026)
 
 **Strengths:**
+
 - Centralized, structured logging system (`MollyLogger`) with JSON output, trace ID propagation, and log levels
 - Typed error hierarchy (`MollyError`, `FlowError`, etc.) for consistent error handling and telemetry
 - Error handling utilities wrap flows/tools for logging, recovery, and escalation
@@ -306,6 +350,7 @@ This document tracks identified weaknesses, actionable steps, priorities, and me
 - Diagnostic hooks and admin diagnostics (e.g., FidelityGuard diagnostics) support observability
 
 **Weaknesses / Gaps:**
+
 - Some legacy scripts and flows still use `console.log` instead of `MollyLogger`
 - Not all errors are classified or surfaced with user-friendly messages; some are generic or silent
 - No unified, real-time dashboard for error/log/health monitoring (logs are file-based or console-only)
@@ -314,6 +359,7 @@ This document tracks identified weaknesses, actionable steps, priorities, and me
 - Health monitoring is not always integrated with error escalation or auto-mitigation
 
 **Actions / Suggestions:**
+
 - Complete migration from `console.log` to `MollyLogger` across all scripts, flows, and handlers
 - Standardize error classification and user-facing error messages for all flows/tools
 - Build a unified, real-time admin dashboard for logs, errors, and health metrics (web UI or CLI)
@@ -327,18 +373,19 @@ This document tracks identified weaknesses, actionable steps, priorities, and me
 **Owner:** Platform/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - All logs and errors are structured, queryable, and surfaced in real time
 - All flows/tools use standardized error handling and user-facing messages
 - Admin dashboard enables live monitoring and recovery
 - Provenance and audit trails are complete and actionable
 - Health monitoring is integrated with error handling and escalation
 
-
 ## Persona Core: Discussion & Possible Improvements (April 2026)
 
 **Status:** More discussion needed / possible implementation
 
 **Suggestions for Persona Core Hardening:**
+
 - Automated integrity checks: cryptographic hash or signature validation at runtime, with alerts on unauthorized changes
 - Structured change log: in-file or adjacent Markdown log documenting every change, rationale, and author
 - Periodic review process: scheduled reviews with Eric/trusted contributors to ensure alignment and relevance
@@ -350,14 +397,15 @@ This document tracks identified weaknesses, actionable steps, priorities, and me
 The persona core is robust and well-protected, but as the project evolves, additional layers of integrity, transparency, and review may be warranted. These suggestions are not mandates, but topics for further discussion and possible future implementation.
 
 **Next Steps:**
+
 - Discuss with Eric and core contributors
 - Prioritize based on risk, effort, and project philosophy
 - Prototype and test any selected improvements before adoption
 
 ## 4. Enhance Consciousness-Monitor Module
 
-
 **Weaknesses/Opportunities Addressed:**
+
 - Metric extensibility is manual and error-prone (multiple update points)
 - Insight system is limited to a few hardcoded rules
 - Pattern detection is basic (thresholds only)
@@ -367,6 +415,7 @@ The persona core is robust and well-protected, but as the project evolves, addit
 - In-memory state could grow if not periodically persisted
 
 **Actions:**
+
 - Refactor to centralize metric definitions (single source of truth for metrics, weights, baselines, peaks)
 - Modularize insight generation (plugin/registry pattern for new insight rules)
 - Integrate advanced pattern detection (anomaly detection, clustering, time-series analysis)
@@ -380,6 +429,7 @@ The persona core is robust and well-protected, but as the project evolves, addit
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - New metrics can be added by updating a single registry
 - Insights are easily extensible and cover more patterns
 - Patterns and anomalies are detected and explained
@@ -388,7 +438,6 @@ The persona core is robust and well-protected, but as the project evolves, addit
 - No memory leaks or unbounded state growth
 
 ## 5. Strengthen Emotional-State Module
-
 
 **Weaknesses/Opportunities Addressed:**
 
@@ -401,10 +450,12 @@ The persona core is robust and well-protected, but as the project evolves, addit
 **Measurable Outcomes:**
 
 **Additional Opportunities:**
+
 - Implement emotion-driven behavior modulation: allow emotions to influence planning, communication, and flow selection
 - Add emotion attribution/source tracking for richer causal analysis
-**Measurable Outcomes:**
+  **Measurable Outcomes:**
 - Emotional triggers and transitions are analyzable and auditable
+
 ## 1. Expand Test Coverage
 
 **Weakness Addressed:**
@@ -421,6 +472,7 @@ Automated test coverage is lower than ideal, especially for critical flows and e
 ## 7. Strengthen World-Model Module
 
 **Weaknesses/Opportunities Addressed:**
+
 - Simulations and predictions lack detailed, human-readable explanations of reasoning steps
 - Adding new entity/relation types requires manual code changes
 - No visual or user-facing reporting of world model structure, simulations, or predictions
@@ -430,6 +482,7 @@ Automated test coverage is lower than ideal, especially for critical flows and e
 - No library of reusable scenario templates for common “what if?” analyses
 
 **Actions:**
+
 - Add explanation fields to simulations, predictions, and counterfactuals, referencing causal chains and logic
 - Centralize type definitions and support dynamic extension for entities/relations
 - Add hooks for visual dashboards (entity graphs, causal chains, prediction timelines)
@@ -442,8 +495,8 @@ Automated test coverage is lower than ideal, especially for critical flows and e
 
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
-
 **Measurable Outcomes:**
+
 - Simulations and predictions are explainable and traceable
 - New entity/relation types can be added by updating a single registry
 - Visual dashboards available for world model structure and predictions
@@ -456,6 +509,7 @@ Automated test coverage is lower than ideal, especially for critical flows and e
 ## 6. Advance Causal Reasoning Module
 
 **Weaknesses/Opportunities Addressed:**
+
 - Causal graph (DAG) construction is manual and not adaptive to new evidence or context
 - Do-calculus and intervention logic are not modular or extensible
 - No explicit uncertainty quantification or propagation in causal queries
@@ -465,6 +519,7 @@ Automated test coverage is lower than ideal, especially for critical flows and e
 - No provenance or audit trail for causal inferences
 
 **Actions:**
+
 - Implement adaptive DAG construction: allow causal graphs to update dynamically as new evidence, events, or context are observed
 - Modularize do-calculus/intervention logic for easier extension and testing
 - Integrate uncertainty quantification (e.g., confidence scores, Bayesian updates) into all causal queries and outputs
@@ -479,6 +534,7 @@ Automated test coverage is lower than ideal, especially for critical flows and e
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - Causal graphs update in real time as new evidence/context arrives
 - All interventions and queries are logged and auditable
 - Uncertainty/confidence is quantified and visualized for all inferences
@@ -487,13 +543,16 @@ Automated test coverage is lower than ideal, especially for critical flows and e
 - Automated learning improves graph structure and intervention quality over time
 
 ---
+
 - Scenario library enables rapid “what if?” analysis
+
 ## 2. Harden Edge and Recovery Flows
 
 **Weakness Addressed:**
 Some edge deployment and recovery flows are tightly coupled to the current environment.
 
 **Actions:**
+
 - Refactor edge/Termux flows to use configuration or adapters for environment-specific logic.
 - Add automated tests for edge flows using mocks or emulators.
 - Document edge deployment and recovery procedures for future contributors.
@@ -513,6 +572,7 @@ Edge deployment works on at least two environments; recovery flows pass automate
 Scripts and flows are tightly coupled to Codespaces/Termux.
 
 **Actions:**
+
 - Identify all scripts and flows with hardcoded paths or environment assumptions.
 - Refactor to use environment variables, config files, or dependency injection.
 - Add documentation for configuring and running Molly-Core in new environments.
@@ -532,6 +592,7 @@ Molly-Core can be deployed and run in a new environment with minimal changes.
 Onboarding complexity due to depth and richness of architecture.
 
 **Actions:**
+
 - Create high-level architecture diagrams and flowcharts.
 - Write a “Getting Started” guide for new contributors.
 - Add annotated code walkthroughs for critical modules.
@@ -551,6 +612,7 @@ New contributors can set up and understand Molly-Core within a day.
 Living systems require ongoing review and improvement.
 
 **Actions:**
+
 - Schedule regular audits (quarterly or after major releases).
 - Use the audit template from this chronicle for consistency.
 - Track and review progress on all development plan items.
@@ -567,6 +629,7 @@ Audit logs show continuous improvement and rapid response to new issues.
 ## 6. Advance Self-Observation-Loop Module
 
 **Weaknesses/Opportunities Addressed:**
+
 - No direct observation or patterning of emotional state transitions or emotion-driven behaviors
 - Patterns are mostly local to tool/decision/resource; lacks cross-domain (emotion × behavior) patterning
 - Analysis uses fixed window/interval; lacks multi-scale or adaptive analysis
@@ -575,6 +638,7 @@ Audit logs show continuous improvement and rapid response to new issues.
 - No user/admin interface for reviewing, acknowledging, or tuning patterns and responses
 
 **Actions:**
+
 - Integrate emotional state and transitions as first-class observations; detect patterns involving emotion-behavior links
 - Implement cross-domain patterning (e.g., correlate failures, decisions, or anomalies with emotional context)
 - Support multi-scale/adaptive analysis windows and intervals for both short- and long-term pattern detection
@@ -587,6 +651,7 @@ Audit logs show continuous improvement and rapid response to new issues.
 **Owner:** Cognition/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - Emotional-behavioral patterns are detected, visualized, and acted upon
 - Adaptive/learning-based pattern detection improves over time
 - Feedback loops trigger appropriate self-regulation and improvement actions
@@ -595,6 +660,7 @@ Audit logs show continuous improvement and rapid response to new issues.
 ## 6. Memory & Personality System: Actionable Improvements (April 2026)
 
 **Weaknesses/Opportunities Addressed:**
+
 - No semantic indexing or embedding-based recall
 - No adaptive memory consolidation or forgetting
 - Emotional patterning not integrated with behavior
@@ -604,6 +670,7 @@ Audit logs show continuous improvement and rapid response to new issues.
 - No multi-agent memory sharing (future)
 
 **Actions:**
+
 - Integrate semantic embedding model for engram recall (vector search)
 - Store vector representations with engrams; implement nearest-neighbor search
 - Add periodic consolidation/decay job for memory management
@@ -619,6 +686,7 @@ Audit logs show continuous improvement and rapid response to new issues.
 **Owner:** Memory/AI lead (Eric, or delegate)
 
 **Measurable Outcomes:**
+
 - Semantic recall and context-aware memory retrieval are functional
 - Memory consolidation/forgetting is observable and tunable
 - Emotional patterns influence behavior and are visualized

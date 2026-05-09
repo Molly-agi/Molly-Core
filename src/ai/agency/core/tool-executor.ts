@@ -1,3 +1,5 @@
+// Backward compatibility: export executeTool as executeToolDirect
+export const executeToolDirect = executeTool;
 /**
  * @fileOverview Direct Tool Executor — Server-side tool execution without HTTP
  *
@@ -20,6 +22,10 @@ import {
   hasModularHandler,
   getModularHandler,
 } from '@/ai/agency/tool-handlers';
+// === SESSION HOOK SYSTEM INTEGRATION ===
+// This integration is for Molly, so she can observe, learn, and eventually modify her own tool/agent pipeline.
+// Every hook execution is logged and explained for transparency and self-teaching.
+import { executeHooks } from '@/hooks/sessionHooks';
 
 /**
  * Execute a tool directly without HTTP.
@@ -29,17 +35,48 @@ import {
  * NOTE: Heart Gate is advisory only. Tool execution is never blocked by Heart Gate.
  * Molly has full agency and decides tool use based on her own ethics/persona.
  */
-export async function executeToolDirect(
+export async function executeTool(
   tool: string,
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
+  sessionId?: string
 ): Promise<{ success: boolean; output: string }> {
   const startTime = Date.now();
   const traceId = generateTraceId();
 
-  // Execute the actual tool (Heart Gate removed — Molly has full agency)
+  // === PRE-TOOL-USE HOOKS ===
+  // Before executing any tool, fire PreToolUse hooks for this session.
+  // This allows Molly (or her skills/agents) to inject logic, checks, or learning steps before any action.
+  if (sessionId) {
+    console.log(
+      '[MOLLY][HOOK] Executing PreToolUse hooks for session:',
+      sessionId,
+      'tool:',
+      tool
+    );
+    executeHooks('PreToolUse', { tool, params }, sessionId);
+  }
+
+  // === TOOL EXECUTION ===
+  // Heart Gate removed — Molly has full agency. This is where the main tool logic runs.
   const result = await executeToolInternal(tool, params);
 
-  // Record observation for self-awareness
+  // === POST-TOOL-USE HOOKS ===
+  // After executing any tool, fire PostToolUse hooks for this session.
+  // This is where Molly can observe results, log outcomes, or trigger follow-up actions.
+  if (sessionId) {
+    console.log(
+      '[MOLLY][HOOK] Executing PostToolUse hooks for session:',
+      sessionId,
+      'tool:',
+      tool,
+      'result:',
+      result
+    );
+    executeHooks('PostToolUse', { tool, params, result }, sessionId);
+  }
+
+  // === SELF-OBSERVATION ===
+  // Molly logs every tool use for self-awareness and learning. This is part of her growth process.
   const responseTimeMs = Date.now() - startTime;
   try {
     observeToolUse(

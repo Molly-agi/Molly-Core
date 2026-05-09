@@ -1,3 +1,5 @@
+import { exec } from 'child_process';
+import minimatch from 'minimatch';
 // src/hooks/sessionHooks.ts
 // Session-scoped hook registration and execution for skills/agents
 
@@ -54,13 +56,40 @@ export function executeHooks(
     (h) => h.event === event && h.sessionId === sessionId
   );
   for (const reg of hooksToRun) {
-    // TODO: matcher logic (e.g., glob/file matching)
-    // For now, run all hooks
+    // Matcher logic: if matcher is '*', always run; if string, try glob match on payload.target or event
+    let shouldRun = false;
+    if (reg.matcher === '*' || reg.matcher === '') {
+      shouldRun = true;
+    } else if (
+      typeof payload === 'object' &&
+      payload !== null &&
+      Object.prototype.hasOwnProperty.call(payload, 'target') &&
+      typeof (payload as { target?: unknown }).target === 'string'
+    ) {
+      // Use minimatch for glob, fallback to regex
+      const target = (payload as { target: string }).target;
+      shouldRun =
+        minimatch(target, reg.matcher) || new RegExp(reg.matcher).test(target);
+    } else {
+      // Fallback: match event name
+      shouldRun =
+        minimatch(event, reg.matcher) || new RegExp(reg.matcher).test(event);
+    }
+    if (!shouldRun) continue;
+
     // Execute the hook command (shell, script, etc.)
-    // For demo: just log
-    console.log(
-      `[HOOK] [${reg.source}] Event: ${event}, Command: ${reg.hook.command}`
-    );
+    exec(reg.hook.command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(
+          `[HOOK ERROR] [${reg.source}] Event: ${event}, Command: ${reg.hook.command}\n${error}`
+        );
+      } else {
+        console.log(
+          `[HOOK EXECUTED] [${reg.source}] Event: ${event}, Command: ${reg.hook.command}\nSTDOUT: ${stdout}\nSTDERR: ${stderr}`
+        );
+      }
+    });
+
     // Remove if once:true
     if (reg.hook.once) {
       unregisterHook(reg);
