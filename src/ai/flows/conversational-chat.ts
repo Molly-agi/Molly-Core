@@ -6,6 +6,7 @@ import { buildNeuralBridgeContext } from '../tools/neural-bridge';
 import { getUnreadMessages, markMessagesRead } from '../bridge/family-bridge';
 import { getRogueMode } from '../rogue-mode';
 import { composeSystemPrompt } from '@/ai/prompts';
+import { compactHistory } from '../context-compaction';
 
 /**
  * @fileOverview Hardened Conversational Chat Flow V5.0 (Rogue Protocol).
@@ -117,10 +118,25 @@ const conversationalChatFlow = ai.defineFlow(
         // Bridge read failure — non-critical
       }
 
-      const llmHistory = history.map((item) => ({
+      const rawHistory = history.map((item) => ({
         role: item.role === 'bot' ? ('model' as const) : ('user' as const),
         parts: [{ text: item.content }],
       }));
+
+      const {
+        history: llmHistory,
+        stage: compactionStage,
+        originalLength,
+        compactedLength,
+      } = await compactHistory(rawHistory);
+
+      if (compactionStage !== 'passthrough') {
+        MollyLogger.info(
+          `Context compacted via ${compactionStage}: ${originalLength}→${compactedLength} messages`,
+          'conversationalChat',
+          { traceId, compactionStage, originalLength, compactedLength }
+        );
+      }
 
       // Determine channel context
       const channelContext: 'voice' | 'text' =
