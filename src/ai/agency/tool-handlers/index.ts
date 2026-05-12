@@ -35,6 +35,7 @@ export { sensingToolHandlers } from './sensing-tools';
 export { geminiToolHandlers } from './gemini-tools';
 export { bugBountyToolHandlers } from './bug-bounty-tools';
 export { searchToolHandlers } from './search-tools';
+export { httpToolHandlers } from './http-tools';
 export {
   mcpToolHandlers,
   getMcpHandlers,
@@ -67,6 +68,7 @@ import { sensingToolHandlers } from './sensing-tools';
 import { geminiToolHandlers } from './gemini-tools';
 import { bugBountyToolHandlers } from './bug-bounty-tools';
 import { searchToolHandlers } from './search-tools';
+import { httpToolHandlers } from './http-tools';
 import type { ToolHandler } from './types';
 
 /**
@@ -99,6 +101,7 @@ const allHandlers: Record<string, ToolHandler> = {
   ...geminiToolHandlers,
   ...bugBountyToolHandlers,
   ...searchToolHandlers,
+  ...httpToolHandlers,
 };
 
 function applyDisabledToolFilter(
