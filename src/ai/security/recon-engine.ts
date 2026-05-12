@@ -306,6 +306,180 @@ const SECRET_PATTERNS: SecretPattern[] = [
     pattern: /-----BEGIN (?:OPENSSH|EC|DSA) PRIVATE KEY-----/g,
     severity: 'critical',
   },
+  // Anthropic
+  {
+    type: 'api_key',
+    name: 'Anthropic API Key',
+    pattern: /sk-ant-(?:api03|03)-[A-Za-z0-9_-]{93}AA/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'Anthropic Admin API Key',
+    pattern: /sk-ant-admin01-[A-Za-z0-9_-]{93}AA/g,
+    severity: 'critical',
+  },
+  // OpenAI
+  {
+    type: 'api_key',
+    name: 'OpenAI API Key',
+    pattern:
+      /sk-(?:proj|svcacct|admin)-[A-Za-z0-9_-]{20,}T3BlbkFJ[A-Za-z0-9_-]{20,}/g,
+    severity: 'critical',
+  },
+  // GitHub (full family)
+  {
+    type: 'api_key',
+    name: 'GitHub Fine-Grained PAT',
+    pattern: /github_pat_[A-Za-z0-9_]{82}/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'GitHub OAuth Token',
+    pattern: /gho_[A-Za-z0-9]{36}/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'GitHub App User Token',
+    pattern: /ghu_[A-Za-z0-9]{36}/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'GitHub Refresh Token',
+    pattern: /ghr_[A-Za-z0-9]{36}/g,
+    severity: 'high',
+  },
+  // GitLab
+  {
+    type: 'api_key',
+    name: 'GitLab PAT',
+    pattern: /glpat-[A-Za-z0-9_-]{20}/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'GitLab Deploy Token',
+    pattern: /gldt-[A-Za-z0-9_-]{20}/g,
+    severity: 'high',
+  },
+  // Cloud providers
+  {
+    type: 'api_key',
+    name: 'DigitalOcean PAT',
+    pattern: /dop_v1_[a-f0-9]{64}/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'DigitalOcean OAuth Token',
+    pattern: /doo_v1_[a-f0-9]{64}/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'Azure AD Client Secret',
+    pattern: /[a-zA-Z0-9_~.]{3}\dQ~[a-zA-Z0-9_~.-]{31,34}/g,
+    severity: 'critical',
+  },
+  // AI/ML platforms
+  {
+    type: 'api_key',
+    name: 'HuggingFace Access Token',
+    pattern: /hf_[A-Za-z]{34}/g,
+    severity: 'high',
+  },
+  // Dev tools / IaC
+  {
+    type: 'api_key',
+    name: 'Databricks API Token',
+    pattern: /dapi[a-f0-9]{32}(?:-\d)?/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'HashiCorp Terraform API Token',
+    pattern: /[A-Za-z0-9]{14}\.atlasv1\.[A-Za-z0-9_=-]{60,70}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'Pulumi API Token',
+    pattern: /pul-[a-f0-9]{40}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'Postman API Token',
+    pattern: /PMAK-[a-fA-F0-9]{24}-[a-fA-F0-9]{34}/g,
+    severity: 'high',
+  },
+  // Observability
+  {
+    type: 'api_key',
+    name: 'Grafana API Key',
+    pattern: /eyJrIjoi[A-Za-z0-9+/]{70,400}={0,3}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'Grafana Cloud API Token',
+    pattern: /glc_[A-Za-z0-9+/]{32,400}={0,3}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'Grafana Service Account Token',
+    pattern: /glsa_[A-Za-z0-9]{32}_[A-Fa-f0-9]{8}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'Sentry User Token',
+    pattern: /sntryu_[a-f0-9]{64}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'Sentry Org Token',
+    pattern:
+      /sntrys_eyJpYXQiO[A-Za-z0-9+/]{10,200}(?:LCJyZWdpb25fdXJs|InJlZ2lvbl91cmwi|cmVnaW9uX3VybCI6)[A-Za-z0-9+/]{10,200}={0,2}_[A-Za-z0-9+/]{43}/g,
+    severity: 'high',
+  },
+  // Commerce
+  {
+    type: 'api_key',
+    name: 'Stripe Access Token (broad)',
+    pattern: /(?:sk|rk)_(?:test|live|prod)_[A-Za-z0-9]{10,99}/g,
+    severity: 'critical',
+  },
+  {
+    type: 'api_key',
+    name: 'Shopify Access Token',
+    pattern: /shpat_[a-fA-F0-9]{32}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'Shopify Shared Secret',
+    pattern: /shpss_[a-fA-F0-9]{32}/g,
+    severity: 'high',
+  },
+  // Package registries
+  {
+    type: 'api_key',
+    name: 'NPM Access Token',
+    pattern: /npm_[A-Za-z0-9]{36}/g,
+    severity: 'high',
+  },
+  {
+    type: 'api_key',
+    name: 'PyPI Upload Token',
+    pattern: /pypi-AgEIcHlwaS5vcmc[A-Za-z0-9_-]{50,1000}/g,
+    severity: 'high',
+  },
   // Passwords
   {
     type: 'password',
