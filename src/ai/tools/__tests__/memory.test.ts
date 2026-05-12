@@ -8,6 +8,8 @@
  * - Edge cases
  */
 
+export {};
+
 // Mock Firebase before imports
 const mockGetDocs = jest.fn();
 const mockRunTransaction = jest.fn();

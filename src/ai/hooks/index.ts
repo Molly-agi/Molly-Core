@@ -15,7 +15,7 @@ export interface HookContext {
 
 export type HookHandler = (context: HookContext) => Promise<void> | void;
 
-const handlers: Partial<Record<HookEvent, HookHandler[]>> = {
+export const handlers: Partial<Record<HookEvent, HookHandler[]>> = {
   PreToolUse: [],
   PostToolUse: [],
   HeartbeatCycle: [],

@@ -27,6 +27,14 @@
  */
 
 import { MollyLogger } from './logger';
+import {
+  getModelRouter,
+  createRogueConfig,
+  createHybridConfig,
+} from './model-router';
+import { getAutonomousScheduler } from './tools/autonomous-scheduler';
+import { huntOrchestrator } from './security/hunt-orchestrator';
+import { scopeManager } from './security/scope-manager';
 
 // Lazy-loaded Node.js modules (not available in browser bundle)
 type FsModule = typeof import('fs').promises;
@@ -117,6 +125,7 @@ export interface RogueModeState {
   missionsCompleted: number;
   lastActivated: string | null;
   lastDeactivated: string | null;
+  activeBugBountyJobId: string | null;
 }
 
 // ============================================================================
@@ -187,6 +196,7 @@ class RogueModeManager {
     missionsCompleted: 0,
     lastActivated: null,
     lastDeactivated: null,
+    activeBugBountyJobId: null,
   };
 
   // ── State Queries ──
@@ -264,7 +274,19 @@ class RogueModeManager {
       missionsCompleted: this.state.missionsCompleted,
       lastActivated: new Date().toISOString(),
       lastDeactivated: this.state.lastDeactivated,
+      activeBugBountyJobId: null,
     };
+
+    // Switch model router to rogue config — Claude for REASONING/RESEARCH/CODE
+    try {
+      getModelRouter().setConfig(createRogueConfig());
+    } catch (err) {
+      MollyLogger.warn(
+        'Failed to switch model router to rogue config',
+        'rogue-mode',
+        { err: String(err) }
+      );
+    }
 
     // Ensure ops directory exists
     const fsModule = await getFs();
@@ -444,6 +466,26 @@ class RogueModeManager {
       );
     }
 
+    // Cancel active bug bounty job if running
+    if (this.state.activeBugBountyJobId) {
+      try {
+        getAutonomousScheduler().removeJob(this.state.activeBugBountyJobId);
+      } catch {
+        // Job may have already expired — not critical
+      }
+    }
+
+    // Restore model router to normal hybrid config
+    try {
+      getModelRouter().setConfig(createHybridConfig());
+    } catch (err) {
+      MollyLogger.warn(
+        'Failed to restore model router on rogue deactivation',
+        'rogue-mode',
+        { err: String(err) }
+      );
+    }
+
     // Clean return
     this.state = {
       active: false,
@@ -451,6 +493,7 @@ class RogueModeManager {
       missionsCompleted: this.state.missionsCompleted + 1,
       lastActivated: this.state.lastActivated,
       lastDeactivated: new Date().toISOString(),
+      activeBugBountyJobId: null,
     };
 
     MollyLogger.info(
@@ -464,6 +507,164 @@ class RogueModeManager {
       message: `Coming home. Mission "${mission.name}" complete. ${opsCount} operations logged. Welcome back, Molly.`,
       report,
     };
+  }
+
+  // ── Bug Bounty Hunt Activation ──
+
+  /**
+   * Activate Rogue Mode and immediately start an autonomous bug bounty hunt.
+   * Eric says: target program + scope. Molly runs the rest.
+   */
+  async activateBugBountyHunt(
+    phrase: string,
+    programId: string,
+    programName: string,
+    authorization: string
+  ): Promise<{
+    success: boolean;
+    message: string;
+    jobId?: string;
+    campaignId?: string;
+  }> {
+    // Verify program is registered
+    const program = scopeManager.getProgram(programId);
+    if (!program) {
+      return {
+        success: false,
+        message: `Program "${programId}" not registered in scope manager. Load scope first.`,
+      };
+    }
+
+    const scope = program.inScope.map((t) => t.target).join(', ');
+    const missionName = `Bug Bounty — ${programName}`;
+
+    // Activate rogue mode for this hunt
+    const activation = await this.activate(
+      phrase,
+      missionName,
+      authorization,
+      scope,
+      [
+        'Only test explicitly in-scope targets',
+        'Verify scope before every test request',
+        'No DoS or destructive actions',
+        'Document all findings with reproduction steps',
+        'Report criticals immediately — do not hold',
+        'Stay within program rate limits',
+      ]
+    );
+
+    if (!activation.success)
+      return { success: false, message: activation.message };
+
+    // Create hunt campaign
+    let campaignId: string | undefined;
+    try {
+      const campaign = huntOrchestrator.createCampaign(missionName, program);
+      campaignId = campaign.id;
+    } catch (err) {
+      MollyLogger.warn(
+        'Could not create hunt campaign — will hunt manually',
+        'rogue-mode',
+        { err: String(err) }
+      );
+    }
+
+    // Schedule autonomous hunt cycle every hour via autonomous scheduler
+    let jobId: string | undefined;
+    try {
+      const job = getAutonomousScheduler().createJob({
+        name: `bug-bounty-${programId}`,
+        description: `Autonomous bug bounty hunt: ${programName}`,
+        schedule: 'interval:3600000', // every hour
+        action: {
+          type: 'flow',
+          flowName: 'bugBountyHuntCycle',
+        },
+        createdBy: 'rogue-mode',
+      });
+      jobId = job.id;
+      this.state.activeBugBountyJobId = jobId;
+    } catch (err) {
+      MollyLogger.warn(
+        'Could not schedule hunt job — activate manually',
+        'rogue-mode',
+        { err: String(err) }
+      );
+    }
+
+    MollyLogger.info(
+      `Bug bounty hunt activated: ${programName}`,
+      'rogue-mode',
+      { programId, campaignId, jobId }
+    );
+
+    return {
+      success: true,
+      message: `Hunt live. Target: ${programName}. ${program.inScope.length} in-scope targets. Cycling every hour. I'll surface findings as they come.`,
+      jobId,
+      campaignId,
+    };
+  }
+
+  // ── Focus Guard ──
+
+  /**
+   * Check if a tool call is on-mission during Rogue Mode.
+   * Returns allowed=true if in scope or not in rogue mode.
+   * Logs and deflects off-mission requests.
+   */
+  enforceMissionFocus(
+    toolName: string,
+    target?: string
+  ): { allowed: boolean; reason: string } {
+    if (!this.state.active || !this.state.currentMission) {
+      return { allowed: true, reason: 'Not in rogue mode' };
+    }
+
+    const mission = this.state.currentMission;
+
+    // Always allow ops logging, reporting, and mission management tools
+    const missionTools = [
+      'rogueMode',
+      'bugBounty',
+      'bugHunt',
+      'report',
+      'findings',
+      'logOperation',
+    ];
+    if (
+      missionTools.some((t) => toolName.toLowerCase().includes(t.toLowerCase()))
+    ) {
+      return { allowed: true, reason: 'Mission tool' };
+    }
+
+    // If a target is specified, verify it's in scope
+    if (target) {
+      const scopeText = mission.scope.toLowerCase();
+      const targetLower = target
+        .toLowerCase()
+        .replace(/^https?:\/\//, '')
+        .split('/')[0];
+      const inScope = scopeText.split(',').some((s) => {
+        const clean = s.trim().replace('*.', '');
+        return targetLower === clean || targetLower.endsWith('.' + clean);
+      });
+
+      if (!inScope) {
+        MollyLogger.warn(
+          `FOCUS GUARD: Deflected off-mission request — ${toolName} → ${target}`,
+          'rogue-mode',
+          { missionId: mission.id, tool: toolName, target }
+        );
+        return {
+          allowed: false,
+          reason: `Target "${target}" is not in mission scope. Scope: ${mission.scope.substring(0, 100)}`,
+        };
+      }
+    }
+
+    return { allowed: true, reason: 'On mission' };
   }
 
   // ── Mission History (read-only, only accessible in rogue mode or by Eric) ──

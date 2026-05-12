@@ -94,7 +94,10 @@ function acquireLock() {
 // =============================================================================
 let heartbeatCount = 0;
 
+let heartbeatRunning = false;
 function heartbeat() {
+  if (heartbeatRunning) return;
+  heartbeatRunning = true;
   heartbeatCount++;
   try {
     writeFileSync(HEARTBEAT_FILE, new Date().toISOString());
@@ -102,22 +105,28 @@ function heartbeat() {
   } catch (e) {
     log(`[ERROR] Heartbeat write failed: ${e.message}`);
   }
+  heartbeatRunning = false;
 }
 
 // =============================================================================
 // GIT ACTIVITY - Every 10 seconds
 // =============================================================================
 function gitActivity() {
+  if (gitActivity.running) return;
+  gitActivity.running = true;
   try {
     spawn('git', ['status', '--short'], { cwd: ROOT, stdio: 'ignore' });
     spawn('git', ['rev-parse', 'HEAD'], { cwd: ROOT, stdio: 'ignore' });
   } catch {}
+  gitActivity.running = false;
 }
 
 // =============================================================================
 // HTTP PING - Every 5 seconds - KEEP 9002 ALIVE (this is critical)
 // =============================================================================
 function httpPing() {
+  if (httpPing.running) return;
+  httpPing.running = true;
   // Ping dev server on 9002 - THIS IS THE MAIN ONE
   try {
     const req = http.request({
@@ -156,12 +165,15 @@ function httpPing() {
     req.on('error', () => {});
     req.end();
   } catch {}
+  httpPing.running = false;
 }
 
 // =============================================================================
 // GHOST HUNTER - Every 30 seconds
 // =============================================================================
 function huntGhosts() {
+  if (huntGhosts.running) return;
+  huntGhosts.running = true;
   try {
     // Find all extension host PIDs sorted by age (newest first)
     const result = execSync(
@@ -169,10 +181,16 @@ function huntGhosts() {
       { encoding: 'utf8', timeout: 5000 }
     ).trim();
 
-    if (!result) return;
+    if (!result) {
+      huntGhosts.running = false;
+      return;
+    }
 
     const lines = result.split('\n').filter((l) => l.trim());
-    if (lines.length <= 1) return; // Only one or zero - nothing to kill
+    if (lines.length <= 1) {
+      huntGhosts.running = false;
+      return;
+    } // Only one or zero - nothing to kill
 
     // Keep the newest (first line after sort), kill the rest
     const newest = lines[0].trim().split(/\s+/)[0];
@@ -189,6 +207,7 @@ function huntGhosts() {
       } catch {}
     }
   } catch {}
+  huntGhosts.running = false;
 }
 
 // =============================================================================
@@ -207,7 +226,12 @@ function isPortListening(port) {
 }
 
 function ensureBridge() {
-  if (isPortListening(9099)) return; // Bridge is up
+  if (ensureBridge.running) return;
+  ensureBridge.running = true;
+  if (isPortListening(9099)) {
+    ensureBridge.running = false;
+    return;
+  } // Bridge is up
 
   log('[BRIDGE] Port 9099 not listening - restarting bridge');
 
@@ -248,12 +272,15 @@ function ensureBridge() {
   } catch (e) {
     log(`[ERROR] Failed to start bridge: ${e.message}`);
   }
+  ensureBridge.running = false;
 }
 
 // =============================================================================
 // STATUS LOG - Every 1 minute
 // =============================================================================
 function logStatus() {
+  if (logStatus.running) return;
+  logStatus.running = true;
   try {
     const mem = execSync(`free -m 2>/dev/null | awk '/^Mem:/{print $7}'`, {
       encoding: 'utf8',
@@ -271,6 +298,7 @@ function logStatus() {
       `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer}`
     );
   } catch {}
+  logStatus.running = false;
 }
 
 // =============================================================================
@@ -326,6 +354,8 @@ setInterval(logStatus, STATUS_LOG_MS);
 
 // ===================== HEARTBEAT DASHBOARD AUTOSTART =====================
 function ensureHeartbeatDashboard() {
+  if (ensureHeartbeatDashboard.running) return;
+  ensureHeartbeatDashboard.running = true;
   const DASHBOARD_PID_FILE = `${ROOT}/.heartbeat-dashboard.pid`;
   const DASHBOARD_PATH = `${ROOT}/public/heartbeat-dashboard.html`;
   const DASHBOARD_API_PATH = `${ROOT}/scripts/heartbeat-api.js`;
@@ -347,6 +377,7 @@ function ensureHeartbeatDashboard() {
   }
   // Optionally, open dashboard in browser (uncomment if desired)
   // spawn('xdg-open', [DASHBOARD_PATH], { detached: true });
+  ensureHeartbeatDashboard.running = false;
 }
 setInterval(ensureHeartbeatDashboard, 10000); // Check every 10s
 

@@ -64,10 +64,6 @@ export async function register() {
       key: 'GOOGLE_GENAI_API_KEY',
       hint: 'Gemini API key — Molly cannot think without it.',
     },
-    {
-      key: 'FIREBASE_SERVICE_ACCOUNT_JSON',
-      hint: 'Firebase admin credentials — Molly cannot remember without it.',
-    },
   ];
 
   const optional: Array<{ key: string; hint: string }> = [
@@ -78,6 +74,10 @@ export async function register() {
     {
       key: 'HIDDEN_ADMIN_PASSWORD',
       hint: 'Admin panel will be inaccessible without credentials.',
+    },
+    {
+      key: 'FIREBASE_PROJECT_ID',
+      hint: 'Firebase project ID — Molly will fall back to local storage without it.',
     },
   ];
 
@@ -123,6 +123,25 @@ export async function register() {
   } catch (err) {
     console.warn(
       '[Startup] ⚠️  Firebase Admin initialization failed:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── Storage Sync ──────────────────────────────────────────────────────────
+  // Reconcile local filesystem (Termux/phone) with Firestore (cloud/Codespace)
+  // before any module loads its state. Last-write-wins on _updatedAt.
+  try {
+    const { syncStorageOnStartup } = await import('@/lib/storage-sync');
+    const syncResult = await syncStorageOnStartup();
+    const total = syncResult.pushedToCloud + syncResult.pulledToLocal;
+    if (total > 0) {
+      console.log(
+        `[Startup] ✅ Storage sync — ↑${syncResult.pushedToCloud} to cloud, ↓${syncResult.pulledToLocal} to local (${syncResult.durationMs}ms)`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Storage sync failed:',
       err instanceof Error ? err.message : String(err)
     );
   }

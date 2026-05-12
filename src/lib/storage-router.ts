@@ -64,9 +64,12 @@ function detectStorageMode(): StorageMode {
   }
 
   // Codespace with Firebase credentials configured — use Firestore
+  // Accepts service account JSON or ADC-style project ID vars
   if (
     process.env.CODESPACES === 'true' &&
-    process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+    (process.env.FIREBASE_SERVICE_ACCOUNT_JSON ||
+      process.env.FIREBASE_PROJECT_ID ||
+      process.env.GOOGLE_CLOUD_PROJECT)
   ) {
     return 'firestore';
   }

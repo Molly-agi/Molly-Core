@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
 import { Battery, Thermometer, Radio, Activity, Brain } from 'lucide-react';
 import { Badge } from '../ui/badge';
-import { ToolList } from '@/components/tools/ToolList';
+// import { ToolList } from '@/components/tools/ToolList';
 import { SkillRegistryPanelWithModal } from '@/components/skills';
 import { SkillDiagnosticsPanel } from '@/components/skills';
 
@@ -307,10 +307,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Molly's Live Tool List */}
-        <div className="my-4">
-          <ToolList />
-        </div>
         {/* Molly's Live Skill/Agent List */}
         <div className="my-4">
           <SkillRegistryPanelWithModal />

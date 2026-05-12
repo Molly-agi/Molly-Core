@@ -260,15 +260,15 @@ export class GeminiProvider implements ModelProvider {
   constructor() {
     // Gemini 3.1 model defaults (April 2026)
     const flash =
-      process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3-flash-preview';
+      process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3.1-flash-lite-preview';
     const pro =
       process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview';
     const flashLite =
-      process.env.MOLLY_MODEL_FLASH_LITE ||
-      'googleai/gemini-3.1-flash-lite-preview';
+      process.env.MOLLY_MODEL_FLASH_LITE || 'googleai/gemini-3.1-flash-lite';
     const tts =
-      process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.5-flash-preview-tts';
-    const imagen = process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen';
+      process.env.MOLLY_MODEL_TTS || 'googleai/gemini-3.1-flash-tts-preview';
+    const imagen =
+      process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-4.0-generate-001';
     const embedding =
       process.env.MOLLY_MODEL_EMBEDDING ||
       'googleai/gemini-embedding-2-preview';
@@ -684,11 +684,11 @@ export function createRogueConfig(): RoutingConfig {
     rules: [
       {
         taskType: TaskType.REASONING,
-        providerChain: ['gemini'], // Pro for deep analysis
+        providerChain: ['claude', 'gemini'], // Claude for deep analysis, Gemini fallback
       },
       {
         taskType: TaskType.CODE,
-        providerChain: ['gemini'], // Pro for exploit/tool dev
+        providerChain: ['claude', 'gemini'], // Claude for exploit/tool dev
       },
       {
         taskType: TaskType.CREATIVE,
@@ -718,9 +718,7 @@ export function createRogueConfig(): RoutingConfig {
       },
       {
         taskType: TaskType.RESEARCH,
-        providerChain: ['gemini'], // Pro for security research
-        modelOverride:
-          process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview',
+        providerChain: ['claude', 'gemini'], // Claude for security research (OSINT, vuln analysis)
       },
       {
         taskType: TaskType.BACKGROUND,

@@ -24,7 +24,7 @@ export const ToolCategoryList = () => {
   const categories = Object.keys(grouped).sort();
 
   return (
-    <div>
+    <div style={{ minHeight: '60vh' }}>
       <h2 className="text-lg font-bold mb-2">System Tools by Category</h2>
       <button
         onClick={refresh}

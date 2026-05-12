@@ -162,7 +162,10 @@ export function TermAISidebar() {
   ] as const;
 
   return (
-    <div className="flex h-full flex-col bg-sidebar">
+    <div
+      className="flex h-full flex-col bg-sidebar overflow-y-auto"
+      style={{ maxHeight: '100vh' }}
+    >
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -196,7 +199,8 @@ export function TermAISidebar() {
           {activeTab === 'tools' && (
             <TabsContent
               value="tools"
-              className="flex-1 m-0 overflow-hidden p-4"
+              className="flex-1 m-0 overflow-y-auto p-4"
+              style={{ maxHeight: 'calc(100vh - 6rem)' }}
             >
               <ToolCategoryList />
             </TabsContent>

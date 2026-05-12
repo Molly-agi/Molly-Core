@@ -17,17 +17,17 @@ export const ai = genkit({
 });
 
 // ── Model constants — env-overridable ──
-// Core models (Gemini 3.1 - latest preview)
+// Core models (Gemini 3.1)
 export const MODEL_FLASH =
-  process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3-flash-preview';
+  process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3.1-flash-lite-preview';
 export const MODEL_PRO =
   process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview';
 export const MODEL_FLASH_LITE =
-  process.env.MOLLY_MODEL_FLASH_LITE ||
-  'googleai/gemini-3.1-flash-lite-preview';
+  process.env.MOLLY_MODEL_FLASH_LITE || 'googleai/gemini-3.1-flash-lite';
 export const MODEL_TTS =
-  process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.5-flash-preview-tts';
-export const MODEL_IMAGEN = process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen';
+  process.env.MOLLY_MODEL_TTS || 'googleai/gemini-3.1-flash-tts-preview';
+export const MODEL_IMAGEN =
+  process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-4.0-generate-001';
 export const MODEL_EMBEDDING =
   process.env.MOLLY_MODEL_EMBEDDING || 'googleai/gemini-embedding-2-preview';
 

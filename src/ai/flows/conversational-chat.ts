@@ -7,6 +7,7 @@ import { getUnreadMessages, markMessagesRead } from '../bridge/family-bridge';
 import { getRogueMode } from '../rogue-mode';
 import { composeSystemPrompt } from '@/ai/prompts';
 import { compactHistory } from '../context-compaction';
+import { callTool } from '@/ai/tools/call-tool';
 
 /**
  * @fileOverview Hardened Conversational Chat Flow V5.0 (Rogue Protocol).
@@ -180,6 +181,7 @@ const conversationalChatFlow = ai.defineFlow(
               system: systemPrompt,
               prompt: text,
               history: llmHistory,
+              tools: [callTool],
             } as Record<string, unknown>
           );
         },

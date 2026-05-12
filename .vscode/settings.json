@@ -61,13 +61,13 @@
   "typescript.tsserver.useSyntaxServer": "never",
   "chat.mcp.serverSampling": {
     "Molly-Core/.vscode/mcp.json: microsoft/markitdown": {
-      "allowedModels": [
-        "copilot/auto",
-        "copilotcli/claude-opus-4.6"
-      ]
+      "allowedModels": ["copilot/auto", "copilotcli/claude-opus-4.6"]
     }
   },
   "chat.checkpoints.showFileChanges": true,
   "chat.planAgent.defaultModel": "Claude Opus 4.5 (claude-code)",
-  "markdown.validate.enabled": true
+  "markdown.validate.enabled": true,
+  "chat.signInTitleBar.enabled": true,
+  "chat.extensionUnification.enabled": false,
+  "git.alwaysSignOff": true
 }

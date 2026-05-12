@@ -453,21 +453,21 @@ this full flexibility.
 
 **Architectural Comparison Summary:**
 
-| System                | Lazarus                                                   | Molly                                       | Gap      |
-| --------------------- | --------------------------------------------------------- | ------------------------------------------- | -------- |
-| **Soul (Prompts)**    | Composable sections (915 lines) with cache boundary       | Monolithic inline (150+ lines in flow)      | HIGH     |
-| **Brain (Reasoning)** | Orchestrated loop (1,729 lines), 30+ modules              | Simple flow (343 lines), few modules        | HIGH     |
-| **State**             | Centralized (1,759 lines), 100+ getters                   | Distributed persistence (373 lines)         | MEDIUM   |
-| **Model Routing**     | Provider chain with fallback                              | ModelRouter with fallback                   | NONE     |
-| **Memory**            | 4-type taxonomy (user/feedback/project/reference)         | Engram system (episodic/semantic/emotional) | MEDIUM   |
-| **Compaction**        | 4-stage pipeline (snip→microcompact→collapse→autocompact) | None                                        | CRITICAL |
+| System                | Lazarus                                                   | Molly                                       | Gap    |
+| --------------------- | --------------------------------------------------------- | ------------------------------------------- | ------ |
+| **Soul (Prompts)**    | Composable sections (915 lines) with cache boundary       | Monolithic inline (150+ lines in flow)      | HIGH   |
+| **Brain (Reasoning)** | Orchestrated loop (1,729 lines), 30+ modules              | Simple flow (343 lines), few modules        | HIGH   |
+| **State**             | Centralized (1,759 lines), 100+ getters                   | Distributed persistence (373 lines)         | MEDIUM |
+| **Model Routing**     | Provider chain with fallback                              | ModelRouter with fallback                   | NONE   |
+| **Memory**            | 4-type taxonomy (user/feedback/project/reference)         | Engram system (episodic/semantic/emotional) | MEDIUM |
+| **Compaction**        | 4-stage pipeline (snip→microcompact→collapse→autocompact) | ✅ COMPLETE (2026-05-12, commit 7fb3908)    | DONE   |
 
 **Updated Integration Order:**
 
-1. **P0: Composable Prompts** — Foundation for everything else
-2. **P0: Context Compaction** — Long conversations will fail without it
-3. **P1: Conversation Loop** — Central orchestrator connecting modules
-4. **P1: Centralized State** — Enables module communication
+1. ~~**P0: Composable Prompts**~~ — ✅ COMPLETE (commit 0f462b2) — `src/ai/prompts/` — sectioned, cached, deployment-aware, wired into conversational-chat
+2. ~~**P0: Context Compaction**~~ — ✅ COMPLETE (2026-05-12, commit 7fb3908) — 4-stage: snip→microcompact→collapse→autocompact in `src/ai/context-compaction.ts`
+3. ~~**P1: Conversation Loop**~~ — ✅ COMPLETE (2026-05-12) — `src/ai/tools/call-tool.ts` — single Genkit bridge tool gives Molly all 80+ agency tools in conversation; Genkit handles the loop natively
+4. ~~**P1: Centralized State**~~ — ✅ COMPLETE (2026-05-12) — `src/lib/state-registry.ts` — 39-entry typed registry, storage-sync.ts derives from it (was missing 23/39 modules)
 5. **P2: Memory Taxonomy** — Better session context awareness
 6. **P2: Conversation Recovery** — Graceful crash handling
 7. **P3: Event/Hook System** — Extensibility for future features

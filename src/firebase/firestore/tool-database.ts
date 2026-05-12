@@ -67,7 +67,7 @@ export async function searchSavedTools(
 
   const tools = results
     .map((doc) => {
-      const data = doc.data;
+      const data = doc.data as Partial<FoundTool>;
       return {
         id: doc.id,
         ...data,
@@ -80,9 +80,9 @@ export async function searchSavedTools(
     .filter((tool) => {
       if (!searchTerm) return true;
       const term = searchTerm.toLowerCase();
-      const name = (tool.name as string) || '';
-      const description = (tool.description as string) || '';
-      const tags = (tool.tags as string[]) || [];
+      const name = tool.name ?? '';
+      const description = tool.description ?? '';
+      const tags = tool.tags ?? [];
       return (
         name.toLowerCase().includes(term) ||
         description.toLowerCase().includes(term) ||
