@@ -167,6 +167,22 @@ export interface ModelProvider {
    * Whether this provider is currently configured (API key present, etc.)
    */
   isConfigured(): boolean;
+
+  /**
+   * Optional base URL override. When set, the provider routes requests to
+   * this endpoint instead of the vendor default. Useful for staging, proxies,
+   * Bedrock/Vertex/Foundry mirrors, or air-gapped deployments.
+   *
+   * Mirrors Anthropic's ANTHROPIC_BASE_URL pattern. Env vars per provider:
+   *   - Gemini: MOLLY_GENAI_BASE_URL (or GOOGLE_GENAI_BASE_URL)
+   *   - Claude: MOLLY_ANTHROPIC_BASE_URL (or ANTHROPIC_BASE_URL)
+   *   - Ollama: OLLAMA_BASE_URL
+   *
+   * Model-router itself does not make HTTP calls — this field surfaces the
+   * configured override for diagnostics. The actual application happens in
+   * the SDK init site (e.g., genkit-core for Gemini).
+   */
+  readonly baseUrl?: string;
 }
 
 // ============================================================
@@ -257,7 +273,14 @@ export class GeminiProvider implements ModelProvider {
 
   private modelMap: Record<string, string>;
 
+  readonly baseUrl: string | undefined;
+
   constructor() {
+    this.baseUrl =
+      process.env.MOLLY_GENAI_BASE_URL?.trim() ||
+      process.env.GOOGLE_GENAI_BASE_URL?.trim() ||
+      undefined;
+
     // Gemini 3.1 model defaults (April 2026)
     const flash =
       process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3.1-flash-lite-preview';
@@ -364,7 +387,7 @@ export class OllamaProvider implements ModelProvider {
     avgResponseMs: 0,
   };
 
-  private baseUrl: string;
+  readonly baseUrl: string;
   private chatModel: string;
   private embeddingModel: string;
 
@@ -453,8 +476,14 @@ export class ClaudeProvider implements ModelProvider {
 
   private model: string;
 
+  readonly baseUrl: string | undefined;
+
   constructor() {
     this.model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
+    this.baseUrl =
+      process.env.MOLLY_ANTHROPIC_BASE_URL?.trim() ||
+      process.env.ANTHROPIC_BASE_URL?.trim() ||
+      undefined;
   }
 
   resolveModel(_taskType: TaskType): string {

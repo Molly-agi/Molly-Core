@@ -44,7 +44,13 @@ function parseCustomHeaders(): Record<string, string> | undefined {
   return Object.keys(out).length > 0 ? out : undefined;
 }
 
-const baseUrl = process.env.MOLLY_GENAI_BASE_URL?.trim();
+// Accept GOOGLE_GENAI_BASE_URL as a vendor-standard alias so operators can
+// use whichever naming their tooling already expects. MOLLY_* wins when both
+// are set. Mirrors Anthropic's ANTHROPIC_BASE_URL pattern documented in
+// stuff/CLAUDE_CODE_HIDDEN_FLAGS_AUDIT_MAY12.md §7 action item 3.
+const baseUrl =
+  process.env.MOLLY_GENAI_BASE_URL?.trim() ||
+  process.env.GOOGLE_GENAI_BASE_URL?.trim();
 const customHeaders = parseCustomHeaders();
 
 export const ai = genkit({
