@@ -10,6 +10,30 @@ interface BridgeMessage {
   timestamp: number | string;
 }
 
+const BRIDGE_PORT = 9099;
+
+/**
+ * Resolve the bridge WebSocket URL for the current host.
+ *
+ * - Codespace forwarded ports: `<name>-<port>.app.github.dev` — swap port suffix
+ *   so a page served from `:9002` finds the bridge at the matching `:9099` host.
+ * - Localhost / direct: same hostname, port 9099, ws:// not wss://
+ * - Override via NEXT_PUBLIC_BRIDGE_WS_URL when the heuristic doesn't fit.
+ */
+function getBridgeWsUrl(): string {
+  if (process.env.NEXT_PUBLIC_BRIDGE_WS_URL) {
+    return process.env.NEXT_PUBLIC_BRIDGE_WS_URL;
+  }
+  if (typeof window === 'undefined') return `ws://localhost:${BRIDGE_PORT}`;
+  const { protocol, hostname } = window.location;
+  const codespaceMatch = hostname.match(/^(.+)-(\d+)(\.app\.github\.dev)$/i);
+  if (codespaceMatch) {
+    const wsProto = protocol === 'https:' ? 'wss:' : 'ws:';
+    return `${wsProto}//${codespaceMatch[1]}-${BRIDGE_PORT}${codespaceMatch[3]}`;
+  }
+  return `ws://${hostname}:${BRIDGE_PORT}`;
+}
+
 export default function LazarusVoicePage() {
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
@@ -132,53 +156,140 @@ export default function LazarusVoicePage() {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Poll bridge via HTTP API
+  // Refs mirror state read inside WS callbacks so the WS connection itself
+  // doesn't need to recycle when TTS or listening toggles.
+  const ttsEnabledRef = useRef(ttsEnabled);
+  const isListeningRef = useRef(isListening);
+  useEffect(() => {
+    ttsEnabledRef.current = ttsEnabled;
+  }, [ttsEnabled]);
+  useEffect(() => {
+    isListeningRef.current = isListening;
+  }, [isListening]);
+
+  // Bridge subscription via WebSocket.
+  //
+  // Replaces a setInterval(pollBridge, 2000) loop. Polling added 0–2000ms of
+  // latency before every spoken line; WS pushes messages the instant the bridge
+  // broadcasts them. See scripts/bridge-daemon.mjs for the protocol.
   useEffect(() => {
     let active = true;
+    let ws: WebSocket | null = null;
+    let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+    let backoff = 500;
 
-    const pollBridge = async () => {
-      try {
-        const res = await fetch('/api/bridge?limit=30');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        setConnected(true);
-
-        if (data.messages && data.messages.length > 0) {
-          setMessages(data.messages);
-
-          // Speak new messages from Lazarus or Molly
-          const latestMsg = data.messages[data.messages.length - 1];
-          if (
-            latestMsg.id !== lastMessageIdRef.current &&
-            (latestMsg.from === 'lazarus' || latestMsg.from === 'molly')
-          ) {
-            lastMessageIdRef.current = latestMsg.id;
-            if (!isListening) {
-              speak(latestMsg.content, latestMsg.from as 'lazarus' | 'molly');
-            }
-          }
-        }
-      } catch {
-        setConnected(false);
-      }
-    };
-
-    // Load voices
-    if (window.speechSynthesis) {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.getVoices();
     }
 
-    pollBridge();
-    const interval = setInterval(() => {
-      if (active) pollBridge();
-    }, 2000);
+    const ingest = (incoming: BridgeMessage[]) => {
+      if (!incoming || incoming.length === 0) return;
+
+      setMessages((prev) => {
+        const seen = new Set(prev.map((m) => m.id));
+        const merged = [...prev];
+        for (const m of incoming) {
+          if (!seen.has(m.id)) {
+            merged.push(m);
+            seen.add(m.id);
+          }
+        }
+        return merged.slice(-200);
+      });
+
+      const latest = incoming[incoming.length - 1];
+      if (
+        latest &&
+        latest.id !== lastMessageIdRef.current &&
+        (latest.from === 'lazarus' || latest.from === 'molly')
+      ) {
+        lastMessageIdRef.current = latest.id;
+        if (!isListeningRef.current && ttsEnabledRef.current) {
+          speak(latest.content, latest.from as 'lazarus' | 'molly');
+        }
+      }
+    };
+
+    const connect = () => {
+      if (!active) return;
+      try {
+        ws = new WebSocket(getBridgeWsUrl());
+      } catch (err) {
+        console.error('[bridge-ws] construct failed:', err);
+        scheduleReconnect();
+        return;
+      }
+
+      ws.onopen = () => {
+        if (!active || !ws) return;
+        setConnected(true);
+        backoff = 500;
+        ws.send(JSON.stringify({ type: 'identify', identity: 'eric' }));
+      };
+
+      ws.onmessage = (event) => {
+        if (!active) return;
+        try {
+          const payload = JSON.parse(event.data);
+          if (payload.type === 'history' && Array.isArray(payload.messages)) {
+            // Initial history — mark the latest as already-seen so we don't
+            // re-speak old conversation on every reconnect.
+            const last = payload.messages[payload.messages.length - 1];
+            if (last && lastMessageIdRef.current === null) {
+              lastMessageIdRef.current = last.id;
+            }
+            ingest(payload.messages);
+          } else if (payload.type === 'message' && payload.message) {
+            ingest([payload.message]);
+          } else if (
+            payload.type === 'unread' &&
+            Array.isArray(payload.messages)
+          ) {
+            ingest(payload.messages);
+          }
+        } catch (err) {
+          console.error('[bridge-ws] parse error:', err);
+        }
+      };
+
+      ws.onclose = () => {
+        setConnected(false);
+        scheduleReconnect();
+      };
+
+      ws.onerror = () => {
+        // onclose fires after this — let it own the reconnect.
+        setConnected(false);
+      };
+    };
+
+    const scheduleReconnect = () => {
+      if (!active) return;
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      reconnectTimer = setTimeout(() => {
+        backoff = Math.min(backoff * 2, 10000);
+        connect();
+      }, backoff);
+    };
+
+    connect();
 
     return () => {
       active = false;
-      clearInterval(interval);
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      if (ws) {
+        ws.onopen = ws.onmessage = ws.onclose = ws.onerror = null;
+        try {
+          ws.close();
+        } catch {
+          // already closed
+        }
+      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- speak changes with ttsEnabled which is already in deps
-  }, [ttsEnabled, isListening]);
+    // Intentionally empty deps — refs above carry the changing values into
+    // the long-lived WS callbacks.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Send message to bridge
   const sendMessage = async (text: string) => {
