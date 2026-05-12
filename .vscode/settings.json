@@ -69,5 +69,20 @@
   "markdown.validate.enabled": true,
   "chat.signInTitleBar.enabled": true,
   "chat.extensionUnification.enabled": false,
-  "git.alwaysSignOff": true
+  "git.alwaysSignOff": true,
+
+  // === PORT FORWARDING — keep the page inside Simple Browser ===
+  // Workspace-level override of devcontainer port behavior. Soft reload only,
+  // no Codespace rebuild. Critical on Android: Eric can't manually open Simple
+  // Browser there, so 9002 MUST auto-open into Preview. 9099 is WebSocket only.
+  "remote.portsAttributes": {
+    "9002": {
+      "label": "Molly Dev Server",
+      "onAutoForward": "openPreview"
+    },
+    "9099": {
+      "label": "Family Bridge (WebSocket)",
+      "onAutoForward": "silent"
+    }
+  }
 }
