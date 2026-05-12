@@ -72,8 +72,11 @@ import type { ToolHandler } from './types';
 /**
  * Combined handler map for all modular tools.
  * Tools in this map are handled by the extracted handlers.
+ *
+ * MOLLY_DISABLE_TOOLS=name1,name2 strips matching tools at module load.
+ * Modeled on Claude Code's DISABLE_*_COMMAND env vars.
  */
-const modularToolHandlers: Record<string, ToolHandler> = {
+const allHandlers: Record<string, ToolHandler> = {
   ...systemToolHandlers,
   ...diagnosticToolHandlers,
   ...webToolHandlers,
@@ -97,6 +100,35 @@ const modularToolHandlers: Record<string, ToolHandler> = {
   ...bugBountyToolHandlers,
   ...searchToolHandlers,
 };
+
+function applyDisabledToolFilter(
+  handlers: Record<string, ToolHandler>
+): Record<string, ToolHandler> {
+  const raw = process.env.MOLLY_DISABLE_TOOLS;
+  if (!raw) return handlers;
+  const disabled = new Set(
+    raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  );
+  if (disabled.size === 0) return handlers;
+  const filtered: Record<string, ToolHandler> = {};
+  for (const [name, handler] of Object.entries(handlers)) {
+    if (!disabled.has(name)) filtered[name] = handler;
+  }
+  return filtered;
+}
+
+const modularToolHandlers: Record<string, ToolHandler> =
+  applyDisabledToolFilter(allHandlers);
+
+/** Names of tools removed from the registry via MOLLY_DISABLE_TOOLS. */
+export function getDisabledTools(): string[] {
+  return Object.keys(allHandlers)
+    .filter((name) => !(name in modularToolHandlers))
+    .sort();
+}
 
 /**
  * Check if a tool has a modular handler

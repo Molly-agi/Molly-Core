@@ -12,8 +12,48 @@
 import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 
+/**
+ * Parse MOLLY_CUSTOM_HEADERS as either a JSON object or "K1=V1;K2=V2"
+ * list. Returns undefined if unset or unparseable.
+ */
+function parseCustomHeaders(): Record<string, string> | undefined {
+  const raw = process.env.MOLLY_CUSTOM_HEADERS?.trim();
+  if (!raw) return undefined;
+  if (raw.startsWith('{')) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        return Object.fromEntries(
+          Object.entries(parsed as Record<string, unknown>).map(([k, v]) => [
+            k,
+            String(v),
+          ])
+        );
+      }
+    } catch {
+      console.warn('[genkit-core] MOLLY_CUSTOM_HEADERS JSON parse failed');
+    }
+    return undefined;
+  }
+  const out: Record<string, string> = {};
+  for (const pair of raw.split(';')) {
+    const eq = pair.indexOf('=');
+    if (eq <= 0) continue;
+    out[pair.slice(0, eq).trim()] = pair.slice(eq + 1).trim();
+  }
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
+const baseUrl = process.env.MOLLY_GENAI_BASE_URL?.trim();
+const customHeaders = parseCustomHeaders();
+
 export const ai = genkit({
-  plugins: [googleAI()],
+  plugins: [
+    googleAI({
+      ...(baseUrl ? { baseUrl } : {}),
+      ...(customHeaders ? { customHeaders } : {}),
+    }),
+  ],
 });
 
 // ── Model constants — env-overridable ──
