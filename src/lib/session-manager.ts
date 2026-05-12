@@ -8,16 +8,37 @@
  * directives, and progress tracking.
  */
 
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
+import {
+  writeFileSync,
+  readFileSync,
+  existsSync,
+  mkdirSync,
+  appendFileSync,
+  readdirSync,
+  unlinkSync,
+  statSync,
+  renameSync,
+} from 'fs';
 import { join } from 'path';
 import { MollyLogger } from '@/ai/logger';
 
 // Session state always writes to project root so Copilot can read the
 // persisted state files. The /tmp path was causing files to vanish on
 // codespace restart, breaking session recovery completely.
-const SESSION_STATE_FILE = join(process.cwd(), 'COPILOT_SESSION_STATE.md');
-const SESSION_STATE_JSON = join(process.cwd(), 'COPILOT_SESSION_STATE.json');
-const SESSION_BACKUP_DIR = join(process.cwd(), '.session-backups');
+//
+// Lazy getters (vs. captured const) so tests can chdir into a temp dir.
+const SESSION_STATE_FILE = (): string =>
+  join(process.cwd(), 'COPILOT_SESSION_STATE.md');
+const SESSION_STATE_JSON = (): string =>
+  join(process.cwd(), 'COPILOT_SESSION_STATE.json');
+const SESSION_BACKUP_DIR = (): string =>
+  join(process.cwd(), '.session-backups');
+const SESSION_EVENTS_LOG = (): string =>
+  join(process.cwd(), '.session-events.jsonl');
+const SESSION_EVENTS_CAP = 2000;
+const SESSION_EVENTS_TRIM_TO = 1000;
+const STATE_BACKUP_RETENTION = 50;
+const DEFAULT_CORE_DIRECTIVE = 'Unknown - please re-establish directives';
 
 export interface SessionState {
   lastUpdated: string;
@@ -68,50 +89,245 @@ export interface SessionEvent {
 }
 
 /**
- * Saves the current session state to disk
+ * Loads on-disk state without falling back to defaults.
+ * Returns null if the file is missing OR unparseable.
+ *
+ * This is the strict load path used by saveSessionState's anti-wipe guard
+ * and by callers that need to distinguish "no state" from "default state".
  */
-export function saveSessionState(state: Partial<SessionState>): void {
+function loadSessionStateRaw(): SessionState | null {
+  if (existsSync(SESSION_STATE_JSON())) {
+    try {
+      return JSON.parse(
+        readFileSync(SESSION_STATE_JSON(), 'utf-8')
+      ) as SessionState;
+    } catch (error) {
+      console.error('[Session Manager] Failed to load JSON state:', error);
+    }
+  }
+  if (existsSync(SESSION_STATE_FILE())) {
+    try {
+      return parseMarkdownToState(readFileSync(SESSION_STATE_FILE(), 'utf-8'));
+    } catch (error) {
+      console.error('[Session Manager] Failed to load MD state:', error);
+    }
+  }
+  return null;
+}
+
+/**
+ * Detects whether a write would clobber populated state with empty defaults.
+ *
+ * Triggered when ANY of these holds:
+ *   - existing has a real coreDirective and incoming has the default placeholder
+ *   - existing has completion > 0 and incoming has 0
+ *   - existing has work entries and incoming has none
+ *   - existing has next-step options and incoming has none
+ *   - existing has session notes and incoming has none
+ *
+ * The runtime.events field is excluded from the guard intentionally — it lives
+ * in .session-events.jsonl and is refreshed at write time.
+ */
+function isClobberingWipe(
+  existing: SessionState,
+  incoming: SessionState
+): { clobber: boolean; reason?: string } {
+  const exDir = (existing.userDirectives?.coreDirective || '').trim();
+  const inDir = (incoming.userDirectives?.coreDirective || '').trim();
+  if (
+    exDir &&
+    exDir !== DEFAULT_CORE_DIRECTIVE &&
+    (inDir === DEFAULT_CORE_DIRECTIVE || inDir === '')
+  ) {
+    return { clobber: true, reason: `coreDirective: "${exDir}" -> "${inDir}"` };
+  }
+
+  const exPct = existing.projectStatus?.completionPercent ?? 0;
+  const inPct = incoming.projectStatus?.completionPercent ?? 0;
+  if (exPct > 0 && inPct === 0) {
+    return { clobber: true, reason: `completionPercent: ${exPct} -> 0` };
+  }
+
+  if (
+    (existing.recentWork?.length ?? 0) > 0 &&
+    (incoming.recentWork?.length ?? 0) === 0
+  ) {
+    return {
+      clobber: true,
+      reason: `recentWork: ${existing.recentWork.length} entries -> 0`,
+    };
+  }
+
+  if (
+    (existing.nextSteps?.options?.length ?? 0) > 0 &&
+    (incoming.nextSteps?.options?.length ?? 0) === 0
+  ) {
+    return {
+      clobber: true,
+      reason: `nextSteps.options: ${existing.nextSteps.options.length} -> 0`,
+    };
+  }
+
+  if (
+    (existing.sessionNotes?.length ?? 0) > 0 &&
+    (incoming.sessionNotes?.length ?? 0) === 0
+  ) {
+    return {
+      clobber: true,
+      reason: `sessionNotes: ${existing.sessionNotes.length} -> 0`,
+    };
+  }
+
+  return { clobber: false };
+}
+
+/**
+ * Snapshots the current on-disk JSON to .session-backups/state-${ISO}.json.
+ * Prunes to STATE_BACKUP_RETENTION newest files. No-op if there's no state to back up.
+ */
+function backupCurrentState(): void {
+  if (!existsSync(SESSION_STATE_JSON())) return;
   try {
-    const currentState = loadSessionState();
+    mkdirSync(SESSION_BACKUP_DIR(), { recursive: true });
+  } catch {
+    return;
+  }
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupFile = join(SESSION_BACKUP_DIR(), `state-${stamp}.json`);
+  try {
+    const content = readFileSync(SESSION_STATE_JSON(), 'utf-8');
+    writeFileSync(backupFile, content, 'utf-8');
+  } catch (e) {
+    MollyLogger.error('Backup write failed', 'session-manager', {}, e);
+    return;
+  }
+
+  try {
+    const entries = readdirSync(SESSION_BACKUP_DIR())
+      .filter((f) => f.startsWith('state-') && f.endsWith('.json'))
+      .map((f) => ({
+        f,
+        path: join(SESSION_BACKUP_DIR(), f),
+        mtime: statSync(join(SESSION_BACKUP_DIR(), f)).mtimeMs,
+      }))
+      .sort((a, b) => b.mtime - a.mtime);
+    for (const old of entries.slice(STATE_BACKUP_RETENTION)) {
+      try {
+        unlinkSync(old.path);
+      } catch {
+        /* ignore */
+      }
+    }
+  } catch {
+    // pruning is best-effort
+  }
+}
+
+/**
+ * Reads the tail of .session-events.jsonl. Used to refresh runtime.events
+ * at save time. Bad lines are skipped, not fatal.
+ */
+function readRecentRuntimeEvents(limit = 50): SessionEvent[] {
+  if (!existsSync(SESSION_EVENTS_LOG())) return [];
+  try {
+    const lines = readFileSync(SESSION_EVENTS_LOG(), 'utf-8')
+      .split('\n')
+      .filter((l) => l.trim().length > 0);
+    const tail = lines.slice(-limit);
+    const events: SessionEvent[] = [];
+    for (const line of tail) {
+      try {
+        events.push(JSON.parse(line) as SessionEvent);
+      } catch {
+        // skip corrupt line
+      }
+    }
+    return events;
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Trims the events log when it grows past SESSION_EVENTS_CAP lines.
+ * Atomic via rename of a temp file.
+ */
+function trimEventsLogIfNeeded(): void {
+  if (!existsSync(SESSION_EVENTS_LOG())) return;
+  try {
+    const content = readFileSync(SESSION_EVENTS_LOG(), 'utf-8');
+    const lines = content.split('\n').filter((l) => l.trim().length > 0);
+    if (lines.length <= SESSION_EVENTS_CAP) return;
+    const trimmed = lines.slice(-SESSION_EVENTS_TRIM_TO).join('\n') + '\n';
+    const tmp = SESSION_EVENTS_LOG() + '.tmp';
+    writeFileSync(tmp, trimmed, 'utf-8');
+    renameSync(tmp, SESSION_EVENTS_LOG());
+  } catch (e) {
+    MollyLogger.error('Events log trim failed', 'session-manager', {}, e);
+  }
+}
+
+/**
+ * Saves the current session state to disk.
+ *
+ * Anti-wipe guarantees:
+ *   1. Before merge, snapshots current on-disk JSON into .session-backups/ for recovery.
+ *   2. Refuses the write if the merged result would clobber real data with defaults.
+ *   3. Refreshes runtime.events from the append-only events log so this code path
+ *      never depends on the caller having the latest events in-memory.
+ *
+ * Set `force: true` to bypass the wipe guard for legitimate resets
+ * (e.g., explicit user-initiated state reset).
+ */
+export function saveSessionState(
+  state: Partial<SessionState>,
+  options: { force?: boolean } = {}
+): void {
+  try {
+    const existing = loadSessionStateRaw();
+    const base: SessionState = existing ?? getDefaultState();
+
     let updatedState: SessionState = {
-      ...currentState,
+      ...base,
       ...state,
       lastUpdated: new Date().toISOString(),
     };
 
-    if (updatedState.runtime) {
-      updatedState = {
-        ...updatedState,
-        runtime: {
-          ...updatedState.runtime,
-          events: updatedState.runtime.events ?? [],
-        },
-      };
+    // Refresh runtime.events from the append-only log — single source of truth.
+    const events = readRecentRuntimeEvents(50);
+    updatedState = {
+      ...updatedState,
+      runtime: {
+        ...(updatedState.runtime ?? {}),
+        events,
+      },
+    };
+
+    // Anti-wipe guard — only checked when there's existing populated state.
+    if (existing && !options.force) {
+      const { clobber, reason } = isClobberingWipe(existing, updatedState);
+      if (clobber) {
+        MollyLogger.error(
+          `Refusing wipe-write to session state — ${reason}`,
+          'session-manager',
+          {
+            hint: 'Pass {force:true} to override. Backups in .session-backups/',
+          }
+        );
+        return;
+      }
     }
 
+    // Backup current state BEFORE overwriting (so we can recover from this write).
+    backupCurrentState();
+
     const markdown = generateMarkdownFromState(updatedState);
-    writeFileSync(SESSION_STATE_FILE, markdown, 'utf-8');
+    writeFileSync(SESSION_STATE_FILE(), markdown, 'utf-8');
     writeFileSync(
-      SESSION_STATE_JSON,
+      SESSION_STATE_JSON(),
       JSON.stringify(updatedState, null, 2),
       'utf-8'
     );
-
-    // Create timestamped backup
-    try {
-      mkdirSync(SESSION_BACKUP_DIR, { recursive: true });
-    } catch {
-      // Ignore backup directory creation failures.
-    }
-    const backupFile = join(
-      SESSION_BACKUP_DIR,
-      `session-${new Date().toISOString().split('T')[0]}.md`
-    );
-    try {
-      writeFileSync(backupFile, markdown, 'utf-8');
-    } catch {
-      // Backup directory may not exist yet, that's okay
-    }
 
     MollyLogger.info('State saved successfully', 'session-manager');
   } catch (error) {
@@ -120,56 +336,47 @@ export function saveSessionState(state: Partial<SessionState>): void {
 }
 
 /**
- * Appends a runtime event entry to the session state
+ * Appends a runtime event to the append-only events log.
+ *
+ * CRITICAL: Does NOT touch COPILOT_SESSION_STATE.{json,md}. Previously this
+ * function did a load-merge-save cycle, which meant every heartbeat (1/min)
+ * was a chance to overwrite real state with defaults if the load hiccupped.
+ * That bug silently wiped session state for over a week. See guardrail #3.
  */
 export function appendSessionEvent(event: SessionEvent): void {
-  const state = loadSessionState();
+  try {
+    const line = JSON.stringify(event) + '\n';
+    appendFileSync(SESSION_EVENTS_LOG(), line, 'utf-8');
 
-  if (!state.runtime) {
-    state.runtime = { events: [] };
+    // Opportunistically trim — cheap when under cap.
+    trimEventsLogIfNeeded();
+  } catch (error) {
+    MollyLogger.error(
+      'Failed to append session event',
+      'session-manager',
+      {},
+      error
+    );
   }
-
-  state.runtime.events.push(event);
-
-  if (event.event === 'heartbeat') {
-    state.runtime.lastHeartbeat = event.timestamp;
-  }
-
-  if (event.url) {
-    state.runtime.lastUrl = event.url;
-  }
-
-  if (state.runtime.events.length > 50) {
-    state.runtime.events = state.runtime.events.slice(-50);
-  }
-
-  saveSessionState(state);
 }
 
 /**
- * Loads the last session state from disk
+ * Loads the last session state from disk.
+ *
+ * Returns the on-disk state when present and parseable. Falls back to
+ * getDefaultState() ONLY when both .json and .md are missing or unparseable.
+ * Runtime.events is hydrated from the append-only events log.
  */
 export function loadSessionState(): SessionState {
-  if (existsSync(SESSION_STATE_JSON)) {
-    try {
-      const jsonContent = readFileSync(SESSION_STATE_JSON, 'utf-8');
-      return JSON.parse(jsonContent) as SessionState;
-    } catch (error) {
-      console.error('[Session Manager] Failed to load JSON state:', error);
-    }
-  }
-
-  if (!existsSync(SESSION_STATE_FILE)) {
-    return getDefaultState();
-  }
-
-  try {
-    const content = readFileSync(SESSION_STATE_FILE, 'utf-8');
-    return parseMarkdownToState(content);
-  } catch (error) {
-    console.error('[Session Manager] Failed to load state:', error);
-    return getDefaultState();
-  }
+  const raw = loadSessionStateRaw() ?? getDefaultState();
+  const events = readRecentRuntimeEvents(50);
+  return {
+    ...raw,
+    runtime: {
+      ...(raw.runtime ?? {}),
+      events,
+    },
+  };
 }
 
 /**

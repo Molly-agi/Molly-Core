@@ -39,6 +39,7 @@ firestore-debug.log
 
 # Session backups (main session state files ARE tracked for recovery)
 .session-backups/
+.session-events.jsonl
 .codespace-heartbeat
 .watchdog.pid
 .watchdog-pulse
