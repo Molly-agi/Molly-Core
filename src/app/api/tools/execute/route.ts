@@ -21,7 +21,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { isAdminConfigured } from '@/firebase/admin';
-// import { enhancedResearchFlow } from '@/ai/flows/enhanced-research';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
 import { hasModularHandler } from '@/ai/agency/tool-handlers';
@@ -99,38 +98,10 @@ async function executeTool(
 
     case 'researchAndDiscover':
     case 'searchGitHub': {
-      const query = (params.query as string) || (params.prompt as string);
-      const _userId = (params.userId as string) || 'default';
-      if (!query) {
-        return {
-          success: false,
-          output: 'No query/prompt provided for research.',
-        };
-      }
-      try {
-        // Enhanced research endpoint deactivated. Reserved for future use.
-        // const result = await enhancedResearchFlow({ prompt: query, userId, effectiveMode: 'github' });
-        // ...endpoint logic deactivated...
-        let output = result.answer;
-        if (result.isToolFound && result.toolInfo) {
-          output += `\n\nTool Found: ${result.toolInfo.name || 'unnamed'}`;
-          if (result.toolInfo.description)
-            output += `\nDescription: ${result.toolInfo.description}`;
-          if (result.toolInfo.sourceUrl)
-            output += `\nURL: ${result.toolInfo.sourceUrl}`;
-          if (result.toolInfo.installCommand)
-            output += `\nInstall: ${result.toolInfo.installCommand}`;
-          if (result.toolInfo.cloneUrl)
-            output += `\nClone: ${result.toolInfo.cloneUrl}`;
-          output += '\n(Tool has been saved to your database automatically)';
-        }
-        return { success: true, output, data: result };
-      } catch (err) {
-        return {
-          success: false,
-          output: `Research failed: ${err instanceof Error ? err.message : 'unknown error'}`,
-        };
-      }
+      return {
+        success: false,
+        output: `The ${tool} tool is currently deactivated. Enhanced research flow is reserved for future use.`,
+      };
     }
 
     case 'apiVault': {
