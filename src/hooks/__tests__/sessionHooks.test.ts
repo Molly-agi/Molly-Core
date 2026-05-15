@@ -1,5 +1,16 @@
 // src/hooks/__tests__/sessionHooks.test.ts
 // Tests for session-scoped hook registration and execution
+jest.mock('child_process', () => ({
+  exec: jest.fn(
+    (
+      _command: string,
+      callback: (error: Error | null, stdout: string, stderr: string) => void
+    ) => {
+      callback(null, 'ok', '');
+    }
+  ),
+}));
+
 import {
   registerSessionHooks,
   unregisterSessionHooks,
