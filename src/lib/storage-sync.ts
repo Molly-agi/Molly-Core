@@ -16,6 +16,7 @@ import { LocalStorageProvider } from './local-storage-provider';
 import { getAdminFirestoreAsync } from '@/firebase/admin';
 import { MollyLogger } from '../ai/logger';
 import { getSyncSingletons, getSyncCollections } from './state-registry';
+import { sanitizeForFirestore } from './firestore-sanitizer';
 
 // ── Document Registry ────────────────────────────────────────────────────────
 //
@@ -89,10 +90,12 @@ async function writeToFirestore(
 ): Promise<void> {
   await firestoreCollection(db, collection)
     .doc(docId)
-    .set({
-      ...data,
-      _updatedAt: data._updatedAt ?? new Date().toISOString(),
-    });
+    .set(
+      sanitizeForFirestore({
+        ...data,
+        _updatedAt: data._updatedAt ?? new Date().toISOString(),
+      })
+    );
 }
 
 // ── Sync logic for a single (collection, docId) pair ────────────────────────
