@@ -1,142 +1,114 @@
 'use client';
 
 /**
- * @fileOverview Primary 3D avatar mesh driver for Molly's VRM model.
- * Drives morph-target facial expressions via AvatarStateBridge and kinematic
- * limb rotations via KinematicsCore, both updated inside the R3F render loop.
+ * @fileOverview Primary 3D avatar mesh driver for Molly's GLB bust model.
  *
- * Mount inside a <Canvas> from @react-three/fiber:
- *   <Canvas><MollyMesh vrmAsset={vrm} currentMood="ANALYTICAL" /></Canvas>
+ * Each render frame:
+ *   1. Asks AvatarDirector for a merged AvatarFrame (voice + robotics + network)
+ *   2. Drives neck bone pitch/yaw toward targets via lerp
+ *   3. Drives arm bones via KinematicsCore.calculateFromBones (GLB rig)
+ *   4. Applies FacialMorphOverrides to the SkinnedMesh morph targets
  *
- * FIXES vs original spec:
- *   • Import from '@react-three/fiber'  (not '/native' — that path is React Native only)
- *   • scene comes from state.scene      (was an undefined global reference)
- *   • 'use client' directive added      (required for hooks in Next.js App Router)
+ * Mount inside MollyCanvas — it manages <Canvas> and the Suspense boundary.
+ * Expects /public/models/molly.glb (Avaturn export, Mixamo rig by default).
  */
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { CircuitBreaker } from '@/ai/agency/security/CircuitBreaker';
-import {
-  AvatarStateBridge,
-  type CognitiveMood,
-  type FacialMorphOverrides,
-} from '@/ai/agency/embodied/AvatarStateBridge';
+import { useMollyGLB } from './useMollyGLB';
 import {
   KinematicsCore,
-  type ArmGestureIntent,
+  AVATURN_RIG,
+  type GLBRigMap,
 } from '@/ai/agency/embodied/KinematicsCore';
+import type { AvatarDirector } from '@/ai/agency/embodied/AvatarDirector';
+import type { FacialMorphOverrides } from '@/ai/agency/embodied/AvatarStateBridge';
+import type * as THREE from 'three';
 
-// Minimal VRM shape used by this component — keeps the prop type loose so
-// MollyMesh doesn't force a hard @pixiv/three-vrm import at the consumer level.
-interface VRMAsset {
-  scene: {
-    traverse: (callback: (node: unknown) => void) => void;
-  };
-  humanoid?: {
-    getRawBone: (
-      name: string
-    ) => { rotation: { x: number; y: number; z: number } } | null;
-  };
+/**
+ * Maps FacialMorphOverrides keys → actual morph target names baked into the GLB.
+ * Avaturn uses ARKit-style blendshape names. Update if your export differs.
+ */
+const MORPH_MAP: Partial<Record<keyof FacialMorphOverrides, string>> = {
+  jawOpen: 'jawOpen',
+  browInnerUp: 'browInnerUp',
+  browDownLeft: 'browDownLeft',
+  browDownRight: 'browDownRight',
+  eyeWideLeft: 'eyeWideLeft',
+  eyeWideRight: 'eyeWideRight',
+  mouthSmileLeft: 'mouthSmileLeft',
+  mouthSmileRight: 'mouthSmileRight',
+  mouthFunnel: 'mouthFunnel',
+};
+
+const LERP = 0.18;
+
+type BoneDict = Record<
+  string,
+  { rotation: { x: number; y: number; z: number } }
+>;
+
+function applyMorphs(
+  mesh: THREE.SkinnedMesh | null,
+  overrides: FacialMorphOverrides
+): void {
+  if (!mesh?.morphTargetInfluences || !mesh.morphTargetDictionary) return;
+
+  for (const [key, targetValue] of Object.entries(overrides) as [
+    keyof FacialMorphOverrides,
+    unknown,
+  ][]) {
+    if (typeof targetValue !== 'number') continue;
+    const morphName = MORPH_MAP[key];
+    if (!morphName) continue;
+    const index = mesh.morphTargetDictionary[morphName];
+    if (index === undefined) continue;
+    const current = mesh.morphTargetInfluences[index];
+    mesh.morphTargetInfluences[index] =
+      current + (targetValue - current) * LERP;
+  }
 }
+
+// --- Props ---
 
 interface MollyMeshProps {
-  vrmAsset: VRMAsset | null;
-  currentMood?: CognitiveMood;
+  director: AvatarDirector;
+  /** Override if your GLB uses bone names other than Avaturn/Mixamo defaults. */
+  rig?: GLBRigMap;
 }
 
-const LERP_FACTOR = 0.18;
+// --- Component ---
 
-function moodToIntent(mood: CognitiveMood): ArmGestureIntent {
-  if (mood === 'SUCCESS_FOUND') return 'AUTONOMOUS_CELEBRATION';
-  if (mood === 'ANALYTICAL') return 'ANALYSIS_TYPING';
-  return 'IDLE_SWA_BREATHE';
-}
+export function MollyMesh({ director, rig = AVATURN_RIG }: MollyMeshProps) {
+  const { scene, bones, skinnedMesh } = useMollyGLB();
 
-/** Apply a FacialMorphOverrides map to all meshes on the VRM scene. */
-function applyMorphTargets(
-  scene: VRMAsset['scene'],
-  overrides: FacialMorphOverrides,
-  lerpFactor: number
-): void {
-  scene.traverse((node: unknown) => {
-    const mesh = node as {
-      isMesh?: boolean;
-      morphTargetInfluences?: number[];
-      morphTargetDictionary?: Record<string, number>;
-    };
+  // Cache in refs so useFrame mutations don't touch hook return values directly.
+  const bonesRef = useRef<BoneDict>({});
+  const meshRef = useRef<THREE.SkinnedMesh | null>(null);
 
-    if (
-      !mesh.isMesh ||
-      !mesh.morphTargetInfluences ||
-      !mesh.morphTargetDictionary
-    ) {
-      return;
-    }
-
-    for (const [shapeName, targetValue] of Object.entries(overrides)) {
-      if (typeof targetValue !== 'number') continue;
-      const index = mesh.morphTargetDictionary[shapeName];
-      if (index === undefined) continue;
-      const current = mesh.morphTargetInfluences[index];
-      mesh.morphTargetInfluences[index] =
-        current + (targetValue - current) * lerpFactor;
-    }
-  });
-}
-
-export function MollyMesh({
-  vrmAsset,
-  currentMood = 'DEFAULT',
-}: MollyMeshProps) {
-  const prevNetworkState = useRef(
-    CircuitBreaker.getInstance().getNetworkState()
-  );
+  useEffect(() => {
+    bonesRef.current = bones as BoneDict;
+    meshRef.current = skinnedMesh;
+  }, [bones, skinnedMesh]);
 
   useFrame((state) => {
-    if (!vrmAsset?.scene || !vrmAsset.humanoid) return;
+    const time = state.clock.getElapsedTime();
+    const frame = director.getFrame(time);
+    const b = bonesRef.current;
 
-    const elapsedTime = state.clock.getElapsedTime();
-    const networkState = CircuitBreaker.getInstance().getNetworkState();
-
-    // Detect transition from CONNECTED → ISOLATED so AvatarStateBridge
-    // can seed its disconnectTimestamp correctly on the first isolated frame.
-    prevNetworkState.current = networkState;
-
-    // 1. Compute per-frame expression overrides
-    const overrides = AvatarStateBridge.getExpressionModifiers(
-      networkState,
-      currentMood,
-      elapsedTime
-    );
-
-    // 2. Drive neck bone for head lean and nod
-    const neckBone = vrmAsset.humanoid.getRawBone('neck');
-    if (neckBone) {
-      let targetNeckX = 0;
-      if (overrides.triggerNod) {
-        targetNeckX = Math.abs(Math.sin(elapsedTime * 6.5)) * 0.22;
-      } else if (networkState === 'ISOLATED_FALLBACK') {
-        targetNeckX = 0.15; // forward lean while computing locally
-      } else if (currentMood === 'ANALYTICAL') {
-        targetNeckX = 0.08; // subtle screen lean
-      }
-      neckBone.rotation.x += (targetNeckX - neckBone.rotation.x) * LERP_FACTOR;
+    // 1. Neck orientation
+    const neck = b[rig.neck];
+    if (neck) {
+      neck.rotation.x += (frame.neckPitch - neck.rotation.x) * LERP;
+      neck.rotation.y += (frame.neckYaw - neck.rotation.y) * LERP;
     }
 
-    // 3. Drive arm kinematics based on cognitive intent
-    KinematicsCore.calculateLimbVectors(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      vrmAsset as any,
-      moodToIntent(currentMood),
-      elapsedTime
-    );
+    // 2. Arm kinematics
+    KinematicsCore.calculateFromBones(b, rig, frame.intent, time);
 
-    // 4. Apply facial morph targets across every mesh in the scene
-    applyMorphTargets(vrmAsset.scene, overrides, LERP_FACTOR);
+    // 3. Facial morph targets
+    applyMorphs(meshRef.current, frame.morphOverrides);
   });
 
-  if (!vrmAsset) return null;
-
-  return <primitive object={vrmAsset.scene} />;
+  return <primitive object={scene} />;
 }
