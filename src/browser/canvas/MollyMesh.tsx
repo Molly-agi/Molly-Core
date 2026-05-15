@@ -125,8 +125,8 @@ export function MollyMesh({
     }
 
     // 3. Drive arm kinematics based on cognitive intent
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     KinematicsCore.calculateLimbVectors(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       vrmAsset as any,
       moodToIntent(currentMood),
       elapsedTime
