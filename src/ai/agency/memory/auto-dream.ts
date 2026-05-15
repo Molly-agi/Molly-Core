@@ -153,7 +153,9 @@ async function checkActivityGate(
 ): Promise<{ pass: boolean; reason: string }> {
   try {
     // Check for recent bridge messages
-    const response = await fetch('http://localhost:9002/api/bridge?limit=1');
+    const response = await fetch('http://localhost:9002/api/bridge?limit=1', {
+      headers: { 'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '' },
+    });
     if (!response.ok) {
       return { pass: true, reason: 'Bridge unavailable, assuming quiet' };
     }

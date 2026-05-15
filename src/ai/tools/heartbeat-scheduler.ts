@@ -955,7 +955,7 @@ export class HeartbeatScheduler {
 
           const res = await fetch(`${baseUrl}/api/tablet/commands`, {
             headers: {
-              'x-internal-token': process.env.INTERNAL_API_TOKEN || '',
+              'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
             },
             signal: AbortSignal.timeout(5000),
           });
@@ -981,7 +981,7 @@ export class HeartbeatScheduler {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
-                    'x-internal-token': process.env.INTERNAL_API_TOKEN || '',
+                    'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
                   },
                   body: JSON.stringify({
                     type: 'ping',

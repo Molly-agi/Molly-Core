@@ -328,7 +328,9 @@ async function executeTool(
         exportUrl.searchParams.set('userId', exportUserId);
 
         const res = await fetch(exportUrl.toString(), {
-          headers: { 'x-internal-key': process.env.INTERNAL_API_KEY || '' },
+          headers: {
+            'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
+          },
         });
 
         if (!res.ok) {
@@ -421,7 +423,7 @@ async function executeTool(
 
             const exportRes = await fetch(exportUrl.toString(), {
               headers: {
-                'x-internal-key': process.env.INTERNAL_API_KEY || '',
+                'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
               },
             });
             if (!exportRes.ok) {
