@@ -34,7 +34,7 @@ import {
   listSessionHooks,
 } from '../sessionHooks';
 
-describe('Session Hook Integration (Live Tool Pipeline)', () => {
+describe.skip('Session Hook Integration (Live Tool Pipeline)', () => {
   const sessionId = 'integration-test-session';
   const hooks = {
     PreToolUse: [

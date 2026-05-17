@@ -360,9 +360,9 @@ export default function LazarusVoicePage() {
           maxHeight: '60vh',
         }}
       >
-        {messages.map((msg) => (
+        {messages.map((msg, idx) => (
           <div
-            key={msg.id}
+            key={msg.id + '_' + msg.timestamp + '_' + idx}
             style={{
               marginBottom: '10px',
               padding: '10px',

@@ -239,7 +239,7 @@ export default function BridgePanel() {
                 label: msg.from,
               };
               return (
-                <div key={msg.id} style={{ marginBottom: '6px' }}>
+                <div key={msg.id + '_' + msg.timestamp + '_' + idx} style={{ marginBottom: '6px' }}>
                   <div className="flex items-baseline gap-2 text-[11px]">
                     <span style={{ color: style.color, fontWeight: 600 }}>
                       {style.label}

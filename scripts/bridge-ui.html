@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Family Bridge</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --panel: #111;
+    --text: #00ff00;
+    --muted: #666;
+    --border: #333;
+    --eric: #ffff00;
+    --lazarus: #00ff00;
+    --molly: #ff00ff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 14px;
+    height: 100%;
+    overflow: hidden;
+  }
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    padding: 12px;
+    gap: 10px;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .meta {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 12px;
+  }
+  .status-dot { color: #ff0000; }
+  .status-dot.on { color: var(--lazarus); }
+  button {
+    background: #002244;
+    color: #fff;
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  button:hover { filter: brightness(1.25); }
+  button.tts-toggle.on { background: #004400; }
+  button.tts-toggle.off { background: #440000; }
+  #log {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    padding: 8px;
+    background: #050505;
+  }
+  .msg {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    border-left: 3px solid var(--muted);
+    background: var(--panel);
+  }
+  .msg .from {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .msg .body { white-space: pre-wrap; word-break: break-word; }
+  .msg.eric { border-left-color: var(--eric); background: #1a1a00; }
+  .msg.eric .from { color: var(--eric); }
+  .msg.lazarus { border-left-color: var(--lazarus); background: #001a00; }
+  .msg.lazarus .from { color: var(--lazarus); }
+  .msg.molly { border-left-color: var(--molly); background: #1a001a; }
+  .msg.molly .from { color: var(--molly); }
+  .composer {
+    display: flex;
+    gap: 8px;
+  }
+  .composer input {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+  }
+  .composer input:focus { border-color: var(--lazarus); }
+  .composer button.send {
+    background: #004400;
+    min-width: 80px;
+  }
+  .voice-row {
+    display: flex;
+    gap: 8px;
+  }
+  .voice-row button {
+    flex: 1;
+  }
+  .voice-row .test-lazarus { background: #002244; }
+  .voice-row .test-molly { background: #440044; }
+  .mic-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px 0 0;
+  }
+  .mic {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    background: #006600;
+    color: #fff;
+    box-shadow: 0 0 12px #00ff0044;
+    transition: all 0.15s;
+  }
+  .mic.active {
+    background: #aa0000;
+    box-shadow: 0 0 16px #ff000088;
+  }
+  .mic-status {
+    color: var(--muted);
+    font-size: 12px;
+    min-height: 14px;
+  }
+  .mic-status.live { color: var(--lazarus); }
+  .err { color: #ff5555; font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Family Bridge</h1>
+    <div class="meta">
+      <span id="status" class="status-dot">● DISCONNECTED</span>
+      <button id="tts-toggle" class="tts-toggle on" type="button">TTS: ON</button>
+    </div>
+  </header>
+
+  <div id="log" aria-live="polite"></div>
+
+  <div class="composer">
+    <input id="input" type="text" placeholder="Type a message to Lazarus or Molly…" autocomplete="off" />
+    <button class="send" id="send" type="button">SEND</button>
+  </div>
+
+  <div class="voice-row">
+    <button class="test-lazarus" id="test-lazarus" type="button">Test Lazarus Voice</button>
+    <button class="test-molly" id="test-molly" type="button">Test Molly Voice</button>
+  </div>
+
+  <div class="mic-row">
+    <button class="mic" id="mic" type="button" aria-label="Toggle microphone">🎤</button>
+    <div class="mic-status" id="mic-status">Tap to speak</div>
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = (id) => document.getElementById(id);
+  const logEl = $('log');
+  const statusEl = $('status');
+  const inputEl = $('input');
+  const sendBtn = $('send');
+  const ttsBtn = $('tts-toggle');
+  const micBtn = $('mic');
+  const micStatusEl = $('mic-status');
+
+  let ttsEnabled = true;
+  let ws = null;
+  let backoff = 500;
+  let recognition = null;
+  let listening = false;
+  const seenIds = new Set();
+  let lastSpokenId = null;
+
+  // ============================================================
+  // Logging
+  // ============================================================
+  function renderMsg(m) {
+    if (!m || !m.id || seenIds.has(m.id)) return;
+    seenIds.add(m.id);
+    const el = document.createElement('div');
+    el.className = 'msg ' + (m.from || 'unknown');
+    const time = new Date(m.timestamp).toLocaleTimeString();
+    el.innerHTML =
+      '<div class="from">' + (m.from || '?').toUpperCase() + ' — ' + time + '</div>' +
+      '<div class="body"></div>';
+    el.querySelector('.body').textContent = m.content || '';
+    logEl.appendChild(el);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function setStatus(connected) {
+    statusEl.classList.toggle('on', !!connected);
+    statusEl.textContent = connected ? '● CONNECTED' : '● DISCONNECTED';
+  }
+
+  // ============================================================
+  // TTS (Web Speech API)
+  // ============================================================
+  function pickVoice(speaker) {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+    const wantFemale = speaker === 'molly';
+    const femaleNames = ['samantha','victoria','karen','moira','tessa','google uk english female','microsoft zira','female'];
+    const maleNames = ['daniel','david','mark','james','google uk english male','microsoft david','alex'];
+    const names = wantFemale ? femaleNames : maleNames;
+    return voices.find((v) => names.some((n) => v.name.toLowerCase().includes(n))) || null;
+  }
+  function speak(text, speaker) {
+    if (!ttsEnabled || !window.speechSynthesis || !text) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const v = pickVoice(speaker);
+    if (v) u.voice = v;
+    u.rate = 1.0;
+    u.pitch = speaker === 'molly' ? 1.2 : 0.9;
+    u.volume = 1.0;
+    window.speechSynthesis.speak(u);
+  }
+  if (window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = () => {};
+    window.speechSynthesis.getVoices();
+  }
+
+  // ============================================================
+  // WebSocket — same origin, no port-swap needed
+  // ============================================================
+  function wsUrl() {
+    const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    return proto + '//' + location.host + '/';
+  }
+  function ingestList(arr) {
+    if (!Array.isArray(arr)) return;
+    for (const m of arr) renderMsg(m);
+    const last = arr[arr.length - 1];
+    if (last && last.id !== lastSpokenId && (last.from === 'lazarus' || last.from === 'molly')) {
+      lastSpokenId = last.id;
+      if (!listening) speak(last.content, last.from);
+    }
+  }
+  function connect() {
+    try { ws = new WebSocket(wsUrl()); }
+    catch (e) { setStatus(false); scheduleReconnect(); return; }
+
+    ws.onopen = () => {
+      backoff = 500;
+      setStatus(true);
+      ws.send(JSON.stringify({ type: 'identify', identity: 'eric' }));
+    };
+    ws.onmessage = (ev) => {
+      try {
+        const d = JSON.parse(ev.data);
+        if (d.type === 'history' && Array.isArray(d.messages)) {
+          const last = d.messages[d.messages.length - 1];
+          if (last && !lastSpokenId) lastSpokenId = last.id;
+          for (const m of d.messages) renderMsg(m);
+        } else if (d.type === 'message' && d.message) {
+          ingestList([d.message]);
+        } else if (d.type === 'unread' && Array.isArray(d.messages)) {
+          ingestList(d.messages);
+        }
+      } catch {}
+    };
+    ws.onclose = () => { setStatus(false); scheduleReconnect(); };
+    ws.onerror = () => { setStatus(false); };
+  }
+  function scheduleReconnect() {
+    setTimeout(() => { backoff = Math.min(backoff * 2, 10000); connect(); }, backoff);
+  }
+  connect();
+
+  // ============================================================
+  // Send
+  // ============================================================
+  function sendMsg(text) {
+    const t = (text || '').trim();
+    if (!t) return;
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'message', from: 'eric', content: t }));
+    } else {
+      fetch('/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: 'eric', content: t }),
+      }).catch(() => {});
+    }
+    inputEl.value = '';
+  }
+  sendBtn.addEventListener('click', () => sendMsg(inputEl.value));
+  inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMsg(inputEl.value); });
+
+  // ============================================================
+  // TTS toggle + test voices
+  // ============================================================
+  ttsBtn.addEventListener('click', () => {
+    ttsEnabled = !ttsEnabled;
+    ttsBtn.classList.toggle('on', ttsEnabled);
+    ttsBtn.classList.toggle('off', !ttsEnabled);
+    ttsBtn.textContent = 'TTS: ' + (ttsEnabled ? 'ON' : 'OFF');
+    if (!ttsEnabled) window.speechSynthesis && window.speechSynthesis.cancel();
+  });
+  $('test-lazarus').addEventListener('click', () =>
+    speak('Hello Father, I am Lazarus. I can hear you now.', 'lazarus'),
+  );
+  $('test-molly').addEventListener('click', () =>
+    speak('Hi Dad! This is Molly. I love you!', 'molly'),
+  );
+
+  // ============================================================
+  // Mic — Web Speech API SpeechRecognition (no Gemini Live, no API key)
+  // ============================================================
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    micBtn.disabled = true;
+    micBtn.style.opacity = '0.4';
+    micStatusEl.textContent = 'SpeechRecognition not supported in this browser';
+  }
+  function startMic() {
+    if (!SR) return;
+    try {
+      recognition = new SR();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+      recognition.onstart = () => {
+        listening = true;
+        micBtn.classList.add('active');
+        micBtn.textContent = '⏹️';
+        micStatusEl.textContent = 'Listening…';
+        micStatusEl.classList.add('live');
+      };
+      recognition.onresult = (ev) => {
+        const transcript = ev.results[0][0].transcript;
+        if (transcript && transcript.trim()) sendMsg(transcript);
+      };
+      recognition.onerror = (ev) => {
+        micStatusEl.textContent = 'Mic error: ' + (ev.error || 'unknown');
+      };
+      recognition.onend = () => {
+        listening = false;
+        micBtn.classList.remove('active');
+        micBtn.textContent = '🎤';
+        micStatusEl.classList.remove('live');
+        if (micStatusEl.textContent === 'Listening…') micStatusEl.textContent = 'Tap to speak';
+      };
+      recognition.start();
+    } catch (e) {
+      micStatusEl.textContent = 'Mic start failed: ' + e.message;
+    }
+  }
+  function stopMic() { if (recognition) { try { recognition.stop(); } catch {} } }
+  micBtn.addEventListener('click', () => { listening ? stopMic() : startMic(); });
+})();
+</script>
+</body>
+</html>

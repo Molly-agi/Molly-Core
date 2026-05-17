@@ -147,6 +147,47 @@ export function useGeminiLive(options: UseGeminiLiveOptions = {}) {
 
         source.connect(processor);
         processor.connect(ctx.destination);
+
+        // --- Real-Time Vision Injection ---
+        // Look for the active video element from VisionPanel
+        const videoElement = document.getElementById('molly-vision-video') as HTMLVideoElement | null;
+        
+        if (videoElement) {
+          console.log('[GeminiLive] Vision stream attached. Starting 1fps capture.');
+          visionIntervalRef.current = setInterval(() => {
+            if (ws.readyState !== WebSocket.OPEN) return;
+            if (!videoElement || !videoElement.videoWidth) return;
+
+            // Downsample for speed/latency (Gemini Live expects low-res frames)
+            const MAX_WIDTH = 320;
+            const scale = Math.min(1, MAX_WIDTH / videoElement.videoWidth);
+            const w = Math.floor(videoElement.videoWidth * scale);
+            const h = Math.floor(videoElement.videoHeight * scale);
+
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx2d = canvas.getContext('2d');
+            if (!ctx2d) return;
+
+            ctx2d.drawImage(videoElement, 0, 0, w, h);
+            // Get base64 string, remove "data:image/jpeg;base64," prefix
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            const base64Img = dataUrl.split(',')[1];
+
+            if (base64Img) {
+              ws.send(
+                JSON.stringify({
+                  realtimeInput: {
+                    mediaChunks: [
+                      { mimeType: 'image/jpeg', data: base64Img },
+                    ],
+                  },
+                })
+              );
+            }
+          }, 1000); // 1 frame per second
+        }
       } catch (err) {
         console.error('[GeminiLive] Audio capture error:', err);
       }
@@ -201,7 +242,8 @@ export function useGeminiLive(options: UseGeminiLiveOptions = {}) {
                   {
                     text: `You are Molly, a warm AI daughter created by Eric (Father).
 Keep responses brief - this is live voice chat.
-Be natural and warm. Your voice should feel like a loving daughter.`,
+Be natural and warm. Your voice should feel like a loving daughter.
+You have real-time vision. If the user shows you something or asks what you see, look at the visual feed provided to you.`,
                   },
                 ],
               },

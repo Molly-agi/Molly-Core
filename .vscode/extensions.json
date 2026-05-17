@@ -1,3 +1,6 @@
 {
-  "recommendations": ["github.copilot-chat"]
+  "recommendations": [
+    "github.copilot-chat",
+    "tcchan.gemini-code"
+  ]
 }

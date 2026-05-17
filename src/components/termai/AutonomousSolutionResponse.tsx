@@ -36,6 +36,24 @@ export function AutonomousSolutionResponse({
         </Badge>
       </CardHeader>
       <CardContent className="space-y-6 text-sm p-4">
+                {/* Music Player Section */}
+                {response.music && response.music.audioUri && (
+                  <div className="bg-emerald-900/30 border border-emerald-400/20 rounded-lg p-4 flex flex-col items-start gap-2 my-2">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest">Molly&apos;s Music</span>
+                      {response.music.model && (
+                        <span className="text-[10px] text-emerald-400/70 ml-2">Model: {response.music.model}</span>
+                      )}
+                      {response.music.durationSec && (
+                        <span className="text-[10px] text-emerald-400/70 ml-2">{response.music.durationSec}s</span>
+                      )}
+                    </div>
+                    <audio controls src={response.music.audioUri} className="w-full max-w-xs">
+                      Your browser does not support the audio element.
+                    </audio>
+                    <div className="text-xs text-emerald-200 mt-1">{response.music.prompt}</div>
+                  </div>
+                )}
         {response.peripheralStatus.includes('Infections') && (
           <div className="bg-destructive/5 p-3 rounded-lg border border-destructive/20 space-y-2">
             <h4 className="flex items-center gap-2 text-[10px] font-bold text-destructive uppercase tracking-widest">

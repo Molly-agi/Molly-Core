@@ -22,7 +22,10 @@ import {
   isImmuneReport,
   isVisionReport,
   isBridgeMessage,
+  isMusicHistoryItem,
+  isVideoHistoryItem,
 } from './terminal-types';
+
 
 const COLLAPSE_THRESHOLD = 700;
 
@@ -51,6 +54,50 @@ export function ChatHistory({
       className="flex-1 p-4 bg-background/50 rounded-lg overflow-y-auto mb-6 border border-primary/10 shadow-inner scrollbar-none"
     >
       {history.map((line, index) => {
+        if (isMusicHistoryItem(line)) {
+          return (
+            <div
+              key={index}
+              className="bg-emerald-900/30 border border-emerald-400/20 rounded-lg p-4 flex flex-col items-start gap-2 my-2"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest">Molly&apos;s Music</span>
+                {line.model && (
+                  <span className="text-[10px] text-emerald-400/70 ml-2">Model: {line.model}</span>
+                )}
+                {line.durationSec && (
+                  <span className="text-[10px] text-emerald-400/70 ml-2">{line.durationSec}s</span>
+                )}
+              </div>
+              <audio controls src={line.audioUri} className="w-full max-w-xs">
+                Your browser does not support the audio element.
+              </audio>
+              <div className="text-xs text-emerald-200 mt-1">{line.prompt}</div>
+            </div>
+          );
+        }
+        if (isVideoHistoryItem(line)) {
+          return (
+            <div
+              key={index}
+              className="bg-emerald-900/30 border border-emerald-400/20 rounded-lg p-4 flex flex-col items-start gap-2 my-2"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-emerald-300 font-bold text-xs uppercase tracking-widest">Molly&apos;s Vision</span>
+                {line.model && (
+                  <span className="text-[10px] text-emerald-400/70 ml-2">Model: {line.model}</span>
+                )}
+                {line.durationSec && (
+                  <span className="text-[10px] text-emerald-400/70 ml-2">{line.durationSec}s</span>
+                )}
+              </div>
+              <video controls src={line.videoUri} className="w-full max-w-sm rounded-md shadow-lg border border-emerald-400/20">
+                Your browser does not support the video element.
+              </video>
+              <div className="text-xs text-emerald-200 mt-2">{line.prompt}</div>
+            </div>
+          );
+        }
         if (isScriptResponse(line))
           return <DownloadableScript key={index} response={line} />;
         if (isAutonomousSolution(line))

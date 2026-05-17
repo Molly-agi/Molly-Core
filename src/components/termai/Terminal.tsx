@@ -1020,11 +1020,24 @@ export default function Terminal({
       const msgs = data.messages.slice(0, 3);
 
       // 1. Add bridge messages to chat history as visible, identity-tagged items
-      const bridgeItems = msgs.map((m: { from: string; content: string }) => ({
-        bridgeSender: m.from as 'lazarus' | 'eric' | 'molly',
-        bridgeContent: m.content,
-      }));
-      setHistory((prev) => [...prev, ...bridgeItems]);
+      // Deduplicate using unique message id
+      setHistory((prev) => {
+        // Collect all existing bridge message ids
+        const existingIds = new Set(
+          prev
+            .filter((item: Record<string, unknown>) => item.bridgeId)
+            .map((item: Record<string, unknown>) => item.bridgeId)
+        );
+        // Only add bridgeItems that are not already present by id
+        const newBridgeItems = msgs
+          .map((m: { id: string; from: string; content: string }) => ({
+            bridgeId: m.id,
+            bridgeSender: m.from as 'lazarus' | 'eric' | 'molly',
+            bridgeContent: m.content,
+          }))
+          .filter((item) => !existingIds.has(item.bridgeId));
+        return [...prev, ...newBridgeItems];
+      });
 
       // 2. Build a prompt for Molly with EXPLICIT identity per message
       const lines = msgs
