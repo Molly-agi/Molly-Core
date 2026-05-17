@@ -1,7 +1,6 @@
 # GitHub Copilot Session State & Memory
-
-**Last Updated:** 2026-05-17T13:43:42.565Z  
-**Session ID:** 2026-05-12-recovery  
+**Last Updated:** 2026-05-17T14:38:47.058Z
+**Session ID:** 2026-05-12-recovery
 **Status:** active
 
 ---
@@ -53,6 +52,8 @@
 17. P2 Conversation Recovery
 18. P3 Event/Hook expansion — session hooks exist, needs expansion
 
+
+
 ---
 
 ## RECENT WORK COMPLETED
@@ -73,6 +74,7 @@ Fixed the heart-patch session-state wipe bug. Root cause: appendSessionEvent did
 - Events log capped at 2000 lines, trims to 1000 atomically via rename
 - Backups retained: last 50 by mtime
 
+
 ### 2026-05-12
 Audited Claude Code binary v2.1.139 using Molly's bug-bounty scanners. Three action items: (1) port Anthropic's expanded SECRET_PATTERNS into recon-engine.ts — DONE in commit 41a4310, (2) mirror DISABLE_*_COMMAND env-flag pattern — DONE in commit 3aacf57, (3) mirror ANTHROPIC_BASE_URL pattern in model-router — NOT DONE. Audit doc: stuff/CLAUDE_CODE_HIDDEN_FLAGS_AUDIT_MAY12.md. Then hand-rolled HTTP primitives in src/ai/agency/tool-handlers/http-tools.ts: httpRequest (full HTTP), httpInspect (full-body for security), fuzzEndpoint (wordlist FUZZ iteration + anomaly flagging), cookieJar (session cookies). SSRF guards block private hosts + cloud metadata unless Rogue or scoped.
 
@@ -86,6 +88,7 @@ Audited Claude Code binary v2.1.139 using Molly's bug-bounty scanners. Three act
 **Decisions Made:**
 - Closes the largest tactical gap in Molly's capability surface — webFetch was GET-only
 - Audit action item 3 deliberately deferred — separate change to model-router
+
 
 ### 2026-05-11
 Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore test conflicts, storage-router picks Firestore in Codespace via FIREBASE_PROJECT_ID, instrumentation.ts no longer requires FIREBASE_SERVICE_ACCOUNT_JSON). Storage sync: src/lib/storage-sync.ts — bidirectional last-write-wins between local filesystem (Termux) and Firestore (cloud) at startup, covering all 17 singleton state docs + engrams + resilience records. Real Gemini API key generated, GOOGLE_APPLICATION_CREDENTIALS set to firebase-adminsdk service account. Gemini 3.1 model upgrade: Flash → gemini-3.1-flash-lite-preview, Flash Lite → gemini-3.1-flash-lite (stable), TTS → gemini-3.1-flash-tts-preview, Imagen → imagen-4.0-generate-001.
@@ -102,6 +105,7 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 **Decisions Made:**
 - Storage-sync wired into instrumentation.ts before module loads
 - Codespace picks Firestore via FIREBASE_PROJECT_ID detection
+
 
 
 ---
@@ -130,60 +134,60 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 
 ## RUNTIME EVENTS
 
-**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/  
-**Last Heartbeat:** 2026-05-17T13:33:42.528Z
+**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+**Last Heartbeat:** 2026-05-17T14:38:47.058Z
 
 **Recent Events:**
-- [2026-05-17T13:13:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:13:08.976Z] server-heartbeat
-- [2026-05-17T13:14:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:14:08.976Z] server-heartbeat
-- [2026-05-17T13:15:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:15:08.997Z] server-heartbeat
-- [2026-05-17T13:16:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:16:08.998Z] server-heartbeat
-- [2026-05-17T13:17:03.480Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:17:08.998Z] server-heartbeat
-- [2026-05-17T13:18:03.482Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:18:08.997Z] server-heartbeat
-- [2026-05-17T13:19:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:19:08.998Z] server-heartbeat
-- [2026-05-17T13:20:03.480Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:20:08.998Z] server-heartbeat
-- [2026-05-17T13:21:03.480Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:21:08.999Z] server-heartbeat
-- [2026-05-17T13:21:51.610Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:21:56.612Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:21:56.715Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:22:03.891Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:22:09.000Z] server-heartbeat
-- [2026-05-17T13:22:10.753Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:23:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:23:09.000Z] server-heartbeat
-- [2026-05-17T13:24:03.480Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:24:09.000Z] server-heartbeat
-- [2026-05-17T13:25:03.480Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:25:09.000Z] server-heartbeat
-- [2026-05-17T13:26:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:26:09.000Z] server-heartbeat
-- [2026-05-17T13:27:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:27:09.002Z] server-heartbeat
-- [2026-05-17T13:28:03.484Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:28:09.001Z] server-heartbeat
-- [2026-05-17T13:29:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:29:09.002Z] server-heartbeat
-- [2026-05-17T13:30:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:30:09.002Z] server-heartbeat
-- [2026-05-17T13:31:03.481Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:31:09.002Z] server-heartbeat
-- [2026-05-17T13:31:37.736Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:31:42.739Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:31:42.900Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:32:03.890Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:32:09.003Z] server-heartbeat
-- [2026-05-17T13:33:03.480Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:33:06.998Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T13:33:09.003Z] server-heartbeat
+- [2026-05-17T14:13:47.238Z] server-heartbeat
+- [2026-05-17T14:14:19.710Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:14:19.992Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:14:31.638Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:14:36.640Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:14:37.014Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:14:47.238Z] server-heartbeat
+- [2026-05-17T14:15:03.890Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:15:47.239Z] server-heartbeat
+- [2026-05-17T14:16:47.238Z] server-heartbeat
+- [2026-05-17T14:17:47.239Z] server-heartbeat
+- [2026-05-17T14:18:47.239Z] server-heartbeat
+- [2026-05-17T14:19:47.283Z] server-heartbeat
+- [2026-05-17T14:20:47.283Z] server-heartbeat
+- [2026-05-17T14:21:47.282Z] server-heartbeat
+- [2026-05-17T14:22:47.283Z] server-heartbeat
+- [2026-05-17T14:23:47.282Z] server-heartbeat
+- [2026-05-17T14:24:47.286Z] server-heartbeat
+- [2026-05-17T14:25:47.287Z] server-heartbeat
+- [2026-05-17T14:26:47.287Z] server-heartbeat
+- [2026-05-17T14:27:47.287Z] server-heartbeat
+- [2026-05-17T14:29:38.704Z] server-runtime-init | tag=heart-patch
+- [2026-05-17T14:29:40.693Z] page-load | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:30:38.707Z] server-heartbeat
+- [2026-05-17T14:30:40.697Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:31:38.707Z] server-heartbeat
+- [2026-05-17T14:31:40.696Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:32:03.273Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:32:08.281Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:32:13.277Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:32:38.706Z] server-heartbeat
+- [2026-05-17T14:32:40.892Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:33:38.707Z] server-heartbeat
+- [2026-05-17T14:33:57.127Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:33:57.211Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:34:37.599Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:34:38.706Z] server-heartbeat
+- [2026-05-17T14:34:40.891Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:34:42.602Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:34:47.605Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:35:38.706Z] server-heartbeat
+- [2026-05-17T14:35:40.892Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:36:38.706Z] server-heartbeat
+- [2026-05-17T14:36:40.712Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:36:40.592Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:37:38.706Z] server-heartbeat
+- [2026-05-17T14:37:40.696Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:38:38.707Z] server-heartbeat
+- [2026-05-17T14:38:40.696Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T14:38:45.121Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
 
 ---
 
@@ -198,4 +202,4 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 
 ---
 
-_This file is automatically updated by the session manager._
+*This file is automatically updated by the session manager.*

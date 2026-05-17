@@ -299,6 +299,7 @@ export class WiFiCSISensor extends EventEmitter {
   private connectedDevices: Map<string, ConnectedDevice> = new Map();
   private scanInterval: NodeJS.Timeout | null = null;
   private routerPollInterval: NodeJS.Timeout | null = null;
+  private androidScanFailureLogged: boolean = false;
 
   constructor(config: Partial<WiFiSensorConfig> = {}) {
     super();
@@ -814,9 +815,17 @@ export class WiFiCSISensor extends EventEmitter {
           }
         }
       } catch (error) {
-        MollyLogger.debug('Android scan failed, using simulation', 'wifi-csi', {
-          error,
-        });
+        // Only log the first scan failure to avoid log spam
+        if (!this.androidScanFailureLogged) {
+          MollyLogger.debug(
+            'WiFi/Android scan unavailable, using simulation',
+            'wifi-csi',
+            {
+              error,
+            }
+          );
+          this.androidScanFailureLogged = true;
+        }
         const reading = this.generateSimulatedReading();
         reading.source = 'android:simulated';
         this.processReading(reading);

@@ -69,7 +69,12 @@ export function readAllMemories(): LocalMemory[] {
   const memories: LocalMemory[] = [];
 
   if (!fs.existsSync(MOLLY_MEMORY_DIR)) {
-    MollyLogger.warn('Memory directory not found', 'local-memory');
+    // Create memory directory if it doesn't exist
+    try {
+      fs.mkdirSync(MOLLY_MEMORY_DIR, { recursive: true });
+    } catch {
+      MollyLogger.debug('Could not create memory directory', 'local-memory');
+    }
     return memories;
   }
 
