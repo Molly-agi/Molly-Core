@@ -145,7 +145,7 @@ export function useTTS({ isVocal, voiceName }: UseTTSOptions): UseTTSReturn {
       try {
         await audio.play();
         setAutoplayBlocked(false);
-      } catch (_error) {
+      } catch {
         setAutoplayBlocked(true);
         setIsVocalizing(false);
       }

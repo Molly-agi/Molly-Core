@@ -32,6 +32,7 @@ export const videoGenerationFlow = ai.defineFlow({
       videoConfig: {
         durationSeconds: durationSec || 5,
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any, 
   });
 

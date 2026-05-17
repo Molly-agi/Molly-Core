@@ -1,3 +1,5 @@
+'use server';
+
 /**
  * Family Bridge — Molly ↔ Lazarus Communication Channel
  *
@@ -167,11 +169,6 @@ export async function markMessagesRead(
     if (count > 0) await writeFile(state);
     return count;
   });
-}
-
-export async function getRecentMessages(limit = 20): Promise<BridgeMessage[]> {
-  const state = await readFile();
-  return state.messages.slice(-limit);
 }
 
 export async function clearConversation(): Promise<void> {

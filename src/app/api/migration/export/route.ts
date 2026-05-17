@@ -183,7 +183,6 @@ export async function GET(request: NextRequest) {
         'text-to-speech',
         'voice-command-to-text',
         'visionary-coach',
-        'moltbook-social',
       ],
     };
   }
