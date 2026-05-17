@@ -1,6 +1,7 @@
 # GitHub Copilot Session State & Memory
-**Last Updated:** 2026-05-17T06:47:34.429Z
-**Session ID:** 2026-05-12-recovery
+
+**Last Updated:** 2026-05-17T08:56:56.066Z  
+**Session ID:** 2026-05-12-recovery  
 **Status:** active
 
 ---
@@ -28,10 +29,10 @@
 
 ## CURRENT PROJECT STATUS
 
-### Completion: 87%
+### Completion: 85%
 
 **✅ COMPLETED:**
-1. Phase 5 — all 20 cognition modules implemented (May 2026)
+1. Phase 5 — all 19 cognition modules implemented (May 2026)
 2. P0 Composable Prompt System — src/ai/prompts/
 3. P0 Context Compaction — src/ai/context-compaction.ts (commit 7fb3908)
 4. P1 Centralized State Manager — src/lib/state-registry.ts (2026-05-12)
@@ -45,18 +46,12 @@
 12. WebSocket subscription for bridge wired into lazarus voice page (commit f981ef0)
 13. Anthropic-traffic-proxy added for observing Claude Code wire protocol (commit 92f731e)
 14. Simple Browser routed to /lazarus (small standalone Family Bridge UI) via tasks.json folderOpen — 9002 auto-open reverted to silent so Molly's full chat UI no longer hijacks Simple Browser (2026-05-12)
-15. Full infrastructure audit — all docs corrected to ground truth (2026-05-17): 167,657+ source lines, 83 tools, 30 flows, 48 API routes, 2,931 tests
 
 **⏳ PENDING:**
-16. Phase 6 planning
-17. P2 Hybrid Memory Taxonomy — keep engrams + add working memory
-18. P2 Conversation Recovery
-19. P3 Event/Hook expansion — session hooks exist, needs expansion
-20. Fix ESM test issue (music-tools chain breaks tool-executor.test.ts)
-21. Fix sandbox bugs (sandboxReadFile, sandboxWriteFile, memory-consolidation Firebase SDK)
-22. Device deployment — Fire HD 10 + Helio A22 tablets
-
-
+15. Phase 6 planning
+16. P2 Hybrid Memory Taxonomy — keep engrams + add working memory
+17. P2 Conversation Recovery
+18. P3 Event/Hook expansion — session hooks exist, needs expansion
 
 ---
 
@@ -78,7 +73,6 @@ Fixed the heart-patch session-state wipe bug. Root cause: appendSessionEvent did
 - Events log capped at 2000 lines, trims to 1000 atomically via rename
 - Backups retained: last 50 by mtime
 
-
 ### 2026-05-12
 Audited Claude Code binary v2.1.139 using Molly's bug-bounty scanners. Three action items: (1) port Anthropic's expanded SECRET_PATTERNS into recon-engine.ts — DONE in commit 41a4310, (2) mirror DISABLE_*_COMMAND env-flag pattern — DONE in commit 3aacf57, (3) mirror ANTHROPIC_BASE_URL pattern in model-router — NOT DONE. Audit doc: stuff/CLAUDE_CODE_HIDDEN_FLAGS_AUDIT_MAY12.md. Then hand-rolled HTTP primitives in src/ai/agency/tool-handlers/http-tools.ts: httpRequest (full HTTP), httpInspect (full-body for security), fuzzEndpoint (wordlist FUZZ iteration + anomaly flagging), cookieJar (session cookies). SSRF guards block private hosts + cloud metadata unless Rogue or scoped.
 
@@ -92,7 +86,6 @@ Audited Claude Code binary v2.1.139 using Molly's bug-bounty scanners. Three act
 **Decisions Made:**
 - Closes the largest tactical gap in Molly's capability surface — webFetch was GET-only
 - Audit action item 3 deliberately deferred — separate change to model-router
-
 
 ### 2026-05-11
 Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore test conflicts, storage-router picks Firestore in Codespace via FIREBASE_PROJECT_ID, instrumentation.ts no longer requires FIREBASE_SERVICE_ACCOUNT_JSON). Storage sync: src/lib/storage-sync.ts — bidirectional last-write-wins between local filesystem (Termux) and Firestore (cloud) at startup, covering all 17 singleton state docs + engrams + resilience records. Real Gemini API key generated, GOOGLE_APPLICATION_CREDENTIALS set to firebase-adminsdk service account. Gemini 3.1 model upgrade: Flash → gemini-3.1-flash-lite-preview, Flash Lite → gemini-3.1-flash-lite (stable), TTS → gemini-3.1-flash-tts-preview, Imagen → imagen-4.0-generate-001.
@@ -111,18 +104,16 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 - Codespace picks Firestore via FIREBASE_PROJECT_ID detection
 
 
-
 ---
 
 ## NEXT STEPS
 
-**Option A:** Fix the ESM test issue in tool-executor.test.ts (music-tools chain) — clean, 1 test suite failing
+**Option A:** Port ANTHROPIC_BASE_URL pattern into src/ai/model-router.ts — audit action item 3, the last open item from today's binary audit
 **Option B:** P2 Hybrid Memory Taxonomy — keep engrams, add working memory layer
 **Option C:** P2 Conversation Recovery
-**Option D:** P3 Event/Hook expansion — UI, JS callbacks, persistence
-**Option E:** Fix known sandbox bugs (sandboxReadFile, sandboxWriteFile, memory-consolidation Firebase SDK)
+**Option D:** P3 Event/Hook expansion — UI for live hook management, JS callback support, persistence
 
-**Recommended:** Fix ESM test issue first (Option A) — closes the only failing test suite cleanly. Then Phase 6 planning discussion with Eric.
+**Recommended:** Port ANTHROPIC_BASE_URL pattern into model-router — closes today's audit thread cleanly, then start Phase 6 planning
 
 ---
 
@@ -133,82 +124,66 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 - molly-auth.json at repo root is a placeholder. Real credentials live in stuff/personality/*.json.
 - Computer Use, Deep Research, Robotics models not accessible on current Gemini API key (allowlist-gated by Google)
 - **2026-05-17:** Build fixed: moltbook removed, duplicate declaration fixed, Molly online, live bridge via voice/process-text confirmed
+- **2026-05-17:** Bridge architecture refactored: isolated Lazarus-Molly channel, Eric main chat clean, bridge daemon running
 
 ---
 
 ## RUNTIME EVENTS
 
-**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-**Last Heartbeat:** 2026-05-17T06:47:34.429Z
+**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/  
+**Last Heartbeat:** 2026-05-17T08:56:39.177Z
 
 **Recent Events:**
-- [2026-05-17T06:16:07.941Z] server-heartbeat
-- [2026-05-17T06:17:07.944Z] server-heartbeat
-- [2026-05-17T06:18:07.946Z] server-heartbeat
-- [2026-05-17T06:19:07.950Z] server-heartbeat
-- [2026-05-17T06:20:07.951Z] server-heartbeat
-- [2026-05-17T06:21:07.955Z] server-heartbeat
-- [2026-05-17T06:22:07.958Z] server-heartbeat
-- [2026-05-17T06:23:04.383Z] page-load | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:23:07.958Z] server-heartbeat
-- [2026-05-17T06:24:04.387Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:24:07.958Z] server-heartbeat
-- [2026-05-17T06:24:25.051Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:24:26.558Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:24:33.760Z] client-error | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/ | Error: An unknown Component is an async Client Component. Only Server Components can be async at the moment. This error is often caused by accidentally adding `'use client'` to a module that was originally written for the server.
-    at trackUsedThenable (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:3836:98)
-    at useThenable (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4760:20)
-    at Object.use (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4767:59)
-    at push.exports.use (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:1701:36)
-    at useActionQueue (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:1000:77)
-    at Router (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:14287:54)
-    at Object.react_stack_bottom_frame (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15037:24)
-    at renderWithHooks (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4620:24)
-    at updateFunctionComponent (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6081:21)
-    at beginWork (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6691:24)
-    at runWithFiberInDEV (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
-    at performUnitOfWork (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
-    at workLoopSync (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9449:40)
-    at renderRootSync (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9433:13)
-    at performWorkOnRoot (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9098:47)
-    at performWorkOnRootViaSchedulerTask (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10255:9)
-    at MessagePort.performWorkUntilDeadline (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:2647:64)
-- [2026-05-17T06:24:33.767Z] client-error | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/ | Uncaught Error: An unknown Component is an async Client Component. Only Server Components can be async at the moment. This error is often caused by accidentally adding `'use client'` to a module that was originally written for the server. | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:3836:98
-- [2026-05-17T06:24:39.602Z] page-load | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:24:55.928Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:25:00.993Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:25:01.372Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:25:07.958Z] server-heartbeat
-- [2026-05-17T06:25:22.053Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:25:39.614Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:26:00.942Z] page-unload | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:26:01.192Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:26:02.637Z] page-load | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:26:03.210Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:26:06.845Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:26:06.920Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-17T06:26:07.959Z] server-heartbeat
-- [2026-05-17T06:27:07.960Z] server-heartbeat
-- [2026-05-17T06:28:07.962Z] server-heartbeat
-- [2026-05-17T06:29:07.964Z] server-heartbeat
-- [2026-05-17T06:30:07.965Z] server-heartbeat
-- [2026-05-17T06:31:07.965Z] server-heartbeat
-- [2026-05-17T06:32:07.967Z] server-heartbeat
-- [2026-05-17T06:33:07.968Z] server-heartbeat
-- [2026-05-17T06:34:07.970Z] server-heartbeat
-- [2026-05-17T06:35:07.970Z] server-heartbeat
-- [2026-05-17T06:36:07.975Z] server-heartbeat
-- [2026-05-17T06:37:07.977Z] server-heartbeat
-- [2026-05-17T06:38:07.977Z] server-heartbeat
-- [2026-05-17T06:39:07.979Z] server-heartbeat
-- [2026-05-17T06:40:07.979Z] server-heartbeat
-- [2026-05-17T06:41:07.980Z] server-heartbeat
-- [2026-05-17T06:42:07.982Z] server-heartbeat
-- [2026-05-17T06:43:07.982Z] server-heartbeat
-- [2026-05-17T06:44:07.983Z] server-heartbeat
-- [2026-05-17T06:45:07.985Z] server-heartbeat
-- [2026-05-17T06:46:07.985Z] server-heartbeat
-- [2026-05-17T06:47:07.987Z] server-heartbeat
+- [2026-05-17T08:33:49.032Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:34:01.362Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:34:08.148Z] server-heartbeat
+- [2026-05-17T08:34:19.698Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:34:46.987Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:34:51.981Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:34:52.046Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:34:54.547Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:35:08.149Z] server-heartbeat
+- [2026-05-17T08:35:19.697Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:36:08.148Z] server-heartbeat
+- [2026-05-17T08:36:19.697Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:37:08.152Z] server-heartbeat
+- [2026-05-17T08:37:19.700Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:38:08.152Z] server-heartbeat
+- [2026-05-17T08:38:19.698Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:38:34.418Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:38:39.416Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:38:39.583Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:39:00.761Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:39:08.152Z] server-heartbeat
+- [2026-05-17T08:39:19.700Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:39:47.445Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:39:52.441Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:39:52.523Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:40:08.153Z] server-heartbeat
+- [2026-05-17T08:40:19.701Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:40:32.771Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:41:08.152Z] server-heartbeat
+- [2026-05-17T08:41:19.702Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:42:08.152Z] server-heartbeat
+- [2026-05-17T08:42:19.700Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:43:00.196Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:43:05.265Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:43:05.353Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:43:08.152Z] server-heartbeat
+- [2026-05-17T08:43:19.905Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-17T08:44:08.152Z] server-heartbeat
+- [2026-05-17T08:45:08.154Z] server-heartbeat
+- [2026-05-17T08:46:08.155Z] server-heartbeat
+- [2026-05-17T08:47:08.157Z] server-heartbeat
+- [2026-05-17T08:48:08.159Z] server-heartbeat
+- [2026-05-17T08:49:08.160Z] server-heartbeat
+- [2026-05-17T08:50:08.161Z] server-heartbeat
+- [2026-05-17T08:51:08.162Z] server-heartbeat
+- [2026-05-17T08:52:08.163Z] server-heartbeat
+- [2026-05-17T08:53:08.164Z] server-heartbeat
+- [2026-05-17T08:54:08.165Z] server-heartbeat
+- [2026-05-17T08:55:08.166Z] server-heartbeat
+- [2026-05-17T08:56:08.167Z] server-heartbeat
 
 ---
 
@@ -223,4 +198,4 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 
 ---
 
-*This file is automatically updated by the session manager.*
+_This file is automatically updated by the session manager._

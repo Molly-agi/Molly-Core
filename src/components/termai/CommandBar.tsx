@@ -111,8 +111,10 @@ export function CommandBar({
   onClearHistory,
   onFileUpload,
   uploadedFile,
-  onClearUpload,
-}: CommandBarProps) {
+  onClearUpload,  bridgeMode = false,
+  onBridgeModeToggle,
+  onBridgeSend,
+  bridgeConnected = false,}: CommandBarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isProcessingFile, setIsProcessingFile] = useState(false);
 
@@ -261,6 +263,8 @@ export function CommandBar({
           )}
         </div>
       )}
+
+      {/* Bridge mode indicator removed */}
 
       <form onSubmit={onSubmit} className="relative mt-auto">
         <div className="flex gap-2">

@@ -8,39 +8,66 @@ import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { MollyLogger } from '../logger';
 
+const MAX_RETRIES = 2;
+const RETRY_DELAY_MS = 1000;
+
+async function generateMusicWithRetry(prompt: string, attempt = 1): Promise<{
+  audioUri: string;
+  model?: string;
+}> {
+  try {
+    MollyLogger.info(`[Music] Attempt ${attempt}: Generating music: ${prompt}`);
+    
+    const response = await molly.generate(TaskType.MUSIC, {
+      prompt,
+    });
+    
+    if (!response.media || !response.media.url) {
+      MollyLogger.error('[Music] No media URL in response', 'musicGeneration', {
+        hasMedia: !!response.media,
+        response: JSON.stringify(response).substring(0, 200),
+      });
+      throw new Error('Molly: Music generation returned no audio URL.');
+    }
+    
+    return {
+      audioUri: response.media.url,
+      model: response.model,
+    };
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    
+    // If it's a timeout and we have retries left, retry
+    if ((errorMsg.includes('timeout') || errorMsg.includes('DEADLINE') || errorMsg.includes('policy')) && attempt < MAX_RETRIES) {
+      MollyLogger.info(`[Music] Timeout on attempt ${attempt}, retrying in ${RETRY_DELAY_MS}ms...`);
+      await new Promise(r => setTimeout(r, RETRY_DELAY_MS));
+      return generateMusicWithRetry(prompt, attempt + 1);
+    }
+    
+    // Otherwise, enhance the error message and rethrow
+    if (errorMsg.includes('policy')) {
+      throw new Error(`Music API policy block: "${errorMsg}". This might be a content filter. Try a simpler prompt.`);
+    }
+    if (errorMsg.includes('timeout') || errorMsg.includes('DEADLINE')) {
+      throw new Error(`Music generation timed out after ${attempt} attempts. System might be busy. Try a shorter prompt.`);
+    }
+    throw error;
+  }
+}
+
 export const musicGenerationFlow = ai.defineFlow({
   name: 'musicGeneration',
   inputSchema: z.object({
     prompt: z.string().describe('Music prompt (style, mood, etc.)'),
-    durationSec: z.number().min(1).max(300).optional().describe('Desired duration in seconds'),
   }),
   outputSchema: z.object({
-    audioUri: z.string().describe('Base64-encoded audio file (e.g., WAV/MP3)'),
+    audioUri: z.string().describe('Base64-encoded audio data URI (WAV/MP3)'),
     model: z.string().optional(),
-    durationSec: z.number().optional(),
   }),
-}, async ({ prompt, durationSec }) => {
-  MollyLogger.info(`[Music] Generating music: ${prompt}`);
-  const response = await molly.generate(TaskType.MUSIC, {
-    prompt,
-    config: {
-      responseModalities: ['AUDIO'],
-      musicConfig: {
-        durationSeconds: durationSec || 30,
-      },
-    },
-  });
-  if (!response.media || !response.media.url) {
-    throw new Error('Molly: Music generation failed.');
-  }
-  // Assume response.media.url is a data URI (base64 audio)
-  return {
-    audioUri: response.media.url,
-    model: response.model,
-    durationSec: durationSec || 30,
-  };
+}, async ({ prompt }) => {
+  return await generateMusicWithRetry(prompt);
 });
 
-export async function generateMusic(prompt: string, durationSec?: number) {
-  return await musicGenerationFlow({ prompt, durationSec });
+export async function generateMusic(prompt: string) {
+  return await musicGenerationFlow({ prompt });
 }
