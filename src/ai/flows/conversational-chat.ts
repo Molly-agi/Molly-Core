@@ -161,7 +161,7 @@ const conversationalChatFlow = ai.defineFlow(
               deployment: 'cloud', // Codespace/Firebase deployment
               isRogueMode: rogueActive,
               includeTools: true,
-              includeFamily: true,
+              includeFamily: !isTeachingMode, // Suppress family knowledge during teaching
             },
             {
               memoryContext,
