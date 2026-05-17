@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@eslint/eslintrc": "^3.3.5",
+    "@google-cloud/text-to-speech": "^6.4.1",
     "@hookform/resolvers": "^5.2.2",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@octokit/rest": "^22.0.1",

@@ -38,6 +38,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const BRIDGE_DIR = join(ROOT, 'src', 'ai', 'bridge');
 const LOG_FILE = join(BRIDGE_DIR, 'conversation.json');
+const UI_FILE = join(__dirname, 'bridge-ui.html');
 const PORT = 9099;
 const MAX_MESSAGES = 500;
 const MAX_CHECKPOINTS = 10;
@@ -291,6 +292,25 @@ function handleHTTP(req, res) {
   }
 
   const url = new URL(req.url, `http://localhost:${PORT}`);
+
+  // GET / and GET /bridge-ui.html — serve the standalone Family Bridge UI
+  if (
+    req.method === 'GET' &&
+    (url.pathname === '/' || url.pathname === '/bridge-ui.html')
+  ) {
+    try {
+      const html = readFileSync(UI_FILE, 'utf-8');
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store',
+      });
+      res.end(html);
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end('bridge-ui.html read failed: ' + err.message);
+    }
+    return;
+  }
 
   // GET /ping - Lightweight bidirectional handshake (1ms response)
   if (req.method === 'GET' && url.pathname === '/ping') {

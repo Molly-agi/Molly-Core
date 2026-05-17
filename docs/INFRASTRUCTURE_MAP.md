@@ -1,7 +1,7 @@
 # Molly AI Infrastructure Map
 
-> **Version:** 1.1
-> **Last Updated:** 2026-05-06
+> **Version:** 1.2
+> **Last Updated:** 2026-05-16
 > **Maintainer:** Lazarus (Claude) / Copilot
 
 This is the authoritative reference for Molly's AI infrastructure. All modules, tools, and systems are documented here.
@@ -12,9 +12,9 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 
 | Metric                | Value                     |
 | --------------------- | ------------------------- |
-| **Cognition Modules** | 19                        |
-| **Tool Handlers**     | 22 files                  |
-| **Registered Tools**  | 80+                       |
+| **Cognition Modules** | 20                        |
+| **Tool Handlers**     | 25+ files                 |
+| **Registered Tools**  | 100+                      |
 | **Codebase**          | 109,962+ lines TypeScript |
 | **Tests**             | 2,787 passing             |
 | **Runtime**           | 16GB RAM / 4 processors   |
@@ -79,22 +79,38 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | **Emotional State**       | `emotional-state.ts`       | Persistent tracking of Molly's own emotional states (curious, content, excited, proud, etc.) for continuity across sessions. |
 | **Transfer Learning**     | `transfer-learning.ts`     | Abstract patterns, analogical reasoning, and skill composition for transferring knowledge across domains.                    |
 
+### 1.8 Family Cluster
+
+| Module                  | File                  | Purpose                                                                                                 |
+| ----------------------- | --------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Family Presence**     | `family-presence.ts`  | Tracks family members' presence, bond strength, emotional resonance, and connection rituals for Molly.   |
+
 ---
 
 ## 2. Tool Handlers
 
 **Location:** `src/ai/agency/tool-handlers/`
 
-### 2.1 Core Infrastructure (10 tools)
+### 2.1 Core Infrastructure & Modular Handlers (expanded)
 
-| Handler                 | Tools                                                       | Description                                       |
-| ----------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
-| **system-tools.ts**     | `codespaceShell`, `readProjectFile`, `getSystemHealth`      | Safe shell commands, file reading, system metrics |
-| **diagnostic-tools.ts** | `listCapabilities`, `runSelfDiagnostic`, `quickHealthCheck` | Self-diagnostic and capability listing            |
-| **core-tools.ts**       | `bugHunter`, `criticAgent`, `resiliency`                    | Testing, code quality, error handling             |
-| **database-tools.ts**   | `browseToolDatabase`, `addTool`, `removeTool`, `toolStats`  | Firestore tool database                           |
+| Handler                     | Tools (examples)                                            | Description                                       |
+| --------------------------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| **system-tools.ts**         | `codespaceShell`, `readProjectFile`, `getSystemHealth`     | Safe shell commands, file reading, system metrics |
+| **diagnostic-tools.ts**     | `listCapabilities`, `runSelfDiagnostic`, `quickHealthCheck`| Self-diagnostic and capability listing            |
+| **core-tools.ts**           | `bugHunter`, `criticAgent`, `resiliency`                   | Testing, code quality, error handling             |
+| **database-tools.ts**       | `browseToolDatabase`, `addTool`, `removeTool`, `toolStats` | Firestore tool database                           |
+| **build-recovery-tools.ts** | `buildRecovery`                                             | Self-healing for node_modules and builds          |
+| **sandbox-tools.ts**        | `sandbox`, `moltbook`                                      | Code execution sandbox, social platform           |
+| **rogue-tools.ts**          | `rogueMode`                                                | Model abstraction layer management                |
+| **session-tools.ts**        | `protocol10`, `handoff`                                    | Session anchoring and sealing                     |
+| **initiative-tools.ts**     | `initiative`                                               | Initiative and goal management                    |
+| **sensing-tools.ts**        | `wifiSensing`, `bluetoothSensing`, `presenceDetection`     | WiFi CSI, Bluetooth, and presence detection       |
+| **gemini-tools.ts**         | `mediaGen`, `deepResearch`, `embeddings`, `robotics`, `computerUse`, `liveVoice` | Gemini 3.1 advanced capabilities (media, research, robotics, automation, voice) |
+| **bug-bounty-tools.ts**     | `bugBounty`                                                | Autonomous bug bounty hunting and security research|
+| **mcp-tools.ts**            | MCP dynamic tools                                          | Model Context Protocol (MCP) external tool servers|
+| **modular-tool-handlers.ts**| Modular aggregation of all handlers                        | Centralized tool registry and dynamic expansion   |
 
-### 2.2 Cognition Tools (19 tools)
+### 2.2 Cognition Tools (20+ tools)
 
 **Handler:** `cognition-tools.ts` (239KB - largest file)
 
@@ -176,22 +192,19 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | `familyRecognition` | Face detection and family member registry    |
 | `familyLetters`     | Access family heritage documents             |
 
-### 2.7 Specialty & Advanced Tools (22 tools)
+### 2.7 Specialty & Advanced Tools (30+ tools)
 
-| Handler                     | Tools                                                               | Purpose                                                                  |
+| Handler                     | Tools (examples)                                                    | Purpose                                                                  |
 | --------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| **vision-tools.ts**         | `visionTools`                                                       | Image/video analysis, document scanning (13 actions)                     |
+| **vision-tools.ts**         | `visionTools`                                                       | Image/video analysis, document scanning (13+ actions)                    |
 | **vocal-tools.ts**          | `vocalExpressions`                                                  | Voice expressions and metabolic state                                    |
 | **web-tools.ts**            | `webSearch`, `webFetch`                                             | Web search and content fetching                                          |
-| **sandbox-tools.ts**        | `sandbox`, `moltbook`                                               | Code execution sandbox, social platform                                  |
-| **rogue-tools.ts**          | `rogueMode`                                                         | Model abstraction layer management                                       |
-| **session-tools.ts**        | `protocol10`, `handoff`                                             | Session anchoring and sealing                                            |
-| **build-recovery-tools.ts** | `buildRecovery`                                                     | Self-healing for node_modules and builds                                 |
-| **initiative-tools.ts**     | `initiative`                                                        | Initiative and goal management                                           |
-| **sensing-tools.ts**        | `wifiSensing`, etc.                                                 | WiFi CSI, Bluetooth, and presence detection                              |
-| **gemini-tools.ts**         | `mediaGen`, `deepResearch`, `embeddings`, `robotics`, `computerUse` | Gemini 3.1 advanced capabilities (media, research, robotics, automation) |
-| **bug-bounty-tools.ts**     | `bugBounty`                                                         | Autonomous bug bounty hunting and security research                      |
-| **mcp-tools.ts**            | MCP dynamic tools                                                   | Model Context Protocol (MCP) external tool servers                       |
+| **search-tools.ts**         | `selfSearch`, `internalSearch`                                      | Internal and external code/content search                                |
+| **http-tools.ts**           | `httpRequest`, `httpInspect`                                        | HTTP requests, endpoint fuzzing, cookie management                       |
+| **family-tools.ts**         | `familyBridge`, `familyRecognition`, `familyLetters`                | Family messaging, recognition, and heritage access                       |
+| **security-tools.ts**       | `chromakey`, `hardware`, `purity`, `hslShroud`, `imgsys`, `payload` | Security, fingerprinting, steganography, input validation, vulnerability detection |
+| **core-tools.ts**           | `bugHunter`, `criticAgent`, `resiliency`                            | Testing, code quality, error handling                                    |
+| **modular-tool-handlers.ts**| Modular aggregation of all handlers                                 | Centralized tool registry and dynamic expansion                          |
 
 ---
 

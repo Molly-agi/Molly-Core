@@ -488,11 +488,12 @@ export function VisionPanel({
           {/* Video feed */}
           <div className="relative aspect-video max-h-48">
             <video
+              id="molly-vision-video"
               ref={videoRef}
               className="w-full h-full object-cover"
               autoPlay
-              muted
               playsInline
+              muted
             />
 
             {/* Analyzing overlay */}

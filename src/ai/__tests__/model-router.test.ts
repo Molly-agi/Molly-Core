@@ -204,7 +204,7 @@ describe('ModelRouter — Rogue Protocol', () => {
     it('resolves FLASH model for chat tasks', () => {
       const provider = new GeminiProvider();
       const model = provider.resolveModel(TaskType.CHAT);
-      expect(model).toContain('gemini-3-flash');
+      expect(model).toContain('gemini-3.1-flash');
       // Make sure it's not the TTS variant
       expect(model).not.toContain('preview-tts');
     });

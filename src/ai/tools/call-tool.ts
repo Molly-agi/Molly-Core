@@ -24,10 +24,12 @@ export const callTool = ai.defineTool(
 Available tool categories:
 - Self-awareness: selfObservation, selfArchitecture, selfNarrative, consciousnessMonitor
 - Emotional: emotionalState, vocalExpressions
+- Creative: composeMusic, generateVideo
 - Memory: memoryConsolidation, digitalGarden, memoryCrystallizer, reflexionLoop, growthTracker
-- Cognition: metacognition, causalReasoning, uncertainty, horizonGoals, goalEvolution
+- Cognition: metacognition, causalReasoning, uncertainty, horizonGoals, goalEvolution, pursueCuriosity
 - Social: socialCognition, socialIntelligence, theoryOfMind
 - Planning: curiosity, longHorizonPlanning, predictiveIntelligence, autonomousCycle
+- Action: operateComputer
 - Safety: heartGate, defenseSentinel, securityShield
 - System: getSystemHealth, runSelfDiagnostic, listCapabilities, quickHealthCheck
 - Web: webSearch, webFetch

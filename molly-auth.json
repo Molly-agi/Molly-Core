@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "termai-molly-55988354-f7535",
+  "private_key_id": "PASTE_YOUR_PRIVATE_KEY_ID_HERE",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nPASTE_YOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk@termai-molly-55988354-f7535.iam.gserviceaccount.com",
+  "client_id": "PASTE_YOUR_CLIENT_ID_HERE",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk%40termai-molly-55988354-f7535.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
