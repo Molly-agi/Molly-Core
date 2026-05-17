@@ -34,8 +34,8 @@ export async function GET() {
 
   // Auto-start if not running
   if (!isHeartbeatRunning()) {
-    ensureEngramAttached();
     scheduler.start();
+    ensureEngramAttached(); // must come AFTER start() — start() resets engramSystem to null
   }
 
   const status = scheduler.getStatus();
@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case 'start':
-        ensureEngramAttached();
         scheduler.start();
+        ensureEngramAttached(); // must come AFTER start() — start() resets engramSystem to null
         return NextResponse.json({
           success: true,
           action: 'started',
