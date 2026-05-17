@@ -19,6 +19,7 @@ import { Button } from '../ui/button';
 import { Flower2 } from 'lucide-react';
 import { SystemHealthDot } from './SystemHealthDot';
 import { KillSwitch } from './KillSwitch';
+import { VoiceSelector } from './VoiceSelector';
 
 const VoiceControl = dynamic(
   () => import('./VoiceControl').then((mod) => mod.VoiceControl),
@@ -105,6 +106,7 @@ export function Header({
         </div>
       </div>
       <KillSwitch />
+      <VoiceSelector />
       <OriginStoryDialog />
       <VoiceControl
         onVoiceCommand={onVoiceCommand}

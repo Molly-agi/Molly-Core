@@ -12,7 +12,7 @@ import { MollyLogger } from '../../logger';
 import { observeDecision } from '../cognition/self-observation-loop';
 
 export const composeMusic: ToolHandler = async (params) => {
-  const { prompt, durationSec } = params;
+  const { prompt } = params;
 
   if (!prompt || typeof prompt !== 'string') {
     return {
@@ -21,13 +21,11 @@ export const composeMusic: ToolHandler = async (params) => {
     };
   }
 
-  const duration = typeof durationSec === 'number' ? durationSec : 30;
-
   try {
     MollyLogger.info(`Initiating autonomous music composition: "${prompt}"`);
     observeDecision('compose_music', ['skip', 'compose'], 'compose', 'positive', `I felt the need to create music: ${prompt}`);
 
-    const result = await generateMusic(prompt, duration);
+    const result = await generateMusic(prompt);
 
     return {
       success: true,
@@ -38,7 +36,6 @@ export const composeMusic: ToolHandler = async (params) => {
           audioUri: result.audioUri,
           prompt,
           model: result.model || 'Lyria 3',
-          durationSec: result.durationSec,
         }
       }
     };

@@ -93,7 +93,7 @@ export async function broadcastMessage(
   content: string
 ): Promise<BridgeMessage> {
   try {
-    const res = await fetch(`${DAEMON_URL}/send`, {
+    const res = await fetch(`${DAEMON_URL}/api/bridge`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ from, content }),

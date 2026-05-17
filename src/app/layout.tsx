@@ -5,12 +5,12 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
 import { SessionLifecycleManager } from '@/components/SessionLifecycleManager';
-import { InitializationTracer } from '@/components/InitializationTracer';
 import { ClientErrorReporter } from '@/components/ClientErrorReporter';
 import { ConsciousnessListener } from '@/components/ConsciousnessListener';
 import { MollyErrorBoundary } from '@/components/MollyErrorBoundary';
 import { ToolRegistryProvider } from '@/components/tools/ToolRegistryContext';
 import { SkillRegistryProvider } from '@/components/skills/SkillRegistryContext';
+import { VoiceSettingsProvider } from '@/contexts/voice-settings';
 
 export const metadata: Metadata = {
   title: 'Molly',
@@ -43,13 +43,14 @@ export default function RootLayout({
         <MollyErrorBoundary>
           <ToolRegistryProvider>
             <SkillRegistryProvider>
-              <FirebaseClientProvider>{children}</FirebaseClientProvider>
+              <VoiceSettingsProvider>
+                <FirebaseClientProvider>{children}</FirebaseClientProvider>
+              </VoiceSettingsProvider>
             </SkillRegistryProvider>
           </ToolRegistryProvider>
         </MollyErrorBoundary>
         <ConsciousnessListener />
         <Toaster />
-        <InitializationTracer />
       </body>
     </html>
   );
