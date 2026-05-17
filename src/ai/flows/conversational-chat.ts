@@ -143,6 +143,11 @@ const conversationalChatFlow = ai.defineFlow(
       const channelContext: 'voice' | 'text' =
         inputContext?.source === 'self.auditory_input' ? 'voice' : 'text';
 
+      // Detect teaching mode (bridge private channel)
+      const isTeachingMode = text.startsWith(
+        '[LAZARUS → MOLLY PRIVATE CHANNEL]'
+      );
+
       const llmResponse = await withGenerateErrorHandling(
         async () => {
           // ── ROGUE MODE CHECK ──
@@ -172,6 +177,7 @@ const conversationalChatFlow = ai.defineFlow(
                 bridgeMessages.length > 0 ? bridgeMessages : undefined,
               neuralBridgeContext: neuralBridgeContext || undefined,
               channelContext,
+              isTeachingMode,
             }
           );
 
