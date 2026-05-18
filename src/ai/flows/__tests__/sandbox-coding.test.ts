@@ -94,6 +94,53 @@ describe('sandboxCoding flow', () => {
     expect(result.message).toContain('Code executed successfully');
   });
 
+  it('returns failed execute message when sandbox execution fails', async () => {
+    mockSandboxExecuteCode.mockResolvedValueOnce({
+      success: false,
+      stdout: '',
+      stderr: 'runtime error',
+      executionTimeMs: 4,
+    });
+
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({
+      action: 'execute',
+      code: 'throw new Error("x")',
+      language: 'javascript',
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Execution failed: runtime error');
+  });
+
+  it('returns validation error when save lacks filename/code', async () => {
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({ action: 'save', code: 'x=1' });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Need filename and code');
+  });
+
+  it('returns failed save message when sandbox write fails', async () => {
+    mockSandboxWriteFile.mockResolvedValueOnce({
+      success: false,
+      error: 'disk full',
+    });
+
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({
+      action: 'save',
+      filename: 'b.txt',
+      code: 'hello',
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Failed to save: disk full');
+  });
+
   it('returns sandbox list with empty-state guidance', async () => {
     const { sandboxCoding } = await import('../sandbox-coding');
 
@@ -112,6 +159,74 @@ describe('sandboxCoding flow', () => {
     expect(mockSandboxReadFile).toHaveBeenCalledWith('a.txt');
     expect(result.success).toBe(true);
     expect(result.stdout).toBe('hello');
+  });
+
+  it('returns validation error when read lacks filename', async () => {
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({ action: 'read' });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Need a filename to read');
+  });
+
+  it('returns failed read message when sandbox read fails', async () => {
+    mockSandboxReadFile.mockResolvedValueOnce({
+      success: false,
+      error: 'not found',
+    });
+
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({
+      action: 'read',
+      filename: 'missing.txt',
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Failed to read: not found');
+  });
+
+  it('returns list summary for non-empty sandbox', async () => {
+    mockSandboxListFiles.mockResolvedValueOnce([
+      { name: 'main.ts', size: 10, isDirectory: false },
+    ]);
+
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({ action: 'list' });
+
+    expect(result.success).toBe(true);
+    expect(result.message).toContain('1 file(s) in sandbox');
+    expect(result.files).toEqual([
+      { name: 'main.ts', size: 10, isDirectory: false },
+    ]);
+  });
+
+  it('returns validation error when delete lacks filename', async () => {
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({ action: 'delete' });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Need a filename to delete');
+  });
+
+  it('returns failed delete message when sandbox delete fails', async () => {
+    mockSandboxDeleteFile.mockResolvedValueOnce({
+      success: false,
+      error: 'permission denied',
+    });
+
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({
+      action: 'delete',
+      filename: 'locked.ts',
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Failed to delete: permission denied');
   });
 
   it('returns validation error when practice has no challenge', async () => {
@@ -157,6 +272,36 @@ describe('sandboxCoding flow', () => {
 
     expect(result.success).toBe(true);
     expect(result.code).toBe('console.log("practice")');
+
+    (Date.now as jest.Mock).mockRestore();
+  });
+
+  it('accepts string LLM text and returns failed practice summary when execution fails', async () => {
+    jest.spyOn(Date, 'now').mockReturnValue(1779089000123);
+    mockMollyGenerate.mockResolvedValueOnce({
+      text: 'console.log("plain")',
+    });
+    mockSandboxExecuteCode.mockResolvedValueOnce({
+      success: false,
+      stdout: '',
+      stderr: 'syntax error',
+      executionTimeMs: 2,
+    });
+
+    const { sandboxCoding } = await import('../sandbox-coding');
+
+    const result = await sandboxCoding({
+      action: 'practice',
+      challenge: 'print plain',
+      language: 'javascript',
+    });
+
+    expect(result.success).toBe(false);
+    expect(result.message).toContain('Practice attempt failed: syntax error');
+    expect(mockSandboxWriteFile).toHaveBeenCalledWith(
+      'practice_1779089000123.js',
+      'console.log("plain")'
+    );
 
     (Date.now as jest.Mock).mockRestore();
   });

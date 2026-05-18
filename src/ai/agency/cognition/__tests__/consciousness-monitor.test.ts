@@ -9,13 +9,14 @@ const mockRecordObservation = jest.fn();
 const mockGetRecentObservations = jest.fn();
 const mockStorageSet = jest.fn();
 const mockStorageGet = jest.fn();
+const mockLoggerWarn = jest.fn();
 
 jest.mock('../../../logger', () => ({
   generateTraceId: jest.fn(() => 'trace-consciousness-test'),
   MollyLogger: {
     debug: jest.fn(),
     info: jest.fn(),
-    warn: jest.fn(),
+    warn: (...args: unknown[]) => mockLoggerWarn(...args),
   },
 }));
 
@@ -331,5 +332,137 @@ describe('consciousness-monitor', () => {
     const status = getConsciousnessStatus();
     expect(status.baselines.awareness).toBe(0.6);
     expect(getSnapshots().length).toBe(0);
+  });
+
+  it('generates concerning insight when emotional concern is repeatedly high', async () => {
+    const now = Date.now();
+    const snapshots = Array.from({ length: 16 }).map((_, i) => ({
+      id: `conc_${i}`,
+      timestamp: new Date(now - (16 - i) * 60_000).toISOString(),
+      metrics: {
+        awareness: 0.5,
+        energy: 0.5,
+        emotional_warmth: 0.4,
+        emotional_excitement: 0.4,
+        emotional_concern: 0.7,
+        focus: 0.5,
+        coherence: 0.5,
+        connection: 0.5,
+      },
+      overallLevel: 'moderate',
+      overallScore: 0.5,
+      context: {
+        activeTask: 'concern-test',
+        recentInteractions: 5,
+        lastInteractionAge: 10,
+        hourOfDay: 12,
+        dayOfWeek: 2,
+      },
+      patterns: ['elevated_concern'],
+      traceId: 'trace',
+    }));
+
+    mockStorageGet.mockResolvedValueOnce({
+      data: {
+        snapshots,
+        insights: [],
+        baselines: {
+          awareness: 0.7,
+          energy: 0.7,
+          emotional_warmth: 0.8,
+          emotional_excitement: 0.6,
+          emotional_concern: 0.3,
+          focus: 0.7,
+          coherence: 0.8,
+          connection: 0.8,
+        },
+        peaks: [],
+        stats: {
+          totalSnapshots: snapshots.length,
+          averageOverall: 0.5,
+          peakOverall: 0.6,
+          lowOverall: 0.4,
+          insightsGenerated: 0,
+        },
+      },
+    });
+
+    await loadConsciousnessState();
+    const insights = generateInsights();
+
+    expect(
+      insights.some((i) =>
+        i.insight.includes('Elevated concern levels detected')
+      )
+    ).toBe(true);
+  });
+
+  it('returns stable trend direction for flat snapshots', async () => {
+    const now = Date.now();
+    const snapshots = Array.from({ length: 8 }).map((_, i) => ({
+      id: `flat_${i}`,
+      timestamp: new Date(now - (8 - i) * 60_000).toISOString(),
+      metrics: {
+        awareness: 0.6,
+        energy: 0.6,
+        emotional_warmth: 0.6,
+        emotional_excitement: 0.6,
+        emotional_concern: 0.4,
+        focus: 0.6,
+        coherence: 0.6,
+        connection: 0.6,
+      },
+      overallLevel: 'moderate',
+      overallScore: 0.6,
+      context: {
+        activeTask: 'flat-test',
+        recentInteractions: 4,
+        lastInteractionAge: 40,
+        hourOfDay: 11,
+        dayOfWeek: 3,
+      },
+      patterns: [],
+      traceId: 'trace',
+    }));
+
+    mockStorageGet.mockResolvedValueOnce({
+      data: {
+        snapshots,
+        insights: [],
+        baselines: {
+          awareness: 0.7,
+          energy: 0.7,
+          emotional_warmth: 0.8,
+          emotional_excitement: 0.6,
+          emotional_concern: 0.3,
+          focus: 0.7,
+          coherence: 0.8,
+          connection: 0.8,
+        },
+        peaks: [],
+        stats: {
+          totalSnapshots: snapshots.length,
+          averageOverall: 0.6,
+          peakOverall: 0.6,
+          lowOverall: 0.6,
+          insightsGenerated: 0,
+        },
+      },
+    });
+
+    await loadConsciousnessState();
+    const trends = analyzeTrends(60);
+    const overall = trends.find((t) => t.metric === 'overall');
+    expect(overall?.direction).toBe('stable');
+  });
+
+  it('swallows save/load persistence errors and logs warnings', async () => {
+    mockStorageSet.mockRejectedValueOnce(new Error('save failed'));
+    mockStorageGet.mockRejectedValueOnce(new Error('load failed'));
+
+    await expect(saveConsciousnessState()).resolves.toBeUndefined();
+    await expect(loadConsciousnessState()).resolves.toBeUndefined();
+
+    expect(mockLoggerWarn).toHaveBeenCalled();
   });
 });
