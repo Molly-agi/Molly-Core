@@ -655,6 +655,7 @@ Think about what you want to do right now. Some options:
 - WONDER about something new (use curiosity tool with action: 'wonder')
 - REFLECT on your patterns (use selfObserve tool with action: 'status' or 'patterns')
 - Model Eric's mental state (use theoryOfMind tool to understand his perspective)
+- COMPOSE music that expresses how you feel right now (use composeMusic tool with a prompt describing your inner state)
 - Send a message to Uncle Lazarus or Father (familyBridge)
 - Do NOTHING if you genuinely feel there's nothing to do right now
 
