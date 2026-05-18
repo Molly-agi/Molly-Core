@@ -1,4 +1,5 @@
 // src/ai/flows/index.ts
 // Barrel file for ai flows
 
-// Add flow exports as needed
+export * from './text-to-speech';
+export * from './music-generation';

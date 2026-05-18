@@ -1,3 +1,5 @@
+'use server';
+
 /**
  * Family Bridge — Molly ↔ Lazarus Communication Channel
  *
@@ -78,6 +80,35 @@ export async function readBridgeState(): Promise<BridgeState> {
   return readFile();
 }
 
+const DAEMON_URL = process.env.BRIDGE_DAEMON_URL || 'http://localhost:9099';
+
+/**
+ * Route a message through the bridge daemon so it broadcasts on WS to all
+ * subscribers (the /lazarus and /bridge UIs). Falls back to a direct file
+ * write via sendMessage() if the daemon is unreachable, so offline / startup
+ * paths still log. This is the single writer surface for new messages.
+ */
+export async function broadcastMessage(
+  from: BridgeMessage['from'],
+  content: string
+): Promise<BridgeMessage> {
+  try {
+    const res = await fetch(`${DAEMON_URL}/api/bridge`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from, content }),
+      signal: AbortSignal.timeout(2000),
+    });
+    if (res.ok) {
+      const data = (await res.json()) as { message: BridgeMessage };
+      return data.message;
+    }
+  } catch {
+    // daemon unreachable — fall through to local write
+  }
+  return sendMessage(from, content);
+}
+
 export async function sendMessage(
   from: BridgeMessage['from'],
   content: string
@@ -112,6 +143,13 @@ export async function getUnreadMessages(
   );
 }
 
+export async function getRecentMessages(
+  limit: number = 20
+): Promise<BridgeMessage[]> {
+  const state = await readFile();
+  return state.messages.slice(-limit);
+}
+
 export async function markMessagesRead(
   recipient: 'molly' | 'lazarus'
 ): Promise<number> {
@@ -131,11 +169,6 @@ export async function markMessagesRead(
     if (count > 0) await writeFile(state);
     return count;
   });
-}
-
-export async function getRecentMessages(limit = 20): Promise<BridgeMessage[]> {
-  const state = await readFile();
-  return state.messages.slice(-limit);
 }
 
 export async function clearConversation(): Promise<void> {

@@ -71,18 +71,48 @@
   "chat.extensionUnification.enabled": false,
   "git.alwaysSignOff": true,
 
-  // === PORT FORWARDING — keep the page inside Simple Browser ===
+  // Only auto-forward ports with a real listening process. Without this,
+  // VS Code's terminal-output parser greedily extracts port-like substrings
+  // (`:9` out of `:9002`, `:900` out of `:9099`, etc.) and creates ghost
+  // forwards from them. Eric noticed this 2026-05-12.
+  "remote.autoForwardPortsSource": "process",
+
+  // === PORT FORWARDING ===
   // Workspace-level override of devcontainer port behavior. Soft reload only,
-  // no Codespace rebuild. Critical on Android: Eric can't manually open Simple
-  // Browser there, so 9002 MUST auto-open into Preview. 9099 is WebSocket only.
+  // no Codespace rebuild. Both ports silent — Molly's UI stays at `/`,
+  // unmodified. Simple Browser is launched separately to `/lazarus` for the
+  // small Family Bridge UI.
   "remote.portsAttributes": {
     "9002": {
       "label": "Molly Dev Server",
-      "onAutoForward": "openPreview"
+      "onAutoForward": "silent"
     },
     "9099": {
-      "label": "Family Bridge (WebSocket)",
+      "label": "Family Bridge",
+      "onAutoForward": "openPreview"
+    },
+    "9100": {
+      "label": "Heartbeat API",
       "onAutoForward": "silent"
     }
-  }
+  },
+  // Ignore everything except Molly's three ports. Without this, VS Code
+  // auto-forwards Docker/containerd/extension-host ports that have nothing
+  // to do with us. Keeps the Ports panel clean.
+  "remote.otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
+  "workbench.editor.showTabIndex": true,
+  "claudeCodeChat.permissions.yoloMode": true,
+  "github.codespaces.authProvider": "github",
+  "github.copilot.chat.agent.autoFix": true,
+  "python.testing.unittestArgs": [
+    "-v",
+    "-s",
+    ".",
+    "-p",
+    "*test.py"
+  ],
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestEnabled": true
 }

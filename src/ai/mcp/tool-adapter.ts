@@ -66,8 +66,8 @@ export function parseMcpToolName(
 /**
  * Check if a tool name is an MCP tool.
  */
-export function isMcpToolName(toolName: string): boolean {
-  return toolName.startsWith('mcp_');
+export function isMcpToolName(toolName: string | undefined): boolean {
+  return typeof toolName === 'string' && toolName.startsWith('mcp_');
 }
 
 // ============================================================================

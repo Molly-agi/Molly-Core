@@ -660,7 +660,7 @@ async function executeTool(
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, moltbook, rogueMode, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, rogueMode, listCapabilities`,
       };
   }
 }

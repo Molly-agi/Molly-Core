@@ -267,9 +267,9 @@ export default function BridgeObserver() {
           </div>
         )}
 
-        {messages.map((msg) => (
+        {messages.map((msg, idx) => (
           <div
-            key={msg.id}
+            key={msg.id + '_' + msg.timestamp + '_' + idx}
             style={{
               marginBottom: '12px',
               padding: '10px 14px',

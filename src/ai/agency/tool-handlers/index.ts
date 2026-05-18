@@ -36,6 +36,9 @@ export { geminiToolHandlers } from './gemini-tools';
 export { bugBountyToolHandlers } from './bug-bounty-tools';
 export { searchToolHandlers } from './search-tools';
 export { httpToolHandlers } from './http-tools';
+export { musicToolHandlers } from './music-tools';
+export { researchToolHandlers } from './research-tools';
+export { visualArtsToolHandlers } from './visual-arts-tools';
 export {
   mcpToolHandlers,
   getMcpHandlers,
@@ -69,6 +72,9 @@ import { geminiToolHandlers } from './gemini-tools';
 import { bugBountyToolHandlers } from './bug-bounty-tools';
 import { searchToolHandlers } from './search-tools';
 import { httpToolHandlers } from './http-tools';
+import { musicToolHandlers } from './music-tools';
+import { researchToolHandlers } from './research-tools';
+import { operateComputer } from '../computer-use/computer-use-handler';
 import type { ToolHandler } from './types';
 
 /**
@@ -102,6 +108,9 @@ const allHandlers: Record<string, ToolHandler> = {
   ...bugBountyToolHandlers,
   ...searchToolHandlers,
   ...httpToolHandlers,
+  ...musicToolHandlers,
+  ...researchToolHandlers,
+  operateComputer,
 };
 
 function applyDisabledToolFilter(

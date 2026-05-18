@@ -24,7 +24,7 @@ const senderStyle: Record<string, { color: string; label: string }> = {
 };
 
 export default function BridgePanel() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
   const [connected, setConnected] = useState(false);
   const [ericMsg, setEricMsg] = useState('');
@@ -208,7 +208,7 @@ export default function BridgePanel() {
       {isOpen && (
         <div
           style={{
-            maxHeight: '250px',
+            maxHeight: '380px',
             display: 'flex',
             flexDirection: 'column',
             background: '#0a0a12',
@@ -220,7 +220,7 @@ export default function BridgePanel() {
               flex: 1,
               overflowY: 'auto',
               padding: '8px 12px',
-              maxHeight: '200px',
+              maxHeight: '320px',
             }}
           >
             {messages.length === 0 && (
@@ -233,13 +233,13 @@ export default function BridgePanel() {
                   : 'Connecting to bridge...'}
               </div>
             )}
-            {messages.map((msg) => {
+            {messages.map((msg, idx) => {
               const style = senderStyle[msg.from] || {
                 color: '#94a3b8',
                 label: msg.from,
               };
               return (
-                <div key={msg.id} style={{ marginBottom: '6px' }}>
+                <div key={msg.id + '_' + msg.timestamp + '_' + idx} style={{ marginBottom: '6px' }}>
                   <div className="flex items-baseline gap-2 text-[11px]">
                     <span style={{ color: style.color, fontWeight: 600 }}>
                       {style.label}

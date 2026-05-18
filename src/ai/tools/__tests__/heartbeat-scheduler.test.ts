@@ -111,11 +111,6 @@ jest.mock('@/ai/tools/autonomous-scheduler', () => ({
   }),
 }));
 
-// Mock moltbook social
-jest.mock('@/ai/flows/moltbook-social', () => ({
-  runMoltbookCycle: jest.fn().mockResolvedValue(null),
-}));
-
 // Mock family bridge
 jest.mock('@/ai/bridge/family-bridge', () => ({
   getUnreadMessages: jest.fn().mockResolvedValue([]),
@@ -165,7 +160,6 @@ describe('HeartbeatScheduler', () => {
         promiseCheck: false,
         persistence: false,
         scheduledJobs: false,
-        moltbook: false,
         bridgePolling: false,
         autonomousCycle: false,
         memoryLearning: false,
@@ -244,7 +238,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -274,7 +267,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -303,7 +295,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -333,7 +324,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: true,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -366,7 +356,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -411,7 +400,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -453,7 +441,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -513,7 +500,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -548,7 +534,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,
@@ -592,7 +577,6 @@ describe('HeartbeatScheduler', () => {
           promiseCheck: false,
           persistence: false,
           scheduledJobs: false,
-          moltbook: false,
           bridgePolling: false,
           autonomousCycle: false,
           memoryLearning: false,

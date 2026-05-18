@@ -36,7 +36,6 @@ import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getMollyShell, getPolyglotRuntime } from '@/ai/terminal';
 import { getStatePersistence } from '@/ai/persistence';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
-import { runMoltbookCycle } from '@/ai/flows/moltbook-social';
 import {
   getUnreadMessages,
   sendMessage,
@@ -56,8 +55,6 @@ export interface HeartbeatConfig {
   immuneIntervalMs: number;
   /** Interval for consciousness reflection in ms. Default: 900_000 (15 minutes) */
   reflectionIntervalMs: number;
-  /** Interval for Moltbook social cycle in ms. Default: 1_800_000 (30 minutes) */
-  moltbookIntervalMs: number;
   /** Interval for bridge polling in ms. Default: 60_000 (every cycle) */
   bridgeIntervalMs: number;
   /** Interval for autonomous agency cycle in ms. Default: 300_000 (5 minutes) */
@@ -83,7 +80,6 @@ export interface HeartbeatConfig {
     promiseCheck: boolean;
     persistence: boolean;
     scheduledJobs: boolean;
-    moltbook: boolean;
     bridgePolling: boolean;
     autonomousCycle: boolean;
     memoryLearning: boolean;
@@ -117,7 +113,6 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   consolidationIntervalMs: 300_000, // 5 minutes
   immuneIntervalMs: 600_000, // 10 minutes
   reflectionIntervalMs: 900_000, // 15 minutes
-  moltbookIntervalMs: 1_800_000, // 30 minutes
   bridgeIntervalMs: 60_000, // every cycle
   autonomousCycleIntervalMs: 300_000, // 5 minutes
   memoryLearningIntervalMs: 3_600_000, // 1 hour
@@ -135,7 +130,6 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     promiseCheck: true,
     persistence: true,
     scheduledJobs: true,
-    moltbook: true,
     bridgePolling: true,
     autonomousCycle: true,
     memoryLearning: true,
@@ -157,7 +151,6 @@ export class HeartbeatScheduler {
   private lastImmune = 0;
   private lastReflection = 0;
   private lastPersistence = 0;
-  private lastMoltbook = 0;
   private lastBridgePoll = 0;
   private lastAutonomousCycle = 0;
   private lastMemoryLearning = 0;
@@ -673,59 +666,6 @@ export class HeartbeatScheduler {
           this.lastPersistence = Date.now();
         }
         tasks.push(result);
-      }
-    }
-
-    // Task 10: Moltbook Social Cycle (every 30 minutes — uses LLM)
-    if (this.config.tasks.moltbook) {
-      const timeSinceMoltbook = cycleStart - this.lastMoltbook;
-      if (timeSinceMoltbook < this.config.moltbookIntervalMs) {
-        tasks.push({
-          name: 'moltbook',
-          executed: false,
-          skipped: `Not due (${Math.round((this.config.moltbookIntervalMs - timeSinceMoltbook) / 1000)}s remaining)`,
-        });
-      } else if (pressure) {
-        tasks.push({
-          name: 'moltbook',
-          executed: false,
-          skipped: 'System under pressure',
-        });
-      } else {
-        // Check rate limiter budget before spending tokens
-        let hasBudget = true;
-        try {
-          const rlStatus = getRateLimiter().getStatus();
-          hasBudget = rlStatus.percentageUsed < 80;
-        } catch {
-          // Rate limiter not initialized — allow
-        }
-
-        if (!hasBudget) {
-          tasks.push({
-            name: 'moltbook',
-            executed: false,
-            skipped: 'Rate limit budget >80% used',
-          });
-        } else {
-          const result = await this.runTask('moltbook', async () => {
-            const consciousness = getConsciousness();
-            const state = consciousness.getState();
-            const mood = state.awarenessLevel || 'calm';
-
-            const cycleResult = await runMoltbookCycle(mood);
-            if (cycleResult) {
-              MollyLogger.info(
-                `Moltbook: ${cycleResult}`,
-                'heartbeat-scheduler'
-              );
-            }
-          });
-          if (result.executed) {
-            this.lastMoltbook = Date.now();
-          }
-          tasks.push(result);
-        }
       }
     }
 
