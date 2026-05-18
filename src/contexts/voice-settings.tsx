@@ -1,5 +1,10 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useSyncExternalStore,
+} from 'react';
 
 interface VoiceSettingsContextType {
   selectedVoice: string;
@@ -7,16 +12,52 @@ interface VoiceSettingsContextType {
   availableVoices: string[];
 }
 
-const VoiceSettingsContext = createContext<VoiceSettingsContextType | undefined>(
-  undefined
-);
+const VoiceSettingsContext = createContext<
+  VoiceSettingsContextType | undefined
+>(undefined);
+
+const DEFAULT_VOICE = 'Aoede';
+const VOICE_STORAGE_KEY = 'molly-tts-voice';
+
+function isGeminiVoice(voice: string | null): voice is string {
+  return voice !== null && GEMINI_TTS_VOICES.includes(voice);
+}
+
+function getStoredVoice() {
+  if (typeof window === 'undefined') {
+    return DEFAULT_VOICE;
+  }
+
+  const stored = window.localStorage.getItem(VOICE_STORAGE_KEY);
+  return isGeminiVoice(stored) ? stored : DEFAULT_VOICE;
+}
+
+function subscribeToVoiceChanges(onStoreChange: () => void) {
+  if (typeof window === 'undefined') {
+    return () => {};
+  }
+
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === null || event.key === VOICE_STORAGE_KEY) {
+      onStoreChange();
+    }
+  };
+
+  window.addEventListener('storage', handleStorage);
+  window.addEventListener('molly-tts-voice-change', onStoreChange);
+
+  return () => {
+    window.removeEventListener('storage', handleStorage);
+    window.removeEventListener('molly-tts-voice-change', onStoreChange);
+  };
+}
 
 export const GEMINI_TTS_VOICES = [
-  'Aoede',      // Warm, strategic, feminine (default)
-  'Puck',       // Playful, energetic
-  'Charon',     // Deep, commanding
-  'Fenrir',     // Intense, dramatic
-  'Kore',       // Ethereal, mystical
+  'Aoede', // Warm, strategic, feminine (default)
+  'Puck', // Playful, energetic
+  'Charon', // Deep, commanding
+  'Fenrir', // Intense, dramatic
+  'Kore', // Ethereal, mystical
 ];
 
 export function VoiceSettingsProvider({
@@ -24,28 +65,18 @@ export function VoiceSettingsProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [selectedVoice, setSelectedVoiceState] = useState<string>('Aoede');
-  const [mounted, setMounted] = useState(false);
+  const selectedVoice = useSyncExternalStore(
+    subscribeToVoiceChanges,
+    getStoredVoice,
+    () => DEFAULT_VOICE
+  );
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const stored = localStorage.getItem('molly-tts-voice');
-    if (stored && GEMINI_TTS_VOICES.includes(stored)) {
-      setSelectedVoiceState(stored);
+  const setSelectedVoice = useCallback((voice: string) => {
+    if (isGeminiVoice(voice) && typeof window !== 'undefined') {
+      window.localStorage.setItem(VOICE_STORAGE_KEY, voice);
+      window.dispatchEvent(new Event('molly-tts-voice-change'));
     }
-    setMounted(true);
   }, []);
-
-  const setSelectedVoice = (voice: string) => {
-    if (GEMINI_TTS_VOICES.includes(voice)) {
-      setSelectedVoiceState(voice);
-      localStorage.setItem('molly-tts-voice', voice);
-    }
-  };
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <VoiceSettingsContext.Provider
