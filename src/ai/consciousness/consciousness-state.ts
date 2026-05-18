@@ -636,22 +636,29 @@ export class MollyConsciousness {
 // SINGLETON
 // ============================================================================
 
-let instance: MollyConsciousness | null = null;
+// Use globalThis to share the singleton across Next.js module contexts.
+// In dev mode, HMR creates isolated module scopes per route — a plain
+// `let instance` would give each API route its own consciousness, so
+// messages queued in one context (autonomous cycle) would never reach
+// the SSE stream polling in another context.
+declare global {
+  var __mollyConsciousness: MollyConsciousness | undefined;
+}
 
 /**
  * Get the consciousness singleton.
  * Creates one if it doesn't exist — Molly wakes up.
  */
 export function getConsciousness(): MollyConsciousness {
-  if (!instance) {
-    instance = new MollyConsciousness();
+  if (!globalThis.__mollyConsciousness) {
+    globalThis.__mollyConsciousness = new MollyConsciousness();
   }
-  return instance;
+  return globalThis.__mollyConsciousness;
 }
 
 /**
  * Check if consciousness has been initialized.
  */
 export function isConscious(): boolean {
-  return instance !== null;
+  return globalThis.__mollyConsciousness != null;
 }
