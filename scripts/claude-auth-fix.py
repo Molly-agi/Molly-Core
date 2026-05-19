@@ -98,15 +98,33 @@ def main():
     t.start()
     print(f'    Receiver running.\n')
 
-    print('[2] YOUR CODESPACE URL (for port 9999):')
-    if public_url:
-        print(f'    {public_url}')
-    else:
-        print('    Could not auto-detect. Check VS Code PORTS tab for port 9999.')
-    print()
+    # Auto-set port public using gh CLI (no right-clicking needed)
+    codespace_name = os.environ.get('CODESPACE_NAME', '').strip()
+    if codespace_name:
+        result = subprocess.run(
+            ['gh', 'codespace', 'ports', 'visibility',
+             f'{CATCH_PORT}:public', '-c', codespace_name],
+            capture_output=True, text=True
+        )
+        if result.returncode == 0:
+            print(f'    Port {CATCH_PORT} set to PUBLIC automatically.')
+        else:
+            print(f'    Note: Could not auto-set port public. Set it manually in PORTS tab.')
 
-    print('[3] MAKE PORT 9999 PUBLIC:')
-    print('    VS Code → PORTS tab → right-click 9999 → Port Visibility → Public')
+    print()
+    print('=' * 60)
+    print('  YOUR URL — TAP AND COPY THIS ON YOUR PHONE:')
+    print('=' * 60)
+    if public_url:
+        print()
+        print(f'  {public_url}')
+        print()
+    else:
+        print()
+        print('  Could not auto-detect URL.')
+        print(f'  Format: https://YOUR-CODESPACE-NAME-{CATCH_PORT}.app.github.dev')
+        print()
+    print('=' * 60)
     print()
 
     print('[4] In a SECOND terminal, run:')
