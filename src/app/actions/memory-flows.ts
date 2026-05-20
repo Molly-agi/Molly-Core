@@ -100,7 +100,7 @@ export async function seedFamilyMemories(userId: string) {
       throw new Error('Missing userId for family memory seeding.');
     }
 
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
       MollyLogger.warn(
         'Family memory seed skipped (admin not configured)',
@@ -289,7 +289,7 @@ export async function seedOriginStoryMemory(userId: string) {
       throw new Error('Missing userId for origin story seeding.');
     }
 
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
       MollyLogger.warn(
         'Origin story seed skipped (admin not configured)',

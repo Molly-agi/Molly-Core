@@ -49,10 +49,10 @@ jest.mock('@/firebase/admin', () => ({
 }));
 
 jest.mock('@/lib/storage-router', () => ({
-  getStorageRouter: jest.fn(() => ({
+  getStorageRouter: jest.fn().mockResolvedValue({
     getMode: jest.fn(() => 'firestore'),
     query: jest.fn(),
-  })),
+  }),
 }));
 
 // Imports — AFTER mocks
@@ -407,7 +407,7 @@ describe('collectRuntimeSnapshot', () => {
       { id: '2', data: { id: '2', crc32: 'def', responseText: 'ok-2' } },
     ];
 
-    mockGetStorageRouter.mockReturnValue({
+    mockGetStorageRouter.mockResolvedValue({
       getMode: jest.fn(() => 'firestore'),
       query: jest.fn().mockResolvedValue(docs),
     });
@@ -425,7 +425,7 @@ describe('collectRuntimeSnapshot', () => {
   it('reports degraded memory health when storage query throws', async () => {
     mockIsAdminConfigured.mockReturnValue(true);
 
-    mockGetStorageRouter.mockReturnValue({
+    mockGetStorageRouter.mockResolvedValue({
       getMode: jest.fn(() => 'firestore'),
       query: jest.fn().mockRejectedValue(new Error('Storage down')),
     });

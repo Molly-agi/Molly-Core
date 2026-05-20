@@ -94,7 +94,7 @@ async function collectMemoryHealth(userId?: string) {
   }
 
   // In Firestore mode, check if admin is configured
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     return {
       status: 'unavailable' as const,

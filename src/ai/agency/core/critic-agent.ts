@@ -850,7 +850,7 @@ const CRITIC_DOC_ID = 'critic_state';
  */
 export async function saveCriticState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(CRITIC_COLLECTION, CRITIC_DOC_ID, {
       profile: state.profile,
       stats: state.stats,
@@ -869,7 +869,7 @@ export async function saveCriticState(): Promise<void> {
  */
 export async function loadCriticState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(CRITIC_COLLECTION, CRITIC_DOC_ID);
 
     if (doc?.data) {

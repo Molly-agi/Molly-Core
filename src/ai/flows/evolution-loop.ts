@@ -178,7 +178,7 @@ async function persistEvolutionExperience(
   }
 ): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const record = createMemoryRecord<ExperienceRecord>({
       type: 'experience',
       userId,

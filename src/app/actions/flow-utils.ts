@@ -238,7 +238,7 @@ export async function buildMemoryContext(
  * booting fresh.
  */
 export async function buildGreetingContext(userId: string): Promise<string> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     return 'First ignition.';
   }
@@ -297,7 +297,7 @@ export async function recordChatResponse(
 ): Promise<void> {
   if (!userId) return;
 
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   if (storage.getMode() === 'firestore' && !isAdminConfigured()) return;
 
   try {

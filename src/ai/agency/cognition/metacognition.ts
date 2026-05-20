@@ -1279,7 +1279,7 @@ async function saveMetacognitionState(): Promise<void> {
   try {
     state.metadata.lastUpdated = new Date().toISOString();
 
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(METACOGNITION_COLLECTION, METACOGNITION_DOC_ID, {
       completedTraces: state.completedTraces.slice(-50), // Keep recent
       strategies: Array.from(state.strategies.entries()),
@@ -1302,7 +1302,7 @@ async function saveMetacognitionState(): Promise<void> {
  */
 async function loadMetacognitionState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(
       METACOGNITION_COLLECTION,
       METACOGNITION_DOC_ID

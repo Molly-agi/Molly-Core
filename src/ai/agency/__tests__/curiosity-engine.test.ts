@@ -18,7 +18,7 @@ jest.mock('../../logger', () => ({
 }));
 
 jest.mock('@/lib/storage-router', () => ({
-  getStorageRouter: () => ({
+  getStorageRouter: async () => ({
     set: jest.fn().mockResolvedValue(undefined),
     get: jest.fn().mockResolvedValue(null),
   }),

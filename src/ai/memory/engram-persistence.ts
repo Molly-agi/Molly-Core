@@ -39,7 +39,7 @@ export async function persistEngramBatch(
   }
 
   // In Firestore mode, check if admin is configured
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     return {
       saved: 0,

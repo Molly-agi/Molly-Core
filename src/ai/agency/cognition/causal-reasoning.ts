@@ -1264,7 +1264,7 @@ async function saveCausalState(): Promise<void> {
   try {
     state.metadata.lastUpdated = new Date().toISOString();
 
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(CAUSAL_COLLECTION, CAUSAL_DOC_ID, {
       graphs: Array.from(state.graphs.entries()).map(([id, graph]) => [
         id,
@@ -1292,7 +1292,7 @@ async function saveCausalState(): Promise<void> {
 
 async function loadCausalState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(CAUSAL_COLLECTION, CAUSAL_DOC_ID);
 
     if (doc?.data) {

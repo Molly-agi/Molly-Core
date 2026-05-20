@@ -1032,7 +1032,7 @@ const GARDEN_DOC_ID = 'digital_garden';
  */
 export async function saveGardenState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
 
     // Convert Map to array for storage
     const seedsArray = Array.from(state.seeds.entries());
@@ -1060,7 +1060,7 @@ export async function saveGardenState(): Promise<void> {
  */
 export async function loadGardenState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(GARDEN_COLLECTION, GARDEN_DOC_ID);
 
     if (doc?.data) {

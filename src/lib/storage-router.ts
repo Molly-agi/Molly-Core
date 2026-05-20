@@ -13,10 +13,10 @@
  *
  * Usage:
  *   import { getStorageRouter } from '@/lib/storage-router';
- *   const storage = getStorageRouter();
+ *   const storage = await getStorageRouter();
  *   await storage.add('users/molly/experiences', { ... });
  *
- * The router is a singleton. It creates the provider once and reuses it.
+ * The router is a singleton Promise. It creates the provider once and reuses it.
  */
 
 import type {
@@ -38,6 +38,13 @@ type StorageMode = 'local' | 'firestore';
 
 /**
  * Detect which storage backend to use based on environment.
+ *
+ * Priority (highest to lowest):
+ *   1. MOLLY_STORAGE_PROVIDER env var (explicit override)
+ *   2. Termux detection (phone → local)
+ *   3. Production / Firebase App Hosting / Cloud Run (→ firestore)
+ *   4. Codespace with Firebase credentials (→ firestore)
+ *   5. Default: local
  */
 function detectStorageMode(): StorageMode {
   // Explicit override takes priority
@@ -91,10 +98,10 @@ class StorageRouter implements StorageProvider {
   private mode: StorageMode;
   private dualWriteEnabled: boolean;
 
-  constructor() {
-    this.mode = detectStorageMode();
+  private constructor(mode: StorageMode, provider: StorageProvider) {
+    this.mode = mode;
+    this.provider = provider;
     this.dualWriteEnabled = process.env.MOLLY_DUAL_WRITE === 'true';
-    this.provider = this.createProvider();
 
     // In dual-write mode with Firestore primary, create local backup
     if (this.dualWriteEnabled && this.mode === 'firestore') {
@@ -111,23 +118,28 @@ class StorageRouter implements StorageProvider {
     }
   }
 
-  private createProvider(): StorageProvider {
-    if (this.mode === 'firestore') {
+  static async create(): Promise<StorageRouter> {
+    const requestedMode = detectStorageMode();
+    const { provider, mode } = await StorageRouter.createProvider(requestedMode);
+    return new StorageRouter(mode, provider);
+  }
+
+  private static async createProvider(
+    mode: StorageMode
+  ): Promise<{ provider: StorageProvider; mode: StorageMode }> {
+    if (mode === 'firestore') {
       try {
-        // Dynamic require avoids bundler pulling firebase-admin into client bundles
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { isAdminConfigured } = require('../firebase/admin');
+        // Dynamic import avoids bundler pulling firebase-admin into client bundles
+        const { isAdminConfigured } = await import('../firebase/admin');
         if (!isAdminConfigured()) {
           throw new Error(
             'Firebase Admin SDK not configured (missing credentials)'
           );
         }
-        /* eslint-disable @typescript-eslint/no-require-imports */
-        const {
-          FirestoreStorageProvider,
-        } = require('./firestore-storage-provider');
-        /* eslint-enable @typescript-eslint/no-require-imports */
-        return new FirestoreStorageProvider();
+        const { FirestoreStorageProvider } = await import(
+          './firestore-storage-provider'
+        );
+        return { provider: new FirestoreStorageProvider(), mode: 'firestore' };
       } catch (err) {
         MollyLogger.warn(
           `Firestore requested but unavailable, falling back to local storage: ${
@@ -135,16 +147,15 @@ class StorageRouter implements StorageProvider {
           }`,
           'storage-router'
         );
-        // Update mode to reflect actual provider so getMode()/getProviderInfo() stay consistent
-        this.mode = 'local';
-        return new LocalStorageProvider();
+        // Fall through to local; update mode to reflect actual provider
       }
     }
 
-    return new LocalStorageProvider();
+    return { provider: new LocalStorageProvider(), mode: 'local' };
   }
 
   // ── Passthrough to active provider ──
+  // NOTE: these methods must stay in sync with the StorageProvider interface.
 
   getMode(): StorageMode {
     return this.mode;
@@ -253,12 +264,7 @@ class StorageRouter implements StorageProvider {
   }
 
   async healthCheck(): Promise<boolean> {
-    // Only call if provider implements healthCheck
-    const provider = this.provider as { healthCheck?: () => Promise<boolean> };
-    if (typeof provider.healthCheck === 'function') {
-      return provider.healthCheck();
-    }
-    return true;
+    return this.provider.healthCheck();
   }
 }
 
@@ -266,20 +272,20 @@ class StorageRouter implements StorageProvider {
 // SINGLETON
 // ============================================================================
 
-let _instance: StorageRouter | null = null;
+let _promise: Promise<StorageRouter> | null = null;
 
-export function getStorageRouter(): StorageRouter {
-  if (!_instance) {
-    _instance = new StorageRouter();
+export function getStorageRouter(): Promise<StorageRouter> {
+  if (!_promise) {
+    _promise = StorageRouter.create();
   }
-  return _instance;
+  return _promise;
 }
 
 /**
  * Reset the storage router singleton (for testing only)
  */
 export function resetStorageRouter(): void {
-  _instance = null;
+  _promise = null;
 }
 
 // ============================================================================
@@ -295,7 +301,7 @@ export async function saveToStorage(
   key: string,
   value: unknown
 ): Promise<void> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   // Use a single doc with id 'singleton' for each key
   await storage.set(key, 'singleton', { value });
 }
@@ -308,9 +314,10 @@ export async function saveToStorage(
 export async function loadFromStorage<T = unknown>(
   key: string
 ): Promise<T | null> {
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   const doc = await storage.get(key, 'singleton');
-  if (!doc || typeof doc.data !== 'object' || !('value' in doc.data))
+  // `== null` intentionally uses loose equality to catch both null and undefined
+  if (!doc || doc.data == null || typeof doc.data !== 'object' || !('value' in doc.data))
     return null;
   return doc.data.value as T;
 }

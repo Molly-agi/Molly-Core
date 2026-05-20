@@ -71,7 +71,7 @@ async function cacheEmbedding(
   traceId: string
 ): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const collectionPath = `users/${userId}/${collectionName}`;
 
     await storage.update(collectionPath, docId, {
@@ -147,7 +147,7 @@ export const semanticRecall = ai.defineTool(
 
     try {
       // In Firestore mode, check if admin is configured
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
         MollyLogger.warn(
           'Admin Firestore not configured - skipping semantic recall',
@@ -466,7 +466,7 @@ async function fallbackKeywordSearch(
   const traceId = generateTraceId();
 
   // In Firestore mode, check if admin is configured
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     MollyLogger.warn(
       'Admin Firestore not configured - skipping keyword search',

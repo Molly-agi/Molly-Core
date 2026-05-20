@@ -829,7 +829,7 @@ const PREDICTIVE_DOC_ID = 'predictive_intelligence_state';
  */
 export async function savePredictiveState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(PREDICTIVE_COLLECTION, PREDICTIVE_DOC_ID, {
       patterns: state.patterns,
       interactionHistory: state.interactionHistory.slice(-200),
@@ -849,7 +849,7 @@ export async function savePredictiveState(): Promise<void> {
  */
 export async function loadPredictiveState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(PREDICTIVE_COLLECTION, PREDICTIVE_DOC_ID);
 
     if (doc?.data) {

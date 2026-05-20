@@ -868,7 +868,7 @@ const CRYSTALLIZER_DOC_ID = 'memory_crystallizer';
  */
 export async function saveCrystallizerState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
 
     // Convert Map to array for storage
     const crystalsArray = Array.from(state.crystals.entries());
@@ -900,7 +900,7 @@ export async function saveCrystallizerState(): Promise<void> {
  */
 export async function loadCrystallizerState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(CRYSTALLIZER_COLLECTION, CRYSTALLIZER_DOC_ID);
 
     if (doc?.data) {

@@ -226,4 +226,15 @@ export class FirestoreStorageProvider implements StorageProvider {
 
     await batch.commit();
   }
+
+  async healthCheck(): Promise<boolean> {
+    try {
+      const db = this.getDb();
+      // Lightweight read on a dedicated health collection to verify connectivity
+      await db.collection('_health').limit(1).get();
+      return true;
+    } catch {
+      return false;
+    }
+  }
 }

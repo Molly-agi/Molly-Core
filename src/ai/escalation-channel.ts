@@ -200,7 +200,7 @@ const ESCALATION_COLLECTION = 'system';
 
 async function persistEscalation(event: EscalationEvent): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.add(`${ESCALATION_COLLECTION}/escalations`, {
       ...event,
       persistedAt: new Date().toISOString(),
@@ -224,7 +224,7 @@ export async function acknowledgeEscalation(eventId: string): Promise<boolean> {
 
   // Update in storage if possible
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.update(`${ESCALATION_COLLECTION}/escalations`, eventId, {
       acknowledged: true,
       acknowledgedAt: event.acknowledgedAt,

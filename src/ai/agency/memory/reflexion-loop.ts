@@ -878,7 +878,7 @@ export async function saveReflexionState(): Promise<void> {
   if (!persistenceEnabled) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(REFLEXION_COLLECTION, REFLEXION_DOC_ID, {
       learnings: state.learnings,
       policies: state.policies,
@@ -898,7 +898,7 @@ export async function saveReflexionState(): Promise<void> {
  */
 export async function loadReflexionState(): Promise<number> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(REFLEXION_COLLECTION, REFLEXION_DOC_ID);
 
     if (!doc?.data) {

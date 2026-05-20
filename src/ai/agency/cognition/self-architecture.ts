@@ -590,7 +590,7 @@ export async function loadSelfArchitectureState(): Promise<SelfArchitectureState
   if (selfArchState) return selfArchState;
 
   try {
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const doc = await router.get(ARCH_COLLECTION, ARCH_DOC_ID);
     if (doc?.data) {
       const parsed = doc.data as Record<string, unknown>;
@@ -661,7 +661,7 @@ async function saveSelfArchState(): Promise<void> {
     selfArchState.metadata.totalCapabilities = selfArchState.capabilities.size;
     selfArchState.metadata.totalLimitations = selfArchState.limitations.size;
 
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const serializable = {
       modules: Array.from(selfArchState.modules.entries()),
       dataFlows: Array.from(selfArchState.dataFlows.entries()),

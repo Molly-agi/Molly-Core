@@ -945,7 +945,7 @@ const GROWTH_DOC_ID = 'growth_state';
  */
 export async function saveGrowthState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(GROWTH_COLLECTION, GROWTH_DOC_ID, {
       snapshots: state.snapshots.slice(-100),
       events: state.events.slice(-50),
@@ -972,7 +972,7 @@ export async function saveGrowthState(): Promise<void> {
  */
 export async function loadGrowthState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(GROWTH_COLLECTION, GROWTH_DOC_ID);
 
     if (doc?.data) {

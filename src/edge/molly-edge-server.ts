@@ -214,7 +214,8 @@ const CONFIG = {
 // STORAGE
 // ============================================================================
 
-const storage = getStorageRouter();
+// Shared promise — resolved once on first use; subsequent calls are instant
+const storagePromise = getStorageRouter();
 
 // ============================================================================
 // HTTP SERVER
@@ -305,6 +306,7 @@ async function handleStorage(
   const collection = body.collection as string;
   const docId = body.docId as string;
   const data = body.data as Record<string, unknown>;
+  const storage = await storagePromise;
 
   if (!collection && action !== 'batch') {
     sendError(res, 400, 'Missing collection path');
@@ -508,6 +510,7 @@ async function handleAiProxy(
  * Health / Info — /api/health
  */
 async function handleHealth(res: http.ServerResponse): Promise<void> {
+  const storage = await storagePromise;
   const storageHealthy = await storage.healthCheck();
 
   let memUsage: NodeJS.MemoryUsage | null = null;
@@ -679,6 +682,7 @@ async function handleSyncReceive(
   const changes = (body.changes as Array<Record<string, unknown>>) || [];
   let applied = 0;
   const myNodeId = syncEngine.getNodeIdentity().nodeId;
+  const storage = await storagePromise;
 
   for (const change of changes) {
     if (change.sourceNodeId === myNodeId) continue;
@@ -782,6 +786,7 @@ async function handleMigrationImport(
   }
 
   const imported: string[] = [];
+  const storage = await storagePromise;
 
   // ── Persona ──
   if (sections.persona) {

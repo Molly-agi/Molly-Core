@@ -609,7 +609,7 @@ export async function loadSocialCognitionState(): Promise<SocialCognitionState> 
   if (socialCognitionState) return socialCognitionState;
 
   try {
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const doc = await router.get(SOCIAL_COLLECTION, SOCIAL_DOC_ID);
     if (doc?.data) {
       const parsed = doc.data as Record<string, unknown>;
@@ -688,7 +688,7 @@ async function saveSocialCognitionState(): Promise<void> {
 
   try {
     socialCognitionState.metadata.lastUpdated = new Date();
-    const router = getStorageRouter();
+    const router = await getStorageRouter();
     const serializable = {
       actorModels: Array.from(socialCognitionState.actorModels.entries()),
       relationships: Array.from(socialCognitionState.relationships.entries()),

@@ -137,7 +137,7 @@ describe('runtime snapshot collector', () => {
       { id: 'missing', data: { id: 'missing', responseText: 'c' } },
     ];
 
-    getStorageRouter.mockReturnValue({
+    getStorageRouter.mockResolvedValue({
       getMode: jest.fn(() => 'firestore'),
       query: jest.fn().mockResolvedValue(docs),
     });

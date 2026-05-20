@@ -146,7 +146,7 @@ export async function loadMetaLearningState(): Promise<void> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, STATE_DOC);
 
     if (doc && doc.data) {
@@ -206,7 +206,7 @@ async function saveState(): Promise<void> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(COLLECTION, STATE_DOC, {
       strategies: Array.from(state.strategies.values()),
       learningEvents: state.learningEvents,

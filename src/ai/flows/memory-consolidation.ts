@@ -328,7 +328,7 @@ export const memoryConsolidationFlow = ai.defineFlow(
           recommendations: ['Configure Firebase Admin SDK'],
         };
       }
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       const embeddingProvider = getEmbeddingProvider();
 
       // STEP 1: Fetch Memories

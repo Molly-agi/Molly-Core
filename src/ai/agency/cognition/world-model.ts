@@ -1111,7 +1111,7 @@ async function saveWorldModel(): Promise<void> {
 
   saveDebounceTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       await storage.set(WORLD_MODEL_COLLECTION, WORLD_MODEL_DOC_ID, {
         entities: state.entities,
         relations: state.relations,
@@ -1134,7 +1134,7 @@ async function saveWorldModel(): Promise<void> {
  */
 export async function loadWorldModel(): Promise<number> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(WORLD_MODEL_COLLECTION, WORLD_MODEL_DOC_ID);
 
     if (!doc?.data) {

@@ -266,7 +266,7 @@ async function saveInitiatives(): Promise<void> {
 
   saveDebounceTimer = setTimeout(async () => {
     try {
-      const storage = getStorageRouter();
+      const storage = await getStorageRouter();
       await storage.set(INITIATIVES_COLLECTION, INITIATIVES_DOC_ID, {
         initiatives: JSON.parse(serializeInitiatives()),
         savedAt: new Date().toISOString(),
@@ -288,7 +288,7 @@ async function saveInitiatives(): Promise<void> {
  */
 export async function loadInitiatives(): Promise<number> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(INITIATIVES_COLLECTION, INITIATIVES_DOC_ID);
 
     if (!doc?.data?.initiatives) {

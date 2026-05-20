@@ -8,10 +8,10 @@ import * as wm from '../cognition/world-model';
 
 // Mock storage router
 jest.mock('@/lib/storage-router', () => ({
-  getStorageRouter: jest.fn(() => ({
+  getStorageRouter: jest.fn().mockResolvedValue({
     get: jest.fn().mockResolvedValue(null),
     set: jest.fn().mockResolvedValue(undefined),
-  })),
+  }),
 }));
 
 // Mock curiosity engine
