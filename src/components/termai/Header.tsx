@@ -16,7 +16,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MOLLY_AVATAR_URL } from '@/lib/memory-anchors';
 import { Button } from '../ui/button';
-import { Flower2, Sparkles } from 'lucide-react';
+import { Clapperboard, Flower2, Sparkles } from 'lucide-react';
 import { SystemHealthDot } from './SystemHealthDot';
 import { KillSwitch } from './KillSwitch';
 import { VoiceSelector } from './VoiceSelector';
@@ -119,6 +119,21 @@ export function Header({
         className="h-8 w-8 text-muted-foreground hover:text-foreground"
       >
         <Sparkles className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() =>
+          window.open(
+            '/personality-video',
+            'molly-personality-video',
+            'width=860,height=960,resizable=yes,scrollbars=yes'
+          )
+        }
+        title="Open Personality Video"
+        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+      >
+        <Clapperboard className="h-4 w-4" />
       </Button>
       <KillSwitch />
       <VoiceSelector />
