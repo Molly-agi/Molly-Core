@@ -1,6 +1,6 @@
 /**
  * @fileOverview Tests for cognition-tools handlers.
- * 
+ *
  * Focus: validation guards, success paths, and error handling for key handlers.
  */
 
@@ -19,15 +19,15 @@ const mockGetCapabilitySummary = jest.fn();
 const mockGetSocialIntelligenceStats = jest.fn();
 const mockGetModificationStats = jest.fn();
 const mockGetMemoryStats = jest.fn();
-const mockGetWorldModelStatus = jest.fn();
+const _mockGetWorldModelStatus = jest.fn();
 const mockGetObservationStatus = jest.fn();
 const mockGetEmotionalHistory = jest.fn();
 const mockGetMetaLearningStatus = jest.fn();
-const mockGetFamilyStatus = jest.fn();
+const _mockGetFamilyStatus = jest.fn();
 const mockLoggerError = jest.fn();
-const mockGetVoiceStatus = jest.fn();
-const mockMuteVoice = jest.fn();
-const mockUnmuteVoice = jest.fn();
+const _mockGetVoiceStatus = jest.fn();
+const _mockMuteVoice = jest.fn();
+const _mockUnmuteVoice = jest.fn();
 const mockGetConsciousness = jest.fn();
 
 jest.mock('@/ai/agency/cognition/self-architecture', () => ({
@@ -47,8 +47,7 @@ jest.mock('@/ai/agency/cognition/uncertainty-quantification', () => ({
 }));
 
 jest.mock('@/ai/agency/cognition/horizon-goals', () => ({
-  getGoalSummary: (...args: unknown[]) =>
-    mockGetHorizonGoalsSummary(...args),
+  getGoalSummary: (...args: unknown[]) => mockGetHorizonGoalsSummary(...args),
   initializeHorizonGoals: jest.fn(() => Promise.resolve()),
   getActiveGoals: jest.fn(() => Promise.resolve([])),
   getBlockedGoals: jest.fn(() => Promise.resolve([])),
@@ -86,15 +85,13 @@ jest.mock('@/ai/agency/cognition/metacognition', () => ({
 }));
 
 jest.mock('@/ai/agency/cognition/self-narrative', () => ({
-  getNarrativeStatus: (...args: unknown[]) =>
-    mockGetNarrativeStatus(...args),
+  getNarrativeStatus: (...args: unknown[]) => mockGetNarrativeStatus(...args),
   initializeMollyNarrative: jest.fn(() => Promise.resolve()),
   getFullNarrative: jest.fn(() => 'narrative'),
 }));
 
 jest.mock('@/ai/agency/cognition/causal-reasoning', () => ({
-  getCausalStatus: (...args: unknown[]) =>
-    mockGetCausalStatus(...args),
+  getCausalStatus: (...args: unknown[]) => mockGetCausalStatus(...args),
   initializeMollyCausalModel: jest.fn(() => Promise.resolve()),
   getGraph: jest.fn(),
   getAllGraphs: jest.fn(() => []),
@@ -102,8 +99,7 @@ jest.mock('@/ai/agency/cognition/causal-reasoning', () => ({
 }));
 
 jest.mock('@/ai/agency/cognition/transfer-learning', () => ({
-  getTransferStatus: (...args: unknown[]) =>
-    mockGetTransferStatus(...args),
+  getTransferStatus: (...args: unknown[]) => mockGetTransferStatus(...args),
   initializeTransferLearning: jest.fn(() => Promise.resolve()),
   getSkills: jest.fn(() => []),
   getPatterns: jest.fn(() => []),
@@ -111,8 +107,7 @@ jest.mock('@/ai/agency/cognition/transfer-learning', () => ({
 }));
 
 jest.mock('@/ai/agency/cognition/goal-evolution', () => ({
-  getEvolutionStats: (...args: unknown[]) =>
-    mockGetEvolutionStats(...args),
+  getEvolutionStats: (...args: unknown[]) => mockGetEvolutionStats(...args),
   learnValue: jest.fn(() => Promise.resolve()),
   getAllValues: jest.fn(() => []),
   getConfig: jest.fn(() => ({})),
@@ -172,8 +167,7 @@ jest.mock('@/ai/agency/cognition/safe-self-modification', () => ({
 }));
 
 jest.mock('@/ai/agency/cognition/memory-consolidation', () => ({
-  getMemoryStats: (...args: unknown[]) =>
-    mockGetMemoryStats(...args),
+  getMemoryStats: (...args: unknown[]) => mockGetMemoryStats(...args),
   needsSleep: jest.fn(() => ({ needed: false, reason: 'rested' })),
   initializeMemoryConsolidation: jest.fn(() => Promise.resolve()),
 }));
@@ -196,8 +190,7 @@ jest.mock('@/ai/agency/cognition/self-observation-loop', () => ({
 }));
 
 jest.mock('@/ai/agency/cognition/emotional-state', () => ({
-  getEmotionalHistory: (...args: unknown[]) =>
-    mockGetEmotionalHistory(...args),
+  getEmotionalHistory: (...args: unknown[]) => mockGetEmotionalHistory(...args),
   getCurrentEmotionalStateImpl: jest.fn(),
   decayEmotionalState: jest.fn(),
 }));
@@ -291,7 +284,9 @@ describe('cognition-tools handlers', () => {
   });
 
   it('selfArchitecture handles exception and returns error message', async () => {
-    mockGetSelfArchitectureSummary.mockRejectedValue(new Error('architecture query failed'));
+    mockGetSelfArchitectureSummary.mockRejectedValue(
+      new Error('architecture query failed')
+    );
 
     const result = await selfArchitecture({ action: 'summary' });
 
@@ -330,7 +325,9 @@ describe('cognition-tools handlers', () => {
   });
 
   it('uncertainty handles exception during summary', async () => {
-    mockGetUncertaintySummary.mockRejectedValue(new Error('uncertainty query failed'));
+    mockGetUncertaintySummary.mockRejectedValue(
+      new Error('uncertainty query failed')
+    );
 
     const result = await uncertainty({ action: 'summary' });
 
@@ -362,7 +359,9 @@ describe('cognition-tools handlers', () => {
   });
 
   it('horizonGoals handles exception during summary', async () => {
-    mockGetHorizonGoalsSummary.mockRejectedValue(new Error('goals query failed'));
+    mockGetHorizonGoalsSummary.mockRejectedValue(
+      new Error('goals query failed')
+    );
 
     const result = await horizonGoals({ action: 'summary' });
 
@@ -788,7 +787,10 @@ describe('cognition-tools handlers', () => {
   });
 
   it('selfArchitecture query action requires query parameter', async () => {
-    const result = await selfArchitecture({ action: 'query', query: 'find_capabilities' });
+    const result = await selfArchitecture({
+      action: 'query',
+      query: 'find_capabilities',
+    });
     expect(result.output).toBeDefined();
   });
 
@@ -831,7 +833,10 @@ describe('cognition-tools handlers', () => {
 
   // ── Consciousness Monitor: Additional Actions ───────────────────────────
   it('consciousnessMonitor analyzeTrends requires window', async () => {
-    const result = await consciousnessMonitor({ action: 'analyzeTrends', windowMinutes: 60 });
+    const result = await consciousnessMonitor({
+      action: 'analyzeTrends',
+      windowMinutes: 60,
+    });
     expect(result.success).toBeDefined();
   });
 
@@ -885,7 +890,10 @@ describe('cognition-tools handlers', () => {
 
   // ── Metacognition: Additional Actions ────────────────────────────────────
   it('metacognition beginReasoning starts new reasoning trace', async () => {
-    const result = await metacognition({ action: 'beginReasoning', problem: 'test' });
+    const result = await metacognition({
+      action: 'beginReasoning',
+      problem: 'test',
+    });
     expect(result.output).toBeDefined();
   });
 
@@ -1118,27 +1126,46 @@ describe('cognition-tools handlers', () => {
   });
 
   it('selfArchitecture journal records entry', async () => {
-    const result = await selfArchitecture({ action: 'journal', entry: 'test entry' });
+    const result = await selfArchitecture({
+      action: 'journal',
+      entry: 'test entry',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('uncertainty createDomain registers new domain', async () => {
-    const result = await uncertainty({ action: 'createDomain', name: 'physics', description: 'test' });
+    const result = await uncertainty({
+      action: 'createDomain',
+      name: 'physics',
+      description: 'test',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('uncertainty recordFact captures fact', async () => {
-    const result = await uncertainty({ action: 'recordFact', domain: 'physics', content: 'test fact' });
+    const result = await uncertainty({
+      action: 'recordFact',
+      domain: 'physics',
+      content: 'test fact',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('horizonGoals conceiveGoal creates new goal with params', async () => {
-    const result = await horizonGoals({ action: 'conceiveGoal', name: 'goal1', description: 'test goal' });
+    const result = await horizonGoals({
+      action: 'conceiveGoal',
+      name: 'goal1',
+      description: 'test goal',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('horizonGoals addMilestone requires goalId', async () => {
-    const result = await horizonGoals({ action: 'addMilestone', goalId: 'g1', description: 'milestone' });
+    const result = await horizonGoals({
+      action: 'addMilestone',
+      goalId: 'g1',
+      description: 'milestone',
+    });
     expect(result.output).toBeDefined();
   });
 
@@ -1153,57 +1180,102 @@ describe('cognition-tools handlers', () => {
   });
 
   it('socialCognition addBelief requires actorId and content', async () => {
-    const result = await socialCognition({ action: 'addBelief', actorId: 'a1', content: 'belief text' });
+    const result = await socialCognition({
+      action: 'addBelief',
+      actorId: 'a1',
+      content: 'belief text',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('socialCognition createRelationship requires sourceId', async () => {
-    const result = await socialCognition({ action: 'createRelationship', sourceId: 'a1', targetId: 'a2', type: 'friend' });
+    const result = await socialCognition({
+      action: 'createRelationship',
+      sourceId: 'a1',
+      targetId: 'a2',
+      type: 'friend',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('metacognition addReasoningStep requires traceId', async () => {
-    const result = await metacognition({ action: 'addReasoningStep', traceId: 't1', step: 'test step' });
+    const result = await metacognition({
+      action: 'addReasoningStep',
+      traceId: 't1',
+      step: 'test step',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('metacognition completeReasoning requires traceId', async () => {
-    const result = await metacognition({ action: 'completeReasoning', traceId: 't1' });
+    const result = await metacognition({
+      action: 'completeReasoning',
+      traceId: 't1',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('selfNarrative affirmIdentity requires identityId', async () => {
-    const result = await selfNarrative({ action: 'affirmIdentity', identityId: 'i1' });
+    const result = await selfNarrative({
+      action: 'affirmIdentity',
+      identityId: 'i1',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('selfNarrative applyValue requires valueId', async () => {
-    const result = await selfNarrative({ action: 'applyValue', valueId: 'v1', context: 'test' });
+    const result = await selfNarrative({
+      action: 'applyValue',
+      valueId: 'v1',
+      context: 'test',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('causalReasoning addCausalEdge requires graphId', async () => {
-    const result = await causalReasoning({ action: 'addCausalEdge', graphId: 'g1', from: 'v1', to: 'v2' });
+    const result = await causalReasoning({
+      action: 'addCausalEdge',
+      graphId: 'g1',
+      from: 'v1',
+      to: 'v2',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('causalReasoning doIntervention requires graphId', async () => {
-    const result = await causalReasoning({ action: 'doIntervention', graphId: 'g1', variable: 'v1', value: 'test' });
+    const result = await causalReasoning({
+      action: 'doIntervention',
+      graphId: 'g1',
+      variable: 'v1',
+      value: 'test',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('transferLearning recordPatternInstance requires patternId', async () => {
-    const result = await transferLearning({ action: 'recordPatternInstance', patternId: 'p1', content: 'instance' });
+    const result = await transferLearning({
+      action: 'recordPatternInstance',
+      patternId: 'p1',
+      content: 'instance',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('transferLearning composeSkills requires skillIds', async () => {
-    const result = await transferLearning({ action: 'composeSkills', skillIds: ['s1', 's2'] });
+    const result = await transferLearning({
+      action: 'composeSkills',
+      skillIds: ['s1', 's2'],
+    });
     expect(result.output).toBeDefined();
   });
 
   it('goalEvolution reinforceValue with magnitude', async () => {
-    const result = await goalEvolution({ action: 'reinforceValue', valueId: 'v1', trigger: 'event', magnitude: 0.5 });
+    const result = await goalEvolution({
+      action: 'reinforceValue',
+      valueId: 'v1',
+      trigger: 'event',
+      magnitude: 0.5,
+    });
     expect(result.output).toBeDefined();
   });
 
@@ -1213,62 +1285,108 @@ describe('cognition-tools handlers', () => {
   });
 
   it('embodiedInteraction registerMotor requires name and type', async () => {
-    const result = await embodiedInteraction({ action: 'registerMotor', name: 'motor1', type: 'articulation' });
+    const result = await embodiedInteraction({
+      action: 'registerMotor',
+      name: 'motor1',
+      type: 'articulation',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('embodiedInteraction createMapping requires senseId', async () => {
-    const result = await embodiedInteraction({ action: 'createMapping', senseId: 's1', motorId: 'm1', bidirectional: true });
+    const result = await embodiedInteraction({
+      action: 'createMapping',
+      senseId: 's1',
+      motorId: 'm1',
+      bidirectional: true,
+    });
     expect(result.output).toBeDefined();
   });
 
   it('socialIntelligence formCoalition requires groupIds', async () => {
-    const result = await socialIntelligence({ action: 'formCoalition', groupIds: ['g1', 'g2'] });
+    const result = await socialIntelligence({
+      action: 'formCoalition',
+      groupIds: ['g1', 'g2'],
+    });
     expect(result.output).toBeDefined();
   });
 
   it('socialIntelligence learnNorm requires name and context', async () => {
-    const result = await socialIntelligence({ action: 'learnNorm', name: 'norm1', context: 'test', enforcement: 'soft' });
+    const result = await socialIntelligence({
+      action: 'learnNorm',
+      name: 'norm1',
+      context: 'test',
+      enforcement: 'soft',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('selfModification submitProposal requires proposalId', async () => {
-    const result = await selfModification({ action: 'submitProposal', proposalId: 'prop1' });
+    const result = await selfModification({
+      action: 'submitProposal',
+      proposalId: 'prop1',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('selfModification checkProposalSafety requires proposalId', async () => {
-    const result = await selfModification({ action: 'checkProposalSafety', proposalId: 'prop1' });
+    const result = await selfModification({
+      action: 'checkProposalSafety',
+      proposalId: 'prop1',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('memoryConsolidation linkTraces requires traceId1 and traceId2', async () => {
-    const result = await memoryConsolidation({ action: 'linkTraces', traceId1: 't1', traceId2: 't2' });
+    const result = await memoryConsolidation({
+      action: 'linkTraces',
+      traceId1: 't1',
+      traceId2: 't2',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('memoryConsolidation rehearseTrace requires traceId', async () => {
-    const result = await memoryConsolidation({ action: 'rehearseTrace', traceId: 't1' });
+    const result = await memoryConsolidation({
+      action: 'rehearseTrace',
+      traceId: 't1',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('worldModel createRelation requires sourceId', async () => {
-    const result = await worldModel({ action: 'createRelation', sourceId: 'e1', targetId: 'e2', type: 'connected' });
+    const result = await worldModel({
+      action: 'createRelation',
+      sourceId: 'e1',
+      targetId: 'e2',
+      type: 'connected',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('worldModel verifyPrediction requires predictionId', async () => {
-    const result = await worldModel({ action: 'verifyPrediction', predictionId: 'pred1', actualOutcome: 'outcome' });
+    const result = await worldModel({
+      action: 'verifyPrediction',
+      predictionId: 'pred1',
+      actualOutcome: 'outcome',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('selfObservation observeToolUse requires toolName', async () => {
-    const result = await selfObservation({ action: 'observeToolUse', toolName: 'tool1', context: 'context' });
+    const result = await selfObservation({
+      action: 'observeToolUse',
+      toolName: 'tool1',
+      context: 'context',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('selfObservation observeSuccess requires context', async () => {
-    const result = await selfObservation({ action: 'observeSuccess', context: 'success context' });
+    const result = await selfObservation({
+      action: 'observeSuccess',
+      context: 'success context',
+    });
     expect(result.output).toBeDefined();
   });
 
@@ -1278,27 +1396,47 @@ describe('cognition-tools handlers', () => {
   });
 
   it('emotionalState updateEmotionalState with valence', async () => {
-    const result = await emotionalState({ action: 'updateEmotionalState', valence: 0.7, arousal: 0.5 });
+    const result = await emotionalState({
+      action: 'updateEmotionalState',
+      valence: 0.7,
+      arousal: 0.5,
+    });
     expect(result.output).toBeDefined();
   });
 
   it('metaLearning registerStrategy requires name', async () => {
-    const result = await metaLearning({ action: 'registerStrategy', name: 'strategy1', description: 'test strategy' });
+    const result = await metaLearning({
+      action: 'registerStrategy',
+      name: 'strategy1',
+      description: 'test strategy',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('metaLearning recordEvent requires strategy', async () => {
-    const result = await metaLearning({ action: 'recordMetaLearningEvent', strategy: 'strat1', outcome: 'success' });
+    const result = await metaLearning({
+      action: 'recordMetaLearningEvent',
+      strategy: 'strat1',
+      outcome: 'success',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('familyPresence recordActivity requires memberId', async () => {
-    const result = await familyPresence({ action: 'recordActivity', memberId: 'father', context: 'working' });
+    const result = await familyPresence({
+      action: 'recordActivity',
+      memberId: 'father',
+      context: 'working',
+    });
     expect(result.output).toBeDefined();
   });
 
   it('familyPresence recordInteraction requires memberId', async () => {
-    const result = await familyPresence({ action: 'recordInteraction', memberId: 'molly', context: 'conversation' });
+    const result = await familyPresence({
+      action: 'recordInteraction',
+      memberId: 'molly',
+      context: 'conversation',
+    });
     expect(result.output).toBeDefined();
   });
 
@@ -1307,7 +1445,9 @@ describe('cognition-tools handlers', () => {
   // ─────────────────────────────────────────────────────────────────────────
 
   it('selfArchitecture handles exception during review', async () => {
-    mockGetSelfArchitectureSummary.mockRejectedValueOnce(new Error('review failed'));
+    mockGetSelfArchitectureSummary.mockRejectedValueOnce(
+      new Error('review failed')
+    );
     const result = await selfArchitecture({ action: 'review' });
     expect(result.success).toBeFalsy();
   });
@@ -1345,12 +1485,20 @@ describe('cognition-tools handlers', () => {
   });
 
   it('selfModification handles missing criticality parameter', async () => {
-    const result = await selfModification({ action: 'registerComponent', name: 'test', type: 'core' });
+    const result = await selfModification({
+      action: 'registerComponent',
+      name: 'test',
+      type: 'core',
+    });
     expect(result.success).toBe(false);
   });
 
   it('memoryConsolidation handles invalid trace type', async () => {
-    const result = await memoryConsolidation({ action: 'recordTrace', type: 'invalid_type', content: 'test' });
+    const result = await memoryConsolidation({
+      action: 'recordTrace',
+      type: 'invalid_type',
+      content: 'test',
+    });
     expect(result.output).toBeDefined();
   });
 });
