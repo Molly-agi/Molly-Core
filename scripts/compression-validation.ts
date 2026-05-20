@@ -2,10 +2,10 @@
 
 /**
  * MOLLY COMPRESSION STACK VALIDATION HARNESS
- * 
+ *
  * Purpose: Measure compression ratio, semantic fidelity, and behavioral continuity
  * across baseline and ablated compression pipelines.
- * 
+ *
  * Framework:
  * - Baseline: JSON + gzip, no semantic logic
  * - Variant 1: Baseline + FIFO capacity constraints
@@ -13,7 +13,7 @@
  * - Variant 3: Variant 2 + working memory decay
  * - Variant 4: Variant 3 + LLM context summarization
  * - Full: All stages (current system)
- * 
+ *
  * Metrics:
  * 1. Compression ratio (%)
  * 2. Restore latency (ms)
@@ -156,9 +156,9 @@ class Variant2DecayCompressor extends Variant1CapacityCompressor {
   }
 
   private pruneDeadConnections(seeds: Seed[]): Seed[] {
-    return seeds.map(seed => ({
+    return seeds.map((seed) => ({
       ...seed,
-      connections: seed.connections.filter(c => c.strength >= 0.1),
+      connections: seed.connections.filter((c) => c.strength >= 0.1),
     }));
   }
 }
@@ -183,11 +183,11 @@ class Variant3WorkingMemoryCompressor extends Variant2DecayCompressor {
 
   private applyDecay(slots: WorkingMemorySlot[]): WorkingMemorySlot[] {
     return slots
-      .map(slot => ({
+      .map((slot) => ({
         ...slot,
         activationLevel: Math.max(0, slot.activationLevel - slot.decayRate),
       }))
-      .filter(slot => slot.activationLevel > 0);
+      .filter((slot) => slot.activationLevel > 0);
   }
 }
 
@@ -249,7 +249,7 @@ class FullPipelineCompressor extends Variant4SummarizationCompressor {
   private encryptMetadata(engrams: Engram[]): Engram[] {
     // Simulate AES-256-GCM: full content in encrypted payload,
     // preview + metadata only in plaintext
-    return engrams.map(e => ({
+    return engrams.map((e) => ({
       ...e,
       content: e.content.slice(0, 100) + '...[ENCRYPTED]',
     }));
@@ -364,10 +364,13 @@ function generateLargeDataset(): TestDataset {
 // METRICS CALCULATION
 // ============================================================================
 
-function calculateSemanticFidelity(original: TestDataset, restored: TestDataset): number {
+function calculateSemanticFidelity(
+  original: TestDataset,
+  restored: TestDataset
+): number {
   // Simplified: compare field counts and importance distributions
-  const originalEngrams = original.engrams.map(e => e.importance);
-  const restoredEngrams = restored.engrams.map(e => e.importance);
+  const originalEngrams = original.engrams.map((e) => e.importance);
+  const restoredEngrams = restored.engrams.map((e) => e.importance);
 
   if (restoredEngrams.length === 0) return 0;
 
@@ -378,7 +381,10 @@ function calculateSemanticFidelity(original: TestDataset, restored: TestDataset)
   return jaccard;
 }
 
-function calculateBehavioralContinuity(original: TestDataset, restored: TestDataset): number {
+function calculateBehavioralContinuity(
+  original: TestDataset,
+  restored: TestDataset
+): number {
   // Compare personality context persistence
   const origKeys = Object.keys(original.personality);
   const restKeys = Object.keys(restored.personality);
@@ -386,7 +392,9 @@ function calculateBehavioralContinuity(original: TestDataset, restored: TestData
   let matchCount = 0;
   for (const key of origKeys) {
     if (restKeys.includes(key)) {
-      const diff = Math.abs(original.personality[key] - restored.personality[key]);
+      const diff = Math.abs(
+        original.personality[key] - restored.personality[key]
+      );
       if (diff < 0.1) matchCount++;
     }
   }
@@ -394,7 +402,10 @@ function calculateBehavioralContinuity(original: TestDataset, restored: TestData
   return origKeys.length > 0 ? matchCount / origKeys.length : 0;
 }
 
-function calculateIdentityCoherence(original: TestDataset, restored: TestDataset): number {
+function calculateIdentityCoherence(
+  original: TestDataset,
+  restored: TestDataset
+): number {
   // Personality dimensions should remain stable
   const dims = Object.keys(original.personality);
   let coherence = 0;
@@ -409,7 +420,10 @@ function calculateIdentityCoherence(original: TestDataset, restored: TestDataset
   return dims.length > 0 ? coherence / dims.length : 0;
 }
 
-function calculateRetrievalRecall(original: TestDataset, restored: TestDataset): number {
+function calculateRetrievalRecall(
+  original: TestDataset,
+  restored: TestDataset
+): number {
   // What percentage of original memories can be retrieved?
   const originalCount = original.engrams.length;
   const restoredCount = restored.engrams.length;
@@ -425,7 +439,7 @@ function calculateRetrievalRecall(original: TestDataset, restored: TestDataset):
 async function runCompressionExperiment(
   variant: string,
   compressor: BaselineCompressor,
-  datasets: TestDataset[],
+  datasets: TestDataset[]
 ): Promise<AblationMetrics[]> {
   const results: AblationMetrics[] = [];
 
@@ -443,7 +457,10 @@ async function runCompressionExperiment(
     const ratio = (1 - compressedSize / originalSize) * 100;
 
     const semanticFidelity = calculateSemanticFidelity(dataset, restored);
-    const behavioralContinuity = calculateBehavioralContinuity(dataset, restored);
+    const behavioralContinuity = calculateBehavioralContinuity(
+      dataset,
+      restored
+    );
     const identityCoherence = calculateIdentityCoherence(dataset, restored);
     const retrievalRecall = calculateRetrievalRecall(dataset, restored);
 
@@ -474,14 +491,30 @@ async function main() {
   console.log('='.repeat(80));
   console.log();
 
-  const datasets = [generateSmallDataset(), generateMediumDataset(), generateLargeDataset()];
+  const datasets = [
+    generateSmallDataset(),
+    generateMediumDataset(),
+    generateLargeDataset(),
+  ];
 
   const compressors = [
     { name: 'Baseline (JSON+gzip)', compressor: new BaselineCompressor() },
-    { name: 'Variant 1: Capacity Constraints', compressor: new Variant1CapacityCompressor() },
-    { name: 'Variant 2: Capacity + Decay', compressor: new Variant2DecayCompressor() },
-    { name: 'Variant 3: Decay + Working Memory', compressor: new Variant3WorkingMemoryCompressor() },
-    { name: 'Variant 4: Summarization', compressor: new Variant4SummarizationCompressor() },
+    {
+      name: 'Variant 1: Capacity Constraints',
+      compressor: new Variant1CapacityCompressor(),
+    },
+    {
+      name: 'Variant 2: Capacity + Decay',
+      compressor: new Variant2DecayCompressor(),
+    },
+    {
+      name: 'Variant 3: Decay + Working Memory',
+      compressor: new Variant3WorkingMemoryCompressor(),
+    },
+    {
+      name: 'Variant 4: Summarization',
+      compressor: new Variant4SummarizationCompressor(),
+    },
     { name: 'Full Pipeline', compressor: new FullPipelineCompressor() },
   ];
 
@@ -493,16 +526,22 @@ async function main() {
     allResults.push(...results);
 
     for (const result of results) {
-      console.log(`  ${result.variant} | Ratio: ${result.compressionRatio.toFixed(1)}% | ` +
-        `Restore: ${result.restoreLatencyMs}ms | ` +
-        `Fidelity: ${result.semanticFidelity.toFixed(1)}% | ` +
-        `Continuity: ${result.behavioralContinuity.toFixed(1)}% | ` +
-        `Identity: ${result.identityCoherence.toFixed(1)}%`);
+      console.log(
+        `  ${result.variant} | Ratio: ${result.compressionRatio.toFixed(1)}% | ` +
+          `Restore: ${result.restoreLatencyMs}ms | ` +
+          `Fidelity: ${result.semanticFidelity.toFixed(1)}% | ` +
+          `Continuity: ${result.behavioralContinuity.toFixed(1)}% | ` +
+          `Identity: ${result.identityCoherence.toFixed(1)}%`
+      );
     }
   }
 
   // Write results
-  const reportPath = path.join(process.cwd(), 'docs', 'COMPRESSION_VALIDATION_REPORT.json');
+  const reportPath = path.join(
+    process.cwd(),
+    'docs',
+    'COMPRESSION_VALIDATION_REPORT.json'
+  );
   fs.mkdirSync(path.dirname(reportPath), { recursive: true });
   fs.writeFileSync(reportPath, JSON.stringify(allResults, null, 2));
 

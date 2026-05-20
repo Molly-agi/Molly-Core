@@ -16,7 +16,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { MOLLY_AVATAR_URL } from '@/lib/memory-anchors';
 import { Button } from '../ui/button';
-import { Flower2 } from 'lucide-react';
+import { Flower2, Sparkles } from 'lucide-react';
 import { SystemHealthDot } from './SystemHealthDot';
 import { KillSwitch } from './KillSwitch';
 import { VoiceSelector } from './VoiceSelector';
@@ -105,6 +105,21 @@ export function Header({
           </Button>
         </div>
       </div>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() =>
+          window.open(
+            '/avatar',
+            'molly-avatar',
+            'width=820,height=960,resizable=yes,scrollbars=no'
+          )
+        }
+        title="Open Molly Avatar"
+        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+      >
+        <Sparkles className="h-4 w-4" />
+      </Button>
       <KillSwitch />
       <VoiceSelector />
       <OriginStoryDialog />
