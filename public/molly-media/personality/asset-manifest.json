@@ -1,0 +1,26 @@
+{
+  "id": "grok-video-2026-05-16-20-48-21",
+  "createdAt": "2026-05-20",
+  "title": "Personality Video Upload",
+  "description": "Web-optimized derivatives of the uploaded personality video.",
+  "video": {
+    "primary": "/molly-media/personality/grok-optimized.mp4",
+    "fallback": "/molly-media/personality/grok-optimized.webm",
+    "original": "/molly-media/personality/original.mp4",
+    "durationSeconds": 6.042,
+    "width": 928,
+    "height": 1376
+  },
+  "poster": {
+    "jpg": "/molly-media/personality/poster.jpg",
+    "webp": "/molly-media/personality/poster.webp"
+  },
+  "audio": {
+    "m4a": "/molly-media/personality/audio.m4a"
+  },
+  "notes": [
+    "Use MP4 as the default source for broad browser compatibility.",
+    "Use WebM as an alternate source for reduced transfer size.",
+    "Poster images are extracted at 1 second."
+  ]
+}

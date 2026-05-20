@@ -26,7 +26,7 @@ import { useGeminiLive } from '@/components/termai/useGeminiLive';
 import { useTTS } from '@/components/termai/useTTS';
 import { detectEmotionalTone } from '@/ai/voice/voice-personality';
 import { AvatarDirector } from '@/ai/agency/embodied/AvatarDirector';
-import { Mic, MicOff, Send } from 'lucide-react';
+import { ArrowLeft, Mic, MicOff, Send, X } from 'lucide-react';
 
 // Canvas is WebGL — must be client-only, no SSR
 const MollyCanvas = dynamic(() => import('@/browser/canvas/MollyCanvas'), {
@@ -48,6 +48,10 @@ export default function AvatarPage() {
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [status, setStatus] = useState('');
+  const [roboticsStatus, setRoboticsStatus] = useState(
+    'No active robotics plan'
+  );
+  const activePlanSignatureRef = useRef<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
 
   // One AvatarDirector per window — owns voice + robotics state
@@ -87,22 +91,57 @@ export default function AvatarPage() {
     onStatusChange: setStatus,
   });
 
-  // Poll bridge every 3 s
+  // Poll bridge and active robotics plan every 3 s.
   useEffect(() => {
     const poll = async () => {
       try {
-        const res = await fetch('/api/bridge?limit=30');
-        if (!res.ok) return;
-        const data = await res.json();
-        setMessages(data.messages ?? []);
+        const [bridgeRes, planRes] = await Promise.all([
+          fetch('/api/bridge?limit=30'),
+          fetch('/api/robotics/active-plan', { cache: 'no-store' }),
+        ]);
+
+        if (bridgeRes.ok) {
+          const bridgeData = await bridgeRes.json();
+          setMessages(bridgeData.messages ?? []);
+        }
+
+        if (planRes.ok) {
+          const planData = await planRes.json();
+          const incomingPlan = planData.plan as {
+            id?: string;
+            goal?: string;
+            actions?: unknown[];
+          } | null;
+
+          if (!incomingPlan?.id) {
+            activePlanSignatureRef.current = null;
+            director.robotics.clearPlan();
+            setRoboticsStatus('No active robotics plan');
+            return;
+          }
+
+          const planSignature = `${incomingPlan.id}:${planData.updatedAt ?? 0}`;
+
+          if (planSignature !== activePlanSignatureRef.current) {
+            director.robotics.loadPlan(planData.plan);
+            activePlanSignatureRef.current = planSignature;
+          }
+
+          const actionCount = Array.isArray(incomingPlan.actions)
+            ? incomingPlan.actions.length
+            : 0;
+          setRoboticsStatus(
+            `Robotics: ${incomingPlan.goal || 'Active plan'} (${actionCount} steps)${planData.source ? ` • ${planData.source}` : ''}`
+          );
+        }
       } catch {
-        // silent — bridge may not be running
+        // silent — bridge/robotics service may be unavailable
       }
     };
     poll();
     const id = setInterval(poll, 3000);
     return () => clearInterval(id);
-  }, []);
+  }, [director]);
 
   // Auto-scroll feed
   useEffect(() => {
@@ -134,11 +173,55 @@ export default function AvatarPage() {
     [sendText]
   );
 
+  const closeOrReturn = useCallback(() => {
+    if (window.opener && !window.opener.closed) {
+      window.close();
+      return;
+    }
+    window.location.href = '/';
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeOrReturn();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [closeOrReturn]);
+
   return (
     <div
       className="flex flex-col h-screen bg-background text-foreground overflow-hidden"
       onClick={unlockAutoplay}
     >
+      <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border bg-background/95 backdrop-blur-sm">
+        <button
+          onClick={() => {
+            if (window.opener && !window.opener.closed) {
+              window.close();
+              return;
+            }
+            window.location.href = '/';
+          }}
+          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          title="Return"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Return
+        </button>
+        <span className="text-xs text-muted-foreground">Avatar Window</span>
+        <button
+          onClick={closeOrReturn}
+          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          title="Close"
+        >
+          <X className="h-3.5 w-3.5" />
+          Close
+        </button>
+      </div>
+
       {/* ── Avatar canvas (top ~60%) ─────────────────────────────────────── */}
       <div className="relative flex-none" style={{ height: '60vh' }}>
         <MollyCanvas
@@ -154,6 +237,13 @@ export default function AvatarPage() {
               {status}
             </span>
           )}
+        </div>
+
+        {/* Overlay: robotics plan status */}
+        <div className="absolute top-3 right-3 pointer-events-none">
+          <span className="text-[10px] text-muted-foreground bg-background/70 rounded-full px-2.5 py-1 backdrop-blur-sm">
+            {roboticsStatus}
+          </span>
         </div>
 
         {/* Overlay: model placeholder hint */}
