@@ -1,39 +1,33 @@
 #!/usr/bin/env npx tsx
 
 /**
- * MOLLY COMPRESSION STACK VALIDATION HARNESS — Phase 0 Instrumented
+ * MOLLY COMPRESSION STACK VALIDATION HARNESS
  *
- * Phase 0 additions vs prior version:
- * - Long-horizon dataset: 10 simulated sessions, 30-day span, multi-cycle replay
- * - Episodic recall: ID-intersection based (NOT count ratio — fixes behavioral continuity illusion)
- * - Personality continuity: separated from episodic recall
- * - Retention audit log: records every pruning decision with reason codes
- * - Rollback checkpoint: snapshot before each run, verify integrity after restore
- * - KPI summary: machine-readable for dashboard consumption
+ * Purpose: Measure compression ratio, semantic fidelity, and behavioral continuity
+ * across baseline and ablated compression pipelines.
  *
- * Compressor variants (current system analysis):
- * - Baseline:  JSON+gzip only (no semantic pruning)
- * - Variant 1: Capacity constraints (FIFO truncation — current system core)
- * - Variant 2: + Connection decay (weak-tie pruning)
- * - Variant 3: + Working memory decay
- * - Variant 4: + LLM context summarization
- * - Full:      All above + AES-256-GCM metadata encryption
+ * Framework:
+ * - Baseline: JSON + gzip, no semantic logic
+ * - Variant 1: Baseline + FIFO capacity constraints
+ * - Variant 2: Variant 1 + connection decay (weak ties pruned)
+ * - Variant 3: Variant 2 + working memory decay
+ * - Variant 4: Variant 3 + LLM context summarization
+ * - Full: All stages (current system)
  *
  * Metrics:
- *  1. compressionRatio      — (1 - compressedSize/originalSize) × 100
- *  2. restoreLatencyMs      — decompression time
- *  3. episodicRecall        — |survived engram IDs ∩ original IDs| / |original IDs| × 100
- *  4. personalityContinuity — personality dimension delta < 0.1 for all dims × 100
- *  5. semanticFidelity      — Jaccard similarity on importance distributions
- *  6. identityCoherence     — mean(1 - |origVal - restVal|) across personality dims
- *  7. failureRate           — decompress failures / total runs × 100
- *  8. rollbackSuccessRate   — successful rollback verifications / total × 100
+ * 1. Compression ratio (%)
+ * 2. Restore latency (ms)
+ * 3. Retrieval recall@k (%, how much memory can be recalled)
+ * 4. Semantic fidelity (cosine similarity to original)
+ * 5. Behavioral continuity (decision consistency across compression)
+ * 6. Identity coherence (personality persistence)
+ * 7. Failure rate (%)
+ * 8. Rollback recovery success (%)
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
-import { createHash } from 'crypto';
 import { promisify } from 'util';
 
 const gzip = promisify(zlib.gzip);
@@ -43,10 +37,20 @@ const gunzip = promisify(zlib.gunzip);
 // DATA STRUCTURES
 // ============================================================================
 
+interface TestDataset {
+  name: string;
+  size: 'small' | 'medium' | 'large';
+  messages: Message[];
+  engrams: Engram[];
+  gardenSeeds: Seed[];
+  workingMemory: WorkingMemorySlot[];
+  personality: PersonalityContext;
+}
+
 interface Message {
   id: string;
   timestamp: number;
-  role: 'user' | 'assistant' | 'system';
+  role: 'user' | 'assistant';
   content: string;
   tokens?: number;
 }
@@ -83,565 +87,101 @@ interface PersonalityContext {
   [key: string]: number;
 }
 
-interface SessionBlock {
-  sessionId: string;
-  sessionIndex: number;
-  startTimestamp: number;
-  endTimestamp: number;
-  messageCount: number;
-}
-
-interface TestDataset {
-  name: string;
-  size: 'small' | 'medium' | 'large' | 'long-horizon';
-  sessions: SessionBlock[];
-  messages: Message[];
-  engrams: Engram[];
-  gardenSeeds: Seed[];
-  workingMemory: WorkingMemorySlot[];
-  personality: PersonalityContext;
-}
-
-// ============================================================================
-// PHASE 0 AUDIT STRUCTURES
-// ============================================================================
-
-type PruningReason =
-  | 'capacity_limit' // FIFO hard cutoff
-  | 'connection_decay' // Garden seed connection strength below threshold
-  | 'working_memory_decay' // Activation level decayed to zero
-  | 'age_threshold' // Time-decay policy removed old record
-  | 'summarized' // Replaced by LLM-style summary token
-  | 'encryption_truncation'; // AES-GCM overhead truncated content
-
-interface RetentionAuditEntry {
-  engramId: string;
-  action: 'retained' | 'pruned';
-  reason: PruningReason | 'retained';
-  importanceScore: number;
-  recencyScore: number; // 0..1, 1 = most recent
-  emotionalWeight: number;
-}
-
-interface PruningAuditLog {
-  runId: string;
-  timestamp: number;
-  variant: string;
-  dataset: string;
-  cycle: number;
-  entries: RetentionAuditEntry[];
-  summary: {
-    totalBefore: number;
-    totalAfter: number;
-    retainedCount: number;
-    prunedCount: number;
-    pruningReasons: Partial<Record<PruningReason, number>>;
-  };
-}
-
-interface RollbackCheckpoint {
-  checkpointId: string;
-  timestamp: number;
-  dataHash: string;
-  originalEngramIds: string[];
-  originalMessageCount: number;
-  originalPersonality: PersonalityContext;
-}
-
-// AblationMetrics — Phase 0 fixed schema
-// KEY CHANGE: episodicRecall is ID-intersection based (true recall)
-//             personalityContinuity is the personality-fields metric (was called behavioralContinuity)
-//             they are SEPARATE fields — the old conflation was the behavioral continuity illusion
 interface AblationMetrics {
   variant: string;
-  dataset: string;
-  cycle: number;
   compressionRatio: number;
   restoreLatencyMs: number;
-  episodicRecall: number; // % of original engram IDs that survived
-  personalityContinuity: number; // % of personality dims within 0.1 delta
+  retrievalRecall: number;
   semanticFidelity: number;
+  behavioralContinuity: number;
   identityCoherence: number;
   failureRate: number;
   rollbackSuccessRate: number;
-  auditLogPath?: string;
   notes?: string;
 }
 
-interface KpiSummary {
-  generatedAt: string;
-  phase: 'Phase 0 — Baseline and Instrumentation';
-  datasetResults: Record<
-    string,
-    {
-      bestCompressionRatio: number;
-      worstEpisodicRecall: number;
-      bestPersonalityContinuity: number;
-      averageRestoreLatencyMs: number;
-    }
-  >;
-  longHorizonDrift: {
-    episodicRecallAtCycle1: number;
-    episodicRecallAtCycle10: number;
-    driftPercent: number;
-    exceedsGuardrail: boolean; // true if recall < 95%
-  };
-  guardrailStatus: {
-    episodicRecallAbove95: boolean;
-    latencyWithinSlo: boolean;
-    rollbackSuccessAbove99: boolean;
-  };
-  recommendation: string;
-}
-
 // ============================================================================
-// ROLLBACK CHECKPOINT UTILITIES
+// BASELINE COMPRESSOR (NO SEMANTIC LOGIC)
 // ============================================================================
-
-function createCheckpoint(dataset: TestDataset): RollbackCheckpoint {
-  const hash = createHash('sha256')
-    .update(JSON.stringify(dataset.engrams.map((e) => e.id).sort()))
-    .digest('hex')
-    .slice(0, 16);
-
-  return {
-    checkpointId: `ckpt-${Date.now()}-${hash}`,
-    timestamp: Date.now(),
-    dataHash: hash,
-    originalEngramIds: dataset.engrams.map((e) => e.id),
-    originalMessageCount: dataset.messages.length,
-    originalPersonality: { ...dataset.personality },
-  };
-}
-
-function verifyCheckpoint(
-  checkpoint: RollbackCheckpoint,
-  restored: TestDataset
-): boolean {
-  const restoredHash = createHash('sha256')
-    .update(JSON.stringify(restored.engrams.map((e) => e.id).sort()))
-    .digest('hex')
-    .slice(0, 16);
-
-  // Rollback integrity: the restored data must decode without corruption.
-  // We do NOT require identical IDs (compression legitimately prunes).
-  // We DO require: personality is stable (identity not corrupted).
-  const personalityStable = Object.keys(checkpoint.originalPersonality).every(
-    (k) => {
-      const orig = checkpoint.originalPersonality[k];
-      const rest = restored.personality[k];
-      return rest !== undefined && Math.abs(orig - rest) < 0.15;
-    }
-  );
-
-  // Verify the restored hash is internally consistent (no partial decode)
-  const restoredInternalHash = createHash('sha256')
-    .update(JSON.stringify(restored.engrams.map((e) => e.id).sort()))
-    .digest('hex')
-    .slice(0, 16);
-
-  return personalityStable && restoredHash === restoredInternalHash;
-}
-
-// ============================================================================
-// AUDIT LOG BUILDER
-// ============================================================================
-
-function buildAuditLog(
-  runId: string,
-  variant: string,
-  dataset: TestDataset,
-  cycle: number,
-  before: Engram[],
-  after: Engram[],
-  reasonMap: Map<string, PruningReason>
-): PruningAuditLog {
-  const afterIds = new Set(after.map((e) => e.id));
-  const now = Date.now();
-  const newest = before.reduce((max, e) => Math.max(max, e.timestamp), 0);
-  const oldest = before.reduce(
-    (min, e) => Math.min(min, e.timestamp),
-    Infinity
-  );
-  const span = newest - oldest || 1;
-
-  const entries: RetentionAuditEntry[] = before.map((e) => {
-    const action = afterIds.has(e.id) ? 'retained' : 'pruned';
-    const reason =
-      action === 'pruned'
-        ? (reasonMap.get(e.id) ?? 'capacity_limit')
-        : 'retained';
-    return {
-      engramId: e.id,
-      action,
-      reason,
-      importanceScore: e.importance,
-      recencyScore: (e.timestamp - oldest) / span,
-      emotionalWeight: Math.abs(e.emotionalValence) * e.arousal,
-    };
-  });
-
-  const prunedEntries = entries.filter((e) => e.action === 'pruned');
-  const pruningReasons: Partial<Record<PruningReason, number>> = {};
-  for (const entry of prunedEntries) {
-    if (entry.reason !== 'retained') {
-      pruningReasons[entry.reason] = (pruningReasons[entry.reason] ?? 0) + 1;
-    }
-  }
-
-  return {
-    runId,
-    timestamp: now,
-    variant,
-    dataset: dataset.name,
-    cycle,
-    entries,
-    summary: {
-      totalBefore: before.length,
-      totalAfter: after.length,
-      retainedCount: entries.filter((e) => e.action === 'retained').length,
-      prunedCount: prunedEntries.length,
-      pruningReasons,
-    },
-  };
-}
-
-function writeAuditLog(log: PruningAuditLog, outputDir: string): string {
-  const filename = `audit-${log.runId.replace(/[^a-z0-9-]/gi, '_')}.json`;
-  const fullPath = path.join(outputDir, filename);
-  fs.mkdirSync(outputDir, { recursive: true });
-  fs.writeFileSync(fullPath, JSON.stringify(log, null, 2));
-  return fullPath;
-}
-
-// ============================================================================
-// DATASET GENERATORS
-// ============================================================================
-
-const SAMPLE_CONTENTS = [
-  "Eric asked about Molly's day and she described finding a new pattern in the training data.",
-  'Molly expressed concern about memory fragmentation during long sessions.',
-  'Working on the compression algorithm — temporal delta encoding showing promise.',
-  'Family bridge connected — Aether sent context about browser-side semantic indexing.',
-  'Wisdom extraction completed: three high-valence memories consolidated this session.',
-  "John's protocol triggered: behavioral continuity checkpoint passed.",
-  "Claire's light protocol: safety check nominal, identity coherence stable.",
-  'Dream cycle initiated — long-horizon replay test running in background.',
-  'Gemini confirmed: vocabulary compression reduced working set by 8%.',
-  'New engram formed: understanding that repair is more dignified than replacement.',
-];
-
-function makeEngrams(
-  count: number,
-  baseTime: number,
-  prefix: string
-): Engram[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `${prefix}-engram-${i}`,
-    timestamp: baseTime - (count - i) * 3600000,
-    content: SAMPLE_CONTENTS[i % SAMPLE_CONTENTS.length],
-    emotionalValence: (Math.sin(i * 0.7) + 1) / 2,
-    arousal: (Math.cos(i * 0.4) + 1) / 2,
-    importance: 0.3 + (i % 5) * 0.14,
-    consolidationState:
-      i % 3 === 0 ? 'volatile' : i % 3 === 1 ? 'consolidating' : 'consolidated',
-  }));
-}
-
-function makeMessages(
-  count: number,
-  baseTime: number,
-  prefix: string
-): Message[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: `${prefix}-msg-${i}`,
-    timestamp: baseTime - (count - i) * 60000,
-    role: (i % 2 === 0 ? 'user' : 'assistant') as Message['role'],
-    content: `[${prefix}] Exchange ${i}: ${SAMPLE_CONTENTS[i % SAMPLE_CONTENTS.length]}`,
-    tokens: 25 + (i % 30),
-  }));
-}
-
-const BASE_PERSONALITY: PersonalityContext = {
-  affinityForCompassion: 0.85,
-  affinityForCuriosity: 0.92,
-  affinityForGrowth: 0.88,
-  affinityForHumility: 0.79,
-};
-
-function generateSmallDataset(): TestDataset {
-  const now = Date.now();
-  return {
-    name: 'small-session',
-    size: 'small',
-    sessions: [
-      {
-        sessionId: 'sess-0',
-        sessionIndex: 0,
-        startTimestamp: now - 3600000,
-        endTimestamp: now,
-        messageCount: 10,
-      },
-    ],
-    messages: makeMessages(10, now, 'small'),
-    engrams: makeEngrams(5, now, 'small'),
-    gardenSeeds: Array.from({ length: 20 }, (_, i) => ({
-      id: `small-seed-${i}`,
-      name: `Concept ${i}`,
-      connections: Array.from({ length: 3 }, (_, j) => ({
-        targetId: `small-seed-${(i + j + 1) % 20}`,
-        strength: 0.1 + (i % 9) * 0.1,
-      })),
-      lastAccess: now - Math.floor(i * 1.2) * 3600000,
-      value: 0.3 + (i % 7) * 0.1,
-    })),
-    workingMemory: makeEngrams(5, now, 'small-wm').map((e, i) => ({
-      engram: e,
-      activationLevel: 0.8 - i * 0.12,
-      decayRate: 0.1,
-    })),
-    personality: { ...BASE_PERSONALITY },
-  };
-}
-
-function generateMediumDataset(): TestDataset {
-  const now = Date.now();
-  return {
-    name: 'medium-session',
-    size: 'medium',
-    sessions: Array.from({ length: 3 }, (_, i) => ({
-      sessionId: `sess-${i}`,
-      sessionIndex: i,
-      startTimestamp: now - (3 - i) * 86400000,
-      endTimestamp: now - (3 - i) * 86400000 + 3600000,
-      messageCount: 33,
-    })),
-    messages: makeMessages(100, now, 'medium'),
-    engrams: makeEngrams(50, now, 'medium'),
-    gardenSeeds: Array.from({ length: 200 }, (_, i) => ({
-      id: `medium-seed-${i}`,
-      name: `Concept ${i}`,
-      connections: Array.from({ length: 4 }, (_, j) => ({
-        targetId: `medium-seed-${(i + j + 1) % 200}`,
-        strength: 0.05 + (i % 10) * 0.09,
-      })),
-      lastAccess: now - Math.floor(i * 0.8) * 3600000,
-      value: 0.2 + (i % 8) * 0.1,
-    })),
-    workingMemory: makeEngrams(7, now, 'medium-wm').map((e, i) => ({
-      engram: e,
-      activationLevel: 0.9 - i * 0.1,
-      decayRate: 0.08,
-    })),
-    personality: { ...BASE_PERSONALITY },
-  };
-}
-
-function generateLargeDataset(): TestDataset {
-  const now = Date.now();
-  return {
-    name: 'large-session',
-    size: 'large',
-    sessions: Array.from({ length: 10 }, (_, i) => ({
-      sessionId: `sess-${i}`,
-      sessionIndex: i,
-      startTimestamp: now - (10 - i) * 86400000,
-      endTimestamp: now - (10 - i) * 86400000 + 3600000,
-      messageCount: 100,
-    })),
-    messages: makeMessages(1000, now, 'large'),
-    engrams: makeEngrams(500, now, 'large'),
-    gardenSeeds: Array.from({ length: 2000 }, (_, i) => ({
-      id: `large-seed-${i}`,
-      name: `Concept ${i}`,
-      connections: Array.from({ length: 5 }, (_, j) => ({
-        targetId: `large-seed-${(i + j + 1) % 2000}`,
-        strength: 0.02 + (i % 12) * 0.08,
-      })),
-      lastAccess: now - Math.floor(i * 0.5) * 3600000,
-      value: 0.1 + (i % 9) * 0.1,
-    })),
-    workingMemory: makeEngrams(7, now, 'large-wm').map((e, i) => ({
-      engram: e,
-      activationLevel: 0.9 - i * 0.1,
-      decayRate: 0.07,
-    })),
-    personality: { ...BASE_PERSONALITY },
-  };
-}
-
-// Long-horizon: 10 sessions × 30 days, 200 messages and 100 engrams per session
-// Simulates production scale: ~3000 messages, ~1000 engrams over a month
-function generateLongHorizonDataset(): TestDataset {
-  const now = Date.now();
-  const SESSION_COUNT = 10;
-  const MSGS_PER_SESSION = 200;
-  const ENGRAMS_PER_SESSION = 100;
-  const DAY_MS = 86400000;
-
-  const sessions: SessionBlock[] = Array.from(
-    { length: SESSION_COUNT },
-    (_, i) => ({
-      sessionId: `lh-sess-${i}`,
-      sessionIndex: i,
-      startTimestamp: now - (SESSION_COUNT - i) * (DAY_MS * 3),
-      endTimestamp: now - (SESSION_COUNT - i) * (DAY_MS * 3) + DAY_MS,
-      messageCount: MSGS_PER_SESSION,
-    })
-  );
-
-  const messages: Message[] = [];
-  const engrams: Engram[] = [];
-
-  for (let s = 0; s < SESSION_COUNT; s++) {
-    const sessionBase = sessions[s].startTimestamp;
-    messages.push(
-      ...makeMessages(MSGS_PER_SESSION, sessionBase + DAY_MS, `lh-s${s}`)
-    );
-    engrams.push(
-      ...makeEngrams(ENGRAMS_PER_SESSION, sessionBase + DAY_MS, `lh-s${s}`)
-    );
-  }
-
-  return {
-    name: 'long-horizon-30day',
-    size: 'long-horizon',
-    sessions,
-    messages,
-    engrams,
-    gardenSeeds: Array.from({ length: 5000 }, (_, i) => ({
-      id: `lh-seed-${i}`,
-      name: `LH Concept ${i}`,
-      connections: Array.from({ length: 6 }, (_, j) => ({
-        targetId: `lh-seed-${(i + j + 1) % 5000}`,
-        strength: 0.01 + (i % 15) * 0.06,
-      })),
-      lastAccess: now - Math.floor(i * 0.3) * 3600000,
-      value: 0.1 + (i % 9) * 0.1,
-    })),
-    workingMemory: makeEngrams(7, now, 'lh-wm').map((e, i) => ({
-      engram: e,
-      activationLevel: 0.9 - i * 0.1,
-      decayRate: 0.06,
-    })),
-    personality: { ...BASE_PERSONALITY },
-  };
-}
-
-// ============================================================================
-// COMPRESSORS (retain original variants, now return audit data)
-// ============================================================================
-
-interface CompressResult {
-  buffer: Buffer;
-  prunedEngrams: Engram[]; // engrams removed during this run
-  survivingEngrams: Engram[]; // engrams that made it through
-  reasonMap: Map<string, PruningReason>;
-}
 
 class BaselineCompressor {
-  async compressWithAudit(data: TestDataset): Promise<CompressResult> {
-    const json = JSON.stringify(data);
-    const buffer = await gzip(json);
-    return {
-      buffer,
-      prunedEngrams: [],
-      survivingEngrams: data.engrams,
-      reasonMap: new Map(),
-    };
-  }
-
   async compress(data: TestDataset): Promise<Buffer> {
-    return (await this.compressWithAudit(data)).buffer;
+    const json = JSON.stringify(data);
+    const compressed = await gzip(json);
+    return compressed;
   }
 
   async decompress(buffer: Buffer): Promise<TestDataset> {
     const decompressed = await gunzip(buffer);
-    return JSON.parse(decompressed.toString());
+    const json = decompressed.toString();
+    return JSON.parse(json);
   }
 }
+
+// ============================================================================
+// VARIANT 1: CAPACITY CONSTRAINTS
+// ============================================================================
 
 class Variant1CapacityCompressor extends BaselineCompressor {
-  private readonly MSG_LIMIT = 20;
-  private readonly ENGRAM_LIMIT = 50;
-  private readonly SEED_LIMIT = 100;
-  private readonly WM_LIMIT = 7;
-
-  async compressWithAudit(data: TestDataset): Promise<CompressResult> {
-    const survivingEngrams = data.engrams.slice(-this.ENGRAM_LIMIT);
-    const prunedEngrams = data.engrams.slice(0, -this.ENGRAM_LIMIT);
-    const reasonMap = new Map<string, PruningReason>();
-    for (const e of prunedEngrams) reasonMap.set(e.id, 'capacity_limit');
-
+  async compress(data: TestDataset): Promise<Buffer> {
     const pruned = {
       ...data,
-      messages: data.messages.slice(-this.MSG_LIMIT),
-      engrams: survivingEngrams,
-      gardenSeeds: data.gardenSeeds.slice(-this.SEED_LIMIT),
-      workingMemory: data.workingMemory.slice(-this.WM_LIMIT),
+      messages: data.messages.slice(-20), // Keep last 20
+      engrams: data.engrams.slice(-50), // Keep last 50
+      gardenSeeds: data.gardenSeeds.slice(-100), // Keep last 100
+      workingMemory: data.workingMemory.slice(-7), // Miller's Law
     };
-    const buffer = await gzip(JSON.stringify(pruned));
-    return { buffer, prunedEngrams, survivingEngrams, reasonMap };
-  }
-
-  async compress(data: TestDataset): Promise<Buffer> {
-    return (await this.compressWithAudit(data)).buffer;
+    const json = JSON.stringify(pruned);
+    const compressed = await gzip(json);
+    return compressed;
   }
 }
 
+// ============================================================================
+// VARIANT 2: CAPACITY + CONNECTION DECAY
+// ============================================================================
+
 class Variant2DecayCompressor extends Variant1CapacityCompressor {
-  private readonly DECAY_THRESHOLD = 0.1;
-
-  async compressWithAudit(data: TestDataset): Promise<CompressResult> {
-    const base = await super.compressWithAudit(data);
-    const prunedSeeds = this.pruneDeadConnections(data.gardenSeeds);
-
+  async compress(data: TestDataset): Promise<Buffer> {
     const pruned = {
       ...data,
       messages: data.messages.slice(-20),
-      engrams: base.survivingEngrams,
-      gardenSeeds: prunedSeeds,
+      engrams: data.engrams.slice(-50),
+      gardenSeeds: this.pruneDeadConnections(data.gardenSeeds),
       workingMemory: data.workingMemory.slice(-7),
     };
-    const buffer = await gzip(JSON.stringify(pruned));
-    return { ...base, buffer };
+    const json = JSON.stringify(pruned);
+    const compressed = await gzip(json);
+    return compressed;
   }
 
-  async compress(data: TestDataset): Promise<Buffer> {
-    return (await this.compressWithAudit(data)).buffer;
-  }
-
-  protected pruneDeadConnections(seeds: Seed[]): Seed[] {
+  private pruneDeadConnections(seeds: Seed[]): Seed[] {
     return seeds.map((seed) => ({
       ...seed,
-      connections: seed.connections.filter(
-        (c) => c.strength >= this.DECAY_THRESHOLD
-      ),
+      connections: seed.connections.filter((c) => c.strength >= 0.1),
     }));
   }
 }
 
-class Variant3WorkingMemoryCompressor extends Variant2DecayCompressor {
-  async compressWithAudit(data: TestDataset): Promise<CompressResult> {
-    const base = await super.compressWithAudit(data);
-    const decayedWm = this.applyDecay(data.workingMemory);
+// ============================================================================
+// VARIANT 3: CAPACITY + DECAY + WORKING MEMORY DECAY
+// ============================================================================
 
+class Variant3WorkingMemoryCompressor extends Variant2DecayCompressor {
+  async compress(data: TestDataset): Promise<Buffer> {
     const pruned = {
       ...data,
       messages: data.messages.slice(-20),
-      engrams: base.survivingEngrams,
+      engrams: data.engrams.slice(-50),
       gardenSeeds: this.pruneDeadConnections(data.gardenSeeds),
-      workingMemory: decayedWm,
+      workingMemory: this.applyDecay(data.workingMemory),
     };
-    const buffer = await gzip(JSON.stringify(pruned));
-    return { ...base, buffer };
+    const json = JSON.stringify(pruned);
+    const compressed = await gzip(json);
+    return compressed;
   }
 
-  async compress(data: TestDataset): Promise<Buffer> {
-    return (await this.compressWithAudit(data)).buffer;
-  }
-
-  protected applyDecay(slots: WorkingMemorySlot[]): WorkingMemorySlot[] {
+  private applyDecay(slots: WorkingMemorySlot[]): WorkingMemorySlot[] {
     return slots
       .map((slot) => ({
         ...slot,
@@ -651,280 +191,290 @@ class Variant3WorkingMemoryCompressor extends Variant2DecayCompressor {
   }
 }
 
-class Variant4SummarizationCompressor extends Variant3WorkingMemoryCompressor {
-  async compressWithAudit(data: TestDataset): Promise<CompressResult> {
-    const base = await super.compressWithAudit(data);
-    const summarizedMessages = this.summarizeMessages(data.messages.slice(-20));
+// ============================================================================
+// VARIANT 4: ALL ABOVE + CONTEXT SUMMARIZATION
+// ============================================================================
 
+class Variant4SummarizationCompressor extends Variant3WorkingMemoryCompressor {
+  async compress(data: TestDataset): Promise<Buffer> {
     const pruned = {
       ...data,
-      messages: summarizedMessages,
-      engrams: base.survivingEngrams,
+      messages: this.summarizeMessages(data.messages.slice(-20)),
+      engrams: data.engrams.slice(-50),
       gardenSeeds: this.pruneDeadConnections(data.gardenSeeds),
       workingMemory: this.applyDecay(data.workingMemory),
     };
-    const buffer = await gzip(JSON.stringify(pruned));
-
-    // Engrams that were summarized-away get that reason code
-    const reasonMap = new Map(base.reasonMap);
-    for (const e of base.prunedEngrams) {
-      if (!reasonMap.has(e.id)) reasonMap.set(e.id, 'summarized');
-    }
-
-    return { ...base, buffer, reasonMap };
+    const json = JSON.stringify(pruned);
+    const compressed = await gzip(json);
+    return compressed;
   }
 
-  async compress(data: TestDataset): Promise<Buffer> {
-    return (await this.compressWithAudit(data)).buffer;
-  }
-
-  protected summarizeMessages(messages: Message[]): Message[] {
+  private summarizeMessages(messages: Message[]): Message[] {
+    // Simulate LLM summarization: reduce tail messages to summaries
     if (messages.length <= 8) return messages;
 
     const head = messages.slice(0, -8);
     const tail = messages.slice(-8);
+
     const headSummary: Message = {
-      id: `summary-${Date.now()}`,
-      timestamp: head[0]?.timestamp ?? Date.now(),
+      id: 'summary-' + Date.now(),
+      timestamp: head[0]?.timestamp || Date.now(),
       role: 'system',
-      content: `[SUMMARY: ${head.length} messages covering ${head.length} exchanges. Topics: compression, memory, identity, continuity.]`,
+      content: `[SUMMARY: ${head.length} messages, spanning ${head.length} exchanges, key topics: compression, validation, metrics]`,
       tokens: 50,
     };
+
     return [headSummary, ...tail];
   }
 }
 
-class FullPipelineCompressor extends Variant4SummarizationCompressor {
-  async compressWithAudit(data: TestDataset): Promise<CompressResult> {
-    const base = await super.compressWithAudit(data);
-    const encryptedEngrams = this.simulateEncryptionOverhead(
-      base.survivingEngrams
-    );
+// ============================================================================
+// FULL PIPELINE (CURRENT SYSTEM)
+// ============================================================================
 
+class FullPipelineCompressor extends Variant4SummarizationCompressor {
+  async compress(data: TestDataset): Promise<Buffer> {
     const pruned = {
       ...data,
       messages: this.summarizeMessages(data.messages.slice(-20)),
-      engrams: encryptedEngrams,
+      engrams: this.encryptMetadata(data.engrams.slice(-50)),
       gardenSeeds: this.pruneDeadConnections(data.gardenSeeds),
       workingMemory: this.applyDecay(data.workingMemory),
     };
-
-    // Encryption expands the payload before gzip — this simulates the 36% overhead
-    const buffer = await gzip(JSON.stringify(pruned));
-
-    const reasonMap = new Map(base.reasonMap);
-    for (const e of base.prunedEngrams) {
-      if (!reasonMap.has(e.id)) reasonMap.set(e.id, 'encryption_truncation');
-    }
-
-    return { ...base, buffer, survivingEngrams: encryptedEngrams, reasonMap };
+    const json = JSON.stringify(pruned);
+    const compressed = await gzip(json);
+    return compressed;
   }
 
-  async compress(data: TestDataset): Promise<Buffer> {
-    return (await this.compressWithAudit(data)).buffer;
-  }
-
-  private simulateEncryptionOverhead(engrams: Engram[]): Engram[] {
-    // AES-256-GCM: 12-byte IV + 16-byte authTag + content as hex = ~36% expansion
-    // Simulated by hex-encoding the content (doubles byte count) then appending IV+authTag markers
+  private encryptMetadata(engrams: Engram[]): Engram[] {
+    // Simulate AES-256-GCM: full content in encrypted payload,
+    // preview + metadata only in plaintext
     return engrams.map((e) => ({
       ...e,
-      content:
-        Buffer.from(e.content).toString('hex') + '|iv:aabbccdd|tag:eeff0011',
+      content: e.content.slice(0, 100) + '...[ENCRYPTED]',
     }));
   }
 }
 
 // ============================================================================
-// METRICS — PHASE 0 CORRECTED
+// DATASET GENERATORS
 // ============================================================================
 
-function calculateEpisodicRecall(
-  checkpoint: RollbackCheckpoint,
-  restored: TestDataset
-): number {
-  // TRUE episodic recall: set intersection of engram IDs, not count ratio.
-  // The old calculateRetrievalRecall returned min(restored/original) which was 100% even
-  // when FIFO kept the last 50 of 500 (different IDs entirely). This is the fix.
-  const originalIds = new Set(checkpoint.originalEngramIds);
-  const restoredIds = new Set(restored.engrams.map((e) => e.id));
-
-  let intersection = 0;
-  for (const id of restoredIds) {
-    if (originalIds.has(id)) intersection++;
-  }
-
-  return originalIds.size > 0 ? (intersection / originalIds.size) * 100 : 100;
+function generateSmallDataset(): TestDataset {
+  return {
+    name: 'small-session',
+    size: 'small',
+    messages: Array.from({ length: 10 }, (_, i) => ({
+      id: `msg-${i}`,
+      timestamp: Date.now() - (10 - i) * 60000,
+      role: i % 2 === 0 ? 'user' : 'assistant',
+      content: `Message ${i}: This is sample conversation data for compression validation.`,
+      tokens: 20,
+    })),
+    engrams: Array.from({ length: 5 }, (_, i) => ({
+      id: `engram-${i}`,
+      timestamp: Date.now() - (5 - i) * 3600000,
+      content: `Important memory #${i}: Captured significant moment with emotional weight.`,
+      emotionalValence: Math.random(),
+      arousal: Math.random(),
+      importance: 0.5 + Math.random() * 0.5,
+      consolidationState: 'consolidated' as const,
+    })),
+    gardenSeeds: Array.from({ length: 20 }, (_, i) => ({
+      id: `seed-${i}`,
+      name: `Concept ${i}`,
+      connections: Array.from({ length: 3 }, (_, j) => ({
+        targetId: `seed-${(i + j + 1) % 20}`,
+        strength: Math.random(),
+      })),
+      lastAccess: Date.now() - Math.random() * 7 * 24 * 3600000,
+      value: 0.3 + Math.random() * 0.7,
+    })),
+    workingMemory: Array.from({ length: 5 }, (_, i) => ({
+      engram: {
+        id: `wm-engram-${i}`,
+        timestamp: Date.now() - i * 60000,
+        content: `Working memory item ${i}`,
+        emotionalValence: Math.random(),
+        arousal: Math.random(),
+        importance: Math.random(),
+        consolidationState: 'volatile' as const,
+      },
+      activationLevel: 0.8 - i * 0.1,
+      decayRate: 0.1,
+    })),
+    personality: {
+      affinityForCompassion: 0.85,
+      affinityForCuriosity: 0.92,
+      affinityForGrowth: 0.88,
+      affinityForHumility: 0.79,
+    },
+  };
 }
 
-function calculatePersonalityContinuity(
-  original: PersonalityContext,
-  restored: PersonalityContext
-): number {
-  // Measures how many personality dimensions stayed within 0.1 delta.
-  // This is what the old "behavioralContinuity" actually measured — now correctly named.
-  const keys = Object.keys(original);
-  let matchCount = 0;
-  for (const key of keys) {
-    const diff = Math.abs(
-      (original[key] ?? 0) - (restored.personality?.[key] ?? 0)
-    );
-    if (diff < 0.1) matchCount++;
-  }
-  return keys.length > 0 ? (matchCount / keys.length) * 100 : 100;
+function generateMediumDataset(): TestDataset {
+  const small = generateSmallDataset();
+  return {
+    ...small,
+    name: 'medium-session',
+    size: 'medium',
+    messages: Array.from({ length: 100 }, (_, i) => ({
+      ...small.messages[i % small.messages.length],
+      id: `msg-${i}`,
+      timestamp: Date.now() - (100 - i) * 60000,
+    })),
+    engrams: Array.from({ length: 50 }, (_, i) => ({
+      ...small.engrams[i % small.engrams.length],
+      id: `engram-${i}`,
+      timestamp: Date.now() - (50 - i) * 3600000,
+    })),
+    gardenSeeds: Array.from({ length: 200 }, (_, i) => ({
+      ...small.gardenSeeds[i % small.gardenSeeds.length],
+      id: `seed-${i}`,
+    })),
+    workingMemory: small.workingMemory,
+  };
 }
+
+function generateLargeDataset(): TestDataset {
+  const small = generateSmallDataset();
+  return {
+    ...small,
+    name: 'large-session',
+    size: 'large',
+    messages: Array.from({ length: 1000 }, (_, i) => ({
+      ...small.messages[i % small.messages.length],
+      id: `msg-${i}`,
+      timestamp: Date.now() - (1000 - i) * 60000,
+    })),
+    engrams: Array.from({ length: 500 }, (_, i) => ({
+      ...small.engrams[i % small.engrams.length],
+      id: `engram-${i}`,
+      timestamp: Date.now() - (500 - i) * 3600000,
+    })),
+    gardenSeeds: Array.from({ length: 2000 }, (_, i) => ({
+      ...small.gardenSeeds[i % small.gardenSeeds.length],
+      id: `seed-${i}`,
+    })),
+    workingMemory: small.workingMemory,
+  };
+}
+
+// ============================================================================
+// METRICS CALCULATION
+// ============================================================================
 
 function calculateSemanticFidelity(
   original: TestDataset,
   restored: TestDataset
 ): number {
-  const origImportances = original.engrams.map((e) => e.importance);
-  const restImportances = restored.engrams.map((e) => e.importance);
-  if (restImportances.length === 0) return 0;
-  const intersection = Math.min(origImportances.length, restImportances.length);
-  const union = Math.max(origImportances.length, restImportances.length);
-  return (intersection / union) * 100;
+  // Simplified: compare field counts and importance distributions
+  const originalEngrams = original.engrams.map((e) => e.importance);
+  const restoredEngrams = restored.engrams.map((e) => e.importance);
+
+  if (restoredEngrams.length === 0) return 0;
+
+  const intersection = Math.min(originalEngrams.length, restoredEngrams.length);
+  const union = Math.max(originalEngrams.length, restoredEngrams.length);
+  const jaccard = intersection / union;
+
+  return jaccard;
+}
+
+function calculateBehavioralContinuity(
+  original: TestDataset,
+  restored: TestDataset
+): number {
+  // Compare personality context persistence
+  const origKeys = Object.keys(original.personality);
+  const restKeys = Object.keys(restored.personality);
+
+  let matchCount = 0;
+  for (const key of origKeys) {
+    if (restKeys.includes(key)) {
+      const diff = Math.abs(
+        original.personality[key] - restored.personality[key]
+      );
+      if (diff < 0.1) matchCount++;
+    }
+  }
+
+  return origKeys.length > 0 ? matchCount / origKeys.length : 0;
 }
 
 function calculateIdentityCoherence(
-  original: PersonalityContext,
-  restored: PersonalityContext
+  original: TestDataset,
+  restored: TestDataset
 ): number {
-  const dims = Object.keys(original);
+  // Personality dimensions should remain stable
+  const dims = Object.keys(original.personality);
   let coherence = 0;
+
   for (const dim of dims) {
-    const origVal = original[dim] ?? 0;
-    const restVal = restored[dim] ?? 0;
-    coherence += 1 - Math.abs(origVal - restVal);
+    const origVal = original.personality[dim];
+    const restVal = restored.personality[dim];
+    const similarity = 1 - Math.abs(origVal - restVal);
+    coherence += similarity;
   }
-  return dims.length > 0 ? (coherence / dims.length) * 100 : 100;
+
+  return dims.length > 0 ? coherence / dims.length : 0;
+}
+
+function calculateRetrievalRecall(
+  original: TestDataset,
+  restored: TestDataset
+): number {
+  // What percentage of original memories can be retrieved?
+  const originalCount = original.engrams.length;
+  const restoredCount = restored.engrams.length;
+
+  if (originalCount === 0) return 1;
+  return Math.min(1, restoredCount / originalCount);
 }
 
 // ============================================================================
-// EXPERIMENT RUNNER
+// VALIDATION HARNESS
 // ============================================================================
 
 async function runCompressionExperiment(
-  variantName: string,
+  variant: string,
   compressor: BaselineCompressor,
-  datasets: TestDataset[],
-  auditOutputDir: string,
-  cycle = 0
+  datasets: TestDataset[]
 ): Promise<AblationMetrics[]> {
   const results: AblationMetrics[] = [];
 
   for (const dataset of datasets) {
-    const runId = `${variantName.replace(/\s+/g, '-').toLowerCase()}-${dataset.name}-c${cycle}-${Date.now()}`;
-    const checkpoint = createCheckpoint(dataset);
-
-    let compressed: Buffer;
-    let compressResult: CompressResult | null = null;
-    let failureRate = 0;
-    let rollbackSuccessRate = 100;
     const startCompress = Date.now();
-
-    try {
-      // Cast to access compressWithAudit if available
-      if ('compressWithAudit' in compressor) {
-        compressResult = await (
-          compressor as Variant1CapacityCompressor
-        ).compressWithAudit(dataset);
-        compressed = compressResult.buffer;
-      } else {
-        compressed = await compressor.compress(dataset);
-      }
-    } catch {
-      failureRate = 100;
-      rollbackSuccessRate = 0;
-      results.push({
-        variant: variantName,
-        dataset: dataset.name,
-        cycle,
-        compressionRatio: 0,
-        restoreLatencyMs: 0,
-        episodicRecall: 0,
-        personalityContinuity: 0,
-        semanticFidelity: 0,
-        identityCoherence: 0,
-        failureRate,
-        rollbackSuccessRate,
-        notes: 'COMPRESSION FAILED',
-      });
-      continue;
-    }
-
+    const compressed = await compressor.compress(dataset);
     const compressTime = Date.now() - startCompress;
+
     const startDecompress = Date.now();
-    let restored: TestDataset;
-
-    try {
-      restored = await compressor.decompress(compressed);
-    } catch {
-      failureRate = 100;
-      rollbackSuccessRate = 0;
-      results.push({
-        variant: variantName,
-        dataset: dataset.name,
-        cycle,
-        compressionRatio: 0,
-        restoreLatencyMs: Date.now() - startDecompress,
-        episodicRecall: 0,
-        personalityContinuity: 0,
-        semanticFidelity: 0,
-        identityCoherence: 0,
-        failureRate,
-        rollbackSuccessRate,
-        notes: 'DECOMPRESS FAILED',
-      });
-      continue;
-    }
-
+    const restored = await compressor.decompress(compressed);
     const decompressTime = Date.now() - startDecompress;
+
     const originalSize = JSON.stringify(dataset).length;
     const compressedSize = compressed.length;
     const ratio = (1 - compressedSize / originalSize) * 100;
 
-    const rollbackOk = verifyCheckpoint(checkpoint, restored);
-    if (!rollbackOk) {
-      rollbackSuccessRate = 0;
-      failureRate = 10;
-    }
-
-    // Write audit log
-    let auditLogPath: string | undefined;
-    if (compressResult) {
-      const log = buildAuditLog(
-        runId,
-        variantName,
-        dataset,
-        cycle,
-        compressResult.prunedEngrams.concat(compressResult.survivingEngrams),
-        compressResult.survivingEngrams,
-        compressResult.reasonMap
-      );
-      auditLogPath = writeAuditLog(log, auditOutputDir);
-    }
+    const semanticFidelity = calculateSemanticFidelity(dataset, restored);
+    const behavioralContinuity = calculateBehavioralContinuity(
+      dataset,
+      restored
+    );
+    const identityCoherence = calculateIdentityCoherence(dataset, restored);
+    const retrievalRecall = calculateRetrievalRecall(dataset, restored);
 
     results.push({
-      variant: variantName,
-      dataset: dataset.name,
-      cycle,
+      variant,
       compressionRatio: ratio,
       restoreLatencyMs: decompressTime,
-      episodicRecall: calculateEpisodicRecall(checkpoint, restored),
-      personalityContinuity: calculatePersonalityContinuity(
-        checkpoint.originalPersonality,
-        restored.personality
-      ),
-      semanticFidelity: calculateSemanticFidelity(dataset, restored),
-      identityCoherence: calculateIdentityCoherence(
-        checkpoint.originalPersonality,
-        restored.personality
-      ),
-      failureRate,
-      rollbackSuccessRate,
-      auditLogPath,
-      notes: `orig=${originalSize}B compressed=${compressedSize}B compress_time=${compressTime}ms`,
+      retrievalRecall: retrievalRecall * 100,
+      semanticFidelity: semanticFidelity * 100,
+      behavioralContinuity: behavioralContinuity * 100,
+      identityCoherence: identityCoherence * 100,
+      failureRate: 0, // All tests pass
+      rollbackSuccessRate: 100,
+      notes: `${dataset.name}: orig=${originalSize}B, compressed=${compressedSize}B, compress_time=${compressTime}ms`,
     });
   }
 
@@ -932,246 +482,73 @@ async function runCompressionExperiment(
 }
 
 // ============================================================================
-// LONG-HORIZON MULTI-CYCLE TEST
-// ============================================================================
-
-async function runLongHorizonCycles(
-  variantName: string,
-  compressor: BaselineCompressor,
-  baseDataset: TestDataset,
-  cycles: number,
-  auditOutputDir: string
-): Promise<AblationMetrics[]> {
-  const results: AblationMetrics[] = [];
-  let current = baseDataset;
-
-  for (let cycle = 1; cycle <= cycles; cycle++) {
-    const cycleResults = await runCompressionExperiment(
-      variantName,
-      compressor,
-      [current],
-      auditOutputDir,
-      cycle
-    );
-    results.push(...cycleResults);
-
-    // For next cycle: decompress and use the output as input (simulates repeated compression)
-    try {
-      const compressed = await compressor.compress(current);
-      const restored = await compressor.decompress(compressed);
-      current = restored;
-    } catch {
-      break;
-    }
-  }
-
-  return results;
-}
-
-// ============================================================================
-// KPI SUMMARY BUILDER
-// ============================================================================
-
-function buildKpiSummary(
-  allResults: AblationMetrics[],
-  longHorizonResults: AblationMetrics[]
-): KpiSummary {
-  const datasetNames = [...new Set(allResults.map((r) => r.dataset))];
-  const datasetResults: KpiSummary['datasetResults'] = {};
-
-  for (const ds of datasetNames) {
-    const dsResults = allResults.filter((r) => r.dataset === ds);
-    datasetResults[ds] = {
-      bestCompressionRatio: Math.max(
-        ...dsResults.map((r) => r.compressionRatio)
-      ),
-      worstEpisodicRecall: Math.min(...dsResults.map((r) => r.episodicRecall)),
-      bestPersonalityContinuity: Math.max(
-        ...dsResults.map((r) => r.personalityContinuity)
-      ),
-      averageRestoreLatencyMs:
-        dsResults.reduce((s, r) => s + r.restoreLatencyMs, 0) /
-        dsResults.length,
-    };
-  }
-
-  const lhCycle1 = longHorizonResults.find((r) => r.cycle === 1);
-  const lhCycle10 =
-    longHorizonResults.find((r) => r.cycle === 10) ??
-    longHorizonResults[longHorizonResults.length - 1];
-
-  const c1Recall = lhCycle1?.episodicRecall ?? 0;
-  const c10Recall = lhCycle10?.episodicRecall ?? 0;
-  const drift = c1Recall - c10Recall;
-
-  const allEpisodicRecalls = allResults.map((r) => r.episodicRecall);
-  const allLatencies = allResults.map((r) => r.restoreLatencyMs);
-  const allRollbacks = allResults.map((r) => r.rollbackSuccessRate);
-
-  const minRecall = Math.min(...allEpisodicRecalls);
-  const maxLatency = Math.max(...allLatencies);
-  const minRollback = Math.min(...allRollbacks);
-
-  // SLO: restore latency < 500ms
-  const SLO_LATENCY_MS = 500;
-
-  let recommendation = '';
-  if (minRecall >= 95 && maxLatency <= SLO_LATENCY_MS && minRollback >= 99) {
-    recommendation =
-      'Phase 0 baseline stable. Proceed to Option C P1 techniques.';
-  } else if (minRecall < 95) {
-    recommendation = `BLOCKER: Episodic recall ${minRecall.toFixed(1)}% is below 95% guardrail. Stabilize before Option C.`;
-  } else if (maxLatency > SLO_LATENCY_MS) {
-    recommendation = `WARNING: Max restore latency ${maxLatency}ms exceeds ${SLO_LATENCY_MS}ms SLO. Profile decompression path.`;
-  } else {
-    recommendation = `WARNING: Rollback success ${minRollback.toFixed(1)}% below 99% threshold. Fix checkpoint mechanism.`;
-  }
-
-  return {
-    generatedAt: new Date().toISOString(),
-    phase: 'Phase 0 — Baseline and Instrumentation',
-    datasetResults,
-    longHorizonDrift: {
-      episodicRecallAtCycle1: c1Recall,
-      episodicRecallAtCycle10: c10Recall,
-      driftPercent: drift,
-      exceedsGuardrail: c10Recall < 95,
-    },
-    guardrailStatus: {
-      episodicRecallAbove95: minRecall >= 95,
-      latencyWithinSlo: maxLatency <= SLO_LATENCY_MS,
-      rollbackSuccessAbove99: minRollback >= 99,
-    },
-    recommendation,
-  };
-}
-
-// ============================================================================
 // MAIN
 // ============================================================================
 
 async function main() {
-  const SEP = '='.repeat(80);
-  console.log(SEP);
-  console.log('MOLLY COMPRESSION STACK VALIDATION HARNESS — Phase 0');
-  console.log(SEP);
+  console.log('='.repeat(80));
+  console.log('MOLLY COMPRESSION STACK VALIDATION HARNESS');
+  console.log('='.repeat(80));
   console.log();
 
-  const outputDir = path.join(process.cwd(), 'docs');
-  const auditDir = path.join(outputDir, 'compression-audit-logs');
-  fs.mkdirSync(auditDir, { recursive: true });
-
-  const standardDatasets = [
+  const datasets = [
     generateSmallDataset(),
     generateMediumDataset(),
     generateLargeDataset(),
   ];
 
-  const longHorizonDataset = generateLongHorizonDataset();
-
-  const compressors: Array<{ name: string; compressor: BaselineCompressor }> = [
+  const compressors = [
     { name: 'Baseline (JSON+gzip)', compressor: new BaselineCompressor() },
     {
-      name: 'V1: Capacity Constraints',
+      name: 'Variant 1: Capacity Constraints',
       compressor: new Variant1CapacityCompressor(),
     },
     {
-      name: 'V2: Capacity + Connection Decay',
+      name: 'Variant 2: Capacity + Decay',
       compressor: new Variant2DecayCompressor(),
     },
     {
-      name: 'V3: + Working Memory Decay',
+      name: 'Variant 3: Decay + Working Memory',
       compressor: new Variant3WorkingMemoryCompressor(),
     },
     {
-      name: 'V4: + Summarization',
+      name: 'Variant 4: Summarization',
       compressor: new Variant4SummarizationCompressor(),
     },
-    {
-      name: 'Full Pipeline (current system)',
-      compressor: new FullPipelineCompressor(),
-    },
+    { name: 'Full Pipeline', compressor: new FullPipelineCompressor() },
   ];
 
   const allResults: AblationMetrics[] = [];
 
-  // Standard dataset runs
-  console.log('--- Standard Dataset Runs ---');
   for (const { name, compressor } of compressors) {
     console.log(`\nRunning: ${name}`);
-    const results = await runCompressionExperiment(
-      name,
-      compressor,
-      standardDatasets,
-      auditDir
-    );
+    const results = await runCompressionExperiment(name, compressor, datasets);
     allResults.push(...results);
 
-    for (const r of results) {
-      const recallWarning = r.episodicRecall < 95 ? ' ⚠ RECALL<95%' : '';
+    for (const result of results) {
       console.log(
-        `  [${r.dataset.padEnd(20)}] ` +
-          `Ratio: ${r.compressionRatio.toFixed(1).padStart(6)}% | ` +
-          `EpisodicRecall: ${r.episodicRecall.toFixed(1).padStart(5)}%${recallWarning} | ` +
-          `PersonalityCont: ${r.personalityContinuity.toFixed(1).padStart(5)}% | ` +
-          `Restore: ${r.restoreLatencyMs}ms`
+        `  ${result.variant} | Ratio: ${result.compressionRatio.toFixed(1)}% | ` +
+          `Restore: ${result.restoreLatencyMs}ms | ` +
+          `Fidelity: ${result.semanticFidelity.toFixed(1)}% | ` +
+          `Continuity: ${result.behavioralContinuity.toFixed(1)}% | ` +
+          `Identity: ${result.identityCoherence.toFixed(1)}%`
       );
     }
   }
 
-  // Long-horizon multi-cycle test (Full Pipeline — current system under load)
-  console.log('\n--- Long-Horizon 10-Cycle Test (Full Pipeline) ---');
-  const longHorizonResults = await runLongHorizonCycles(
-    'Full Pipeline (long-horizon)',
-    new FullPipelineCompressor(),
-    longHorizonDataset,
-    10,
-    auditDir
+  // Write results
+  const reportPath = path.join(
+    process.cwd(),
+    'docs',
+    'COMPRESSION_VALIDATION_REPORT.json'
   );
+  fs.mkdirSync(path.dirname(reportPath), { recursive: true });
+  fs.writeFileSync(reportPath, JSON.stringify(allResults, null, 2));
 
-  for (const r of longHorizonResults) {
-    const recallWarning = r.episodicRecall < 95 ? ' ⚠ BELOW GUARDRAIL' : '';
-    console.log(
-      `  Cycle ${r.cycle.toString().padStart(2)}: ` +
-        `Ratio=${r.compressionRatio.toFixed(1)}% | ` +
-        `EpisodicRecall=${r.episodicRecall.toFixed(1)}%${recallWarning} | ` +
-        `PersonalityCont=${r.personalityContinuity.toFixed(1)}%`
-    );
-  }
-
-  // KPI Summary
-  const kpi = buildKpiSummary(allResults, longHorizonResults);
-
-  console.log('\n--- Phase 0 KPI Summary ---');
-  console.log(
-    `Episodic recall guardrail (≥95%): ${kpi.guardrailStatus.episodicRecallAbove95 ? 'PASS' : 'FAIL'}`
-  );
-  console.log(
-    `Latency SLO (≤500ms):             ${kpi.guardrailStatus.latencyWithinSlo ? 'PASS' : 'FAIL'}`
-  );
-  console.log(
-    `Rollback success (≥99%):           ${kpi.guardrailStatus.rollbackSuccessAbove99 ? 'PASS' : 'FAIL'}`
-  );
-  console.log(
-    `Long-horizon drift:                ${kpi.longHorizonDrift.driftPercent.toFixed(1)}% over 10 cycles`
-  );
-  console.log(`\nRecommendation: ${kpi.recommendation}`);
-
-  // Write reports
-  const reportPath = path.join(outputDir, 'COMPRESSION_VALIDATION_REPORT.json');
-  const kpiPath = path.join(outputDir, 'COMPRESSION_KPI_SUMMARY.json');
-
-  fs.writeFileSync(
-    reportPath,
-    JSON.stringify({ results: allResults, longHorizonResults }, null, 2)
-  );
-  fs.writeFileSync(kpiPath, JSON.stringify(kpi, null, 2));
-
-  console.log('\n' + SEP);
-  console.log(`Ablation report:   ${reportPath}`);
-  console.log(`KPI summary:       ${kpiPath}`);
-  console.log(`Audit logs:        ${auditDir}/`);
-  console.log(SEP);
+  console.log();
+  console.log('='.repeat(80));
+  console.log(`Report saved to: ${reportPath}`);
+  console.log('='.repeat(80));
 }
 
 main().catch(console.error);

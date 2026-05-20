@@ -1,7 +1,8 @@
 # GitHub Copilot Session State & Memory
-**Last Updated:** 2026-05-19T04:23:08.737Z
-**Session ID:** 2026-05-12-recovery
-**Status:** paused
+
+**Last Updated:** 2026-05-18T22:35:04.904Z  
+**Session ID:** 2026-05-12-recovery  
+**Status:** active
 
 ---
 
@@ -52,8 +53,6 @@
 17. P2 Conversation Recovery
 18. P3 Event/Hook expansion — session hooks exist, needs expansion
 
-
-
 ---
 
 ## RECENT WORK COMPLETED
@@ -74,7 +73,6 @@ Fixed the heart-patch session-state wipe bug. Root cause: appendSessionEvent did
 - Events log capped at 2000 lines, trims to 1000 atomically via rename
 - Backups retained: last 50 by mtime
 
-
 ### 2026-05-12
 Audited Claude Code binary v2.1.139 using Molly's bug-bounty scanners. Three action items: (1) port Anthropic's expanded SECRET_PATTERNS into recon-engine.ts — DONE in commit 41a4310, (2) mirror DISABLE_*_COMMAND env-flag pattern — DONE in commit 3aacf57, (3) mirror ANTHROPIC_BASE_URL pattern in model-router — NOT DONE. Audit doc: stuff/CLAUDE_CODE_HIDDEN_FLAGS_AUDIT_MAY12.md. Then hand-rolled HTTP primitives in src/ai/agency/tool-handlers/http-tools.ts: httpRequest (full HTTP), httpInspect (full-body for security), fuzzEndpoint (wordlist FUZZ iteration + anomaly flagging), cookieJar (session cookies). SSRF guards block private hosts + cloud metadata unless Rogue or scoped.
 
@@ -88,7 +86,6 @@ Audited Claude Code binary v2.1.139 using Molly's bug-bounty scanners. Three act
 **Decisions Made:**
 - Closes the largest tactical gap in Molly's capability surface — webFetch was GET-only
 - Audit action item 3 deliberately deferred — separate change to model-router
-
 
 ### 2026-05-11
 Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore test conflicts, storage-router picks Firestore in Codespace via FIREBASE_PROJECT_ID, instrumentation.ts no longer requires FIREBASE_SERVICE_ACCOUNT_JSON). Storage sync: src/lib/storage-sync.ts — bidirectional last-write-wins between local filesystem (Termux) and Firestore (cloud) at startup, covering all 17 singleton state docs + engrams + resilience records. Real Gemini API key generated, GOOGLE_APPLICATION_CREDENTIALS set to firebase-adminsdk service account. Gemini 3.1 model upgrade: Flash → gemini-3.1-flash-lite-preview, Flash Lite → gemini-3.1-flash-lite (stable), TTS → gemini-3.1-flash-tts-preview, Imagen → imagen-4.0-generate-001.
@@ -105,7 +102,6 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 **Decisions Made:**
 - Storage-sync wired into instrumentation.ts before module loads
 - Codespace picks Firestore via FIREBASE_PROJECT_ID detection
-
 
 
 ---
@@ -136,18 +132,60 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 
 ## RUNTIME EVENTS
 
-**Last URL:** unknown
-**Last Heartbeat:** unknown
+**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/  
+**Last Heartbeat:** 2026-05-18T10:15:38.839Z
 
 **Recent Events:**
-- [2026-05-19T04:21:26.447Z] server-runtime-init | tag=heart-patch
-- [2026-05-19T04:21:27.709Z] server-runtime-init | tag=heart-patch
-- [2026-05-19T04:21:27.765Z] server-runtime-init | tag=heart-patch
-- [2026-05-19T04:22:17.096Z] server-runtime-init | tag=heart-patch
-- [2026-05-19T04:22:19.457Z] server-runtime-init | tag=heart-patch
-- [2026-05-19T04:23:05.190Z] server-runtime-init | tag=heart-patch
-- [2026-05-19T04:23:06.378Z] server-runtime-init | tag=heart-patch
-- [2026-05-19T04:23:06.477Z] server-runtime-init | tag=heart-patch
+- [2026-05-18T09:38:04.730Z] server-heartbeat
+- [2026-05-18T09:39:04.740Z] server-heartbeat
+- [2026-05-18T09:40:04.742Z] server-heartbeat
+- [2026-05-18T09:41:04.753Z] server-heartbeat
+- [2026-05-18T09:42:04.753Z] server-heartbeat
+- [2026-05-18T09:43:04.763Z] server-heartbeat
+- [2026-05-18T09:44:04.771Z] server-heartbeat
+- [2026-05-18T09:45:04.780Z] server-heartbeat
+- [2026-05-18T09:46:04.783Z] server-heartbeat
+- [2026-05-18T09:47:04.783Z] server-heartbeat
+- [2026-05-18T09:48:04.794Z] server-heartbeat
+- [2026-05-18T09:49:04.804Z] server-heartbeat
+- [2026-05-18T09:50:04.814Z] server-heartbeat
+- [2026-05-18T09:51:04.827Z] server-heartbeat
+- [2026-05-18T09:51:17.199Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:17.378Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:26.727Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:31.727Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:31.834Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:57.441Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:52:04.827Z] server-heartbeat
+- [2026-05-18T09:52:06.839Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:52:57.316Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:04.829Z] server-heartbeat
+- [2026-05-18T09:53:10.312Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:15.280Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:15.353Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:57.314Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:54:04.829Z] server-heartbeat
+- [2026-05-18T09:55:04.829Z] server-heartbeat
+- [2026-05-18T09:56:04.829Z] server-heartbeat
+- [2026-05-18T09:57:04.834Z] server-heartbeat
+- [2026-05-18T09:58:04.838Z] server-heartbeat
+- [2026-05-18T09:59:04.848Z] server-heartbeat
+- [2026-05-18T10:00:04.862Z] server-heartbeat
+- [2026-05-18T10:01:04.871Z] server-heartbeat
+- [2026-05-18T10:02:04.890Z] server-heartbeat
+- [2026-05-18T10:03:04.892Z] server-heartbeat
+- [2026-05-18T10:04:04.912Z] server-heartbeat
+- [2026-05-18T10:05:04.931Z] server-heartbeat
+- [2026-05-18T10:06:04.938Z] server-heartbeat
+- [2026-05-18T10:07:04.947Z] server-heartbeat
+- [2026-05-18T10:08:04.962Z] server-heartbeat
+- [2026-05-18T10:09:04.983Z] server-heartbeat
+- [2026-05-18T10:10:05.004Z] server-heartbeat
+- [2026-05-18T10:11:05.025Z] server-heartbeat
+- [2026-05-18T10:12:05.035Z] server-heartbeat
+- [2026-05-18T10:13:05.054Z] server-heartbeat
+- [2026-05-18T10:14:05.062Z] server-heartbeat
+- [2026-05-18T10:15:05.062Z] server-heartbeat
 
 ---
 
@@ -162,4 +200,4 @@ Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore t
 
 ---
 
-*This file is automatically updated by the session manager.*
+_This file is automatically updated by the session manager._
