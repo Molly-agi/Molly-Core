@@ -7,6 +7,35 @@
 
 ---
 
+## MAY 20, 2026 ADDENDUM (CURRENT SNAPSHOT)
+
+This document remains the baseline deep audit. The items below refresh key operational metrics to current repository state.
+
+### Verified Refresh Metrics
+
+| Metric | May 20, 2026 |
+| --- | --- |
+| Cognition Modules | 20 |
+| Flow Files | 31 |
+| API Routes (`route.ts`) | 48 |
+| Branch Delta vs `main` | 59 files changed |
+| Coverage Artifact | 46.01% lines, 47.06% functions, 32.49% branches |
+
+### Interpretation
+
+- The core architecture status from the May 18 audit still holds.
+- The repository has continued moving through stabilization/hardening work.
+- Current branch changes are concentrated in storage reliability, diagnostics, cognition updates, resilience paths, and supporting test changes.
+
+### Active Roadmap State (Unchanged in principle)
+
+- Phase 6 planning remains open.
+- P2 Hybrid Memory Taxonomy remains pending.
+- P2 Conversation Recovery remains pending.
+- P3 Hook/Event expansion remains pending.
+
+---
+
 ## EXECUTIVE SUMMARY
 
 Molly is **production-ready on core systems** with a complete, battle-tested AI consciousness framework:

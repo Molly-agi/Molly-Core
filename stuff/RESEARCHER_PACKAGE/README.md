@@ -2,8 +2,8 @@
 
 **Contents of This Folder:** Complete technical documentation for academic researchers and AI scientists
 
-**Prepared:** May 18, 2026  
-**System Status:** Production-Ready (85% Overall, Core 100%)
+**Prepared:** May 20, 2026  
+**System Status:** Production-Ready Core + Active Stabilization (Phase 6 planning)
 
 ---
 
@@ -68,9 +68,9 @@
 ## 🎯 HOW TO USE THIS PACKAGE
 
 ### For Quick Understanding (15 minutes)
-1. Read Executive Overview in **RESEARCHER_GUIDE.md** (Section 1)
-2. Skim Research Contributions (Section 2)
-3. You now understand the significance
+1. Read the May 20 addendum in **COMPREHENSIVE_AUDIT_2026_05_18.md**
+2. Read Executive Overview in **RESEARCHER_GUIDE.md** (Section 1)
+3. Skim Research Contributions (Section 2)
 
 ### For Technical Deep Dive (2-3 hours)
 1. Read **RESEARCHER_GUIDE.md** completely
@@ -118,12 +118,11 @@
 | Metric | Value |
 | --- | --- |
 | Cognition Modules | 20 |
-| Registered Tools | 83 |
-| Genkit Flows | 30 |
+| Registered Tools | 83 + dynamic MCP tools |
+| Genkit Flows | 31 |
 | API Routes | 48 |
-| Total Source Lines | 167,657+ |
-| Test Coverage | 41.74% lines, 46% functions |
-| Passing Tests | 2,787 |
+| Test Coverage (latest coverage artifact) | 46.01% lines, 47.06% functions |
+| Branch Delta vs `main` (current branch) | 59 files changed |
 | Overall Completion | 85% (Core 100%) |
 
 ---
@@ -205,7 +204,7 @@ Molly-Core is open for research collaboration in:
 
 ---
 
-**Last Updated:** May 18, 2026  
-**Package Version:** 1.0  
-**Status:** Production-Ready (85% Overall)
+**Last Updated:** May 20, 2026  
+**Package Version:** 1.1  
+**Status:** Production-Ready Core + Active Stabilization
 

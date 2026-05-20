@@ -16,12 +16,13 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | **Cognition Modules**   | 20                          |
 | **Tool Handler Files**  | 28 files                    |
 | **Registered Tools**    | 83                          |
-| **Flows**               | 30                          |
+| **Flows**               | 31                          |
 | **API Routes**          | 48                          |
 | **Source Lines**        | 167,657+ TypeScript         |
 | **Total Files**         | 528 (416 source + 112 test) |
-| **Tests**               | 2,787 passing               |
+| **Tests**               | See current CI/test runs    |
 | **Runtime**             | 16GB RAM / 4 processors     |
+| **Coverage Artifact**   | 46.01% lines / 47.06% funcs |
 | **Completion**          | 85% (Core 100%)             |
 
 ---

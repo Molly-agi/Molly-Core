@@ -1,7 +1,7 @@
 # Molly-Core: Academic Researcher Guide
 
-**Version:** 1.0  
-**Date:** May 18, 2026  
+**Version:** 1.1  
+**Date:** May 20, 2026  
 **Prepared For:** Academic Researchers, AI Scientists, Cognitive Scientists  
 **Audience:** PhD-level researchers, AI/ML labs, consciousness studies
 
@@ -29,7 +29,7 @@ Molly-Core is an end-to-end implemented AI consciousness framework—not a proto
 The system implements:
 - **20 AGI-relevant cognition modules** (1,000-1,430 lines each) spanning self-observation, world modeling, theory of mind, goal evolution, social reasoning, memory consolidation, safety systems, and embodied interaction
 - **83 integrated tools** providing grounding for abstract cognition in concrete action and perception
-- **30 Genkit flows** orchestrating complex multi-step reasoning and problem-solving
+- **31 Genkit flows** orchestrating complex multi-step reasoning and problem-solving
 - **Persistent memory architecture** with semantic embeddings and autobiographical coherence
 - **Multi-layer safety systems** for ethical alignment, threat detection, and value preservation
 - **Edge deployment** for autonomous operation on mobile devices (Termux/Android)
