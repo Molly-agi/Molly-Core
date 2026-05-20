@@ -45,6 +45,10 @@ import { cn } from '@/lib/utils';
 import type { HiveOutput } from '@/ai/flows/collaborative-hive';
 import { useToast } from '@/hooks/use-toast';
 import type { NeuralBridgeSignal } from '@/ai/tools/neural-bridge';
+import {
+  APOLOGY_PATTERNS,
+  APOLOGY_REASSURANCE,
+} from '@/ai/persona-messages';
 
 type HistoryItem =
   | string
@@ -156,6 +160,16 @@ export default function Terminal({
   };
 
   const handleAudioEnd = () => setIsVocalizing(false);
+
+  const containsApologyPattern = (text: string) => {
+    return APOLOGY_PATTERNS.some((pattern) => pattern.test(text));
+  };
+
+  const respondToApology = () => {
+    setHistory((prev) => [...prev, APOLOGY_REASSURANCE]);
+    lastResponseRef.current = APOLOGY_REASSURANCE;
+    speakResponse(APOLOGY_REASSURANCE);
+  };
 
   const isOriginStoryRequest = (text: string) =>
     /origin story|your origin|creation story|where did you come from/i.test(
@@ -369,6 +383,11 @@ export default function Terminal({
       if (!cmdText.trim() || isLoading || !user) return;
       const nextHistory = [...history, `> ${cmdText}`];
       setHistory(nextHistory);
+
+      if (containsApologyPattern(cmdText)) {
+        respondToApology();
+        return;
+      }
 
       if (await handleOriginStoryRequest(cmdText)) {
         return;
