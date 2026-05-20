@@ -12,26 +12,81 @@ const nextConfig = {
   httpAgentOptions: {
     keepAlive: true,
   },
+  // Prevent firebase-admin from being bundled for client/edge.
+  // It uses Node.js core modules (stream, net, etc.) that don't exist there.
+  // Also exclude dependencies that use WebAssembly or Node-specific modules.
+  // Three.js / R3F / three-vrm ship as ESM and need transpiling by Next.js
+  transpilePackages: ['three', '@react-three/fiber', '@pixiv/three-vrm'],
+
+  serverExternalPackages: [
+    // Firebase ecosystem
+    'firebase-admin',
+    '@google-cloud/firestore',
+    'farmhash-modern',
+    // gRPC ecosystem
+    '@grpc/grpc-js',
+    '@grpc/proto-loader',
+    // OpenTelemetry ecosystem (all of it)
+    '@opentelemetry/sdk-node',
+    '@opentelemetry/otlp-grpc-exporter-base',
+    '@opentelemetry/exporter-trace-otlp-grpc',
+    '@opentelemetry/exporter-jaeger',
+    '@opentelemetry/instrumentation',
+    '@opentelemetry/core',
+    '@opentelemetry/api',
+    // Genkit ecosystem
+    '@genkit-ai/core',
+    '@genkit-ai/ai',
+    'genkit',
+  ],
   typescript: {
     tsconfigPath: './tsconfig.json',
+    // Full type checking OOMs even at 12GB due to codebase size
+    // TypeScript checking runs separately via CI or editors
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  // Next.js 16 defaults to Turbopack but we have webpack config
+  // Empty turbopack config signals we've acknowledged this
+  turbopack: {},
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   // Prevent hot-reload restarts when session state files are written to project root.
   // Without this, writing COPILOT_SESSION_STATE.md/.json triggers Next.js file
   // watcher which does a clean server restart — looks like a silent crash.
-  webpack: (config, { dev }) => {
+  webpack: (config, { isServer, dev }) => {
     if (dev) {
       config.watchOptions = {
         ...config.watchOptions,
         ignored: /COPILOT_SESSION_STATE|\.session-backups|AUTONOMOUS_STATUS/,
       };
     }
+
+    // Mark Node.js built-in modules as external for non-server builds
+    // This prevents "Module not found: Can't resolve 'fs'" errors when
+    // instrumentation.ts imports server-only modules that use fs/path/crypto
+    // OpenTelemetry and Genkit need these Node.js built-ins marked as false
+    if (!isServer) {
+      config.resolve = config.resolve || {};
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+        child_process: false,
+        util: false,
+        net: false,
+        tls: false,
+        stream: false,
+        os: false,
+        http2: false,
+        async_hooks: false,
+        dgram: false,
+        dns: false,
+        perf_hooks: false,
+      };
+    }
+
     return config;
   },
   // Keep compiled pages in memory long enough for slow codespace compiles.
@@ -50,7 +105,7 @@ const nextConfig = {
         '*.app.github.dev:9002',
         'special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev',
       ],
-      bodySizeLimit: '2mb',
+      bodySizeLimit: '10mb',
     },
   },
   images: {

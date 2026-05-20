@@ -20,7 +20,9 @@
 
 import { MollyLogger, generateTraceId } from './logger';
 import { getCircuitBreaker } from './tools/circuit-breaker';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+// firebase-admin is imported dynamically in persistFailure() to avoid bundler issues
+import { getStorageRouter } from '@/lib/storage-router';
+import { escalateCognitiveFailure } from './escalation-channel';
 
 // ── Types ──────────────────────────────────────────────────────
 
@@ -174,9 +176,8 @@ export async function handleUnknownFailure(
   // Step 6: Create a self-improvement initiative — Molly will work on this
   // in her autonomous cycle. She doesn't just fail; she grows.
   try {
-    const { createCustomInitiative, getActiveInitiatives } = await import(
-      '@/ai/agency/initiative-engine'
-    );
+    const { createCustomInitiative, getActiveInitiatives } =
+      await import('@/ai/agency/planning/initiative-engine');
     // Don't create duplicate initiatives for the same type of failure
     const existing = getActiveInitiatives().find(
       (i) =>
@@ -203,6 +204,24 @@ export async function handleUnknownFailure(
     }
   } catch {
     // Initiative creation failure must never block the response
+  }
+
+  // Step 7: Escalate to Eric — all systems failed, he needs to know
+  try {
+    await escalateCognitiveFailure(
+      source,
+      diagnosis,
+      failure.id,
+      failure.attempts
+    );
+    MollyLogger.info(
+      `[RESILIENCE] Escalated to Eric via bridge`,
+      'resilience-core',
+      { failureId: failure.id },
+      traceId
+    );
+  } catch {
+    // Escalation failure must never block the response
   }
 
   return {
@@ -250,8 +269,13 @@ export function withResilienceSync<T>(
   try {
     return { result: fn(), resilient: false };
   } catch (error) {
-    // Fire-and-forget the async handler
-    handleUnknownFailure(error, source).catch(() => {});
+    // Fire-and-forget the async handler with error logging
+    handleUnknownFailure(error, source).catch((resilErr) => {
+      console.error(
+        '[resilience-core] Self-failure in sync handler:',
+        resilErr instanceof Error ? resilErr.message : String(resilErr)
+      );
+    });
     return { result: fallback, resilient: true };
   }
 }
@@ -437,8 +461,25 @@ function diagnoseFailure(failure: UnknownFailure): string {
     msg.includes('eacces') ||
     msg.includes('file')
   ) {
+    // Special case: node_modules corruption (only check error message, not stack)
+    if (msg.includes('node_modules')) {
+      failure.level = 'heal';
+      return 'NODE_MODULES_CORRUPTION: Package file missing — npm install required';
+    }
     failure.level = 'diagnose';
     return 'FILESYSTEM: File not found, inaccessible, or corrupted';
+  }
+
+  // Build/webpack errors
+  if (
+    msg.includes('failed to compile') ||
+    msg.includes('webpack') ||
+    msg.includes('build error') ||
+    msg.includes('module not found') ||
+    msg.includes('cannot find module')
+  ) {
+    failure.level = 'heal';
+    return 'BUILD_ERROR: Compilation or module resolution failure — may need npm install';
   }
 
   // Database
@@ -511,8 +552,68 @@ function attemptQuickFix(
     return 'SHED_LOAD: Memory pressure — reduce concurrent operations, clear caches';
   }
 
+  // Node modules corruption: auto-fix with npm install
+  if (
+    diagnosis.startsWith('NODE_MODULES_CORRUPTION') ||
+    diagnosis.startsWith('BUILD_ERROR')
+  ) {
+    // Trigger async recovery - don't await since this is a quick fix path
+    triggerBuildRecovery(failure, diagnosis).catch((err) => {
+      MollyLogger.warn(
+        `[RESILIENCE] Build recovery failed: ${err instanceof Error ? err.message : String(err)}`,
+        'resilience-core',
+        {}
+      );
+    });
+    return 'BUILD_RECOVERY_INITIATED: Running npm install to fix corrupted dependencies';
+  }
+
   // Everything else goes to cognitive systems
   return null;
+}
+
+/**
+ * Trigger build recovery asynchronously.
+ */
+async function triggerBuildRecovery(
+  failure: UnknownFailure,
+  diagnosis: string
+): Promise<void> {
+  try {
+    const { attemptAutoRecovery, fixNodeModules } =
+      await import('@/ai/agency/core/build-recovery');
+
+    // Use the error message for smart recovery
+    const result = await attemptAutoRecovery(failure.message);
+
+    if (result?.success) {
+      MollyLogger.info(
+        `[RESILIENCE] Build recovery succeeded: ${result.message}`,
+        'resilience-core',
+        { diagnosis }
+      );
+      failure.resolved = true;
+      failure.resolution = result.message;
+    } else {
+      // Fall back to basic npm install
+      const fallback = await fixNodeModules();
+      if (fallback.success) {
+        MollyLogger.info(
+          `[RESILIENCE] Fallback npm install succeeded`,
+          'resilience-core',
+          {}
+        );
+        failure.resolved = true;
+        failure.resolution = fallback.message;
+      }
+    }
+  } catch (err) {
+    MollyLogger.warn(
+      `[RESILIENCE] Build recovery threw: ${err instanceof Error ? err.message : String(err)}`,
+      'resilience-core',
+      {}
+    );
+  }
 }
 
 // ── Cognitive Systems Engagement ───────────────────────────────
@@ -534,7 +635,7 @@ async function engageCognitiveSystems(
 
   // Try the interpreter first — it can diagnose and fix code issues
   try {
-    const { runInterpreter } = await import('./interpreter-limb');
+    const { runInterpreter } = await import('./flows/interpreter-limb');
     const interpreterResult = await runInterpreter(
       objective,
       'system-resilience'
@@ -568,7 +669,7 @@ async function engageCognitiveSystems(
 
   // If interpreter couldn't fix it, try the sandbox for safe experimentation
   try {
-    const { sandboxCoding } = await import('./sandbox-coding');
+    const { sandboxCoding } = await import('./flows/sandbox-coding');
     const sandboxResult = await sandboxCoding({
       action: 'execute',
       language: 'javascript',
@@ -603,7 +704,7 @@ async function engageCognitiveSystems(
 
   // If neither worked, try the evolution loop — iterative refinement
   try {
-    const { evolutionLoopFlow } = await import('./evolution-loop');
+    const { evolutionLoopFlow } = await import('./flows/evolution-loop');
     const evoResult = await evolutionLoopFlow({
       objective: `Self-heal: ${diagnosis}. Error: ${failure.message}`,
       userId: 'system-resilience',
@@ -637,7 +738,7 @@ async function engageCognitiveSystems(
 
   // If nothing else worked, run the immune response for system-wide healing
   try {
-    const { runImmuneResponse } = await import('./immune-response');
+    const { runImmuneResponse } = await import('./flows/immune-response');
     const immuneResult = await runImmuneResponse(
       'system-resilience',
       `Auto-triggered by: ${diagnosis}`
@@ -746,24 +847,21 @@ async function persistFailure(
   failure: UnknownFailure,
   traceId: string
 ): Promise<void> {
-  if (!isAdminConfigured()) return;
-
+  // Use the storage router for persistence — it handles local vs remote transparently
+  // No direct firebase-admin usage here to avoid bundler issues
   try {
-    const db = getAdminFirestore();
-    await db
-      .collection('molly_resilience')
-      .doc(failure.id)
-      .set({
-        message: failure.message,
-        source: failure.source,
-        diagnosis: failure.level,
-        context: JSON.stringify(failure.context).slice(0, 1000),
-        stack: failure.stack?.slice(0, 2000),
-        timestamp: failure.timestamp,
-        resolved: failure.resolved,
-        resolution: failure.resolution || null,
-        attempts: failure.attempts,
-      });
+    const storage = getStorageRouter();
+    await storage.set('molly_resilience', failure.id, {
+      message: failure.message,
+      source: failure.source,
+      diagnosis: failure.level,
+      context: JSON.stringify(failure.context).slice(0, 1000),
+      stack: failure.stack?.slice(0, 2000),
+      timestamp: failure.timestamp,
+      resolved: failure.resolved,
+      resolution: failure.resolution || null,
+      attempts: failure.attempts,
+    });
   } catch (persistError) {
     // The persistence layer itself can't crash the dam
     MollyLogger.warn(
@@ -821,4 +919,128 @@ export function getFailureFrequency(
   return failureHistory.filter(
     (f) => f.source === source && f.timestamp > cutoff
   ).length;
+}
+
+// ── Pattern Persistence ─────────────────────────────────────────────────────
+
+const PATTERNS_COLLECTION = 'system';
+const PATTERNS_DOC_ID = 'learned_patterns';
+
+let patternPersistenceEnabled = false;
+let patternSaveTimer: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * Save learned patterns to persistent storage (debounced).
+ */
+async function savePatterns(): Promise<void> {
+  if (!patternPersistenceEnabled) return;
+
+  // Debounce saves to avoid excessive writes
+  if (patternSaveTimer) {
+    clearTimeout(patternSaveTimer);
+  }
+
+  patternSaveTimer = setTimeout(async () => {
+    try {
+      const storage = getStorageRouter();
+      const patternsArray = Array.from(learnedPatterns.entries()).map(
+        ([key, value]) => ({
+          key,
+          ...value,
+        })
+      );
+
+      await storage.set(PATTERNS_COLLECTION, PATTERNS_DOC_ID, {
+        patterns: patternsArray,
+        savedAt: new Date().toISOString(),
+        count: patternsArray.length,
+      });
+    } catch (err) {
+      // Non-fatal: patterns still work in-memory
+      MollyLogger.warn(
+        `[RESILIENCE] Failed to save patterns: ${err instanceof Error ? err.message : String(err)}`,
+        'resilience-core'
+      );
+    }
+  }, 1000);
+}
+
+/**
+ * Load learned patterns from persistent storage.
+ * Should be called on startup.
+ */
+export async function loadPatterns(): Promise<number> {
+  try {
+    const storage = getStorageRouter();
+    const doc = await storage.get(PATTERNS_COLLECTION, PATTERNS_DOC_ID);
+
+    if (!doc?.data?.patterns || !Array.isArray(doc.data.patterns)) {
+      patternPersistenceEnabled = true;
+      return 0;
+    }
+
+    learnedPatterns.clear();
+    for (const p of doc.data.patterns) {
+      if (p.key && p.pattern && p.solution) {
+        learnedPatterns.set(p.key, {
+          pattern: p.pattern,
+          solution: p.solution,
+          successCount: p.successCount || 0,
+          lastUsed: p.lastUsed || Date.now(),
+        });
+      }
+    }
+
+    patternPersistenceEnabled = true;
+    MollyLogger.info(
+      `[RESILIENCE] Loaded ${learnedPatterns.size} learned patterns`,
+      'resilience-core'
+    );
+    return learnedPatterns.size;
+  } catch (err) {
+    // Non-fatal: start with empty patterns
+    MollyLogger.warn(
+      `[RESILIENCE] Failed to load patterns: ${err instanceof Error ? err.message : String(err)}`,
+      'resilience-core'
+    );
+    patternPersistenceEnabled = true;
+    return 0;
+  }
+}
+
+// ── Auto-save wrapper for pattern learning ──────────────────────────────────
+
+/**
+ * Learn a pattern and auto-save to persistent storage.
+ * Use this instead of the internal learnPattern() when persistence is needed.
+ */
+export function learnPatternWithSave(
+  failure: UnknownFailure,
+  diagnosis: string,
+  solution: string
+): void {
+  // Call original function (it modifies learnedPatterns directly)
+  const key = `${diagnosis}:${failure.message.slice(0, 50)}`;
+  learnedPatterns.set(key, {
+    pattern: diagnosis,
+    solution,
+    successCount: 1,
+    lastUsed: Date.now(),
+  });
+
+  // Enforce max patterns
+  if (learnedPatterns.size > MAX_PATTERNS) {
+    let oldest: string | null = null;
+    let oldestTime = Infinity;
+    for (const [k, v] of learnedPatterns) {
+      if (v.lastUsed < oldestTime) {
+        oldestTime = v.lastUsed;
+        oldest = k;
+      }
+    }
+    if (oldest) learnedPatterns.delete(oldest);
+  }
+
+  // Auto-save
+  savePatterns();
 }

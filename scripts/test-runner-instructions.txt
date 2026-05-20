@@ -1,0 +1,10 @@
+# Test Runner Output Redirection
+
+To capture all test output and errors, run your tests as follows:
+
+npx jest > test-output.log 2>&1
+
+# Or for a specific test file:
+npx jest src/ai/memory/personality-diagnostics.test.ts > test-output.log 2>&1
+
+# This will write all console output and errors to test-output.log for later review.

@@ -72,8 +72,7 @@ export default function SeedOriginPage() {
   const [result, setResult] = useState<{
     success: boolean;
     message: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    details?: any;
+    details?: Record<string, unknown>;
   } | null>(null);
 
   const seedOriginStory = async () => {
@@ -96,7 +95,7 @@ export default function SeedOriginPage() {
 
       const content = await response.text();
       const hash = simpleHash(content);
-      const db = getFirestore(getApp(), 'mollydb');
+      const db = getFirestore(getApp());
       const context = `origin story:${hash}`;
 
       // Check if already seeded

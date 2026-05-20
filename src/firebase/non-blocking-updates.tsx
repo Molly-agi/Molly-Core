@@ -62,8 +62,7 @@ export function addDocumentNonBlocking(
  */
 export function updateDocumentNonBlocking(
   docRef: DocumentReference,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any
+  data: Record<string, unknown>
 ) {
   updateDoc(docRef, data).catch(() => {
     errorEmitter.emit(

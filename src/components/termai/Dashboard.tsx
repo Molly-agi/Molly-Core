@@ -16,6 +16,9 @@ import { useRouter } from 'next/navigation';
 import { Skeleton } from '../ui/skeleton';
 import { Battery, Thermometer, Radio, Activity, Brain } from 'lucide-react';
 import { Badge } from '../ui/badge';
+// import { ToolList } from '@/components/tools/ToolList';
+import { SkillRegistryPanelWithModal } from '@/components/skills';
+import { SkillDiagnosticsPanel } from '@/components/skills';
 
 export default function Dashboard() {
   const [voiceResult, setVoiceResult] = useState<VoiceCommandResult | null>(
@@ -58,20 +61,24 @@ export default function Dashboard() {
     }
   }, [user, isUserLoading, router]);
 
+  // Auth stall detection - only runs timeout when loading
   useEffect(() => {
-    if (!isUserLoading) {
-      setAuthStalled(false);
+    const isDev = process.env.NODE_ENV === 'development';
+
+    // Only set up stall timeout if we're actually loading (in dev)
+    if (!isUserLoading || !isDev) {
       return;
     }
-
-    const isDev = process.env.NODE_ENV === 'development';
-    if (!isDev) return;
 
     const timeout = setTimeout(() => {
       setAuthStalled(true);
     }, 12000);
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+      // Reset stalled state when loading completes (cleanup runs on re-render)
+      setAuthStalled(false);
+    };
   }, [isUserLoading]);
 
   // Handle authentication errors with retry
@@ -298,6 +305,16 @@ export default function Dashboard() {
               Self-Evolution: Live
             </Badge>
           </div>
+        </div>
+
+        {/* Molly's Live Skill/Agent List */}
+        <div className="my-4">
+          <SkillRegistryPanelWithModal />
+        </div>
+
+        {/* Molly's Skill/Agent Diagnostics */}
+        <div className="my-4">
+          <SkillDiagnosticsPanel />
         </div>
 
         <div className="flex-1 p-4 overflow-y-auto bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-secondary/20 via-background to-background">

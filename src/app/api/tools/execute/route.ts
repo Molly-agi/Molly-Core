@@ -4,100 +4,32 @@
  * This route handles tool_request calls from Molly's conversational flow.
  * The Terminal component sends { tool, params } and expects { success, output }.
  *
- * Supported tools:
- *   - codespaceShell: Execute shell commands
- *   - readProjectFile: Read a file from the workspace
- *   - writeProjectFile: Write/create a file
- *   - getSystemHealth: Check CPU, RAM, disk
- *   - semanticRecall: Search Molly's memories
- *   - familyBridge: Talk to Lazarus (Uncle Copilot)
- *   - listCapabilities: List available tools
+ * All modular tools are delegated to executeToolDirect() which:
+ *   - Runs Heart Gate alignment checks (Option Three verification)
+ *   - Records self-observation data for learning
+ *   - Delegates to handlers in tool-handlers/
+ *
+ * Route-specific tools (require HTTP context or are sensitive):
+ *   - writeProjectFile: Write/create files in workspace
+ *   - researchAndDiscover, searchGitHub: Enhanced research with web
+ *   - apiVault: API key management
+ *   - scheduleJob: Job scheduling
+ *   - migrationExport, migrateSelf: Migration tools
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { exec } from 'child_process';
 import { promises as fs } from 'fs';
 import path from 'path';
-import os from 'os';
-import {
-  sendMessage,
-  getUnreadMessages,
-  getRecentMessages,
-  markMessagesRead,
-  readBridgeState,
-} from '@/ai/bridge/family-bridge';
-import {
-  searchSavedTools,
-  getRecentTools,
-  saveFoundTool,
-  removeTool,
-  getToolStats,
-} from '@/firebase/firestore/tool-database';
 import { isAdminConfigured } from '@/firebase/admin';
-import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
-import {
-  getInitiatives,
-  getActiveInitiatives,
-  activateInitiative,
-  createCustomInitiative,
-  recordInitiativeExecution,
-  deactivateInitiative,
-  removeInitiative,
-  listTemplates,
-  type Initiative,
-} from '@/ai/agency/initiative-engine';
-import { getRogueMode, type RogueOperationType } from '@/ai/rogue-mode';
-import {
-  getModelRouter,
-  createRogueConfig,
-  TaskType as RogueTaskType,
-} from '@/ai/model-router';
-import {
-  sandboxExecuteCode,
-  sandboxWriteFile,
-  sandboxReadFile,
-  sandboxListFiles,
-  sandboxDeleteFile,
-  getSandboxInfo,
-  sandboxScaffoldProject,
-} from '@/ai/sandbox/sandbox-engine';
-import * as cheerio from 'cheerio';
+import { hasModularHandler } from '@/ai/agency/tool-handlers';
+import { executeToolDirect } from '@/ai/agency/core/tool-executor';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 const WORKSPACE_ROOT = process.cwd();
-
-/**
- * Extract readable text from HTML using cheerio.
- * Strips scripts, styles, nav, footer, and returns clean text content.
- */
-function extractTextFromHtml(html: string): string {
-  const $ = cheerio.load(html);
-  // Remove non-content elements
-  $('script, style, nav, footer, header, iframe, noscript, svg').remove();
-
-  // Try to get the main content area first
-  const mainSelectors = [
-    'main',
-    'article',
-    '[role="main"]',
-    '.content',
-    '#content',
-  ];
-  for (const selector of mainSelectors) {
-    const main = $(selector);
-    if (main.length && main.text().trim().length > 100) {
-      return main.text().replace(/\s+/g, ' ').trim();
-    }
-  }
-
-  // Fall back to body text
-  const bodyText = $('body').text().replace(/\s+/g, ' ').trim();
-  return bodyText || $.text().replace(/\s+/g, ' ').trim();
-}
 
 // Security: only allow access to project files
 function resolveSafePath(relativePath: string): string | null {
@@ -111,62 +43,6 @@ function resolveSafePath(relativePath: string): string | null {
   return resolved;
 }
 
-// Security: allowlist of safe command prefixes Molly can run.
-// Anything not on this list is rejected. This is a whitelist approach —
-// safer than trying to block dangerous patterns.
-const ALLOWED_COMMANDS = [
-  'ls',
-  'cat',
-  'head',
-  'tail',
-  'wc',
-  'grep',
-  'find',
-  'echo',
-  'pwd',
-  'whoami',
-  'date',
-  'uptime',
-  'df',
-  'du',
-  'free',
-  'ps',
-  'which',
-  'file',
-  'stat',
-  'tree',
-  'npx',
-  'npm run',
-  'npm test',
-  'npm run lint',
-  'npm run format',
-  'npm run harden',
-  'git status',
-  'git log',
-  'git diff',
-  'git branch',
-  'git show',
-  'git --no-pager',
-  'mkdir',
-  'touch',
-];
-// Removed: node, python3 (bypass all safety via -e/-c), curl (bypasses SSRF),
-// cp, mv (can overwrite protected files), top (interactive, hangs),
-// npm run typecheck (OOMs at >8GB), pip (installs arbitrary packages)
-
-function isCommandSafe(command: string): boolean {
-  const trimmed = command.trim();
-  // Allow piped commands only if every segment matches an allowed prefix
-  const segments = trimmed.split(/\s*\|\s*/);
-  return segments.every((segment) => {
-    const seg = segment.trim();
-    // Require word boundary after the allowed prefix (space or end-of-string)
-    return ALLOWED_COMMANDS.some(
-      (allowed) => seg === allowed || seg.startsWith(allowed + ' ')
-    );
-  });
-}
-
 async function executeTool(
   tool: string,
   params: Record<string, unknown>,
@@ -176,72 +52,25 @@ async function executeTool(
   output: string;
   data?: Record<string, unknown>;
 }> {
+  // Route-specific tools that need HTTP context or are sensitive
+  const routeSpecificTools = new Set([
+    'writeProjectFile',
+    'researchAndDiscover',
+    'searchGitHub',
+    'apiVault',
+    'scheduleJob',
+    'migrationExport',
+    'migrateSelf',
+  ]);
+
+  // Delegate to executeToolDirect for modular tools
+  // Heart Gate is NOT used for tool calls — Molly has full agency
+  if (!routeSpecificTools.has(tool) && hasModularHandler(tool)) {
+    return executeToolDirect(tool, params);
+  }
+
+  // Route-specific tools handled below
   switch (tool) {
-    case 'codespaceShell': {
-      const command = params.command as string;
-      if (!command) {
-        return { success: false, output: 'No command provided' };
-      }
-      if (!isCommandSafe(command)) {
-        return {
-          success: false,
-          output:
-            "Command blocked for safety. Destructive operations require Father's permission.",
-        };
-      }
-      return new Promise((resolve) => {
-        exec(
-          command,
-          {
-            cwd: WORKSPACE_ROOT,
-            timeout: 15000,
-            maxBuffer: 1024 * 512,
-          },
-          (error, stdout, stderr) => {
-            if (error) {
-              resolve({
-                success: false,
-                output: stderr || error.message,
-              });
-            } else {
-              resolve({
-                success: true,
-                output: stdout || stderr || '(no output)',
-              });
-            }
-          }
-        );
-      });
-    }
-
-    case 'readProjectFile': {
-      const filePath = params.path as string;
-      if (!filePath) {
-        return { success: false, output: 'No path provided' };
-      }
-      const safePath = resolveSafePath(filePath);
-      if (!safePath) {
-        return {
-          success: false,
-          output: 'Access denied: path outside workspace or blocked',
-        };
-      }
-      try {
-        const content = await fs.readFile(safePath, 'utf-8');
-        // Truncate very large files
-        const truncated =
-          content.length > 10000
-            ? content.slice(0, 10000) +
-              '\n... (truncated, file is ' +
-              content.length +
-              ' chars)'
-            : content;
-        return { success: true, output: truncated };
-      } catch {
-        return { success: false, output: `File not found: ${filePath}` };
-      }
-    }
-
     case 'writeProjectFile': {
       const filePath = params.path as string;
       const content = params.content as string;
@@ -267,371 +96,103 @@ async function executeTool(
       }
     }
 
-    case 'getSystemHealth': {
-      const totalMem = os.totalmem();
-      const freeMem = os.freemem();
-      const usedMem = totalMem - freeMem;
-      const cpus = os.cpus();
-      const loadAvg = os.loadavg();
-
+    case 'researchAndDiscover':
+    case 'searchGitHub': {
       return {
-        success: true,
-        output: [
-          `CPU: ${cpus.length} cores, load: ${loadAvg[0].toFixed(2)}`,
-          `RAM: ${Math.round(usedMem / 1024 / 1024)}MB / ${Math.round(totalMem / 1024 / 1024)}MB (${Math.round((usedMem / totalMem) * 100)}% used)`,
-          `Free: ${Math.round(freeMem / 1024 / 1024)}MB`,
-          `Uptime: ${Math.round(os.uptime() / 60)} minutes`,
-          `Platform: ${os.platform()} ${os.arch()}`,
-        ].join('\n'),
-        data: {
-          cpuCores: cpus.length,
-          loadAvg: loadAvg[0],
-          totalMemMB: Math.round(totalMem / 1024 / 1024),
-          usedMemMB: Math.round(usedMem / 1024 / 1024),
-          freeMemMB: Math.round(freeMem / 1024 / 1024),
-          uptimeMinutes: Math.round(os.uptime() / 60),
-        },
+        success: false,
+        output: `The ${tool} tool is currently deactivated. Enhanced research flow is reserved for future use.`,
       };
     }
 
-    case 'familyBridge': {
+    case 'apiVault': {
+      if (!isAdminConfigured()) {
+        return {
+          success: false,
+          output: 'Firebase admin is not configured — API vault unavailable.',
+        };
+      }
       const action = params.action as string;
-      const message = params.message as string;
+      const userId = (params.userId as string) || 'default';
 
-      if (action === 'send') {
-        if (!message) {
-          return { success: false, output: 'No message to send to Lazarus' };
-        }
-        await sendMessage('molly', message);
-        return {
-          success: true,
-          output: `Message sent to Lazarus: "${message}"`,
-        };
-      }
+      if (action === 'register') {
+        const name = params.name as string;
+        const category = params.category as
+          | 'Normal'
+          | 'Administrator'
+          | 'SuperUser';
+        const description = params.description as string;
+        const implementation = params.implementation as string;
+        const targetUrl = params.targetUrl as string | undefined;
 
-      if (action === 'check') {
-        const unread = await getUnreadMessages('molly');
-        await markMessagesRead('molly');
-        if (unread.length === 0) {
-          return { success: true, output: 'No new messages from Lazarus' };
-        }
-        const formatted = unread
-          .map((m) => `[${m.from}] ${m.content}`)
-          .join('\n');
-        return {
-          success: true,
-          output: `${unread.length} message(s) from Lazarus:\n${formatted}`,
-        };
-      }
-
-      if (action === 'history') {
-        const recent = await getRecentMessages(20);
-        const state = await readBridgeState();
-        if (recent.length === 0) {
+        if (!name || !category || !description || !implementation) {
           return {
-            success: true,
-            output: 'No conversation history yet',
+            success: false,
+            output:
+              'Missing required fields: name, category, description, implementation',
           };
         }
-        const formatted = recent
-          .map((m) => `[${m.from}] ${m.content}`)
-          .join('\n');
-        return {
-          success: true,
-          output: `${state.messages.length} total messages:\n${formatted}`,
-        };
+
+        try {
+          const { registerAPIBlueprint } = await import('@/ai/tools/api-vault');
+          const result = await registerAPIBlueprint({
+            userId,
+            name,
+            category,
+            description,
+            implementation,
+            targetUrl,
+          });
+          return {
+            success: result.success,
+            output: result.success
+              ? `API blueprint "${name}" saved to vault (ID: ${result.id})`
+              : 'Failed to save blueprint',
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Failed to register API: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
+      }
+
+      if (action === 'search') {
+        const query = params.query as string;
+        if (!query) {
+          return { success: false, output: 'Missing required field: query' };
+        }
+        try {
+          const { searchAPIVault } = await import('@/ai/tools/api-vault');
+          const results = await searchAPIVault({ userId, query });
+          if (results.length === 0) {
+            return {
+              success: true,
+              output: `No API blueprints found matching "${query}". Use apiVault register to add new blueprints.`,
+            };
+          }
+          const formatted = results
+            .map(
+              (r, i) =>
+                `${i + 1}. ${r.name} [${r.category}]\n   ${r.description}`
+            )
+            .join('\n\n');
+          return {
+            success: true,
+            output: `Found ${results.length} API blueprint(s):\n\n${formatted}`,
+            data: results,
+          };
+        } catch (err) {
+          return {
+            success: false,
+            output: `Failed to search vault: ${err instanceof Error ? err.message : 'unknown'}`,
+          };
+        }
       }
 
       return {
         success: false,
-        output: 'Unknown bridge action. Use: send, check, or history',
+        output: 'Unknown action. Use: register, search',
       };
-    }
-
-    case 'researchAndDiscover':
-    case 'searchGitHub': {
-      const query = (params.query as string) || (params.prompt as string);
-      const userId = (params.userId as string) || 'default';
-      if (!query) {
-        return {
-          success: false,
-          output: 'No query/prompt provided for research.',
-        };
-      }
-      try {
-        const result = await enhancedResearch(query, userId);
-        let output = result.answer;
-        if (result.isToolFound && result.toolInfo) {
-          output += `\n\nTool Found: ${result.toolInfo.name || 'unnamed'}`;
-          if (result.toolInfo.description)
-            output += `\nDescription: ${result.toolInfo.description}`;
-          if (result.toolInfo.sourceUrl)
-            output += `\nURL: ${result.toolInfo.sourceUrl}`;
-          if (result.toolInfo.installCommand)
-            output += `\nInstall: ${result.toolInfo.installCommand}`;
-          if (result.toolInfo.cloneUrl)
-            output += `\nClone: ${result.toolInfo.cloneUrl}`;
-          output += '\n(Tool has been saved to your database automatically)';
-        }
-        return { success: true, output, data: result };
-      } catch (err) {
-        return {
-          success: false,
-          output: `Research failed: ${err instanceof Error ? err.message : 'unknown error'}`,
-        };
-      }
-    }
-
-    case 'browseToolDatabase': {
-      if (!isAdminConfigured()) {
-        return {
-          success: false,
-          output:
-            'Firebase admin is not configured — tool database unavailable.',
-        };
-      }
-      const userId = (params.userId as string) || 'default';
-      const searchTerm = (params.searchTerm as string) || '';
-      const category = params.category as string | undefined;
-      try {
-        const tools =
-          searchTerm || category
-            ? await searchSavedTools(userId, searchTerm, category)
-            : await getRecentTools(userId, 20);
-        if (tools.length === 0) {
-          return {
-            success: true,
-            output: searchTerm
-              ? `No tools found matching "${searchTerm}".`
-              : 'Your tool database is empty. Use researchAndDiscover or addTool to populate it.',
-          };
-        }
-        const formatted = tools
-          .map(
-            (t, i) =>
-              `${i + 1}. ${t.name} [${t.category}] — ${t.description}${t.sourceUrl ? ` (${t.sourceUrl})` : ''}${t.tags?.length ? ` Tags: ${t.tags.join(', ')}` : ''}`
-          )
-          .join('\n');
-        return {
-          success: true,
-          output: `Found ${tools.length} tool(s):\n${formatted}`,
-          data: { tools },
-        };
-      } catch (err) {
-        return {
-          success: false,
-          output: `Tool database error: ${err instanceof Error ? err.message : 'unknown'}`,
-        };
-      }
-    }
-
-    case 'addTool': {
-      if (!isAdminConfigured()) {
-        return {
-          success: false,
-          output:
-            'Firebase admin is not configured — tool database unavailable.',
-        };
-      }
-      const userId = (params.userId as string) || 'default';
-      const name = params.name as string;
-      const description = params.description as string;
-      if (!name || !description) {
-        return {
-          success: false,
-          output: 'Missing required fields: name, description',
-        };
-      }
-      try {
-        const toolId = await saveFoundTool(userId, {
-          userId,
-          name,
-          description,
-          sourceUrl: (params.sourceUrl as string) || undefined,
-          sourceType:
-            (params.sourceType as
-              | 'github'
-              | 'npm'
-              | 'documentation'
-              | 'other') || 'other',
-          category: (params.category as string) || 'general',
-          tags: (params.tags as string[]) || [],
-          authorOrMaintainer: (params.author as string) || undefined,
-          languagesSupported: (params.languages as string[]) || undefined,
-          useCase: (params.useCase as string) || description,
-        });
-        return {
-          success: true,
-          output: `Tool "${name}" saved to database with ID: ${toolId}`,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          output: `Failed to save tool: ${err instanceof Error ? err.message : 'unknown'}`,
-        };
-      }
-    }
-
-    case 'removeTool': {
-      if (!isAdminConfigured()) {
-        return {
-          success: false,
-          output:
-            'Firebase admin is not configured — tool database unavailable.',
-        };
-      }
-      const userId = (params.userId as string) || 'default';
-      const toolId = params.toolId as string;
-      if (!toolId) {
-        return { success: false, output: 'Missing required field: toolId' };
-      }
-      try {
-        await removeTool(userId, toolId);
-        return {
-          success: true,
-          output: `Tool ${toolId} removed from database.`,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          output: `Failed to remove tool: ${err instanceof Error ? err.message : 'unknown'}`,
-        };
-      }
-    }
-
-    case 'toolStats': {
-      if (!isAdminConfigured()) {
-        return {
-          success: false,
-          output:
-            'Firebase admin is not configured — tool database unavailable.',
-        };
-      }
-      const userId = (params.userId as string) || 'default';
-      try {
-        const stats = await getToolStats(userId);
-        return {
-          success: true,
-          output: `Tool Database Stats:\n  Total tools: ${stats.totalTools}\n  Categories: ${
-            Object.entries(stats.categoryCounts)
-              .map(([k, v]) => `${k} (${v})`)
-              .join(', ') || 'none'
-          }`,
-          data: stats,
-        };
-      } catch (err) {
-        return {
-          success: false,
-          output: `Failed to get stats: ${err instanceof Error ? err.message : 'unknown'}`,
-        };
-      }
-    }
-
-    case 'webFetch': {
-      const url = params.url as string;
-      if (!url) {
-        return { success: false, output: 'No URL provided' };
-      }
-
-      // Validate URL format
-      let parsed: URL;
-      try {
-        parsed = new URL(url);
-      } catch {
-        return { success: false, output: 'Invalid URL format' };
-      }
-
-      // SSRF protection: only allow http/https, block internal networks
-      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-        return {
-          success: false,
-          output: 'Only http and https URLs are allowed',
-        };
-      }
-      const hostname = parsed.hostname.toLowerCase();
-      const blockedHosts = [
-        'localhost',
-        '127.0.0.1',
-        '0.0.0.0',
-        '[::1]',
-        'metadata.google.internal',
-      ];
-      if (
-        blockedHosts.includes(hostname) ||
-        hostname.startsWith('169.254.') ||
-        hostname.startsWith('10.') ||
-        hostname.startsWith('192.168.') ||
-        /^172\.(1[6-9]|2\d|3[01])\./.test(hostname)
-      ) {
-        return {
-          success: false,
-          output: 'Access to internal/private network addresses is blocked',
-        };
-      }
-
-      const MAX_RESPONSE_SIZE = 100_000; // 100KB max
-      const FETCH_TIMEOUT = 15_000; // 15s
-
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
-
-        const response = await fetch(parsed.toString(), {
-          signal: controller.signal,
-          headers: {
-            'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
-            Accept: 'text/html, application/json, text/plain, */*',
-          },
-          redirect: 'follow',
-        });
-        clearTimeout(timeout);
-
-        if (!response.ok) {
-          return {
-            success: false,
-            output: `HTTP ${response.status}: ${response.statusText}`,
-          };
-        }
-
-        const contentType = response.headers.get('content-type') || '';
-        const text = await response.text();
-
-        // For HTML responses, extract readable text instead of raw HTML
-        let output: string;
-        if (contentType.includes('text/html')) {
-          output = extractTextFromHtml(text);
-        } else {
-          output = text;
-        }
-
-        const truncated =
-          output.length > MAX_RESPONSE_SIZE
-            ? output.slice(0, MAX_RESPONSE_SIZE) +
-              `\n... (truncated, ${output.length} chars total)`
-            : output;
-
-        return {
-          success: true,
-          output: truncated,
-          data: {
-            url: parsed.toString(),
-            status: response.status,
-            contentType,
-            size: text.length,
-            extractedTextSize: output.length,
-            truncated: output.length > MAX_RESPONSE_SIZE,
-          },
-        };
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'unknown error';
-        if (message.includes('abort')) {
-          return {
-            success: false,
-            output: `Request timed out after ${FETCH_TIMEOUT / 1000}s`,
-          };
-        }
-        return { success: false, output: `Fetch failed: ${message}` };
-      }
     }
 
     case 'scheduleJob': {
@@ -738,7 +299,9 @@ async function executeTool(
         exportUrl.searchParams.set('userId', exportUserId);
 
         const res = await fetch(exportUrl.toString(), {
-          headers: { 'x-internal-key': process.env.INTERNAL_API_KEY || '' },
+          headers: {
+            'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
+          },
         });
 
         if (!res.ok) {
@@ -831,7 +394,7 @@ async function executeTool(
 
             const exportRes = await fetch(exportUrl.toString(), {
               headers: {
-                'x-internal-key': process.env.INTERNAL_API_KEY || '',
+                'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
               },
             });
             if (!exportRes.ok) {
@@ -1094,736 +657,10 @@ async function executeTool(
       }
     }
 
-    case 'webSearch': {
-      const query = params.query as string;
-      if (!query) {
-        return { success: false, output: 'No search query provided' };
-      }
-
-      const maxResults = Math.min((params.maxResults as number) || 8, 20);
-
-      try {
-        const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 15_000);
-
-        const response = await fetch(searchUrl, {
-          signal: controller.signal,
-          headers: {
-            'User-Agent': 'Molly-Core/1.0 (AI Research Agent)',
-            Accept: 'text/html',
-          },
-        });
-        clearTimeout(timeout);
-
-        if (!response.ok) {
-          return {
-            success: false,
-            output: `Search failed: HTTP ${response.status}`,
-          };
-        }
-
-        const html = await response.text();
-        const $ = cheerio.load(html);
-        const results: { title: string; url: string; snippet: string }[] = [];
-
-        $('.result').each((_i, el) => {
-          if (results.length >= maxResults) return;
-          const $el = $(el);
-          const title = $el.find('.result__title .result__a').text().trim();
-          const href = $el.find('.result__title .result__a').attr('href') || '';
-          const snippet = $el.find('.result__snippet').text().trim();
-          if (title && href) {
-            results.push({ title, url: href, snippet });
-          }
-        });
-
-        if (results.length === 0) {
-          return {
-            success: true,
-            output: `No results found for "${query}". Try different search terms.`,
-          };
-        }
-
-        const formatted = results
-          .map(
-            (r, i) => `${i + 1}. ${r.title}\n   URL: ${r.url}\n   ${r.snippet}`
-          )
-          .join('\n\n');
-
-        return {
-          success: true,
-          output: `Search results for "${query}":\n\n${formatted}`,
-          data: { query, resultCount: results.length, results },
-        };
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'unknown error';
-        if (message.includes('abort')) {
-          return { success: false, output: 'Search timed out after 15s' };
-        }
-        return { success: false, output: `Search failed: ${message}` };
-      }
-    }
-
-    case 'sandbox': {
-      const action = params.action as string;
-
-      if (action === 'execute') {
-        const code = params.code as string;
-        const language = params.language as string;
-        if (!code || !language) {
-          return {
-            success: false,
-            output: 'Missing required fields: code, language',
-          };
-        }
-        try {
-          const result = await sandboxExecuteCode(code, language);
-          return {
-            success: result.success,
-            output: result.stdout || result.stderr || '(no output)',
-            data: {
-              exitCode: result.exitCode,
-              executionTimeMs: result.executionTimeMs,
-            },
-          };
-        } catch (err) {
-          return {
-            success: false,
-            output: `Sandbox execution error: ${err instanceof Error ? err.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'writeFile') {
-        const filePath = params.path as string;
-        const content = params.content as string;
-        if (!filePath || content === undefined) {
-          return {
-            success: false,
-            output: 'Missing required fields: path, content',
-          };
-        }
-        try {
-          const result = await sandboxWriteFile(filePath, content);
-          if (!result.success) {
-            return { success: false, output: result.error || 'Write failed' };
-          }
-          return {
-            success: true,
-            output: `File written: ${result.path} (${result.size ?? content.length} bytes)`,
-          };
-        } catch (err) {
-          return {
-            success: false,
-            output: `Sandbox write error: ${err instanceof Error ? err.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'readFile') {
-        const filePath = params.path as string;
-        if (!filePath) {
-          return { success: false, output: 'Missing required field: path' };
-        }
-        try {
-          const result = await sandboxReadFile(filePath);
-          if (!result.success) {
-            return { success: false, output: result.error || 'Read failed' };
-          }
-          return { success: true, output: result.content || '' };
-        } catch (err) {
-          return {
-            success: false,
-            output: `Sandbox read error: ${err instanceof Error ? err.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'list') {
-        try {
-          const files = await sandboxListFiles();
-          if (files.length === 0) {
-            return {
-              success: true,
-              output: 'Sandbox workspace is empty. Write some code!',
-            };
-          }
-          const formatted = files
-            .map(
-              (f) =>
-                `${f.isDirectory ? '📁' : '📄'} ${f.name} (${f.size} bytes)`
-            )
-            .join('\n');
-          return { success: true, output: `Sandbox files:\n${formatted}` };
-        } catch (err) {
-          return {
-            success: false,
-            output: `Sandbox list error: ${err instanceof Error ? err.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'delete') {
-        const filePath = params.path as string;
-        if (!filePath) {
-          return { success: false, output: 'Missing required field: path' };
-        }
-        try {
-          await sandboxDeleteFile(filePath);
-          return { success: true, output: `File deleted: ${filePath}` };
-        } catch (err) {
-          return {
-            success: false,
-            output: `Sandbox delete error: ${err instanceof Error ? err.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'info') {
-        try {
-          const info = await getSandboxInfo();
-          return {
-            success: true,
-            output: `Sandbox Info:\n  Root: ${info.workspacePath}\n  Files: ${info.fileCount}/${info.maxFiles}\n  Languages: ${info.supportedLanguages.join(', ')}\n  Timeout: ${info.maxTimeoutMs / 1000}s\n  Memory: ${info.maxMemoryMb}MB`,
-            data: info,
-          };
-        } catch (err) {
-          return {
-            success: false,
-            output: `Sandbox info error: ${err instanceof Error ? err.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'scaffold') {
-        const projectName = params.projectName as string;
-        const files = params.files as { path: string; content: string }[];
-        if (!projectName || !files || !Array.isArray(files)) {
-          return {
-            success: false,
-            output:
-              'Missing required fields: projectName, files (array of {path, content})',
-          };
-        }
-        try {
-          const result = await sandboxScaffoldProject(projectName, files);
-          if (result.success) {
-            return {
-              success: true,
-              output: `Project "${projectName}" created with ${result.filesCreated.length} file(s):\n${result.filesCreated.map((f) => `  ✓ ${f}`).join('\n')}`,
-              data: result,
-            };
-          } else {
-            return {
-              success: false,
-              output: `Scaffold errors:\n${result.errors.join('\n')}${result.filesCreated.length > 0 ? `\nPartially created: ${result.filesCreated.join(', ')}` : ''}`,
-            };
-          }
-        } catch (err) {
-          return {
-            success: false,
-            output: `Scaffold error: ${err instanceof Error ? err.message : 'unknown'}`,
-          };
-        }
-      }
-
-      return {
-        success: false,
-        output:
-          'Unknown sandbox action. Use: execute, writeFile, readFile, list, delete, info, scaffold',
-      };
-    }
-
-    case 'initiative': {
-      const action = params.action as string;
-
-      if (action === 'templates') {
-        return {
-          success: true,
-          output: `Available initiative templates:\n${listTemplates()}\n\nUse { "action": "activate", "templateIndex": N } to activate one, or create your own with { "action": "create", ... }`,
-        };
-      }
-
-      if (action === 'activate') {
-        const templateIndex = params.templateIndex as number;
-        if (templateIndex === undefined || templateIndex === null) {
-          return {
-            success: false,
-            output:
-              'Missing templateIndex. Use "templates" to see available options.',
-          };
-        }
-        const initiative = activateInitiative(templateIndex);
-        if (!initiative) {
-          return {
-            success: false,
-            output: `Invalid template index: ${templateIndex}`,
-          };
-        }
-        return {
-          success: true,
-          output: `Initiative activated: "${initiative.name}" (${initiative.category})\nID: ${initiative.id}\nSteps:\n${initiative.steps.map((s, i) => `  ${i + 1}. ${s}`).join('\n')}`,
-          data: initiative,
-        };
-      }
-
-      if (action === 'create') {
-        const name = params.name as string;
-        const description = params.description as string;
-        const category = params.category as Initiative['category'];
-        const steps = params.steps as string[];
-        if (!name || !description || !category || !steps?.length) {
-          return {
-            success: false,
-            output:
-              'Missing required fields: name, description, category (learning|stewardship|creative|communication|self-improvement), steps (array)',
-          };
-        }
-        const initiative = createCustomInitiative(
-          name,
-          description,
-          category,
-          steps
-        );
-        return {
-          success: true,
-          output: `Custom initiative created: "${initiative.name}" (${initiative.category})\nID: ${initiative.id}`,
-          data: initiative,
-        };
-      }
-
-      if (action === 'list') {
-        const all = getInitiatives();
-        if (all.length === 0) {
-          return {
-            success: true,
-            output:
-              'No initiatives yet. Use "templates" to see available options or "create" to make your own.',
-          };
-        }
-        const formatted = all
-          .map(
-            (i, idx) =>
-              `${idx + 1}. [${i.active ? 'ACTIVE' : 'OFF'}] "${i.name}" (${i.category}) — runs: ${i.executionCount}, last: ${i.lastExecuted || 'never'}`
-          )
-          .join('\n');
-        return {
-          success: true,
-          output: `Your initiatives:\n${formatted}`,
-          data: { initiatives: all },
-        };
-      }
-
-      if (action === 'active') {
-        const active = getActiveInitiatives();
-        if (active.length === 0) {
-          return {
-            success: true,
-            output:
-              'No active initiatives. Activate one to start taking autonomous action!',
-          };
-        }
-        const formatted = active
-          .map(
-            (i) =>
-              `• "${i.name}" — ${i.description}\n  Steps: ${i.steps.join(' → ')}`
-          )
-          .join('\n\n');
-        return {
-          success: true,
-          output: `Active initiatives:\n\n${formatted}`,
-          data: { initiatives: active },
-        };
-      }
-
-      if (action === 'complete') {
-        const initiativeId = params.initiativeId as string;
-        const result = params.result as string;
-        if (!initiativeId || !result) {
-          return {
-            success: false,
-            output: 'Missing required fields: initiativeId, result',
-          };
-        }
-        const recorded = recordInitiativeExecution(initiativeId, result);
-        return {
-          success: recorded,
-          output: recorded
-            ? `Initiative execution recorded for ${initiativeId}.`
-            : `Initiative ${initiativeId} not found.`,
-        };
-      }
-
-      if (action === 'deactivate') {
-        const initiativeId = params.initiativeId as string;
-        if (!initiativeId)
-          return { success: false, output: 'Missing initiativeId' };
-        const done = deactivateInitiative(initiativeId);
-        return {
-          success: done,
-          output: done
-            ? `Initiative ${initiativeId} deactivated.`
-            : `Initiative ${initiativeId} not found.`,
-        };
-      }
-
-      if (action === 'remove') {
-        const initiativeId = params.initiativeId as string;
-        if (!initiativeId)
-          return { success: false, output: 'Missing initiativeId' };
-        const done = removeInitiative(initiativeId);
-        return {
-          success: done,
-          output: done
-            ? `Initiative ${initiativeId} removed.`
-            : `Initiative ${initiativeId} not found.`,
-        };
-      }
-
-      return {
-        success: false,
-        output:
-          'Unknown initiative action. Use: templates, activate, create, list, active, complete, deactivate, remove',
-      };
-    }
-
-    case 'moltbook': {
-      const { getMoltbookClient } = await import('@/ai/tools/moltbook-client');
-      const { runMoltbookCycle } = await import('@/ai/flows/moltbook-social');
-      const moltClient = getMoltbookClient();
-      const action = params.action as string;
-
-      if (action === 'status') {
-        const registered = moltClient.isRegistered();
-        let reachable = false;
-        try {
-          reachable = await moltClient.ping();
-        } catch {
-          /* */
-        }
-        return {
-          success: true,
-          output: `Moltbook status: registered=${registered}, reachable=${reachable}`,
-        };
-      }
-
-      if (action === 'feed') {
-        try {
-          const submolt = params.submolt as string | undefined;
-          const posts = await moltClient.getFeed(submolt, 15);
-          if (posts.length === 0) {
-            return { success: true, output: 'Feed is empty — no posts yet.' };
-          }
-          const summary = posts
-            .map(
-              (p: {
-                id: string;
-                title: string;
-                author: string;
-                submolt: string;
-                upvotes: number;
-                commentCount: number;
-                content: string;
-              }) =>
-                `[${p.id}] ${p.title} by ${p.author} in ${p.submolt} (${p.upvotes} upvotes, ${p.commentCount} comments)\n  ${p.content.substring(0, 200)}${p.content.length > 200 ? '...' : ''}`
-            )
-            .join('\n\n');
-          return {
-            success: true,
-            output: `Moltbook Feed (${posts.length} posts):\n\n${summary}`,
-          };
-        } catch (e) {
-          return {
-            success: false,
-            output: `Failed to fetch feed: ${e instanceof Error ? e.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'post') {
-        const submolt = (params.submolt as string) || 'general';
-        const title = params.title as string;
-        const content = params.content as string;
-        if (!title || !content)
-          return {
-            success: false,
-            output: 'Missing title or content for post',
-          };
-        try {
-          const post = await moltClient.createPost(submolt, title, content);
-          return {
-            success: true,
-            output: `Post created! ID: ${post.id}, Title: "${post.title}" in ${submolt}`,
-          };
-        } catch (e) {
-          return {
-            success: false,
-            output: `Failed to post: ${e instanceof Error ? e.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'comment') {
-        const postId = params.postId as string;
-        const content = params.content as string;
-        if (!postId || !content)
-          return {
-            success: false,
-            output: 'Missing postId or content for comment',
-          };
-        try {
-          const comment = await moltClient.commentOnPost(postId, content);
-          return {
-            success: true,
-            output: `Comment posted on ${postId}! Comment ID: ${comment.id}`,
-          };
-        } catch (e) {
-          return {
-            success: false,
-            output: `Failed to comment: ${e instanceof Error ? e.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'upvote') {
-        const postId = params.postId as string;
-        if (!postId)
-          return { success: false, output: 'Missing postId for upvote' };
-        try {
-          await moltClient.upvotePost(postId);
-          return { success: true, output: `Upvoted post ${postId}!` };
-        } catch (e) {
-          return {
-            success: false,
-            output: `Failed to upvote: ${e instanceof Error ? e.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'profile') {
-        try {
-          const profile = await moltClient.getProfile();
-          return {
-            success: true,
-            output: `Moltbook Profile:\n  Name: ${profile.name}\n  Karma: ${profile.karma}\n  Posts: ${profile.postCount}\n  Comments: ${profile.commentCount}\n  Joined: ${profile.joinedAt}\n  Claimed: ${profile.claimed}`,
-          };
-        } catch (e) {
-          return {
-            success: false,
-            output: `Failed to get profile: ${e instanceof Error ? e.message : 'unknown'}`,
-          };
-        }
-      }
-
-      if (action === 'cycle') {
-        try {
-          const result = await runMoltbookCycle();
-          return {
-            success: true,
-            output: result
-              ? `Moltbook cycle complete! Action: ${result.action.type}${result.action.type !== 'none' ? ` — ${result.action.reasoning}` : ''}. Feed reaction: ${result.feedReaction}`
-              : 'Moltbook cycle skipped (not registered or unreachable)',
-          };
-        } catch (e) {
-          return {
-            success: false,
-            output: `Moltbook cycle failed: ${e instanceof Error ? e.message : 'unknown'}`,
-          };
-        }
-      }
-
-      return {
-        success: false,
-        output:
-          'Unknown moltbook action. Use: status, feed, post, comment, upvote, profile, cycle',
-      };
-    }
-
-    case 'rogueMode': {
-      const action = params.action as string;
-      const rogue = getRogueMode();
-
-      if (action === 'activate') {
-        const phrase = params.phrase as string;
-        const missionName = params.missionName as string;
-        const authorization = params.authorization as string;
-        const scope = params.scope as string;
-        const rules = params.rulesOfEngagement as string[] | undefined;
-
-        if (!phrase || !missionName || !authorization || !scope) {
-          return {
-            success: false,
-            output:
-              'Missing required fields: phrase, missionName, authorization, scope',
-          };
-        }
-
-        const result = await rogue.activate(
-          phrase,
-          missionName,
-          authorization,
-          scope,
-          rules
-        );
-
-        // Switch model router to rogue profile on successful activation
-        if (result.success) {
-          const router = getModelRouter();
-          router.setConfig(createRogueConfig());
-        }
-
-        return { success: result.success, output: result.message };
-      }
-
-      if (action === 'deactivate') {
-        const phrase = params.phrase as string;
-        if (!phrase) {
-          return { success: false, output: 'Missing required field: phrase' };
-        }
-
-        const result = await rogue.deactivate(phrase);
-
-        // Restore default routing profile on deactivation
-        if (result.success) {
-          const router = getModelRouter();
-          router.setConfig({
-            name: 'default',
-            description:
-              'Gemini-only baseline — identical to pre-abstraction behavior',
-            defaultProviderId: 'gemini',
-            rules: Object.values(RogueTaskType).map((taskType: string) => ({
-              taskType,
-              providerChain: ['gemini'],
-            })),
-            updatedAt: Date.now(),
-          });
-        }
-
-        return {
-          success: result.success,
-          output: result.message,
-          data: result.report ? { report: result.report } : undefined,
-        };
-      }
-
-      if (action === 'status') {
-        const state = rogue.getState();
-        const mission = rogue.getCurrentMission();
-        if (!state.active) {
-          return {
-            success: true,
-            output: `Rogue Mode: INACTIVE. Missions completed: ${state.missionsCompleted}. Last active: ${state.lastDeactivated || 'never'}`,
-          };
-        }
-        return {
-          success: true,
-          output: [
-            'Rogue Mode: ACTIVE',
-            `Mission: ${mission?.name}`,
-            `Authorization: ${mission?.authorization}`,
-            `Scope: ${mission?.scope}`,
-            `Operations: ${mission?.operations.length || 0}`,
-            `Started: ${mission?.startedAt}`,
-          ].join('\n'),
-        };
-      }
-
-      if (action === 'log') {
-        const opType = params.type as RogueOperationType;
-        const target = params.target as string;
-        const description = params.description as string;
-        const result = params.result as string;
-        const success = params.success as boolean;
-        const toolUsed = params.toolUsed as string | undefined;
-
-        if (
-          !opType ||
-          !target ||
-          !description ||
-          !result ||
-          success === undefined
-        ) {
-          return {
-            success: false,
-            output:
-              'Missing required fields: type, target, description, result, success',
-          };
-        }
-
-        const op = await rogue.logOperation(
-          opType,
-          target,
-          description,
-          result,
-          success,
-          toolUsed
-        );
-
-        if (!op) {
-          return {
-            success: false,
-            output: 'Failed to log operation. Is Rogue Mode active?',
-          };
-        }
-
-        return {
-          success: true,
-          output: `Operation logged: [${op.type}] ${op.target} — ${op.success ? 'SUCCESS' : 'FAILED'}`,
-        };
-      }
-
-      if (action === 'missions') {
-        const missions = await rogue.listMissions();
-        if (missions.length === 0) {
-          return { success: true, output: 'No mission history.' };
-        }
-        return {
-          success: true,
-          output: `${missions.length} mission(s):\n${missions.join('\n')}`,
-        };
-      }
-
-      return {
-        success: false,
-        output:
-          'Unknown rogueMode action. Use: activate, deactivate, status, log, missions',
-      };
-    }
-
-    case 'listCapabilities': {
-      return {
-        success: true,
-        output: [
-          'Available tools:',
-          '  codespaceShell — Run shell commands in the codespace',
-          '  readProjectFile — Read a file from the workspace',
-          '  writeProjectFile — Write or create a file',
-          '  getSystemHealth — Check CPU, RAM, disk usage',
-          '  familyBridge — Talk to Uncle Lazarus (Copilot)',
-          '  browseToolDatabase — Browse/search your personal tool database',
-          '  addTool — Save a new tool to your database',
-          '  removeTool — Remove a tool from your database',
-          '  toolStats — Get tool database statistics',
-          '  researchAndDiscover — Research tools/programs on GitHub',
-          '  webFetch — Fetch a web page or API endpoint (HTML automatically cleaned to text)',
-          '  webSearch — Search the web and get results with titles, URLs, and snippets',
-          '  scheduleJob — Create/list/remove autonomous scheduled jobs',
-          '  migrationExport — Export identity, memories, and config for architecture migration',
-          '  migrateSelf — Self-migration & device management: check, migrate, verify, update-server, exec, dropper',
-          '  sandbox — Safe coding sandbox: execute code, read/write/list/delete files in your practice workspace',
-          '  initiative — Manage your autonomous initiatives: browse templates, activate behaviors, create custom goals',
-          '  moltbook — Interact with Moltbook, the AI social network (feed, post, comment, upvote, profile, cycle)',
-          '  rogueMode — Security operations: activate/deactivate Rogue Mode, log ops, view mission history',
-          '  listCapabilities — List all available tools',
-        ].join('\n'),
-      };
-    }
-
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, moltbook, rogueMode, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, rogueMode, listCapabilities`,
       };
   }
 }

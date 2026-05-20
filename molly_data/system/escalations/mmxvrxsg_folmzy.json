@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773949576912_lwh6",
+  "severity": "critical",
+  "source": "test",
+  "message": "Self-healing failed: UNKNOWN: Unclassified failure in test — \"[object Object]\"",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773949576903_g78oo7",
+  "timestamp": "2026-03-19T19:46:16.912Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-19T19:46:16.912Z",
+  "_id": "mmxvrxsg_folmzy",
+  "_createdAt": "2026-03-19T19:46:16.912Z",
+  "_updatedAt": "2026-03-19T19:46:16.912Z"
+}

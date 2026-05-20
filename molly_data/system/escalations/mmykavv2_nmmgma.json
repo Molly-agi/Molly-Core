@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773990771657_to2d",
+  "severity": "critical",
+  "source": "test",
+  "message": "Self-healing failed: DATA_INTEGRITY: Unexpected data shape or missing value",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773990771640_ao35kn",
+  "timestamp": "2026-03-20T07:12:51.657Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-20T07:12:51.662Z",
+  "_id": "mmykavv2_nmmgma",
+  "_createdAt": "2026-03-20T07:12:51.662Z",
+  "_updatedAt": "2026-03-20T07:12:51.662Z"
+}

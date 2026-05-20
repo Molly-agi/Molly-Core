@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773990771751_jdxq",
+  "severity": "critical",
+  "source": "parse-test",
+  "message": "Self-healing failed: PARSE_FAILURE: Malformed data or invalid syntax",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773990771741_2gunv1",
+  "timestamp": "2026-03-20T07:12:51.751Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-20T07:12:51.752Z",
+  "_id": "mmykavxk_5puznf",
+  "_createdAt": "2026-03-20T07:12:51.752Z",
+  "_updatedAt": "2026-03-20T07:12:51.752Z"
+}

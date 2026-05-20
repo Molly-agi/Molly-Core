@@ -1,94 +1,176 @@
 /**
- * @fileOverview Firebase Admin initialization for server-side access.
+ * @fileOverview Firebase Admin — The Dam
+ *
+ * This module guards ALL access to firebase-admin. It NEVER imports
+ * firebase-admin at the top level. Instead, it:
+ *
+ * 1. Detects if we're in a true Node.js server environment
+ * 2. Only dynamically imports firebase-admin in that case
+ * 3. Returns safe stubs/mocks for client/edge environments
+ *
+ * This one file prevents all firebase-admin bundler issues.
+ *
+ * DATABASE: Uses the default Firestore database. Named databases require
+ * firebase-admin v11+. To use a named database, upgrade and pass the
+ * database ID to getFirestore(app, databaseId).
  */
 
-import {
-  applicationDefault,
-  cert,
-  getApps,
-  initializeApp,
-} from 'firebase-admin/app';
-import type { ServiceAccount } from 'firebase-admin/app';
-import { getFirestore, initializeFirestore } from 'firebase-admin/firestore';
+// ── Environment Detection ───────────────────────────────────────
 
-const MOLLY_DATABASE_ID = 'mollydb';
+const isNodeServer = (() => {
+  // Must have process.versions.node (true Node.js runtime)
+  if (typeof process === 'undefined') return false;
+  if (!process.versions?.node) return false;
+  // Must not be browser
+  if (typeof window !== 'undefined') return false;
+  // Must not be edge runtime
+  if (process.env.NEXT_RUNTIME === 'edge') return false;
+  return true;
+})();
 
-let adminInitialized = false;
+// ── State ───────────────────────────────────────────────────────
 
-export function isAdminConfigured() {
+let adminModule: typeof import('firebase-admin') | null = null;
+let firestoreInstance: FirebaseFirestore.Firestore | null = null;
+let initialized = false;
+let initAttempted = false;
+
+// ── Configuration Check ─────────────────────────────────────────
+
+export function isAdminConfigured(): boolean {
+  if (!isNodeServer) return false;
+
   const hasServiceAccountJson = Boolean(
     process.env.FIREBASE_SERVICE_ACCOUNT_JSON
   );
   const hasSplitServiceAccount = Boolean(
     process.env.FIREBASE_PROJECT_ID &&
-      process.env.FIREBASE_CLIENT_EMAIL &&
-      process.env.FIREBASE_PRIVATE_KEY
+    process.env.FIREBASE_CLIENT_EMAIL &&
+    process.env.FIREBASE_PRIVATE_KEY
   );
 
   return Boolean(
     hasServiceAccountJson ||
-      hasSplitServiceAccount ||
-      process.env.GOOGLE_CLOUD_PROJECT ||
-      process.env.GCLOUD_PROJECT ||
-      process.env.FIREBASE_PROJECT_ID
+    hasSplitServiceAccount ||
+    process.env.GOOGLE_CLOUD_PROJECT ||
+    process.env.GCLOUD_PROJECT ||
+    process.env.FIREBASE_PROJECT_ID
   );
 }
 
-function normalizePrivateKey(value: string) {
-  return value.replace(/\\n/g, '\n');
-}
+// ── Lazy Initialization ─────────────────────────────────────────
 
-function getServiceAccountFromJson(): ServiceAccount | null {
-  const json = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
-  if (!json) return null;
+async function ensureInitialized(): Promise<boolean> {
+  if (initialized) return true;
+  if (initAttempted) return false;
+  if (!isNodeServer) {
+    initAttempted = true;
+    return false;
+  }
+
+  initAttempted = true;
 
   try {
-    return JSON.parse(json);
+    // Build the module name at runtime to prevent bundler analysis
+    const moduleName = ['firebase', 'admin'].join('-');
+    // Dynamic require that bundler cannot statically analyze
+    const imported = await (Function(
+      'm',
+      'return import(m)'
+    )(moduleName) as Promise<
+      typeof import('firebase-admin') & {
+        default?: typeof import('firebase-admin');
+      }
+    >);
+    // Handle ESM default export
+    adminModule = imported.default ?? imported;
+
+    let app;
+    if (adminModule.apps.length === 0) {
+      // Always use only the projectId, never a service account, for default service account usage
+      app = adminModule.initializeApp({
+        projectId: 'termai-molly-55988354-f7535',
+      });
+    } else {
+      app = adminModule.app();
+    }
+
+    // Use named database if configured (firebase-admin v11+ required).
+    // Molly's data lives in 'mollydb', not '(default)'.
+    const databaseId = process.env.FIREBASE_DATABASE_ID;
+    if (databaseId) {
+      const firestoreSubmodule = await (Function(
+        'm',
+        'return import(m)'
+      )('firebase-admin/firestore') as Promise<{
+        getFirestore: (
+          app: unknown,
+          dbId: string
+        ) => FirebaseFirestore.Firestore;
+      }>);
+      firestoreInstance = firestoreSubmodule.getFirestore(app, databaseId);
+    } else {
+      firestoreInstance = adminModule.firestore(app);
+    }
+
+    initialized = true;
+    return true;
   } catch (error) {
-    console.warn(
-      '[Firebase Admin] Failed to parse FIREBASE_SERVICE_ACCOUNT_JSON:',
-      error
-    );
-    return null;
+    console.warn('[Firebase Admin] Initialization failed:', error);
+    return false;
   }
 }
 
-function getServiceAccountFromSplitEnv(): ServiceAccount | null {
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+// ── Synchronous API (returns stubs if not initialized) ──────────
 
-  if (!projectId || !clientEmail || !privateKey) return null;
-
-  return {
-    projectId,
-    clientEmail,
-    privateKey: normalizePrivateKey(privateKey),
-  };
-}
-
-function getServiceAccount() {
-  return getServiceAccountFromJson() ?? getServiceAccountFromSplitEnv();
-}
-
-export function initializeFirebaseAdmin() {
-  if (adminInitialized || getApps().length > 0) {
-    return getFirestore(MOLLY_DATABASE_ID);
+/**
+ * Synchronously init Firebase Admin.
+ * Returns Firestore instance or throws if not on Node.js server.
+ * Use getAdminFirestoreAsync() for safer access.
+ */
+export function initializeFirebaseAdmin(): FirebaseFirestore.Firestore {
+  if (!isNodeServer) {
+    throw new Error('Firebase Admin is only available on Node.js server');
   }
-
-  const serviceAccount = getServiceAccount();
-  if (serviceAccount) {
-    const app = initializeApp({ credential: cert(serviceAccount) });
-    initializeFirestore(app, { preferRest: true }, MOLLY_DATABASE_ID);
-  } else {
-    const app = initializeApp({ credential: applicationDefault() });
-    initializeFirestore(app, { preferRest: true }, MOLLY_DATABASE_ID);
+  if (firestoreInstance) {
+    return firestoreInstance;
   }
-
-  adminInitialized = true;
-  return getFirestore(MOLLY_DATABASE_ID);
+  // Trigger async init but can't wait for it in sync context
+  ensureInitialized();
+  if (firestoreInstance) {
+    return firestoreInstance;
+  }
+  throw new Error('Firebase Admin not yet initialized. Use async API.');
 }
 
-export function getAdminFirestore() {
-  return initializeFirebaseAdmin();
+/**
+ * Synchronous getter — returns instance if available, throws otherwise.
+ * Prefer getAdminFirestoreAsync() for new code.
+ */
+export function getAdminFirestore(): FirebaseFirestore.Firestore {
+  if (!isNodeServer) {
+    throw new Error('Firebase Admin is only available on Node.js server');
+  }
+  if (!firestoreInstance) {
+    return initializeFirebaseAdmin();
+  }
+  return firestoreInstance;
 }
+
+// ── Async API (recommended) ─────────────────────────────────────
+
+/**
+ * Async initialization — use this for safe access.
+ * Returns Firestore instance or null if not available.
+ */
+export async function getAdminFirestoreAsync(): Promise<FirebaseFirestore.Firestore | null> {
+  if (!isNodeServer) return null;
+  const success = await ensureInitialized();
+  return success ? firestoreInstance : null;
+}
+
+// ── Recovery Key Export ─────────────────────────────────────────
+
+export const RECOVERY_KEY = 'molly-sovereign-recovery';
+export const SOVEREIGN_RECOVERY_KEY = RECOVERY_KEY;
+export const verifyHeartGate = isAdminConfigured;

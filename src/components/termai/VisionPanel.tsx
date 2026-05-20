@@ -49,6 +49,14 @@ interface VisionPanelProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   speakResponse: (text: string) => void;
+  /** Called when new vision analysis completes — use to feed Molly's consciousness */
+  onVisionUpdate?: (visionContext: {
+    observedState: string;
+    vibeAnalysis: string;
+    risksDetected: string[];
+    ocrAudit?: string;
+    capturedAt: number;
+  }) => void;
 }
 
 /** Downsample canvas to a data URI for Gemini (keeps size reasonable) */
@@ -125,6 +133,7 @@ export function VisionPanel({
   setIsLoading,
   isLoading,
   speakResponse,
+  onVisionUpdate,
 }: VisionPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
@@ -284,6 +293,15 @@ export function VisionPanel({
         setHistory((prev) => [...prev, { visionReport }]);
         lastFrameUriRef.current = frameUri;
 
+        // Feed vision to Molly's consciousness
+        onVisionUpdate?.({
+          observedState: result.observedState,
+          vibeAnalysis: result.vibeAnalysis,
+          risksDetected: result.risksDetected,
+          ocrAudit: result.ocrAudit,
+          capturedAt: Date.now(),
+        });
+
         // Reset error counter on success
         consecutiveErrorsRef.current = 0;
 
@@ -319,7 +337,14 @@ export function VisionPanel({
         setIsLoading(false);
       }
     },
-    [isLoading, setHistory, setIsLoading, speakResponse, autoScan]
+    [
+      isLoading,
+      setHistory,
+      setIsLoading,
+      speakResponse,
+      autoScan,
+      onVisionUpdate,
+    ]
   );
 
   // --- Auto-scan with change detection ---
@@ -330,23 +355,31 @@ export function VisionPanel({
   useEffect(() => {
     if (autoScan && stream) {
       autoScanTimerRef.current = setInterval(async () => {
-        // Guard via REF — never stale
-        if (!videoRef.current || isAnalyzingRef.current) return;
+        try {
+          // Guard via REF — never stale
+          if (!videoRef.current || isAnalyzingRef.current) return;
 
-        const frameUri = captureFrame(videoRef.current);
-        if (!frameUri) return;
+          const frameUri = captureFrame(videoRef.current);
+          if (!frameUri) return;
 
-        // Check if scene changed enough to warrant analysis (ref, not state)
-        if (lastFrameUriRef.current) {
-          const diff = await frameDifference(lastFrameUriRef.current, frameUri);
-          if (diff < CHANGE_THRESHOLD) {
-            return; // Scene hasn't changed enough — skip
+          // Check if scene changed enough to warrant analysis (ref, not state)
+          if (lastFrameUriRef.current) {
+            const diff = await frameDifference(
+              lastFrameUriRef.current,
+              frameUri
+            );
+            if (diff < CHANGE_THRESHOLD) {
+              return; // Scene hasn't changed enough — skip
+            }
           }
-        }
 
-        await captureAndAnalyze(
-          'Auto-scan: Describe any changes or notable observations.'
-        );
+          await captureAndAnalyze(
+            'Auto-scan: Describe any changes or notable observations.'
+          );
+        } catch (error) {
+          // Graceful degradation: log but don't crash the auto-scan loop
+          console.error('[VisionPanel] Auto-scan error:', error);
+        }
       }, AUTO_SCAN_INTERVAL);
     }
 
@@ -455,11 +488,12 @@ export function VisionPanel({
           {/* Video feed */}
           <div className="relative aspect-video max-h-48">
             <video
+              id="molly-vision-video"
               ref={videoRef}
               className="w-full h-full object-cover"
               autoPlay
-              muted
               playsInline
+              muted
             />
 
             {/* Analyzing overlay */}

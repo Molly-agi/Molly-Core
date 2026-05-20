@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { appendSessionEvent } from '@/lib/session-manager';
+import { MollyLogger } from '@/ai/logger';
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,7 +31,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error('[Session Event API] Error:', error);
+    MollyLogger.error(
+      'Session event recording failed',
+      'session-event-api',
+      {},
+      error
+    );
     return NextResponse.json(
       { success: false, error: 'Failed to record session event' },
       { status: 500 }

@@ -47,7 +47,7 @@ export const getSystemHealth = ai.defineTool(
       const memInfo = execSync('free -m').toString();
       const memLines = memInfo.split('\n');
       const memData = (memLines[1] || '').split(/\s+/);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       const _totalRam = parseInt(memData[1] || '8000');
       const availableRam = parseInt(memData[6] || '2000');
 
@@ -139,7 +139,7 @@ export const systemAudit = ai.defineTool(
       vibeCheck: z.string(),
     }),
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   async ({ depth: _depth }) => {
     return {
       integrityScore: 0.98,

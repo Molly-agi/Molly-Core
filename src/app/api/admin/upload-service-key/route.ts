@@ -1,11 +1,13 @@
 /**
  * Temporary one-time endpoint to upload Firebase service account key.
  * Protected by admin password. Delete this file after use.
+ * Rate limited: 5 requests per minute (sensitive operation).
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
-import { timingSafeEqual } from 'crypto';
+import { timingSafeEqual } from 'node:crypto';
+import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
 
 const ENV_PATH = join(process.cwd(), '.env.local');
 
@@ -21,6 +23,13 @@ function isAuthorized(request: NextRequest): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limit check - strictest limits for credential operations
+  const rateLimitResponse = checkAdminRateLimit(request, {
+    ...ADMIN_RATE_LIMITS.destructive,
+    routeName: 'upload-service-key',
+  });
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     if (!isAuthorized(request)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

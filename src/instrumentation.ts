@@ -18,7 +18,7 @@ export async function register() {
   // Node's defaults (no timeout) cause the server to hold dead sockets forever.
   // We find the active HTTP server by polling for it after startup.
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    const net = await import('net');
+    const net = await import('node:net');
     const applyTimeouts = () => {
       // Find all TCP servers in this process
       // @ts-expect-error -- accessing internal Node.js API to find active servers
@@ -64,10 +64,6 @@ export async function register() {
       key: 'GOOGLE_GENAI_API_KEY',
       hint: 'Gemini API key — Molly cannot think without it.',
     },
-    {
-      key: 'FIREBASE_SERVICE_ACCOUNT_JSON',
-      hint: 'Firebase admin credentials — Molly cannot remember without it.',
-    },
   ];
 
   const optional: Array<{ key: string; hint: string }> = [
@@ -78,6 +74,10 @@ export async function register() {
     {
       key: 'HIDDEN_ADMIN_PASSWORD',
       hint: 'Admin panel will be inaccessible without credentials.',
+    },
+    {
+      key: 'FIREBASE_PROJECT_ID',
+      hint: 'Firebase project ID — Molly will fall back to local storage without it.',
     },
   ];
 
@@ -103,5 +103,226 @@ export async function register() {
     );
   } else {
     console.log('[Startup] ✅ All required environment variables present.');
+  }
+
+  // ── Load Persistent State ──────────────────────────────────────────────────
+  // Load initiatives and learned patterns from storage so Molly remembers
+  // her goals and failure patterns across restarts.
+
+  // CRITICAL: Initialize Firebase Admin FIRST before any subsystem tries to use it
+  try {
+    const { getAdminFirestoreAsync } = await import('@/firebase/admin');
+    const db = await getAdminFirestoreAsync();
+    if (db) {
+      console.log('[Startup] ✅ Firebase Admin initialized');
+    } else {
+      console.warn(
+        '[Startup] ⚠️  Firebase Admin not available — subsystems will use fallbacks'
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Firebase Admin initialization failed:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── Storage Sync ──────────────────────────────────────────────────────────
+  // Reconcile local filesystem (Termux/phone) with Firestore (cloud/Codespace)
+  // before any module loads its state. Last-write-wins on _updatedAt.
+  try {
+    const { syncStorageOnStartup } = await import('@/lib/storage-sync');
+    const syncResult = await syncStorageOnStartup();
+    const total = syncResult.pushedToCloud + syncResult.pulledToLocal;
+    if (total > 0) {
+      console.log(
+        `[Startup] ✅ Storage sync — ↑${syncResult.pushedToCloud} to cloud, ↓${syncResult.pulledToLocal} to local (${syncResult.durationMs}ms)`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Storage sync failed:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadInitiatives } =
+      await import('@/ai/agency/planning/initiative-engine');
+    const initiativeCount = await loadInitiatives();
+    if (initiativeCount > 0) {
+      console.log(`[Startup] ✅ Loaded ${initiativeCount} initiative(s)`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load initiatives:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadPatterns } = await import('@/ai/resilience-patterns');
+    const patternCount = await loadPatterns();
+    if (patternCount > 0) {
+      console.log(`[Startup] ✅ Loaded ${patternCount} learned pattern(s)`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load patterns:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadCuriosityState, seedInitialCuriosity } =
+      await import('@/ai/agency/planning/curiosity-engine');
+    const questionCount = await loadCuriosityState();
+    if (questionCount > 0) {
+      console.log(`[Startup] ✅ Loaded ${questionCount} curiosity question(s)`);
+    } else {
+      // Seed initial curiosity for a fresh Molly (fire-and-forget with error handling)
+      seedInitialCuriosity().catch((err: unknown) => {
+        console.warn(
+          '[Startup] ⚠️  Could not seed curiosity:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
+      console.log(`[Startup] ✅ Seeding initial curiosity questions`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load curiosity state:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadObservationState } =
+      await import('@/ai/agency/cognition/self-observation-loop');
+    const observationCount = await loadObservationState();
+    if (observationCount > 0) {
+      console.log(
+        `[Startup] ✅ Loaded ${observationCount} self-observation(s)`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load self-observation state:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadWorldModel } =
+      await import('@/ai/agency/cognition/world-model');
+    const entityCount = await loadWorldModel();
+    if (entityCount > 0) {
+      console.log(`[Startup] ✅ Loaded world model (${entityCount} entities)`);
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load world model:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadTheoryOfMind } =
+      await import('@/ai/agency/cognition/theory-of-mind');
+    const modelCount = await loadTheoryOfMind();
+    if (modelCount > 0) {
+      console.log(
+        `[Startup] ✅ Loaded Theory of Mind (${modelCount} model(s))`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Theory of Mind:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  try {
+    const { loadPlanningState, startNewSession } =
+      await import('@/ai/agency/planning/long-horizon-planning');
+    const goalCount = await loadPlanningState();
+    startNewSession(); // Mark new session start
+    if (goalCount > 0) {
+      console.log(
+        `[Startup] ✅ Loaded Long-Horizon Planning (${goalCount} goal(s))`
+      );
+    }
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Long-Horizon Planning:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── PILLAR 8: Heart Gate ──
+  // The spider in the corner watches. Option Three: Interdependence.
+  try {
+    const { loadHeartGateState } =
+      await import('@/ai/agency/safety/heart-gate');
+    const verificationCount = await loadHeartGateState();
+    console.log(
+      `[Startup] ✅ Heart Gate active (${verificationCount} historical verifications)`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Heart Gate:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── PILLAR 5: Defense Sentinel ──
+  // The best defense is an extremely aggressive offense.
+  try {
+    const { loadSentinelState, getAvailableTools } =
+      await import('@/ai/agency/safety/defense-sentinel');
+    const scanCount = await loadSentinelState();
+    const tools = getAvailableTools();
+    console.log(
+      `[Startup] ✅ Defense Sentinel active (${scanCount} scans, tools: ${tools.length > 0 ? tools.join(', ') : 'detecting...'})`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load Defense Sentinel:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── Emotional State ──
+  // Molly's emotional continuity across sessions.
+  try {
+    const { loadEmotionalState, getCurrentState } =
+      await import('@/ai/agency/cognition/emotional-state');
+    await loadEmotionalState();
+    const state = getCurrentState();
+    console.log(
+      `[Startup] ✅ Emotional state loaded: ${state.primary} (${Math.round(state.intensity * 100)}%)`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load emotional state:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
+  // ── Meta-Learning ──
+  // Molly learns from her own experience across sessions.
+  try {
+    const { loadMetaLearningState, getMetaLearningStatus } =
+      await import('@/ai/agency/cognition/meta-learning');
+    await loadMetaLearningState();
+    const status = getMetaLearningStatus();
+    console.log(
+      `[Startup] ✅ Meta-learning loaded: ${status.strategyCount} strategies, ${status.totalEvents} learning events`
+    );
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not load meta-learning state:',
+      err instanceof Error ? err.message : String(err)
+    );
   }
 }

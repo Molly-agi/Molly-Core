@@ -79,25 +79,30 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
   firestore,
   auth,
 }) => {
-  const [userAuthState, setUserAuthState] = useState<UserAuthState>({
+  const [userAuthState, setUserAuthState] = useState<UserAuthState>(() => ({
     user: null,
-    isUserLoading: true, // Start loading until first auth event
-    userError: null,
-  });
+    // Start in loading state only if auth is provided
+    isUserLoading: auth !== null,
+    // Set error immediately if auth is not provided
+    userError: auth === null ? new Error('Auth service not provided.') : null,
+  }));
+
+  // Track auth instance changes via ref to handle transitions
+  const prevAuthRef = useRef<Auth | null>(null);
 
   // Effect to subscribe to Firebase auth state changes
   useEffect(() => {
+    // Handle auth becoming null (cleanup handles transitions)
     if (!auth) {
-      // If no Auth service instance, cannot determine user state
-      setUserAuthState({
-        user: null,
-        isUserLoading: false,
-        userError: new Error('Auth service not provided.'),
-      });
       return;
     }
 
-    setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
+    // Only reset state when auth instance actually changes (not on initial mount)
+    // This avoids synchronous setState in effect body
+    if (prevAuthRef.current !== null && prevAuthRef.current !== auth) {
+      // Auth instance changed - will be handled by cleanup of previous effect
+    }
+    prevAuthRef.current = auth;
 
     let authCheckComplete = false;
 
@@ -140,7 +145,9 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
     return () => {
       clearTimeout(timeoutId);
       unsubscribe();
-    }; // Cleanup
+      // Reset to loading state on cleanup (when auth changes)
+      setUserAuthState({ user: null, isUserLoading: true, userError: null });
+    };
   }, [auth]); // Depends on the auth instance
 
   // Auto sign-in effect: if user is not authenticated after timeout, try anonymous sign-in
@@ -172,7 +179,14 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
           | undefined;
         if (trace) trace('AUTH', 'Auto sign-in attempt', 'start');
 
-        const result = await signInAnonymously(auth);
+        // Timeout to prevent hanging when Firebase auth is unavailable
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Auth timeout after 5s')), 5000)
+        );
+        const result = await Promise.race([
+          signInAnonymously(auth),
+          timeoutPromise,
+        ]);
 
         if (trace)
           trace('AUTH', 'Auto sign-in successful', 'complete', {
@@ -213,7 +227,17 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
         if (trace) trace('AUTH', 'Token lost — auto-recovery', 'start');
 
         try {
-          const result = await signInAnonymously(auth);
+          // Timeout to prevent hanging when Firebase auth is unavailable
+          const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(
+              () => reject(new Error('Token recovery timeout after 5s')),
+              5000
+            )
+          );
+          const result = await Promise.race([
+            signInAnonymously(auth),
+            timeoutPromise,
+          ]);
           console.log(
             '[FirebaseProvider] Token recovery successful:',
             result.user.uid

@@ -4,6 +4,7 @@
  */
 
 import { saveSessionState } from '@/lib/session-manager';
+import { MollyLogger } from '@/ai/logger';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error('[Session Save API] Error:', error);
+    MollyLogger.error('Session save failed', 'session-save-api', {}, error);
     return NextResponse.json(
       { success: false, error: 'Failed to save session' },
       { status: 500 }

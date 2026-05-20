@@ -53,7 +53,10 @@ export default function LoginPage() {
     if (!attemptedAutoSignIn.current && !isUserLoading && !user && auth) {
       attemptedAutoSignIn.current = true;
       console.log('[Login] Auto-attempting anonymous sign-in');
-      handleSignIn();
+      // Defer to next microtask to avoid synchronous setState cascade
+      queueMicrotask(() => {
+        handleSignIn();
+      });
     }
   }, [isUserLoading, user, auth, handleSignIn]);
 

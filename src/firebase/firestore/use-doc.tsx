@@ -49,16 +49,17 @@ export function useDoc<T = any>(
   const [error, setError] = useState<FirestoreError | Error | null>(null);
 
   useEffect(() => {
+    // When docRef is null/undefined, initial state (null, false, null) is correct
+    // State reset happens in cleanup when docRef changes
     if (!memoizedDocRef) {
-      setData(null);
-      setIsLoading(false);
-      setError(null);
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-    // Optional: setData(null); // Clear previous data instantly
+    // Defer loading state update to avoid synchronous setState cascade
+    queueMicrotask(() => {
+      setIsLoading(true);
+      setError(null);
+    });
 
     const unsubscribe = onSnapshot(
       memoizedDocRef,
@@ -88,7 +89,13 @@ export function useDoc<T = any>(
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      // Reset state on cleanup when docRef changes or becomes null
+      setData(null);
+      setIsLoading(false);
+      setError(null);
+    };
   }, [memoizedDocRef]); // Re-run if the memoizedDocRef changes.
 
   return { data, isLoading, error };

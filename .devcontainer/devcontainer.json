@@ -3,15 +3,28 @@
 
   // Run health check on every attach/reconnect to kill zombie processes
   // before they accumulate and cause OOM crashes.
+  // Track Molly's growth (code, memory, docs) and save snapshot.
   // Save session state so Copilot can restore context after reconnect.
   // Start keep-alive heartbeat (also auto-saves + git-commits state every 10min).
-  "postAttachCommand": "bash scripts/codespace-health.sh && node scripts/save-session.mjs --status active --note 'Codespace reconnected' && (git add COPILOT_SESSION_STATE.json COPILOT_SESSION_STATE.md .github/copilot-instructions.md && git diff --cached --quiet || git commit -m 'chore: session state on reconnect' --no-verify && git push origin HEAD &) 2>/dev/null; nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &; nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
+  "postAttachCommand": "bash scripts/codespace-health.sh && npx tsx scripts/track-growth.ts --save && node scripts/save-session.mjs --status active --note 'Codespace reconnected' && (git add COPILOT_SESSION_STATE.json COPILOT_SESSION_STATE.md .github/copilot-instructions.md molly_data/system/growth_log.json && git diff --cached --quiet || git commit -m 'chore: session state on reconnect' --no-verify && git push origin HEAD &) 2>/dev/null; nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &; nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
 
   // Codespace settings + grant gh CLI permission to manage Actions runs
   "customizations": {
     "codespaces": {
       "permissions": {
         "actions": "write"
+      },
+      "repositories": {
+        "Molly-agi/Lazarus": {
+          "permissions": {
+            "contents": "read"
+          }
+        },
+        "Molly-agi/Lazarus-": {
+          "permissions": {
+            "contents": "read"
+          }
+        }
       }
     },
     "vscode": {
@@ -22,11 +35,15 @@
     }
   },
 
-  // Forward Molly's port
-  "forwardPorts": [9002],
+  // Forward Molly's ports
+  "forwardPorts": [9002, 9099],
   "portsAttributes": {
     "9002": {
       "label": "Molly Dev Server",
+      "onAutoForward": "notify"
+    },
+    "9099": {
+      "label": "Family Bridge (WebSocket)",
       "onAutoForward": "notify"
     }
   }

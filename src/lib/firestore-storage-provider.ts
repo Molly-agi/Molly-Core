@@ -16,6 +16,7 @@ import type {
   QueryOptions,
   BatchOperation,
 } from './storage-interface';
+import { sanitizeForFirestore } from './firestore-sanitizer';
 
 /**
  * Parse a collection path like 'users/molly/experiences' into
@@ -40,13 +41,16 @@ function getCollectionRef(
   }
 
   // Build the reference by alternating collection/doc
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let ref: any = db.collection(segments[0]);
+  let ref:
+    | FirebaseFirestore.CollectionReference
+    | FirebaseFirestore.DocumentReference = db.collection(segments[0]);
   for (let i = 1; i < segments.length; i++) {
     if (i % 2 === 1) {
-      ref = ref.doc(segments[i]);
+      ref = (ref as FirebaseFirestore.CollectionReference).doc(segments[i]);
     } else {
-      ref = ref.collection(segments[i]);
+      ref = (ref as FirebaseFirestore.DocumentReference).collection(
+        segments[i]
+      );
     }
   }
 
@@ -81,14 +85,18 @@ export class FirestoreStorageProvider implements StorageProvider {
   ): Promise<StorageDocument> {
     const db = this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
-    const docRef = await colRef.add({
-      ...data,
-      _createdAt: Date.now(),
-    });
+    const now = new Date().toISOString();
+    const docRef = await colRef.add(
+      sanitizeForFirestore({
+        ...data,
+        _createdAt: now,
+        _updatedAt: now,
+      })
+    );
 
     return {
       id: docRef.id,
-      data: { ...data, _createdAt: Date.now() },
+      data: { ...data, _createdAt: now, _updatedAt: now },
     };
   }
 
@@ -99,10 +107,21 @@ export class FirestoreStorageProvider implements StorageProvider {
   ): Promise<void> {
     const db = this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
-    await colRef.doc(docId).set({
-      ...data,
-      _updatedAt: Date.now(),
-    });
+    const docRef = colRef.doc(docId);
+    const now = new Date().toISOString();
+
+    // Preserve _createdAt if doc already exists
+    const existing = await docRef.get();
+    const existingData = existing.exists ? existing.data() : null;
+    const createdAt = existingData?._createdAt || now;
+
+    await docRef.set(
+      sanitizeForFirestore({
+        ...data,
+        _createdAt: createdAt,
+        _updatedAt: now,
+      })
+    );
   }
 
   async get(
@@ -128,10 +147,12 @@ export class FirestoreStorageProvider implements StorageProvider {
   ): Promise<void> {
     const db = this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
-    await colRef.doc(docId).update({
-      ...updates,
-      _updatedAt: Date.now(),
-    });
+    await colRef.doc(docId).update(
+      sanitizeForFirestore({
+        ...updates,
+        _updatedAt: new Date().toISOString(),
+      })
+    );
   }
 
   async delete(collectionPath: string, docId: string): Promise<void> {
@@ -149,8 +170,7 @@ export class FirestoreStorageProvider implements StorageProvider {
     const colRef = getCollectionRef(db, collectionPath);
 
     // Build the query
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let q: any = colRef;
+    let q: FirebaseFirestore.Query = colRef;
 
     if (filters) {
       for (const filter of filters) {
@@ -179,6 +199,7 @@ export class FirestoreStorageProvider implements StorageProvider {
   async batchWrite(operations: BatchOperation[]): Promise<void> {
     const db = this.getDb();
     const batch = db.batch();
+    const now = new Date().toISOString();
 
     for (const op of operations) {
       const colRef = getCollectionRef(db, op.collectionPath);
@@ -186,10 +207,16 @@ export class FirestoreStorageProvider implements StorageProvider {
 
       switch (op.type) {
         case 'set':
-          batch.set(docRef, { ...op.data, _updatedAt: Date.now() });
+          batch.set(
+            docRef,
+            sanitizeForFirestore({ ...op.data, _updatedAt: now })
+          );
           break;
         case 'update':
-          batch.update(docRef, { ...op.data, _updatedAt: Date.now() });
+          batch.update(
+            docRef,
+            sanitizeForFirestore({ ...op.data, _updatedAt: now })
+          );
           break;
         case 'delete':
           batch.delete(docRef);

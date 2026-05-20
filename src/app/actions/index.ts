@@ -2,11 +2,17 @@
  * Re-export all server actions for backward compatibility.
  * This file acts as the public API for all server-side operations.
  *
- * Note: 'use server' directive is in ai-flows.ts where the actual functions are defined.
+ * Flows are now split into domain-specific files:
+ *   - voice-flows.ts: Voice processing
+ *   - memory-flows.ts: Origin story, family memories
+ *   - chat-flows.ts: Conversational, guidance
+ *   - autonomous-flows.ts: Autonomous operations, code analysis
+ *   - system-flows.ts: Health, termux, recovery
+ *   - tablet-flows.ts: Moltbook, sandbox, tablet control
  */
 
 // Health & Diagnostics
-export { getHealthCheck, getModelPulse } from './ai-flows';
+export { getHealthCheck, getModelPulse } from './system-flows';
 export {
   getCircuitBreakerStatus,
   resetCircuitBreaker,
@@ -24,20 +30,24 @@ export {
   getVoiceCommand,
   getMollyVoice,
   processVoiceInteraction,
-} from './ai-flows';
+} from './voice-flows';
 
 // Conversational & Guidance
 export {
   getConversationalChat,
   getContextualGuidance,
   getVisionaryCoach,
+} from './chat-flows';
+
+// Memory & Origin Story
+export {
   getOriginStory,
   getOriginStoryAnchorParts,
   getFamilyMessages,
   getFamilyStoryAnchorParts,
   seedOriginStoryMemory,
   seedFamilyMemories,
-} from './ai-flows';
+} from './memory-flows';
 
 // Research & Knowledge Base
 export {
@@ -52,7 +62,7 @@ export {
 } from './research-cache';
 
 // Research Agent
-export { getEnhancedResearch } from './ai-flows';
+export { getEnhancedResearch } from './system-flows';
 
 // Code Analysis & Integration
 export {
@@ -60,30 +70,30 @@ export {
   getCodeAnalysisAndIntegration,
   getIntegrationFromAnalysis,
   getIntegrationsList,
-} from './ai-flows';
+} from './autonomous-flows';
 
 // Self-Reader — Molly reads her own entire repo
-export { getMollyRepoReading } from './ai-flows';
+export { getMollyRepoReading } from './system-flows';
 
 // Pillar Pipeline — Autonomous Code Absorption
-export { getPillarPipelineResult, getPillarFilesList } from './ai-flows';
+export { getPillarPipelineResult, getPillarFilesList } from './system-flows';
 
 // Termux Self-Setup — Molly installs herself on the phone
 export {
   getTermuxSelfSetup,
   getTermuxUpdate,
   getBootstrapCommand,
-} from './ai-flows';
+} from './system-flows';
 
 // Problem Solving & Code Generation
 export {
   getAutonomousSolution,
   getTextToScript,
   getTextToTermuxCommand,
-} from './ai-flows';
+} from './autonomous-flows';
 
 // Vision & Analysis
-export { getVisionAnalysis, runIntrospection } from './ai-flows';
+export { getVisionAnalysis, runIntrospection } from './autonomous-flows';
 
 // Advanced Operations
 export {
@@ -93,7 +103,7 @@ export {
   startHiveOperation,
   triggerImmuneResponse,
   startSyntheticSynthesis,
-} from './ai-flows';
+} from './autonomous-flows';
 
 // Molly's Personal Tool Library
 export {
@@ -119,10 +129,12 @@ export {
   runRecoveryScan,
   getRecoveryStatus,
   setRecoveryMode,
-} from './ai-flows';
+} from './system-flows';
 
 // Sandbox — Molly's Safe Coding Playground
-export { runSandboxAction } from './ai-flows';
+export { runSandboxAction } from './tablet-flows';
 
 // Tablet Control — Molly's Hands into Browser Devices
-export { sendTabletCommand, getTabletStatus } from './ai-flows';
+export { sendTabletCommand, getTabletStatus } from './tablet-flows';
+
+

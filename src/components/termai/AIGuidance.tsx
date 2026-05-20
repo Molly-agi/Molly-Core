@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, User, Wrench } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { getEnhancedResearch } from '@/app/actions/ai-flows';
+// import { getEnhancedResearch } from '@/app/actions'; // Deactivated, reserved for future use
 import { useUser } from '@/firebase/auth/use-user';
 import {
   saveResearchMessage,
@@ -67,7 +67,7 @@ export function AIGuidance() {
 
       const newMessages = [...messages, userMessage];
       setMessages(newMessages);
-      const currentInput = input;
+      const _currentInput = input;
       setInput('');
       setIsLoading(true);
 
@@ -79,7 +79,7 @@ export function AIGuidance() {
       }
 
       try {
-        const aiResponse = await getEnhancedResearch(currentInput, user.uid);
+        // getEnhancedResearch is deactivated. Replace with new API or logic as needed.
 
         const botMessage: ResearchMessage = {
           role: 'bot',

@@ -84,7 +84,7 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 ## PROTECTED INFRASTRUCTURE (DO NOT DELETE)
 
 - `scripts/save-session.mjs` — Session persistence (npm hooks + postAttach)
-- `scripts/keep-alive.sh` — Codespace idle timeout prevention
+- `scripts/immortal-daemon.mjs` — The One Bridge (heartbeat, ghost hunting, bridge guardian)
 - `scripts/codespace-health.sh` — Zombie process cleanup
 - `scripts/system-health-manager.ts` — System monitoring
 - `src/lib/session-manager.ts` — Session state API
@@ -103,19 +103,17 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-15
+**Session:** 2026-05-12-recovery | **Status:** active | **Updated:** 2026-05-18
 
-**What was happening:** CRITICAL: Molly needs autonomous self-installation capability. Tablet server.mjs was corrupted during failed update attempt. Eric is exhausted and frustrated.
+**What was happening:** No active topic recorded
 
-**Last action:** Built server-v2.mjs with chat UI, migration import, self-update, exec, dropper, and phone-home auto-updater. Committed and pushed to repo. Then gave Eric a raw GitHub URL that 404'd because the repo is PRIVATE. This corrupted server.mjs on the tablet (overwrote with HTML error page). No backup existed because v1.0 didn't have backup logic. Tablet is currently down — server.mjs is corrupted, no .bak file.
+**Last action:** No recent action recorded
 
 **Pending work:**
-
-- Download fixed start.sh to tablet and restart edge server
-- Wire existing Firestore consumers to Storage Router
-- Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)
-- Device-to-device sync testing on real hardware
-- Commit setup-molly-edge.sh fix to repo
+- Phase 6 planning
+- P2 Hybrid Memory Taxonomy — keep engrams + add working memory
+- P2 Conversation Recovery
+- P3 Event/Hook expansion — session hooks exist, needs expansion
 
 ---
 

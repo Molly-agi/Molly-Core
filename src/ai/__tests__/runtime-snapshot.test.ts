@@ -48,6 +48,13 @@ jest.mock('@/firebase/admin', () => ({
   getAdminFirestore: jest.fn(),
 }));
 
+jest.mock('@/lib/storage-router', () => ({
+  getStorageRouter: jest.fn(() => ({
+    getMode: jest.fn(() => 'firestore'),
+    query: jest.fn(),
+  })),
+}));
+
 // Imports — AFTER mocks
 import { collectRuntimeSnapshot } from '../tools/runtime-snapshot';
 import { CircuitState } from '../tools/circuit-breaker';
@@ -57,7 +64,8 @@ import { getLatencyStats } from '../tools/latency-cache';
 import { getSystemHealth } from '../tools/system';
 import { verifyRecordIntegrity } from '../tools/memory-integrity';
 import { loadSessionState } from '@/lib/session-manager';
-import { isAdminConfigured, getAdminFirestore } from '@/firebase/admin';
+import { isAdminConfigured } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
 
 // Narrowed mock handles
 const mockGetCircuitBreaker = getCircuitBreaker as jest.Mock;
@@ -67,7 +75,7 @@ const mockGetSystemHealth = getSystemHealth as unknown as jest.Mock;
 const mockVerifyRecordIntegrity = verifyRecordIntegrity as jest.Mock;
 const mockLoadSessionState = loadSessionState as jest.Mock;
 const mockIsAdminConfigured = isAdminConfigured as jest.Mock;
-const mockGetAdminFirestore = getAdminFirestore as jest.Mock;
+const mockGetStorageRouter = getStorageRouter as jest.Mock;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -89,7 +97,7 @@ function sessionState(overrides: Record<string, unknown> = {}) {
   // If caller provides a runtime override, replace entirely (no merge)
   if ('runtime' in overrides) {
     base.runtime = overrides.runtime;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const { runtime: _runtime, ...restOverrides } = overrides;
     return { ...base, ...restOverrides };
   }
@@ -390,23 +398,18 @@ describe('collectRuntimeSnapshot', () => {
     expect(snap.memoryHealth.warning).toMatch(/Admin Firestore/);
   });
 
-  it('reports memory health ok when Firestore records all pass checksum integrity', async () => {
+  it('reports memory health ok when storage records all pass checksum integrity', async () => {
     mockIsAdminConfigured.mockReturnValue(true);
     mockVerifyRecordIntegrity.mockReturnValue(true);
 
     const docs = [
-      { data: () => ({ id: '1', crc32: 'abc', responseText: 'ok-1' }) },
-      { data: () => ({ id: '2', crc32: 'def', responseText: 'ok-2' }) },
+      { id: '1', data: { id: '1', crc32: 'abc', responseText: 'ok-1' } },
+      { id: '2', data: { id: '2', crc32: 'def', responseText: 'ok-2' } },
     ];
 
-    const getMock = jest.fn().mockResolvedValue({ size: docs.length, docs });
-    const limitMock = jest.fn().mockReturnValue({ get: getMock });
-    const orderByMock = jest.fn().mockReturnValue({ limit: limitMock });
-    const collectionMock = jest.fn().mockReturnValue({ orderBy: orderByMock });
-    const docMock = jest.fn().mockReturnValue({ collection: collectionMock });
-
-    mockGetAdminFirestore.mockReturnValue({
-      collection: jest.fn().mockReturnValue({ doc: docMock }),
+    mockGetStorageRouter.mockReturnValue({
+      getMode: jest.fn(() => 'firestore'),
+      query: jest.fn().mockResolvedValue(docs),
     });
 
     const snap = await collectRuntimeSnapshot('user-123');
@@ -419,24 +422,19 @@ describe('collectRuntimeSnapshot', () => {
     expect(snap.memoryHealth.warning).toBeUndefined();
   });
 
-  it('reports degraded memory health when Firestore query throws', async () => {
+  it('reports degraded memory health when storage query throws', async () => {
     mockIsAdminConfigured.mockReturnValue(true);
 
-    const getMock = jest.fn().mockRejectedValue(new Error('Firestore down'));
-    const limitMock = jest.fn().mockReturnValue({ get: getMock });
-    const orderByMock = jest.fn().mockReturnValue({ limit: limitMock });
-    const collectionMock = jest.fn().mockReturnValue({ orderBy: orderByMock });
-    const docMock = jest.fn().mockReturnValue({ collection: collectionMock });
-
-    mockGetAdminFirestore.mockReturnValue({
-      collection: jest.fn().mockReturnValue({ doc: docMock }),
+    mockGetStorageRouter.mockReturnValue({
+      getMode: jest.fn(() => 'firestore'),
+      query: jest.fn().mockRejectedValue(new Error('Storage down')),
     });
 
     const snap = await collectRuntimeSnapshot('user-123');
 
     expect(snap.memoryHealth.status).toBe('degraded');
     expect(snap.memoryHealth.checkedRecords).toBe(0);
-    expect(snap.memoryHealth.error).toMatch(/Firestore down/);
+    expect(snap.memoryHealth.error).toMatch(/Storage down/);
   });
 
   // ----- Session without runtime -----

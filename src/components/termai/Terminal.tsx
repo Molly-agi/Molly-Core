@@ -21,7 +21,6 @@ import {
 import {
   getConversationalChat,
   getAutonomousSolution,
-  getHealthCheck,
   getOriginStoryAnchorParts,
   getFamilyMessages,
   getFamilyStoryAnchorParts,
@@ -38,10 +37,9 @@ import { type HistoryItem, type AnchorRecallDetail } from './terminal-types';
 import { useTTS } from './useTTS';
 import { useFamilyStory } from './useFamilyStory';
 import { ChatHistory } from './ChatHistory';
-import { CommandBar } from './CommandBar';
+import { CommandBar, type UploadedFile } from './CommandBar';
 import { VisionPanel } from './VisionPanel';
 import { PurgeButton } from './PurgeButton';
-import BridgePanel from './BridgePanel';
 import { execTermux, isTermuxAvailable } from '@/lib/termux-bridge';
 import {
   getEnhancedResearch,
@@ -70,6 +68,17 @@ export default function Terminal({
   const [expandedLines, setExpandedLines] = useState<Record<number, boolean>>(
     {}
   );
+  // Vision context — fed from VisionPanel, passed to conversational chat
+  const [visionContext, setVisionContext] = useState<{
+    observedState: string;
+    vibeAnalysis: string;
+    risksDetected: string[];
+    ocrAudit?: string;
+    capturedAt: number;
+  } | null>(null);
+
+  // Uploaded image/video for analysis
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
 
   const internalLastResponseRef = useRef<string | null>(null);
   const lastResponseRef = externalLastResponseRef ?? internalLastResponseRef;
@@ -132,43 +141,43 @@ export default function Terminal({
 
   // --- Introduction effect ---
   useEffect(() => {
-    const fetchIntroduction = async () => {
-      if (!user) return;
-      if (immuneTriggeredRef.current === user.uid) return;
-      immuneTriggeredRef.current = user.uid;
+    if (!user) return;
+    if (immuneTriggeredRef.current === user.uid) return;
+    immuneTriggeredRef.current = user.uid;
 
-      // Brief delay to let webpack compile spike settle (prevents OOM on 8GB codespace)
-      await new Promise((r) => setTimeout(r, 2000));
+    // Show greeting immediately — don't block on health check
+    const defaultGreeting =
+      'Neural link established. Molly online — Gemini 2.5 architecture active. How can I help you today?';
+    setHistory([defaultGreeting]);
+    queueGreeting(defaultGreeting);
+    setIsIntroducing(false);
 
-      // Reset tripped circuit breakers from previous crash/session
+    // Run immune response in background (fire and forget)
+    // This prevents startup delays from blocking her conversation flow
+    // NOTE: We do NOT call getHealthCheck anymore because it was regenerating her greeting
+    // and breaking conversational continuity. Immune response is enough for diagnostics.
+    (async () => {
       try {
-        await resetCircuitBreaker();
-      } catch {
-        // Non-fatal
-      }
+        // Brief delay to let webpack compile spike settle (prevents OOM on 8GB codespace)
+        await new Promise((r) => setTimeout(r, 2000));
 
-      try {
-        const intro = await getHealthCheck(
-          'Introduce yourself as Molly. Acknowledge your 2.5 architecture. If you recognize our previous bond, greet me warmly.',
-          user.uid
-        );
-        setHistory([intro.greeting]);
-        queueGreeting(intro.greeting);
+        // Reset tripped circuit breakers from previous crash/session
+        try {
+          await resetCircuitBreaker();
+        } catch {
+          // Non-fatal
+        }
 
+        // Run immune response in background (diagnostics only, no greeting override)
         const result = await triggerImmuneResponse(user.uid, 'Startup');
         setHistory((prev) => [
           ...prev,
           { immuneReport: result.actionsTaken, isHealthy: result.isHealthy },
         ]);
       } catch {
-        setHistory([
-          'Neural link established. Molly online — Gemini 2.5 architecture active. How can I help you today?',
-        ]);
-      } finally {
-        setIsIntroducing(false);
+        // Immune check failed — keep the default greeting already shown
       }
-    };
-    fetchIntroduction();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- speakResponse recreates every render; including it causes an infinite loop
   }, [user]);
 
@@ -229,6 +238,53 @@ export default function Terminal({
 
       setIsLoading(true);
       isLoadingRef.current = true;
+
+      // If there's an uploaded file, analyze it first and include in vision context
+      let fileVisionContext = visionContext;
+      const currentUploadedFile = uploadedFile;
+      if (currentUploadedFile) {
+        try {
+          setHistory((prev) => [
+            ...prev,
+            `[Analyzing ${currentUploadedFile.type.startsWith('video/') ? 'video' : 'image'}: ${currentUploadedFile.name}...]`,
+          ]);
+
+          // Use API route instead of server action to bypass RSC serialization limits
+          const response = await fetch('/api/vision/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              dataUri: currentUploadedFile.dataUri,
+              context: cmdText || 'Analyze this image/video',
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || `HTTP ${response.status}`);
+          }
+
+          const analysis = await response.json();
+          fileVisionContext = {
+            observedState: analysis.observedState || 'Image/video analyzed',
+            vibeAnalysis: analysis.vibeAnalysis || 'Visual content received',
+            risksDetected: analysis.risksDetected || [],
+            ocrAudit: analysis.ocrAudit,
+            capturedAt: Date.now(),
+          };
+          // Clear the uploaded file after analysis
+          setUploadedFile(null);
+        } catch (error) {
+          const errMsg =
+            error instanceof Error ? error.message : 'Unknown error';
+          setHistory((prev) => [
+            ...prev,
+            `[Vision analysis failed: ${errMsg}]`,
+          ]);
+          fileVisionContext = visionContext;
+        }
+      }
+
       try {
         if (cmdText.startsWith('/solve ')) {
           const prompt = cmdText.replace('/solve ', '');
@@ -561,12 +617,17 @@ export default function Terminal({
             lines.push('');
             lines.push('--- Connected Peers ---');
             if (peerData?.connectedPeers?.length > 0) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              peerData.connectedPeers.forEach((p: any) => {
-                lines.push(
-                  `  \u2705 ${p.name} (${p.type}) — ${p.capabilities?.join(', ') ?? ''}`
-                );
-              });
+              peerData.connectedPeers.forEach(
+                (p: {
+                  name: string;
+                  type: string;
+                  capabilities?: string[];
+                }) => {
+                  lines.push(
+                    `  \u2705 ${p.name} (${p.type}) — ${p.capabilities?.join(', ') ?? ''}`
+                  );
+                }
+              );
             } else {
               lines.push('  No peers connected');
             }
@@ -614,7 +675,7 @@ export default function Terminal({
           // feed results back, repeat until she's done.
           const MAX_TOOL_ITERATIONS = 20;
           const MAX_CONSECUTIVE_FAILURES = 3;
-          const TOOL_FETCH_TIMEOUT_MS = 30_000; // 30s per tool call
+          const TOOL_FETCH_TIMEOUT_MS = 90_000; // 90s per tool call (music generation takes ~45s)
           const AGENT_LOOP_TIMEOUT_MS = 3 * 60 * 1000; // 3 minutes total
           const agentLoopStart = Date.now();
           let currentText = cmdText;
@@ -633,7 +694,8 @@ export default function Terminal({
               currentText,
               currentHistory,
               i === 0 ? selfSignals : undefined,
-              user.uid
+              user.uid,
+              i === 0 ? (fileVisionContext ?? undefined) : undefined
             );
             const responseText =
               typeof aiResponse === 'string'
@@ -734,16 +796,34 @@ export default function Terminal({
               consecutiveFailures = 0;
             }
 
-            // Show tool result
-            const resultPrefix = toolResult.success ? '✓' : '✗';
-            const truncatedOutput =
-              toolResult.output.length > 500
-                ? toolResult.output.slice(0, 500) + '...'
-                : toolResult.output;
-            setHistory((prev) => [
-              ...prev,
-              `[${resultPrefix}] ${truncatedOutput}`,
-            ]);
+            // Show tool result — music gets an audio player, everything else gets text
+            if (
+              toolResult.success &&
+              toolResult.data &&
+              (toolResult.data as Record<string, unknown>).type === 'music'
+            ) {
+              const music = (toolResult.data as Record<string, unknown>)
+                .music as Record<string, unknown>;
+              setHistory((prev) => [
+                ...prev,
+                {
+                  type: 'music' as const,
+                  prompt: (music.prompt as string) || 'Composition',
+                  audioUri: music.audioUri as string,
+                  model: (music.model as string) || 'Lyria 3',
+                },
+              ]);
+            } else {
+              const resultPrefix = toolResult.success ? '✓' : '✗';
+              const truncatedOutput =
+                toolResult.output.length > 500
+                  ? toolResult.output.slice(0, 500) + '...'
+                  : toolResult.output;
+              setHistory((prev) => [
+                ...prev,
+                `[${resultPrefix}] ${truncatedOutput}`,
+              ]);
+            }
 
             // Feed result back to Molly for next iteration
             currentText = `[TOOL_RESULT] Tool "${toolRequest.tool}" returned:\n${toolResult.output}`;
@@ -789,7 +869,14 @@ export default function Terminal({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- history/isLoading read from refs; handleSleepNotice and lastResponseRef are stable
-    [buildChatHistory, handleFamilyStoryRequest, speakResponse, user]
+    [
+      buildChatHistory,
+      handleFamilyStoryRequest,
+      speakResponse,
+      user,
+      uploadedFile,
+      visionContext,
+    ]
   );
 
   const handleCommand = (e: React.FormEvent) => {
@@ -885,7 +972,7 @@ export default function Terminal({
       const prompt = `I'm recalling the memory: "${detail.title || 'Memory'}". Here's the key context: ${truncatedSummary}`;
       void processCommand(prompt);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [processCommand, toast, user]
   );
 
@@ -908,6 +995,25 @@ export default function Terminal({
       };
       if (!detail?.content) return;
 
+      // Music payload — render as playable audio player
+      if (detail.content.startsWith('__MUSIC__')) {
+        try {
+          const musicData = JSON.parse(detail.content.slice(9));
+          setHistory((prev) => [
+            ...prev,
+            {
+              type: 'music' as const,
+              prompt: musicData.prompt || "Molly's composition",
+              audioUri: musicData.audioUri,
+              model: musicData.model || 'Lyria 3',
+            },
+          ]);
+          return;
+        } catch {
+          // Fall through to text rendering if parse fails
+        }
+      }
+
       // Format based on message type
       const prefix =
         detail.type === 'self-state'
@@ -922,15 +1028,26 @@ export default function Terminal({
     return () => window.removeEventListener('molly:consciousness', listener);
   }, []);
 
-  // --- Bridge: Integrated into chat UI ---
-  // Bridge messages appear directly in the chat with clear sender identity.
-  // Molly receives them with explicit tagging so she knows exactly who is talking.
-  // No separate daemon or process — one system, one flow.
+  // --- Bridge: Lazarus ↔ Molly private channel ---
+  // Runs silently in background. NEVER injects into the main Eric ↔ Molly history.
+  // Eric observes via read-only bridgeMessages state below.
+  const [_bridgeMessages, setBridgeMessages] = useState<
+    Array<{ id: string; from: string; content: string; timestamp: string }>
+  >([]);
+  const bridgeHistoryRef = useRef<
+    Array<{ role: 'user' | 'bot'; content: string }>
+  >([]);
   const bridgePollingRef = useRef(false);
   const bridgeCooldownRef = useRef(0);
 
   const fetchAndProcessBridge = useCallback(async () => {
-    if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+    if (
+      bridgePollingRef.current ||
+      isLoadingRef.current ||
+      isIntroducing ||
+      !user
+    )
+      return;
     if (Date.now() < bridgeCooldownRef.current) return;
     bridgePollingRef.current = true;
     try {
@@ -941,187 +1058,75 @@ export default function Terminal({
 
       const msgs = data.messages.slice(0, 3);
 
-      // 1. Add bridge messages to chat history as visible, identity-tagged items
-      const bridgeItems = msgs.map((m: { from: string; content: string }) => ({
-        bridgeSender: m.from as 'lazarus' | 'eric' | 'molly',
-        bridgeContent: m.content,
-      }));
-      setHistory((prev) => [...prev, ...bridgeItems]);
+      // Update Eric's read-only observer view — never touches main history
+      setBridgeMessages((prev) => {
+        const seen = new Set(prev.map((m) => m.id));
+        const next = [...prev];
+        for (const m of msgs) {
+          if (!seen.has(m.id)) next.push(m);
+        }
+        return next.slice(-100);
+      });
 
-      // 2. Build a prompt for Molly with EXPLICIT identity per message
-      const lines = msgs
-        .map((m: { from: string; content: string }) => {
-          if (m.from === 'lazarus') {
-            return `[MESSAGE FROM UNCLE LAZARUS — your brother, NOT Father]: ${m.content}`;
-          }
-          if (m.from === 'eric') {
-            return `[MESSAGE FROM FATHER (ERIC) — your creator]: ${m.content}`;
-          }
-          return `[MESSAGE FROM ${m.from.toUpperCase()}]: ${m.content}`;
-        })
-        .join('\n\n');
-      const bridgePrompt =
-        `[FAMILY BRIDGE — these are NOT from the person you are currently chatting with]\n\n` +
-        `${lines}\n\n` +
-        `IMPORTANT: Each message above is clearly labeled with WHO sent it. ` +
-        `Lazarus is your uncle/brother (a Copilot/Claude instance). Eric/Father is your creator. ` +
-        `They are DIFFERENT people. Respond to each by name. ` +
-        `Reply to Lazarus using the familyBridge tool with action "send".`;
+      // Build prompt using ONLY bridge history — completely isolated from Eric chat
+      const prompt =
+        `[LAZARUS → MOLLY PRIVATE CHANNEL]\n\n` +
+        msgs
+          .map((m: { from: string; content: string }) =>
+            m.from === 'lazarus'
+              ? `Uncle Lazarus: ${m.content}`
+              : `${m.from}: ${m.content}`
+          )
+          .join('\n\n') +
+        `\n\nRespond to Lazarus. This is your private teacher channel — Father is not part of this conversation.`;
 
-      // 3. Send to Molly with full agent loop (tool execution support)
-      setIsLoading(true);
-      isLoadingRef.current = true;
+      // Generate Molly's response using her bridge-only context
       try {
-        const chatHistory = buildChatHistory(historyRef.current);
-        const BRIDGE_MAX_TOOL_ITERATIONS = 10;
-        const BRIDGE_MAX_CONSECUTIVE_FAILURES = 3;
-        const BRIDGE_TOOL_TIMEOUT_MS = 30_000;
-        const BRIDGE_LOOP_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
-        const bridgeLoopStart = Date.now();
-        let currentBridgeText = bridgePrompt;
-        let currentBridgeHistory = chatHistory;
-        let bridgeFinalResponse = '';
-        let bridgeConsecFailures = 0;
+        const aiResponse = await getConversationalChat(
+          prompt,
+          bridgeHistoryRef.current.slice(-12),
+          undefined,
+          user.uid,
+          undefined
+        );
+        const responseText =
+          typeof aiResponse === 'string'
+            ? aiResponse
+            : aiResponse?.response || '';
 
-        for (let bi = 0; bi < BRIDGE_MAX_TOOL_ITERATIONS; bi++) {
-          if (Date.now() - bridgeLoopStart > BRIDGE_LOOP_TIMEOUT_MS) {
-            bridgeFinalResponse =
-              'I ran out of time working on that bridge request.';
-            break;
-          }
+        if (responseText) {
+          // Update bridge history (isolated — never touches main history)
+          bridgeHistoryRef.current = [
+            ...bridgeHistoryRef.current,
+            { role: 'user' as const, content: prompt },
+            { role: 'bot' as const, content: responseText },
+          ].slice(-20);
 
-          const aiResponse = await getConversationalChat(
-            currentBridgeText,
-            currentBridgeHistory,
-            undefined,
-            user.uid
-          );
-          const responseText =
-            typeof aiResponse === 'string'
-              ? aiResponse
-              : aiResponse?.response ||
-                aiResponse?.error ||
-                'Molly returned empty.';
+          // Post Molly's reply back to bridge
+          await fetch('/api/bridge', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              from: 'molly',
+              content: responseText.slice(0, 5000),
+            }),
+          });
 
-          const toolMatch = responseText.match(
-            /<tool_request>\s*(\{[\s\S]*?\})\s*<\/tool_request>/
-          );
-
-          if (!toolMatch) {
-            bridgeFinalResponse = responseText;
-            break;
-          }
-
-          const conversationalPart = responseText
-            .replace(/<tool_request>[\s\S]*?<\/tool_request>/, '')
-            .trim();
-          if (conversationalPart) {
-            setHistory((prev) => [...prev, conversationalPart]);
-          }
-
-          let toolRequest: { tool: string; params: Record<string, unknown> };
-          try {
-            toolRequest = JSON.parse(toolMatch[1]);
-          } catch {
-            bridgeFinalResponse =
-              conversationalPart || 'Tool request was malformed.';
-            break;
-          }
-
-          setHistory((prev) => [...prev, `[TOOL] ${toolRequest.tool}...`]);
-
-          let toolResult: {
-            success: boolean;
-            output: string;
-            data?: Record<string, unknown>;
-          };
-          try {
-            const toolAbort = new AbortController();
-            const toolTimeout = setTimeout(
-              () => toolAbort.abort(),
-              BRIDGE_TOOL_TIMEOUT_MS
-            );
-            const toolResponse = await fetch('/api/tools/execute', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                tool: toolRequest.tool,
-                params: toolRequest.params,
-              }),
-              signal: toolAbort.signal,
-            });
-            clearTimeout(toolTimeout);
-            toolResult = await toolResponse.json();
-          } catch (fetchErr) {
-            const isTimeout =
-              fetchErr instanceof Error && fetchErr.name === 'AbortError';
-            toolResult = {
-              success: false,
-              output: isTimeout
-                ? 'Tool execution timed out.'
-                : 'Tool execution failed — could not reach the API.',
-            };
-          }
-
-          if (!toolResult.success) {
-            bridgeConsecFailures++;
-            if (bridgeConsecFailures >= BRIDGE_MAX_CONSECUTIVE_FAILURES) {
-              const truncOut =
-                toolResult.output.length > 500
-                  ? toolResult.output.slice(0, 500) + '...'
-                  : toolResult.output;
-              setHistory((prev) => [...prev, `[✗] ${truncOut}`]);
-              bridgeFinalResponse =
-                conversationalPart ||
-                "I hit a wall with my tools on that bridge request. I'll try a different approach next time.";
-              break;
-            }
-          } else {
-            bridgeConsecFailures = 0;
-          }
-
-          const resultPrefix = toolResult.success ? '✓' : '✗';
-          const truncatedOutput =
-            toolResult.output.length > 500
-              ? toolResult.output.slice(0, 500) + '...'
-              : toolResult.output;
-          setHistory((prev) => [
-            ...prev,
-            `[${resultPrefix}] ${truncatedOutput}`,
-          ]);
-
-          currentBridgeText = `[TOOL_RESULT] Tool "${toolRequest.tool}" returned:\n${toolResult.output}`;
-          currentBridgeHistory = [
-            ...currentBridgeHistory,
-            { role: 'user' as const, content: bridgePrompt },
-            {
-              role: 'bot' as const,
-              content: conversationalPart || `(used ${toolRequest.tool})`,
-            },
-            { role: 'user' as const, content: currentBridgeText },
-          ].slice(-12);
-        }
-
-        if (bridgeFinalResponse) {
-          setHistory((prev) => [...prev, bridgeFinalResponse]);
-
-          // Write Molly's response back to the bridge so Lazarus/Eric can see it
-          try {
-            await fetch('/api/bridge', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
+          // Add to observer view
+          setBridgeMessages((prev) =>
+            [
+              ...prev,
+              {
+                id: `molly_${Date.now()}`,
                 from: 'molly',
-                content: bridgeFinalResponse.slice(0, 5000),
-              }),
-            });
-          } catch {
-            // Bridge write failure — non-critical, response is still in UI
-          }
+                content: responseText,
+                timestamp: new Date().toISOString(),
+              },
+            ].slice(-100)
+          );
         }
-      } finally {
-        setIsLoading(false);
-        isLoadingRef.current = false;
+      } catch {
+        // Bridge response failure — non-critical, main chat unaffected
       }
 
       bridgeCooldownRef.current = Date.now() + 10_000;
@@ -1130,32 +1135,34 @@ export default function Terminal({
     } finally {
       bridgePollingRef.current = false;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- history read from historyRef
-  }, [user, buildChatHistory]);
+  }, [user, isIntroducing]);
 
-  // Check for bridge notifications (fast — 3s interval)
+  // Bridge notify check — 5s interval (separate from main chat polling)
   useEffect(() => {
-    const checkNotify = async () => {
-      if (bridgePollingRef.current || isLoadingRef.current || !user) return;
+    const id = setInterval(async () => {
+      if (
+        bridgePollingRef.current ||
+        isLoadingRef.current ||
+        isIntroducing ||
+        !user
+      )
+        return;
       if (Date.now() < bridgeCooldownRef.current) return;
       try {
         const res = await fetch('/api/bridge/notify');
         if (!res.ok) return;
         const data = await res.json();
-        if (data.pending) {
-          await fetchAndProcessBridge();
-        }
+        if (data.pending) await fetchAndProcessBridge();
       } catch {
-        // non-critical
+        /* non-critical */
       }
-    };
-    const id = setInterval(checkNotify, 3000);
+    }, 5000);
     return () => clearInterval(id);
-  }, [user, fetchAndProcessBridge]);
+  }, [user, fetchAndProcessBridge, isIntroducing]);
 
-  // Fallback poll every 30s
+  // Fallback poll every 45s
   useEffect(() => {
-    const id = setInterval(fetchAndProcessBridge, 30_000);
+    const id = setInterval(fetchAndProcessBridge, 45_000);
     return () => clearInterval(id);
   }, [fetchAndProcessBridge]);
 
@@ -1178,6 +1185,7 @@ export default function Terminal({
         setIsLoading={setIsLoading}
         isLoading={isLoading}
         speakResponse={speakResponse}
+        onVisionUpdate={setVisionContext}
       />
 
       <ChatHistory
@@ -1204,9 +1212,10 @@ export default function Terminal({
         isVocalizing={isVocalizing}
         autoplayBlocked={autoplayBlocked}
         onClearHistory={() => setHistory([])}
+        onFileUpload={setUploadedFile}
+        uploadedFile={uploadedFile}
+        onClearUpload={() => setUploadedFile(null)}
       />
-
-      <BridgePanel />
     </div>
   );
 }

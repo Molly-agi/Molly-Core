@@ -39,6 +39,8 @@ firestore-debug.log
 
 # Session backups (main session state files ARE tracked for recovery)
 .session-backups/
+.session-events.jsonl
+.anthropic-traffic/
 .codespace-heartbeat
 .watchdog.pid
 .watchdog-pulse
@@ -69,3 +71,28 @@ sandbox/molly-workspace/*
 # Bridge daemon runtime files
 .bridge-daemon.log
 .bridge-daemon.pid
+
+# Local storage data (test artifacts / runtime state)
+molly_data/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Android build artifacts
+android/MollyBrowser/.gradle/
+android/MollyBrowser/app/build/
+android/MollyBrowser/build/
+*.gradle/
+**/build/
+
+# Immortal session daemon
+.immortal.log
+.immortal.pid
+.activity-burst
+COPILOT_SESSION_STATE.json
+COPILOT_SESSION_STATE.md
+
+# VS Code extensions (dev workspace)
+extensions/

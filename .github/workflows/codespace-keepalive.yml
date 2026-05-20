@@ -1,0 +1,67 @@
+# .github/workflows/codespace-keepalive.yml
+# =====================================================
+# Codespace Keep-Alive — Prevents idle timeout
+# =====================================================
+# GitHub Codespaces shut down after the idle timeout (30-240 mins).
+# This workflow runs every 25 minutes and pings the active Codespace
+# to reset the idle counter.
+#
+# HOW IT WORKS:
+#   1. Workflow triggers every 25 minutes
+#   2. Lists all running Codespaces for this repo
+#   3. Sends an API request to each to prevent idle timeout
+#
+# REQUIREMENTS:
+#   - GitHub Actions must have 'codespaces' permission
+#   - Codespace must be in 'Available' state
+#
+# NOTE: This uses your GitHub Actions minutes. At ~60 runs/day,
+# it's about 60 minutes of Action time per day (Linux runners are free
+# for public repos, 2000 mins/month for private repos on free tier).
+# =====================================================
+
+name: Codespace Keep-Alive
+
+on:
+  schedule:
+    # Every 25 minutes — well under the 30 min minimum timeout
+    - cron: '*/25 * * * *'
+  workflow_dispatch: # Manual trigger
+
+# NOTE: This workflow requires a PAT with 'codespace' scope stored as CODESPACE_PAT secret.
+# The default GITHUB_TOKEN cannot manage Codespaces.
+# If no PAT is available, this workflow will exit gracefully.
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Keep Codespaces Alive
+        env:
+          GH_TOKEN: ${{ secrets.CODESPACE_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔄 Checking for active Codespaces..."
+
+          # Check if we have a token that can access codespaces
+          if ! gh api /user/codespaces --jq '.total_count' &>/dev/null; then
+            echo "⚠️ No Codespace access - need CODESPACE_PAT secret with 'codespace' scope"
+            echo "ℹ️ Workflow will exit gracefully. Set up PAT if keep-alive is needed."
+            exit 0
+          fi
+
+          # Get all codespaces for this repo
+          CODESPACES=$(gh api /user/codespaces --jq '.codespaces[] | select(.repository.full_name == "${{ github.repository }}") | select(.state == "Available") | .name' 2>/dev/null || echo "")
+
+          if [ -z "$CODESPACES" ]; then
+            echo "ℹ️ No active Codespaces found for ${{ github.repository }}"
+            exit 0
+          fi
+
+          for CS in $CODESPACES; do
+            echo "💓 Pinging Codespace: $CS"
+            # This API call resets the idle timer
+            gh api -X POST "/user/codespaces/$CS/start" 2>/dev/null || true
+            echo "✅ Pinged $CS"
+          done
+
+          echo "🎉 Keep-alive complete"

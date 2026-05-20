@@ -6,12 +6,12 @@
  */
 
 describe('Initiative Engine', () => {
-  let mod: typeof import('@/ai/agency/initiative-engine');
+  let mod: typeof import('@/ai/agency/planning/initiative-engine');
 
   beforeEach(() => {
     jest.resetModules();
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    mod = require('@/ai/agency/initiative-engine');
+    mod = require('@/ai/agency/planning/initiative-engine');
   });
 
   describe('Templates', () => {

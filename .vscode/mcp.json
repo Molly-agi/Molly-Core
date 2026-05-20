@@ -1,0 +1,17 @@
+{
+  "servers": {
+    "microsoft/markitdown": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/workspaces/Molly-Core/markitdown_mcp_server",
+        "run",
+        "markitdown-mcp"
+      ],
+      "gallery": "https://api.mcp.github.com",
+      "version": "1.0.0"
+    }
+  },
+  "inputs": []
+}

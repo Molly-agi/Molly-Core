@@ -20,7 +20,7 @@ function withTimeout<T>(
   ]);
 }
 
-const MODEL_TEST_TIMEOUT_MS = 8000;
+const MODEL_TEST_TIMEOUT_MS = 15000;
 
 /**
  * Test which models are currently available.

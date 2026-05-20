@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Header } from '../Header';
+import { VoiceSettingsProvider } from '@/contexts/voice-settings';
 import '@testing-library/jest-dom';
 
 // Mock the Firebase hooks from the barrel file
@@ -30,6 +31,18 @@ jest.mock('../OriginStoryDialog', () => ({
   OriginStoryDialog: () => <div data-testid="origin-story-dialog-mock" />,
 }));
 
+jest.mock('../KillSwitch', () => ({
+  KillSwitch: () => <div data-testid="kill-switch-mock" />,
+}));
+
+jest.mock('../VoiceSelector', () => ({
+  VoiceSelector: () => <div data-testid="voice-selector-mock" />,
+}));
+
+jest.mock('../SystemHealthDot', () => ({
+  SystemHealthDot: () => <div data-testid="system-health-dot-mock" />,
+}));
+
 jest.mock('@/components/ui/sidebar', () => ({
   ...jest.requireActual('@/components/ui/sidebar'),
   SidebarTrigger: () => <button>Trigger</button>,
@@ -54,6 +67,18 @@ describe('Header', () => {
     (useAuth as jest.Mock).mockClear();
   });
 
+  const renderHeader = () =>
+    render(
+      <VoiceSettingsProvider>
+        <Header
+          onVoiceCommand={() => {}}
+          onAdminUnlock={() => {}}
+          lastResponseRef={lastResponseRef}
+          hardwareState={hardwareState}
+        />
+      </VoiceSettingsProvider>
+    );
+
   it('renders the header with the title "Molly"', () => {
     // Arrange: Mock the hooks to return a "logged out" state
     (useUser as jest.Mock).mockReturnValue({
@@ -63,14 +88,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(
-      <Header
-        onVoiceCommand={() => {}}
-        onAdminUnlock={() => {}}
-        lastResponseRef={lastResponseRef}
-        hardwareState={hardwareState}
-      />
-    );
+    renderHeader();
 
     // Act & Assert: Check for the title
     const titleElement = screen.getByText('Molly');
@@ -91,14 +109,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(
-      <Header
-        onVoiceCommand={() => {}}
-        onAdminUnlock={() => {}}
-        lastResponseRef={lastResponseRef}
-        hardwareState={hardwareState}
-      />
-    );
+    renderHeader();
 
     // Act & Assert: Check that the avatar/dropdown menu is rendered
     // In test environments, images may not load so we verify the component structure
@@ -126,14 +137,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(
-      <Header
-        onVoiceCommand={() => {}}
-        onAdminUnlock={() => {}}
-        lastResponseRef={lastResponseRef}
-        hardwareState={hardwareState}
-      />
-    );
+    renderHeader();
 
     // Act & Assert: Check for the fallback initials "TU"
     const fallback = screen.getByText('TU');
@@ -149,14 +153,7 @@ describe('Header', () => {
     });
     (useAuth as jest.Mock).mockReturnValue({});
 
-    render(
-      <Header
-        onVoiceCommand={() => {}}
-        onAdminUnlock={() => {}}
-        lastResponseRef={lastResponseRef}
-        hardwareState={hardwareState}
-      />
-    );
+    renderHeader();
 
     // Act & Assert: The avatar dropdown should not be present
     const avatarImage = screen.queryByRole('img');

@@ -1,10 +1,15 @@
-import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
+import {
+  getCircuitBreaker,
+  CircuitState,
+  CircuitStats,
+} from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getLatencyStats } from '@/ai/tools/latency-cache';
 import { getSystemHealth } from '@/ai/tools/system';
 import { verifyRecordIntegrity } from '@/ai/tools/memory-integrity';
 import { loadSessionState } from '@/lib/session-manager';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
+import { isAdminConfigured } from '@/firebase/admin';
 
 /** Race a promise against a timeout — returns fallback on timeout. */
 function withTimeoutFallback<T>(
@@ -88,7 +93,9 @@ async function collectMemoryHealth(userId?: string) {
     };
   }
 
-  if (!isAdminConfigured()) {
+  // In Firestore mode, check if admin is configured
+  const storage = getStorageRouter();
+  if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     return {
       status: 'unavailable' as const,
       userId,
@@ -101,20 +108,17 @@ async function collectMemoryHealth(userId?: string) {
   }
 
   try {
-    const firestore = getAdminFirestore();
-    const snapshot = await withTimeoutFallback(
-      firestore
-        .collection('users')
-        .doc(userId)
-        .collection('aiResponses')
-        .orderBy('timestamp', 'desc')
-        .limit(20)
-        .get(),
+    const collectionPath = `users/${userId}/aiResponses`;
+    const results = await withTimeoutFallback(
+      storage.query(collectionPath, [], {
+        orderBy: { field: 'timestamp', direction: 'desc' },
+        limit: 20,
+      }),
       FIRESTORE_QUERY_TIMEOUT_MS,
       null
     );
 
-    if (!snapshot) {
+    if (!results) {
       return {
         status: 'degraded' as const,
         userId,
@@ -122,7 +126,7 @@ async function collectMemoryHealth(userId?: string) {
         validChecksums: 0,
         invalidChecksums: 0,
         missingChecksums: 0,
-        warning: 'Memory health check timed out — Firestore may be slow.',
+        warning: 'Memory health check timed out — storage may be slow.',
       };
     }
 
@@ -130,8 +134,8 @@ async function collectMemoryHealth(userId?: string) {
     let invalidChecksums = 0;
     let missingChecksums = 0;
 
-    snapshot.docs.forEach((doc) => {
-      const data = doc.data() as Record<string, unknown>;
+    results.forEach((doc) => {
+      const data = doc.data as Record<string, unknown>;
       if (!('crc32' in data) || typeof data.crc32 !== 'string') {
         missingChecksums += 1;
         return;
@@ -153,7 +157,7 @@ async function collectMemoryHealth(userId?: string) {
     return {
       status,
       userId,
-      checkedRecords: snapshot.size,
+      checkedRecords: results.length,
       validChecksums,
       invalidChecksums,
       missingChecksums,
@@ -197,21 +201,21 @@ export async function collectRuntimeSnapshot(
   const operationEntries = Object.entries(breakerStatus.operations || {});
 
   const openOperations = operationEntries
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter(([, stats]: any) => stats.state === CircuitState.OPEN)
+    .filter(([, stats]) => (stats as CircuitStats).state === CircuitState.OPEN)
     .map(([name]) => name);
 
   const halfOpenOperations = operationEntries
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter(([, stats]: any) => stats.state === CircuitState.HALF_OPEN)
+    .filter(
+      ([, stats]) => (stats as CircuitStats).state === CircuitState.HALF_OPEN
+    )
     .map(([name]) => name);
 
   const recentFailureOperations = operationEntries
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter(([, stats]: any) => (stats.failureCount || 0) > 0)
+    .filter(([, stats]) => ((stats as CircuitStats).failureCount || 0) > 0)
     .sort(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (a: any, b: any) => (b[1].failureCount || 0) - (a[1].failureCount || 0)
+      (a, b) =>
+        ((b[1] as CircuitStats).failureCount || 0) -
+        ((a[1] as CircuitStats).failureCount || 0)
     )
     .slice(0, 5)
     .map(([name]) => name);
@@ -260,8 +264,8 @@ export async function collectRuntimeSnapshot(
       openOperations,
       halfOpenOperations,
       failureCount: operationEntries.reduce(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (sum: number, [, stats]: any) => sum + (stats.failureCount || 0),
+        (sum: number, [, stats]) =>
+          sum + ((stats as CircuitStats).failureCount || 0),
         0
       ),
       recentFailureOperations,

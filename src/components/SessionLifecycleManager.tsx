@@ -9,6 +9,10 @@
 
 import { useEffect, useRef } from 'react';
 import { logSessionEventToFirestore } from '@/firebase/system-logger';
+import {
+  autoInitKeepAlive,
+  handleVisibilityChange as keepAliveVisibilityChange,
+} from '@/lib/tab-keepalive';
 
 type SessionEventPayload = {
   event: string;
@@ -54,6 +58,8 @@ export function SessionLifecycleManager() {
       console.log(
         '[SessionLifecycle] Memory system ready (manual init via /api/memory/init)'
       );
+      // Auto-init keep-alive on first user interaction (invisible, no button)
+      autoInitKeepAlive();
     }
 
     sendSessionEvent({
@@ -87,7 +93,21 @@ export function SessionLifecycleManager() {
       });
     }, 60000);
 
+    // Bidirectional bridge ping - every 1 second
+    // This keeps both Molly's tab AND the codespace alive
+    const bridgePingId = window.setInterval(() => {
+      fetch('/api/bridge/ping', {
+        method: 'GET',
+        keepalive: true,
+      }).catch(() => {
+        // Silent - bridge may not be up yet
+      });
+    }, 1000);
+
     const handleVisibilityChange = () => {
+      // Restart keepalive if it died while backgrounded (critical for Android)
+      keepAliveVisibilityChange();
+
       sendSessionEvent({
         event: document.hidden ? 'visibility-hidden' : 'visibility-visible',
         url: window.location.href,
@@ -130,6 +150,7 @@ export function SessionLifecycleManager() {
 
     return () => {
       window.clearInterval(heartbeatId);
+      window.clearInterval(bridgePingId);
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('visibilitychange', handleVisibilityChange);
     };

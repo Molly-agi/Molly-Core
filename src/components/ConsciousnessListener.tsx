@@ -21,10 +21,13 @@ import { useEffect, useRef } from 'react';
 
 export interface ConsciousnessEventDetail {
   id: string;
-  type: 'thought' | 'observation' | 'self-state' | 'realization';
+  type: 'thought' | 'observation' | 'self-state' | 'realization' | 'music';
   content: string;
   priority: 'low' | 'normal' | 'high';
   createdAt: string;
+  audioUri?: string;
+  prompt?: string;
+  model?: string;
 }
 
 /**
@@ -60,7 +63,6 @@ export function ConsciousnessListener() {
             const data = JSON.parse(event.data);
             // Consciousness is connected — log initial state in dev
             if (process.env.NODE_ENV === 'development') {
-              // eslint-disable-next-line no-console
               console.log(
                 '[Molly Consciousness] Connected:',
                 data.state?.awarenessLevel,
@@ -104,7 +106,6 @@ export function ConsciousnessListener() {
             eventSourceRef.current = null;
 
             if (process.env.NODE_ENV === 'development') {
-              // eslint-disable-next-line no-console
               console.log(
                 '[Molly Consciousness] Giving up after 10 reconnection attempts'
               );

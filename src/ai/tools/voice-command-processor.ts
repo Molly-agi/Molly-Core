@@ -6,7 +6,8 @@
  * Enables natural conversation with Molly through voice.
  */
 
-import { ai, MODEL_FLASH } from '@/ai/genkit';
+import { molly } from '@/ai/rogue-generate';
+import { TaskType } from '@/ai/model-router';
 import { z } from 'zod';
 import { voiceCommandToText } from '../flows/voice-command-to-text';
 import { textToSpeech } from '../flows/text-to-speech';
@@ -81,8 +82,7 @@ async function analyzeIntent(
   const traceId = generateTraceId();
 
   try {
-    const response = await ai.generate({
-      model: MODEL_FLASH,
+    const response = await molly.generate(TaskType.CLASSIFICATION, {
       system: `You are Molly's intent analyzer. Classify conversational voice commands into intents.
 
 Context:
@@ -127,15 +127,14 @@ intent is 'remember' and info is about thermal management.`,
 async function handleRememberIntent(
   transcription: string,
   context: VoiceCommandContext,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   _extracted: string
 ): Promise<string> {
   const traceId = generateTraceId();
 
   try {
     // Extract what needs to be remembered
-    const memoryPrompt = await ai.generate({
-      model: MODEL_FLASH,
+    const memoryPrompt = await molly.generate(TaskType.SUMMARIZATION, {
       system: `Extract the key lesson/information to remember from voice command.
 Be concise but preserve meaning. Format as a memory suggestion.`,
       prompt: `From: "${transcription}"\nExtract the memory:`,
@@ -207,8 +206,7 @@ async function handleRecallIntent(
       )
       .join('\n');
 
-    const response = await ai.generate({
-      model: MODEL_FLASH,
+    const response = await molly.generate(TaskType.CHAT, {
       system: `You are Molly. Synthesize memories into a natural, conversational response.
 Be warm, specific, and helpful. Reference the memories naturally.`,
       prompt: `User asked: "${transcription}"

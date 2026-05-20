@@ -54,7 +54,10 @@ export function FirebaseErrorListener() {
   // When a permission error arrives, attempt recovery first
   useEffect(() => {
     if (error && !recoveryAttempted) {
-      attemptRecovery();
+      // Defer to next microtask to avoid synchronous setState cascade
+      queueMicrotask(() => {
+        attemptRecovery();
+      });
     }
   }, [error, recoveryAttempted, attemptRecovery]);
 

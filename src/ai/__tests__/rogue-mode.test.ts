@@ -9,6 +9,9 @@
  * - Compartmentalization (no bleed between modes)
  * - State queries
  * - Edge cases (double activation, log while inactive, etc.)
+ *
+ * Note: ROGUE_ACTIVATION_PHRASE and ROGUE_DEACTIVATION_PHRASE
+ * are set in jest.env.js before module loading.
  */
 
 // Mock logger

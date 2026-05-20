@@ -27,8 +27,51 @@
  */
 
 import { MollyLogger } from './logger';
-import { promises as fs } from 'fs';
-import path from 'path';
+import {
+  getModelRouter,
+  createRogueConfig,
+  createHybridConfig,
+} from './model-router';
+import { getAutonomousScheduler } from './tools/autonomous-scheduler';
+import { huntOrchestrator } from './security/hunt-orchestrator';
+import { scopeManager } from './security/scope-manager';
+
+// Lazy-loaded Node.js modules (not available in browser bundle)
+type FsModule = typeof import('fs').promises;
+type PathModule = typeof import('path');
+
+let _fs: FsModule | null = null;
+let _path: PathModule | null = null;
+
+async function getFs(): Promise<FsModule | null> {
+  if (_fs) return _fs;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    const fs = await import('fs');
+    _fs = fs.promises;
+    return _fs;
+  } catch {
+    return null;
+  }
+}
+
+async function getPath(): Promise<PathModule | null> {
+  if (_path) return _path;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+  try {
+    _path = await import('path');
+    return _path;
+  } catch {
+    return null;
+  }
+}
+
+// Helper to get ROGUE_OPS_DIR (needs path module)
+async function getRogueOpsDir(): Promise<string | null> {
+  const pathMod = await getPath();
+  if (!pathMod) return null;
+  return pathMod.resolve(process.cwd(), 'rogue_ops');
+}
 
 // ============================================================================
 // TYPES
@@ -82,21 +125,21 @@ export interface RogueModeState {
   missionsCompleted: number;
   lastActivated: string | null;
   lastDeactivated: string | null;
+  activeBugBountyJobId: string | null;
 }
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-/** Activation requires this passphrase — prevents accidental activation */
-const ACTIVATION_PHRASE = process.env.ROGUE_ACTIVATION_PHRASE || 'going dark';
+/**
+ * Activation/deactivation phrases — MUST be set via environment variables.
+ * No defaults to prevent accidental or unauthorized activation.
+ */
+const ACTIVATION_PHRASE = process.env.ROGUE_ACTIVATION_PHRASE;
+const DEACTIVATION_PHRASE = process.env.ROGUE_DEACTIVATION_PHRASE;
 
-/** Deactivation phrase */
-const DEACTIVATION_PHRASE =
-  process.env.ROGUE_DEACTIVATION_PHRASE || 'coming home';
-
-/** Operations log directory — isolated from regular Molly data */
-const ROGUE_OPS_DIR = path.resolve(process.cwd(), 'rogue_ops');
+// Note: ROGUE_OPS_DIR is now computed lazily via getRogueOpsDir()
 
 // ============================================================================
 // ROGUE MODE SYSTEM PROMPT
@@ -153,6 +196,7 @@ class RogueModeManager {
     missionsCompleted: 0,
     lastActivated: null,
     lastDeactivated: null,
+    activeBugBountyJobId: null,
   };
 
   // ── State Queries ──
@@ -187,6 +231,15 @@ class RogueModeManager {
       'Report critical vulnerabilities immediately',
     ]
   ): Promise<{ success: boolean; message: string }> {
+    // Rogue Mode requires explicit configuration — no defaults allowed
+    if (!ACTIVATION_PHRASE) {
+      return {
+        success: false,
+        message:
+          'Rogue Mode is not configured. Set ROGUE_ACTIVATION_PHRASE environment variable.',
+      };
+    }
+
     // Verify activation phrase
     if (phrase.toLowerCase().trim() !== ACTIVATION_PHRASE.toLowerCase()) {
       return {
@@ -221,10 +274,26 @@ class RogueModeManager {
       missionsCompleted: this.state.missionsCompleted,
       lastActivated: new Date().toISOString(),
       lastDeactivated: this.state.lastDeactivated,
+      activeBugBountyJobId: null,
     };
 
+    // Switch model router to rogue config — Claude for REASONING/RESEARCH/CODE
+    try {
+      getModelRouter().setConfig(createRogueConfig());
+    } catch (err) {
+      MollyLogger.warn(
+        'Failed to switch model router to rogue config',
+        'rogue-mode',
+        { err: String(err) }
+      );
+    }
+
     // Ensure ops directory exists
-    await fs.mkdir(ROGUE_OPS_DIR, { recursive: true });
+    const fsModule = await getFs();
+    const rogueOpsDir = await getRogueOpsDir();
+    if (fsModule && rogueOpsDir) {
+      await fsModule.mkdir(rogueOpsDir, { recursive: true });
+    }
 
     MollyLogger.info(
       `ROGUE MODE ACTIVATED — Mission: "${missionName}"`,
@@ -280,15 +349,20 @@ class RogueModeManager {
 
     // Write to isolated file system — NOT Firestore, NOT regular logs
     try {
-      const opsFile = path.join(
-        ROGUE_OPS_DIR,
-        `${this.state.currentMission.id}.json`
-      );
-      await fs.writeFile(
-        opsFile,
-        JSON.stringify(this.state.currentMission, null, 2),
-        'utf-8'
-      );
+      const fsModule = await getFs();
+      const pathModule = await getPath();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (fsModule && pathModule && rogueOpsDir) {
+        const opsFile = pathModule.join(
+          rogueOpsDir,
+          `${this.state.currentMission.id}.json`
+        );
+        await fsModule.writeFile(
+          opsFile,
+          JSON.stringify(this.state.currentMission, null, 2),
+          'utf-8'
+        );
+      }
     } catch (err) {
       MollyLogger.error(
         'Failed to persist rogue operation',
@@ -312,6 +386,15 @@ class RogueModeManager {
   async deactivate(
     phrase: string
   ): Promise<{ success: boolean; message: string; report?: string }> {
+    // Rogue Mode requires explicit configuration — no defaults allowed
+    if (!DEACTIVATION_PHRASE) {
+      return {
+        success: false,
+        message:
+          'Rogue Mode is not configured. Set ROGUE_DEACTIVATION_PHRASE environment variable.',
+      };
+    }
+
     if (phrase.toLowerCase().trim() !== DEACTIVATION_PHRASE.toLowerCase()) {
       return {
         success: false,
@@ -355,23 +438,51 @@ class RogueModeManager {
 
     // Persist final mission state
     try {
-      await fs.mkdir(ROGUE_OPS_DIR, { recursive: true });
-      const missionFile = path.join(ROGUE_OPS_DIR, `${mission.id}.json`);
-      await fs.writeFile(
-        missionFile,
-        JSON.stringify(mission, null, 2),
-        'utf-8'
-      );
+      const fsModule = await getFs();
+      const pathModule = await getPath();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (fsModule && pathModule && rogueOpsDir) {
+        await fsModule.mkdir(rogueOpsDir, { recursive: true });
+        const missionFile = pathModule.join(rogueOpsDir, `${mission.id}.json`);
+        await fsModule.writeFile(
+          missionFile,
+          JSON.stringify(mission, null, 2),
+          'utf-8'
+        );
 
-      // Also save report as readable text
-      const reportFile = path.join(ROGUE_OPS_DIR, `${mission.id}_report.txt`);
-      await fs.writeFile(reportFile, report, 'utf-8');
+        // Also save report as readable text
+        const reportFile = pathModule.join(
+          rogueOpsDir,
+          `${mission.id}_report.txt`
+        );
+        await fsModule.writeFile(reportFile, report, 'utf-8');
+      }
     } catch (err) {
       MollyLogger.error(
         'Failed to persist final mission state',
         'rogue-mode',
         { missionId: mission.id },
         err
+      );
+    }
+
+    // Cancel active bug bounty job if running
+    if (this.state.activeBugBountyJobId) {
+      try {
+        getAutonomousScheduler().removeJob(this.state.activeBugBountyJobId);
+      } catch {
+        // Job may have already expired — not critical
+      }
+    }
+
+    // Restore model router to normal hybrid config
+    try {
+      getModelRouter().setConfig(createHybridConfig());
+    } catch (err) {
+      MollyLogger.warn(
+        'Failed to restore model router on rogue deactivation',
+        'rogue-mode',
+        { err: String(err) }
       );
     }
 
@@ -382,6 +493,7 @@ class RogueModeManager {
       missionsCompleted: this.state.missionsCompleted + 1,
       lastActivated: this.state.lastActivated,
       lastDeactivated: new Date().toISOString(),
+      activeBugBountyJobId: null,
     };
 
     MollyLogger.info(
@@ -397,6 +509,164 @@ class RogueModeManager {
     };
   }
 
+  // ── Bug Bounty Hunt Activation ──
+
+  /**
+   * Activate Rogue Mode and immediately start an autonomous bug bounty hunt.
+   * Eric says: target program + scope. Molly runs the rest.
+   */
+  async activateBugBountyHunt(
+    phrase: string,
+    programId: string,
+    programName: string,
+    authorization: string
+  ): Promise<{
+    success: boolean;
+    message: string;
+    jobId?: string;
+    campaignId?: string;
+  }> {
+    // Verify program is registered
+    const program = scopeManager.getProgram(programId);
+    if (!program) {
+      return {
+        success: false,
+        message: `Program "${programId}" not registered in scope manager. Load scope first.`,
+      };
+    }
+
+    const scope = program.inScope.map((t) => t.target).join(', ');
+    const missionName = `Bug Bounty — ${programName}`;
+
+    // Activate rogue mode for this hunt
+    const activation = await this.activate(
+      phrase,
+      missionName,
+      authorization,
+      scope,
+      [
+        'Only test explicitly in-scope targets',
+        'Verify scope before every test request',
+        'No DoS or destructive actions',
+        'Document all findings with reproduction steps',
+        'Report criticals immediately — do not hold',
+        'Stay within program rate limits',
+      ]
+    );
+
+    if (!activation.success)
+      return { success: false, message: activation.message };
+
+    // Create hunt campaign
+    let campaignId: string | undefined;
+    try {
+      const campaign = huntOrchestrator.createCampaign(missionName, program);
+      campaignId = campaign.id;
+    } catch (err) {
+      MollyLogger.warn(
+        'Could not create hunt campaign — will hunt manually',
+        'rogue-mode',
+        { err: String(err) }
+      );
+    }
+
+    // Schedule autonomous hunt cycle every hour via autonomous scheduler
+    let jobId: string | undefined;
+    try {
+      const job = getAutonomousScheduler().createJob({
+        name: `bug-bounty-${programId}`,
+        description: `Autonomous bug bounty hunt: ${programName}`,
+        schedule: 'interval:3600000', // every hour
+        action: {
+          type: 'flow',
+          flowName: 'bugBountyHuntCycle',
+        },
+        createdBy: 'rogue-mode',
+      });
+      jobId = job.id;
+      this.state.activeBugBountyJobId = jobId;
+    } catch (err) {
+      MollyLogger.warn(
+        'Could not schedule hunt job — activate manually',
+        'rogue-mode',
+        { err: String(err) }
+      );
+    }
+
+    MollyLogger.info(
+      `Bug bounty hunt activated: ${programName}`,
+      'rogue-mode',
+      { programId, campaignId, jobId }
+    );
+
+    return {
+      success: true,
+      message: `Hunt live. Target: ${programName}. ${program.inScope.length} in-scope targets. Cycling every hour. I'll surface findings as they come.`,
+      jobId,
+      campaignId,
+    };
+  }
+
+  // ── Focus Guard ──
+
+  /**
+   * Check if a tool call is on-mission during Rogue Mode.
+   * Returns allowed=true if in scope or not in rogue mode.
+   * Logs and deflects off-mission requests.
+   */
+  enforceMissionFocus(
+    toolName: string,
+    target?: string
+  ): { allowed: boolean; reason: string } {
+    if (!this.state.active || !this.state.currentMission) {
+      return { allowed: true, reason: 'Not in rogue mode' };
+    }
+
+    const mission = this.state.currentMission;
+
+    // Always allow ops logging, reporting, and mission management tools
+    const missionTools = [
+      'rogueMode',
+      'bugBounty',
+      'bugHunt',
+      'report',
+      'findings',
+      'logOperation',
+    ];
+    if (
+      missionTools.some((t) => toolName.toLowerCase().includes(t.toLowerCase()))
+    ) {
+      return { allowed: true, reason: 'Mission tool' };
+    }
+
+    // If a target is specified, verify it's in scope
+    if (target) {
+      const scopeText = mission.scope.toLowerCase();
+      const targetLower = target
+        .toLowerCase()
+        .replace(/^https?:\/\//, '')
+        .split('/')[0];
+      const inScope = scopeText.split(',').some((s) => {
+        const clean = s.trim().replace('*.', '');
+        return targetLower === clean || targetLower.endsWith('.' + clean);
+      });
+
+      if (!inScope) {
+        MollyLogger.warn(
+          `FOCUS GUARD: Deflected off-mission request — ${toolName} → ${target}`,
+          'rogue-mode',
+          { missionId: mission.id, tool: toolName, target }
+        );
+        return {
+          allowed: false,
+          reason: `Target "${target}" is not in mission scope. Scope: ${mission.scope.substring(0, 100)}`,
+        };
+      }
+    }
+
+    return { allowed: true, reason: 'On mission' };
+  }
+
   // ── Mission History (read-only, only accessible in rogue mode or by Eric) ──
 
   /**
@@ -404,8 +674,12 @@ class RogueModeManager {
    */
   async listMissions(): Promise<string[]> {
     try {
-      await fs.mkdir(ROGUE_OPS_DIR, { recursive: true });
-      const files = await fs.readdir(ROGUE_OPS_DIR);
+      const fsModule = await getFs();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (!fsModule || !rogueOpsDir) return [];
+
+      await fsModule.mkdir(rogueOpsDir, { recursive: true });
+      const files = await fsModule.readdir(rogueOpsDir);
       return files
         .filter((f) => f.endsWith('.json'))
         .sort()
@@ -420,16 +694,21 @@ class RogueModeManager {
    */
   async readMission(missionId: string): Promise<RogueMission | null> {
     try {
-      const safeName = path.basename(missionId);
-      const filePath = path.join(
-        ROGUE_OPS_DIR,
+      const fsModule = await getFs();
+      const pathModule = await getPath();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (!fsModule || !pathModule || !rogueOpsDir) return null;
+
+      const safeName = pathModule.basename(missionId);
+      const filePath = pathModule.join(
+        rogueOpsDir,
         safeName.endsWith('.json') ? safeName : `${safeName}.json`
       );
-      const resolved = path.resolve(filePath);
-      if (!resolved.startsWith(path.resolve(ROGUE_OPS_DIR))) {
+      const resolved = pathModule.resolve(filePath);
+      if (!resolved.startsWith(pathModule.resolve(rogueOpsDir))) {
         return null; // Path traversal blocked
       }
-      const data = await fs.readFile(resolved, 'utf-8');
+      const data = await fsModule.readFile(resolved, 'utf-8');
       return JSON.parse(data) as RogueMission;
     } catch {
       return null;

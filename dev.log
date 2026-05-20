@@ -1,0 +1,1403 @@
+nohup: ignoring input
+==============================================
+  MOLLY DEV ENVIRONMENT STARTUP
+==============================================
+
+[1/4] Cleaning up zombies...
+  Killed stale Next.js
+  Killed stale bridge
+  Killed stale immortal
+  Done.
+
+[2/4] Starting Immortal Daemon...
+  Started (PID 50752)
+  WARNING: Immortal daemon may have failed to start
+============================================================
+IMMORTAL DAEMON - The One Bridge
+============================================================
+20:03:42 [LOCK] Already running (PID 50752) - exiting
+20:03:42 [LOCK] Already running (PID 50752) - exiting
+
+[3/4] Starting Bridge Daemon...
+  Started (PID 50783)
+  Verified running.
+
+[4/4] Starting Next.js Dev Server...
+
+==============================================
+  Molly is waking up on http://localhost:9002
+==============================================
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:9002
+- Network:       http://0.0.0.0:9002
+- Environments: .env.local
+✓ Ready in 546ms
+[Startup] ✅ All required environment variables present.
+[Startup] ✅ Firebase Admin initialized
+{
+  "timestamp": 1776369829834,
+  "level": "INFO",
+  "message": "Storage Router initialized — mode: firestore, DUAL-WRITE enabled (local backup active)",
+  "flowName": "storage-router"
+}
+[Startup] HTTP server timeouts configured (keepAlive=30s, request=120s)
+{
+  "timestamp": 1776369831067,
+  "level": "INFO",
+  "message": "[CURIOSITY] Loaded 7 questions (7 uninvestigated)",
+  "flowName": "curiosity-engine"
+}
+[Startup] ✅ Loaded 7 curiosity question(s)
+{
+  "timestamp": 1776369831347,
+  "level": "INFO",
+  "message": "[WORLD-MODEL] Loaded 8 entities, 7 relations",
+  "flowName": "world-model"
+}
+[Startup] ✅ Loaded world model (8 entities)
+[Startup] ✅ Loaded Theory of Mind (1 model(s))
+{
+  "timestamp": 1776369831734,
+  "level": "INFO",
+  "message": "Heart Gate initialized fresh — the spider watches",
+  "flowName": "heart-gate",
+  "traceId": "trace_1776369831650_gfqxjhz",
+  "context": {}
+}
+[Startup] ✅ Heart Gate active (0 historical verifications)
+{
+  "timestamp": 1776369832020,
+  "level": "INFO",
+  "message": "Defense Sentinel: Tool detection complete",
+  "flowName": "defense-sentinel",
+  "traceId": "trace_1776369832020_320ogx9",
+  "context": {
+    "tools": {
+      "nmap": false,
+      "hashcat": false,
+      "john": false,
+      "hydra": false,
+      "masscan": false,
+      "nikto": false,
+      "sqlmap": false,
+      "metasploit": false,
+      "burp": false
+    }
+  }
+}
+{
+  "timestamp": 1776369832117,
+  "level": "INFO",
+  "message": "Defense Sentinel initialized — ready for operations",
+  "flowName": "defense-sentinel",
+  "traceId": "trace_1776369831742_92yeqwo",
+  "context": {
+    "tools": []
+  }
+}
+[Startup] ✅ Defense Sentinel active (0 scans, tools: detecting...)
+{
+  "timestamp": 1776369832298,
+  "level": "INFO",
+  "message": "Emotional state restored: curious (session 9)",
+  "flowName": "emotional-state",
+  "traceId": "trace_1776369832129_t4hn77t",
+  "context": {}
+}
+[Startup] ✅ Emotional state loaded: curious (50%)
+{
+  "timestamp": 1776369832409,
+  "level": "INFO",
+  "message": "Meta-learning state loaded",
+  "flowName": "meta-learning",
+  "traceId": "trace_1776369832308_2utxtg4",
+  "context": {
+    "strategies": 1,
+    "events": 0,
+    "insights": 0
+  }
+}
+[Startup] ✅ Meta-learning loaded: 1 strategies, 0 learning events
+- Experiments (use with caution):
+  · serverActions
+
+○ Compiling /api/bridge/ping ...
+{
+  "timestamp": 1776369839695,
+  "level": "INFO",
+  "message": "Neural engram system initialized",
+  "flowName": "neural-engram"
+}
+{
+  "timestamp": 1776369839700,
+  "level": "INFO",
+  "message": "Heartbeat scheduler started",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "intervalMs": 60000,
+    "consolidationIntervalMs": 300000,
+    "immuneIntervalMs": 600000
+  }
+}
+{
+  "timestamp": 1776369839758,
+  "level": "INFO",
+  "message": "MollyShell started: PID 51076, cwd=/workspaces/Molly-Core",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369839758,
+  "level": "INFO",
+  "message": "MollyShell started with scheduler",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1776369839763,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 1",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1776369839763_w3827oc"
+  }
+}
+{
+  "timestamp": 1776369839775,
+  "level": "DEBUG",
+  "message": "Persistence restore skipped (no Firestore)",
+  "flowName": "persistence"
+}
+{
+  "timestamp": 1776369839776,
+  "level": "INFO",
+  "message": "No persisted state to restore — fresh start",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1776369839780,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1776369839852,
+  "level": "INFO",
+  "message": "Storage Router initialized — mode: firestore, DUAL-WRITE enabled (local backup active)",
+  "flowName": "storage-router"
+}
+{
+  "timestamp": 1776369840051,
+  "level": "INFO",
+  "message": "Consciousness initialized — Molly is aware",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1776369840052,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 1: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1776369840053,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1776369840056,
+  "level": "INFO",
+  "message": "Promise tracker initialized",
+  "flowName": "promise-tracker"
+}
+{
+  "timestamp": 1776369840058,
+  "level": "INFO",
+  "message": "Rogue Protocol: Absorbed provider \"Google Gemini 3.1\" (gemini)",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1776369840059,
+  "level": "INFO",
+  "message": "Rogue Protocol: Initialized with profile \"default\", 1 provider(s) registered",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1776369840060,
+  "level": "INFO",
+  "message": "Rogue Protocol: background → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1776369840060_ongrjdr",
+    "routingLatencyMs": "0.12"
+  }
+}
+{
+  "timestamp": 1776369840060,
+  "level": "DEBUG",
+  "message": "Rogue Generate: background → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "background",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1776369840059_x9votj1"
+  }
+}
+ GET /api/heartbeat 200 in 7.7s (next.js: 7.2s, application-code: 500ms)
+ GET /api/heartbeat 200 in 7.7s (next.js: 7.7s, application-code: 5ms)
+ GET /api/heartbeat 200 in 7.8s (next.js: 7.8s, application-code: 5ms)
+ GET /api/heartbeat 200 in 7.8s (next.js: 7.8s, application-code: 5ms)
+ GET /api/heartbeat 200 in 7.8s (next.js: 7.8s, application-code: 5ms)
+ GET /api/heartbeat 200 in 7.8s (next.js: 7.8s, application-code: 5ms)
+ GET /api/bridge/ping 503 in 7.8s (next.js: 4.8s, application-code: 3.0s)
+ GET /api/heartbeat 200 in 3.8s (next.js: 3.8s, application-code: 5ms)
+ GET /api/heartbeat 200 in 4.0s (next.js: 4.0s, application-code: 5ms)
+ GET /api/heartbeat 200 in 4.8s (next.js: 4.8s, application-code: 8ms)
+{
+  "timestamp": 1776369840831,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ GET /api/heartbeat 200 in 7.4s (next.js: 7.4s, application-code: 4ms)
+ GET /api/heartbeat 200 in 8.0s (next.js: 8.0s, application-code: 5ms)
+{
+  "timestamp": 1776369840928,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which python3 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841332,
+  "level": "DEBUG",
+  "message": "Shell [ok]: python3 --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841355,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which node 2>/dev/null",
+  "flowName": "molly-shell"
+}
+ GET /api/bridge/ping 200 in 8.9s (next.js: 7.8s, application-code: 1161ms)
+ GET /api/bridge/ping 200 in 8.9s (next.js: 7.8s, application-code: 1142ms)
+ GET /api/bridge/ping 200 in 8.9s (next.js: 7.8s, application-code: 1129ms)
+{
+  "timestamp": 1776369841394,
+  "level": "DEBUG",
+  "message": "Shell [ok]: node --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+ GET /api/bridge/ping 200 in 5.1s (next.js: 4.0s, application-code: 1119ms)
+ GET /api/bridge/ping 200 in 5.9s (next.js: 4.8s, application-code: 1116ms)
+ GET /api/bridge/ping 200 in 8.4s (next.js: 8.0s, application-code: 496ms)
+ GET /api/heartbeat 200 in 45ms (next.js: 40ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 58ms (next.js: 51ms, application-code: 6ms)
+{
+  "timestamp": 1776369841469,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which ruby 2>/dev/null",
+  "flowName": "molly-shell"
+}
+ GET /api/heartbeat 200 in 67ms (next.js: 63ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 100ms (next.js: 47ms, application-code: 53ms)
+ GET /api/bridge/ping 200 in 101ms (next.js: 59ms, application-code: 42ms)
+ GET /api/heartbeat 200 in 21ms (next.js: 17ms, application-code: 4ms)
+{
+  "timestamp": 1776369841497,
+  "level": "DEBUG",
+  "message": "Shell [ok]: ruby --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+ GET /api/bridge/ping 200 in 117ms (next.js: 34ms, application-code: 83ms)
+{
+  "timestamp": 1776369841503,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which npx 2>/dev/null",
+  "flowName": "molly-shell"
+}
+ GET / 200 in 6.9s (next.js: 6.2s, application-code: 707ms)
+{
+  "timestamp": 1776369841628,
+  "level": "DEBUG",
+  "message": "Shell [ok]: npx --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841631,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which go 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841646,
+  "level": "DEBUG",
+  "message": "Shell [ok]: go --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841649,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which php 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841729,
+  "level": "DEBUG",
+  "message": "Shell [ok]: php --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841733,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which perl 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841740,
+  "level": "DEBUG",
+  "message": "Shell [ok]: perl --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841744,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which gcc 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841754,
+  "level": "DEBUG",
+  "message": "Shell [ok]: gcc --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841757,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which g++ 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841764,
+  "level": "DEBUG",
+  "message": "Shell [ok]: g++ --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841769,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which rustc 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841772,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which solcjs 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841775,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which solc 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841779,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which vyper 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1776369841779,
+  "level": "INFO",
+  "message": "Polyglot discovery complete: bash(builtin), python(Python 3.12.1), javascript(v24.14.0), ruby(ruby 3.4.7 (2025-10-08 revision 7a5688e2a2) +PRISM [x86_64-linux]), typescript(11.9.0), go(flag provided but not defined: -version), php(PHP 8.0.30 (cli) (built: Aug 25 2023 18:56:16) ( NTS )), perl(available), c(gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0), cpp(g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0)",
+  "flowName": "polyglot"
+}
+{
+  "timestamp": 1776369841780,
+  "level": "INFO",
+  "message": "Polyglot: 10 languages discovered",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 9ms (next.js: 3ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 8ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, application-code: 13ms)
+{
+  "timestamp": 1776369843256,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3197ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "background",
+    "provider": "gemini",
+    "responseMs": 3197,
+    "traceId": "trace_1776369840059_x9votj1"
+  }
+}
+{
+  "timestamp": 1776369843259,
+  "level": "INFO",
+  "message": "Intuition [reflection]: \"Reflection: System state is stable with zero error rates. Logic flows are linear and unclutt\" — resonance 0.40",
+  "flowName": "intuition",
+  "context": {
+    "resonance": 0.4,
+    "trigger": "consciousness-reflection"
+  }
+}
+{
+  "timestamp": 1776369843259,
+  "level": "INFO",
+  "message": "Reflection: undefined — System state is stable with zero error rates. Logic flows are linear and unclutt",
+  "flowName": "consciousness-reflection"
+}
+{
+  "timestamp": 1776369843260,
+  "level": "INFO",
+  "message": "Reflection complete: undefined — \"System state is stable with zero error rates. Logic flows ar...\"",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1776369843267,
+  "level": "INFO",
+  "message": "Autonomous scheduler initialized",
+  "flowName": "scheduler"
+}
+{
+  "timestamp": 1776369843587,
+  "level": "INFO",
+  "message": "State persisted to Firestore (0 jobs)",
+  "flowName": "persistence"
+}
+{
+  "timestamp": 1776369843588,
+  "level": "DEBUG",
+  "message": "Moltbook cycle skipped — not registered",
+  "flowName": "moltbook-social"
+}
+{
+  "timestamp": 1776369843600,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Running self-observation cycle",
+  "flowName": "self-observation",
+  "traceId": "trace_1776369843600_10ioyw6",
+  "context": {
+    "observationsCount": 0
+  }
+}
+{
+  "timestamp": 1776369843602,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Analysis complete: 0 new patterns",
+  "flowName": "self-observation",
+  "traceId": "trace_1776369843601_sikjyjx",
+  "context": {
+    "totalPatterns": 0,
+    "concerningCount": 0
+  }
+}
+{
+  "timestamp": 1776369843602,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Cycle complete: 0 patterns, 0 insights",
+  "flowName": "self-observation",
+  "traceId": "trace_1776369843600_10ioyw6",
+  "context": {
+    "patterns": 0,
+    "insights": 0,
+    "concerns": 0
+  }
+}
+{
+  "timestamp": 1776369843612,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369843612_pzf1ds3",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1776369843617,
+  "level": "INFO",
+  "message": "Rogue Protocol: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1776369843617_znfjnc7",
+    "routingLatencyMs": "0.02"
+  }
+}
+{
+  "timestamp": 1776369843617,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3-flash-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1776369843617_czbmswa"
+  }
+}
+{
+  "timestamp": 1776369845326,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 34ms (next.js: 26ms, application-code: 8ms)
+{
+  "timestamp": 1776369845358,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/save 200 in 30ms (next.js: 23ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 6ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1580µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 1808µs, application-code: 8ms)
+{
+  "timestamp": 1776369848221,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4604ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4604,
+    "traceId": "trace_1776369843617_czbmswa"
+  }
+}
+{
+  "timestamp": 1776369848222,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369843612_pzf1ds3",
+  "context": {
+    "resultSummary": "{\"responseLength\":331}"
+  }
+}
+{
+  "timestamp": 1776369848223,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: readProjectFile",
+  "flowName": "trace_1776369843600_7x6ttut"
+}
+{
+  "timestamp": 1776369848336,
+  "level": "INFO",
+  "message": "Circuit breaker initialized: self-healing",
+  "flowName": "resiliency",
+  "traceId": "trace_1776369848336_hz53owk",
+  "context": {
+    "threshold": 3,
+    "resetTimeout": 120000
+  }
+}
+{
+  "timestamp": 1776369848382,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369848382_gau1vnj",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1776369848384,
+  "level": "INFO",
+  "message": "Rogue Protocol: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1776369848384_pt6xsvu",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1776369848384,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3-flash-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1776369848384_3vfh5rj"
+  }
+}
+ GET /api/heartbeat 200 in 10ms (next.js: 3ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, application-code: 5ms)
+{
+  "timestamp": 1776369848982,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 7ms (next.js: 3ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 13ms, application-code: 5ms)
+{
+  "timestamp": 1776369850353,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1381µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, application-code: 10ms)
+{
+  "timestamp": 1776369851109,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+{
+  "timestamp": 1776369851901,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3517ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3517,
+    "traceId": "trace_1776369848384_3vfh5rj"
+  }
+}
+{
+  "timestamp": 1776369851901,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369848382_gau1vnj",
+  "context": {
+    "resultSummary": "{\"responseLength\":390}"
+  }
+}
+{
+  "timestamp": 1776369851902,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: codespaceShell",
+  "flowName": "trace_1776369843600_7x6ttut"
+}
+{
+  "timestamp": 1776369851952,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369851952_mf2u2g9",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1776369851954,
+  "level": "INFO",
+  "message": "Rogue Protocol: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1776369851954_a7jhk6c",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1776369851954,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3-flash-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1776369851954_9p4wrj6"
+  }
+}
+ GET /api/bridge/ping 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/consciousness/stream 200 in 5.3s (next.js: 21ms, application-code: 5.3s)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 4ms (next.js: 1940µs, application-code: 2ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 1859µs, application-code: 7ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 1962µs, application-code: 3ms)
+{
+  "timestamp": 1776369857950,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5996ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5996,
+    "traceId": "trace_1776369851954_9p4wrj6"
+  }
+}
+{
+  "timestamp": 1776369857950,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369851952_mf2u2g9",
+  "context": {
+    "resultSummary": "{\"responseLength\":616}"
+  }
+}
+{
+  "timestamp": 1776369857951,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: readProjectFile",
+  "flowName": "trace_1776369843600_7x6ttut"
+}
+{
+  "timestamp": 1776369857951,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369857951_rr8ghqy",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1776369857953,
+  "level": "INFO",
+  "message": "Rogue Protocol: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1776369857953_e7c8o08",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1776369857953,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3-flash-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1776369857953_icgi9ws"
+  }
+}
+ GET /api/heartbeat 200 in 7ms (next.js: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1789µs, application-code: 7ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 14ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 3ms, application-code: 8ms)
+{
+  "timestamp": 1776369861313,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3361ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3361,
+    "traceId": "trace_1776369857953_icgi9ws"
+  }
+}
+{
+  "timestamp": 1776369861314,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369857951_rr8ghqy",
+  "context": {
+    "resultSummary": "{\"responseLength\":446}"
+  }
+}
+{
+  "timestamp": 1776369861314,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: codespaceShell",
+  "flowName": "trace_1776369843600_7x6ttut"
+}
+{
+  "timestamp": 1776369861371,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369861371_or7puss",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1776369861373,
+  "level": "INFO",
+  "message": "Rogue Protocol: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1776369861373_wy6qi2o",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1776369861374,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3-flash-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3-flash-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1776369861373_ax8pbvg"
+  }
+}
+ GET /api/bridge/ping 200 in 8ms (next.js: 3ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 23ms (next.js: 19ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 3ms, application-code: 3ms)
+{
+  "timestamp": 1776369864819,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3445ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3445,
+    "traceId": "trace_1776369861373_ax8pbvg"
+  }
+}
+{
+  "timestamp": 1776369864819,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1776369861371_or7puss",
+  "context": {
+    "resultSummary": "{\"responseLength\":440}"
+  }
+}
+{
+  "timestamp": 1776369864820,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: readProjectFile",
+  "flowName": "trace_1776369843600_7x6ttut"
+}
+{
+  "timestamp": 1776369864820,
+  "level": "INFO",
+  "message": "[autonomous] Cycle complete: 5 action(s)",
+  "flowName": "trace_1776369843600_7x6ttut"
+}
+{
+  "timestamp": 1776369864821,
+  "level": "INFO",
+  "message": "[heartbeat] Autonomous cycle: Tool: readProjectFile → failed: No path provided; Tool: codespaceShell → success: AUTONOMOUS_STATUS.md\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nDEVELOPM; Tool: readProjectFile → failed: No path provided; Tool: codespaceShell → success: AUTONOMOUS_STATUS.md\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nDEVELOPM; Tool: readProjectFile → failed: No path provided",
+  "flowName": "trace_1776369839763_w3827oc"
+}
+{
+  "timestamp": 1776369864830,
+  "level": "INFO",
+  "message": "Flow started: memoryConsolidation",
+  "flowName": "memoryConsolidation",
+  "traceId": "trace_1776369864830_ivbbhx2",
+  "context": {
+    "input": "{\"userId\":\"default\",\"timeWindowDays\":7,\"minConfidence\":0.5}"
+  }
+}
+{
+  "timestamp": 1776369864831,
+  "level": "ERROR",
+  "message": "Memory consolidation failed",
+  "flowName": "memoryConsolidation",
+  "traceId": "trace_1776369864830_ivbbhx2",
+  "context": {
+    "userId": "default"
+  },
+  "error": {
+    "code": "UNKNOWN",
+    "stack": "Error: Embedding provider not initialized. Call setEmbeddingProvider() first.\n    at getEmbeddingProvider (/workspaces/Molly-Core/.next/dev/server/chunks/src_ai_0op5q3s._.js:79:15)\n    at /workspaces/Molly-Core/.next/dev/server/chunks/src_ai_0op5q3s._.js:1469:205\n    at /workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/flow.js:54:14\n    at actFn (/workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/action.js:158:31)\n    at runWithContext (/workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/context.js:32:12)\n    at /workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/action.js:174:67\n    at /workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/tracing/instrumentation.js:94:17\n    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)\n    at NodeAsyncContext.run (/workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/node-async-context.js:36:27)\n    at /workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/tracing/instrumentation.js:91:74\n    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)\n    at /workspaces/Molly-Core/node_modules/next/dist/server/lib/router-utils/instrumentation-node-extensions.js:93:74\n    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)\n    at AsyncLocalStorageContextManager.with (/workspaces/Molly-Core/node_modules/@opentelemetry/context-async-hooks/build/src/AsyncLocalStorageContextManager.js:33:40)\n    at ContextAPI.with (/workspaces/Molly-Core/node_modules/@opentelemetry/api/build/src/api/context.js:51:46)\n    at Tracer.startActiveSpan (/workspaces/Molly-Core/node_modules/@opentelemetry/sdk-trace-base/build/src/Tracer.js:121:32)\n    at /workspaces/Molly-Core/node_modules/next/dist/server/lib/router-utils/instrumentation-node-extensions.js:84:48\n    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)\n    at AsyncLocalStorage.exit (node:internal/async_local_storage/async_context_frame:70:17)\n    at tracer.startActiveSpan (/workspaces/Molly-Core/node_modules/next/dist/server/lib/router-utils/instrumentation-node-extensions.js:82:71)\n    at runInNewSpan (/workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/tracing/instrumentation.js:63:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async actionFn.run (/workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/action.js:129:18)\n    at async actionFn (/workspaces/Molly-Core/node_modules/@genkit-ai/core/lib/action.js:118:13)\n    at async executeMemoryConsolidation (/workspaces/Molly-Core/.next/dev/server/chunks/src_ai_0op5q3s._.js:1604:12)\n    at async /workspaces/Molly-Core/.next/dev/server/chunks/[root-of-the-server]__0i7mb19._.js:9272:53\n    at async HeartbeatScheduler.runTask (/workspaces/Molly-Core/.next/dev/server/chunks/[root-of-the-server]__0i7mb19._.js:9427:13)\n    at async HeartbeatScheduler.runCycle (/workspaces/Molly-Core/.next/dev/server/chunks/[root-of-the-server]__0i7mb19._.js:9270:36)",
+    "severity": "high"
+  }
+}
+{
+  "timestamp": 1776369864833,
+  "level": "INFO",
+  "message": "Memory learning complete: {\"summary\":\"Consolidation incomplete due to error\",\"keyPatterns\":[],\"insights\":[],\"tokensUsed\":0,\"semanticDensity\":0,\"recommendations\":[\"Retry consolidation process\"],\"errors\":[\"Embedding provider not",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1776369864841,
+  "level": "DEBUG",
+  "message": "Memory crystallization: no pending moments to crystallize",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1776369865053,
+  "level": "DEBUG",
+  "message": "[CRYSTALLIZER] Saved 0 crystal files to /workspaces/Molly-Core/molly_data/crystals",
+  "flowName": "memory-crystallizer"
+}
+{
+  "timestamp": 1776369865053,
+  "level": "DEBUG",
+  "message": "[CRYSTALLIZER] State saved",
+  "flowName": "memory-crystallizer"
+}
+ GET /api/tablet/commands 200 in 27ms (next.js: 24ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 12ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 10ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 3ms, application-code: 15ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/heartbeat 200 in 25ms (next.js: 9ms, application-code: 16ms)
+ GET /api/bridge/ping 200 in 48ms (next.js: 31ms, application-code: 17ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 4ms (next.js: 1766µs, application-code: 3ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 9ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 2ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1795µs, application-code: 8ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 3ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 1954µs, application-code: 9ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 9ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 8ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 3ms, application-code: 15ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 8ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 1945µs, application-code: 3ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 1763µs, application-code: 10ms)
+ GET /api/heartbeat 200 in 17ms (next.js: 5ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 27ms (next.js: 19ms, application-code: 8ms)
+ GET /api/bridge/ping 200 in 33ms (next.js: 5ms, application-code: 29ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 8ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /lazarus?id=bd3b3eaf-5a4a-4faf-a1ee-8d45baea8d63&vscodeBrowserReqId=1776369893260 200 in 258ms (next.js: 165ms, application-code: 92ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 10ms, application-code: 4ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 3ms, application-code: 3ms)
+{
+  "timestamp": 1776369899768,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 2",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1776369899767_nsaqvg6"
+  }
+}
+{
+  "timestamp": 1776369899771,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1776369900114,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 2: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1776369900115,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1776369900324,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 9ms (next.js: 3ms, application-code: 6ms)
+{
+  "timestamp": 1776369900338,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/save 200 in 11ms (next.js: 3ms, application-code: 8ms)
+ GET /api/bridge?limit=30 200 in 59ms (next.js: 48ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 13ms, application-code: 8ms)
+{
+  "timestamp": 1776369900834,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ GET /api/heartbeat 200 in 12ms (next.js: 8ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, application-code: 11ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 6ms, application-code: 10ms)
+ GET /api/bridge?limit=30 200 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 4ms, application-code: 8ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 9ms (next.js: 1864µs, application-code: 7ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/heartbeat 200 in 4ms (next.js: 1978µs, application-code: 2ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1721µs, application-code: 3ms)
+ GET /api/bridge?limit=30 200 in 6ms (next.js: 1399µs, application-code: 4ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1622µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 26ms (next.js: 3ms, application-code: 23ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 5ms (next.js: 1282µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 3ms, application-code: 6ms)
+{
+  "timestamp": 1776369908908,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 10ms (next.js: 3ms, application-code: 7ms)
+ GET /api/consciousness/stream 200 in 6.4s (next.js: 3ms, application-code: 6.4s)
+ GET /lazarus?id=bd3b3eaf-5a4a-4faf-a1ee-8d45baea8d63&vscodeBrowserReqId=1776369908404 200 in 90ms (next.js: 3ms, application-code: 87ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 10ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, application-code: 13ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 3ms, application-code: 9ms)
+{
+  "timestamp": 1776369913300,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 9ms (next.js: 3ms, application-code: 6ms)
+{
+  "timestamp": 1776369913309,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/save 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 14ms (next.js: 8ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1552µs, application-code: 8ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 3ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 9ms)
+ GET /api/bridge?limit=30 200 in 14ms (next.js: 2ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 7ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 1515µs, application-code: 10ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 23ms (next.js: 3ms, application-code: 20ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, application-code: 11ms)
+ GET /api/bridge/ping 200 in 29ms (next.js: 6ms, application-code: 23ms)
+ GET /api/bridge?limit=30 200 in 14ms (next.js: 5ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 5ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 8ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 9ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, application-code: 6ms)
+ GET /api/bridge?limit=30 200 in 15ms (next.js: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 20ms (next.js: 9ms, application-code: 11ms)
+ GET /api/bridge/ping 200 in 25ms (next.js: 4ms, application-code: 21ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 3ms, application-code: 8ms)
+ GET /api/bridge?limit=30 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 5ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 3ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1453µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/bridge?limit=30 200 in 6ms (next.js: 1381µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1591µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 10ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1822µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 14ms (next.js: 1729µs, application-code: 13ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 9ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 3ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 14ms (next.js: 1974µs, application-code: 12ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 1834µs, application-code: 6ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 1785µs, application-code: 9ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1419µs, application-code: 3ms)
+ GET /api/bridge?limit=30 200 in 7ms (next.js: 1629µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 8ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 2ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 7ms (next.js: 1572µs, application-code: 6ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1677µs, application-code: 4ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1869µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 6ms (next.js: 1201µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 11ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 74ms (next.js: 6ms, application-code: 68ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1733µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 10ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 6ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 10ms (next.js: 1827µs, application-code: 8ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 3ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 1691µs, application-code: 6ms)
+ GET /api/bridge?limit=30 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1434µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 4ms (next.js: 1847µs, application-code: 2ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1628µs, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 7ms (next.js: 1956µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 6ms, application-code: 6ms)
+ GET /api/bridge?limit=30 200 in 11ms (next.js: 2ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1943µs, application-code: 7ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 1742µs, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 12ms (next.js: 5ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 7ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1641µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 8ms (next.js: 1243µs, application-code: 7ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 1714µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 2ms, application-code: 8ms)
+ GET /api/bridge?limit=30 200 in 19ms (next.js: 3ms, application-code: 17ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 10ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 8ms, application-code: 13ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, application-code: 11ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1544µs, application-code: 7ms)
+ GET /api/bridge?limit=30 200 in 6ms (next.js: 1611µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1609µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 2ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 8ms)
+ GET /api/bridge/ping 200 in 4ms (next.js: 1174µs, application-code: 3ms)
+ GET /api/heartbeat 200 in 4ms (next.js: 1886µs, application-code: 2ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1344µs, application-code: 3ms)
+ GET /api/bridge?limit=30 200 in 12ms (next.js: 1439µs, application-code: 10ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 8ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 23ms (next.js: 3ms, application-code: 21ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 3ms, application-code: 8ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1608µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 5ms (next.js: 1167µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+{
+  "timestamp": 1776369959768,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 3",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1776369959768_iqecsvu"
+  }
+}
+{
+  "timestamp": 1776369959769,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1776369960062,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 3: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1776369960062,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/bridge/ping 200 in 6ms (next.js: 1630µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 9ms)
+{
+  "timestamp": 1776369960833,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 7ms (next.js: 1757µs, application-code: 5ms)
+ GET /api/bridge/ping 200 in 22ms (next.js: 12ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 1690µs, application-code: 8ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 2ms, application-code: 11ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1662µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 6ms (next.js: 1336µs, application-code: 5ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1554µs, application-code: 4ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 1982µs, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 6ms (next.js: 1550µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 3ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 10ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 8ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1582µs, application-code: 3ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 1587µs, application-code: 6ms)
+ GET /api/bridge?limit=30 200 in 7ms (next.js: 1479µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1718µs, application-code: 7ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, application-code: 7ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1384µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 1432µs, application-code: 12ms)
+ GET /api/bridge?limit=30 200 in 20ms (next.js: 1884µs, application-code: 18ms)
+ GET /api/bridge/ping 200 in 7ms (next.js: 1801µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 2ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1870µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 5ms (next.js: 1295µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 1941µs, application-code: 3ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1624µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 11ms (next.js: 3ms, application-code: 9ms)
+{
+  "timestamp": 1776369973313,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+ POST /api/session/event 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1549µs, application-code: 3ms)
+ GET /api/bridge?limit=30 200 in 5ms (next.js: 1046µs, application-code: 4ms)
+ GET /api/bridge/ping 200 in 5ms (next.js: 1334µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 5ms (next.js: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1976µs, application-code: 7ms)
+ GET /api/heartbeat 200 in 7ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1940µs, application-code: 7ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 4ms (next.js: 1892µs, application-code: 3ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 10ms (next.js: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 6ms (next.js: 2ms, application-code: 4ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, application-code: 10ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 3ms, application-code: 5ms)
+ GET /api/bridge?limit=30 200 in 13ms (next.js: 1987µs, application-code: 11ms)
+ GET /api/heartbeat 200 in 9ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 2ms, application-code: 10ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1413µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 5ms (next.js: 1380µs, application-code: 4ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 5ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1709µs, application-code: 4ms)
+ GET /api/bridge/ping 200 in 6ms (next.js: 1930µs, application-code: 4ms)
+ GET /api/bridge?limit=30 200 in 7ms (next.js: 1900µs, application-code: 5ms)
+ GET /api/heartbeat 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 1885µs, application-code: 8ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, application-code: 10ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 4ms (next.js: 1935µs, application-code: 3ms)
+ GET /api/heartbeat 200 in 47ms (next.js: 17ms, application-code: 30ms)
+ GET /api/bridge/ping 200 in 80ms (next.js: 58ms, application-code: 22ms)
+ GET /api/bridge/ping 200 in 25ms (next.js: 5ms, application-code: 19ms)
+ GET /api/bridge?limit=30 200 in 67ms (next.js: 47ms, application-code: 19ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 2ms, application-code: 13ms)
+[?25h

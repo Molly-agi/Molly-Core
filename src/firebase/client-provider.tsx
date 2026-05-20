@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, type ReactNode } from 'react';
+import React, { useMemo, useEffect, useRef, type ReactNode } from 'react';
 import { FirebaseProvider } from '@/firebase/provider';
 import { initializeFirebase } from '@/firebase';
 
@@ -12,22 +12,21 @@ export function FirebaseClientProvider({
   children,
 }: FirebaseClientProviderProps) {
   const firebaseServices = useMemo(() => {
-    // Trace Firebase initialization
+    return initializeFirebase();
+  }, []);
+
+  // Trace initialization after mount (not during render)
+  const tracedRef = useRef(false);
+  useEffect(() => {
+    if (tracedRef.current) return;
+    tracedRef.current = true;
+
     const trace = (globalThis as Record<string, unknown>).__MOLLY_TRACE as
       | ((...args: unknown[]) => void)
       | undefined;
-    if (trace) trace('FIREBASE', 'Starting initialization', 'start');
-
-    const startTime = performance.now();
-    const services = initializeFirebase();
-    const duration = performance.now() - startTime;
-
-    if (trace)
-      trace('FIREBASE', 'Initialization complete', 'complete', {
-        duration: duration.toFixed(0) + 'ms',
-      });
-
-    return services;
+    if (trace) {
+      trace('FIREBASE', 'Initialization complete', 'complete');
+    }
   }, []);
 
   return (

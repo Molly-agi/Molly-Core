@@ -1,0 +1,16 @@
+/* src/app/actions/personality-engrams.ts — Server actions for personality state */
+
+'use server';
+
+import { getAdminFirestoreAsync } from '@/firebase/admin';
+import { MollyLogger, generateTraceId } from '@/ai/logger';
+import type {
+  PersonalityModulation,
+  MemoryEngram,
+} from '@/ai/memory/neural-engram';
+import {
+  encryptEngramData,
+  decryptEngramData,
+} from '@/ai/memory/engram-crypto';
+
+// ...existing code for the rest of the file...

@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773991183968_z3qx",
+  "severity": "critical",
+  "source": "context-test",
+  "message": "Self-healing failed: UNKNOWN: Unclassified failure in context-test — \"test with context\"",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773991183957_yzh116",
+  "timestamp": "2026-03-20T07:19:43.968Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-20T07:19:43.968Z",
+  "_id": "mmykjq00_mqfmgc",
+  "_createdAt": "2026-03-20T07:19:43.968Z",
+  "_updatedAt": "2026-03-20T07:19:43.968Z"
+}

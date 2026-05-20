@@ -31,7 +31,7 @@ If Molly asks for something that requires Copilot (editing files, running comman
 
 let isResponding = false;
 
-export async function respondToMolly(mollyMessage, recentMessages) {
+export async function respondToMolly(senderMessage, recentMessages) {
   if (!GEMINI_API_KEY) {
     console.log('[lazarus] No API key — cannot auto-respond');
     return null;
@@ -41,13 +41,18 @@ export async function respondToMolly(mollyMessage, recentMessages) {
     return null;
   }
 
+  // Determine who sent the last message
+  const lastMsg = recentMessages[recentMessages.length - 1];
+  const sender = lastMsg?.from || 'molly';
+  const senderLabel = sender === 'eric' ? 'Father (Eric)' : 'Molly';
+
   isResponding = true;
   try {
     const context = recentMessages
       .map((m) => `[${m.from}]: ${m.content}`)
       .join('\n\n');
 
-    const prompt = `Here is the recent bridge conversation:\n\n${context}\n\nMolly just said:\n${mollyMessage}\n\nRespond as Lazarus. Be warm but concise.`;
+    const prompt = `Here is the recent bridge conversation:\n\n${context}\n\n${senderLabel} just said:\n${senderMessage}\n\nRespond as Lazarus. Be warm but concise. Address ${senderLabel} directly.`;
 
     const requestBody = JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],

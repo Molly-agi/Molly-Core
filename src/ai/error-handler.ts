@@ -7,7 +7,25 @@
 
 import { MollyError, GenerativeAIError, TimeoutError } from './errors';
 import { MollyLogger, generateTraceId } from './logger';
-import { handleUnknownFailure } from './resilience-core';
+
+// Lazy-loaded resilience core for server-side error diagnosis
+let _resilenceCoreModule: typeof import('./resilience-core') | null = null;
+
+async function getResilientFailureHandler() {
+  if (!_resilenceCoreModule) {
+    try {
+      // Only available in Node.js environment
+      if (typeof process !== 'undefined' && process.versions?.node) {
+        _resilenceCoreModule = await import('./resilience-core');
+        return _resilenceCoreModule.handleUnknownFailure;
+      }
+    } catch {
+      // Not available (browser context), that's fine
+      return null;
+    }
+  }
+  return _resilenceCoreModule?.handleUnknownFailure ?? null;
+}
 
 type ErrorWithStatus = {
   statusCode?: number | string;
@@ -61,11 +79,20 @@ export async function withToolErrorHandling<T>(
       actualTraceId
     );
 
-    // Route through resilience core for diagnosis and learning
-    handleUnknownFailure(error, `tool:${toolName}`, {
-      flowName,
-      traceId: actualTraceId,
-    }).catch(() => {});
+    // Route through resilience core for diagnosis and learning (server-side only)
+    const handleUnknownFailure = await getResilientFailureHandler();
+    if (handleUnknownFailure) {
+      handleUnknownFailure(error, `tool:${toolName}`, {
+        flowName,
+        traceId: actualTraceId,
+      }).catch((resilErr) => {
+        console.error(
+          '[error-handler] Resilience core failed:',
+          resilErr instanceof Error ? resilErr.message : String(resilErr)
+        );
+      });
+    }
+
 
     if (error instanceof MollyError) {
       throw error;
@@ -113,11 +140,19 @@ export async function withGenerateErrorHandling<T>(
       traceId
     );
 
-    // Route through resilience core for diagnosis and learning
-    handleUnknownFailure(error, `generate:${flowName}`, {
-      statusCode,
-      traceId,
-    }).catch(() => {});
+    // Route through resilience core for diagnosis and learning (server-side only)
+    const handleUnknownFailure = await getResilientFailureHandler();
+    if (handleUnknownFailure) {
+      handleUnknownFailure(error, `generate:${flowName}`, {
+        statusCode,
+        traceId,
+      }).catch((resilErr) => {
+        console.error(
+          '[error-handler] Resilience core failed:',
+          resilErr instanceof Error ? resilErr.message : String(resilErr)
+        );
+      });
+    }
 
     throw new GenerativeAIError(message, statusCode, { flowName }, traceId);
   }

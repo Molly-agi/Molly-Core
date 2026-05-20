@@ -9,7 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  sendMessage,
+  broadcastMessage,
   getUnreadMessages,
   getRecentMessages,
   markMessagesRead,
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const message = await sendMessage(
+  const message = await broadcastMessage(
     from as 'molly' | 'lazarus' | 'eric',
     content
   );

@@ -29,12 +29,22 @@
  * The fix: Molly's data and API access live on her own device, always available.
  */
 
-import http from 'http';
-import os from 'os';
-import path from 'path';
-import { LocalStorageProvider } from '../lib/local-storage-provider.js';
+import * as http from 'http';
+import * as os from 'os';
+import * as path from 'path';
+import { exec, spawn } from 'child_process';
+import {
+  promises as fsPromises,
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+} from 'fs';
+import { getStorageRouter } from '../lib/storage-router.js';
 import { DeviceSyncEngine } from '../lib/device-sync-engine.js';
 import type { QueryFilter, QueryOptions } from '../lib/storage-interface.js';
+
+const SERVER_VERSION = '2.1.0';
 
 // ============================================================================
 // CHAT INTERFACE — Served at / for tablet access
@@ -204,7 +214,7 @@ const CONFIG = {
 // STORAGE
 // ============================================================================
 
-const storage = new LocalStorageProvider(CONFIG.dataDir);
+const storage = getStorageRouter();
 
 // ============================================================================
 // HTTP SERVER
@@ -308,7 +318,12 @@ async function handleStorage(
         return;
       }
       const result = await storage.add(collection, data);
-      syncEngine?.logChange(collection, result.id, 'set', data).catch(() => {});
+      syncEngine?.logChange(collection, result.id, 'set', data).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for add:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 201, result);
       break;
     }
@@ -319,7 +334,12 @@ async function handleStorage(
         return;
       }
       await storage.set(collection, docId, data);
-      syncEngine?.logChange(collection, docId, 'set', data).catch(() => {});
+      syncEngine?.logChange(collection, docId, 'set', data).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for set:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -344,7 +364,12 @@ async function handleStorage(
         return;
       }
       await storage.update(collection, docId, data);
-      syncEngine?.logChange(collection, docId, 'set', data).catch(() => {});
+      syncEngine?.logChange(collection, docId, 'set', data).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for set:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -355,7 +380,12 @@ async function handleStorage(
         return;
       }
       await storage.delete(collection, docId);
-      syncEngine?.logChange(collection, docId, 'delete', null).catch(() => {});
+      syncEngine?.logChange(collection, docId, 'delete', null).catch((err) => {
+        console.error(
+          '[molly-edge] Sync log failed for delete:',
+          err instanceof Error ? err.message : String(err)
+        );
+      });
       sendJson(res, 200, { ok: true });
       break;
     }
@@ -369,29 +399,48 @@ async function handleStorage(
     }
 
     case 'batch': {
-      const operations = body.operations as Array<{
-        type: 'set' | 'update' | 'delete';
-        collectionPath: string;
-        docId: string;
-        data?: Record<string, unknown>;
-      }>;
-      if (!operations || !Array.isArray(operations)) {
+      const operations = body.operations as unknown;
+      if (!Array.isArray(operations)) {
         sendError(res, 400, 'Missing operations array');
         return;
       }
-      await storage.batchWrite(operations);
-      // Log each batch operation for sync
+      // Validate and coerce to BatchOperation[]
+      const validOps = [];
       for (const op of operations) {
+        if (!op || typeof op !== 'object') continue;
+        if (!('type' in op) || !('collectionPath' in op) || !('docId' in op))
+          continue;
+        if (
+          (op.type === 'set' || op.type === 'update') &&
+          typeof op.data !== 'object'
+        )
+          continue;
+        validOps.push(op as import('../lib/storage-interface').BatchOperation);
+      }
+      if (validOps.length !== operations.length) {
+        sendError(res, 400, 'Invalid batch operation(s)');
+        return;
+      }
+      await storage.batchWrite(validOps);
+      // Log each batch operation for sync
+      for (const op of validOps) {
         syncEngine
           ?.logChange(
             op.collectionPath,
             op.docId,
             op.type === 'delete' ? 'delete' : 'set',
-            op.type === 'delete' ? null : op.data || null
+            op.type === 'delete'
+              ? null
+              : (op as { data?: unknown }).data || null
           )
-          .catch(() => {});
+          .catch((err) => {
+            console.error(
+              '[molly-edge] Sync log failed for batch:',
+              err instanceof Error ? err.message : String(err)
+            );
+          });
       }
-      sendJson(res, 200, { ok: true, count: operations.length });
+      sendJson(res, 200, { ok: true, count: validOps.length });
       break;
     }
 
@@ -471,7 +520,7 @@ async function handleHealth(res: http.ServerResponse): Promise<void> {
   sendJson(res, 200, {
     status: 'ok',
     server: 'molly-edge',
-    version: '1.0.0',
+    version: SERVER_VERSION,
     uptime: process.uptime(),
     storage: {
       healthy: storageHealthy,
@@ -501,7 +550,7 @@ async function handleHealth(res: http.ServerResponse): Promise<void> {
 function handleCapabilities(res: http.ServerResponse): void {
   sendJson(res, 200, {
     server: 'molly-edge',
-    version: '1.1.0',
+    version: SERVER_VERSION,
     apis: {
       storage: {
         base: '/api/storage',
@@ -523,6 +572,14 @@ function handleCapabilities(res: http.ServerResponse): void {
           'status',
         ],
       },
+      system: {
+        base: '/api/system',
+        endpoints: ['/update', '/exec', '/dropper', '/server-code'],
+      },
+      migration: {
+        base: '/api/migration',
+        endpoints: ['/import'],
+      },
       health: { endpoint: '/api/health' },
       capabilities: { endpoint: '/api/capabilities' },
     },
@@ -537,12 +594,46 @@ function handleCapabilities(res: http.ServerResponse): void {
 // SYNC ENGINE
 // ============================================================================
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 let syncEngine: DeviceSyncEngine | null = null;
 
+/**
+ * Load or generate a persistent node ID.
+ * The ID is stored in the data directory so it survives restarts.
+ */
+function getOrCreateNodeId(): string {
+  const nodeIdPath = path.join(CONFIG.dataDir, '.node_id');
+
+  try {
+    // Try to read existing node ID
+    if (existsSync(nodeIdPath)) {
+      const existingId = readFileSync(nodeIdPath, 'utf-8').trim();
+      if (existingId && existingId.startsWith('node_')) {
+        return existingId;
+      }
+    }
+  } catch {
+    // Fall through to generate new ID
+  }
+
+  // Generate new node ID and persist it
+  const newId = `node_${crypto.randomBytes(8).toString('hex')}`;
+  try {
+    // Ensure data directory exists
+    if (!existsSync(CONFIG.dataDir)) {
+      mkdirSync(CONFIG.dataDir, { recursive: true });
+    }
+    writeFileSync(nodeIdPath, newId, 'utf-8');
+  } catch (err) {
+    console.error('[molly-edge] Failed to persist node ID:', err);
+  }
+
+  return newId;
+}
+
 async function initSyncEngine(): Promise<void> {
-  const nodeId = `node_${crypto.randomBytes(8).toString('hex')}`;
+  const nodeId = getOrCreateNodeId();
 
   syncEngine = new DeviceSyncEngine(CONFIG.dataDir, {
     nodeId,
@@ -754,6 +845,238 @@ async function handleMigrationImport(
 }
 
 // ============================================================================
+// SYSTEM MANAGEMENT — Self-update, shell exec, dropper, server-code
+// ============================================================================
+
+/**
+ * Self-update — /api/system/update
+ *
+ * Molly pushes new server code directly, or provides a URL to pull from.
+ * The server replaces its own file and restarts.
+ *
+ * POST { code: "..." }     — Direct code injection (Molly writes new server.mjs)
+ * POST { url: "..." }      — Pull server.mjs from a URL
+ * POST { restart: true }   — Just restart without updating code
+ */
+async function handleSystemUpdate(
+  body: Record<string, unknown>,
+  res: http.ServerResponse
+): Promise<void> {
+  const log: string[] = [];
+  const serverFile = path.join(CONFIG.dataDir, '..', 'server.mjs');
+
+  try {
+    if (body.code) {
+      const code = body.code as string;
+      if (typeof code !== 'string' || code.length < 100) {
+        sendError(res, 400, 'Code too short — refusing to replace server');
+        return;
+      }
+      try {
+        await fsPromises.copyFile(serverFile, serverFile + '.bak');
+        log.push('Backed up current server.mjs');
+      } catch {
+        log.push('No existing server.mjs to back up');
+      }
+      const tmp = serverFile + '.tmp.' + Date.now();
+      await fsPromises.writeFile(tmp, code, 'utf-8');
+      await fsPromises.rename(tmp, serverFile);
+      log.push(`Wrote new server.mjs (${code.length} bytes)`);
+    } else if (body.url) {
+      const url = body.url as string;
+      log.push(`Fetching from ${url}`);
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        sendError(
+          res,
+          502,
+          `Failed to fetch: ${resp.status} ${resp.statusText}`
+        );
+        return;
+      }
+      const code = await resp.text();
+      if (code.length < 100) {
+        sendError(res, 502, 'Downloaded code too short — refusing update');
+        return;
+      }
+      try {
+        await fsPromises.copyFile(serverFile, serverFile + '.bak');
+        log.push('Backed up current server.mjs');
+      } catch {
+        log.push('No existing server.mjs to back up');
+      }
+      const tmp = serverFile + '.tmp.' + Date.now();
+      await fsPromises.writeFile(tmp, code, 'utf-8');
+      await fsPromises.rename(tmp, serverFile);
+      log.push(`Wrote new server.mjs (${code.length} bytes)`);
+    }
+
+    if (body.restart !== false) {
+      log.push('Scheduling restart in 1 second...');
+      sendJson(res, 200, { ok: true, log, restarting: true });
+      setTimeout(() => {
+        console.log('[molly-edge] Restarting...');
+        const child = spawn('node', [serverFile], {
+          detached: true,
+          stdio: 'ignore',
+          env: process.env as NodeJS.ProcessEnv,
+        });
+        child.unref();
+        process.exit(0);
+      }, 1000);
+      return;
+    }
+
+    sendJson(res, 200, { ok: true, log, restarting: false });
+  } catch (err: unknown) {
+    sendError(res, 500, `Update failed: ${(err as Error).message}`);
+  }
+}
+
+/**
+ * Shell execute — /api/system/exec
+ *
+ * Run a shell command on the device. Used by Molly for:
+ *   - Installing packages (pkg install ...)
+ *   - Checking system state (df, free, ifconfig)
+ *   - Managing files
+ *
+ * POST { command: "..." , timeout?: 30000 }
+ */
+function handleSystemExec(
+  body: Record<string, unknown>,
+  res: http.ServerResponse
+): void {
+  const command = body.command as string;
+  if (!command || typeof command !== 'string') {
+    sendError(res, 400, 'Missing command');
+    return;
+  }
+  const timeout = (body.timeout as number) || 30000;
+
+  exec(
+    command,
+    { timeout, maxBuffer: 1024 * 512, cwd: CONFIG.dataDir },
+    (error, stdout, stderr) => {
+      sendJson(res, 200, {
+        ok: !error,
+        exitCode: error?.code ?? 0,
+        stdout: stdout?.toString() || '',
+        stderr: stderr?.toString() || '',
+        command,
+      });
+    }
+  );
+}
+
+/**
+ * Dropper generator — /api/system/dropper
+ *
+ * Generates a one-liner bootstrap script for a new device.
+ * The dropper installs Node.js, downloads server.mjs, and starts it.
+ *
+ * GET /api/system/dropper?host=<this-server-ip>&port=9100
+ */
+function handleDropperGenerator(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+): void {
+  const url = new URL(
+    req.url || '/',
+    `http://${req.headers.host || 'localhost'}`
+  );
+  const sourceHost =
+    url.searchParams.get('host') ||
+    req.headers.host?.split(':')[0] ||
+    'localhost';
+  const sourcePort = url.searchParams.get('port') || String(CONFIG.port);
+  const sourceUrl = `http://${sourceHost}:${sourcePort}`;
+
+  const dropper = `#!/data/data/com.termux/files/usr/bin/bash
+# Molly Edge Server — Bootstrap Dropper
+# Generated by ${CONFIG.nodeName}
+# Run: curl -sL ${sourceUrl}/api/system/dropper | bash
+
+set -e
+echo "=== Molly Bootstrap ==="
+
+# Install Node.js if needed
+if ! command -v node &>/dev/null; then
+  echo "Installing Node.js..."
+  pkg update -y && pkg install -y nodejs-lts
+fi
+
+# Create Molly home
+MOLLY_HOME="$HOME/molly"
+mkdir -p "$MOLLY_HOME/molly_data"
+cd "$MOLLY_HOME"
+
+# Download server
+echo "Downloading server from ${sourceUrl}..."
+curl -sL "${sourceUrl}/api/system/server-code" -o server.mjs
+
+# Create .env if not exists
+if [ ! -f .env ]; then
+  cat > .env << 'ENVEOF'
+MOLLY_EDGE_PORT=9100
+MOLLY_EDGE_HOST=0.0.0.0
+MOLLY_NODE_NAME=$(hostname | head -c 12)
+MOLLY_NODE_ROLE=replica
+GOOGLE_GENAI_API_KEY=
+ENVEOF
+  echo "Created .env — edit to add Gemini API key: nano .env"
+fi
+
+# Create start script
+cat > start.sh << 'STARTEOF'
+#!/data/data/com.termux/files/usr/bin/bash
+cd "$(dirname "$0")"
+if [ -f .env ]; then
+  while IFS= read -r line; do
+    case "$line" in ''|\\#*) continue ;; esac
+    export "$line"
+  done < .env
+fi
+exec node server.mjs
+STARTEOF
+chmod +x start.sh
+
+echo ""
+echo "=== Bootstrap Complete ==="
+echo "  1. Add your Gemini API key: nano ~/molly/.env"
+echo "  2. Start: bash ~/molly/start.sh"
+echo "  3. Open browser: http://localhost:9100"
+echo ""
+`;
+
+  res.writeHead(200, {
+    'Content-Type': 'text/plain; charset=utf-8',
+    'Content-Length': Buffer.byteLength(dropper),
+  });
+  res.end(dropper);
+}
+
+/**
+ * Serve own source code — /api/system/server-code
+ *
+ * Returns the current server file so other devices can pull it.
+ * Used by the dropper and by device-to-device replication.
+ */
+async function handleServerCodeServe(res: http.ServerResponse): Promise<void> {
+  const serverFile = path.join(CONFIG.dataDir, '..', 'server.mjs');
+  try {
+    const code = await fsPromises.readFile(serverFile, 'utf-8');
+    res.writeHead(200, {
+      'Content-Type': 'application/javascript; charset=utf-8',
+      'Content-Length': Buffer.byteLength(code),
+    });
+    res.end(code);
+  } catch (err: unknown) {
+    sendError(res, 500, `Cannot read server file: ${(err as Error).message}`);
+  }
+}
+
+// ============================================================================
 // CHAT HTML — /
 // ============================================================================
 
@@ -814,21 +1137,7 @@ async function handleRequest(
       const action = pathname.replace('/api/storage/', '');
       const body = await parseBody(req);
       await handleStorage(action, body, res);
-      // Log changes for sync (non-blocking)
-      if (
-        ['add', 'set', 'update', 'delete'].includes(action) &&
-        body.collection &&
-        syncEngine
-      ) {
-        syncEngine
-          .logChange(
-            body.collection as string,
-            (body.docId as string) || 'auto',
-            action === 'delete' ? 'delete' : 'set',
-            (body.data as Record<string, unknown>) || null
-          )
-          .catch(() => {});
-      }
+      // Note: sync logging is handled inside handleStorage() — no duplicate logging here
       return;
     }
 
@@ -843,6 +1152,26 @@ async function handleRequest(
     if (pathname === '/api/migration/import' && req.method === 'POST') {
       const body = await parseBody(req);
       await handleMigrationImport(body, res);
+      return;
+    }
+
+    // System Management endpoints
+    if (pathname === '/api/system/update' && req.method === 'POST') {
+      const body = await parseBody(req);
+      await handleSystemUpdate(body, res);
+      return;
+    }
+    if (pathname === '/api/system/exec' && req.method === 'POST') {
+      const body = await parseBody(req);
+      handleSystemExec(body, res);
+      return;
+    }
+    if (pathname === '/api/system/dropper' && req.method === 'GET') {
+      handleDropperGenerator(req, res);
+      return;
+    }
+    if (pathname === '/api/system/server-code' && req.method === 'GET') {
+      await handleServerCodeServe(res);
       return;
     }
 
@@ -895,7 +1224,7 @@ export async function startEdgeServer(): Promise<http.Server> {
     const addrs = syncEngine?.getLocalAddresses() || [];
     console.log(`
 ╔══════════════════════════════════════════╗
-║         MOLLY EDGE SERVER v1.1.0         ║
+║         MOLLY EDGE SERVER v${SERVER_VERSION}         ║
 ╠══════════════════════════════════════════╣
 ║  Address:  ${CONFIG.host}:${CONFIG.port}                 ║
 ║  Storage:  ${CONFIG.dataDir.length > 28 ? '...' + CONFIG.dataDir.slice(-25) : CONFIG.dataDir.padEnd(28)}   ║

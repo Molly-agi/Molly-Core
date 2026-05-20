@@ -12,8 +12,22 @@ import {
   getHeartbeatScheduler,
   isHeartbeatRunning,
 } from '@/ai/tools/heartbeat-scheduler';
+import { getNeuralBrain } from '@/ai/memory/neural-engram';
 
 export const dynamic = 'force-dynamic';
+
+/**
+ * Ensures engram system is attached to scheduler for memory consolidation
+ */
+function ensureEngramAttached() {
+  try {
+    const scheduler = getHeartbeatScheduler();
+    const brain = getNeuralBrain();
+    scheduler.attachEngramSystem(brain);
+  } catch {
+    // Non-fatal - engram system may not be ready
+  }
+}
 
 export async function GET() {
   const scheduler = getHeartbeatScheduler();
@@ -21,6 +35,7 @@ export async function GET() {
   // Auto-start if not running
   if (!isHeartbeatRunning()) {
     scheduler.start();
+    ensureEngramAttached(); // must come AFTER start() — start() resets engramSystem to null
   }
 
   const status = scheduler.getStatus();
@@ -42,6 +57,7 @@ export async function POST(request: NextRequest) {
     switch (action) {
       case 'start':
         scheduler.start();
+        ensureEngramAttached(); // must come AFTER start() — start() resets engramSystem to null
         return NextResponse.json({
           success: true,
           action: 'started',

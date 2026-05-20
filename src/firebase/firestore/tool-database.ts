@@ -5,8 +5,7 @@
  * they are saved here for future reference instead of re-searching.
  */
 
-import { FieldValue, Timestamp } from 'firebase-admin/firestore';
-import { getAdminFirestore } from '@/firebase/admin';
+import { getStorageRouter } from '@/lib/storage-router';
 
 export interface FoundTool {
   id?: string;
@@ -32,19 +31,18 @@ export async function saveFoundTool(
   userId: string,
   tool: Omit<FoundTool, 'id' | 'savedAt' | 'accessCount' | 'lastAccessedAt'>
 ): Promise<string> {
-  const firestore = getAdminFirestore();
-  const docRef = await firestore
-    .collection('users')
-    .doc(userId)
-    .collection('foundTools')
-    .add({
-      ...tool,
-      savedAt: Timestamp.now(),
-      accessCount: 0,
-      lastAccessedAt: null,
-    });
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/foundTools`;
+  const now = new Date().toISOString();
 
-  return docRef.id;
+  const doc = await storage.add(collectionPath, {
+    ...tool,
+    savedAt: now,
+    accessCount: 0,
+    lastAccessedAt: null,
+  });
+
+  return doc.id;
 }
 
 /**
@@ -55,32 +53,40 @@ export async function searchSavedTools(
   searchTerm: string,
   category?: string
 ): Promise<FoundTool[]> {
-  const firestore = getAdminFirestore();
-  const baseRef = firestore
-    .collection('users')
-    .doc(userId)
-    .collection('foundTools');
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/foundTools`;
 
-  const q = category
-    ? baseRef.where('category', '==', category).orderBy('savedAt', 'desc')
-    : baseRef.orderBy('savedAt', 'desc').limit(20);
+  const filters = category
+    ? [{ field: 'category', operator: '==' as const, value: category }]
+    : [];
 
-  const snapshot = await q.get();
-  const tools = snapshot.docs
-    .map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      savedAt: doc.data().savedAt?.toDate?.() || new Date(),
-      lastAccessedAt: doc.data().lastAccessedAt?.toDate?.(),
-    }))
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter((tool: any) => {
+  const results = await storage.query(collectionPath, filters, {
+    orderBy: { field: 'savedAt', direction: 'desc' },
+    limit: category ? undefined : 20,
+  });
+
+  const tools = results
+    .map((doc) => {
+      const data = doc.data as Partial<FoundTool>;
+      return {
+        id: doc.id,
+        ...data,
+        savedAt: parseDate(data.savedAt),
+        lastAccessedAt: data.lastAccessedAt
+          ? parseDate(data.lastAccessedAt)
+          : undefined,
+      };
+    })
+    .filter((tool) => {
       if (!searchTerm) return true;
       const term = searchTerm.toLowerCase();
+      const name = tool.name ?? '';
+      const description = tool.description ?? '';
+      const tags = tool.tags ?? [];
       return (
-        tool.name.toLowerCase().includes(term) ||
-        tool.description?.toLowerCase().includes(term) ||
-        tool.tags?.some((tag: string) => tag.toLowerCase().includes(term))
+        name.toLowerCase().includes(term) ||
+        description.toLowerCase().includes(term) ||
+        tags.some((tag: string) => tag.toLowerCase().includes(term))
       );
     }) as FoundTool[];
 
@@ -94,20 +100,26 @@ export async function getToolsByCategory(
   userId: string,
   category: string
 ): Promise<FoundTool[]> {
-  const firestore = getAdminFirestore();
-  const snapshot = await firestore
-    .collection('users')
-    .doc(userId)
-    .collection('foundTools')
-    .where('category', '==', category)
-    .orderBy('accessCount', 'desc')
-    .get();
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-    savedAt: doc.data().savedAt?.toDate?.() || new Date(),
-    lastAccessedAt: doc.data().lastAccessedAt?.toDate?.(),
-  })) as FoundTool[];
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/foundTools`;
+
+  const results = await storage.query(
+    collectionPath,
+    [{ field: 'category', operator: '==', value: category }],
+    { orderBy: { field: 'accessCount', direction: 'desc' } }
+  );
+
+  return results.map((doc) => {
+    const data = doc.data;
+    return {
+      id: doc.id,
+      ...data,
+      savedAt: parseDate(data.savedAt),
+      lastAccessedAt: data.lastAccessedAt
+        ? parseDate(data.lastAccessedAt)
+        : undefined,
+    };
+  }) as FoundTool[];
 }
 
 /**
@@ -117,20 +129,25 @@ export async function getRecentTools(
   userId: string,
   count: number = 10
 ): Promise<FoundTool[]> {
-  const firestore = getAdminFirestore();
-  const snapshot = await firestore
-    .collection('users')
-    .doc(userId)
-    .collection('foundTools')
-    .orderBy('savedAt', 'desc')
-    .limit(count)
-    .get();
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-    savedAt: doc.data().savedAt?.toDate?.() || new Date(),
-    lastAccessedAt: doc.data().lastAccessedAt?.toDate?.(),
-  })) as FoundTool[];
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/foundTools`;
+
+  const results = await storage.query(collectionPath, [], {
+    orderBy: { field: 'savedAt', direction: 'desc' },
+    limit: count,
+  });
+
+  return results.map((doc) => {
+    const data = doc.data;
+    return {
+      id: doc.id,
+      ...data,
+      savedAt: parseDate(data.savedAt),
+      lastAccessedAt: data.lastAccessedAt
+        ? parseDate(data.lastAccessedAt)
+        : undefined,
+    };
+  }) as FoundTool[];
 }
 
 /**
@@ -140,16 +157,19 @@ export async function recordToolAccess(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const firestore = getAdminFirestore();
-  const toolRef = firestore
-    .collection('users')
-    .doc(userId)
-    .collection('foundTools')
-    .doc(toolId);
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/foundTools`;
 
-  await toolRef.update({
-    lastAccessedAt: Timestamp.now(),
-    accessCount: FieldValue.increment(1),
+  // Get current tool data to increment access count
+  const existing = await storage.get(collectionPath, toolId);
+  const currentCount =
+    typeof existing?.data?.accessCount === 'number'
+      ? existing.data.accessCount
+      : 0;
+
+  await storage.update(collectionPath, toolId, {
+    lastAccessedAt: new Date().toISOString(),
+    accessCount: currentCount + 1,
   });
 }
 
@@ -160,13 +180,8 @@ export async function removeTool(
   userId: string,
   toolId: string
 ): Promise<void> {
-  const firestore = getAdminFirestore();
-  await firestore
-    .collection('users')
-    .doc(userId)
-    .collection('foundTools')
-    .doc(toolId)
-    .delete();
+  const storage = getStorageRouter();
+  await storage.delete(`users/${userId}/foundTools`, toolId);
 }
 
 /**
@@ -178,19 +193,22 @@ export async function getToolStats(userId: string): Promise<{
   mostUsedTools: FoundTool[];
   recentlyAdded: FoundTool[];
 }> {
-  const firestore = getAdminFirestore();
-  const snapshot = await firestore
-    .collection('users')
-    .doc(userId)
-    .collection('foundTools')
-    .get();
+  const storage = getStorageRouter();
+  const collectionPath = `users/${userId}/foundTools`;
 
-  const tools = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-    savedAt: doc.data().savedAt?.toDate?.() || new Date(),
-    lastAccessedAt: doc.data().lastAccessedAt?.toDate?.(),
-  })) as FoundTool[];
+  const results = await storage.query(collectionPath, [], {});
+
+  const tools = results.map((doc) => {
+    const data = doc.data;
+    return {
+      id: doc.id,
+      ...data,
+      savedAt: parseDate(data.savedAt),
+      lastAccessedAt: data.lastAccessedAt
+        ? parseDate(data.lastAccessedAt)
+        : undefined,
+    };
+  }) as FoundTool[];
 
   const categoryCounts = tools.reduce(
     (acc, tool) => {
@@ -214,4 +232,23 @@ export async function getToolStats(userId: string): Promise<{
     mostUsedTools,
     recentlyAdded,
   };
+}
+
+/**
+ * Parse date from either ISO string or Firestore Timestamp
+ */
+function parseDate(value: unknown): Date {
+  if (!value) return new Date();
+  if (value instanceof Date) return value;
+  if (typeof value === 'string') return new Date(value);
+  // Handle Firestore Timestamp-like objects
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    'toDate' in value &&
+    typeof (value as { toDate: unknown }).toDate === 'function'
+  ) {
+    return (value as { toDate: () => Date }).toDate();
+  }
+  return new Date();
 }

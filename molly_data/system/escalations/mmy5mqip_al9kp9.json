@@ -1,0 +1,15 @@
+{
+  "id": "esc_1773966130369_mems",
+  "severity": "critical",
+  "source": "freq-test-1773966130358",
+  "message": "Self-healing failed: UNKNOWN: Unclassified failure in freq-test-1773966130358 — \"freq 1\"",
+  "details": "All cognitive systems (interpreter, sandbox, evolution, immune) attempted but could not resolve. Attempts: 1",
+  "failureId": "fail_1773966130358_69xwfa",
+  "timestamp": "2026-03-20T00:22:10.369Z",
+  "acknowledged": false,
+  "sentToBridge": false,
+  "persistedAt": "2026-03-20T00:22:10.369Z",
+  "_id": "mmy5mqip_al9kp9",
+  "_createdAt": "2026-03-20T00:22:10.369Z",
+  "_updatedAt": "2026-03-20T00:22:10.369Z"
+}

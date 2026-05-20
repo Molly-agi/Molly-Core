@@ -7,6 +7,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { MollyLogger } from '@/ai/logger';
 
 // In-memory flag that the bridge poller in Terminal.tsx can check
 // This is a simple signaling mechanism — set it, client polls and clears it
@@ -35,9 +36,10 @@ export async function POST(request: NextRequest) {
 
     setPendingNotification(from, preview || '');
 
-    console.log(
-      `[bridge-notify] Chirp from ${from}: ${(preview || '').slice(0, 60)}`
-    );
+    MollyLogger.debug('Bridge notification received', 'bridge-notify', {
+      from,
+      preview: (preview || '').slice(0, 60),
+    });
 
     return NextResponse.json({ received: true });
   } catch {

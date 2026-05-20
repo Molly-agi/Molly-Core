@@ -6,9 +6,10 @@
  */
 
 import { NextResponse } from 'next/server';
-import { initializeFirebaseServer } from '@/firebase/server';
+import { isAdminConfigured, getAdminFirestoreAsync } from '@/firebase/admin';
 import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
+import { getStorageRouter } from '@/lib/storage-router';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,15 +20,23 @@ export async function GET() {
     checks: {},
   };
 
-  // 1. Check Firebase
+  // 1. Check Firebase Admin SDK
   try {
-    const { firebaseApp, auth, firestore } = initializeFirebaseServer();
-    diagnostics.checks.firebase = {
-      status: 'ok',
-      app: !!firebaseApp,
-      auth: !!auth,
-      firestore: !!firestore,
-    };
+    const configured = isAdminConfigured();
+    if (configured) {
+      const db = await getAdminFirestoreAsync();
+      diagnostics.checks.firebase = {
+        status: db ? 'ok' : 'error',
+        adminConfigured: configured,
+        firestoreConnected: !!db,
+      };
+    } else {
+      diagnostics.checks.firebase = {
+        status: 'unconfigured',
+        adminConfigured: false,
+        message: 'Firebase Admin SDK not configured (no credentials)',
+      };
+    }
   } catch (err) {
     diagnostics.checks.firebase = {
       status: 'error',
@@ -35,7 +44,25 @@ export async function GET() {
     };
   }
 
-  // 2. Check Circuit Breaker
+  // 2. Check Storage Router
+  try {
+    const router = getStorageRouter();
+    const info = router.getProviderInfo();
+    const healthy = await router.healthCheck();
+    diagnostics.checks.storage = {
+      status: healthy ? 'ok' : 'degraded',
+      provider: info.name,
+      mode: info.mode,
+      dualWrite: info.dualWrite,
+    };
+  } catch (err) {
+    diagnostics.checks.storage = {
+      status: 'error',
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
+
+  // 3. Check Circuit Breaker
   try {
     const breaker = getCircuitBreaker();
     const status = breaker.getStatus();
@@ -52,7 +79,7 @@ export async function GET() {
     };
   }
 
-  // 3. Check Rate Limiter
+  // 4. Check Rate Limiter
   try {
     const limiter = getRateLimiter();
     const limitStatus = limiter.getStatus();
@@ -70,11 +97,14 @@ export async function GET() {
     };
   }
 
-  // 4. Check Environment
+  // 5. Check Environment
   diagnostics.checks.environment = {
     status: 'ok',
     nodeEnv: process.env.NODE_ENV,
     hasGoogleKey: !!process.env.GOOGLE_GENAI_API_KEY,
+    hasFirebaseCredentials: !!process.env.FIREBASE_SERVICE_ACCOUNT_JSON,
+    isCodespace: process.env.CODESPACES === 'true',
+    isTermux: !!process.env.TERMUX_VERSION,
   };
 
   // Summary

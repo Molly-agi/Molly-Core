@@ -68,15 +68,17 @@ export function useCollection<T = any>(
   const [error, setError] = useState<FirestoreError | Error | null>(null);
 
   useEffect(() => {
+    // When query is null/undefined, initial state (null, false, null) is already correct
+    // State reset happens in cleanup when query changes
     if (!memoizedTargetRefOrQuery) {
-      setData(null);
-      setIsLoading(false);
-      setError(null);
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
+    // Defer loading state update to avoid synchronous setState cascade
+    queueMicrotask(() => {
+      setIsLoading(true);
+      setError(null);
+    });
 
     // Directly use memoizedTargetRefOrQuery as it's assumed to be the final query
     const unsubscribe = onSnapshot(
@@ -114,7 +116,13 @@ export function useCollection<T = any>(
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      // Reset state on cleanup when query changes or becomes null
+      setData(null);
+      setIsLoading(false);
+      setError(null);
+    };
   }, [memoizedTargetRefOrQuery]); // Re-run if the target query/reference changes.
   if (memoizedTargetRefOrQuery && !memoizedTargetRefOrQuery.__memo) {
     throw new Error(

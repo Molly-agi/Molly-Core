@@ -1,0 +1,90 @@
+# GitLab Bug Bounty Program Scope
+# Source: HackerOne - https://hackerone.com/gitlab
+# Last Updated: May 2026
+
+## In Scope Assets
+
+### Primary Targets (Eligible for Bounty)
+*.gitlab.com
+gitlab.com
+*.gitlab.io
+about.gitlab.com
+customers.gitlab.com
+forum.gitlab.com
+docs.gitlab.com
+license.gitlab.com
+version.gitlab.com
+
+### Source Code (In Scope)
+github.com/gitlabhq/gitlabhq
+gitlab.com/gitlab-org/gitlab
+gitlab.com/gitlab-org/gitlab-runner
+gitlab.com/gitlab-org/gitaly
+gitlab.com/gitlab-org/gitlab-pages
+gitlab.com/gitlab-org/gitlab-shell
+gitlab.com/gitlab-org/omnibus-gitlab
+
+### API Endpoints
+api.gitlab.com
+gitlab.com/api/v4/*
+
+## Out of Scope
+
+### Domains
+status.gitlab.com
+*.staging.gitlab.com
+*.test.gitlab.com
+
+### Vulnerability Types Not Eligible
+Self-XSS
+Missing security headers without demonstrated impact
+CSRF on logout
+Clickjacking without demonstrated impact
+Content spoofing / text injection
+Rate limiting issues on non-authentication endpoints
+Missing cookie flags on non-session cookies
+Software version disclosure
+Stack traces without sensitive information
+SPF/DKIM/DMARC issues
+User enumeration on public profiles
+Host header injection without impact
+Vulnerabilities requiring physical access
+Social engineering attacks
+Denial of Service (DoS) attacks
+Open redirects without additional impact
+Vulnerabilities in third-party applications
+Automated scanning without verification
+
+## Bounty Ranges (USD)
+
+Critical: $10,000 - $20,000
+High: $3,000 - $7,500
+Medium: $1,000 - $3,000
+Low: $100 - $500
+Informational: No bounty
+
+## Program Notes
+
+Safe Harbor: Yes - GitLab provides safe harbor for good-faith security research
+Automated Scanning: Allowed with rate limiting (be respectful)
+Disclosure: 30 days after fix is released
+
+## High-Value Vulnerability Focus
+- Remote Code Execution (RCE)
+- SQL Injection
+- Authentication Bypass
+- Privilege Escalation
+- SSRF with internal network access
+- Stored XSS affecting other users
+- IDOR leading to data exposure
+- CI/CD Pipeline Injection
+- Access Control Bypass
+- Git Protocol Vulnerabilities
+
+## Technology Stack
+Backend: Ruby on Rails
+Frontend: Vue.js
+Database: PostgreSQL, Redis
+Search: Elasticsearch
+CI/CD: GitLab Runner (Go)
+Git: Gitaly (Go), gitlab-shell

@@ -1,3 +1,19 @@
+export interface VideoHistoryItem {
+  type: 'video';
+  prompt: string;
+  videoUri: string;
+  model?: string;
+  durationSec?: number;
+}
+
+export interface MusicHistoryItem {
+  type: 'music';
+  prompt: string;
+  audioUri: string;
+  model?: string;
+  durationSec?: number;
+}
+
 /**
  * @fileOverview Shared types and type guards for the Terminal subsystem.
  *
@@ -30,7 +46,29 @@ export type HistoryItem =
   | { immuneReport: string; isHealthy: boolean }
   | { syntheticReport: string; implementation: string; authority: string }
   | { visionReport: VisionReport }
-  | BridgeMessage;
+  | BridgeMessage
+  | MusicHistoryItem
+  | VideoHistoryItem;
+
+export function isVideoHistoryItem(item: HistoryItem): item is VideoHistoryItem {
+  return (
+    typeof item === 'object' &&
+    item !== null &&
+    'type' in item &&
+    item.type === 'video' &&
+    'videoUri' in item
+  );
+}
+
+export function isMusicHistoryItem(item: HistoryItem): item is MusicHistoryItem {
+  return (
+    typeof item === 'object' &&
+    item !== null &&
+    'type' in item &&
+    item.type === 'music' &&
+    'audioUri' in item
+  );
+}
 
 export type AnchorRecallDetail = {
   title?: string;
