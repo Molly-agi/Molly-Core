@@ -111,10 +111,12 @@ export function CommandBar({
   onClearHistory,
   onFileUpload,
   uploadedFile,
-  onClearUpload,  bridgeMode = false,
-  onBridgeModeToggle,
-  onBridgeSend,
-  bridgeConnected = false,}: CommandBarProps) {
+  onClearUpload,
+  bridgeMode: _bridgeMode = false,
+  onBridgeModeToggle: _onBridgeModeToggle,
+  onBridgeSend: _onBridgeSend,
+  bridgeConnected: _bridgeConnected = false,
+}: CommandBarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isProcessingFile, setIsProcessingFile] = useState(false);
 
