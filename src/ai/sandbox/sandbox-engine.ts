@@ -201,7 +201,7 @@ function validateCode(code: string, language: SandboxLanguage): string[] {
 export async function sandboxWriteFile(
   relativePath: string,
   content: string
-): Promise<{ success: boolean; path: string; error?: string }> {
+): Promise<{ success: boolean; path: string; size?: number; error?: string }> {
   try {
     const safePath = resolveSafePath(relativePath);
 
@@ -220,7 +220,7 @@ export async function sandboxWriteFile(
     }
 
     await writeFile(safePath, content, 'utf-8');
-    return { success: true, path: relativePath };
+    return { success: true, path: relativePath, size: content.length };
   } catch (error) {
     return {
       success: false,
