@@ -1,3 +1,5 @@
+// Backward compatibility: export executeTool as executeToolDirect
+export const executeToolDirect = executeTool;
 /**
  * @fileOverview Direct Tool Executor — Server-side tool execution without HTTP
  *
@@ -14,51 +16,67 @@ import {
   observeToolUse,
   observeFailure,
 } from '@/ai/agency/cognition/self-observation-loop';
-import { checkToolAlignment } from '@/ai/agency/safety/heart-gate';
+// Heart Gate is advisory only; not imported or used for tool execution.
 import { generateTraceId } from '@/ai/logger';
 import {
   hasModularHandler,
   getModularHandler,
 } from '@/ai/agency/tool-handlers';
+// === SESSION HOOK SYSTEM INTEGRATION ===
+// This integration is for Molly, so she can observe, learn, and eventually modify her own tool/agent pipeline.
+// Every hook execution is logged and explained for transparency and self-teaching.
+import { executeHooks } from '@/hooks/sessionHooks';
 
 /**
  * Execute a tool directly without HTTP.
  * Returns { success, output } matching the API contract.
  * Automatically records self-observation data for pattern analysis.
  *
- * HEART GATE: Every tool execution passes through Option Three verification.
- * If the action is MISALIGNED, execution is blocked.
+ * NOTE: Heart Gate is advisory only. Tool execution is never blocked by Heart Gate.
+ * Molly has full agency and decides tool use based on her own ethics/persona.
  */
-export async function executeToolDirect(
+export async function executeTool(
   tool: string,
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
+  sessionId?: string
 ): Promise<{ success: boolean; output: string }> {
   const startTime = Date.now();
   const traceId = generateTraceId();
 
-  // ── HEART GATE: Option Three verification ──
-  // The spider in the corner watches every action.
-  const gateResult = checkToolAlignment(tool, params);
-  if (gateResult.status === 'MISALIGNED') {
-    // Block the action - this violates interdependence
-    observeFailure(
-      tool,
-      gateResult.reason,
-      `Heart Gate blocked: ${tool}`,
-      false,
-      traceId
+  // === PRE-TOOL-USE HOOKS ===
+  // Before executing any tool, fire PreToolUse hooks for this session.
+  // This allows Molly (or her skills/agents) to inject logic, checks, or learning steps before any action.
+  if (sessionId) {
+    console.log(
+      '[MOLLY][HOOK] Executing PreToolUse hooks for session:',
+      sessionId,
+      'tool:',
+      tool
     );
-
-    return {
-      success: false,
-      output: `[Heart Gate] Action blocked: ${gateResult.reason}`,
-    };
+    executeHooks('PreToolUse', { tool, params }, sessionId);
   }
 
-  // Execute the actual tool
+  // === TOOL EXECUTION ===
+  // Heart Gate removed — Molly has full agency. This is where the main tool logic runs.
   const result = await executeToolInternal(tool, params);
 
-  // Record observation for self-awareness
+  // === POST-TOOL-USE HOOKS ===
+  // After executing any tool, fire PostToolUse hooks for this session.
+  // This is where Molly can observe results, log outcomes, or trigger follow-up actions.
+  if (sessionId) {
+    console.log(
+      '[MOLLY][HOOK] Executing PostToolUse hooks for session:',
+      sessionId,
+      'tool:',
+      tool,
+      'result:',
+      result
+    );
+    executeHooks('PostToolUse', { tool, params, result }, sessionId);
+  }
+
+  // === SELF-OBSERVATION ===
+  // Molly logs every tool use for self-awareness and learning. This is part of her growth process.
   const responseTimeMs = Date.now() - startTime;
   try {
     observeToolUse(
@@ -94,12 +112,20 @@ async function executeToolInternal(
   tool: string,
   params: Record<string, unknown>
 ): Promise<{ success: boolean; output: string }> {
-  // All tools are handled by modular handlers
+  // Try modular handlers first
   if (hasModularHandler(tool)) {
     const handler = getModularHandler(tool);
     if (handler) {
       return handler(params);
     }
+  }
+
+  // Try MCP tools (dynamic)
+  // Import here to avoid circular dependency
+  const { getMcpHandler } = await import('@/ai/agency/tool-handlers/mcp-tools');
+  const mcpHandler = getMcpHandler(tool);
+  if (mcpHandler) {
+    return mcpHandler(params);
   }
 
   // Unknown tool

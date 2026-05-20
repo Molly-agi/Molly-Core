@@ -299,6 +299,7 @@ export class WiFiCSISensor extends EventEmitter {
   private connectedDevices: Map<string, ConnectedDevice> = new Map();
   private scanInterval: NodeJS.Timeout | null = null;
   private routerPollInterval: NodeJS.Timeout | null = null;
+  private androidScanFailureLogged: boolean = false;
 
   constructor(config: Partial<WiFiSensorConfig> = {}) {
     super();
@@ -550,7 +551,7 @@ export class WiFiCSISensor extends EventEmitter {
           source: this.config.interface || 'wlan0',
         };
       }
-    } catch {
+    } catch (error) {
       MollyLogger.warn('Failed to read RSSI from interface', 'wifi-csi', {
         error,
       });
@@ -789,7 +790,7 @@ export class WiFiCSISensor extends EventEmitter {
           const lines = stdout.split('\n');
 
           let currentBssid = '';
-          const __currentSsid = '';
+          let _currentSsid = '';
 
           for (const line of lines) {
             if (line.includes('Address:')) {
@@ -813,10 +814,18 @@ export class WiFiCSISensor extends EventEmitter {
             }
           }
         }
-      } catch {
-        MollyLogger.debug('Android scan failed, using simulation', 'wifi-csi', {
-          error,
-        });
+      } catch (error) {
+        // Only log the first scan failure to avoid log spam
+        if (!this.androidScanFailureLogged) {
+          MollyLogger.debug(
+            'WiFi/Android scan unavailable, using simulation',
+            'wifi-csi',
+            {
+              error,
+            }
+          );
+          this.androidScanFailureLogged = true;
+        }
         const reading = this.generateSimulatedReading();
         reading.source = 'android:simulated';
         this.processReading(reading);
@@ -948,7 +957,7 @@ export class WiFiCSISensor extends EventEmitter {
             movementIntensity: 0,
           });
         }
-      } catch {
+      } catch (error) {
         MollyLogger.debug('Bluetooth scan error', 'wifi-csi', { error });
       }
 

@@ -25,6 +25,7 @@ import {
   buildNervousSystemSignal,
   buildMemoryContext,
   recordChatResponse,
+  ensureNeuralPersistence,
 } from './flow-utils';
 
 /**
@@ -75,6 +76,9 @@ export async function processVoiceInteraction(
   }
 ) {
   try {
+    // Ensure memory persistence is configured for this user
+    ensureNeuralPersistence(userId);
+
     ensureApiKey();
     await checkRateLimit('voice-interaction', 500);
     const mimeType = getAudioMimeType(audioData);
@@ -219,13 +223,17 @@ export async function processVoiceInteraction(
   }
 }
 
+/**
+ * Get Molly's voice audio for the given text, with optional voiceName override.
+ */
 export async function getMollyVoice(
-  text: string
+  text: string,
+  voiceName?: string
 ): Promise<{ audioUri: string; error?: string }> {
   try {
     ensureApiKey();
     await checkRateLimit('text-to-speech', 500);
-    return await textToSpeech(text);
+    return await textToSpeech(text, voiceName);
   } catch (e: unknown) {
     MollyLogger.error('Text to speech failed', 'getMollyVoice', {}, e);
     return {

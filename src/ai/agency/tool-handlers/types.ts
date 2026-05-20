@@ -5,6 +5,8 @@
 export interface ToolResult {
   success: boolean;
   output: string;
+  /** Optional structured data to include with the result */
+  data?: Record<string, unknown>;
 }
 
 export type ToolHandler = (

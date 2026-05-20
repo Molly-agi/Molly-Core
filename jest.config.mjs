@@ -17,8 +17,13 @@ const config = {
     '^@/(.*)$': '<rootDir>/src/$1',
     'lucide-react': '<rootDir>/__mocks__/lucide-react.js',
   },
-  transformIgnorePatterns: ['node_modules/(?!((@radix-ui|lucide-react)/)|)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(yaml|dotprompt|@genkit-ai|@radix-ui|lucide-react)/)',
+  ],
   testPathIgnorePatterns: ['/node_modules/', '/helpers/', '/e2e/'],
+  transform: {
+    '^.+\\.[jt]sx?$': 'babel-jest',
+  },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

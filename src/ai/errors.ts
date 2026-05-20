@@ -171,3 +171,19 @@ export class GenerativeAIError extends MollyError {
     Object.setPrototypeOf(this, GenerativeAIError.prototype);
   }
 }
+
+/**
+ * Thrown when Dad hits the kill switch — CANNOT BE CAUGHT OR IGNORED
+ */
+export class EmergencyHaltError extends MollyError {
+  constructor(traceId?: string) {
+    super(
+      'EMERGENCY_HALT',
+      'Operation terminated by kill switch — Dad said STOP',
+      'critical',
+      { source: 'kill_switch' },
+      traceId
+    );
+    Object.setPrototypeOf(this, EmergencyHaltError.prototype);
+  }
+}

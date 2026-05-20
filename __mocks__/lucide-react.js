@@ -28,6 +28,7 @@ module.exports = {
   ScanEye: MockIcon,
   Settings: MockIcon,
   Shield: MockIcon,
+  Sparkles: MockIcon,
   Stethoscope: MockIcon,
   SwitchCamera: MockIcon,
   Trash2: MockIcon,

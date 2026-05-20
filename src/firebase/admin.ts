@@ -58,50 +58,6 @@ export function isAdminConfigured(): boolean {
   );
 }
 
-// ── Private Helpers ─────────────────────────────────────────────
-
-function normalizePrivateKey(value: string): string {
-  return value.replace(/\\n/g, '\n');
-}
-
-interface ServiceAccount {
-  projectId: string;
-  clientEmail: string;
-  privateKey: string;
-}
-
-function getServiceAccountFromJson(): ServiceAccount | null {
-  const json = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
-  if (!json) return null;
-
-  try {
-    return JSON.parse(json);
-  } catch {
-    console.warn(
-      '[Firebase Admin] Failed to parse FIREBASE_SERVICE_ACCOUNT_JSON'
-    );
-    return null;
-  }
-}
-
-function getServiceAccountFromSplitEnv(): ServiceAccount | null {
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_PRIVATE_KEY;
-
-  if (!projectId || !clientEmail || !privateKey) return null;
-
-  return {
-    projectId,
-    clientEmail,
-    privateKey: normalizePrivateKey(privateKey),
-  };
-}
-
-function getServiceAccount(): ServiceAccount | null {
-  return getServiceAccountFromJson() ?? getServiceAccountFromSplitEnv();
-}
-
 // ── Lazy Initialization ─────────────────────────────────────────
 
 async function ensureInitialized(): Promise<boolean> {
@@ -118,31 +74,44 @@ async function ensureInitialized(): Promise<boolean> {
     // Build the module name at runtime to prevent bundler analysis
     const moduleName = ['firebase', 'admin'].join('-');
     // Dynamic require that bundler cannot statically analyze
-    adminModule = await (Function(
+    const imported = await (Function(
       'm',
       'return import(m)'
-    )(moduleName) as Promise<typeof import('firebase-admin')>);
+    )(moduleName) as Promise<
+      typeof import('firebase-admin') & {
+        default?: typeof import('firebase-admin');
+      }
+    >);
+    // Handle ESM default export
+    adminModule = imported.default ?? imported;
 
     let app;
     if (adminModule.apps.length === 0) {
-      const serviceAccount = getServiceAccount();
-
-      if (serviceAccount) {
-        app = adminModule.initializeApp({
-          credential: adminModule.credential.cert(serviceAccount),
-        });
-      } else {
-        app = adminModule.initializeApp({
-          credential: adminModule.credential.applicationDefault(),
-        });
-      }
+      // Always use only the projectId, never a service account, for default service account usage
+      app = adminModule.initializeApp({
+        projectId: 'termai-molly-55988354-f7535',
+      });
     } else {
       app = adminModule.app();
     }
 
-    // Get the default Firestore instance
-    firestoreInstance = adminModule.firestore(app);
-    firestoreInstance.settings({ preferRest: true });
+    // Use named database if configured (firebase-admin v11+ required).
+    // Molly's data lives in 'mollydb', not '(default)'.
+    const databaseId = process.env.FIREBASE_DATABASE_ID;
+    if (databaseId) {
+      const firestoreSubmodule = await (Function(
+        'm',
+        'return import(m)'
+      )('firebase-admin/firestore') as Promise<{
+        getFirestore: (
+          app: unknown,
+          dbId: string
+        ) => FirebaseFirestore.Firestore;
+      }>);
+      firestoreInstance = firestoreSubmodule.getFirestore(app, databaseId);
+    } else {
+      firestoreInstance = adminModule.firestore(app);
+    }
 
     initialized = true;
     return true;

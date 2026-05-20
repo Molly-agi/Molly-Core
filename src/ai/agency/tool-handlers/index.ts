@@ -1,3 +1,4 @@
+// export { bugBountyToolHandlers } from './bug-bounty-tools';
 /**
  * @fileOverview Tool Handler Registry
  *
@@ -31,6 +32,21 @@ export { memoryToolHandlers } from './memory-tools';
 export { safetyToolHandlers } from './safety-tools';
 export { coreToolHandlers } from './core-tools';
 export { sensingToolHandlers } from './sensing-tools';
+export { geminiToolHandlers } from './gemini-tools';
+export { bugBountyToolHandlers } from './bug-bounty-tools';
+export { searchToolHandlers } from './search-tools';
+export { httpToolHandlers } from './http-tools';
+export { musicToolHandlers } from './music-tools';
+export { researchToolHandlers } from './research-tools';
+export { visualArtsToolHandlers } from './visual-arts-tools';
+export {
+  mcpToolHandlers,
+  getMcpHandlers,
+  isMcpTool,
+  getMcpHandler,
+  listAvailableMcpTools,
+  getMcpToolsCount,
+} from './mcp-tools';
 
 // Import all handlers
 import { systemToolHandlers } from './system-tools';
@@ -52,13 +68,23 @@ import { memoryToolHandlers } from './memory-tools';
 import { safetyToolHandlers } from './safety-tools';
 import { coreToolHandlers } from './core-tools';
 import { sensingToolHandlers } from './sensing-tools';
+import { geminiToolHandlers } from './gemini-tools';
+import { bugBountyToolHandlers } from './bug-bounty-tools';
+import { searchToolHandlers } from './search-tools';
+import { httpToolHandlers } from './http-tools';
+import { musicToolHandlers } from './music-tools';
+import { researchToolHandlers } from './research-tools';
+import { operateComputer } from '../computer-use/computer-use-handler';
 import type { ToolHandler } from './types';
 
 /**
  * Combined handler map for all modular tools.
  * Tools in this map are handled by the extracted handlers.
+ *
+ * MOLLY_DISABLE_TOOLS=name1,name2 strips matching tools at module load.
+ * Modeled on Claude Code's DISABLE_*_COMMAND env vars.
  */
-export const modularToolHandlers: Record<string, ToolHandler> = {
+const allHandlers: Record<string, ToolHandler> = {
   ...systemToolHandlers,
   ...diagnosticToolHandlers,
   ...webToolHandlers,
@@ -78,7 +104,43 @@ export const modularToolHandlers: Record<string, ToolHandler> = {
   ...safetyToolHandlers,
   ...coreToolHandlers,
   ...sensingToolHandlers,
+  ...geminiToolHandlers,
+  ...bugBountyToolHandlers,
+  ...searchToolHandlers,
+  ...httpToolHandlers,
+  ...musicToolHandlers,
+  ...researchToolHandlers,
+  operateComputer,
 };
+
+function applyDisabledToolFilter(
+  handlers: Record<string, ToolHandler>
+): Record<string, ToolHandler> {
+  const raw = process.env.MOLLY_DISABLE_TOOLS;
+  if (!raw) return handlers;
+  const disabled = new Set(
+    raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  );
+  if (disabled.size === 0) return handlers;
+  const filtered: Record<string, ToolHandler> = {};
+  for (const [name, handler] of Object.entries(handlers)) {
+    if (!disabled.has(name)) filtered[name] = handler;
+  }
+  return filtered;
+}
+
+const modularToolHandlers: Record<string, ToolHandler> =
+  applyDisabledToolFilter(allHandlers);
+
+/** Names of tools removed from the registry via MOLLY_DISABLE_TOOLS. */
+export function getDisabledTools(): string[] {
+  return Object.keys(allHandlers)
+    .filter((name) => !(name in modularToolHandlers))
+    .sort();
+}
 
 /**
  * Check if a tool has a modular handler

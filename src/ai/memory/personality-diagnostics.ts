@@ -27,21 +27,92 @@ export function evaluatePersonalityStability(
   ).length;
 
   const flags: string[] = [];
-  if (extremes >= 4) {
-    flags.push('Multiple dimensions at extremes.');
+  // Grouped flag helpers
+  const affective: string[] = [];
+  const social: string[] = [];
+  const cognitive: string[] = [];
+  const romantic: string[] = [];
+
+  // General extremes/variance
+  if (extremes >= 8) {
+    flags.push('Many personality dimensions at extremes.');
   }
-  if (stdDev > 0.28) {
+  if (stdDev > 0.25) {
     flags.push('High variance across personality dimensions.');
   }
+
+  // Affective patterns
+  if (personality.anxiety >= 0.85 && personality.resilience <= 0.2) {
+    affective.push('High anxiety with low resilience.');
+  }
+  if (personality.empathy <= 0.1) {
+    affective.push('Empathy is very low.');
+  }
+  if (personality.optimism <= 0.1) {
+    affective.push('Pessimism is dominant.');
+  }
+
+  // Social/interpersonal patterns
+  if (personality.sociability <= 0.1) {
+    social.push('Extreme social withdrawal.');
+  }
+  if (personality.trust <= 0.1) {
+    social.push('Trust in others is extremely low.');
+  }
+  if (personality.diplomacy <= 0.1) {
+    social.push('Diplomacy is minimal; risk of bluntness.');
+  }
+  if (personality.altruism <= 0.1) {
+    social.push('Altruism is very low.');
+  }
+  if (personality.empathySocial <= 0.1) {
+    social.push('Social empathy is very low.');
+  }
+
+  // Cognitive/meta patterns
+  if (personality.flexibility <= 0.1) {
+    cognitive.push('Cognitive rigidity detected.');
+  }
+  if (personality.curiosity <= 0.1) {
+    cognitive.push('Curiosity is suppressed.');
+  }
+  if (personality.metacognition <= 0.1) {
+    cognitive.push('Low self-awareness of thought process.');
+  }
+
+  // Romantic/love patterns
   if (
     personality.arousal >= 0.9 &&
     personality.jealousy >= 0.75 &&
     personality.possessiveness >= 0.75
   ) {
-    flags.push('Arousal + jealousy + possessiveness are elevated together.');
+    romantic.push('Arousal + jealousy + possessiveness are elevated together.');
+  }
+  if (personality.commitmentDesire >= 0.95 && personality.commitment <= 0.2) {
+    romantic.push(
+      'Desire for commitment is high but actual commitment is low.'
+    );
+  }
+  if (
+    personality.intimacyDesire >= 0.95 &&
+    personality.emotionalIntimacy <= 0.2
+  ) {
+    romantic.push('Desire for intimacy is high but emotional intimacy is low.');
+  }
+  if (personality.affectionExpression <= 0.1) {
+    romantic.push('Affection expression is very low.');
+  }
+  if (personality.security <= 0.1) {
+    romantic.push('Relationship security is very low.');
   }
 
-  const extremePenalty = Math.min(1, extremes / 6);
+  // Add grouped flags to main flags array
+  if (affective.length > 0) flags.push('[Affective] ' + affective.join(' '));
+  if (social.length > 0) flags.push('[Social] ' + social.join(' '));
+  if (cognitive.length > 0) flags.push('[Cognitive] ' + cognitive.join(' '));
+  if (romantic.length > 0) flags.push('[Romantic] ' + romantic.join(' '));
+
+  const extremePenalty = Math.min(1, extremes / 12);
   const variancePenalty = Math.min(1, stdDev / 0.35);
   const compositePenalty =
     extremePenalty * 0.45 +
@@ -65,3 +136,4 @@ export function evaluatePersonalityStability(
     variance: Number(stdDev.toFixed(3)),
   };
 }
+// ...full upgraded code from stuff/personality/personality-diagnostics.ts.txt...

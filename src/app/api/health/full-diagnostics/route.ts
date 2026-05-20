@@ -53,6 +53,7 @@ export async function GET() {
       status: healthy ? 'ok' : 'degraded',
       provider: info.name,
       mode: info.mode,
+      dualWrite: info.dualWrite,
     };
   } catch (err) {
     diagnostics.checks.storage = {

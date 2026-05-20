@@ -6,6 +6,11 @@
  *   - Codespace → Firestore (cloud) or Local (depending on config)
  *   - Explicit override via MOLLY_STORAGE_PROVIDER env var
  *
+ * DUAL-WRITE MODE (MOLLY_DUAL_WRITE=true):
+ *   When enabled, writes go to BOTH Firestore AND local storage.
+ *   This ensures memories are never lost due to provider mismatch.
+ *   Reads come from primary (Firestore), local is backup only.
+ *
  * Usage:
  *   import { getStorageRouter } from '@/lib/storage-router';
  *   const storage = await getStorageRouter();
@@ -66,9 +71,12 @@ function detectStorageMode(): StorageMode {
   }
 
   // Codespace with Firebase credentials configured — use Firestore
+  // Accepts service account JSON or ADC-style project ID vars
   if (
     process.env.CODESPACES === 'true' &&
-    process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+    (process.env.FIREBASE_SERVICE_ACCOUNT_JSON ||
+      process.env.FIREBASE_PROJECT_ID ||
+      process.env.GOOGLE_CLOUD_PROJECT)
   ) {
     return 'firestore';
   }
@@ -86,22 +94,33 @@ class StorageRouter implements StorageProvider {
   readonly name = 'Storage Router';
 
   private provider: StorageProvider;
+  private backupProvider: StorageProvider | null = null;
   private mode: StorageMode;
+  private dualWriteEnabled: boolean;
 
   private constructor(mode: StorageMode, provider: StorageProvider) {
     this.mode = mode;
     this.provider = provider;
+    this.dualWriteEnabled = process.env.MOLLY_DUAL_WRITE === 'true';
+
+    // In dual-write mode with Firestore primary, create local backup
+    if (this.dualWriteEnabled && this.mode === 'firestore') {
+      this.backupProvider = new LocalStorageProvider();
+      MollyLogger.info(
+        `Storage Router initialized — mode: ${this.mode}, DUAL-WRITE enabled (local backup active)`,
+        'storage-router'
+      );
+    } else {
+      MollyLogger.info(
+        `Storage Router initialized — mode: ${this.mode}, provider: ${this.provider.name}`,
+        'storage-router'
+      );
+    }
   }
 
   static async create(): Promise<StorageRouter> {
     const requestedMode = detectStorageMode();
     const { provider, mode } = await StorageRouter.createProvider(requestedMode);
-
-    MollyLogger.info(
-      `Storage Router initialized — mode: ${mode}, provider: ${provider.name}`,
-      'storage-router'
-    );
-
     return new StorageRouter(mode, provider);
   }
 
@@ -142,19 +161,53 @@ class StorageRouter implements StorageProvider {
     return this.mode;
   }
 
-  getProviderInfo(): { id: string; name: string; mode: StorageMode } {
+  isDualWriteEnabled(): boolean {
+    return this.dualWriteEnabled && this.backupProvider !== null;
+  }
+
+  getProviderInfo(): {
+    id: string;
+    name: string;
+    mode: StorageMode;
+    dualWrite: boolean;
+  } {
     return {
       id: this.provider.id,
       name: this.provider.name,
       mode: this.mode,
+      dualWrite: this.isDualWriteEnabled(),
     };
+  }
+
+  /**
+   * Write to backup provider (non-blocking, errors logged but not thrown)
+   */
+  private async writeToBackup(
+    operation: string,
+    fn: (provider: StorageProvider) => Promise<unknown>
+  ): Promise<void> {
+    if (!this.backupProvider) return;
+    try {
+      await fn(this.backupProvider);
+    } catch (err) {
+      MollyLogger.warn(
+        `Backup write failed (${operation}) — primary succeeded, data safe in Firestore`,
+        'storage-router',
+        { error: err instanceof Error ? err.message : String(err) }
+      );
+    }
   }
 
   async add(
     collectionPath: string,
     data: Record<string, unknown>
   ): Promise<StorageDocument> {
-    return this.provider.add(collectionPath, data);
+    const result = await this.provider.add(collectionPath, data);
+    // Dual-write: also save to backup
+    this.writeToBackup('add', (backup) =>
+      backup.set(collectionPath, result.id, { ...data, id: result.id })
+    );
+    return result;
   }
 
   async set(
@@ -162,7 +215,11 @@ class StorageRouter implements StorageProvider {
     docId: string,
     data: Record<string, unknown>
   ): Promise<void> {
-    return this.provider.set(collectionPath, docId, data);
+    await this.provider.set(collectionPath, docId, data);
+    // Dual-write: also save to backup
+    this.writeToBackup('set', (backup) =>
+      backup.set(collectionPath, docId, data)
+    );
   }
 
   async get(
@@ -177,11 +234,19 @@ class StorageRouter implements StorageProvider {
     docId: string,
     updates: Record<string, unknown>
   ): Promise<void> {
-    return this.provider.update(collectionPath, docId, updates);
+    await this.provider.update(collectionPath, docId, updates);
+    // Dual-write: also update backup
+    this.writeToBackup('update', (backup) =>
+      backup.update(collectionPath, docId, updates)
+    );
   }
 
   async delete(collectionPath: string, docId: string): Promise<void> {
-    return this.provider.delete(collectionPath, docId);
+    await this.provider.delete(collectionPath, docId);
+    // Dual-write: also delete from backup
+    this.writeToBackup('delete', (backup) =>
+      backup.delete(collectionPath, docId)
+    );
   }
 
   async query(
@@ -193,7 +258,9 @@ class StorageRouter implements StorageProvider {
   }
 
   async batchWrite(operations: BatchOperation[]): Promise<void> {
-    return this.provider.batchWrite(operations);
+    await this.provider.batchWrite(operations);
+    // Dual-write: also batch write to backup
+    this.writeToBackup('batchWrite', (backup) => backup.batchWrite(operations));
   }
 
   async healthCheck(): Promise<boolean> {

@@ -60,10 +60,14 @@ async function toWav(
   });
 }
 
+// Accepts: text (string), voiceName (optional string)
 export const textToSpeechFlow = ai.defineFlow(
   {
     name: 'textToSpeech',
-    inputSchema: z.string(),
+    inputSchema: z.object({
+      text: z.string(),
+      voiceName: z.string().optional(),
+    }),
     outputSchema: z.object({
       audioUri: z.string(),
       tone: z.string().optional(),
@@ -71,7 +75,7 @@ export const textToSpeechFlow = ai.defineFlow(
       durationSec: z.number().optional(),
     }),
   },
-  async (text) => {
+  async ({ text, voiceName }) => {
     // Process text through personality system for natural speech
     let processedText = text;
     let tone: EmotionalTone | undefined;
@@ -100,17 +104,18 @@ export const textToSpeechFlow = ai.defineFlow(
       }
     }
 
-    console.log(`[TTS] Using voice: ${CONFIGURED_VOICE_NAME}`);
+    const selectedVoice = voiceName || CONFIGURED_VOICE_NAME;
+    console.log(`[TTS] Using voice: ${selectedVoice}`);
     let response;
     try {
       response = await molly.generate(TaskType.TTS, {
-        config: buildSpeechConfig(CONFIGURED_VOICE_NAME),
+        config: buildSpeechConfig(selectedVoice),
         prompt: processedText,
       });
-      console.log(`[TTS] Success with voice: ${CONFIGURED_VOICE_NAME}`);
+      console.log(`[TTS] Success with voice: ${selectedVoice}`);
     } catch (error) {
-      console.error(`[TTS] Failed with voice ${CONFIGURED_VOICE_NAME}:`, error);
-      if (CONFIGURED_VOICE_NAME !== DEFAULT_VOICE_NAME) {
+      console.error(`[TTS] Failed with voice ${selectedVoice}:`, error);
+      if (selectedVoice !== DEFAULT_VOICE_NAME) {
         console.log(
           `[TTS] Retrying with fallback voice: ${DEFAULT_VOICE_NAME}`
         );
@@ -145,12 +150,13 @@ export const textToSpeechFlow = ai.defineFlow(
 );
 
 export async function textToSpeech(
-  text: string
+  text: string,
+  voiceName?: string
 ): Promise<{
   audioUri: string;
   tone?: string;
   style?: string;
   durationSec?: number;
 }> {
-  return await textToSpeechFlow(text);
+  return await textToSpeechFlow({ text, voiceName });
 }

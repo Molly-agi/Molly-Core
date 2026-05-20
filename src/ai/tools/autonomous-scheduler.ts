@@ -14,8 +14,11 @@
  * - PolyglotRuntime: Code-type jobs execute in the appropriate language
  * - MollyShell: Shell-type jobs run through her terminal
  *
- * Cron support uses a lightweight parser — no external dependencies.
- * Interval support uses simple millisecond timers.
+ * MERGED SYSTEM (April 2026):
+ * - Robust cron parsing from Lazarus (366-day lookahead, DST-aware)
+ * - Molly's original interval/once schedule types preserved
+ * - Missed task detection (from Lazarus)
+ * - Auto-expiry for recurring jobs (from Lazarus)
  *
  * Methodology (from Dad):
  *   "Slow. Methodical. Precise."
@@ -23,6 +26,13 @@
 
 import { MollyLogger } from '@/ai/logger';
 import type { PersistedSchedulerJob } from '@/ai/persistence/state-persistence';
+import {
+  nextCronRunMs,
+  cronToHuman,
+  isMissedTask,
+  isRecurringTaskExpired,
+  DEFAULT_RECURRING_MAX_AGE_MS,
+} from '@/ai/scheduling';
 
 // ============================================================================
 // TYPES
@@ -73,77 +83,6 @@ export interface JobResult {
   error?: string;
   durationMs: number;
   executedAt: string;
-}
-
-// ============================================================================
-// CRON PARSER — Lightweight, no dependencies
-// ============================================================================
-
-/**
- * Parse a cron expression and determine if the current time matches.
- * Supports: minute hour day-of-month month day-of-week
- * Supports: * (any), star/N (every N), N (exact), N-M (range), N,M (list)
- */
-function cronMatches(expression: string, date: Date): boolean {
-  const parts = expression.trim().split(/\s+/);
-  if (parts.length !== 5) return false;
-
-  const fields = [
-    { value: date.getMinutes(), max: 59 }, // minute
-    { value: date.getHours(), max: 23 }, // hour
-    { value: date.getDate(), max: 31 }, // day of month
-    { value: date.getMonth() + 1, max: 12 }, // month (1-12)
-    { value: date.getDay(), max: 6 }, // day of week (0=Sun)
-  ];
-
-  for (let i = 0; i < 5; i++) {
-    if (!fieldMatches(parts[i], fields[i].value, fields[i].max)) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function fieldMatches(field: string, value: number, _max: number): boolean {
-  // Wildcard
-  if (field === '*') return true;
-
-  // Step: */N
-  if (field.startsWith('*/')) {
-    const step = parseInt(field.slice(2));
-    return !isNaN(step) && step > 0 && value % step === 0;
-  }
-
-  // List: N,M,P
-  if (field.includes(',')) {
-    return field.split(',').some((f) => fieldMatches(f.trim(), value, _max));
-  }
-
-  // Range: N-M
-  if (field.includes('-')) {
-    const [lo, hi] = field.split('-').map(Number);
-    return !isNaN(lo) && !isNaN(hi) && value >= lo && value <= hi;
-  }
-
-  // Exact
-  return parseInt(field) === value;
-}
-
-/**
- * Compute the next time a cron expression will match (within the next 24h).
- * Returns epoch ms or null if not found.
- */
-function nextCronRun(expression: string): number | null {
-  const now = new Date();
-  // Check every minute for the next 24 hours
-  for (let i = 1; i <= 1440; i++) {
-    const candidate = new Date(now.getTime() + i * 60_000);
-    candidate.setSeconds(0, 0);
-    if (cronMatches(expression, candidate)) {
-      return candidate.getTime();
-    }
-  }
-  return null;
 }
 
 // ============================================================================
@@ -472,7 +411,7 @@ export class AutonomousScheduler {
   }
 
   // ==========================================================================
-  // SCHEDULE PARSING
+  // SCHEDULE PARSING — Using robust merged cron parser
   // ==========================================================================
 
   private computeNextRun(schedule: string): number | null {
@@ -480,7 +419,8 @@ export class AutonomousScheduler {
 
     if (schedule.startsWith('cron:')) {
       const expr = schedule.slice(5).trim();
-      return nextCronRun(expr);
+      // Use robust 366-day lookahead parser (merged from Lazarus)
+      return nextCronRunMs(expr, now);
     }
 
     if (schedule.startsWith('interval:')) {
@@ -496,6 +436,90 @@ export class AutonomousScheduler {
     }
 
     return null;
+  }
+
+  /**
+   * Get a human-readable description of a job's schedule.
+   * Uses the merged cronToHuman utility.
+   */
+  getScheduleDescription(job: SchedulerJob): string {
+    if (job.schedule.startsWith('cron:')) {
+      return cronToHuman(job.schedule.slice(5).trim());
+    }
+    if (job.schedule.startsWith('interval:')) {
+      const ms = parseInt(job.schedule.slice(9).trim());
+      const seconds = Math.floor(ms / 1000);
+      if (seconds < 60) return `Every ${seconds} seconds`;
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60)
+        return `Every ${minutes} minute${minutes > 1 ? 's' : ''}`;
+      const hours = Math.floor(minutes / 60);
+      return `Every ${hours} hour${hours > 1 ? 's' : ''}`;
+    }
+    if (job.schedule.startsWith('once:')) {
+      const dateStr = job.schedule.slice(5).trim();
+      return `Once at ${new Date(dateStr).toLocaleString()}`;
+    }
+    return job.schedule;
+  }
+
+  /**
+   * Check for missed tasks that should have run while Molly was offline.
+   * Returns jobs that were scheduled to run but didn't.
+   */
+  getMissedJobs(): SchedulerJob[] {
+    const now = Date.now();
+    return Array.from(this.jobs.values()).filter((job) => {
+      if (!job.enabled) return false;
+      if (!job.schedule.startsWith('cron:')) return false;
+
+      const expr = job.schedule.slice(5).trim();
+      const createdAtMs = new Date(job.createdAt).getTime();
+
+      // If we've never run and the first scheduled time has passed
+      if (!job.lastRun) {
+        return isMissedTask(expr, createdAtMs, now);
+      }
+
+      // If the next scheduled run after last execution has passed
+      const lastRunMs = new Date(job.lastRun).getTime();
+      const nextRun = nextCronRunMs(expr, lastRunMs);
+      return nextRun !== null && nextRun < now;
+    });
+  }
+
+  /**
+   * Check for recurring jobs that have exceeded their max age.
+   * Returns jobs that should be removed due to age expiry.
+   */
+  getExpiredJobs(
+    maxAgeMs: number = DEFAULT_RECURRING_MAX_AGE_MS
+  ): SchedulerJob[] {
+    const now = Date.now();
+    return Array.from(this.jobs.values()).filter((job) => {
+      if (!job.enabled) return false;
+      // Only cron and interval jobs can expire (once jobs are one-shot)
+      if (job.schedule.startsWith('once:')) return false;
+
+      const createdAtMs = new Date(job.createdAt).getTime();
+      return isRecurringTaskExpired(createdAtMs, now, maxAgeMs, false);
+    });
+  }
+
+  /**
+   * Clean up expired jobs. Called by heartbeat scheduler.
+   * Returns number of jobs removed.
+   */
+  cleanupExpiredJobs(maxAgeMs: number = DEFAULT_RECURRING_MAX_AGE_MS): number {
+    const expired = this.getExpiredJobs(maxAgeMs);
+    for (const job of expired) {
+      MollyLogger.info(
+        `Auto-expiring job "${job.name}" (created ${job.createdAt})`,
+        'scheduler'
+      );
+      this.jobs.delete(job.id);
+    }
+    return expired.length;
   }
 
   // ==========================================================================
@@ -563,7 +587,9 @@ export class AutonomousScheduler {
       const nextStr = j.nextRunAt
         ? `next: ${new Date(j.nextRunAt).toLocaleTimeString()}`
         : 'no next run';
-      return `- "${j.name}" (${j.schedule}) [${nextStr}]`;
+      // Use human-readable schedule description
+      const scheduleStr = this.getScheduleDescription(j);
+      return `- "${j.name}" (${scheduleStr}) [${nextStr}]`;
     });
 
     return `Scheduled jobs (${enabled.length}/${jobs.length}):\n${lines.join('\n')}`;

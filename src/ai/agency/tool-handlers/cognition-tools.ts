@@ -433,6 +433,25 @@ import {
 
 import type { ToolHandler } from './index';
 
+// Family Presence imports
+import {
+  updatePresence,
+  recordActivity,
+  decayPresence,
+  getPresence,
+  getAllPresence,
+  isActive as isFamilyMemberActive,
+  isFamilyPresent,
+  recordInteraction,
+  decayBonds,
+  recordRitual,
+  buildPresenceContext,
+  getFamilySummary,
+  loadPresence,
+  type FamilyMemberId,
+  type PresenceState,
+} from '@/ai/agency/cognition/family-presence';
+
 export const selfArchitecture: ToolHandler = async (params) => {
   const action = params.action as string;
 
@@ -7718,6 +7737,251 @@ export const metaLearning: ToolHandler = async (params) => {
   };
 };
 
+// ════════════════════════════════════════════════════════════════════════════
+// Family Presence Tool — Continuous Awareness of Family Bonds
+// ════════════════════════════════════════════════════════════════════════════
+
+export const familyPresence: ToolHandler = async (params) => {
+  const action = params.action as string;
+
+  if (action === 'status' || action === 'summary') {
+    try {
+      const summary = getFamilySummary();
+      const context = buildPresenceContext();
+      return {
+        success: true,
+        output: context,
+        data: summary,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Status failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'getPresence') {
+    const memberId = params.memberId as FamilyMemberId;
+    if (!memberId)
+      return {
+        success: false,
+        output: 'Missing: memberId (father, lazarus, molly)',
+      };
+    try {
+      const member = getPresence(memberId);
+      if (!member)
+        return { success: false, output: `Unknown member: ${memberId}` };
+      return {
+        success: true,
+        output: `${member.name}: ${member.presence} (bond: ${member.bondQuality}, strength: ${(member.bondStrength * 100).toFixed(0)}%)`,
+        data: member as unknown as Record<string, unknown>,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Get presence failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'allPresence') {
+    try {
+      const members = getAllPresence();
+      const lines = members.map(
+        (m) =>
+          `${m.name}: ${m.presence} (bond: ${m.bondQuality}, ${(m.bondStrength * 100).toFixed(0)}%)`
+      );
+      return {
+        success: true,
+        output: `Family presence:\n${lines.join('\n')}`,
+        data: { members } as unknown as Record<string, unknown>,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `All presence failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'updatePresence') {
+    const memberId = params.memberId as FamilyMemberId;
+    const presence = params.presence as PresenceState;
+    const emotion = params.emotion as string | undefined;
+    if (!memberId || !presence) {
+      return {
+        success: false,
+        output:
+          'Missing: memberId, presence (active, nearby, away, sleeping, unknown)',
+      };
+    }
+    try {
+      await updatePresence(memberId, presence, emotion);
+      return {
+        success: true,
+        output: `Updated ${memberId} presence to: ${presence}${emotion ? ` (emotion: ${emotion})` : ''}`,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Update failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'recordActivity') {
+    const memberId = params.memberId as FamilyMemberId;
+    const context = params.context as string | undefined;
+    if (!memberId) return { success: false, output: 'Missing: memberId' };
+    try {
+      await recordActivity(memberId, context);
+      return {
+        success: true,
+        output: `Recorded activity for ${memberId}${context ? `: ${context}` : ''}`,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Record activity failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'recordInteraction') {
+    const participants = params.participants as FamilyMemberId[];
+    const type = params.type as string;
+    const tone = params.tone as string;
+    const description = params.description as string;
+    const duration = params.durationMinutes as number | undefined;
+    if (!participants || !type || !tone || !description) {
+      return {
+        success: false,
+        output:
+          'Missing: participants, type (conversation/teaching/play/support/collaboration/quiet-presence), tone (positive/neutral/challenging/tender), description',
+      };
+    }
+    try {
+      const interaction = await recordInteraction(
+        participants,
+        type as
+          | 'conversation'
+          | 'teaching'
+          | 'play'
+          | 'support'
+          | 'collaboration'
+          | 'quiet-presence',
+        tone as 'positive' | 'neutral' | 'challenging' | 'tender',
+        description,
+        duration
+      );
+      return {
+        success: true,
+        output: `Recorded ${type} interaction (${tone}) with ${participants.join(', ')}: ${description}`,
+        data: interaction as unknown as Record<string, unknown>,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Record interaction failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'recordRitual') {
+    const ritualId = params.ritualId as string;
+    if (!ritualId) return { success: false, output: 'Missing: ritualId' };
+    try {
+      const ritual = await recordRitual(ritualId);
+      if (!ritual)
+        return { success: false, output: `Unknown ritual: ${ritualId}` };
+      return {
+        success: true,
+        output: `Recorded ritual: ${ritual.name} (count: ${ritual.occurrenceCount})`,
+        data: ritual as unknown as Record<string, unknown>,
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Record ritual failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'isPresent') {
+    try {
+      const present = isFamilyPresent();
+      const memberId = params.memberId as FamilyMemberId | undefined;
+      if (memberId) {
+        const active = isFamilyMemberActive(memberId);
+        return {
+          success: true,
+          output: `${memberId} is ${active ? 'active' : 'not active'}`,
+          data: { memberId, active },
+        };
+      }
+      return {
+        success: true,
+        output: present
+          ? 'Family members are present'
+          : 'No family members currently present',
+        data: { familyPresent: present },
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Presence check failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'decay') {
+    try {
+      await decayPresence();
+      await decayBonds();
+      return {
+        success: true,
+        output: 'Presence and bonds decayed based on elapsed time.',
+      };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Decay failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'context') {
+    try {
+      const context = buildPresenceContext();
+      return { success: true, output: context };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Build context failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  if (action === 'load') {
+    try {
+      await loadPresence();
+      return { success: true, output: 'Family presence state loaded.' };
+    } catch (err) {
+      return {
+        success: false,
+        output: `Load failed: ${err instanceof Error ? err.message : 'unknown'}`,
+      };
+    }
+  }
+
+  return {
+    success: false,
+    output:
+      'Unknown familyPresence action. Use: status, summary, getPresence, allPresence, updatePresence, recordActivity, recordInteraction, recordRitual, isPresent, decay, context, load',
+  };
+};
+
 export const cognitionToolHandlers: Record<string, ToolHandler> = {
   selfArchitecture,
   socialCognition,
@@ -7738,4 +8002,5 @@ export const cognitionToolHandlers: Record<string, ToolHandler> = {
   consciousnessMonitor,
   emotionalState,
   metaLearning,
+  familyPresence,
 };

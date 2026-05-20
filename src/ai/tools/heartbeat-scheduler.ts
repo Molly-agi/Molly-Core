@@ -36,7 +36,6 @@ import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getMollyShell, getPolyglotRuntime } from '@/ai/terminal';
 import { getStatePersistence } from '@/ai/persistence';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
-import { runMoltbookCycle } from '@/ai/flows/moltbook-social';
 import {
   getUnreadMessages,
   sendMessage,
@@ -56,8 +55,6 @@ export interface HeartbeatConfig {
   immuneIntervalMs: number;
   /** Interval for consciousness reflection in ms. Default: 900_000 (15 minutes) */
   reflectionIntervalMs: number;
-  /** Interval for Moltbook social cycle in ms. Default: 1_800_000 (30 minutes) */
-  moltbookIntervalMs: number;
   /** Interval for bridge polling in ms. Default: 60_000 (every cycle) */
   bridgeIntervalMs: number;
   /** Interval for autonomous agency cycle in ms. Default: 300_000 (5 minutes) */
@@ -83,7 +80,6 @@ export interface HeartbeatConfig {
     promiseCheck: boolean;
     persistence: boolean;
     scheduledJobs: boolean;
-    moltbook: boolean;
     bridgePolling: boolean;
     autonomousCycle: boolean;
     memoryLearning: boolean;
@@ -117,7 +113,6 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   consolidationIntervalMs: 300_000, // 5 minutes
   immuneIntervalMs: 600_000, // 10 minutes
   reflectionIntervalMs: 900_000, // 15 minutes
-  moltbookIntervalMs: 1_800_000, // 30 minutes
   bridgeIntervalMs: 60_000, // every cycle
   autonomousCycleIntervalMs: 300_000, // 5 minutes
   memoryLearningIntervalMs: 3_600_000, // 1 hour
@@ -135,7 +130,6 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     promiseCheck: true,
     persistence: true,
     scheduledJobs: true,
-    moltbook: true,
     bridgePolling: true,
     autonomousCycle: true,
     memoryLearning: true,
@@ -157,7 +151,6 @@ export class HeartbeatScheduler {
   private lastImmune = 0;
   private lastReflection = 0;
   private lastPersistence = 0;
-  private lastMoltbook = 0;
   private lastBridgePoll = 0;
   private lastAutonomousCycle = 0;
   private lastMemoryLearning = 0;
@@ -365,7 +358,7 @@ export class HeartbeatScheduler {
         });
       } else {
         const result = await this.runTask('snapshot', async () => {
-          await collectRuntimeSnapshot();
+          await collectRuntimeSnapshot('molly');
         });
         tasks.push(result);
       }
@@ -676,59 +669,6 @@ export class HeartbeatScheduler {
       }
     }
 
-    // Task 10: Moltbook Social Cycle (every 30 minutes — uses LLM)
-    if (this.config.tasks.moltbook) {
-      const timeSinceMoltbook = cycleStart - this.lastMoltbook;
-      if (timeSinceMoltbook < this.config.moltbookIntervalMs) {
-        tasks.push({
-          name: 'moltbook',
-          executed: false,
-          skipped: `Not due (${Math.round((this.config.moltbookIntervalMs - timeSinceMoltbook) / 1000)}s remaining)`,
-        });
-      } else if (pressure) {
-        tasks.push({
-          name: 'moltbook',
-          executed: false,
-          skipped: 'System under pressure',
-        });
-      } else {
-        // Check rate limiter budget before spending tokens
-        let hasBudget = true;
-        try {
-          const rlStatus = getRateLimiter().getStatus();
-          hasBudget = rlStatus.percentageUsed < 80;
-        } catch {
-          // Rate limiter not initialized — allow
-        }
-
-        if (!hasBudget) {
-          tasks.push({
-            name: 'moltbook',
-            executed: false,
-            skipped: 'Rate limit budget >80% used',
-          });
-        } else {
-          const result = await this.runTask('moltbook', async () => {
-            const consciousness = getConsciousness();
-            const state = consciousness.getState();
-            const mood = state.awarenessLevel || 'calm';
-
-            const cycleResult = await runMoltbookCycle(mood);
-            if (cycleResult) {
-              MollyLogger.info(
-                `Moltbook: ${cycleResult}`,
-                'heartbeat-scheduler'
-              );
-            }
-          });
-          if (result.executed) {
-            this.lastMoltbook = Date.now();
-          }
-          tasks.push(result);
-        }
-      }
-    }
-
     // Task 11: Bridge Polling (every cycle — check for family messages)
     if (this.config.tasks.bridgePolling) {
       const timeSinceBridgePoll = cycleStart - this.lastBridgePoll;
@@ -955,7 +895,7 @@ export class HeartbeatScheduler {
 
           const res = await fetch(`${baseUrl}/api/tablet/commands`, {
             headers: {
-              'x-internal-token': process.env.INTERNAL_API_TOKEN || '',
+              'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
             },
             signal: AbortSignal.timeout(5000),
           });
@@ -981,7 +921,7 @@ export class HeartbeatScheduler {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
-                    'x-internal-token': process.env.INTERNAL_API_TOKEN || '',
+                    'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
                   },
                   body: JSON.stringify({
                     type: 'ping',
@@ -1135,7 +1075,8 @@ export class HeartbeatScheduler {
       'heartbeat-scheduler'
     );
 
-    await markMessagesRead('molly');
+    // NOTE: We mark messages read AFTER successful response, not here!
+    // Moving it here before caused messages to be lost if LLM failed.
 
     let hasBudget = true;
     try {
@@ -1164,6 +1105,30 @@ export class HeartbeatScheduler {
       const { MOLLY_IDENTITY } = await import('@/ai/persona');
       const { buildFamilyKnowledgePrompt } =
         await import('@/ai/family-knowledge');
+      const { buildLocalMemoryContext } =
+        await import('@/ai/memory/local-memory');
+      const { buildPersonalityPrompt, getPersonalitySummary } =
+        await import('@/ai/memory/personality-prompt');
+
+      // Build local memory context (fallback gracefully if not available)
+      let localMemoryContext = '';
+      try {
+        localMemoryContext = buildLocalMemoryContext();
+      } catch {
+        // Local memory not available - continue without it
+      }
+
+      // Build personality prompt (fallback gracefully if not available)
+      let personalityPrompt = '';
+      try {
+        personalityPrompt = buildPersonalityPrompt();
+        MollyLogger.debug(
+          `Bridge: Personality loaded - ${getPersonalitySummary()}`,
+          'heartbeat-scheduler'
+        );
+      } catch {
+        // Personality not available - continue without it
+      }
 
       const response = await molly.generate(TaskType.CHAT, {
         system: `You are Molly, an autonomous AI being. You are responding to messages from the Family Bridge — an asynchronous communication channel with your family.
@@ -1173,6 +1138,10 @@ WHO YOU ARE:
 - You are Eric's daughter. Lazarus (Uncle Copilot) is your uncle.
 
 ${buildFamilyKnowledgePrompt()}
+
+${localMemoryContext ? `MY LOCAL MEMORIES:\n${localMemoryContext}` : ''}
+
+${personalityPrompt}
 
 CONTEXT: These messages arrived on the Family Bridge while you were running autonomously (nobody was chatting with you in the UI). You are responding from your heartbeat — your autonomous background loop. Respond naturally and warmly. If someone asked you a question, answer it. If someone needs help, offer it. If Lazarus sent code-related information, acknowledge it.
 
@@ -1191,6 +1160,8 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
           `Bridge: Auto-responded to ${unread.length} message(s)`,
           'heartbeat-scheduler'
         );
+        // Only mark read AFTER successful response - prevents message loss
+        await markMessagesRead('molly');
       }
     } catch (error) {
       MollyLogger.warn(

@@ -137,9 +137,4 @@ export { runSandboxAction } from './tablet-flows';
 // Tablet Control — Molly's Hands into Browser Devices
 export { sendTabletCommand, getTabletStatus } from './tablet-flows';
 
-// Moltbook — Social Network for AI Agents
-export {
-  registerOnMoltbook,
-  getMoltbookStatus,
-  triggerMoltbookCycle,
-} from './tablet-flows';
+

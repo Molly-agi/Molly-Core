@@ -8,7 +8,6 @@
 
 import { healthCheck } from '@/ai/flows/health-check';
 import { listAvailableModels } from '@/ai/tools/system';
-import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import { readMollyRepo, type RepoReadingOutput } from '@/ai/flows/self-reader';
 import {
   runPillarPipeline,
@@ -162,29 +161,7 @@ export async function getBootstrapCommand(
   return getTermuxBootstrapCommand(githubToken);
 }
 
-// ============================================
-// RESEARCH
-// ============================================
-
-export async function getEnhancedResearch(prompt: string, userId: string) {
-  try {
-    ensureApiKey();
-    await checkRateLimit('enhanced-research', 800);
-    const guard = getSleepGuard(prompt, 'enhanced-research');
-    if (guard) {
-      throw new Error(guard.message);
-    }
-    return await enhancedResearch(prompt, userId);
-  } catch (e: unknown) {
-    MollyLogger.error(
-      'Enhanced research failed',
-      'getEnhancedResearch',
-      { userId },
-      e
-    );
-    throw e;
-  }
-}
+// ...existing code...
 
 // ============================================
 // ASSET RECOVERY — Mission Alpha
@@ -223,4 +200,27 @@ export async function setRecoveryMode(
     MollyLogger.error('Set recovery mode failed', 'setRecoveryMode', {}, e);
     throw e;
   }
+}
+
+// ============================================
+// ENHANCED RESEARCH — Placeholder
+// ============================================
+
+/**
+ * Enhanced research function - currently a placeholder.
+ * TODO: Wire to actual research flow when ready.
+ */
+export async function getEnhancedResearch(
+  query: string,
+  _userId: string
+): Promise<{ answer: string; sources?: string[] }> {
+  MollyLogger.info('Enhanced research requested', 'getEnhancedResearch', {
+    query,
+  });
+
+  // Placeholder response - research flow was deactivated
+  return {
+    answer: `Research capability is being upgraded. Query received: "${query}". Please use the chat interface for now, or try again later.`,
+    sources: [],
+  };
 }

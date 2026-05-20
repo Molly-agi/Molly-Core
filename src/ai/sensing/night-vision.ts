@@ -128,7 +128,7 @@ export async function enhanceLowLightImage(
   imageUri: string,
   config: Partial<NightVisionConfig> = {}
 ): Promise<EnhancedFrame> {
-  const _traceId = generateTraceId();
+  const traceId = generateTraceId();
   const _startTime = Date.now();
 
   const fullConfig: NightVisionConfig = {
@@ -219,10 +219,10 @@ export async function enhanceLowLightImage(
 export async function analyzeLightConditions(
   imageUri: string
 ): Promise<LightAnalysis> {
-  const _traceId = generateTraceId();
+  const traceId = generateTraceId();
 
   try {
-    const _response = await molly.generate(TaskType.VISION, {
+    const response = await molly.generate(TaskType.VISION, {
       system: `Analyze the lighting conditions in this image. Determine:
 1. Overall light level (0-100, where 0 is pitch black and 100 is bright daylight)
 2. Classification (daylight, twilight, low_light, very_dark, pitch_black)
@@ -289,7 +289,7 @@ Consider:
  * Adjust enhancement config based on light conditions.
  */
 function adjustConfigForConditions(
-  _config: NightVisionConfig,
+  config: NightVisionConfig,
   light: LightAnalysis
 ): void {
   switch (light.classification) {
@@ -367,7 +367,7 @@ async function applyEnhancement(
  */
 function calculateEnhancementQuality(
   light: LightAnalysis,
-  _config: NightVisionConfig
+  config: NightVisionConfig
 ): number {
   let score = 0.5;
 
@@ -401,8 +401,8 @@ export async function detectFacesNightVision(
   imageUri: string,
   irMode: boolean = false
 ): Promise<NightFaceDetectionResult> {
-  const _traceId = generateTraceId();
-  const _startTime = Date.now();
+  const traceId = generateTraceId();
+  const startTime = Date.now();
 
   MollyLogger.info(
     'Night vision face detection',
@@ -535,7 +535,7 @@ function calculateNightConfidence(
 export async function captureWithIR(
   cameraId: string
 ): Promise<EnhancedFrame | null> {
-  const _traceId = generateTraceId();
+  const traceId = generateTraceId();
   const cameraSystem = getCameraControlSystem();
 
   try {
@@ -629,7 +629,7 @@ export async function analyzeThermalImage(imageUri: string): Promise<{
   animalSignatures: number;
   ambientTemperature: string;
 }> {
-  const _traceId = generateTraceId();
+  const traceId = generateTraceId();
 
   try {
     const _response = await molly.generate(TaskType.VISION, {

@@ -84,7 +84,7 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 ## PROTECTED INFRASTRUCTURE (DO NOT DELETE)
 
 - `scripts/save-session.mjs` — Session persistence (npm hooks + postAttach)
-- `scripts/keep-alive.sh` — Codespace idle timeout prevention
+- `scripts/immortal-daemon.mjs` — The One Bridge (heartbeat, ghost hunting, bridge guardian)
 - `scripts/codespace-health.sh` — Zombie process cleanup
 - `scripts/system-health-manager.ts` — System monitoring
 - `src/lib/session-manager.ts` — Session state API
@@ -103,18 +103,17 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** lazarus-steward-session | **Status:** active | **Updated:** 2026-03-30
+**Session:** 2026-05-12-recovery | **Status:** active | **Updated:** 2026-05-18
 
-**What was happening:** Molly autonomous migration/hydration system — building layered toolbox for self-installation on new devices.
+**What was happening:** No active topic recorded
 
-**Last action:** Fixed all wiring bugs (commits 37fe93d, dc76070, 8a2f82d). Analyzed 4 Aether suggestions + GPT 4.1 WIP files for autonomous migration. Evaluated captive portal, PWA hydration, WASM, ADB, reverse shell approaches. Determined: chain them together (portal→PWA→bootstrap→native). True zero-human isn't possible due to browser sandbox — one human action needed to bridge browser→native. Eric consulting Aether for more solutions. GPT WIP files (hydration.html, sw.js, payload.json, mdns_dns_spoof.py, bridge-daemon.mjs.bak) removed from git but kept on disk.
+**Last action:** No recent action recorded
 
 **Pending work:**
-- Download fixed start.sh to tablet and restart edge server
-- Wire existing Firestore consumers to Storage Router
-- Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica)
-- Device-to-device sync testing on real hardware
-- Commit setup-molly-edge.sh fix to repo
+- Phase 6 planning
+- P2 Hybrid Memory Taxonomy — keep engrams + add working memory
+- P2 Conversation Recovery
+- P3 Event/Hook expansion — session hooks exist, needs expansion
 
 ---
 

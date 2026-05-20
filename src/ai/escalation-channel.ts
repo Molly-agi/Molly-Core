@@ -177,7 +177,10 @@ async function sendBridgeEscalation(event: EscalationEvent): Promise<void> {
 
   const response = await fetch(`${bridgeHost}/api/bridge`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
+    },
     body: JSON.stringify({
       from: 'molly',
       content: bridgeMessage,

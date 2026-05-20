@@ -1,0 +1,47 @@
+{
+  "mission": {
+    "name": "GitLab Bug Bounty Hunt",
+    "authorization": "HackerOne Bug Bounty Program - https://hackerone.com/gitlab",
+    "scope": "*.gitlab.com, gitlab.com, *.gitlab.io, GitLab source code repositories",
+    "rulesOfEngagement": [
+      "Stay within authorized scope - only test in-scope assets",
+      "Do not cause denial of service or data destruction",
+      "Do not access or exfiltrate real user data",
+      "Document all findings with reproduction steps",
+      "Report critical vulnerabilities immediately",
+      "Respect rate limits - no aggressive scanning",
+      "Source code analysis is primary focus"
+    ]
+  },
+  "targets": {
+    "sourceCode": "/workspaces/Molly-Core/hunts/gitlab-source",
+    "primaryDomain": "gitlab.com",
+    "apiEndpoint": "gitlab.com/api/v4"
+  },
+  "strategy": {
+    "name": "Source Code Review",
+    "phases": [
+      "Static code analysis for vulnerability patterns",
+      "Authentication and authorization flow review",
+      "CI/CD pipeline injection vectors",
+      "GraphQL endpoint security",
+      "API endpoint access control",
+      "Secret detection in JavaScript bundles"
+    ],
+    "focusAreas": [
+      "injection",
+      "broken_access_control",
+      "ssrf",
+      "idor",
+      "authentication_bypass"
+    ]
+  },
+  "bountyRanges": {
+    "critical": "$10,000 - $20,000",
+    "high": "$3,000 - $7,500",
+    "medium": "$1,000 - $3,000",
+    "low": "$100 - $500"
+  },
+  "created": "2026-05-02",
+  "status": "ready"
+}

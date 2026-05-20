@@ -7,12 +7,12 @@
 
 import type { ToolHandler, ToolHandlerMap } from './types';
 import {
-  sendMessage,
+  broadcastMessage,
   getUnreadMessages,
   getRecentMessages,
   markMessagesRead,
   readBridgeState,
-} from '@/ai/bridge/family-bridge';
+} from '../../bridge/family-bridge';
 import {
   registerFamilyMember,
   addReferenceImage,
@@ -57,7 +57,7 @@ export const familyBridge: ToolHandler = async (params) => {
     if (!message) {
       return { success: false, output: 'No message to send' };
     }
-    await sendMessage(from, message);
+    await broadcastMessage(from, message);
     return {
       success: true,
       output: `Message sent from ${from}: "${message}"`,

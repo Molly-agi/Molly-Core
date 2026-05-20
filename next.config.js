@@ -15,6 +15,9 @@ const nextConfig = {
   // Prevent firebase-admin from being bundled for client/edge.
   // It uses Node.js core modules (stream, net, etc.) that don't exist there.
   // Also exclude dependencies that use WebAssembly or Node-specific modules.
+  // Three.js / R3F / three-vrm ship as ESM and need transpiling by Next.js
+  transpilePackages: ['three', '@react-three/fiber', '@pixiv/three-vrm'],
+
   serverExternalPackages: [
     // Firebase ecosystem
     'firebase-admin',

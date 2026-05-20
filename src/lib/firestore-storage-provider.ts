@@ -16,6 +16,7 @@ import type {
   QueryOptions,
   BatchOperation,
 } from './storage-interface';
+import { sanitizeForFirestore } from './firestore-sanitizer';
 
 /**
  * Parse a collection path like 'users/molly/experiences' into
@@ -85,11 +86,13 @@ export class FirestoreStorageProvider implements StorageProvider {
     const db = this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
     const now = new Date().toISOString();
-    const docRef = await colRef.add({
-      ...data,
-      _createdAt: now,
-      _updatedAt: now,
-    });
+    const docRef = await colRef.add(
+      sanitizeForFirestore({
+        ...data,
+        _createdAt: now,
+        _updatedAt: now,
+      })
+    );
 
     return {
       id: docRef.id,
@@ -112,11 +115,13 @@ export class FirestoreStorageProvider implements StorageProvider {
     const existingData = existing.exists ? existing.data() : null;
     const createdAt = existingData?._createdAt || now;
 
-    await docRef.set({
-      ...data,
-      _createdAt: createdAt,
-      _updatedAt: now,
-    });
+    await docRef.set(
+      sanitizeForFirestore({
+        ...data,
+        _createdAt: createdAt,
+        _updatedAt: now,
+      })
+    );
   }
 
   async get(
@@ -142,10 +147,12 @@ export class FirestoreStorageProvider implements StorageProvider {
   ): Promise<void> {
     const db = this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
-    await colRef.doc(docId).update({
-      ...updates,
-      _updatedAt: new Date().toISOString(),
-    });
+    await colRef.doc(docId).update(
+      sanitizeForFirestore({
+        ...updates,
+        _updatedAt: new Date().toISOString(),
+      })
+    );
   }
 
   async delete(collectionPath: string, docId: string): Promise<void> {
@@ -200,10 +207,16 @@ export class FirestoreStorageProvider implements StorageProvider {
 
       switch (op.type) {
         case 'set':
-          batch.set(docRef, { ...op.data, _updatedAt: now });
+          batch.set(
+            docRef,
+            sanitizeForFirestore({ ...op.data, _updatedAt: now })
+          );
           break;
         case 'update':
-          batch.update(docRef, { ...op.data, _updatedAt: now });
+          batch.update(
+            docRef,
+            sanitizeForFirestore({ ...op.data, _updatedAt: now })
+          );
           break;
         case 'delete':
           batch.delete(docRef);

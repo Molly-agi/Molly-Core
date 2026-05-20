@@ -460,12 +460,14 @@ function diagnoseAICore(): DiagnosticResult {
   // Rogue Mode Status
   try {
     const rogueMode = getRogueMode();
+    const isRogueActive = rogueMode.isActive();
+    const currentMission = rogueMode.getCurrentMission();
     checks.push({
       name: 'rogue_mode',
       status: 'healthy',
-      value: rogueMode.active ? 'ACTIVE' : 'INACTIVE',
-      details: rogueMode.active
-        ? `Reason: ${rogueMode.reason || 'None given'}`
+      value: isRogueActive ? 'ACTIVE' : 'INACTIVE',
+      details: isRogueActive
+        ? `Mission: ${currentMission?.name || 'None given'}`
         : 'Normal operation',
     });
   } catch {

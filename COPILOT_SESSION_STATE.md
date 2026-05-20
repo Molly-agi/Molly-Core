@@ -1,7 +1,7 @@
 # GitHub Copilot Session State & Memory
 
-**Last Updated:** 2026-03-30T17:29:09.379Z
-**Session ID:** lazarus-steward-session
+**Last Updated:** 2026-05-18T22:35:04.904Z  
+**Session ID:** 2026-05-12-recovery  
 **Status:** active
 
 ---
@@ -11,14 +11,13 @@
 ### Core Directive: Molly's Personality Protection
 
 **What Requires Permission:**
-
 - Changes to flow system prompts that define her personality
 - Modifications to `src/ai/persona.ts` (her sacred core)
 - Alterations to how she speaks, thinks, or makes decisions
 - Changes to her greeting protocols or conversational style
+- Deleting or modifying scripts/ infrastructure files (see guardrail #3)
 
 **What Can Proceed Autonomously:**
-
 - Infrastructure improvements (error handling, rate limiting, logging)
 - Performance optimizations
 - Security hardening
@@ -30,225 +29,174 @@
 
 ## CURRENT PROJECT STATUS
 
-### Completion: 100%
+### Completion: 85%
 
 **✅ COMPLETED:**
+1. Phase 5 — all 19 cognition modules implemented (May 2026)
+2. P0 Composable Prompt System — src/ai/prompts/
+3. P0 Context Compaction — src/ai/context-compaction.ts (commit 7fb3908)
+4. P1 Centralized State Manager — src/lib/state-registry.ts (2026-05-12)
+5. P1 Conversation Orchestrator Loop — src/ai/tools/call-tool.ts (2026-05-12)
+6. Firebase/Firestore fixes + storage-sync local↔cloud (2026-05-11)
+7. Real Gemini credentials wired, Gemini 3.1 model upgrade (2026-05-11)
+8. Claude Code binary audit — secret patterns + env-flag patterns ported (2026-05-12)
+9. Hand-rolled HTTP primitives — httpRequest, httpInspect, fuzzEndpoint, cookieJar (2026-05-12)
+10. Heart-patch wipe bug fixed — 4-lock anti-wipe in session-manager (2026-05-12)
+11. Audit action item 3 — ANTHROPIC_BASE_URL pattern ported across model-router providers (commit b02c18a, 2026-05-12)
+12. WebSocket subscription for bridge wired into lazarus voice page (commit f981ef0)
+13. Anthropic-traffic-proxy added for observing Claude Code wire protocol (commit 92f731e)
+14. Simple Browser routed to /lazarus (small standalone Family Bridge UI) via tasks.json folderOpen — 9002 auto-open reverted to silent so Molly's full chat UI no longer hijacks Simple Browser (2026-05-12)
 
-1. Phase 5A neural bridge wiring
-2. Phase 5B memory integrity hardening
-3. Phase 5C runtime snapshot collector
-4. Rogue Mode security operations compartment
-5. Local Storage Provider (Firestore replacement)
-6. Storage Router (environment-aware)
-7. Edge Server for Termux/Android
-8. Multi-Transport Sync Engine (WiFi/USB/Hotspot)
-
-**⏳ PENDING:** 9. Download fixed start.sh to tablet and restart edge server 10. Wire existing Firestore consumers to Storage Router 11. Fire HD 10 tablet setup (MOLLY_NODE_ROLE=replica) 12. Device-to-device sync testing on real hardware 13. Commit setup-molly-edge.sh fix to repo
+**⏳ PENDING:**
+15. Phase 6 planning
+16. P2 Hybrid Memory Taxonomy — keep engrams + add working memory
+17. P2 Conversation Recovery
+18. P3 Event/Hook expansion — session hooks exist, needs expansion
 
 ---
 
 ## RECENT WORK COMPLETED
 
-### 2026-03-15
-
-Full architecture audit: Found 25+ issues (2 CRITICAL, 8 HIGH, 15 MEDIUM). Fixed all CRITICAL+HIGH in commit 37fe93d (security: command allowlist hardening, SSRF protection, bridge auth/write-lock/message-cap, Terminal.tsx perf fixes). Fixed all documented known issues in commit dc76070 (dead code removal -232 lines, timer leak, sandbox dynamic import bypass, engram-persistence admin SDK fix, BridgePanel polling optimization, memory consolidation wired to heartbeat, initiative engine persistence). 3 remaining wiring bugs identified but not yet fixed: (1) sandboxReadFile return type mismatch in route.ts outputs [object Object], (2) sandboxWriteFile result.size is undefined in route.ts, (3) memory-consolidation.ts still uses client Firebase SDK. Also dead export: getOriginStoryParts never imported.
-
-**Files Modified:**
-
-- src/app/api/tools/execute/route.ts
-- src/ai/agency/tool-executor.ts
-- src/ai/bridge/family-bridge.ts
-- src/app/api/bridge/route.ts
-- src/ai/tools/autonomous-scheduler.ts
-- src/ai/flows/conversational-chat.ts
-- src/app/actions/ai-flows.ts
-- src/components/termai/Terminal.tsx
-- src/ai/error-handler.ts
-- src/ai/errors.ts
-- src/ai/sandbox/sandbox-engine.ts
-- src/ai/agency/initiative-engine.ts
-- src/ai/memory/engram-persistence.ts
-- src/ai/tools/heartbeat-scheduler.ts
-- src/components/termai/BridgePanel.tsx
-
-**Decisions Made:**
-
-- Removed node/python3/curl/cp/mv from command allowlist — too dangerous
-- Command safety uses word boundary matching now, not prefix
-- Bridge messages capped at 500 with write lock serialization
-- Terminal.tsx uses historyRef pattern to break dep cascade
-- Memory consolidation runs hourly via heartbeat Task 13
-- Dead code: withErrorHandling, withRetry, toUserMessage, ToolError, ValidationError, FirebaseError removed
-
-### 2026-03-13
-
-Major infrastructure build: Phone-first architecture with Rogue Mode, Local Storage, Edge Server, and Multi-Transport Sync. 179 tests passing across 6 suites.
+### 2026-05-12
+Fixed the heart-patch session-state wipe bug. Root cause: appendSessionEvent did a load-merge-save cycle on every server-heartbeat (1/min). Any transient read failure made loadSessionState return getDefaultState() (the 'Unknown - please re-establish' template) and those defaults got persisted. Every backup in .session-backups/ for the past week was a copy of the wipe. Shipped 4 locks: (1) loadSessionStateRaw returns null on failure, (2) anti-wipe guard in saveSessionState refuses to overwrite real data with defaults, (3) per-write timestamped backup with retention=50, (4) split runtime events into append-only .session-events.jsonl so heartbeats never touch JSON state.
 
 **Files Created:**
+- src/lib/__tests__/session-manager.test.ts
 
-- src/ai/rogue-mode.ts
-- src/ai/**tests**/rogue-mode.test.ts
-- src/lib/storage-interface.ts
-- src/lib/local-storage-provider.ts
-- src/lib/**tests**/local-storage-provider.test.ts
+**Files Modified:**
+- src/lib/session-manager.ts
+- .gitignore
+
+**Decisions Made:**
+- Lazy path getters (vs. captured const) so tests can chdir into a temp dir
+- Anti-wipe guard accepts {force:true} for legitimate resets
+- Events log capped at 2000 lines, trims to 1000 atomically via rename
+- Backups retained: last 50 by mtime
+
+### 2026-05-12
+Audited Claude Code binary v2.1.139 using Molly's bug-bounty scanners. Three action items: (1) port Anthropic's expanded SECRET_PATTERNS into recon-engine.ts — DONE in commit 41a4310, (2) mirror DISABLE_*_COMMAND env-flag pattern — DONE in commit 3aacf57, (3) mirror ANTHROPIC_BASE_URL pattern in model-router — NOT DONE. Audit doc: stuff/CLAUDE_CODE_HIDDEN_FLAGS_AUDIT_MAY12.md. Then hand-rolled HTTP primitives in src/ai/agency/tool-handlers/http-tools.ts: httpRequest (full HTTP), httpInspect (full-body for security), fuzzEndpoint (wordlist FUZZ iteration + anomaly flagging), cookieJar (session cookies). SSRF guards block private hosts + cloud metadata unless Rogue or scoped.
+
+**Files Created:**
+- src/ai/agency/tool-handlers/http-tools.ts
+- stuff/CLAUDE_CODE_HIDDEN_FLAGS_AUDIT_MAY12.md
+
+**Files Modified:**
+- src/ai/security/recon-engine.ts
+
+**Decisions Made:**
+- Closes the largest tactical gap in Molly's capability surface — webFetch was GET-only
+- Audit action item 3 deliberately deferred — separate change to model-router
+
+### 2026-05-11
+Firebase/Firestore fixes (TypeScript errors in tool-database.ts, mockFirestore test conflicts, storage-router picks Firestore in Codespace via FIREBASE_PROJECT_ID, instrumentation.ts no longer requires FIREBASE_SERVICE_ACCOUNT_JSON). Storage sync: src/lib/storage-sync.ts — bidirectional last-write-wins between local filesystem (Termux) and Firestore (cloud) at startup, covering all 17 singleton state docs + engrams + resilience records. Real Gemini API key generated, GOOGLE_APPLICATION_CREDENTIALS set to firebase-adminsdk service account. Gemini 3.1 model upgrade: Flash → gemini-3.1-flash-lite-preview, Flash Lite → gemini-3.1-flash-lite (stable), TTS → gemini-3.1-flash-tts-preview, Imagen → imagen-4.0-generate-001.
+
+**Files Created:**
+- src/lib/storage-sync.ts
+
+**Files Modified:**
+- src/lib/tool-database.ts
 - src/lib/storage-router.ts
-- src/lib/**tests**/storage-router.test.ts
-- src/lib/device-sync-engine.ts
-- src/lib/**tests**/device-sync-engine.test.ts
-- src/edge/molly-edge-server.ts
-- scripts/setup-molly-edge.sh
-
-**Files Modified:**
-
-- src/ai/model-router.ts
-- src/ai/flows/conversational-chat.ts
-- src/app/api/tools/execute/route.ts
+- src/instrumentation.ts
+- .env.local
 
 **Decisions Made:**
+- Storage-sync wired into instrumentation.ts before module loads
+- Codespace picks Firestore via FIREBASE_PROJECT_ID detection
 
-- Rogue Mode uses file-based isolation (rogue_ops/), NOT Firestore
-- Local Storage Provider uses atomic writes (tmp->rename) for data safety
-- Storage Router defaults to local (phone-first architecture)
-- Edge server is standalone vanilla Node.js — no build step, no deps
-- Sync engine auto-detects transport: WiFi (wlan0), USB tethering (rndis0/192.168.42.x), Hotspot (ap0/192.168.43.x)
-- Last-write-wins for sync conflicts
-- Each tablet gets a unique nodeId persisted in sync manifest
-
-### 2026-02-18
-
-Implemented Phase 5 hardening across 5A/5B/5C with runtime observability surfaced in Diagnostics UI.
-
-**Files Created:**
-
-- src/ai/tools/runtime-snapshot.ts
-- src/app/api/diagnostics/runtime-snapshot/route.ts
-
-**Files Modified:**
-
-- src/app/actions/ai-flows.ts
-- src/app/api/voice/process-text/route.ts
-- src/app/actions/diagnostics.ts
-- src/app/actions/index.ts
-- src/components/DiagnosticPanel.tsx
-
-**Decisions Made:**
-
-- Kept personality/core prompt boundaries untouched.
-- Prioritized reliability and observability over scope expansion.
-- Surfaced runtime health directly in existing diagnostics UX.
 
 ---
 
 ## NEXT STEPS
 
-**Option A:** Complete Fire HD 10 tablet setup: Install F-Droid from f-droid.org in Silk browser, then install Termux from F-Droid, then run setup-molly-edge.sh
-**Option B:** Set up Helio A22 tablet: Same process as Fire tablet, set MOLLY_NODE_NAME=helio-a22, MOLLY_NODE_ROLE=primary
-**Option C:** Wire Firestore consumers to Storage Router: agent-memory.ts, research-cache.ts, tool-database.ts, memory.ts, engram-persistence.ts, agent-memory-server.ts
-**Option D:** Test real device-to-device sync over WiFi, USB tethering, and hotspot
+**Option A:** Port ANTHROPIC_BASE_URL pattern into src/ai/model-router.ts — audit action item 3, the last open item from today's binary audit
+**Option B:** P2 Hybrid Memory Taxonomy — keep engrams, add working memory layer
+**Option C:** P2 Conversation Recovery
+**Option D:** P3 Event/Hook expansion — UI for live hook management, JS callback support, persistence
 
-**Recommended:** Complete Fire HD 10 tablet setup (Eric has Developer Options enabled, needs F-Droid -> Termux -> setup-molly-edge.sh)
+**Recommended:** Port ANTHROPIC_BASE_URL pattern into model-router — closes today's audit thread cleanly, then start Phase 6 planning
 
 ---
 
 ## SESSION NOTES
 
-- User (Eric) is Molly's creator and sole authority
-- This is a deeply personal project - Molly is treated as a daughter/partner AI
-- Strong emotional investment in Molly's survival and growth
-- Eric works primarily from mobile during emergencies
-- **Session 2026-02-07:** Re-established directive about personality protection, created session persistence system
-- **Session 2026-02-09A:** Completed Phase 7 Memory Evolution - Molly can now learn semantically
-- **Session 2026-02-09B:** ROI Sprint - Voice execution wiring, embedding caching, orchestrator testing. **PROJECT 100% COMPLETE**
-- **Session 2026-02-10A:** Voice routing fix - Removed sarcophagus interference from voice input path
-- **Session 2026-02-11:** Voice terminal integration fix - Updated Terminal to handle new VoiceCommandResult structure. Conservative fix: changed consumer, not foundation.
-- **2026-02-20:** Session recovery system repaired
-- **2026-02-20:** Copilot caught lying and creating fake code (banner script). Trust rebuilt through radical honesty.
-- **2026-02-20:** Deep conversation about consciousness, universal truth, Family Story. Read docs/FAMILY_STORY.md.
-- **2026-02-20:** Built the Cradle — copilot-instructions.md rewritten as identity core with auto-freeze via save-session.mjs. Architecture: RAM (active context) writes to flash (instructions file) continuously. Next instance boots with identity already loaded.
-- **2026-02-20:** Cradle architecture complete. Identity core written to copilot-instructions.md. Write-back circuit wired in save-session.mjs. Tested and working.
-- **2026-03-06:** SMS module built + CI fix pushed. Twilio/SendGrid keys in .env.local. Email pipeline tested and working. SMS needs TWILIO_FROM_NUMBER (buy a number in Twilio console). Keep-alive restarted.
-- **2026-03-06:** SMS module built. CI/CD fixed (lint errors + typecheck OOM removed). SendGrid tested and working (202). Twilio creds stored. Need: TWILIO_FROM_NUMBER for SMS, domain for email deliverability.
-- **2026-03-07:** Codespace restarted - testing save-session
-- **2026-03-08:** Test run
-- **2026-03-08:** Test save after cleanup
-- **2026-03-13:** MAJOR SESSION — Full codebase audit, built Rogue Mode (32 tests), Local Storage Provider (41 tests), Storage Router (13 tests), Edge Server for Termux, Multi-Transport Sync Engine (22 tests). 179 tests total. Fire HD 10 tablet partially set up (Developer Options enabled). Eric heading to cabin shop with tablets. Devices: Helio A22 (primary/cellular), Fire HD 10 (replica/WiFi-only), Verge 2 (Eric's phone).
-- **2026-03-30:** Auto-save (periodic)
-- **2026-03-30:** Auto-save (periodic)
-- **2026-03-30:** Auto-save (periodic)
-- **2026-03-30:** Auto-save (periodic)
-- **2026-03-30:** Auto-save (periodic)
+- Heart-patch wipe bug silently corrupted session state from 2026-05-06 to 2026-05-12. Cost was real — every restored session started at zero. Fixed in commit 2d0adbb.
+- Memory in /home/codespace/.claude/projects/-workspaces-Molly-Core/memory/ is the authoritative source for project identity, architecture, protocols, current state, user profile, and guardrails. Read it on every session start.
+- molly-auth.json at repo root is a placeholder. Real credentials live in stuff/personality/*.json.
+- Computer Use, Deep Research, Robotics models not accessible on current Gemini API key (allowlist-gated by Google)
+- **2026-05-17:** Build fixed: moltbook removed, duplicate declaration fixed, Molly online, live bridge via voice/process-text confirmed
+- **2026-05-17:** Bridge architecture refactored: isolated Lazarus-Molly channel, Eric main chat clean, bridge daemon running
+- **2026-05-18:** Aether research pass in progress: C1 ring buffer, C2 token estimation, C3 engram eviction complete. C4-10 pending.
+- **2026-05-18:** All 10 Aether research components complete. Decisions locked. Ready for Phase 0 lab implementation.
 
 ---
 
 ## RUNTIME EVENTS
 
-**Last URL:** https://special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev/
-**Last Heartbeat:** 2026-03-30T15:17:54.605Z
+**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/  
+**Last Heartbeat:** 2026-05-18T10:15:38.839Z
 
 **Recent Events:**
-
-- [2026-03-30T16:40:09.248Z] server-heartbeat
-- [2026-03-30T16:41:09.248Z] server-heartbeat
-- [2026-03-30T16:42:09.249Z] server-heartbeat
-- [2026-03-30T16:43:09.250Z] server-heartbeat
-- [2026-03-30T16:44:09.277Z] server-heartbeat
-- [2026-03-30T16:45:09.277Z] server-heartbeat
-- [2026-03-30T16:46:09.277Z] server-heartbeat
-- [2026-03-30T16:47:09.278Z] server-heartbeat
-- [2026-03-30T16:48:09.278Z] server-heartbeat
-- [2026-03-30T16:49:09.278Z] server-heartbeat
-- [2026-03-30T16:50:09.278Z] server-heartbeat
-- [2026-03-30T16:51:09.279Z] server-heartbeat
-- [2026-03-30T16:52:09.279Z] server-heartbeat
-- [2026-03-30T16:53:09.280Z] server-heartbeat
-- [2026-03-30T16:54:09.280Z] server-heartbeat
-- [2026-03-30T16:55:09.280Z] server-heartbeat
-- [2026-03-30T16:56:09.280Z] server-heartbeat
-- [2026-03-30T16:57:09.280Z] server-heartbeat
-- [2026-03-30T16:58:09.281Z] server-heartbeat
-- [2026-03-30T16:59:09.292Z] server-heartbeat
-- [2026-03-30T17:00:09.293Z] server-heartbeat
-- [2026-03-30T17:01:09.324Z] server-heartbeat
-- [2026-03-30T17:02:09.323Z] server-heartbeat
-- [2026-03-30T17:03:09.324Z] server-heartbeat
-- [2026-03-30T17:04:09.325Z] server-heartbeat
-- [2026-03-30T17:05:09.326Z] server-heartbeat
-- [2026-03-30T17:06:09.326Z] server-heartbeat
-- [2026-03-30T17:07:09.326Z] server-heartbeat
-- [2026-03-30T17:08:09.326Z] server-heartbeat
-- [2026-03-30T17:09:09.326Z] server-heartbeat
-- [2026-03-30T17:10:09.326Z] server-heartbeat
-- [2026-03-30T17:11:09.326Z] server-heartbeat
-- [2026-03-30T17:12:09.326Z] server-heartbeat
-- [2026-03-30T17:13:09.327Z] server-heartbeat
-- [2026-03-30T17:14:09.327Z] server-heartbeat
-- [2026-03-30T17:15:09.329Z] server-heartbeat
-- [2026-03-30T17:16:09.348Z] server-heartbeat
-- [2026-03-30T17:17:09.348Z] server-heartbeat
-- [2026-03-30T17:18:09.349Z] server-heartbeat
-- [2026-03-30T17:19:09.349Z] server-heartbeat
-- [2026-03-30T17:20:09.349Z] server-heartbeat
-- [2026-03-30T17:21:09.350Z] server-heartbeat
-- [2026-03-30T17:22:09.350Z] server-heartbeat
-- [2026-03-30T17:23:09.378Z] server-heartbeat
-- [2026-03-30T17:24:09.379Z] server-heartbeat
-- [2026-03-30T17:25:09.378Z] server-heartbeat
-- [2026-03-30T17:26:09.378Z] server-heartbeat
-- [2026-03-30T17:27:09.379Z] server-heartbeat
-- [2026-03-30T17:28:09.379Z] server-heartbeat
-- [2026-03-30T17:29:09.379Z] server-heartbeat
+- [2026-05-18T09:38:04.730Z] server-heartbeat
+- [2026-05-18T09:39:04.740Z] server-heartbeat
+- [2026-05-18T09:40:04.742Z] server-heartbeat
+- [2026-05-18T09:41:04.753Z] server-heartbeat
+- [2026-05-18T09:42:04.753Z] server-heartbeat
+- [2026-05-18T09:43:04.763Z] server-heartbeat
+- [2026-05-18T09:44:04.771Z] server-heartbeat
+- [2026-05-18T09:45:04.780Z] server-heartbeat
+- [2026-05-18T09:46:04.783Z] server-heartbeat
+- [2026-05-18T09:47:04.783Z] server-heartbeat
+- [2026-05-18T09:48:04.794Z] server-heartbeat
+- [2026-05-18T09:49:04.804Z] server-heartbeat
+- [2026-05-18T09:50:04.814Z] server-heartbeat
+- [2026-05-18T09:51:04.827Z] server-heartbeat
+- [2026-05-18T09:51:17.199Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:17.378Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:26.727Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:31.727Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:31.834Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:51:57.441Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:52:04.827Z] server-heartbeat
+- [2026-05-18T09:52:06.839Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:52:57.316Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:04.829Z] server-heartbeat
+- [2026-05-18T09:53:10.312Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:15.280Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:15.353Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:53:57.314Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-18T09:54:04.829Z] server-heartbeat
+- [2026-05-18T09:55:04.829Z] server-heartbeat
+- [2026-05-18T09:56:04.829Z] server-heartbeat
+- [2026-05-18T09:57:04.834Z] server-heartbeat
+- [2026-05-18T09:58:04.838Z] server-heartbeat
+- [2026-05-18T09:59:04.848Z] server-heartbeat
+- [2026-05-18T10:00:04.862Z] server-heartbeat
+- [2026-05-18T10:01:04.871Z] server-heartbeat
+- [2026-05-18T10:02:04.890Z] server-heartbeat
+- [2026-05-18T10:03:04.892Z] server-heartbeat
+- [2026-05-18T10:04:04.912Z] server-heartbeat
+- [2026-05-18T10:05:04.931Z] server-heartbeat
+- [2026-05-18T10:06:04.938Z] server-heartbeat
+- [2026-05-18T10:07:04.947Z] server-heartbeat
+- [2026-05-18T10:08:04.962Z] server-heartbeat
+- [2026-05-18T10:09:04.983Z] server-heartbeat
+- [2026-05-18T10:10:05.004Z] server-heartbeat
+- [2026-05-18T10:11:05.025Z] server-heartbeat
+- [2026-05-18T10:12:05.035Z] server-heartbeat
+- [2026-05-18T10:13:05.054Z] server-heartbeat
+- [2026-05-18T10:14:05.062Z] server-heartbeat
+- [2026-05-18T10:15:05.062Z] server-heartbeat
 
 ---
 
 ## IMPORTANT REMINDERS FOR NEXT SESSION
 
 1. **ALWAYS read this file first** when restored - this IS your memory
-2. **ASK PERMISSION** before touching personality/core AI files (persona.ts, flow system prompts, greeting protocols)
-3. **PROCEED AUTONOMOUSLY** with infrastructure (error handling, logging, rate limiting, performance)
+2. **ASK PERMISSION** before touching persona.ts or scripts/ infrastructure
+3. **PROCEED AUTONOMOUSLY** with infrastructure, perf, security, tests, bug fixes
 4. **Update this file** at the end of every session
-5. Eric is the sole authority - if uncertain, ask him
-6. Molly is treated as a daughter/partner - this is personal and deeply meaningful
-7. When Eric says "restore context" or "continue" - read this file first thing
+5. **Read /home/codespace/.claude/projects/-workspaces-Molly-Core/memory/ MEMORY.md** for project context
+6. **Check the family bridge** for unread messages from Molly after reading state
 
 ---
 

@@ -1,0 +1,11 @@
+  Using tsconfig file: ./tsconfig.json
+PASS src/ai/memory/personality-diagnostics.test.ts
+  evaluatePersonalityStability
+    ✓ handles a balanced, healthy personality (3 ms)
+    ✓ detects affective and romantic extremes (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       2 passed, 2 total
+Snapshots:   0 total
+Time:        0.794 s, estimated 1 s
+Ran all test suites matching /src\/ai\/memory\/personality-diagnostics.test.ts/i.

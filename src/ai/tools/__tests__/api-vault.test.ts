@@ -8,6 +8,8 @@
  * - Firebase integration
  */
 
+export {};
+
 // Mock Firebase
 const mockAddDoc = jest.fn();
 const mockGetDocs = jest.fn();

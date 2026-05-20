@@ -39,6 +39,8 @@ firestore-debug.log
 
 # Session backups (main session state files ARE tracked for recovery)
 .session-backups/
+.session-events.jsonl
+.anthropic-traffic/
 .codespace-heartbeat
 .watchdog.pid
 .watchdog-pulse
@@ -84,3 +86,13 @@ android/MollyBrowser/app/build/
 android/MollyBrowser/build/
 *.gradle/
 **/build/
+
+# Immortal session daemon
+.immortal.log
+.immortal.pid
+.activity-burst
+COPILOT_SESSION_STATE.json
+COPILOT_SESSION_STATE.md
+
+# VS Code extensions (dev workspace)
+extensions/

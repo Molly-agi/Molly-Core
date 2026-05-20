@@ -155,7 +155,9 @@ export class MollyLogger {
   }
 
   /**
-   * Output the log entry (to console in dev, Cloud Logging in prod)
+   * Output the log entry (to console in dev, Cloud Logging in prod).
+   * MOLLY_DEBUG_LOG_DIR additionally appends every entry to molly.log
+   * in the named directory (pattern from CLAUDE_CODE_DEBUG_LOGS_DIR).
    */
   private static output(entry: LogEntry) {
     if (entry.level === 'ERROR' || entry.level === 'WARN') {
@@ -167,6 +169,42 @@ export class MollyLogger {
     } else {
       // In production, send to Cloud Logging or your observability platform
       console.log(JSON.stringify(entry));
+    }
+
+    this.writeToDebugDir(entry);
+  }
+
+  private static debugDirChecked = false;
+  private static debugDirPath: string | null = null;
+
+  private static writeToDebugDir(entry: LogEntry) {
+    if (typeof window !== 'undefined') return;
+
+    if (!this.debugDirChecked) {
+      this.debugDirChecked = true;
+      const dir = process.env.MOLLY_DEBUG_LOG_DIR?.trim();
+      if (dir) {
+        try {
+          // Use eval'd require to keep fs out of client bundles.
+          const fs = (Function('return require')() as NodeRequire)('node:fs');
+          fs.mkdirSync(dir, { recursive: true });
+          this.debugDirPath = dir;
+        } catch {
+          this.debugDirPath = null;
+        }
+      }
+    }
+
+    if (!this.debugDirPath) return;
+    try {
+      const fs = (Function('return require')() as NodeRequire)('node:fs');
+      const path = (Function('return require')() as NodeRequire)('node:path');
+      fs.appendFileSync(
+        path.join(this.debugDirPath, 'molly.log'),
+        JSON.stringify(entry) + '\n'
+      );
+    } catch {
+      // Disk full / permission flip — drop silently.
     }
   }
 

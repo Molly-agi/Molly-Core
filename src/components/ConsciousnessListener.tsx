@@ -21,10 +21,13 @@ import { useEffect, useRef } from 'react';
 
 export interface ConsciousnessEventDetail {
   id: string;
-  type: 'thought' | 'observation' | 'self-state' | 'realization';
+  type: 'thought' | 'observation' | 'self-state' | 'realization' | 'music';
   content: string;
   priority: 'low' | 'normal' | 'high';
   createdAt: string;
+  audioUri?: string;
+  prompt?: string;
+  model?: string;
 }
 
 /**

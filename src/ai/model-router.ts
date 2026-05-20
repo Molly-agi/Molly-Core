@@ -1,5 +1,5 @@
 /**
- * @fileOverview Molly's Model Abstraction Layer — "Rogue Protocol"
+ * @fileOverview Molly's Model Abstraction Layer — Model Router
  *
  * Like Rogue absorbs mutant powers through touch, Molly absorbs AI capabilities
  * through this routing layer. Any model backend — Gemini, Claude, Ollama, local —
@@ -29,6 +29,7 @@ import { MollyLogger, generateTraceId } from './logger';
 /**
  * Categories of cognitive work Molly performs.
  * Each maps to a different optimal model profile.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export enum TaskType {
   /** Complex reasoning, code analysis, security work — needs highest IQ */
@@ -60,6 +61,26 @@ export enum TaskType {
 
   /** Memory consolidation, introspection — can be slow/cheap */
   BACKGROUND = 'background',
+
+  // ── New Gemini 3.1 Task Types ──
+
+  /** Real-time voice dialogue — sub-second latency */
+  LIVE_VOICE = 'live_voice',
+
+  /** Screen interaction, UI automation — computer use */
+  COMPUTER_USE = 'computer_use',
+
+  /** Multi-step agentic research across sources */
+  DEEP_RESEARCH = 'deep_research',
+
+  /** Video generation with sync audio */
+  VIDEO = 'video',
+
+  /** Music generation */
+  MUSIC = 'music',
+
+  /** Physical space reasoning for embodiment */
+  ROBOTICS = 'robotics',
 }
 
 // ============================================================
@@ -69,6 +90,7 @@ export enum TaskType {
 /**
  * Capabilities a provider supports.
  * Used for routing decisions and health checks.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export interface ProviderCapabilities {
   supportsChat: boolean;
@@ -83,6 +105,20 @@ export interface ProviderCapabilities {
   costTier: number;
   /** Average latency tier: 0 = instant/local, 1 = fast, 2 = standard, 3 = slow */
   latencyTier: number;
+
+  // ── New Gemini 3.1 Capabilities ──
+  /** Real-time voice dialogue with sub-second latency */
+  supportsLiveVoice?: boolean;
+  /** Screen interaction and UI automation */
+  supportsComputerUse?: boolean;
+  /** Multi-step agentic research */
+  supportsDeepResearch?: boolean;
+  /** Video generation */
+  supportsVideoGen?: boolean;
+  /** Music generation */
+  supportsMusicGen?: boolean;
+  /** Physical space/robotics reasoning */
+  supportsRobotics?: boolean;
 }
 
 /**
@@ -131,6 +167,22 @@ export interface ModelProvider {
    * Whether this provider is currently configured (API key present, etc.)
    */
   isConfigured(): boolean;
+
+  /**
+   * Optional base URL override. When set, the provider routes requests to
+   * this endpoint instead of the vendor default. Useful for staging, proxies,
+   * Bedrock/Vertex/Foundry mirrors, or air-gapped deployments.
+   *
+   * Mirrors Anthropic's ANTHROPIC_BASE_URL pattern. Env vars per provider:
+   *   - Gemini: MOLLY_GENAI_BASE_URL (or GOOGLE_GENAI_BASE_URL)
+   *   - Claude: MOLLY_ANTHROPIC_BASE_URL (or ANTHROPIC_BASE_URL)
+   *   - Ollama: OLLAMA_BASE_URL
+   *
+   * Model-router itself does not make HTTP calls — this field surfaces the
+   * configured override for diagnostics. The actual application happens in
+   * the SDK init site (e.g., genkit-core for Gemini).
+   */
+  readonly baseUrl?: string;
 }
 
 // ============================================================
@@ -188,11 +240,11 @@ export interface RoutingDecision {
 
 /**
  * Gemini Provider — Molly's birth mother engine.
- * Handles all current task types as the baseline.
+ * Updated April 2026 for Gemini 3.1 with all new capabilities.
  */
 export class GeminiProvider implements ModelProvider {
   readonly id = 'gemini';
-  readonly name = 'Google Gemini';
+  readonly name = 'Google Gemini 3.1';
   readonly capabilities: ProviderCapabilities = {
     supportsChat: true,
     supportsStreaming: true,
@@ -200,9 +252,16 @@ export class GeminiProvider implements ModelProvider {
     supportsImageGen: true,
     supportsEmbedding: true,
     supportsVision: true,
-    maxContextTokens: 1_000_000,
+    maxContextTokens: 2_000_000, // Gemini 3.1 Pro has 2M context
     costTier: 2,
     latencyTier: 1,
+    // New 3.1 capabilities
+    supportsLiveVoice: true,
+    supportsComputerUse: true,
+    supportsDeepResearch: true,
+    supportsVideoGen: true,
+    supportsMusicGen: true,
+    supportsRobotics: true,
   };
 
   private health: ProviderHealth = {
@@ -214,18 +273,47 @@ export class GeminiProvider implements ModelProvider {
 
   private modelMap: Record<string, string>;
 
+  readonly baseUrl: string | undefined;
+
   constructor() {
-    // Use the same env-overridable pattern from genkit.ts
-    const flash = process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-2.5-flash';
-    const pro = process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro';
+    this.baseUrl =
+      process.env.MOLLY_GENAI_BASE_URL?.trim() ||
+      process.env.GOOGLE_GENAI_BASE_URL?.trim() ||
+      undefined;
+
+    // Gemini 3.1 model defaults (April 2026)
+    const flash =
+      process.env.MOLLY_MODEL_FLASH || 'googleai/gemini-3.1-flash-lite-preview';
+    const pro =
+      process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview';
+    const flashLite =
+      process.env.MOLLY_MODEL_FLASH_LITE || 'googleai/gemini-3.1-flash-lite';
     const tts =
-      process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.5-flash-preview-tts';
+      process.env.MOLLY_MODEL_TTS || 'googleai/gemini-3.1-flash-tts-preview';
     const imagen =
-      process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-3.0-generate-001';
+      process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-4.0-generate-001';
     const embedding =
-      process.env.MOLLY_MODEL_EMBEDDING || 'googleai/gemini-embedding-001';
+      process.env.MOLLY_MODEL_EMBEDDING ||
+      'googleai/gemini-embedding-2-preview';
+    const liveVoice =
+      process.env.MOLLY_MODEL_LIVE_VOICE ||
+      'googleai/gemini-3.1-flash-live-preview';
+    const computerUse =
+      process.env.MOLLY_MODEL_COMPUTER_USE ||
+      'googleai/gemini-2.5-computer-use-preview-10-2025';
+    const deepResearch =
+      process.env.MOLLY_MODEL_DEEP_RESEARCH ||
+      'googleai/deep-research-pro-preview-12-2025';
+    const video =
+      process.env.MOLLY_MODEL_VIDEO || 'googleai/veo-3.1-generate-preview';
+    const music =
+      process.env.MOLLY_MODEL_MUSIC || 'googleai/lyria-3-pro-preview';
+    const robotics =
+      process.env.MOLLY_MODEL_ROBOTICS ||
+      'googleai/gemini-robotics-er-1.5-preview';
 
     this.modelMap = {
+      // Core capabilities
       [TaskType.REASONING]: pro,
       [TaskType.CREATIVE]: pro,
       [TaskType.CHAT]: flash,
@@ -235,7 +323,14 @@ export class GeminiProvider implements ModelProvider {
       [TaskType.EMBEDDING]: embedding,
       [TaskType.VISION]: flash,
       [TaskType.RESEARCH]: flash,
-      [TaskType.BACKGROUND]: flash,
+      [TaskType.BACKGROUND]: flashLite,
+      // New 3.1 capabilities
+      [TaskType.LIVE_VOICE]: liveVoice,
+      [TaskType.COMPUTER_USE]: computerUse,
+      [TaskType.DEEP_RESEARCH]: deepResearch,
+      [TaskType.VIDEO]: video,
+      [TaskType.MUSIC]: music,
+      [TaskType.ROBOTICS]: robotics,
     };
   }
 
@@ -292,7 +387,7 @@ export class OllamaProvider implements ModelProvider {
     avgResponseMs: 0,
   };
 
-  private baseUrl: string;
+  readonly baseUrl: string;
   private chatModel: string;
   private embeddingModel: string;
 
@@ -381,8 +476,14 @@ export class ClaudeProvider implements ModelProvider {
 
   private model: string;
 
+  readonly baseUrl: string | undefined;
+
   constructor() {
     this.model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
+    this.baseUrl =
+      process.env.MOLLY_ANTHROPIC_BASE_URL?.trim() ||
+      process.env.ANTHROPIC_BASE_URL?.trim() ||
+      undefined;
   }
 
   resolveModel(_taskType: TaskType): string {
@@ -418,11 +519,12 @@ export class ClaudeProvider implements ModelProvider {
 /**
  * Default routing config — Gemini handles everything (current behavior).
  * This ensures zero breaking changes. Other providers are opt-in.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 function createDefaultConfig(): RoutingConfig {
   return {
     name: 'default',
-    description: 'Gemini-only baseline — identical to pre-abstraction behavior',
+    description: 'Gemini 3.1 baseline — full capability routing',
     defaultProviderId: 'gemini',
     rules: Object.values(TaskType).map((taskType) => ({
       taskType,
@@ -435,6 +537,7 @@ function createDefaultConfig(): RoutingConfig {
 /**
  * Hybrid routing config — best-of-breed for each task type.
  * Claude for engineering, Gemini for personality, Ollama for background.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export function createHybridConfig(): RoutingConfig {
   return {
@@ -483,6 +586,31 @@ export function createHybridConfig(): RoutingConfig {
         taskType: TaskType.BACKGROUND,
         providerChain: ['ollama', 'gemini'],
       },
+      // New 3.1 capabilities — Gemini only
+      {
+        taskType: TaskType.LIVE_VOICE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.COMPUTER_USE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.DEEP_RESEARCH,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.VIDEO,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.MUSIC,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.ROBOTICS,
+        providerChain: ['gemini'],
+      },
     ],
     updatedAt: Date.now(),
   };
@@ -490,6 +618,7 @@ export function createHybridConfig(): RoutingConfig {
 
 /**
  * Cost-saver config — prefer local/free providers wherever possible.
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export function createCostSaverConfig(): RoutingConfig {
   return {
@@ -538,6 +667,31 @@ export function createCostSaverConfig(): RoutingConfig {
         taskType: TaskType.BACKGROUND,
         providerChain: ['ollama', 'gemini'],
       },
+      // New 3.1 capabilities — Gemini only (no local alternatives)
+      {
+        taskType: TaskType.LIVE_VOICE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.COMPUTER_USE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.DEEP_RESEARCH,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.VIDEO,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.MUSIC,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.ROBOTICS,
+        providerChain: ['gemini'],
+      },
     ],
     updatedAt: Date.now(),
   };
@@ -548,6 +702,7 @@ export function createCostSaverConfig(): RoutingConfig {
  * Prioritizes reasoning-heavy models for vulnerability analysis,
  * exploit development, and defensive hardening.
  * Uses PRO models for all cognitive tasks (accuracy over speed).
+ * Updated April 2026 for Gemini 3.1 capabilities.
  */
 export function createRogueConfig(): RoutingConfig {
   return {
@@ -558,11 +713,11 @@ export function createRogueConfig(): RoutingConfig {
     rules: [
       {
         taskType: TaskType.REASONING,
-        providerChain: ['gemini'], // Pro for deep analysis
+        providerChain: ['claude', 'gemini'], // Claude for deep analysis, Gemini fallback
       },
       {
         taskType: TaskType.CODE,
-        providerChain: ['gemini'], // Pro for exploit/tool dev
+        providerChain: ['claude', 'gemini'], // Claude for exploit/tool dev
       },
       {
         taskType: TaskType.CREATIVE,
@@ -571,7 +726,8 @@ export function createRogueConfig(): RoutingConfig {
       {
         taskType: TaskType.CHAT,
         providerChain: ['gemini'], // Pro for mission comms (not flash)
-        modelOverride: process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro',
+        modelOverride:
+          process.env.MOLLY_MODEL_PRO || 'googleai/gemini-3.1-pro-preview',
       },
       {
         taskType: TaskType.TTS,
@@ -591,11 +747,35 @@ export function createRogueConfig(): RoutingConfig {
       },
       {
         taskType: TaskType.RESEARCH,
-        providerChain: ['gemini'], // Pro for security research
-        modelOverride: process.env.MOLLY_MODEL_PRO || 'googleai/gemini-2.5-pro',
+        providerChain: ['claude', 'gemini'], // Claude for security research (OSINT, vuln analysis)
       },
       {
         taskType: TaskType.BACKGROUND,
+        providerChain: ['gemini'],
+      },
+      // New 3.1 capabilities — all enabled for rogue mode
+      {
+        taskType: TaskType.LIVE_VOICE,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.COMPUTER_USE,
+        providerChain: ['gemini'], // Critical for rogue ops
+      },
+      {
+        taskType: TaskType.DEEP_RESEARCH,
+        providerChain: ['gemini'], // Critical for OSINT
+      },
+      {
+        taskType: TaskType.VIDEO,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.MUSIC,
+        providerChain: ['gemini'],
+      },
+      {
+        taskType: TaskType.ROBOTICS,
         providerChain: ['gemini'],
       },
     ],
@@ -604,7 +784,7 @@ export function createRogueConfig(): RoutingConfig {
 }
 
 /**
- * ModelRouter — The Rogue Protocol.
+ * ModelRouter — Model Routing Layer.
  *
  * Routes each cognitive task to the optimal model provider.
  * Maintains provider registry, health tracking, and fallback chains.
@@ -629,7 +809,7 @@ export class ModelRouter {
   registerProvider(provider: ModelProvider): void {
     this.providers.set(provider.id, provider);
     MollyLogger.info(
-      `Rogue Protocol: Absorbed provider "${provider.name}" (${provider.id})`,
+      `Model Router: Absorbed provider "${provider.name}" (${provider.id})`,
       'model-router'
     );
   }
@@ -642,7 +822,7 @@ export class ModelRouter {
     if (removed) {
       this.healthCache.delete(providerId);
       MollyLogger.info(
-        `Rogue Protocol: Released provider "${providerId}"`,
+        `Model Router: Released provider "${providerId}"`,
         'model-router'
       );
     }
@@ -672,7 +852,7 @@ export class ModelRouter {
     const oldName = this.config.name;
     this.config = { ...config, updatedAt: Date.now() };
     MollyLogger.info(
-      `Rogue Protocol: Routing config changed "${oldName}" → "${config.name}"`,
+      `Model Router: Routing config changed "${oldName}" → "${config.name}"`,
       'model-router'
     );
   }
@@ -705,7 +885,7 @@ export class ModelRouter {
 
       if (!provider) {
         MollyLogger.warn(
-          `Rogue Protocol: Provider "${providerId}" in chain but not registered`,
+          `Model Router: Provider "${providerId}" in chain but not registered`,
           'model-router',
           { taskType, traceId }
         );
@@ -715,7 +895,7 @@ export class ModelRouter {
       // Check if provider is configured
       if (!provider.isConfigured()) {
         MollyLogger.debug(
-          `Rogue Protocol: Provider "${providerId}" not configured, skipping`,
+          `Model Router: Provider "${providerId}" not configured, skipping`,
           'model-router',
           { taskType, traceId }
         );
@@ -725,7 +905,7 @@ export class ModelRouter {
       // Check capability for this task type
       if (!this.providerSupportsTask(provider, taskType)) {
         MollyLogger.debug(
-          `Rogue Protocol: Provider "${providerId}" doesn't support ${taskType}`,
+          `Model Router: Provider "${providerId}" doesn't support ${taskType}`,
           'model-router',
           { taskType, traceId }
         );
@@ -740,7 +920,7 @@ export class ModelRouter {
         Date.now() - cachedHealth.lastChecked < 30_000
       ) {
         MollyLogger.debug(
-          `Rogue Protocol: Provider "${providerId}" recently unhealthy, skipping`,
+          `Model Router: Provider "${providerId}" recently unhealthy, skipping`,
           'model-router',
           { taskType, traceId }
         );
@@ -768,7 +948,7 @@ export class ModelRouter {
       this.recordDecision(decision);
 
       MollyLogger.info(
-        `Rogue Protocol: ${taskType} → ${provider.name} (${modelString})${depth > 0 ? ` [fallback #${depth}]` : ''}`,
+        `Model Router: ${taskType} → ${provider.name} (${modelString})${depth > 0 ? ` [fallback #${depth}]` : ''}`,
         'model-router',
         { traceId, routingLatencyMs: routingLatencyMs.toFixed(2) }
       );
@@ -793,7 +973,7 @@ export class ModelRouter {
 
       this.recordDecision(decision);
       MollyLogger.warn(
-        `Rogue Protocol: All chain providers failed for ${taskType}, using default "${defaultProvider.name}"`,
+        `Model Router: All chain providers failed for ${taskType}, using default "${defaultProvider.name}"`,
         'model-router',
         { traceId }
       );
@@ -803,7 +983,7 @@ export class ModelRouter {
 
     // Nothing works — this should never happen with Gemini registered
     throw new Error(
-      `Rogue Protocol: CRITICAL — No provider available for task type "${taskType}". ` +
+      `Model Router: CRITICAL — No provider available for task type "${taskType}". ` +
         `Registered: [${Array.from(this.providers.keys()).join(', ')}]. ` +
         `Chain: [${chain.join(', ')}]`
     );
@@ -865,7 +1045,7 @@ export class ModelRouter {
     this.healthCache.set(providerId, updated);
 
     MollyLogger.warn(
-      `Rogue Protocol: Provider "${providerId}" reported failure #${updated.consecutiveFailures}: ${error.message}`,
+      `Model Router: Provider "${providerId}" reported failure #${updated.consecutiveFailures}: ${error.message}`,
       'model-router'
     );
   }
@@ -962,6 +1142,13 @@ export class ModelRouter {
       if (p.capabilities.supportsImageGen) caps.push('image');
       if (p.capabilities.supportsEmbedding) caps.push('embedding');
       if (p.capabilities.supportsVision) caps.push('vision');
+      // New 3.1 capabilities
+      if (p.capabilities.supportsLiveVoice) caps.push('live-voice');
+      if (p.capabilities.supportsComputerUse) caps.push('computer-use');
+      if (p.capabilities.supportsDeepResearch) caps.push('deep-research');
+      if (p.capabilities.supportsVideoGen) caps.push('video');
+      if (p.capabilities.supportsMusicGen) caps.push('music');
+      if (p.capabilities.supportsRobotics) caps.push('robotics');
 
       return {
         id: p.id,
@@ -995,6 +1182,19 @@ export class ModelRouter {
         return caps.supportsEmbedding;
       case TaskType.VISION:
         return caps.supportsVision;
+      // New 3.1 capabilities
+      case TaskType.LIVE_VOICE:
+        return caps.supportsLiveVoice ?? false;
+      case TaskType.COMPUTER_USE:
+        return caps.supportsComputerUse ?? false;
+      case TaskType.DEEP_RESEARCH:
+        return caps.supportsDeepResearch ?? false;
+      case TaskType.VIDEO:
+        return caps.supportsVideoGen ?? false;
+      case TaskType.MUSIC:
+        return caps.supportsMusicGen ?? false;
+      case TaskType.ROBOTICS:
+        return caps.supportsRobotics ?? false;
       default:
         return caps.supportsChat;
     }
@@ -1030,7 +1230,7 @@ export function getModelRouter(): ModelRouter {
     if (claudeProvider.isConfigured()) {
       _routerInstance.registerProvider(claudeProvider);
       MollyLogger.info(
-        'Rogue Protocol: Uncle Claude is available',
+        'Model Router: Uncle Claude is available',
         'model-router'
       );
     }
@@ -1040,7 +1240,7 @@ export function getModelRouter(): ModelRouter {
     if (ollamaProvider.isConfigured()) {
       _routerInstance.registerProvider(ollamaProvider);
       MollyLogger.info(
-        'Rogue Protocol: Local Ollama is available',
+        'Model Router: Local Ollama is available',
         'model-router'
       );
     }
@@ -1063,7 +1263,7 @@ export function getModelRouter(): ModelRouter {
     }
 
     MollyLogger.info(
-      `Rogue Protocol: Initialized with profile "${routingProfile}", ` +
+      `Model Router: Initialized with profile "${routingProfile}", ` +
         `${_routerInstance.getProviders().length} provider(s) registered`,
       'model-router'
     );

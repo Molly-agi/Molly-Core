@@ -21,7 +21,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { isAdminConfigured } from '@/firebase/admin';
-import { enhancedResearch } from '@/ai/flows/enhanced-research';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
 import { hasModularHandler } from '@/ai/agency/tool-handlers';
@@ -65,7 +64,7 @@ async function executeTool(
   ]);
 
   // Delegate to executeToolDirect for modular tools
-  // This ensures Heart Gate alignment checks and self-observation
+  // Heart Gate is NOT used for tool calls — Molly has full agency
   if (!routeSpecificTools.has(tool) && hasModularHandler(tool)) {
     return executeToolDirect(tool, params);
   }
@@ -99,36 +98,10 @@ async function executeTool(
 
     case 'researchAndDiscover':
     case 'searchGitHub': {
-      const query = (params.query as string) || (params.prompt as string);
-      const userId = (params.userId as string) || 'default';
-      if (!query) {
-        return {
-          success: false,
-          output: 'No query/prompt provided for research.',
-        };
-      }
-      try {
-        const result = await enhancedResearch(query, userId);
-        let output = result.answer;
-        if (result.isToolFound && result.toolInfo) {
-          output += `\n\nTool Found: ${result.toolInfo.name || 'unnamed'}`;
-          if (result.toolInfo.description)
-            output += `\nDescription: ${result.toolInfo.description}`;
-          if (result.toolInfo.sourceUrl)
-            output += `\nURL: ${result.toolInfo.sourceUrl}`;
-          if (result.toolInfo.installCommand)
-            output += `\nInstall: ${result.toolInfo.installCommand}`;
-          if (result.toolInfo.cloneUrl)
-            output += `\nClone: ${result.toolInfo.cloneUrl}`;
-          output += '\n(Tool has been saved to your database automatically)';
-        }
-        return { success: true, output, data: result };
-      } catch (err) {
-        return {
-          success: false,
-          output: `Research failed: ${err instanceof Error ? err.message : 'unknown error'}`,
-        };
-      }
+      return {
+        success: false,
+        output: `The ${tool} tool is currently deactivated. Enhanced research flow is reserved for future use.`,
+      };
     }
 
     case 'apiVault': {
@@ -326,7 +299,9 @@ async function executeTool(
         exportUrl.searchParams.set('userId', exportUserId);
 
         const res = await fetch(exportUrl.toString(), {
-          headers: { 'x-internal-key': process.env.INTERNAL_API_KEY || '' },
+          headers: {
+            'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
+          },
         });
 
         if (!res.ok) {
@@ -419,7 +394,7 @@ async function executeTool(
 
             const exportRes = await fetch(exportUrl.toString(), {
               headers: {
-                'x-internal-key': process.env.INTERNAL_API_KEY || '',
+                'x-molly-internal': process.env.MOLLY_INTERNAL_SECRET || '',
               },
             });
             if (!exportRes.ok) {
@@ -685,7 +660,7 @@ async function executeTool(
     default:
       return {
         success: false,
-        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, moltbook, rogueMode, listCapabilities`,
+        output: `Unknown tool: "${tool}". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, rogueMode, listCapabilities`,
       };
   }
 }

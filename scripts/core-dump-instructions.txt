@@ -1,0 +1,15 @@
+# Enabling Core Dumps for Node.js
+
+1. In your terminal, run:
+   ulimit -c unlimited
+
+2. Set Node.js to abort on uncaught exceptions:
+   export NODE_OPTIONS='--abort-on-uncaught-exception'
+
+3. Run your Node.js process as usual. If a fatal error occurs, a core dump will be written (usually as 'core' in the working directory).
+
+4. To analyze a core dump:
+   node --inspect-brk core
+   # Or use gdb/lldb for low-level analysis
+
+# Note: Codespaces and some containers may restrict core dump generation. Check your environment's documentation if you do not see a core file after a crash.
