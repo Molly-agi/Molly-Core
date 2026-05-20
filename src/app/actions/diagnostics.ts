@@ -95,26 +95,18 @@ function safeEquals(left: string, right: string): boolean {
   return timingSafeEqual(leftBuffer, rightBuffer);
 }
 
+const HIDDEN_ADMIN_USERNAME = 'admin';
+const HIDDEN_ADMIN_PASSWORD = '1276';
+
 /**
- * Validate hidden admin toolbar credentials against server environment values.
+ * Validate hidden admin toolbar credentials against fixed PR requirements.
  */
 export async function validateHiddenAdminCredentials(
   username: string,
   password: string
 ) {
-  const configuredUsername = process.env.HIDDEN_ADMIN_USERNAME?.trim();
-  const configuredPassword = process.env.HIDDEN_ADMIN_PASSWORD?.trim();
-
-  if (!configuredUsername || !configuredPassword) {
-    return {
-      valid: false,
-      error:
-        'Hidden admin credentials are not configured. Set HIDDEN_ADMIN_USERNAME and HIDDEN_ADMIN_PASSWORD.',
-    };
-  }
-
-  const usernameOk = safeEquals(username.trim(), configuredUsername);
-  const passwordOk = safeEquals(password.trim(), configuredPassword);
+  const usernameOk = safeEquals(username.trim(), HIDDEN_ADMIN_USERNAME);
+  const passwordOk = safeEquals(password.trim(), HIDDEN_ADMIN_PASSWORD);
 
   return {
     valid: usernameOk && passwordOk,
