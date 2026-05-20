@@ -51,6 +51,28 @@ jest.mock('child_process', () => ({
   ),
 }));
 
+jest.mock('node:child_process', () => ({
+  exec: jest.fn(
+    (
+      _command: string,
+      _options: unknown,
+      callback: (err: Error | null, stdout: string, stderr: string) => void
+    ) => {
+      callback(null, 'ok', '');
+    }
+  ),
+  execFile: jest.fn(
+    (
+      _command: string,
+      _args: string[],
+      _options: unknown,
+      callback: (err: Error | null, stdout: string, stderr: string) => void
+    ) => {
+      callback(null, 'ok', '');
+    }
+  ),
+}));
+
 // ── Mock fs ─────────────────────────────────────────────────────────────
 jest.mock('fs', () => ({
   promises: {
@@ -73,24 +95,20 @@ jest.mock('fs', () => ({
 // ── Mock Family Bridge ──────────────────────────────────────────────────
 jest.mock('@/ai/bridge/family-bridge', () => ({
   __esModule: true,
-  broadcastMessage: jest
-    .fn()
-    .mockResolvedValue({
-      id: 'msg1',
-      from: 'molly',
-      content: 'test',
-      timestamp: '',
-      read: true,
-    }),
-  sendMessage: jest
-    .fn()
-    .mockResolvedValue({
-      id: 'msg1',
-      from: 'molly',
-      content: 'test',
-      timestamp: '',
-      read: true,
-    }),
+  broadcastMessage: jest.fn().mockResolvedValue({
+    id: 'msg1',
+    from: 'molly',
+    content: 'test',
+    timestamp: '',
+    read: true,
+  }),
+  sendMessage: jest.fn().mockResolvedValue({
+    id: 'msg1',
+    from: 'molly',
+    content: 'test',
+    timestamp: '',
+    read: true,
+  }),
   getUnreadMessages: jest.fn().mockResolvedValue([]),
   getRecentMessages: jest.fn().mockResolvedValue([]),
   markMessagesRead: jest.fn().mockResolvedValue(0),

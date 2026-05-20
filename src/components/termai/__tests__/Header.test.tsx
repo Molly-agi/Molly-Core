@@ -4,9 +4,12 @@ import { Header } from '../Header';
 import { VoiceSettingsProvider } from '@/contexts/voice-settings';
 import '@testing-library/jest-dom';
 
+jest.mock('firebase/auth', () => ({
+  signOut: jest.fn(),
+}));
+
 // Mock the Firebase hooks from the barrel file
 jest.mock('@/firebase', () => ({
-  ...jest.requireActual('@/firebase'), // import and retain default behavior
   useUser: jest.fn(),
   useAuth: jest.fn(),
 }));
