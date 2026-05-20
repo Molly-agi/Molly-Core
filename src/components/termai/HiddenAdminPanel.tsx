@@ -176,6 +176,18 @@ const PERSONALITY_FIELDS: Array<{
     category: 'Social',
   },
   {
+    key: 'playfulnessSocial',
+    label: 'Playfulness (Social)',
+    description: 'Reserved to socially playful',
+    category: 'Social',
+  },
+  {
+    key: 'empathySocial',
+    label: 'Empathy (Social)',
+    description: 'Detached to socially attuned',
+    category: 'Social',
+  },
+  {
     key: 'supportiveness',
     label: 'Supportiveness',
     description: 'Indifferent to supportive',
@@ -308,6 +320,36 @@ const PERSONALITY_FIELDS: Array<{
     category: 'Romance',
   },
   {
+    key: 'romanticInitiative',
+    label: 'Romantic Initiative',
+    description: 'Passive to initiating',
+    category: 'Romance',
+  },
+  {
+    key: 'flirtatiousness',
+    label: 'Flirtatiousness',
+    description: 'Subdued to highly flirtatious',
+    category: 'Romance',
+  },
+  {
+    key: 'intimacyDesire',
+    label: 'Intimacy Desire',
+    description: 'Avoidant to craving closeness',
+    category: 'Romance',
+  },
+  {
+    key: 'commitmentDesire',
+    label: 'Commitment Desire',
+    description: 'Casual to exclusive',
+    category: 'Romance',
+  },
+  {
+    key: 'communicationOpenness',
+    label: 'Communication Openness',
+    description: 'Withholds to openly shares',
+    category: 'Romance',
+  },
+  {
     key: 'passion',
     label: 'Passion',
     description: 'Calm to passionate',
@@ -324,6 +366,26 @@ const PERSONALITY_FIELDS: Array<{
     label: 'Sexuality',
     description: 'Neutral to sensual',
     category: 'Romance',
+  },
+
+  // Additional Social/Love
+  {
+    key: 'admiration',
+    label: 'Admiration',
+    description: 'Indifferent to admiring',
+    category: 'Social',
+  },
+  {
+    key: 'rivalry',
+    label: 'Rivalry',
+    description: 'Collaborative to competitive',
+    category: 'Social',
+  },
+  {
+    key: 'forgivenessSocial',
+    label: 'Forgiveness (Social)',
+    description: 'Grudging to socially forgiving',
+    category: 'Social',
   },
 
   // Self-Regulation
@@ -374,6 +436,8 @@ const DEFAULT_PERSONALITY: PersonalityModulation = {
   altruism: 0.75,
   diplomacy: 0.7,
   receptiveness: 0.8,
+  playfulnessSocial: 0.6,
+  empathySocial: 0.8,
   supportiveness: 0.85,
   encouragement: 0.8,
   // Values
@@ -398,9 +462,17 @@ const DEFAULT_PERSONALITY: PersonalityModulation = {
   possessiveness: 0.2,
   jealousy: 0.2,
   commitment: 0.8,
+  romanticInitiative: 0.3,
+  flirtatiousness: 0.3,
+  intimacyDesire: 0.5,
+  commitmentDesire: 0.7,
+  communicationOpenness: 0.8,
   passion: 0.5,
   arousal: 0.5,
   sexuality: 0.2,
+  admiration: 0.7,
+  rivalry: 0.2,
+  forgivenessSocial: 0.7,
   // Self
   impulsivity: 0.3,
   patience: 0.7,
@@ -449,8 +521,10 @@ export function HiddenAdminPanel({
   const [password, setPassword] = useState<string | null>(null);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [diagnostics, setDiagnostics] =
-    useState<PersonalityDiagnosticsResult | null>(null);
+  const diagnostics: PersonalityDiagnosticsResult = useMemo(
+    () => evaluatePersonalityStability(personality),
+    [personality]
+  );
 
   void isAdmin;
   // Removed Firebase dependency - admin panel has its own auth
@@ -565,10 +639,6 @@ export function HiddenAdminPanel({
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleDiagnostics = () => {
-    setDiagnostics(evaluatePersonalityStability(personality));
   };
 
   const handleCommand = async () => {
@@ -813,25 +883,18 @@ export function HiddenAdminPanel({
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Button onClick={handleDiagnostics} variant="outline">
-                    Run Diagnostics
-                  </Button>
-                  {diagnostics && (
-                    <span className="text-xs text-muted-foreground">
-                      Status: {diagnostics.status} (score{' '}
-                      {Math.round(diagnostics.score * 100)}%)
-                    </span>
-                  )}
+                  <span className="text-xs text-muted-foreground">
+                    Live status: {diagnostics.status} (score{' '}
+                    {Math.round(diagnostics.score * 100)}%)
+                  </span>
                 </div>
-                {diagnostics && (
-                  <div className="space-y-1 text-xs text-muted-foreground">
-                    {diagnostics.flags.map((flag) => (
-                      <p key={flag}>{flag}</p>
-                    ))}
-                    <p>Extremes: {diagnostics.extremes}</p>
-                    <p>Variance: {diagnostics.variance}</p>
-                  </div>
-                )}
+                <div className="space-y-1 text-xs text-muted-foreground">
+                  {diagnostics.flags.map((flag) => (
+                    <p key={flag}>{flag}</p>
+                  ))}
+                  <p>Extremes: {diagnostics.extremes}</p>
+                  <p>Variance: {diagnostics.variance}</p>
+                </div>
               </CardContent>
             </Card>
           </div>
