@@ -33,6 +33,8 @@
     "watchdog": "nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
     "bridge": "node scripts/bridge-daemon.mjs",
     "bridge:listen": "node scripts/bridge-listen.mjs",
+    "demon": "node scripts/demon-state.mjs",
+    "demon:bg": "nohup node scripts/demon-state.mjs > .demon-state.log 2>&1 &",
     "save-session": "node scripts/save-session.mjs",
     "save-session:pause": "node scripts/save-session.mjs --status paused"
   },

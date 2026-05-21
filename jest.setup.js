@@ -1,3 +1,9 @@
+// Polyfill fetch for Node.js test environment (required by Firebase Auth)
+if (typeof global.fetch === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  global.fetch = require('node-fetch');
+}
+
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 

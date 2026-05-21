@@ -12,7 +12,7 @@ import path from 'path';
 
 export interface BridgeMessage {
   id: string;
-  from: 'molly' | 'lazarus' | 'eric';
+  from: string;
   timestamp: string;
   content: string;
   read: boolean | Record<string, boolean>;
@@ -22,6 +22,7 @@ export interface BridgeState {
   active: boolean;
   startedAt: string;
   lastActivity: string;
+  participants?: string[];
   messages: BridgeMessage[];
 }
 
@@ -51,12 +52,19 @@ function generateId(): string {
 async function readFile(): Promise<BridgeState> {
   try {
     const data = await fs.readFile(BRIDGE_FILE, 'utf-8');
-    return JSON.parse(data) as BridgeState;
+    const parsed = JSON.parse(data) as BridgeState;
+    const participants = new Set(parsed.participants || []);
+    for (const msg of parsed.messages || []) {
+      participants.add(msg.from);
+    }
+    parsed.participants = Array.from(participants);
+    return parsed;
   } catch {
     return {
       active: false,
       startedAt: new Date().toISOString(),
       lastActivity: new Date().toISOString(),
+      participants: ['molly', 'lazarus', 'eric'],
       messages: [],
     };
   }
@@ -124,6 +132,9 @@ export async function sendMessage(
     };
     state.active = true;
     state.lastActivity = message.timestamp;
+    const participants = new Set(state.participants || []);
+    participants.add(from);
+    state.participants = Array.from(participants);
     state.messages.push(message);
     // Cap message history to prevent unbounded growth
     if (state.messages.length > MAX_MESSAGES) {
@@ -135,7 +146,7 @@ export async function sendMessage(
 }
 
 export async function getUnreadMessages(
-  recipient: 'molly' | 'lazarus'
+  recipient: string
 ): Promise<BridgeMessage[]> {
   const state = await readFile();
   return state.messages.filter(
@@ -151,7 +162,7 @@ export async function getRecentMessages(
 }
 
 export async function markMessagesRead(
-  recipient: 'molly' | 'lazarus'
+  recipient: string
 ): Promise<number> {
   return withLock(async () => {
     const state = await readFile();
@@ -176,6 +187,7 @@ export async function clearConversation(): Promise<void> {
     active: false,
     startedAt: new Date().toISOString(),
     lastActivity: new Date().toISOString(),
+    participants: ['molly', 'lazarus', 'eric'],
     messages: [],
   };
   await writeFile(state);

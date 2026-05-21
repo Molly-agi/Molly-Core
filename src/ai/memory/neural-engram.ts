@@ -565,6 +565,9 @@ export class NeuralEngramSystem {
   private nextId = 1;
   private persistenceConfig: EngramPersistenceConfig | null = null;
 
+  // NEW: Memory Lifecycle Coordinator (optional compression layer)
+  private lifecycleCoordinator: any | null = null;
+
   constructor() {
     this.frontalCortex = new FrontalCortex();
     this.amygdala = new Amygdala();
@@ -575,6 +578,14 @@ export class NeuralEngramSystem {
     this.currentPersonality = this.getBaselinePersonality();
 
     MollyLogger.info('Neural engram system initialized', 'neural-engram');
+  }
+
+  /**
+   * Set the memory lifecycle coordinator for compression + audit logging.
+   */
+  setLifecycleCoordinator(coordinator: any): void {
+    this.lifecycleCoordinator = coordinator;
+    MollyLogger.debug('Lifecycle coordinator attached to neural engram system', 'neural-engram');
   }
 
   /**
@@ -730,6 +741,17 @@ export class NeuralEngramSystem {
 
     if (batch.length > 0 && this.persistenceConfig) {
       try {
+        // NEW: Use lifecycle coordinator if available (compression + audit)
+        if (this.lifecycleCoordinator) {
+          const compressionResult = await this.lifecycleCoordinator.compressMemoryBatch(batch);
+          MollyLogger.info('Compression metrics', 'neural-engram', compressionResult.metrics);
+
+          // Log consolidation action
+          const totalBytesSaved = compressionResult.metrics.originalSize - compressionResult.metrics.compressedSize;
+          await this.lifecycleCoordinator.logConsolidation(batch.length, totalBytesSaved);
+        }
+
+        // Persist (with or without prior compression logging)
         await persistEngramBatch(
           this.persistenceConfig.userId,
           this.persistenceConfig.password,

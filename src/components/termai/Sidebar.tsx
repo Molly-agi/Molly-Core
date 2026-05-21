@@ -39,7 +39,7 @@ function retryImport<T>(factory: () => Promise<T>, retries = 1): Promise<T> {
 
 const AIGuidance = dynamic(
   () => retryImport(() => import('./AIGuidance').then((mod) => mod.AIGuidance)),
-  { ssr: false, loading: loadingPlaceholder('research') }
+  { ssr: false, loading: loadingPlaceholder('demon') }
 );
 
 const ToolCategoryList = dynamic(
@@ -55,7 +55,7 @@ const VisionaryCoachTab = dynamic(
     retryImport(() =>
       import('./VisionaryCoachTab').then((mod) => mod.VisionaryCoachTab)
     ),
-  { ssr: false, loading: loadingPlaceholder('partner') }
+  { ssr: false, loading: loadingPlaceholder('spiritual advisor') }
 );
 
 const MemoryViewer = dynamic(
@@ -154,9 +154,9 @@ export function TermAISidebar() {
   const [diagnosticsKey, setDiagnosticsKey] = useState(0);
 
   const tabs = [
-    { value: 'research', icon: Search, label: 'Research' },
+    { value: 'research', icon: Search, label: 'Demon' },
     { value: 'tools', icon: Library, label: 'Tools' },
-    { value: 'partner', icon: HeartPulse, label: 'Partner' },
+    { value: 'partner', icon: HeartPulse, label: 'Spiritual' },
     { value: 'memory', icon: BrainCircuit, label: 'Memory' },
     { value: 'diagnostics', icon: Activity, label: 'System' },
   ] as const;

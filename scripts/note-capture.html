@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Molly Note Capture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      max-height: 800px;
+    }
+
+    .header {
+      padding: 24px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #f8f9fa;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #333;
+      margin-bottom: 16px;
+    }
+
+    .title-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .title-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .text-area {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'Courier New', monospace;
+      resize: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-area:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .text-area.drag-over {
+      border-color: #667eea;
+      background-color: #f0f2ff;
+    }
+
+    .footer {
+      padding: 20px 24px;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      background: #f8f9fa;
+      border-radius: 0 0 12px 12px;
+      flex-wrap: wrap;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      overflow: hidden;
+      display: none;
+      margin-bottom: 12px;
+    }
+
+    .progress-bar.active {
+      display: block;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.2s;
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: #666;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      flex: 1;
+    }
+
+    .btn-send:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-send:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-send:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-clear {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-clear:hover {
+      background: #d0d0d0;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+      border: 1px solid #f5c6cb;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .char-count {
+      font-size: 12px;
+      color: #999;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📝 Molly Notes</h1>
+      <input
+        type="text"
+        class="title-input"
+        id="titleInput"
+        placeholder="Note title..."
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="content-area">
+      <textarea
+        class="text-area"
+        id="contentArea"
+        placeholder="Paste or drag text here... (or start typing)"
+      ></textarea>
+      <div class="char-count">
+        <span id="charCount">0</span> characters
+      </div>
+    </div>
+
+    <div class="progress-bar" id="progressBar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="footer">
+      <div class="progress-text" id="progressText"></div>
+      <button class="btn-clear" id="clearBtn">Clear</button>
+      <button class="btn-send" id="sendBtn">Send</button>
+    </div>
+
+    <div class="status" id="status"></div>
+  </div>
+
+  <script>
+    const titleInput = document.getElementById('titleInput');
+    const contentArea = document.getElementById('contentArea');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const status = document.getElementById('status');
+    const charCount = document.getElementById('charCount');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+
+    const CHUNK_SIZE = 1024 * 1024; // 1MB chunks
+    const MAX_SINGLE_UPLOAD = 5 * 1024 * 1024; // Use chunking above 5MB
+
+    // Character counter
+    contentArea.addEventListener('input', () => {
+      charCount.textContent = contentArea.value.length;
+    });
+
+    // Drag and drop
+    contentArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      contentArea.classList.add('drag-over');
+    });
+
+    contentArea.addEventListener('dragleave', () => {
+      contentArea.classList.remove('drag-over');
+    });
+
+    contentArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      contentArea.classList.remove('drag-over');
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          contentArea.value = event.target.result;
+          charCount.textContent = contentArea.value.length;
+          if (!titleInput.value) {
+            titleInput.value = file.name.replace(/\.[^.]+$/, '');
+          }
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // Clear button
+    clearBtn.addEventListener('click', () => {
+      if (contentArea.value && !confirm('Clear all text?')) return;
+      titleInput.value = '';
+      contentArea.value = '';
+      charCount.textContent = '0';
+      status.style.display = 'none';
+    });
+
+    // Upload with chunking for large files
+    async function uploadWithChunking(title, content) {
+      const sessionId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const chunks = [];
+
+      // Split content into chunks
+      for (let i = 0; i < content.length; i += CHUNK_SIZE) {
+        chunks.push(content.slice(i, i + CHUNK_SIZE));
+      }
+
+      const totalChunks = chunks.length;
+      let uploadedChunks = 0;
+
+      for (let i = 0; i < chunks.length; i++) {
+        try {
+          const response = await fetch('/api/upload-chunk', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              sessionId,
+              chunkIndex: i,
+              totalChunks,
+              chunk: chunks[i],
+              title
+            })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Upload failed');
+          }
+
+          uploadedChunks++;
+          const percent = (uploadedChunks / totalChunks) * 100;
+          updateProgress(percent);
+
+          if (data.complete) {
+            return data;
+          }
+        } catch (error) {
+          throw error;
+        }
+      }
+    }
+
+    function updateProgress(percent) {
+      progressBar.classList.add('active');
+      progressFill.style.width = percent + '%';
+      progressText.textContent = Math.round(percent) + '%';
+    }
+
+    function hideProgress() {
+      progressBar.classList.remove('active');
+      progressFill.style.width = '0%';
+      progressText.textContent = '';
+    }
+
+    // Send button
+    sendBtn.addEventListener('click', async () => {
+      const title = titleInput.value.trim();
+      const content = contentArea.value.trim();
+
+      if (!title || !content) {
+        showStatus('Title and content required', 'error');
+        return;
+      }
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = 'Saving...';
+
+      try {
+        let data;
+
+        // Use chunking for large content
+        if (content.length > MAX_SINGLE_UPLOAD) {
+          data = await uploadWithChunking(title, content);
+        } else {
+          const response = await fetch('/api/save-note', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, content })
+          });
+
+          data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Save failed');
+          }
+        }
+
+        showStatus(`✅ ${data.message}`, 'success');
+        hideProgress();
+        titleInput.value = '';
+        contentArea.value = '';
+        charCount.textContent = '0';
+
+        setTimeout(() => {
+          status.style.display = 'none';
+        }, 3000);
+      } catch (error) {
+        showStatus(`❌ ${error.message}`, 'error');
+        hideProgress();
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send';
+      }
+    });
+
+    function showStatus(message, type) {
+      status.textContent = message;
+      status.className = `status ${type}`;
+      status.style.display = 'block';
+    }
+
+    // Focus title input on load
+    titleInput.focus();
+  </script>
+</body>
+</html>

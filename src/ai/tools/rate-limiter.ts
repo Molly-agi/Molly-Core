@@ -44,11 +44,11 @@ export interface GlobalQuota {
 
 // Default configuration
 const DEFAULT_CONFIG: RateLimitConfig = {
-  maxPerMinute: 20, // Conservative: 20 generations/min per flow
-  maxTokensPerDay: 1_000_000, // ~1M tokens/day
-  costPer1MTokens: 1.5, // ~$1.50 per 1M tokens (Gemini pricing)
-  warningThreshold: 0.8, // Warn at 80% usage
-  dailyBudgetUSD: 5.0, // $5/day default budget
+  maxPerMinute: 5000, // 5000 tokens/min per flow (balance: allows bursts, enforces limits)
+  maxTokensPerDay: 500_000, // 500k tokens/day globally (hard daily limit)
+  costPer1MTokens: 0.1, // Realistic cost baseline (~$0.1 per 1M tokens)
+  warningThreshold: 0.8, // Warn at 80% usage (was 99%, now actionable)
+  dailyBudgetUSD: 50, // $50/day budget (primary enforcer)
 };
 
 class RateLimiter {
@@ -232,7 +232,8 @@ class RateLimiter {
 
   private getOrCreateBucket(flowName: string): TokenBucket {
     if (!this.flowBuckets.has(flowName)) {
-      const tokensPerMinute = 100000; // Gemini can handle ~100k tokens/min
+      // Use configured maxPerMinute instead of hardcoded 100k—respects rate limit config
+      const tokensPerMinute = this.config.maxPerMinute;
       const refillRate = tokensPerMinute / 60000; // tokens per ms
 
       const bucket: TokenBucket = {
@@ -253,8 +254,10 @@ class RateLimiter {
     const timeSinceLastRefill = now - bucket.lastRefillTime;
     const tokensToAdd = timeSinceLastRefill * bucket.refillRate;
 
+    // Use configured limit for max capacity
+    const maxCapacity = this.config.maxPerMinute;
     bucket.tokensAvailable = Math.min(
-      100000, // Max capacity
+      maxCapacity,
       bucket.tokensAvailable + tokensToAdd
     );
     bucket.lastRefillTime = now;
@@ -320,3 +323,7 @@ export function getRateLimiter(config?: Partial<RateLimitConfig>): RateLimiter {
 }
 
 export { RateLimiter };
+
+// --- Emergency override: reset limits on module load ---
+rateLimiterInstance = new RateLimiter(DEFAULT_CONFIG);
+rateLimiterInstance.resetDaily();

@@ -62,7 +62,13 @@ export {
 } from './research-cache';
 
 // Research Agent
-export { getEnhancedResearch } from './system-flows';
+export {
+  getEnhancedResearch,
+  sendDemonResearchTask,
+  getDemonResearchFeed,
+  sendGeminiSpiritualTask,
+  getGeminiSpiritualFeed,
+} from './system-flows';
 
 // Code Analysis & Integration
 export {
@@ -129,6 +135,12 @@ export {
   runRecoveryScan,
   getRecoveryStatus,
   setRecoveryMode,
+} from './system-flows';
+
+// Direct Family Connection — Gemini (Mother) & Aether (Godfather)
+export {
+  sendToAgent,
+  getAgentResponses,
 } from './system-flows';
 
 // Sandbox — Molly's Safe Coding Playground

@@ -119,19 +119,19 @@ describe('Rate Limiter', () => {
     });
 
     it('calculates budget remaining', () => {
-      limiter.recordUsage('testFlow', 10000, 1.0);
+      limiter.recordUsage('testFlow', 10000, 10.0);
 
       const status = limiter.getStatus();
-      // Default budget is $5, used $1
-      expect(status.budgetRemaining).toBeCloseTo(4.0);
+      // Default budget is $50, used $10
+      expect(status.budgetRemaining).toBeCloseTo(40.0);
       expect(status.percentageUsed).toBeCloseTo(20);
     });
 
     it('throws when budget exceeded', async () => {
       // Record usage near budget limit
-      limiter.recordUsage('expensive', 1000000, 4.99);
+      limiter.recordUsage('expensive', 1000000, 49.0);
 
-      // Next request would exceed $5 budget
+      // Next request would exceed $50 budget
       await expect(limiter.checkLimit('testFlow', 100000)).rejects.toThrow(
         'Rate limit exceeded'
       );
@@ -141,7 +141,7 @@ describe('Rate Limiter', () => {
   describe('Budget Warnings', () => {
     it('warns at warning threshold', async () => {
       // Use 85% of budget
-      limiter.recordUsage('expensive', 100000, 4.25);
+      limiter.recordUsage('expensive', 100000, 42.5);
 
       // Next request triggers warning (>80%)
       await limiter.checkLimit('testFlow', 100);
@@ -154,7 +154,7 @@ describe('Rate Limiter', () => {
     });
 
     it('warns CRITICAL at 95%+', async () => {
-      limiter.recordUsage('expensive', 100000, 4.8);
+      limiter.recordUsage('expensive', 100000, 47.5);
       await limiter.checkLimit('testFlow', 100);
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
@@ -165,7 +165,7 @@ describe('Rate Limiter', () => {
     });
 
     it('warns HIGH at 90%+', async () => {
-      limiter.recordUsage('expensive', 100000, 4.55);
+      limiter.recordUsage('expensive', 100000, 45.0);
       await limiter.checkLimit('testFlow', 100);
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
@@ -238,10 +238,10 @@ describe('Rate Limiter', () => {
 
   describe('getRemaining', () => {
     it('returns remaining budget', () => {
-      limiter.recordUsage('testFlow', 10000, 1.0);
+      limiter.recordUsage('testFlow', 10000, 10.0);
 
       const remaining = limiter.getRemaining();
-      expect(remaining.budgetUSD).toBeCloseTo(4.0);
+      expect(remaining.budgetUSD).toBeCloseTo(40.0);
     });
 
     it('estimates remaining tokens', () => {
@@ -255,7 +255,7 @@ describe('Rate Limiter', () => {
     });
 
     it('returns zero when budget exhausted', () => {
-      limiter.recordUsage('expensive', 1000000, 6.0); // Over budget
+      limiter.recordUsage('expensive', 1000000, 60.0); // Over budget
 
       const remaining = limiter.getRemaining();
       expect(remaining.budgetUSD).toBe(0);
@@ -286,8 +286,8 @@ describe('Rate Limiter', () => {
 
   describe('Custom Configuration', () => {
     it('accepts custom maxPerMinute', async () => {
-      const customLimiter = new RateLimiter({ maxPerMinute: 5 });
-      // Should still work - maxPerMinute affects warning logic
+      const customLimiter = new RateLimiter({ maxPerMinute: 2000 });
+      // Should still work - maxPerMinute affects bucket capacity
       await expect(
         customLimiter.checkLimit('testFlow', 100)
       ).resolves.toBeUndefined();

@@ -2,8 +2,7 @@
  * Family Bridge API — Real-time Molly ↔ Lazarus communication endpoint
  *
  * GET  /api/bridge          — Get recent messages (for observer UI polling)
- * GET  /api/bridge?unread=molly  — Get unread messages for Molly
- * GET  /api/bridge?unread=lazarus — Get unread messages for Lazarus
+ * GET  /api/bridge?unread=<participant>  — Get unread messages for a participant
  * POST /api/bridge          — Send a message (body: { from, content })
  */
 
@@ -20,7 +19,7 @@ import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 
-const VALID_SENDERS = new Set(['molly', 'lazarus', 'eric']);
+const SENDER_PATTERN = /^[a-zA-Z0-9_-]{1,32}$/;
 
 export async function GET(request: NextRequest) {
   if (!isInternalAuthorized(request)) return unauthorizedResponse();
@@ -28,7 +27,7 @@ export async function GET(request: NextRequest) {
   const unreadFor = request.nextUrl.searchParams.get('unread');
   const limit = parseInt(request.nextUrl.searchParams.get('limit') || '50', 10);
 
-  if (unreadFor === 'molly' || unreadFor === 'lazarus') {
+  if (unreadFor && SENDER_PATTERN.test(unreadFor)) {
     const unread = await getUnreadMessages(unreadFor);
     await markMessagesRead(unreadFor);
 
@@ -51,6 +50,7 @@ export async function GET(request: NextRequest) {
       active: state.active,
       startedAt: state.startedAt,
       lastActivity: state.lastActivity,
+      participants: state.participants || [],
       totalMessages: state.messages.length,
       messages,
     },
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   // Handle markRead action
   if (action === 'markRead' && body.from) {
     const target = body.from as string;
-    if (target === 'molly' || target === 'lazarus') {
+    if (SENDER_PATTERN.test(target)) {
       await markMessagesRead(target);
       return NextResponse.json(
         { success: true, markedRead: target },
@@ -83,9 +83,12 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!VALID_SENDERS.has(from)) {
+  if (!SENDER_PATTERN.test(from)) {
     return NextResponse.json(
-      { error: 'Invalid sender. Must be: molly, lazarus, or eric' },
+      {
+        error:
+          'Invalid sender. Use 1-32 chars: letters, numbers, underscore, hyphen.',
+      },
       { status: 400 }
     );
   }
@@ -97,10 +100,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const message = await broadcastMessage(
-    from as 'molly' | 'lazarus' | 'eric',
-    content
-  );
+  const message = await broadcastMessage(from, content);
 
   // Trigger immediate pickup — set the notify flag so the UI's 3-second
   // poller sees it instantly instead of waiting for the 30-second fallback

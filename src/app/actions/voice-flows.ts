@@ -19,6 +19,7 @@ import {
   isSleepSafeword,
   toggleSleepState,
 } from '@/ai/tools/safety-sleep';
+import { withTimeoutAndRetry, TIMEOUT_PRESETS, RETRY_PRESETS } from '@/ai/tools/timeout-retry';
 import { ensureApiKey, checkRateLimit } from './utils';
 import {
   getAudioMimeType,
@@ -171,18 +172,24 @@ export async function processVoiceInteraction(
     const memoryContext = await buildMemoryContext(userId, transcription);
 
     const startTime = Date.now();
-    const chatResponse = await conversationalChat({
-      text: transcription,
-      history: [],
-      inputContext: {
-        source: 'self.auditory_input',
-        modality: 'audio',
-        content: transcription,
-      },
-      selfSignals,
-      memoryContext,
-      visionContext,
-    });
+    const chatResponse = await withTimeoutAndRetry(
+      () =>
+        conversationalChat({
+          text: transcription,
+          history: [],
+          inputContext: {
+            source: 'self.auditory_input',
+            modality: 'audio',
+            content: transcription,
+          },
+          selfSignals,
+          memoryContext,
+          visionContext,
+        }),
+      'voice-conversational-chat',
+      TIMEOUT_PRESETS.NORMAL,
+      RETRY_PRESETS.FAST
+    );
     setLastLatencyMs(latencyKey, Date.now() - startTime);
 
     logPacingTelemetry(

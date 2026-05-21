@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Header } from '../Header';
-import { VoiceSettingsProvider } from '@/contexts/voice-settings';
 import '@testing-library/jest-dom';
 
 jest.mock('firebase/auth', () => ({
@@ -51,6 +50,15 @@ jest.mock('@/components/ui/sidebar', () => ({
   SidebarTrigger: () => <button>Trigger</button>,
 }));
 
+jest.mock('@/contexts/voice-settings', () => ({
+  VoiceSettingsProvider: ({ children }: { children: React.ReactNode }) => children,
+  useVoiceSettings: () => ({
+    selectedVoice: 'Aoede',
+    setSelectedVoice: jest.fn(),
+    availableVoices: ['Aoede', 'Puck', 'Charon', 'Fenrir', 'Kore'],
+  }),
+}));
+
 describe('Header', () => {
   // Directly import the mocked hooks
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -70,17 +78,20 @@ describe('Header', () => {
     (useAuth as jest.Mock).mockClear();
   });
 
-  const renderHeader = () =>
-    render(
-      <VoiceSettingsProvider>
+  const renderHeader = () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { VoiceSettingsProvider: Provider } = require('@/contexts/voice-settings');
+    return render(
+      <Provider>
         <Header
           onVoiceCommand={() => {}}
           onAdminUnlock={() => {}}
           lastResponseRef={lastResponseRef}
           hardwareState={hardwareState}
         />
-      </VoiceSettingsProvider>
+      </Provider>
     );
+  };
 
   it('renders the header with the title "Molly"', () => {
     // Arrange: Mock the hooks to return a "logged out" state

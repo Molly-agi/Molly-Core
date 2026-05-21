@@ -750,7 +750,7 @@ export const robotics: ToolHandler = async (params): Promise<ToolResult> => {
 
     try {
       const { getRoboticsClient } = await import('@/ai/agency/robotics');
-      const _client = getRoboticsClient();
+      const client = getRoboticsClient();
 
       const scene = await client.analyzeScene(
         {
@@ -818,13 +818,18 @@ export const robotics: ToolHandler = async (params): Promise<ToolResult> => {
 
     try {
       const { getRoboticsClient } = await import('@/ai/agency/robotics');
-      const _client = getRoboticsClient();
+      const client = getRoboticsClient();
 
       const plan = await client.planActions(
         sceneData as unknown as Parameters<typeof client.planActions>[0],
         goal,
         params.constraints as string[]
       );
+
+      const { setActiveRoboticsPlan } = await import(
+        '@/ai/agency/robotics/active-plan'
+      );
+      setActiveRoboticsPlan(plan, 'gemini-tools:robotics-plan');
 
       if (!plan.feasible) {
         return {

@@ -11,8 +11,8 @@ android {
         applicationId = "dev.molly.browser"
         minSdk = 26  // Android 8.0+ for foreground service types
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.3.0"
+        versionCode = 4
+        versionName = "1.4.0-autonomous"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

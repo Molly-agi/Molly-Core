@@ -1,7 +1,9 @@
 package dev.molly.browser
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -27,6 +29,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -34,6 +37,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import android.Manifest
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+import java.util.concurrent.Executors
 
 /**
  * MollyBrowser - A full-featured browser that keeps Codespace connections alive.
@@ -48,6 +58,11 @@ import android.Manifest
  * - Multi-tab support (up to 6 tabs)
  */
 class MainActivity : AppCompatActivity() {
+
+    data class ControlBridgeConfig(
+        val baseUrl: String,
+        val internalSecret: String
+    )
 
     // Tab data class
     data class Tab(
@@ -88,6 +103,7 @@ class MainActivity : AppCompatActivity() {
     // Default URLs
     private val defaultUrl = "https://github.dev"
     private val githubUrl = "https://github.com"
+    private val ioExecutor = Executors.newSingleThreadExecutor()
 
     // Quick access bookmarks
     private val bookmarks = mapOf(
@@ -123,6 +139,10 @@ class MainActivity : AppCompatActivity() {
         try {
             githubButton = findViewById(R.id.githubButton)
             githubButton.setOnClickListener { loadUrlInActiveTab(githubUrl) }
+            githubButton.setOnLongClickListener {
+                showBridgeConfigDialog()
+                true
+            }
         } catch (e: Exception) { /* Button not in layout */ }
 
         // Request permissions
@@ -149,6 +169,227 @@ class MainActivity : AppCompatActivity() {
         val intentUrl = intent?.data?.toString()
         val urlToLoad = intentUrl ?: defaultUrl
         createNewTab(urlToLoad)
+
+        // Handle autonomous control deep links and run startup diagnostics.
+        handleControlIntent(intent, isColdStart = true)
+    }
+
+    private fun bridgePrefs() = getSharedPreferences("molly_bridge", Context.MODE_PRIVATE)
+
+    private fun loadBridgeConfig(): ControlBridgeConfig? {
+        val prefs = bridgePrefs()
+        val baseUrl = prefs.getString("base_url", "")?.trim().orEmpty()
+        val secret = prefs.getString("internal_secret", "")?.trim().orEmpty()
+        if (baseUrl.isBlank()) return null
+        return ControlBridgeConfig(baseUrl.removeSuffix("/"), secret)
+    }
+
+    private fun saveBridgeConfig(config: ControlBridgeConfig) {
+        bridgePrefs().edit()
+            .putString("base_url", config.baseUrl.removeSuffix("/"))
+            .putString("internal_secret", config.internalSecret)
+            .apply()
+    }
+
+    private fun showBridgeConfigDialog() {
+        val config = loadBridgeConfig()
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(32, 24, 32, 0)
+        }
+
+        val baseUrlInput = EditText(this).apply {
+            hint = "Codespace URL (https://...github.dev)"
+            setText(config?.baseUrl ?: "")
+        }
+        val secretInput = EditText(this).apply {
+            hint = "MOLLY_INTERNAL_SECRET"
+            setText(config?.internalSecret ?: "")
+        }
+
+        layout.addView(baseUrlInput)
+        layout.addView(secretInput)
+
+        AlertDialog.Builder(this)
+            .setTitle("Autonomous Bridge Setup")
+            .setView(layout)
+            .setMessage("Save once. After this, MollyBrowser can self-diagnose and trigger control actions via deep links.")
+            .setPositiveButton("Save + Diagnose") { _, _ ->
+                val newConfig = ControlBridgeConfig(
+                    baseUrl = baseUrlInput.text.toString().trim().removeSuffix("/"),
+                    internalSecret = secretInput.text.toString().trim()
+                )
+                if (newConfig.baseUrl.isBlank()) {
+                    Toast.makeText(this, "Base URL is required", Toast.LENGTH_LONG).show()
+                    return@setPositiveButton
+                }
+                saveBridgeConfig(newConfig)
+                runBridgeDiagnostics(autoRepair = true)
+            }
+            .setNeutralButton("Diagnose") { _, _ -> runBridgeDiagnostics(autoRepair = true) }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun runBridgeDiagnostics(autoRepair: Boolean) {
+        val config = loadBridgeConfig()
+        if (config == null) {
+            updateStatus("Bridge not configured", false)
+            Toast.makeText(this, "Long-press GitHub button to configure bridge", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        updateStatus("Diagnosing bridge...", true)
+        ioExecutor.execute {
+            val schemaResult = performGet("${config.baseUrl}/api/widget/control", config)
+            if (schemaResult.first != 200) {
+                val status = schemaResult.first
+                runOnUiThread {
+                    updateStatus("Bridge unhealthy ($status)", false)
+                    if (autoRepair) {
+                        // Workaround: open control endpoint in active tab to validate routing/session quickly.
+                        loadUrlInActiveTab("${config.baseUrl}/api/widget/control")
+                        Toast.makeText(
+                            this,
+                            "Bridge check failed ($status). Opened control endpoint for direct recovery.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                return@execute
+            }
+
+            val livePayload = JSONObject().put("action", "live").put("limit", 5)
+            val liveResult = performPost("${config.baseUrl}/api/widget/control", config, livePayload)
+            val ok = liveResult.first in 200..299
+
+            runOnUiThread {
+                if (ok) {
+                    updateStatus("Bridge healthy", true)
+                    Toast.makeText(this, "Bridge diagnostics passed", Toast.LENGTH_SHORT).show()
+                } else {
+                    updateStatus("Bridge degraded (${liveResult.first})", false)
+                    if (autoRepair) {
+                        loadUrlInActiveTab(config.baseUrl)
+                        Toast.makeText(this, "Bridge degraded. Opened base URL as fallback.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun executeControlAction(
+        action: String,
+        text: String? = null,
+        query: String? = null,
+        agent: String? = null,
+        filePath: String? = null,
+        limit: Int? = null
+    ) {
+        val config = loadBridgeConfig()
+        if (config == null) {
+            runOnUiThread {
+                updateStatus("Bridge not configured", false)
+                showBridgeConfigDialog()
+            }
+            return
+        }
+
+        ioExecutor.execute {
+            val payload = JSONObject().put("action", action)
+            text?.let { payload.put("text", it) }
+            query?.let { payload.put("query", it) }
+            agent?.let { payload.put("agent", it) }
+            filePath?.let { payload.put("filePath", it) }
+            limit?.let { payload.put("limit", it) }
+
+            val result = performPost("${config.baseUrl}/api/widget/control", config, payload)
+            runOnUiThread {
+                if (result.first in 200..299) {
+                    updateStatus("Action $action sent", true)
+                    Toast.makeText(this, "Action $action completed", Toast.LENGTH_SHORT).show()
+                } else {
+                    updateStatus("Action $action failed (${result.first})", false)
+                    Toast.makeText(this, result.second.take(140), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun performGet(url: String, config: ControlBridgeConfig): Pair<Int, String> {
+        return try {
+            val conn = URL(url).openConnection() as HttpURLConnection
+            conn.requestMethod = "GET"
+            conn.connectTimeout = 10000
+            conn.readTimeout = 15000
+            conn.setRequestProperty("Accept", "application/json")
+            if (config.internalSecret.isNotBlank()) {
+                conn.setRequestProperty("x-molly-internal", config.internalSecret)
+            }
+
+            val code = conn.responseCode
+            val stream = if (code in 200..299) conn.inputStream else conn.errorStream
+            val body = stream?.let { BufferedReader(InputStreamReader(it)).readText() }.orEmpty()
+            conn.disconnect()
+            code to body
+        } catch (e: Exception) {
+            -1 to (e.message ?: "Network error")
+        }
+    }
+
+    private fun performPost(url: String, config: ControlBridgeConfig, payload: JSONObject): Pair<Int, String> {
+        return try {
+            val conn = URL(url).openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.doOutput = true
+            conn.connectTimeout = 10000
+            conn.readTimeout = 20000
+            conn.setRequestProperty("Content-Type", "application/json")
+            conn.setRequestProperty("Accept", "application/json")
+            if (config.internalSecret.isNotBlank()) {
+                conn.setRequestProperty("x-molly-internal", config.internalSecret)
+            }
+
+            OutputStreamWriter(conn.outputStream).use { it.write(payload.toString()) }
+
+            val code = conn.responseCode
+            val stream = if (code in 200..299) conn.inputStream else conn.errorStream
+            val body = stream?.let { BufferedReader(InputStreamReader(it)).readText() }.orEmpty()
+            conn.disconnect()
+            code to body
+        } catch (e: Exception) {
+            -1 to (e.message ?: "Network error")
+        }
+    }
+
+    private fun handleControlIntent(intent: Intent?, isColdStart: Boolean = false) {
+        val data = intent?.data ?: return
+        if (data.scheme != "molly") return
+
+        val action = data.getQueryParameter("action")?.trim()?.lowercase()
+
+        // If no action, treat as normal URL/deep link behavior.
+        if (action.isNullOrBlank()) {
+            if (isColdStart) {
+                runBridgeDiagnostics(autoRepair = false)
+            }
+            return
+        }
+
+        when (action) {
+            "diagnose" -> runBridgeDiagnostics(autoRepair = true)
+            "configure" -> showBridgeConfigDialog()
+            else -> {
+                executeControlAction(
+                    action = action,
+                    text = data.getQueryParameter("text"),
+                    query = data.getQueryParameter("query"),
+                    agent = data.getQueryParameter("agent"),
+                    filePath = data.getQueryParameter("filePath"),
+                    limit = data.getQueryParameter("limit")?.toIntOrNull()
+                )
+            }
+        }
     }
 
     private fun createNewTab(url: String): Tab? {
@@ -574,6 +815,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        handleControlIntent(intent)
         intent?.data?.toString()?.let { url ->
             // Open in new tab if we have room, otherwise load in current tab
             if (tabs.size < maxTabs) {

@@ -32,6 +32,20 @@ MollyBrowser hosts web apps in a WebView within our own app process. A Foregroun
 - **Remote Debugging** - `chrome://inspect` works for debugging
 - **Desktop User Agent** - Sites render as desktop, not mobile
 
+### Autonomous Control Mode (New)
+
+- **One-time Bridge Config** - Long-press the GitHub button to save Codespace URL + internal secret
+- **Built-in Diagnostics** - App runs bridge health checks and reports degraded states
+- **Deep-link Actions** - Trigger control actions with `molly://control?...` links (good for launchers/widgets)
+- **Auto-Recovery Workarounds** - On bridge failure, app opens recovery endpoints and surfaces actionable status
+
+Example deep links:
+
+- `molly://control?action=diagnose`
+- `molly://control?action=ask&text=Hello%20mother`
+- `molly://control?action=search&query=autonomous%20bridge%20design`
+- `molly://control?action=live&limit=20`
+
 ### Media & Permissions
 
 - **Camera & Microphone** - Video calls, screen sharing
@@ -51,6 +65,14 @@ Type these in the URL bar:
 ## Build
 
 ```bash
+# Use Java 21 (Java 25 breaks Android/Kotlin tooling in this project)
+export JAVA_HOME=/usr/local/sdkman/candidates/java/21.0.10-ms
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# Ensure Android SDK is installed and configured
+# local.properties should contain:
+# sdk.dir=/path/to/Android/Sdk
+
 # Debug build
 ./gradlew assembleDebug
 
@@ -60,6 +82,8 @@ Type these in the URL bar:
 # Install via ADB
 adb install app/build/outputs/apk/debug/app-debug.apk
 ```
+
+If build fails with `What went wrong: 25.0.2`, switch to Java 21 before running Gradle.
 
 ## Requirements
 

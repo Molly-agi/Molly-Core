@@ -1,15 +1,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { initializeFirebase } from '@/firebase';
-import {
-  collection,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-  doc,
-  runTransaction,
-} from 'firebase/firestore';
+import { getStorageRouter } from '@/lib/storage-router';
+import { MollyLogger, generateTraceId } from '@/ai/logger';
 
 /**
  * @fileOverview Stage 3 Neural Recall & Memory Pruning Tool.
@@ -44,22 +36,37 @@ export const recallExperiences = ai.defineTool(
   },
   async ({ userId, context, limit: searchLimit }) => {
     void context;
-    const { firestore } = initializeFirebase();
+    const traceId = generateTraceId();
 
-    const ref = collection(firestore, 'users', userId, 'codeModifications');
-    const q = query(ref, orderBy('timestamp', 'desc'), limit(searchLimit * 3));
-    const snapshot = await getDocs(q);
+    try {
+      const storage = await getStorageRouter();
+      const docData = await storage.read(`users/${userId}/codeModifications`);
 
-    const allLessons = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      suggestion:
-        doc.data().modificationSuggestion || 'No suggestion recorded.',
-      code: doc.data().modifiedCode || 'N/A',
-      timestamp: doc.data().timestamp || new Date().toISOString(),
-      vibe: doc.data().vibe || 'Stable',
-    }));
+      if (!docData || typeof docData !== 'object') {
+        return [];
+      }
 
-    return allLessons;
+      const allLessons = Object.entries(docData)
+        .slice(0, searchLimit * 3)
+        .map(([id, doc]: [string, any]) => ({
+          id,
+          suggestion: doc.modificationSuggestion || 'No suggestion recorded.',
+          code: doc.modifiedCode || 'N/A',
+          timestamp: doc.timestamp || new Date().toISOString(),
+          vibe: doc.vibe || 'Stable',
+        }));
+
+      return allLessons;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      MollyLogger.error(
+        'recallExperiences failed',
+        'memory',
+        { error: message },
+        traceId
+      );
+      return [];
+    }
   }
 );
 
@@ -82,42 +89,37 @@ export const pruneSensoryLogs = ai.defineTool(
     }),
   },
   async ({ userId, retentionCount }) => {
-    const { firestore } = initializeFirebase();
-    const ref = collection(firestore, 'users', userId, 'aiResponses');
-    const q = query(ref, orderBy('timestamp', 'desc'));
+    const traceId = generateTraceId();
+    const failedDeletes: string[] = [];
 
     try {
-      const snapshot = await getDocs(q);
+      const storage = await getStorageRouter();
+      const docData = await storage.read(`users/${userId}/aiResponses`);
 
-      if (snapshot.size <= retentionCount) {
+      if (!docData || typeof docData !== 'object') {
+        return {
+          prunedCount: 0,
+          status: 'No documents to prune.',
+        };
+      }
+
+      const docEntries = Object.entries(docData);
+      if (docEntries.length <= retentionCount) {
         return {
           prunedCount: 0,
           status: 'Memory levels within safety margins.',
         };
       }
 
-      const toPrune = snapshot.docs.slice(retentionCount);
-      const failedDeletes: string[] = [];
-      let successCount = 0;
+      const toPrune = docEntries.slice(retentionCount);
+      const deleteOps = toPrune.map(([docId]) => ({
+        type: 'delete' as const,
+        collectionPath: `users/${userId}/aiResponses`,
+        docId,
+      }));
 
-      // Use atomic transaction to ensure all-or-nothing semantics
-      await runTransaction(firestore, async (transaction) => {
-        for (const docSnapshot of toPrune) {
-          try {
-            const docRef = doc(
-              firestore,
-              'users',
-              userId,
-              'aiResponses',
-              docSnapshot.id
-            );
-            transaction.delete(docRef);
-            successCount++;
-          } catch {
-            failedDeletes.push(docSnapshot.id);
-          }
-        }
-      });
+      await storage.batchWrite(deleteOps);
+      const successCount = deleteOps.length;
 
       const resultStatus =
         failedDeletes.length === 0
@@ -130,10 +132,11 @@ export const pruneSensoryLogs = ai.defineTool(
         ...(failedDeletes.length > 0 && { failedDeletes }),
       };
     } catch (error) {
-      const message = `Failed to prune logs: ${error instanceof Error ? error.message : String(error)}`;
+      const message = error instanceof Error ? error.message : String(error);
+      MollyLogger.error('pruneSensoryLogs failed', 'memory', { error: message }, traceId);
       return {
         prunedCount: 0,
-        status: message,
+        status: `Failed to prune logs: ${message}`,
         failedDeletes: [],
       };
     }

@@ -3,3 +3,4 @@
 
 export * from './text-to-speech';
 export * from './music-generation';
+export * from './agent-bridge-flow';

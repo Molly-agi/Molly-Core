@@ -39,7 +39,7 @@ interface BridgeMessage {
   id: string;
   from: 'molly' | 'eric' | 'lazarus';
   content: string;
-  timestamp: number;
+  timestamp: string;
 }
 
 // ── Avatar page ────────────────────────────────────────────────────────────
@@ -51,6 +51,11 @@ export default function AvatarPage() {
   const [roboticsStatus, setRoboticsStatus] = useState(
     'No active robotics plan'
   );
+  const [modelX, setModelX] = useState(0);
+  const [modelY, setModelY] = useState(0);
+  const [modelZ, setModelZ] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const [visionEnabled, setVisionEnabled] = useState(true);
   const activePlanSignatureRef = useRef<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
 
@@ -102,7 +107,13 @@ export default function AvatarPage() {
 
         if (bridgeRes.ok) {
           const bridgeData = await bridgeRes.json();
-          setMessages(bridgeData.messages ?? []);
+          const msgs = bridgeData.messages ?? [];
+          setMessages(msgs);
+          if (msgs.length === 0) {
+            console.log('[Avatar] No messages yet');
+          }
+        } else {
+          console.error('[Avatar] Bridge fetch failed:', bridgeRes.status);
         }
 
         if (planRes.ok) {
@@ -134,14 +145,14 @@ export default function AvatarPage() {
             `Robotics: ${incomingPlan.goal || 'Active plan'} (${actionCount} steps)${planData.source ? ` • ${planData.source}` : ''}`
           );
         }
-      } catch {
-        // silent — bridge/robotics service may be unavailable
+      } catch (err) {
+        console.error('[Avatar] Polling error:', err);
       }
     };
     poll();
     const id = setInterval(poll, 3000);
     return () => clearInterval(id);
-  }, [director]);
+  }, []);
 
   // Auto-scroll feed
   useEffect(() => {
@@ -156,11 +167,18 @@ export default function AvatarPage() {
     if (!text) return;
     setInputText('');
     unlockAutoplay();
-    await fetch('/api/bridge', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: 'eric', content: text }),
-    }).catch(() => {});
+    try {
+      const res = await fetch('/api/bridge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ from: 'eric', content: text }),
+      });
+      if (!res.ok) {
+        console.error('[Avatar] Failed to send message:', res.status, res.statusText);
+      }
+    } catch (err) {
+      console.error('[Avatar] Error sending message:', err);
+    }
   }, [inputText, unlockAutoplay]);
 
   const handleKeyDown = useCallback(
@@ -227,6 +245,8 @@ export default function AvatarPage() {
         <MollyCanvas
           director={director}
           isVocalizing={isVocalizing}
+          modelPosition={{ x: modelX, y: modelY, z: modelZ }}
+          zoom={zoom}
           className="w-full h-full"
         />
 
@@ -244,6 +264,78 @@ export default function AvatarPage() {
           <span className="text-[10px] text-muted-foreground bg-background/70 rounded-full px-2.5 py-1 backdrop-blur-sm">
             {roboticsStatus}
           </span>
+        </div>
+
+        {/* Overlay: position & zoom controls (top-left) */}
+        <div className="absolute top-3 left-3 bg-background/90 backdrop-blur-sm rounded-lg p-3 space-y-2 text-xs pointer-events-auto">
+          <div className="space-y-1">
+            <label className="block text-muted-foreground">X: {modelX.toFixed(2)}</label>
+            <input
+              type="range"
+              min="-10"
+              max="10"
+              step="0.1"
+              value={modelX}
+              onChange={(e) => setModelX(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="block text-muted-foreground">Y: {modelY.toFixed(2)}</label>
+            <input
+              type="range"
+              min="-10"
+              max="10"
+              step="0.1"
+              value={modelY}
+              onChange={(e) => setModelY(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="block text-muted-foreground">Z: {modelZ.toFixed(2)}</label>
+            <input
+              type="range"
+              min="-10"
+              max="10"
+              step="0.1"
+              value={modelZ}
+              onChange={(e) => setModelZ(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+          <div className="h-px bg-border my-1" />
+          <div className="space-y-1">
+            <label className="block text-muted-foreground">Zoom: {zoom.toFixed(2)}x</label>
+            <input
+              type="range"
+              min="0.1"
+              max="3"
+              step="0.1"
+              value={zoom}
+              onChange={(e) => setZoom(Number(e.target.value))}
+              className="w-full"
+            />
+          </div>
+          <button
+            onClick={async () => {
+              try {
+                const res = await fetch('/api/robotics/test-plan', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({}),
+                });
+                if (res.ok) {
+                  setRoboticsStatus('Test plan loaded');
+                }
+              } catch (err) {
+                setRoboticsStatus(`Error: ${String(err)}`);
+              }
+            }}
+            className="mt-2 w-full rounded bg-primary text-primary-foreground text-xs py-1 hover:bg-primary/90 transition-colors"
+          >
+            Load Test Plan
+          </button>
         </div>
 
         {/* Overlay: model placeholder hint */}

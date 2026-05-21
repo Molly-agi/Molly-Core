@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, User, Wrench } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-// import { getEnhancedResearch } from '@/app/actions'; // Deactivated, reserved for future use
+import { sendDemonResearchTask, getDemonResearchFeed } from '@/app/actions';
 import { useUser } from '@/firebase/auth/use-user';
 import {
   saveResearchMessage,
@@ -37,10 +37,16 @@ export function AIGuidance() {
     let mounted = true;
 
     if (user && !historyLoaded) {
-      loadResearchHistory(user.uid, 50)
-        .then((history) => {
+      Promise.all([loadResearchHistory(user.uid, 50), getDemonResearchFeed(50)])
+        .then(([history, demonFeed]) => {
           if (mounted) {
-            setMessages(history);
+            const demonMessages: ResearchMessage[] = demonFeed.map((msg) => ({
+              role: msg.from === 'eric' ? 'user' : 'bot',
+              content: `[${msg.from.toUpperCase()}] ${msg.content}`,
+              timestamp: msg.timestamp,
+            }));
+
+            setMessages([...history, ...demonMessages]);
             setHistoryLoaded(true);
           }
         })
@@ -79,13 +85,12 @@ export function AIGuidance() {
       }
 
       try {
-        // getEnhancedResearch is deactivated. Replace with new API or logic as needed.
+        const aiResponse = await sendDemonResearchTask(_currentInput, user.uid);
 
         const botMessage: ResearchMessage = {
           role: 'bot',
-          content: aiResponse.answer,
+          content: `${aiResponse.answer}\n\nTask ID: ${aiResponse.taskId}`,
           timestamp: new Date().toISOString(),
-          savedTool: aiResponse.isToolFound,
         };
 
         setMessages([...newMessages, botMessage]);
@@ -121,15 +126,15 @@ export function AIGuidance() {
   return (
     <Card className="h-full flex flex-col border-0">
       <CardHeader>
-        <CardTitle className="text-lg">AI Research Assistant</CardTitle>
+        <CardTitle className="text-lg">Demon Research Queue</CardTitle>
         <p className="text-xs text-muted-foreground">
-          Integrated with Molly&apos;s memory · GitHub tools · Auto-saves to
-          shared database
+          Sends structured research tasks to Demon via bridge and shows recent
+          queue traffic
         </p>
         <p className="text-[10px] text-muted-foreground/60 mt-1">
-          Terminal command:{' '}
+          Queue command:{' '}
           <code className="bg-muted px-1 py-0.5 rounded text-primary">
-            /research [query]
+            /research [query] (forwarded as [DEMON_TASK])
           </code>
         </p>
       </CardHeader>
@@ -171,7 +176,7 @@ export function AIGuidance() {
               <div className="flex gap-3 text-sm">
                 <Bot className="size-5 shrink-0" />
                 <div className="rounded-lg px-3 py-2 bg-muted animate-pulse">
-                  Researching with GitHub tools...
+                  Dispatching task to Demon queue...
                 </div>
               </div>
             )}
@@ -181,7 +186,7 @@ export function AIGuidance() {
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a research question..."
+            placeholder="Send a Demon research task..."
             onKeyDown={(e) =>
               e.key === 'Enter' &&
               !e.shiftKey &&

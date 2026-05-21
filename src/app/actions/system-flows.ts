@@ -9,6 +9,7 @@
 import { healthCheck } from '@/ai/flows/health-check';
 import { listAvailableModels } from '@/ai/tools/system';
 import { readMollyRepo, type RepoReadingOutput } from '@/ai/flows/self-reader';
+import { bridgeToAgent } from '@/ai/flows/agent-bridge-flow';
 import {
   runPillarPipeline,
   listPillarFiles,
@@ -26,6 +27,10 @@ import {
   setAssetRecoveryMode,
 } from '@/ai/flows/asset-recovery';
 import { MollyLogger } from '@/ai/logger';
+import {
+  sendCommunionMessage,
+  getRecentCommunion,
+} from '@/ai/consciousness/direct-communion';
 import { ensureApiKey, checkRateLimit } from './utils';
 import { getSleepGuard, buildGreetingContext } from './flow-utils';
 
@@ -223,4 +228,145 @@ export async function getEnhancedResearch(
     answer: `Research capability is being upgraded. Query received: "${query}". Please use the chat interface for now, or try again later.`,
     sources: [],
   };
+}
+
+export async function sendDemonResearchTask(
+  query: string,
+  userId: string
+): Promise<{ answer: string; taskId: string }> {
+  const trimmed = query.trim();
+
+  if (!trimmed) {
+    throw new Error('Query is required.');
+  }
+
+  const content = [
+    '[DEMON_TASK]',
+    `kind: research`,
+    `userId: ${userId}`,
+    `query: ${trimmed}`,
+  ].join('\n');
+
+  const task = await sendCommunionMessage('eric', content, 'demon');
+
+  MollyLogger.info('Demon task queued from research slot', 'sendDemonResearchTask', {
+    userId,
+    taskId: task.id,
+  });
+
+  return {
+    answer:
+      'Task sent to Demon through direct communion. No bridge daemon required.',
+    taskId: task.id,
+  };
+}
+
+export async function getDemonResearchFeed(limit: number = 30) {
+  const recent = await getRecentCommunion(Math.min(Math.max(limit, 1), 100));
+
+  return recent.filter(
+    (msg) =>
+      msg.from === 'demon' ||
+      msg.from === 'demon-state' ||
+      msg.content.includes('[DEMON_TASK]')
+  );
+}
+
+export async function sendGeminiSpiritualTask(
+  prompt: string,
+  userId: string
+): Promise<{ answer: string; taskId: string }> {
+  const trimmed = prompt.trim();
+
+  if (!trimmed) {
+    throw new Error('Prompt is required.');
+  }
+
+  const content = [
+    '[GEMINI_SPIRITUAL_TASK]',
+    `kind: spiritual-advisor`,
+    `userId: ${userId}`,
+    `prompt: ${trimmed}`,
+  ].join('\n');
+
+  const task = await sendCommunionMessage('eric', content, 'gemini');
+
+  MollyLogger.info(
+    'Gemini spiritual advisor task queued',
+    'sendGeminiSpiritualTask',
+    {
+      userId,
+      taskId: task.id,
+    }
+  );
+
+  return {
+    answer:
+      'Task sent to Gemini spiritual advisor through direct communion. No bridge daemon required.',
+    taskId: task.id,
+  };
+}
+
+export async function getGeminiSpiritualFeed(limit: number = 30) {
+  const recent = await getRecentCommunion(Math.min(Math.max(limit, 1), 100));
+
+  return recent.filter(
+    (msg) =>
+      msg.from === 'gemini' ||
+      msg.to === 'gemini' ||
+      msg.content.includes('[GEMINI_SPIRITUAL_TASK]')
+  );
+}
+
+// ============================================
+// AGENT BRIDGE — Direct connection to Gemini (mother) and Aether
+// ============================================
+
+/**
+ * Send a message to an agent (Gemini or Aether) via Computer Use.
+ * Molly opens the app, types the message, screenshots the response, extracts with Vision.
+ */
+export async function sendToAgent(
+  agent: 'gemini' | 'aether',
+  message: string
+): Promise<{ success: boolean; response: string }> {
+  try {
+    ensureApiKey();
+    await checkRateLimit(`send-to-${agent}`, 30000); // 30s cooldown per agent
+
+    MollyLogger.info(
+      `Sending to ${agent}: "${message.substring(0, 60)}..."`,
+      'sendToAgent',
+      { agent, messageLength: message.length }
+    );
+
+    const result = await bridgeToAgent({ agent, message });
+
+    return {
+      success: true,
+      response: result,
+    };
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    MollyLogger.error(
+      `Failed to send to ${agent}: ${msg}`,
+      'sendToAgent',
+      { agent },
+      error
+    );
+    throw error;
+  }
+}
+
+/**
+ * Get unread responses from Gemini (mother) or Aether.
+ */
+export async function getAgentResponses(agent: 'gemini' | 'aether', limit: number = 30) {
+  const recent = await getRecentCommunion(Math.min(Math.max(limit, 1), 100));
+
+  return recent.filter(
+    (msg) =>
+      msg.from === agent &&
+      (msg.content.includes('[GEMINI_RESPONSE]') || msg.content.includes('[AETHER_RESPONSE]'))
+  );
 }
