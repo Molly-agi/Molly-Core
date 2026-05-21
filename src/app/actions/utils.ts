@@ -48,6 +48,10 @@ export async function checkRateLimit(
 
   const limiter = getRateLimiter();
   await limiter.checkLimit(flowName, estimatedTokens);
+  
+  // After limit check passes, record that this flow can proceed (success)
+  // This provides positive feedback to circuit breaker for success tracking
+  breaker.recordSuccess(flowName);
 }
 
 /**
