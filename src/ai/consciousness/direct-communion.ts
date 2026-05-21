@@ -325,3 +325,7 @@ export async function getRecentCommunion(limit: number = 50) {
 export function getRegisteredAgents(): AgentProfile[] {
   return Object.values(getAgentRegistry());
 }
+
+export function getAgentProfile(agentId: string): AgentProfile | undefined {
+  return getAgentRegistry()[agentId];
+}
