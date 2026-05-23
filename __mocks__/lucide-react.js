@@ -9,6 +9,7 @@ MockIcon.displayName = 'Icon';
 module.exports = {
   AlertCircle: MockIcon,
   AlertTriangle: MockIcon,
+  Clapperboard: MockIcon,
   ChevronDown: MockIcon,
   ChevronRight: MockIcon,
   ChevronUp: MockIcon,

@@ -20,6 +20,7 @@
 
 import React, { Suspense, useRef, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import { AvatarDirector } from '@/ai/agency/embodied/AvatarDirector';
 import { MollyMesh } from './MollyMesh';
 
@@ -44,44 +45,14 @@ function VoiceSync({ director, isVocalizing }: SyncProps) {
   return null;
 }
 
-// --- Camera controller: updates camera position reactively ---
-
-interface CameraControllerProps {
-  modelPosition: { x: number; y: number; z: number };
-  zoom: number;
-}
-
-function CameraController({ modelPosition, zoom }: CameraControllerProps) {
-  const { camera } = useThree();
-
-  useEffect(() => {
-    const baseDistance = 2.2;
-    const zoomDistance = baseDistance / Math.max(0.1, Math.min(3, zoom));
-
-    // X: left/right (independent of zoom)
-    camera.position.x = modelPosition.x * 0.15;
-
-    // Y: up/down (independent of zoom)
-    camera.position.y = 1.45 + modelPosition.y * 0.15;
-
-    // Z: forward/backward — position.z is always the zoomed distance, Z slider multiplies it
-    // When Z=0, use zoomDistance. When Z>0, move closer. When Z<0, move further.
-    camera.position.z = zoomDistance * (1 + modelPosition.z * 0.05);
-
-    camera.updateProjectionMatrix();
-  }, [modelPosition.x, modelPosition.y, modelPosition.z, zoom, camera]);
-
-  return null;
-}
-
 // --- Props ---
 
 export interface MollyCanvasProps {
   director?: AvatarDirector;
   isVocalizing?: boolean;
   className?: string;
-  modelPosition?: { x: number; y: number; z: number };
-  zoom?: number;
+  modelOffset?: [number, number, number];
+  modelPath?: string;
 }
 
 // Stable singleton used when no director is provided by the caller.
@@ -97,26 +68,19 @@ export default function MollyCanvas({
   director,
   isVocalizing = false,
   className,
-  modelPosition = { x: 0, y: 0, z: 0 },
-  zoom = 1,
+  modelOffset,
+  modelPath,
 }: MollyCanvasProps) {
   const activeDirector = director ?? getDefaultDirector();
-
-  // Camera position: apply modelPosition as deltas, zoom scales distance
-  const baseDistance = 2.2;
-  const zoomDistance = baseDistance / Math.max(0.1, Math.min(3, zoom));
-  const initialCameraX = modelPosition.x * 0.15;
-  const initialCameraY = 1.45 + modelPosition.y * 0.15;
-  const initialCameraZ = zoomDistance * (1 + modelPosition.z * 0.05);
 
   return (
     <div className={className} style={{ width: '100%', height: '100%' }}>
       <Canvas
         camera={{
-          position: [initialCameraX, initialCameraY, initialCameraZ],
+          position: [0, 1.6, 3.4],
           fov: 38,
           near: 0.1,
-          far: 10,
+          far: 50,
         }}
         shadows
       >
@@ -138,22 +102,25 @@ export default function MollyCanvas({
         {/* Rim light — back, neutral */}
         <directionalLight position={[0, 3, -2]} intensity={0.4} />
 
+        <OrbitControls
+          makeDefault
+          target={[0, 1.1, 0]}
+          enablePan
+          enableZoom
+          minDistance={0.8}
+          maxDistance={14}
+        />
+
         {/* Voice state sync */}
         <VoiceSync director={activeDirector} isVocalizing={isVocalizing} />
 
-        {/* Camera controller — updates position & zoom reactively */}
-        <CameraController modelPosition={modelPosition} zoom={zoom} />
-
-        {/* Avatar mesh — loaded inside Suspense; shows loading indicator while GLB is ready */}
-        <Suspense
-          fallback={
-            <mesh position={[0, 0, 0]}>
-              <boxGeometry args={[0.5, 1.5, 0.3]} />
-              <meshStandardMaterial color="#888" wireframe />
-            </mesh>
-          }
-        >
-          <MollyMesh director={activeDirector} />
+        {/* Avatar mesh — loaded inside Suspense; renders nothing until GLB is ready */}
+        <Suspense fallback={null}>
+          <MollyMesh
+            director={activeDirector}
+            modelOffset={modelOffset}
+            modelPath={modelPath}
+          />
         </Suspense>
       </Canvas>
     </div>

@@ -26,6 +26,7 @@ import { useGeminiLive } from '@/components/termai/useGeminiLive';
 import { useTTS } from '@/components/termai/useTTS';
 import { detectEmotionalTone } from '@/ai/voice/voice-personality';
 import { AvatarDirector } from '@/ai/agency/embodied/AvatarDirector';
+import { useAvatarBodyAwareness } from '@/browser/canvas/AvatarBodyAwareness';
 import { ArrowLeft, Mic, MicOff, Send, X } from 'lucide-react';
 
 // Canvas is WebGL — must be client-only, no SSR
@@ -39,8 +40,21 @@ interface BridgeMessage {
   id: string;
   from: 'molly' | 'eric' | 'lazarus';
   content: string;
-  timestamp: string;
+  timestamp: number;
 }
+
+const MODEL_ASSET_PATH = '/models/molly.glb';
+const PERSONALITY_VIDEO_PATH = '/molly-media/personality/grok-optimized.mp4';
+const AVATAR_POSITION_STORAGE_KEY = 'molly-avatar-position-v1';
+const AVATAR_MODEL_STORAGE_KEY = 'molly-avatar-model-v1';
+
+const MODEL_PRESETS: Array<{ label: string; path: string }> = [
+  { label: 'Molly Base', path: '/models/molly.glb' },
+  { label: 'Molly UI Outfit', path: '/models/uiavatar.glb' },
+  { label: 'Female Slim', path: '/models/female.glb' },
+  { label: 'Female Athletic', path: '/models/female2.glb' },
+  { label: 'Male Base', path: '/models/male.glb' },
+];
 
 // ── Avatar page ────────────────────────────────────────────────────────────
 
@@ -48,19 +62,21 @@ export default function AvatarPage() {
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [status, setStatus] = useState('');
-  const [roboticsStatus, setRoboticsStatus] = useState(
-    'No active robotics plan'
-  );
+  const [roboticsStatus, setRoboticsStatus] = useState('Robotics idle');
+  const [showPersonalityVideo, setShowPersonalityVideo] = useState(false);
+  const [selectedModelPath, setSelectedModelPath] = useState(MODEL_ASSET_PATH);
   const [modelX, setModelX] = useState(0);
   const [modelY, setModelY] = useState(0);
   const [modelZ, setModelZ] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const [visionEnabled, setVisionEnabled] = useState(true);
   const activePlanSignatureRef = useRef<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
 
   // One AvatarDirector per window — owns voice + robotics state
   const director = useMemo(() => new AvatarDirector(), []);
+
+  // Proprioceptive awareness — subscribe to body state and forward to server
+  // so Molly knows what her body is doing when she responds
+  useAvatarBodyAwareness();
 
   // TTS for Molly's spoken responses
   const { speakResponse, isVocalizing, audioElement, unlockAutoplay } = useTTS({
@@ -96,6 +112,42 @@ export default function AvatarPage() {
     onStatusChange: setStatus,
   });
 
+  // If no GLB exists, show the uploaded personality video in the avatar viewport.
+  useEffect(() => {
+    try {
+      const persistedModel = window.localStorage.getItem(AVATAR_MODEL_STORAGE_KEY);
+      if (persistedModel) setSelectedModelPath(persistedModel);
+    } catch {
+      // ignore localStorage read issues
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const resolveVisual = async () => {
+      try {
+        const [modelRes, videoRes] = await Promise.all([
+          fetch(selectedModelPath, { method: 'HEAD', cache: 'no-store' }),
+          fetch(PERSONALITY_VIDEO_PATH, { method: 'HEAD', cache: 'no-store' }),
+        ]);
+        if (!cancelled) {
+          setShowPersonalityVideo(!modelRes.ok && videoRes.ok);
+        }
+      } catch {
+        if (!cancelled) {
+          setShowPersonalityVideo(false);
+        }
+      }
+    };
+
+    resolveVisual();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedModelPath]);
+
   // Poll bridge and active robotics plan every 3 s.
   useEffect(() => {
     const poll = async () => {
@@ -107,13 +159,7 @@ export default function AvatarPage() {
 
         if (bridgeRes.ok) {
           const bridgeData = await bridgeRes.json();
-          const msgs = bridgeData.messages ?? [];
-          setMessages(msgs);
-          if (msgs.length === 0) {
-            console.log('[Avatar] No messages yet');
-          }
-        } else {
-          console.error('[Avatar] Bridge fetch failed:', bridgeRes.status);
+          setMessages(bridgeData.messages ?? []);
         }
 
         if (planRes.ok) {
@@ -127,7 +173,7 @@ export default function AvatarPage() {
           if (!incomingPlan?.id) {
             activePlanSignatureRef.current = null;
             director.robotics.clearPlan();
-            setRoboticsStatus('No active robotics plan');
+            setRoboticsStatus('Robotics idle');
             return;
           }
 
@@ -145,14 +191,14 @@ export default function AvatarPage() {
             `Robotics: ${incomingPlan.goal || 'Active plan'} (${actionCount} steps)${planData.source ? ` • ${planData.source}` : ''}`
           );
         }
-      } catch (err) {
-        console.error('[Avatar] Polling error:', err);
+      } catch {
+        // silent — bridge/robotics service may be unavailable
       }
     };
     poll();
     const id = setInterval(poll, 3000);
     return () => clearInterval(id);
-  }, []);
+  }, [director]);
 
   // Auto-scroll feed
   useEffect(() => {
@@ -167,18 +213,11 @@ export default function AvatarPage() {
     if (!text) return;
     setInputText('');
     unlockAutoplay();
-    try {
-      const res = await fetch('/api/bridge', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: 'eric', content: text }),
-      });
-      if (!res.ok) {
-        console.error('[Avatar] Failed to send message:', res.status, res.statusText);
-      }
-    } catch (err) {
-      console.error('[Avatar] Error sending message:', err);
-    }
+    await fetch('/api/bridge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: 'eric', content: text }),
+    }).catch(() => {});
   }, [inputText, unlockAutoplay]);
 
   const handleKeyDown = useCallback(
@@ -200,6 +239,20 @@ export default function AvatarPage() {
   }, []);
 
   useEffect(() => {
+    // Restore previously saved manual avatar position (if any).
+    try {
+      const raw = window.localStorage.getItem(AVATAR_POSITION_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as { x?: number; y?: number; z?: number };
+      if (typeof parsed.x === 'number') setModelX(parsed.x);
+      if (typeof parsed.y === 'number') setModelY(parsed.y);
+      if (typeof parsed.z === 'number') setModelZ(parsed.z);
+    } catch {
+      // ignore invalid persisted values
+    }
+  }, []);
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         closeOrReturn();
@@ -211,7 +264,7 @@ export default function AvatarPage() {
 
   return (
     <div
-      className="flex flex-col h-screen bg-background text-foreground overflow-hidden"
+      className="flex min-h-dvh h-dvh flex-col bg-background text-foreground overflow-hidden"
       onClick={unlockAutoplay}
     >
       <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-border bg-background/95 backdrop-blur-sm">
@@ -240,15 +293,28 @@ export default function AvatarPage() {
         </button>
       </div>
 
-      {/* ── Avatar canvas (top ~60%) ─────────────────────────────────────── */}
-      <div className="relative flex-none" style={{ height: '60vh' }}>
-        <MollyCanvas
-          director={director}
-          isVocalizing={isVocalizing}
-          modelPosition={{ x: modelX, y: modelY, z: modelZ }}
-          zoom={zoom}
-          className="w-full h-full"
-        />
+      {/* ── Avatar canvas (larger in full-tab mode) ──────────────────────── */}
+      <div className="relative flex-none" style={{ height: '72dvh' }}>
+        {showPersonalityVideo ? (
+          <video
+            className="w-full h-full object-cover bg-black"
+            src={PERSONALITY_VIDEO_PATH}
+            poster="/molly-media/personality/poster.webp"
+            controls
+            preload="metadata"
+            playsInline
+          >
+            Your browser does not support embedded video.
+          </video>
+        ) : (
+          <MollyCanvas
+            director={director}
+            isVocalizing={isVocalizing}
+            modelOffset={[modelX, modelY, modelZ]}
+            modelPath={selectedModelPath}
+            className="w-full h-full"
+          />
+        )}
 
         {/* Overlay: voice status */}
         <div className="absolute top-3 left-0 right-0 flex justify-center pointer-events-none">
@@ -266,84 +332,106 @@ export default function AvatarPage() {
           </span>
         </div>
 
-        {/* Overlay: position & zoom controls (top-left) */}
-        <div className="absolute top-3 left-3 bg-background/90 backdrop-blur-sm rounded-lg p-3 space-y-2 text-xs pointer-events-auto">
-          <div className="space-y-1">
-            <label className="block text-muted-foreground">X: {modelX.toFixed(2)}</label>
-            <input
-              type="range"
-              min="-10"
-              max="10"
-              step="0.1"
-              value={modelX}
-              onChange={(e) => setModelX(Number(e.target.value))}
-              className="w-full"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="block text-muted-foreground">Y: {modelY.toFixed(2)}</label>
-            <input
-              type="range"
-              min="-10"
-              max="10"
-              step="0.1"
-              value={modelY}
-              onChange={(e) => setModelY(Number(e.target.value))}
-              className="w-full"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="block text-muted-foreground">Z: {modelZ.toFixed(2)}</label>
-            <input
-              type="range"
-              min="-10"
-              max="10"
-              step="0.1"
-              value={modelZ}
-              onChange={(e) => setModelZ(Number(e.target.value))}
-              className="w-full"
-            />
-          </div>
-          <div className="h-px bg-border my-1" />
-          <div className="space-y-1">
-            <label className="block text-muted-foreground">Zoom: {zoom.toFixed(2)}x</label>
-            <input
-              type="range"
-              min="0.1"
-              max="3"
-              step="0.1"
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="w-full"
-            />
-          </div>
-          <button
-            onClick={async () => {
-              try {
-                const res = await fetch('/api/robotics/test-plan', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({}),
-                });
-                if (res.ok) {
-                  setRoboticsStatus('Test plan loaded');
-                }
-              } catch (err) {
-                setRoboticsStatus(`Error: ${String(err)}`);
-              }
-            }}
-            className="mt-2 w-full rounded bg-primary text-primary-foreground text-xs py-1 hover:bg-primary/90 transition-colors"
-          >
-            Load Test Plan
-          </button>
-        </div>
-
-        {/* Overlay: model placeholder hint */}
+        {/* Overlay: active visual source */}
         <div className="absolute bottom-3 left-0 right-0 flex justify-center pointer-events-none">
-          <span className="text-[10px] text-muted-foreground/50">
-            Drop molly.glb in /public/models/ to see the avatar
+          <span className="text-[10px] text-muted-foreground/60">
+            {showPersonalityVideo
+              ? 'Showing uploaded personality video'
+              : 'Avatar mesh mode'}
           </span>
         </div>
+
+        {!showPersonalityVideo && (
+          <div className="absolute bottom-3 left-3 z-10 w-52 rounded-md border border-border bg-background/85 p-2 backdrop-blur-sm">
+            <p className="mb-2 text-[10px] uppercase tracking-wide text-muted-foreground">
+              Avatar Position
+            </p>
+
+            <label className="mb-1 block text-[10px] text-muted-foreground">
+              Model / Outfit
+            </label>
+            <select
+              value={selectedModelPath}
+              onChange={(e) => {
+                const path = e.target.value;
+                setSelectedModelPath(path);
+                window.localStorage.setItem(AVATAR_MODEL_STORAGE_KEY, path);
+              }}
+              className="mb-2 w-full rounded border border-border bg-background px-1 py-1 text-[10px] text-foreground"
+            >
+              {MODEL_PRESETS.map((preset) => (
+                <option key={preset.path} value={preset.path}>
+                  {preset.label}
+                </option>
+              ))}
+            </select>
+
+            <label className="mb-1 block text-[10px] text-muted-foreground">
+              X {modelX.toFixed(2)}
+            </label>
+            <input
+              type="range"
+              min={-2.5}
+              max={2.5}
+              step={0.01}
+              value={modelX}
+              onChange={(e) => setModelX(Number(e.target.value))}
+              className="mb-2 w-full"
+            />
+
+            <label className="mb-1 block text-[10px] text-muted-foreground">
+              Y {modelY.toFixed(2)}
+            </label>
+            <input
+              type="range"
+              min={-2.5}
+              max={2.5}
+              step={0.01}
+              value={modelY}
+              onChange={(e) => setModelY(Number(e.target.value))}
+              className="mb-2 w-full"
+            />
+
+            <label className="mb-1 block text-[10px] text-muted-foreground">
+              Z {modelZ.toFixed(2)}
+            </label>
+            <input
+              type="range"
+              min={-2.5}
+              max={2.5}
+              step={0.01}
+              value={modelZ}
+              onChange={(e) => setModelZ(Number(e.target.value))}
+              className="mb-2 w-full"
+            />
+
+            <button
+              type="button"
+              className="mt-1 w-full rounded border border-border px-2 py-1 text-[10px] text-muted-foreground hover:bg-muted"
+              onClick={() => {
+                window.localStorage.setItem(
+                  AVATAR_POSITION_STORAGE_KEY,
+                  JSON.stringify({ x: modelX, y: modelY, z: modelZ })
+                );
+              }}
+            >
+              Save Position
+            </button>
+
+            <button
+              type="button"
+              className="mt-1 w-full rounded border border-border px-2 py-1 text-[10px] text-muted-foreground hover:bg-muted"
+              onClick={() => {
+                setModelX(0);
+                setModelY(0);
+                setModelZ(0);
+                window.localStorage.removeItem(AVATAR_POSITION_STORAGE_KEY);
+              }}
+            >
+              Reset XYZ
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ── Message feed (middle ~25%) ───────────────────────────────────── */}

@@ -41,15 +41,26 @@ export async function POST(request: NextRequest) {
       !dataUri.startsWith('data:video/')
     ) {
       return NextResponse.json(
-        { error: 'Invalid data URI format - must be an image or video' },
+        { error: 'Invalid data URI format — must be an image or video' },
         { status: 400 }
       );
     }
 
-    const mediaType = dataUri.startsWith('data:video/') ? 'video' : 'image';
+    // Reject raw video data URIs — Gemini vision only accepts images.
+    // Videos must be frame-extracted client-side first (CommandBar.tsx).
+    if (dataUri.startsWith('data:video/')) {
+      return NextResponse.json(
+        {
+          error:
+            'Raw video data URIs are not supported. Frame extraction failed client-side. Please try uploading again.',
+        },
+        { status: 400 }
+      );
+    }
+
     const result = await analyzeVision(
       dataUri,
-      context || `Analyze this ${mediaType}`
+      context || 'Analyze this image'
     );
 
     return NextResponse.json(result);

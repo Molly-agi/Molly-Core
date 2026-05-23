@@ -109,6 +109,12 @@
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 
+        <!-- Widget Control Socket Service (listens on port 9077) -->
+        <service
+            android:name=".WidgetSocketService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
     </application>
 
 </manifest>

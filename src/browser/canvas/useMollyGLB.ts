@@ -24,10 +24,10 @@ export interface MollyGLB {
   skinnedMesh: THREE.SkinnedMesh | null;
 }
 
-const MODEL_PATH = '/models/molly.glb';
+export const MODEL_PATH = '/models/molly.glb';
 
-export function useMollyGLB(): MollyGLB {
-  const gltf = useLoader(GLTFLoader, MODEL_PATH);
+export function useMollyGLB(modelPath: string = MODEL_PATH): MollyGLB {
+  const gltf = useLoader(GLTFLoader, modelPath);
 
   return useMemo<MollyGLB>(() => {
     const bones: Record<string, THREE.Object3D> = {};

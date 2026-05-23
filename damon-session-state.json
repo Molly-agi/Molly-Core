@@ -1,0 +1,15 @@
+{
+  "status": "startup",
+  "currentState": "idle",
+  "currentTask": null,
+  "taskAssignedAt": null,
+  "lastActivity": null,
+  "sessionId": null,
+  "findings": [],
+  "proposal": null,
+  "awaitingDirective": false,
+  "directiveDeadlineMs": 300000,
+  "uptime": 0,
+  "tasksCompleted": 0,
+  "lastMessage": null
+}

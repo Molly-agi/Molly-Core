@@ -22,6 +22,11 @@ jest.mock('../tool-handlers/visual-arts-tools', () => ({
   visualArtsToolHandlers: {},
 }));
 
+// widget-tools imports widget-control → genkit-core → @genkit-ai/google-genai (ESM)
+jest.mock('../tool-handlers/widget-tools', () => ({
+  widgetToolHandlers: {},
+}));
+
 jest.mock('../computer-use/computer-use-handler', () => ({
   operateComputer: jest.fn(async () => ({
     success: true,

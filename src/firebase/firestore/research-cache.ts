@@ -7,19 +7,8 @@
  * This avoids redundant searches and allows Molly to reference her past discoveries.
  */
 
-import { initializeFirebase } from '@/firebase/index';
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  updateDoc,
-  doc,
-  Timestamp,
-  orderBy,
-  limit,
-} from 'firebase/firestore';
+import { getStorageRouter } from '@/lib/storage-router';
+import type { QueryFilter } from '@/lib/storage-interface';
 
 export interface ResearchFinding {
   id?: string;
@@ -33,8 +22,8 @@ export interface ResearchFinding {
   relevance: number; // 1-10 scale, how useful was this
   useCase?: string; // What problem does this solve?
   tags: string[]; // Additional categorization
-  savedAt: Timestamp;
-  lastAccessed?: Timestamp;
+  savedAt: string; // ISO timestamp
+  lastAccessed?: string; // ISO timestamp
   accessCount: number; // How many times Molly has referenced this
   content?: string; // Optional: Full text content for local search
 }
@@ -46,18 +35,17 @@ export async function saveResearchFinding(
   userId: string,
   finding: Omit<ResearchFinding, 'id' | 'savedAt' | 'accessCount'>
 ): Promise<string> {
-  const { firestore } = initializeFirebase();
-
-  const researchRef = collection(firestore, 'users', userId, 'researchCache');
+  const storage = await getStorageRouter();
+  const collectionPath = `users/${userId}/researchCache`;
 
   const findingWithTimestamp: Omit<ResearchFinding, 'id'> = {
     ...finding,
-    savedAt: Timestamp.now(),
+    savedAt: new Date().toISOString(),
     accessCount: 0,
   };
 
-  const docRef = await addDoc(researchRef, findingWithTimestamp);
-  return docRef.id;
+  const doc = await storage.add(collectionPath, findingWithTimestamp);
+  return doc.id;
 }
 
 /**
@@ -69,14 +57,62 @@ export async function searchResearchCache(
   searchQuery: string,
   sourceFilter?: string // Optional: filter by 'github', 'documentation', etc.
 ): Promise<ResearchFinding[]> {
-  const { firestore } = initializeFirebase();
+  const storage = await getStorageRouter();
+  const collectionPath = `users/${userId}/researchCache`;
 
-  const researchRef = collection(firestore, 'users', userId, 'researchCache');
+  // Build query filters
+  const filters: QueryFilter[] = [];
+  if (sourceFilter) {
+    filters.push({
+      field: 'source',
+      operator: '==',
+      value: sourceFilter,
+    });
+  }
 
-  // Build query - search by topic containing keywords
-  const constraints: ReturnType<typeof where>[] = [];
-  constraints.push(where('topic', '>=', searchQuery.toLowerCase()));
-  constraints.push(where('topic', '<=', searchQuery.toLowerCase() + '\uf8ff'));
+  const results = await storage.query(collectionPath, filters, {
+    orderBy: { field: 'savedAt', direction: 'desc' },
+    limit: 50,
+  });
+
+  // Filter by search query in topic or keywords (client-side since storage doesn't support text search)
+  const searchLower = searchQuery.toLowerCase();
+  return results
+    .filter((doc) => {
+      const data = doc.data as Partial<ResearchFinding>;
+      return (
+        data.topic?.toLowerCase().includes(searchLower) ||
+        data.keywords?.some((k: string) => k.toLowerCase().includes(searchLower)) ||
+        data.tags?.some((t: string) => t.toLowerCase().includes(searchLower))
+      );
+    })
+    .map((doc) => ({
+      id: doc.id,
+      ...doc.data,
+    } as ResearchFinding));
+}
+
+/**
+ * Increment access count for a research finding
+ */
+export async function recordResearchAccess(
+  userId: string,
+  findingId: string
+): Promise<void> {
+  const storage = await getStorageRouter();
+  const collectionPath = `users/${userId}/researchCache`;
+  const docPath = `${collectionPath}/${findingId}`;
+
+  const doc = await storage.read(docPath);
+  if (!doc) return;
+
+  const data = doc as Partial<ResearchFinding> & { accessCount?: number };
+  await storage.set(collectionPath, findingId, {
+    ...data,
+    accessCount: (data.accessCount || 0) + 1,
+    lastAccessed: new Date().toISOString(),
+  });
+}
 
   if (sourceFilter) {
     constraints.push(where('source', '==', sourceFilter));

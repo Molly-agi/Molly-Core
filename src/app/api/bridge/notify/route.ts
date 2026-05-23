@@ -8,6 +8,10 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { MollyLogger } from '@/ai/logger';
+import {
+  getHeartbeatScheduler,
+  isHeartbeatRunning,
+} from '@/ai/tools/heartbeat-scheduler';
 
 // In-memory flag that the bridge poller in Terminal.tsx can check
 // This is a simple signaling mechanism — set it, client polls and clears it
@@ -35,6 +39,16 @@ export async function POST(request: NextRequest) {
     }
 
     setPendingNotification(from, preview || '');
+
+    // Wake autonomous bridge processing even if no UI tab is active.
+    // This prevents "bridge only works when Molly tab is foreground" behavior.
+    try {
+      if (!isHeartbeatRunning()) {
+        getHeartbeatScheduler().start();
+      }
+    } catch {
+      // Non-fatal — notify path must remain fast and resilient
+    }
 
     MollyLogger.debug('Bridge notification received', 'bridge-notify', {
       from,

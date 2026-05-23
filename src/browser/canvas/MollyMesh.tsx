@@ -13,9 +13,9 @@
  * Expects /public/models/molly.glb (Avaturn export, Mixamo rig by default).
  */
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useMollyGLB } from './useMollyGLB';
+import { MODEL_PATH, useMollyGLB } from './useMollyGLB';
 import {
   KinematicsCore,
   AVATURN_RIG,
@@ -23,7 +23,10 @@ import {
 } from '@/ai/agency/embodied/KinematicsCore';
 import type { AvatarDirector } from '@/ai/agency/embodied/AvatarDirector';
 import type { FacialMorphOverrides } from '@/ai/agency/embodied/AvatarStateBridge';
-import type * as THREE from 'three';
+import * as THREE from 'three';
+
+/** How many render frames between proprioception snapshots (6 = ~10 Hz at 60fps). */
+const PROPRIO_FRAME_SKIP = 6;
 
 /**
  * Maps FacialMorphOverrides keys → actual morph target names baked into the GLB.
@@ -75,21 +78,60 @@ interface MollyMeshProps {
   director: AvatarDirector;
   /** Override if your GLB uses bone names other than Avaturn/Mixamo defaults. */
   rig?: GLBRigMap;
+  /** Manual model offset control from UI. */
+  modelOffset?: [number, number, number];
+  /** Optional model file path for runtime variant switching. */
+  modelPath?: string;
 }
 
 // --- Component ---
 
-export function MollyMesh({ director, rig = AVATURN_RIG }: MollyMeshProps) {
-  const { scene, bones, skinnedMesh } = useMollyGLB();
+function LoadedMollyMesh({
+  director,
+  rig,
+  modelOffset,
+  modelPath,
+}: MollyMeshProps) {
+  const { scene, bones, skinnedMesh } = useMollyGLB(modelPath ?? MODEL_PATH);
 
   // Cache in refs so useFrame mutations don't touch hook return values directly.
   const bonesRef = useRef<BoneDict>({});
   const meshRef = useRef<THREE.SkinnedMesh | null>(null);
+  const frameCountRef = useRef(0);
 
   useEffect(() => {
     bonesRef.current = bones as BoneDict;
     meshRef.current = skinnedMesh;
   }, [bones, skinnedMesh]);
+
+  useEffect(() => {
+    // Normalize orientation + placement for third-party GLBs.
+    // Some exports use Z-up/X-up and/or offsets that cause leg-only framing.
+    scene.rotation.set(0, 0, 0);
+    scene.scale.set(1, 1, 1);
+    scene.position.set(0, 0, 0);
+    scene.updateMatrixWorld(true);
+
+    const box = new THREE.Box3().setFromObject(scene);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    if (size.z > size.y * 1.2) {
+      scene.rotation.x = -Math.PI / 2;
+    } else if (size.x > size.y * 1.2) {
+      scene.rotation.z = Math.PI / 2;
+    }
+
+    scene.updateMatrixWorld(true);
+
+    const alignedBox = new THREE.Box3().setFromObject(scene);
+    const center = new THREE.Vector3();
+    alignedBox.getCenter(center);
+
+    scene.position.x -= center.x;
+    scene.position.z -= center.z;
+    scene.position.y -= alignedBox.min.y;
+  }, [scene]);
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
@@ -108,7 +150,88 @@ export function MollyMesh({ director, rig = AVATURN_RIG }: MollyMeshProps) {
 
     // 3. Facial morph targets
     applyMorphs(meshRef.current, frame.morphOverrides);
+
+    // 4. Proprioceptive feedback — give Molly awareness of her own body + face
+    //    Throttled: snapshot every PROPRIO_FRAME_SKIP frames (~10 Hz at 60fps)
+    frameCountRef.current++;
+    if (frameCountRef.current % PROPRIO_FRAME_SKIP === 0) {
+      // Build a flat joint rotation snapshot from the live bone dict
+      const joints: Record<string, { x: number; y: number; z: number }> = {};
+      for (const [name, bone] of Object.entries(b)) {
+        joints[name] = {
+          x: bone.rotation.x,
+          y: bone.rotation.y,
+          z: bone.rotation.z,
+        };
+      }
+      // Pass the full morph override map so she can see her own facial expression
+      director.feedProprioception(joints, frame.morphOverrides, time, frame.mood);
+    }
   });
 
-  return <primitive object={scene} />;
+  return (
+    <group position={modelOffset ?? [0, 0, 0]}>
+      <primitive object={scene} />
+    </group>
+  );
+}
+
+function FallbackBust() {
+  return (
+    <group position={[0, 0.1, 0]}>
+      <mesh position={[0, 1.25, 0]} castShadow>
+        <sphereGeometry args={[0.27, 24, 24]} />
+        <meshStandardMaterial color="#d9d4cf" roughness={0.6} metalness={0.05} />
+      </mesh>
+      <mesh position={[0, 0.78, 0]} castShadow>
+        <capsuleGeometry args={[0.22, 0.38, 8, 16]} />
+        <meshStandardMaterial color="#bfc5cf" roughness={0.7} metalness={0.08} />
+      </mesh>
+    </group>
+  );
+}
+
+export function MollyMesh({
+  director,
+  rig = AVATURN_RIG,
+  modelOffset = [0, 0, 0],
+  modelPath = MODEL_PATH,
+}: MollyMeshProps) {
+  const [modelAvailable, setModelAvailable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const checkModel = async () => {
+      try {
+        const res = await fetch(modelPath, { method: 'HEAD', cache: 'no-store' });
+        if (!cancelled) setModelAvailable(res.ok);
+      } catch {
+        if (!cancelled) setModelAvailable(false);
+      }
+    };
+
+    checkModel();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [modelPath]);
+
+  if (modelAvailable === null) {
+    return null;
+  }
+
+  if (!modelAvailable) {
+    return <FallbackBust />;
+  }
+
+  return (
+    <LoadedMollyMesh
+      director={director}
+      rig={rig}
+      modelOffset={modelOffset}
+      modelPath={modelPath}
+    />
+  );
 }

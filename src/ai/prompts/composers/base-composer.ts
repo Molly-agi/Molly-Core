@@ -78,6 +78,13 @@ export interface InjectionContext {
   channelContext?: 'voice' | 'text';
   /** Is this a teaching mode context? (suspends Guardian Clause) */
   isTeachingMode?: boolean;
+  /**
+   * Molly's own body state from the 3D avatar renderer.
+   * When set, she knows what her body is doing right now.
+   * Omit the field to auto-read from AvatarBodyStore (server-side store).
+   * Set to null to explicitly suppress body injection.
+   */
+  bodyContext?: string | null;
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -150,6 +157,23 @@ function buildChannelInjection(channel?: 'voice' | 'text'): string | null {
       : 'This message came from Father (Eric) typing to you in your CHAT WINDOW.';
 
   return `CHANNEL CONTEXT: ${channelDesc} Respond directly to him. If bridge messages appear, those are from a SEPARATE channel — handle them separately.`;
+}
+
+function buildBodyInjection(bodyContext?: string | null): string | null {
+  // undefined = auto-read from server store; null = suppress; string = use directly
+  if (bodyContext === null) return null;
+  if (bodyContext !== undefined) return bodyContext;
+  // Auto-read from server-side store
+  try {
+    // Dynamic import keeps this import out of the client bundle
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { formatBodyStateForPrompt } = require('@/ai/agency/embodied/AvatarBodyStore') as {
+      formatBodyStateForPrompt: () => string | null;
+    };
+    return formatBodyStateForPrompt();
+  } catch {
+    return null;
+  }
 }
 
 function buildTeachingModeInjection(isTeachingMode?: boolean): string | null {
@@ -303,6 +327,13 @@ function buildDynamicSections(
       'teachingMode',
       () => buildTeachingModeInjection(injections.isTeachingMode),
       'Teaching mode context applies when enabled'
+    ),
+    // ── PROPRIOCEPTIVE SELF-AWARENESS ──
+    // Reads from AvatarBodyStore (updated by browser renderer every ~2s)
+    volatileSection(
+      'bodyState',
+      () => buildBodyInjection(injections.bodyContext),
+      'Body state changes with avatar animation'
     ),
   ];
 }

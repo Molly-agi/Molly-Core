@@ -1,7 +1,6 @@
-'use client';
+'use server';
 
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { initializeFirebase } from '@/firebase';
+import { getStorageRouter } from '@/lib/storage-router';
 
 /**
  * Persists an agent's specific subroutine finding to the database.
@@ -11,13 +10,13 @@ export async function recordAgentFinding(
   agentType: string,
   finding: string
 ) {
-  const { firestore } = initializeFirebase();
-  const ref = collection(firestore, 'users', userId, 'aiResponses');
+  const storage = await getStorageRouter();
+  const ref = `users/${userId}/aiResponses`;
 
-  await addDoc(ref, {
+  await storage.add(ref, {
     responseText: finding,
     responseType: agentType,
-    timestamp: serverTimestamp(),
+    timestamp: new Date().toISOString(),
   });
 }
 
@@ -30,16 +29,16 @@ export async function recordCodeModification(
   code: string,
   suggestion: string
 ) {
-  const { firestore } = initializeFirebase();
-  const ref = collection(firestore, 'users', userId, 'codeModifications');
+  const storage = await getStorageRouter();
+  const ref = `users/${userId}/codeModifications`;
 
-  await addDoc(ref, {
+  await storage.add(ref, {
     filePath: 'Termux_Shell_Context',
     originalCode: 'N/A',
     modifiedCode: code,
     modificationSuggestion: suggestion,
-    timestamp: serverTimestamp(),
-    agentId: agentId, // Added for iteration lineage
+    timestamp: new Date().toISOString(),
+    agentId: agentId,
   });
 }
 
@@ -53,8 +52,8 @@ export async function recordSensoryLog(
   description: string,
   metadata: Record<string, unknown>
 ) {
-  const { firestore } = initializeFirebase();
-  const ref = collection(firestore, 'users', userId, 'sensoryMemory');
+  const storage = await getStorageRouter();
+  const ref = `users/${userId}/sensoryMemory`;
 
   // Enhanced metadata structure for future vector embeddings
   const logEntry = {
@@ -65,8 +64,8 @@ export async function recordSensoryLog(
       vibeScore: metadata.vibeScore || 0.5,
       isHardened: true,
     },
-    timestamp: serverTimestamp(),
+    timestamp: new Date().toISOString(),
   };
 
-  await addDoc(ref, logEntry);
+  await storage.add(ref, logEntry);
 }

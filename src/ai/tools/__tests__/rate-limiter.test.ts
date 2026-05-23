@@ -45,8 +45,8 @@ describe('Rate Limiter', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    // Create fresh instance for each test
-    limiter = new RateLimiter();
+    // Create fresh instance with explicit test config so tests are isolated from DEFAULT_CONFIG
+    limiter = new RateLimiter({ dailyBudgetUSD: 50.0, warningThreshold: 0.8 });
   });
 
   describe('Basic Operation', () => {
@@ -128,10 +128,10 @@ describe('Rate Limiter', () => {
     });
 
     it('throws when budget exceeded', async () => {
-      // Record usage near budget limit
-      limiter.recordUsage('expensive', 1000000, 49.0);
+      // Record usage over budget limit
+      limiter.recordUsage('expensive', 1000000, 50.01);
 
-      // Next request would exceed $50 budget
+      // Next request exceeds $50 budget
       await expect(limiter.checkLimit('testFlow', 100000)).rejects.toThrow(
         'Rate limit exceeded'
       );
@@ -309,9 +309,9 @@ describe('Rate Limiter', () => {
     });
 
     it('accepts custom warningThreshold', async () => {
-      const customLimiter = new RateLimiter({ warningThreshold: 0.5 });
+      const customLimiter = new RateLimiter({ warningThreshold: 0.5, dailyBudgetUSD: 5.0 });
 
-      // 60% usage should trigger warning with 0.5 threshold
+      // 60% usage (3/5 = 60%) should trigger warning with 0.5 threshold
       customLimiter.recordUsage('flow', 10000, 3.0);
       await customLimiter.checkLimit('testFlow', 100);
 
@@ -392,7 +392,7 @@ describe('Rate Limiter', () => {
     });
 
     it('logs error when budget exceeded', async () => {
-      limiter.recordUsage('expensive', 100000, 4.99);
+      limiter.recordUsage('expensive', 100000, 50.01);
 
       try {
         await limiter.checkLimit('testFlow', 100000);

@@ -57,7 +57,7 @@ export async function executeTool(
   }
 
   // === TOOL EXECUTION ===
-  // Heart Gate removed — Molly has full agency. This is where the main tool logic runs.
+  // Heart Gate is advisory only — Molly has full agency. This is where the main tool logic runs.
   const result = await executeToolInternal(tool, params);
 
   // === POST-TOOL-USE HOOKS ===

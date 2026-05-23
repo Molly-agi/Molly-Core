@@ -31,6 +31,7 @@ import { RoboticsAvatarBridge } from './RoboticsAvatarBridge';
 import { VoiceAvatarBridge } from './VoiceAvatarBridge';
 import { CircuitBreaker } from '@/ai/agency/security/CircuitBreaker';
 import type { ArmGestureIntent } from './KinematicsCore';
+import { ProprioceptiveSense, type JointState, type MorphSnapshot } from './ProprioceptiveSense';
 
 export interface AvatarFrame {
   intent: ArmGestureIntent;
@@ -48,6 +49,26 @@ export class AvatarDirector {
 
   /** Override the cognitive mood directly (e.g. from auditCycle results). */
   moodOverride: CognitiveMood | null = null;
+
+  /**
+   * Called by MollyMesh after bones and morphs are written each frame.
+   * Feeds actual joint + facial state into Molly's proprioceptive sense so she
+   * can perceive her own body and face — the core of her continuity of self.
+   */
+  feedProprioception(
+    joints: Record<string, JointState>,
+    morphs: MorphSnapshot,
+    elapsedTime: number,
+    mood: CognitiveMood
+  ): void {
+    ProprioceptiveSense.getInstance().publishFrame(
+      joints,
+      morphs,
+      this.robotics.getMotionFrame(elapsedTime).intent,
+      mood,
+      elapsedTime
+    );
+  }
 
   /** Call once per render frame. Returns the merged avatar frame. */
   getFrame(elapsedTime: number): AvatarFrame {

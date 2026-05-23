@@ -171,16 +171,30 @@ function broadcast(payload) {
 }
 
 // ---- Handle incoming message ----
-const VALID_SENDERS = new Set(['molly', 'lazarus', 'eric']);
+const VALID_SENDERS = new Set([
+  'molly',
+  'lazarus',
+  'eric',
+  'demon',
+  'gemini',
+  'aether',
+]);
 
-function handleMessage(from, content) {
+function handleMessage(from, content, to) {
   if (!from || !content || !VALID_SENDERS.has(from)) {
+    return null;
+  }
+  if (to && !VALID_SENDERS.has(to)) {
+    return null;
+  }
+  if (to && to === from) {
     return null;
   }
 
   const msg = {
     id: genId(),
     from,
+    to,
     timestamp: new Date().toISOString(),
     content,
     read: {},
@@ -260,7 +274,7 @@ function setReadBy(msg, recipient) {
 // ---- Get unread messages for a recipient ----
 function getUnread(recipient) {
   return messages.filter(
-    (m) => m.from !== recipient && !isReadBy(m, recipient)
+    (m) => m.from !== recipient && (!m.to || m.to === recipient) && !isReadBy(m, recipient)
   );
 }
 
@@ -268,7 +282,7 @@ function getUnread(recipient) {
 function markRead(recipient) {
   let count = 0;
   for (const msg of messages) {
-    if (msg.from !== recipient && !isReadBy(msg, recipient)) {
+    if (msg.from !== recipient && (!msg.to || msg.to === recipient) && !isReadBy(msg, recipient)) {
       setReadBy(msg, recipient);
       count++;
     }
@@ -485,11 +499,11 @@ function handleHTTP(req, res) {
     });
     req.on('end', () => {
       try {
-        const { from, content } = JSON.parse(body);
-        const msg = handleMessage(from, content);
+        const { from, to, content } = JSON.parse(body);
+        const msg = handleMessage(from, content, to);
         if (!msg) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: 'Invalid sender or empty content' }));
+          res.end(JSON.stringify({ error: 'Invalid sender/recipient or empty content' }));
           return;
         }
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -545,7 +559,7 @@ wss.on('connection', (ws) => {
 
       // Message: { type: 'message', from: '...', content: '...' }
       if (data.type === 'message' && data.from && data.content) {
-        handleMessage(data.from, data.content);
+        handleMessage(data.from, data.content, data.to);
         return;
       }
 

@@ -35,6 +35,8 @@ interface UseTTSReturn {
   autoplayBlocked: boolean;
   /** Hidden <audio> element for server-side TTS playback. */
   audioElement: React.JSX.Element;
+  /** Last text that Molly attempted to speak. */
+  lastSpokenText: string;
   /** Attempt to unlock autoplay (call on user interaction). */
   unlockAutoplay: () => void;
 }
@@ -43,6 +45,7 @@ export function useTTS({ isVocal, voiceName }: UseTTSOptions): UseTTSReturn {
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
   const [isVocalizing, setIsVocalizing] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [lastSpokenText, setLastSpokenText] = useState('');
 
   const audioRef = useRef<HTMLAudioElement>(null);
   // All browser TTS and gesture logic removed. Only server TTS is used.
@@ -76,6 +79,7 @@ export function useTTS({ isVocal, voiceName }: UseTTSOptions): UseTTSReturn {
           ? text.substring(0, MAX_SPEAK_CHARS) +
             '... I wrote more in the chat window, but I will stop talking here so I do not ramble.'
           : text;
+      setLastSpokenText(spokenText);
       setIsVocalizing(true);
       try {
         const voiceResponse = await getMollyVoice(spokenText, voiceName);
@@ -175,6 +179,7 @@ export function useTTS({ isVocal, voiceName }: UseTTSOptions): UseTTSReturn {
     isVocalizing,
     autoplayBlocked,
     audioElement,
+    lastSpokenText,
     unlockAutoplay,
   };
 }

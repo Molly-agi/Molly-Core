@@ -1,4 +1,5 @@
 /**
+ * @jest-environment node
  * @fileOverview Tests for Engram Crypto - AES-256-GCM encryption
  *
  * Tests encryption helpers including:

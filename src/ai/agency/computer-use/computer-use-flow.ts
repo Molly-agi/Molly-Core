@@ -21,7 +21,30 @@ import {
   getEmergencyStop,
 } from './types';
 import { getScreenCaptureProvider } from './screen-capture';
-import { executeAction, getActionExecutor } from './action-executor';
+import {
+  executeAction,
+  getActionExecutor,
+  registerActionExecutor,
+} from './action-executor';
+import { registerScreenCaptureProvider } from './screen-capture';
+import { PlaywrightComputerUseProvider } from './providers/playwright-provider';
+import { AndroidADBProvider } from './providers/android-adb-provider';
+
+let _providersRegistered = false;
+
+function ensureProvidersRegistered(): void {
+  if (_providersRegistered) return;
+
+  const browserProvider = new PlaywrightComputerUseProvider();
+  const androidProvider = new AndroidADBProvider();
+
+  registerActionExecutor(browserProvider);
+  registerScreenCaptureProvider(browserProvider);
+  registerActionExecutor(androidProvider);
+  registerScreenCaptureProvider(androidProvider);
+
+  _providersRegistered = true;
+}
 
 // ============================================================
 // AUDIT LOG — Observability
@@ -94,6 +117,8 @@ export async function executeComputerUseTask(
   environment: Environment = 'browser',
   config: Partial<ComputerUseConfig> = {}
 ): Promise<ComputerUseSession> {
+  ensureProvidersRegistered();
+
   const mergedConfig: ComputerUseConfig = { ...DEFAULT_CONFIG, ...config };
   const sessionId = generateTraceId();
   const traceId = generateTraceId();

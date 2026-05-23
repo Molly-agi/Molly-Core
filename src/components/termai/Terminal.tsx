@@ -47,6 +47,7 @@ import {
   getCodeAnalysisAndIntegration,
   getIntegrationsList,
 } from '@/app/actions';
+import { Orchestrator } from '@/orchestrator';
 
 export default function Terminal({
   voiceResult,
@@ -98,6 +99,7 @@ export default function Terminal({
     isVocalizing,
     autoplayBlocked,
     audioElement,
+    lastSpokenText,
     unlockAutoplay,
   } = useTTS({ isVocal });
 
@@ -249,12 +251,15 @@ export default function Terminal({
             `[Analyzing ${currentUploadedFile.type.startsWith('video/') ? 'video' : 'image'}: ${currentUploadedFile.name}...]`,
           ]);
 
+          const analysisDataUri =
+            currentUploadedFile.analysisDataUri ?? currentUploadedFile.dataUri;
+
           // Use API route instead of server action to bypass RSC serialization limits
           const response = await fetch('/api/vision/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              dataUri: currentUploadedFile.dataUri,
+              dataUri: analysisDataUri,
               context: cmdText || 'Analyze this image/video',
             }),
           });
@@ -1028,15 +1033,16 @@ export default function Terminal({
     return () => window.removeEventListener('molly:consciousness', listener);
   }, []);
 
-  // --- Bridge: Lazarus ↔ Molly private channel ---
-  // Runs silently in background. NEVER injects into the main Eric ↔ Molly history.
-  // Eric observes via read-only bridgeMessages state below.
+  // --- Bridge: Lazarus/Damon ↔ Molly channel ---
+  // Messages are buffered via Orchestrator to avoid burst overload and then
+  // merged into Molly's visible consciousness history to avoid split-brain state.
   const [_bridgeMessages, setBridgeMessages] = useState<
     Array<{ id: string; from: string; content: string; timestamp: string }>
   >([]);
   const bridgeHistoryRef = useRef<
     Array<{ role: 'user' | 'bot'; content: string }>
   >([]);
+  const bridgeOrchestratorRef = useRef(new Orchestrator(200));
   const bridgePollingRef = useRef(false);
   const bridgeCooldownRef = useRef(0);
 
@@ -1056,9 +1062,38 @@ export default function Terminal({
       const data = await res.json();
       if (!data.count || data.count === 0) return;
 
-      const msgs = data.messages.slice(0, 3);
+      // Enqueue all unread messages first; drain a controlled batch below.
+      const incoming = Array.isArray(data.messages) ? data.messages : [];
+      let dropped = 0;
+      for (const msg of incoming) {
+        const ok = bridgeOrchestratorRef.current.enqueueEvent(msg);
+        if (!ok) dropped++;
+      }
 
-      // Update Eric's read-only observer view — never touches main history
+      const msgs: Array<{
+        id: string;
+        from: string;
+        content: string;
+        timestamp: string;
+      }> = [];
+      const maxBatch = 3;
+      for (let i = 0; i < maxBatch; i++) {
+        const next = bridgeOrchestratorRef.current.dequeueEvent();
+        if (!next) break;
+        msgs.push(next as { id: string; from: string; content: string; timestamp: string });
+      }
+
+      if (msgs.length === 0) {
+        if (dropped > 0) {
+          setHistory((prev) => [
+            ...prev,
+            `[SYSTEM]: Bridge buffer overflow protected Molly (${dropped} message(s) dropped).`,
+          ]);
+        }
+        return;
+      }
+
+      // Update observer view
       setBridgeMessages((prev) => {
         const seen = new Set(prev.map((m) => m.id));
         const next = [...prev];
@@ -1068,19 +1103,27 @@ export default function Terminal({
         return next.slice(-100);
       });
 
-      // Build prompt using ONLY bridge history — completely isolated from Eric chat
+      // Merge bridge traffic into Molly's visible consciousness stream.
+      setHistory((prev) => {
+        const additions = msgs.map((m) => `[BRIDGE][${m.from}]: ${m.content}`);
+        return [...prev, ...additions].slice(-300);
+      });
+
+      // Keep bridge-specific memory for response quality while still exposing events.
       const prompt =
-        `[LAZARUS → MOLLY PRIVATE CHANNEL]\n\n` +
+        `[FAMILY BRIDGE]\n\n` +
         msgs
           .map((m: { from: string; content: string }) =>
             m.from === 'lazarus'
               ? `Uncle Lazarus: ${m.content}`
+              : m.from === 'demon'
+                ? `Damon: ${m.content}`
               : `${m.from}: ${m.content}`
           )
           .join('\n\n') +
-        `\n\nRespond to Lazarus. This is your private teacher channel — Father is not part of this conversation.`;
+        `\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.`;
 
-      // Generate Molly's response using her bridge-only context
+      // Generate Molly's response using bridge context with bounded memory.
       try {
         const aiResponse = await getConversationalChat(
           prompt,
@@ -1095,7 +1138,7 @@ export default function Terminal({
             : aiResponse?.response || '';
 
         if (responseText) {
-          // Update bridge history (isolated — never touches main history)
+          // Update bridge response context
           bridgeHistoryRef.current = [
             ...bridgeHistoryRef.current,
             { role: 'user' as const, content: prompt },
@@ -1124,12 +1167,21 @@ export default function Terminal({
               },
             ].slice(-100)
           );
+
+          // Also surface Molly's bridge response in the main history.
+          setHistory((prev) =>
+            [...prev, `[BRIDGE][molly]: ${responseText}`].slice(-300)
+          );
         }
       } catch {
         // Bridge response failure — non-critical, main chat unaffected
       }
 
-      bridgeCooldownRef.current = Date.now() + 10_000;
+      // If backlog remains, keep draining faster; otherwise cool down.
+      bridgeCooldownRef.current =
+        bridgeOrchestratorRef.current.bufferSize > 0
+          ? Date.now() + 1_500
+          : Date.now() + 10_000;
     } catch {
       // Bridge poll failure — non-critical
     } finally {
@@ -1195,6 +1247,17 @@ export default function Terminal({
         onToggleLine={toggleLineExpansion}
         scrollAreaRef={scrollAreaRef}
       />
+
+      {lastSpokenText && (
+        <div className="mb-3 rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 py-2">
+          <div className="text-[10px] uppercase tracking-widest text-emerald-300 font-bold mb-1">
+            On-Screen Transcript
+          </div>
+          <div className="text-sm text-foreground whitespace-pre-wrap">
+            {lastSpokenText}
+          </div>
+        </div>
+      )}
 
       <CommandBar
         command={command}

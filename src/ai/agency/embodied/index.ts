@@ -16,3 +16,19 @@ export type { VoiceAvatarFrame } from './VoiceAvatarBridge';
 
 export { AvatarDirector } from './AvatarDirector';
 export type { AvatarFrame } from './AvatarDirector';
+
+export { ProprioceptiveSense } from './ProprioceptiveSense';
+export type {
+  BodyPerception,
+  BodySnapshot,
+  BodyEvent,
+  GestureFlags,
+  JointState,
+} from './ProprioceptiveSense';
+
+export {
+  getAvatarBodyState,
+  setAvatarBodyState,
+  formatBodyStateForPrompt,
+} from './AvatarBodyStore';
+export type { AvatarBodyState } from './AvatarBodyStore';

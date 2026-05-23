@@ -32,6 +32,7 @@ export interface UploadedFile {
   type: string;
   dataUri: string;
   size: number;
+  analysisDataUri?: string;
 }
 
 interface CommandBarProps {
@@ -96,6 +97,66 @@ async function compressImage(dataUri: string): Promise<string> {
   });
 }
 
+/**
+ * Extract a JPEG frame from a video data URI for vision analysis.
+ * This keeps payloads small and stable versus sending raw video base64.
+ */
+async function extractVideoFrame(dataUri: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.muted = true;
+    video.playsInline = true;
+
+    const cleanup = () => {
+      video.pause();
+      video.removeAttribute('src');
+      video.load();
+    };
+
+    video.onloadeddata = () => {
+      try {
+        const width = video.videoWidth;
+        const height = video.videoHeight;
+        if (!width || !height) {
+          cleanup();
+          reject(new Error('Video has no frame data'));
+          return;
+        }
+
+        const scale = Math.min(1, MAX_IMAGE_DIMENSION / width);
+        const w = Math.floor(width * scale);
+        const h = Math.floor(height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          cleanup();
+          reject(new Error('Failed to get canvas context'));
+          return;
+        }
+
+        ctx.drawImage(video, 0, 0, w, h);
+        const frameDataUri = canvas.toDataURL('image/jpeg', IMAGE_QUALITY);
+        cleanup();
+        resolve(frameDataUri);
+      } catch (error) {
+        cleanup();
+        reject(error instanceof Error ? error : new Error('Frame extraction failed'));
+      }
+    };
+
+    video.onerror = () => {
+      cleanup();
+      reject(new Error('Failed to load video for frame extraction'));
+    };
+
+    video.src = dataUri;
+  });
+}
+
 export function CommandBar({
   command,
   onCommandChange,
@@ -147,6 +208,17 @@ export function CommandBar({
         dataUri = await compressImage(dataUri);
       }
 
+      // For videos, extract a still frame for vision analysis.
+      // Raw video base64 payloads are too large and unreliable in API requests.
+      let analysisDataUri: string | undefined;
+      if (file.type.startsWith('video/')) {
+        try {
+          analysisDataUri = await extractVideoFrame(dataUri);
+        } catch (error) {
+          console.warn('Video frame extraction failed, using raw video data:', error);
+        }
+      }
+
       // Detect the actual mime type from the compressed dataUri
       const mimeMatch = dataUri.match(/^data:([^;]+);/);
       const actualType = mimeMatch ? mimeMatch[1] : file.type;
@@ -156,6 +228,7 @@ export function CommandBar({
         type: actualType,
         dataUri,
         size: dataUri.length, // Use compressed size
+        analysisDataUri,
       });
     } catch (error) {
       console.error('Failed to process file:', error);
@@ -202,12 +275,20 @@ export function CommandBar({
               variant="ghost"
               size="sm"
               onClick={onToggleVocal}
-              className={cn(isVocalizing && 'animate-pulse')}
+              className={cn('gap-2', isVocalizing && 'animate-pulse')}
+              aria-label={isVocal ? 'Mute Molly voice' : 'Unmute Molly voice'}
+              title={isVocal ? 'Mute' : 'Unmute'}
             >
               {isVocal ? (
-                <Volume2 className="size-4 text-primary" />
+                <>
+                  <Volume2 className="size-4 text-primary" />
+                  <span className="text-xs">Mute</span>
+                </>
               ) : (
-                <VolumeX className="size-4 text-muted-foreground" />
+                <>
+                  <VolumeX className="size-4 text-muted-foreground" />
+                  <span className="text-xs">Unmute</span>
+                </>
               )}
             </Button>
             <Button
