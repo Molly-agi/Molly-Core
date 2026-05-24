@@ -103,7 +103,28 @@ function generateLoadTestEngrams(scenario: LoadTestScenario): NeuralEngram[] {
         assertiveness: 0.3 + Math.random() * 0.7,
         curiosity: 0.6 + Math.random() * 0.4,
       },
-      data: { testScenario: scenario.name },
+      data: {
+        context: {
+          primary: scenario.name,
+          sessionPhase: i % 3 === 0 ? 'opening' : i % 3 === 1 ? 'deepening' : 'resolution',
+          priorContext: `Load test memory ${Math.max(0, i - 1)} in scenario ${scenario.name}`,
+        },
+        emotionalState: {
+          primary: scenario.patternType,
+          intensity: importance,
+          valence: (Math.random() - 0.5) * 2,
+          regulation: { strategy: 'acceptance', effectiveness: Math.random() },
+        },
+        associations: {
+          relatedMemories: [`load_test_${Math.max(0, i - 3)}`, `load_test_${Math.max(0, i - 7)}`],
+          strength: Math.random(),
+        },
+        metadata: {
+          sourceType: scenario.patternType,
+          processingDepth: i % 4 === 0 ? 'deep' : 'surface',
+          consolidationAttempts: Math.floor(Math.random() * 3),
+        },
+      },
     };
 
     engrams.push(engram);
@@ -127,17 +148,25 @@ export async function runLoadTest(
     const startTime = performance.now();
     const startMemory = process.memoryUsage().heapUsed;
 
-    const manager = new CompressionManager();
+    CompressionManager.resetForTest();
+    const manager = CompressionManager.getInstance({
+      t1PersonalityReference: enabledTechniques.some(t => ['PERSONALITY_REF', 'T1'].includes(t)),
+      t3TemporalDelta: enabledTechniques.some(t => ['TEMPORAL_DELTA', 'T3'].includes(t)),
+      t4VocabularyDict: enabledTechniques.some(t => ['VOCAB_DICT', 'T4'].includes(t)),
+      t2TimeDecayFidelity: enabledTechniques.some(t => ['TIME_DECAY', 'T2'].includes(t)),
+      t6InteractionTrace: enabledTechniques.some(t => ['INTERACTION_TRACE', 'T6'].includes(t)),
+      t5NumericQuantization: enabledTechniques.some(t => ['NUMERIC_QUANT', 'T5'].includes(t)),
+    });
     const result = await manager.compress({
       engrams,
-      targetRatio: 0.8, // Default target
-      enabledTechniques,
+      sessionId: `load-test-${scenario.name}-${modelName}`,
+      compressionTimestamp: Date.now(),
     });
 
     const endTime = performance.now();
     const endMemory = process.memoryUsage().heapUsed;
 
-    const compressedSize = JSON.stringify(result.bundle).length;
+    const compressedSize = result.metrics.compressedByteSize;
     const compressionRatio = compressedSize / originalSize;
     const executionTime = endTime - startTime;
     const memoryPeakMB = ((endMemory - startMemory) / 1024 / 1024).toFixed(2);
@@ -256,7 +285,7 @@ export function formatLoadTestResults(results: LoadTestResult[]): string {
     for (const result of modelResults) {
       if (result.success) {
         lines.push(
-          `  ✓ ${result.scenario.name.padEnd(15)} | ${result.executionTimeMs.toFixed(0).padStart(6)}ms | ${(result.compressionRatio * 100).toFixed(1).padStart(5)}% | ${result.throughputMBps.padStart(6)} MB/s`
+          `  ✓ ${result.scenario.name.padEnd(15)} | ${result.executionTimeMs.toFixed(0).padStart(6)}ms | ${(result.compressionRatio * 100).toFixed(1).padStart(5)}% | ${result.throughputMBps.toFixed(2).padStart(6)} MB/s`
         );
       } else {
         lines.push(

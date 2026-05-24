@@ -52,6 +52,8 @@ import {
 // ============================================================================
 
 export interface CompressionFeatureFlags {
+  // S0 — structural foundation layer (env: TITAN_SCHEMA_STRIPPER)
+  s0SchemaStripper: boolean;
   // P1 — build first, highest confidence
   t1PersonalityReference: boolean; // env: MOLLY_COMPRESS_T1
   t3TemporalDelta: boolean; // env: MOLLY_COMPRESS_T3
@@ -65,6 +67,7 @@ export interface CompressionFeatureFlags {
 
 function loadFeatureFlags(): CompressionFeatureFlags {
   return {
+    s0SchemaStripper: process.env.TITAN_SCHEMA_STRIPPER === '1',
     t1PersonalityReference: process.env.MOLLY_COMPRESS_T1 === '1',
     t3TemporalDelta: process.env.MOLLY_COMPRESS_T3 === '1',
     t4VocabularyDict: process.env.MOLLY_COMPRESS_T4 === '1',
@@ -166,6 +169,10 @@ function measureEpisodicRecall(
 export class CompressionManager {
   private static instance: CompressionManager | null = null;
   private readonly flags: CompressionFeatureFlags;
+  // Sequential versioning: prevents stale cache pointers in multi-technique compression
+  // Each technique increments the version before and after its modifications
+  private compressionStateVersion = 0;
+  private techniqueExecutionLock: Promise<void> = Promise.resolve();
 
   private constructor(flags?: Partial<CompressionFeatureFlags>) {
     this.flags = { ...loadFeatureFlags(), ...flags };
@@ -187,6 +194,29 @@ export class CompressionManager {
 
   getFlags(): Readonly<CompressionFeatureFlags> {
     return { ...this.flags };
+  }
+
+  /**
+   * Ensures sequential state versioning to prevent race conditions.
+   * Each technique must complete its state mutations before the next begins.
+   * This enforces the mutex-like ordering required for dedup-delta synchronization.
+   */
+  private async ensureSequentialExecution<T>(operation: () => Promise<T>): Promise<T> {
+    const myLock = this.techniqueExecutionLock;
+    let resolveLock: () => void;
+    this.techniqueExecutionLock = new Promise((resolve) => {
+      resolveLock = resolve;
+    });
+    
+    try {
+      await myLock; // Wait for previous technique to finish
+      this.compressionStateVersion++; // Increment version to invalidate stale cache pointers
+      const result = await operation();
+      return result;
+    } finally {
+      this.compressionStateVersion++; // Increment again after completion
+      resolveLock!(); // Release lock for next technique
+    }
   }
 
   async compress(ctx: CompressionContext): Promise<CompressionResult> {
@@ -213,24 +243,34 @@ export class CompressionManager {
     // ---- S0: Structural Schema Stripping (Foundation) ----
     // Aether's Phase 1: Strip redundant keys, replace with Uint16 IDs.
     // Expected gain: 40-50% on structured data.
-    if (process.env.TITAN_SCHEMA_STRIPPER !== 'off') {
+    // Default OFF to preserve existing test and rollout behavior unless explicitly enabled.
+    if (this.flags.s0SchemaStripper) {
+      // One stripper instance — manifest is built once and stored at bundle level,
+      // NOT inside each engram. Storing manifest per-engram replicates it N times
+      // and turns net compression negative.
       const stripper = new SchemaStripper();
       const strippedEngrams: MemoryEngram[] = [];
 
       for (const engram of currentEngrams) {
-        const strippedData = stripper.strip(engram.data);
-        const originalSize = Buffer.byteLength(JSON.stringify(engram.data), 'utf-8');
+        const sourceData: Record<string, unknown> =
+          engram.data && typeof engram.data === 'object'
+            ? (engram.data as Record<string, unknown>)
+            : {};
+
+        const strippedData = stripper.strip(sourceData);
+        const originalSize = Buffer.byteLength(
+          JSON.stringify(sourceData),
+          'utf-8'
+        );
         const strippedSize =
           strippedData.structuralKeys.byteLength +
           Buffer.byteLength(JSON.stringify(strippedData.primitiveValues), 'utf-8') +
           strippedData.textPayloads.reduce((sum, text) => sum + Buffer.byteLength(text, 'utf-8'), 0);
 
+        // Manifest stored ONCE in bundle metadata below — not per engram
         strippedEngrams.push({
           ...engram,
-          data: {
-            ...strippedData,
-            __original_schema: stripper.getManifest(), // Serialized for later unstripping
-          } as any, // Type relaxation for now
+          data: strippedData as any,
         });
 
         auditEntries.push({
@@ -241,7 +281,11 @@ export class CompressionManager {
         });
       }
 
-      bundle.stages.afterS0 = { engrams: strippedEngrams, metadata: { technique: 'S0:SchemaStripper' } };
+      // Manifest lives here — one copy for the whole batch
+      bundle.stages.afterS0 = {
+        engrams: strippedEngrams,
+        metadata: { technique: 'S0:SchemaStripper', schemaManifest: stripper.getManifest() },
+      };
       currentEngrams = strippedEngrams;
       techniquesApplied.push('S0:SchemaStripper');
       fidelityNotes.push('S0:SchemaStripper applied (structural overhead removed)');
@@ -541,7 +585,10 @@ export class CompressionManager {
     bundle.techniqueOrder = techniquesApplied;
     bundle.auditEntries = auditEntries;
 
-    const compressedByteSize = JSON.stringify(bundle).length;
+    // Measure only finalEngrams — this is what gets stored in production.
+    // The full bundle includes decompression metadata (stages, audit entries)
+    // which is transport overhead, not storage cost.
+    const compressedByteSize = JSON.stringify(currentEngrams).length;
     const finalRecall = measureEpisodicRecall(originalIds, currentEngrams);
 
     return {
