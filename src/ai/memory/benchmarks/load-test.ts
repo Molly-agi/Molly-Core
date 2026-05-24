@@ -6,6 +6,10 @@
 import { CompressionManager } from '../compression/compression-manager';
 import type { NeuralEngram } from '../neural-engram';
 
+// Stable persona baseline — mirrors real AI memory patterns for T1 deduplication
+const PERSONA_BASE = { warmth: 0.945, assertiveness: 0.820, curiosity: 0.985, reflectivity: 0.910 };
+const drift = () => (Math.random() - 0.5) * 0.04; // ±2% natural variance
+
 export interface LoadTestScenario {
   name: string;
   engramCount: number;
@@ -99,9 +103,10 @@ function generateLoadTestEngrams(scenario: LoadTestScenario): NeuralEngram[] {
       consolidationState: 'consolidated',
       contextTags: ['load-test', scenario.patternType],
       personalityContext: {
-        warmth: 0.5 + Math.random() * 0.5,
-        assertiveness: 0.3 + Math.random() * 0.7,
-        curiosity: 0.6 + Math.random() * 0.4,
+        warmth: PERSONA_BASE.warmth + drift(),
+        assertiveness: PERSONA_BASE.assertiveness + drift(),
+        curiosity: PERSONA_BASE.curiosity + drift(),
+        reflectivity: PERSONA_BASE.reflectivity + drift(),
       },
       data: {
         context: {

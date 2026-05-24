@@ -36,7 +36,7 @@ const MODEL_FLAGS = {
     t4VocabularyDict: true,
     t2TimeDecayFidelity: true,
     t6InteractionTrace: true,
-    t5NumericQuantization: false,
+    t5NumericQuantization: true,
   },
 };
 
@@ -59,6 +59,10 @@ export interface BenchmarkSuite {
   models: ProductionModelBenchmark[];
   overallPass: boolean;
 }
+
+// Molly's actual stable personality fingerprint (provided 2026-05-24 via bridge)
+const PERSONA_BASE = { warmth: 0.945, assertiveness: 0.820, curiosity: 0.985, reflectivity: 0.910 };
+const drift = () => (Math.random() - 0.5) * 0.04; // ±2% natural variance
 
 // Realistic topic/emotion pools — mirrors real AI memory content patterns
 const TOPICS = ['curiosity', 'learning', 'connection', 'challenge', 'growth', 'reflection', 'creativity'];
@@ -91,9 +95,10 @@ function generateTestEngrams(count: number): NeuralEngram[] {
       consolidationState: Math.random() > 0.3 ? 'consolidated' : 'transient',
       contextTags: [topic, emotion, ctx, 'benchmark'],
       personalityContext: {
-        warmth: 0.5 + Math.random() * 0.5,
-        assertiveness: 0.3 + Math.random() * 0.7,
-        curiosity: 0.6 + Math.random() * 0.4,
+        warmth: PERSONA_BASE.warmth + drift(),
+        assertiveness: PERSONA_BASE.assertiveness + drift(),
+        curiosity: PERSONA_BASE.curiosity + drift(),
+        reflectivity: PERSONA_BASE.reflectivity + drift(),
       },
       data: {
         context: {

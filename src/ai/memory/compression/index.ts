@@ -76,6 +76,10 @@ export {
 } from './interaction-trace';
 export type { InteractionTraceStage } from './interaction-trace';
 
+// ── T5: Numeric Quantization ───────────────────────────────────────────────
+export { applyNumericQuantization } from './numeric-quantization';
+export type { NumericQuantizationResult } from './numeric-quantization';
+
 // ── Orchestrators ──────────────────────────────────────────────────────────
 // CompressionManager: feature-flag-driven, 95% recall guardrail, pure compression
 export { CompressionManager } from './compression-manager';

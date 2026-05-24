@@ -26,6 +26,7 @@
 import type { MemoryEngram } from '@/ai/memory/neural-engram';
 import { MollyLogger } from '@/ai/logger';
 import { SchemaStripper } from './schema-stripper';
+import { applyNumericQuantization } from './numeric-quantization';
 import {
   applyPersonalityReferenceCompression,
   decompressPersonalityReferences,
@@ -120,10 +121,13 @@ export interface CompressedMemoryBundle {
   // the decompressor can consume. We keep all stages so rollback can stop
   // at any stage.
   stages: {
+    afterS0?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
     afterT1?: ReturnType<typeof applyPersonalityReferenceCompression>;
     afterT3?: ReturnType<typeof applyTemporalDeltaEncoding>;
     afterT4?: ReturnType<typeof applyVocabularyCompression>;
-    // T2, T6, T5 payloads added when those techniques are built
+    afterT5?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
+    afterT2?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
+    afterT6?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
   };
   // Final engrams (post all enabled techniques). These are the live-serving engrams.
   finalEngrams: MemoryEngram[];
@@ -577,9 +581,20 @@ export class CompressionManager {
       techniquesSkipped.push('T6:InteractionTrace (flag off)');
     }
 
-    // T5 — stub, built in Option C P3 phase
-    if (this.flags.t5NumericQuantization)
-      techniquesSkipped.push('T5:NumericQuantization (not yet built — P3)');
+    // ---- T5: Numeric Quantization (P3) ----
+    if (this.flags.t5NumericQuantization) {
+      const result = applyNumericQuantization(currentEngrams);
+      currentEngrams = result.engrams;
+      bundle.stages.afterT5 = { engrams: currentEngrams, metadata: { technique: 'T5:NumericQuantization' } };
+      techniquesApplied.push('T5:NumericQuantization');
+      fidelityNotes.push(`T5: ${result.floatsQuantized} bytes recovered via float truncation`);
+      MollyLogger.info('T5: NumericQuantization applied', 'compression-manager', {
+        engramsProcessed: currentEngrams.length,
+        bytesRecovered: result.floatsQuantized,
+      });
+    } else {
+      techniquesSkipped.push('T5:NumericQuantization (flag off)');
+    }
 
     bundle.finalEngrams = currentEngrams;
     bundle.techniqueOrder = techniquesApplied;
