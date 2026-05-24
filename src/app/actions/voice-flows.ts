@@ -185,6 +185,7 @@ export async function processVoiceInteraction(
           selfSignals,
           memoryContext,
           visionContext,
+          userId,
         }),
       'voice-conversational-chat',
       TIMEOUT_PRESETS.NORMAL,

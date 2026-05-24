@@ -103,6 +103,7 @@ export async function getConversationalChat(
           selfSignals: mergedSignals,
           memoryContext,
           visionContext,
+          userId,
         }),
       'conversational-chat',
       TIMEOUT_PRESETS.LONG,

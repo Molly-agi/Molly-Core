@@ -9,7 +9,7 @@ import { composeSystemPrompt } from '@/ai/prompts';
 import { compactHistory } from '../context-compaction';
 import { callTool } from '@/ai/tools/call-tool';
 import { buildConversationCrystalContext } from '@/ai/memory/crystal-context';
-import { getOrCreateSession } from '@/lib/session-manager';
+// getOrCreateSession removed — userId passed via input schema
 
 /**
  * @fileOverview Hardened Conversational Chat Flow V5.0 (Rogue Protocol).
@@ -73,6 +73,7 @@ const ConversationalChatInputSchema = z.object({
   selfSignals: z.array(NeuralBridgeSignalSchema).optional(),
   memoryContext: z.string().optional(),
   visionContext: VisionContextSchema.optional(),
+  userId: z.string().optional(),
 });
 type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
 
@@ -92,6 +93,7 @@ const conversationalChatFlow = ai.defineFlow(
     selfSignals,
     memoryContext,
     visionContext,
+    userId,
   }) => {
     const traceId = generateTraceId();
     MollyLogger.logFlowStart(
@@ -155,9 +157,8 @@ const conversationalChatFlow = ai.defineFlow(
       let finalMemoryContext = memoryContext;
       if (!memoryContext) {
         try {
-          const session = await getOrCreateSession();
           const crystalContext = await buildConversationCrystalContext(
-            session.userId,
+            userId ?? 'molly',
             30 // Load up to 30 identity crystals
           );
           if (crystalContext.contextString) {
