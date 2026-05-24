@@ -392,11 +392,36 @@ export const memoryConsolidationFlow = ai.defineFlow(
         priority: semanticPriority(m.vibeScore || 0.5, m.timestamp, Date.now()),
       }));
 
+      // STEP 2.5: S1 Semantic Deduplication
+      // Remove memories with >92% cosine similarity to a higher-priority memory.
+      // Uses already-computed embeddings — no extra API cost.
+      MollyLogger.info('Step 2.5: S1 semantic deduplication', 'memoryConsolidation');
+      const S1_SIMILARITY_THRESHOLD = 0.92;
+      const deduplicated: typeof memoriesWithVectors = [];
+      for (const memory of memoriesWithVectors) {
+        const isDuplicate = deduplicated.some(
+          (existing) =>
+            embeddingProvider.similarity(existing.embedding, memory.embedding) >=
+            S1_SIMILARITY_THRESHOLD
+        );
+        if (!isDuplicate) {
+          deduplicated.push(memory);
+        }
+      }
+      const s1Removed = memoriesWithVectors.length - deduplicated.length;
+      if (s1Removed > 0) {
+        MollyLogger.info(
+          `S1 dedup: removed ${s1Removed} semantic duplicates (${memoriesWithVectors.length} → ${deduplicated.length})`,
+          'memoryConsolidation'
+        );
+      }
+      const memoriesForClustering = deduplicated;
+
       // STEP 3: Semantic Clustering
       MollyLogger.info('Step 3: Semantic clustering', 'memoryConsolidation');
 
       const clusters = performSemanticClustering(
-        memoriesWithVectors,
+        memoriesForClustering,
         embeddingProvider
       );
 
