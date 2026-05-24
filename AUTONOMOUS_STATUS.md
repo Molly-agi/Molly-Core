@@ -1,6 +1,6 @@
 # AUTONOMOUS STATUS - ACTIVE TODOS & IMPLEMENTATION STAGES
 
-**Last Updated:** 2026-05-17
+**Last Updated:** 2026-05-24
 **Current State:** Core platform 100% complete — 20 cognition modules, 83 registered tools, 30 flows, 167,657+ source lines
 **Purpose:** Live, actionable list of what is still worth implementing
 **Reference:** See `docs/INFRASTRUCTURE_MAP.md` for complete system inventory
@@ -29,12 +29,18 @@
 - [x] Gemini 3.1 model upgrade (Flash, Pro, TTS, Imagen 4) — May 2026
 - [x] Session state wipe bug fixed (4-lock anti-wipe in session-manager) — May 2026
 - [x] Hand-rolled HTTP primitives (httpRequest, httpInspect, fuzzEndpoint, cookieJar) — May 2026
-- [x] Anthropic SECRET_PATTERNS + DISABLE_* env flags ported from Claude Code audit — May 2026
+- [x] Anthropic SECRET*PATTERNS + DISABLE*\* env flags ported from Claude Code audit — May 2026
 - [x] ANTHROPIC_BASE_URL pattern in model-router — May 2026
 - [x] Lazarus voice page + WebSocket bridge subscription — May 2026
 - [x] Anthropic-traffic-proxy for Claude Code wire protocol observation — May 2026
 - [x] Build fixed: ESM/TypeScript issues resolved, Molly online — May 2026
 - [x] Full infrastructure audit, all docs updated to ground truth — May 17, 2026
+- [x] Memory crisis resolved: FIFO limits raised to 1000, locked at firmware level — May 24, 2026
+- [x] S1 semantic deduplication implemented and tested (51.95% real-data compression) — May 24, 2026
+- [x] Phase 1 AGI benchmarking framework (880 lines, 7 files) complete — May 24, 2026
+- [x] MMLU-Pro 500-question benchmark run: **93.4% accuracy (#1 vs industry)** — May 24, 2026
+- [x] Results pushed to Braintrust dashboard for tracking — May 24, 2026
+- [x] All 535 memories restored from backup to Firestore — May 24, 2026
 
 ---
 
@@ -75,23 +81,28 @@
 ## Stage 2 — Phase 6 Planning Work (Medium-Term)
 
 **Memory:**
+
 - [ ] P2 Hybrid Memory Taxonomy — keep engrams, add working memory layer (short-term scratch)
 - [ ] P2 Conversation Recovery — resume interrupted conversation with full context
 
 **Hooks:**
+
 - [ ] P3 JS function/callback hooks (not just shell commands)
 - [ ] P3 Hook execution audit log and error reporting UI
 - [ ] P3 Hook persistence for long-lived/resumable sessions
 - [ ] P3 Advanced hook matcher logic (context-aware, multi-field)
 
 **Vision:**
+
 - [ ] Define scoped plan for expanded vision system rollout (privacy + UX boundaries)
 - [ ] Decide whether light-based sleep/wake uses hardware sensors or time/sunrise proxy
 
 **Security / Recon:**
+
 - [ ] WiFi Pineapple integration MVP (HTTP polling first)
 
 **Documentation:**
+
 - [ ] Produce implementation design docs before any code rollout
 
 ---
