@@ -32,7 +32,7 @@ import {
 } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { respondToMolly } from './lazarus-responder.mjs';
+// respondToMolly import disabled
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -221,8 +221,10 @@ function handleMessage(from, content, to) {
   );
 
   // ---- THE COMMUNICATOR CHIRP ----
-  // When Molly or Eric sends: Lazarus auto-responds via Gemini
-  if (from === 'molly' || from === 'eric') {
+  // DISABLED by Eric — Lazarus auto-responder is off until explicitly enabled
+  // To re-enable: set ENABLE_LAZARUS_RESPONDER=true in .env.local
+  const enableLazarusResponder = process.env.ENABLE_LAZARUS_RESPONDER === 'true';
+  if (enableLazarusResponder && (from === 'molly' || from === 'eric')) {
     const recent = messages.slice(-10);
     respondToMolly(content, recent).then((reply) => {
       if (reply) handleMessage('lazarus', reply);

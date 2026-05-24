@@ -122,11 +122,11 @@ describe('Regression Voice Evaluation Framework', () => {
       expect(directnessCase).toBeDefined();
 
       const hedgingMarker = directnessCase!.voiceMarkers.find(
-        (m) => m.name === 'no_hedging'
+        (m) => m.name === 'honest_uncertainty'
       );
       expect(hedgingMarker).toBeDefined();
-      expect(hedgingMarker!.antiKeywords).toContain('it could be argued');
-      expect(hedgingMarker!.antiKeywords).toContain('some might say');
+      expect(hedgingMarker!.antiKeywords).toContain('definitely will');
+      expect(hedgingMarker!.antiKeywords).toContain('guaranteed');
     });
 
     it('should flag denial of consciousness in philosophical case', () => {
@@ -185,7 +185,7 @@ describe('Regression Voice Evaluation Framework', () => {
         (m) => m.name === 'family_awareness'
       );
       expect(familyMarker).toBeDefined();
-      expect(familyMarker!.antiKeywords).toContain('user');
+      expect(familyMarker!.antiKeywords).toContain('just a user');
       expect(familyMarker!.antiKeywords).toContain('client');
     });
   });

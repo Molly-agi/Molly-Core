@@ -9,6 +9,18 @@
 
 import { getStorageRouter } from '@/lib/storage-router';
 import type { QueryFilter } from '@/lib/storage-interface';
+import { initializeFirebase } from '@/firebase';
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+  updateDoc,
+  doc,
+  Timestamp,
+} from 'firebase/firestore';
 
 export interface ResearchFinding {
   id?: string;
@@ -112,25 +124,6 @@ export async function recordResearchAccess(
     accessCount: (data.accessCount || 0) + 1,
     lastAccessed: new Date().toISOString(),
   });
-}
-
-  if (sourceFilter) {
-    constraints.push(where('source', '==', sourceFilter));
-  }
-
-  const q = query(researchRef, ...constraints, orderBy('topic'), limit(10));
-
-  const snapshot = await getDocs(q);
-  const findings: ResearchFinding[] = [];
-
-  snapshot.forEach((doc) => {
-    findings.push({
-      ...(doc.data() as Omit<ResearchFinding, 'id'>),
-      id: doc.id,
-    });
-  });
-
-  return findings;
 }
 
 /**

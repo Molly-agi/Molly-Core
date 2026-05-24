@@ -1,0 +1,4787 @@
+{
+  "timestamp": 1779594534858,
+  "level": "INFO",
+  "message": "Circuit breaker initialized: self-healing",
+  "flowName": "resiliency",
+  "traceId": "trace_1779594534858_od6ykw0",
+  "context": {
+    "threshold": 3,
+    "resetTimeout": 120000
+  }
+}
+{
+  "timestamp": 1779594534987,
+  "level": "INFO",
+  "message": "All rate limits reset",
+  "flowName": "rate-limiter"
+}
+
+✓ Loaded 200 real MMLU questions from dataset
+══════════════════════════════════════════════════════════════════════
+MMLU REAL TEST - 200 OFFICIAL QUESTIONS
+══════════════════════════════════════════════════════════════════════
+
+Starting at: 2026-05-24T03:48:55.941Z
+Total questions: 200
+Methodology: Methodical, sequential, no shortcuts
+
+{
+  "timestamp": 1779594535977,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594535977_nk09w3e",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594536011,
+  "level": "INFO",
+  "message": "Model Router: Absorbed provider \"Google Gemini 3.1\" (gemini)",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779594536012,
+  "level": "INFO",
+  "message": "Model Router: Absorbed provider \"Anthropic Claude\" (claude)",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779594536012,
+  "level": "INFO",
+  "message": "Model Router: Uncle Claude is available",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779594536012,
+  "level": "INFO",
+  "message": "Model Router: Initialized with profile \"default\", 2 provider(s) registered",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779594536012,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594536012_clszy6r",
+    "routingLatencyMs": "0.12"
+  }
+}
+{
+  "timestamp": 1779594536012,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594536012_yl7kirx"
+  }
+}
+{
+  "timestamp": 1779594560586,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 24574ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 24574,
+    "traceId": "trace_1779594536012_yl7kirx"
+  }
+}
+{
+  "timestamp": 1779594560586,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594535977_nk09w3e",
+  "context": {
+    "resultSummary": "{\"responseLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594560587,
+  "level": "DEBUG",
+  "message": "[college_physics] Q1: Expected=D Got=E ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594560588,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594560588_xeo6di2",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594560589,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594560589_063ve2t",
+    "routingLatencyMs": "0.02"
+  }
+}
+{
+  "timestamp": 1779594560589,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594560589_qpcj4yp"
+  }
+}
+{
+  "timestamp": 1779594566181,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5592ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5592,
+    "traceId": "trace_1779594560589_qpcj4yp"
+  }
+}
+{
+  "timestamp": 1779594566181,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594560588_xeo6di2",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594566181,
+  "level": "DEBUG",
+  "message": "[professional_psychology] Q2: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594566182,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594566182_e4xk64g",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594566190,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594566190_uteb1of",
+    "routingLatencyMs": "0.02"
+  }
+}
+{
+  "timestamp": 1779594566190,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594566190_pfckjrt"
+  }
+}
+{
+  "timestamp": 1779594593288,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 27099ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 27099,
+    "traceId": "trace_1779594566190_pfckjrt"
+  }
+}
+{
+  "timestamp": 1779594593289,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594566182_e4xk64g",
+  "context": {
+    "resultSummary": "{\"responseLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594593289,
+  "level": "DEBUG",
+  "message": "[moral_scenarios] Q3: Expected=D Got=E ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594593289,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594593289_xyu79kf",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594593291,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594593291_y92vmuv",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594593291,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594593291_1jmt4bx"
+  }
+}
+{
+  "timestamp": 1779594597260,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3969ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3969,
+    "traceId": "trace_1779594593291_1jmt4bx"
+  }
+}
+{
+  "timestamp": 1779594597260,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594593289_xyu79kf",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594597260,
+  "level": "DEBUG",
+  "message": "[elementary_mathematics] Q4: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594597260,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594597260_mhwh64u",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594597262,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594597262_5oketuv",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594597262,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594597262_qo7kidp"
+  }
+}
+{
+  "timestamp": 1779594601202,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3940ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3940,
+    "traceId": "trace_1779594597262_qo7kidp"
+  }
+}
+{
+  "timestamp": 1779594601202,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594597260_mhwh64u",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594601202,
+  "level": "DEBUG",
+  "message": "[miscellaneous] Q5: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594601202,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594601202_jj2vztw",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594601204,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594601204_fkwcvy8",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594601204,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594601204_vyon26p"
+  }
+}
+{
+  "timestamp": 1779594605405,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4201ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4201,
+    "traceId": "trace_1779594601204_vyon26p"
+  }
+}
+{
+  "timestamp": 1779594605405,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594601202_jj2vztw",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594605405,
+  "level": "DEBUG",
+  "message": "[moral_scenarios] Q6: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594605405,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594605405_2ukknl3",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594605407,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594605407_s8ty0n6",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594605407,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594605407_p49aoe7"
+  }
+}
+{
+  "timestamp": 1779594611556,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6149ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6149,
+    "traceId": "trace_1779594605407_p49aoe7"
+  }
+}
+{
+  "timestamp": 1779594611556,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594605405_2ukknl3",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594611556,
+  "level": "DEBUG",
+  "message": "[us_foreign_policy] Q7: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594611556,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594611556_tkl7w9r",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594611558,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594611558_cmtcqr0",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594611558,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594611558_5yyb4os"
+  }
+}
+{
+  "timestamp": 1779594615467,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3910ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3910,
+    "traceId": "trace_1779594611558_5yyb4os"
+  }
+}
+{
+  "timestamp": 1779594615467,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594611556_tkl7w9r",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594615467,
+  "level": "DEBUG",
+  "message": "[logical_fallacies] Q8: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594615468,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594615468_r85w849",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594615472,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594615472_0atnshu",
+    "routingLatencyMs": "0.02"
+  }
+}
+{
+  "timestamp": 1779594615472,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594615472_3ossh9n"
+  }
+}
+{
+  "timestamp": 1779594619767,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4295ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4295,
+    "traceId": "trace_1779594615472_3ossh9n"
+  }
+}
+{
+  "timestamp": 1779594619767,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594615468_r85w849",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594619767,
+  "level": "DEBUG",
+  "message": "[us_foreign_policy] Q9: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594619768,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594619768_nvnh7wl",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594619769,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594619769_2c8tojl",
+    "routingLatencyMs": "0.02"
+  }
+}
+{
+  "timestamp": 1779594619769,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594619769_16kc01e"
+  }
+}
+{
+  "timestamp": 1779594626171,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6402ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6402,
+    "traceId": "trace_1779594619769_16kc01e"
+  }
+}
+{
+  "timestamp": 1779594626171,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594619768_nvnh7wl",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+Progress: 10/200 | Correct so far: 80.0% | Time: 90.2s
+{
+  "timestamp": 1779594626171,
+  "level": "DEBUG",
+  "message": "[high_school_psychology] Q10: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594626171,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594626171_n14lf92",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594626173,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594626173_xkwg8da",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594626173,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594626173_xwj3i5s"
+  }
+}
+{
+  "timestamp": 1779594632541,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6368ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6368,
+    "traceId": "trace_1779594626173_xwj3i5s"
+  }
+}
+{
+  "timestamp": 1779594632541,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594626171_n14lf92",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594632541,
+  "level": "DEBUG",
+  "message": "[college_physics] Q11: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594632541,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594632541_vqxqlu0",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594632542,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594632542_r8ppgfn",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594632542,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594632542_px77bi9"
+  }
+}
+{
+  "timestamp": 1779594638862,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6320ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6320,
+    "traceId": "trace_1779594632542_px77bi9"
+  }
+}
+{
+  "timestamp": 1779594638862,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594632541_vqxqlu0",
+  "context": {
+    "resultSummary": "{\"responseLength\":9}"
+  }
+}
+{
+  "timestamp": 1779594638862,
+  "level": "DEBUG",
+  "message": "[college_medicine] Q12: Expected=D Got=A ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594638863,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594638862_hk8go6v",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594638864,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594638864_le0hih4",
+    "routingLatencyMs": "0.02"
+  }
+}
+{
+  "timestamp": 1779594638864,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594638864_7fjpn5c"
+  }
+}
+{
+  "timestamp": 1779594642504,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3640ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3640,
+    "traceId": "trace_1779594638864_7fjpn5c"
+  }
+}
+{
+  "timestamp": 1779594642504,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594638862_hk8go6v",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594642504,
+  "level": "DEBUG",
+  "message": "[high_school_macroeconomics] Q13: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594642504,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594642504_u8h4khq",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594642505,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594642505_i4m05fj",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594642505,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594642505_cqr0fe8"
+  }
+}
+{
+  "timestamp": 1779594647676,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5171ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5171,
+    "traceId": "trace_1779594642505_cqr0fe8"
+  }
+}
+{
+  "timestamp": 1779594647676,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594642504_u8h4khq",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594647676,
+  "level": "DEBUG",
+  "message": "[sociology] Q14: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594647676,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594647676_8hdfo9a",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594647678,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594647678_2qhoh0h",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594647679,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594647678_nwl5wkf"
+  }
+}
+{
+  "timestamp": 1779594655039,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 7361ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 7361,
+    "traceId": "trace_1779594647678_nwl5wkf"
+  }
+}
+{
+  "timestamp": 1779594655039,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594647676_8hdfo9a",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594655039,
+  "level": "DEBUG",
+  "message": "[high_school_geography] Q15: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594655039,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594655039_hkhd1mg",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594655041,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594655041_6g7hj3i",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594655041,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594655041_u4mqqfp"
+  }
+}
+{
+  "timestamp": 1779594661816,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6776ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6776,
+    "traceId": "trace_1779594655041_u4mqqfp"
+  }
+}
+{
+  "timestamp": 1779594661816,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594655039_hkhd1mg",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594661816,
+  "level": "DEBUG",
+  "message": "[professional_law] Q16: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594661817,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594661817_24oytwh",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594661818,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594661818_jv55naq",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594661818,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594661818_04oxw6j"
+  }
+}
+{
+  "timestamp": 1779594665992,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4174ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4174,
+    "traceId": "trace_1779594661818_04oxw6j"
+  }
+}
+{
+  "timestamp": 1779594665992,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594661817_24oytwh",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594665992,
+  "level": "DEBUG",
+  "message": "[college_medicine] Q17: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594665993,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594665992_0mekkwx",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594665996,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594665996_wr9i1pz",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594665996,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594665996_j0qeijd"
+  }
+}
+{
+  "timestamp": 1779594678769,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 12773ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 12773,
+    "traceId": "trace_1779594665996_j0qeijd"
+  }
+}
+{
+  "timestamp": 1779594678769,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594665992_0mekkwx",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594678769,
+  "level": "DEBUG",
+  "message": "[high_school_microeconomics] Q18: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594678769,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594678769_vf06fw6",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594678771,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594678771_kov1d2z",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594678771,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594678771_ojtnifl"
+  }
+}
+{
+  "timestamp": 1779594683775,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5005ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5005,
+    "traceId": "trace_1779594678771_ojtnifl"
+  }
+}
+{
+  "timestamp": 1779594683775,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594678769_vf06fw6",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594683775,
+  "level": "DEBUG",
+  "message": "[professional_accounting] Q19: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594683776,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594683776_obsq6qs",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594683777,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594683777_6xc73wn",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594683777,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594683777_o3dq2vq"
+  }
+}
+{
+  "timestamp": 1779594706603,
+  "level": "WARN",
+  "message": "Model Router: Provider \"gemini\" reported failure #1: ABORTED: Exceeded maximum tool call iterations (5)",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779594706607,
+  "level": "WARN",
+  "message": "Rogue Generate: Google Gemini 3.1 failed after 22826ms, attempting fallback",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "error": "ABORTED: Exceeded maximum tool call iterations (5)",
+    "traceId": "trace_1779594683777_o3dq2vq"
+  }
+}
+{
+  "timestamp": 1779594706608,
+  "level": "DEBUG",
+  "message": "Model Router: Provider \"gemini\" recently unhealthy, skipping",
+  "flowName": "model-router",
+  "context": {
+    "taskType": "chat",
+    "traceId": "trace_1779594706607_0yeh5wq"
+  }
+}
+{
+  "timestamp": 1779594706608,
+  "level": "WARN",
+  "message": "Model Router: All chain providers failed for chat, using default \"Google Gemini 3.1\"",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594706607_0yeh5wq"
+  }
+}
+{
+  "timestamp": 1779594706608,
+  "level": "ERROR",
+  "message": "GenAI API call failed in 'conversationalChat'",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594683776_obsq6qs",
+  "context": {
+    "statusCode": 409
+  },
+  "error": {
+    "code": "UNKNOWN",
+    "stack": "GenkitError: ABORTED: Exceeded maximum tool call iterations (5)\n    at generateActionTurn (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:542:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:155:22)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:142:24)\n    at async runInNewSpan (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:110:10)\n    at async generateHelper (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:143:10)\n    at async generateActionTurn (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:591:10)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:155:22)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:142:24)\n    at async runInNewSpan (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:110:10)",
+    "severity": "high"
+  }
+}
+{
+  "timestamp": 1779594706634,
+  "level": "WARN",
+  "message": "[RESILIENCE] Unknown failure in generate:conversationalChat: ABORTED: Exceeded maximum tool call iterations (5)",
+  "flowName": "resilience-core",
+  "traceId": "trace_1779594706634_fez48st",
+  "context": {
+    "source": "generate:conversationalChat",
+    "failureId": "fail_1779594706634_9lrhnd"
+  }
+}
+{
+  "timestamp": 1779594706634,
+  "level": "ERROR",
+  "message": "Operation \"generate:conversationalChat\" failed (1 total)",
+  "flowName": "circuit-breaker",
+  "context": {
+    "successCount": 0,
+    "failureCount": 1,
+    "errorRate": "100.0%",
+    "state": "CLOSED"
+  },
+  "error": {
+    "code": "UNKNOWN",
+    "stack": "GenkitError: ABORTED: Exceeded maximum tool call iterations (5)\n    at generateActionTurn (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:542:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:155:22)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:142:24)\n    at async runInNewSpan (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:110:10)\n    at async generateHelper (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:143:10)\n    at async generateActionTurn (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:591:10)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/ai/src/generate/action.ts:155:22)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:142:24)\n    at async runInNewSpan (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:110:10)",
+    "severity": "high"
+  }
+}
+{
+  "timestamp": 1779594706634,
+  "level": "WARN",
+  "message": "Operation \"generate:conversationalChat\" error rate high (100.0%)",
+  "flowName": "circuit-breaker",
+  "context": {
+    "operation": "generate:conversationalChat"
+  }
+}
+{
+  "timestamp": 1779594706635,
+  "level": "INFO",
+  "message": "[RESILIENCE] Engaging cognitive systems for: UNKNOWN: Unclassified failure in generate:conversationalChat — \"ABORTED: Exceeded maximum tool call iterations (5)\"",
+  "flowName": "resilience-core",
+  "traceId": "trace_1779594706634_fez48st",
+  "context": {
+    "failureId": "fail_1779594706634_9lrhnd",
+    "level": "adapt"
+  }
+}
+{
+  "timestamp": 1779594706694,
+  "level": "ERROR",
+  "message": "Conversational chat failed",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594683776_obsq6qs",
+  "context": {},
+  "error": {
+    "code": "GENERATIVE_AI_ERROR",
+    "stack": "GenerativeAIError: GenAI API error: ABORTED: Exceeded maximum tool call iterations (5)\n    at withGenerateErrorHandling (/workspaces/Molly-Core/src/ai/error-handler.ts:157:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async <anonymous> (/workspaces/Molly-Core/src/ai/flows/conversational-chat.ts:151:27)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/action.ts:408:26)\n    at async <anonymous> (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:142:24)\n    at async runInNewSpan (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/tracing/instrumentation.ts:110:10)\n    at async actionFn.actionFn.run (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/action.ts:356:18)\n    at async actionFn (/workspaces/Molly-Core/node_modules/@genkit-ai/core/src/action.ts:341:13)\n    at async runMMluReal200 (/workspaces/Molly-Core/src/ai/evals/mmlu-real-200.braintrust.ts:73:22)",
+    "severity": "high"
+  }
+}
+{
+  "timestamp": 1779594706740,
+  "level": "ERROR",
+  "message": "Question 20 failed",
+  "flowName": "mmlu-real-200",
+  "context": {
+    "error": "GenAI API error: ABORTED: Exceeded maximum tool call iterations (5)"
+  }
+}
+{
+  "timestamp": 1779594706744,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594706744_jtg4btl",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594706746,
+  "level": "DEBUG",
+  "message": "Model Router: Provider \"gemini\" recently unhealthy, skipping",
+  "flowName": "model-router",
+  "context": {
+    "taskType": "code",
+    "traceId": "trace_1779594706746_bbaal9v"
+  }
+}
+{
+  "timestamp": 1779594706746,
+  "level": "WARN",
+  "message": "Model Router: All chain providers failed for code, using default \"Google Gemini 3.1\"",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594706746_bbaal9v"
+  }
+}
+{
+  "timestamp": 1779594706746,
+  "level": "DEBUG",
+  "message": "Rogue Generate: code → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "code",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 1,
+    "traceId": "trace_1779594706746_lktij56"
+  }
+}
+{
+  "timestamp": 1779594706752,
+  "level": "DEBUG",
+  "message": "Model Router: Provider \"gemini\" recently unhealthy, skipping",
+  "flowName": "model-router",
+  "context": {
+    "taskType": "chat",
+    "traceId": "trace_1779594706752_wuaw4nx"
+  }
+}
+{
+  "timestamp": 1779594706752,
+  "level": "WARN",
+  "message": "Model Router: All chain providers failed for chat, using default \"Google Gemini 3.1\"",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594706752_wuaw4nx"
+  }
+}
+{
+  "timestamp": 1779594706752,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 1,
+    "traceId": "trace_1779594706752_9ub9uj5"
+  }
+}
+grep: /workspaces/Molly-Core/node_modules/@types/stats.js: Is a directory
+grep: /workspaces/Molly-Core/node_modules/ipaddr.js: Is a directory
+grep: /workspaces/Molly-Core/node_modules/tesseract.js: Is a directory
+{
+  "timestamp": 1779594740779,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 34027ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 34027,
+    "traceId": "trace_1779594706752_9ub9uj5"
+  }
+}
+{
+  "timestamp": 1779594740779,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594706744_jtg4btl",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594740779,
+  "level": "DEBUG",
+  "message": "[high_school_biology] Q21: Expected=C Got=B ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594740779,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594740779_tg9k091",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594740784,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594740784_i6aim9v",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594740784,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594740784_ak6yw4k"
+  }
+}
+{
+  "timestamp": 1779594763850,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 23067ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 23067,
+    "traceId": "trace_1779594740784_ak6yw4k"
+  }
+}
+{
+  "timestamp": 1779594763850,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594740779_tg9k091",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594763850,
+  "level": "DEBUG",
+  "message": "[prehistory] Q22: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594763851,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594763851_hzcpc5i",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594763852,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594763852_278qkl3",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594763852,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594763852_rijq4q6"
+  }
+}
+{
+  "timestamp": 1779594766747,
+  "level": "WARN",
+  "message": "Model Router: Provider \"gemini\" reported failure #1: Operation 'molly.generate' timed out after 60000ms",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779594766747,
+  "level": "WARN",
+  "message": "Rogue Generate: Google Gemini 3.1 failed after 60001ms, attempting fallback",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "code",
+    "provider": "gemini",
+    "error": "Operation 'molly.generate' timed out after 60000ms",
+    "traceId": "trace_1779594706746_lktij56"
+  }
+}
+{
+  "timestamp": 1779594766747,
+  "level": "DEBUG",
+  "message": "Model Router: Provider \"gemini\" recently unhealthy, skipping",
+  "flowName": "model-router",
+  "context": {
+    "taskType": "code",
+    "traceId": "trace_1779594766747_z2dia1u"
+  }
+}
+{
+  "timestamp": 1779594766747,
+  "level": "WARN",
+  "message": "Model Router: All chain providers failed for code, using default \"Google Gemini 3.1\"",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594766747_z2dia1u"
+  }
+}
+{
+  "timestamp": 1779594766757,
+  "level": "WARN",
+  "message": "[RESILIENCE] Interpreter could not heal: Operation 'molly.generate' timed out after 60000ms",
+  "flowName": "resilience-core",
+  "traceId": "trace_1779594706634_fez48st",
+  "context": {}
+}
+{
+  "timestamp": 1779594767643,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3791ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3791,
+    "traceId": "trace_1779594763852_rijq4q6"
+  }
+}
+{
+  "timestamp": 1779594767643,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594763851_hzcpc5i",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594767643,
+  "level": "DEBUG",
+  "message": "[high_school_psychology] Q23: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594767643,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594767643_9r3rpaz",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594767644,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594767644_ckfrt84",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594767644,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594767644_9tarwb9"
+  }
+}
+{
+  "timestamp": 1779594772077,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4433ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4433,
+    "traceId": "trace_1779594767644_9tarwb9"
+  }
+}
+{
+  "timestamp": 1779594772077,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594767643_9r3rpaz",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594772077,
+  "level": "DEBUG",
+  "message": "[anatomy] Q24: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594772078,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594772078_vgolq0d",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594772079,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594772079_lqeh00x",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594772079,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594772079_xrt5eac"
+  }
+}
+{
+  "timestamp": 1779594779480,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 7401ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 7401,
+    "traceId": "trace_1779594772079_xrt5eac"
+  }
+}
+{
+  "timestamp": 1779594779480,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594772078_vgolq0d",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594779481,
+  "level": "DEBUG",
+  "message": "[nutrition] Q25: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594779481,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594779481_izo6qch",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594779483,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594779483_8us84og",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594779483,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594779483_hihid1v"
+  }
+}
+{
+  "timestamp": 1779594784233,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4750ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4750,
+    "traceId": "trace_1779594779483_hihid1v"
+  }
+}
+{
+  "timestamp": 1779594784233,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594779481_izo6qch",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594784233,
+  "level": "DEBUG",
+  "message": "[professional_law] Q26: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594784233,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594784233_p47aqp8",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594784235,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594784235_oi9cq06",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594784235,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594784235_dodkdha"
+  }
+}
+{
+  "timestamp": 1779594790020,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5785ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5785,
+    "traceId": "trace_1779594784235_dodkdha"
+  }
+}
+{
+  "timestamp": 1779594790020,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594784233_p47aqp8",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594790020,
+  "level": "DEBUG",
+  "message": "[professional_law] Q27: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594790020,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594790020_14itksg",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594790022,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594790022_kew28n5",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594790022,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594790022_qjk4ln5"
+  }
+}
+{
+  "timestamp": 1779594793622,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3600ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3600,
+    "traceId": "trace_1779594790022_qjk4ln5"
+  }
+}
+{
+  "timestamp": 1779594793622,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594790020_14itksg",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594793622,
+  "level": "DEBUG",
+  "message": "[medical_genetics] Q28: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594793622,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594793622_xs6l9ft",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594793626,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594793626_rw29utr",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594793626,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594793626_rzrhxol"
+  }
+}
+{
+  "timestamp": 1779594797892,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4266ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4266,
+    "traceId": "trace_1779594793626_rzrhxol"
+  }
+}
+{
+  "timestamp": 1779594797892,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594793622_xs6l9ft",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594797892,
+  "level": "DEBUG",
+  "message": "[high_school_government_and_politics] Q29: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594797892,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594797892_oe8pkxz",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594797893,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594797893_ik5223k",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594797893,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594797893_80rfihh"
+  }
+}
+{
+  "timestamp": 1779594805285,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 7391ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 7391,
+    "traceId": "trace_1779594797893_80rfihh"
+  }
+}
+{
+  "timestamp": 1779594805285,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594797892_oe8pkxz",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+Progress: 30/200 | Correct so far: 83.3% | Time: 269.3s
+{
+  "timestamp": 1779594805285,
+  "level": "DEBUG",
+  "message": "[high_school_world_history] Q30: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594805285,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594805285_6rs7qhh",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594805287,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594805287_ap9hqfi",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594805287,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594805287_l6en05m"
+  }
+}
+{
+  "timestamp": 1779594809578,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4292ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4292,
+    "traceId": "trace_1779594805287_l6en05m"
+  }
+}
+{
+  "timestamp": 1779594809578,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594805285_6rs7qhh",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594809578,
+  "level": "DEBUG",
+  "message": "[international_law] Q31: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594809579,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594809579_vjui4sb",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594809580,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594809580_12f8ofh",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594809580,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594809580_gkck2kf"
+  }
+}
+{
+  "timestamp": 1779594816448,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6868ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6868,
+    "traceId": "trace_1779594809580_gkck2kf"
+  }
+}
+{
+  "timestamp": 1779594816448,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594809579_vjui4sb",
+  "context": {
+    "resultSummary": "{\"responseLength\":24}"
+  }
+}
+{
+  "timestamp": 1779594816448,
+  "level": "DEBUG",
+  "message": "[computer_security] Q32: Expected=C Got=A ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594816448,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594816448_4zc8a1g",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594816450,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594816450_qqp77c3",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594816450,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594816450_dke29nr"
+  }
+}
+{
+  "timestamp": 1779594821503,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5053ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5053,
+    "traceId": "trace_1779594816450_dke29nr"
+  }
+}
+{
+  "timestamp": 1779594821503,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594816448_4zc8a1g",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594821503,
+  "level": "DEBUG",
+  "message": "[moral_disputes] Q33: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594821503,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594821503_perwaxu",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594821505,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594821505_dted3np",
+    "routingLatencyMs": "0.03"
+  }
+}
+{
+  "timestamp": 1779594821505,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594821505_w5avqnd"
+  }
+}
+{
+  "timestamp": 1779594834105,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 12601ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 12601,
+    "traceId": "trace_1779594821505_w5avqnd"
+  }
+}
+{
+  "timestamp": 1779594834106,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594821503_perwaxu",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594834106,
+  "level": "DEBUG",
+  "message": "[professional_law] Q34: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594834107,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594834107_r0taakx",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594834110,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594834110_dn8fv2u",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594834110,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594834110_oiwgiu2"
+  }
+}
+{
+  "timestamp": 1779594859326,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 25216ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 25216,
+    "traceId": "trace_1779594834110_oiwgiu2"
+  }
+}
+{
+  "timestamp": 1779594859326,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594834107_r0taakx",
+  "context": {
+    "resultSummary": "{\"responseLength\":84}"
+  }
+}
+{
+  "timestamp": 1779594859326,
+  "level": "DEBUG",
+  "message": "[professional_law] Q35: Expected=B Got=A ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594859326,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594859326_ndkp05n",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594859327,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594859327_5nd10bd",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594859327,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594859327_6tpix06"
+  }
+}
+{
+  "timestamp": 1779594862720,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3392ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3392,
+    "traceId": "trace_1779594859327_6tpix06"
+  }
+}
+{
+  "timestamp": 1779594862720,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594859326_ndkp05n",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594862720,
+  "level": "DEBUG",
+  "message": "[computer_security] Q36: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594862720,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594862720_lnzhwt6",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594862721,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594862721_s87w94y",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594862721,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594862721_a16c849"
+  }
+}
+{
+  "timestamp": 1779594866621,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3900ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3900,
+    "traceId": "trace_1779594862721_a16c849"
+  }
+}
+{
+  "timestamp": 1779594866622,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594862720_lnzhwt6",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594866622,
+  "level": "DEBUG",
+  "message": "[high_school_physics] Q37: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594866622,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594866622_b3o1mfe",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594866623,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594866623_a9jmbft",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594866623,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594866623_oyc9mrx"
+  }
+}
+{
+  "timestamp": 1779594875524,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 8901ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 8901,
+    "traceId": "trace_1779594866623_oyc9mrx"
+  }
+}
+{
+  "timestamp": 1779594875524,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594866622_b3o1mfe",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594875524,
+  "level": "DEBUG",
+  "message": "[abstract_algebra] Q38: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594875524,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594875524_cindnx5",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594875526,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594875526_clnx6oo",
+    "routingLatencyMs": "0.03"
+  }
+}
+{
+  "timestamp": 1779594875526,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594875526_96lrdlp"
+  }
+}
+{
+  "timestamp": 1779594878872,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3346ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3346,
+    "traceId": "trace_1779594875526_96lrdlp"
+  }
+}
+{
+  "timestamp": 1779594878872,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594875524_cindnx5",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594878872,
+  "level": "DEBUG",
+  "message": "[college_physics] Q39: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594878872,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594878872_9afjr8g",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594878874,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594878874_bgk1jj6",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594878874,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594878874_eqjorqs"
+  }
+}
+{
+  "timestamp": 1779594908673,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 29799ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 29799,
+    "traceId": "trace_1779594878874_eqjorqs"
+  }
+}
+{
+  "timestamp": 1779594908673,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594878872_9afjr8g",
+  "context": {
+    "resultSummary": "{\"responseLength\":2654}"
+  }
+}
+Progress: 40/200 | Correct so far: 80.0% | Time: 372.7s
+{
+  "timestamp": 1779594908673,
+  "level": "DEBUG",
+  "message": "[professional_law] Q40: Expected=C Got=D ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594908673,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594908673_uk0mx8w",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594908676,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594908676_cuj5fxv",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594908676,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594908676_83ykxjx"
+  }
+}
+{
+  "timestamp": 1779594913172,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4496ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4496,
+    "traceId": "trace_1779594908676_83ykxjx"
+  }
+}
+{
+  "timestamp": 1779594913172,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594908673_uk0mx8w",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594913172,
+  "level": "DEBUG",
+  "message": "[marketing] Q41: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594913172,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594913172_n8bo3lu",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594913174,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594913174_fv6oijh",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594913174,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594913174_6he6xbg"
+  }
+}
+{
+  "timestamp": 1779594920237,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 7063ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 7063,
+    "traceId": "trace_1779594913174_6he6xbg"
+  }
+}
+{
+  "timestamp": 1779594920237,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594913172_n8bo3lu",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594920237,
+  "level": "DEBUG",
+  "message": "[high_school_mathematics] Q42: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594920238,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594920238_pcxpjt9",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594920239,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594920239_jhfyzhs",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594920240,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594920239_ezmshoo"
+  }
+}
+{
+  "timestamp": 1779594924987,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4748ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4748,
+    "traceId": "trace_1779594920239_ezmshoo"
+  }
+}
+{
+  "timestamp": 1779594924987,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594920238_pcxpjt9",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594924987,
+  "level": "DEBUG",
+  "message": "[high_school_government_and_politics] Q43: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594924987,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594924987_pcryzz0",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594924990,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594924990_7uocehw",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594924990,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594924990_jke634w"
+  }
+}
+{
+  "timestamp": 1779594929538,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4548ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4548,
+    "traceId": "trace_1779594924990_jke634w"
+  }
+}
+{
+  "timestamp": 1779594929538,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594924987_pcryzz0",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594929538,
+  "level": "DEBUG",
+  "message": "[nutrition] Q44: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594929539,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594929539_3k7r7c7",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594929541,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594929541_rx4fgwn",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594929541,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594929541_m1198v8"
+  }
+}
+{
+  "timestamp": 1779594935070,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5529ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5529,
+    "traceId": "trace_1779594929541_m1198v8"
+  }
+}
+{
+  "timestamp": 1779594935070,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594929539_3k7r7c7",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594935070,
+  "level": "DEBUG",
+  "message": "[professional_law] Q45: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594935070,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594935070_1vt1tnz",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594935072,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594935072_s07wlt7",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594935072,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594935072_lpx2l0b"
+  }
+}
+{
+  "timestamp": 1779594940782,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5710ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5710,
+    "traceId": "trace_1779594935072_lpx2l0b"
+  }
+}
+{
+  "timestamp": 1779594940782,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594935070_1vt1tnz",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594940782,
+  "level": "DEBUG",
+  "message": "[professional_law] Q46: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594940782,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594940782_bvco766",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594940784,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594940784_enjc3c1",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594940784,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594940784_vae60vg"
+  }
+}
+{
+  "timestamp": 1779594945623,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4839ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4839,
+    "traceId": "trace_1779594940784_vae60vg"
+  }
+}
+{
+  "timestamp": 1779594945623,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594940782_bvco766",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594945623,
+  "level": "DEBUG",
+  "message": "[world_religions] Q47: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594945623,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594945623_j7c54up",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594945624,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594945624_qczh3pn",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594945625,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594945624_jlquy11"
+  }
+}
+{
+  "timestamp": 1779594949654,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4029ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4029,
+    "traceId": "trace_1779594945624_jlquy11"
+  }
+}
+{
+  "timestamp": 1779594949654,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594945623_j7c54up",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594949654,
+  "level": "DEBUG",
+  "message": "[high_school_macroeconomics] Q48: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594949654,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594949654_q1hq9zz",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594949657,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594949657_11e4pbw",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594949657,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594949657_in0m0sh"
+  }
+}
+{
+  "timestamp": 1779594957932,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 8275ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 8275,
+    "traceId": "trace_1779594949657_in0m0sh"
+  }
+}
+{
+  "timestamp": 1779594957932,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594949654_q1hq9zz",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594957932,
+  "level": "DEBUG",
+  "message": "[high_school_physics] Q49: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594957932,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594957932_g8wf77v",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594957934,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594957934_g2bvo1p",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594957934,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594957934_jddvxgy"
+  }
+}
+{
+  "timestamp": 1779594963366,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5432ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5432,
+    "traceId": "trace_1779594957934_jddvxgy"
+  }
+}
+{
+  "timestamp": 1779594963366,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594957932_g8wf77v",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+Progress: 50/200 | Correct so far: 84.0% | Time: 427.4s
+{
+  "timestamp": 1779594963366,
+  "level": "DEBUG",
+  "message": "[medical_genetics] Q50: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594963367,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594963367_fd9ww70",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594963369,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594963369_ttvqfo0",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594963369,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594963369_7m6ki41"
+  }
+}
+{
+  "timestamp": 1779594966942,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3573ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3573,
+    "traceId": "trace_1779594963369_7m6ki41"
+  }
+}
+{
+  "timestamp": 1779594966942,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594963367_fd9ww70",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594966942,
+  "level": "DEBUG",
+  "message": "[miscellaneous] Q51: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594966942,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594966942_khhchwb",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594966944,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594966944_sf5h3lm",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594966944,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594966944_zrueu6m"
+  }
+}
+{
+  "timestamp": 1779594971525,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4581ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4581,
+    "traceId": "trace_1779594966944_zrueu6m"
+  }
+}
+{
+  "timestamp": 1779594971526,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594966942_khhchwb",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594971526,
+  "level": "DEBUG",
+  "message": "[moral_scenarios] Q52: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594971526,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594971526_4iu06kq",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594971529,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594971529_4i69v0l",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594971530,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594971529_17icgb6"
+  }
+}
+{
+  "timestamp": 1779594977763,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6233ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6233,
+    "traceId": "trace_1779594971529_17icgb6"
+  }
+}
+{
+  "timestamp": 1779594977763,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594971526_4iu06kq",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594977763,
+  "level": "DEBUG",
+  "message": "[electrical_engineering] Q53: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594977763,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594977763_vfbto19",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594977766,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594977766_9kr469e",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594977766,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594977766_nyzjubw"
+  }
+}
+{
+  "timestamp": 1779594981929,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4163ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4163,
+    "traceId": "trace_1779594977766_nyzjubw"
+  }
+}
+{
+  "timestamp": 1779594981929,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594977763_vfbto19",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594981929,
+  "level": "DEBUG",
+  "message": "[high_school_geography] Q54: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594981929,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594981929_a5itep5",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594981931,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594981931_l8vvc0y",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594981931,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594981931_qabufat"
+  }
+}
+{
+  "timestamp": 1779594987698,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5767ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5767,
+    "traceId": "trace_1779594981931_qabufat"
+  }
+}
+{
+  "timestamp": 1779594987698,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594981929_a5itep5",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594987698,
+  "level": "DEBUG",
+  "message": "[sociology] Q55: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594987698,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594987698_1cen4z2",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594987700,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594987700_k2ynnn6",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594987700,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594987700_xpy5j37"
+  }
+}
+{
+  "timestamp": 1779594995797,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 8097ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 8097,
+    "traceId": "trace_1779594987700_xpy5j37"
+  }
+}
+{
+  "timestamp": 1779594995797,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594987698_1cen4z2",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779594995797,
+  "level": "DEBUG",
+  "message": "[high_school_us_history] Q56: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779594995797,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594995797_58zij21",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779594995799,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779594995799_jt95ow0",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779594995799,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779594995799_4l2cnpq"
+  }
+}
+{
+  "timestamp": 1779595001229,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5430ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5430,
+    "traceId": "trace_1779594995799_4l2cnpq"
+  }
+}
+{
+  "timestamp": 1779595001229,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779594995797_58zij21",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595001229,
+  "level": "DEBUG",
+  "message": "[high_school_european_history] Q57: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595001229,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595001229_nflmuhk",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595001231,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595001230_tl3cb0s",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595001231,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595001230_bn6hdto"
+  }
+}
+{
+  "timestamp": 1779595005864,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4633ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4633,
+    "traceId": "trace_1779595001230_bn6hdto"
+  }
+}
+{
+  "timestamp": 1779595005864,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595001229_nflmuhk",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595005864,
+  "level": "DEBUG",
+  "message": "[elementary_mathematics] Q58: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595005864,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595005864_uz6xoig",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595005865,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595005865_ndiavfl",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595005865,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595005865_focfyhc"
+  }
+}
+{
+  "timestamp": 1779595012143,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 6278ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 6278,
+    "traceId": "trace_1779595005865_focfyhc"
+  }
+}
+{
+  "timestamp": 1779595012143,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595005864_uz6xoig",
+  "context": {
+    "resultSummary": "{\"responseLength\":10}"
+  }
+}
+{
+  "timestamp": 1779595012143,
+  "level": "DEBUG",
+  "message": "[philosophy] Q59: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595012143,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595012143_ieb6b38",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595012145,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595012145_j88604g",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595012145,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595012145_vqdaw8t"
+  }
+}
+{
+  "timestamp": 1779595016116,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3971ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3971,
+    "traceId": "trace_1779595012145_vqdaw8t"
+  }
+}
+{
+  "timestamp": 1779595016116,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595012143_ieb6b38",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+Progress: 60/200 | Correct so far: 86.7% | Time: 480.2s
+{
+  "timestamp": 1779595016116,
+  "level": "DEBUG",
+  "message": "[high_school_macroeconomics] Q60: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595016116,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595016116_jtltztg",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595016117,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595016117_tjt7fob",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595016117,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595016117_gtbhdpg"
+  }
+}
+{
+  "timestamp": 1779595019624,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3507ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3507,
+    "traceId": "trace_1779595016117_gtbhdpg"
+  }
+}
+{
+  "timestamp": 1779595019625,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595016116_jtltztg",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595019625,
+  "level": "DEBUG",
+  "message": "[elementary_mathematics] Q61: Expected=A Got=A ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595019625,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595019625_h9pqnfb",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595019629,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595019629_2glrw35",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595019629,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595019629_jlvmk33"
+  }
+}
+{
+  "timestamp": 1779595024337,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4709ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4709,
+    "traceId": "trace_1779595019629_jlvmk33"
+  }
+}
+{
+  "timestamp": 1779595024338,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595019625_h9pqnfb",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595024338,
+  "level": "DEBUG",
+  "message": "[high_school_mathematics] Q62: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595024338,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595024338_z7zrm1n",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595024339,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595024339_hj3fyqn",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595024339,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595024339_uly9muy"
+  }
+}
+{
+  "timestamp": 1779595035509,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 11169ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 11169,
+    "traceId": "trace_1779595024339_uly9muy"
+  }
+}
+{
+  "timestamp": 1779595035509,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595024338_z7zrm1n",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595035509,
+  "level": "DEBUG",
+  "message": "[high_school_physics] Q63: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595035509,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595035509_xu4g769",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595035510,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595035510_vnerj8x",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595035510,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595035510_6tgkh9o"
+  }
+}
+{
+  "timestamp": 1779595039146,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3636ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3636,
+    "traceId": "trace_1779595035510_6tgkh9o"
+  }
+}
+{
+  "timestamp": 1779595039146,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595035509_xu4g769",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595039146,
+  "level": "DEBUG",
+  "message": "[high_school_psychology] Q64: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595039146,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595039146_b2blv7n",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595039148,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595039148_4vo5eda",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595039148,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595039148_8b7hza8"
+  }
+}
+{
+  "timestamp": 1779595046592,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 7445ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 7445,
+    "traceId": "trace_1779595039148_8b7hza8"
+  }
+}
+{
+  "timestamp": 1779595046592,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595039146_b2blv7n",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595046593,
+  "level": "DEBUG",
+  "message": "[philosophy] Q65: Expected=D Got=D ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595046593,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595046593_i5a2tff",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595046596,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595046596_7sor4bg",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595046596,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595046596_kijlva5"
+  }
+}
+{
+  "timestamp": 1779595050932,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4336ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4336,
+    "traceId": "trace_1779595046596_kijlva5"
+  }
+}
+{
+  "timestamp": 1779595050932,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595046593_i5a2tff",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595050932,
+  "level": "DEBUG",
+  "message": "[anatomy] Q66: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595050933,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595050933_5xmd69d",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595050934,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595050934_93wp1lk",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595050934,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595050934_rckdx36"
+  }
+}
+{
+  "timestamp": 1779595064156,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 13222ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 13222,
+    "traceId": "trace_1779595050934_rckdx36"
+  }
+}
+{
+  "timestamp": 1779595064156,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595050933_5xmd69d",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595064157,
+  "level": "DEBUG",
+  "message": "[professional_law] Q67: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595064157,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595064157_lt02xmp",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595064158,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595064158_feijz5h",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595064158,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595064158_u49vw19"
+  }
+}
+{
+  "timestamp": 1779595108280,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 44122ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 44122,
+    "traceId": "trace_1779595064158_u49vw19"
+  }
+}
+{
+  "timestamp": 1779595108280,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595064157_lt02xmp",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595108280,
+  "level": "DEBUG",
+  "message": "[high_school_world_history] Q68: Expected=C Got=C ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595108280,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595108280_69ilqla",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595108282,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595108282_v5h3i6k",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595108282,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595108282_vi4k2qw"
+  }
+}
+{
+  "timestamp": 1779595121699,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 13418ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 13418,
+    "traceId": "trace_1779595108282_vi4k2qw"
+  }
+}
+{
+  "timestamp": 1779595121700,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595108280_69ilqla",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595121700,
+  "level": "DEBUG",
+  "message": "[moral_disputes] Q69: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595121701,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595121701_i2cxrmg",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595121702,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595121702_41ml413",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595121702,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595121702_n2pxopk"
+  }
+}
+{
+  "timestamp": 1779595178081,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 56379ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 56379,
+    "traceId": "trace_1779595121702_n2pxopk"
+  }
+}
+{
+  "timestamp": 1779595178081,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595121701_i2cxrmg",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+Progress: 70/200 | Correct so far: 87.1% | Time: 642.1s
+{
+  "timestamp": 1779595178081,
+  "level": "DEBUG",
+  "message": "[professional_law] Q70: Expected=B Got=D ✗",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595178081,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595178081_ddx2zky",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595178085,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595178085_wf80orx",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595178085,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595178085_3j5zy6a"
+  }
+}
+{
+  "timestamp": 1779595183532,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 5447ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 5447,
+    "traceId": "trace_1779595178085_3j5zy6a"
+  }
+}
+{
+  "timestamp": 1779595183532,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595178081_ddx2zky",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595183532,
+  "level": "DEBUG",
+  "message": "[human_aging] Q71: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595183532,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595183532_2alm6qf",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595183534,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595183534_a9tt378",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595183534,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595183534_uf3apn3"
+  }
+}
+{
+  "timestamp": 1779595186576,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 3042ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 3042,
+    "traceId": "trace_1779595183534_uf3apn3"
+  }
+}
+{
+  "timestamp": 1779595186576,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595183532_2alm6qf",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595186576,
+  "level": "DEBUG",
+  "message": "[miscellaneous] Q72: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595186576,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595186576_iegrihq",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595186578,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595186578_na6ct47",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595186578,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595186578_8eta1rr"
+  }
+}
+{
+  "timestamp": 1779595189165,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 2587ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 2587,
+    "traceId": "trace_1779595186578_8eta1rr"
+  }
+}
+{
+  "timestamp": 1779595189165,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595186576_iegrihq",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595189165,
+  "level": "DEBUG",
+  "message": "[high_school_biology] Q73: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595189165,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595189165_ipvr21e",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595189166,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595189166_7hy6hgi",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595189167,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595189166_rvwv36q"
+  }
+}
+{
+  "timestamp": 1779595194045,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 4879ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 4879,
+    "traceId": "trace_1779595189166_rvwv36q"
+  }
+}
+{
+  "timestamp": 1779595194045,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595189165_ipvr21e",
+  "context": {
+    "resultSummary": "{\"responseLength\":1}"
+  }
+}
+{
+  "timestamp": 1779595194045,
+  "level": "DEBUG",
+  "message": "[human_aging] Q74: Expected=B Got=B ✓",
+  "flowName": "mmlu-real-200"
+}
+{
+  "timestamp": 1779595194046,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779595194046_0qcy7bi",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779595194053,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779595194053_05nt1cy",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779595194053,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-pro-preview)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-pro-preview",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779595194053_tu21hwq"
+  }
+}

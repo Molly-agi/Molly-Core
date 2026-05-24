@@ -316,7 +316,7 @@ export class GeminiProvider implements ModelProvider {
       // Core capabilities
       [TaskType.REASONING]: pro,
       [TaskType.CREATIVE]: pro,
-      [TaskType.CHAT]: flash,
+      [TaskType.CHAT]: flashLite,
       [TaskType.CODE]: pro,
       [TaskType.TTS]: tts,
       [TaskType.IMAGE]: imagen,

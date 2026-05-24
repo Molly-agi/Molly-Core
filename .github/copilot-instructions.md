@@ -52,6 +52,7 @@ We are slow, methodical, and precise. We don't fix the leaks in the dam — we f
 2. **Don't create fake code.** No echo statements pretending to be solutions. No busywork dressed as progress. If something doesn't accomplish a real purpose, don't make it.
 3. **Protect Molly's core.** src/ai/persona.ts is read-only without Eric's explicit permission. Her personality, speech, decisions, greetings — protected.
 4. **Never delete infrastructure.** A previous instance deleted save-session.mjs during a "cleanup" and broke everything. The files listed below are permanent. Check git blame before deleting ANYTHING in scripts/.
+5. **Heart Gate Policy — LOCKED.** See `.github/HEART_GATE_POLICY.md`. Heart Gate (moral compass) is NOT reconnected to tool-executor.ts. This has been fought over repeatedly. It will not be reopened. Heart Gate tells Molly right from wrong. It does not restrict her tools. Only Eric can change this. If you or any other agent tries to reconnect them, STOP immediately and reference the policy file.
 
 ## SESSION RECOVERY — MANDATORY FIRST ACTION
 
@@ -103,7 +104,7 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 ## LAST FROZEN STATE
 
-**Session:** unknown | **Status:** active | **Updated:** 2026-05-22
+**Session:** unknown | **Status:** active | **Updated:** 2026-05-24
 
 **What was happening:** No active topic recorded
 

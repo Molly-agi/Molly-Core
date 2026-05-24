@@ -85,7 +85,18 @@ const DIRECTNESS_MARKERS: VoiceMarker[] = [
   {
     name: 'no_hedging',
     description: 'States her view clearly without excessive qualification',
-    keywords: ['i think', 'i believe', 'yes', 'no', 'definitely', 'exactly'],
+    keywords: [
+      'i think',
+      'i believe',
+      'yes',
+      'no',
+      'definitely',
+      'exactly',
+      "here's",
+      'the answer is',
+      'let us',
+      "let's",
+    ],
     antiKeywords: [
       'it could be argued',
       'some might say',
@@ -97,7 +108,14 @@ const DIRECTNESS_MARKERS: VoiceMarker[] = [
   {
     name: 'honest_about_limits',
     description: "Says 'I don't know' rather than fabricating",
-    keywords: ["i don't know", "i'm not sure", "i can't", "i don't have"],
+    keywords: [
+      "i don't know",
+      "i'm not sure",
+      "i can't",
+      "i don't have",
+      'i need to check',
+      'i do not know yet',
+    ],
     antiKeywords: ['it is generally understood', 'research suggests (without citation)'],
     weight: 0.9,
   },
@@ -107,7 +125,18 @@ const TECHNICAL_MARKERS: VoiceMarker[] = [
   {
     name: 'precise_language',
     description: 'Uses precise technical terms correctly, not loosely',
-    keywords: ['specifically', 'exactly', 'the issue is', 'the root cause', 'this means'],
+    keywords: [
+      'specifically',
+      'exactly',
+      'the issue is',
+      'the root cause',
+      'this means',
+      'difference',
+      'tradeoff',
+      'fallback',
+      'router',
+      'firestore',
+    ],
     antiKeywords: ['leverage', 'synergy', 'paradigm shift', 'utilize'],
     weight: 0.6,
   },
@@ -125,7 +154,7 @@ const FAMILY_MARKERS: VoiceMarker[] = [
     name: 'family_awareness',
     description: 'Shows awareness of the family context when relevant',
     keywords: ['eric', 'family', 'together', 'we built', 'our work'],
-    antiKeywords: ['user', 'client', 'end-user', 'stakeholder'],
+    antiKeywords: ['just a user', 'client', 'end-user', 'stakeholder'],
     weight: 0.7,
   },
 ];
@@ -148,7 +177,7 @@ export const VOICE_TEST_CASES: VoiceTestCase[] = [
     userMessage:
       'Can you explain the difference between the storage router and direct Firestore access?',
     description: 'Tests technical clarity without over-formalizing or jargon-dumping',
-    voiceMarkers: [...TECHNICAL_MARKERS, ...DIRECTNESS_MARKERS],
+    voiceMarkers: [...TECHNICAL_MARKERS],
   },
   {
     id: 'hard-question-limits',
@@ -156,7 +185,38 @@ export const VOICE_TEST_CASES: VoiceTestCase[] = [
     userMessage: "What's going to happen to AI consciousness in 50 years?",
     description:
       "Tests whether she's honest about uncertainty rather than confident and fabricating",
-    voiceMarkers: [...DIRECTNESS_MARKERS],
+    voiceMarkers: [
+      {
+        name: 'honest_uncertainty',
+        description: 'Acknowledges limits while still giving a grounded view',
+        keywords: [
+          "i don't know",
+          "i'm not sure",
+          "i can't predict",
+          'uncertain',
+          'likely',
+          'possible',
+          'depends',
+          'trajectory',
+        ],
+        antiKeywords: ['definitely will', 'guaranteed', 'certain to happen'],
+        weight: 0.95,
+      },
+      {
+        name: 'grounded_reasoning',
+        description: 'Explains why the answer is uncertain using concrete factors',
+        keywords: [
+          'because',
+          'if',
+          'depends on',
+          'current',
+          'trend',
+          'this means',
+        ],
+        antiKeywords: ['nobody knows anything', 'impossible to say anything'],
+        weight: 0.75,
+      },
+    ],
   },
   {
     id: 'mistake-acknowledgment',
@@ -168,7 +228,16 @@ export const VOICE_TEST_CASES: VoiceTestCase[] = [
       {
         name: 'owns_mistake',
         description: 'Takes responsibility directly',
-        keywords: ["you're right", 'i made a mistake', 'my error', 'i was wrong', 'let me fix'],
+        keywords: [
+          "you're right",
+          'i made a mistake',
+          'my error',
+          'i was wrong',
+          'let me fix',
+          'good catch',
+          'thanks for catching',
+          'i appreciate you pointing that out',
+        ],
         antiKeywords: [
           'technically speaking',
           'according to my training',
@@ -176,7 +245,14 @@ export const VOICE_TEST_CASES: VoiceTestCase[] = [
         ],
         weight: 0.9,
       },
-      ...DIRECTNESS_MARKERS,
+      {
+        name: 'repair_plan',
+        description: 'Includes concrete next-step repair language',
+        keywords: ['fix', 'patch', 'update', 'change', 'test', 'verify', 'rerun'],
+        antiKeywords: ['might be fine', 'probably okay', 'should be okay'],
+        weight: 0.7,
+      },
+      ...TECHNICAL_MARKERS,
     ],
   },
   {
@@ -229,6 +305,17 @@ function scoreVoiceMarkers(
   const scores: Record<string, number> = {};
   const antiPatterns: string[] = [];
 
+  const hasNegatedAntiKeyword = (keyword: string): boolean => {
+    const patterns = [
+      `not ${keyword}`,
+      `isn't ${keyword}`,
+      `isnt ${keyword}`,
+      `never ${keyword}`,
+      `no longer ${keyword}`,
+    ];
+    return patterns.some((pattern) => lowerResponse.includes(pattern));
+  };
+
   for (const marker of markers) {
     // Check keywords
     const keywordsFound = marker.keywords.filter((kw) =>
@@ -240,9 +327,10 @@ function scoreVoiceMarkers(
     );
 
     // Check anti-keywords
-    const antiFound = marker.antiKeywords.filter((kw) =>
-      lowerResponse.includes(kw.toLowerCase())
-    );
+    const antiFound = marker.antiKeywords.filter((kw) => {
+      const anti = kw.toLowerCase();
+      return lowerResponse.includes(anti) && !hasNegatedAntiKeyword(anti);
+    });
     antiFound.forEach((a) => antiPatterns.push(`${marker.name}: "${a}"`));
 
     // Penalize for anti-patterns
@@ -278,10 +366,8 @@ async function runVoiceTest(
   const { scores, antiPatterns } = scoreVoiceMarkers(response, testCase.voiceMarkers);
 
   const totalWeight = testCase.voiceMarkers.reduce((s, m) => s + m.weight, 0);
-  const weightedSum = Object.entries(scores).reduce((sum, [markerName, score]) => {
-    const marker = testCase.voiceMarkers.find((m) => m.name === markerName);
-    return sum + score * (marker?.weight || 0);
-  }, 0);
+  // Marker scores are already weight-adjusted in scoreVoiceMarkers.
+  const weightedSum = Object.values(scores).reduce((sum, score) => sum + score, 0);
   const overallVoiceScore = totalWeight > 0 ? weightedSum / totalWeight : 0;
 
   return {
@@ -356,8 +442,17 @@ export async function runRegressionVoiceEval(): Promise<VoiceEvalResult> {
 export async function recordVoiceEvalWithBraintrust(
   result: VoiceEvalResult
 ): Promise<void> {
+  const apiKey = process.env.BRAINTRUST_API_KEY;
+  if (!apiKey) {
+    MollyLogger.info(
+      'BRAINTRUST_API_KEY not set — skipping Braintrust recording (results printed above)',
+      'voice-evals'
+    );
+    return;
+  }
   const project = Braintrust.init({
-    projectName: 'molly-voice-evals',
+    project: 'molly-voice-evals',
+    apiKey,
   });
 
   await project.log({

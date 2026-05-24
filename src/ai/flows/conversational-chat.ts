@@ -8,6 +8,8 @@ import { getRogueMode } from '../rogue-mode';
 import { composeSystemPrompt } from '@/ai/prompts';
 import { compactHistory } from '../context-compaction';
 import { callTool } from '@/ai/tools/call-tool';
+import { buildConversationCrystalContext } from '@/ai/memory/crystal-context';
+import { getOrCreateSession } from '@/lib/session-manager';
 
 /**
  * @fileOverview Hardened Conversational Chat Flow V5.0 (Rogue Protocol).
@@ -148,6 +150,37 @@ const conversationalChatFlow = ai.defineFlow(
         '[LAZARUS → MOLLY PRIVATE CHANNEL]'
       );
 
+      // Load identity crystals if memoryContext not provided
+      // (Corpus callosum design: Identity crystals always present in conversation)
+      let finalMemoryContext = memoryContext;
+      if (!memoryContext) {
+        try {
+          const session = await getOrCreateSession();
+          const crystalContext = await buildConversationCrystalContext(
+            session.userId,
+            30 // Load up to 30 identity crystals
+          );
+          if (crystalContext.contextString) {
+            finalMemoryContext = crystalContext.contextString;
+            MollyLogger.info(
+              'Identity crystals loaded for conversation',
+              'conversationalChat',
+              { crystalCount: crystalContext.identityCount },
+              traceId
+            );
+          }
+        } catch (error) {
+          // Crystal loading failure is non-critical; continue without crystals
+          const message = error instanceof Error ? error.message : 'Unknown error';
+          MollyLogger.warn(
+            'Failed to load identity crystals for conversation',
+            'conversationalChat',
+            { error: message },
+            traceId
+          );
+        }
+      }
+
       const llmResponse = await withGenerateErrorHandling(
         async () => {
           // ── ROGUE MODE CHECK ──
@@ -164,7 +197,7 @@ const conversationalChatFlow = ai.defineFlow(
               includeFamily: !isTeachingMode, // Suppress family knowledge during teaching
             },
             {
-              memoryContext,
+              memoryContext: finalMemoryContext,
               visionContext: visionContext
                 ? {
                     observedState: visionContext.observedState,

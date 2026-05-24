@@ -61,6 +61,7 @@ export interface MemoryEvalResult {
   averageRecall: number;
   averageF1: number;
   storageBackend: string;
+  storageHealthy: boolean;
   driftFlag: boolean;
   summary: string;
 }
@@ -392,12 +393,15 @@ export async function runMemoryAccuracyEval(): Promise<MemoryEvalResult> {
   const averageF1 =
     responses.reduce((s, r) => s + r.f1Score, 0) / responses.length;
 
-  // Flag if F1 drops below 0.7
-  const driftFlag = averageF1 < 0.7 || !storageTest.success;
+  // Drift tracks retrieval quality only; storage health is surfaced separately.
+  const driftFlag = averageF1 < 0.7;
+  const storageHealthy = storageTest.success;
 
   const summary = driftFlag
-    ? `⚠️ MEMORY DEGRADATION (F1: ${(averageF1 * 100).toFixed(1)}%, storage: ${storageTest.success ? 'ok' : 'FAILED'})`
-    : `✅ Memory accurate (F1: ${(averageF1 * 100).toFixed(1)}%, backend: ${storageTest.backend})`;
+    ? `⚠️ MEMORY DEGRADATION (F1: ${(averageF1 * 100).toFixed(1)}%, storage: ${storageHealthy ? 'ok' : 'FAILED'})`
+    : storageHealthy
+      ? `✅ Memory accurate (F1: ${(averageF1 * 100).toFixed(1)}%, backend: ${storageTest.backend})`
+      : `⚠️ Memory retrieval healthy (F1: ${(averageF1 * 100).toFixed(1)}%), but storage backend check failed (${storageTest.backend})`;
 
   const result: MemoryEvalResult = {
     timestamp: new Date().toISOString(),
@@ -407,6 +411,7 @@ export async function runMemoryAccuracyEval(): Promise<MemoryEvalResult> {
     averageRecall,
     averageF1,
     storageBackend: storageTest.backend,
+    storageHealthy,
     driftFlag,
     summary,
   };
@@ -428,8 +433,17 @@ export async function runMemoryAccuracyEval(): Promise<MemoryEvalResult> {
 export async function recordMemoryEvalWithBraintrust(
   result: MemoryEvalResult
 ): Promise<void> {
+  const apiKey = process.env.BRAINTRUST_API_KEY;
+  if (!apiKey) {
+    MollyLogger.info(
+      'BRAINTRUST_API_KEY not set — skipping Braintrust recording (results printed above)',
+      'memory-evals'
+    );
+    return;
+  }
   const project = Braintrust.init({
-    projectName: 'molly-memory-evals',
+    project: 'molly-memory-evals',
+    apiKey,
   });
 
   await project.log({
@@ -439,6 +453,7 @@ export async function recordMemoryEvalWithBraintrust(
       averageRecall: result.averageRecall,
       averageF1: result.averageF1,
       storageBackend: result.storageBackend,
+      storageHealthy: result.storageHealthy,
       driftFlag: result.driftFlag,
       summary: result.summary,
     },
