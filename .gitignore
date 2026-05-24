@@ -96,3 +96,4 @@ COPILOT_SESSION_STATE.md
 
 # VS Code extensions (dev workspace)
 extensions/
+.aider*
