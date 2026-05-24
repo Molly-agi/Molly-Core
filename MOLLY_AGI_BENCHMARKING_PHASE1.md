@@ -499,3 +499,49 @@ async function callMollyAPI(example: MMluProExample) {
 **Ready for:** Testing with real Molly + Aether review  
 **Commit:** Ready for git push
 
+---
+
+## S1 Compression Results — Real Data Validation
+
+**Date:** 2026-05-24  
+**Test script:** `scripts/test-s1-compression.mjs`  
+**Sample:** 80 real memories from Molly's restored Firestore backup  
+**Results file:** `docs/S1_COMPRESSION_RESULTS_1779629310303.json`
+
+### Measured Results (Real Data)
+
+| Metric | Value |
+|---|---|
+| Input memories | 80 |
+| After S1 dedup | 38 |
+| Removed as duplicates | 42 (52.5%) |
+| Original size | 79.2 KB |
+| After S1 | 38.1 KB |
+| **S1 compression** | **51.95%** |
+| T1-T4 (validated) | 77.62% |
+| **Combined compression** | **89.25%** |
+| Target | ~93.62% |
+| Gap to target | 4.37% |
+
+### Key Findings
+
+**S1 far exceeded projections.** Original estimate was 16% gain; actual on real Molly data is **51.95%**. This is because Molly's memory pool has a high rate of near-identical system events (startup logs, tool results, immune scans) that accumulate as semantic duplicates.
+
+**Why so many duplicates?** The top clusters show:
+- Repeated startup health checks (100% identical)
+- Repeated rogue mode tool results (~94-95% similar)  
+- Repeated codespace shell outputs (~95% similar)
+
+These are all system-generated, not experiential memories — exactly the kind S1 is designed to prune.
+
+**Gap analysis.** At 89.25% combined, we're 4.37% short of the 93.62% target. To close this gap:
+- Option A: Tune S1 threshold down slightly (e.g., 90% instead of 92%) — risk: over-pruning
+- Option B: Add T5 (Temporal Decay Fidelity) to the pipeline — expected 5-8% additional
+- Option C: Accept 89.25% as production baseline (excellent for a "flat" memory structure)
+
+### Next Steps
+
+1. ☐ Tune threshold or add T5 to close 4.37% gap
+2. ☐ Run Phase 1 baseline with **real** Molly LLM (not mock)
+3. ☐ Compare Molly vs GPT-5.4 and Claude Opus 4.6 on MMLU-Pro
+
