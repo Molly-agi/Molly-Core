@@ -3,25 +3,34 @@
  *
  * Handles storage and retrieval of Identity and Knowledge crystals
  * to separate Firestore collections, with corpus callosum linking.
+ * Integrates Titan Echo compression for optimized memory density.
  */
 
 import { getStorageRouter } from '@/lib/storage-router';
 import { isAdminConfigured } from '@/firebase/admin';
 import type { BatchOperation } from '@/lib/storage-interface';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
-import type { CrystalEngram, CrystalQueryOptions, CrystalQueryResult } from '@/ai/memory/crystal-partition';
+import type {
+  CrystalEngram,
+  CrystalQueryOptions,
+  CrystalQueryResult,
+} from '@/ai/memory/crystal-partition';
 import { CrystalType } from '@/ai/memory/crystal-partition';
 import {
   encryptEngramData,
   decryptEngramData,
 } from '@/ai/memory/engram-crypto';
+import { getCrystalCompressionBridge } from '@/ai/memory/crystal-compression-bridge';
 
 const MAX_BATCH_SIZE = 450;
 
 /**
  * Get the collection path for a crystal type
  */
-function getCrystalCollectionPath(userId: string, crystalType: CrystalType): string {
+function getCrystalCollectionPath(
+  userId: string,
+  crystalType: CrystalType
+): string {
   return `users/${userId}/${crystalType}-crystals`;
 }
 
@@ -67,7 +76,10 @@ export async function saveCrystals(
 
   // Persist each type to its collection
   for (const [crystalType, typeCrystals] of Object.entries(byType)) {
-    const collectionPath = getCrystalCollectionPath(userId, crystalType as CrystalType);
+    const collectionPath = getCrystalCollectionPath(
+      userId,
+      crystalType as CrystalType
+    );
     let typeSaved = 0;
 
     for (let i = 0; i < typeCrystals.length; i += MAX_BATCH_SIZE) {
@@ -76,7 +88,14 @@ export async function saveCrystals(
 
       for (const crystal of slice) {
         try {
-          const payload = JSON.stringify(crystal);
+          // ── TITAN ECHO COMPRESSION ──
+          // Prepare crystal for compression (if enabled)
+          const compressionBridge = getCrystalCompressionBridge();
+          const compressedPayload =
+            await compressionBridge.prepareForStorage(crystal);
+
+          // Use the (possibly compressed) crystal for serialization
+          const payload = JSON.stringify(compressedPayload);
           const { encrypted, iv, authTag } = encryptEngramData(
             payload,
             userId,
@@ -102,6 +121,13 @@ export async function saveCrystals(
             doc.emotionalWeight = crystal.relationalMetadata.emotionalWeight;
             doc.linkedIdentityCrystalId =
               crystal.relationalMetadata.linkedIdentityCrystalId;
+          }
+
+          // Add compression metadata if compression was applied
+          if (compressedPayload.compression) {
+            doc.compression = compressedPayload.compression;
+            doc.compressionRatio =
+              compressedPayload.compression.compressionRatio;
           }
 
           batchOps.push({
@@ -174,9 +200,7 @@ export async function loadCrystals(
       identityCrystals: [],
       knowledgeCrystals: [],
       totalLoaded: 0,
-      errors: [
-        'Firebase admin not configured — crystal loading unavailable',
-      ],
+      errors: ['Firebase admin not configured — crystal loading unavailable'],
     };
   }
 
@@ -190,9 +214,10 @@ export async function loadCrystals(
   // Load from each requested store
   for (const crystalType of stores) {
     const collectionPath = getCrystalCollectionPath(userId, crystalType);
-    const constraints = minImportance > 0
-      ? [{ field: 'importance', operator: '>=', value: minImportance }]
-      : [];
+    const constraints =
+      minImportance > 0
+        ? [{ field: 'importance', operator: '>=', value: minImportance }]
+        : [];
 
     // Add subject filter for knowledge crystals
     if (crystalType === CrystalType.KNOWLEDGE && subject) {
@@ -200,17 +225,13 @@ export async function loadCrystals(
     }
 
     try {
-      const docs = await storage.query(
-        collectionPath,
-        constraints,
-        {
-          orderBy: {
-            field: 'timestamp',
-            direction: mostRecentFirst ? 'desc' : 'asc',
-          },
-          limit,
-        }
-      );
+      const docs = await storage.query(collectionPath, constraints, {
+        orderBy: {
+          field: 'timestamp',
+          direction: mostRecentFirst ? 'desc' : 'asc',
+        },
+        limit,
+      });
 
       for (const doc of docs) {
         try {
@@ -220,8 +241,26 @@ export async function loadCrystals(
             authTag: string;
           };
 
-          const decrypted = decryptEngramData(encrypted, iv, authTag, userId, password);
-          const crystal = JSON.parse(decrypted) as CrystalEngram;
+          const decrypted = decryptEngramData(
+            encrypted,
+            iv,
+            authTag,
+            userId,
+            password
+          );
+          const payload = JSON.parse(decrypted);
+
+          // ── TITAN ECHO DECOMPRESSION ──
+          // Handle both compressed and uncompressed payloads
+          let crystal: CrystalEngram;
+          if (payload.version === '1.0' && payload.compression) {
+            // Compressed payload; decompress
+            const compressionBridge = getCrystalCompressionBridge();
+            crystal = await compressionBridge.restoreFromStorage(payload);
+          } else {
+            // Either uncompressed payload or legacy format
+            crystal = payload.crystal ?? payload;
+          }
 
           if (crystalType === CrystalType.IDENTITY) {
             identityCrystals.push(crystal);
@@ -238,12 +277,17 @@ export async function loadCrystals(
       MollyLogger.info(
         `Crystals loaded: ${crystalType}`,
         'crystal-persistence',
-        { crystalType, loaded: crystalType === CrystalType.IDENTITY ? identityCrystals.length : knowledgeCrystals.length },
+        {
+          crystalType,
+          loaded:
+            crystalType === CrystalType.IDENTITY
+              ? identityCrystals.length
+              : knowledgeCrystals.length,
+        },
         traceId
       );
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Query failed';
+      const message = error instanceof Error ? error.message : 'Query failed';
       errors.push(`${crystalType}-query: ${message}`);
     }
   }
