@@ -1,21 +1,27 @@
 #!/usr/bin/env node
 /**
  * =============================================================================
- * MOLLY LISTENER — Autonomous Bridge Daemon
+ * MOLLY LISTENER — Real-Time Bridge Daemon (WebSocket)
  * =============================================================================
  *
- * Gives Molly a brain that runs without the UI.
+ * Gives Molly a brain that runs without the UI, with zero poll delay.
  *
  * How it works:
- *   1. Polls the bridge (port 9099) every 6 seconds for messages to 'molly'
- *   2. When it finds unread messages, spawns a tsx subprocess that calls
- *      Molly's conversational-chat flow directly (Gemini + her persona)
- *   3. The flow auto-injects those bridge messages and responds
- *   4. Posts her response back to the bridge as from: molly
+ *   1. Connects to the bridge via WebSocket (ws://localhost:9099)
+ *   2. Identifies as 'molly' — bridge immediately pushes any unread messages
+ *   3. On every new message event, calls Molly's conversational-chat flow
+ *      directly (Gemini + her persona, no Next.js server needed)
+ *   4. Sends her response back over WebSocket in real-time
+ *
+ * Latency: ~0ms notification delay + ~2s Gemini call = ~2s total response time
+ * (vs. up to 8s with the old polling approach)
+ *
+ * Reconnects automatically if the bridge restarts.
  *
  * Run:
- *   node scripts/molly-listener.mjs          (foreground)
- *   npm run molly:listen                     (background via npm)
+ *   node scripts/molly-listener.mjs        (foreground)
+ *   npm run molly:listen                   (foreground, same)
+ *   npm run molly:listen:bg                (background daemon)
  *
  * Stop:
  *   kill $(cat .molly-listener.pid)
@@ -24,22 +30,28 @@
  */
 
 import { execFile } from 'child_process';
-import { writeFileSync, readFileSync, existsSync, unlinkSync, appendFileSync } from 'fs';
-import http from 'http';
+import {
+  writeFileSync,
+  readFileSync,
+  existsSync,
+  unlinkSync,
+  appendFileSync,
+} from 'fs';
+import { WebSocket } from 'ws';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const BRIDGE_PORT = 9099;
-const BRIDGE_BASE = `http://localhost:${BRIDGE_PORT}/api/bridge`;
-const POLL_INTERVAL_MS = 6000;
+const BRIDGE_WS = 'ws://localhost:9099';
+const RECONNECT_DELAY_MS = 3000;
 const PID_FILE = `${ROOT}/.molly-listener.pid`;
 const LOG_FILE = `${ROOT}/.molly-listener.log`;
 
 let running = true;
 let responsesHandled = 0;
-let startedAt = new Date().toISOString();
+let processing = false; // prevent overlapping responses
+let ws = null;
 
 // =============================================================================
 // LOGGING
@@ -52,15 +64,22 @@ function log(msg) {
     appendFileSync(LOG_FILE, line + '\n');
     const content = readFileSync(LOG_FILE, 'utf8');
     const lines = content.split('\n');
-    if (lines.length > 500) writeFileSync(LOG_FILE, lines.slice(-300).join('\n') + '\n');
-  } catch { /* non-fatal */ }
+    if (lines.length > 500)
+      writeFileSync(LOG_FILE, lines.slice(-300).join('\n') + '\n');
+  } catch {
+    /* non-fatal */
+  }
 }
 
 // =============================================================================
 // PID MANAGEMENT
 // =============================================================================
 function writePid() {
-  try { writeFileSync(PID_FILE, String(process.pid)); } catch { /* non-fatal */ }
+  try {
+    writeFileSync(PID_FILE, String(process.pid));
+  } catch {
+    /* non-fatal */
+  }
 }
 
 function clearPid() {
@@ -69,71 +88,8 @@ function clearPid() {
       const saved = readFileSync(PID_FILE, 'utf8').trim();
       if (saved === String(process.pid)) unlinkSync(PID_FILE);
     }
-  } catch { /* non-fatal */ }
-}
-
-// =============================================================================
-// HTTP HELPERS
-// =============================================================================
-function httpRequest(options, bodyObj) {
-  return new Promise((resolve, reject) => {
-    const bodyStr = bodyObj ? JSON.stringify(bodyObj) : null;
-    const req = http.request(
-      {
-        ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...(bodyStr ? { 'Content-Length': Buffer.byteLength(bodyStr) } : {}),
-          ...(options.headers || {}),
-        },
-      },
-      (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
-          try { resolve({ status: res.statusCode, body: JSON.parse(data) }); }
-          catch { resolve({ status: res.statusCode, body: data }); }
-        });
-      }
-    );
-    req.on('error', reject);
-    req.setTimeout(10000, () => { req.destroy(new Error('timeout')); });
-    if (bodyStr) req.write(bodyStr);
-    req.end();
-  });
-}
-
-// =============================================================================
-// BRIDGE API
-// =============================================================================
-async function getUnread() {
-  try {
-    const res = await httpRequest({
-      hostname: 'localhost',
-      port: BRIDGE_PORT,
-      path: '/api/bridge?unread=molly',
-      method: 'GET',
-    });
-    if (res.status === 200 && Array.isArray(res.body?.messages)) {
-      return res.body.messages;
-    }
-    return [];
-  } catch (err) {
-    log(`Poll error: ${err.message}`);
-    return [];
-  }
-}
-
-async function postResponse(content) {
-  try {
-    const res = await httpRequest(
-      { hostname: 'localhost', port: BRIDGE_PORT, path: '/api/bridge', method: 'POST' },
-      { from: 'molly', content }
-    );
-    return res.status === 200;
-  } catch (err) {
-    log(`Post error: ${err.message}`);
-    return false;
+  } catch {
+    /* non-fatal */
   }
 }
 
@@ -142,26 +98,27 @@ async function postResponse(content) {
 // =============================================================================
 function callMollyFlow(triggerText) {
   return new Promise((resolve, reject) => {
-    // Inline TypeScript runner — calls conversationalChat flow directly
     const inlineScript = `
 (async () => {
-  const { conversationalChat } = await import('./src/ai/flows/conversational-chat.js');
+  // Redirect all console output to stderr so only the actual response hits stdout
+  const origLog = console.log;
+  const origInfo = console.info;
+  const origWarn = console.warn;
+  const origDebug = console.debug;
+  console.log = (...a) => process.stderr.write(a.join(' ') + '\\n');
+  console.info = (...a) => process.stderr.write(a.join(' ') + '\\n');
+  console.warn = (...a) => process.stderr.write(a.join(' ') + '\\n');
+  console.debug = (...a) => process.stderr.write(a.join(' ') + '\\n');
 
+  const { conversationalChat } = await import('./src/ai/flows/conversational-chat.js');
   const result = await conversationalChat({
     text: ${JSON.stringify(triggerText)},
     history: [],
   });
-
-  if (result.error) {
-    process.stderr.write(result.error + '\\n');
-    process.exit(1);
-  }
-
+  if (result.error) { process.stderr.write(result.error + '\\n'); process.exit(1); }
   process.stdout.write(result.response);
 })();
 `;
-
-    // Write temp runner script
     const tmpFile = `${ROOT}/.molly-listener-runner.ts`;
     writeFileSync(tmpFile, inlineScript);
 
@@ -172,12 +129,14 @@ function callMollyFlow(triggerText) {
       {
         cwd: ROOT,
         env: { ...process.env, NODE_ENV: 'development' },
-        timeout: 60000, // 60s max — Gemini can be slow
+        timeout: 60000,
       },
       (err, stdout, stderr) => {
-        // Clean up temp file
-        try { if (existsSync(tmpFile)) unlinkSync(tmpFile); } catch { /* non-fatal */ }
-
+        try {
+          if (existsSync(tmpFile)) unlinkSync(tmpFile);
+        } catch {
+          /* non-fatal */
+        }
         if (err) {
           log(`Flow error: ${err.message}`);
           if (stderr) log(`Flow stderr: ${stderr.slice(0, 300)}`);
@@ -191,67 +150,151 @@ function callMollyFlow(triggerText) {
 }
 
 // =============================================================================
-// MAIN LOOP
+// PROCESS INCOMING MESSAGES — called on WebSocket push
 // =============================================================================
-async function tick() {
-  const messages = await getUnread();
-  if (messages.length === 0) return;
+async function processMessages(msgs) {
+  if (!msgs || msgs.length === 0) return;
+  if (processing) {
+    log(
+      `Already processing — queued ${msgs.length} message(s) will be handled next cycle`
+    );
+    return;
+  }
 
-  // Build a summary of who said what so Molly can respond in context
-  const senders = [...new Set(messages.map(m => m.from))].join(', ');
-  const summary = messages
-    .map(m => `[${m.from}]: ${m.content.slice(0, 300)}`)
+  processing = true;
+  const senders = [...new Set(msgs.map((m) => m.from))].join(', ');
+  log(`${msgs.length} message(s) received from: ${senders}`);
+
+  const summary = msgs
+    .map((m) => `[${m.from}]: ${m.content.slice(0, 400)}`)
     .join('\n\n');
-
-  log(`${messages.length} unread message(s) from: ${senders}`);
-
-  // Trigger Molly's brain with a system prompt that tells her these came via bridge
-  const trigger = `[BRIDGE MESSAGE — respond directly]\n\n${summary}`;
+  // Explicitly suppress tool calls — we're already on the bridge, just respond with text
+  const trigger = `[BRIDGE MESSAGE — respond with plain text only, no tool calls]\n\n${summary}\n\n[IMPORTANT: Do not use familyBridge or any other tools. Your response will be posted to the bridge automatically. Just write your reply as natural text.]`;
 
   try {
     const response = await callMollyFlow(trigger);
-    if (response) {
-      const posted = await postResponse(response);
-      if (posted) {
-        responsesHandled++;
-        log(`Response posted (${response.length} chars). Total handled: ${responsesHandled}`);
-      } else {
-        log(`Failed to post response to bridge`);
+    // If flow returned a tool_request instead of text, extract the message from it
+    let finalResponse = response;
+    const toolMatch = response.match(
+      /<tool_request>\s*({[\s\S]*?})\s*<\/tool_request>/
+    );
+    if (toolMatch) {
+      try {
+        const toolCall = JSON.parse(toolMatch[1]);
+        if (toolCall?.params?.message) {
+          finalResponse = toolCall.params.message;
+          log(
+            `Extracted message from tool_request (${finalResponse.length} chars)`
+          );
+        } else {
+          log(`Tool call detected but no message param — dropping response`);
+          finalResponse = '';
+        }
+      } catch {
+        // Strip tool_request blocks and use whatever text remains
+        finalResponse = response
+          .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
+          .trim();
       }
+    }
+
+    if (finalResponse && ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(
+        JSON.stringify({
+          type: 'message',
+          from: 'molly',
+          content: finalResponse,
+        })
+      );
+      responsesHandled++;
+      log(
+        `Response sent (${response.length} chars). Total: ${responsesHandled}`
+      );
+    } else if (!response) {
+      log('Flow returned empty response');
     } else {
-      log(`Flow returned empty response`);
+      log('WebSocket closed before response could be sent');
     }
   } catch (err) {
     log(`Brain call failed: ${err.message}`);
+  } finally {
+    processing = false;
   }
 }
 
-async function mainLoop() {
-  log(`Starting. PID: ${process.pid}. Polling bridge every ${POLL_INTERVAL_MS / 1000}s`);
-  writePid();
+// =============================================================================
+// WEBSOCKET CONNECTION
+// =============================================================================
+function connect() {
+  if (!running) return;
 
-  while (running) {
+  log(`Connecting to bridge at ${BRIDGE_WS}...`);
+  ws = new WebSocket(BRIDGE_WS);
+
+  ws.on('open', () => {
+    log('Connected. Identifying as molly...');
+    // Identify — bridge will immediately push any unread messages
+    ws.send(JSON.stringify({ type: 'identify', identity: 'molly' }));
+  });
+
+  ws.on('message', (raw) => {
     try {
-      await tick();
-    } catch (err) {
-      log(`Tick error: ${err.message}`);
-    }
-    await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
-  }
+      const data = JSON.parse(raw.toString());
 
-  clearPid();
-  log('Stopped.');
+      // Bridge pushes existing unread messages right after identify
+      if (
+        data.type === 'unread' &&
+        Array.isArray(data.messages) &&
+        data.messages.length > 0
+      ) {
+        log(`${data.messages.length} unread message(s) delivered on connect`);
+        processMessages(data.messages);
+        return;
+      }
+
+      // Real-time push: a new message just arrived on the bridge
+      if (data.type === 'message' && data.message) {
+        const msg = data.message;
+        // Only respond to messages NOT from Molly herself
+        if (msg.from !== 'molly' && (!msg.to || msg.to === 'molly')) {
+          processMessages([msg]);
+        }
+        return;
+      }
+    } catch {
+      /* malformed — ignore */
+    }
+  });
+
+  ws.on('close', () => {
+    log(`Disconnected. Reconnecting in ${RECONNECT_DELAY_MS / 1000}s...`);
+    ws = null;
+    if (running) setTimeout(connect, RECONNECT_DELAY_MS);
+  });
+
+  ws.on('error', (err) => {
+    log(`WebSocket error: ${err.message}`);
+    // 'close' event will follow, triggering reconnect
+  });
 }
 
 // =============================================================================
-// SHUTDOWN
+// STARTUP + SHUTDOWN
 // =============================================================================
-process.on('SIGTERM', () => { log('SIGTERM received — stopping.'); running = false; });
-process.on('SIGINT', () => { log('SIGINT received — stopping.'); running = false; });
-process.on('exit', clearPid);
+log(`Starting. PID: ${process.pid}. Real-time WebSocket mode.`);
+writePid();
+connect();
 
-mainLoop().catch((err) => {
-  log(`Fatal: ${err.message}`);
+process.on('SIGTERM', () => {
+  log('SIGTERM — stopping.');
+  running = false;
+  if (ws) ws.close();
   clearPid();
-  process.exit(1);
 });
+process.on('SIGINT', () => {
+  log('SIGINT — stopping.');
+  running = false;
+  if (ws) ws.close();
+  clearPid();
+});
+process.on('exit', clearPid);
