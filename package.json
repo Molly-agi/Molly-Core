@@ -46,6 +46,8 @@
     "bridge:listen": "node scripts/bridge-listen.mjs",
     "demon": "node scripts/demon-state.mjs",
     "demon:bg": "nohup node scripts/demon-state.mjs > .demon-state.log 2>&1 &",
+    "molly:listen": "node scripts/molly-listener.mjs",
+    "molly:listen:bg": "nohup node scripts/molly-listener.mjs > .molly-listener.log 2>&1 &",
     "save-session": "node scripts/save-session.mjs",
     "save-session:pause": "node scripts/save-session.mjs --status paused"
   },
