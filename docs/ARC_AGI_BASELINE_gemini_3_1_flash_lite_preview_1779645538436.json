@@ -1,0 +1,311 @@
+{
+  "timestamp": 1779645395494,
+  "model": "gemini-3.1-flash-lite-preview",
+  "sampleSize": 50,
+  "tasks": [
+    {
+      "id": "00576224",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1143
+    },
+    {
+      "id": "08573cc6",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1464
+    },
+    {
+      "id": "0c786b71",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1507
+    },
+    {
+      "id": "12997ef3",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1711
+    },
+    {
+      "id": "15663ba9",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1719
+    },
+    {
+      "id": "1990f7a8",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1259
+    },
+    {
+      "id": "1d0a4b61",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1586
+    },
+    {
+      "id": "20981f0e",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1743
+    },
+    {
+      "id": "2697da3f",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1445
+    },
+    {
+      "id": "2b01abd0",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1785
+    },
+    {
+      "id": "31d5ba1a",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 881
+    },
+    {
+      "id": "358ba94e",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1527
+    },
+    {
+      "id": "3f23242b",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1452
+    },
+    {
+      "id": "45737921",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1620
+    },
+    {
+      "id": "4acc7107",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1369
+    },
+    {
+      "id": "505fff84",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1115
+    },
+    {
+      "id": "52fd389e",
+      "correct": false,
+      "parseSuccess": false,
+      "responseLength": 1012
+    },
+    {
+      "id": "58743b76",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1868
+    },
+    {
+      "id": "5d2a5c43",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1742
+    },
+    {
+      "id": "639f5a19",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1660
+    },
+    {
+      "id": "67c52801",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1544
+    },
+    {
+      "id": "6df30ad6",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 2092
+    },
+    {
+      "id": "73182012",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 840
+    },
+    {
+      "id": "7953d61e",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1316
+    },
+    {
+      "id": "7e02026e",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1739
+    },
+    {
+      "id": "8597cfd7",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1380
+    },
+    {
+      "id": "8b28cd80",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1366
+    },
+    {
+      "id": "903d1b4a",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1773
+    },
+    {
+      "id": "94133066",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1834
+    },
+    {
+      "id": "981571dc",
+      "correct": false,
+      "parseSuccess": false,
+      "responseLength": 774
+    },
+    {
+      "id": "9c1e755f",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1100
+    },
+    {
+      "id": "a3f84088",
+      "correct": false,
+      "parseSuccess": false,
+      "responseLength": 1420
+    },
+    {
+      "id": "aa300dc3",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1688
+    },
+    {
+      "id": "ae58858e",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1762
+    },
+    {
+      "id": "b20f7c8b",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 2019
+    },
+    {
+      "id": "b9630600",
+      "correct": false,
+      "parseSuccess": false,
+      "responseLength": 774
+    },
+    {
+      "id": "be03b35f",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1647
+    },
+    {
+      "id": "c48954c1",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1753
+    },
+    {
+      "id": "c8b7cc0f",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1491
+    },
+    {
+      "id": "cd3c21df",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1442
+    },
+    {
+      "id": "d2acf2cb",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1431
+    },
+    {
+      "id": "d5c634a2",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1381
+    },
+    {
+      "id": "de493100",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1041
+    },
+    {
+      "id": "e345f17b",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1037
+    },
+    {
+      "id": "e66aafb8",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 927
+    },
+    {
+      "id": "e7a25a18",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1363
+    },
+    {
+      "id": "e9b4f6fc",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1325
+    },
+    {
+      "id": "ef26cbf6",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1419
+    },
+    {
+      "id": "f45f5ca7",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1569
+    },
+    {
+      "id": "fafd9572",
+      "correct": false,
+      "parseSuccess": true,
+      "responseLength": 1983
+    }
+  ],
+  "correct": 0,
+  "parseFailures": 4,
+  "accuracy": 0,
+  "elapsedSeconds": 142.941
+}
