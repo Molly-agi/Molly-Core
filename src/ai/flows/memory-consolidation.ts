@@ -15,6 +15,7 @@ import { ExperienceRecord, createMemoryRecord } from '@/ai/tools/memory-schema';
 import { withGenerateErrorHandling } from '@/ai/error-handler';
 import { isAdminConfigured } from '@/firebase/admin';
 import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
+import { migrateToPartitions } from '@/ai/memory/crystal-migration';
 
 const MemoryConsolidationOutputSchema = z.object({
   summary: z.string().describe('High-level summary of consolidated memories'),
@@ -487,6 +488,58 @@ Generate insights for Molly's continued growth.`,
         },
         traceId
       );
+
+      // ── STEP 8: Crystal Partition Migration + Titan Echo Compression ──
+      // After consolidation, migrate engrams from the unified pool into the
+      // partitioned crystal stores. Titan Echo compression is applied
+      // transparently inside saveCrystals() via crystal-compression-bridge.
+      const engramPassword = process.env.ENGRAM_SECRET;
+      if (engramPassword && isAdminConfigured()) {
+        try {
+          MollyLogger.info(
+            'Step 8: Crystal partition migration + compression',
+            'memoryConsolidation',
+            { userId }
+          );
+          const migrationResult = await migrateToPartitions(
+            userId,
+            engramPassword
+          );
+          MollyLogger.info(
+            'Crystal migration complete',
+            'memoryConsolidation',
+            {
+              totalProcessed: migrationResult.totalProcessed,
+              identityCrystals: migrationResult.identityCrystals,
+              knowledgeCrystals: migrationResult.knowledgeCrystals,
+              saved: migrationResult.saved,
+              failed: migrationResult.failed,
+            },
+            traceId
+          );
+          if (migrationResult.errors.length > 0) {
+            errors.push(...migrationResult.errors.slice(0, 5)); // cap to avoid flooding
+          }
+        } catch (migrationError) {
+          // Non-fatal — consolidation already succeeded above
+          MollyLogger.warn(
+            'Crystal migration failed (non-fatal)',
+            'memoryConsolidation',
+            {
+              error:
+                migrationError instanceof Error
+                  ? migrationError.message
+                  : String(migrationError),
+            },
+            traceId
+          );
+        }
+      } else {
+        MollyLogger.debug(
+          'Skipping crystal migration: ENGRAM_SECRET or Firebase Admin not configured',
+          'memoryConsolidation'
+        );
+      }
 
       return {
         summary: `Consolidated ${memories.length} memories into ${clusters.length} clusters. Identified ${patterns.length} patterns and extracted ${insights.length} insights for growth.`,
