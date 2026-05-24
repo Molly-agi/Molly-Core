@@ -5,7 +5,7 @@
  * Serves as foundation for all subsequent evaluation runs.
  */
 
-import type { BenchmarkInput, BenchmarkOutput, ExperimentResult } from '../braintrust/types';
+import type { BenchmarkInput, BenchmarkOutput } from '../braintrust/types';
 import { scoreResponse } from '../scorers/llm-judge';
 
 export interface ExperimentConfig {

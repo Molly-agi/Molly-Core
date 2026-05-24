@@ -20,21 +20,21 @@ export interface BenchmarkInput {
   options?: string[];
   difficulty?: 'easy' | 'medium' | 'hard' | 'expert';
   category?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface BenchmarkOutput {
   answer: string;
   reasoning?: string;
   confidence?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface ScorerResult {
   name: string;
   score: number;
   details?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface ExperimentResult {

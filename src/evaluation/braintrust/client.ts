@@ -4,7 +4,7 @@
  * Initialize and manage Braintrust SDK for evaluation experiments.
  */
 
-import type { BraintrustConfig } from './types';
+import type { BraintrustConfig, BenchmarkOutput, ScorerResult } from './types';
 
 class BraintrustClient {
   private config: BraintrustConfig;
@@ -87,7 +87,7 @@ class BraintrustClient {
   /**
    * Log evaluation result
    */
-  async logResult(experimentId: string, inputId: string, output: any, scores: any) {
+  async logResult(experimentId: string, inputId: string, _output: BenchmarkOutput, _scores: Map<string, ScorerResult>) {
     // TODO: Connect to real Braintrust SDK
     // await bt.log({
     //   experimentId,

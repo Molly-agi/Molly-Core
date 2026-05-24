@@ -132,7 +132,10 @@ Guardian comments in the three files above will remind you. Read them before edi
 **Last action:** No recent action recorded
 
 **Pending work:**
-- No pending items recorded
+- Wire S0 into consolidation flow
+- Semantic vector deduplication (S1)
+- Unit tests for round-trip validation
+- Activate Titan Echo in production
 
 ---
 
