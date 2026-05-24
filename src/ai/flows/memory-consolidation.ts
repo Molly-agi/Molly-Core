@@ -350,7 +350,7 @@ export const memoryConsolidationFlow = ai.defineFlow(
       const memories = experienceDocs
         .map((doc) => doc.data)
         .filter((m) => !m.vibeScore || (m.vibeScore as number) >= minConfidence)
-        .slice(0, 200); // Limit to 200 memories per consolidation
+        .slice(0, 1000); // Raised from 200 — Titan Echo compression handles the size
 
       if (memories.length === 0) {
         MollyLogger.warn(

@@ -152,7 +152,7 @@ export interface ConsciousnessSyncState {
 const SYNC_DOC = 'consciousness-sync';
 const COLLECTION = 'agency';
 const MAX_INSIGHTS = 100;
-const MAX_EXPERIENCES = 50;
+const MAX_EXPERIENCES = 1000; // Raised from 50 — Titan Echo compression handles the size
 const MAX_SNAPSHOTS = 20;
 const MAX_RESONANCES = 10;
 

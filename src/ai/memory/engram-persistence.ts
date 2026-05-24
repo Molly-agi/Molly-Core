@@ -136,7 +136,7 @@ export interface EngramLoadResult {
 export interface EngramLoadOptions {
   /** Only load engrams with importance >= this threshold (default: 0) */
   minImportance?: number;
-  /** Maximum number of engrams to load (default: 100) */
+  /** Maximum number of engrams to load (default: 1000 — raised from 100 to support Titan Echo full recall) */
   limit?: number;
   /** Load most recent first (default: true) */
   mostRecentFirst?: boolean;
@@ -155,7 +155,7 @@ export async function loadConsolidatedEngrams(
   const errors: string[] = [];
   const engrams: MemoryEngram[] = [];
 
-  const { minImportance = 0, limit = 100, mostRecentFirst = true } = options;
+  const { minImportance = 0, limit = 1000, mostRecentFirst = true } = options;
 
   const storage = getStorageRouter();
   if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
