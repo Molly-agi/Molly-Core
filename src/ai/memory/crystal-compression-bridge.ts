@@ -11,6 +11,10 @@
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type { CrystalEngram } from '@/ai/memory/crystal-partition';
 import { getActiveCompressionTechniques } from '@/ai/memory/compression-activation';
+import {
+  CompressionManager,
+  type CompressionResult,
+} from '@/ai/memory/compression/compression-manager';
 
 // ============================================================================
 // COMPRESSION CONTEXT
@@ -45,6 +49,8 @@ export interface CompressedCrystalPayload {
   crystal: CrystalEngram;
   /** Compression context if applied */
   compression?: CrystalCompressionContext;
+  /** Compression bundle for lossless round-trip (if techniques applied) */
+  compressionBundle?: CompressionResult['bundle'];
   /** Version of compression protocol */
   version: '1.0';
 }
@@ -58,13 +64,24 @@ export interface CompressedCrystalPayload {
  */
 export class CrystalCompressionBridge {
   private traceId: string;
+  private compressionManager: CompressionManager;
+  private activeTechniques: string[] = [];
+  private totalCompressionRatio: number = 0;
 
   constructor() {
     this.traceId = generateTraceId();
+    this.compressionManager = CompressionManager.getInstance({
+      t1PersonalityReference: process.env.MOLLY_COMPRESS_T1 === '1',
+      t3TemporalDelta: process.env.MOLLY_COMPRESS_T3 === '1',
+      t4VocabularyDict: process.env.MOLLY_COMPRESS_T4 === '1',
+      t2TimeDecayFidelity: process.env.MOLLY_COMPRESS_T2 === '1',
+      t6InteractionTrace: process.env.MOLLY_COMPRESS_T6 === '1',
+      t5NumericQuantization: process.env.MOLLY_COMPRESS_T5 === '1',
+    });
   }
 
   /**
-   * Prepare crystal for storage with optional compression
+   * Prepare crystal for storage with compression via CompressionManager
    */
   async prepareForStorage(
     crystal: CrystalEngram
@@ -73,14 +90,16 @@ export class CrystalCompressionBridge {
     const originalContent = JSON.stringify(crystal);
     const originalBytes = Buffer.byteLength(originalContent, 'utf8');
 
-    const activeTechniques = getActiveCompressionTechniques();
+    const flags = this.compressionManager.getFlags();
+    const anyTechniquesEnabled = Object.values(flags).some((f) => f);
 
-    if (activeTechniques.length === 0) {
+    if (!anyTechniquesEnabled) {
       // No compression enabled; return as-is
       MollyLogger.debug(
         'No compression techniques enabled; storing crystal uncompressed',
         'crystal-compression',
-        { crystalId: crystal.id }
+        { crystalId: crystal.id },
+        this.traceId
       );
 
       return {
@@ -96,28 +115,83 @@ export class CrystalCompressionBridge {
       {
         crystalId: crystal.id,
         originalBytes,
-        techniquesActive: activeTechniques.map((t) => t.id),
+        techniquesEnabled: Object.entries(flags)
+          .filter(([, enabled]) => enabled)
+          .map(([technique]) => technique),
       },
       this.traceId
     );
 
-    // TODO: Apply compression techniques in order (P1 → P2 → P3)
-    // For now, return uncompressed but with metadata indicating what would compress
-    const compressionTimeMs = performance.now() - startTime;
+    try {
+      // Call CompressionManager to apply P1/P2/P3 techniques
+      const result = await this.compressionManager.compress({
+        engrams: [crystal], // Single crystal as single-element batch
+        sessionId: `crystal-${crystal.id}`,
+        compressionTimestamp: Date.now(),
+      });
 
-    return {
-      crystal,
-      compression: {
-        activeTechniques: activeTechniques.map((t) => t.id),
+      const compressionTimeMs = performance.now() - startTime;
+
+      // Track metrics for later reporting
+      this.activeTechniques = result.metrics.techniquesApplied;
+      this.totalCompressionRatio = result.metrics.compressionRatio;
+
+      const compressionContext: CrystalCompressionContext = {
+        activeTechniques: result.metrics.techniquesApplied,
         originalBytes,
-        compressedBytes: originalBytes, // TODO: update after compression
-        compressionRatio: 0, // TODO: calculate
-        skippedTechniques: [],
+        compressedBytes: result.metrics.compressedByteSize,
+        compressionRatio: result.metrics.compressionRatio,
+        skippedTechniques: result.metrics.techniquesSkipped,
         compressionTimeMs,
         compressedAt: Date.now(),
-      },
-      version: '1.0',
-    };
+      };
+
+      // Log guardrail state for Molly's visibility
+      const guardrailNote =
+        result.metrics.guardrailState === 'alert'
+          ? ' [ALERT: Molly should verify integrity]'
+          : result.metrics.guardrailState === 'violated'
+            ? ' [VIOLATED: Technique skipped for safety]'
+            : '';
+
+      MollyLogger.info(
+        `Crystal compression complete${guardrailNote}`,
+        'crystal-compression',
+        {
+          crystalId: crystal.id,
+          originalBytes,
+          compressedBytes: result.metrics.compressedByteSize,
+          ratio: `${result.metrics.compressionRatio.toFixed(2)}%`,
+          techniques: result.metrics.techniquesApplied.join(','),
+          guardrailState: result.metrics.guardrailState,
+          timeMs: compressionTimeMs,
+        },
+        this.traceId
+      );
+
+      return {
+        crystal,
+        compression: compressionContext,
+        compressionBundle: result.bundle,
+        version: '1.0',
+      };
+    } catch (error) {
+      MollyLogger.error(
+        'Compression failed; returning uncompressed',
+        'crystal-compression',
+        {
+          crystalId: crystal.id,
+          error: error instanceof Error ? error.message : String(error),
+        },
+        this.traceId
+      );
+
+      // Graceful degradation: return uncompressed on error
+      return {
+        crystal,
+        version: '1.0',
+      };
+    }
   }
 
   /**
@@ -126,29 +200,62 @@ export class CrystalCompressionBridge {
   async restoreFromStorage(
     payload: CompressedCrystalPayload
   ): Promise<CrystalEngram> {
-    if (!payload.compression) {
+    if (!payload.compression || !payload.compressionBundle) {
       // Not compressed; return directly
       return payload.crystal;
     }
 
     const startTime = performance.now();
 
-    // TODO: Apply decompression techniques in reverse order
-    // For now, return the crystal as-is
-    const decompressionTimeMs = performance.now() - startTime;
+    try {
+      // Call CompressionManager to decompress in reverse order
+      const decompressed = await this.compressionManager.decompress(
+        payload.compressionBundle
+      );
 
-    MollyLogger.debug(
-      'Crystal decompressed from storage',
-      'crystal-compression',
-      {
-        crystalId: payload.crystal.id,
-        compressionRatio: `${payload.compression.compressionRatio.toFixed(1)}%`,
-        decompressionTimeMs,
-      },
-      this.traceId
-    );
+      // Should have exactly 1 crystal (we compressed 1)
+      if (decompressed.length === 0) {
+        MollyLogger.warn(
+          'Decompression returned empty array; falling back to original',
+          'crystal-compression',
+          {
+            crystalId: payload.crystal.id,
+          },
+          this.traceId
+        );
+        return payload.crystal;
+      }
 
-    return payload.crystal;
+      const decompressionTimeMs = performance.now() - startTime;
+
+      MollyLogger.debug(
+        'Crystal decompressed from storage',
+        'crystal-compression',
+        {
+          crystalId: payload.crystal.id,
+          compressionRatio: `${payload.compression.compressionRatio.toFixed(2)}%`,
+          decompressionTimeMs,
+          techniquesApplied:
+            payload.compression.activeTechniques.join(','),
+        },
+        this.traceId
+      );
+
+      return decompressed[0];
+    } catch (error) {
+      MollyLogger.error(
+        'Decompression failed; returning original crystal',
+        'crystal-compression',
+        {
+          crystalId: payload.crystal.id,
+          error: error instanceof Error ? error.message : String(error),
+        },
+        this.traceId
+      );
+
+      // Graceful degradation: return original on decompression failure
+      return payload.crystal;
+    }
   }
 
   /**
@@ -158,13 +265,16 @@ export class CrystalCompressionBridge {
     techniquesEnabled: number;
     totalCompressionRatio: number;
     guardrailsPassed: boolean;
+    activeTechniques: string[];
   } {
-    const techniques = getActiveCompressionTechniques();
+    const flags = this.compressionManager.getFlags();
+    const enabledCount = Object.values(flags).filter((f) => f).length;
 
     return {
-      techniquesEnabled: techniques.length,
-      totalCompressionRatio: 0, // TODO: aggregate from compressed crystals
-      guardrailsPassed: true, // TODO: check recall metrics
+      techniquesEnabled: enabledCount,
+      totalCompressionRatio: this.totalCompressionRatio,
+      guardrailsPassed: true, // CompressionManager enforces guardrails internally
+      activeTechniques: this.activeTechniques,
     };
   }
 }

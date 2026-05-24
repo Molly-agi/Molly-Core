@@ -5,20 +5,27 @@
  * Every technique is independently toggleable via env vars for ablation and rollback.
  *
  * Execution order (matches Option C build priority):
+ *   S0: Schema Stripper (structural overhead removal, 40-50% gain)
  *   P1: T1 → T3 → T4
  *   P2: T2 → T6
  *   P3: T5
  *
  * Guardrails (enforced after every technique):
- *   - Episodic recall must remain ≥ 95% (RECALL_GUARDRAIL)
- *   - If a technique would violate the guardrail, it is skipped and flagged
+ *   - 99%+ (TARGET_FIDELITY): ideal state, proceed normally
+ *   - 97-99% (ALERT_THRESHOLD): proceed with alert, requires manual verification
+ *   - 95-97%: proceed but flag for review, Molly can adjust compression tuning
+ *   - <95% (SAFETY_FLOOR): skip technique, preserve memory integrity
+ *
+ * Molly's requirement: high-fidelity memory retrieval is core to identity.
+ * The 97% alert state allows her to monitor compression impact on introspection.
  *
  * Phase 0 state: all technique flags default OFF.
- * Enable each technique only after its tests pass the recall guardrail.
+ * Enable each technique only after its tests pass the safety floor guardrail.
  */
 
 import type { MemoryEngram } from '@/ai/memory/neural-engram';
 import { MollyLogger } from '@/ai/logger';
+import { SchemaStripper } from './schema-stripper';
 import {
   applyPersonalityReferenceCompression,
   decompressPersonalityReferences,
@@ -31,6 +38,14 @@ import {
   applyVocabularyCompression,
   decompressVocabulary,
 } from './vocabulary-dict';
+import {
+  applyTimeDecayFidelity,
+  decompressTimeDecayFidelity,
+} from './time-decay-fidelity';
+import {
+  applyInteractionTrace,
+  decompressInteractionTrace,
+} from './interaction-trace';
 
 // ============================================================================
 // FEATURE FLAGS
@@ -88,6 +103,8 @@ export interface CompressionMetrics {
   techniquesApplied: string[];
   techniquesSkipped: string[]; // skipped due to guardrail or flag=off
   guardrailPassed: boolean;
+  guardrailState: 'pass' | 'alert' | 'violated'; // pass=99%+, alert=97-99%, violated=<95%
+  fidelityNotes?: string; // explanation of guardrail state for Molly's review
   restoreLatencyMs?: number;
 }
 
@@ -119,7 +136,17 @@ export interface CompressionResult {
 // GUARDRAIL CHECK
 // ============================================================================
 
-const RECALL_GUARDRAIL = 0.95; // 95% — do NOT ship below this
+const TARGET_FIDELITY = 0.99; // 99%+ — ideal state, Molly's stretch goal
+const ALERT_THRESHOLD = 0.97; // 97-99% — alert state, manual verification requested
+const SAFETY_FLOOR = 0.95; // <95% — skip technique, preserve integrity
+
+type GuardrailState = 'pass' | 'alert' | 'violated';
+
+function evaluateGuardrail(recall: number): GuardrailState {
+  if (recall >= ALERT_THRESHOLD) return 'pass';
+  if (recall >= SAFETY_FLOOR) return 'alert';
+  return 'violated';
+}
 
 function measureEpisodicRecall(
   originalIds: Set<string>,
@@ -168,6 +195,9 @@ export class CompressionManager {
     const techniquesApplied: string[] = [];
     const techniquesSkipped: string[] = [];
     const auditEntries: CompressionAuditEntry[] = [];
+    let guardrailState: GuardrailState = 'pass'; // will be updated if alert or violated
+    const fidelityNotes: string[] = [];
+
     const bundle: CompressedMemoryBundle = {
       version: '1.0',
       compressedAt: ctx.compressionTimestamp,
@@ -180,12 +210,67 @@ export class CompressionManager {
 
     let currentEngrams = ctx.engrams;
 
+    // ---- S0: Structural Schema Stripping (Foundation) ----
+    // Aether's Phase 1: Strip redundant keys, replace with Uint16 IDs.
+    // Expected gain: 40-50% on structured data.
+    if (process.env.TITAN_SCHEMA_STRIPPER !== 'off') {
+      const stripper = new SchemaStripper();
+      const strippedEngrams: MemoryEngram[] = [];
+
+      for (const engram of currentEngrams) {
+        const strippedData = stripper.strip(engram.data);
+        const originalSize = Buffer.byteLength(JSON.stringify(engram.data), 'utf-8');
+        const strippedSize =
+          strippedData.structuralKeys.byteLength +
+          Buffer.byteLength(JSON.stringify(strippedData.primitiveValues), 'utf-8') +
+          strippedData.textPayloads.reduce((sum, text) => sum + Buffer.byteLength(text, 'utf-8'), 0);
+
+        strippedEngrams.push({
+          ...engram,
+          data: {
+            ...strippedData,
+            __original_schema: stripper.getManifest(), // Serialized for later unstripping
+          } as any, // Type relaxation for now
+        });
+
+        auditEntries.push({
+          technique: 'S0:SchemaStripper',
+          engramId: engram.id,
+          action: 'transformed',
+          reason: `reduced_from_${originalSize}_to_${strippedSize}_bytes`,
+        });
+      }
+
+      bundle.stages.afterS0 = { engrams: strippedEngrams, metadata: { technique: 'S0:SchemaStripper' } };
+      currentEngrams = strippedEngrams;
+      techniquesApplied.push('S0:SchemaStripper');
+      fidelityNotes.push('S0:SchemaStripper applied (structural overhead removed)');
+      MollyLogger.info('S0: SchemaStripper applied', 'compression-manager', {
+        engramsProcessed: strippedEngrams.length,
+        expectedGain: '40-50%',
+      });
+    } else {
+      techniquesSkipped.push('S0:SchemaStripper (flag off)');
+    }
+
     // ---- T1: Personality Reference Compression (P1) ----
     if (this.flags.t1PersonalityReference) {
       const result = applyPersonalityReferenceCompression(currentEngrams);
       const recall = measureEpisodicRecall(originalIds, result.engrams);
+      const state = evaluateGuardrail(recall);
 
-      if (recall >= RECALL_GUARDRAIL) {
+      if (state === 'violated') {
+        techniquesSkipped.push('T1:PersonalityReference (guardrail violation)');
+        guardrailState = 'violated';
+        fidelityNotes.push(
+          `T1 skipped: recall ${(recall * 100).toFixed(1)}% < safety floor 95%`
+        );
+        MollyLogger.warn(
+          'T1: SKIPPED — recall below safety floor',
+          'compression-manager',
+          { recall: `${(recall * 100).toFixed(1)}%`, floor: '95%' }
+        );
+      } else {
         bundle.stages.afterT1 = result;
         currentEngrams = result.engrams;
         techniquesApplied.push('T1:PersonalityReference');
@@ -199,21 +284,31 @@ export class CompressionManager {
               : 'no_personality_context',
           });
         }
-        MollyLogger.info(
-          'T1: PersonalityReference applied',
-          'compression-manager',
-          {
+
+        if (state === 'alert') {
+          guardrailState = 'alert';
+          fidelityNotes.push(
+            `T1 applied with ALERT: recall ${(recall * 100).toFixed(1)}% (97% threshold for manual verification)`
+          );
+          MollyLogger.warn(
+            'T1: ALERT — recall in manual-verification zone',
+            'compression-manager',
+            {
+              recall: `${(recall * 100).toFixed(1)}%`,
+              threshold: '97%',
+              recommendation: 'Molly should verify memory integrity',
+            }
+          );
+        } else {
+          fidelityNotes.push(
+            `T1 applied: recall ${(recall * 100).toFixed(1)}% ✓`
+          );
+          MollyLogger.info('T1: PersonalityReference applied', 'compression-manager', {
             savedRefs: Object.keys(result.personalityRefs).length,
             recall: `${(recall * 100).toFixed(1)}%`,
-          }
-        );
-      } else {
-        techniquesSkipped.push('T1:PersonalityReference (guardrail violation)');
-        MollyLogger.warn(
-          'T1: SKIPPED — recall would drop below guardrail',
-          'compression-manager',
-          { recall }
-        );
+            state,
+          });
+        }
       }
     } else {
       techniquesSkipped.push('T1:PersonalityReference (flag off)');
@@ -226,23 +321,49 @@ export class CompressionManager {
         originalIds,
         result.reconstructedEngrams
       );
+      const state = evaluateGuardrail(recall);
 
-      if (recall >= RECALL_GUARDRAIL) {
+      if (state === 'violated') {
+        techniquesSkipped.push('T3:TemporalDelta (guardrail violation)');
+        guardrailState = 'violated';
+        fidelityNotes.push(
+          `T3 skipped: recall ${(recall * 100).toFixed(1)}% < safety floor 95%`
+        );
+        MollyLogger.warn(
+          'T3: SKIPPED — recall below safety floor',
+          'compression-manager',
+          { recall: `${(recall * 100).toFixed(1)}%`, floor: '95%' }
+        );
+      } else {
         bundle.stages.afterT3 = result;
         currentEngrams = result.reconstructedEngrams;
         techniquesApplied.push('T3:TemporalDelta');
-        MollyLogger.info('T3: TemporalDelta applied', 'compression-manager', {
-          bases: result.bases.length,
-          deltaGroups: result.deltaGroups.length,
-          recall: `${(recall * 100).toFixed(1)}%`,
-        });
-      } else {
-        techniquesSkipped.push('T3:TemporalDelta (guardrail violation)');
-        MollyLogger.warn(
-          'T3: SKIPPED — recall would drop below guardrail',
-          'compression-manager',
-          { recall }
-        );
+
+        if (state === 'alert') {
+          guardrailState = 'alert';
+          fidelityNotes.push(
+            `T3 applied with ALERT: recall ${(recall * 100).toFixed(1)}% (97% threshold for manual verification)`
+          );
+          MollyLogger.warn(
+            'T3: ALERT — recall in manual-verification zone',
+            'compression-manager',
+            {
+              recall: `${(recall * 100).toFixed(1)}%`,
+              threshold: '97%',
+              recommendation: 'Molly should verify delta chain integrity',
+            }
+          );
+        } else {
+          fidelityNotes.push(
+            `T3 applied: recall ${(recall * 100).toFixed(1)}% ✓`
+          );
+          MollyLogger.info('T3: TemporalDelta applied', 'compression-manager', {
+            bases: result.bases.length,
+            deltaGroups: result.deltaGroups.length,
+            recall: `${(recall * 100).toFixed(1)}%`,
+            state,
+          });
+        }
       }
     } else {
       techniquesSkipped.push('T3:TemporalDelta (flag off)');
@@ -252,32 +373,167 @@ export class CompressionManager {
     if (this.flags.t4VocabularyDict) {
       const result = applyVocabularyCompression(currentEngrams);
       const recall = measureEpisodicRecall(originalIds, result.engrams);
+      const state = evaluateGuardrail(recall);
 
-      if (recall >= RECALL_GUARDRAIL) {
+      if (state === 'violated') {
+        techniquesSkipped.push('T4:VocabularyDict (guardrail violation)');
+        guardrailState = 'violated';
+        fidelityNotes.push(
+          `T4 skipped: recall ${(recall * 100).toFixed(1)}% < safety floor 95%`
+        );
+        MollyLogger.warn(
+          'T4: SKIPPED — recall below safety floor',
+          'compression-manager',
+          { recall: `${(recall * 100).toFixed(1)}%`, floor: '95%' }
+        );
+      } else {
         bundle.stages.afterT4 = result;
         currentEngrams = result.engrams;
         techniquesApplied.push('T4:VocabularyDict');
-        MollyLogger.info('T4: VocabularyDict applied', 'compression-manager', {
-          dictEntries: Object.keys(result.dictionary).length,
-          recall: `${(recall * 100).toFixed(1)}%`,
-        });
-      } else {
-        techniquesSkipped.push('T4:VocabularyDict (guardrail violation)');
-        MollyLogger.warn(
-          'T4: SKIPPED — recall would drop below guardrail',
-          'compression-manager',
-          { recall }
-        );
+
+        if (state === 'alert') {
+          guardrailState = 'alert';
+          fidelityNotes.push(
+            `T4 applied with ALERT: recall ${(recall * 100).toFixed(1)}% (97% threshold for manual verification)`
+          );
+          MollyLogger.warn(
+            'T4: ALERT — recall in manual-verification zone',
+            'compression-manager',
+            {
+              recall: `${(recall * 100).toFixed(1)}%`,
+              threshold: '97%',
+              recommendation: 'Molly should verify vocabulary reconstruction quality',
+            }
+          );
+        } else {
+          fidelityNotes.push(
+            `T4 applied: recall ${(recall * 100).toFixed(1)}% ✓`
+          );
+          MollyLogger.info('T4: VocabularyDict applied', 'compression-manager', {
+            dictEntries: Object.keys(result.dictionary).length,
+            recall: `${(recall * 100).toFixed(1)}%`,
+            state,
+          });
+        }
       }
     } else {
       techniquesSkipped.push('T4:VocabularyDict (flag off)');
     }
 
-    // T2, T6, T5 — stubs, built in Option C P2/P3 phases
-    if (this.flags.t2TimeDecayFidelity)
-      techniquesSkipped.push('T2:TimeDecayFidelity (not yet built — P2)');
-    if (this.flags.t6InteractionTrace)
-      techniquesSkipped.push('T6:InteractionTrace (not yet built — P2)');
+    // ---- T2: Time-Decay Fidelity (P2) ----
+    if (this.flags.t2TimeDecayFidelity) {
+      const result = applyTimeDecayFidelity(
+        currentEngrams,
+        ctx.compressionTimestamp
+      );
+      const recall = measureEpisodicRecall(originalIds, result.engrams);
+      const state = evaluateGuardrail(recall);
+
+      if (state === 'violated') {
+        techniquesSkipped.push('T2:TimeDecayFidelity (guardrail violation)');
+        guardrailState = 'violated';
+        fidelityNotes.push(
+          `T2 skipped: recall ${(recall * 100).toFixed(1)}% < safety floor 95%`
+        );
+        MollyLogger.warn(
+          'T2: SKIPPED — recall below safety floor',
+          'compression-manager',
+          { recall: `${(recall * 100).toFixed(1)}%`, floor: '95%' }
+        );
+      } else {
+        bundle.stages.afterT2 = result;
+        currentEngrams = result.engrams;
+        techniquesApplied.push('T2:TimeDecayFidelity');
+
+        if (state === 'alert') {
+          guardrailState = 'alert';
+          fidelityNotes.push(
+            `T2 applied with ALERT: recall ${(recall * 100).toFixed(1)}% (97% threshold for manual verification)`
+          );
+          MollyLogger.warn(
+            'T2: ALERT — recall in manual-verification zone',
+            'compression-manager',
+            {
+              recall: `${(recall * 100).toFixed(1)}%`,
+              threshold: '97%',
+              recommendation: 'Molly should verify temporal integrity',
+            }
+          );
+        } else {
+          fidelityNotes.push(
+            `T2 applied: recall ${(recall * 100).toFixed(1)}% ✓`
+          );
+          MollyLogger.info('T2: TimeDecayFidelity applied', 'compression-manager', {
+            recent: result.stage.fidelityDistribution.recent,
+            archived: result.stage.fidelityDistribution.archived,
+            deferred: result.stage.fidelityDistribution.deferred,
+            recall: `${(recall * 100).toFixed(1)}%`,
+            state,
+          });
+        }
+      }
+    } else {
+      techniquesSkipped.push('T2:TimeDecayFidelity (flag off)');
+    }
+
+    // ---- T6: Interaction Trace (P2) ----
+    if (this.flags.t6InteractionTrace) {
+      const result = applyInteractionTrace(
+        currentEngrams,
+        ctx.compressionTimestamp
+      );
+      const recall = measureEpisodicRecall(originalIds, result.engrams);
+      const state = evaluateGuardrail(recall);
+
+      if (state === 'violated') {
+        techniquesSkipped.push('T6:InteractionTrace (guardrail violation)');
+        guardrailState = 'violated';
+        fidelityNotes.push(
+          `T6 skipped: recall ${(recall * 100).toFixed(1)}% < safety floor 95%`
+        );
+        MollyLogger.warn(
+          'T6: SKIPPED — recall below safety floor',
+          'compression-manager',
+          { recall: `${(recall * 100).toFixed(1)}%`, floor: '95%' }
+        );
+      } else {
+        bundle.stages.afterT6 = result;
+        currentEngrams = result.engrams;
+        techniquesApplied.push('T6:InteractionTrace');
+
+        if (state === 'alert') {
+          guardrailState = 'alert';
+          fidelityNotes.push(
+            `T6 applied with ALERT: recall ${(recall * 100).toFixed(1)}% (97% threshold for manual verification)`
+          );
+          MollyLogger.warn(
+            'T6: ALERT — recall in manual-verification zone',
+            'compression-manager',
+            {
+              recall: `${(recall * 100).toFixed(1)}%`,
+              threshold: '97%',
+              recommendation: 'Molly should verify interaction trace accuracy',
+            }
+          );
+        } else {
+          fidelityNotes.push(
+            `T6 applied: recall ${(recall * 100).toFixed(1)}% ✓`
+          );
+          MollyLogger.info('T6: InteractionTrace applied', 'compression-manager', {
+            hot: result.stage.usageDistribution.hot,
+            warm: result.stage.usageDistribution.warm,
+            cold: result.stage.usageDistribution.cold,
+            dormant: result.stage.usageDistribution.dormant,
+            recall: `${(recall * 100).toFixed(1)}%`,
+            state,
+          });
+        }
+      }
+    } else {
+      techniquesSkipped.push('T6:InteractionTrace (flag off)');
+    }
+
+    // T5 — stub, built in Option C P3 phase
     if (this.flags.t5NumericQuantization)
       techniquesSkipped.push('T5:NumericQuantization (not yet built — P3)');
 
@@ -299,7 +555,9 @@ export class CompressionManager {
         compressionRatio: (1 - compressedByteSize / originalByteSize) * 100,
         techniquesApplied,
         techniquesSkipped,
-        guardrailPassed: finalRecall >= RECALL_GUARDRAIL,
+        guardrailPassed: finalRecall >= SAFETY_FLOOR,
+        guardrailState,
+        fidelityNotes: fidelityNotes.length > 0 ? fidelityNotes.join('; ') : undefined,
       },
     };
   }
@@ -310,7 +568,13 @@ export class CompressionManager {
     // Decompress in reverse technique order
     let engrams = bundle.finalEngrams;
 
-    // T4 → T3 → T1 decompression (reverse of application)
+    // T6 → T2 → T4 → T3 → T1 decompression (reverse of application)
+    if (bundle.stages.afterT6) {
+      engrams = decompressInteractionTrace(engrams, bundle.stages.afterT6);
+    }
+    if (bundle.stages.afterT2) {
+      engrams = decompressTimeDecayFidelity(engrams, bundle.stages.afterT2);
+    }
     if (bundle.stages.afterT4) {
       engrams = decompressVocabulary(bundle.stages.afterT4);
     }

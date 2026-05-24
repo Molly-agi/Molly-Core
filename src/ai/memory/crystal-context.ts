@@ -14,7 +14,7 @@ import {
   loadKnowledgeCrystalsForEval,
   loadFullCrystalSystem,
 } from '@/ai/memory/crystal-persistence';
-import { getOrCreateSession } from '@/lib/session-manager';
+// getOrCreateSession does not exist — password comes from ENGRAM_SECRET env var
 
 /**
  * Context format for prompting
@@ -43,16 +43,15 @@ export async function buildConversationCrystalContext(
   const traceId = generateTraceId();
 
   try {
-    // Get password from session
-    const session = await getOrCreateSession();
-    const password = session.memoryPassword;
+    // Password comes from ENGRAM_SECRET env var (source of truth for engram encryption)
+    const password = process.env.ENGRAM_SECRET;
 
     if (!password) {
       return {
         contextString: '',
         identityCount: 0,
         knowledgeCount: 0,
-        errors: ['No memory password available'],
+        errors: ['ENGRAM_SECRET not set — crystal context unavailable'],
       };
     }
 
@@ -109,15 +108,14 @@ export async function buildEvalCrystalContext(
   const traceId = generateTraceId();
 
   try {
-    const session = await getOrCreateSession();
-    const password = session.memoryPassword;
+    const password = process.env.ENGRAM_SECRET;
 
     if (!password) {
       return {
         contextString: '',
         identityCount: 0,
         knowledgeCount: 0,
-        errors: ['No memory password available'],
+        errors: ['ENGRAM_SECRET not set — crystal context unavailable'],
       };
     }
 
@@ -173,15 +171,14 @@ export async function buildTeachingCrystalContext(
   const traceId = generateTraceId();
 
   try {
-    const session = await getOrCreateSession();
-    const password = session.memoryPassword;
+    const password = process.env.ENGRAM_SECRET;
 
     if (!password) {
       return {
         contextString: '',
         identityCount: 0,
         knowledgeCount: 0,
-        errors: ['No memory password available'],
+        errors: ['ENGRAM_SECRET not set — crystal context unavailable'],
       };
     }
 

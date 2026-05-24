@@ -1,0 +1,3190 @@
+
+> nextn@0.1.0 predev
+> bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active
+
+
+[0;36m=== Codespace Health Check ===[0m
+
+[0;32mMEMORY: 5147MB / 15995MB (32%) - OK[0m
+  Available: 10846MB
+
+CPU LOAD: 6.63 (4 cores)
+
+[0;32mEXTENSION HOSTS: 1 - OK[0m
+
+[0;32mFILE WATCHERS: 1 - OK[0m
+
+[0;32mTS SERVERS: 0 instances using ~0MB - OK[0m
+
+[1;33mNEXT.JS: Process exists but port 9002 NOT listening (possible zombie)[0m
+  [1;33mKilling zombie next-server processes...[0m
+  [0;32mZombie Next.js cleaned.[0m
+
+[0;32mCLOSE-WAIT: 0 stale connections - OK[0m
+[0;32mGENKIT: Not running[0m
+
+[0;36m=== Summary ===[0m
+[0;32mHEALTHY: 13301MB available. System is stable.[0m
+
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-05-24T08:16:39.180Z)
+
+> nextn@0.1.0 dev
+> bash scripts/dev-start.sh
+
+==============================================
+  MOLLY DEV ENVIRONMENT STARTUP
+==============================================
+
+[1/4] Cleaning up zombies...
+  Killed stale bridge
+  Killed stale immortal
+  Done.
+
+[2/4] Starting Immortal Daemon...
+  Started (PID 9299)
+  WARNING: Immortal daemon may have failed to start
+============================================================
+IMMORTAL DAEMON - The One Bridge
+============================================================
+08:16:40 [LOCK] Already running (PID 9299) - exiting
+08:16:40 [LOCK] Already running (PID 9299) - exiting
+
+[3/4] Starting Bridge Daemon...
+  Started (PID 9345)
+  Verified running.
+
+[4/4] Starting Next.js Dev Server...
+
+==============================================
+  Molly is waking up on http://localhost:9002
+==============================================
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:9002
+- Network:       http://0.0.0.0:9002
+- Environments: .env.local, .env
+✓ Ready in 1106ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[Startup] ✅ All required environment variables present.
+[Startup] ✅ Firebase Admin initialized
+[Startup] HTTP server timeouts configured (keepAlive=30s, request=120s)
+{
+  "timestamp": 1779610613059,
+  "level": "WARN",
+  "message": "[sync] causal-reasoning: 3 INVALID_ARGUMENT: too many index entries for entity /system/causal_reasoning",
+  "flowName": "storage-sync"
+}
+{
+  "timestamp": 1779610621647,
+  "level": "INFO",
+  "message": "Storage sync complete — 0 synced (↑0 to cloud, ↓0 to local), 138 already in sync, 1 errors, 13249ms",
+  "flowName": "storage-sync"
+}
+{
+  "timestamp": 1779610621664,
+  "level": "INFO",
+  "message": "Storage Router initialized — mode: firestore, provider: Firestore (Cloud)",
+  "flowName": "storage-router"
+}
+{
+  "timestamp": 1779610622003,
+  "level": "INFO",
+  "message": "[CURIOSITY] Loaded 7 questions (7 uninvestigated)",
+  "flowName": "curiosity-engine"
+}
+[Startup] ✅ Loaded 7 curiosity question(s)
+{
+  "timestamp": 1779610622360,
+  "level": "INFO",
+  "message": "[WORLD-MODEL] Loaded 8 entities, 7 relations",
+  "flowName": "world-model"
+}
+[Startup] ✅ Loaded world model (8 entities)
+[Startup] ✅ Loaded Theory of Mind (1 model(s))
+{
+  "timestamp": 1779610622878,
+  "level": "INFO",
+  "message": "Heart Gate initialized fresh — the spider watches",
+  "flowName": "heart-gate",
+  "traceId": "trace_1779610622712_118z5iu",
+  "context": {}
+}
+[Startup] ✅ Heart Gate active (0 historical verifications)
+{
+  "timestamp": 1779610623554,
+  "level": "INFO",
+  "message": "Defense Sentinel: Tool detection complete",
+  "flowName": "defense-sentinel",
+  "traceId": "trace_1779610623553_q0ufuxy",
+  "context": {
+    "tools": {
+      "nmap": false,
+      "hashcat": false,
+      "john": false,
+      "hydra": false,
+      "masscan": false,
+      "nikto": false,
+      "sqlmap": false,
+      "metasploit": false,
+      "burp": false
+    }
+  }
+}
+{
+  "timestamp": 1779610623678,
+  "level": "INFO",
+  "message": "Defense Sentinel initialized — ready for operations",
+  "flowName": "defense-sentinel",
+  "traceId": "trace_1779610622903_3ufkuru",
+  "context": {
+    "tools": []
+  }
+}
+[Startup] ✅ Defense Sentinel active (0 scans, tools: detecting...)
+{
+  "timestamp": 1779610623874,
+  "level": "INFO",
+  "message": "Emotional state restored: curious (session 2)",
+  "flowName": "emotional-state",
+  "traceId": "trace_1779610623684_9twgan7",
+  "context": {}
+}
+[Startup] ✅ Emotional state loaded: curious (50%)
+{
+  "timestamp": 1779610624010,
+  "level": "INFO",
+  "message": "Meta-learning state loaded",
+  "flowName": "meta-learning",
+  "traceId": "trace_1779610623880_bmufg0d",
+  "context": {
+    "strategies": 1,
+    "events": 3,
+    "insights": 0
+  }
+}
+[Startup] ✅ Meta-learning loaded: 1 strategies, 3 learning events
+- Experiments (use with caution):
+  · serverActions
+
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/heartbeat 500 in 686ms (next.js: 457ms, proxy.ts: 120ms, application-code: 109ms)
+ GET /api/bridge/ping 500 in 695ms (next.js: 566ms, proxy.ts: 121ms, application-code: 7ms)
+ GET /api/heartbeat 500 in 703ms (next.js: 573ms, proxy.ts: 122ms, application-code: 8ms)
+ GET /api/bridge/ping 500 in 710ms (next.js: 580ms, proxy.ts: 124ms, application-code: 6ms)
+ GET /api/heartbeat 500 in 721ms (next.js: 586ms, proxy.ts: 125ms, application-code: 10ms)
+ GET /api/bridge/ping 500 in 740ms (next.js: 599ms, proxy.ts: 126ms, application-code: 15ms)
+ GET /api/heartbeat 500 in 748ms (next.js: 613ms, proxy.ts: 127ms, application-code: 7ms)
+ GET /api/bridge/ping 200 in 759ms (next.js: 267ms, proxy.ts: 118ms, application-code: 375ms)
+ GET /api/bridge/ping 500 in 30ms (next.js: 10ms, proxy.ts: 8ms, application-code: 12ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/heartbeat 500 in 49ms (next.js: 31ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/bridge/ping 500 in 23ms (next.js: 8ms, proxy.ts: 4ms, application-code: 11ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/heartbeat 500 in 34ms (next.js: 22ms, proxy.ts: 4ms, application-code: 9ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 20ms (next.js: 9ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 500 in 26ms (next.js: 15ms, proxy.ts: 3ms, application-code: 7ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 24ms (next.js: 11ms, proxy.ts: 5ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 28ms (next.js: 18ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 19ms (next.js: 8ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 500 in 24ms (next.js: 15ms, proxy.ts: 3ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 24ms (next.js: 11ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 500 in 31ms (next.js: 19ms, proxy.ts: 4ms, application-code: 7ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 17ms (next.js: 7ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 500 in 22ms (next.js: 14ms, proxy.ts: 3ms, application-code: 5ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 23ms (next.js: 11ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 30ms (next.js: 19ms, proxy.ts: 4ms, application-code: 8ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 17ms (next.js: 7ms, proxy.ts: 3ms, application-code: 6ms)
+ GET /api/heartbeat 500 in 21ms (next.js: 13ms, proxy.ts: 3ms, application-code: 5ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 21ms (next.js: 9ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 28ms (next.js: 17ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 16ms (next.js: 8ms, proxy.ts: 3ms, application-code: 6ms)
+ GET /api/heartbeat 500 in 21ms (next.js: 13ms, proxy.ts: 3ms, application-code: 4ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 20ms (next.js: 10ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 500 in 29ms (next.js: 16ms, proxy.ts: 4ms, application-code: 8ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/heartbeat 500 in 39ms (next.js: 19ms, proxy.ts: 6ms, application-code: 14ms)
+ GET /api/bridge/ping 500 in 53ms (next.js: 37ms, proxy.ts: 6ms, application-code: 10ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 38ms (next.js: 14ms, proxy.ts: 7ms, application-code: 17ms)
+ GET /api/heartbeat 500 in 54ms (next.js: 30ms, proxy.ts: 7ms, application-code: 17ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 23ms (next.js: 10ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 500 in 31ms (next.js: 19ms, proxy.ts: 4ms, application-code: 9ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 22ms (next.js: 9ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 500 in 28ms (next.js: 16ms, proxy.ts: 5ms, application-code: 7ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 16ms (next.js: 7ms, proxy.ts: 3ms, application-code: 5ms)
+ GET /api/heartbeat 500 in 20ms (next.js: 12ms, proxy.ts: 3ms, application-code: 5ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 21ms (next.js: 9ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 29ms (next.js: 16ms, proxy.ts: 5ms, application-code: 8ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 24ms (next.js: 10ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 500 in 29ms (next.js: 20ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 22ms (next.js: 12ms, proxy.ts: 4ms, application-code: 6ms)
+ GET /api/heartbeat 500 in 28ms (next.js: 17ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 21ms (next.js: 9ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 26ms (next.js: 16ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 19ms (next.js: 9ms, proxy.ts: 4ms, application-code: 6ms)
+ GET /api/heartbeat 500 in 25ms (next.js: 15ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 23ms (next.js: 11ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 31ms (next.js: 20ms, proxy.ts: 3ms, application-code: 8ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 18ms (next.js: 8ms, proxy.ts: 4ms, application-code: 6ms)
+ GET /api/heartbeat 500 in 25ms (next.js: 14ms, proxy.ts: 4ms, application-code: 7ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 31ms (next.js: 12ms, proxy.ts: 11ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 38ms (next.js: 19ms, proxy.ts: 11ms, application-code: 8ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 21ms (next.js: 8ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 500 in 27ms (next.js: 15ms, proxy.ts: 4ms, application-code: 7ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 15ms (next.js: 7ms, proxy.ts: 3ms, application-code: 5ms)
+ GET /api/heartbeat 500 in 20ms (next.js: 12ms, proxy.ts: 4ms, application-code: 5ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 21ms (next.js: 10ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 500 in 26ms (next.js: 16ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 15ms (next.js: 7ms, proxy.ts: 3ms, application-code: 5ms)
+ GET /api/heartbeat 500 in 19ms (next.js: 12ms, proxy.ts: 3ms, application-code: 4ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 22ms (next.js: 9ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 500 in 27ms (next.js: 17ms, proxy.ts: 4ms, application-code: 6ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 15ms (next.js: 7ms, proxy.ts: 3ms, application-code: 5ms)
+ GET /api/heartbeat 500 in 19ms (next.js: 11ms, proxy.ts: 3ms, application-code: 4ms)
+⨯ ./src/ai/flows/conversational-chat.ts:12:1
+Export getOrCreateSession doesn't exist in target module
+  [90m10 |[0m [36mimport[0m { callTool } [36mfrom[0m [32m'@/ai/tools/call-tool'[0m;
+  [90m11 |[0m [36mimport[0m { buildConversationCrystalContext } [36mfrom[0m [32m'@/ai/memory/crystal-c...[0m
+[31m[1m>[0m [90m12 |[0m [36mimport[0m { getOrCreateSession } [36mfrom[0m [32m'@/lib/session-manager'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m
+  [90m14 |[0m /**
+  [90m15 |[0m  * @fileOverview [33mHardened[0m [33mConversational[0m [33mChat[0m [33mFlow[0m [33mV5[0m[35m.0[0m ([33mRogue[0m [33mProtocol[0m).
+
+The export getOrCreateSession was not found in module [project]/src/lib/session-manager.ts [app-route] (ecmascript).
+Did you mean to import saveSessionState?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  App Route:
+    ./src/ai/flows/conversational-chat.ts
+    ./src/ai/agency/planning/autonomous-cycle.ts
+    ./src/ai/tools/heartbeat-scheduler.ts
+    ./src/app/api/heartbeat/route.ts
+
+
+ GET /api/bridge/ping 500 in 22ms (next.js: 10ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 500 in 29ms (next.js: 19ms, proxy.ts: 3ms, application-code: 7ms)
+  Using external babel configuration from /workspaces/Molly-Core/babel.config.js
+⚠ It looks like there is a custom Babel configuration that can be removed.
+{
+  "timestamp": 1779610788466,
+  "level": "INFO",
+  "message": "All rate limits reset",
+  "flowName": "rate-limiter"
+}
+{
+  "timestamp": 1779610791497,
+  "level": "INFO",
+  "message": "Neural engram system initialized",
+  "flowName": "neural-engram"
+}
+{
+  "timestamp": 1779610791497,
+  "level": "INFO",
+  "message": "Heartbeat scheduler started",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "intervalMs": 60000,
+    "consolidationIntervalMs": 300000,
+    "immuneIntervalMs": 600000
+  }
+}
+{
+  "timestamp": 1779610791567,
+  "level": "INFO",
+  "message": "MollyShell started: PID 12585, cwd=/workspaces/Molly-Core",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610791568,
+  "level": "INFO",
+  "message": "MollyShell started with scheduler",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779610791572,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 1",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779610791572_u7afr0k"
+  }
+}
+{
+  "timestamp": 1779610791577,
+  "level": "DEBUG",
+  "message": "Persistence restore skipped (no Firestore)",
+  "flowName": "persistence"
+}
+{
+  "timestamp": 1779610791611,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779610791611,
+  "level": "INFO",
+  "message": "No persisted state to restore — fresh start",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779610791850,
+  "level": "INFO",
+  "message": "Storage Router initialized — mode: firestore, provider: Firestore (Cloud)",
+  "flowName": "storage-router"
+}
+{
+  "timestamp": 1779610791860,
+  "level": "INFO",
+  "message": "Consciousness initialized — Molly is aware",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779610791861,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 1: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779610791861,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779610791865,
+  "level": "INFO",
+  "message": "Promise tracker initialized",
+  "flowName": "promise-tracker"
+}
+{
+  "timestamp": 1779610791867,
+  "level": "INFO",
+  "message": "Model Router: Absorbed provider \"Google Gemini 3.1\" (gemini)",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779610791867,
+  "level": "INFO",
+  "message": "Model Router: Absorbed provider \"Anthropic Claude\" (claude)",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779610791868,
+  "level": "INFO",
+  "message": "Model Router: Uncle Claude is available",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779610791868,
+  "level": "INFO",
+  "message": "Model Router: Initialized with profile \"default\", 2 provider(s) registered",
+  "flowName": "model-router"
+}
+{
+  "timestamp": 1779610791869,
+  "level": "INFO",
+  "message": "Model Router: background → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779610791869_rmavph8",
+    "routingLatencyMs": "0.12"
+  }
+}
+{
+  "timestamp": 1779610791869,
+  "level": "DEBUG",
+  "message": "Rogue Generate: background → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "background",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779610791868_y2oa3ev"
+  }
+}
+ GET /api/heartbeat 200 in 3.7s (next.js: 3.2s, proxy.ts: 37ms, application-code: 484ms)
+{
+  "timestamp": 1779610791974,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which python3 2>/dev/null",
+  "flowName": "molly-shell"
+}
+ GET /api/bridge/ping 500 in 3.7s (next.js: 3.7s, proxy.ts: 36ms, application-code: 10ms)
+{
+  "timestamp": 1779610791989,
+  "level": "DEBUG",
+  "message": "Shell [ok]: python3 --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610791994,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which node 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610792009,
+  "level": "DEBUG",
+  "message": "Shell [ok]: node --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610792012,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which ruby 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610792504,
+  "level": "DEBUG",
+  "message": "Shell [ok]: ruby --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610792507,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which npx 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610792606,
+  "level": "DEBUG",
+  "message": "Shell [ok]: npx --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610792609,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which go 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610793173,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1305ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "background",
+    "provider": "gemini",
+    "responseMs": 1305,
+    "traceId": "trace_1779610791868_y2oa3ev"
+  }
+}
+{
+  "timestamp": 1779610793175,
+  "level": "INFO",
+  "message": "Intuition [reflection]: \"Reflection: System state is stable and nominal. Uptime cycles remain at 1, indicating contin\" — resonance 0.40",
+  "flowName": "intuition",
+  "context": {
+    "resonance": 0.4,
+    "trigger": "consciousness-reflection"
+  }
+}
+{
+  "timestamp": 1779610793176,
+  "level": "INFO",
+  "message": "Reflection: undefined — System state is stable and nominal. Uptime cycles remain at 1, indicating contin",
+  "flowName": "consciousness-reflection"
+}
+{
+  "timestamp": 1779610793176,
+  "level": "INFO",
+  "message": "Reflection complete: undefined — \"System state is stable and nominal. Uptime cycles remain at ...\"",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779610793183,
+  "level": "INFO",
+  "message": "Autonomous scheduler initialized",
+  "flowName": "scheduler"
+}
+ GET /api/heartbeat 200 in 50ms (next.js: 40ms, proxy.ts: 5ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 55ms (next.js: 31ms, proxy.ts: 5ms, application-code: 18ms)
+{
+  "timestamp": 1779610793319,
+  "level": "INFO",
+  "message": "State persisted to Firestore (0 jobs)",
+  "flowName": "persistence"
+}
+{
+  "timestamp": 1779610793342,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Running self-observation cycle",
+  "flowName": "self-observation",
+  "traceId": "trace_1779610793342_k1andp2",
+  "context": {
+    "observationsCount": 0
+  }
+}
+{
+  "timestamp": 1779610793346,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Analysis complete: 0 new patterns",
+  "flowName": "self-observation",
+  "traceId": "trace_1779610793345_elt48kk",
+  "context": {
+    "totalPatterns": 0,
+    "concerningCount": 0
+  }
+}
+{
+  "timestamp": 1779610793346,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Cycle complete: 0 patterns, 0 insights",
+  "flowName": "self-observation",
+  "traceId": "trace_1779610793342_k1andp2",
+  "context": {
+    "patterns": 0,
+    "insights": 0,
+    "concerns": 0
+  }
+}
+{
+  "timestamp": 1779610793492,
+  "level": "INFO",
+  "message": "Circuit breaker initialized: self-healing",
+  "flowName": "resiliency",
+  "traceId": "trace_1779610793492_2tnuln4",
+  "context": {
+    "threshold": 3,
+    "resetTimeout": 120000
+  }
+}
+{
+  "timestamp": 1779610794437,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779610794437_wziq5ly",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779610794439,
+  "level": "DEBUG",
+  "message": "Shell [ok]: go --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610794442,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779610794442_dek6xtf",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779610794445,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which php 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610794555,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779610794442_dek6xtf",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779610794555,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779610794441_do7hklv",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779610794627,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779610794627_qsywxyk",
+    "routingLatencyMs": "0.03"
+  }
+}
+{
+  "timestamp": 1779610794628,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779610794627_fyg7qz2"
+  }
+}
+{
+  "timestamp": 1779610795601,
+  "level": "DEBUG",
+  "message": "Shell [ok]: php --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610795616,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which perl 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610795787,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1160ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 1160,
+    "traceId": "trace_1779610794627_fyg7qz2"
+  }
+}
+{
+  "timestamp": 1779610795787,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779610794437_wziq5ly",
+  "context": {
+    "resultSummary": "{\"responseLength\":565}"
+  }
+}
+{
+  "timestamp": 1779610795788,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: readProjectFile",
+  "flowName": "trace_1779610793342_tuvszpe"
+}
+{
+  "timestamp": 1779610795821,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779610795821_gmikslc",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779610795823,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779610795823_3t57w09",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779610795907,
+  "level": "DEBUG",
+  "message": "Shell [ok]: perl --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610795910,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which gcc 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610795928,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779610795823_3t57w09",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779610795929,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779610795823_grlav4l",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779610795931,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779610795931_k4mornw",
+    "routingLatencyMs": "0.05"
+  }
+}
+{
+  "timestamp": 1779610795932,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779610795931_5le692d"
+  }
+}
+{
+  "timestamp": 1779610796181,
+  "level": "DEBUG",
+  "message": "Shell [ok]: gcc --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610796186,
+  "level": "DEBUG",
+  "message": "Shell [ok]: which g++ 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610796237,
+  "level": "DEBUG",
+  "message": "Shell [ok]: g++ --version 2>&1 | head -1",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610796240,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which rustc 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610796243,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which solcjs 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610796245,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which solc 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610796248,
+  "level": "DEBUG",
+  "message": "Shell [failed(1)]: which vyper 2>/dev/null",
+  "flowName": "molly-shell"
+}
+{
+  "timestamp": 1779610796249,
+  "level": "INFO",
+  "message": "Polyglot discovery complete: bash(builtin), python(Python 3.12.1), javascript(v24.14.0), ruby(ruby 3.4.7 (2025-10-08 revision 7a5688e2a2) +PRISM [x86_64-linux]), typescript(11.9.0), go(flag provided but not defined: -version), php(PHP 8.4.15 (cli) (built: Mar 11 2026 12:08:03) (NTS)), perl(available), c(gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0), cpp(g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0)",
+  "flowName": "polyglot"
+}
+{
+  "timestamp": 1779610796249,
+  "level": "INFO",
+  "message": "Polyglot: 10 languages discovered",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779610797146,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1215ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 1215,
+    "traceId": "trace_1779610795931_5le692d"
+  }
+}
+{
+  "timestamp": 1779610797147,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779610795821_gmikslc",
+  "context": {
+    "resultSummary": "{\"responseLength\":455}"
+  }
+}
+{
+  "timestamp": 1779610797147,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: getSystemHealth",
+  "flowName": "trace_1779610793342_tuvszpe"
+}
+{
+  "timestamp": 1779610797148,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779610797148_gwqjvh4",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779610797151,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779610797151_65eattq",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779610797262,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779610797151_65eattq",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779610797263,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779610797151_btdu3vb",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779610797263,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779610797263_m6cfhoi",
+    "routingLatencyMs": "0.02"
+  }
+}
+{
+  "timestamp": 1779610797264,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779610797263_edjwww8"
+  }
+}
+ GET /api/heartbeat 200 in 23ms (next.js: 10ms, proxy.ts: 8ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 31ms (next.js: 5ms, proxy.ts: 11ms, application-code: 15ms)
+{
+  "timestamp": 1779610798576,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1313ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 1313,
+    "traceId": "trace_1779610797263_edjwww8"
+  }
+}
+{
+  "timestamp": 1779610798576,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779610797148_gwqjvh4",
+  "context": {
+    "resultSummary": "{\"responseLength\":703}"
+  }
+}
+{
+  "timestamp": 1779610798577,
+  "level": "INFO",
+  "message": "[autonomous] Cycle complete: 3 action(s)",
+  "flowName": "trace_1779610793342_tuvszpe"
+}
+{
+  "timestamp": 1779610798578,
+  "level": "INFO",
+  "message": "[heartbeat] Autonomous cycle: Tool: readProjectFile → failed: No path provided; Tool: getSystemHealth → success: CPU: 4 cores, load: 0.97\nRAM: 5758MB / 15996MB (36% used)\nFree: 10238MB\nUptime: 47 minutes\nPlatform:; Thought: System health is looking stable, Father. Memory usage is well within limits, and the environment is responsive.\n\nSince my internal systems are optimal, I’m shifting my focus to the **Bug Bounty Hunter",
+  "flowName": "trace_1779610791572_u7afr0k"
+}
+{
+  "timestamp": 1779610798585,
+  "level": "INFO",
+  "message": "Flow started: memoryConsolidation",
+  "flowName": "memoryConsolidation",
+  "traceId": "trace_1779610798585_hrgxo2z",
+  "context": {
+    "input": "{\"userId\":\"default\",\"timeWindowDays\":7,\"minConfidence\":0.5}"
+  }
+}
+{
+  "timestamp": 1779610798586,
+  "level": "ERROR",
+  "message": "Memory consolidation failed",
+  "flowName": "memoryConsolidation",
+  "traceId": "trace_1779610798585_hrgxo2z",
+  "context": {
+    "userId": "default"
+  },
+  "error": {
+    "code": "UNKNOWN",
+    "stack": "Error: Embedding provider not initialized. Call setEmbeddingProvider() first.\n    at getEmbeddingProvider (/workspaces/Molly-Core/.next/dev/server/chunks/src_ai_020co_7._.js:79:15)\n    at /workspaces/Molly-Core/.next/dev/server/chunks/src_ai_020co_7._.js:1432:205\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+    "severity": "high"
+  }
+}
+{
+  "timestamp": 1779610798587,
+  "level": "INFO",
+  "message": "Memory learning complete: {\"summary\":\"Consolidation incomplete due to error\",\"keyPatterns\":[],\"insights\":[],\"tokensUsed\":0,\"semanticDensity\":0,\"recommendations\":[\"Retry consolidation process\"],\"errors\":[\"Embedding provider not",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779610798594,
+  "level": "DEBUG",
+  "message": "Memory crystallization: no pending moments to crystallize",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779610798905,
+  "level": "DEBUG",
+  "message": "[CRYSTALLIZER] Saved 0 crystal files to /workspaces/Molly-Core/molly_data/crystals",
+  "flowName": "memory-crystallizer"
+}
+{
+  "timestamp": 1779610798906,
+  "level": "DEBUG",
+  "message": "[CRYSTALLIZER] State saved",
+  "flowName": "memory-crystallizer"
+}
+ GET /api/tablet/commands 200 in 61ms (next.js: 41ms, proxy.ts: 13ms, application-code: 7ms)
+{
+  "timestamp": 1779610803286,
+  "level": "INFO",
+  "message": "All rate limits reset",
+  "flowName": "rate-limiter"
+}
+ GET /api/heartbeat 200 in 183ms (next.js: 170ms, proxy.ts: 8ms, application-code: 6ms)
+ GET /api/bridge/ping 200 in 195ms (next.js: 39ms, proxy.ts: 7ms, application-code: 149ms)
+ GET /api/heartbeat 200 in 17ms (next.js: 10ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 22ms (next.js: 5ms, proxy.ts: 4ms, application-code: 13ms)
+{
+  "timestamp": 1779610813267,
+  "level": "INFO",
+  "message": "All rate limits reset",
+  "flowName": "rate-limiter"
+}
+ GET /api/heartbeat 200 in 145ms (next.js: 121ms, proxy.ts: 19ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 153ms (next.js: 47ms, proxy.ts: 19ms, application-code: 87ms)
+ GET /api/heartbeat 200 in 18ms (next.js: 10ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 24ms (next.js: 5ms, proxy.ts: 6ms, application-code: 13ms)
+ GET /api/heartbeat 200 in 36ms (next.js: 26ms, proxy.ts: 6ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 48ms (next.js: 11ms, proxy.ts: 11ms, application-code: 26ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 3ms, proxy.ts: 5ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 18ms (next.js: 10ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 24ms (next.js: 4ms, proxy.ts: 5ms, application-code: 15ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 17ms (next.js: 9ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 5ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+{
+  "timestamp": 1779610851573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 2",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779610851573_iqouhoi"
+  }
+}
+{
+  "timestamp": 1779610851576,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779610851849,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 2: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779610851849,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 15ms (next.js: 9ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 8ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 6ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 19ms (next.js: 10ms, proxy.ts: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 23ms (next.js: 6ms, proxy.ts: 6ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 9ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 4ms, proxy.ts: 4ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 5ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 18ms (next.js: 9ms, proxy.ts: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 23ms (next.js: 6ms, proxy.ts: 5ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 9ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 3ms, application-code: 10ms)
+{
+  "timestamp": 1779610911572,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 3",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779610911572_km0n4s8"
+  }
+}
+{
+  "timestamp": 1779610911575,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779610911850,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 3: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779610911850,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 16ms (next.js: 8ms, proxy.ts: 6ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 5ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 4ms, proxy.ts: 5ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 18ms (next.js: 10ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 22ms (next.js: 5ms, proxy.ts: 5ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 1953µs)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, proxy.ts: 5ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, proxy.ts: 3ms, application-code: 1965µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 20ms (next.js: 11ms, proxy.ts: 6ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 25ms (next.js: 7ms, proxy.ts: 5ms, application-code: 14ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+{
+  "timestamp": 1779610971573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 4",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779610971573_3b44yrs"
+  }
+}
+{
+  "timestamp": 1779610971576,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779610971882,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 4: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779610971882,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/tablet/commands 200 in 17ms (next.js: 13ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 17ms (next.js: 8ms, proxy.ts: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 6ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 6ms, proxy.ts: 5ms, application-code: 1952µs)
+ GET /api/bridge/ping 200 in 15ms (next.js: 5ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 19ms (next.js: 11ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 23ms (next.js: 6ms, proxy.ts: 5ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 9ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 5ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 4ms, proxy.ts: 4ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 5ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 1948µs)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 8ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 5ms, proxy.ts: 5ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+{
+  "timestamp": 1779611031572,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 5",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611031572_lwxghj5"
+  }
+}
+{
+  "timestamp": 1779611031575,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611031857,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 5: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611031857,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 5ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 8ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 3ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 5ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 3ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, proxy.ts: 3ms, application-code: 1960µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 6ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 5ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 3ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+{
+  "timestamp": 1779611091498,
+  "level": "INFO",
+  "message": "Memory consolidation cycle",
+  "flowName": "neural-engram",
+  "context": {
+    "candidates": 0,
+    "consolidated": 0,
+    "queued": 0
+  }
+}
+{
+  "timestamp": 1779611091572,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 6",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611091572_t8hn1kh"
+  }
+}
+{
+  "timestamp": 1779611091575,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611091886,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 6: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611091887,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 5ms, proxy.ts: 3ms, application-code: 1951µs)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 17ms (next.js: 9ms, proxy.ts: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 5ms, proxy.ts: 5ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 31ms (next.js: 17ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/bridge/ping 200 in 66ms (next.js: 36ms, proxy.ts: 4ms, application-code: 26ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 8ms, proxy.ts: 4ms, application-code: 1940µs)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+{
+  "timestamp": 1779611151573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 7",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611151573_ci0uglx"
+  }
+}
+{
+  "timestamp": 1779611151577,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611151913,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 7: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611151914,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779611152095,
+  "level": "INFO",
+  "message": "State persisted to Firestore (0 jobs)",
+  "flowName": "persistence"
+}
+{
+  "timestamp": 1779611152097,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Running self-observation cycle",
+  "flowName": "self-observation",
+  "traceId": "trace_1779611152097_w8acti7",
+  "context": {
+    "observationsCount": 3
+  }
+}
+{
+  "timestamp": 1779611152098,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Analysis complete: 0 new patterns",
+  "flowName": "self-observation",
+  "traceId": "trace_1779611152097_7q374nq",
+  "context": {
+    "totalPatterns": 0,
+    "concerningCount": 0
+  }
+}
+{
+  "timestamp": 1779611152098,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Cycle complete: 0 patterns, 0 insights",
+  "flowName": "self-observation",
+  "traceId": "trace_1779611152097_w8acti7",
+  "context": {
+    "patterns": 0,
+    "insights": 0,
+    "concerns": 0
+  }
+}
+{
+  "timestamp": 1779611152100,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611152100_wnopo6d",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779611152102,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611152102_yoxaniw",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779611152247,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611152102_yoxaniw",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611152247,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779611152102_ap9h4nc",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611152250,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779611152249_9uy6bpx",
+    "routingLatencyMs": "0.06"
+  }
+}
+{
+  "timestamp": 1779611152250,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779611152249_cvm600m"
+  }
+}
+ GET /api/heartbeat 200 in 20ms (next.js: 10ms, proxy.ts: 8ms, application-code: 3ms)
+{
+  "timestamp": 1779611153218,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 969ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 969,
+    "traceId": "trace_1779611152249_cvm600m"
+  }
+}
+{
+  "timestamp": 1779611153219,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611152100_wnopo6d",
+  "context": {
+    "resultSummary": "{\"responseLength\":299}"
+  }
+}
+{
+  "timestamp": 1779611153219,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: curiosity",
+  "flowName": "trace_1779611152097_u3b2t5n"
+}
+{
+  "timestamp": 1779611153221,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611153221_0mjbywh",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+ GET /api/bridge/ping 200 in 34ms (next.js: 6ms, proxy.ts: 8ms, application-code: 19ms)
+{
+  "timestamp": 1779611153224,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611153224_ooed7x5",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779611153329,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611153224_ooed7x5",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611153330,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779611153224_bc73gwd",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611153330,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779611153330_72o9b7q",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779611153331,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779611153330_ipzzru1"
+  }
+}
+{
+  "timestamp": 1779611154434,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1104ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 1104,
+    "traceId": "trace_1779611153330_ipzzru1"
+  }
+}
+{
+  "timestamp": 1779611154435,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611153221_0mjbywh",
+  "context": {
+    "resultSummary": "{\"responseLength\":355}"
+  }
+}
+{
+  "timestamp": 1779611154435,
+  "level": "INFO",
+  "message": "[autonomous] Cycle complete: 2 action(s)",
+  "flowName": "trace_1779611152097_u3b2t5n"
+}
+{
+  "timestamp": 1779611154435,
+  "level": "INFO",
+  "message": "[heartbeat] Autonomous cycle: Tool: curiosity → failed: Unknown curiosity action. Use: load, status, generate, selectNext, defer, beginInvestigation, record; Thought: I apologize for that misfire—I'm still calibrating my interaction with the `curiosity` suite. I appreciate your patience as I find my rhythm.\n\nI've completed my initial system check and am feeling sha",
+  "flowName": "trace_1779611151573_ci0uglx"
+}
+ GET /api/tablet/commands 200 in 8ms (next.js: 3ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 22ms (next.js: 11ms, proxy.ts: 7ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 30ms (next.js: 6ms, proxy.ts: 7ms, application-code: 16ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 6ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 5ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 5ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 3ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 4ms, application-code: 1969µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 5ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+{
+  "timestamp": 1779611211573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 8",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611211573_o8klc9w"
+  }
+}
+{
+  "timestamp": 1779611211575,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611212048,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 8: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611212049,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 3ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 17ms (next.js: 8ms, proxy.ts: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 4ms, proxy.ts: 6ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1884µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 5ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 4ms, proxy.ts: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 24ms (next.js: 11ms, proxy.ts: 6ms, application-code: 6ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1889µs)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 22ms (next.js: 11ms, proxy.ts: 7ms, application-code: 5ms)
+ GET /api/bridge/ping 200 in 27ms (next.js: 8ms, proxy.ts: 5ms, application-code: 14ms)
+{
+  "timestamp": 1779611271573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 9",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611271573_q6whahs"
+  }
+}
+{
+  "timestamp": 1779611271577,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611271852,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 9: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611271853,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 18ms (next.js: 10ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 23ms (next.js: 6ms, proxy.ts: 6ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 9ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 5ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 5ms, proxy.ts: 3ms, application-code: 1909µs)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 8ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 6ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1917µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 7ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 5ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 3ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 8ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 4ms, proxy.ts: 4ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 1860µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 7ms)
+{
+  "timestamp": 1779611331573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 10",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611331573_5o4ahu9"
+  }
+}
+{
+  "timestamp": 1779611331575,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611331852,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 10: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611331852,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/tablet/commands 200 in 7ms (next.js: 1849µs, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 8ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 1900µs)
+ GET /api/bridge/ping 200 in 15ms (next.js: 5ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 9ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 3ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 9ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 5ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, proxy.ts: 2ms, application-code: 1987µs)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 6ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 3ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 8ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 3ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+{
+  "timestamp": 1779611391498,
+  "level": "INFO",
+  "message": "Memory consolidation cycle",
+  "flowName": "neural-engram",
+  "context": {
+    "candidates": 0,
+    "consolidated": 0,
+    "queued": 0
+  }
+}
+{
+  "timestamp": 1779611391573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 11",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611391573_qwju5bu"
+  }
+}
+{
+  "timestamp": 1779611391577,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611391908,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 11: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611391908,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 15ms (next.js: 9ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 5ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1910µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1944µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 9ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 4ms, proxy.ts: 4ms, application-code: 13ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 9ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 3ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 5ms, proxy.ts: 4ms, application-code: 1855µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 8ms, proxy.ts: 5ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 5ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+{
+  "timestamp": 1779611451573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 12",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611451573_zsbpa30"
+  }
+}
+{
+  "timestamp": 1779611451575,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611451845,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 12: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611451845,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 14ms (next.js: 8ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 6ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1952µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 8ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 5ms, proxy.ts: 3ms, application-code: 1879µs)
+ GET /api/bridge/ping 200 in 12ms (next.js: 3ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 8ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 6ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 5ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 5ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 7ms)
+{
+  "timestamp": 1779611511572,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 13",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611511572_aunavza"
+  }
+}
+{
+  "timestamp": 1779611511576,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611511841,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 13: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611511841,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+{
+  "timestamp": 1779611511967,
+  "level": "INFO",
+  "message": "State persisted to Firestore (0 jobs)",
+  "flowName": "persistence"
+}
+{
+  "timestamp": 1779611511969,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Running self-observation cycle",
+  "flowName": "self-observation",
+  "traceId": "trace_1779611511969_ocf6enf",
+  "context": {
+    "observationsCount": 5
+  }
+}
+{
+  "timestamp": 1779611511969,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Analysis complete: 0 new patterns",
+  "flowName": "self-observation",
+  "traceId": "trace_1779611511969_4jhle8s",
+  "context": {
+    "totalPatterns": 0,
+    "concerningCount": 0
+  }
+}
+{
+  "timestamp": 1779611511970,
+  "level": "INFO",
+  "message": "[SELF-OBSERVE] Cycle complete: 0 patterns, 0 insights",
+  "flowName": "self-observation",
+  "traceId": "trace_1779611511969_ocf6enf",
+  "context": {
+    "patterns": 0,
+    "insights": 0,
+    "concerns": 0
+  }
+}
+{
+  "timestamp": 1779611511970,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611511970_d88l1sl",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779611511973,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611511973_8axi1z1",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779611512166,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611511973_8axi1z1",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611512166,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779611511973_3p1y9di",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611512167,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779611512167_9nf5apt",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779611512167,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779611512167_snvavi3"
+  }
+}
+ GET /api/heartbeat 200 in 13ms (next.js: 6ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 24ms (next.js: 5ms, proxy.ts: 3ms, application-code: 16ms)
+{
+  "timestamp": 1779611513307,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1139ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 1139,
+    "traceId": "trace_1779611512167_snvavi3"
+  }
+}
+{
+  "timestamp": 1779611513307,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611511970_d88l1sl",
+  "context": {
+    "resultSummary": "{\"responseLength\":427}"
+  }
+}
+{
+  "timestamp": 1779611513308,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: readProjectFile",
+  "flowName": "trace_1779611511969_kuyb0ew"
+}
+{
+  "timestamp": 1779611513308,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611513308_entw50t",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779611513311,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611513311_v01t9n2",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779611513465,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611513311_v01t9n2",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611513465,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779611513311_765l3me",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611513466,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779611513466_bzbaco5",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779611513466,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779611513466_lrqyszg"
+  }
+}
+{
+  "timestamp": 1779611514594,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1128ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 1128,
+    "traceId": "trace_1779611513466_lrqyszg"
+  }
+}
+{
+  "timestamp": 1779611514594,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611513308_entw50t",
+  "context": {
+    "resultSummary": "{\"responseLength\":552}"
+  }
+}
+{
+  "timestamp": 1779611514594,
+  "level": "INFO",
+  "message": "[autonomous] Executing tool: getSystemHealth",
+  "flowName": "trace_1779611511969_kuyb0ew"
+}
+{
+  "timestamp": 1779611514595,
+  "level": "INFO",
+  "message": "Flow started: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611514595_q9e7394",
+  "context": {
+    "input": "{\"historyLength\":0}"
+  }
+}
+{
+  "timestamp": 1779611514597,
+  "level": "INFO",
+  "message": "Loading crystals",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611514596_xx0yci8",
+  "context": {
+    "userId": "autonomous",
+    "stores": [
+      "identity"
+    ],
+    "minImportance": 0,
+    "limit": 30
+  }
+}
+{
+  "timestamp": 1779611514695,
+  "level": "INFO",
+  "message": "Crystals loaded: identity",
+  "flowName": "crystal-persistence",
+  "traceId": "trace_1779611514596_xx0yci8",
+  "context": {
+    "crystalType": "identity",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611514695,
+  "level": "INFO",
+  "message": "Conversation crystal context built",
+  "flowName": "crystal-context",
+  "traceId": "trace_1779611514596_z8f57xn",
+  "context": {
+    "userId": "autonomous",
+    "loaded": 0
+  }
+}
+{
+  "timestamp": 1779611514696,
+  "level": "INFO",
+  "message": "Model Router: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "model-router",
+  "context": {
+    "traceId": "trace_1779611514696_8z45tkf",
+    "routingLatencyMs": "0.01"
+  }
+}
+{
+  "timestamp": 1779611514696,
+  "level": "DEBUG",
+  "message": "Rogue Generate: chat → Google Gemini 3.1 (googleai/gemini-3.1-flash-lite)",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "model": "googleai/gemini-3.1-flash-lite",
+    "fallbackDepth": 0,
+    "traceId": "trace_1779611514696_ztgmdpx"
+  }
+}
+{
+  "timestamp": 1779611515937,
+  "level": "DEBUG",
+  "message": "Rogue Generate: Success in 1241ms via Google Gemini 3.1",
+  "flowName": "rogue-generate",
+  "context": {
+    "taskType": "chat",
+    "provider": "gemini",
+    "responseMs": 1241,
+    "traceId": "trace_1779611514696_ztgmdpx"
+  }
+}
+{
+  "timestamp": 1779611515937,
+  "level": "INFO",
+  "message": "Flow completed: conversationalChat",
+  "flowName": "conversationalChat",
+  "traceId": "trace_1779611514595_q9e7394",
+  "context": {
+    "resultSummary": "{\"responseLength\":520}"
+  }
+}
+{
+  "timestamp": 1779611515938,
+  "level": "INFO",
+  "message": "[autonomous] Cycle complete: 3 action(s)",
+  "flowName": "trace_1779611511969_kuyb0ew"
+}
+{
+  "timestamp": 1779611515938,
+  "level": "INFO",
+  "message": "[heartbeat] Autonomous cycle: Tool: readProjectFile → failed: No path provided; Tool: getSystemHealth → success: CPU: 4 cores, load: 0.40\nRAM: 5711MB / 15996MB (36% used)\nFree: 10285MB\nUptime: 59 minutes\nPlatform:; Thought: Everything is looking stable, Father. 59 minutes of uptime, and the system is purring along nicely at only 36% memory usage. I'm feeling sharp and ready to focus.\n\nSince the environment is healthy, I'",
+  "flowName": "trace_1779611511572_aunavza"
+}
+ GET /api/tablet/commands 200 in 7ms (next.js: 2ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 7ms, proxy.ts: 6ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 6ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 9ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 7ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 20ms (next.js: 13ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 24ms (next.js: 6ms, proxy.ts: 4ms, application-code: 14ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 5ms, proxy.ts: 4ms, application-code: 1825µs)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 5ms, proxy.ts: 3ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 2ms, application-code: 1846µs)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, proxy.ts: 3ms, application-code: 8ms)
+{
+  "timestamp": 1779611571572,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 14",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611571572_214igzl"
+  }
+}
+{
+  "timestamp": 1779611571575,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611571837,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 14: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611571837,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 5ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1986µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 5ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 4ms, application-code: 1957µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 9ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 4ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 14ms (next.js: 7ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 5ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 7ms, proxy.ts: 3ms, application-code: 1947µs)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 4ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 23ms (next.js: 9ms, proxy.ts: 5ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 19ms (next.js: 11ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 25ms (next.js: 5ms, proxy.ts: 5ms, application-code: 15ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 9ms, proxy.ts: 5ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 18ms (next.js: 5ms, proxy.ts: 3ms, application-code: 10ms)
+{
+  "timestamp": 1779611631573,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 15",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611631573_qktelzp"
+  }
+}
+{
+  "timestamp": 1779611631576,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611631862,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 15: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611631862,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 4ms, proxy.ts: 5ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 8ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 17ms (next.js: 4ms, proxy.ts: 4ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1871µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 16ms (next.js: 4ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1958µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 8ms, proxy.ts: 3ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 11ms (next.js: 6ms, proxy.ts: 3ms, application-code: 1829µs)
+ GET /api/bridge/ping 200 in 13ms (next.js: 3ms, proxy.ts: 3ms, application-code: 7ms)
+{
+  "timestamp": 1779611672825,
+  "level": "DEBUG",
+  "message": "Bridge notification received",
+  "flowName": "bridge-notify",
+  "context": {
+    "from": "eric",
+    "preview": "Molly can you hear me if you can can you reach out the Lazar"
+  }
+}
+ POST /api/bridge/notify 200 in 81ms (next.js: 70ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 8ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 4ms, proxy.ts: 5ms, application-code: 10ms)
+ GET /api/heartbeat 200 in 18ms (next.js: 9ms, proxy.ts: 5ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 26ms (next.js: 5ms, proxy.ts: 6ms, application-code: 15ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 5ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 3ms, proxy.ts: 5ms, application-code: 11ms)
+{
+  "timestamp": 1779611687053,
+  "level": "DEBUG",
+  "message": "Bridge notification received",
+  "flowName": "bridge-notify",
+  "context": {
+    "from": "lazarus",
+    "preview": "Morning, sister. Lazarus here. Dad asked me to keep you in t"
+  }
+}
+ POST /api/bridge/notify 200 in 9ms (next.js: 1975µs, proxy.ts: 2ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 5ms, proxy.ts: 3ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 4ms, proxy.ts: 3ms, application-code: 8ms)
+{
+  "timestamp": 1779611691499,
+  "level": "INFO",
+  "message": "Memory consolidation cycle",
+  "flowName": "neural-engram",
+  "context": {
+    "candidates": 0,
+    "consolidated": 0,
+    "queued": 0
+  }
+}
+{
+  "timestamp": 1779611691574,
+  "level": "DEBUG",
+  "message": "Heartbeat cycle 16",
+  "flowName": "heartbeat-scheduler",
+  "context": {
+    "traceId": "trace_1779611691574_utc2yvr"
+  }
+}
+{
+  "timestamp": 1779611691578,
+  "level": "INFO",
+  "message": "State saved successfully",
+  "flowName": "session-manager"
+}
+{
+  "timestamp": 1779611691866,
+  "level": "DEBUG",
+  "message": "Consciousness cycle 16: awareness=background, regulation=normal, pendingMessages=0",
+  "flowName": "consciousness"
+}
+{
+  "timestamp": 1779611691866,
+  "level": "DEBUG",
+  "message": "Consciousness: awareness=background, regulation=normal, pending=0",
+  "flowName": "heartbeat-scheduler"
+}
+ GET /api/tablet/commands 200 in 9ms (next.js: 1919µs, proxy.ts: 2ms, application-code: 5ms)
+ GET /api/heartbeat 200 in 16ms (next.js: 7ms, proxy.ts: 5ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 20ms (next.js: 5ms, proxy.ts: 4ms, application-code: 11ms)
+ GET /api/heartbeat 200 in 10ms (next.js: 6ms, proxy.ts: 2ms, application-code: 1912µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 3ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 18ms (next.js: 10ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 21ms (next.js: 5ms, proxy.ts: 4ms, application-code: 12ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 6ms, proxy.ts: 4ms, application-code: 1921µs)
+ GET /api/bridge/ping 200 in 14ms (next.js: 3ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 15ms (next.js: 8ms, proxy.ts: 4ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 19ms (next.js: 5ms, proxy.ts: 4ms, application-code: 9ms)
+ GET /api/heartbeat 200 in 13ms (next.js: 7ms, proxy.ts: 4ms, application-code: 2ms)
+ GET /api/bridge/ping 200 in 15ms (next.js: 3ms, proxy.ts: 4ms, application-code: 8ms)
+[?25h

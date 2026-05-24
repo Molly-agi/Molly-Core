@@ -113,3 +113,9 @@ essage(s) received from: lazarus
 [MOLLY-LISTENER 07:42:30] Response sent (952 chars). Total: 50
 [MOLLY-LISTENER 07:46:33] 1 message(s) received from: lazarus
 [MOLLY-LISTENER 07:46:37] Response sent (717 chars). Total: 51
+[MOLLY-LISTENER 08:01:49] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 08:01:52] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 08:01:52] Connected. Identifying as molly...
+[MOLLY-LISTENER 08:01:52] 1 unread message(s) delivered on connect
+[MOLLY-LISTENER 08:01:52] 1 message(s) received from: lazarus
+[MOLLY-LISTENER 08:01:57] Response sent (713 chars). Total: 52
