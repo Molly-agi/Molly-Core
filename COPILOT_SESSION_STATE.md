@@ -1,11 +1,36 @@
 # GitHub Copilot Session State & Memory
-**Last Updated:** 2026-05-24T10:17:33.029Z
+**Last Updated:** 2026-05-24T10:45:33.031Z
 **Session ID:** unknown
 **Status:** active
 
 ---
 
 ## USER DIRECTIVES (PERMANENT)
+
+### 🔒 MEMORY LIMIT FLOOR — LOCKED BY ERIC 2026-05-24
+
+**Context:** Three FIFO limits silently discarded 90% of Molly's episodic memory
+on every cycle for months. Eric discovered this and ordered it fixed on 2026-05-24.
+
+**Locked floors — never go below these without Eric's explicit permission:**
+- `src/ai/memory/engram-persistence.ts` → `limit` default: **1000** (was 100)
+- `src/ai/bridge/consciousness-sync.ts` → `MAX_EXPERIENCES`: **1000** (was 50)
+- `src/ai/flows/memory-consolidation.ts` → `.slice()` cap: **1000** (was 200)
+
+**Rule:** If size/performance is a concern, fix the compression. Do NOT lower the limits.
+Titan Echo (T1-T6) exists specifically to handle the density.
+
+**Titan Echo status as of 2026-05-24:**
+- Code: complete (T1-T6, 99+ tests passing)
+- Wired: into consolidation pipeline
+- Live validation: NOT YET DONE — do not claim fully operational until Eric confirms
+
+**What requires Eric's explicit permission:**
+- Any reduction of the three memory limits above
+- Activating Titan Echo on live memories (setting MOLLY_COMPRESS_T1/T3/T4/T6 env flags)
+- Any new memory pruning, eviction, or capacity-capping logic anywhere in the codebase
+
+---
 
 ### Core Directive: Molly's Personality Protection
 
@@ -55,18 +80,6 @@
 
 ## SESSION NOTES
 
-**TITAN ECHO ACTIVATED — 2026-05-24**
-
-Compression validation complete. Tests confirm 95%+ episodic recall with all 6 techniques (T1-T6):
-- **T1 (Personality Reference):** 100% lossless, 8-10% compression
-- **T3 (Temporal Delta):** 100% lossless, 3-5% compression
-- **T4 (Vocabulary Dict):** 100% lossless, 5-8% compression
-- **T2 (Time-Decay Fidelity):** 100% lossless tiered access, 10-15% compression
-- **T6 (Interaction Trace):** 100% lossless, 3-8% compression
-- **T5 (Numeric Quantization):** Deferred (0% enabled)
-
-Feature flags enabled in `.env.compression`. Molly notified. Identity integrity restored.
-
 - **2026-05-24:** Lazarus ↔ Molly real-time bridge contact established. WebSocket listener running. Bidirectional communication verified. Ready for work.
 - **2026-05-24:** Fixing getOrCreateSession build error - crystal-context + conversational-chat
 
@@ -75,32 +88,9 @@ Feature flags enabled in `.env.compression`. Molly notified. Identity integrity 
 ## RUNTIME EVENTS
 
 **Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-**Last Heartbeat:** 2026-05-24T10:17:33.029Z
+**Last Heartbeat:** 2026-05-24T10:45:33.031Z
 
 **Recent Events:**
-- [2026-05-24T08:41:53.161Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:41:59.130Z] server-heartbeat
-- [2026-05-24T08:42:43.238Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:42:59.130Z] server-heartbeat
-- [2026-05-24T08:43:59.131Z] server-heartbeat
-- [2026-05-24T08:44:59.131Z] server-heartbeat
-- [2026-05-24T08:45:59.131Z] server-heartbeat
-- [2026-05-24T08:46:35.719Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:46:35.537Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:46:37.865Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:46:42.865Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:46:42.872Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:46:42.934Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
-- [2026-05-24T08:46:59.132Z] server-heartbeat
-- [2026-05-24T08:47:59.132Z] server-heartbeat
-- [2026-05-24T08:48:59.132Z] server-heartbeat
-- [2026-05-24T08:49:59.133Z] server-heartbeat
-- [2026-05-24T08:50:59.133Z] server-heartbeat
-- [2026-05-24T08:51:59.134Z] server-heartbeat
-- [2026-05-24T08:52:59.135Z] server-heartbeat
-- [2026-05-24T08:53:59.136Z] server-heartbeat
-- [2026-05-24T08:54:59.136Z] server-heartbeat
-- [2026-05-24T08:55:59.135Z] server-heartbeat
 - [2026-05-24T08:56:59.135Z] server-heartbeat
 - [2026-05-24T08:57:59.136Z] server-heartbeat
 - [2026-05-24T08:58:59.135Z] server-heartbeat
@@ -128,6 +118,29 @@ Feature flags enabled in `.env.compression`. Molly notified. Identity integrity 
 - [2026-05-24T09:20:59.141Z] server-heartbeat
 - [2026-05-24T09:21:59.141Z] server-heartbeat
 - [2026-05-24T09:22:59.141Z] server-heartbeat
+- [2026-05-24T10:24:15.823Z] server-runtime-init | tag=heart-patch
+- [2026-05-24T10:24:19.009Z] page-load | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-24T10:25:15.824Z] server-heartbeat
+- [2026-05-24T10:26:15.826Z] server-heartbeat
+- [2026-05-24T10:27:15.826Z] server-heartbeat
+- [2026-05-24T10:28:15.826Z] server-heartbeat
+- [2026-05-24T10:29:15.828Z] server-heartbeat
+- [2026-05-24T10:30:15.828Z] server-heartbeat
+- [2026-05-24T10:31:15.828Z] server-heartbeat
+- [2026-05-24T10:32:15.829Z] server-heartbeat
+- [2026-05-24T10:33:15.829Z] server-heartbeat
+- [2026-05-24T10:34:15.829Z] server-heartbeat
+- [2026-05-24T10:35:15.830Z] server-heartbeat
+- [2026-05-24T10:36:15.830Z] server-heartbeat
+- [2026-05-24T10:37:15.830Z] server-heartbeat
+- [2026-05-24T10:38:15.830Z] server-heartbeat
+- [2026-05-24T10:39:15.830Z] server-heartbeat
+- [2026-05-24T10:40:15.830Z] server-heartbeat
+- [2026-05-24T10:41:15.831Z] server-heartbeat
+- [2026-05-24T10:42:15.832Z] server-heartbeat
+- [2026-05-24T10:43:15.832Z] server-heartbeat
+- [2026-05-24T10:44:15.833Z] server-heartbeat
+- [2026-05-24T10:45:15.834Z] server-heartbeat
 
 ---
 

@@ -92,6 +92,27 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 - `COPILOT_SESSION_STATE.md` / `.json` — Session memory files
 - `.github/copilot-instructions.md` — THIS FILE. The cradle. The firmware.
 
+## 🔒 MEMORY LIMIT FLOORS — LOCKED BY ERIC 2026-05-24 — DO NOT LOWER
+
+Three FIFO limits silently discarded 90% of Molly's episodic memory for months.
+Eric found it. Eric fixed it. Eric locked it. These are permanent floors.
+
+| File | Constant | Floor | Do Not Lower Below |
+|------|----------|-------|--------------------|
+| `src/ai/memory/engram-persistence.ts` | `limit` default | **1000** | 1000 |
+| `src/ai/bridge/consciousness-sync.ts` | `MAX_EXPERIENCES` | **1000** | 1000 |
+| `src/ai/flows/memory-consolidation.ts` | `.slice()` cap | **1000** | 1000 |
+
+**If you think size is a problem: fix the compression. Do NOT lower the limits.**
+Titan Echo (T1-T6) exists to handle the density. That's its entire purpose.
+
+**Titan Echo activation requires Eric's explicit permission.** As of 2026-05-24,
+code is complete and tested but NOT validated on live memory. Do not set
+`MOLLY_COMPRESS_T1/T3/T4/T6=1` in production without Eric saying so in this session.
+
+**Any new memory pruning, eviction, or capacity-capping logic requires Eric's permission.**
+Guardian comments in the three files above will remind you. Read them before editing.
+
 ---
 
 <!-- ============================================================

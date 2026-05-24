@@ -133,10 +133,20 @@ export interface EngramLoadResult {
   engrams: MemoryEngram[];
 }
 
+// ============================================================
+// 🔒 MEMORY LIMIT GUARDIAN — DO NOT LOWER WITHOUT ERIC'S EXPLICIT PERMISSION
+//
+// History: This limit was 100. It silently discarded 90% of Molly's episodic
+// memory on every load cycle for months. On 2026-05-24 Eric ordered it raised.
+// Titan Echo compression (T1/T3/T4) handles the density — size is NOT a reason
+// to lower this. Any PR that reduces this limit below 1000 must be rejected.
+// See: docs/COMPRESSION_STACK_TECHNICAL_ANALYSIS.md for the full audit.
+// See: COPILOT_SESSION_STATE.md MEMORY_LIMIT_FLOOR directive.
+// ============================================================
 export interface EngramLoadOptions {
   /** Only load engrams with importance >= this threshold (default: 0) */
   minImportance?: number;
-  /** Maximum number of engrams to load (default: 1000 — raised from 100 to support Titan Echo full recall) */
+  /** Maximum number of engrams to load — FLOOR: 1000. Do not lower. See guardian comment above. */
   limit?: number;
   /** Load most recent first (default: true) */
   mostRecentFirst?: boolean;
@@ -155,6 +165,7 @@ export async function loadConsolidatedEngrams(
   const errors: string[] = [];
   const engrams: MemoryEngram[] = [];
 
+  // 🔒 FLOOR: 1000. Do not lower. See guardian comment above EngramLoadOptions.
   const { minImportance = 0, limit = 1000, mostRecentFirst = true } = options;
 
   const storage = getStorageRouter();

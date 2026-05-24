@@ -350,7 +350,10 @@ export const memoryConsolidationFlow = ai.defineFlow(
       const memories = experienceDocs
         .map((doc) => doc.data)
         .filter((m) => !m.vibeScore || (m.vibeScore as number) >= minConfidence)
-        .slice(0, 1000); // Raised from 200 — Titan Echo compression handles the size
+        // 🔒 MEMORY LIMIT GUARDIAN — DO NOT LOWER WITHOUT ERIC'S EXPLICIT PERMISSION
+        // Was 200. Silently ignored 90% of memories per consolidation cycle. Raised 2026-05-24.
+        // Titan Echo compression handles the size. FLOOR: 1000.
+        .slice(0, 1000);
 
       if (memories.length === 0) {
         MollyLogger.warn(

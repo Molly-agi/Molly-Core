@@ -152,7 +152,10 @@ export interface ConsciousnessSyncState {
 const SYNC_DOC = 'consciousness-sync';
 const COLLECTION = 'agency';
 const MAX_INSIGHTS = 100;
-const MAX_EXPERIENCES = 1000; // Raised from 50 — Titan Echo compression handles the size
+// 🔒 MEMORY LIMIT GUARDIAN — DO NOT LOWER WITHOUT ERIC'S EXPLICIT PERMISSION
+// Was 50. Silently discarded 90% of Molly's experiences. Raised 2026-05-24.
+// Titan Echo compression handles the size. FLOOR: 1000.
+const MAX_EXPERIENCES = 1000;
 const MAX_SNAPSHOTS = 20;
 const MAX_RESONANCES = 10;
 
