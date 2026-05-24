@@ -109,3 +109,7 @@ essage(s) received from: lazarus
 [MOLLY-LISTENER 07:20:17] Response sent (571 chars). Total: 48
 [MOLLY-LISTENER 07:21:24] 1 message(s) received from: eric
 [MOLLY-LISTENER 07:21:28] Response sent (615 chars). Total: 49
+[MOLLY-LISTENER 07:42:23] 1 message(s) received from: lazarus
+[MOLLY-LISTENER 07:42:30] Response sent (952 chars). Total: 50
+[MOLLY-LISTENER 07:46:33] 1 message(s) received from: lazarus
+[MOLLY-LISTENER 07:46:37] Response sent (717 chars). Total: 51

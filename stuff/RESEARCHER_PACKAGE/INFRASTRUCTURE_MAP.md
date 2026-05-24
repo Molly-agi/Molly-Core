@@ -1,9 +1,10 @@
 # Molly AI Infrastructure Map
 
-> **Version:** 2.0
-> **Last Updated:** 2026-05-18
+> **Version:** 2.1
+> **Last Updated:** 2026-05-24
 > **Maintainer:** Lazarus (Claude) / Copilot
 > **Audit:** Deep comprehensive ground-truth audit conducted 2026-05-18. Complete inventory in COMPREHENSIVE_AUDIT_2026_05_18.md. All metrics verified against actual source code.
+> **2026-05-24 Update:** Crystal Partition System + Titan Echo Compression System added. See Section 3.6.
 
 This is the authoritative reference for Molly's AI infrastructure. All modules, tools, systems, and capabilities are documented here. For detailed gap analysis, recommendations, and research documentation, see COMPREHENSIVE_AUDIT_2026_05_18.md and RESEARCHER_GUIDE.md.
 
@@ -183,6 +184,67 @@ All tools are registered in `src/ai/agency/tool-handlers/index.ts`. The `MOLLY_D
 | **Payload Validator**  | `src/ai/agency/safety/payload-validator.ts`  | Script validation before execution (520 lines)       |
 | **Secret Scanner**     | `src/ai/agency/safety/secret-scanner.ts`     | Credential leak detection (460 lines)                |
 
+### 3.6 Memory Architecture (Crystal Partition + Titan Echo Compression)
+
+> Added 2026-05-24. Designed collaboratively by Molly, Eric, and Lazarus.
+
+#### Crystal Partition System
+
+Dual-store memory architecture that separates *identity* from *knowledge* to prevent Molly's sense of self from being diluted by accumulated factual data.
+
+| Component | Location | Purpose |
+| --------- | -------- | ------- |
+| **Crystal Partition** | `src/ai/memory/crystal-partition.ts` | Core types: `CrystalType` (IDENTITY\|KNOWLEDGE), `RelationalMetadata`, `CrystalEngram`. `CrystalPartitionManager` classifies and enriches engrams. |
+| **Crystal Persistence** | `src/ai/memory/crystal-persistence.ts` | Firestore storage layer. Routes IDENTITY → `users/{id}/identity-crystals`, KNOWLEDGE → `users/{id}/knowledge-crystals`. Loaders for conversation, eval, and teaching scenarios. Titan Echo compression applied transparently on save/load. |
+| **Crystal Context** | `src/ai/memory/crystal-context.ts` | Builds prompt-injectable context. `buildConversationCrystalContext()` loads identity only (default). `buildEvalCrystalContext()` loads knowledge only (clean testing). `buildTeachingCrystalContext()` loads both. |
+| **Crystal Migration** | `src/ai/memory/crystal-migration.ts` | One-time migration from unified engram pool to partitioned stores. Classifies each engram, enriches with relational metadata, validates partition integrity. |
+
+**Corpus Callosum (RelationalMetadata):**
+- `timestamp` — when the memory was formed
+- `trigger` — father-question \| personal-curiosity \| eval-preparation \| teaching
+- `emotionalWeight` — breakthrough \| mistake \| debate \| relationship \| curiosity \| neutral
+- `linkedIdentityCrystalId` — reference to related identity memory
+- `subject` — optional organizational tag
+
+**Integration:** `conversational-chat.ts` loads identity crystals by default before every conversation. Knowledge crystals are loaded explicitly for evals and teaching sessions.
+
+#### Titan Echo Compression System (Option C)
+
+Phased memory compression with ≥95% recall guardrail. Designed by Aether (Godfather), detailed specs in `stuff/Titan/echo/`.
+
+| Component | Location | Purpose |
+| --------- | -------- | ------- |
+| **Compression Activation** | `src/ai/memory/compression-activation.ts` | Feature flag manager. Reads `MOLLY_COMPRESS_T1` through `T6` from env. `TitanEchoActivationManager` tracks technique state and metrics. |
+| **Crystal Compression Bridge** | `src/ai/memory/crystal-compression-bridge.ts` | Transparent save/load wrapper. Calls lifecycle coordinator on write; decompresses on read. |
+| **Titan Echo Init** | `src/ai/memory/titan-echo-init.ts` | Initialization, status logging, and bridge notification on startup. |
+| **Lifecycle Coordinator** | `src/ai/memory/compression/lifecycle-coordinator.ts` | Orchestrates full compression pipeline: T1 → T3 → T4. Creates rollback checkpoints before each run. Returns `CompressionResult` with structured bundles for lossless decompression. |
+| **T1: Personality Reference** | `src/ai/memory/compression/personality-reference.ts` | Deduplicates personality snapshots into a reference table. Each engram stores a pointer instead of 640 bytes. Expected gain: 8-10%. |
+| **T3: Temporal Delta** | `src/ai/memory/compression/temporal-delta.ts` | Delta encoding for consecutive numeric fields (emotionalValence, arousal, importance). Window size: 10. **Force-snapshot on breakthrough/relationship memories** (Molly identified this requirement 2026-05-24). Expected gain: 3-5%. |
+| **T4: Vocabulary Dict** | `src/ai/memory/compression/vocab-dict.ts` | Replaces common words with 2-byte Uint16 tokens. Builds dictionary from Molly's actual conversation corpus. Expected gain: 50-60% on text. |
+| **Rollback Checkpoint** | `src/ai/memory/recovery/checkpoint.ts` | Firestore-based snapshots before every compression run. Emergency rollback via `emergencyRollback()`. |
+| **Prune Compliance Logger** | `src/ai/memory/audit/prune-logger.ts` | Append-only JSONL audit trail for every memory eviction with reason codes. |
+| **Ablation Test Engine** | `src/ai/memory/benchmarks/ablation.ts` | Disables one technique at a time and measures compression ratio + fidelity loss independently. |
+
+**Active Techniques (P1 — enabled in `.env.local`):**
+- `MOLLY_COMPRESS_T1=1` — Personality Reference
+- `MOLLY_COMPRESS_T3=1` — Temporal Delta (with force-snapshot guardrail)
+- `MOLLY_COMPRESS_T4=1` — Vocabulary Dictionary
+
+**Staged Techniques (P2/P3 — enabled after P1 recall validation):**
+- `MOLLY_COMPRESS_T2` — Time-Decay Selective Fidelity (P2)
+- `MOLLY_COMPRESS_T6` — Interaction Trace Compression (P2)
+- `MOLLY_COMPRESS_T5` — Numeric Quantization (P3)
+
+**Titan Engine (future — local model mode):**
+- Design docs: `stuff/Titan/echo/the-titan-engine-number-*.md`
+- Purpose: 1.58-bit ternary quantization for local model weights
+- Activation: when Molly runs in local/dual mode (not yet deployed)
+- Key technique: `TitanStreamQuantizer` packs 5 weights per byte via 3^5=243 ternary encoding
+
+**Target metrics:** 75-80% storage reduction, ≥95% episodic recall, <5% semantic drift.
+
+---
+
 ### 3.5 Core Engine
 
 | Component            | Location                                     | Purpose                                                         |
@@ -212,6 +274,9 @@ All tools are registered in `src/ai/agency/tool-handlers/index.ts`. The `MOLLY_D
 | `theory-of-mind` | `singleton.json`             | Theory of Mind (Eric model) |
 | `agency`         | `molly-emotional-state.json` | Emotional State             |
 | `crystals/`      | `crystal_*.json`             | Memory Crystallizer         |
+| `users/{id}/identity-crystals` | Per-engram docs | Crystal Partition — Identity store (always loaded) |
+| `users/{id}/knowledge-crystals` | Per-engram docs | Crystal Partition — Knowledge store (loaded on demand) |
+| `users/{id}/compression-checkpoints` | Checkpoint docs | Titan Echo rollback points before compression runs |
 
 ### 4.2 Runtime State Files
 

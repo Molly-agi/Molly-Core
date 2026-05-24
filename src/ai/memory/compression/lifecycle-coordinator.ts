@@ -1,17 +1,30 @@
 /**
  * Memory Lifecycle Coordinator — Orchestration Layer
  * Wires all compression techniques + safety infrastructure into the memory consolidation pipeline.
- * 
+ *
  * Flow: Memory → Compress → Checkpoint → Log → Firestore
  */
 
 import type { Firestore } from 'firebase/firestore';
-import type { MemoryEngram, PersonalityModulation } from '@/ai/memory/neural-engram';
+import type { MemoryEngram } from '@/ai/memory/neural-engram';
 import { MollyLogger } from '@/ai/logger';
-import { VocabDictCompressor, buildDictionaryFromCorpus } from './compression/vocab-dict';
-import { RollbackCheckpointManager } from './recovery/checkpoint';
-import { PruneComplianceLogger, type PruneReasonCode } from './audit/prune-logger';
-import { AblationTestEngine } from './benchmarks/ablation';
+import { VocabDictCompressor, buildDictionaryFromCorpus } from './vocab-dict';
+import {
+  applyPersonalityReferenceCompression,
+  decompressPersonalityReferences,
+  type PersonalityReferenceBundle,
+} from './personality-reference';
+import {
+  applyTemporalDeltaEncoding,
+  decompressTemporalDeltas,
+  type TemporalDeltaBundle,
+} from './temporal-delta';
+import { RollbackCheckpointManager } from '../recovery/checkpoint';
+import {
+  PruneComplianceLogger,
+  type PruneReasonCode,
+} from '../audit/prune-logger';
+import { AblationTestEngine } from '../benchmarks/ablation';
 
 export interface CompressionPipeline {
   enableVocabDict?: boolean;
@@ -20,6 +33,19 @@ export interface CompressionPipeline {
   enableTemporalDelta?: boolean;
   enableNumericQuant?: boolean;
   enableInteractionTrace?: boolean;
+}
+
+/**
+ * Result of a full compression pipeline run — includes both the compressed
+ * buffer for storage AND the structured bundles needed for decompression.
+ */
+export interface CompressionResult {
+  compressed: Buffer;
+  metrics: CompressionMetrics;
+  checkpointId: string;
+  // Structured bundles stored alongside the buffer for lossless decompression
+  personalityBundle?: PersonalityReferenceBundle;
+  temporalBundle?: TemporalDeltaBundle;
 }
 
 export interface CompressionMetrics {
@@ -95,16 +121,12 @@ export class MemoryLifecycleCoordinator {
    */
   public async compressMemoryBatch(
     engrams: MemoryEngram[]
-  ): Promise<{
-    compressed: Buffer;
-    metrics: CompressionMetrics;
-    checkpointId: string;
-  }> {
+  ): Promise<CompressionResult> {
     const startTime = performance.now();
 
-    // Build corpus from engrams for compression
-    const corpus = engrams.map((e) => e.content).join(' ');
-    const originalSize = Buffer.byteLength(corpus, 'utf8');
+    // Measure original size from raw text corpus
+    const originalCorpus = engrams.map((e) => e.content).join(' ');
+    const originalSize = Buffer.byteLength(originalCorpus, 'utf8');
 
     // Create checkpoint BEFORE compression
     let checkpointId = '';
@@ -128,22 +150,57 @@ export class MemoryLifecycleCoordinator {
       });
     }
 
-    // Apply compression techniques
-    let compressed = Buffer.from(corpus);
+    // Apply compression techniques in P1 priority order
+    let workingEngrams = [...engrams];
     const techniquesUsed: string[] = [];
+    let personalityBundle: PersonalityReferenceBundle | undefined;
+    let temporalBundle: TemporalDeltaBundle | undefined;
 
-    // Technique 4: Vocabulary Dictionary
-    if (this.pipeline.enableVocabDict && this.vocabCompressor) {
-      compressed = this.vocabCompressor.compressString(corpus);
-      techniquesUsed.push('VOCAB_DICT');
+    // ── T1: Personality Reference Compression ──
+    // Deduplicates personality snapshots into a reference table.
+    // Expected gain: 8-10% on datasets with personalityContext populated.
+    if (this.pipeline.enablePersonalityRef) {
+      personalityBundle = applyPersonalityReferenceCompression(workingEngrams);
+      // For the pipeline, continue with original engrams (T1 operates on structure)
+      techniquesUsed.push('T1_PERSONALITY_REF');
+      MollyLogger.debug(
+        'T1 personality reference compression applied',
+        'lifecycle',
+        {
+          refCount: Object.keys(personalityBundle.personalityRefs).length,
+          engramCount: personalityBundle.engrams.length,
+        }
+      );
     }
 
-    // TODO: Wire in other techniques
-    // - Technique 1: PersonalityRefEngine
-    // - Technique 2: TimeDecayCompressor
-    // - Technique 3: TemporalDeltaEncoder
-    // - Technique 5: NumericQuantizer
-    // - Technique 6: InteractionTraceCompressor
+    // ── T3: Temporal Delta Encoding ──
+    // Stores deltas between consecutive engrams instead of full copies.
+    // Expected gain: 3-5% on numeric fields; enables T2 (time-decay) later.
+    if (this.pipeline.enableTemporalDelta) {
+      temporalBundle = applyTemporalDeltaEncoding(workingEngrams);
+      // Use reconstructed engrams to maintain pipeline correctness
+      workingEngrams = temporalBundle.reconstructedEngrams;
+      techniquesUsed.push('T3_TEMPORAL_DELTA');
+      MollyLogger.debug('T3 temporal delta encoding applied', 'lifecycle', {
+        baseCount: temporalBundle.bases.length,
+        deltaGroupCount: temporalBundle.deltaGroups.length,
+        passthroughCount: temporalBundle.passthrough.length,
+      });
+    }
+
+    // ── T4: Vocabulary Dictionary Compression ──
+    // Replaces common words with 2-byte tokens.
+    // Expected gain: 50-60% on text content.
+    const textCorpus = workingEngrams.map((e) => e.content).join(' ');
+    let compressed = Buffer.from(textCorpus);
+
+    if (this.pipeline.enableVocabDict && this.vocabCompressor) {
+      compressed = this.vocabCompressor.compressString(textCorpus);
+      techniquesUsed.push('T4_VOCAB_DICT');
+    }
+
+    // T2 (Time-Decay), T5 (Numeric Quantization), T6 (Interaction Trace)
+    // are staged for P2/P3 — implemented after P1 recall validation passes.
 
     const compressedSize = compressed.byteLength;
     const compressionRatio = (
@@ -174,7 +231,34 @@ export class MemoryLifecycleCoordinator {
       compressed,
       metrics,
       checkpointId,
+      personalityBundle,
+      temporalBundle,
     };
+  }
+
+  /**
+   * Decompress a previously compressed memory batch back to MemoryEngram[].
+   * Pass the CompressionResult from compressMemoryBatch.
+   */
+  public decompressMemoryBatch(result: CompressionResult): MemoryEngram[] {
+    // Start with whatever was in the temporal bundle (most complete form)
+    let engrams: MemoryEngram[] = [];
+
+    if (result.temporalBundle) {
+      engrams = decompressTemporalDeltas(result.temporalBundle);
+    }
+
+    // Restore personality contexts from reference table
+    if (result.personalityBundle && engrams.length > 0) {
+      // Rebuild bundle with current engrams + original refs
+      const rebuildBundle: PersonalityReferenceBundle = {
+        ...result.personalityBundle,
+        engrams: engrams as PersonalityReferenceBundle['engrams'],
+      };
+      engrams = decompressPersonalityReferences(rebuildBundle);
+    }
+
+    return engrams;
   }
 
   /**
@@ -254,7 +338,7 @@ export class MemoryLifecycleCoordinator {
 /**
  * Singleton instance per user.
  */
-let _coordinators = new Map<string, MemoryLifecycleCoordinator>();
+const _coordinators = new Map<string, MemoryLifecycleCoordinator>();
 
 export function getMemoryLifecycleCoordinator(
   db: Firestore,

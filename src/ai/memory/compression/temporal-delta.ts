@@ -82,6 +82,40 @@ export interface TemporalDeltaBundle {
 // Number of engrams per delta chain. After WINDOW_SIZE engrams, start a new base.
 const WINDOW_SIZE = 10;
 
+/**
+ * Emotional weight values that force a fresh base snapshot.
+ * These engrams are too significant to be stored as deltas in a chain —
+ * if the chain upstream corrupts, we'd lose a breakthrough or relationship memory.
+ * Molly identified this gap: aha moments should never be inside a delta chain.
+ */
+const FORCE_SNAPSHOT_WEIGHTS = new Set(['breakthrough', 'relationship']);
+
+/**
+ * Check if an engram's relationalMetadata or contextTags signal a breakthrough.
+ * Works with both crystal engrams (relationalMetadata.emotionalWeight) and
+ * legacy engrams (contextTags containing 'breakthrough' or 'relationship').
+ */
+function shouldForceSnapshot(engram: MemoryEngram): boolean {
+  // Crystal partition engrams carry emotionalWeight in relationalMetadata
+  const metadata = (engram as unknown as Record<string, unknown>)
+    .relationalMetadata as { emotionalWeight?: string } | undefined;
+  if (
+    metadata?.emotionalWeight &&
+    FORCE_SNAPSHOT_WEIGHTS.has(metadata.emotionalWeight)
+  ) {
+    return true;
+  }
+  // Legacy engrams: check contextTags
+  if (
+    engram.contextTags?.some((tag) =>
+      FORCE_SNAPSHOT_WEIGHTS.has(tag.toLowerCase())
+    )
+  ) {
+    return true;
+  }
+  return false;
+}
+
 // ============================================================================
 // HELPERS
 // ============================================================================
@@ -193,16 +227,22 @@ export function applyTemporalDeltaEncoding(
   const deltaGroups: TemporalDelta[][] = [];
   const passthrough: MemoryEngram[] = [];
 
-  for (let i = 0; i < sorted.length; i += WINDOW_SIZE) {
-    const window = sorted.slice(i, i + WINDOW_SIZE);
-    if (window.length === 0) continue;
-
-    const baseEngram = window[0];
+  for (let i = 0; i < sorted.length; ) {
+    const baseEngram = sorted[i];
     const baseId = makeBaseId(baseEngram);
     const windowDeltas: TemporalDelta[] = [];
+    let j = i + 1;
 
-    for (let j = 1; j < window.length; j++) {
-      windowDeltas.push(engramToDelta(window[j], baseEngram, baseId));
+    // Extend the window up to WINDOW_SIZE, but stop early if a high-significance
+    // engram is encountered — it becomes the start of a new base instead.
+    while (j < sorted.length && j - i < WINDOW_SIZE) {
+      if (shouldForceSnapshot(sorted[j])) {
+        // This engram is a breakthrough or relationship memory.
+        // End the current chain here so it becomes its own base snapshot.
+        break;
+      }
+      windowDeltas.push(engramToDelta(sorted[j], baseEngram, baseId));
+      j++;
     }
 
     bases.push({
@@ -211,6 +251,7 @@ export function applyTemporalDeltaEncoding(
       chainHash: makeChainHash(windowDeltas),
     });
     deltaGroups.push(windowDeltas);
+    i = j; // advance to next window (or to the forced-snapshot engram)
   }
 
   // Reconstruct immediately so the bundle carries ready-to-use engrams

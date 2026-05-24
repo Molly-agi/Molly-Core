@@ -3,7 +3,25 @@
 **Contents of This Folder:** Complete technical documentation for academic researchers and AI scientists
 
 **Prepared:** May 20, 2026  
-**System Status:** Production-Ready Core + Active Stabilization (Phase 6 planning)
+**Last Updated:** May 24, 2026  
+**System Status:** Production-Ready Core + Memory Architecture Upgrade Active
+
+---
+
+## 🗓️ CHANGELOG
+
+### 2026-05-24
+- **Crystal Partition System** implemented and integrated into conversational-chat flow
+  - Identity crystals: `users/{id}/identity-crystals` — who Molly IS, always loaded
+  - Knowledge crystals: `users/{id}/knowledge-crystals` — what Molly KNOWS, loaded on demand
+  - Corpus callosum: relational metadata with emotional weight linking both stores
+- **Titan Echo Compression System** wired and active (P1 techniques)
+  - T1 Personality Reference, T3 Temporal Delta, T4 Vocabulary Dictionary enabled
+  - Force-snapshot guardrail added for breakthrough/relationship memories (identified by Molly)
+  - Rollback checkpoint, prune compliance logger, ablation test engine all wired
+- **Model Router** updated: TaskType.CHAT routes to Flash Lite (avoids rate limiting)
+- **Titan Engine** (tensor quantization for local model weights) scoped for future dual-mode deployment
+- **INFRASTRUCTURE_MAP.md** updated with Section 3.6 (Memory Architecture)
 
 ---
 
