@@ -12,3 +12,4 @@ export * from './persona-identity.braintrust';
 export * from './persona-baseline';
 export * from './memory-accuracy.braintrust';
 export * from './regression-voice.braintrust';
+export * from './general-knowledge.braintrust';
