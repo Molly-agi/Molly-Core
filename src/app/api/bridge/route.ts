@@ -25,16 +25,23 @@ export async function GET(request: NextRequest) {
   if (!isInternalAuthorized(request)) return unauthorizedResponse();
 
   const unreadFor = request.nextUrl.searchParams.get('unread');
+  const peek = ['1', 'true', 'yes'].includes(
+    String(request.nextUrl.searchParams.get('peek') || '').toLowerCase()
+  );
   const limit = parseInt(request.nextUrl.searchParams.get('limit') || '50', 10);
 
   if (unreadFor && SENDER_PATTERN.test(unreadFor)) {
     const unread = await getUnreadMessages(unreadFor);
-    await markMessagesRead(unreadFor);
+    if (!peek) {
+      await markMessagesRead(unreadFor);
+    }
 
     return NextResponse.json(
       {
         recipient: unreadFor,
         count: unread.length,
+        peek,
+        consumed: !peek,
         messages: unread,
       },
       { headers: { 'Cache-Control': 'no-store' } }

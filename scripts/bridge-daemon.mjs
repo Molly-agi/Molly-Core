@@ -458,6 +458,9 @@ function handleHTTP(req, res) {
   if (req.method === 'GET' && url.pathname === '/api/bridge') {
     loadMessages(); // Re-read from disk
     const unreadFor = url.searchParams.get('unread');
+    const peek = ['1', 'true', 'yes'].includes(
+      String(url.searchParams.get('peek') || '').toLowerCase()
+    );
     const limit = Math.min(
       parseInt(url.searchParams.get('limit') || '50', 10),
       200
@@ -465,12 +468,18 @@ function handleHTTP(req, res) {
 
     if (unreadFor && VALID_SENDERS.has(unreadFor)) {
       const unread = getUnread(unreadFor);
-      markRead(unreadFor);
+      // Default behavior is consume-on-read for backward compatibility.
+      // Pass ?peek=1 for non-destructive reads (debugging/observer UIs).
+      if (!peek) {
+        markRead(unreadFor);
+      }
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(
         JSON.stringify({
           recipient: unreadFor,
           count: unread.length,
+          peek,
+          consumed: !peek,
           messages: unread,
         })
       );
@@ -501,7 +510,27 @@ function handleHTTP(req, res) {
     });
     req.on('end', () => {
       try {
-        const { from, to, content } = JSON.parse(body);
+        const payload = JSON.parse(body);
+        const { from, to, content, action } = payload;
+
+        // Explicit read acknowledgement
+        if (action === 'markRead') {
+          const recipient = String(payload.recipient || from || '').trim();
+          if (!VALID_SENDERS.has(recipient)) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(
+              JSON.stringify({ error: 'Invalid recipient for markRead action' })
+            );
+            return;
+          }
+          const marked = markRead(recipient);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(
+            JSON.stringify({ success: true, action: 'markRead', recipient, marked })
+          );
+          return;
+        }
+
         const msg = handleMessage(from, content, to);
         if (!msg) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
