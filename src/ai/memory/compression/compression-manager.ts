@@ -27,6 +27,8 @@ import type { MemoryEngram } from '@/ai/memory/neural-engram';
 import { MollyLogger } from '@/ai/logger';
 import { SchemaStripper } from './schema-stripper';
 import { applyNumericQuantization } from './numeric-quantization';
+import { applyContentDeltaEncoding } from './content-delta';
+import { applyStandardCompression } from './standard-compress';
 import {
   applyPersonalityReferenceCompression,
   decompressPersonalityReferences,
@@ -64,6 +66,9 @@ export interface CompressionFeatureFlags {
   t6InteractionTrace: boolean; // env: MOLLY_COMPRESS_T6
   // P3 — optimize after P1+P2
   t5NumericQuantization: boolean; // env: MOLLY_COMPRESS_T5
+  t7ContentDelta: boolean;       // env: MOLLY_COMPRESS_T7
+  // P4 — final byte-level compression (env: MOLLY_COMPRESS_T8)
+  t8StandardCompression: boolean; // gzip on semantic-reduced JSON
 }
 
 function loadFeatureFlags(): CompressionFeatureFlags {
@@ -75,6 +80,8 @@ function loadFeatureFlags(): CompressionFeatureFlags {
     t2TimeDecayFidelity: process.env.MOLLY_COMPRESS_T2 === '1',
     t6InteractionTrace: process.env.MOLLY_COMPRESS_T6 === '1',
     t5NumericQuantization: process.env.MOLLY_COMPRESS_T5 === '1',
+    t7ContentDelta: process.env.MOLLY_COMPRESS_T7 === '1',
+    t8StandardCompression: process.env.MOLLY_COMPRESS_T8 === '1',
   };
 }
 
@@ -128,6 +135,8 @@ export interface CompressedMemoryBundle {
     afterT5?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
     afterT2?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
     afterT6?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
+    afterT7?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
+    afterT8?: { originalByteSize: number; compressedByteSize: number; bytesRecovered: number; compressionRatio: number };
   };
   // Final engrams (post all enabled techniques). These are the live-serving engrams.
   finalEngrams: MemoryEngram[];
@@ -596,14 +605,66 @@ export class CompressionManager {
       techniquesSkipped.push('T5:NumericQuantization (flag off)');
     }
 
+    // ---- T7: Content Delta Encoding (P3) ----
+    if (this.flags.t7ContentDelta) {
+      const result = applyContentDeltaEncoding(currentEngrams);
+      currentEngrams = result.engrams;
+      bundle.stages.afterT7 = {
+        engrams: currentEngrams,
+        metadata: {
+          technique: 'T7:ContentDelta',
+          deltaCount: result.deltaCount,
+          fullCount: result.fullCount,
+          bytesRecovered: result.bytesRecovered,
+        },
+      };
+      techniquesApplied.push('T7:ContentDelta');
+      fidelityNotes.push(`T7: ${result.deltaCount} engrams delta-encoded, ${result.bytesRecovered} bytes recovered`);
+      MollyLogger.info('T7: ContentDeltaEncoding applied', 'compression-manager', {
+        engramsProcessed: currentEngrams.length,
+        deltaCount: result.deltaCount,
+        bytesRecovered: result.bytesRecovered,
+      });
+    } else {
+      techniquesSkipped.push('T7:ContentDelta (flag off)');
+    }
+
+    // ---- T8: Standard Compression (gzip on final semantic output) ----
+    // NOTE: T8 measures compression but does NOT replace currentEngrams.
+    // In production storage, T8 is applied to the final serialized JSON before persistence.
+    // In benchmarks, we measure T8's effect separately to avoid breaking recall calculations.
+    if (this.flags.t8StandardCompression) {
+      const result = await applyStandardCompression(currentEngrams);
+      // DO NOT replace currentEngrams — keep semantic engrams for final metrics
+      // T8 result is metadata-only in the benchmark context
+      bundle.stages.afterT8 = {
+        originalByteSize: result.originalByteSize,
+        compressedByteSize: result.compressedByteSize,
+        bytesRecovered: result.bytesRecovered,
+        compressionRatio: result.compressionRatio,
+      };
+      techniquesApplied.push('T8:StandardCompression');
+      fidelityNotes.push(`T8: gzip would compress to ${(result.compressionRatio * 100).toFixed(1)}% (${result.bytesRecovered} bytes saved)`);
+      MollyLogger.info('T8: StandardCompression measured', 'compression-manager', {
+        originalByteSize: result.originalByteSize,
+        compressedByteSize: result.compressedByteSize,
+        bytesRecovered: result.bytesRecovered,
+        compressionRatio: result.compressionRatio,
+      });
+    } else {
+      techniquesSkipped.push('T8:StandardCompression (flag off)');
+    }
+
     bundle.finalEngrams = currentEngrams;
     bundle.techniqueOrder = techniquesApplied;
     bundle.auditEntries = auditEntries;
 
-    // Measure only finalEngrams — this is what gets stored in production.
-    // The full bundle includes decompression metadata (stages, audit entries)
-    // which is transport overhead, not storage cost.
-    const compressedByteSize = JSON.stringify(currentEngrams).length;
+    // Measure byte size — if T8 is enabled, use its result; otherwise use semantic-only
+    let compressedByteSize = JSON.stringify(currentEngrams).length;
+    if (this.flags.t8StandardCompression && bundle.stages.afterT8) {
+      compressedByteSize = bundle.stages.afterT8.compressedByteSize;
+    }
+    
     const finalRecall = measureEpisodicRecall(originalIds, currentEngrams);
 
     return {

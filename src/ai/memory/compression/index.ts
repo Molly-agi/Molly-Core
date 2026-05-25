@@ -80,6 +80,32 @@ export type { InteractionTraceStage } from './interaction-trace';
 export { applyNumericQuantization } from './numeric-quantization';
 export type { NumericQuantizationResult } from './numeric-quantization';
 
+// ── T7: Content Delta Encoding ─────────────────────────────────────────────
+export {
+  applyContentDeltaEncoding,
+  decompressContentDeltas,
+  computeWordDiff,
+  applyWordDiff,
+  isContentDeltaPayload,
+} from './content-delta';
+export type {
+  ContentDeltaOp,
+  ContentDeltaPayload,
+  ContentDeltaResult,
+} from './content-delta';
+
+// ── T8: Standard Compression (gzip) ────────────────────────────────────────
+export {
+  applyStandardCompression,
+  decompressStandardCompression,
+  isStandardCompressedPayload,
+  decompressIfNeeded,
+} from './standard-compress';
+export type {
+  StandardCompressedPayload,
+  StandardCompressionResult,
+} from './standard-compress';
+
 // ── Orchestrators ──────────────────────────────────────────────────────────
 // CompressionManager: feature-flag-driven, 95% recall guardrail, pure compression
 export { CompressionManager } from './compression-manager';

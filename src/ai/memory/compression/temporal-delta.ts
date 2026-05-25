@@ -14,14 +14,11 @@ import { MollyLogger } from '../../logger';
 
 export interface TemporalDeltaResult {
   bases: MemoryEngram[];
-  deltaGroups: Array<{
-    baseId: string;
-    deltas: Array<{
-      id: string;
-      timestamp: Date;
-      diff: Record<string, any>;
-    }>;
-  }>;
+  deltaGroups: Array<Array<{
+    id: string;
+    timestamp: Date;
+    deltas: Record<string, any>;
+  }>>;
   reconstructedEngrams: MemoryEngram[]; // For validation loop
 }
 
@@ -38,7 +35,11 @@ export function applyTemporalDeltaEncoding(
   const reconstructed: MemoryEngram[] = [];
 
   let lastEngram: MemoryEngram | null = null;
-  let currentGroup: (typeof deltaGroups)[0] | null = null;
+  let currentGroupArray: Array<{
+    id: string;
+    timestamp: Date;
+    deltas: Record<string, any>;
+  }> | null = null;
 
   for (let i = 0; i < sorted.length; i++) {
     const engram = sorted[i];
@@ -49,22 +50,19 @@ export function applyTemporalDeltaEncoding(
       reconstructed.push(engram);
       lastEngram = engram;
       
-      currentGroup = {
-        baseId: engram.id,
-        deltas: []
-      };
-      deltaGroups.push(currentGroup);
+      currentGroupArray = [];
+      deltaGroups.push(currentGroupArray);
       continue;
     }
 
     // Calculate diff from the last engram in the chain
-    if (lastEngram && currentGroup) {
+    if (lastEngram && currentGroupArray) {
       const diff = calculateEngramDiff(lastEngram, engram);
       
-      currentGroup.deltas.push({
+      currentGroupArray.push({
         id: engram.id,
         timestamp: engram.timestamp,
-        diff
+        deltas: diff
       });
 
       // For validation, reconstruct immediately from the diff
@@ -90,15 +88,16 @@ export function decompressTemporalDeltas(
 ): MemoryEngram[] {
   const engrams: MemoryEngram[] = [];
 
-  for (const group of result.deltaGroups) {
-    const base = result.bases.find(b => b.id === group.baseId);
+  for (let i = 0; i < result.deltaGroups.length; i++) {
+    const baseIndex = i < result.bases.length ? i : result.bases.length - 1;
+    const base = result.bases[baseIndex];
     if (!base) continue;
 
     engrams.push(base);
     let lastEngram = base;
 
-    for (const delta of group.deltas) {
-      const restored = applyEngramDiff(lastEngram, delta.diff, delta.id, delta.timestamp);
+    for (const delta of result.deltaGroups[i]) {
+      const restored = applyEngramDiff(lastEngram, delta.deltas, delta.id, delta.timestamp);
       engrams.push(restored);
       lastEngram = restored;
     }
@@ -109,23 +108,34 @@ export function decompressTemporalDeltas(
 
 /**
  * Calculates a field-level diff between two engrams.
- * Includes all metadata fields to ensure bit-perfect matching.
+ * For numeric fields, stores delta (difference), not full value.
+ * For other fields, stores full new value to ensure bit-perfect restoration.
  */
 function calculateEngramDiff(oldE: any, newE: any): Record<string, any> {
   const diff: Record<string, any> = {};
 
-  // List of fields to track for perfect recall
-  const fields = [
-    'content', 'importance', 'emotionalValence', 'arousal', 
-    'accessCount', 'lastAccessed', 'userId', 'engramVersion', 
+  // Numeric fields benefit from delta encoding (store difference, not value)
+  const numericFields = ['importance', 'emotionalValence', 'arousal', 'accessCount'];
+  // Non-numeric fields: store full new value
+  const otherFields = [
+    'content', 'lastAccessed', 'userId', 'engramVersion', 
     'consolidationState', 'contextTags', 'relatedEngrams', 
     'personalityContext', 'data'
   ];
   
-  for (const field of fields) {
+  // Delta-encode numeric fields
+  for (const field of numericFields) {
+    const oldVal = oldE[field] ?? 0;
+    const newVal = newE[field] ?? 0;
+    if (typeof oldVal === 'number' && typeof newVal === 'number' && oldVal !== newVal) {
+      diff[field] = newVal - oldVal;  // Store delta, not full value
+    }
+  }
+  
+  // Full-value encoding for other fields
+  for (const field of otherFields) {
     const oldVal = JSON.stringify(oldE[field]);
     const newVal = JSON.stringify(newE[field]);
-    
     if (oldVal !== newVal) {
       diff[field] = newE[field];
     }
@@ -136,6 +146,7 @@ function calculateEngramDiff(oldE: any, newE: any): Record<string, any> {
 
 /**
  * Applies a diff to a previous engram to restore the next one.
+ * For delta-encoded numeric fields, adds the delta to the previous value.
  */
 function applyEngramDiff(
   prev: MemoryEngram, 
@@ -149,10 +160,20 @@ function applyEngramDiff(
     id,
     timestamp
   };
+  
+  // Apply delta-encoded numeric fields
+  const numericFields = ['importance', 'emotionalValence', 'arousal', 'accessCount'];
+  for (const field of numericFields) {
+    if (field in diff) {
+      restored[field] = (prev[field as keyof MemoryEngram] as number ?? 0) + diff[field];
+    }
+  }
 
-  // Overlay only the fields that changed
-  for (const key in diff) {
-    restored[key] = diff[key];
+  // Apply full-value encoded fields (non-numeric)
+  for (const [key, value] of Object.entries(diff)) {
+    if (!numericFields.includes(key)) {
+      restored[key] = value;
+    }
   }
 
   // Handle Date objects specifically if they were stored as strings in diff (though unlikely here)

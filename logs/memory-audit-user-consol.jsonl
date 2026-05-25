@@ -10,3 +10,14 @@
 {"timestamp":"2026-05-24T09:30:15.365Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
 {"timestamp":"2026-05-24T09:30:42.441Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
 {"timestamp":"2026-05-24T11:06:09.611Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:43:45.352Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:45:22.086Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:45:41.970Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:51:48.274Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:51:56.765Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:55:42.715Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:55:56.064Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:56:04.905Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T21:57:39.804Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T22:19:33.889Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}
+{"timestamp":"2026-05-24T22:24:13.064Z","userId":"user-consol","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":5120}}

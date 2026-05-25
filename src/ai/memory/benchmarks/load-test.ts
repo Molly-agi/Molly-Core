@@ -161,6 +161,8 @@ export async function runLoadTest(
       t2TimeDecayFidelity: enabledTechniques.some(t => ['TIME_DECAY', 'T2'].includes(t)),
       t6InteractionTrace: enabledTechniques.some(t => ['INTERACTION_TRACE', 'T6'].includes(t)),
       t5NumericQuantization: enabledTechniques.some(t => ['NUMERIC_QUANT', 'T5'].includes(t)),
+      t7ContentDelta: enabledTechniques.some(t => ['CONTENT_DELTA', 'T7'].includes(t)),
+      t8StandardCompression: enabledTechniques.some(t => ['STANDARD_COMPRESS', 'T8'].includes(t)),
     });
     const result = await manager.compress({
       engrams,

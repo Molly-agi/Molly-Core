@@ -19,6 +19,8 @@ const MODEL_FLAGS = {
     t2TimeDecayFidelity: false,
     t6InteractionTrace: false,
     t5NumericQuantization: false,
+    t7ContentDelta: false,
+    t8StandardCompression: false,
   },
   MODEL_85_FLAT: {
     s0SchemaStripper: false,
@@ -28,6 +30,8 @@ const MODEL_FLAGS = {
     t2TimeDecayFidelity: false,
     t6InteractionTrace: false,
     t5NumericQuantization: false,
+    t7ContentDelta: false,
+    t8StandardCompression: false,
   },
   MODEL_95_NESTED: {
     s0SchemaStripper: false,
@@ -37,6 +41,8 @@ const MODEL_FLAGS = {
     t2TimeDecayFidelity: true,
     t6InteractionTrace: true,
     t5NumericQuantization: true,
+    t7ContentDelta: true,
+    t8StandardCompression: true,
   },
 };
 

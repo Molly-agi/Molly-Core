@@ -14,35 +14,60 @@ export interface PersonalityReferenceResult {
   personalityRefId: Record<string, string>; 
 }
 
+/**
+ * Computes a hash of personality data for deduplication (within 0.005 tolerance).
+ * 
+ * CRITICAL: Compare object structure, not serialized blobs.
+ * Serialization includes metadata (timestamps, IDs) that drift with every state-merge,
+ * causing false uniqueness detection. Instead, normalize the trait values themselves.
+ */
+function hashPersonalityContext(personality: any): string {
+  if (!personality || typeof personality !== 'object') return '';
+  
+  // Extract only the numeric personality traits (ignore metadata, timestamps, IDs)
+  const traits: Array<[string, number]> = [];
+  
+  for (const [key, value] of Object.entries(personality)) {
+    // Skip metadata and structural fields—only hash the actual traits
+    if (typeof value === 'number' && !key.startsWith('_') && !['id', 'timestamp', 'version', 'hash'].includes(key)) {
+      const normalized = Math.round(value * 200) / 200; // 0.005 tolerance
+      traits.push([key, normalized]);
+    }
+  }
+  
+  // Sort by key to ensure deterministic hashing (same traits in any order = same hash)
+  traits.sort(([k1], [k2]) => k1.localeCompare(k2));
+  
+  // Hash is based only on trait values, not metadata
+  return traits.map(([k, v]) => `${k}:${v}`).join('|');
+}
+
 export function applyPersonalityReferenceCompression(
   engrams: MemoryEngram[]
 ): PersonalityReferenceResult {
-  const currentHash = getPersonaVersionHash();
   const personalityRefId: Record<string, string> = {};
   const personalityRefs: Record<string, any> = {};
+  const hashToId: Record<string, string> = {};
 
   const processedEngrams = engrams.map((engram) => {
-    const data = engram.data as any;
+    const personalityContext = (engram as any).personalityContext;
 
-    if (data && (data.persona || data.identity || data.principles)) {
-      if (!personalityRefs[currentHash]) {
-        // Only capture fields that actually exist to ensure bit-perfect restoration
-        const ref: any = {};
-        if (data.identity) ref.identity = data.identity;
-        if (data.principles) ref.principles = data.principles;
-        if (data.persona) ref.persona = data.persona;
-        personalityRefs[currentHash] = ref;
+    if (personalityContext && typeof personalityContext === 'object') {
+      const hash = hashPersonalityContext(personalityContext);
+      
+      if (!hashToId[hash]) {
+        const refId = `pers_${Object.keys(personalityRefs).length}`;
+        hashToId[hash] = refId;
+        personalityRefs[refId] = personalityContext;
       }
 
-      personalityRefId[engram.id] = currentHash;
+      const refId = hashToId[hash];
+      personalityRefId[engram.id] = refId;
 
-      const { persona, identity, principles, ...rest } = data;
+      const { personalityContext: _, ...rest } = engram as any;
       return {
-        ...engram,
-        data: {
-          ...rest,
-          __t1_ref: currentHash
-        }
+        ...rest,
+        personalityRefId: refId
       };
     }
 
@@ -60,21 +85,33 @@ export function decompressPersonalityReferences(
   result: PersonalityReferenceResult
 ): MemoryEngram[] {
   return result.engrams.map((engram) => {
-    const data = engram.data as any;
-    if (data && data.__t1_ref) {
-      const hash = data.__t1_ref;
-      const refData = result.personalityRefs[hash];
-      if (refData) {
-        const { __t1_ref, ...rest } = data;
-        return {
-          ...engram,
-          data: {
-            ...rest,
-            ...refData
-          }
-        };
-      }
+    const refId = (engram as any).personalityRefId;
+    if (refId && result.personalityRefs[refId]) {
+      const personalityContext = result.personalityRefs[refId];
+      const { personalityRefId: _, ...rest } = engram as any;
+      return {
+        ...rest,
+        personalityContext
+      };
     }
     return engram;
   });
+}
+
+export function measurePersonalityCompressionGain(
+  originalEngrams: MemoryEngram[],
+  bundle: PersonalityReferenceResult
+): { savedBytes: number; ratioPercent: number; originalBytes: number; compressedBytes: number } {
+  const originalSize = Buffer.byteLength(JSON.stringify(originalEngrams), 'utf-8');
+  const compressedSize = Buffer.byteLength(JSON.stringify(bundle.engrams), 'utf-8') +
+    Buffer.byteLength(JSON.stringify(bundle.personalityRefs), 'utf-8');
+  const savedBytes = originalSize - compressedSize;
+  const ratioPercent = (savedBytes / originalSize) * 100;
+
+  return {
+    savedBytes,
+    ratioPercent,
+    originalBytes: originalSize,
+    compressedBytes: compressedSize,
+  };
 }

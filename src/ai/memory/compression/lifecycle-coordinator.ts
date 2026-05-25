@@ -184,7 +184,7 @@ export class MemoryLifecycleCoordinator {
       MollyLogger.debug('T3 temporal delta encoding applied', 'lifecycle', {
         baseCount: temporalBundle.bases.length,
         deltaGroupCount: temporalBundle.deltaGroups.length,
-        passthroughCount: temporalBundle.passthrough.length,
+        reconstructedCount: temporalBundle.reconstructedEngrams.length,
       });
     }
 

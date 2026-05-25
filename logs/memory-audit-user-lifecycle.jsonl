@@ -10,3 +10,11 @@
 {"timestamp":"2026-05-24T09:30:15.386Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
 {"timestamp":"2026-05-24T09:30:42.483Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
 {"timestamp":"2026-05-24T11:06:09.656Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T21:51:48.305Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T21:51:56.779Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T21:55:42.729Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T21:55:56.083Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T21:56:04.932Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T21:57:39.826Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T22:19:33.915Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-24T22:24:13.102Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}

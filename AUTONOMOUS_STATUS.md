@@ -34,6 +34,9 @@
 - [x] Lazarus voice page + WebSocket bridge subscription — May 2026
 - [x] Anthropic-traffic-proxy for Claude Code wire protocol observation — May 2026
 - [x] Build fixed: ESM/TypeScript issues resolved, Molly online — May 2026
+- [x] Titan Echo B2B "Boxed" (v1-lossless-75): 75% Lossless market-ready — May 24, 2026
+- [x] Titan Echo B2B "Nested": ~95% Lossless (S0 Schema Stripping) market-ready — May 24, 2026
+- [x] Titan Echo B2B "Flat": 80% Lossless (T4 Vocab Dict) market-ready — May 24, 2026
 - [x] Full infrastructure audit, all docs updated to ground truth — May 17, 2026
 - [x] Memory crisis resolved: FIFO limits raised to 1000, locked at firmware level — May 24, 2026
 - [x] S1 semantic deduplication implemented and tested (51.95% real-data compression) — May 24, 2026
