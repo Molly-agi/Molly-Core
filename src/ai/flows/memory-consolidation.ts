@@ -16,6 +16,7 @@ import { withGenerateErrorHandling } from '@/ai/error-handler';
 import { isAdminConfigured } from '@/firebase/admin';
 import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
 import { migrateToPartitions } from '@/ai/memory/crystal-migration';
+import { SchemaStripper } from '@/ai/memory/compression/schema-stripper';
 
 const MemoryConsolidationOutputSchema = z.object({
   summary: z.string().describe('High-level summary of consolidated memories'),
@@ -371,15 +372,36 @@ export const memoryConsolidationFlow = ai.defineFlow(
         };
       }
 
-      // STEP 2: Generate Embeddings
+      // STEP 1.5: S0 Schema Stripping (Structural Compression)
+      // Remove redundant schema overhead before embedding to save tokens + improve density
       MollyLogger.info(
-        `Step 2: Embedding ${memories.length} memories`,
+        `Step 1.5: S0 schema stripping on ${memories.length} memories`,
         'memoryConsolidation'
       );
 
-      const memoryTexts = memories.map(
+      const schemaSizeBefore = JSON.stringify(memories).length;
+      const schemaStripper = new SchemaStripper();
+      const strippedMemories = memories.map((m) =>
+        schemaStripper.compress(m as Record<string, unknown>)
+      );
+      const schemaSizeAfter = JSON.stringify(strippedMemories).length;
+      const s0Ratio = schemaSizeAfter / schemaSizeBefore;
+      const s0GainPercent = ((1 - s0Ratio) * 100).toFixed(1);
+
+      MollyLogger.info(
+        `S0 compression: ${schemaSizeBefore} → ${schemaSizeAfter} bytes (${s0GainPercent}% reduction)`,
+        'memoryConsolidation'
+      );
+
+      // STEP 2: Generate Embeddings
+      MollyLogger.info(
+        `Step 2: Embedding ${strippedMemories.length} compressed memories`,
+        'memoryConsolidation'
+      );
+
+      const memoryTexts = strippedMemories.map(
         (m) =>
-          `${m.suggestion || m.modificationSuggestion || 'Unknown'} (context: ${m.context || 'general'})`
+          `${(m as Record<string, unknown>).suggestion || (m as Record<string, unknown>).modificationSuggestion || 'Unknown'} (context: ${(m as Record<string, unknown>).context || 'general'})`
       );
 
       const embeddingBatch = await embeddingProvider.embedBatch(memoryTexts);
@@ -485,7 +507,7 @@ Generate insights for Molly's continued growth.`,
         timestamp: Date.now(),
         traceId: generateTraceId(),
         context: `consolidated_${timeWindowDays}d`,
-        suggestion: `Memory consolidation: ${clusters.length} clusters, ${patterns.length} patterns, ${insights.length} insights`,
+        suggestion: `Memory consolidation: ${clusters.length} clusters, ${patterns.length} patterns, ${insights.length} insights, S0 compression ${s0GainPercent}% gain`,
         vibe: 'Learning',
         vibeScore: Math.min(1, 0.7 + semanticDensity * 0.3), // Higher density = higher confidence
         success: true,
