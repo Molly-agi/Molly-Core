@@ -688,25 +688,51 @@ export class CompressionManager {
   async decompress(bundle: CompressedMemoryBundle): Promise<MemoryEngram[]> {
     const startMs = Date.now();
 
-    // Decompress in reverse technique order
+    // Decompress in reverse technique order: T8 → T7 → T6 → T2 → T4 → T3 → T1
     let engrams = bundle.finalEngrams;
 
-    // T6 → T2 → T4 → T3 → T1 decompression (reverse of application)
+    // T8: Standard Compression (gzip) — must be first to restore semantic engrams
+    // T8 stores the entire engram array as a single gzipped blob: [{__compressed: true, ...}]
+    if (bundle.stages.afterT8) {
+      const { isStandardCompressedPayload, decompressStandardCompression } = await import('./standard-compress');
+      const blob = engrams[0];
+      if (engrams.length === 1 && isStandardCompressedPayload(blob)) {
+        engrams = await decompressStandardCompression(blob);
+      }
+    }
+
+    // T7: Content Delta Encoding — restore full content strings (delta payloads are embedded in engram.content)
+    if (bundle.stages.afterT7) {
+      const { decompressContentDeltas } = await import('./content-delta');
+      engrams = decompressContentDeltas(engrams);
+    }
+
+    // T6: Interaction Trace
     if (bundle.stages.afterT6) {
       engrams = decompressInteractionTrace(engrams, bundle.stages.afterT6);
     }
+
+    // T2: Time Decay Fidelity
     if (bundle.stages.afterT2) {
       engrams = decompressTimeDecayFidelity(engrams, bundle.stages.afterT2);
     }
+
+    // T4: Vocabulary Dictionary
     if (bundle.stages.afterT4) {
       engrams = decompressVocabulary(bundle.stages.afterT4);
     }
+
+    // T3: Temporal Delta
     if (bundle.stages.afterT3) {
       engrams = decompressTemporalDeltas(bundle.stages.afterT3);
     }
+
+    // T1: Personality Reference (last, as it was first applied)
     if (bundle.stages.afterT1) {
       engrams = decompressPersonalityReferences(bundle.stages.afterT1);
     }
+
+    // T5: Numeric Quantization — no decompression needed (lossless truncation)
 
     MollyLogger.debug('Decompression complete', 'compression-manager', {
       techniquesReversed: bundle.techniqueOrder.length,

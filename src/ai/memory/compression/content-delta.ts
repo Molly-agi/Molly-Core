@@ -47,9 +47,14 @@ export interface ContentDeltaResult {
  * Compress content fields across a sorted engram sequence using word-level diffs.
  */
 export function applyContentDeltaEncoding(engrams: MemoryEngram[]): ContentDeltaResult {
-  const sorted = [...engrams].sort(
-    (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
-  );
+  // Sort by timestamp; preserve insertion order when timestamps are equal
+  const indexed = engrams.map((e, i) => ({ e, i }));
+  const sorted = indexed
+    .sort((a, b) => {
+      const td = a.e.timestamp.getTime() - b.e.timestamp.getTime();
+      return td !== 0 ? td : a.i - b.i;
+    })
+    .map(({ e }) => e);
 
   const resultEngrams: MemoryEngram[] = [];
   let bytesRecovered = 0;
@@ -99,15 +104,18 @@ export function applyContentDeltaEncoding(engrams: MemoryEngram[]): ContentDelta
  * Must be called with engrams in the same order they were encoded (by timestamp).
  */
 export function decompressContentDeltas(engrams: MemoryEngram[]): MemoryEngram[] {
-  const sorted = [...engrams].sort(
-    (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
-  );
+  // Sort by timestamp; preserve insertion order when timestamps are equal
+  const indexed = engrams.map((e, i) => ({ e, i }));
+  const sorted = indexed.sort((a, b) => {
+    const td = a.e.timestamp.getTime() - b.e.timestamp.getTime();
+    return td !== 0 ? td : a.i - b.i;
+  });
 
   // Build id → resolved content map for forward-chained reconstruction
   const resolved = new Map<string, string>();
   const result: MemoryEngram[] = [];
 
-  for (const engram of sorted) {
+  for (const { e: engram } of sorted) {
     const raw = engram.content as unknown;
 
     if (isContentDeltaPayload(raw)) {
@@ -128,7 +136,12 @@ export function decompressContentDeltas(engrams: MemoryEngram[]): MemoryEngram[]
     }
   }
 
-  return result.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+  return result.sort((a, b) => {
+    const td = a.timestamp.getTime() - b.timestamp.getTime();
+    if (td !== 0) return td;
+    // Preserve original insertion order when timestamps match
+    return engrams.findIndex(e => e.id === a.id) - engrams.findIndex(e => e.id === b.id);
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
