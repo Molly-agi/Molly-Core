@@ -233,6 +233,9 @@ export async function runFullLoadTestSuite() {
         'VOCAB_DICT',
         'TIME_DECAY',
         'INTERACTION_TRACE',
+        'NUMERIC_QUANT',
+        'CONTENT_DELTA',
+        'STANDARD_COMPRESS',
       ],
     },
   ];
