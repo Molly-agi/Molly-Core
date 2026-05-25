@@ -27,9 +27,9 @@ const MODEL_FLAGS = {
     t1PersonalityReference: true,
     t3TemporalDelta: true,
     t4VocabularyDict: true,
-    t2TimeDecayFidelity: false,
-    t6InteractionTrace: false,
-    t5NumericQuantization: false,
+    t2TimeDecayFidelity: true,  // adds age-tiered fidelity reduction
+    t6InteractionTrace: true,   // adds hot/cold scheduling
+    t5NumericQuantization: true, // truncates floats to 3 decimals
     t7ContentDelta: false,
     t8StandardCompression: false,
   },
@@ -80,7 +80,7 @@ const CONTEXTS = ['conversation', 'problem-solving', 'introspection', 'collabora
  * The data field uses a realistic nested structure so that S0 SchemaStripper
  * can demonstrate its structural key deduplication across the corpus.
  */
-function generateTestEngrams(count: number): NeuralEngram[] {
+export function generateTestEngrams(count: number): NeuralEngram[] {
   const engrams: NeuralEngram[] = [];
 
   for (let i = 0; i < count; i++) {
@@ -201,14 +201,14 @@ export async function benchmarkProductionModels(
     models.push({
       modelName: 'MODEL_85_FLAT',
       targetRatio: 0.85,
-      techniques: ['T1', 'T3', 'T4'],
+      techniques: ['T1', 'T3', 'T4', 'T2', 'T6', 'T5'],
       originalSize,
       compressedSize,
       achievedRatio,
       compressionGain,
       executionTimeMs: executionTime,
       recallPreserved: result.metrics?.episodicRecall ?? 1.0,
-      passed: compressionGain >= 8,
+      passed: compressionGain >= 12, // must beat VR tier
     });
   }
 
@@ -231,14 +231,14 @@ export async function benchmarkProductionModels(
     models.push({
       modelName: 'MODEL_95_NESTED',
       targetRatio: 0.95,
-      techniques: ['S0', 'T1', 'T3', 'T4', 'T2', 'T6'],
+      techniques: ['T1', 'T3', 'T4', 'T2', 'T6', 'T5', 'T7', 'T8'],
       originalSize,
       compressedSize,
       achievedRatio,
       compressionGain,
       executionTimeMs: executionTime,
       recallPreserved: result.metrics?.episodicRecall ?? 1.0,
-      passed: compressionGain >= 3,
+      passed: compressionGain >= 50, // must substantially beat FLAT tier
     });
   }
 
