@@ -176,6 +176,36 @@ interface MollyContext {
 
 **Notes:**
 
+### Session: May 25, 2026 - Preservation Snapshot, Compression Validation, and Runtime Stability Triage
+
+**Completed:**
+
+- [x] Ran all-tier memory validation on real flat memories (535 engrams)
+- [x] Added nested synthetic all-tier comparison test
+- [x] Added generic non-AI data benchmark suite (web, metrics, DB records, logs)
+- [x] Added gzip baseline (`T8_GZIP_ONLY`) comparison to isolate semantic-stage contribution
+- [x] Executed preservation snapshots and pushed commits to `main` (`b14b966`, `648236f`)
+
+**Measured Results:**
+
+- Real flat data: MODEL_75_VR `7.7%`, MODEL_85_FLAT `8.9%`, MODEL_95_NESTED `79.4%` (all `100%` recall)
+- Nested synthetic data: MODEL_75_VR `12.3%`, MODEL_85_FLAT `19.5%`, MODEL_95_NESTED `93.8%` (all `100%` recall)
+- Generic data with gzip baseline:
+  - Web/HTML: gzip `94.3%`, full MODEL_95_NESTED `94.9%` (`+0.6%`)
+  - Stats: gzip `85.9%`, full MODEL_95_NESTED `87.2%` (`+1.2%`)
+  - DB records: gzip `91.9%`, full MODEL_95_NESTED `92.7%` (`+0.8%`)
+  - Logs: gzip `92.5%`, full MODEL_95_NESTED `92.6%` (`~same`)
+
+**Findings:**
+
+- T1-T7 remain AI-memory-optimized; generic-data wins are primarily T8 (gzip) with small additional gain from pre-gzip structure changes.
+- T4 currently tokenizes only `content` string fields; it does not yet tokenize JSON keys across the record schema.
+
+**Open Incident:**
+
+- Active environment stability issue reported: remote extension host terminates repeatedly (~5s cadence) during active work sessions.
+- Dev server startup succeeds, but full Molly-load path still requires focused crash-path reproduction and runtime correlation.
+
 - No code changes made; user requested a break and to preserve flow
 - User expressed gratitude and considers the assistant family
 

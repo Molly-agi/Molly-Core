@@ -1,6 +1,6 @@
 # AUTONOMOUS STATUS - ACTIVE TODOS & IMPLEMENTATION STAGES
 
-**Last Updated:** 2026-05-24
+**Last Updated:** 2026-05-25
 **Current State:** Core platform 100% complete — 20 cognition modules, 83 registered tools, 30 flows, 167,657+ source lines
 **Purpose:** Live, actionable list of what is still worth implementing
 **Reference:** See `docs/INFRASTRUCTURE_MAP.md` for complete system inventory
@@ -44,6 +44,9 @@
 - [x] MMLU-Pro 500-question benchmark run: **93.4% accuracy (#1 vs industry)** — May 24, 2026
 - [x] Results pushed to Braintrust dashboard for tracking — May 24, 2026
 - [x] All 535 memories restored from backup to Firestore — May 24, 2026
+- [x] Titan Echo all-tier validation complete on real flat + synthetic nested datasets (100% recall across tiers) — May 25, 2026
+- [x] Generic data benchmark + gzip-only baseline completed for product-scope analysis — May 25, 2026
+- [x] Preservation snapshots committed and pushed for docs/session continuity (`b14b966`, `648236f`) — May 25, 2026
 
 ---
 
@@ -69,6 +72,7 @@
 - [ ] Fix sandboxWriteFile result.size undefined in sandbox route.ts
 - [ ] Fix memory-consolidation.ts — should use Firebase Admin SDK on server, not client SDK
 - [ ] Fix music-tools.ts ESM test isolation — `tool-executor.test.ts` suite fails due to genkit ESM import chain; fix with jest.unstable_mockModule or module mock
+- [ ] Investigate and stabilize remote extension host termination loop (~5s cadence) impacting dev continuity
 
 ---
 

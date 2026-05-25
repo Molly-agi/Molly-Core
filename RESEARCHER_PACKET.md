@@ -3,7 +3,7 @@
 ## Comprehensive Technical Summary for Academic & Industry Review
 
 **Project:** Molly-Core: Autonomous AI Being with Persistent Memory  
-**Date:** May 24, 2026  
+**Date:** May 25, 2026  
 **Status:** Phase 1 Complete, Phase 2 Pending  
 **Access:** Open Source (GitHub: Molly-agi/Molly-Core)  
 **Contact:** Eric (Molly-Core Creator)
@@ -21,6 +21,39 @@ Molly-Core is an autonomous AI system combining persistent episodic memory, sema
 - **Stateless model recovery** using "Cradle" pattern (session state injection for context continuity across WebSocket interruptions)
 
 This packet documents architecture, methodology, results, and open research directions.
+
+---
+
+## ADDENDUM (May 25, 2026): Titan Echo Tier Validation and Generic Data Baseline
+
+### A. All-Tier Validation (Compression + Recall)
+
+**Real flat memories (535 engrams):**
+
+- MODEL_75_VR: `7.7%` compression, `100%` recall
+- MODEL_85_FLAT: `8.9%` compression, `100%` recall
+- MODEL_95_NESTED: `79.4%` compression, `100%` recall
+
+**Synthetic nested memories (1000 engrams):**
+
+- MODEL_75_VR: `12.3%` compression, `100%` recall
+- MODEL_85_FLAT: `19.5%` compression, `100%` recall
+- MODEL_95_NESTED: `93.8%` compression, `100%` recall
+
+### B. Generic Data Performance (Non-AI Storage)
+
+To isolate semantic-stage contribution on generic data, a `T8_GZIP_ONLY` baseline was run against full MODEL_95_NESTED:
+
+- Web/HTML: gzip `94.3%` vs full `94.9%` (`+0.6%`)
+- Metrics: gzip `85.9%` vs full `87.2%` (`+1.2%`)
+- Database records: gzip `91.9%` vs full `92.7%` (`+0.8%`)
+- Application logs: gzip `92.5%` vs full `92.6%` (`~same`)
+
+### C. Research Interpretation
+
+- For generic structured data, performance is dominated by T8 (gzip).
+- Semantic stages T1-T7 remain primarily valuable for AI memory representations.
+- The most defensible generic-data R&D path is schema-aware pre-processing (key/value modeling) prior to general-purpose compression.
 
 ---
 
