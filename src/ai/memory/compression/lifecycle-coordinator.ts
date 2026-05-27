@@ -17,7 +17,7 @@ import {
 import {
   applyTemporalDeltaEncoding,
   decompressTemporalDeltas,
-  type TemporalDeltaBundle,
+  type TemporalDeltaResult,
 } from './temporal-delta';
 import { RollbackCheckpointManager } from '../recovery/checkpoint';
 import {
@@ -25,6 +25,7 @@ import {
   type PruneReasonCode,
 } from '../audit/prune-logger';
 import { AblationTestEngine } from '../benchmarks/ablation';
+import { getMetricsCollector } from './metrics-collector';
 
 export interface CompressionPipeline {
   enableVocabDict?: boolean;
@@ -45,7 +46,7 @@ export interface CompressionResult {
   checkpointId: string;
   // Structured bundles stored alongside the buffer for lossless decompression
   personalityBundle?: PersonalityReferenceBundle;
-  temporalBundle?: TemporalDeltaBundle;
+  temporalBundle?: TemporalDeltaResult;
 }
 
 export interface CompressionMetrics {
@@ -155,7 +156,7 @@ export class MemoryLifecycleCoordinator {
     let workingEngrams = [...engrams];
     const techniquesUsed: string[] = [];
     let personalityBundle: PersonalityReferenceBundle | undefined;
-    let temporalBundle: TemporalDeltaBundle | undefined;
+    let temporalBundle: TemporalDeltaResult | undefined;
 
     // ── T1: Personality Reference Compression ──
     // Deduplicates personality snapshots into a reference table.
@@ -252,6 +253,9 @@ export class MemoryLifecycleCoordinator {
       techniques: techniquesUsed.join(','),
       timeMs: metrics.timeMs,
     });
+
+    // ── Record metrics for live monitoring dashboard ──
+    getMetricsCollector().recordBatch(metrics, engrams.length, metrics.timeMs);
 
     return {
       compressed,

@@ -36,12 +36,9 @@ export type {
 export {
   applyTemporalDeltaEncoding,
   decompressTemporalDeltas,
-  measureTemporalDeltaGain,
 } from './temporal-delta';
 export type {
-  TemporalBase,
-  TemporalDelta,
-  TemporalDeltaBundle,
+  TemporalDeltaResult,
 } from './temporal-delta';
 
 // ── T4a: Vocabulary Dictionary — pipeline version (string substitution) ───
@@ -139,3 +136,12 @@ export type { AuditLogEntry, PruneReasonCode } from '../audit/prune-logger';
 
 export { AblationTestEngine } from '../benchmarks/ablation';
 export type { AblationReport, AblationSuite } from '../benchmarks/ablation';
+
+// ── Metrics Collection (Live Monitoring) ───────────────────────────────────
+export {
+  getMetricsCollector,
+} from './metrics-collector';
+export type {
+  CompressionMetricsSnapshot,
+  MetricsAggregation,
+} from './metrics-collector';

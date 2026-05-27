@@ -146,6 +146,12 @@ export {
   getAgentResponses,
 } from './system-flows';
 
+// Compression Monitoring & Metrics — Titan Echo Live Dashboard
+export {
+  getCompressionMetrics,
+  getCompressionSummary,
+} from './system-flows';
+
 // Sandbox — Molly's Safe Coding Playground
 export { runSandboxAction } from './tablet-flows';
 

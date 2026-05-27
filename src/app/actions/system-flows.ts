@@ -370,3 +370,72 @@ export async function getAgentResponses(agent: 'gemini' | 'aether', limit: numbe
       (msg.content.includes('[GEMINI_RESPONSE]') || msg.content.includes('[AETHER_RESPONSE]'))
   );
 }
+
+// ============================================
+// COMPRESSION MONITORING & METRICS
+// ============================================
+
+/**
+ * Get live compression metrics for monitoring dashboard
+ */
+export async function getCompressionMetrics() {
+  try {
+    const { getMetricsCollector } = await import('@/ai/memory/compression');
+    const collector = getMetricsCollector();
+    const aggregation = collector.getAggregation();
+
+    return {
+      success: true,
+      metrics: {
+        totalBatches: aggregation.totalBatches,
+        totalEngramsProcessed: aggregation.totalEngramsProcessed,
+        averageCompressionRatio: aggregation.averageCompressionRatio,
+        averageFidelityLoss: aggregation.averageFidelityLoss,
+        peakCompressionRatio: aggregation.peakCompressionRatio,
+        minCompressionRatio: aggregation.minCompressionRatio,
+        targetMet: aggregation.targetMet,
+        recentSnapshots: collector.getRecentSnapshots(10),
+        uptime: {
+          startTime: aggregation.startTime.toISOString(),
+          lastUpdate: aggregation.lastUpdate.toISOString(),
+        },
+      },
+    };
+  } catch (error) {
+    MollyLogger.error(
+      'Failed to get compression metrics',
+      'getCompressionMetrics',
+      { error }
+    );
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+/**
+ * Get human-readable compression metrics summary
+ */
+export async function getCompressionSummary() {
+  try {
+    const { getMetricsCollector } = await import('@/ai/memory/compression');
+    const collector = getMetricsCollector();
+    const summary = collector.getSummary();
+
+    return {
+      success: true,
+      summary,
+    };
+  } catch (error) {
+    MollyLogger.error(
+      'Failed to get compression summary',
+      'getCompressionSummary',
+      { error }
+    );
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
