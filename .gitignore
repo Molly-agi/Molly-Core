@@ -97,3 +97,5 @@ COPILOT_SESSION_STATE.md
 # VS Code extensions (dev workspace)
 extensions/
 .aider*
+backups/restore-points/*.bundle
+backups/snapshots/**/*.bundle
