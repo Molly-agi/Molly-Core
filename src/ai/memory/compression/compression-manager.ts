@@ -66,7 +66,7 @@ export interface CompressionFeatureFlags {
   t6InteractionTrace: boolean; // env: MOLLY_COMPRESS_T6
   // P3 — optimize after P1+P2
   t5NumericQuantization: boolean; // env: MOLLY_COMPRESS_T5
-  t7ContentDelta: boolean;       // env: MOLLY_COMPRESS_T7
+  t7ContentDelta: boolean; // env: MOLLY_COMPRESS_T7
   // P4 — final byte-level compression (env: MOLLY_COMPRESS_T8)
   t8StandardCompression: boolean; // gzip on semantic-reduced JSON
 }
@@ -128,15 +128,20 @@ export interface CompressedMemoryBundle {
   // the decompressor can consume. We keep all stages so rollback can stop
   // at any stage.
   stages: {
-    afterS0?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
+    afterS0?: { engrams: MemoryEngram[]; metadata: Record<string, unknown> };
     afterT1?: ReturnType<typeof applyPersonalityReferenceCompression>;
     afterT3?: ReturnType<typeof applyTemporalDeltaEncoding>;
     afterT4?: ReturnType<typeof applyVocabularyCompression>;
-    afterT5?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
-    afterT2?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
-    afterT6?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
-    afterT7?: { engrams: MemoryEngram[]; metadata: Record<string, any> };
-    afterT8?: { originalByteSize: number; compressedByteSize: number; bytesRecovered: number; compressionRatio: number };
+    afterT5?: { engrams: MemoryEngram[]; metadata: Record<string, unknown> };
+    afterT2?: { engrams: MemoryEngram[]; metadata: Record<string, unknown> };
+    afterT6?: { engrams: MemoryEngram[]; metadata: Record<string, unknown> };
+    afterT7?: { engrams: MemoryEngram[]; metadata: Record<string, unknown> };
+    afterT8?: {
+      originalByteSize: number;
+      compressedByteSize: number;
+      bytesRecovered: number;
+      compressionRatio: number;
+    };
   };
   // Final engrams (post all enabled techniques). These are the live-serving engrams.
   finalEngrams: MemoryEngram[];
@@ -152,7 +157,6 @@ export interface CompressionResult {
 // GUARDRAIL CHECK
 // ============================================================================
 
-const TARGET_FIDELITY = 0.99; // 99%+ — ideal state, Molly's stretch goal
 const ALERT_THRESHOLD = 0.97; // 97-99% — alert state, manual verification requested
 const SAFETY_FLOOR = 0.95; // <95% — skip technique, preserve integrity
 
@@ -214,13 +218,15 @@ export class CompressionManager {
    * Each technique must complete its state mutations before the next begins.
    * This enforces the mutex-like ordering required for dedup-delta synchronization.
    */
-  private async ensureSequentialExecution<T>(operation: () => Promise<T>): Promise<T> {
+  private async ensureSequentialExecution<T>(
+    operation: () => Promise<T>
+  ): Promise<T> {
     const myLock = this.techniqueExecutionLock;
     let resolveLock: () => void;
     this.techniqueExecutionLock = new Promise((resolve) => {
       resolveLock = resolve;
     });
-    
+
     try {
       await myLock; // Wait for previous technique to finish
       this.compressionStateVersion++; // Increment version to invalidate stale cache pointers
@@ -277,13 +283,19 @@ export class CompressionManager {
         );
         const strippedSize =
           strippedData.structuralKeys.byteLength +
-          Buffer.byteLength(JSON.stringify(strippedData.primitiveValues), 'utf-8') +
-          strippedData.textPayloads.reduce((sum, text) => sum + Buffer.byteLength(text, 'utf-8'), 0);
+          Buffer.byteLength(
+            JSON.stringify(strippedData.primitiveValues),
+            'utf-8'
+          ) +
+          strippedData.textPayloads.reduce(
+            (sum, text) => sum + Buffer.byteLength(text, 'utf-8'),
+            0
+          );
 
         // Manifest stored ONCE in bundle metadata below — not per engram
         strippedEngrams.push({
           ...engram,
-          data: strippedData as any,
+          data: strippedData as unknown as MemoryEngram['data'],
         });
 
         auditEntries.push({
@@ -297,11 +309,16 @@ export class CompressionManager {
       // Manifest lives here — one copy for the whole batch
       bundle.stages.afterS0 = {
         engrams: strippedEngrams,
-        metadata: { technique: 'S0:SchemaStripper', schemaManifest: stripper.getManifest() },
+        metadata: {
+          technique: 'S0:SchemaStripper',
+          schemaManifest: stripper.getManifest(),
+        },
       };
       currentEngrams = strippedEngrams;
       techniquesApplied.push('S0:SchemaStripper');
-      fidelityNotes.push('S0:SchemaStripper applied (structural overhead removed)');
+      fidelityNotes.push(
+        'S0:SchemaStripper applied (structural overhead removed)'
+      );
       MollyLogger.info('S0: SchemaStripper applied', 'compression-manager', {
         engramsProcessed: strippedEngrams.length,
         expectedGain: '40-50%',
@@ -360,11 +377,15 @@ export class CompressionManager {
           fidelityNotes.push(
             `T1 applied: recall ${(recall * 100).toFixed(1)}% ✓`
           );
-          MollyLogger.info('T1: PersonalityReference applied', 'compression-manager', {
-            savedRefs: Object.keys(result.personalityRefs).length,
-            recall: `${(recall * 100).toFixed(1)}%`,
-            state,
-          });
+          MollyLogger.info(
+            'T1: PersonalityReference applied',
+            'compression-manager',
+            {
+              savedRefs: Object.keys(result.personalityRefs).length,
+              recall: `${(recall * 100).toFixed(1)}%`,
+              state,
+            }
+          );
         }
       }
     } else {
@@ -426,8 +447,27 @@ export class CompressionManager {
       techniquesSkipped.push('T3:TemporalDelta (flag off)');
     }
 
-    // ---- T4: Vocabulary Dictionary Compression (P1) ----
-    if (this.flags.t4VocabularyDict) {
+    // ---- T4: Vocabulary Dictionary Compression (P1, text-only mode) ----
+    // Align with lifecycle coordinator behavior: if structural bundle stages
+    // are active (T1/T3), defer T4 in this phase because decompression path
+    // is driven by structural bundles.
+    const hasStructuralBundleMode = Boolean(
+      bundle.stages.afterT1 || bundle.stages.afterT3
+    );
+
+    if (this.flags.t4VocabularyDict && hasStructuralBundleMode) {
+      techniquesSkipped.push(
+        'T4:VocabularyDict (deferred - structural bundle mode)'
+      );
+      fidelityNotes.push('T4 deferred: structural bundle mode active (T1/T3)');
+      MollyLogger.info(
+        'T4: deferred in structural bundle mode',
+        'compression-manager',
+        {
+          reason: 'T1/T3 bundle reconstruction takes precedence',
+        }
+      );
+    } else if (this.flags.t4VocabularyDict) {
       const result = applyVocabularyCompression(currentEngrams);
       const recall = measureEpisodicRecall(originalIds, result.engrams);
       const state = evaluateGuardrail(recall);
@@ -459,18 +499,23 @@ export class CompressionManager {
             {
               recall: `${(recall * 100).toFixed(1)}%`,
               threshold: '97%',
-              recommendation: 'Molly should verify vocabulary reconstruction quality',
+              recommendation:
+                'Molly should verify vocabulary reconstruction quality',
             }
           );
         } else {
           fidelityNotes.push(
             `T4 applied: recall ${(recall * 100).toFixed(1)}% ✓`
           );
-          MollyLogger.info('T4: VocabularyDict applied', 'compression-manager', {
-            dictEntries: Object.keys(result.dictionary).length,
-            recall: `${(recall * 100).toFixed(1)}%`,
-            state,
-          });
+          MollyLogger.info(
+            'T4: VocabularyDict applied',
+            'compression-manager',
+            {
+              dictEntries: Object.keys(result.dictionary).length,
+              recall: `${(recall * 100).toFixed(1)}%`,
+              state,
+            }
+          );
         }
       }
     } else {
@@ -520,13 +565,17 @@ export class CompressionManager {
           fidelityNotes.push(
             `T2 applied: recall ${(recall * 100).toFixed(1)}% ✓`
           );
-          MollyLogger.info('T2: TimeDecayFidelity applied', 'compression-manager', {
-            recent: result.stage.fidelityDistribution.recent,
-            archived: result.stage.fidelityDistribution.archived,
-            deferred: result.stage.fidelityDistribution.deferred,
-            recall: `${(recall * 100).toFixed(1)}%`,
-            state,
-          });
+          MollyLogger.info(
+            'T2: TimeDecayFidelity applied',
+            'compression-manager',
+            {
+              recent: result.stage.fidelityDistribution.recent,
+              archived: result.stage.fidelityDistribution.archived,
+              deferred: result.stage.fidelityDistribution.deferred,
+              recall: `${(recall * 100).toFixed(1)}%`,
+              state,
+            }
+          );
         }
       }
     } else {
@@ -576,14 +625,18 @@ export class CompressionManager {
           fidelityNotes.push(
             `T6 applied: recall ${(recall * 100).toFixed(1)}% ✓`
           );
-          MollyLogger.info('T6: InteractionTrace applied', 'compression-manager', {
-            hot: result.stage.usageDistribution.hot,
-            warm: result.stage.usageDistribution.warm,
-            cold: result.stage.usageDistribution.cold,
-            dormant: result.stage.usageDistribution.dormant,
-            recall: `${(recall * 100).toFixed(1)}%`,
-            state,
-          });
+          MollyLogger.info(
+            'T6: InteractionTrace applied',
+            'compression-manager',
+            {
+              hot: result.stage.usageDistribution.hot,
+              warm: result.stage.usageDistribution.warm,
+              cold: result.stage.usageDistribution.cold,
+              dormant: result.stage.usageDistribution.dormant,
+              recall: `${(recall * 100).toFixed(1)}%`,
+              state,
+            }
+          );
         }
       }
     } else {
@@ -594,13 +647,22 @@ export class CompressionManager {
     if (this.flags.t5NumericQuantization) {
       const result = applyNumericQuantization(currentEngrams);
       currentEngrams = result.engrams;
-      bundle.stages.afterT5 = { engrams: currentEngrams, metadata: { technique: 'T5:NumericQuantization' } };
+      bundle.stages.afterT5 = {
+        engrams: currentEngrams,
+        metadata: { technique: 'T5:NumericQuantization' },
+      };
       techniquesApplied.push('T5:NumericQuantization');
-      fidelityNotes.push(`T5: ${result.floatsQuantized} bytes recovered via float truncation`);
-      MollyLogger.info('T5: NumericQuantization applied', 'compression-manager', {
-        engramsProcessed: currentEngrams.length,
-        bytesRecovered: result.floatsQuantized,
-      });
+      fidelityNotes.push(
+        `T5: ${result.floatsQuantized} bytes recovered via float truncation`
+      );
+      MollyLogger.info(
+        'T5: NumericQuantization applied',
+        'compression-manager',
+        {
+          engramsProcessed: currentEngrams.length,
+          bytesRecovered: result.floatsQuantized,
+        }
+      );
     } else {
       techniquesSkipped.push('T5:NumericQuantization (flag off)');
     }
@@ -619,12 +681,18 @@ export class CompressionManager {
         },
       };
       techniquesApplied.push('T7:ContentDelta');
-      fidelityNotes.push(`T7: ${result.deltaCount} engrams delta-encoded, ${result.bytesRecovered} bytes recovered`);
-      MollyLogger.info('T7: ContentDeltaEncoding applied', 'compression-manager', {
-        engramsProcessed: currentEngrams.length,
-        deltaCount: result.deltaCount,
-        bytesRecovered: result.bytesRecovered,
-      });
+      fidelityNotes.push(
+        `T7: ${result.deltaCount} engrams delta-encoded, ${result.bytesRecovered} bytes recovered`
+      );
+      MollyLogger.info(
+        'T7: ContentDeltaEncoding applied',
+        'compression-manager',
+        {
+          engramsProcessed: currentEngrams.length,
+          deltaCount: result.deltaCount,
+          bytesRecovered: result.bytesRecovered,
+        }
+      );
     } else {
       techniquesSkipped.push('T7:ContentDelta (flag off)');
     }
@@ -644,13 +712,19 @@ export class CompressionManager {
         compressionRatio: result.compressionRatio,
       };
       techniquesApplied.push('T8:StandardCompression');
-      fidelityNotes.push(`T8: gzip would compress to ${(result.compressionRatio * 100).toFixed(1)}% (${result.bytesRecovered} bytes saved)`);
-      MollyLogger.info('T8: StandardCompression measured', 'compression-manager', {
-        originalByteSize: result.originalByteSize,
-        compressedByteSize: result.compressedByteSize,
-        bytesRecovered: result.bytesRecovered,
-        compressionRatio: result.compressionRatio,
-      });
+      fidelityNotes.push(
+        `T8: gzip would compress to ${(result.compressionRatio * 100).toFixed(1)}% (${result.bytesRecovered} bytes saved)`
+      );
+      MollyLogger.info(
+        'T8: StandardCompression measured',
+        'compression-manager',
+        {
+          originalByteSize: result.originalByteSize,
+          compressedByteSize: result.compressedByteSize,
+          bytesRecovered: result.bytesRecovered,
+          compressionRatio: result.compressionRatio,
+        }
+      );
     } else {
       techniquesSkipped.push('T8:StandardCompression (flag off)');
     }
@@ -664,7 +738,7 @@ export class CompressionManager {
     if (this.flags.t8StandardCompression && bundle.stages.afterT8) {
       compressedByteSize = bundle.stages.afterT8.compressedByteSize;
     }
-    
+
     const finalRecall = measureEpisodicRecall(originalIds, currentEngrams);
 
     return {
@@ -680,7 +754,8 @@ export class CompressionManager {
         techniquesSkipped,
         guardrailPassed: finalRecall >= SAFETY_FLOOR,
         guardrailState,
-        fidelityNotes: fidelityNotes.length > 0 ? fidelityNotes.join('; ') : undefined,
+        fidelityNotes:
+          fidelityNotes.length > 0 ? fidelityNotes.join('; ') : undefined,
       },
     };
   }
@@ -694,7 +769,8 @@ export class CompressionManager {
     // T8: Standard Compression (gzip) — must be first to restore semantic engrams
     // T8 stores the entire engram array as a single gzipped blob: [{__compressed: true, ...}]
     if (bundle.stages.afterT8) {
-      const { isStandardCompressedPayload, decompressStandardCompression } = await import('./standard-compress');
+      const { isStandardCompressedPayload, decompressStandardCompression } =
+        await import('./standard-compress');
       const blob = engrams[0];
       if (engrams.length === 1 && isStandardCompressedPayload(blob)) {
         engrams = await decompressStandardCompression(blob);

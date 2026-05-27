@@ -103,7 +103,7 @@ describe('CompressionManager — Option C Pipeline Orchestrator', () => {
       );
     });
 
-    it('applies T1→T3→T4 when all P1 flags are ON', async () => {
+    it('defers T4 when T1/T3 structural bundle mode is active', async () => {
       const manager = CompressionManager.getInstance({
         t1PersonalityReference: true,
         t3TemporalDelta: true,
@@ -120,7 +120,12 @@ describe('CompressionManager — Option C Pipeline Orchestrator', () => {
         'T1:PersonalityReference'
       );
       expect(result.metrics.techniquesApplied).toContain('T3:TemporalDelta');
-      expect(result.metrics.techniquesApplied).toContain('T4:VocabularyDict');
+      expect(result.metrics.techniquesApplied).not.toContain(
+        'T4:VocabularyDict'
+      );
+      expect(result.metrics.techniquesSkipped).toContain(
+        'T4:VocabularyDict (deferred - structural bundle mode)'
+      );
     });
   });
 
@@ -274,7 +279,7 @@ describe('CompressionManager — Option C Pipeline Orchestrator', () => {
       }
     });
 
-    it('decompresses correctly when techniques applied in reverse order', async () => {
+    it('decompresses correctly when T4 is enabled but deferred', async () => {
       const manager = CompressionManager.getInstance({
         t1PersonalityReference: true,
         t3TemporalDelta: true,
@@ -287,7 +292,7 @@ describe('CompressionManager — Option C Pipeline Orchestrator', () => {
         compressionTimestamp: Date.now(),
       });
 
-      // Decompression should reverse T4→T3→T1
+      // Decompression should still restore full data with T4 deferred.
       const decompressed = await manager.decompress(result.bundle);
 
       // All IDs present
