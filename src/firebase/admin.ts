@@ -49,12 +49,14 @@ export function isAdminConfigured(): boolean {
     process.env.FIREBASE_PRIVATE_KEY
   );
 
+  const hasGoogleApplicationCredentials = Boolean(
+    process.env.GOOGLE_APPLICATION_CREDENTIALS
+  );
+
   return Boolean(
     hasServiceAccountJson ||
     hasSplitServiceAccount ||
-    process.env.GOOGLE_CLOUD_PROJECT ||
-    process.env.GCLOUD_PROJECT ||
-    process.env.FIREBASE_PROJECT_ID
+    hasGoogleApplicationCredentials
   );
 }
 
@@ -85,12 +87,71 @@ async function ensureInitialized(): Promise<boolean> {
     // Handle ESM default export
     adminModule = imported.default ?? imported;
 
+    const hasServiceAccountJson = Boolean(
+      process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+    );
+    const hasSplitServiceAccount = Boolean(
+      process.env.FIREBASE_PROJECT_ID &&
+      process.env.FIREBASE_CLIENT_EMAIL &&
+      process.env.FIREBASE_PRIVATE_KEY
+    );
+    const hasGoogleApplicationCredentials = Boolean(
+      process.env.GOOGLE_APPLICATION_CREDENTIALS
+    );
+
+    if (
+      !hasServiceAccountJson &&
+      !hasSplitServiceAccount &&
+      !hasGoogleApplicationCredentials
+    ) {
+      console.warn(
+        '[Firebase Admin] No server credentials found. Running in local-only mode.'
+      );
+      return false;
+    }
+
     let app;
     if (adminModule.apps.length === 0) {
-      // Always use only the projectId, never a service account, for default service account usage
-      app = adminModule.initializeApp({
-        projectId: 'termai-molly-55988354-f7535',
-      });
+      const initOptions: {
+        credential?: unknown;
+        projectId?: string;
+      } = {};
+
+      if (hasServiceAccountJson && process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
+        try {
+          const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON) as {
+            project_id?: string;
+          };
+          initOptions.credential = adminModule.credential.cert(serviceAccount);
+          initOptions.projectId =
+            serviceAccount.project_id ?? process.env.FIREBASE_PROJECT_ID;
+        } catch (err) {
+          console.warn(
+            '[Firebase Admin] Invalid FIREBASE_SERVICE_ACCOUNT_JSON:',
+            err instanceof Error ? err.message : String(err)
+          );
+          return false;
+        }
+      } else if (hasSplitServiceAccount) {
+        const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(
+          /\\n/g,
+          '\n'
+        );
+        initOptions.credential = adminModule.credential.cert({
+          projectId: process.env.FIREBASE_PROJECT_ID!,
+          clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
+          privateKey,
+        });
+        initOptions.projectId = process.env.FIREBASE_PROJECT_ID;
+      } else {
+        // ADC path via GOOGLE_APPLICATION_CREDENTIALS
+        initOptions.projectId =
+          process.env.GOOGLE_CLOUD_PROJECT ??
+          process.env.GCLOUD_PROJECT ??
+          process.env.FIREBASE_PROJECT_ID;
+      }
+
+      app = adminModule.initializeApp(initOptions);
     } else {
       app = adminModule.app();
     }

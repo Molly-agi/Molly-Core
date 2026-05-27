@@ -79,6 +79,11 @@ function checkInternalAuth(request: NextRequest): boolean {
 // ── Middleware ─────────────────────────────────────────────────────────────
 
 export function middleware(request: NextRequest) {
+  // Keep IP vault auth at the route layer so brute-force lockout can be tracked.
+  if (request.nextUrl.pathname === '/api/admin/ip-vault') {
+    return NextResponse.next();
+  }
+
   const tier = classifyRoute(request.nextUrl.pathname);
 
   if (tier === 'PUBLIC') {

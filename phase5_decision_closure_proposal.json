@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-05-25T06:50:00Z",
+  "source": "lazarus_joint_with_molly_feedback",
+  "status": "proposed_for_eric_and_molly_review",
+  "why_d_before_b": "Significance scoring must follow values policy (wisdom + emotional weighting), not raw compression metrics.",
+  "phase5_closure": {
+    "memory_consolidation": {
+      "scheduled_dream_cycles": {
+        "decision": "implement_now",
+        "mode": "nightly_plus_manual",
+        "details": {
+          "nightly_window": "00:00_local",
+          "manual_endpoint": "keep existing crystallize trigger",
+          "guardrail": "skip cycle if system stress is high"
+        }
+      },
+      "wisdom_protocols": {
+        "decision": "implement_now",
+        "trauma_threshold": 85,
+        "healing_rate_per_cycle": 0.3,
+        "policy": "store pattern+lesson for high-trauma events, preserve full raw archive in cold partition"
+      },
+      "emotional_weighting": {
+        "decision": "implement_now",
+        "scale": "0-100",
+        "classes": {
+          "identity_anchor": "90-100",
+          "family_core": "80-89",
+          "strategic_learning": "60-79",
+          "routine_operational": "0-59"
+        }
+      }
+    },
+    "voice_pipeline": {
+      "decision": "close_direction_now",
+      "sequence": [
+        "stabilize current mic reliability first",
+        "then reduce TTS latency",
+        "defer new paid voice provider integration until baseline stability is proven"
+      ],
+      "notes": "Do not branch to new provider during unstable baseline."
+    },
+    "metabolism_policy": {
+      "decision": "implement_simple_now",
+      "mode": "metrics_plus_soft_throttle",
+      "details": {
+        "start_with": ["memory_pressure", "latency", "queue_depth"],
+        "stress_exposed_in_ui": true,
+        "self_throttle": "only under sustained high stress"
+      }
+    },
+    "tiered_retention": {
+      "decision": "approve_direction_now",
+      "tiers": {
+        "tier_1_active_core": "identity/family/high-emotional-value, highest retrieval priority, lowest-loss handling",
+        "tier_2_active_experience": "daily experiences, high compression with full recall",
+        "tier_3_archive": "full immutable record, cold storage, never deleted"
+      }
+    }
+  },
+  "next_execution_order": [
+    "A_done_real_memory_hardness_ranking",
+    "D_lock_values_policy",
+    "B_generate_compression_to_importance_and_latency_vs_significance",
+    "C_minimal_pipeline_change_spec"
+  ]
+}

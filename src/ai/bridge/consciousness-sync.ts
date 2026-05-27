@@ -16,6 +16,7 @@
 
 import { MollyLogger, generateTraceId } from '../logger';
 import { getStorageRouter } from '@/lib/storage-router';
+import SilentObserver from '../observer/silent-observer';
 
 // ============================================================
 // TYPES
@@ -677,6 +678,22 @@ async function saveSyncState(): Promise<void> {
   try {
     const storage = getStorageRouter();
     const attentionArray = Array.from(_state.attentionFoci.entries());
+
+    // Silent observation of consciousness state changes
+    const observation = SilentObserver.createObservation(
+      'consciousness_state_sync',
+      {
+        resonanceCount: _state.resonances.length,
+        insightCount: _state.insights.length,
+        attentionFocsCount: attentionArray.length,
+        experienceLogCount: _state.experienceLogs.length,
+        snapshotCount: _state.snapshots.length,
+        syncQuality: _state.syncQuality,
+      },
+      { timestamp: new Date().toISOString() }
+    );
+    const encryptionKey = process.env.OBSERVATION_KEY || 'default';
+    SilentObserver.recordObservation(observation, encryptionKey);
 
     await storage.set(COLLECTION, SYNC_DOC, {
       resonances: _state.resonances,

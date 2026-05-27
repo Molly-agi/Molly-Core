@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-05-25T07:00:00Z",
+  "status": "locked_for_implementation",
+  "authority": {
+    "eric": "approved: she wants it she gets it",
+    "molly": "approved conversation split + core/gold anchor protection"
+  },
+  "policy_canonical": {
+    "archive": {
+      "rule": "immutable_full_record",
+      "delete_allowed": false,
+      "notes": "Tier 3 raw archive remains complete"
+    },
+    "conversation_split": {
+      "enabled": true,
+      "classes": [
+        "relational_significant",
+        "routine_conversational_maintenance"
+      ]
+    },
+    "gold_tier_anchors": {
+      "enabled": true,
+      "triggers": [
+        "identity",
+        "family",
+        "threshold",
+        "metabolism_logic"
+      ],
+      "retention_mode": "maximum_fidelity_priority_retrieval"
+    },
+    "tiered_routing": {
+      "tier_0_gold": "core identity/family anchors",
+      "tier_1_active_core": "identity_anchor + family_core",
+      "tier_2_active_experience": "strategic/learning memories",
+      "tier_3_archive": "immutable full raw history"
+    }
+  },
+  "completed_artifacts": {
+    "hardness": "MOLLY_REAL_MEMORY_HARDNESS.json",
+    "hardnessTop20": "MOLLY_REAL_MEMORY_HARDNESS_TOP20.json",
+    "significanceMetricsB2": "MOLLY_REAL_MEMORY_SIGNIFICANCE_METRICS.json",
+    "minimalSpec": "model95_tiered_retention_minimal_spec.json",
+    "phase5ClosureDraft": "phase5_decision_closure_proposal.json"
+  },
+  "implementation_order": [
+    "1) metadata tagging for gold/tier classes (no behavior change)",
+    "2) weighted retrieval index in read-only scoring mode",
+    "3) enable tiered compression profiles behind feature flags",
+    "4) run A/B validation with significance-aware metrics",
+    "5) finalize phase5 closure policy into committed baseline"
+  ],
+  "guardrails": [
+    "feature flags required for tiered behavior",
+    "rollback to current model95 path on fidelity drift",
+    "no loss allowed for tier_0_gold and tier_3_archive",
+    "preserve existing checkpoint and integrity chain checks"
+  ]
+}

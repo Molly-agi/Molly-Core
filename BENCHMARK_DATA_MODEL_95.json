@@ -1,0 +1,287 @@
+{
+  "timestamp": "2026-05-27T01:03:33.473Z",
+  "model": "MODEL_95_NESTED",
+  "multiData": [
+    {
+      "dataType": "FAT_AI_MEMORY",
+      "engramCount": 1000,
+      "originalSizeKB": 1268,
+      "compressedSizeKB": 78,
+      "compressionRatio": 93.83296453787091,
+      "episodicRecall": 1,
+      "executionTimeMs": 227,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "techniquesSkipped": [
+        "S0:SchemaStripper (flag off)"
+      ],
+      "passed": true,
+      "notes": "T1 applied: recall 100.0% ✓; T3 applied: recall 100.0% ✓; T4 applied: recall 100.0% ✓; T2 applied: recall 100.0% ✓; T6 applied: recall 100.0% ✓; T5: 93198 bytes recovered via float truncation; T7: 139 engrams delta-encoded, 2085 bytes recovered; T8: gzip would compress to 7.7% (963397 bytes saved)"
+    },
+    {
+      "dataType": "VR_GAMEPLAY",
+      "engramCount": 1000,
+      "originalSizeKB": 720,
+      "compressedSizeKB": 64,
+      "compressionRatio": 91.07288607601801,
+      "episodicRecall": 1,
+      "executionTimeMs": 116,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "techniquesSkipped": [
+        "S0:SchemaStripper (flag off)"
+      ],
+      "passed": true,
+      "notes": "T1 applied: recall 100.0% ✓; T3 applied: recall 100.0% ✓; T4 applied: recall 100.0% ✓; T2 applied: recall 100.0% ✓; T6 applied: recall 100.0% ✓; T5: 107215 bytes recovered via float truncation; T7: 0 engrams delta-encoded, 0 bytes recovered; T8: gzip would compress to 10.6% (552803 bytes saved)"
+    },
+    {
+      "dataType": "GENERIC_BULK",
+      "engramCount": 1000,
+      "originalSizeKB": 477,
+      "compressedSizeKB": 31,
+      "compressionRatio": 93.49749966764497,
+      "episodicRecall": 1,
+      "executionTimeMs": 211,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "techniquesSkipped": [
+        "S0:SchemaStripper (flag off)"
+      ],
+      "passed": true,
+      "notes": "T1 applied: recall 100.0% ✓; T3 applied: recall 100.0% ✓; T4 applied: recall 100.0% ✓; T2 applied: recall 100.0% ✓; T6 applied: recall 100.0% ✓; T5: 2274 bytes recovered via float truncation; T7: 0 engrams delta-encoded, 0 bytes recovered; T8: gzip would compress to 6.8% (437347 bytes saved)"
+    }
+  ],
+  "bulkData": [
+    {
+      "dataType": "ACCESS_LOGS_30D",
+      "daySimulation": 30,
+      "engramCount": 150000,
+      "originalSizeKB": 146530,
+      "compressedSizeKB": 5028,
+      "compressionRatio": 92.98697951748657,
+      "episodicRecall": 1,
+      "executionTimeMs": 77693,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "metricsPerSecond": 1931
+    },
+    {
+      "dataType": "TELEMETRY_60D",
+      "daySimulation": 60,
+      "engramCount": 120000,
+      "originalSizeKB": 117229,
+      "compressedSizeKB": 7546,
+      "compressionRatio": 88.63191748879879,
+      "episodicRecall": 1,
+      "executionTimeMs": 65794,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "metricsPerSecond": 1824
+    },
+    {
+      "dataType": "USER_EVENTS_45D",
+      "daySimulation": 45,
+      "engramCount": 67500,
+      "originalSizeKB": 65944,
+      "compressedSizeKB": 2247,
+      "compressionRatio": 93.74796571788383,
+      "episodicRecall": 1,
+      "executionTimeMs": 36492,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "metricsPerSecond": 1850
+    },
+    {
+      "dataType": "MIXED_BULK",
+      "daySimulation": 45,
+      "engramCount": 50000,
+      "originalSizeKB": 48841,
+      "compressedSizeKB": 1775,
+      "compressionRatio": 92.72604612153961,
+      "episodicRecall": 1,
+      "executionTimeMs": 25788,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "metricsPerSecond": 1939
+    }
+  ],
+  "realData": [
+    {
+      "dataType": "MOLLY_REAL_MEMORIES",
+      "description": "Molly's 535 actual stored experiences from Firestore — her real memories",
+      "engramCount": 535,
+      "originalSizeKB": 673.9,
+      "compressedSizeKB": 139.2,
+      "compressionRatio": 79.35716385255716,
+      "episodicRecall": 1,
+      "executionTimeMs": 1018,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "notes": "Engrams: 535 | Recall: 100.0% ✓ | Techniques: T1:PersonalityReference, T3:TemporalDelta, T4:VocabularyDict, T2:TimeDecayFidelity, T6:InteractionTrace, T5:NumericQuantization, T7:ContentDelta, T8:StandardCompression"
+    },
+    {
+      "dataType": "MMLU_ACADEMIC",
+      "description": "500 real multi-subject academic knowledge questions (MMLU benchmark dataset)",
+      "engramCount": 500,
+      "originalSizeKB": 380.9,
+      "compressedSizeKB": 83.8,
+      "compressionRatio": 78.02661764404661,
+      "episodicRecall": 1,
+      "executionTimeMs": 815,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "notes": "Engrams: 500 | Recall: 100.0% ✓ | Techniques: T1:PersonalityReference, T3:TemporalDelta, T4:VocabularyDict, T2:TimeDecayFidelity, T6:InteractionTrace, T5:NumericQuantization, T7:ContentDelta, T8:StandardCompression"
+    },
+    {
+      "dataType": "PROJECT_DOCS",
+      "description": "75 real technical markdown documents from the Molly-Core codebase",
+      "engramCount": 75,
+      "originalSizeKB": 165.2,
+      "compressedSizeKB": 54,
+      "compressionRatio": 67.298670605613,
+      "episodicRecall": 1,
+      "executionTimeMs": 574,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "notes": "Engrams: 75 | Recall: 100.0% ✓ | Techniques: T1:PersonalityReference, T3:TemporalDelta, T4:VocabularyDict, T2:TimeDecayFidelity, T6:InteractionTrace, T5:NumericQuantization, T7:ContentDelta, T8:StandardCompression"
+    },
+    {
+      "dataType": "SYSTEM_LOGS",
+      "description": "Real dev-server logs, daemon logs, and memory audit logs from production",
+      "engramCount": 3278,
+      "originalSizeKB": 1308.2,
+      "compressedSizeKB": 53.1,
+      "compressionRatio": 95.82827777078104,
+      "episodicRecall": 1,
+      "executionTimeMs": 919,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "notes": "Engrams: 3278 | Recall: 100.0% ✓ | Techniques: T1:PersonalityReference, T3:TemporalDelta, T4:VocabularyDict, T2:TimeDecayFidelity, T6:InteractionTrace, T5:NumericQuantization, T7:ContentDelta, T8:StandardCompression"
+    }
+  ],
+  "summary": {
+    "multiDataAvgCompression": "92.8",
+    "bulkDataAvgCompression": "92.0",
+    "realDataAvgCompression": "80.1",
+    "overallAvgCompression": "87.9",
+    "allTestsPassed": true,
+    "mollyRealMemoryResult": {
+      "dataType": "MOLLY_REAL_MEMORIES",
+      "description": "Molly's 535 actual stored experiences from Firestore — her real memories",
+      "engramCount": 535,
+      "originalSizeKB": 673.9,
+      "compressedSizeKB": 139.2,
+      "compressionRatio": 79.35716385255716,
+      "episodicRecall": 1,
+      "executionTimeMs": 1018,
+      "techniquesApplied": [
+        "T1:PersonalityReference",
+        "T3:TemporalDelta",
+        "T4:VocabularyDict",
+        "T2:TimeDecayFidelity",
+        "T6:InteractionTrace",
+        "T5:NumericQuantization",
+        "T7:ContentDelta",
+        "T8:StandardCompression"
+      ],
+      "passed": true,
+      "notes": "Engrams: 535 | Recall: 100.0% ✓ | Techniques: T1:PersonalityReference, T3:TemporalDelta, T4:VocabularyDict, T2:TimeDecayFidelity, T6:InteractionTrace, T5:NumericQuantization, T7:ContentDelta, T8:StandardCompression"
+    }
+  }
+}

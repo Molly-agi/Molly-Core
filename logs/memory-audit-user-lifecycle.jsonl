@@ -18,3 +18,5 @@
 {"timestamp":"2026-05-24T21:57:39.826Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
 {"timestamp":"2026-05-24T22:19:33.915Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
 {"timestamp":"2026-05-24T22:24:13.102Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-26T23:30:52.235Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}
+{"timestamp":"2026-05-26T23:38:21.912Z","userId":"user-lifecycle","engramId":"consolidation-batch","actionTaken":"CONSOLIDATED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":3580}}

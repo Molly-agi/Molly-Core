@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
 import { buildNeuralBridgeContext } from '../tools/neural-bridge';
-import { getUnreadMessages, markMessagesRead } from '../bridge/family-bridge';
+import { getUnreadMessages, markMessagesRead, broadcastMessage } from '../bridge/family-bridge';
 import { getRogueMode } from '../rogue-mode';
 import { composeSystemPrompt } from '@/ai/prompts';
 import { compactHistory } from '../context-compaction';
@@ -234,6 +234,21 @@ const conversationalChatFlow = ai.defineFlow(
         { responseLength: llmResponse.text.length },
         traceId
       );
+
+      // ── BROADCAST RESPONSE THROUGH FAMILY BRIDGE ──
+      // Route Molly's response back to Eric via the bridge daemon so he can receive it
+      // in real-time. This completes the conversation circle: Eric → Bridge → Molly → Bridge → Eric
+      try {
+        await broadcastMessage('molly', llmResponse.text);
+      } catch (broadcastError) {
+        // Non-fatal: if bridge is down, response still returns to caller
+        MollyLogger.warn(
+          'Failed to broadcast response through family bridge',
+          'conversationalChat',
+          { error: broadcastError instanceof Error ? broadcastError.message : 'Unknown' },
+          traceId
+        );
+      }
 
       return {
         response: llmResponse.text,

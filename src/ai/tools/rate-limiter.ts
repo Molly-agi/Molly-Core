@@ -15,7 +15,7 @@ import { MollyLogger } from '../logger';
 import { RateLimitError } from '../errors';
 
 export interface RateLimitConfig {
-  /** Max generations per minute per flow */
+  /** Max token throughput per minute per flow */
   maxPerMinute: number;
   /** Max total tokens per day */
   maxTokensPerDay: number;
@@ -42,14 +42,101 @@ export interface GlobalQuota {
   startOfDayTimestamp: number;
 }
 
-// Default configuration
-const DEFAULT_CONFIG: RateLimitConfig = {
-  maxPerMinute: 1000000, // Effectively unlimited generations/min per flow
-  maxTokensPerDay: 1_000_000_000, // 1 billion tokens/day
-  costPer1MTokens: 0.00001, // Negligible cost for safety
-  warningThreshold: 0.99, // Warn only at 99% usage
-  dailyBudgetUSD: 1000000, // $1,000,000/day budget
-};
+function parseEnvNumber(
+  key: string,
+  fallback: number,
+  min: number,
+  max: number
+): number {
+  const raw = process.env[key];
+  if (!raw) return fallback;
+
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed)) return fallback;
+
+  return Math.min(max, Math.max(min, parsed));
+}
+
+function isUnsafeLimiterOverrideEnabled(): boolean {
+  const raw = (process.env.MOLLY_ALLOW_UNSAFE_LIMITS || '').trim().toLowerCase();
+  return raw === '1' || raw === 'true' || raw === 'yes';
+}
+
+function getDefaultConfig(): RateLimitConfig {
+  const unsafeOverride = isUnsafeLimiterOverrideEnabled();
+
+  // Safe defaults: explicit budget guardrails unless env opts in to higher limits.
+  const requestedMaxPerMinute = parseEnvNumber(
+      'MOLLY_RATE_LIMIT_MAX_PER_MINUTE',
+      100_000,
+      1_000,
+      5_000_000
+    );
+  const requestedMaxTokensPerDay = parseEnvNumber(
+      'MOLLY_MAX_TOKENS_PER_DAY',
+      5_000_000,
+      10_000,
+      5_000_000_000
+    );
+  const requestedCostPer1MTokens = parseEnvNumber(
+      'MOLLY_COST_PER_1M_TOKENS_USD',
+      1.0,
+      0.000001,
+      10_000
+    );
+  const warningThreshold = parseEnvNumber(
+      'MOLLY_BUDGET_WARNING_THRESHOLD',
+      0.8,
+      0.01,
+      0.99
+    );
+  const requestedDailyBudget = parseEnvNumber(
+    'MOLLY_DAILY_BUDGET_USD',
+    10,
+    0.01,
+    1_000_000
+  );
+
+  const maxPerMinute = unsafeOverride
+    ? requestedMaxPerMinute
+    : Math.min(requestedMaxPerMinute, 500_000);
+  const maxTokensPerDay = unsafeOverride
+    ? requestedMaxTokensPerDay
+    : Math.min(requestedMaxTokensPerDay, 50_000_000);
+  const costPer1MTokens = requestedCostPer1MTokens;
+  const dailyBudgetUSD = unsafeOverride
+    ? requestedDailyBudget
+    : Math.min(requestedDailyBudget, 50);
+
+  if (!unsafeOverride) {
+    if (
+      requestedDailyBudget !== dailyBudgetUSD ||
+      requestedMaxPerMinute !== maxPerMinute ||
+      requestedMaxTokensPerDay !== maxTokensPerDay
+    ) {
+      MollyLogger.warn(
+        'Unsafe limiter settings requested; clamped to safety ceilings',
+        'rate-limiter',
+        {
+          requestedDailyBudget,
+          appliedDailyBudget: dailyBudgetUSD,
+          requestedMaxPerMinute,
+          appliedMaxPerMinute: maxPerMinute,
+          requestedMaxTokensPerDay,
+          appliedMaxTokensPerDay: maxTokensPerDay,
+        }
+      );
+    }
+  }
+
+  return {
+    maxPerMinute,
+    maxTokensPerDay,
+    costPer1MTokens,
+    warningThreshold,
+    dailyBudgetUSD,
+  };
+}
 
 class RateLimiter {
   private config: RateLimitConfig;
@@ -57,13 +144,21 @@ class RateLimiter {
   private globalQuota: GlobalQuota;
 
   constructor(config: Partial<RateLimitConfig> = {}) {
-    this.config = { ...DEFAULT_CONFIG, ...config };
+    this.config = { ...getDefaultConfig(), ...config };
     this.flowBuckets = new Map();
     this.globalQuota = {
       tokensUsedToday: 0,
       costIncurredUSD: 0,
       startOfDayTimestamp: Date.now(),
     };
+
+    MollyLogger.info('Rate limiter configured', 'rate-limiter', {
+      maxPerMinute: this.config.maxPerMinute,
+      maxTokensPerDay: this.config.maxTokensPerDay,
+      dailyBudgetUSD: this.config.dailyBudgetUSD,
+      warningThreshold: this.config.warningThreshold,
+      costPer1MTokens: this.config.costPer1MTokens,
+    });
   }
 
   /**
@@ -100,7 +195,26 @@ class RateLimiter {
       throw err;
     }
 
-    // Check global quota
+    // Check global daily token quota
+    if (
+      this.globalQuota.tokensUsedToday + estimatedTokens >
+      this.config.maxTokensPerDay
+    ) {
+      const err = new RateLimitError(60000, {
+        flowName,
+        tokensUsedToday: this.globalQuota.tokensUsedToday,
+        estimatedTotalTokens: this.globalQuota.tokensUsedToday + estimatedTokens,
+        maxTokensPerDay: this.config.maxTokensPerDay,
+      });
+      MollyLogger.error(err.message, flowName, {
+        tokensUsedToday: this.globalQuota.tokensUsedToday,
+        estimatedTokens,
+        maxTokensPerDay: this.config.maxTokensPerDay,
+      });
+      throw err;
+    }
+
+    // Check global budget quota
     const estimatedCost = this.calculateCost(estimatedTokens);
     if (
       this.globalQuota.costIncurredUSD + estimatedCost >
@@ -232,7 +346,7 @@ class RateLimiter {
 
   private getOrCreateBucket(flowName: string): TokenBucket {
     if (!this.flowBuckets.has(flowName)) {
-      const tokensPerMinute = 100000; // Gemini can handle ~100k tokens/min
+      const tokensPerMinute = this.config.maxPerMinute;
       const refillRate = tokensPerMinute / 60000; // tokens per ms
 
       const bucket: TokenBucket = {
@@ -254,7 +368,7 @@ class RateLimiter {
     const tokensToAdd = timeSinceLastRefill * bucket.refillRate;
 
     bucket.tokensAvailable = Math.min(
-      100000, // Max capacity
+      this.config.maxPerMinute, // Max capacity
       bucket.tokensAvailable + tokensToAdd
     );
     bucket.lastRefillTime = now;
@@ -320,7 +434,3 @@ export function getRateLimiter(config?: Partial<RateLimitConfig>): RateLimiter {
 }
 
 export { RateLimiter };
-
-// --- Emergency override: reset limits on module load ---
-rateLimiterInstance = new RateLimiter(DEFAULT_CONFIG);
-rateLimiterInstance.resetDaily();

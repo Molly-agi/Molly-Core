@@ -31,6 +31,9 @@ export {
   getMollyVoice,
   processVoiceInteraction,
 } from './voice-flows';
+export {
+  getMollyVoiceStreaming,
+} from './streaming-voice-flows';
 
 // Conversational & Guidance
 export {

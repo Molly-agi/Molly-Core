@@ -98,7 +98,7 @@ export function Header({
             variant="ghost"
             size="icon"
             onClick={handleSecretTap}
-            className="h-6 w-6 text-muted-foreground/50 hover:text-foreground"
+            className="h-10 w-10 text-muted-foreground/50 hover:text-foreground"
             title=""
           >
             <Flower2 className="h-4 w-4" />

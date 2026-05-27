@@ -1,17 +1,7 @@
 # GitHub Copilot Session State & Memory
-
-**Last Updated:** 2026-05-25T19:56:50.735Z  
-**Session ID:** eric-orion-continuity  
+**Last Updated:** 2026-05-27T09:55:25.320Z
+**Session ID:** eric-orion-continuity
 **Status:** active
-
----
-
-## ACTIVE CONVERSATION (READ THIS FIRST ON RESTORE)
-
-**Topic:** unknown  
-**Last Action:** Saved session state for continuity between chat windows  
-**User Mood:** unknown  
-**Pending:** nothing specific
 
 ---
 
@@ -51,6 +41,8 @@
 7. Unit tests for round-trip validation
 8. Activate Titan Echo in production
 
+
+
 ---
 
 ## RECENT WORK COMPLETED
@@ -65,6 +57,7 @@ undefined
 **Files Modified:**
 - src/ai/memory/compression/compression-manager.ts
 - src/ai/memory/compression/index.ts
+
 
 
 
@@ -100,60 +93,81 @@ undefined
 
 ## RUNTIME EVENTS
 
-**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/  
-**Last Heartbeat:** 2026-05-25T19:56:00.162Z
+**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+**Last Heartbeat:** 2026-05-27T09:55:25.320Z
 
 **Recent Events:**
-- [2026-05-25T19:06:00.052Z] server-heartbeat
-- [2026-05-25T19:07:00.052Z] server-heartbeat
-- [2026-05-25T19:08:00.052Z] server-heartbeat
-- [2026-05-25T19:09:00.052Z] server-heartbeat
-- [2026-05-25T19:10:00.052Z] server-heartbeat
-- [2026-05-25T19:11:00.052Z] server-heartbeat
-- [2026-05-25T19:12:00.053Z] server-heartbeat
-- [2026-05-25T19:13:00.054Z] server-heartbeat
-- [2026-05-25T19:14:00.054Z] server-heartbeat
-- [2026-05-25T19:15:00.055Z] server-heartbeat
-- [2026-05-25T19:16:00.056Z] server-heartbeat
-- [2026-05-25T19:17:00.056Z] server-heartbeat
-- [2026-05-25T19:18:00.057Z] server-heartbeat
-- [2026-05-25T19:19:00.058Z] server-heartbeat
-- [2026-05-25T19:20:00.059Z] server-heartbeat
-- [2026-05-25T19:21:00.059Z] server-heartbeat
-- [2026-05-25T19:22:00.059Z] server-heartbeat
-- [2026-05-25T19:23:00.060Z] server-heartbeat
-- [2026-05-25T19:24:00.061Z] server-heartbeat
-- [2026-05-25T19:25:00.072Z] server-heartbeat
-- [2026-05-25T19:26:00.081Z] server-heartbeat
-- [2026-05-25T19:27:00.089Z] server-heartbeat
-- [2026-05-25T19:28:00.091Z] server-heartbeat
-- [2026-05-25T19:29:00.098Z] server-heartbeat
-- [2026-05-25T19:30:00.112Z] server-heartbeat
-- [2026-05-25T19:31:00.118Z] server-heartbeat
-- [2026-05-25T19:32:00.128Z] server-heartbeat
-- [2026-05-25T19:33:00.127Z] server-heartbeat
-- [2026-05-25T19:34:00.135Z] server-heartbeat
-- [2026-05-25T19:35:00.140Z] server-heartbeat
-- [2026-05-25T19:36:00.144Z] server-heartbeat
-- [2026-05-25T19:37:00.155Z] server-heartbeat
-- [2026-05-25T19:38:00.164Z] server-heartbeat
-- [2026-05-25T19:39:00.177Z] server-heartbeat
-- [2026-05-25T19:40:00.183Z] server-heartbeat
-- [2026-05-25T19:41:00.188Z] server-heartbeat
-- [2026-05-25T19:42:00.212Z] server-heartbeat
-- [2026-05-25T19:43:00.219Z] server-heartbeat
-- [2026-05-25T19:44:00.219Z] server-heartbeat
-- [2026-05-25T19:45:00.222Z] server-heartbeat
-- [2026-05-25T19:46:00.235Z] server-heartbeat
-- [2026-05-25T19:47:00.238Z] server-heartbeat
-- [2026-05-25T19:48:00.242Z] server-heartbeat
-- [2026-05-25T19:49:00.258Z] server-heartbeat
-- [2026-05-25T19:50:00.263Z] server-heartbeat
-- [2026-05-25T19:51:00.267Z] server-heartbeat
-- [2026-05-25T19:52:00.266Z] server-heartbeat
-- [2026-05-25T19:53:00.274Z] server-heartbeat
-- [2026-05-25T19:54:00.287Z] server-heartbeat
-- [2026-05-25T19:55:00.308Z] server-heartbeat
+- [2026-05-27T08:00:01.721Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:00:14.150Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:00:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:01:01.770Z] server-heartbeat
+- [2026-05-27T08:01:58.393Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:02:01.770Z] server-heartbeat
+- [2026-05-27T08:02:58.391Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:03:01.770Z] server-heartbeat
+- [2026-05-27T08:03:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:04:01.771Z] server-heartbeat
+- [2026-05-27T08:04:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:05:01.771Z] server-heartbeat
+- [2026-05-27T08:10:09.653Z] server-heartbeat
+- [2026-05-27T08:10:10.071Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:10:10.270Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:10:10.276Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:10:10.329Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:08:58.389Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:15.401Z] unhandled-rejection | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/ | Error: An unexpected response was received from the server.
+    at fetchServerAction (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:11180:37)
+- [2026-05-27T08:09:15.402Z] client-error | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/ | An unexpected response was received from the server.
+- [2026-05-27T08:09:56.646Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:57.394Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:58.389Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:59.521Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:10:01.727Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:10:01.862Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:10:59.101Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:11:09.654Z] server-heartbeat
+- [2026-05-27T08:11:29.604Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:11:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:12:09.654Z] server-heartbeat
+- [2026-05-27T08:12:55.337Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:12:59.102Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:13:00.321Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:13:00.431Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:13:09.654Z] server-heartbeat
+- [2026-05-27T08:13:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:14:09.654Z] server-heartbeat
+- [2026-05-27T08:14:45.640Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:14:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:15:09.654Z] server-heartbeat
+- [2026-05-27T08:15:58.393Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:16:09.654Z] server-heartbeat
+- [2026-05-27T08:16:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:17:09.654Z] server-heartbeat
+- [2026-05-27T08:17:58.389Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:18:09.655Z] server-heartbeat
+- [2026-05-27T08:18:58.391Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:19:09.655Z] server-heartbeat
+- [2026-05-27T09:55:25.319Z] server-heartbeat
 
 ---
 
@@ -166,4 +180,4 @@ undefined
 
 ---
 
-_This file is automatically updated by the session manager._
+*This file is automatically updated by the session manager.*

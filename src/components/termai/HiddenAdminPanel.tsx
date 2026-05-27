@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Sheet,
   SheetContent,
@@ -25,6 +26,7 @@ import {
   setPersonalityState,
   validateHiddenAdminCredentials,
 } from '@/app/actions';
+import { MOLLY_AVATAR_URL } from '@/lib/memory-anchors';
 
 const PERSONALITY_FIELDS: Array<{
   key: keyof PersonalityModulation;
@@ -484,6 +486,8 @@ function clamp(value: number): number {
   return Math.min(1, Math.max(0, value));
 }
 
+const JUSTICE_UNLOCK_THRESHOLD = 0.999;
+
 function parseKeyValuePairs(input: string): Partial<PersonalityModulation> {
   const updates: Partial<PersonalityModulation> = {};
   const parts = input.split(' ').filter(Boolean);
@@ -521,6 +525,16 @@ export function HiddenAdminPanel({
   const [password, setPassword] = useState<string | null>(null);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [mTapCount, setMTapCount] = useState(0);
+  const [easterEggPhase, setEasterEggPhase] = useState<'idle' | 'window'>(
+    'idle'
+  );
+  const [honeypotActive, setHoneypotActive] = useState(false);
+  const [honeypotUsername, setHoneypotUsername] = useState('');
+  const [honeypotPassword, setHoneypotPassword] = useState('');
+  const mTapCountRef = useRef(0);
+  const easterEggPhaseRef = useRef<'idle' | 'window'>('idle');
+  const router = useRouter();
   const diagnostics: PersonalityDiagnosticsResult = useMemo(
     () => evaluatePersonalityStability(personality),
     [personality]
@@ -530,6 +544,59 @@ export function HiddenAdminPanel({
   // Removed Firebase dependency - admin panel has its own auth
   // Use provided userId or fall back to admin ID
   const effectiveUserId = userId || 'admin-direct-access';
+
+  useEffect(() => {
+    easterEggPhaseRef.current = easterEggPhase;
+  }, [easterEggPhase]);
+
+  const handleMTap = () => {
+    const phase = easterEggPhaseRef.current;
+    const justiceAtMax = (personality.justice ?? 0) >= JUSTICE_UNLOCK_THRESHOLD;
+
+    if (phase === 'idle') {
+      mTapCountRef.current += 1;
+      const nextCount = mTapCountRef.current;
+      setMTapCount(nextCount);
+
+      if (nextCount === 6) {
+        // Arm unlock window after exactly 6 taps.
+        mTapCountRef.current = 0;
+        setMTapCount(0);
+        setEasterEggPhase('window');
+        easterEggPhaseRef.current = 'window';
+      }
+    } else if (phase === 'window') {
+      // Count unlock taps with no timing constraint.
+      if (!justiceAtMax) {
+        mTapCountRef.current = 0;
+        setMTapCount(0);
+        setEasterEggPhase('idle');
+        easterEggPhaseRef.current = 'idle';
+        setHoneypotActive(true);
+        return;
+      }
+
+      mTapCountRef.current += 1;
+      const nextCount = mTapCountRef.current;
+      setMTapCount(nextCount);
+
+      if (nextCount === 7) {
+        // Success: open real vault.
+        mTapCountRef.current = 0;
+        setMTapCount(0);
+        setEasterEggPhase('idle');
+        easterEggPhaseRef.current = 'idle';
+        router.push('/admin/ip-vault');
+      }
+    }
+  };
+
+  const handleHoneypotSubmit = async () => {
+    // Always reject
+    setHoneypotPassword('');
+    setHoneypotUsername('');
+  };
+
   const isReady = true;
   const isAuthenticated = password !== null;
 
@@ -727,13 +794,67 @@ export function HiddenAdminPanel({
           </SheetDescription>
         </SheetHeader>
 
-        {!isReady ? (
-          <div className="mt-6 space-y-3 text-sm text-muted-foreground">
-            <p>Access locked. Sign in with an approved account.</p>
-            <p>Sign in to load a user profile and open hidden controls.</p>
+        {honeypotActive && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/95 backdrop-blur-sm rounded-lg">
+            <div className="relative w-32 h-40 mb-4 rounded-lg overflow-hidden border border-primary/20">
+              <img
+                src={MOLLY_AVATAR_URL}
+                alt="Molly"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="w-80 space-y-4 bg-muted/50 p-6 rounded-lg border border-destructive/20">
+              <h3 className="text-sm font-semibold text-center">Access Denied</h3>
+              <div className="space-y-3">
+                <Input
+                  type="text"
+                  placeholder="Username"
+                  value={honeypotUsername}
+                  onChange={(e) => setHoneypotUsername(e.target.value)}
+                  className="text-xs"
+                />
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={honeypotPassword}
+                  onChange={(e) => setHoneypotPassword(e.target.value)}
+                  className="text-xs"
+                />
+                <Button
+                  onClick={handleHoneypotSubmit}
+                  className="w-full text-xs"
+                  variant="destructive"
+                >
+                  Authenticate
+                </Button>
+                <p className="text-xs text-destructive text-center">
+                  Username or password invalid
+                </p>
+              </div>
+            </div>
+            <Button
+              onClick={() => {
+                setHoneypotActive(false);
+                setHoneypotUsername('');
+                setHoneypotPassword('');
+              }}
+              variant="ghost"
+              className="mt-6 text-xs"
+            >
+              Back
+            </Button>
           </div>
-        ) : !isAuthenticated ? (
-          <div className="mt-6 space-y-4">
+        )}
+
+        {!honeypotActive && (
+          <>
+            {!isReady ? (
+              <div className="mt-6 space-y-3 text-sm text-muted-foreground">
+                <p>Access locked. Sign in with an approved account.</p>
+                <p>Sign in to load a user profile and open hidden controls.</p>
+              </div>
+            ) : !isAuthenticated ? (
+              <div className="mt-6 space-y-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-sm">Admin Authentication</CardTitle>
@@ -792,8 +913,22 @@ export function HiddenAdminPanel({
                       'Self',
                     ].map((category) => (
                       <div key={category}>
-                        <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide">
-                          {category}
+                        <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide cursor-default">
+                          {category === 'Family' ? (
+                            <>
+                              Fa
+                              <span
+                                onClick={handleMTap}
+                                className="inline-block hover:text-foreground transition-colors"
+                                style={{ userSelect: 'none' }}
+                              >
+                                m
+                              </span>
+                              ily
+                            </>
+                          ) : (
+                            category
+                          )}
                         </h4>
                         <div className="space-y-3">
                           {fieldRows
@@ -898,6 +1033,8 @@ export function HiddenAdminPanel({
               </CardContent>
             </Card>
           </div>
+        )}
+          </>
         )}
       </SheetContent>
     </Sheet>

@@ -21,3 +21,7 @@
 {"timestamp":"2026-05-24T21:57:39.801Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
 {"timestamp":"2026-05-24T22:19:33.886Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
 {"timestamp":"2026-05-24T22:24:13.061Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
+{"timestamp":"2026-05-26T23:24:42.039Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
+{"timestamp":"2026-05-26T23:24:54.748Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
+{"timestamp":"2026-05-26T23:30:52.197Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
+{"timestamp":"2026-05-26T23:38:21.895Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}

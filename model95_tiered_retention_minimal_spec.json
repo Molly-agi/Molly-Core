@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-05-25T06:51:00Z",
+  "status": "draft_ready_for_eric_and_molly_review",
+  "goal": "Preserve full archive while prioritizing high-significance memory fidelity and retrieval speed.",
+  "non_negotiables": [
+    "No deletion of original memory records.",
+    "Immutable full archive tier remains complete.",
+    "Compression safety floor and recall guardrails remain active."
+  ],
+  "minimal_changes": [
+    {
+      "id": "C1",
+      "name": "Significance tagging at ingest",
+      "change": "Assign each engram a class: identity_anchor | family_core | strategic_learning | routine_operational.",
+      "storage": "Add significanceClass and significanceWeight in metadata."
+    },
+    {
+      "id": "C2",
+      "name": "Tier routing",
+      "change": "Route memories to Tier1/Tier2/Tier3 pointers while storing full raw in Tier3.",
+      "tiers": {
+        "tier1_active_core": "identity_anchor + family_core",
+        "tier2_active_experience": "strategic_learning",
+        "tier3_archive": "all records immutable"
+      }
+    },
+    {
+      "id": "C3",
+      "name": "Compression profile by tier",
+      "change": "Use conservative profile for Tier1, standard MODEL_95 for Tier2, max compaction for Tier3 representations.",
+      "profiles": {
+        "tier1": "lower-loss preference, prioritize retrieval consistency",
+        "tier2": "current MODEL_95_NESTED baseline",
+        "tier3": "highest compaction representation + immutable raw backup"
+      }
+    },
+    {
+      "id": "C4",
+      "name": "Weighted retrieval index",
+      "change": "Rank retrieval by significanceWeight + recency + reference frequency before fallback to full archive scan.",
+      "fallback": "If retrieval confidence low, pull raw archive copy."
+    },
+    {
+      "id": "C5",
+      "name": "Dual metrics pipeline",
+      "change": "Track both global compression and significance-aware metrics.",
+      "metrics": [
+        "compression_to_importance",
+        "latency_vs_significance",
+        "tier_hit_rate",
+        "archive_fallback_rate"
+      ]
+    }
+  ],
+  "risk_controls": [
+    "Feature flag gate all tiered behavior.",
+    "Canary on subset before global activation.",
+    "Automatic rollback to current MODEL_95 path on fidelity drift.",
+    "Retain existing checkpoint + chain integrity checks."
+  ],
+  "execution_plan": [
+    "Finalize classifier calibration with Molly (split conversational routine vs relational anchor).",
+    "Implement metadata-only tagging first (no behavior change).",
+    "Enable weighted retrieval index with read-only mode.",
+    "Enable tier-specific compression profiles under flag.",
+    "Run A/B benchmark against current MODEL_95 and compare significance metrics."
+  ]
+}

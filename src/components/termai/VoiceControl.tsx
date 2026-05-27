@@ -68,6 +68,9 @@ export function VoiceControl({
   const activeLastResponseRef = lastResponseRef ?? localLastResponseRef;
   const { toast } = useToast();
   const { user } = useUser();
+  const [liveBannerPos, setLiveBannerPos] = useState({ x: 16, y: 96 });
+  const [isDraggingLiveBanner, setIsDraggingLiveBanner] = useState(false);
+  const dragOffsetRef = useRef({ x: 0, y: 0 });
 
   // Live voice mode using Gemini
 
@@ -106,15 +109,41 @@ export function VoiceControl({
       }
     },
     onStatusChange: (status) => {
-      if (status.includes('error') || status.includes('Error')) {
+      console.log('[VoiceControl] Status:', status);
+      if (status && (status.includes('error') || status.includes('Error'))) {
         toast({
           variant: 'destructive',
           title: 'Live Voice Error',
           description: status,
+          duration: 4000,
         });
       }
     },
   });
+
+  useEffect(() => {
+    if (!isDraggingLiveBanner) return;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const maxX = Math.max(window.innerWidth - 230, 8);
+      const maxY = Math.max(window.innerHeight - 56, 8);
+      const nextX = Math.min(maxX, Math.max(8, event.clientX - dragOffsetRef.current.x));
+      const nextY = Math.min(maxY, Math.max(8, event.clientY - dragOffsetRef.current.y));
+      setLiveBannerPos({ x: nextX, y: nextY });
+    };
+
+    const handlePointerUp = () => {
+      setIsDraggingLiveBanner(false);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, [isDraggingLiveBanner]);
 
   const resetSessionTimeout = () => {
     if (sessionTimeoutRef.current) {
@@ -556,8 +585,33 @@ export function VoiceControl({
     isProcessingRef.current = isProcessing;
   }, [isProcessing]);
 
+  const showLiveBanner =
+    isLiveActive &&
+    !!liveStatus &&
+    !liveStatus.includes('error') &&
+    !liveStatus.includes('Error');
+
   return (
-    <div className="flex items-center gap-1">
+    <>
+      {showLiveBanner ? (
+        <div
+          className="fixed z-[70] rounded-full border border-emerald-600/50 bg-emerald-700/90 px-3 py-1.5 text-xs font-medium text-white shadow-lg select-none touch-none"
+          style={{ left: `${liveBannerPos.x}px`, top: `${liveBannerPos.y}px` }}
+          onPointerDown={(event) => {
+            const target = event.currentTarget.getBoundingClientRect();
+            dragOffsetRef.current = {
+              x: event.clientX - target.left,
+              y: event.clientY - target.top,
+            };
+            setIsDraggingLiveBanner(true);
+          }}
+          title="Drag this status bubble anywhere"
+        >
+          Live Voice: {liveStatus}
+        </div>
+      ) : null}
+
+      <div className="flex items-center gap-1">
       {/* Live Voice Mode Button */}
       <Button
         variant={isLiveActive ? 'destructive' : 'ghost'}
@@ -591,6 +645,7 @@ export function VoiceControl({
           {isListening ? 'Stop Listening' : 'Start Listening'}
         </span>
       </Button>
-    </div>
+      </div>
+    </>
   );
 }

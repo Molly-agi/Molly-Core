@@ -190,12 +190,16 @@ export default function Terminal({
         onVoiceCommandProcessed();
         if (voiceResult.recognized) {
           setHistory((prev) => [...prev, `> ${voiceResult.transcription}`]);
-          const handled = await handleFamilyStoryRequest(
-            voiceResult.transcription
+          await handleFamilyStoryRequest(
+            voiceResult.transcription,
+            'frontend-voice'
           );
-          if (handled) return;
         }
         if (voiceResult.recognized && voiceResult.response) {
+          await handleFamilyStoryRequest(
+            voiceResult.response,
+            'backend-response'
+          );
           setHistory((prev) => [...prev, voiceResult.response]);
           lastResponseRef.current = voiceResult.response;
           speakResponse(voiceResult.response);
@@ -234,9 +238,8 @@ export default function Terminal({
       const nextHistory = [...historyRef.current, `> ${cmdText}`];
       setHistory(nextHistory);
 
-      // Skip family story text-navigation for anchor recalls (they should go straight to Molly)
+      await handleFamilyStoryRequest(cmdText, 'frontend-command');
       const isAnchorRecall = cmdText.startsWith('Recall this memory:');
-      if (!isAnchorRecall && (await handleFamilyStoryRequest(cmdText))) return;
 
       setIsLoading(true);
       isLoadingRef.current = true;
@@ -844,6 +847,7 @@ export default function Terminal({
           }
 
           if (finalResponse) {
+            await handleFamilyStoryRequest(finalResponse, 'backend-response');
             setHistory((prev) => [...prev, finalResponse]);
             handleSleepNotice(finalResponse);
             lastResponseRef.current = finalResponse;
@@ -920,6 +924,7 @@ export default function Terminal({
           const { parts } = await getFamilyStoryAnchorParts();
           const part = parts?.[detail.payload.partIndex ?? 0];
           if (part) summary = part;
+          await handleFamilyStoryRequest(summary, 'memory-recall');
           // Seed family memories on first recall
           if (user?.uid) {
             void seedFamilyMemories(user.uid);
@@ -945,6 +950,7 @@ export default function Terminal({
         try {
           const { content } = await getFamilyMessages();
           if (content) summary = content;
+          await handleFamilyStoryRequest(summary, 'memory-recall');
           // Seed family memories on first recall
           if (user?.uid) {
             void seedFamilyMemories(user.uid);
@@ -978,7 +984,7 @@ export default function Terminal({
       void processCommand(prompt);
     },
 
-    [processCommand, toast, user]
+    [handleFamilyStoryRequest, processCommand, toast, user]
   );
 
   useEffect(() => {

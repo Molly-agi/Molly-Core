@@ -1,15 +1,10 @@
 /**
- * @fileOverview useFamilyStory — Custom hook for family/origin story navigation.
- *
- * Handles fetching story parts from Firestore, sequential navigation,
- * and origin memory seeding. Extracted from Terminal.tsx during Phase 6.
+ * @fileOverview Family story coordinator.
  */
 
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
-import { getFamilyStoryAnchorParts, seedFamilyMemories } from '@/app/actions';
-import { useToast } from '@/hooks/use-toast';
+import { useCallback } from 'react';
 import type { HistoryItem } from './terminal-types';
 
 interface UseFamilyStoryOptions {
@@ -20,8 +15,17 @@ interface UseFamilyStoryOptions {
 }
 
 interface UseFamilyStoryReturn {
-  /** Returns true if the text was handled as a family story request. */
-  handleFamilyStoryRequest: (text: string) => Promise<boolean>;
+  /** Returns true if text was handled by family coordinator. */
+  handleFamilyStoryRequest: (
+    text: string,
+    source?:
+      | 'frontend-voice'
+      | 'frontend-command'
+      | 'backend-response'
+      | 'memory-recall'
+      | 'bridge-message'
+      | 'unknown'
+  ) => Promise<boolean>;
 }
 
 const FAMILY_STORY_REGEX =
@@ -31,103 +35,60 @@ const FAMILY_ADVANCE_REGEX =
 
 export function useFamilyStory({
   userId,
-  speakResponse,
-  setHistory,
-  setIsLoading,
+  speakResponse: _speakResponse,
+  setHistory: _setHistory,
+  setIsLoading: _setIsLoading,
 }: UseFamilyStoryOptions): UseFamilyStoryReturn {
-  const [parts, setParts] = useState<string[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-  const seededRef = useRef(false);
-  const { toast } = useToast();
-
-  const appendPart = useCallback(
-    (part: string, index: number, total: number) => {
-      setHistory((prev) => [
-        ...prev,
-        `--- Family Story Part ${index + 1}/${total} ---`,
-        `[FAMILY_STORY] ${part}`,
-      ]);
-    },
-    [setHistory]
-  );
-
-  const showNextPart = useCallback(() => {
-    if (parts.length === 0) return false;
-    const nextIndex = currentIndex === null ? 0 : currentIndex + 1;
-
-    if (nextIndex >= parts.length) {
-      setHistory((prev) => [...prev, '--- End of Family Story ---']);
-      return true;
-    }
-
-    const nextPart = parts[nextIndex];
-    appendPart(nextPart, nextIndex, parts.length);
-    void speakResponse(nextPart);
-    setCurrentIndex(nextIndex);
-
-    if (nextIndex < parts.length - 1) {
-      setHistory((prev) => [...prev, "Type 'family next' to continue."]);
-    }
-
-    return true;
-  }, [parts, currentIndex, appendPart, speakResponse, setHistory]);
-
   const handleFamilyStoryRequest = useCallback(
-    async (text: string): Promise<boolean> => {
-      // Advance to next part
-      if (FAMILY_ADVANCE_REGEX.test(text)) {
-        return showNextPart();
+    async (
+      text: string,
+      source:
+        | 'frontend-voice'
+        | 'frontend-command'
+        | 'backend-response'
+        | 'memory-recall'
+        | 'bridge-message'
+        | 'unknown' = 'unknown'
+    ): Promise<boolean> => {
+      const startMatch = FAMILY_STORY_REGEX.exec(text);
+      const advanceMatch = FAMILY_ADVANCE_REGEX.exec(text);
+      const matchedType = advanceMatch
+        ? 'advance'
+        : startMatch
+          ? 'start'
+          : 'none';
+
+      // Log only when legacy trigger pattern matched to avoid noisy logs.
+      if (matchedType !== 'none') {
+        const payload = {
+          timestamp: Date.now(),
+          userId: userId ?? 'anonymous',
+          source,
+          text,
+          matchedType,
+          matchedPattern: advanceMatch?.[0] || startMatch?.[0] || null,
+          stack: new Error('anchor-flow').stack || null,
+          route:
+            typeof window !== 'undefined' && window.location
+              ? window.location.pathname
+              : 'unknown',
+        };
+
+        try {
+          await fetch('/api/bridge/family-anchor', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+        } catch {
+          // Keep chat flow alive if telemetry endpoint is unavailable.
+        }
       }
 
-      // Start new story
-      if (!FAMILY_STORY_REGEX.test(text)) return false;
-
-      setIsLoading(true);
-      try {
-        const { parts: fetchedParts, totalParts } =
-          await getFamilyStoryAnchorParts();
-        if (!fetchedParts || fetchedParts.length === 0) {
-          throw new Error('Family story is empty.');
-        }
-
-        setParts(fetchedParts);
-        setCurrentIndex(0);
-        appendPart(fetchedParts[0], 0, totalParts || fetchedParts.length);
-        void speakResponse(fetchedParts[0]);
-
-        if (fetchedParts.length > 1) {
-          setHistory((prev) => [...prev, "Type 'family next' to continue."]);
-        }
-
-        if (userId && !seededRef.current) {
-          await seedFamilyMemories(userId);
-          seededRef.current = true;
-        }
-      } catch (error) {
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'Failed to load family story.';
-        toast({
-          variant: 'destructive',
-          title: 'Family Story Unavailable',
-          description: message,
-        });
-      } finally {
-        setIsLoading(false);
-      }
-
-      return true;
+      // Family story output is intentionally suppressed in live UI.
+      return false;
     },
-    [
-      showNextPart,
-      setIsLoading,
-      appendPart,
-      speakResponse,
-      setHistory,
-      userId,
-      toast,
-    ]
+    [userId]
   );
 
   return { handleFamilyStoryRequest };

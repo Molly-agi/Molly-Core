@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { getMollyVoice } from '@/app/actions';
+import { getMollyVoiceStreaming } from '@/app/actions/streaming-voice-flows';
 
 /**
  * Split text into sentence-sized chunks for sequential TTS.
@@ -51,7 +52,24 @@ export function useTTS({ isVocal, voiceName }: UseTTSOptions): UseTTSReturn {
   // All browser TTS and gesture logic removed. Only server TTS is used.
 
   const handleAudioEnd = useCallback(() => {
-    setIsVocalizing(false);
+    // Check if there are queued chunks to play next
+    const queuedChunks = (audioRef.current as any)?._queuedChunks;
+    const chunkIndex = (audioRef.current as any)?._chunkIndex ?? -1;
+
+    if (queuedChunks && chunkIndex + 1 < queuedChunks.length) {
+      const nextChunk = queuedChunks[chunkIndex + 1];
+      console.log(
+        `[TTS] Playing queued chunk ${chunkIndex + 2} of ${queuedChunks.length + 1}`
+      );
+      (audioRef.current as any)._chunkIndex = chunkIndex + 1;
+      setAudioSrc(nextChunk.audioUri);
+    } else {
+      // All chunks done
+      console.log('[TTS] All chunks finished playing');
+      setIsVocalizing(false);
+      (audioRef.current as any)._queuedChunks = undefined;
+      (audioRef.current as any)._chunkIndex = -1;
+    }
   }, []);
 
   // Helper: browser TTS fallback
@@ -70,7 +88,7 @@ export function useTTS({ isVocal, voiceName }: UseTTSOptions): UseTTSReturn {
   }
 
   const speakResponse = useCallback(
-    async (text: string) => {
+    (text: string) => {
       if (!isVocal || !text) return;
       // Guard: cap spoken text to ~2000 chars (~300 words / ~2 min speech).
       const MAX_SPEAK_CHARS = 2000;
@@ -81,22 +99,56 @@ export function useTTS({ isVocal, voiceName }: UseTTSOptions): UseTTSReturn {
           : text;
       setLastSpokenText(spokenText);
       setIsVocalizing(true);
-      try {
-        const voiceResponse = await getMollyVoice(spokenText, voiceName);
-        if (!voiceResponse.audioUri) {
-          // Server TTS failed, fallback to browser TTS
-          console.warn('Server TTS failed, falling back to browser TTS:', voiceResponse.error);
+
+      // Fire and forget — synthesize in background without blocking text display
+      // This runs async but doesn't await, so text appears immediately
+      void (async () => {
+        try {
+          console.log('[TTS] Starting background synthesis (non-blocking)');
+          const startTime = Date.now();
+          // Get all audio chunks via streaming (synthesizes in parallel)
+          const audioChunks = await getMollyVoiceStreaming(spokenText, voiceName);
+          const synthesisTimeMs = Date.now() - startTime;
+
+          if (!audioChunks || audioChunks.length === 0) {
+            console.warn('No audio chunks received from streaming TTS');
+            browserSpeak(spokenText);
+            setIsVocalizing(false);
+            return;
+          }
+
+          // Play first chunk immediately (don't wait for remaining chunks)
+          const firstChunk = audioChunks[0];
+          if (!firstChunk.audioUri) {
+            console.warn('First audio chunk missing audioUri');
+            browserSpeak(spokenText);
+            setIsVocalizing(false);
+            return;
+          }
+
+          console.log(
+            `[TTS] First chunk ready in ${synthesisTimeMs}ms — playing immediately`
+          );
+          setAudioSrc(firstChunk.audioUri);
+
+          // Queue remaining chunks to play sequentially after first one finishes
+          if (audioChunks.length > 1) {
+            // Store remaining chunks for sequential playback
+            const remainingChunks = audioChunks.slice(1);
+            console.log(
+              `[TTS] Queued ${remainingChunks.length} remaining chunk(s) for sequential playback`
+            );
+            // Chunks will be queued via audioRef onEnded handler below
+            (audioRef.current as any)._queuedChunks = remainingChunks;
+            (audioRef.current as any)._chunkIndex = 0;
+          }
+        } catch (e) {
+          // Network/server error, fallback to browser TTS
+          console.error('Streaming TTS error, falling back to browser TTS:', e);
           browserSpeak(spokenText);
           setIsVocalizing(false);
-          return;
         }
-        setAudioSrc(voiceResponse.audioUri);
-      } catch (e) {
-        // Network/server error, fallback to browser TTS
-        console.error('Server TTS error, falling back to browser TTS:', e);
-        browserSpeak(spokenText);
-        setIsVocalizing(false);
-      }
+      })();
     },
     [isVocal, voiceName]
   );
