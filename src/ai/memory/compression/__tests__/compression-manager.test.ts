@@ -1,8 +1,4 @@
-import {
-  CompressionManager,
-  type CompressionContext,
-  type CompressionFeatureFlags,
-} from '../compression-manager';
+import { CompressionManager } from '../compression-manager';
 import { makeEngramBatch } from '../test-helpers';
 
 describe('CompressionManager — Option C Pipeline Orchestrator', () => {
@@ -34,7 +30,7 @@ describe('CompressionManager — Option C Pipeline Orchestrator', () => {
     });
 
     it('returns same instance on subsequent calls (singleton)', () => {
-      const m1 = CompressionManager.getInstance({ t1PersonalityReference: true });
+      CompressionManager.getInstance({ t1PersonalityReference: true });
       const m2 = CompressionManager.getInstance();
 
       // m2 should return the same singleton (with t1 still enabled)
@@ -300,7 +296,6 @@ describe('CompressionManager — Option C Pipeline Orchestrator', () => {
       expect(decompressedIds).toEqual(originalIds);
 
       // Content restored
-      const origById = new Map(original.map((e) => [e.id, e]));
       for (const e of decompressed) {
         expect(e.content).toBeTruthy();
         expect(e.personalityContext).toBeDefined();
@@ -452,11 +447,15 @@ describe('CompressionManager — Option C Pipeline Orchestrator', () => {
       });
 
       // T2 and T6 should now be applied (no longer "not yet built")
-      expect(result.metrics.techniquesApplied).toContain('T2:TimeDecayFidelity');
+      expect(result.metrics.techniquesApplied).toContain(
+        'T2:TimeDecayFidelity'
+      );
       expect(result.metrics.techniquesApplied).toContain('T6:InteractionTrace');
-      
-      // T5 should still be skipped as not yet built
-      expect(result.metrics.techniquesSkipped.join(',')).toContain('T5:NumericQuantization (not yet built — P3)');
+
+      // T5 is now implemented and should be applied when enabled
+      expect(result.metrics.techniquesApplied).toContain(
+        'T5:NumericQuantization'
+      );
     });
   });
 });

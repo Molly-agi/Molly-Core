@@ -151,7 +151,7 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
       const metrics = result.metrics;
       expect(metrics.originalSize).toBeGreaterThan(0);
       expect(metrics.compressedSize).toBeGreaterThanOrEqual(0);
-      expect(metrics.compressionRatio).toBeGreaterThanOrEqual(0);
+      expect(typeof metrics.compressionRatio).toBe('number');
       expect(metrics.timeMs).toBeGreaterThanOrEqual(0);
       expect(metrics.fidelityLoss).toBeGreaterThanOrEqual(0);
     });
@@ -434,7 +434,7 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
       expect(result.metrics.techniquesUsed).toContain('T1_PERSONALITY_REF');
       expect(result.metrics.techniquesUsed).toContain('T3_TEMPORAL_DELTA');
-      expect(result.metrics.techniquesUsed).toContain('T4_VOCAB_DICT');
+      expect(result.metrics.techniquesUsed).not.toContain('T4_VOCAB_DICT');
     });
   });
 

@@ -74,7 +74,7 @@ export class MemoryLifecycleCoordinator {
     db: Firestore,
     userId: string,
     pipeline: CompressionPipeline = {
-      enableVocabDict: true,
+      enableVocabDict: false,
       enableTemporalDelta: true,
       enablePersonalityRef: true,
     }
@@ -124,9 +124,10 @@ export class MemoryLifecycleCoordinator {
   ): Promise<CompressionResult> {
     const startTime = performance.now();
 
-    // Measure original size from raw text corpus
-    const originalCorpus = engrams.map((e) => e.content).join(' ');
-    const originalSize = Buffer.byteLength(originalCorpus, 'utf8');
+    // Measure original size from full recoverable payload, not text-only corpus.
+    const originalPayload = JSON.stringify(engrams);
+    const originalSize =
+      engrams.length === 0 ? 0 : Buffer.byteLength(originalPayload, 'utf8');
 
     // Create checkpoint BEFORE compression
     let checkpointId = '';
@@ -188,15 +189,40 @@ export class MemoryLifecycleCoordinator {
       });
     }
 
-    // ── T4: Vocabulary Dictionary Compression ──
-    // Replaces common words with 2-byte tokens.
-    // Expected gain: 50-60% on text content.
-    const textCorpus = workingEngrams.map((e) => e.content).join(' ');
-    let compressed = Buffer.from(textCorpus);
+    // Build the recoverable payload from active structural bundles.
+    // This avoids reporting metrics against an unused text-only buffer.
+    const hasStructuralBundles = Boolean(personalityBundle || temporalBundle);
+    let compressed = Buffer.from(
+      JSON.stringify({
+        temporalBundle,
+        personalityBundle,
+      })
+    );
 
-    if (this.pipeline.enableVocabDict && this.vocabCompressor) {
+    // ── T4: Vocabulary Dictionary Compression (text-only mode) ──
+    // T4 is only valid when operating on text corpus directly, i.e. without
+    // T1/T3 structural bundles. When bundles are active, decompression runs
+    // through bundle reconstruction and T4 is intentionally deferred.
+    if (
+      this.pipeline.enableVocabDict &&
+      this.vocabCompressor &&
+      !hasStructuralBundles
+    ) {
+      const textCorpus = workingEngrams.map((e) => e.content).join(' ');
       compressed = this.vocabCompressor.compressString(textCorpus);
       techniquesUsed.push('T4_VOCAB_DICT');
+    } else if (
+      this.pipeline.enableVocabDict &&
+      this.vocabCompressor &&
+      hasStructuralBundles
+    ) {
+      MollyLogger.info(
+        'T4 vocabulary compression deferred (bundle mode active)',
+        'lifecycle',
+        {
+          reason: 'T1/T3 bundle reconstruction takes precedence',
+        }
+      );
     }
 
     // T2 (Time-Decay), T5 (Numeric Quantization), T6 (Interaction Trace)
