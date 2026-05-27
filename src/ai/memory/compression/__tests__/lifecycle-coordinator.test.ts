@@ -17,7 +17,10 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('initialization', () => {
     it('creates coordinator with default pipeline config', () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user123');
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user123'
+      );
 
       expect(coordinator).toBeDefined();
       // Verify internal state was set up
@@ -42,8 +45,12 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('can initialize vocabulary scanner from corpus', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user789');
-      const corpus = 'the quick brown fox jumps over the lazy dog ' + 'the test'.repeat(100);
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user789'
+      );
+      const corpus =
+        'the quick brown fox jumps over the lazy dog ' + 'the test'.repeat(100);
 
       // Should not throw
       await expect(
@@ -54,11 +61,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('compression pipeline (compressMemoryBatch)', () => {
     it('compresses engram batch with all techniques enabled', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-compress-all', {
-        enableVocabDict: true,
-        enableTemporalDelta: true,
-        enablePersonalityRef: true,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-compress-all',
+        {
+          enableVocabDict: true,
+          enableTemporalDelta: true,
+          enablePersonalityRef: true,
+        }
+      );
 
       const engrams = makeEngramBatch(15, true);
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -70,11 +81,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('applies T1 personality reference when enabled', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-t1', {
-        enablePersonalityRef: true,
-        enableTemporalDelta: false,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-t1',
+        {
+          enablePersonalityRef: true,
+          enableTemporalDelta: false,
+          enableVocabDict: false,
+        }
+      );
 
       const engrams = makeEngramBatch(10, true);
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -84,11 +99,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('applies T3 temporal delta when enabled', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-t3', {
-        enablePersonalityRef: false,
-        enableTemporalDelta: true,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-t3',
+        {
+          enablePersonalityRef: false,
+          enableTemporalDelta: true,
+          enableVocabDict: false,
+        }
+      );
 
       const engrams = makeEngramBatch(12, true);
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -98,11 +117,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('skips techniques when disabled in pipeline', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-skip', {
-        enablePersonalityRef: false,
-        enableTemporalDelta: false,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-skip',
+        {
+          enablePersonalityRef: false,
+          enableTemporalDelta: false,
+          enableVocabDict: false,
+        }
+      );
 
       const engrams = makeEngramBatch(5, true);
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -112,11 +135,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('reports correct compression metrics', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-metrics', {
-        enableVocabDict: true,
-        enableTemporalDelta: true,
-        enablePersonalityRef: true,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-metrics',
+        {
+          enableVocabDict: true,
+          enableTemporalDelta: true,
+          enablePersonalityRef: true,
+        }
+      );
 
       const engrams = makeEngramBatch(20, true);
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -130,7 +157,10 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('creates checkpoint before compression', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-checkpoint');
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-checkpoint'
+      );
       const engrams = makeEngramBatch(5, true);
 
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -143,11 +173,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('decompression and round-trip', () => {
     it('decompresses and returns engrams (T1 only)', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-decomp-t1', {
-        enablePersonalityRef: true,
-        enableTemporalDelta: false,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-decomp-t1',
+        {
+          enablePersonalityRef: true,
+          enableTemporalDelta: false,
+          enableVocabDict: false,
+        }
+      );
 
       const original = makeEngramBatch(8, true);
       const result = await coordinator.compressMemoryBatch(original);
@@ -162,11 +196,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('decompresses and returns engrams (T3 only)', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-decomp-t3', {
-        enablePersonalityRef: false,
-        enableTemporalDelta: true,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-decomp-t3',
+        {
+          enablePersonalityRef: false,
+          enableTemporalDelta: true,
+          enableVocabDict: false,
+        }
+      );
 
       const original = makeEngramBatch(12, true);
       const result = await coordinator.compressMemoryBatch(original);
@@ -180,11 +218,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('decompresses and returns engrams (T1+T3 combined)', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-decomp-t1t3', {
-        enablePersonalityRef: true,
-        enableTemporalDelta: true,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-decomp-t1t3',
+        {
+          enablePersonalityRef: true,
+          enableTemporalDelta: true,
+          enableVocabDict: false,
+        }
+      );
 
       const original = makeEngramBatch(15, true);
       const result = await coordinator.compressMemoryBatch(original);
@@ -197,7 +239,10 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('handles empty engram batch gracefully', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-empty');
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-empty'
+      );
       const result = await coordinator.compressMemoryBatch([]);
 
       expect(result.compressed).toBeInstanceOf(Buffer);
@@ -211,7 +256,10 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('audit logging', () => {
     it('logs eviction action', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-evict');
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-evict'
+      );
       const [engram] = makeEngramBatch(1, true);
 
       // Should not throw
@@ -221,7 +269,10 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('logs consolidation batch', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-consol');
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-consol'
+      );
 
       // Should not throw
       await expect(
@@ -230,7 +281,10 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('retrieves audit report', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-audit');
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-audit'
+      );
       const report = await coordinator.getAuditReport();
 
       expect(report).toBeDefined();
@@ -239,7 +293,10 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('emergency restore', () => {
     it('supports emergency rollback from checkpoint', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-restore');
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-restore'
+      );
       const engrams = makeEngramBatch(5, true);
       const compressResult = await coordinator.compressMemoryBatch(engrams);
 
@@ -254,8 +311,14 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('singleton pattern', () => {
     it('returns same instance for same user', () => {
-      const coord1 = getMemoryLifecycleCoordinator(mockFirestore, 'user-singleton');
-      const coord2 = getMemoryLifecycleCoordinator(mockFirestore, 'user-singleton');
+      const coord1 = getMemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-singleton'
+      );
+      const coord2 = getMemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-singleton'
+      );
 
       expect(coord1).toBe(coord2);
     });
@@ -268,13 +331,25 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('clears all coordinators', () => {
-      const coord1 = getMemoryLifecycleCoordinator(mockFirestore, 'user-clear-1');
-      const coord2 = getMemoryLifecycleCoordinator(mockFirestore, 'user-clear-2');
+      const coord1 = getMemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-clear-1'
+      );
+      const coord2 = getMemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-clear-2'
+      );
 
       clearCoordinators();
 
-      const coord1New = getMemoryLifecycleCoordinator(mockFirestore, 'user-clear-1');
-      const coord2New = getMemoryLifecycleCoordinator(mockFirestore, 'user-clear-2');
+      const coord1New = getMemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-clear-1'
+      );
+      const coord2New = getMemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-clear-2'
+      );
 
       expect(coord1).not.toBe(coord1New);
       expect(coord2).not.toBe(coord2New);
@@ -283,11 +358,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('pipeline configurations', () => {
     it('handles T1-only pipeline', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-t1-only', {
-        enablePersonalityRef: true,
-        enableTemporalDelta: false,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-t1-only',
+        {
+          enablePersonalityRef: true,
+          enableTemporalDelta: false,
+          enableVocabDict: false,
+        }
+      );
 
       const engrams = makeEngramBatch(10, true);
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -296,11 +375,15 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('handles T3-only pipeline', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-t3-only', {
-        enablePersonalityRef: false,
-        enableTemporalDelta: true,
-        enableVocabDict: false,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-t3-only',
+        {
+          enablePersonalityRef: false,
+          enableTemporalDelta: true,
+          enableVocabDict: false,
+        }
+      );
 
       const engrams = makeEngramBatch(10, true);
       const result = await coordinator.compressMemoryBatch(engrams);
@@ -309,14 +392,19 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('handles T4-only (vocabulary dict) pipeline', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-t4-only', {
-        enablePersonalityRef: false,
-        enableTemporalDelta: false,
-        enableVocabDict: true,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-t4-only',
+        {
+          enablePersonalityRef: false,
+          enableTemporalDelta: false,
+          enableVocabDict: true,
+        }
+      );
 
       // Initialize vocabulary compressor first
-      const corpus = 'test vocabulary words for compression ' + 'test'.repeat(100);
+      const corpus =
+        'test vocabulary words for compression ' + 'test'.repeat(100);
       await coordinator.initializeVocabularyScan(corpus);
 
       const engrams = makeEngramBatch(10, true);
@@ -326,14 +414,19 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
     });
 
     it('handles full T1+T3+T4 pipeline', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-full-p1', {
-        enablePersonalityRef: true,
-        enableTemporalDelta: true,
-        enableVocabDict: true,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-full-p1',
+        {
+          enablePersonalityRef: true,
+          enableTemporalDelta: true,
+          enableVocabDict: true,
+        }
+      );
 
       // Initialize vocabulary compressor
-      const corpus = 'memory compression techniques for molly ' + 'memory'.repeat(80);
+      const corpus =
+        'memory compression techniques for molly ' + 'memory'.repeat(80);
       await coordinator.initializeVocabularyScan(corpus);
 
       const engrams = makeEngramBatch(15, true);
@@ -347,14 +440,19 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
 
   describe('integration', () => {
     it('maintains lifecycle through compress→decompress→verify', async () => {
-      const coordinator = new MemoryLifecycleCoordinator(mockFirestore, 'user-lifecycle', {
-        enablePersonalityRef: true,
-        enableTemporalDelta: true,
-        enableVocabDict: true,
-      });
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-lifecycle',
+        {
+          enablePersonalityRef: true,
+          enableTemporalDelta: true,
+          enableVocabDict: true,
+        }
+      );
 
       // Scan corpus for vocabulary
-      const corpus = 'the memory system stores important context ' + 'the test'.repeat(50);
+      const corpus =
+        'the memory system stores important context ' + 'the test'.repeat(50);
       await coordinator.initializeVocabularyScan(corpus);
 
       // Create and compress
@@ -362,13 +460,75 @@ describe('MemoryLifecycleCoordinator — Full Memory Lifecycle', () => {
       const compressed = await coordinator.compressMemoryBatch(original);
 
       // Log audit action
-      await coordinator.logConsolidation(original.length, compressed.metrics.compressedSize);
+      await coordinator.logConsolidation(
+        original.length,
+        compressed.metrics.compressedSize
+      );
 
       // Decompress and verify
       const restored = coordinator.decompressMemoryBatch(compressed);
 
       expect(restored.length).toBe(original.length);
       expect(restored.every((e) => e.id && e.content)).toBe(true);
+    });
+
+    it('ISSUE #1: verifies complete content equality after compression round-trip', async () => {
+      const coordinator = new MemoryLifecycleCoordinator(
+        mockFirestore,
+        'user-deep-equality',
+        {
+          enablePersonalityRef: true,
+          enableTemporalDelta: true,
+          enableVocabDict: true,
+        }
+      );
+
+      // Initialize vocabulary from realistic corpus
+      const corpus =
+        'I remember when we first started this project ' +
+        'memory consolidation is critical for AI consciousness ' +
+        'the compression pipeline needs to preserve exact content ' +
+        'every byte matters when personality is at stake ' +
+        'we cannot afford data loss in episodic memories ' +
+        'test'.repeat(100);
+      await coordinator.initializeVocabularyScan(corpus);
+
+      // Create realistic engram batch (10 memories with rich structure)
+      const original = makeEngramBatch(10, true);
+
+      // Compress using full pipeline
+      const compressed = await coordinator.compressMemoryBatch(original);
+
+      // Decompress
+      const restored = coordinator.decompressMemoryBatch(compressed);
+
+      // CRITICAL: Deep content equality - this is what fails today
+      // Every engram must be identical before/after compression
+      expect(restored).toHaveLength(original.length);
+
+      original.forEach((originalEngram, index) => {
+        const restoredEngram = restored[index];
+
+        // Exact ID match
+        expect(restoredEngram.id).toBe(originalEngram.id);
+
+        // Exact content match (the critical check)
+        expect(restoredEngram.content).toBe(originalEngram.content);
+
+        // Exact metadata match
+        expect(restoredEngram.metadata).toEqual(originalEngram.metadata);
+
+        // Exact timestamp match
+        expect(restoredEngram.timestamp).toBe(originalEngram.timestamp);
+
+        // If tags exist, they must be identical
+        if (originalEngram.tags) {
+          expect(restoredEngram.tags).toEqual(originalEngram.tags);
+        }
+
+        // Full deep equality as final verification
+        expect(restoredEngram).toEqual(originalEngram);
+      });
     });
   });
 });
