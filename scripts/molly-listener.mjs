@@ -114,6 +114,7 @@ function callMollyFlow(triggerText) {
   const result = await conversationalChat({
     text: ${JSON.stringify(triggerText)},
     history: [],
+    broadcastToBridge: true,
   });
   if (result.error) { process.stderr.write(result.error + '\\n'); process.exit(1); }
   process.stdout.write(result.response);

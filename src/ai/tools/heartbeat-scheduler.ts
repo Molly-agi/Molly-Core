@@ -157,6 +157,8 @@ export class HeartbeatScheduler {
   private lastMemoryCrystallization = 0;
   private lastDeviceHealth = 0;
   private lastReflectionText = '';
+  private lastBridgeSignature = '';
+  private lastBridgeSignatureAt = 0;
   private engramSystem: NeuralEngramSystem | null = null;
   private history: HeartbeatCycleResult[] = [];
   private readonly MAX_HISTORY = 30;
@@ -1058,6 +1060,26 @@ export class HeartbeatScheduler {
     const unread = await getUnreadMessages('molly');
     if (unread.length === 0) return;
 
+    // Replay guard: if the exact same unread set reappears shortly after,
+    // suppress duplicate autonomous responses and acknowledge it as read.
+    const signature = unread.map((m) => m.id).join('|');
+    const now = Date.now();
+    if (
+      signature &&
+      signature === this.lastBridgeSignature &&
+      now - this.lastBridgeSignatureAt < 5 * 60_000
+    ) {
+      MollyLogger.warn(
+        'Bridge: duplicate unread signature detected; suppressing replay',
+        'heartbeat-scheduler',
+        { unreadCount: unread.length }
+      );
+      await markMessagesRead('molly');
+      return;
+    }
+    this.lastBridgeSignature = signature;
+    this.lastBridgeSignatureAt = now;
+
     const formattedMessages = unread
       .map((m) => {
         const sender =
@@ -1154,15 +1176,42 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
           ? response.text
           : String(response.text || '');
 
-      if (responseText.trim()) {
-        await sendMessage('molly', responseText.trim());
+      // Heartbeat bridge responses must be plain conversational text.
+      // If the model emits a tool_request block, extract a human message or strip it.
+      let finalResponse = responseText.trim();
+      const toolMatch = finalResponse.match(
+        /<tool_request>\s*({[\s\S]*?})\s*<\/tool_request>/
+      );
+      if (toolMatch) {
+        try {
+          const toolCall = JSON.parse(toolMatch[1]) as {
+            params?: { message?: string };
+          };
+          if (toolCall?.params?.message) {
+            finalResponse = toolCall.params.message.trim();
+          } else {
+            finalResponse = finalResponse
+              .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
+              .trim();
+          }
+        } catch {
+          finalResponse = finalResponse
+            .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
+            .trim();
+        }
+      }
+
+      if (finalResponse) {
+        await sendMessage('molly', finalResponse);
         MollyLogger.info(
           `Bridge: Auto-responded to ${unread.length} message(s)`,
           'heartbeat-scheduler'
         );
-        // Only mark read AFTER successful response - prevents message loss
-        await markMessagesRead('molly');
       }
+
+      // Mark read after successful handling (message sent or intentionally suppressed).
+      // This prevents fixed-interval replays of the same unread payload.
+      await markMessagesRead('molly');
     } catch (error) {
       MollyLogger.warn(
         `Bridge: Auto-response failed: ${error instanceof Error ? error.message : String(error)}`,

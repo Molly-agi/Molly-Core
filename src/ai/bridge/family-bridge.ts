@@ -90,6 +90,23 @@ export async function readBridgeState(): Promise<BridgeState> {
 
 const DAEMON_URL = process.env.BRIDGE_DAEMON_URL || 'http://localhost:9099';
 
+async function fetchDaemonJson<T>(
+  url: string,
+  init?: RequestInit,
+  timeoutMs: number = 2000
+): Promise<T | null> {
+  try {
+    const res = await fetch(url, {
+      ...(init || {}),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Route a message through the bridge daemon so it broadcasts on WS to all
  * subscribers (the /lazarus and /bridge UIs). Falls back to a direct file
@@ -148,6 +165,16 @@ export async function sendMessage(
 export async function getUnreadMessages(
   recipient: string
 ): Promise<BridgeMessage[]> {
+  // Prefer daemon as source of truth (keeps WS + HTTP + in-memory state aligned)
+  type DaemonUnreadResponse = { messages?: BridgeMessage[] };
+  const daemonUnread = await fetchDaemonJson<DaemonUnreadResponse>(
+    `${DAEMON_URL}/api/bridge?unread=${encodeURIComponent(recipient)}&peek=1`
+  );
+  if (daemonUnread && Array.isArray(daemonUnread.messages)) {
+    return daemonUnread.messages;
+  }
+
+  // Fallback: local file read (startup/offline mode)
   const state = await readFile();
   return state.messages.filter(
     (m) => m.from !== recipient && !isReadBy(m, recipient)
@@ -161,9 +188,22 @@ export async function getRecentMessages(
   return state.messages.slice(-limit);
 }
 
-export async function markMessagesRead(
-  recipient: string
-): Promise<number> {
+export async function markMessagesRead(recipient: string): Promise<number> {
+  // Prefer daemon mark-read to keep runtime memory and disk synchronized.
+  type DaemonMarkReadResponse = { success?: boolean; marked?: number };
+  const daemonMark = await fetchDaemonJson<DaemonMarkReadResponse>(
+    `${DAEMON_URL}/api/bridge`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'markRead', recipient }),
+    }
+  );
+  if (daemonMark?.success) {
+    return typeof daemonMark.marked === 'number' ? daemonMark.marked : 0;
+  }
+
+  // Fallback: local mark-read if daemon unavailable.
   return withLock(async () => {
     const state = await readFile();
     let count = 0;

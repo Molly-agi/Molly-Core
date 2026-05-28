@@ -43,21 +43,37 @@ export default function LazarusVoicePage() {
   const [mounted, setMounted] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState('');
   const lastMessageIdRef = useRef<string | null>(null);
+  const lastOutboundRef = useRef<{ text: string; at: number } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Send transcribed speech to bridge
-  const sendToBridge = useCallback(async (text: string) => {
-    if (!text.trim()) return;
-    try {
-      await fetch('/api/bridge', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ from: 'eric', content: text.trim() }),
-      });
-    } catch (err) {
-      console.error('Failed to send to bridge:', err);
+  const shouldSendOutbound = useCallback((raw: string) => {
+    const text = raw.trim();
+    if (!text) return false;
+    const now = Date.now();
+    const last = lastOutboundRef.current;
+    if (last && last.text === text && now - last.at < 15000) {
+      return false;
     }
+    lastOutboundRef.current = { text, at: now };
+    return true;
   }, []);
+
+  // Send transcribed speech to bridge
+  const sendToBridge = useCallback(
+    async (text: string) => {
+      if (!shouldSendOutbound(text)) return;
+      try {
+        await fetch('/api/bridge', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ from: 'eric', content: text.trim() }),
+        });
+      } catch (err) {
+        console.error('Failed to send to bridge:', err);
+      }
+    },
+    [shouldSendOutbound]
+  );
 
   // Gemini Live voice for real-time input
   const {
@@ -293,7 +309,10 @@ export default function LazarusVoicePage() {
 
   // Send message to bridge
   const sendMessage = async (text: string) => {
-    if (!text.trim()) return;
+    if (!shouldSendOutbound(text)) {
+      setInputText('');
+      return;
+    }
 
     try {
       await fetch('/api/bridge', {

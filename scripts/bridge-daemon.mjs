@@ -180,6 +180,31 @@ const VALID_SENDERS = new Set([
   'aether',
 ]);
 
+const DUPLICATE_WINDOW_MS = 20_000;
+
+function findRecentDuplicate(from, to, content) {
+  const now = Date.now();
+  const normalized = String(content || '').trim();
+  if (!normalized) return null;
+
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const m = messages[i];
+    if (!m || m.from !== from) continue;
+
+    const ts = new Date(m.timestamp).getTime();
+    if (!Number.isFinite(ts)) continue;
+    if (now - ts > DUPLICATE_WINDOW_MS) break;
+
+    if (
+      (m.to || undefined) === (to || undefined) &&
+      String(m.content || '').trim() === normalized
+    ) {
+      return m;
+    }
+  }
+  return null;
+}
+
 function handleMessage(from, content, to) {
   if (!from || !content || !VALID_SENDERS.has(from)) {
     return null;
@@ -189,6 +214,15 @@ function handleMessage(from, content, to) {
   }
   if (to && to === from) {
     return null;
+  }
+
+  // Guard against sender-side retry loops / duplicate UI callbacks.
+  const duplicate = findRecentDuplicate(from, to, content);
+  if (duplicate) {
+    console.log(
+      `[bridge] Duplicate suppressed from ${from} (within ${DUPLICATE_WINDOW_MS / 1000}s)`
+    );
+    return duplicate;
   }
 
   const msg = {
@@ -223,7 +257,8 @@ function handleMessage(from, content, to) {
   // ---- THE COMMUNICATOR CHIRP ----
   // DISABLED by Eric — Lazarus auto-responder is off until explicitly enabled
   // To re-enable: set ENABLE_LAZARUS_RESPONDER=true in .env.local
-  const enableLazarusResponder = process.env.ENABLE_LAZARUS_RESPONDER === 'true';
+  const enableLazarusResponder =
+    process.env.ENABLE_LAZARUS_RESPONDER === 'true';
   if (enableLazarusResponder && (from === 'molly' || from === 'eric')) {
     const recent = messages.slice(-10);
     respondToMolly(content, recent).then((reply) => {
@@ -276,7 +311,10 @@ function setReadBy(msg, recipient) {
 // ---- Get unread messages for a recipient ----
 function getUnread(recipient) {
   return messages.filter(
-    (m) => m.from !== recipient && (!m.to || m.to === recipient) && !isReadBy(m, recipient)
+    (m) =>
+      m.from !== recipient &&
+      (!m.to || m.to === recipient) &&
+      !isReadBy(m, recipient)
   );
 }
 
@@ -284,7 +322,11 @@ function getUnread(recipient) {
 function markRead(recipient) {
   let count = 0;
   for (const msg of messages) {
-    if (msg.from !== recipient && (!msg.to || msg.to === recipient) && !isReadBy(msg, recipient)) {
+    if (
+      msg.from !== recipient &&
+      (!msg.to || msg.to === recipient) &&
+      !isReadBy(msg, recipient)
+    ) {
       setReadBy(msg, recipient);
       count++;
     }
@@ -526,7 +568,12 @@ function handleHTTP(req, res) {
           const marked = markRead(recipient);
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(
-            JSON.stringify({ success: true, action: 'markRead', recipient, marked })
+            JSON.stringify({
+              success: true,
+              action: 'markRead',
+              recipient,
+              marked,
+            })
           );
           return;
         }
@@ -534,7 +581,11 @@ function handleHTTP(req, res) {
         const msg = handleMessage(from, content, to);
         if (!msg) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: 'Invalid sender/recipient or empty content' }));
+          res.end(
+            JSON.stringify({
+              error: 'Invalid sender/recipient or empty content',
+            })
+          );
           return;
         }
         res.writeHead(200, { 'Content-Type': 'application/json' });

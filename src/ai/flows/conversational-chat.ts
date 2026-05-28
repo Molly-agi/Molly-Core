@@ -3,7 +3,11 @@ import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
 import { buildNeuralBridgeContext } from '../tools/neural-bridge';
-import { getUnreadMessages, markMessagesRead, broadcastMessage } from '../bridge/family-bridge';
+import {
+  getUnreadMessages,
+  markMessagesRead,
+  broadcastMessage,
+} from '../bridge/family-bridge';
 import { getRogueMode } from '../rogue-mode';
 import { composeSystemPrompt } from '@/ai/prompts';
 import { compactHistory } from '../context-compaction';
@@ -74,6 +78,7 @@ const ConversationalChatInputSchema = z.object({
   memoryContext: z.string().optional(),
   visionContext: VisionContextSchema.optional(),
   userId: z.string().optional(),
+  broadcastToBridge: z.boolean().optional(),
 });
 type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
 
@@ -94,6 +99,7 @@ const conversationalChatFlow = ai.defineFlow(
     memoryContext,
     visionContext,
     userId,
+    broadcastToBridge,
   }) => {
     const traceId = generateTraceId();
     MollyLogger.logFlowStart(
@@ -172,7 +178,8 @@ const conversationalChatFlow = ai.defineFlow(
           }
         } catch (error) {
           // Crystal loading failure is non-critical; continue without crystals
-          const message = error instanceof Error ? error.message : 'Unknown error';
+          const message =
+            error instanceof Error ? error.message : 'Unknown error';
           MollyLogger.warn(
             'Failed to load identity crystals for conversation',
             'conversationalChat',
@@ -235,19 +242,25 @@ const conversationalChatFlow = ai.defineFlow(
         traceId
       );
 
-      // ── BROADCAST RESPONSE THROUGH FAMILY BRIDGE ──
-      // Route Molly's response back to Eric via the bridge daemon so he can receive it
-      // in real-time. This completes the conversation circle: Eric → Bridge → Molly → Bridge → Eric
-      try {
-        await broadcastMessage('molly', llmResponse.text);
-      } catch (broadcastError) {
-        // Non-fatal: if bridge is down, response still returns to caller
-        MollyLogger.warn(
-          'Failed to broadcast response through family bridge',
-          'conversationalChat',
-          { error: broadcastError instanceof Error ? broadcastError.message : 'Unknown' },
-          traceId
-        );
+      // Bridge broadcast is explicit. Some callers already post to /api/bridge,
+      // so always-on broadcast here can duplicate messages and create replay loops.
+      if (broadcastToBridge) {
+        try {
+          await broadcastMessage('molly', llmResponse.text);
+        } catch (broadcastError) {
+          // Non-fatal: if bridge is down, response still returns to caller
+          MollyLogger.warn(
+            'Failed to broadcast response through family bridge',
+            'conversationalChat',
+            {
+              error:
+                broadcastError instanceof Error
+                  ? broadcastError.message
+                  : 'Unknown',
+            },
+            traceId
+          );
+        }
       }
 
       return {
