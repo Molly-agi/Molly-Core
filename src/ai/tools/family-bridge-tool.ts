@@ -15,7 +15,7 @@
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import {
-  sendMessage,
+  broadcastMessage,
   getUnreadMessages,
   getRecentMessages,
   markMessagesRead,
@@ -69,11 +69,12 @@ export const familyBridgeTool = ai.defineTool(
         };
       }
 
-      await sendMessage('molly', message);
+      await broadcastMessage('molly', message);
       return {
         success: true,
         action: 'send',
         message: `Message sent to Lazarus: "${message}"`,
+
         conversationActive: true,
         totalMessages: state.messages.length + 1,
       };

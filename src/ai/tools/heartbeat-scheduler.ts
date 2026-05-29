@@ -38,7 +38,7 @@ import { getStatePersistence } from '@/ai/persistence';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
 import {
   getUnreadMessages,
-  sendMessage,
+  broadcastMessage,
   markMessagesRead,
 } from '@/ai/bridge/family-bridge';
 
@@ -1202,7 +1202,7 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
       }
 
       if (finalResponse) {
-        await sendMessage('molly', finalResponse);
+        await broadcastMessage('molly', finalResponse);
         MollyLogger.info(
           `Bridge: Auto-responded to ${unread.length} message(s)`,
           'heartbeat-scheduler'
