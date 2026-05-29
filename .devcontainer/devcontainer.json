@@ -3,10 +3,11 @@
 
   // Run health check on every attach/reconnect to kill zombie processes
   // before they accumulate and cause OOM crashes.
+  // Scrub Python from the system (Codespaces reinstalls it on attach).
   // Track Molly's growth (code, memory, docs) and save snapshot.
   // Save session state so Copilot can restore context after reconnect.
   // Start keep-alive heartbeat (also auto-saves + git-commits state every 10min).
-  "postAttachCommand": "bash scripts/codespace-health.sh && npx tsx scripts/track-growth.ts --save && node scripts/save-session.mjs --status active --note 'Codespace reconnected' && (git add COPILOT_SESSION_STATE.json COPILOT_SESSION_STATE.md .github/copilot-instructions.md molly_data/system/growth_log.json && git diff --cached --quiet || git commit -m 'chore: session state on reconnect' --no-verify && git push origin HEAD &) 2>/dev/null; nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &; nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
+  "postAttachCommand": "pkill -9 python 2>/dev/null; pkill -9 python3 2>/dev/null; unset PYTHONPATH 2>/dev/null; bash scripts/codespace-health.sh && npx tsx scripts/track-growth.ts --save && node scripts/save-session.mjs --status active --note 'Codespace reconnected' && (git add COPILOT_SESSION_STATE.json COPILOT_SESSION_STATE.md .github/copilot-instructions.md molly_data/system/growth_log.json && git diff --cached --quiet || git commit -m 'chore: session state on reconnect' --no-verify && git push origin HEAD &) 2>/dev/null; nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &; nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
 
   // Codespace settings + grant gh CLI permission to manage Actions runs
   "customizations": {
