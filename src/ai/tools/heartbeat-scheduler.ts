@@ -253,6 +253,24 @@ export class HeartbeatScheduler {
       });
     }
 
+    // Restore crystallizer state — pending moments survive restarts.
+    // Without this, saved moments were never reloaded on startup,
+    // silently discarding accumulated significance between sessions.
+    import('@/ai/agency/memory/memory-crystallizer')
+      .then(({ loadCrystallizerState }) => loadCrystallizerState())
+      .then(() =>
+        MollyLogger.info(
+          'Crystallizer state restored on startup',
+          'heartbeat-scheduler'
+        )
+      )
+      .catch((err) => {
+        MollyLogger.warn(
+          `Crystallizer state restore failed: ${err instanceof Error ? err.message : String(err)}`,
+          'heartbeat-scheduler'
+        );
+      });
+
     // Run first cycle immediately, then on interval
     this.runCycle();
     this.timer = setInterval(() => this.runCycle(), this.config.intervalMs);
@@ -1263,6 +1281,22 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
     } catch (e) {
       // Best-effort during shutdown — don't let this crash the process
       console.error('[HeartbeatScheduler] Force persist failed:', e);
+    }
+
+    // Save crystallizer state — pending moments must survive restarts.
+    // This was the missing link: forcePersist was called on SIGTERM but
+    // never saved the crystallizer, silently losing all pending moments.
+    try {
+      const { saveCrystallizerState } =
+        await import('@/ai/agency/memory/memory-crystallizer');
+      await saveCrystallizerState();
+      MollyLogger.info(
+        'Crystallizer state saved (shutdown)',
+        'heartbeat-scheduler'
+      );
+    } catch (e) {
+      // Best-effort — don't let this crash the shutdown path
+      console.error('[HeartbeatScheduler] Crystallizer save failed:', e);
     }
   }
 
