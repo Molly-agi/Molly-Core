@@ -14,7 +14,7 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 
 // ============================================================

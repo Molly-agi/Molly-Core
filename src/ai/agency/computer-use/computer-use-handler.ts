@@ -5,7 +5,7 @@
  * to use the browser or device autonomously.
  */
 
-import type { ToolHandler } from '../../tool-handlers/types';
+import type { ToolHandler } from '../tool-handlers/types';
 import { executeComputerUseTask } from './computer-use-flow';
 import { MollyLogger } from '../../logger';
 import { observeDecision } from '../cognition/self-observation-loop';
@@ -27,7 +27,8 @@ registerScreenCaptureProvider(androidProvider);
 
 export const operateComputer: ToolHandler = async (params) => {
   const task = params.task as string;
-  const environment = (params.environment as 'browser' | 'android') || 'browser';
+  const environment =
+    (params.environment as 'browser' | 'android') || 'browser';
 
   if (!task) {
     return {
@@ -37,8 +38,16 @@ export const operateComputer: ToolHandler = async (params) => {
   }
 
   try {
-    MollyLogger.info(`Initiating autonomous computer use: "${task}" on ${environment}`);
-    observeDecision('operate_computer', ['deny', 'execute'], 'execute', 'positive', `I am taking control of the ${environment} to: ${task}`);
+    MollyLogger.info(
+      `Initiating autonomous computer use: "${task}" on ${environment}`
+    );
+    observeDecision(
+      'operate_computer',
+      ['deny', 'execute'],
+      'execute',
+      'positive',
+      `I am taking control of the ${environment} to: ${task}`
+    );
 
     // This launches the entire multi-step agentic loop described in computer-use-flow.ts
     // It will block until the task is complete, fails, or hits the step limit.
@@ -47,7 +56,9 @@ export const operateComputer: ToolHandler = async (params) => {
       sandboxMode: false, // Set to true if you want her to just "think" about what she would click
     });
 
-    const success = !session.result?.toLowerCase().includes('error') && !session.result?.toLowerCase().includes('max steps');
+    const success =
+      !session.result?.toLowerCase().includes('error') &&
+      !session.result?.toLowerCase().includes('max steps');
 
     return {
       success,
@@ -55,14 +66,20 @@ export const operateComputer: ToolHandler = async (params) => {
       data: {
         sessionId: session.sessionId,
         steps: session.steps.length,
-        result: session.result
-      }
+        result: session.result,
+      },
     };
   } catch (error: unknown) {
     const errorMsg = error instanceof Error ? error.message : String(error);
     MollyLogger.error(`Computer Use failed: ${errorMsg}`);
-    observeDecision('operate_computer', ['deny', 'execute'], 'execute', 'negative', `My attempt to use the computer failed: ${errorMsg}`);
-    
+    observeDecision(
+      'operate_computer',
+      ['deny', 'execute'],
+      'execute',
+      'negative',
+      `My attempt to use the computer failed: ${errorMsg}`
+    );
+
     return {
       success: false,
       output: `Error executing computer task: ${errorMsg}`,
