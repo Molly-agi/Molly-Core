@@ -1,12 +1,11 @@
 import type { MemoryEngram } from '../neural-engram';
-import { MollyLogger } from '../../logger';
 
 /**
  * T3: Temporal Delta Encoding (B2B Grade)
- * 
+ *
  * Captures the 'evolution' of a session by storing a single base engram
- * followed by a series of diffs (deltas). 
- * 
+ * followed by a series of diffs (deltas).
+ *
  * METHODOLOGY:
  * Unlike lossy compression, this engine ensures 100% BIT-PERFECT RECALL.
  * It tracks changes across ALL fields of the MemoryEngram.
@@ -14,11 +13,13 @@ import { MollyLogger } from '../../logger';
 
 export interface TemporalDeltaResult {
   bases: MemoryEngram[];
-  deltaGroups: Array<Array<{
-    id: string;
-    timestamp: Date;
-    deltas: Record<string, any>;
-  }>>;
+  deltaGroups: Array<
+    Array<{
+      id: string;
+      timestamp: Date;
+      deltas: Record<string, unknown>;
+    }>
+  >;
   reconstructedEngrams: MemoryEngram[]; // For validation loop
 }
 
@@ -29,7 +30,9 @@ export function applyTemporalDeltaEncoding(
   engrams: MemoryEngram[],
   checkpointInterval = 10
 ): TemporalDeltaResult {
-  const sorted = [...engrams].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+  const sorted = [...engrams].sort(
+    (a, b) => a.timestamp.getTime() - b.timestamp.getTime()
+  );
   const bases: MemoryEngram[] = [];
   const deltaGroups: TemporalDeltaResult['deltaGroups'] = [];
   const reconstructed: MemoryEngram[] = [];
@@ -38,7 +41,7 @@ export function applyTemporalDeltaEncoding(
   let currentGroupArray: Array<{
     id: string;
     timestamp: Date;
-    deltas: Record<string, any>;
+    deltas: Record<string, unknown>;
   }> | null = null;
 
   for (let i = 0; i < sorted.length; i++) {
@@ -49,7 +52,7 @@ export function applyTemporalDeltaEncoding(
       bases.push(engram);
       reconstructed.push(engram);
       lastEngram = engram;
-      
+
       currentGroupArray = [];
       deltaGroups.push(currentGroupArray);
       continue;
@@ -58,17 +61,22 @@ export function applyTemporalDeltaEncoding(
     // Calculate diff from the last engram in the chain
     if (lastEngram && currentGroupArray) {
       const diff = calculateEngramDiff(lastEngram, engram);
-      
+
       currentGroupArray.push({
         id: engram.id,
         timestamp: engram.timestamp,
-        deltas: diff
+        deltas: diff,
       });
 
       // For validation, reconstruct immediately from the diff
-      const restored = applyEngramDiff(lastEngram, diff, engram.id, engram.timestamp);
+      const restored = applyEngramDiff(
+        lastEngram,
+        diff,
+        engram.id,
+        engram.timestamp
+      );
       reconstructed.push(restored);
-      
+
       lastEngram = restored;
     }
   }
@@ -76,7 +84,7 @@ export function applyTemporalDeltaEncoding(
   return {
     bases,
     deltaGroups,
-    reconstructedEngrams: reconstructed
+    reconstructedEngrams: reconstructed,
   };
 }
 
@@ -97,7 +105,12 @@ export function decompressTemporalDeltas(
     let lastEngram = base;
 
     for (const delta of result.deltaGroups[i]) {
-      const restored = applyEngramDiff(lastEngram, delta.deltas, delta.id, delta.timestamp);
+      const restored = applyEngramDiff(
+        lastEngram,
+        delta.deltas,
+        delta.id,
+        delta.timestamp
+      );
       engrams.push(restored);
       lastEngram = restored;
     }
@@ -111,33 +124,51 @@ export function decompressTemporalDeltas(
  * For numeric fields, stores delta (difference), not full value.
  * For other fields, stores full new value to ensure bit-perfect restoration.
  */
-function calculateEngramDiff(oldE: any, newE: any): Record<string, any> {
-  const diff: Record<string, any> = {};
+function calculateEngramDiff(
+  oldE: MemoryEngram,
+  newE: MemoryEngram
+): Record<string, unknown> {
+  const diff: Record<string, unknown> = {};
 
   // Numeric fields benefit from delta encoding (store difference, not value)
-  const numericFields = ['importance', 'emotionalValence', 'arousal', 'accessCount'];
+  const numericFields = [
+    'importance',
+    'emotionalValence',
+    'arousal',
+    'accessCount',
+  ];
   // Non-numeric fields: store full new value
   const otherFields = [
-    'content', 'lastAccessed', 'userId', 'engramVersion', 
-    'consolidationState', 'contextTags', 'relatedEngrams', 
-    'personalityContext', 'data'
+    'content',
+    'lastAccessed',
+    'userId',
+    'engramVersion',
+    'consolidationState',
+    'contextTags',
+    'relatedEngrams',
+    'personalityContext',
+    'data',
   ];
-  
+
   // Delta-encode numeric fields
   for (const field of numericFields) {
-    const oldVal = oldE[field] ?? 0;
-    const newVal = newE[field] ?? 0;
-    if (typeof oldVal === 'number' && typeof newVal === 'number' && oldVal !== newVal) {
-      diff[field] = newVal - oldVal;  // Store delta, not full value
+    const oldVal = (oldE as Record<string, unknown>)[field] ?? 0;
+    const newVal = (newE as Record<string, unknown>)[field] ?? 0;
+    if (
+      typeof oldVal === 'number' &&
+      typeof newVal === 'number' &&
+      oldVal !== newVal
+    ) {
+      diff[field] = newVal - oldVal;
     }
   }
-  
+
   // Full-value encoding for other fields
   for (const field of otherFields) {
-    const oldVal = JSON.stringify(oldE[field]);
-    const newVal = JSON.stringify(newE[field]);
+    const oldVal = JSON.stringify((oldE as Record<string, unknown>)[field]);
+    const newVal = JSON.stringify((newE as Record<string, unknown>)[field]);
     if (oldVal !== newVal) {
-      diff[field] = newE[field];
+      diff[field] = (newE as Record<string, unknown>)[field];
     }
   }
 
@@ -149,23 +180,33 @@ function calculateEngramDiff(oldE: any, newE: any): Record<string, any> {
  * For delta-encoded numeric fields, adds the delta to the previous value.
  */
 function applyEngramDiff(
-  prev: MemoryEngram, 
-  diff: Record<string, any>, 
-  id: string, 
+  prev: MemoryEngram,
+  diff: Record<string, unknown>,
+  id: string,
   timestamp: Date
 ): MemoryEngram {
   // Start with the exact values of the previous engram in the chain
-  const restored: any = { 
+  const restored: Record<string, unknown> = {
     ...prev,
     id,
-    timestamp
+    timestamp,
   };
-  
+
   // Apply delta-encoded numeric fields
-  const numericFields = ['importance', 'emotionalValence', 'arousal', 'accessCount'];
+  const numericFields = [
+    'importance',
+    'emotionalValence',
+    'arousal',
+    'accessCount',
+  ];
   for (const field of numericFields) {
     if (field in diff) {
-      restored[field] = (prev[field as keyof MemoryEngram] as number ?? 0) + diff[field];
+      const prevVal = (prev as Record<string, unknown>)[field];
+      const delta = diff[field];
+      restored[field] =
+        typeof prevVal === 'number' && typeof delta === 'number'
+          ? prevVal + delta
+          : prevVal;
     }
   }
 

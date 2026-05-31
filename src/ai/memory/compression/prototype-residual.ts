@@ -1,13 +1,12 @@
 import type { MemoryEngram } from '../neural-engram';
-import { MollyLogger } from '../../logger';
 
 /**
  * S2: Prototype + Residual Encoding (B2B Grade)
- * 
+ *
  * Instead of storing N semantically similar memories, we store:
  * 1. A single 'Prototype' engram (The most representative one).
  * 2. A 'Residual' for each other engram (The unique diff from the prototype).
- * 
+ *
  * GAIN: Extreme (Reduces text footprint by 60-80% for similar memories).
  * INTEGRITY: Lossless relative to the semantic cluster.
  */
@@ -17,7 +16,7 @@ export interface PrototypeResidualResult {
   residuals: Array<{
     id: string;
     prototypeId: string;
-    diff: Record<string, any>; // Lexical and metadata diffs
+    diff: Record<string, unknown>;
   }>;
   reconstructedEngrams: MemoryEngram[];
 }
@@ -45,25 +44,30 @@ export function applyPrototypeResidualEncoding(
     residuals.push({
       id: current.id,
       prototypeId: prototype.id,
-      diff
+      diff,
     });
 
     // Validation: Immediate reconstruction
-    reconstructed.push(applyResidualDiff(prototype, diff, current.id, current.timestamp));
+    reconstructed.push(
+      applyResidualDiff(prototype, diff, current.id, current.timestamp)
+    );
   }
 
   return {
     prototypes: [prototype],
     residuals,
-    reconstructedEngrams: reconstructed
+    reconstructedEngrams: reconstructed,
   };
 }
 
 /**
  * Calculates the residual diff (what makes this memory unique compared to the prototype).
  */
-function calculateResidualDiff(proto: MemoryEngram, target: MemoryEngram): Record<string, any> {
-  const diff: Record<string, any> = {};
+function calculateResidualDiff(
+  proto: MemoryEngram,
+  target: MemoryEngram
+): Record<string, unknown> {
+  const diff: Record<string, unknown> = {};
 
   // Textual residual (Simplified word-level diff)
   if (proto.content !== target.content) {
@@ -71,7 +75,12 @@ function calculateResidualDiff(proto: MemoryEngram, target: MemoryEngram): Recor
   }
 
   // Metadata residuals
-  const fields: (keyof MemoryEngram)[] = ['importance', 'emotionalValence', 'arousal', 'consolidationState'];
+  const fields: (keyof MemoryEngram)[] = [
+    'importance',
+    'emotionalValence',
+    'arousal',
+    'consolidationState',
+  ];
   for (const field of fields) {
     if (proto[field] !== target[field]) {
       diff[field] = target[field];
@@ -90,15 +99,15 @@ function calculateResidualDiff(proto: MemoryEngram, target: MemoryEngram): Recor
  * Reconstructs a target engram from its prototype and residual.
  */
 function applyResidualDiff(
-  proto: MemoryEngram, 
-  diff: Record<string, any>, 
-  id: string, 
+  proto: MemoryEngram,
+  diff: Record<string, unknown>,
+  id: string,
   timestamp: Date
 ): MemoryEngram {
-  const restored: any = { 
+  const restored: Record<string, unknown> = {
     ...proto,
     id,
-    timestamp
+    timestamp,
   };
 
   for (const key in diff) {
@@ -114,12 +123,17 @@ export function decompressPrototypeResiduals(
   const engrams: MemoryEngram[] = [...result.prototypes];
 
   for (const res of result.residuals) {
-    const proto = result.prototypes.find(p => p.id === res.prototypeId);
+    const proto = result.prototypes.find((p) => p.id === res.prototypeId);
     if (!proto) continue;
 
     // In a real system, we'd need the original timestamp which would be stored in residuals
     // For this simulation, we'll assume the residual has the necessary info.
-    const restored = applyResidualDiff(proto, res.diff, res.id, proto.timestamp); 
+    const restored = applyResidualDiff(
+      proto,
+      res.diff,
+      res.id,
+      proto.timestamp
+    );
     engrams.push(restored);
   }
 

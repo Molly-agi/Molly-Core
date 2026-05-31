@@ -2,10 +2,10 @@
  * Structural Schema Stripper — Component S0 (Hardenened B2B Version)
  *
  * Aether's Phase 1 optimization: Strip redundant structural keys from nested
- * objects before compression. 
- * 
- * FIX: This version ensures 100% bit-perfect reconstruction of complex 
- * nested objects and arrays by using explicit path indexing and recursive 
+ * objects before compression.
+ *
+ * FIX: This version ensures 100% bit-perfect reconstruction of complex
+ * nested objects and arrays by using explicit path indexing and recursive
  * inflation.
  */
 
@@ -17,14 +17,14 @@ export interface SchemaManifest {
 
 export interface StrippedMemory {
   schemaVersion: number;
-  structuralKeys: Uint16Array; 
-  textPayloads: string[]; 
-  primitiveValues: any[]; 
+  structuralKeys: Uint16Array;
+  textPayloads: string[];
+  primitiveValues: unknown[];
 }
 
 export class SchemaStripper {
   private manifest: SchemaManifest;
-  private readonly maxPaths = 65536; 
+  private readonly maxPaths = 65536;
 
   constructor(existingManifest?: SchemaManifest) {
     this.manifest = existingManifest || {
@@ -39,10 +39,10 @@ export class SchemaStripper {
    * Handles arrays with explicit indexing (e.g., "logs.0.signature")
    */
   private flattenObject(
-    obj: any,
+    obj: Record<string, unknown> | unknown[],
     prefix = '',
-    result: Array<{ path: string; value: any }> = []
-  ): Array<{ path: string; value: any }> {
+    result: Array<{ path: string; value: unknown }> = []
+  ): Array<{ path: string; value: unknown }> {
     if (result.length > 20000) return result;
 
     if (typeof obj !== 'object' || obj === null || obj instanceof Date) {
@@ -52,21 +52,37 @@ export class SchemaStripper {
     for (const key in obj) {
       if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
 
-      const value = obj[key];
+      const value = (obj as Record<string, unknown>)[key];
       const currentPath = prefix ? `${prefix}.${key}` : key;
 
       if (Array.isArray(value)) {
         for (let i = 0; i < value.length; i++) {
-          const item = value[i];
+          const item = value[i] as unknown;
           const arrayPath = `${currentPath}.${i}`;
-          if (typeof item === 'object' && item !== null && !(item instanceof Date)) {
-            this.flattenObject(item, arrayPath, result);
+          if (
+            typeof item === 'object' &&
+            item !== null &&
+            !(item instanceof Date)
+          ) {
+            this.flattenObject(
+              item as Record<string, unknown>,
+              arrayPath,
+              result
+            );
           } else {
             result.push({ path: arrayPath, value: item });
           }
         }
-      } else if (typeof value === 'object' && value !== null && !(value instanceof Date)) {
-        this.flattenObject(value, currentPath, result);
+      } else if (
+        typeof value === 'object' &&
+        value !== null &&
+        !(value instanceof Date)
+      ) {
+        this.flattenObject(
+          value as Record<string, unknown>,
+          currentPath,
+          result
+        );
       } else {
         result.push({ path: currentPath, value });
       }
@@ -79,7 +95,9 @@ export class SchemaStripper {
     let id = this.manifest.pathToId.get(path);
     if (id === undefined) {
       if (this.manifest.knownPaths.length >= this.maxPaths) {
-        throw new RangeError(`Schema overflow: Exceeded path limit (${this.maxPaths})`);
+        throw new RangeError(
+          `Schema overflow: Exceeded path limit (${this.maxPaths})`
+        );
       }
       id = this.manifest.knownPaths.length;
       this.manifest.knownPaths.push(path);
@@ -88,11 +106,11 @@ export class SchemaStripper {
     return id;
   }
 
-  public strip(memory: Record<string, any>): StrippedMemory {
+  public strip(memory: Record<string, unknown>): StrippedMemory {
     const flattened = this.flattenObject(memory);
     const structuralKeys = new Uint16Array(flattened.length);
     const textPayloads: string[] = [];
-    const primitiveValues: any[] = [];
+    const primitiveValues: unknown[] = [];
 
     for (let i = 0; i < flattened.length; i++) {
       const { path, value } = flattened[i];
@@ -117,8 +135,8 @@ export class SchemaStripper {
   /**
    * Robust reconstruction of the original object from stripped form.
    */
-  public unstrip(stripped: StrippedMemory): Record<string, any> {
-    const result: any = {};
+  public unstrip(stripped: StrippedMemory): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
     const { structuralKeys, textPayloads, primitiveValues } = stripped;
 
     let textIndex = 0;
@@ -140,8 +158,12 @@ export class SchemaStripper {
   /**
    * Recursively builds the object/array structure based on the path.
    */
-  private setDeepValue(obj: any, pathParts: string[], value: any): void {
-    let current = obj;
+  private setDeepValue(
+    obj: Record<string, unknown>,
+    pathParts: string[],
+    value: unknown
+  ): void {
+    let current: Record<string, unknown> = obj;
 
     for (let i = 0; i < pathParts.length; i++) {
       const part = pathParts[i];
@@ -156,7 +178,7 @@ export class SchemaStripper {
         if (!(part in current)) {
           current[part] = isNextPartArray ? [] : {};
         }
-        current = current[part];
+        current = current[part] as Record<string, unknown>;
       }
     }
   }

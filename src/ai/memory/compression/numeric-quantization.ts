@@ -22,7 +22,7 @@ const FACTOR = Math.pow(10, PRECISION); // 1000
  * Recursively quantize all numeric float values in an object.
  * Integers and non-numeric fields are left untouched.
  */
-function quantizeObject(obj: any): any {
+function quantizeObject(obj: unknown): unknown {
   if (obj === null || obj === undefined) return obj;
 
   if (typeof obj === 'number') {
@@ -38,9 +38,9 @@ function quantizeObject(obj: any): any {
   if (obj instanceof Date) return obj;
 
   if (typeof obj === 'object') {
-    const result: Record<string, any> = {};
+    const result: Record<string, unknown> = {};
     for (const key of Object.keys(obj)) {
-      result[key] = quantizeObject(obj[key]);
+      result[key] = quantizeObject((obj as Record<string, unknown>)[key]);
     }
     return result;
   }
