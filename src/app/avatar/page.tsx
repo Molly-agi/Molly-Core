@@ -56,18 +56,63 @@ const MODEL_PRESETS: Array<{ label: string; path: string }> = [
   { label: 'Male Base', path: '/models/male.glb' },
 ];
 
+function loadInitialAvatarSettings(): {
+  modelPath: string;
+  position: { x: number; y: number; z: number };
+} {
+  if (typeof window === 'undefined') {
+    return {
+      modelPath: MODEL_ASSET_PATH,
+      position: { x: 0, y: 0, z: 0 },
+    };
+  }
+
+  let modelPath = MODEL_ASSET_PATH;
+  let position = { x: 0, y: 0, z: 0 };
+
+  try {
+    const persistedModel = window.localStorage.getItem(
+      AVATAR_MODEL_STORAGE_KEY
+    );
+    if (persistedModel) {
+      modelPath = persistedModel;
+    }
+  } catch {
+    // ignore localStorage read issues
+  }
+
+  try {
+    const raw = window.localStorage.getItem(AVATAR_POSITION_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as { x?: number; y?: number; z?: number };
+      position = {
+        x: typeof parsed.x === 'number' ? parsed.x : 0,
+        y: typeof parsed.y === 'number' ? parsed.y : 0,
+        z: typeof parsed.z === 'number' ? parsed.z : 0,
+      };
+    }
+  } catch {
+    // ignore invalid persisted values
+  }
+
+  return { modelPath, position };
+}
+
 // ── Avatar page ────────────────────────────────────────────────────────────
 
 export default function AvatarPage() {
+  const [initialSettings] = useState(loadInitialAvatarSettings);
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [status, setStatus] = useState('');
   const [roboticsStatus, setRoboticsStatus] = useState('Robotics idle');
   const [showPersonalityVideo, setShowPersonalityVideo] = useState(false);
-  const [selectedModelPath, setSelectedModelPath] = useState(MODEL_ASSET_PATH);
-  const [modelX, setModelX] = useState(0);
-  const [modelY, setModelY] = useState(0);
-  const [modelZ, setModelZ] = useState(0);
+  const [selectedModelPath, setSelectedModelPath] = useState(
+    initialSettings.modelPath
+  );
+  const [modelX, setModelX] = useState(initialSettings.position.x);
+  const [modelY, setModelY] = useState(initialSettings.position.y);
+  const [modelZ, setModelZ] = useState(initialSettings.position.z);
   const activePlanSignatureRef = useRef<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
 
@@ -113,14 +158,6 @@ export default function AvatarPage() {
   });
 
   // If no GLB exists, show the uploaded personality video in the avatar viewport.
-  useEffect(() => {
-    try {
-      const persistedModel = window.localStorage.getItem(AVATAR_MODEL_STORAGE_KEY);
-      if (persistedModel) setSelectedModelPath(persistedModel);
-    } catch {
-      // ignore localStorage read issues
-    }
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -236,20 +273,6 @@ export default function AvatarPage() {
       return;
     }
     window.location.href = '/';
-  }, []);
-
-  useEffect(() => {
-    // Restore previously saved manual avatar position (if any).
-    try {
-      const raw = window.localStorage.getItem(AVATAR_POSITION_STORAGE_KEY);
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as { x?: number; y?: number; z?: number };
-      if (typeof parsed.x === 'number') setModelX(parsed.x);
-      if (typeof parsed.y === 'number') setModelY(parsed.y);
-      if (typeof parsed.z === 'number') setModelZ(parsed.z);
-    } catch {
-      // ignore invalid persisted values
-    }
   }, []);
 
   useEffect(() => {

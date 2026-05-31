@@ -20,7 +20,7 @@ export class EchoCoreParser {
     this.manifest = existingManifest || {
       version: 1,
       keys: [],
-      keyToId: new Map<string, number>()
+      keyToId: new Map<string, number>(),
     };
   }
 
@@ -28,13 +28,13 @@ export class EchoCoreParser {
    * Methodical linear engine to safely flatten corporate payloads.
    * Completely preserves array indices to ensure exact reconstruction.
    */
-  public parseFrame(rawInput: Record<string, any>): EchoCompressedFrame {
-    if (!rawInput || typeof rawInput !== "object") {
-      throw new TypeError("Input payload must be a valid non-null object.");
+  public parseFrame(rawInput: Record<string, unknown>): EchoCompressedFrame {
+    if (!rawInput || typeof rawInput !== 'object') {
+      throw new TypeError('Input payload must be a valid non-null object.');
     }
 
-    const flatEntries: Array<[string, any]> = [];
-    this.flattenToEntries(rawInput, "", flatEntries);
+    const flatEntries: Array<[string, unknown]> = [];
+    this.flattenToEntries(rawInput, '', flatEntries);
 
     const keyBitmask = new Uint16Array(flatEntries.length);
     const textPayloads: string[] = [];
@@ -46,7 +46,9 @@ export class EchoCoreParser {
 
       if (id === undefined) {
         if (this.manifest.keys.length >= this.maxSchemaKeys) {
-          throw new RangeError(`Schema overflow: Exceeded maximum key count limit of ${this.maxSchemaKeys}`);
+          throw new RangeError(
+            `Schema overflow: Exceeded maximum key count limit of ${this.maxSchemaKeys}`
+          );
         }
         id = this.manifest.keys.length;
         this.manifest.keys.push(path);
@@ -55,12 +57,12 @@ export class EchoCoreParser {
 
       keyBitmask[i] = id;
 
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         textPayloads.push(value);
-      } else if (typeof value === "number") {
+      } else if (typeof value === 'number') {
         if (!Number.isFinite(value)) {
           // Safeguard numeric values against IEEE 754 Infinity/NaN encoding corruptions
-          numerics.push(0.0); 
+          numerics.push(0.0);
         } else {
           numerics.push(value);
         }
@@ -71,25 +73,31 @@ export class EchoCoreParser {
       schemaVersion: this.manifest.version,
       keyBitmask,
       textPayloads,
-      numericalPrimitives: new Float64Array(numerics)
+      numericalPrimitives: new Float64Array(numerics),
     };
   }
 
-  private flattenToEntries(obj: any, prefix: string, acc: Array<[string, any]>): void {
+  private flattenToEntries(
+    obj: Record<string, unknown>,
+    prefix: string,
+    acc: Array<[string, unknown]>
+  ): void {
     // Stop recursive execution if cyclic structures are found
     if (acc.length > 5000) {
-      throw new RangeError("Payload depth or element length exceeds safe tracking density.");
+      throw new RangeError(
+        'Payload depth or element length exceeds safe tracking density.'
+      );
     }
 
     for (const key in obj) {
       if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
-      
+
       const value = obj[key];
       // Keep exact array sequence tracking intact
       const path = prefix ? `${prefix}.${key}` : key;
 
-      if (typeof value === "object" && value !== null) {
-        this.flattenToEntries(value, path, acc);
+      if (typeof value === 'object' && value !== null) {
+        this.flattenToEntries(value as Record<string, unknown>, path, acc);
       } else {
         acc.push([path, value]);
       }

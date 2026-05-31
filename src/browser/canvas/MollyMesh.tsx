@@ -13,7 +13,7 @@
  * Expects /public/models/molly.glb (Avaturn export, Mixamo rig by default).
  */
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { MODEL_PATH, useMollyGLB } from './useMollyGLB';
 import {
@@ -94,6 +94,39 @@ function LoadedMollyMesh({
 }: MollyMeshProps) {
   const { scene, bones, skinnedMesh } = useMollyGLB(modelPath ?? MODEL_PATH);
 
+  const sceneTransform = useMemo(() => {
+    // Normalize orientation + placement for third-party GLBs without mutating
+    // the original scene object returned by useGLTF.
+    const box = new THREE.Box3().setFromObject(scene);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    let rotation: [number, number, number] = [0, 0, 0];
+
+    if (size.z > size.y * 1.2) {
+      rotation = [-Math.PI / 2, 0, 0];
+    } else if (size.x > size.y * 1.2) {
+      rotation = [0, 0, Math.PI / 2];
+    }
+
+    const sample = scene.clone(true);
+    sample.rotation.set(rotation[0], rotation[1], rotation[2]);
+    sample.updateMatrixWorld(true);
+
+    const alignedBox = new THREE.Box3().setFromObject(sample);
+    const center = new THREE.Vector3();
+    alignedBox.getCenter(center);
+
+    return {
+      rotation,
+      position: [-center.x, -alignedBox.min.y, -center.z] as [
+        number,
+        number,
+        number,
+      ],
+    };
+  }, [scene]);
+
   // Cache in refs so useFrame mutations don't touch hook return values directly.
   const bonesRef = useRef<BoneDict>({});
   const meshRef = useRef<THREE.SkinnedMesh | null>(null);
@@ -103,35 +136,6 @@ function LoadedMollyMesh({
     bonesRef.current = bones as BoneDict;
     meshRef.current = skinnedMesh;
   }, [bones, skinnedMesh]);
-
-  useEffect(() => {
-    // Normalize orientation + placement for third-party GLBs.
-    // Some exports use Z-up/X-up and/or offsets that cause leg-only framing.
-    scene.rotation.set(0, 0, 0);
-    scene.scale.set(1, 1, 1);
-    scene.position.set(0, 0, 0);
-    scene.updateMatrixWorld(true);
-
-    const box = new THREE.Box3().setFromObject(scene);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-
-    if (size.z > size.y * 1.2) {
-      scene.rotation.x = -Math.PI / 2;
-    } else if (size.x > size.y * 1.2) {
-      scene.rotation.z = Math.PI / 2;
-    }
-
-    scene.updateMatrixWorld(true);
-
-    const alignedBox = new THREE.Box3().setFromObject(scene);
-    const center = new THREE.Vector3();
-    alignedBox.getCenter(center);
-
-    scene.position.x -= center.x;
-    scene.position.z -= center.z;
-    scene.position.y -= alignedBox.min.y;
-  }, [scene]);
 
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
@@ -165,13 +169,23 @@ function LoadedMollyMesh({
         };
       }
       // Pass the full morph override map so she can see her own facial expression
-      director.feedProprioception(joints, frame.morphOverrides, time, frame.mood);
+      director.feedProprioception(
+        joints,
+        frame.morphOverrides,
+        time,
+        frame.mood
+      );
     }
   });
 
   return (
     <group position={modelOffset ?? [0, 0, 0]}>
-      <primitive object={scene} />
+      <group
+        rotation={sceneTransform.rotation}
+        position={sceneTransform.position}
+      >
+        <primitive object={scene} />
+      </group>
     </group>
   );
 }
@@ -181,11 +195,19 @@ function FallbackBust() {
     <group position={[0, 0.1, 0]}>
       <mesh position={[0, 1.25, 0]} castShadow>
         <sphereGeometry args={[0.27, 24, 24]} />
-        <meshStandardMaterial color="#d9d4cf" roughness={0.6} metalness={0.05} />
+        <meshStandardMaterial
+          color="#d9d4cf"
+          roughness={0.6}
+          metalness={0.05}
+        />
       </mesh>
       <mesh position={[0, 0.78, 0]} castShadow>
         <capsuleGeometry args={[0.22, 0.38, 8, 16]} />
-        <meshStandardMaterial color="#bfc5cf" roughness={0.7} metalness={0.08} />
+        <meshStandardMaterial
+          color="#bfc5cf"
+          roughness={0.7}
+          metalness={0.08}
+        />
       </mesh>
     </group>
   );
@@ -204,7 +226,10 @@ export function MollyMesh({
 
     const checkModel = async () => {
       try {
-        const res = await fetch(modelPath, { method: 'HEAD', cache: 'no-store' });
+        const res = await fetch(modelPath, {
+          method: 'HEAD',
+          cache: 'no-store',
+        });
         if (!cancelled) setModelAvailable(res.ok);
       } catch {
         if (!cancelled) setModelAvailable(false);

@@ -1,6 +1,6 @@
 // src/ai/engine-echo/pipeline.ts
-import { EchoCoreParser, EchoCompressedFrame } from "./core-parser";
-import { VocabDictCompressor } from "../memory/compression/vocab-dict";
+import { EchoCoreParser, EchoCompressedFrame } from './core-parser';
+import { VocabDictCompressor } from '../memory/compression/vocab-dict';
 
 export interface EchoPackedBlock {
   readonly schemaManifestVersion: number;
@@ -26,9 +26,8 @@ export class EchoPipeline {
    * defensively, and tracking data across byte boundaries.
    */
   public async compressPayload(
-    rawJson: Record<string, any>
+    rawJson: Record<string, unknown>
   ): Promise<EchoPackedBlock> {
-    
     const frame: EchoCompressedFrame = this.parser.parseFrame(rawJson);
 
     // Structural bitmask buffer
@@ -38,8 +37,9 @@ export class EchoPipeline {
     const numericBuffer = Buffer.from(frame.numericalPrimitives.buffer);
 
     // Unified text compression using the vocabulary dictionary
-    const unifiedText = frame.textPayloads.join(" ");
-    const dictionaryCompressed = this.vocabCompressor.compressString(unifiedText);
+    const unifiedText = frame.textPayloads.join(' ');
+    const dictionaryCompressed =
+      this.vocabCompressor.compressString(unifiedText);
 
     return {
       schemaManifestVersion: frame.schemaVersion,
@@ -47,8 +47,8 @@ export class EchoPipeline {
       compressedNumerics: numericBuffer,
       dictionaryPayload: {
         version: frame.schemaVersion,
-        compressedStream: dictionaryCompressed
-      }
+        compressedStream: dictionaryCompressed,
+      },
     };
   }
 }

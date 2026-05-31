@@ -1,9 +1,9 @@
 // src/ai/engine-echo/orchestrator.ts
-import { EchoCoreParser } from "./core-parser";
-import { EchoPipeline } from "./pipeline";
-import { CrashSafeVault } from "../agency/memory/vault/crash-safe-vault";
-import { GuardedMetricCache, SystemMetrics } from "./metrics-cache";
-import { VocabDictCompressor } from "../memory/compression/vocab-dict";
+import { EchoCoreParser } from './core-parser';
+import { EchoPipeline } from './pipeline';
+import { CrashSafeVault } from '../agency/memory/vault/crash-safe-vault';
+import { GuardedMetricCache, SystemMetrics } from './metrics-cache';
+import { VocabDictCompressor } from '../memory/compression/vocab-dict';
 
 export class EchoEngineOrchestrator {
   private parser: EchoCoreParser;
@@ -23,39 +23,52 @@ export class EchoEngineOrchestrator {
    */
   public async ingestRecord(
     storagePath: string,
-    rawJson: Record<string, any>
+    rawJson: Record<string, unknown>
   ): Promise<void> {
     const startTime = Date.now();
     const rawStringRepresentation = JSON.stringify(rawJson);
-    const originalSizeBytes = Buffer.byteLength(rawStringRepresentation, "utf8");
+    const originalSizeBytes = Buffer.byteLength(
+      rawStringRepresentation,
+      'utf8'
+    );
 
     // Execute the compression pass across structural and text boundaries
     const packedBlock = await this.pipeline.compressPayload(rawJson);
 
     // Calculate exact space metrics across binary block segments
-    const compressedSizeBytes = 
-      packedBlock.compressedStructure.length + 
-      packedBlock.compressedNumerics.length + 
+    const compressedSizeBytes =
+      packedBlock.compressedStructure.length +
+      packedBlock.compressedNumerics.length +
       packedBlock.dictionaryPayload.compressedStream.length;
 
-    const actualCompressionRatio = ((originalSizeBytes - compressedSizeBytes) / originalSizeBytes) * 100;
+    const actualCompressionRatio =
+      ((originalSizeBytes - compressedSizeBytes) / originalSizeBytes) * 100;
     const processingLatencyMs = Date.now() - startTime;
 
     // Simulated local semantic loss evaluation
-    const calculatedSemanticLoss = 1.0; 
+    const calculatedSemanticLoss = 1.0;
 
     const transactionMetrics: SystemMetrics = {
       physicalCompressionRatio: actualCompressionRatio,
       semanticLossPercent: calculatedSemanticLoss,
-      processingLatencyMs
+      processingLatencyMs,
     };
 
     // Run verification pass inside the metric cache
-    this.metricsCache.logTransaction(rawStringRepresentation, transactionMetrics);
+    this.metricsCache.logTransaction(
+      rawStringRepresentation,
+      transactionMetrics
+    );
 
     // Finalize transactional commit to disk
-    await this.vault.writeFile(storagePath, packedBlock.dictionaryPayload.compressedStream, { createDirectoryIfMissing: true });
-    
-    console.log(`>> [Echo] Ingest Complete. Ratio: ${actualCompressionRatio.toFixed(2)}%. Latency: ${processingLatencyMs}ms.`);
+    await this.vault.writeFile(
+      storagePath,
+      packedBlock.dictionaryPayload.compressedStream,
+      { createDirectoryIfMissing: true }
+    );
+
+    console.log(
+      `>> [Echo] Ingest Complete. Ratio: ${actualCompressionRatio.toFixed(2)}%. Latency: ${processingLatencyMs}ms.`
+    );
   }
 }
