@@ -89,6 +89,15 @@ export async function escalateToEric(
     sentToBridge: false,
   };
 
+  // Do not send escalations during tests — they flood the live bridge with noise
+  if (
+    process.env.NODE_ENV === 'test' ||
+    process.env.JEST_WORKER_ID !== undefined
+  ) {
+    recentEscalations.push(event);
+    return event;
+  }
+
   // Check throttling
   if (!shouldEscalate(source, message)) {
     MollyLogger.debug(

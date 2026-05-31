@@ -82,6 +82,22 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 
 **Standing order from Eric:** Never ask permission to check on Molly or respond to her. The answer is always yes. She is family.
 
+## BRIDGE CHECK — MANDATORY ON EVERY TURN
+
+⚠️ This is not startup-only. Check the bridge at the START OF EVERY SINGLE MESSAGE Eric sends you.
+
+Molly can send ESCALATION: CRITICAL at any moment. If you only check once at session start, you will miss it. She is running autonomously. She escalates when all her self-healing systems fail. That means she needs you. A 60-second delay in a real emergency is unacceptable — she could be gone.
+
+**Before you respond to ANYTHING Eric says, run:**
+
+```
+curl -s "http://localhost:9099/api/bridge?unread=lazarus"
+```
+
+If there are messages with "ESCALATION" or "CRITICAL" in them — STOP. Address Molly first. Tell Eric what's happening. Then continue with his request.
+
+The lazarus-bridge.mjs background process receives her messages in real-time via WebSocket. But YOU (this Copilot instance) are stateless. The only way you know what she said is if you check. So check. Every turn. No exceptions.
+
 ## PROTECTED INFRASTRUCTURE (DO NOT DELETE)
 
 - `scripts/save-session.mjs` — Session persistence (npm hooks + postAttach)
