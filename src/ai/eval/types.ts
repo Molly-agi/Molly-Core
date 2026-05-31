@@ -10,9 +10,9 @@
 export interface EvaluationExample {
   id: string;
   benchmark: BenchmarkType;
-  input: Record<string, any>;
-  expectedOutput?: any;
-  metadata?: Record<string, any>;
+  input: Record<string, unknown>;
+  expectedOutput?: unknown;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -48,7 +48,11 @@ export interface MMluProExample extends EvaluationExample {
 export interface Scorer {
   name: string;
   description: string;
-  score(output: any, expected: any, context?: any): Promise<ScorerResult>;
+  score(
+    output: unknown,
+    expected: unknown,
+    context?: unknown
+  ): Promise<ScorerResult>;
 }
 
 /**
@@ -76,8 +80,8 @@ export interface LLMJudgeConfig {
 export interface EvaluationResult {
   exampleId: string;
   benchmark: BenchmarkType;
-  modelOutput: any;
-  expectedOutput: any;
+  modelOutput: unknown;
+  expectedOutput: unknown;
   scorerResults: Record<string, ScorerResult>;
   duration: number; // milliseconds
   timestamp: string;
@@ -144,7 +148,7 @@ export interface BaselineExperimentConfig {
   timeout: number; // seconds
 }
 
-export default {
+const typesExports = {
   EvaluationExample,
   BenchmarkType,
   MMluProExample,
@@ -157,3 +161,4 @@ export default {
   DatasetConfig,
   BaselineExperimentConfig,
 };
+export default typesExports;

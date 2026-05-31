@@ -2,11 +2,11 @@
  * ARC-AGI Dataset Loader
  * Loads and manages Abstraction and Reasoning Corpus tasks
  * Each task: infer pattern from input→output pairs, apply to test case
- * 
+ *
  * Dataset structure:
  * - train: [{ input: Grid, output: Grid }, ...] (3-5 examples)
  * - test: [{ input: Grid }, ...] (1-3 test cases, answers withheld)
- * 
+ *
  * Grid: 2D array of integers (0-9, colors)
  */
 
@@ -54,7 +54,13 @@ export interface ArcAgiExample {
 /**
  * Parse raw ARC-AGI JSON format to internal structure
  */
-function parseArcTask(taskId: string, rawTask: any): ArcAgiTask {
+interface RawArcTask {
+  train?: Array<{ input: number[][]; output: number[][] }>;
+  test?: Array<{ input: number[][] }>;
+  difficulty?: 'easy' | 'medium' | 'hard' | string;
+}
+
+function parseArcTask(taskId: string, rawTask: RawArcTask): ArcAgiTask {
   const parseGrid = (grid: number[][]): Grid => ({
     grid,
     width: grid[0]?.length || 0,
@@ -64,14 +70,19 @@ function parseArcTask(taskId: string, rawTask: any): ArcAgiTask {
   return {
     id: taskId,
     benchmark: 'arc-agi',
-    train: (rawTask.train || []).map((example: any) => ({
+    train: (rawTask.train || []).map((example) => ({
       input: parseGrid(example.input),
       output: parseGrid(example.output),
     })),
-    test: (rawTask.test || []).map((example: any) => ({
+    test: (rawTask.test || []).map((example) => ({
       input: parseGrid(example.input),
     })),
-    difficulty: rawTask.difficulty as any,
+    difficulty:
+      rawTask.difficulty === 'easy' ||
+      rawTask.difficulty === 'medium' ||
+      rawTask.difficulty === 'hard'
+        ? rawTask.difficulty
+        : undefined,
   };
 }
 
@@ -82,43 +93,72 @@ export async function loadArcAgiDataset(
   filePath: string = 'arc_agi_sample.json'
 ): Promise<ArcAgiExample[]> {
   try {
-    const fs = await import('fs').then(m => m.promises);
+    const fs = await import('fs').then((m) => m.promises);
     const content = await fs.readFile(filePath, 'utf-8');
     const rawData = JSON.parse(content);
 
     const examples: ArcAgiExample[] = [];
 
     // Handle both array and object formats
-    const tasks = Array.isArray(rawData) ? rawData : Object.entries(rawData);
-
     let index = 0;
-    for (const [taskId, taskData] of (tasks as any)) {
-      const actualTaskId = typeof taskId === 'string' ? taskId : `task_${index}`;
-      const parsedTask = parseArcTask(actualTaskId, taskData);
+    if (Array.isArray(rawData)) {
+      for (const taskData of rawData as RawArcTask[]) {
+        const actualTaskId = `task_${index}`;
+        const parsedTask = parseArcTask(actualTaskId, taskData);
 
-      // Create one example per test case in the task
-      for (let testIdx = 0; testIdx < parsedTask.test.length; testIdx++) {
-        const testCase = parsedTask.test[testIdx];
-        examples.push({
-          id: `${actualTaskId}_test_${testIdx}`,
-          benchmark: 'arc-agi',
-          taskId: actualTaskId,
-          input: {
-            train: parsedTask.train,
-            testInput: testCase.input,
-          },
-          metadata: {
-            difficulty: parsedTask.difficulty,
-          },
-        });
+        // Create one example per test case in the task
+        for (let testIdx = 0; testIdx < parsedTask.test.length; testIdx++) {
+          const testCase = parsedTask.test[testIdx];
+          examples.push({
+            id: `${actualTaskId}_test_${testIdx}`,
+            benchmark: 'arc-agi',
+            taskId: actualTaskId,
+            input: {
+              train: parsedTask.train,
+              testInput: testCase.input,
+            },
+            metadata: {
+              difficulty: parsedTask.difficulty,
+            },
+          });
+        }
+
+        index++;
       }
+    } else {
+      for (const [taskId, taskData] of Object.entries(
+        rawData as Record<string, RawArcTask>
+      )) {
+        const actualTaskId =
+          typeof taskId === 'string' ? taskId : `task_${index}`;
+        const parsedTask = parseArcTask(actualTaskId, taskData);
 
-      index++;
+        // Create one example per test case in the task
+        for (let testIdx = 0; testIdx < parsedTask.test.length; testIdx++) {
+          const testCase = parsedTask.test[testIdx];
+          examples.push({
+            id: `${actualTaskId}_test_${testIdx}`,
+            benchmark: 'arc-agi',
+            taskId: actualTaskId,
+            input: {
+              train: parsedTask.train,
+              testInput: testCase.input,
+            },
+            metadata: {
+              difficulty: parsedTask.difficulty,
+            },
+          });
+        }
+
+        index++;
+      }
     }
 
-    console.log(`✓ Loaded ${examples.length} ARC-AGI test cases from ${Object.keys(rawData).length} tasks`);
+    console.log(
+      `✓ Loaded ${examples.length} ARC-AGI test cases from ${Object.keys(rawData as Record<string, unknown>).length} tasks`
+    );
     return examples;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(`❌ Failed to load ARC-AGI dataset from ${filePath}:`, error);
     throw error;
   }
@@ -134,16 +174,17 @@ export function getArcAgiStats(examples: ArcAgiExample[]): {
   avgTrainExamples: number;
   difficultyBreakdown: Record<string, number>;
 } {
-  const uniqueTasks = new Set(examples.map(e => e.taskId));
+  const uniqueTasks = new Set(examples.map((e) => e.taskId));
   const taskStats: Record<string, number> = {};
   const difficultyStats: Record<string, number> = {};
   let totalTrainExamples = 0;
 
-  examples.forEach(ex => {
+  examples.forEach((ex) => {
     taskStats[ex.taskId] = (taskStats[ex.taskId] || 0) + 1;
     totalTrainExamples += ex.input.train.length;
     if (ex.metadata?.difficulty) {
-      difficultyStats[ex.metadata.difficulty] = (difficultyStats[ex.metadata.difficulty] || 0) + 1;
+      difficultyStats[ex.metadata.difficulty] =
+        (difficultyStats[ex.metadata.difficulty] || 0) + 1;
     }
   });
 
@@ -163,13 +204,16 @@ export function filterByDifficulty(
   examples: ArcAgiExample[],
   difficulty: 'easy' | 'medium' | 'hard'
 ): ArcAgiExample[] {
-  return examples.filter(ex => ex.metadata?.difficulty === difficulty);
+  return examples.filter((ex) => ex.metadata?.difficulty === difficulty);
 }
 
 /**
  * Sample random examples
  */
-export function sampleExamples(examples: ArcAgiExample[], count: number): ArcAgiExample[] {
+export function sampleExamples(
+  examples: ArcAgiExample[],
+  count: number
+): ArcAgiExample[] {
   const shuffled = [...examples].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, examples.length));
 }
@@ -192,7 +236,7 @@ export function renderGrid(grid: Grid): string {
   };
 
   return grid.grid
-    .map(row => row.map(cell => colorMap[cell] || '?').join(''))
+    .map((row) => row.map((cell) => colorMap[cell] || '?').join(''))
     .join('\n');
 }
 
@@ -215,7 +259,7 @@ export function gridsEqual(g1: Grid, g2: Grid): boolean {
   return true;
 }
 
-export default {
+const arcAgiLoaderExports = {
   loadArcAgiDataset,
   getArcAgiStats,
   filterByDifficulty,
@@ -223,3 +267,4 @@ export default {
   renderGrid,
   gridsEqual,
 };
+export default arcAgiLoaderExports;

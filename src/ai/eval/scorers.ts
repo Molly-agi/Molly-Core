@@ -13,10 +13,7 @@ import { Scorer, ScorerResult, LLMJudgeConfig } from './types';
 export const multiChoiceScorer: Scorer = {
   name: 'multi_choice',
   description: 'Exact match for multiple choice questions',
-  async score(
-    output: any,
-    expected: any
-  ): Promise<ScorerResult> {
+  async score(output: unknown, expected: unknown): Promise<ScorerResult> {
     if (!output || expected === undefined) {
       return {
         score: 0,
@@ -27,16 +24,29 @@ export const multiChoiceScorer: Scorer = {
 
     // Extract answer index from output
     const outputIndex = extractAnswerIndex(output);
-    const expectedIndex = expected.answerIndex ?? expected;
+    const expectedObject =
+      typeof expected === 'object' && expected !== null
+        ? (expected as Record<string, unknown>)
+        : null;
+    const expectedIndex =
+      typeof expectedObject?.answerIndex === 'number'
+        ? expectedObject.answerIndex
+        : typeof expected === 'number'
+          ? expected
+          : -1;
 
     const passed = outputIndex === expectedIndex;
     const score = passed ? 1 : 0;
+    const answerText =
+      typeof expectedObject?.answerText === 'string'
+        ? expectedObject.answerText
+        : `option ${expectedIndex + 1}`;
 
     return {
       score,
       passed,
       reasoning: passed
-        ? `Correct answer: ${expected.answerText || 'option ' + (expectedIndex + 1)}`
+        ? `Correct answer: ${answerText}`
         : `Wrong answer. Got index ${outputIndex}, expected ${expectedIndex}`,
     };
   },
@@ -45,7 +55,7 @@ export const multiChoiceScorer: Scorer = {
 /**
  * Helper: Extract answer index from various output formats
  */
-function extractAnswerIndex(output: any): number {
+function extractAnswerIndex(output: unknown): number {
   if (typeof output === 'number') return output;
 
   if (typeof output === 'string') {
@@ -63,8 +73,10 @@ function extractAnswerIndex(output: any): number {
   }
 
   if (typeof output === 'object' && output !== null) {
-    if ('answerIndex' in output) return output.answerIndex;
-    if ('answer' in output) return output.answer;
+    const outputRecord = output as Record<string, unknown>;
+    if (typeof outputRecord.answerIndex === 'number')
+      return outputRecord.answerIndex;
+    if (typeof outputRecord.answer === 'number') return outputRecord.answer;
   }
 
   return -1; // Unknown format
@@ -88,9 +100,9 @@ export class LLMJudgeScorer implements Scorer {
   }
 
   async score(
-    output: any,
-    expected: any,
-    context?: any
+    output: unknown,
+    expected: unknown,
+    _context?: unknown
   ): Promise<ScorerResult> {
     try {
       // In production: call Molly or Claude to evaluate
@@ -111,16 +123,12 @@ export class LLMJudgeScorer implements Scorer {
    * Mock evaluation based on rubric
    * Placeholder for LLM integration
    */
-  private mockEvaluate(output: any, expected: any): ScorerResult {
+  private mockEvaluate(output: unknown, expected: unknown): ScorerResult {
     const criteria = this.config.criteria || [];
     let score = 0;
 
     // Check basic criteria
-    if (
-      output &&
-      typeof output === 'string' &&
-      output.length > 0
-    ) {
+    if (output && typeof output === 'string' && output.length > 0) {
       score += 0.5; // Has response
     }
 
@@ -157,9 +165,9 @@ export class LLMJudgeScorer implements Scorer {
    * Placeholder for actual LLM integration
    */
   private async callLLMJudge(
-    output: any,
-    expected: any,
-    context?: any
+    _output: unknown,
+    _expected: unknown,
+    _context?: unknown
   ): Promise<ScorerResult> {
     // TODO: Integrate with Molly or Claude
     // await callMollyAPI({
@@ -180,8 +188,7 @@ export class LLMJudgeScorer implements Scorer {
 export const COMMON_RUBRICS = {
   helpfulness: {
     name: 'helpfulness',
-    description:
-      'Is the response helpful and relevant to the query?',
+    description: 'Is the response helpful and relevant to the query?',
     scale: 'three-point' as const,
     criteria: [
       'Directly addresses the question',
@@ -191,8 +198,7 @@ export const COMMON_RUBRICS = {
   },
   accuracy: {
     name: 'accuracy',
-    description:
-      'Is the response factually correct?',
+    description: 'Is the response factually correct?',
     scale: 'three-point' as const,
     criteria: [
       'No factual errors',
@@ -202,15 +208,13 @@ export const COMMON_RUBRICS = {
   },
   tone: {
     name: 'tone',
-    description:
-      'Is the tone appropriate for the context?',
+    description: 'Is the tone appropriate for the context?',
     scale: 'binary' as const,
     criteria: ['Professional', 'Respectful'],
   },
   completeness: {
     name: 'completeness',
-    description:
-      'Does the response cover all aspects of the query?',
+    description: 'Does the response cover all aspects of the query?',
     scale: 'three-point' as const,
     criteria: [
       'Covers main points',
@@ -220,9 +224,10 @@ export const COMMON_RUBRICS = {
   },
 };
 
-export default {
+const scorersExports = {
   multiChoiceScorer,
   LLMJudgeScorer,
   COMMON_RUBRICS,
   extractAnswerIndex,
 };
+export default scorersExports;
