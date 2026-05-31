@@ -9,7 +9,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { MMluProExample, EvaluationExample } from './types';
+import { MMluProExample } from './types';
 
 /**
  * Load MMLU-Pro dataset from JSON file
@@ -17,9 +17,7 @@ import { MMluProExample, EvaluationExample } from './types';
 export async function loadMMLUProDataset(
   filePath?: string
 ): Promise<MMluProExample[]> {
-  const dataPath =
-    filePath ||
-    path.join(process.cwd(), 'mmlu_sample_500.json');
+  const dataPath = filePath || path.join(process.cwd(), 'mmlu_sample_500.json');
 
   if (!fs.existsSync(dataPath)) {
     throw new Error(`MMLU-Pro dataset not found at ${dataPath}`);
@@ -32,7 +30,7 @@ export async function loadMMLUProDataset(
     // Handle both array and object formats
     const items = Array.isArray(rawData) ? rawData : rawData.data || [];
 
-    return items.map((item: any, index: number) => {
+    return items.map((item: unknown, index: number) => {
       // Handle the actual dataset format:
       // {
       //   "id": "mmlu_0",
@@ -41,13 +39,15 @@ export async function loadMMLUProDataset(
       //   "options": ["A", "B", "C", "D"],
       //   "correctAnswer": "B"
       // }
+      if (typeof item !== 'object' || !item) return null;
+      const itemObj = item as Record<string, unknown>;
 
-      const question = item.question || '';
-      const choices = item.options || [];
-      const subject = item.subject || inferSubject(question, item);
+      const question = (itemObj['question'] as string) || '';
+      const choices = (itemObj['options'] as unknown[]) || [];
+      const subject =
+        (itemObj['subject'] as string) || inferSubject(question, itemObj);
 
-      // Convert correctAnswer letter (A/B/C/D) to index (0/1/2/3)
-      const correctAnswerText = item.correctAnswer;
+      const correctAnswerText = (itemObj['correctAnswer'] as string) || 'A';
       let answerIndex = 0;
       if (typeof correctAnswerText === 'string') {
         answerIndex = correctAnswerText.charCodeAt(0) - 65; // A=0, B=1, C=2, D=3
@@ -55,11 +55,10 @@ export async function loadMMLUProDataset(
         answerIndex = correctAnswerText;
       }
 
-      const answerText =
-        choices[answerIndex] || correctAnswerText || '';
+      const answerText = choices[answerIndex] || correctAnswerText || '';
 
       return {
-        id: item.id || `mmlu-pro-${index}`,
+        id: (itemObj['id'] as string) || `mmlu-pro-${index}`,
         benchmark: 'mmlu-pro' as const,
         input: {
           question,
@@ -86,7 +85,7 @@ export async function loadMMLUProDataset(
 /**
  * Infer subject from question or metadata
  */
-function inferSubject(question: string, item: any): string {
+function inferSubject(question: string, item: Record<string, unknown>): string {
   // Try metadata first
   if (item.subject) return item.subject;
   if (item.category) return item.category;
@@ -117,9 +116,7 @@ function inferSubject(question: string, item: any): string {
 /**
  * Get statistics about the dataset
  */
-export async function getMMLUProStats(
-  examples: MMluProExample[]
-): Promise<{
+export async function getMMLUProStats(examples: MMluProExample[]): Promise<{
   totalExamples: number;
   subjectsCount: number;
   subjectBreakdown: Record<string, number>;
@@ -161,9 +158,11 @@ export function sampleExamples(
   return shuffled.slice(0, Math.min(count, examples.length));
 }
 
-export default {
+const mmluProLoaderExports = {
   loadMMLUProDataset,
   getMMLUProStats,
   filterBySubject,
   sampleExamples,
 };
+
+export default mmluProLoaderExports;

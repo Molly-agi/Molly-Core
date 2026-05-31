@@ -2,12 +2,12 @@
  * Prune Compliance Logger — Audit Trail
  * Every memory eviction gets logged with a reason code for regulatory/audit compliance.
  * Append-only JSONL format for immutability.
- * 
+ *
  * Eric's original design. Adapted for Molly's audit needs.
  */
 
 import { promises as fs } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { dirname } from 'node:path';
 
 /**
  * Reason codes for why a memory engram was modified, archived, or purged.
@@ -70,9 +70,7 @@ export class PruneComplianceLogger {
     entry: Omit<AuditLogEntry, 'timestamp'>
   ): Promise<void> {
     // Chain writes to maintain strict ordering
-    this.writerQueue = this.writerQueue.then(() =>
-      this._writeLogEntry(entry)
-    );
+    this.writerQueue = this.writerQueue.then(() => this._writeLogEntry(entry));
 
     return this.writerQueue;
   }
@@ -109,20 +107,20 @@ export class PruneComplianceLogger {
   public async readAuditLog(limit?: number): Promise<AuditLogEntry[]> {
     try {
       const content = await fs.readFile(this.auditFilePath, 'utf8');
-      const lines = content.split('\n').filter(line => line.trim());
+      const lines = content.split('\n').filter((line) => line.trim());
 
       return lines
-        .map(line => {
+        .map((line) => {
           try {
             return JSON.parse(line) as AuditLogEntry;
           } catch {
             return null;
           }
         })
-        .filter(Boolean as any as (entry: AuditLogEntry | null) => entry is AuditLogEntry)
+        .filter((entry): entry is AuditLogEntry => entry !== null)
         .slice(limit ? -limit : undefined);
     } catch (err) {
-      if ((err as any).code === 'ENOENT') {
+      if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
         return []; // Log file doesn't exist yet
       }
       throw err;

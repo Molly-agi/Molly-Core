@@ -48,12 +48,16 @@ export const recallExperiences = ai.defineTool(
 
       const allLessons = Object.entries(docData)
         .slice(0, searchLimit * 3)
-        .map(([id, doc]: [string, any]) => ({
+        .map(([id, doc]: [string, unknown]) => ({
           id,
-          suggestion: doc.modificationSuggestion || 'No suggestion recorded.',
-          code: doc.modifiedCode || 'N/A',
-          timestamp: doc.timestamp || new Date().toISOString(),
-          vibe: doc.vibe || 'Stable',
+          suggestion:
+            (doc as Record<string, string>).modificationSuggestion ||
+            'No suggestion recorded.',
+          code: (doc as Record<string, string>).modifiedCode || 'N/A',
+          timestamp:
+            (doc as Record<string, string>).timestamp ||
+            new Date().toISOString(),
+          vibe: (doc as Record<string, string>).vibe || 'Stable',
         }));
 
       return allLessons;
@@ -133,7 +137,12 @@ export const pruneSensoryLogs = ai.defineTool(
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      MollyLogger.error('pruneSensoryLogs failed', 'memory', { error: message }, traceId);
+      MollyLogger.error(
+        'pruneSensoryLogs failed',
+        'memory',
+        { error: message },
+        traceId
+      );
       return {
         prunedCount: 0,
         status: `Failed to prune logs: ${message}`,

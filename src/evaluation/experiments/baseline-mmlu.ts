@@ -80,7 +80,10 @@ export abstract class BaselineExperiment {
       passed: this.run.results.passed,
       failed: this.run.results.failed,
       skipped: this.run.results.skipped,
-      passRate: this.run.results.totalTests > 0 ? (this.run.results.passed / this.run.results.totalTests) * 100 : 0,
+      passRate:
+        this.run.results.totalTests > 0
+          ? (this.run.results.passed / this.run.results.totalTests) * 100
+          : 0,
       avgScore: this.run.results.avgScore,
       duration: `${duration.toFixed(2)}s`,
       scorerStats: this.getScoreStats(),
@@ -91,7 +94,7 @@ export abstract class BaselineExperiment {
    * Calculate statistics for each scorer
    */
   protected getScoreStats() {
-    const stats: Record<string, any> = {};
+    const stats: Record<string, Record<string, number>> = {};
 
     for (const [scorerName, scores] of this.run.results.scores) {
       if (scores.length > 0) {
@@ -119,7 +122,9 @@ export class MMluProBaselineExperiment extends BaselineExperiment {
     const maxSamples = this.config.maxSamples || inputs.length;
     const testInputs = inputs.slice(0, maxSamples);
 
-    console.log(`[${this.config.name}] Starting with ${testInputs.length} samples`);
+    console.log(
+      `[${this.config.name}] Starting with ${testInputs.length} samples`
+    );
 
     for (const input of testInputs) {
       this.run.results.totalTests++;
@@ -129,7 +134,11 @@ export class MMluProBaselineExperiment extends BaselineExperiment {
         const output = await this.getMollyResponse(input);
 
         // Score the response
-        const scores = await scoreResponse(input, output, input.metadata?.correctAnswer);
+        const scores = await scoreResponse(
+          input,
+          output,
+          input.metadata?.correctAnswer
+        );
 
         // Record results
         let passCount = 0;
@@ -157,7 +166,9 @@ export class MMluProBaselineExperiment extends BaselineExperiment {
         // Calculate average score for this item
         const avgScore = totalScore / scores.size;
         if (this.run.results.totalTests % 10 === 0) {
-          console.log(`  Progress: ${this.run.results.totalTests}/${testInputs.length} - Avg Score: ${avgScore.toFixed(2)}`);
+          console.log(
+            `  Progress: ${this.run.results.totalTests}/${testInputs.length} - Avg Score: ${avgScore.toFixed(2)}`
+          );
         }
       } catch (error) {
         console.error(`Error processing input ${input.id}:`, error);
@@ -165,8 +176,14 @@ export class MMluProBaselineExperiment extends BaselineExperiment {
       }
 
       // Timeout check
-      if (this.config.timeout && new Date().getTime() - this.run.startTime.getTime() > this.config.timeout) {
-        console.warn(`Experiment timeout reached. Stopping at ${this.run.results.totalTests} tests.`);
+      if (
+        this.config.timeout &&
+        new Date().getTime() - this.run.startTime.getTime() >
+          this.config.timeout
+      ) {
+        console.warn(
+          `Experiment timeout reached. Stopping at ${this.run.results.totalTests} tests.`
+        );
         break;
       }
     }
@@ -182,18 +199,24 @@ export class MMluProBaselineExperiment extends BaselineExperiment {
       this.run.results.avgScore = totalAvg / this.run.results.scores.size;
     }
 
-    console.log(`[${this.config.name}] Completed: ${this.run.results.passed} passed, ${this.run.results.failed} failed, ${this.run.results.skipped} skipped`);
+    console.log(
+      `[${this.config.name}] Completed: ${this.run.results.passed} passed, ${this.run.results.failed} failed, ${this.run.results.skipped} skipped`
+    );
   }
 
   /**
    * Get Molly's response (placeholder - will be replaced with real API call)
    */
-  protected async getMollyResponse(input: BenchmarkInput): Promise<BenchmarkOutput> {
+  protected async getMollyResponse(
+    input: BenchmarkInput
+  ): Promise<BenchmarkOutput> {
     // TODO: Replace with real Molly API call
     // For now, simulate a response based on the question
 
     // Mock response - select a random option
-    const selectedIndex = Math.floor(Math.random() * (input.options?.length || 1));
+    const selectedIndex = Math.floor(
+      Math.random() * (input.options?.length || 1)
+    );
     const selectedOption = input.options?.[selectedIndex] || 'Unknown';
 
     return {
@@ -211,7 +234,9 @@ export class MMluProBaselineExperiment extends BaselineExperiment {
 /**
  * Create baseline experiment
  */
-export function createMMluProBaseline(overrides?: Partial<ExperimentConfig>): BaselineExperiment {
+export function createMMluProBaseline(
+  overrides?: Partial<ExperimentConfig>
+): BaselineExperiment {
   const config: ExperimentConfig = {
     name: 'MMLU-Pro Baseline',
     description: 'Molly AGI baseline evaluation on MMLU-Pro dataset',

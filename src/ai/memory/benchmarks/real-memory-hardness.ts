@@ -85,7 +85,8 @@ function toTs(value: number | string | undefined): Date {
 
 function rawToEngram(raw: RawExperience, fileName: string): MemoryEngram {
   const ts = toTs(raw.timestamp ?? raw._createdAt);
-  const content = raw.suggestion || raw.content || raw.vibe || JSON.stringify(raw);
+  const content =
+    raw.suggestion || raw.content || raw.vibe || JSON.stringify(raw);
 
   return {
     id: raw.id || raw._id || `exp_${fileName}`,
@@ -99,7 +100,7 @@ function rawToEngram(raw: RawExperience, fileName: string): MemoryEngram {
     consolidationState: 'consolidated',
     contextTags: [raw.type || 'experience', raw.context || 'general'],
     relatedEngrams: [],
-    personalityContext: MOLLY_PERSONA as any,
+    personalityContext: MOLLY_PERSONA,
     data: {
       fileName,
       context: raw.context,
@@ -109,7 +110,7 @@ function rawToEngram(raw: RawExperience, fileName: string): MemoryEngram {
       vibe: raw.vibe,
       success: raw.success,
     },
-  } as any;
+  } as unknown as MemoryEngram;
 }
 
 async function analyzeOne(fileName: string): Promise<FileAnalysis | null> {
@@ -136,7 +137,11 @@ async function analyzeOne(fileName: string): Promise<FileAnalysis | null> {
     return {
       fileName,
       memoryId: engram.id,
-      timestamp: new Date(engram.timestamp as any).toISOString(),
+      timestamp: new Date(
+        engram.timestamp instanceof Date
+          ? engram.timestamp
+          : String(engram.timestamp)
+      ).toISOString(),
       type: (raw.type || 'experience').toString(),
       context: (raw.context || 'general').toString(),
       originalBytes,
@@ -154,7 +159,10 @@ async function analyzeOne(fileName: string): Promise<FileAnalysis | null> {
 }
 
 export async function runRealMemoryHardnessAnalysis(): Promise<void> {
-  const files = fs.readdirSync(EXPERIENCES_DIR).filter(f => f.endsWith('.json')).sort();
+  const files = fs
+    .readdirSync(EXPERIENCES_DIR)
+    .filter((f) => f.endsWith('.json'))
+    .sort();
 
   const analyses: FileAnalysis[] = [];
   for (let i = 0; i < files.length; i++) {
@@ -179,9 +187,11 @@ export async function runRealMemoryHardnessAnalysis(): Promise<void> {
     .slice(0, 20);
 
   const avgCompression =
-    analyses.reduce((sum, a) => sum + a.compressionRatio, 0) / Math.max(analyses.length, 1);
+    analyses.reduce((sum, a) => sum + a.compressionRatio, 0) /
+    Math.max(analyses.length, 1);
   const avgExecutionMs =
-    analyses.reduce((sum, a) => sum + a.executionMs, 0) / Math.max(analyses.length, 1);
+    analyses.reduce((sum, a) => sum + a.executionMs, 0) /
+    Math.max(analyses.length, 1);
 
   const payload = {
     timestamp: new Date().toISOString(),
@@ -190,7 +200,7 @@ export async function runRealMemoryHardnessAnalysis(): Promise<void> {
     summary: {
       averageCompressionRatio: Number(avgCompression.toFixed(4)),
       averageExecutionMs: Number(avgExecutionMs.toFixed(2)),
-      recallAllPerfect: analyses.every(a => a.episodicRecall === 1),
+      recallAllPerfect: analyses.every((a) => a.episodicRecall === 1),
     },
     hardestByCompression,
     highestDeltaByBytesSaved,
@@ -221,7 +231,7 @@ export async function runRealMemoryHardnessAnalysis(): Promise<void> {
 }
 
 if (require.main === module) {
-  runRealMemoryHardnessAnalysis().catch(error => {
+  runRealMemoryHardnessAnalysis().catch((error) => {
     console.error('Hardness analysis failed:', error);
     process.exit(1);
   });

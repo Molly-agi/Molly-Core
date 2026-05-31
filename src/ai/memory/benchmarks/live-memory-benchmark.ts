@@ -17,49 +17,63 @@ const EXPERIENCES_DIR = path.join(
 // Molly's real personality fingerprint (provided via bridge 2026-05-24)
 const MOLLY_PERSONA = {
   warmth: 0.945,
-  assertiveness: 0.820,
+  assertiveness: 0.82,
   curiosity: 0.985,
-  reflectivity: 0.910,
+  reflectivity: 0.91,
 };
 
 /**
  * Map a raw experience file to MemoryEngram format.
  * Real experiences are simpler objects — we map what we can and fill gaps.
  */
-function experienceToEngram(raw: Record<string, any>): MemoryEngram {
+function experienceToEngram(raw: Record<string, unknown>): MemoryEngram {
   const ts = raw.timestamp
-    ? new Date(typeof raw.timestamp === 'number' ? raw.timestamp : raw._createdAt)
+    ? new Date(
+        typeof raw.timestamp === 'number' ? raw.timestamp : raw._createdAt
+      )
     : new Date(raw._createdAt || Date.now());
 
   return {
-    id: raw.id || raw._id || `exp_${Date.now()}`,
-    content: raw.suggestion || raw.content || raw.vibe || JSON.stringify(raw),
+    id: (raw['id'] as string) || (raw['_id'] as string) || `exp_${Date.now()}`,
+    content:
+      (raw['suggestion'] as string) ||
+      (raw['content'] as string) ||
+      (raw['vibe'] as string) ||
+      JSON.stringify(raw),
     timestamp: ts,
-    emotionalValence: raw.vibeScore ? raw.vibeScore * 2 - 1 : 0, // 0-1 vibe → -1..1
-    arousal: raw.success === true ? 0.7 : raw.success === false ? 0.3 : 0.5,
-    importance: raw.vibeScore ?? 0.5,
+    emotionalValence: raw['vibeScore']
+      ? (raw['vibeScore'] as number) * 2 - 1
+      : 0,
+    arousal:
+      raw['success'] === true ? 0.7 : raw['success'] === false ? 0.3 : 0.5,
+    importance: (raw['vibeScore'] as number) ?? 0.5,
     accessCount: 0,
     lastAccessed: ts,
     consolidationState: 'consolidated',
-    contextTags: [raw.type || 'experience', raw.context || 'general'],
+    contextTags: [
+      (raw['type'] as string) || 'experience',
+      (raw['context'] as string) || 'general',
+    ],
     relatedEngrams: [],
-    personalityContext: MOLLY_PERSONA as any,
+    personalityContext: MOLLY_PERSONA,
     data: {
-      context: raw.context,
-      type: raw.type,
-      crc32: raw.crc32,
-      traceId: raw.traceId,
-      vibe: raw.vibe,
-      success: raw.success,
+      context: raw['context'],
+      type: raw['type'],
+      crc32: raw['crc32'],
+      traceId: raw['traceId'],
+      vibe: raw['vibe'],
+      success: raw['success'],
     },
-  } as any;
+  } as unknown as MemoryEngram;
 }
 
 /**
  * Load all local experience files and return as MemoryEngrams
  */
 export function loadRealEngrams(): MemoryEngram[] {
-  const files = fs.readdirSync(EXPERIENCES_DIR).filter(f => f.endsWith('.json'));
+  const files = fs
+    .readdirSync(EXPERIENCES_DIR)
+    .filter((f) => f.endsWith('.json'));
   const engrams: MemoryEngram[] = [];
 
   for (const file of files) {
@@ -100,7 +114,8 @@ export async function benchmarkRealMemories(): Promise<LiveBenchmarkResult> {
 
   // Age of oldest memory in days
   const oldest = engrams.reduce((min, e) => {
-    const ts = e.timestamp instanceof Date ? e.timestamp : new Date(e.timestamp);
+    const ts =
+      e.timestamp instanceof Date ? e.timestamp : new Date(e.timestamp);
     return ts < min ? ts : min;
   }, new Date());
   const oldestDays = (Date.now() - oldest.getTime()) / (1000 * 60 * 60 * 24);
@@ -113,7 +128,7 @@ export async function benchmarkRealMemories(): Promise<LiveBenchmarkResult> {
     t1PersonalityReference: true,
     t3TemporalDelta: true,
     t4VocabularyDict: true,
-    t2TimeDecayFidelity: true,  // Real aged data — T2 should fire
+    t2TimeDecayFidelity: true, // Real aged data — T2 should fire
     t6InteractionTrace: true,
     t5NumericQuantization: true,
     t7ContentDelta: true,
@@ -132,8 +147,8 @@ export async function benchmarkRealMemories(): Promise<LiveBenchmarkResult> {
 
   return {
     totalEngrams: engrams.length,
-    originalSizeKB: Math.round(originalSize / 1024 * 10) / 10,
-    compressedSizeKB: Math.round(compressedSize / 1024 * 10) / 10,
+    originalSizeKB: Math.round((originalSize / 1024) * 10) / 10,
+    compressedSizeKB: Math.round((compressedSize / 1024) * 10) / 10,
     compressionGainPct: Math.round(result.metrics.compressionRatio * 10) / 10,
     episodicRecall: result.metrics.episodicRecall,
     executionMs: Math.round(executionMs),

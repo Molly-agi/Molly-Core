@@ -566,7 +566,12 @@ export class NeuralEngramSystem {
   private persistenceConfig: EngramPersistenceConfig | null = null;
 
   // NEW: Memory Lifecycle Coordinator (optional compression layer)
-  private lifecycleCoordinator: any | null = null;
+  private lifecycleCoordinator: {
+    compressMemoryBatch: (
+      batch: MemoryEngram[]
+    ) => Promise<{ bytesSaved: number }>;
+    logConsolidation: (count: number, bytesSaved: number) => Promise<void>;
+  } | null = null;
 
   constructor() {
     this.frontalCortex = new FrontalCortex();
@@ -583,9 +588,17 @@ export class NeuralEngramSystem {
   /**
    * Set the memory lifecycle coordinator for compression + audit logging.
    */
-  setLifecycleCoordinator(coordinator: any): void {
+  setLifecycleCoordinator(coordinator: {
+    compressMemoryBatch: (
+      batch: MemoryEngram[]
+    ) => Promise<{ bytesSaved: number }>;
+    logConsolidation: (count: number, bytesSaved: number) => Promise<void>;
+  }): void {
     this.lifecycleCoordinator = coordinator;
-    MollyLogger.debug('Lifecycle coordinator attached to neural engram system', 'neural-engram');
+    MollyLogger.debug(
+      'Lifecycle coordinator attached to neural engram system',
+      'neural-engram'
+    );
   }
 
   /**
@@ -743,12 +756,22 @@ export class NeuralEngramSystem {
       try {
         // NEW: Use lifecycle coordinator if available (compression + audit)
         if (this.lifecycleCoordinator) {
-          const compressionResult = await this.lifecycleCoordinator.compressMemoryBatch(batch);
-          MollyLogger.info('Compression metrics', 'neural-engram', compressionResult.metrics);
+          const compressionResult =
+            await this.lifecycleCoordinator.compressMemoryBatch(batch);
+          MollyLogger.info(
+            'Compression metrics',
+            'neural-engram',
+            compressionResult.metrics
+          );
 
           // Log consolidation action
-          const totalBytesSaved = compressionResult.metrics.originalSize - compressionResult.metrics.compressedSize;
-          await this.lifecycleCoordinator.logConsolidation(batch.length, totalBytesSaved);
+          const totalBytesSaved =
+            compressionResult.metrics.originalSize -
+            compressionResult.metrics.compressedSize;
+          await this.lifecycleCoordinator.logConsolidation(
+            batch.length,
+            totalBytesSaved
+          );
         }
 
         // Persist (with or without prior compression logging)

@@ -2,19 +2,12 @@
  * Rollback Checkpoint Manager — Safety Layer
  * Creates snapshots before compression runs. Auto-restores if pipeline crashes.
  * Works with Firestore documents (Molly's actual storage backend).
- * 
+ *
  * Eric's original design. Adapted for Firestore.
  */
 
 import type { Firestore, DocumentData } from 'firebase/firestore';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  deleteDoc,
-  updateDoc,
-  Timestamp,
-} from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, Timestamp } from 'firebase/firestore';
 
 export interface CheckpointMetadata {
   id: string;
@@ -72,9 +65,7 @@ export class RollbackCheckpointManager {
         data: documentData,
       });
 
-      console.log(
-        `✅ Checkpoint created: ${checkpointId} for ${documentPath}`
-      );
+      console.log(`✅ Checkpoint created: ${checkpointId} for ${documentPath}`);
       return checkpointId;
     } catch (err) {
       console.error('❌ Failed to create checkpoint:', err);
@@ -133,9 +124,8 @@ export class RollbackCheckpointManager {
    */
   public async cleanupExpiredCheckpoints(userId: string): Promise<number> {
     try {
-      const now = Date.now();
       const oneDayMs = 24 * 60 * 60 * 1000;
-      let cleaned = 0;
+      const cleaned = 0;
 
       // In a real implementation, would use Firestore query + batch delete
       // For now, just log the intention

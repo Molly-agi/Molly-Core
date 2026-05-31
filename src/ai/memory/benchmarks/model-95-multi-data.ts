@@ -77,7 +77,7 @@ function generateVRGameplayData(count: number): MemoryEngram[] {
         distance_traveled_m: Math.random() * 500,
         success: Math.random() > 0.2,
       },
-    } as any);
+    } as unknown as MemoryEngram);
   }
 
   return engrams;
@@ -94,7 +94,7 @@ function generateGenericBulkData(count: number): MemoryEngram[] {
   for (let i = 0; i < count; i++) {
     const type = dataTypes[i % dataTypes.length];
 
-    let data: Record<string, any>;
+    let data: Record<string, unknown>;
     let content: string;
 
     if (type === 'web') {
@@ -107,7 +107,7 @@ function generateGenericBulkData(count: number): MemoryEngram[] {
         byteSize: html.length,
       };
     } else if (type === 'stats') {
-      content = `Metric ${i}: cpu=${(Math.random()*100).toFixed(2)}% mem=${(Math.random()*32).toFixed(2)}GB disk=${(Math.random()*100).toFixed(1)}%`;
+      content = `Metric ${i}: cpu=${(Math.random() * 100).toFixed(2)}% mem=${(Math.random() * 32).toFixed(2)}GB disk=${(Math.random() * 100).toFixed(1)}%`;
       data = {
         cpu_percent: parseFloat((Math.random() * 100).toFixed(6)),
         memory_gb: parseFloat((Math.random() * 32).toFixed(6)),
@@ -125,7 +125,6 @@ function generateGenericBulkData(count: number): MemoryEngram[] {
         rating: parseFloat((1 + Math.random() * 4).toFixed(2)),
       };
     } else {
-      const levels = ['INFO', 'WARN', 'ERROR'];
       const level = i % 20 === 0 ? 'ERROR' : i % 5 === 0 ? 'WARN' : 'INFO';
       content = `[${level}] Service-${Math.floor(i / 100)} - Event ${i} processed in ${Math.floor(Math.random() * 2000)}ms`;
       data = {
@@ -149,7 +148,7 @@ function generateGenericBulkData(count: number): MemoryEngram[] {
       consolidationState: 'consolidated',
       contextTags: [type],
       data,
-    } as any);
+    } as unknown as MemoryEngram);
   }
 
   return engrams;
@@ -217,7 +216,9 @@ export async function runModel95MultiDataBenchmark(
 }> {
   console.log(`\n${'═'.repeat(80)}`);
   console.log('  MODEL_95_NESTED — Multi-Data Benchmark');
-  console.log('  Testing against: Fat AI Memory | VR Gaming | Generic Bulk Data');
+  console.log(
+    '  Testing against: Fat AI Memory | VR Gaming | Generic Bulk Data'
+  );
   console.log(`  Test Size: ${testSize} engrams per dataset`);
   console.log(`${'═'.repeat(80)}\n`);
 
@@ -285,7 +286,7 @@ Generic Bulk Data (web/stats/db/logs):
   • Time: ${bulkResult.executionTimeMs}ms
   • Status: ${bulkResult.passed ? '✓ PASS' : '✗ FAIL'}
 
-Overall: ${results.every(r => r.passed) ? '✓ ALL PASSED' : '✗ SOME FAILED'}
+Overall: ${results.every((r) => r.passed) ? '✓ ALL PASSED' : '✗ SOME FAILED'}
 `;
 
   return {

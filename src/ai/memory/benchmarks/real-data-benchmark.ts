@@ -63,7 +63,7 @@ function loadMmluData(): MemoryEngram[] {
       consolidationState: 'consolidated' as const,
       contextTags: ['academic', item.subject],
       relatedEngrams: [],
-      personalityContext: undefined as any,
+
       data: {
         subject: item.subject,
         questionLength: item.question.length,
@@ -81,7 +81,7 @@ function loadProjectDocs(): MemoryEngram[] {
   const docsDir = path.join(PROJECT_ROOT, 'docs');
   const files = fs
     .readdirSync(docsDir)
-    .filter(f => f.endsWith('.md'))
+    .filter((f) => f.endsWith('.md'))
     .slice(0, 120); // cap at 120 files to stay memory-safe
 
   const engrams: MemoryEngram[] = [];
@@ -105,7 +105,7 @@ function loadProjectDocs(): MemoryEngram[] {
         consolidationState: 'consolidated' as const,
         contextTags: ['documentation', 'technical'],
         relatedEngrams: [],
-        personalityContext: undefined as any,
+
         data: {
           filename: file,
           totalBytes: content.length,
@@ -143,7 +143,10 @@ function loadSystemLogs(): MemoryEngram[] {
     if (!fs.existsSync(filePath)) continue;
 
     try {
-      const lines = fs.readFileSync(filePath, 'utf-8').split('\n').filter(Boolean);
+      const lines = fs
+        .readFileSync(filePath, 'utf-8')
+        .split('\n')
+        .filter(Boolean);
 
       for (const line of lines) {
         const ts = new Date(Date.now() - index * 30000);
@@ -159,7 +162,7 @@ function loadSystemLogs(): MemoryEngram[] {
           consolidationState: 'consolidated' as const,
           contextTags: ['log', 'system'],
           relatedEngrams: [],
-          personalityContext: undefined as any,
+
           data: {
             source: relPath,
             lineLength: line.length,
@@ -236,14 +239,17 @@ async function runSingleRealDataTest(
     `Techniques: ${result.metrics.techniquesApplied.join(', ')}`,
   ].join(' | ');
 
-  console.log(`  [${dataType}] ${compressionRatio.toFixed(1)}% compression, recall ${(episodicRecall * 100).toFixed(1)}% — ${passed ? 'PASS ✓' : 'FAIL ✗'}`);
+  console.log(
+    `  [${dataType}] ${compressionRatio.toFixed(1)}% compression, recall ${(episodicRecall * 100).toFixed(1)}% — ${passed ? 'PASS ✓' : 'FAIL ✗'}`
+  );
 
   return {
     dataType,
     description,
     engramCount: engrams.length,
-    originalSizeKB: Math.round(originalSize / 1024 * 10) / 10,
-    compressedSizeKB: Math.round(result.metrics.compressedByteSize / 1024 * 10) / 10,
+    originalSizeKB: Math.round((originalSize / 1024) * 10) / 10,
+    compressedSizeKB:
+      Math.round((result.metrics.compressedByteSize / 1024) * 10) / 10,
     compressionRatio,
     episodicRecall,
     executionTimeMs: Math.round(executionMs),
@@ -276,33 +282,43 @@ export async function runRealDataBenchmark(): Promise<RealDataBenchmarkReport> {
 
   const results: RealDataResult[] = [];
 
-  results.push(await runSingleRealDataTest(
-    'MOLLY_REAL_MEMORIES',
-    "Molly's 535 actual stored experiences from Firestore — her real memories",
-    mollysMemories
-  ));
+  results.push(
+    await runSingleRealDataTest(
+      'MOLLY_REAL_MEMORIES',
+      "Molly's 535 actual stored experiences from Firestore — her real memories",
+      mollysMemories
+    )
+  );
 
-  results.push(await runSingleRealDataTest(
-    'MMLU_ACADEMIC',
-    '500 real multi-subject academic knowledge questions (MMLU benchmark dataset)',
-    mmluData
-  ));
+  results.push(
+    await runSingleRealDataTest(
+      'MMLU_ACADEMIC',
+      '500 real multi-subject academic knowledge questions (MMLU benchmark dataset)',
+      mmluData
+    )
+  );
 
-  results.push(await runSingleRealDataTest(
-    'PROJECT_DOCS',
-    `${projectDocs.length} real technical markdown documents from the Molly-Core codebase`,
-    projectDocs
-  ));
+  results.push(
+    await runSingleRealDataTest(
+      'PROJECT_DOCS',
+      `${projectDocs.length} real technical markdown documents from the Molly-Core codebase`,
+      projectDocs
+    )
+  );
 
-  results.push(await runSingleRealDataTest(
-    'SYSTEM_LOGS',
-    'Real dev-server logs, daemon logs, and memory audit logs from production',
-    systemLogs
-  ));
+  results.push(
+    await runSingleRealDataTest(
+      'SYSTEM_LOGS',
+      'Real dev-server logs, daemon logs, and memory audit logs from production',
+      systemLogs
+    )
+  );
 
-  const allPassed = results.every(r => r.passed);
-  const avgCompression = (results.reduce((a, r) => a + r.compressionRatio, 0) / results.length).toFixed(1);
-  const allRecallPerfect = results.every(r => r.episodicRecall === 1.0);
+  const allPassed = results.every((r) => r.passed);
+  const avgCompression = (
+    results.reduce((a, r) => a + r.compressionRatio, 0) / results.length
+  ).toFixed(1);
+  const allRecallPerfect = results.every((r) => r.episodicRecall === 1.0);
 
   const summary = [
     '═'.repeat(80),
@@ -312,9 +328,12 @@ export async function runRealDataBenchmark(): Promise<RealDataBenchmarkReport> {
     `  Episodic recall:     ${allRecallPerfect ? '100% across all datasets ✓' : 'DEGRADED — see individual results ✗'}`,
     `  All tests passed:    ${allPassed ? 'YES ✓' : 'NO ✗'}`,
     '',
-    results.map(r =>
-      `  ${r.dataType.padEnd(24)} ${r.compressionRatio.toFixed(1).padStart(6)}%  recall ${(r.episodicRecall * 100).toFixed(1)}%  [${r.engramCount} records]`
-    ).join('\n'),
+    results
+      .map(
+        (r) =>
+          `  ${r.dataType.padEnd(24)} ${r.compressionRatio.toFixed(1).padStart(6)}%  recall ${(r.episodicRecall * 100).toFixed(1)}%  [${r.engramCount} records]`
+      )
+      .join('\n'),
     '═'.repeat(80),
   ].join('\n');
 

@@ -20,8 +20,22 @@ import type { MemoryEngram } from '@/ai/memory/neural-engram';
  */
 function generateAccessLogs(dayCount: number = 30): MemoryEngram[] {
   const engrams: MemoryEngram[] = [];
-  const services = ['api-gateway', 'auth-service', 'db-proxy', 'cache-layer', 'worker', 'scheduler'];
-  const paths = ['/api/users', '/api/data', '/api/search', '/health', '/metrics', '/ws'];
+  const services = [
+    'api-gateway',
+    'auth-service',
+    'db-proxy',
+    'cache-layer',
+    'worker',
+    'scheduler',
+  ];
+  const paths = [
+    '/api/users',
+    '/api/data',
+    '/api/search',
+    '/health',
+    '/metrics',
+    '/ws',
+  ];
   const statuses = [200, 201, 400, 401, 403, 404, 500, 502, 503];
 
   const logsPerDay = 5000;
@@ -29,7 +43,9 @@ function generateAccessLogs(dayCount: number = 30): MemoryEngram[] {
 
   for (let i = 0; i < totalLogs; i++) {
     const dayOffset = Math.floor(i / logsPerDay);
-    const timestamp = new Date(Date.now() - (dayCount - dayOffset) * 86400000 + (i % logsPerDay) * 1080); // ~1080ms per log
+    const timestamp = new Date(
+      Date.now() - (dayCount - dayOffset) * 86400000 + (i % logsPerDay) * 1080
+    ); // ~1080ms per log
 
     const service = services[i % services.length];
     const path = paths[i % paths.length];
@@ -57,7 +73,7 @@ function generateAccessLogs(dayCount: number = 30): MemoryEngram[] {
         method: ['GET', 'POST', 'PUT', 'DELETE'][i % 4],
         userAgent: `client-${Math.floor(i / 10000)}`,
       },
-    } as any);
+    } as unknown as MemoryEngram);
   }
 
   return engrams;
@@ -73,7 +89,11 @@ function generateTelemetryMetrics(dayCount: number = 60): MemoryEngram[] {
 
   for (let i = 0; i < totalMetrics; i++) {
     const dayOffset = Math.floor(i / metricsPerDay);
-    const timestamp = new Date(Date.now() - (dayCount - dayOffset) * 86400000 + (i % metricsPerDay) * 5184); // ~5.2 seconds per metric
+    const timestamp = new Date(
+      Date.now() -
+        (dayCount - dayOffset) * 86400000 +
+        (i % metricsPerDay) * 5184
+    ); // ~5.2 seconds per metric
 
     engrams.push({
       id: `metric_${i}`,
@@ -98,7 +118,7 @@ function generateTelemetryMetrics(dayCount: number = 60): MemoryEngram[] {
         load_5min: parseFloat((Math.random() * 16).toFixed(6)),
         load_15min: parseFloat((Math.random() * 16).toFixed(6)),
       },
-    } as any);
+    } as unknown as MemoryEngram);
   }
 
   return engrams;
@@ -109,13 +129,26 @@ function generateTelemetryMetrics(dayCount: number = 60): MemoryEngram[] {
  */
 function generateUserEventStream(dayCount: number = 45): MemoryEngram[] {
   const engrams: MemoryEngram[] = [];
-  const eventTypes = ['click', 'view', 'purchase', 'login', 'logout', 'share', 'comment', 'like', 'search', 'scroll'];
+  const eventTypes = [
+    'click',
+    'view',
+    'purchase',
+    'login',
+    'logout',
+    'share',
+    'comment',
+    'like',
+    'search',
+    'scroll',
+  ];
   const eventsPerDay = 1500;
   const totalEvents = dayCount * eventsPerDay;
 
   for (let i = 0; i < totalEvents; i++) {
     const dayOffset = Math.floor(i / eventsPerDay);
-    const timestamp = new Date(Date.now() - (dayCount - dayOffset) * 86400000 + (i % eventsPerDay) * 7854); // ~7.8 seconds per event
+    const timestamp = new Date(
+      Date.now() - (dayCount - dayOffset) * 86400000 + (i % eventsPerDay) * 7854
+    ); // ~7.8 seconds per event
 
     const eventType = eventTypes[i % eventTypes.length];
     const userId = `user_${Math.floor(Math.random() * 50000)}`;
@@ -125,12 +158,13 @@ function generateUserEventStream(dayCount: number = 45): MemoryEngram[] {
       userId: 'bulk-system',
       content: `${eventType.toUpperCase()} by ${userId} at ${timestamp.toISOString()} on resource-${Math.floor(i / 100)}`,
       timestamp,
-      importance: eventType === 'purchase' ? 0.9 : eventType === 'login' ? 0.5 : 0.2,
+      importance:
+        eventType === 'purchase' ? 0.9 : eventType === 'login' ? 0.5 : 0.2,
       emotionalValence: Math.random() * 2 - 1,
       arousal: Math.random(),
       accessCount: 0,
       lastAccessed: new Date(),
-      consolidationState: 'consolidated',
+      consolidationState: 'consolidated' as const,
       contextTags: [eventType, 'user-event'],
       data: {
         eventType,
@@ -141,7 +175,7 @@ function generateUserEventStream(dayCount: number = 45): MemoryEngram[] {
         deviceType: ['mobile', 'desktop', 'tablet'][i % 3],
         duration_seconds: Math.floor(Math.random() * 3600),
       },
-    } as any);
+    } as unknown as MemoryEngram);
   }
 
   return engrams;
@@ -152,9 +186,9 @@ function generateUserEventStream(dayCount: number = 45): MemoryEngram[] {
  * Generates guaranteed-unique IDs. Never repeats records.
  */
 function generateMixedBulkData(totalCount: number): MemoryEngram[] {
-  const logs = generateAccessLogs(1);     // ~5K logs
+  const logs = generateAccessLogs(1); // ~5K logs
   const metrics = generateTelemetryMetrics(1); // ~2K metrics
-  const events = generateUserEventStream(1);   // ~1.5K events
+  const events = generateUserEventStream(1); // ~1.5K events
 
   const allData = [...logs, ...metrics, ...events];
 
@@ -168,7 +202,10 @@ function generateMixedBulkData(totalCount: number): MemoryEngram[] {
   const extraLogs = generateAccessLogs(Math.ceil(deficit / 5000) + 1);
   for (const e of extraLogs) {
     // Re-stamp ID to guarantee uniqueness
-    result.push({ ...e, id: `mixed_extra_${result.length}` } as any);
+    result.push({
+      ...e,
+      id: `mixed_extra_${result.length}`,
+    } as unknown as MemoryEngram);
     if (result.length >= totalCount) break;
   }
 
@@ -213,14 +250,17 @@ async function runBulkBenchmark(
   daySimulation: number
 ): Promise<BulkBenchmarkResult> {
   CompressionManager.resetForTest();
-  
+
   // Estimate size without full stringify (avoid OOM on massive datasets)
   let estimatedSize = 0;
   for (const engram of engrams) {
     estimatedSize += JSON.stringify(engram).length;
     if (estimatedSize > 1000000) break; // Estimate after 1MB
   }
-  const originalSize = Math.ceil((estimatedSize / (engrams.length > 1000 ? 1000 : engrams.length)) * engrams.length);
+  const originalSize = Math.ceil(
+    (estimatedSize / (engrams.length > 1000 ? 1000 : engrams.length)) *
+      engrams.length
+  );
 
   const startTime = performance.now();
   const manager = CompressionManager.getInstance(MODEL_95_FLAGS);
@@ -259,7 +299,9 @@ export async function runBulkDataBenchmark(): Promise<{
 }> {
   console.log(`\n${'═'.repeat(80)}`);
   console.log('  MODEL_95_NESTED — Bulk Data Benchmark (30-60 Day Simulation)');
-  console.log('  Testing: Access Logs | Telemetry Metrics | User Events | Mixed Data');
+  console.log(
+    '  Testing: Access Logs | Telemetry Metrics | User Events | Mixed Data'
+  );
   console.log(`  Scale: ~350K total entries spanning 30-60 days`);
   console.log(`${'═'.repeat(80)}\n`);
 
@@ -277,9 +319,13 @@ export async function runBulkDataBenchmark(): Promise<{
   );
 
   // 2. TELEMETRY METRICS (60 DAYS)
-  console.log('[2/4] Generating 60-day telemetry metrics (~120K data points)...');
+  console.log(
+    '[2/4] Generating 60-day telemetry metrics (~120K data points)...'
+  );
   const metrics = generateTelemetryMetrics(60);
-  console.log(`  ✓ ${metrics.length.toLocaleString()} metric data points generated`);
+  console.log(
+    `  ✓ ${metrics.length.toLocaleString()} metric data points generated`
+  );
   console.log('  Running compression...');
   const metricsResult = await runBulkBenchmark('TELEMETRY_60D', metrics, 60);
   results.push(metricsResult);
@@ -299,9 +345,13 @@ export async function runBulkDataBenchmark(): Promise<{
   );
 
   // 4. MIXED HETEROGENEOUS DATA (50K combined)
-  console.log('[4/4] Generating mixed heterogeneous bulk data (50K combined entries)...');
+  console.log(
+    '[4/4] Generating mixed heterogeneous bulk data (50K combined entries)...'
+  );
   const mixed = generateMixedBulkData(50000);
-  console.log(`  ✓ ${mixed.length.toLocaleString()} mixed data entries generated`);
+  console.log(
+    `  ✓ ${mixed.length.toLocaleString()} mixed data entries generated`
+  );
   console.log('  Running compression...');
   const mixedResult = await runBulkBenchmark('MIXED_BULK', mixed, 45);
   results.push(mixedResult);
@@ -346,7 +396,7 @@ Mixed Heterogeneous Bulk Data (50K entries):
   • Speed: ${mixedResult.metricsPerSecond.toLocaleString()} entries/sec
   • Status: ${mixedResult.passed ? '✓ PASS' : '✗ FAIL'}
 
-Overall: ${results.every(r => r.passed) ? '✓ ALL PASSED' : '✗ SOME FAILED'}
+Overall: ${results.every((r) => r.passed) ? '✓ ALL PASSED' : '✗ SOME FAILED'}
 Average Compression: ${(results.reduce((a, r) => a + r.compressionRatio, 0) / results.length).toFixed(1)}%
 Average Speed: ${Math.round(results.reduce((a, r) => a + r.metricsPerSecond, 0) / results.length).toLocaleString()} items/sec
 `;

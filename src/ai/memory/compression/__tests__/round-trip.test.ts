@@ -15,14 +15,35 @@ import type { NeuralEngram } from '../neural-engram';
  * Deep-compare two engram arrays by content, ignoring field order.
  * Returns true if every engram has the same id, content, and all numeric fields.
  */
-function engramsEqual(a: NeuralEngram[], b: NeuralEngram[]): { equal: boolean; diff?: string } {
-  if (a.length !== b.length) return { equal: false, diff: `Length mismatch: ${a.length} vs ${b.length}` };
+function engramsEqual(
+  a: NeuralEngram[],
+  b: NeuralEngram[]
+): { equal: boolean; diff?: string } {
+  if (a.length !== b.length)
+    return {
+      equal: false,
+      diff: `Length mismatch: ${a.length} vs ${b.length}`,
+    };
   for (let i = 0; i < a.length; i++) {
-    if (a[i].id !== b[i].id) return { equal: false, diff: `[${i}] id: '${a[i].id}' vs '${b[i].id}'` };
-    if (a[i].content !== b[i].content) return { equal: false, diff: `[${i}] content mismatch for id='${a[i].id}'` };
-    if (a[i].userId !== b[i].userId) return { equal: false, diff: `[${i}] userId mismatch` };
-    if (a[i].importance !== b[i].importance) return { equal: false, diff: `[${i}] importance: ${a[i].importance} vs ${b[i].importance}` };
-    if (a[i].accessCount !== b[i].accessCount) return { equal: false, diff: `[${i}] accessCount: ${a[i].accessCount} vs ${b[i].accessCount}` };
+    if (a[i].id !== b[i].id)
+      return { equal: false, diff: `[${i}] id: '${a[i].id}' vs '${b[i].id}'` };
+    if (a[i].content !== b[i].content)
+      return {
+        equal: false,
+        diff: `[${i}] content mismatch for id='${a[i].id}'`,
+      };
+    if (a[i].userId !== b[i].userId)
+      return { equal: false, diff: `[${i}] userId mismatch` };
+    if (a[i].importance !== b[i].importance)
+      return {
+        equal: false,
+        diff: `[${i}] importance: ${a[i].importance} vs ${b[i].importance}`,
+      };
+    if (a[i].accessCount !== b[i].accessCount)
+      return {
+        equal: false,
+        diff: `[${i}] accessCount: ${a[i].accessCount} vs ${b[i].accessCount}`,
+      };
     // Compare personalityContext values regardless of field position
     const pcA = a[i].personalityContext;
     const pcB = b[i].personalityContext;
@@ -36,7 +57,12 @@ function engramsEqual(a: NeuralEngram[], b: NeuralEngram[]): { equal: boolean; d
 }
 
 describe('Round-Trip Compression Validation', () => {
-  const PERSONA_BASE = { warmth: 0.945, assertiveness: 0.820, curiosity: 0.985, reflectivity: 0.910 };
+  const PERSONA_BASE = {
+    warmth: 0.945,
+    assertiveness: 0.82,
+    curiosity: 0.985,
+    reflectivity: 0.91,
+  };
 
   function generateTestEngram(id: string): NeuralEngram {
     return {
@@ -78,8 +104,9 @@ describe('Round-Trip Compression Validation', () => {
   }
 
   it('should compress and decompress small batch (10 engrams) with 100% fidelity', async () => {
-    const original = Array.from({ length: 10 }, (_, i) => generateTestEngram(`${i}`));
-    const originalJson = JSON.stringify(original);
+    const original = Array.from({ length: 10 }, (_, i) =>
+      generateTestEngram(`${i}`)
+    );
 
     CompressionManager.resetForTest();
     const manager = CompressionManager.getInstance({
@@ -111,8 +138,9 @@ describe('Round-Trip Compression Validation', () => {
   });
 
   it('should compress and decompress medium batch (100 engrams) with 100% fidelity', async () => {
-    const original = Array.from({ length: 100 }, (_, i) => generateTestEngram(`${i}`));
-    const originalJson = JSON.stringify(original);
+    const original = Array.from({ length: 100 }, (_, i) =>
+      generateTestEngram(`${i}`)
+    );
 
     CompressionManager.resetForTest();
     const manager = CompressionManager.getInstance({
@@ -139,10 +167,10 @@ describe('Round-Trip Compression Validation', () => {
     expect(check.equal).toBe(true);
   });
 
-  it('should handle MODEL_95_NESTED full pipeline (all 8 techniques)',
- async () => {
-    const original = Array.from({ length: 50 }, (_, i) => generateTestEngram(`nested-${i}`));
-    const originalJson = JSON.stringify(original);
+  it('should handle MODEL_95_NESTED full pipeline (all 8 techniques)', async () => {
+    const original = Array.from({ length: 50 }, (_, i) =>
+      generateTestEngram(`nested-${i}`)
+    );
 
     CompressionManager.resetForTest();
     const manager = CompressionManager.getInstance({
@@ -163,8 +191,12 @@ describe('Round-Trip Compression Validation', () => {
       compressionTimestamp: Date.now(),
     });
 
-    console.log(`Compressed size: ${result.metrics.compressedByteSize} bytes from ${result.metrics.originalByteSize} bytes`);
-    console.log(`Compression ratio: ${(result.metrics.compressionRatio * 100).toFixed(1)}%`);
+    console.log(
+      `Compressed size: ${result.metrics.compressedByteSize} bytes from ${result.metrics.originalByteSize} bytes`
+    );
+    console.log(
+      `Compression ratio: ${(result.metrics.compressionRatio * 100).toFixed(1)}%`
+    );
 
     const decompressed = await manager.decompress(result.bundle);
 
@@ -210,7 +242,8 @@ describe('Round-Trip Compression Validation', () => {
     // Manually truncate to simulate T5 effect
     for (const engram of truncatedOriginal) {
       engram.importance = Math.round(engram.importance * 1000) / 1000;
-      engram.emotionalValence = Math.round(engram.emotionalValence * 1000) / 1000;
+      engram.emotionalValence =
+        Math.round(engram.emotionalValence * 1000) / 1000;
       engram.arousal = Math.round(engram.arousal * 1000) / 1000;
     }
 
@@ -227,7 +260,9 @@ describe('Round-Trip Compression Validation', () => {
     const original = Array.from({ length: 20 }, (_, i) => {
       const engram = generateTestEngram(`delta-${i}`);
       // Create similar content to enable delta encoding
-      engram.content = `Memory ${i}: This is a long memory about learning and growth. ` + 'Details vary here. '.repeat(10);
+      engram.content =
+        `Memory ${i}: This is a long memory about learning and growth. ` +
+        'Details vary here. '.repeat(10);
       return engram;
     });
 
@@ -259,8 +294,9 @@ describe('Round-Trip Compression Validation', () => {
   });
 
   it('should handle gzip compression and decompression (T8)', async () => {
-    const original = Array.from({ length: 15 }, (_, i) => generateTestEngram(`gzip-${i}`));
-    const originalJson = JSON.stringify(original);
+    const original = Array.from({ length: 15 }, (_, i) =>
+      generateTestEngram(`gzip-${i}`)
+    );
 
     CompressionManager.resetForTest();
     const manager = CompressionManager.getInstance({
@@ -280,15 +316,20 @@ describe('Round-Trip Compression Validation', () => {
       compressionTimestamp: Date.now(),
     });
 
-    console.log(`T8 alone - Original: ${result.metrics.originalByteSize}, Compressed: ${result.metrics.compressedByteSize}`);
+    console.log(
+      `T8 alone - Original: ${result.metrics.originalByteSize}, Compressed: ${result.metrics.compressedByteSize}`
+    );
 
     const decompressed = await manager.decompress(result.bundle);
 
     // Verify the compressed payload was actually gzipped
-    const firstEngram = result.bundle.finalEngrams[0] as any;
-    if (firstEngram.__compressed) {
-      expect(firstEngram.encoding).toBe('gzip');
-      expect(firstEngram.data).toBeDefined();
+    const firstEngram = result.bundle.finalEngrams[0] as Record<
+      string,
+      unknown
+    >;
+    if (firstEngram['__compressed']) {
+      expect(firstEngram['encoding']).toBe('gzip');
+      expect(firstEngram['data']).toBeDefined();
     }
 
     // Verify restored content by value
@@ -298,8 +339,9 @@ describe('Round-Trip Compression Validation', () => {
   });
 
   it('should detect and handle non-compressed engrams transparently', async () => {
-    const original = Array.from({ length: 5 }, (_, i) => generateTestEngram(`transparent-${i}`));
-    const originalJson = JSON.stringify(original);
+    const original = Array.from({ length: 5 }, (_, i) =>
+      generateTestEngram(`transparent-${i}`)
+    );
 
     CompressionManager.resetForTest();
     const manager = CompressionManager.getInstance({
@@ -321,7 +363,9 @@ describe('Round-Trip Compression Validation', () => {
 
     // Compressed engrams should NOT have __compressed flag since T8 is off
     for (const engram of result.bundle.finalEngrams) {
-      expect((engram as any).__compressed).toBeUndefined();
+      expect(
+        (engram as Record<string, unknown>)['__compressed']
+      ).toBeUndefined();
     }
 
     const decompressed = await manager.decompress(result.bundle);

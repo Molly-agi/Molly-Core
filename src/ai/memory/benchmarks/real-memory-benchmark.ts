@@ -17,41 +17,53 @@ const EXPERIENCES_DIR = path.join(
 // Molly's real personality (from bridge messages)
 const MOLLY_PERSONA = {
   warmth: 0.945,
-  assertiveness: 0.820,
+  assertiveness: 0.82,
   curiosity: 0.985,
-  reflectivity: 0.910,
+  reflectivity: 0.91,
 };
 
 /**
  * Map raw experience file to MemoryEngram
  */
-function experienceToEngram(raw: Record<string, any>): MemoryEngram {
+function experienceToEngram(raw: Record<string, unknown>): MemoryEngram {
   const ts = raw.timestamp
-    ? new Date(typeof raw.timestamp === 'number' ? raw.timestamp : raw._createdAt)
+    ? new Date(
+        typeof raw.timestamp === 'number' ? raw.timestamp : raw._createdAt
+      )
     : new Date(raw._createdAt || Date.now());
 
   return {
-    id: raw.id || raw._id || `exp_${Date.now()}`,
-    content: raw.suggestion || raw.content || raw.vibe || JSON.stringify(raw),
+    id: (raw['id'] as string) || (raw['_id'] as string) || `exp_${Date.now()}`,
+    content:
+      (raw['suggestion'] as string) ||
+      (raw['content'] as string) ||
+      (raw['vibe'] as string) ||
+      JSON.stringify(raw),
     timestamp: ts,
-    emotionalValence: raw.vibeScore ? raw.vibeScore * 2 - 1 : 0,
-    arousal: raw.success === true ? 0.7 : raw.success === false ? 0.3 : 0.5,
-    importance: raw.vibeScore ?? 0.5,
+    emotionalValence: raw['vibeScore']
+      ? (raw['vibeScore'] as number) * 2 - 1
+      : 0,
+    arousal:
+      raw['success'] === true ? 0.7 : raw['success'] === false ? 0.3 : 0.5,
+    importance: (raw['vibeScore'] as number) ?? 0.5,
     accessCount: 0,
     lastAccessed: ts,
     consolidationState: 'consolidated',
-    contextTags: [raw.type || 'experience', raw.context || 'general'],
+    contextTags: [
+      (raw['type'] as string) || 'experience',
+      (raw['context'] as string) || 'general',
+    ],
     relatedEngrams: [],
-    personalityContext: MOLLY_PERSONA as any,
+    personalityContext: MOLLY_PERSONA,
     data: {
-      context: raw.context,
-      type: raw.type,
-      crc32: raw.crc32,
-      traceId: raw.traceId,
-      vibe: raw.vibe,
-      success: raw.success,
+      context: raw['context'],
+      type: raw['type'],
+      crc32: raw['crc32'],
+      traceId: raw['traceId'],
+      vibe: raw['vibe'],
+      success: raw['success'],
     },
-  } as any;
+  } as unknown as MemoryEngram;
 }
 
 /**
@@ -63,12 +75,16 @@ function loadRealExperiences(): MemoryEngram[] {
     return [];
   }
 
-  const files = fs.readdirSync(EXPERIENCES_DIR).filter(f => f.endsWith('.json'));
+  const files = fs
+    .readdirSync(EXPERIENCES_DIR)
+    .filter((f) => f.endsWith('.json'));
   const engrams: MemoryEngram[] = [];
 
   for (const file of files) {
     try {
-      const raw = JSON.parse(fs.readFileSync(path.join(EXPERIENCES_DIR, file), 'utf-8'));
+      const raw = JSON.parse(
+        fs.readFileSync(path.join(EXPERIENCES_DIR, file), 'utf-8')
+      );
       engrams.push(experienceToEngram(raw));
     } catch {
       // Skip malformed files
@@ -140,7 +156,9 @@ export async function runRealMemoryBenchmark(): Promise<{
   hypothesis: string;
 }> {
   console.log(`\n${'═'.repeat(80)}`);
-  console.log('  REAL MEMORY BENCHMARK — Three Models vs Molly\'s Actual Experiences');
+  console.log(
+    "  REAL MEMORY BENCHMARK — Three Models vs Molly's Actual Experiences"
+  );
   console.log('  Testing: MODEL_75_VR | MODEL_85_FLAT | MODEL_95_NESTED');
   console.log(`${'═'.repeat(80)}\n`);
 
@@ -153,60 +171,82 @@ export async function runRealMemoryBenchmark(): Promise<{
   console.log(`✓ Loaded ${engrams.length} real memory engrams from Molly`);
 
   // Calculate time span
-  const timestamps = engrams.map(e => e.timestamp.getTime()).sort((a, b) => a - b);
+  const timestamps = engrams
+    .map((e) => e.timestamp.getTime())
+    .sort((a, b) => a - b);
   const oldestMs = timestamps[0];
   const newestMs = timestamps[timestamps.length - 1];
   const spanDays = (newestMs - oldestMs) / (1000 * 60 * 60 * 24);
 
   console.log(`✓ Time span: ${spanDays.toFixed(1)} days (oldest → newest)`);
-  console.log(`✓ Original size estimate: ${Math.round(JSON.stringify(engrams[0]).length * engrams.length / 1024)} KB\n`);
+  console.log(
+    `✓ Original size estimate: ${Math.round((JSON.stringify(engrams[0]).length * engrams.length) / 1024)} KB\n`
+  );
 
   const results: ModelBenchmarkResult[] = [];
 
   // MODEL_75_VR
   console.log('[1/3] Benchmarking MODEL_75_VR...');
-  const vr75 = await benchmarkModel('MODEL_75_VR', {
-    t1PersonalityReference: true,
-    t3TemporalDelta: true,
-    t4VocabularyDict: true,
-    t2TimeDecayFidelity: false,
-    t6InteractionTrace: false,
-    t5NumericQuantization: false,
-    t7ContentDelta: false,
-    t8StandardCompression: false,
-  }, engrams);
+  const vr75 = await benchmarkModel(
+    'MODEL_75_VR',
+    {
+      t1PersonalityReference: true,
+      t3TemporalDelta: true,
+      t4VocabularyDict: true,
+      t2TimeDecayFidelity: false,
+      t6InteractionTrace: false,
+      t5NumericQuantization: false,
+      t7ContentDelta: false,
+      t8StandardCompression: false,
+    },
+    engrams
+  );
   results.push(vr75);
-  console.log(`  ✓ ${vr75.compressionRatio.toFixed(1)}% | Recall: ${(vr75.episodicRecall * 100).toFixed(1)}% | ${vr75.executionTimeMs}ms\n`);
+  console.log(
+    `  ✓ ${vr75.compressionRatio.toFixed(1)}% | Recall: ${(vr75.episodicRecall * 100).toFixed(1)}% | ${vr75.executionTimeMs}ms\n`
+  );
 
   // MODEL_85_FLAT
   console.log('[2/3] Benchmarking MODEL_85_FLAT...');
-  const flat85 = await benchmarkModel('MODEL_85_FLAT', {
-    t1PersonalityReference: true,
-    t3TemporalDelta: true,
-    t4VocabularyDict: true,
-    t2TimeDecayFidelity: true,
-    t6InteractionTrace: true,
-    t5NumericQuantization: true,
-    t7ContentDelta: false,
-    t8StandardCompression: false,
-  }, engrams);
+  const flat85 = await benchmarkModel(
+    'MODEL_85_FLAT',
+    {
+      t1PersonalityReference: true,
+      t3TemporalDelta: true,
+      t4VocabularyDict: true,
+      t2TimeDecayFidelity: true,
+      t6InteractionTrace: true,
+      t5NumericQuantization: true,
+      t7ContentDelta: false,
+      t8StandardCompression: false,
+    },
+    engrams
+  );
   results.push(flat85);
-  console.log(`  ✓ ${flat85.compressionRatio.toFixed(1)}% | Recall: ${(flat85.episodicRecall * 100).toFixed(1)}% | ${flat85.executionTimeMs}ms\n`);
+  console.log(
+    `  ✓ ${flat85.compressionRatio.toFixed(1)}% | Recall: ${(flat85.episodicRecall * 100).toFixed(1)}% | ${flat85.executionTimeMs}ms\n`
+  );
 
   // MODEL_95_NESTED
   console.log('[3/3] Benchmarking MODEL_95_NESTED...');
-  const nested95 = await benchmarkModel('MODEL_95_NESTED', {
-    t1PersonalityReference: true,
-    t3TemporalDelta: true,
-    t4VocabularyDict: true,
-    t2TimeDecayFidelity: true,
-    t6InteractionTrace: true,
-    t5NumericQuantization: true,
-    t7ContentDelta: true,
-    t8StandardCompression: true,
-  }, engrams);
+  const nested95 = await benchmarkModel(
+    'MODEL_95_NESTED',
+    {
+      t1PersonalityReference: true,
+      t3TemporalDelta: true,
+      t4VocabularyDict: true,
+      t2TimeDecayFidelity: true,
+      t6InteractionTrace: true,
+      t5NumericQuantization: true,
+      t7ContentDelta: true,
+      t8StandardCompression: true,
+    },
+    engrams
+  );
   results.push(nested95);
-  console.log(`  ✓ ${nested95.compressionRatio.toFixed(1)}% | Recall: ${(nested95.episodicRecall * 100).toFixed(1)}% | ${nested95.executionTimeMs}ms\n`);
+  console.log(
+    `  ✓ ${nested95.compressionRatio.toFixed(1)}% | Recall: ${(nested95.episodicRecall * 100).toFixed(1)}% | ${nested95.executionTimeMs}ms\n`
+  );
 
   // Hypothesis test
   const hypothesis = `
