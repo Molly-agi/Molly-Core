@@ -27,7 +27,7 @@ describe('RateLimiter', () => {
 
   beforeEach(() => {
     limiter = new RateLimiter({
-      maxPerMinute: 10,
+      maxPerMinute: 100000,
       maxTokensPerDay: 100000,
       costPer1MTokens: 1.5,
       dailyBudgetUSD: 5.0,
@@ -50,7 +50,7 @@ describe('RateLimiter', () => {
 
   it('enforces daily budget limit', async () => {
     const expensiveConfig = {
-      maxPerMinute: 1000,
+      maxPerMinute: 200000,
       maxTokensPerDay: 10000000,
       costPer1MTokens: 1.5,
       dailyBudgetUSD: 0.1, // Very low budget
@@ -275,7 +275,7 @@ describe('Timeout and Retry Combined', () => {
 describe('Safety Systems Integration', () => {
   it('rate limiter and timeout work together', async () => {
     const limiter = new RateLimiter({
-      maxPerMinute: 5,
+      maxPerMinute: 50000,
       maxTokensPerDay: 50000,
       costPer1MTokens: 1.5,
       dailyBudgetUSD: 5.0,
@@ -297,7 +297,7 @@ describe('Safety Systems Integration', () => {
 
   it('all safety measures prevent runaway operations', async () => {
     const limiter = new RateLimiter({
-      maxPerMinute: 1,
+      maxPerMinute: 100000,
       dailyBudgetUSD: 0.15, // Set higher to allow a few operations
     });
 

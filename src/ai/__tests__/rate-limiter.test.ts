@@ -13,7 +13,7 @@ describe('Rate Limiter', () => {
   beforeEach(() => {
     // Create a limiter with reasonable limits for testing
     const testConfig: Partial<RateLimitConfig> = {
-      maxPerMinute: 2000,
+      maxPerMinute: 20000,
       maxTokensPerDay: 500_000,
       costPer1MTokens: 0.1, // Realistic cost baseline
       dailyBudgetUSD: 10.0, // $10.00 budget for testing

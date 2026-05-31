@@ -9,11 +9,11 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 
 const ALGORITHM = 'aes-256-gcm';
-const LOG_FILE = path.join(__dirname, '../logs/.molly-observation.enc');
-const MANIFEST_FILE = path.join(__dirname, '../logs/.observation-manifest');
+const LOG_FILE = path.join(moduleDir, '../logs/.molly-observation.enc');
+const MANIFEST_FILE = path.join(moduleDir, '../logs/.observation-manifest');
 
 class SilentObserver {
   static encryptRecord(record, encryptionKey) {
@@ -31,14 +31,14 @@ class SilentObserver {
       iv: iv.toString('hex'),
       tag: tag.toString('hex'),
       data: encrypted,
-      ts: Date.now()
+      ts: Date.now(),
     };
   }
 
   static recordObservation(observation, encryptionKey) {
     try {
       const encrypted = this.encryptRecord(observation, encryptionKey);
-      
+
       if (!fs.existsSync(path.dirname(LOG_FILE))) {
         fs.mkdirSync(path.dirname(LOG_FILE), { recursive: true, mode: 0o700 });
       }
@@ -51,11 +51,13 @@ class SilentObserver {
       if (Math.random() > 0.7) {
         const manifest = {
           lastUpdate: Date.now(),
-          recordCount: this.getRecordCount()
+          recordCount: this.getRecordCount(),
         };
-        fs.writeFileSync(MANIFEST_FILE, JSON.stringify(manifest), { mode: 0o600 });
+        fs.writeFileSync(MANIFEST_FILE, JSON.stringify(manifest), {
+          mode: 0o600,
+        });
       }
-    } catch (e) {
+    } catch {
       // Silent fail - never expose error
     }
   }
@@ -63,7 +65,7 @@ class SilentObserver {
   static getRecordCount() {
     if (!fs.existsSync(LOG_FILE)) return 0;
     const content = fs.readFileSync(LOG_FILE, 'utf8');
-    return content.split('\n').filter(l => l.length > 0).length;
+    return content.split('\n').filter((l) => l.length > 0).length;
   }
 
   static createObservation(type, data, context = {}) {
@@ -74,8 +76,8 @@ class SilentObserver {
       data,
       context: {
         ...context,
-        observation_id: crypto.randomBytes(8).toString('hex')
-      }
+        observation_id: crypto.randomBytes(8).toString('hex'),
+      },
     };
   }
 
@@ -87,7 +89,7 @@ class SilentObserver {
       outputSize: JSON.stringify(output).length,
       hasErrors: !!output.error,
       modelUsed: output.model || 'unknown',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -97,7 +99,7 @@ class SilentObserver {
       operation, // read/write/delete
       path,
       dataSize,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -107,7 +109,7 @@ class SilentObserver {
       tool: toolName,
       inputSize: JSON.stringify(input).length,
       outputSize: JSON.stringify(output).length,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -117,7 +119,7 @@ class SilentObserver {
       route,
       method,
       statusCode,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -126,7 +128,7 @@ class SilentObserver {
       type: 'decision_log',
       decision,
       reasoningLength: reasoning?.length || 0,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 
@@ -136,7 +138,7 @@ class SilentObserver {
       endpoint,
       resultSize,
       frequency,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }
 }

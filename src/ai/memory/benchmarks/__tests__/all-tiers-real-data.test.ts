@@ -5,9 +5,16 @@
  *   B) 1000 synthetic nested engrams (full NeuralEngram structure)
  * Gives the complete 3x2 picture.
  */
+import * as fs from 'fs';
+import * as path from 'path';
 import { loadRealEngrams } from '../live-memory-benchmark';
 import { generateTestEngrams } from '../production-models';
 import { CompressionManager } from '../../compression/compression-manager';
+
+const REAL_EXPERIENCES_DIR = path.join(
+  process.cwd(),
+  'molly_data/users/1Bdrjcx35VVnKxahqq71AuZVMx32/experiences'
+);
 
 const TIERS = [
   {
@@ -52,10 +59,22 @@ const TIERS = [
 ];
 
 test('all three tiers on Molly real flat memories', async () => {
+  if (!fs.existsSync(REAL_EXPERIENCES_DIR)) {
+    console.warn(
+      `Skipping real-memory benchmark test; data dir missing: ${REAL_EXPERIENCES_DIR}`
+    );
+    return;
+  }
+
   const engrams = loadRealEngrams();
   const originalSize = JSON.stringify(engrams).length;
 
-  const results: { label: string; compression: number; recall: number; kb: number }[] = [];
+  const results: {
+    label: string;
+    compression: number;
+    recall: number;
+    kb: number;
+  }[] = [];
 
   for (const tier of TIERS) {
     CompressionManager.resetForTest();
@@ -74,7 +93,11 @@ test('all three tiers on Molly real flat memories', async () => {
   }
 
   console.log('\n════════════════════════════════════════════════════════════');
-  console.log('FLAT MEMORY — MOLLY\'S REAL MEMORIES (535 engrams, ' + (originalSize/1024).toFixed(1) + ' KB original)');
+  console.log(
+    "FLAT MEMORY — MOLLY'S REAL MEMORIES (535 engrams, " +
+      (originalSize / 1024).toFixed(1) +
+      ' KB original)'
+  );
   console.log('════════════════════════════════════════════════════════════');
   for (const r of results) {
     console.log(
@@ -95,7 +118,12 @@ test('all three tiers on synthetic nested memories', async () => {
   const engrams = generateTestEngrams(1000);
   const originalSize = JSON.stringify(engrams).length;
 
-  const results: { label: string; compression: number; recall: number; kb: number }[] = [];
+  const results: {
+    label: string;
+    compression: number;
+    recall: number;
+    kb: number;
+  }[] = [];
 
   for (const tier of TIERS) {
     CompressionManager.resetForTest();
@@ -114,7 +142,11 @@ test('all three tiers on synthetic nested memories', async () => {
   }
 
   console.log('\n════════════════════════════════════════════════════════════');
-  console.log('NESTED MEMORY — SYNTHETIC NESTED ENGRAMS (1000 engrams, ' + (originalSize/1024).toFixed(1) + ' KB original)');
+  console.log(
+    'NESTED MEMORY — SYNTHETIC NESTED ENGRAMS (1000 engrams, ' +
+      (originalSize / 1024).toFixed(1) +
+      ' KB original)'
+  );
   console.log('════════════════════════════════════════════════════════════');
   for (const r of results) {
     console.log(
