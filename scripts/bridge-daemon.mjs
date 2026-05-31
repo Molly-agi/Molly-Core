@@ -179,6 +179,7 @@ const VALID_SENDERS = new Set([
   'gemini',
   'aether',
   'atlas',
+  'switchboard',
 ]);
 
 function handleMessage(from, content, to) {

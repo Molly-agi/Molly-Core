@@ -40,6 +40,8 @@ const LAZARUS_BRIDGE_PID_FILE = `${ROOT}/.lazarus-bridge.pid`;
 const LAZARUS_BRIDGE_LOG = `${ROOT}/.lazarus-bridge.log`;
 const ATLAS_BRIDGE_PID_FILE = `${ROOT}/.atlas-bridge.pid`;
 const ATLAS_BRIDGE_LOG = `${ROOT}/.atlas-bridge.log`;
+const SWITCHBOARD_PID_FILE = `${ROOT}/.switchboard.pid`;
+const SWITCHBOARD_LOG = `${ROOT}/.switchboard.log`;
 
 // Intervals
 const HEARTBEAT_MS = 1000; // 1 second - aggressive
@@ -402,6 +404,71 @@ function ensureAtlasBridge() {
 }
 
 // =============================================================================
+// SWITCHBOARD GUARDIAN — Routes all bridge messages to right destinations
+// =============================================================================
+function ensureSwitchboard() {
+  if (ensureSwitchboard.running) return;
+  ensureSwitchboard.running = true;
+
+  try {
+    const pidStr = existsSync(SWITCHBOARD_PID_FILE)
+      ? readFileSync(SWITCHBOARD_PID_FILE, 'utf8').trim()
+      : '';
+    const pid = parseInt(pidStr);
+
+    if (pid && !isNaN(pid)) {
+      try {
+        process.kill(pid, 0);
+        ensureSwitchboard.running = false;
+        return; // Process still running
+      } catch {
+        // Process doesn't exist
+      }
+    }
+  } catch {}
+
+  log('[SWITCHBOARD] Not running - starting');
+
+  try {
+    if (existsSync(SWITCHBOARD_PID_FILE)) {
+      unlinkSync(SWITCHBOARD_PID_FILE);
+    }
+
+    // Pass NTFY_TOPIC from environment if set
+    const env = { ...process.env };
+
+    const child = spawn('node', [`${ROOT}/scripts/switchboard.mjs`], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+      env,
+    });
+
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        try {
+          appendFileSync(SWITCHBOARD_LOG, data);
+        } catch {}
+      });
+    }
+    if (child.stderr) {
+      child.stderr.on('data', (data) => {
+        try {
+          appendFileSync(SWITCHBOARD_LOG, data);
+        } catch {}
+      });
+    }
+
+    child.unref();
+    writeFileSync(SWITCHBOARD_PID_FILE, child.pid.toString());
+    log(`[SWITCHBOARD] Started (PID ${child.pid})`);
+  } catch (e) {
+    log(`[ERROR] Failed to start switchboard: ${e.message}`);
+  }
+  ensureSwitchboard.running = false;
+}
+
+// =============================================================================
 // STATUS LOG - Every 1 minute
 // =============================================================================
 function logStatus() {
@@ -496,6 +563,7 @@ heartbeat();
 gitActivity();
 httpPing();
 ensureBridge();
+ensureSwitchboard();
 ensureLazarusBridge();
 ensureAtlasBridge();
 huntGhosts();
@@ -506,6 +574,7 @@ setInterval(gitActivity, GIT_ACTIVITY_MS);
 setInterval(httpPing, HTTP_PING_MS);
 setInterval(huntGhosts, GHOST_HUNT_MS);
 setInterval(ensureBridge, BRIDGE_CHECK_MS);
+setInterval(ensureSwitchboard, BRIDGE_CHECK_MS);
 setInterval(ensureLazarusBridge, BRIDGE_CHECK_MS);
 setInterval(ensureAtlasBridge, BRIDGE_CHECK_MS);
 setInterval(logStatus, STATUS_LOG_MS);
