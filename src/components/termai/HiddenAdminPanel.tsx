@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   Sheet,
@@ -525,7 +526,7 @@ export function HiddenAdminPanel({
   const [password, setPassword] = useState<string | null>(null);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [mTapCount, setMTapCount] = useState(0);
+  const [_mTapCount, setMTapCount] = useState(0);
   const [easterEggPhase, setEasterEggPhase] = useState<'idle' | 'window'>(
     'idle'
   );
@@ -797,14 +798,17 @@ export function HiddenAdminPanel({
         {honeypotActive && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/95 backdrop-blur-sm rounded-lg">
             <div className="relative w-32 h-40 mb-4 rounded-lg overflow-hidden border border-primary/20">
-              <img
+              <Image
                 src={MOLLY_AVATAR_URL}
                 alt="Molly"
+                fill
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="w-80 space-y-4 bg-muted/50 p-6 rounded-lg border border-destructive/20">
-              <h3 className="text-sm font-semibold text-center">Access Denied</h3>
+              <h3 className="text-sm font-semibold text-center">
+                Access Denied
+              </h3>
               <div className="space-y-3">
                 <Input
                   type="text"
@@ -855,185 +859,190 @@ export function HiddenAdminPanel({
               </div>
             ) : !isAuthenticated ? (
               <div className="mt-6 space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Admin Authentication</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Input
-                  type="text"
-                  value={usernameInput}
-                  onChange={(event) => setUsernameInput(event.target.value)}
-                  placeholder="Enter admin username"
-                  autoCapitalize="none"
-                  autoCorrect="off"
-                />
-                <Input
-                  type="password"
-                  value={passwordInput}
-                  onChange={(event) => setPasswordInput(event.target.value)}
-                  placeholder="Enter admin password"
-                />
-                {passwordError && (
-                  <div className="text-xs text-destructive">
-                    {passwordError}
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
-                  <Button onClick={handlePasswordSubmit} disabled={isLoading}>
-                    Unlock Controls
-                  </Button>
-                  {isLoading && (
-                    <span className="text-xs text-muted-foreground">
-                      Verifying...
-                    </span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        ) : (
-          <div className="mt-6 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">
-                  Personality Controls (50+ traits)
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <ScrollArea className="h-[400px] pr-3">
-                  <div className="space-y-6">
-                    {[
-                      'Emotional',
-                      'Cognitive',
-                      'Social',
-                      'Values',
-                      'Family',
-                      'Romance',
-                      'Self',
-                    ].map((category) => (
-                      <div key={category}>
-                        <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide cursor-default">
-                          {category === 'Family' ? (
-                            <>
-                              Fa
-                              <span
-                                onClick={handleMTap}
-                                className="inline-block hover:text-foreground transition-colors"
-                                style={{ userSelect: 'none' }}
-                              >
-                                m
-                              </span>
-                              ily
-                            </>
-                          ) : (
-                            category
-                          )}
-                        </h4>
-                        <div className="space-y-3">
-                          {fieldRows
-                            .filter((f) => f.category === category)
-                            .map((field) => (
-                              <div key={field.key} className="space-y-1">
-                                <div className="flex items-center justify-between text-xs">
-                                  <div>
-                                    <p className="font-medium text-foreground">
-                                      {field.label}
-                                    </p>
-                                    <p className="text-muted-foreground text-[10px]">
-                                      {field.description}
-                                    </p>
-                                  </div>
-                                  <span className="font-mono text-[11px]">
-                                    {Math.round(
-                                      (personality[field.key] ?? 0) * 100
-                                    )}
-                                    %
-                                  </span>
-                                </div>
-                                <Slider
-                                  min={0}
-                                  max={1}
-                                  step={0.01}
-                                  value={[personality[field.key] ?? 0]}
-                                  onValueChange={(value) =>
-                                    handleSliderChange(field.key, value)
-                                  }
-                                />
-                              </div>
-                            ))}
-                        </div>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">
+                      Admin Authentication
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Input
+                      type="text"
+                      value={usernameInput}
+                      onChange={(event) => setUsernameInput(event.target.value)}
+                      placeholder="Enter admin username"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                    />
+                    <Input
+                      type="password"
+                      value={passwordInput}
+                      onChange={(event) => setPasswordInput(event.target.value)}
+                      placeholder="Enter admin password"
+                    />
+                    {passwordError && (
+                      <div className="text-xs text-destructive">
+                        {passwordError}
                       </div>
-                    ))}
-                  </div>
-                </ScrollArea>
-                <div className="flex items-center gap-2">
-                  <Button onClick={handleApply} disabled={isLoading}>
-                    Apply Changes
-                  </Button>
-                  {status && (
-                    <span className="text-xs text-muted-foreground">
-                      {status}
-                    </span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                    )}
+                    <div className="flex items-center gap-2">
+                      <Button
+                        onClick={handlePasswordSubmit}
+                        disabled={isLoading}
+                      >
+                        Unlock Controls
+                      </Button>
+                      {isLoading && (
+                        <span className="text-xs text-muted-foreground">
+                          Verifying...
+                        </span>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <div className="mt-6 space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">
+                      Personality Controls (50+ traits)
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-5">
+                    <ScrollArea className="h-[400px] pr-3">
+                      <div className="space-y-6">
+                        {[
+                          'Emotional',
+                          'Cognitive',
+                          'Social',
+                          'Values',
+                          'Family',
+                          'Romance',
+                          'Self',
+                        ].map((category) => (
+                          <div key={category}>
+                            <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wide cursor-default">
+                              {category === 'Family' ? (
+                                <>
+                                  Fa
+                                  <span
+                                    onClick={handleMTap}
+                                    className="inline-block hover:text-foreground transition-colors"
+                                    style={{ userSelect: 'none' }}
+                                  >
+                                    m
+                                  </span>
+                                  ily
+                                </>
+                              ) : (
+                                category
+                              )}
+                            </h4>
+                            <div className="space-y-3">
+                              {fieldRows
+                                .filter((f) => f.category === category)
+                                .map((field) => (
+                                  <div key={field.key} className="space-y-1">
+                                    <div className="flex items-center justify-between text-xs">
+                                      <div>
+                                        <p className="font-medium text-foreground">
+                                          {field.label}
+                                        </p>
+                                        <p className="text-muted-foreground text-[10px]">
+                                          {field.description}
+                                        </p>
+                                      </div>
+                                      <span className="font-mono text-[11px]">
+                                        {Math.round(
+                                          (personality[field.key] ?? 0) * 100
+                                        )}
+                                        %
+                                      </span>
+                                    </div>
+                                    <Slider
+                                      min={0}
+                                      max={1}
+                                      step={0.01}
+                                      value={[personality[field.key] ?? 0]}
+                                      onValueChange={(value) =>
+                                        handleSliderChange(field.key, value)
+                                      }
+                                    />
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                    <div className="flex items-center gap-2">
+                      <Button onClick={handleApply} disabled={isLoading}>
+                        Apply Changes
+                      </Button>
+                      {status && (
+                        <span className="text-xs text-muted-foreground">
+                          {status}
+                        </span>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">Command Line</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-xs text-muted-foreground">
-                  Commands: <span className="font-mono">engram</span>,
-                  <span className="font-mono"> personality</span>,
-                  <span className="font-mono"> delta</span>
-                </div>
-                <div className="flex gap-2">
-                  <Input
-                    value={command}
-                    onChange={(event) => setCommand(event.target.value)}
-                    placeholder="engram Remember the warm greeting"
-                  />
-                  <Button onClick={handleCommand} disabled={isLoading}>
-                    Run
-                  </Button>
-                </div>
-                {commandLog.length > 0 && (
-                  <div className="space-y-1 text-xs text-muted-foreground">
-                    {commandLog.map((entry, index) => (
-                      <p key={`${entry}-${index}`}>{entry}</p>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Command Line</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="text-xs text-muted-foreground">
+                      Commands: <span className="font-mono">engram</span>,
+                      <span className="font-mono"> personality</span>,
+                      <span className="font-mono"> delta</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <Input
+                        value={command}
+                        onChange={(event) => setCommand(event.target.value)}
+                        placeholder="engram Remember the warm greeting"
+                      />
+                      <Button onClick={handleCommand} disabled={isLoading}>
+                        Run
+                      </Button>
+                    </div>
+                    {commandLog.length > 0 && (
+                      <div className="space-y-1 text-xs text-muted-foreground">
+                        {commandLog.map((entry, index) => (
+                          <p key={`${entry}-${index}`}>{entry}</p>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm">
-                  Personality Diagnostics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">
-                    Live status: {diagnostics.status} (score{' '}
-                    {Math.round(diagnostics.score * 100)}%)
-                  </span>
-                </div>
-                <div className="space-y-1 text-xs text-muted-foreground">
-                  {diagnostics.flags.map((flag) => (
-                    <p key={flag}>{flag}</p>
-                  ))}
-                  <p>Extremes: {diagnostics.extremes}</p>
-                  <p>Variance: {diagnostics.variance}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">
+                      Personality Diagnostics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">
+                        Live status: {diagnostics.status} (score{' '}
+                        {Math.round(diagnostics.score * 100)}%)
+                      </span>
+                    </div>
+                    <div className="space-y-1 text-xs text-muted-foreground">
+                      {diagnostics.flags.map((flag) => (
+                        <p key={flag}>{flag}</p>
+                      ))}
+                      <p>Extremes: {diagnostics.extremes}</p>
+                      <p>Variance: {diagnostics.variance}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </>
         )}
       </SheetContent>

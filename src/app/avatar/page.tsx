@@ -38,9 +38,9 @@ const MollyCanvas = dynamic(() => import('@/browser/canvas/MollyCanvas'), {
 
 interface BridgeMessage {
   id: string;
-  from: 'molly' | 'eric' | 'lazarus';
+  from: string;
   content: string;
-  timestamp: number;
+  timestamp: string;
 }
 
 const MODEL_ASSET_PATH = '/models/molly.glb';
@@ -115,6 +115,9 @@ export default function AvatarPage() {
   const [modelZ, setModelZ] = useState(initialSettings.position.z);
   const activePlanSignatureRef = useRef<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
+  const bridgeWsRef = useRef<WebSocket | null>(null);
+  const bridgeReconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bridgeWsConnectedRef = useRef(false);
 
   // One AvatarDirector per window — owns voice + robotics state
   const director = useMemo(() => new AvatarDirector(), []);
@@ -185,19 +188,118 @@ export default function AvatarPage() {
     };
   }, [selectedModelPath]);
 
-  // Poll bridge and active robotics plan every 3 s.
-  useEffect(() => {
-    const poll = async () => {
-      try {
-        const [bridgeRes, planRes] = await Promise.all([
-          fetch('/api/bridge?limit=30'),
-          fetch('/api/robotics/active-plan', { cache: 'no-store' }),
-        ]);
+  const getBridgeWsUrl = useCallback(() => {
+    if (typeof window === 'undefined') return '';
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.hostname;
 
-        if (bridgeRes.ok) {
-          const bridgeData = await bridgeRes.json();
-          setMessages(bridgeData.messages ?? []);
+    if (host.includes('github.dev') || host.includes('app.github.dev')) {
+      return `${protocol}//${host.replace('-9002.', '-9099.')}`;
+    }
+
+    return `${protocol}//${host}:9099`;
+  }, []);
+
+  // Primary bridge feed path: websocket push updates from bridge-daemon.
+  useEffect(() => {
+    let cancelled = false;
+
+    const connect = () => {
+      if (cancelled) return;
+      if (bridgeWsRef.current?.readyState === WebSocket.OPEN) return;
+
+      const wsUrl = getBridgeWsUrl();
+      if (!wsUrl) return;
+
+      try {
+        const ws = new WebSocket(wsUrl);
+        bridgeWsRef.current = ws;
+
+        ws.onopen = () => {
+          bridgeWsConnectedRef.current = true;
+          ws.send(JSON.stringify({ type: 'identify', identity: 'eric' }));
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data as string) as {
+              type?: string;
+              message?: BridgeMessage;
+              messages?: BridgeMessage[];
+            };
+
+            if (data.type === 'history' && Array.isArray(data.messages)) {
+              setMessages(data.messages.slice(-30));
+              return;
+            }
+
+            if (data.type === 'unread' && Array.isArray(data.messages)) {
+              setMessages((prev) => {
+                const seen = new Set(prev.map((m) => m.id));
+                const merged = [...prev];
+                for (const msg of data.messages || []) {
+                  if (!seen.has(msg.id)) merged.push(msg);
+                }
+                return merged.slice(-100);
+              });
+              return;
+            }
+
+            if (data.type === 'message' && data.message) {
+              setMessages((prev) => {
+                if (prev.some((msg) => msg.id === data.message?.id)) {
+                  return prev;
+                }
+                return [...prev, data.message as BridgeMessage].slice(-100);
+              });
+            }
+          } catch {
+            // Ignore malformed websocket payloads
+          }
+        };
+
+        ws.onclose = () => {
+          bridgeWsConnectedRef.current = false;
+          bridgeWsRef.current = null;
+          if (!cancelled) {
+            bridgeReconnectRef.current = setTimeout(connect, 3000);
+          }
+        };
+
+        ws.onerror = () => {
+          ws.close();
+        };
+      } catch {
+        bridgeWsConnectedRef.current = false;
+        if (!cancelled) {
+          bridgeReconnectRef.current = setTimeout(connect, 3000);
         }
+      }
+    };
+
+    connect();
+
+    return () => {
+      cancelled = true;
+      bridgeWsConnectedRef.current = false;
+      if (bridgeReconnectRef.current) {
+        clearTimeout(bridgeReconnectRef.current);
+        bridgeReconnectRef.current = null;
+      }
+      if (bridgeWsRef.current) {
+        bridgeWsRef.current.close();
+        bridgeWsRef.current = null;
+      }
+    };
+  }, [getBridgeWsUrl]);
+
+  // Poll active robotics plan every 3 s.
+  useEffect(() => {
+    const pollPlan = async () => {
+      try {
+        const planRes = await fetch('/api/robotics/active-plan', {
+          cache: 'no-store',
+        });
 
         if (planRes.ok) {
           const planData = await planRes.json();
@@ -229,13 +331,34 @@ export default function AvatarPage() {
           );
         }
       } catch {
-        // silent — bridge/robotics service may be unavailable
+        // silent — robotics service may be unavailable
       }
     };
-    poll();
-    const id = setInterval(poll, 3000);
+
+    pollPlan();
+    const id = setInterval(pollPlan, 3000);
     return () => clearInterval(id);
   }, [director]);
+
+  // Fallback bridge polling only when websocket is disconnected.
+  useEffect(() => {
+    const pollBridgeFallback = async () => {
+      if (bridgeWsConnectedRef.current) return;
+
+      try {
+        const bridgeRes = await fetch('/api/bridge?limit=30');
+        if (!bridgeRes.ok) return;
+        const bridgeData = await bridgeRes.json();
+        setMessages(bridgeData.messages ?? []);
+      } catch {
+        // silent — bridge service may be unavailable
+      }
+    };
+
+    pollBridgeFallback();
+    const id = setInterval(pollBridgeFallback, 15000);
+    return () => clearInterval(id);
+  }, []);
 
   // Auto-scroll feed
   useEffect(() => {

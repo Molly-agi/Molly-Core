@@ -5,7 +5,10 @@
  * Provides consistent scoring without ground truth labels.
  */
 
-import type { BenchmarkInput, BenchmarkOutput, JudgeScoreRequest, JudgeScoreResponse, JudgeScale } from '../braintrust/types';
+import type {
+  JudgeScoreRequest,
+  JudgeScoreResponse,
+} from '@/evaluation/braintrust/types';
 
 /**
  * Judge rubrics for different evaluation dimensions
@@ -100,7 +103,9 @@ export class RuleBasedJudgeScorer extends JudgeScorer {
     }
 
     // Simple string matching
-    const isCorrect = this.normalizeAnswer(output.answer) === this.normalizeAnswer(correctAnswer);
+    const isCorrect =
+      this.normalizeAnswer(output.answer) ===
+      this.normalizeAnswer(correctAnswer);
 
     if (isCorrect) {
       return {
@@ -216,12 +221,14 @@ export class ReasoningScorer extends JudgeScorer {
     }
 
     const reasoning = output.reasoning;
-    const length = reasoning.length;
+    const _length = reasoning.length;
     const wordCount = reasoning.split(/\s+/).length;
-    const hasLogicalMarkers = /\b(because|therefore|thus|hence|so|since|if|then|must)\b/i.test(
-      reasoning
-    );
-    const hasStructure = /\b(first|second|third|next|finally|in conclusion)\b/i.test(reasoning);
+    const hasLogicalMarkers =
+      /\b(because|therefore|thus|hence|so|since|if|then|must)\b/i.test(
+        reasoning
+      );
+    const hasStructure =
+      /\b(first|second|third|next|finally|in conclusion)\b/i.test(reasoning);
 
     // Scoring logic
     if (wordCount < 20) {

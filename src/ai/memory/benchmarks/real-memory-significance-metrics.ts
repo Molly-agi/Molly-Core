@@ -14,7 +14,10 @@ const EXPERIENCES_DIR = path.join(
   'molly_data/users/1Bdrjcx35VVnKxahqq71AuZVMx32/experiences'
 );
 
-const HARDNESS_PATH = path.join(process.cwd(), 'MOLLY_REAL_MEMORY_HARDNESS.json');
+const HARDNESS_PATH = path.join(
+  process.cwd(),
+  'MOLLY_REAL_MEMORY_HARDNESS.json'
+);
 const OUTPUT_PATH = path.join(
   process.cwd(),
   'MOLLY_REAL_MEMORY_SIGNIFICANCE_METRICS.json'
@@ -27,7 +30,7 @@ type ClassName =
   | 'routine_operational';
 
 interface HardnessItem {
-  fileName: string;
+  _fileName: string;
   compressionRatio: number;
   executionMs: number;
   bytesSaved: number;
@@ -44,14 +47,16 @@ interface RawExperience {
   success?: boolean;
 }
 
-function classify(raw: RawExperience, fileName: string): ClassName {
-  const text = `${raw.suggestion || ''} ${raw.content || ''} ${raw.vibe || ''} ${raw.context || ''}`
-    .toLowerCase()
-    .replace(/\s+/g, ' ');
+function classify(raw: RawExperience, _fileName: string): ClassName {
+  const text =
+    `${raw.suggestion || ''} ${raw.content || ''} ${raw.vibe || ''} ${raw.context || ''}`
+      .toLowerCase()
+      .replace(/\s+/g, ' ');
   const type = (raw.type || '').toLowerCase();
   const context = (raw.context || '').toLowerCase();
   const contentLength = text.length;
-  const isConversation = context.includes('conversation') || type.includes('conversation');
+  const isConversation =
+    context.includes('conversation') || type.includes('conversation');
 
   const identitySignals = [
     'autonomy',
@@ -107,10 +112,10 @@ function classify(raw: RawExperience, fileName: string): ClassName {
     'done',
   ];
 
-  const hasIdentity = identitySignals.some(s => text.includes(s));
-  const hasFamily = familySignals.some(s => text.includes(s));
-  const hasStrategy = strategySignals.some(s => text.includes(s));
-  const hasRoutineConversationSignals = routineConversationSignals.some(s =>
+  const hasIdentity = identitySignals.some((s) => text.includes(s));
+  const hasFamily = familySignals.some((s) => text.includes(s));
+  const hasStrategy = strategySignals.some((s) => text.includes(s));
+  const hasRoutineConversationSignals = routineConversationSignals.some((s) =>
     text.includes(s)
   );
 
@@ -118,7 +123,11 @@ function classify(raw: RawExperience, fileName: string): ClassName {
     return 'identity_anchor';
   }
 
-  if (hasFamily || context.includes('family') || context.includes('relationship')) {
+  if (
+    hasFamily ||
+    context.includes('family') ||
+    context.includes('relationship')
+  ) {
     return 'family_core';
   }
 
@@ -191,7 +200,10 @@ export function runRealMemorySignificanceMetrics(): void {
   const hardnessByFile = new Map<string, HardnessItem>();
   for (const item of hardness.allFiles) hardnessByFile.set(item.fileName, item);
 
-  const files = fs.readdirSync(EXPERIENCES_DIR).filter(f => f.endsWith('.json')).sort();
+  const files = fs
+    .readdirSync(EXPERIENCES_DIR)
+    .filter((f) => f.endsWith('.json'))
+    .sort();
 
   const classified: Array<
     HardnessItem & {
@@ -231,13 +243,15 @@ export function runRealMemorySignificanceMetrics(): void {
     'routine_operational',
   ];
 
-  const byClass = classes.map(className => {
-    const items = classified.filter(i => i.className === className);
+  const byClass = classes.map((className) => {
+    const items = classified.filter((i) => i.className === className);
     const count = items.length;
     const avgCompression =
       items.reduce((s, i) => s + i.compressionRatio, 0) / Math.max(count, 1);
-    const avgLatency = items.reduce((s, i) => s + i.executionMs, 0) / Math.max(count, 1);
-    const avgBytesSaved = items.reduce((s, i) => s + i.bytesSaved, 0) / Math.max(count, 1);
+    const avgLatency =
+      items.reduce((s, i) => s + i.executionMs, 0) / Math.max(count, 1);
+    const avgBytesSaved =
+      items.reduce((s, i) => s + i.bytesSaved, 0) / Math.max(count, 1);
 
     return {
       className,
@@ -251,7 +265,7 @@ export function runRealMemorySignificanceMetrics(): void {
 
   const compressionToImportance = [...byClass]
     .sort((a, b) => b.weight - a.weight)
-    .map(row => ({
+    .map((row) => ({
       className: row.className,
       importanceWeight: row.weight,
       averageCompressionRatio: row.averageCompressionRatio,
@@ -260,7 +274,7 @@ export function runRealMemorySignificanceMetrics(): void {
 
   const latencyVsSignificance = [...byClass]
     .sort((a, b) => b.weight - a.weight)
-    .map(row => ({
+    .map((row) => ({
       className: row.className,
       importanceWeight: row.weight,
       averageLatencyMs: row.averageLatencyMs,
@@ -280,10 +294,10 @@ export function runRealMemorySignificanceMetrics(): void {
       latencyVsSignificance,
     },
     topIdentityAnchorsByHardness: classified
-      .filter(i => i.className === 'identity_anchor')
+      .filter((i) => i.className === 'identity_anchor')
       .sort((a, b) => a.compressionRatio - b.compressionRatio)
       .slice(0, 20)
-      .map(i => ({
+      .map((i) => ({
         fileName: i.fileName,
         compressionRatio: i.compressionRatio,
         executionMs: i.executionMs,

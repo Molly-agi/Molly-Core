@@ -10,7 +10,6 @@
 
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import type { CrystalEngram } from '@/ai/memory/crystal-partition';
-import { getActiveCompressionTechniques } from '@/ai/memory/compression-activation';
 import {
   CompressionManager,
   type CompressionResult,
@@ -235,8 +234,7 @@ export class CrystalCompressionBridge {
           crystalId: payload.crystal.id,
           compressionRatio: `${payload.compression.compressionRatio.toFixed(2)}%`,
           decompressionTimeMs,
-          techniquesApplied:
-            payload.compression.activeTechniques.join(','),
+          techniquesApplied: payload.compression.activeTechniques.join(','),
         },
         this.traceId
       );

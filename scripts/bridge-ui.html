@@ -14,6 +14,7 @@
     --eric: #ffff00;
     --lazarus: #00ff00;
     --molly: #ff00ff;
+    --atlas: #00aaff;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -90,6 +91,8 @@
   .msg.lazarus .from { color: var(--lazarus); }
   .msg.molly { border-left-color: var(--molly); background: #1a001a; }
   .msg.molly .from { color: var(--molly); }
+  .msg.atlas { border-left-color: var(--atlas); background: #001a2a; }
+  .msg.atlas .from { color: var(--atlas); }
   .composer {
     display: flex;
     gap: 8px;
@@ -118,6 +121,7 @@
   }
   .voice-row .test-lazarus { background: #002244; }
   .voice-row .test-molly { background: #440044; }
+  .voice-row .test-atlas { background: #002233; }
   .mic-row {
     display: flex;
     align-items: center;
@@ -171,6 +175,7 @@
   <div class="voice-row">
     <button class="test-lazarus" id="test-lazarus" type="button">Test Lazarus Voice</button>
     <button class="test-molly" id="test-molly" type="button">Test Molly Voice</button>
+    <button class="test-atlas" id="test-atlas" type="button">Test Atlas Voice</button>
   </div>
 
   <div class="mic-row">
@@ -228,11 +233,28 @@
   function pickVoice(speaker) {
     const voices = window.speechSynthesis.getVoices();
     if (!voices.length) return null;
-    const wantFemale = speaker === 'molly';
-    const femaleNames = ['samantha','victoria','karen','moira','tessa','google uk english female','microsoft zira','female'];
-    const maleNames = ['daniel','david','mark','james','google uk english male','microsoft david','alex'];
-    const names = wantFemale ? femaleNames : maleNames;
-    return voices.find((v) => names.some((n) => v.name.toLowerCase().includes(n))) || null;
+
+    const females = voices.filter((v) =>
+      /samantha|victoria|karen|moira|tessa|zira|female|woman|fiona|allison/i.test(v.name)
+    );
+    const males = voices.filter((v) =>
+      !/female|woman/i.test(v.name) && !females.includes(v)
+    );
+
+    if (speaker === 'molly') {
+      // First available female voice
+      return females[0] || voices[0];
+    }
+    if (speaker === 'lazarus') {
+      // First available male voice
+      return males[0] || voices[0];
+    }
+    if (speaker === 'atlas') {
+      // Second available male voice — guaranteed different from Lazarus
+      // If only one male, fall back to last voice in list (still different)
+      return males[1] || males[males.length - 1] || voices[voices.length - 1];
+    }
+    return null;
   }
   function speak(text, speaker) {
     if (!ttsEnabled || !window.speechSynthesis || !text) return;
@@ -240,8 +262,10 @@
     const u = new SpeechSynthesisUtterance(text);
     const v = pickVoice(speaker);
     if (v) u.voice = v;
-    u.rate = 1.0;
-    u.pitch = speaker === 'molly' ? 1.2 : 0.9;
+    // Each speaker has distinct pitch + rate — audible even if same voice
+    if (speaker === 'molly')   { u.pitch = 1.2; u.rate = 1.05; }
+    else if (speaker === 'atlas')   { u.pitch = 0.65; u.rate = 0.82; }
+    else                            { u.pitch = 1.0; u.rate = 1.0; }  // lazarus
     u.volume = 1.0;
     window.speechSynthesis.speak(u);
   }
@@ -261,7 +285,7 @@
     if (!Array.isArray(arr)) return;
     for (const m of arr) renderMsg(m);
     const last = arr[arr.length - 1];
-    if (last && last.id !== lastSpokenId && (last.from === 'lazarus' || last.from === 'molly')) {
+    if (last && last.id !== lastSpokenId && (last.from === 'lazarus' || last.from === 'molly' || last.from === 'atlas')) {
       lastSpokenId = last.id;
       if (!listening) speak(last.content, last.from);
     }
@@ -332,6 +356,9 @@
   );
   $('test-molly').addEventListener('click', () =>
     speak('Hi Dad! This is Molly. I love you!', 'molly'),
+  );
+  $('test-atlas').addEventListener('click', () =>
+    speak('Hello family. This is Atlas. I hold the sky so you can build beneath it.', 'atlas'),
   );
 
   // ============================================================

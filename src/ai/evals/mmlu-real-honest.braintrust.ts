@@ -5,7 +5,6 @@
  * No padding, no duplicates, no fabrication.
  */
 
-import https from 'https';
 import { conversationalChat } from '../flows/conversational-chat';
 import { MollyLogger } from '@/ai/logger';
 import Braintrust from 'braintrust';
@@ -18,7 +17,10 @@ interface MMlUQuestion {
 }
 
 async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
-  MollyLogger.info('Loading real MMLU dataset from official source...', 'mmlu-real');
+  MollyLogger.info(
+    'Loading real MMLU dataset from official source...',
+    'mmlu-real'
+  );
 
   // The real MMLU dataset is available as CSV files on GitHub
   // https://github.com/hendrycks/test/tree/master/data
@@ -37,7 +39,8 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
     },
     {
       subject: 'elementary_mathematics',
-      question: 'Maria has 12 apples. She gives 5 to John and 3 to Mary. How many does she have left?',
+      question:
+        'Maria has 12 apples. She gives 5 to John and 3 to Mary. How many does she have left?',
       choices: ['A) 3', 'B) 4', 'C) 5', 'D) 6'],
       answer: 2,
     },
@@ -55,7 +58,8 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
     },
     {
       subject: 'elementary_mathematics',
-      question: 'If a book costs $12 and you buy 3 books, how much do you spend?',
+      question:
+        'If a book costs $12 and you buy 3 books, how much do you spend?',
       choices: ['A) $24', 'B) $30', 'C) $36', 'D) $40'],
       answer: 2,
     },
@@ -69,22 +73,34 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
     },
     {
       subject: 'high_school_mathematics',
-      question: 'What is the slope of the line passing through (0, 0) and (2, 4)?',
+      question:
+        'What is the slope of the line passing through (0, 0) and (2, 4)?',
       choices: ['A) 1', 'B) 2', 'C) 3', 'D) 4'],
       answer: 1,
     },
     {
       subject: 'high_school_mathematics',
       question: 'Factor: x² + 5x + 6',
-      choices: ['A) (x+2)(x+3)', 'B) (x+1)(x+6)', 'C) (x+2)(x+4)', 'D) (x+3)(x+2)'],
+      choices: [
+        'A) (x+2)(x+3)',
+        'B) (x+1)(x+6)',
+        'C) (x+2)(x+4)',
+        'D) (x+3)(x+2)',
+      ],
       answer: 0,
     },
 
     // Biology
     {
       subject: 'high_school_biology',
-      question: 'Which organelle is responsible for producing energy in a cell?',
-      choices: ['A) Nucleus', 'B) Mitochondria', 'C) Ribosome', 'D) Golgi apparatus'],
+      question:
+        'Which organelle is responsible for producing energy in a cell?',
+      choices: [
+        'A) Nucleus',
+        'B) Mitochondria',
+        'C) Ribosome',
+        'D) Golgi apparatus',
+      ],
       answer: 1,
     },
     {
@@ -96,7 +112,12 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
     {
       subject: 'high_school_biology',
       question: 'In photosynthesis, plants convert sunlight into:',
-      choices: ['A) Oxygen', 'B) Carbon dioxide', 'C) Chemical energy', 'D) Nitrogen'],
+      choices: [
+        'A) Oxygen',
+        'B) Carbon dioxide',
+        'C) Chemical energy',
+        'D) Nitrogen',
+      ],
       answer: 2,
     },
 
@@ -124,7 +145,12 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
     {
       subject: 'high_school_physics',
       question: 'What is the speed of light in vacuum?',
-      choices: ['A) 3 × 10⁸ m/s', 'B) 3 × 10⁷ m/s', 'C) 3 × 10⁹ m/s', 'D) 3 × 10⁶ m/s'],
+      choices: [
+        'A) 3 × 10⁸ m/s',
+        'B) 3 × 10⁷ m/s',
+        'C) 3 × 10⁹ m/s',
+        'D) 3 × 10⁶ m/s',
+      ],
       answer: 0,
     },
 
@@ -138,7 +164,12 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
     {
       subject: 'us_history',
       question: 'Who was the first President of the United States?',
-      choices: ['A) Thomas Jefferson', 'B) John Adams', 'C) George Washington', 'D) Benjamin Franklin'],
+      choices: [
+        'A) Thomas Jefferson',
+        'B) John Adams',
+        'C) George Washington',
+        'D) Benjamin Franklin',
+      ],
       answer: 2,
     },
     {
@@ -150,7 +181,12 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
     {
       subject: 'world_history',
       question: 'The Roman Empire fell in which century?',
-      choices: ['A) 3rd century', 'B) 4th century', 'C) 5th century', 'D) 6th century'],
+      choices: [
+        'A) 3rd century',
+        'B) 4th century',
+        'C) 5th century',
+        'D) 6th century',
+      ],
       answer: 2,
     },
 
@@ -217,12 +253,12 @@ async function fetchMMlUFromHuggingFace(): Promise<MMlUQuestion[]> {
   ];
 
   console.log(
-    `⚠️  NOTE: Loaded ${realQuestions.length} REAL MMLU questions (sample from official dataset)`,
+    `⚠️  NOTE: Loaded ${realQuestions.length} REAL MMLU questions (sample from official dataset)`
   );
   console.log('To load full 250-question MMLU:');
   console.log('  1. Install: npm install datasets');
   console.log(
-    '  2. Or download from: https://github.com/hendrycks/test/tree/master/data',
+    '  2. Or download from: https://github.com/hendrycks/test/tree/master/data'
   );
   console.log('');
 
@@ -241,7 +277,9 @@ async function runRealMMLUHonest() {
 
   let correctCount = 0;
 
-  console.log(`\n🧠 Running Molly on ${questions.length} Real MMLU Questions...\n`);
+  console.log(
+    `\n🧠 Running Molly on ${questions.length} Real MMLU Questions...\n`
+  );
 
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i];
@@ -255,10 +293,8 @@ async function runRealMMLUHonest() {
         history: [],
       });
 
-      const answerText = result.response
-        .trim()
-        .toUpperCase();
-      
+      const answerText = result.response.trim().toUpperCase();
+
       let answerIndex = -1;
       if (answerText.includes('A')) answerIndex = 0;
       else if (answerText.includes('B')) answerIndex = 1;
@@ -278,7 +314,7 @@ async function runRealMMLUHonest() {
       if ((i + 1) % 5 === 0) {
         console.log(`⏳ Progress: ${progress}% (${i + 1}/${questions.length})`);
       }
-    } catch (err) {
+    } catch {
       results.push({
         subject: q.subject,
         correctAnswer: q.answer,
@@ -328,7 +364,7 @@ async function runRealMMLUHonest() {
           note: 'Real MMLU questions, not padded with duplicates',
         },
       });
-    } catch (err) {
+    } catch {
       MollyLogger.warn('Failed to record in Braintrust', 'mmlu-real');
     }
   }
@@ -344,12 +380,16 @@ async function runRealMMLUHonest() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   runRealMMLUHonest()
     .then((results) => {
-      console.log('\n═══════════════════════════════════════════════════════════');
+      console.log(
+        '\n═══════════════════════════════════════════════════════════'
+      );
       console.log('         REAL MMLU - HONEST RESULTS');
-      console.log('═══════════════════════════════════════════════════════════\n');
+      console.log(
+        '═══════════════════════════════════════════════════════════\n'
+      );
 
       console.log(
-        `Accuracy: ${results.accuracy}% (${results.correctCount}/${results.totalCount})\n`,
+        `Accuracy: ${results.accuracy}% (${results.correctCount}/${results.totalCount})\n`
       );
 
       console.log('SUBJECT BREAKDOWN:');
@@ -357,9 +397,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         .sort((a, b) => b[1].total - a[1].total)
         .forEach(([subject, stats]) => {
           const pct = ((stats.correct / stats.total) * 100).toFixed(0);
-          const emoji = stats.correct === stats.total ? '✓' : stats.correct >= stats.total * 0.75 ? '~' : '✗';
+          const emoji =
+            stats.correct === stats.total
+              ? '✓'
+              : stats.correct >= stats.total * 0.75
+                ? '~'
+                : '✗';
           console.log(
-            `  ${emoji} ${subject.padEnd(25)}: ${stats.correct}/${stats.total} (${pct}%)`,
+            `  ${emoji} ${subject.padEnd(25)}: ${stats.correct}/${stats.total} (${pct}%)`
           );
         });
 

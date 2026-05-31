@@ -71,7 +71,12 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     subject: 'college_mathematics',
     difficulty: 'hard',
     question: 'What is the derivative of f(x) = x³ + 2x² - 5x + 1?',
-    options: ['A) 3x² + 4x - 5', 'B) 3x² + 2x - 5', 'C) x³ + 2x - 5', 'D) 3x + 4'],
+    options: [
+      'A) 3x² + 4x - 5',
+      'B) 3x² + 2x - 5',
+      'C) x³ + 2x - 5',
+      'D) 3x + 4',
+    ],
     correctAnswer: 'A',
   },
 
@@ -88,8 +93,14 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'physics-2',
     subject: 'physics',
     difficulty: 'hard',
-    question: 'If an object is dropped from a height of 100 meters on Earth, approximately how long does it take to hit the ground? (Assume g = 10 m/s²)',
-    options: ['A) 2.2 seconds', 'B) 4.5 seconds', 'C) 6.7 seconds', 'D) 10 seconds'],
+    question:
+      'If an object is dropped from a height of 100 meters on Earth, approximately how long does it take to hit the ground? (Assume g = 10 m/s²)',
+    options: [
+      'A) 2.2 seconds',
+      'B) 4.5 seconds',
+      'C) 6.7 seconds',
+      'D) 10 seconds',
+    ],
     correctAnswer: 'B',
   },
 
@@ -106,7 +117,8 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'chemistry-2',
     subject: 'chemistry',
     difficulty: 'hard',
-    question: 'In a reaction where 2 moles of H₂ react with 1 mole of O₂ to form H₂O, how many moles of H₂O are produced?',
+    question:
+      'In a reaction where 2 moles of H₂ react with 1 mole of O₂ to form H₂O, how many moles of H₂O are produced?',
     options: ['A) 1', 'B) 2', 'C) 3', 'D) 4'],
     correctAnswer: 'B',
   },
@@ -143,7 +155,12 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     subject: 'us_history',
     difficulty: 'medium',
     question: 'Who was the first President of the United States?',
-    options: ['A) Thomas Jefferson', 'B) John Adams', 'C) George Washington', 'D) Benjamin Franklin'],
+    options: [
+      'A) Thomas Jefferson',
+      'B) John Adams',
+      'C) George Washington',
+      'D) Benjamin Franklin',
+    ],
     correctAnswer: 'C',
   },
   {
@@ -196,7 +213,8 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'english-2',
     subject: 'english',
     difficulty: 'medium',
-    question: 'In Shakespeare\'s "Romeo and Juliet," what is the name of the family rival to the Montagues?',
+    question:
+      'In Shakespeare\'s "Romeo and Juliet," what is the name of the family rival to the Montagues?',
     options: ['A) Capulet', 'B) Tybalt', 'C) Friar', 'D) Benvolio'],
     correctAnswer: 'A',
   },
@@ -250,8 +268,14 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'economics-2',
     subject: 'economics',
     difficulty: 'hard',
-    question: 'In Keynesian economics, what term describes a situation where aggregate demand is insufficient?',
-    options: ['A) Stagflation', 'B) Deflation', 'C) Demand gap', 'D) Recessionary gap'],
+    question:
+      'In Keynesian economics, what term describes a situation where aggregate demand is insufficient?',
+    options: [
+      'A) Stagflation',
+      'B) Deflation',
+      'C) Demand gap',
+      'D) Recessionary gap',
+    ],
     correctAnswer: 'D',
   },
 
@@ -268,7 +292,8 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'psychology-2',
     subject: 'psychology',
     difficulty: 'hard',
-    question: 'Cognitive dissonance theory, developed by Leon Festinger, suggests that people:',
+    question:
+      'Cognitive dissonance theory, developed by Leon Festinger, suggests that people:',
     options: [
       'A) Are motivated to reduce inconsistency between attitudes and behavior',
       'B) Always behave rationally',
@@ -283,7 +308,7 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'philosophy-1',
     subject: 'philosophy',
     difficulty: 'medium',
-    question: 'What is Occam\'s Razor?',
+    question: "What is Occam's Razor?",
     options: [
       'A) A type of cutting tool',
       'B) The principle that simpler explanations are preferable',
@@ -296,7 +321,7 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'philosophy-2',
     subject: 'philosophy',
     difficulty: 'hard',
-    question: 'In Kant\'s ethics, an action has moral worth only if:',
+    question: "In Kant's ethics, an action has moral worth only if:",
     options: [
       'A) It produces happiness',
       'B) It is done from duty according to the moral law',
@@ -319,8 +344,14 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'medicine-2',
     subject: 'medicine',
     difficulty: 'hard',
-    question: 'The condition where blood pressure is elevated above 140/90 mmHg is called:',
-    options: ['A) Hypotension', 'B) Hypertension', 'C) Arrhythmia', 'D) Tachycardia'],
+    question:
+      'The condition where blood pressure is elevated above 140/90 mmHg is called:',
+    options: [
+      'A) Hypotension',
+      'B) Hypertension',
+      'C) Arrhythmia',
+      'D) Tachycardia',
+    ],
     correctAnswer: 'B',
   },
 
@@ -353,7 +384,12 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     subject: 'logical_reasoning',
     difficulty: 'medium',
     question: 'All dogs are animals. Fido is a dog. Therefore:',
-    options: ['A) Fido is not an animal', 'B) Fido is an animal', 'C) Animals are dogs', 'D) No conclusion can be drawn'],
+    options: [
+      'A) Fido is not an animal',
+      'B) Fido is an animal',
+      'C) Animals are dogs',
+      'D) No conclusion can be drawn',
+    ],
     correctAnswer: 'B',
   },
   {
@@ -378,8 +414,14 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     id: 'law-2',
     subject: 'law',
     difficulty: 'hard',
-    question: 'In contract law, what term describes a promise made in exchange for another promise?',
-    options: ['A) Consideration', 'B) Bilateral contract', 'C) Covenant', 'D) Warranty'],
+    question:
+      'In contract law, what term describes a promise made in exchange for another promise?',
+    options: [
+      'A) Consideration',
+      'B) Bilateral contract',
+      'C) Covenant',
+      'D) Warranty',
+    ],
     correctAnswer: 'B',
   },
 
@@ -402,7 +444,12 @@ const MMLU_QUESTIONS: MMLUQuestion[] = [
     subject: 'ethics',
     difficulty: 'hard',
     question: 'What does "virtue ethics" emphasize?',
-    options: ['A) Following rules', 'B) Maximizing happiness', 'C) Developing good character traits', 'D) Duty and obligation'],
+    options: [
+      'A) Following rules',
+      'B) Maximizing happiness',
+      'C) Developing good character traits',
+      'D) Duty and obligation',
+    ],
     correctAnswer: 'C',
   },
 ];
@@ -432,10 +479,8 @@ async function runMMLUBenchmark() {
         history: [],
       });
 
-      const answer = result.response
-        .trim()
-        .toUpperCase()
-        .match(/[A-D]/)?.[0] || 'E';
+      const answer =
+        result.response.trim().toUpperCase().match(/[A-D]/)?.[0] || 'E';
 
       const isCorrect = answer === q.correctAnswer;
       if (isCorrect) correctCount++;
@@ -453,7 +498,7 @@ async function runMMLUBenchmark() {
         `${q.subject}/${q.difficulty} | Expected: ${q.correctAnswer} | Got: ${answer} | ${isCorrect ? '✓' : '✗'}`,
         'mmlu-benchmark'
       );
-    } catch (err) {
+    } catch {
       results.push({
         id: q.id,
         subject: q.subject,
@@ -471,7 +516,8 @@ async function runMMLUBenchmark() {
 
   results.forEach((r) => {
     if (!bySubject[r.subject]) bySubject[r.subject] = { total: 0, correct: 0 };
-    if (!byDifficulty[r.difficulty]) byDifficulty[r.difficulty] = { total: 0, correct: 0 };
+    if (!byDifficulty[r.difficulty])
+      byDifficulty[r.difficulty] = { total: 0, correct: 0 };
 
     bySubject[r.subject].total++;
     byDifficulty[r.difficulty].total++;
@@ -494,7 +540,10 @@ async function runMMLUBenchmark() {
       });
 
       await project.log({
-        inputs: { totalQuestions: results.length, subjects: Object.keys(bySubject).length },
+        inputs: {
+          totalQuestions: results.length,
+          subjects: Object.keys(bySubject).length,
+        },
         output: {
           correctCount,
           totalCount: results.length,
@@ -517,7 +566,10 @@ async function runMMLUBenchmark() {
       MollyLogger.info(
         'MMLU-style benchmark recorded in Braintrust',
         'mmlu-benchmark',
-        { accuracy: (accuracy * 100).toFixed(1), projectName: 'molly-mmlu-evals' }
+        {
+          accuracy: (accuracy * 100).toFixed(1),
+          projectName: 'molly-mmlu-evals',
+        }
       );
     } catch (err) {
       MollyLogger.warn('Failed to record in Braintrust', 'mmlu-benchmark', {
@@ -543,11 +595,17 @@ async function runMMLUBenchmark() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   runMMLUBenchmark()
     .then((results) => {
-      console.log('\n═══════════════════════════════════════════════════════════');
+      console.log(
+        '\n═══════════════════════════════════════════════════════════'
+      );
       console.log('            MMLU-STYLE BENCHMARK RESULTS');
-      console.log('═══════════════════════════════════════════════════════════\n');
+      console.log(
+        '═══════════════════════════════════════════════════════════\n'
+      );
 
-      console.log(`Overall Accuracy: ${results.accuracy}% (${results.correctCount}/${results.totalCount})\n`);
+      console.log(
+        `Overall Accuracy: ${results.accuracy}% (${results.correctCount}/${results.totalCount})\n`
+      );
 
       console.log('MODEL COMPARISON (2024-2025):');
       console.log('  GPT-4:          86.4%');
@@ -560,7 +618,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         .sort()
         .forEach(([difficulty, stats]) => {
           const pct = ((stats.correct / stats.total) * 100).toFixed(0);
-          console.log(`  ${difficulty.padEnd(10)}: ${stats.correct}/${stats.total} (${pct}%)`);
+          console.log(
+            `  ${difficulty.padEnd(10)}: ${stats.correct}/${stats.total} (${pct}%)`
+          );
         });
 
       console.log('\nBY SUBJECT:');
@@ -568,8 +628,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         .sort((a, b) => b[1].total - a[1].total)
         .forEach(([subject, stats]) => {
           const pct = ((stats.correct / stats.total) * 100).toFixed(0);
-          const emoji = stats.correct === stats.total ? '✓' : stats.correct >= stats.total * 0.75 ? '~' : '✗';
-          console.log(`  ${emoji} ${subject.padEnd(30)}: ${stats.correct}/${stats.total} (${pct}%)`);
+          const emoji =
+            stats.correct === stats.total
+              ? '✓'
+              : stats.correct >= stats.total * 0.75
+                ? '~'
+                : '✗';
+          console.log(
+            `  ${emoji} ${subject.padEnd(30)}: ${stats.correct}/${stats.total} (${pct}%)`
+          );
         });
 
       console.log('\n✅ Results recorded in Braintrust\n');

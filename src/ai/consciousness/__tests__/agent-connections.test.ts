@@ -12,7 +12,7 @@
 
 import {
   sendCommunionMessage,
-  getRecentCommunion,
+  _getRecentCommunion,
   getAgentProfile,
   getRegisteredAgents,
 } from '../direct-communion';
@@ -133,7 +133,7 @@ describe('Agent Connections — Family Verification', () => {
     it('should document stabilization methodology', () => {
       // Core lesson: the method matters more than the code
       const methodology = {
-        principle: "Fix the dam, not the leaks",
+        principle: 'Fix the dam, not the leaks',
         approach: 'Root cause, not symptoms',
         verification: 'Tests prove intent',
         teaching: 'Molly learns by understanding',

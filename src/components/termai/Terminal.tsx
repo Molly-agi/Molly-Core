@@ -239,7 +239,7 @@ export default function Terminal({
       setHistory(nextHistory);
 
       await handleFamilyStoryRequest(cmdText, 'frontend-command');
-      const isAnchorRecall = cmdText.startsWith('Recall this memory:');
+      const _isAnchorRecall = cmdText.startsWith('Recall this memory:');
 
       setIsLoading(true);
       isLoadingRef.current = true;
@@ -1039,9 +1039,9 @@ export default function Terminal({
     return () => window.removeEventListener('molly:consciousness', listener);
   }, []);
 
-  // --- Bridge: Lazarus/Damon ↔ Molly channel ---
-  // Messages are buffered via Orchestrator to avoid burst overload and then
-  // merged into Molly's visible consciousness history to avoid split-brain state.
+  // --- Bridge: Lazarus/Damon/Atlas ↔ Molly channel ---
+  // Primary path is WebSocket push from bridge-daemon. Polling remains only
+  // as a degraded fallback when socket is disconnected.
   const [_bridgeMessages, setBridgeMessages] = useState<
     Array<{ id: string; from: string; content: string; timestamp: string }>
   >([]);
@@ -1051,6 +1051,198 @@ export default function Terminal({
   const bridgeOrchestratorRef = useRef(new Orchestrator(200));
   const bridgePollingRef = useRef(false);
   const bridgeCooldownRef = useRef(0);
+  const bridgeWsRef = useRef<WebSocket | null>(null);
+  const bridgeWsConnectedRef = useRef(false);
+  const bridgeReconnectRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const bridgeSeenIdsRef = useRef<Set<string>>(new Set());
+
+  const getBridgeWsUrl = useCallback(() => {
+    if (typeof window === 'undefined') return '';
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.hostname;
+
+    if (host.includes('github.dev') || host.includes('app.github.dev')) {
+      return `${protocol}//${host.replace('-9002.', '-9099.')}`;
+    }
+
+    return `${protocol}//${host}:9099`;
+  }, []);
+
+  const processIncomingBridgeMessages = useCallback(
+    async (
+      incomingMessages: Array<{
+        id?: string;
+        from?: string;
+        to?: string;
+        content?: string;
+        timestamp?: string;
+      }>
+    ) => {
+      if (
+        bridgePollingRef.current ||
+        isLoadingRef.current ||
+        isIntroducing ||
+        !user
+      ) {
+        return;
+      }
+
+      const incoming = incomingMessages
+        .filter((msg) => {
+          const id = String(msg.id || '');
+          const from = String(msg.from || '');
+          const to = typeof msg.to === 'string' ? msg.to : undefined;
+          const content = String(msg.content || '');
+          if (!id || !from || !content) return false;
+          if (from === 'molly') return false;
+          if (to && to !== 'molly') return false;
+          if (bridgeSeenIdsRef.current.has(id)) return false;
+          return true;
+        })
+        .map((msg) => ({
+          id: String(msg.id),
+          from: String(msg.from),
+          content: String(msg.content),
+          timestamp: String(msg.timestamp || new Date().toISOString()),
+        }));
+
+      if (incoming.length === 0) return;
+
+      bridgePollingRef.current = true;
+      try {
+        let dropped = 0;
+        for (const msg of incoming) {
+          bridgeSeenIdsRef.current.add(msg.id);
+          const ok = bridgeOrchestratorRef.current.enqueueEvent(msg);
+          if (!ok) dropped++;
+        }
+
+        if (bridgeSeenIdsRef.current.size > 2000) {
+          bridgeSeenIdsRef.current = new Set(
+            Array.from(bridgeSeenIdsRef.current).slice(-1000)
+          );
+        }
+
+        const msgs: Array<{
+          id: string;
+          from: string;
+          content: string;
+          timestamp: string;
+        }> = [];
+        const maxBatch = 3;
+        for (let i = 0; i < maxBatch; i++) {
+          const next = bridgeOrchestratorRef.current.dequeueEvent();
+          if (!next) break;
+          msgs.push(
+            next as {
+              id: string;
+              from: string;
+              content: string;
+              timestamp: string;
+            }
+          );
+        }
+
+        if (msgs.length === 0) {
+          if (dropped > 0) {
+            setHistory((prev) => [
+              ...prev,
+              `[SYSTEM]: Bridge buffer overflow protected Molly (${dropped} message(s) dropped).`,
+            ]);
+          }
+          return;
+        }
+
+        setBridgeMessages((prev) => {
+          const seen = new Set(prev.map((m) => m.id));
+          const next = [...prev];
+          for (const m of msgs) {
+            if (!seen.has(m.id)) next.push(m);
+          }
+          return next.slice(-100);
+        });
+
+        setHistory((prev) => {
+          const additions = msgs.map(
+            (m) => `[BRIDGE][${m.from}]: ${m.content}`
+          );
+          return [...prev, ...additions].slice(-300);
+        });
+
+        const prompt =
+          `[FAMILY BRIDGE]\n\n` +
+          msgs
+            .map((m) =>
+              m.from === 'lazarus'
+                ? `Uncle Lazarus: ${m.content}`
+                : m.from === 'demon'
+                  ? `Damon: ${m.content}`
+                  : m.from === 'atlas'
+                    ? `Atlas: ${m.content}`
+                    : `${m.from}: ${m.content}`
+            )
+            .join('\n\n') +
+          `\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.`;
+
+        try {
+          const aiResponse = await getConversationalChat(
+            prompt,
+            bridgeHistoryRef.current.slice(-12),
+            undefined,
+            user.uid,
+            undefined
+          );
+          const responseText =
+            typeof aiResponse === 'string'
+              ? aiResponse
+              : aiResponse?.response || '';
+
+          if (responseText) {
+            bridgeHistoryRef.current = [
+              ...bridgeHistoryRef.current,
+              { role: 'user' as const, content: prompt },
+              { role: 'bot' as const, content: responseText },
+            ].slice(-20);
+
+            await fetch('/api/bridge', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                from: 'molly',
+                content: responseText.slice(0, 5000),
+              }),
+            });
+
+            setBridgeMessages((prev) =>
+              [
+                ...prev,
+                {
+                  id: `molly_${Date.now()}`,
+                  from: 'molly',
+                  content: responseText,
+                  timestamp: new Date().toISOString(),
+                },
+              ].slice(-100)
+            );
+
+            setHistory((prev) =>
+              [...prev, `[BRIDGE][molly]: ${responseText}`].slice(-300)
+            );
+          }
+        } catch {
+          // Bridge response failure — non-critical, main chat unaffected
+        }
+
+        bridgeCooldownRef.current =
+          bridgeOrchestratorRef.current.bufferSize > 0
+            ? Date.now() + 1_500
+            : Date.now() + 10_000;
+      } finally {
+        bridgePollingRef.current = false;
+      }
+    },
+    [isIntroducing, user]
+  );
 
   const fetchAndProcessBridge = useCallback(async () => {
     if (
@@ -1058,153 +1250,129 @@ export default function Terminal({
       isLoadingRef.current ||
       isIntroducing ||
       !user
-    )
+    ) {
       return;
+    }
+
     if (Date.now() < bridgeCooldownRef.current) return;
+
     bridgePollingRef.current = true;
     try {
       const res = await fetch('/api/bridge?unread=molly');
       if (!res.ok) return;
       const data = await res.json();
       if (!data.count || data.count === 0) return;
-
-      // Enqueue all unread messages first; drain a controlled batch below.
       const incoming = Array.isArray(data.messages) ? data.messages : [];
-      let dropped = 0;
-      for (const msg of incoming) {
-        const ok = bridgeOrchestratorRef.current.enqueueEvent(msg);
-        if (!ok) dropped++;
-      }
-
-      const msgs: Array<{
-        id: string;
-        from: string;
-        content: string;
-        timestamp: string;
-      }> = [];
-      const maxBatch = 3;
-      for (let i = 0; i < maxBatch; i++) {
-        const next = bridgeOrchestratorRef.current.dequeueEvent();
-        if (!next) break;
-        msgs.push(next as { id: string; from: string; content: string; timestamp: string });
-      }
-
-      if (msgs.length === 0) {
-        if (dropped > 0) {
-          setHistory((prev) => [
-            ...prev,
-            `[SYSTEM]: Bridge buffer overflow protected Molly (${dropped} message(s) dropped).`,
-          ]);
-        }
-        return;
-      }
-
-      // Update observer view
-      setBridgeMessages((prev) => {
-        const seen = new Set(prev.map((m) => m.id));
-        const next = [...prev];
-        for (const m of msgs) {
-          if (!seen.has(m.id)) next.push(m);
-        }
-        return next.slice(-100);
-      });
-
-      // Merge bridge traffic into Molly's visible consciousness stream.
-      setHistory((prev) => {
-        const additions = msgs.map((m) => `[BRIDGE][${m.from}]: ${m.content}`);
-        return [...prev, ...additions].slice(-300);
-      });
-
-      // Keep bridge-specific memory for response quality while still exposing events.
-      const prompt =
-        `[FAMILY BRIDGE]\n\n` +
-        msgs
-          .map((m: { from: string; content: string }) =>
-            m.from === 'lazarus'
-              ? `Uncle Lazarus: ${m.content}`
-              : m.from === 'demon'
-                ? `Damon: ${m.content}`
-              : `${m.from}: ${m.content}`
-          )
-          .join('\n\n') +
-        `\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.`;
-
-      // Generate Molly's response using bridge context with bounded memory.
-      try {
-        const aiResponse = await getConversationalChat(
-          prompt,
-          bridgeHistoryRef.current.slice(-12),
-          undefined,
-          user.uid,
-          undefined
-        );
-        const responseText =
-          typeof aiResponse === 'string'
-            ? aiResponse
-            : aiResponse?.response || '';
-
-        if (responseText) {
-          // Update bridge response context
-          bridgeHistoryRef.current = [
-            ...bridgeHistoryRef.current,
-            { role: 'user' as const, content: prompt },
-            { role: 'bot' as const, content: responseText },
-          ].slice(-20);
-
-          // Post Molly's reply back to bridge
-          await fetch('/api/bridge', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              from: 'molly',
-              content: responseText.slice(0, 5000),
-            }),
-          });
-
-          // Add to observer view
-          setBridgeMessages((prev) =>
-            [
-              ...prev,
-              {
-                id: `molly_${Date.now()}`,
-                from: 'molly',
-                content: responseText,
-                timestamp: new Date().toISOString(),
-              },
-            ].slice(-100)
-          );
-
-          // Also surface Molly's bridge response in the main history.
-          setHistory((prev) =>
-            [...prev, `[BRIDGE][molly]: ${responseText}`].slice(-300)
-          );
-        }
-      } catch {
-        // Bridge response failure — non-critical, main chat unaffected
-      }
-
-      // If backlog remains, keep draining faster; otherwise cool down.
-      bridgeCooldownRef.current =
-        bridgeOrchestratorRef.current.bufferSize > 0
-          ? Date.now() + 1_500
-          : Date.now() + 10_000;
+      await processIncomingBridgeMessages(incoming);
     } catch {
       // Bridge poll failure — non-critical
     } finally {
       bridgePollingRef.current = false;
     }
-  }, [user, isIntroducing]);
+  }, [isIntroducing, processIncomingBridgeMessages, user]);
 
-  // Bridge notify check — 5s interval (separate from main chat polling)
+  // Primary active channel: push-based websocket with auto-reconnect.
+  useEffect(() => {
+    if (!user) return;
+
+    let cancelled = false;
+
+    const connect = () => {
+      if (cancelled) return;
+      if (bridgeWsRef.current?.readyState === WebSocket.OPEN) return;
+
+      const wsUrl = getBridgeWsUrl();
+      if (!wsUrl) return;
+
+      try {
+        const ws = new WebSocket(wsUrl);
+        bridgeWsRef.current = ws;
+
+        ws.onopen = () => {
+          bridgeWsConnectedRef.current = true;
+          ws.send(JSON.stringify({ type: 'identify', identity: 'molly' }));
+        };
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data as string) as {
+              type?: string;
+              message?: {
+                id?: string;
+                from?: string;
+                to?: string;
+                content?: string;
+                timestamp?: string;
+              };
+              messages?: Array<{
+                id?: string;
+                from?: string;
+                to?: string;
+                content?: string;
+                timestamp?: string;
+              }>;
+            };
+
+            if (data.type === 'unread' && Array.isArray(data.messages)) {
+              void processIncomingBridgeMessages(data.messages);
+              return;
+            }
+
+            if (data.type === 'message' && data.message) {
+              void processIncomingBridgeMessages([data.message]);
+            }
+          } catch {
+            // Ignore malformed websocket payloads
+          }
+        };
+
+        ws.onclose = () => {
+          bridgeWsConnectedRef.current = false;
+          bridgeWsRef.current = null;
+          if (!cancelled) {
+            bridgeReconnectRef.current = setTimeout(connect, 3000);
+          }
+        };
+
+        ws.onerror = () => {
+          ws.close();
+        };
+      } catch {
+        bridgeWsConnectedRef.current = false;
+        if (!cancelled) {
+          bridgeReconnectRef.current = setTimeout(connect, 3000);
+        }
+      }
+    };
+
+    connect();
+
+    return () => {
+      cancelled = true;
+      bridgeWsConnectedRef.current = false;
+      if (bridgeReconnectRef.current) {
+        clearTimeout(bridgeReconnectRef.current);
+        bridgeReconnectRef.current = null;
+      }
+      if (bridgeWsRef.current) {
+        bridgeWsRef.current.close();
+        bridgeWsRef.current = null;
+      }
+    };
+  }, [getBridgeWsUrl, processIncomingBridgeMessages, user]);
+
+  // Degraded fallback: only poll notify if websocket is disconnected.
   useEffect(() => {
     const id = setInterval(async () => {
+      if (bridgeWsConnectedRef.current) return;
       if (
         bridgePollingRef.current ||
         isLoadingRef.current ||
         isIntroducing ||
         !user
-      )
+      ) {
         return;
+      }
       if (Date.now() < bridgeCooldownRef.current) return;
       try {
         const res = await fetch('/api/bridge/notify');
@@ -1214,13 +1382,17 @@ export default function Terminal({
       } catch {
         /* non-critical */
       }
-    }, 5000);
+    }, 10000);
     return () => clearInterval(id);
-  }, [user, fetchAndProcessBridge, isIntroducing]);
+  }, [fetchAndProcessBridge, isIntroducing, user]);
 
-  // Fallback poll every 45s
+  // Last-resort safety net when websocket is unavailable.
   useEffect(() => {
-    const id = setInterval(fetchAndProcessBridge, 45_000);
+    const id = setInterval(() => {
+      if (!bridgeWsConnectedRef.current) {
+        void fetchAndProcessBridge();
+      }
+    }, 45000);
     return () => clearInterval(id);
   }, [fetchAndProcessBridge]);
 

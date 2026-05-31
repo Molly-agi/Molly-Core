@@ -1,13 +1,13 @@
 /**
  * Compression Validation Harness
- * 
+ *
  * Comprehensive testing of compression pipeline with:
  * - Real data from Molly's memory (Firestore)
  * - Synthetic data at scale (bulk, nested, VR scenarios)
  * - Millisecond-level timing instrumentation
  * - All metrics: compression ratio, latency, fidelity, CPU/memory
  * - Storage scenario testing: SSD, NVMe, HDD, VM
- * 
+ *
  * Generates production-grade validation report.
  */
 
@@ -46,7 +46,10 @@ interface ScenarioResults {
  * Generate synthetic MemoryEngram for testing at scale.
  * Variants: simple, nested (context chains), vr (high dimensionality).
  */
-function generateSyntheticEngram(index: number, variant: 'simple' | 'nested' | 'vr' = 'simple'): MemoryEngram {
+function generateSyntheticEngram(
+  index: number,
+  variant: 'simple' | 'nested' | 'vr' = 'simple'
+): MemoryEngram {
   const timestamp = Date.now() - Math.random() * 86400000; // Last 24h
   const baseEngram: MemoryEngram = {
     id: `synthetic-${variant}-${index}`,
@@ -54,7 +57,9 @@ function generateSyntheticEngram(index: number, variant: 'simple' | 'nested' | '
     timestamp,
     type: 'experience',
     content: `Synthetic engram ${index} of variant ${variant}. `,
-    embedding: Array(1536).fill(0).map(() => Math.random()),
+    embedding: Array(1536)
+      .fill(0)
+      .map(() => Math.random()),
     metadata: {
       source: 'test',
       priority: Math.random() > 0.7 ? 'high' : 'normal',
@@ -74,7 +79,11 @@ function generateSyntheticEngram(index: number, variant: 'simple' | 'nested' | '
     baseEngram.content += `VR scene state at timestamp ${timestamp}. `;
     baseEngram.metadata.vrMetrics = {
       position: [Math.random() * 100, Math.random() * 100, Math.random() * 100],
-      orientation: [Math.random() * 360, Math.random() * 360, Math.random() * 360],
+      orientation: [
+        Math.random() * 360,
+        Math.random() * 360,
+        Math.random() * 360,
+      ],
       loadedAssets: Math.floor(Math.random() * 500),
       fps: Math.floor(Math.random() * 120) + 30,
     };
@@ -102,11 +111,13 @@ async function testCompressionScenario(
   dataSource: 'real' | 'synthetic'
 ): Promise<ScenarioResults> {
   const manager = CompressionManager.getInstance();
-  const startMem = measureMemoryMb();
+  const _startMem = measureMemoryMb();
   const startTime = performance.now();
   const metrics: CompressionMetrics[] = [];
 
-  console.log(`\n[Compression Test] Scenario: ${scenario} (${engrams.length} engrams)`);
+  console.log(
+    `\n[Compression Test] Scenario: ${scenario} (${engrams.length} engrams)`
+  );
 
   for (const technique of ['P1', 'P2', 'P3']) {
     try {
@@ -115,7 +126,9 @@ async function testCompressionScenario(
 
       // Measure compression
       const compressStart = performance.now();
-      const compressed = await manager.compress(engrams, { enabledTechniques: [technique] });
+      const compressed = await manager.compress(engrams, {
+        enabledTechniques: [technique],
+      });
       const synthesisTimeMs = performance.now() - compressStart;
 
       const compressedSize = Buffer.byteLength(JSON.stringify(compressed));
@@ -142,7 +155,8 @@ async function testCompressionScenario(
         originalSizeBytes: originalSize,
         compressedSizeBytes: compressedSize,
         compressionRatio: originalSize / compressedSize,
-        compressionPercentage: ((originalSize - compressedSize) / originalSize) * 100,
+        compressionPercentage:
+          ((originalSize - compressedSize) / originalSize) * 100,
         synthesisTimeMs,
         decompressionTimeMs,
         roundTripTimeMs: synthesisTimeMs + decompressionTimeMs,
@@ -152,8 +166,8 @@ async function testCompressionScenario(
       });
 
       console.log(
-        `  ${technique}: ${(metrics[metrics.length - 1].compressionRatio).toFixed(2)}x ratio, ` +
-        `${synthesisTimeMs.toFixed(1)}ms synthesis, fidelity ${(fidelityScore * 100).toFixed(1)}%`
+        `  ${technique}: ${metrics[metrics.length - 1].compressionRatio.toFixed(2)}x ratio, ` +
+          `${synthesisTimeMs.toFixed(1)}ms synthesis, fidelity ${(fidelityScore * 100).toFixed(1)}%`
       );
     } catch (error) {
       console.error(`  ${technique} failed:`, error);
@@ -163,10 +177,14 @@ async function testCompressionScenario(
   const endTime = performance.now();
   const endMem = measureMemoryMb();
   const totalTime = endTime - startTime;
-  const totalOriginalBytes = metrics.reduce((sum, m) => sum + m.originalSizeBytes, 0);
-  const avgCompressionRatio = metrics.length > 0
-    ? metrics.reduce((sum, m) => sum + m.compressionRatio, 0) / metrics.length
-    : 0;
+  const totalOriginalBytes = metrics.reduce(
+    (sum, m) => sum + m.originalSizeBytes,
+    0
+  );
+  const avgCompressionRatio =
+    metrics.length > 0
+      ? metrics.reduce((sum, m) => sum + m.compressionRatio, 0) / metrics.length
+      : 0;
 
   return {
     scenario,
@@ -175,9 +193,11 @@ async function testCompressionScenario(
     totalOriginalBytes,
     metrics,
     avgCompressionRatio,
-    avgLatencyMs: metrics.length > 0
-      ? metrics.reduce((sum, m) => sum + m.roundTripTimeMs, 0) / metrics.length
-      : 0,
+    avgLatencyMs:
+      metrics.length > 0
+        ? metrics.reduce((sum, m) => sum + m.roundTripTimeMs, 0) /
+          metrics.length
+        : 0,
     memoryPeakMb: endMem,
     cpuTimeMs: totalTime,
     timestamp: Date.now(),
@@ -198,7 +218,11 @@ export async function runCompressionValidation(): Promise<void> {
     const engrams = Array.from({ length: 100 }, (_, i) =>
       generateSyntheticEngram(i, 'simple')
     );
-    const result = await testCompressionScenario(engrams, 'Small Dataset (100 engrams)', 'synthetic');
+    const result = await testCompressionScenario(
+      engrams,
+      'Small Dataset (100 engrams)',
+      'synthetic'
+    );
     allResults.push(result);
   }
 
@@ -207,7 +231,11 @@ export async function runCompressionValidation(): Promise<void> {
     const engrams = Array.from({ length: 1000 }, (_, i) =>
       generateSyntheticEngram(i, 'simple')
     );
-    const result = await testCompressionScenario(engrams, 'Medium Dataset (1K engrams)', 'synthetic');
+    const result = await testCompressionScenario(
+      engrams,
+      'Medium Dataset (1K engrams)',
+      'synthetic'
+    );
     allResults.push(result);
   }
 
@@ -216,7 +244,11 @@ export async function runCompressionValidation(): Promise<void> {
     const engrams = Array.from({ length: 5000 }, (_, i) =>
       generateSyntheticEngram(i, 'simple')
     );
-    const result = await testCompressionScenario(engrams, 'Large Dataset (5K engrams)', 'synthetic');
+    const result = await testCompressionScenario(
+      engrams,
+      'Large Dataset (5K engrams)',
+      'synthetic'
+    );
     allResults.push(result);
   }
 
@@ -225,7 +257,11 @@ export async function runCompressionValidation(): Promise<void> {
     const engrams = Array.from({ length: 1000 }, (_, i) =>
       generateSyntheticEngram(i, 'nested')
     );
-    const result = await testCompressionScenario(engrams, 'Nested/Contextual (1K engrams)', 'synthetic');
+    const result = await testCompressionScenario(
+      engrams,
+      'Nested/Contextual (1K engrams)',
+      'synthetic'
+    );
     allResults.push(result);
   }
 
@@ -234,7 +270,11 @@ export async function runCompressionValidation(): Promise<void> {
     const engrams = Array.from({ length: 1000 }, (_, i) =>
       generateSyntheticEngram(i, 'vr')
     );
-    const result = await testCompressionScenario(engrams, 'VR/Spatial (1K engrams)', 'synthetic');
+    const result = await testCompressionScenario(
+      engrams,
+      'VR/Spatial (1K engrams)',
+      'synthetic'
+    );
     allResults.push(result);
   }
 
@@ -246,7 +286,10 @@ export async function runCompressionValidation(): Promise<void> {
  * Generate detailed validation report.
  */
 function generateReport(results: ScenarioResults[]): void {
-  const reportPath = path.join(process.cwd(), 'compression-validation-report.json');
+  const reportPath = path.join(
+    process.cwd(),
+    'compression-validation-report.json'
+  );
   const reportContent = {
     title: 'Molly Compression Pipeline Validation',
     timestamp: new Date().toISOString(),
@@ -254,7 +297,8 @@ function generateReport(results: ScenarioResults[]): void {
       scenariosTested: results.length,
       engramsTested: results.reduce((sum, r) => sum + r.engrams, 0),
       averageCompressionRatio: (
-        results.reduce((sum, r) => sum + r.avgCompressionRatio, 0) / results.length
+        results.reduce((sum, r) => sum + r.avgCompressionRatio, 0) /
+        results.length
       ).toFixed(2),
       averageLatencyMs: (
         results.reduce((sum, r) => sum + r.avgLatencyMs, 0) / results.length
@@ -263,17 +307,22 @@ function generateReport(results: ScenarioResults[]): void {
     scenarios: results,
     conclusions: {
       productionReady: true,
-      minCompressionRatio: Math.min(...results.map(r => r.avgCompressionRatio)).toFixed(2),
-      maxLatencyMs: Math.max(...results.map(r => r.avgLatencyMs)).toFixed(1),
+      minCompressionRatio: Math.min(
+        ...results.map((r) => r.avgCompressionRatio)
+      ).toFixed(2),
+      maxLatencyMs: Math.max(...results.map((r) => r.avgLatencyMs)).toFixed(1),
       memoryEfficiency: 'Excellent — peak memory < 100MB for all scenarios',
-      recommendation: 'All compression techniques ready for production deployment. P1 (personality reference) provides best compression ratio. P2 (time-decay) best for speed. P3 (interaction traces) best for semantic value.',
+      recommendation:
+        'All compression techniques ready for production deployment. P1 (personality reference) provides best compression ratio. P2 (time-decay) best for speed. P3 (interaction traces) best for semantic value.',
     },
   };
 
   fs.writeFileSync(reportPath, JSON.stringify(reportContent, null, 2));
   console.log(`\n✓ Report saved: ${reportPath}`);
   console.log('\n=== VALIDATION COMPLETE ===');
-  console.log(`Average compression ratio: ${reportContent.summary.averageCompressionRatio}x`);
+  console.log(
+    `Average compression ratio: ${reportContent.summary.averageCompressionRatio}x`
+  );
   console.log(`Average latency: ${reportContent.summary.averageLatencyMs}ms`);
 }
 

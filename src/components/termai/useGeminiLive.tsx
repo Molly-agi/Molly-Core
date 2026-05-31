@@ -41,28 +41,37 @@ export function useGeminiLive(options: UseGeminiLiveOptions = {}) {
   const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const visionIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const postDebugLog = useCallback(async (level: 'log' | 'error', message: string, data?: unknown) => {
-    if (typeof window === 'undefined') return;
-    try {
-      await fetch('/api/debug/live-voice', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ level, message, data }),
-      });
-    } catch {
-      // Debug transport failures should never break voice flow.
-    }
-  }, []);
+  const postDebugLog = useCallback(
+    async (level: 'log' | 'error', message: string, data?: unknown) => {
+      if (typeof window === 'undefined') return;
+      try {
+        await fetch('/api/debug/live-voice', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ level, message, data }),
+        });
+      } catch {
+        // Debug transport failures should never break voice flow.
+      }
+    },
+    []
+  );
 
-  const liveLog = useCallback((message: string, data?: unknown) => {
-    console.log(message, data ?? '');
-    void postDebugLog('log', message, data);
-  }, [postDebugLog]);
+  const liveLog = useCallback(
+    (message: string, data?: unknown) => {
+      console.log(message, data ?? '');
+      void postDebugLog('log', message, data);
+    },
+    [postDebugLog]
+  );
 
-  const liveError = useCallback((message: string, data?: unknown) => {
-    console.error(message, data ?? '');
-    void postDebugLog('error', message, data);
-  }, [postDebugLog]);
+  const liveError = useCallback(
+    (message: string, data?: unknown) => {
+      console.error(message, data ?? '');
+      void postDebugLog('error', message, data);
+    },
+    [postDebugLog]
+  );
 
   const updateStatus = useCallback(
     (newStatus: string) => {
@@ -105,27 +114,30 @@ export function useGeminiLive(options: UseGeminiLiveOptions = {}) {
   }, [releaseMedia]);
 
   // Play audio response from Molly
-  const playAudio = useCallback((audioData: Int16Array) => {
-    try {
-      const ctx = getAudioContext();
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-      const buffer = ctx.createBuffer(1, audioData.length, 24000);
-      const channelData = buffer.getChannelData(0);
+  const playAudio = useCallback(
+    (audioData: Int16Array) => {
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+        const buffer = ctx.createBuffer(1, audioData.length, 24000);
+        const channelData = buffer.getChannelData(0);
 
-      for (let i = 0; i < audioData.length; i++) {
-        channelData[i] = audioData[i] / 32768;
-      }
+        for (let i = 0; i < audioData.length; i++) {
+          channelData[i] = audioData[i] / 32768;
+        }
 
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-      source.connect(ctx.destination);
-      source.start();
-    } catch (err) {
-      liveError('[GeminiLive] Audio playback error:', err);
-    }
-  }, [liveError]);
+        const source = ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(ctx.destination);
+        source.start();
+      } catch (err) {
+        liveError('[GeminiLive] Audio playback error:', err);
+      }
+    },
+    [liveError]
+  );
 
   // Start audio capture and streaming
   const startAudioCapture = useCallback(
@@ -182,10 +194,14 @@ export function useGeminiLive(options: UseGeminiLiveOptions = {}) {
 
         // --- Real-Time Vision Injection ---
         // Look for the active video element from VisionPanel
-        const videoElement = document.getElementById('molly-vision-video') as HTMLVideoElement | null;
-        
+        const videoElement = document.getElementById(
+          'molly-vision-video'
+        ) as HTMLVideoElement | null;
+
         if (videoElement) {
-          liveLog('[GeminiLive] Vision stream attached. Starting 1fps capture.');
+          liveLog(
+            '[GeminiLive] Vision stream attached. Starting 1fps capture.'
+          );
           visionIntervalRef.current = setInterval(() => {
             if (ws.readyState !== WebSocket.OPEN) return;
             if (!videoElement || !videoElement.videoWidth) return;
@@ -363,6 +379,7 @@ export function useGeminiLive(options: UseGeminiLiveOptions = {}) {
     cleanup,
     liveLog,
     liveError,
+    playAudio,
     releaseMedia,
   ]);
 

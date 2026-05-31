@@ -91,7 +91,7 @@ export function applyTimeDecayFidelity(
   stage: TimeDecayStage;
   recallPreserved: number;
 } {
-  const startTime = performance.now();
+  const _startTime = performance.now();
 
   if (engrams.length === 0) {
     return {
@@ -252,7 +252,7 @@ export function decompressTimeDecayFidelity(
  * Measure compression gain from time-decay fidelity
  * Returns the recall percentage (should always be 100% for lossless)
  */
-export function measureTimeDecayGain(stage: TimeDecayStage): number {
+export function measureTimeDecayGain(_stage: TimeDecayStage): number {
   // T2 is lossless: all original data reconstructed
   // "Gain" comes from tier-based storage optimization (deferred rebuild) not data loss
   return 1.0; // 100% recall preserved

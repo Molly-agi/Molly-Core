@@ -106,7 +106,8 @@ export function applyInteractionTrace(
 
     const interactionHistory = interactionTracker?.get(engram.id) ?? [];
     const interactionCount = interactionHistory.length;
-    const lastInteractionTime = interactionHistory[interactionHistory.length - 1]?.timestamp;
+    const lastInteractionTime =
+      interactionHistory[interactionHistory.length - 1]?.timestamp;
     const frequency = interactionCount / ageDays;
 
     let usageTier: UsageTier;
@@ -190,11 +191,15 @@ export function decompressInteractionTrace(
   return engrams;
 }
 
-export function measureInteractionTraceGain(stage: InteractionTraceStage): number {
+export function measureInteractionTraceGain(
+  _stage: InteractionTraceStage
+): number {
   return 1.0;
 }
 
-export function getInteractionDistributionSummary(stage: InteractionTraceStage): string {
+export function getInteractionDistributionSummary(
+  stage: InteractionTraceStage
+): string {
   const total =
     stage.usageDistribution.hot +
     stage.usageDistribution.warm +

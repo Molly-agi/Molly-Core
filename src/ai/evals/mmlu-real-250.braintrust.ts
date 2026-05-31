@@ -12,7 +12,6 @@
 import Braintrust from 'braintrust';
 import { conversationalChat } from '../flows/conversational-chat';
 import { MollyLogger } from '@/ai/logger';
-import https from 'https';
 
 interface MMlUQuestion {
   subject: string;
@@ -26,7 +25,10 @@ interface MMlUQuestion {
 // ============================================================================
 
 async function fetchMMluData(): Promise<MMlUQuestion[]> {
-  MollyLogger.info('Fetching real MMLU dataset from Hugging Face...', 'mmlu-real-250');
+  MollyLogger.info(
+    'Fetching real MMLU dataset from Hugging Face...',
+    'mmlu-real-250'
+  );
 
   // We'll use a pre-compiled sample of 250 real MMLU questions
   // compiled from the official huggingface dataset
@@ -36,13 +38,24 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
       subject: 'anatomy',
       question:
         'A 51-year-old woman comes to the office complaining of headaches. Her temperature is 37.1 C (98.8 F), and her blood pressure is 190/100 mmHg. Physical examination shows retinal hemorrhages, papilledema, and exudates. Which of the following medications would be most appropriate initial therapy?',
-      choices: ['A) Atenolol', 'B) Nifedipine sublingual', 'C) Sodium nitroprusside IV', 'D) Hydralazine IV'],
+      choices: [
+        'A) Atenolol',
+        'B) Nifedipine sublingual',
+        'C) Sodium nitroprusside IV',
+        'D) Hydralazine IV',
+      ],
       answer: 3,
     },
     {
       subject: 'anatomy',
-      question: 'The sensory component of the trigeminal nerve supplies which of the following areas?',
-      choices: ['A) External ear', 'B) Anterior two-thirds of tongue', 'C) Palate and teeth', 'D) All of above'],
+      question:
+        'The sensory component of the trigeminal nerve supplies which of the following areas?',
+      choices: [
+        'A) External ear',
+        'B) Anterior two-thirds of tongue',
+        'C) Palate and teeth',
+        'D) All of above',
+      ],
       answer: 3,
     },
 
@@ -51,7 +64,12 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
       subject: 'business_ethics',
       question:
         'As stakeholders are those parties with an interest or concern in a business, which of the following would not be a stakeholder to a local restaurant?',
-      choices: ['A) The owner', 'B) The employees', 'C) The customers', 'D) A person in a neighboring city'],
+      choices: [
+        'A) The owner',
+        'B) The employees',
+        'C) The customers',
+        'D) A person in a neighboring city',
+      ],
       answer: 3,
     },
     {
@@ -81,7 +99,8 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     },
     {
       subject: 'clinical_knowledge',
-      question: 'Which of the following is the minimum infective dose of Vibrio cholerae?',
+      question:
+        'Which of the following is the minimum infective dose of Vibrio cholerae?',
       choices: ['A) 10^2', 'B) 10^4', 'C) 10^6', 'D) 10^8'],
       answer: 2,
     },
@@ -89,8 +108,14 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // COLLEGE BIOLOGY
     {
       subject: 'college_biology',
-      question: 'In which of the following would you expect to find the greatest genetic diversity?',
-      choices: ['A) Asexual reproduction', 'B) Binary fission', 'C) Sexual reproduction', 'D) Budding'],
+      question:
+        'In which of the following would you expect to find the greatest genetic diversity?',
+      choices: [
+        'A) Asexual reproduction',
+        'B) Binary fission',
+        'C) Sexual reproduction',
+        'D) Budding',
+      ],
       answer: 2,
     },
     {
@@ -122,8 +147,14 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // COLLEGE MATHEMATICS
     {
       subject: 'college_mathematics',
-      question: 'In a certain lottery, 5 different numbers are drawn from 1 to 35, and a 6th number from 1 to 20. What is the probability that you win the jackpot?',
-      choices: ['A) 1/3235062720', 'B) 1/6324107880', 'C) 1/12648215760', 'D) 1/1560780'],
+      question:
+        'In a certain lottery, 5 different numbers are drawn from 1 to 35, and a 6th number from 1 to 20. What is the probability that you win the jackpot?',
+      choices: [
+        'A) 1/3235062720',
+        'B) 1/6324107880',
+        'C) 1/12648215760',
+        'D) 1/1560780',
+      ],
       answer: 2,
     },
     {
@@ -136,7 +167,8 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // COMPUTER SCIENCE
     {
       subject: 'computer_science',
-      question: 'Which of the following is characteristic of RISC architecture?',
+      question:
+        'Which of the following is characteristic of RISC architecture?',
       choices: [
         'A) Emphasis on hardware for implementing complex instructions',
         'B) Fewer, simpler instructions with emphasis on software',
@@ -155,7 +187,8 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // ECONOMETRICS
     {
       subject: 'econometrics',
-      question: 'A confidence interval for regression parameters is calculated. Which assumption is required?',
+      question:
+        'A confidence interval for regression parameters is calculated. Which assumption is required?',
       choices: [
         'A) Heteroscedasticity',
         'B) Multicollinearity',
@@ -181,7 +214,8 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // ENGLISH
     {
       subject: 'english',
-      question: 'Which of the following is not a characteristic of Romantic poetry?',
+      question:
+        'Which of the following is not a characteristic of Romantic poetry?',
       choices: [
         'A) Emphasis on emotion and imagination',
         'B) Interest in ordinary people and nature',
@@ -194,8 +228,14 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // FORMAL LOGIC
     {
       subject: 'formal_logic',
-      question: 'All men are mortal. Socrates is a man. Therefore, Socrates is mortal. What type of argument is this?',
-      choices: ['A) Inductive', 'B) Deductive', 'C) Abductive', 'D) Analogical'],
+      question:
+        'All men are mortal. Socrates is a man. Therefore, Socrates is mortal. What type of argument is this?',
+      choices: [
+        'A) Inductive',
+        'B) Deductive',
+        'C) Abductive',
+        'D) Analogical',
+      ],
       answer: 1,
     },
 
@@ -210,7 +250,8 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // GLOBAL FACTS
     {
       subject: 'global_facts',
-      question: 'What percentage of the world population lives in extreme poverty (on less than $1.90 per day)?',
+      question:
+        'What percentage of the world population lives in extreme poverty (on less than $1.90 per day)?',
       choices: ['A) About 1%', 'B) About 5%', 'C) About 10%', 'D) About 20%'],
       answer: 1,
     },
@@ -218,8 +259,14 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // HIGH SCHOOL BIOLOGY
     {
       subject: 'high_school_biology',
-      question: 'Which organelle is responsible for energy production in a cell?',
-      choices: ['A) Nucleus', 'B) Mitochondria', 'C) Ribosome', 'D) Golgi apparatus'],
+      question:
+        'Which organelle is responsible for energy production in a cell?',
+      choices: [
+        'A) Nucleus',
+        'B) Mitochondria',
+        'C) Ribosome',
+        'D) Golgi apparatus',
+      ],
       answer: 1,
     },
 
@@ -258,7 +305,8 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // HUMAN SEXUALITY
     {
       subject: 'human_sexuality',
-      question: 'Which of the following is not a stage of the human sexual response cycle as described by Masters and Johnson?',
+      question:
+        'Which of the following is not a stage of the human sexual response cycle as described by Masters and Johnson?',
       choices: ['A) Excitement', 'B) Plateau', 'C) Orgasm', 'D) Satiation'],
       answer: 3,
     },
@@ -267,15 +315,26 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     {
       subject: 'international_law',
       question: 'Which of the following is not a source of international law?',
-      choices: ['A) Treaties', 'B) Custom', 'C) General principles of law', 'D) National constitutions'],
+      choices: [
+        'A) Treaties',
+        'B) Custom',
+        'C) General principles of law',
+        'D) National constitutions',
+      ],
       answer: 3,
     },
 
     // JURISPRUDENCE
     {
       subject: 'jurisprudence',
-      question: 'Which legal theory emphasizes that law is a system of rules enforced by the state?',
-      choices: ['A) Natural law', 'B) Positivism', 'C) Legal realism', 'D) Feminism'],
+      question:
+        'Which legal theory emphasizes that law is a system of rules enforced by the state?',
+      choices: [
+        'A) Natural law',
+        'B) Positivism',
+        'C) Legal realism',
+        'D) Feminism',
+      ],
       answer: 1,
     },
 
@@ -308,8 +367,14 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // MANAGEMENT
     {
       subject: 'management',
-      question: 'Which management style emphasizes both task and relationship concern?',
-      choices: ['A) Autocratic', 'B) Laissez-faire', 'C) Democratic', 'D) Authoritarian'],
+      question:
+        'Which management style emphasizes both task and relationship concern?',
+      choices: [
+        'A) Autocratic',
+        'B) Laissez-faire',
+        'C) Democratic',
+        'D) Authoritarian',
+      ],
       answer: 2,
     },
 
@@ -329,8 +394,14 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // MEDICAL GENETICS
     {
       subject: 'medical_genetics',
-      question: 'Which of the following inheritance patterns shows a vertical pedigree pattern?',
-      choices: ['A) X-linked recessive', 'B) Autosomal dominant', 'C) Y-linked', 'D) Mitochondrial'],
+      question:
+        'Which of the following inheritance patterns shows a vertical pedigree pattern?',
+      choices: [
+        'A) X-linked recessive',
+        'B) Autosomal dominant',
+        'C) Y-linked',
+        'D) Mitochondrial',
+      ],
       answer: 1,
     },
 
@@ -345,15 +416,22 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // MORAL DISPUTES
     {
       subject: 'moral_disputes',
-      question: 'Which ethical theory would most emphasize the consequence of an action?',
-      choices: ['A) Deontology', 'B) Utilitarianism', 'C) Virtue ethics', 'D) Care ethics'],
+      question:
+        'Which ethical theory would most emphasize the consequence of an action?',
+      choices: [
+        'A) Deontology',
+        'B) Utilitarianism',
+        'C) Virtue ethics',
+        'D) Care ethics',
+      ],
       answer: 1,
     },
 
     // MORAL SCENARIOS
     {
       subject: 'moral_scenarios',
-      question: 'If you could save five people by sacrificing one innocent person, would you do it?',
+      question:
+        'If you could save five people by sacrificing one innocent person, would you do it?',
       choices: [
         'A) Yes, because saving more lives is always better',
         'B) No, because it is always wrong to kill an innocent person',
@@ -387,8 +465,14 @@ async function fetchMMluData(): Promise<MMlUQuestion[]> {
     // PROFESSIONAL ACCOUNTING
     {
       subject: 'professional_accounting',
-      question: 'Under GAAP, which of the following would be recorded as an asset?',
-      choices: ['A) Goodwill', 'B) Owner equity', 'C) Revenue', 'D) All of the above'],
+      question:
+        'Under GAAP, which of the following would be recorded as an asset?',
+      choices: [
+        'A) Goodwill',
+        'B) Owner equity',
+        'C) Revenue',
+        'D) All of the above',
+      ],
       answer: 0,
     },
 
@@ -567,10 +651,8 @@ async function runRealMMLU250() {
         history: [],
       });
 
-      const answerText = result.response
-        .trim()
-        .toUpperCase();
-      
+      const answerText = result.response.trim().toUpperCase();
+
       let answerIndex = -1;
       if (answerText.includes('A')) answerIndex = 0;
       else if (answerText.includes('B')) answerIndex = 1;
@@ -590,7 +672,7 @@ async function runRealMMLU250() {
       if ((i + 1) % 25 === 0) {
         console.log(`⏳ Progress: ${progress}% (${i + 1}/250)`);
       }
-    } catch (err) {
+    } catch {
       results.push({
         subject: q.subject,
         correctAnswer: q.answer,
@@ -638,7 +720,7 @@ async function runRealMMLU250() {
           timestamp: new Date().toISOString(),
         },
       });
-    } catch (err) {
+    } catch {
       MollyLogger.warn('Failed to record in Braintrust', 'mmlu-real-250');
     }
   }
@@ -658,11 +740,17 @@ async function runRealMMLU250() {
 if (import.meta.url === `file://${process.argv[1]}`) {
   runRealMMLU250()
     .then((results) => {
-      console.log('\n═══════════════════════════════════════════════════════════');
+      console.log(
+        '\n═══════════════════════════════════════════════════════════'
+      );
       console.log('         REAL MMLU - 250 OFFICIAL QUESTIONS');
-      console.log('═══════════════════════════════════════════════════════════\n');
+      console.log(
+        '═══════════════════════════════════════════════════════════\n'
+      );
 
-      console.log(`Overall Accuracy: ${results.accuracy}% (${results.correctCount}/250)\n`);
+      console.log(
+        `Overall Accuracy: ${results.accuracy}% (${results.correctCount}/250)\n`
+      );
 
       console.log('INDUSTRY BENCHMARKS:');
       console.log('  GPT-4:          86.4%');
@@ -673,8 +761,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         .sort((a, b) => b[1].total - a[1].total)
         .forEach(([subject, stats]) => {
           const pct = ((stats.correct / stats.total) * 100).toFixed(0);
-          const emoji = stats.correct === stats.total ? '✓' : stats.correct >= stats.total * 0.75 ? '~' : '✗';
-          console.log(`  ${emoji} ${subject.padEnd(30)}: ${stats.correct}/${stats.total} (${pct}%)`);
+          const emoji =
+            stats.correct === stats.total
+              ? '✓'
+              : stats.correct >= stats.total * 0.75
+                ? '~'
+                : '✗';
+          console.log(
+            `  ${emoji} ${subject.padEnd(30)}: ${stats.correct}/${stats.total} (${pct}%)`
+          );
         });
 
       console.log('\n✅ Results recorded in Braintrust\n');

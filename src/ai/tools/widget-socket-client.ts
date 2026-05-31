@@ -10,7 +10,7 @@
  *   await client.updateState('research_status', 'loading');
  */
 
-import { createConnection, Socket } from 'net';
+import { createConnection } from 'net';
 import { MollyLogger } from '@/ai/logger';
 
 export interface WidgetCommand {
@@ -55,8 +55,11 @@ export class WidgetSocketClient {
           port: this.port,
         },
         () => {
-          MollyLogger.debug(`Connected to widget socket at ${this.host}:${this.port}`, 'widget-socket');
-          
+          MollyLogger.debug(
+            `Connected to widget socket at ${this.host}:${this.port}`,
+            'widget-socket'
+          );
+
           // Send command as JSON + newline
           const jsonCommand = JSON.stringify(command) + '\n';
           socket.write(jsonCommand, 'utf8');
@@ -80,7 +83,7 @@ export class WidgetSocketClient {
               socket.destroy();
               clearTimeout(timeoutHandle);
               resolve(response);
-            } catch (e) {
+            } catch {
               socket.destroy();
               clearTimeout(timeoutHandle);
               reject(new Error(`Invalid JSON response: ${responseLine}`));
@@ -92,7 +95,10 @@ export class WidgetSocketClient {
       // Handle errors
       socket.on('error', (err) => {
         clearTimeout(timeoutHandle);
-        MollyLogger.error(`Widget socket error: ${err.message}`, 'widget-socket');
+        MollyLogger.error(
+          `Widget socket error: ${err.message}`,
+          'widget-socket'
+        );
         reject(err);
       });
 
@@ -112,7 +118,10 @@ export class WidgetSocketClient {
   /**
    * Show a widget on the device
    */
-  async showWidget(widgetType: string, content: string): Promise<WidgetResponse> {
+  async showWidget(
+    widgetType: string,
+    content: string
+  ): Promise<WidgetResponse> {
     MollyLogger.info(`Showing widget: ${widgetType}`, 'widget-socket');
 
     return this.sendCommand({
@@ -136,7 +145,10 @@ export class WidgetSocketClient {
    * Update widget state (e.g., progress, status message)
    */
   async updateState(key: string, value: string): Promise<WidgetResponse> {
-    MollyLogger.debug(`Updating widget state: ${key}=${value}`, 'widget-socket');
+    MollyLogger.debug(
+      `Updating widget state: ${key}=${value}`,
+      'widget-socket'
+    );
 
     return this.sendCommand({
       action: 'update_state',

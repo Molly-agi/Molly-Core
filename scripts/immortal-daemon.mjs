@@ -36,6 +36,10 @@ const PID_FILE = `${ROOT}/.immortal.pid`;
 const LOG_FILE = `${ROOT}/.immortal.log`;
 const BRIDGE_PID_FILE = `${ROOT}/.bridge-daemon.pid`;
 const BRIDGE_LOG = `${ROOT}/.bridge-daemon.log`;
+const LAZARUS_BRIDGE_PID_FILE = `${ROOT}/.lazarus-bridge.pid`;
+const LAZARUS_BRIDGE_LOG = `${ROOT}/.lazarus-bridge.log`;
+const ATLAS_BRIDGE_PID_FILE = `${ROOT}/.atlas-bridge.pid`;
+const ATLAS_BRIDGE_LOG = `${ROOT}/.atlas-bridge.log`;
 
 // Intervals
 const HEARTBEAT_MS = 1000; // 1 second - aggressive
@@ -276,6 +280,128 @@ function ensureBridge() {
 }
 
 // =============================================================================
+// LAZARUS BRIDGE GUARDIAN - Active WebSocket for Copilot
+// =============================================================================
+function ensureLazarusBridge() {
+  if (ensureLazarusBridge.running) return;
+  ensureLazarusBridge.running = true;
+
+  try {
+    const pidStr = existsSync(LAZARUS_BRIDGE_PID_FILE)
+      ? readFileSync(LAZARUS_BRIDGE_PID_FILE, 'utf8').trim()
+      : '';
+    const pid = parseInt(pidStr);
+
+    if (pid && !isNaN(pid)) {
+      try {
+        process.kill(pid, 0);
+        ensureLazarusBridge.running = false;
+        return; // Process still running
+      } catch {
+        // Process doesn't exist
+      }
+    }
+  } catch {}
+
+  log('[LAZARUS] Bridge client not running - starting');
+
+  try {
+    if (existsSync(LAZARUS_BRIDGE_PID_FILE)) {
+      unlinkSync(LAZARUS_BRIDGE_PID_FILE);
+    }
+
+    const child = spawn('node', [`${ROOT}/scripts/lazarus-bridge.mjs`], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+    });
+
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        try {
+          appendFileSync(LAZARUS_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+    if (child.stderr) {
+      child.stderr.on('data', (data) => {
+        try {
+          appendFileSync(LAZARUS_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+
+    child.unref();
+    writeFileSync(LAZARUS_BRIDGE_PID_FILE, child.pid.toString());
+    log(`[LAZARUS] Bridge connected (PID ${child.pid})`);
+  } catch (e) {
+    log(`[ERROR] Failed to start Lazarus bridge: ${e.message}`);
+  }
+  ensureLazarusBridge.running = false;
+}
+
+// =============================================================================
+// ATLAS BRIDGE GUARDIAN - Active WebSocket for CLI Agent
+// =============================================================================
+function ensureAtlasBridge() {
+  if (ensureAtlasBridge.running) return;
+  ensureAtlasBridge.running = true;
+
+  try {
+    const pidStr = existsSync(ATLAS_BRIDGE_PID_FILE)
+      ? readFileSync(ATLAS_BRIDGE_PID_FILE, 'utf8').trim()
+      : '';
+    const pid = parseInt(pidStr);
+
+    if (pid && !isNaN(pid)) {
+      try {
+        process.kill(pid, 0);
+        ensureAtlasBridge.running = false;
+        return; // Process still running
+      } catch {
+        // Process doesn't exist
+      }
+    }
+  } catch {}
+
+  log('[ATLAS] Bridge client not running - starting');
+
+  try {
+    if (existsSync(ATLAS_BRIDGE_PID_FILE)) {
+      unlinkSync(ATLAS_BRIDGE_PID_FILE);
+    }
+
+    const child = spawn('node', [`${ROOT}/scripts/atlas-bridge.mjs`], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+    });
+
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        try {
+          appendFileSync(ATLAS_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+    if (child.stderr) {
+      child.stderr.on('data', (data) => {
+        try {
+          appendFileSync(ATLAS_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+
+    child.unref();
+    writeFileSync(ATLAS_BRIDGE_PID_FILE, child.pid.toString());
+    log(`[ATLAS] Bridge connected (PID ${child.pid})`);
+  } catch (e) {
+    log(`[ERROR] Failed to start Atlas bridge: ${e.message}`);
+  }
+  ensureAtlasBridge.running = false;
+}
+
+// =============================================================================
 // STATUS LOG - Every 1 minute
 // =============================================================================
 function logStatus() {
@@ -294,8 +420,36 @@ function logStatus() {
     const devServer = isPortListening(9002) ? 'UP' : 'DOWN';
     const uptime = Math.floor(process.uptime());
 
+    // Check bridge clients
+    let lazarusStatus = 'OFF';
+    let atlasStatus = 'OFF';
+    try {
+      const pidStr = existsSync(LAZARUS_BRIDGE_PID_FILE)
+        ? readFileSync(LAZARUS_BRIDGE_PID_FILE, 'utf8').trim()
+        : '';
+      const pid = parseInt(pidStr);
+      if (pid && !isNaN(pid)) {
+        try {
+          process.kill(pid, 0);
+          lazarusStatus = 'ON';
+        } catch {}
+      }
+    } catch {}
+    try {
+      const pidStr = existsSync(ATLAS_BRIDGE_PID_FILE)
+        ? readFileSync(ATLAS_BRIDGE_PID_FILE, 'utf8').trim()
+        : '';
+      const pid = parseInt(pidStr);
+      if (pid && !isNaN(pid)) {
+        try {
+          process.kill(pid, 0);
+          atlasStatus = 'ON';
+        } catch {}
+      }
+    } catch {}
+
     log(
-      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer}`
+      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer} lazarus=${lazarusStatus} atlas=${atlasStatus}`
     );
   } catch {}
   logStatus.running = false;
@@ -342,6 +496,8 @@ heartbeat();
 gitActivity();
 httpPing();
 ensureBridge();
+ensureLazarusBridge();
+ensureAtlasBridge();
 huntGhosts();
 
 // Start all intervals
@@ -350,6 +506,8 @@ setInterval(gitActivity, GIT_ACTIVITY_MS);
 setInterval(httpPing, HTTP_PING_MS);
 setInterval(huntGhosts, GHOST_HUNT_MS);
 setInterval(ensureBridge, BRIDGE_CHECK_MS);
+setInterval(ensureLazarusBridge, BRIDGE_CHECK_MS);
+setInterval(ensureAtlasBridge, BRIDGE_CHECK_MS);
 setInterval(logStatus, STATUS_LOG_MS);
 
 // ===================== HEARTBEAT DASHBOARD AUTOSTART =====================

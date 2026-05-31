@@ -13,11 +13,11 @@ import { Braintrust } from 'braintrust';
  */
 export function initBraintrust() {
   const apiKey = process.env.BRAINTRUST_API_KEY;
-  
+
   if (!apiKey) {
     throw new Error(
       'BRAINTRUST_API_KEY environment variable is required\n' +
-      'Set it: export BRAINTRUST_API_KEY=your_key_here'
+        'Set it: export BRAINTRUST_API_KEY=your_key_here'
     );
   }
 
@@ -100,6 +100,7 @@ export const EVALUATION_CONFIG = {
  * Validate Braintrust connectivity
  */
 export async function validateBraintrust(client: Braintrust) {
+  void client;
   try {
     // Attempt to list projects (lightweight validation)
     console.log('✓ Braintrust connection validated');

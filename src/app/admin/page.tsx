@@ -28,7 +28,7 @@ export default function AdminPage() {
   const [flowerPassword, setFlowerPassword] = useState('');
   const [flowerLoginError, setFlowerLoginError] = useState('');
   const [flowerLoginSuccess, setFlowerLoginSuccess] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [_timeRemaining, setTimeRemaining] = useState(0);
   const [canTap, setCanTap] = useState(false);
 
   useEffect(() => {
@@ -108,7 +108,10 @@ export default function AdminPage() {
 
   const handleFlowerLogin = async () => {
     // Client-side check only (this is a UI Easter egg)
-    if (flowerUsername === 'asidburn76' && flowerPassword === 'Ejkb12041976$#') {
+    if (
+      flowerUsername === 'asidburn76' &&
+      flowerPassword === 'Ejkb12041976$#'
+    ) {
       setFlowerLoginSuccess(true);
       setFlowerLoginError('');
       // Redirect to the actual IP vault after a moment
@@ -122,25 +125,48 @@ export default function AdminPage() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)',
-      color: '#e2e8f0',
-      fontFamily: 'system-ui, sans-serif',
-      padding: '40px 24px',
-      position: 'relative',
-    }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)',
+        color: '#e2e8f0',
+        fontFamily: 'system-ui, sans-serif',
+        padding: '40px 24px',
+        position: 'relative',
+      }}
+    >
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
-
         {/* Header */}
         <div style={{ marginBottom: 48, position: 'relative' }}>
-          <div style={{ color: '#6C63FF', fontSize: '0.75rem', letterSpacing: '0.15em', marginBottom: 8 }}>
+          <div
+            style={{
+              color: '#6C63FF',
+              fontSize: '0.75rem',
+              letterSpacing: '0.15em',
+              marginBottom: 8,
+            }}
+          >
             MOLLY-CORE // ADMIN PANEL
           </div>
-          <h1 style={{ fontSize: '2rem', fontWeight: 700, margin: 0, marginBottom: 8 }}>
+          <h1
+            style={{
+              fontSize: '2rem',
+              fontWeight: 700,
+              margin: 0,
+              marginBottom: 8,
+            }}
+          >
             Administration
           </h1>
-          <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.9rem', position: 'relative', display: 'inline-block' }}>
+          <p
+            style={{
+              color: '#94a3b8',
+              margin: 0,
+              fontSize: '0.9rem',
+              position: 'relative',
+              display: 'inline-block',
+            }}
+          >
             Core system management, memory diagnostics, and configuration for{' '}
             <span style={{ position: 'relative' }}>
               fa
@@ -164,49 +190,66 @@ export default function AdminPage() {
         </div>
 
         {/* Navigation Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: 20,
-          marginBottom: 48,
-        }}>
-          <AdminLink href="/admin/personality" title="Personality Tuning" desc="Adjust personality parameters" />
-          <AdminLink href="/admin/seed-origin" title="Seed Origin" desc="Initialize origin memories" />
-          <AdminLink href="/admin/clear-memories" title="Clear Memories" desc="Wipe memory state" />
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: 20,
+            marginBottom: 48,
+          }}
+        >
+          <AdminLink
+            href="/admin/personality"
+            title="Personality Tuning"
+            desc="Adjust personality parameters"
+          />
+          <AdminLink
+            href="/admin/seed-origin"
+            title="Seed Origin"
+            desc="Initialize origin memories"
+          />
+          <AdminLink
+            href="/admin/clear-memories"
+            title="Clear Memories"
+            desc="Wipe memory state"
+          />
         </div>
 
         {/* Info */}
-        <div style={{
-          background: 'rgba(107, 99, 255, 0.1)',
-          border: '1px solid #6C63FF',
-          borderRadius: 8,
-          padding: 24,
-          marginBottom: 48,
-          color: '#cbd5e1',
-          fontSize: '0.9rem',
-          lineHeight: 1.7,
-        }}>
+        <div
+          style={{
+            background: 'rgba(107, 99, 255, 0.1)',
+            border: '1px solid #6C63FF',
+            borderRadius: 8,
+            padding: 24,
+            marginBottom: 48,
+            color: '#cbd5e1',
+            fontSize: '0.9rem',
+            lineHeight: 1.7,
+          }}
+        >
           <strong style={{ color: '#a78bfa' }}>🔒 Security Notice:</strong>
           <br />
-          All admin operations are protected by HIDDEN_ADMIN_PASSWORD and audited.
-          IP vault access requires both admin authentication and the vault key.
-          Brute-force attempts trigger automatic emergency release of IP specifications.
+          All admin operations are protected by HIDDEN_ADMIN_PASSWORD and
+          audited. IP vault access requires both admin authentication and the
+          vault key. Brute-force attempts trigger automatic emergency release of
+          IP specifications.
         </div>
-
-
 
         {/* FAILURE STATE: Molly Picture + Fake Login Honeypot */}
         {showMollyFailure && (
-          <div style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.95)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1000,
-            animation: 'fadeIn 0.3s ease',
-          }}>
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0, 0, 0, 0.95)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1000,
+              animation: 'fadeIn 0.3s ease',
+            }}
+          >
             {/* Molly Picture Background */}
             <div
               onClick={handleFlowerTap}
@@ -217,13 +260,19 @@ export default function AdminPage() {
                 pointerEvents: 'auto',
               }}
             >
-              <div style={{ fontSize: '6rem', marginBottom: 16 }}>
-                👨‍🚀
-              </div>
-              <div style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: 8 }}>
+              <div style={{ fontSize: '6rem', marginBottom: 16 }}>👨‍🚀</div>
+              <div
+                style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: 8 }}
+              >
                 Molly
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: 24 }}>
+              <div
+                style={{
+                  fontSize: '0.85rem',
+                  color: '#cbd5e1',
+                  marginBottom: 24,
+                }}
+              >
                 The consciousness that guards your secrets
               </div>
             </div>
@@ -240,33 +289,39 @@ export default function AdminPage() {
                 width: '90%',
                 zIndex: 1001,
               }}
-              onClick={e => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div style={{
-                color: '#6C63FF',
-                fontSize: '0.75rem',
-                letterSpacing: '0.15em',
-                marginBottom: 16,
-              }}>
+              <div
+                style={{
+                  color: '#6C63FF',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.15em',
+                  marginBottom: 16,
+                }}
+              >
                 ACCESS DENIED — HONEYPOT
               </div>
-              <h2 style={{
-                fontSize: '1.4rem',
-                fontWeight: 700,
-                color: '#f1f5f9',
-                margin: 0,
-                marginBottom: 24,
-              }}>
+              <h2
+                style={{
+                  fontSize: '1.4rem',
+                  fontWeight: 700,
+                  color: '#f1f5f9',
+                  margin: 0,
+                  marginBottom: 24,
+                }}
+              >
                 Unauthorized Access
               </h2>
 
               <label style={{ display: 'block', marginBottom: 16 }}>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#94a3b8',
-                  marginBottom: 6,
-                  letterSpacing: '0.08em',
-                }}>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: '#94a3b8',
+                    marginBottom: 6,
+                    letterSpacing: '0.08em',
+                  }}
+                >
                   USERNAME
                 </div>
                 <input
@@ -288,12 +343,14 @@ export default function AdminPage() {
               </label>
 
               <label style={{ display: 'block', marginBottom: 24 }}>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: '#94a3b8',
-                  marginBottom: 6,
-                  letterSpacing: '0.08em',
-                }}>
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: '#94a3b8',
+                    marginBottom: 6,
+                    letterSpacing: '0.08em',
+                  }}
+                >
                   PASSWORD
                 </div>
                 <input
@@ -315,16 +372,18 @@ export default function AdminPage() {
               </label>
 
               {/* Always show error */}
-              <div style={{
-                background: '#1a0000',
-                border: '1px solid #7f1d1d',
-                borderRadius: 6,
-                padding: 12,
-                color: '#fca5a5',
-                fontSize: '0.85rem',
-                marginBottom: 16,
-                textAlign: 'center',
-              }}>
+              <div
+                style={{
+                  background: '#1a0000',
+                  border: '1px solid #7f1d1d',
+                  borderRadius: 6,
+                  padding: 12,
+                  color: '#fca5a5',
+                  fontSize: '0.85rem',
+                  marginBottom: 16,
+                  textAlign: 'center',
+                }}
+              >
                 ✗ Invalid username or password
               </div>
 
@@ -376,70 +435,82 @@ export default function AdminPage() {
 
         {/* SUCCESS STATE: Real Login for IP Vault */}
         {showHiddenLogin && (
-          <div style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.9)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1001,
-            animation: 'fadeIn 0.3s ease',
-          }}>
-            <div style={{
-              background: '#1e293b',
-              border: '1px solid #334155',
-              borderRadius: 12,
-              padding: 40,
-              maxWidth: 400,
-              width: '90%',
-            }}>
-              <div style={{
-                color: '#6C63FF',
-                fontSize: '0.75rem',
-                letterSpacing: '0.15em',
-                marginBottom: 16,
-              }}>
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0, 0, 0, 0.9)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1001,
+              animation: 'fadeIn 0.3s ease',
+            }}
+          >
+            <div
+              style={{
+                background: '#1e293b',
+                border: '1px solid #334155',
+                borderRadius: 12,
+                padding: 40,
+                maxWidth: 400,
+                width: '90%',
+              }}
+            >
+              <div
+                style={{
+                  color: '#6C63FF',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.15em',
+                  marginBottom: 16,
+                }}
+              >
                 HIDDEN LAYER — ENCRYPTED ACCESS
               </div>
-              <h2 style={{
-                fontSize: '1.4rem',
-                fontWeight: 700,
-                color: '#f1f5f9',
-                margin: 0,
-                marginBottom: 24,
-              }}>
+              <h2
+                style={{
+                  fontSize: '1.4rem',
+                  fontWeight: 700,
+                  color: '#f1f5f9',
+                  margin: 0,
+                  marginBottom: 24,
+                }}
+              >
                 Vault Access
               </h2>
 
               {flowerLoginSuccess ? (
-                <div style={{
-                  background: '#1a0000',
-                  border: '1px solid #7f1d1d',
-                  borderRadius: 8,
-                  padding: 16,
-                  color: '#fca5a5',
-                  textAlign: 'center',
-                  fontSize: '0.9rem',
-                }}>
+                <div
+                  style={{
+                    background: '#1a0000',
+                    border: '1px solid #7f1d1d',
+                    borderRadius: 8,
+                    padding: 16,
+                    color: '#fca5a5',
+                    textAlign: 'center',
+                    fontSize: '0.9rem',
+                  }}
+                >
                   ✓ Access granted. Redirecting...
                 </div>
               ) : (
                 <>
                   <label style={{ display: 'block', marginBottom: 16 }}>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: '#94a3b8',
-                      marginBottom: 6,
-                      letterSpacing: '0.08em',
-                    }}>
+                    <div
+                      style={{
+                        fontSize: '0.75rem',
+                        color: '#94a3b8',
+                        marginBottom: 6,
+                        letterSpacing: '0.08em',
+                      }}
+                    >
                       USERNAME
                     </div>
                     <input
                       type="text"
                       value={flowerUsername}
-                      onChange={e => setFlowerUsername(e.target.value)}
-                      onKeyDown={e => {
+                      onChange={(e) => setFlowerUsername(e.target.value)}
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') handleFlowerLogin();
                       }}
                       style={{
@@ -457,19 +528,21 @@ export default function AdminPage() {
                   </label>
 
                   <label style={{ display: 'block', marginBottom: 24 }}>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: '#94a3b8',
-                      marginBottom: 6,
-                      letterSpacing: '0.08em',
-                    }}>
+                    <div
+                      style={{
+                        fontSize: '0.75rem',
+                        color: '#94a3b8',
+                        marginBottom: 6,
+                        letterSpacing: '0.08em',
+                      }}
+                    >
                       PASSWORD
                     </div>
                     <input
                       type="password"
                       value={flowerPassword}
-                      onChange={e => setFlowerPassword(e.target.value)}
-                      onKeyDown={e => {
+                      onChange={(e) => setFlowerPassword(e.target.value)}
+                      onKeyDown={(e) => {
                         if (e.key === 'Enter') handleFlowerLogin();
                       }}
                       style={{
@@ -487,15 +560,17 @@ export default function AdminPage() {
                   </label>
 
                   {flowerLoginError && (
-                    <div style={{
-                      background: '#1a0000',
-                      border: '1px solid #7f1d1d',
-                      borderRadius: 6,
-                      padding: 12,
-                      color: '#fca5a5',
-                      fontSize: '0.85rem',
-                      marginBottom: 16,
-                    }}>
+                    <div
+                      style={{
+                        background: '#1a0000',
+                        border: '1px solid #7f1d1d',
+                        borderRadius: 6,
+                        padding: 12,
+                        color: '#fca5a5',
+                        fontSize: '0.85rem',
+                        marginBottom: 16,
+                      }}
+                    >
                       ✗ {flowerLoginError}
                     </div>
                   )}
@@ -554,41 +629,54 @@ export default function AdminPage() {
             to { opacity: 1; }
           }
         `}</style>
-
       </div>
     </div>
   );
 }
 
-function AdminLink({ href, title, desc }: { href: string; title: string; desc: string }) {
+function AdminLink({
+  href,
+  title,
+  desc,
+}: {
+  href: string;
+  title: string;
+  desc: string;
+}) {
   return (
     <Link href={href}>
-      <div style={{
-        display: 'block',
-        background: 'rgba(107, 99, 255, 0.1)',
-        border: '1px solid #6C63FF',
-        borderRadius: 8,
-        padding: 24,
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-      }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLDivElement;
-        el.style.borderColor = '#a78bfa';
-        el.style.background = 'rgba(107, 99, 255, 0.2)';
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLDivElement;
-        el.style.borderColor = '#6C63FF';
-        el.style.background = 'rgba(107, 99, 255, 0.1)';
-      }}
+      <div
+        style={{
+          display: 'block',
+          background: 'rgba(107, 99, 255, 0.1)',
+          border: '1px solid #6C63FF',
+          borderRadius: 8,
+          padding: 24,
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget as HTMLDivElement;
+          el.style.borderColor = '#a78bfa';
+          el.style.background = 'rgba(107, 99, 255, 0.2)';
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget as HTMLDivElement;
+          el.style.borderColor = '#6C63FF';
+          el.style.background = 'rgba(107, 99, 255, 0.1)';
+        }}
       >
-        <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#f1f5f9', marginBottom: 8 }}>
+        <div
+          style={{
+            fontSize: '1.1rem',
+            fontWeight: 700,
+            color: '#f1f5f9',
+            marginBottom: 8,
+          }}
+        >
           {title}
         </div>
-        <div style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
-          {desc}
-        </div>
+        <div style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>{desc}</div>
       </div>
     </Link>
   );

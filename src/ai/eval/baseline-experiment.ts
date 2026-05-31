@@ -14,8 +14,7 @@ import { BaselineExperimentConfig, EvaluationResult } from './types';
  */
 export const BASELINE_CONFIG: BaselineExperimentConfig = {
   name: 'molly-baseline-v1',
-  description:
-    'Phase 1 baseline evaluation: Molly on MMLU-Pro (500 samples)',
+  description: 'Phase 1 baseline evaluation: Molly on MMLU-Pro (500 samples)',
 
   // Start with MMLU-Pro only
   benchmarks: ['mmlu-pro'],
@@ -48,8 +47,7 @@ export const BASELINE_CONFIG: BaselineExperimentConfig = {
 export const BASELINE_WITH_LLM_JUDGE: BaselineExperimentConfig = {
   ...BASELINE_CONFIG,
   name: 'molly-baseline-with-judge',
-  description:
-    'Phase 1 extended: MMLU-Pro with LLM-as-Judge scorer',
+  description: 'Phase 1 extended: MMLU-Pro with LLM-as-Judge scorer',
   scorers: ['multi_choice', 'llm_judge'],
   samplesPerBenchmark: 100, // Larger sample with judge
   timeout: 1200, // 20 minutes
@@ -97,10 +95,7 @@ export class BaselineResults {
       return multiChoiceResult?.passed ?? false;
     });
 
-    const totalDuration = this.results.reduce(
-      (sum, r) => sum + r.duration,
-      0
-    );
+    const totalDuration = this.results.reduce((sum, r) => sum + r.duration, 0);
 
     return {
       totalResults,
@@ -146,9 +141,7 @@ export class BaselineResults {
         output: r.modelOutput,
         expected: r.expectedOutput,
         scores: r.scorerResults,
-        passed: Object.values(r.scorerResults).every(
-          (s) => s.passed
-        ),
+        passed: Object.values(r.scorerResults).every((s) => s.passed),
         duration: r.duration,
       })),
       summary: this.getSummary(),
@@ -172,19 +165,11 @@ export class BaselineExperiment {
    * Lifecycle: Setup
    */
   async setup() {
-    console.log(
-      `\n📊 Baseline Experiment: ${this.config.name}`
-    );
+    console.log(`\n📊 Baseline Experiment: ${this.config.name}`);
     console.log(`Description: ${this.config.description}`);
-    console.log(
-      `Benchmarks: ${this.config.benchmarks.join(', ')}`
-    );
-    console.log(
-      `Scorers: ${this.config.scorers.join(', ')}`
-    );
-    console.log(
-      `Samples: ${this.config.samplesPerBenchmark} per benchmark\n`
-    );
+    console.log(`Benchmarks: ${this.config.benchmarks.join(', ')}`);
+    console.log(`Scorers: ${this.config.scorers.join(', ')}`);
+    console.log(`Samples: ${this.config.samplesPerBenchmark} per benchmark\n`);
   }
 
   /**
@@ -203,12 +188,8 @@ export class BaselineExperiment {
 
     const summary = this.results.getSummary();
     console.log('\n✅ Experiment Complete');
-    console.log(
-      `Total Results: ${summary.metrics.totalResults}`
-    );
-    console.log(
-      `Accuracy: ${(summary.metrics.avgAccuracy * 100).toFixed(1)}%`
-    );
+    console.log(`Total Results: ${summary.metrics.totalResults}`);
+    console.log(`Accuracy: ${(summary.metrics.avgAccuracy * 100).toFixed(1)}%`);
     console.log(`Duration: ${summary.duration.toFixed(1)}s`);
   }
 
@@ -229,9 +210,11 @@ export class BaselineExperiment {
   }
 }
 
-export default {
+const baselineExperimentExports = {
   BASELINE_CONFIG,
   BASELINE_WITH_LLM_JUDGE,
   BaselineResults,
   BaselineExperiment,
 };
+
+export default baselineExperimentExports;

@@ -56,8 +56,7 @@ export class SemanticDeduplicator {
       const embeddings = await Promise.all(
         texts.map(async (text) => {
           const result = await model.embedContent(text);
-          const vector =
-            result.embedding.values || [];
+          const vector = result.embedding.values || [];
 
           return {
             text,
@@ -78,22 +77,12 @@ export class SemanticDeduplicator {
   /**
    * Calculate cosine similarity between two vectors
    */
-  private cosineSimilarity(
-    a: number[],
-    b: number[]
-  ): number {
+  private cosineSimilarity(a: number[], b: number[]): number {
     if (a.length !== b.length) return 0;
 
-    const dotProduct = a.reduce(
-      (sum, val, i) => sum + val * b[i],
-      0
-    );
-    const magnitudeA = Math.sqrt(
-      a.reduce((sum, val) => sum + val * val, 0)
-    );
-    const magnitudeB = Math.sqrt(
-      b.reduce((sum, val) => sum + val * val, 0)
-    );
+    const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0);
+    const magnitudeA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0));
+    const magnitudeB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
 
     if (magnitudeA === 0 || magnitudeB === 0) return 0;
     return dotProduct / (magnitudeA * magnitudeB);
@@ -103,18 +92,13 @@ export class SemanticDeduplicator {
    * Hash text for duplicate detection
    */
   private hashText(text: string): string {
-    return crypto
-      .createHash('sha256')
-      .update(text)
-      .digest('hex');
+    return crypto.createHash('sha256').update(text).digest('hex');
   }
 
   /**
    * Identify semantic duplicates in memory collection
    */
-  async findSemanticDuplicates(
-    memories: Record<string, unknown>[]
-  ): Promise<{
+  async findSemanticDuplicates(memories: Record<string, unknown>[]): Promise<{
     clusters: Map<number, number[]>; // Map of representative index to similar indices
     similarityMatrix: number[][];
   }> {
@@ -128,8 +112,7 @@ export class SemanticDeduplicator {
     });
 
     // Generate embeddings
-    const embeddings =
-      await this.embedTexts(texts);
+    const embeddings = await this.embedTexts(texts);
 
     // Build similarity matrix
     const similarityMatrix: number[][] = [];
@@ -139,20 +122,16 @@ export class SemanticDeduplicator {
         if (i === j) {
           similarityMatrix[i][j] = 1.0;
         } else {
-          similarityMatrix[i][j] =
-            this.cosineSimilarity(
-              embeddings[i].embedding,
-              embeddings[j].embedding
-            );
+          similarityMatrix[i][j] = this.cosineSimilarity(
+            embeddings[i].embedding,
+            embeddings[j].embedding
+          );
         }
       }
     }
 
     // Identify clusters of similar memories
-    const clusters = new Map<
-      number,
-      number[]
-    >();
+    const clusters = new Map<number, number[]>();
     const assigned = new Set<number>();
 
     for (let i = 0; i < embeddings.length; i++) {
@@ -164,10 +143,7 @@ export class SemanticDeduplicator {
       for (let j = i + 1; j < embeddings.length; j++) {
         if (assigned.has(j)) continue;
 
-        if (
-          similarityMatrix[i][j] >
-          this.similarityThreshold
-        ) {
+        if (similarityMatrix[i][j] > this.similarityThreshold) {
           cluster.push(j);
           assigned.add(j);
         }
@@ -191,9 +167,7 @@ export class SemanticDeduplicator {
 
     try {
       const { clusters, similarityMatrix } =
-        await this.findSemanticDuplicates(
-          memories
-        );
+        await this.findSemanticDuplicates(memories);
 
       // Keep one representative from each cluster
       const dedupIndices = new Set<number>();
@@ -201,18 +175,13 @@ export class SemanticDeduplicator {
 
       // Keep all non-clustered memories
       for (let i = 0; i < memories.length; i++) {
-        if (!Array.from(clusters.values())
-          .flat()
-          .includes(i)) {
+        if (!Array.from(clusters.values()).flat().includes(i)) {
           dedupIndices.add(i);
         }
       }
 
       // Keep first of each cluster, mark rest as removed
-      for (const [
-        representative,
-        cluster,
-      ] of clusters.entries()) {
+      for (const [representative, cluster] of clusters.entries()) {
         dedupIndices.add(representative);
         for (const idx of cluster) {
           if (idx !== representative) {
@@ -222,12 +191,8 @@ export class SemanticDeduplicator {
       }
 
       // Extract preserved and removed memories
-      const preservedMemories: Record<
-        string,
-        unknown
-      >[] = [];
-      const removedMemoriesHashes: string[] =
-        [];
+      const preservedMemories: Record<string, unknown>[] = [];
+      const removedMemoriesHashes: string[] = [];
 
       for (let i = 0; i < memories.length; i++) {
         if (dedupIndices.has(i)) {
@@ -237,9 +202,7 @@ export class SemanticDeduplicator {
             typeof memories[i] === 'object'
               ? JSON.stringify(memories[i])
               : String(memories[i]);
-          removedMemoriesHashes.push(
-            this.hashText(memStr)
-          );
+          removedMemoriesHashes.push(this.hashText(memStr));
         }
       }
 
@@ -247,20 +210,14 @@ export class SemanticDeduplicator {
       let totalSimilarity = 0;
       let comparisons = 0;
       for (let i = 0; i < similarityMatrix.length; i++) {
-        for (
-          let j = i + 1;
-          j < similarityMatrix.length;
-          j++
-        ) {
-          totalSimilarity +=
-            similarityMatrix[i][j];
+        for (let j = i + 1; j < similarityMatrix.length; j++) {
+          totalSimilarity += similarityMatrix[i][j];
           comparisons++;
         }
       }
 
       const compressionGain = (
-        ((originalCount - preservedMemories.length) /
-          originalCount) *
+        ((originalCount - preservedMemories.length) / originalCount) *
         100
       ).toFixed(2);
 
@@ -270,67 +227,44 @@ export class SemanticDeduplicator {
         removed: removedIndices.length,
         compressionGain: `${compressionGain}%`,
         preservedMemories,
-        removedMemories:
-          removedMemoriesHashes,
+        removedMemories: removedMemoriesHashes,
         metrics: {
           averageSimilarity:
-            comparisons > 0
-              ? totalSimilarity / comparisons
-              : 0,
-          clustersIdentified:
-            clusters.size,
-          redundancyThreshold:
-            this.similarityThreshold,
+            comparisons > 0 ? totalSimilarity / comparisons : 0,
+          clustersIdentified: clusters.size,
+          redundancyThreshold: this.similarityThreshold,
         },
       };
     } catch (error) {
-      throw new Error(
-        `Deduplication failed: ${(error as Error).message}`
-      );
+      throw new Error(`Deduplication failed: ${(error as Error).message}`);
     }
   }
 
   /**
    * Estimate compression potential before deduplication
    */
-  async estimateCompression(
-    memories: Record<string, unknown>[]
-  ): Promise<{
+  async estimateCompression(memories: Record<string, unknown>[]): Promise<{
     estimatedGain: string;
     confidence: string;
   }> {
     // Sample 50 memories if > 100
-    const sample =
-      memories.length > 100
-        ? memories.slice(0, 50)
-        : memories;
+    const sample = memories.length > 100 ? memories.slice(0, 50) : memories;
 
-    const { clusters } =
-      await this.findSemanticDuplicates(
-        sample
-      );
+    const { clusters } = await this.findSemanticDuplicates(sample);
 
-    const totalInClusters = Array.from(
-      clusters.values()
-    )
-      .flat().length;
+    const totalInClusters = Array.from(clusters.values()).flat().length;
     const estimatedRemovable =
-      (totalInClusters -
-        clusters.size) /
-      sample.length;
-    const estimatedGain = (
-      estimatedRemovable * 100
-    ).toFixed(1);
+      (totalInClusters - clusters.size) / sample.length;
+    const estimatedGain = (estimatedRemovable * 100).toFixed(1);
 
     return {
       estimatedGain: `${estimatedGain}%`,
       confidence:
-        sample.length ===
-        memories.length
-          ? 'HIGH'
-          : 'MEDIUM (sampled)',
+        sample.length === memories.length ? 'HIGH' : 'MEDIUM (sampled)',
     };
   }
 }
 
-export default { SemanticDeduplicator };
+const semanticDeduplicatorExports = { SemanticDeduplicator };
+
+export default semanticDeduplicatorExports;

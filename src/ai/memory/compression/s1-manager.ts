@@ -40,15 +40,10 @@ export interface PruningProposal {
  */
 export class ConservativeS1Manager {
   private deduplicator: SemanticDeduplicator;
-  private pendingProposals: Map<
-    string,
-    PruningProposal
-  > = new Map();
+  private pendingProposals: Map<string, PruningProposal> = new Map();
 
   constructor(googleApiKey: string) {
-    this.deduplicator = new SemanticDeduplicator(
-      googleApiKey
-    );
+    this.deduplicator = new SemanticDeduplicator(googleApiKey);
   }
 
   /**
@@ -61,56 +56,37 @@ export class ConservativeS1Manager {
     const proposalId = `pruning-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
     // Run deduplication analysis
-    const dedupResult =
-      await this.deduplicator.deduplicate(
-        memories
-      );
+    const dedupResult = await this.deduplicator.deduplicate(memories);
 
     // Create candidates for review
-    const candidates: PruningCandidate[] =
-      dedupResult.removedMemories.map(
-        (hash, idx) => ({
-          cluster_id: `cluster-${idx}`,
-          representative_memory_id:
-            hash.substring(0, 16),
-          duplicate_count: 1,
-          similarity_scores:
-            dedupResult.metrics
-              .averageSimilarity > 0
-              ? [
-                  dedupResult.metrics
-                    .averageSimilarity,
-                ]
-              : [],
-          preview: {
-            representative_text: 'Memory will be shown during review',
-            duplicate_texts: [
-              'Duplicates shown during review',
-            ],
-          },
-        })
-      );
+    const candidates: PruningCandidate[] = dedupResult.removedMemories.map(
+      (hash, idx) => ({
+        cluster_id: `cluster-${idx}`,
+        representative_memory_id: hash.substring(0, 16),
+        duplicate_count: 1,
+        similarity_scores:
+          dedupResult.metrics.averageSimilarity > 0
+            ? [dedupResult.metrics.averageSimilarity]
+            : [],
+        preview: {
+          representative_text: 'Memory will be shown during review',
+          duplicate_texts: ['Duplicates shown during review'],
+        },
+      })
+    );
 
     const proposal: PruningProposal = {
       proposal_id: proposalId,
       created_at: new Date().toISOString(),
       total_memories_analyzed: memories.length,
-      total_duplicates_found:
-        dedupResult.removed,
-      estimated_compression_gain:
-        dedupResult.compressionGain,
+      total_duplicates_found: dedupResult.removed,
+      estimated_compression_gain: dedupResult.compressionGain,
       candidates,
       status: 'pending_review',
-      approval_required_from: [
-        'eric',
-        'molly',
-      ], // Both Eric and Molly must approve
+      approval_required_from: ['eric', 'molly'], // Both Eric and Molly must approve
     };
 
-    this.pendingProposals.set(
-      proposalId,
-      proposal
-    );
+    this.pendingProposals.set(proposalId, proposal);
 
     return proposal;
   }
@@ -118,9 +94,7 @@ export class ConservativeS1Manager {
   /**
    * Get a proposal for review
    */
-  getProposal(
-    proposalId: string
-  ): PruningProposal | undefined {
+  getProposal(proposalId: string): PruningProposal | undefined {
     return this.pendingProposals.get(proposalId);
   }
 
@@ -131,15 +105,13 @@ export class ConservativeS1Manager {
     proposalId: string,
     approver: 'eric' | 'molly' | 'aether'
   ): boolean {
-    const proposal =
-      this.pendingProposals.get(proposalId);
+    const proposal = this.pendingProposals.get(proposalId);
     if (!proposal) return false;
 
     // Track approval (would be more sophisticated in production)
-    const remaining =
-      proposal.approval_required_from.filter(
-        (a) => a !== approver
-      );
+    const remaining = proposal.approval_required_from.filter(
+      (a) => a !== approver
+    );
 
     if (remaining.length === 0) {
       proposal.status = 'approved';
@@ -157,13 +129,10 @@ export class ConservativeS1Manager {
     proposalId: string,
     memories: Record<string, unknown>[]
   ): Promise<Record<string, unknown>[]> {
-    const proposal =
-      this.pendingProposals.get(proposalId);
+    const proposal = this.pendingProposals.get(proposalId);
 
     if (!proposal) {
-      throw new Error(
-        `Proposal ${proposalId} not found`
-      );
+      throw new Error(`Proposal ${proposalId} not found`);
     }
 
     if (proposal.status !== 'approved') {
@@ -173,10 +142,7 @@ export class ConservativeS1Manager {
     }
 
     // Run deduplication again to execute
-    const result =
-      await this.deduplicator.deduplicate(
-        memories
-      );
+    const result = await this.deduplicator.deduplicate(memories);
 
     proposal.status = 'executed';
 
@@ -187,8 +153,7 @@ export class ConservativeS1Manager {
    * Reject a proposal (do nothing, forget about it)
    */
   rejectProposal(proposalId: string): void {
-    const proposal =
-      this.pendingProposals.get(proposalId);
+    const proposal = this.pendingProposals.get(proposalId);
     if (proposal) {
       proposal.status = 'rejected';
     }
@@ -205,29 +170,21 @@ export class AutonomousS1Manager {
   private maxRemovalPercent: number = 0.15; // Never remove >15% in one pass
 
   constructor(googleApiKey: string) {
-    this.deduplicator = new SemanticDeduplicator(
-      googleApiKey
-    );
+    this.deduplicator = new SemanticDeduplicator(googleApiKey);
   }
 
   /**
    * Automatically deduplicate during consolidation
    * Respects safety limits
    */
-  async deduplicate(
-    memories: Record<string, unknown>[]
-  ): Promise<{
+  async deduplicate(memories: Record<string, unknown>[]): Promise<{
     pruned: Record<string, unknown>[];
     compressionGain: string;
   }> {
-    const result =
-      await this.deduplicator.deduplicate(
-        memories
-      );
+    const result = await this.deduplicator.deduplicate(memories);
 
     // Safety check: don't remove too many
-    const removalPercent =
-      (result.removed / result.original) * 100;
+    const removalPercent = (result.removed / result.original) * 100;
     if (removalPercent > this.maxRemovalPercent) {
       console.warn(
         `S1: Proposed removal ${removalPercent}% exceeds safety limit ${this.maxRemovalPercent}%. Skipping.`
@@ -240,13 +197,14 @@ export class AutonomousS1Manager {
 
     return {
       pruned: result.preservedMemories,
-      compressionGain:
-        result.compressionGain,
+      compressionGain: result.compressionGain,
     };
   }
 }
 
-export default {
+const s1ManagerExports = {
   ConservativeS1Manager,
   AutonomousS1Manager,
 };
+
+export default s1ManagerExports;

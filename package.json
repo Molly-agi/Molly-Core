@@ -44,6 +44,8 @@
     "watchdog": "nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
     "bridge": "node scripts/bridge-daemon.mjs",
     "bridge:listen": "node scripts/bridge-listen.mjs",
+    "lazarus:bridge": "node scripts/lazarus-bridge.mjs",
+    "atlas:bridge": "node scripts/atlas-bridge.mjs",
     "demon": "node scripts/demon-state.mjs",
     "demon:bg": "nohup node scripts/demon-state.mjs > .demon-state.log 2>&1 &",
     "molly:listen": "node scripts/molly-listener.mjs",

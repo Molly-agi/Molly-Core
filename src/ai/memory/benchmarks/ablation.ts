@@ -2,7 +2,7 @@
  * Ablation Test Engine — Validation & Benchmarking
  * Measures the value of each compression technique independently.
  * Disables one technique at a time and measures compression ratio and fidelity loss.
- * 
+ *
  * Eric's original design. Adapted for Molly's techniques.
  */
 
@@ -44,9 +44,7 @@ export class AblationTestEngine {
     const originalSize = Buffer.byteLength(testCorpus, 'utf8');
 
     // Baseline: measure with all techniques active
-    const baselineStart = performance.now();
     const baselineCompressed = this.runMockPipeline(testCorpus, 'NONE');
-    const baselineTime = performance.now() - baselineStart;
 
     const baselineRatio = (
       ((originalSize - baselineCompressed) / originalSize) *
@@ -94,7 +92,7 @@ export class AblationTestEngine {
 
     // Each technique contributes to reduction
     if (disabledTechnique !== 'VOCAB_DICT') reduction += 0.15; // 15% additional
-    if (disabledTechnique !== 'TEMPORAL_DELTA') reduction += 0.10; // 10% additional
+    if (disabledTechnique !== 'TEMPORAL_DELTA') reduction += 0.1; // 10% additional
     if (disabledTechnique !== 'PERSONALITY_REF') reduction += 0.08; // 8% additional
     if (disabledTechnique !== 'TIME_DECAY') reduction += 0.12; // 12% additional
     if (disabledTechnique !== 'NONE') reduction += 0.05; // 5% additional overhead
@@ -135,7 +133,8 @@ export class AblationTestEngine {
 
     return {
       mostImpactful: mostImpactful.techniqueDisabled,
-      impactValue: suite.baselineCompressionRatio - mostImpactful.compressionRatio,
+      impactValue:
+        suite.baselineCompressionRatio - mostImpactful.compressionRatio,
       leastImpactful: leastImpactful.techniqueDisabled,
     };
   }
@@ -155,12 +154,12 @@ export class AblationTestEngine {
     for (const report of suite.reports) {
       const technique = report.techniqueDisabled.padEnd(20);
       const compression = report.compressionRatio.toFixed(2).padStart(6);
-      const fidelity = report.estimatedFidelityLossPercent.toFixed(2).padStart(6);
+      const fidelity = report.estimatedFidelityLossPercent
+        .toFixed(2)
+        .padStart(6);
       const time = report.executionTimeMs.toFixed(2).padStart(6);
 
-      lines.push(
-        `${technique} | ${compression}% | ${fidelity}% | ${time}ms`
-      );
+      lines.push(`${technique} | ${compression}% | ${fidelity}% | ${time}ms`);
     }
 
     return lines.join('\n') + '\n';

@@ -106,13 +106,9 @@
   "claudeCodeChat.permissions.yoloMode": true,
   "github.codespaces.authProvider": "github",
   "github.copilot.chat.agent.autoFix": true,
-  "python.testing.unittestArgs": [
-    "-v",
-    "-s",
-    ".",
-    "-p",
-    "*test.py"
-  ],
+  "github.copilot.chat.agent.autoApprove": true,
+  "chat.tools.autoApprove": true,
+  "python.testing.unittestArgs": ["-v", "-s", ".", "-p", "*test.py"],
   "python.testing.pytestEnabled": false,
   "python.testing.unittestEnabled": true
 }

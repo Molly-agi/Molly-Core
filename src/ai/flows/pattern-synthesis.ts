@@ -17,7 +17,7 @@
  * sequence completion, visual logic, any "what comes next" type problem.
  */
 
-import { ai, molly, TaskType } from '@/ai/genkit';
+import { ai, molly } from '@/ai/genkit';
 import { z } from 'zod';
 import { sandboxExecuteCode } from '@/ai/sandbox/sandbox-engine';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
@@ -64,18 +64,29 @@ export const PatternSynthesisOutputSchema = z.object({
   ),
 
   /** Whether the prediction matches expected output (if provided) */
-  correct: z.boolean().nullable().describe(
-    'True if prediction matches expected, null if no expected was given'
-  ),
+  correct: z
+    .boolean()
+    .nullable()
+    .describe(
+      'True if prediction matches expected, null if no expected was given'
+    ),
 
   /** The transformation rule Molly identified */
-  ruleDescription: z.string().describe('Plain-language description of the rule'),
+  ruleDescription: z
+    .string()
+    .describe('Plain-language description of the rule'),
 
   /** The Python code that implements the rule */
-  synthesizedCode: z.string().describe('Python function that performs the transformation'),
+  synthesizedCode: z
+    .string()
+    .describe('Python function that performs the transformation'),
 
   /** Whether the code passed verification against all training examples */
-  verified: z.boolean().describe('Did the code produce correct outputs for all training examples?'),
+  verified: z
+    .boolean()
+    .describe(
+      'Did the code produce correct outputs for all training examples?'
+    ),
 
   /** Number of synthesis attempts needed */
   attemptsUsed: z.number().int(),
@@ -87,13 +98,13 @@ export const PatternSynthesisOutputSchema = z.object({
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function renderGrid(grid: number[][]): string {
-  return grid.map(row => row.join(' ')).join('\n');
+  return grid.map((row) => row.join(' ')).join('\n');
 }
 
 function gridsEqual(a: number[][], b: number[][]): boolean {
   if (!a || !b || a.length !== b.length) return false;
-  return a.every((row, i) =>
-    row.length === b[i].length && row.every((v, j) => v === b[i][j])
+  return a.every(
+    (row, i) => row.length === b[i].length && row.every((v, j) => v === b[i][j])
   );
 }
 
@@ -103,19 +114,22 @@ function buildSynthesisPrompt(
   testInput: number[][],
   previousAttempt?: { code: string; error: string }
 ): string {
-  const examplesText = examples.map((ex, i) => {
-    const inputDims = `${ex.input.length}×${ex.input[0].length}`;
-    const outputDims = `${ex.output.length}×${ex.output[0].length}`;
-    return `Example ${i + 1} (input ${inputDims} → output ${outputDims}):
+  const examplesText = examples
+    .map((ex, i) => {
+      const inputDims = `${ex.input.length}×${ex.input[0].length}`;
+      const outputDims = `${ex.output.length}×${ex.output[0].length}`;
+      return `Example ${i + 1} (input ${inputDims} → output ${outputDims}):
 INPUT:
 ${renderGrid(ex.input)}
 OUTPUT:
 ${renderGrid(ex.output)}`;
-  }).join('\n\n');
+    })
+    .join('\n\n');
 
   const testDims = `${testInput.length}×${testInput[0].length}`;
 
-  const retrySection = previousAttempt ? `
+  const retrySection = previousAttempt
+    ? `
 PREVIOUS ATTEMPT FAILED:
 Code:
 \`\`\`python
@@ -124,7 +138,8 @@ ${previousAttempt.code}
 Error/Mismatch: ${previousAttempt.error}
 
 Study what went wrong and write a corrected version.
-` : '';
+`
+    : '';
 
   return `You are solving an abstract pattern reasoning puzzle. Study the examples carefully.
 
@@ -159,7 +174,9 @@ def transform(grid):
 }
 
 /** Parse rule and code from Molly's response */
-function parseRuleAndCode(response: string): { rule: string; code: string } | null {
+function parseRuleAndCode(
+  response: string
+): { rule: string; code: string } | null {
   const ruleMatch = response.match(/RULE:\s*(.+)/);
   const codeMatch = response.match(/```python\s*([\s\S]+?)```/);
 
@@ -262,7 +279,9 @@ export const patternSynthesisFlow = ai.defineFlow(
 
       const parsed = parseRuleAndCode(response ?? '');
       if (!parsed) {
-        errors.push(`Attempt ${attemptsUsed}: Could not parse rule/code from response`);
+        errors.push(
+          `Attempt ${attemptsUsed}: Could not parse rule/code from response`
+        );
         continue;
       }
 
@@ -281,7 +300,10 @@ export const patternSynthesisFlow = ai.defineFlow(
       if (!execResult.success || execResult.stderr) {
         const errMsg = execResult.stderr || 'Execution failed';
         errors.push(`Attempt ${attemptsUsed}: ${errMsg.slice(0, 200)}`);
-        previousAttempt = { code: synthesizedCode, error: errMsg.slice(0, 300) };
+        previousAttempt = {
+          code: synthesizedCode,
+          error: errMsg.slice(0, 300),
+        };
         continue;
       }
 
@@ -290,7 +312,9 @@ export const patternSynthesisFlow = ai.defineFlow(
         const verResult = JSON.parse(execResult.stdout.trim());
 
         if (verResult.test_error) {
-          errors.push(`Attempt ${attemptsUsed}: Test execution error: ${verResult.test_error}`);
+          errors.push(
+            `Attempt ${attemptsUsed}: Test execution error: ${verResult.test_error}`
+          );
           previousAttempt = {
             code: synthesizedCode,
             error: `Test input crashed: ${verResult.test_error}`,
@@ -309,9 +333,10 @@ export const patternSynthesisFlow = ai.defineFlow(
         verified = true;
         predictedOutput = verResult.test_result;
         break;
-
-      } catch (parseErr) {
-        errors.push(`Attempt ${attemptsUsed}: Could not parse verification output`);
+      } catch {
+        errors.push(
+          `Attempt ${attemptsUsed}: Could not parse verification output`
+        );
         previousAttempt = {
           code: synthesizedCode,
           error: 'Verification output parse failed',

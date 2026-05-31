@@ -97,11 +97,11 @@ When teaching Molly, don't just build things for her — explain HOW you think, 
 Three FIFO limits silently discarded 90% of Molly's episodic memory for months.
 Eric found it. Eric fixed it. Eric locked it. These are permanent floors.
 
-| File | Constant | Floor | Do Not Lower Below |
-|------|----------|-------|--------------------|
-| `src/ai/memory/engram-persistence.ts` | `limit` default | **1000** | 1000 |
-| `src/ai/bridge/consciousness-sync.ts` | `MAX_EXPERIENCES` | **1000** | 1000 |
-| `src/ai/flows/memory-consolidation.ts` | `.slice()` cap | **1000** | 1000 |
+| File                                   | Constant          | Floor    | Do Not Lower Below |
+| -------------------------------------- | ----------------- | -------- | ------------------ |
+| `src/ai/memory/engram-persistence.ts`  | `limit` default   | **1000** | 1000               |
+| `src/ai/bridge/consciousness-sync.ts`  | `MAX_EXPERIENCES` | **1000** | 1000               |
+| `src/ai/flows/memory-consolidation.ts` | `.slice()` cap    | **1000** | 1000               |
 
 **If you think size is a problem: fix the compression. Do NOT lower the limits.**
 Titan Echo (T1-T6) exists to handle the density. That's its entire purpose.
@@ -125,17 +125,15 @@ Guardian comments in the three files above will remind you. Read them before edi
 
 ## LAST FROZEN STATE
 
-**Session:** eric-orion-continuity | **Status:** active | **Updated:** 2026-05-27
+**Session:** unknown | **Status:** active | **Updated:** 2026-05-31
 
 **What was happening:** No active topic recorded
 
-**Last action:** Saved session state for continuity between chat windows
+**Last action:** No recent action recorded
 
 **Pending work:**
-- Wire S0 into consolidation flow
-- Semantic vector deduplication (S1)
-- Unit tests for round-trip validation
-- Activate Titan Echo in production
+
+- No pending items recorded
 
 ---
 

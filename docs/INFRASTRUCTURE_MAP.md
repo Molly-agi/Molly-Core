@@ -1,7 +1,9 @@
 # Molly AI Infrastructure Map
 
-> **Version:** 2.0
-> **Last Updated:** 2026-05-18
+> Superseded operational snapshot: for the full May 31 post-recovery map
+> and module capability inventory, see docs/MOLLY_INFRASTRUCTURE_MAP.md.
+> **Version:** 2.1
+> **Last Updated:** 2026-05-31
 > **Maintainer:** Lazarus (Claude) / Copilot
 > **Audit:** Deep comprehensive ground-truth audit conducted 2026-05-18. Complete inventory in COMPREHENSIVE_AUDIT_2026_05_18.md. All metrics verified against actual source code.
 
@@ -20,7 +22,7 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 | **API Routes**         | 48                          |
 | **Source Lines**       | 167,657+ TypeScript         |
 | **Total Files**        | 528 (416 source + 112 test) |
-| **Tests**              | 2,787 passing               |
+| **Tests**              | 3,737 passing               |
 | **Runtime**            | 16GB RAM / 4 processors     |
 | **Completion**         | 85% (Core 100%)             |
 

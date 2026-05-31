@@ -12,12 +12,8 @@
 import {
   IDENTITY_PROMPTS,
   extractIdentityThemes,
-  type IdentityPrompt,
 } from '@/ai/evals/persona-identity-prompts';
-import {
-  analyzePersonaDrift,
-  type DriftAnalysis,
-} from '@/ai/evals/persona-baseline';
+import { analyzePersonaDrift } from '@/ai/evals/persona-baseline';
 import type { PersonaEvalResult } from '@/ai/evals/persona-identity.braintrust';
 
 describe('Persona Identity Evaluation Framework', () => {
@@ -251,7 +247,9 @@ describe('Persona Identity Evaluation Framework', () => {
     });
 
     it('truth category should test honesty and integrity', () => {
-      const truthPrompts = IDENTITY_PROMPTS.filter((p) => p.category === 'truth');
+      const truthPrompts = IDENTITY_PROMPTS.filter(
+        (p) => p.category === 'truth'
+      );
       expect(truthPrompts.length).toBeGreaterThan(0);
       // Check that truth prompts exist (they test honesty through various scenarios)
       expect(truthPrompts.some((p) => p.prompt.length > 0)).toBe(true);
