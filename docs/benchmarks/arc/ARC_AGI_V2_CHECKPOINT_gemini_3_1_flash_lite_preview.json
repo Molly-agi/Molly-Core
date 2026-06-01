@@ -1,0 +1,408 @@
+{
+  "timestamp": 1779646466574,
+  "model": "gemini-3.1-flash-lite-preview",
+  "version": "v2-improved",
+  "sampleSize": 50,
+  "tasks": [
+    {
+      "id": "00576224",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "6x6",
+      "expectedDims": "6x6",
+      "responseLength": 71
+    },
+    {
+      "id": "08573cc6",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "13x13",
+      "expectedDims": "13x13",
+      "responseLength": 337
+    },
+    {
+      "id": "0c786b71",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "6x8",
+      "expectedDims": "6x8",
+      "responseLength": 103
+    },
+    {
+      "id": "12997ef3",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "12x3",
+      "expectedDims": "3x12",
+      "responseLength": 79
+    },
+    {
+      "id": "15663ba9",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "15x16",
+      "expectedDims": "15x16",
+      "responseLength": 487
+    },
+    {
+      "id": "1990f7a8",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "7x7",
+      "expectedDims": "7x7",
+      "responseLength": 105
+    },
+    {
+      "id": "1d0a4b61",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "11x25",
+      "expectedDims": "25x25",
+      "responseLength": 510
+    },
+    {
+      "id": "20981f0e",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "17x13",
+      "expectedDims": "17x13",
+      "responseLength": 449
+    },
+    {
+      "id": "2697da3f",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "15x15",
+      "expectedDims": "17x17",
+      "responseLength": 457
+    },
+    {
+      "id": "2b01abd0",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "14x16",
+      "expectedDims": "14x16",
+      "responseLength": 447
+    },
+    {
+      "id": "31d5ba1a",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "3x5",
+      "expectedDims": "3x5",
+      "responseLength": 37
+    },
+    {
+      "id": "358ba94e",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "5x5",
+      "expectedDims": "5x5",
+      "responseLength": 57
+    },
+    {
+      "id": "3f23242b",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "14x19",
+      "expectedDims": "17x19",
+      "responseLength": 510
+    },
+    {
+      "id": "45737921",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "8x9",
+      "expectedDims": "8x9",
+      "responseLength": 151
+    },
+    {
+      "id": "4acc7107",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "10x10",
+      "expectedDims": "10x10",
+      "responseLength": 207
+    },
+    {
+      "id": "505fff84",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "5x7",
+      "expectedDims": "5x5",
+      "responseLength": 77
+    },
+    {
+      "id": "52fd389e",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "9x29",
+      "expectedDims": "29x29",
+      "responseLength": 510
+    },
+    {
+      "id": "58743b76",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "14x14",
+      "expectedDims": "14x14",
+      "responseLength": 399
+    },
+    {
+      "id": "5d2a5c43",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "6x4",
+      "expectedDims": "6x4",
+      "responseLength": 55
+    },
+    {
+      "id": "639f5a19",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "11x23",
+      "expectedDims": "23x23",
+      "responseLength": 510
+    },
+    {
+      "id": "67c52801",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "7x11",
+      "expectedDims": "7x11",
+      "responseLength": 161
+    },
+    {
+      "id": "6df30ad6",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "10x10",
+      "expectedDims": "10x10",
+      "responseLength": 207
+    },
+    {
+      "id": "73182012",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "4x4",
+      "expectedDims": "4x4",
+      "responseLength": 39
+    },
+    {
+      "id": "7953d61e",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "8x8",
+      "expectedDims": "8x8",
+      "responseLength": 135
+    },
+    {
+      "id": "7e02026e",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "12x12",
+      "expectedDims": "12x12",
+      "responseLength": 295
+    },
+    {
+      "id": "8597cfd7",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "2x2",
+      "expectedDims": "2x2",
+      "responseLength": 15
+    },
+    {
+      "id": "8b28cd80",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "9x9",
+      "expectedDims": "9x9",
+      "responseLength": 169
+    },
+    {
+      "id": "903d1b4a",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "16x16",
+      "expectedDims": "16x16",
+      "responseLength": 510
+    },
+    {
+      "id": "94133066",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "13x10",
+      "expectedDims": "10x13",
+      "responseLength": 267
+    },
+    {
+      "id": "981571dc",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "9x30",
+      "expectedDims": "30x30",
+      "responseLength": 510
+    },
+    {
+      "id": "9c1e755f",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "10x10",
+      "expectedDims": "10x10",
+      "responseLength": 207
+    },
+    {
+      "id": "a3f84088",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "9x30",
+      "expectedDims": "30x30",
+      "responseLength": 510
+    },
+    {
+      "id": "aa300dc3",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "10x10",
+      "expectedDims": "10x10",
+      "responseLength": 207
+    },
+    {
+      "id": "ae58858e",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "6x8",
+      "expectedDims": "6x8",
+      "responseLength": 103
+    },
+    {
+      "id": "b20f7c8b",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "12x22",
+      "expectedDims": "18x22",
+      "responseLength": 510
+    },
+    {
+      "id": "b9630600",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "9x30",
+      "expectedDims": "30x30",
+      "responseLength": 510
+    },
+    {
+      "id": "be03b35f",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "2x2",
+      "expectedDims": "2x2",
+      "responseLength": 15
+    },
+    {
+      "id": "c48954c1",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "9x9",
+      "expectedDims": "9x9",
+      "responseLength": 169
+    },
+    {
+      "id": "c8b7cc0f",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "3x3",
+      "expectedDims": "3x3",
+      "responseLength": 17
+    },
+    {
+      "id": "cd3c21df",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "2x2",
+      "expectedDims": "3x2",
+      "responseLength": 15
+    },
+    {
+      "id": "d2acf2cb",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "10x9",
+      "expectedDims": "10x9",
+      "responseLength": 187
+    },
+    {
+      "id": "d5c634a2",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "3x6",
+      "expectedDims": "3x6",
+      "responseLength": 43
+    },
+    {
+      "id": "de493100",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "10x5",
+      "expectedDims": "10x2",
+      "responseLength": 107
+    },
+    {
+      "id": "e345f17b",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "4x4",
+      "expectedDims": "4x4",
+      "responseLength": 39
+    },
+    {
+      "id": "e66aafb8",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "3x8",
+      "expectedDims": "3x3",
+      "responseLength": 55
+    },
+    {
+      "id": "e7a25a18",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "10x10",
+      "expectedDims": "10x10",
+      "responseLength": 207
+    },
+    {
+      "id": "e9b4f6fc",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "6x5",
+      "expectedDims": "6x5",
+      "responseLength": 67
+    },
+    {
+      "id": "ef26cbf6",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "11x7",
+      "expectedDims": "11x7",
+      "responseLength": 161
+    },
+    {
+      "id": "f45f5ca7",
+      "correct": true,
+      "parseSuccess": true,
+      "predictedDims": "10x10",
+      "expectedDims": "10x10",
+      "responseLength": 207
+    },
+    {
+      "id": "fafd9572",
+      "correct": false,
+      "parseSuccess": true,
+      "predictedDims": "14x12",
+      "expectedDims": "14x12",
+      "responseLength": 343
+    }
+  ]
+}

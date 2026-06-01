@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-05-24T13:28:30.303Z",
+  "sampleSize": 80,
+  "s1": {
+    "threshold": 0.92,
+    "kept": 38,
+    "removed": 42,
+    "compressionGain": 51.95,
+    "originalKB": 79.2,
+    "afterKB": 38.1
+  },
+  "t1_t4Validated": 77.62,
+  "combinedCompression": 89.25,
+  "targetCompression": 93.62,
+  "targetReached": false,
+  "semanticClusters": 11,
+  "embedTimeMs": 3196
+}

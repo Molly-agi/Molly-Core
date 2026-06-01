@@ -1,0 +1,263 @@
+{
+  "timestamp": "2026-05-25T06:56:37.250Z",
+  "source": {
+    "hardnessFile": "MOLLY_REAL_MEMORY_HARDNESS.json",
+    "totalAnalyzed": 535
+  },
+  "policyClasses": [
+    "identity_anchor",
+    "family_core",
+    "strategic_learning",
+    "routine_operational"
+  ],
+  "byClass": [
+    {
+      "className": "identity_anchor",
+      "weight": 100,
+      "count": 284,
+      "averageCompressionRatio": 44.0891,
+      "averageLatencyMs": 8.3,
+      "averageBytesSaved": 694.85
+    },
+    {
+      "className": "family_core",
+      "weight": 85,
+      "count": 208,
+      "averageCompressionRatio": 44.2144,
+      "averageLatencyMs": 23.35,
+      "averageBytesSaved": 559.06
+    },
+    {
+      "className": "strategic_learning",
+      "weight": 70,
+      "count": 0,
+      "averageCompressionRatio": 0,
+      "averageLatencyMs": 0,
+      "averageBytesSaved": 0
+    },
+    {
+      "className": "routine_operational",
+      "weight": 40,
+      "count": 43,
+      "averageCompressionRatio": 46.8132,
+      "averageLatencyMs": 6.63,
+      "averageBytesSaved": 322.88
+    }
+  ],
+  "tables": {
+    "compressionToImportance": [
+      {
+        "className": "identity_anchor",
+        "importanceWeight": 100,
+        "averageCompressionRatio": 44.0891,
+        "count": 284
+      },
+      {
+        "className": "family_core",
+        "importanceWeight": 85,
+        "averageCompressionRatio": 44.2144,
+        "count": 208
+      },
+      {
+        "className": "strategic_learning",
+        "importanceWeight": 70,
+        "averageCompressionRatio": 0,
+        "count": 0
+      },
+      {
+        "className": "routine_operational",
+        "importanceWeight": 40,
+        "averageCompressionRatio": 46.8132,
+        "count": 43
+      }
+    ],
+    "latencyVsSignificance": [
+      {
+        "className": "identity_anchor",
+        "importanceWeight": 100,
+        "averageLatencyMs": 8.3,
+        "count": 284
+      },
+      {
+        "className": "family_core",
+        "importanceWeight": 85,
+        "averageLatencyMs": 23.35,
+        "count": 208
+      },
+      {
+        "className": "strategic_learning",
+        "importanceWeight": 70,
+        "averageLatencyMs": 0,
+        "count": 0
+      },
+      {
+        "className": "routine_operational",
+        "importanceWeight": 40,
+        "averageLatencyMs": 6.63,
+        "count": 43
+      }
+    ]
+  },
+  "topIdentityAnchorsByHardness": [
+    {
+      "fileName": "experience_1778048478705_dqdgdfhv2.json",
+      "compressionRatio": 39.253996447602134,
+      "executionMs": 1,
+      "bytesSaved": 440,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778205312145_2dxpv29za.json",
+      "compressionRatio": 39.446366782006926,
+      "executionMs": 1,
+      "bytesSaved": 454,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778068673886_oegvlkzkq.json",
+      "compressionRatio": 39.4979079497908,
+      "executionMs": 1,
+      "bytesSaved": 470,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778130172872_qyh05a3u8.json",
+      "compressionRatio": 39.49870354364736,
+      "executionMs": 1,
+      "bytesSaved": 455,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778205446635_vwpf7s0r6.json",
+      "compressionRatio": 39.69155844155844,
+      "executionMs": 1,
+      "bytesSaved": 487,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778130130840_i47rt8pxg.json",
+      "compressionRatio": 39.79963570127505,
+      "executionMs": 1,
+      "bytesSaved": 435,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778466262775_avf6esjcz.json",
+      "compressionRatio": 39.87138263665595,
+      "executionMs": 1,
+      "bytesSaved": 494,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778070147021_3cwehvuyu.json",
+      "compressionRatio": 39.98161764705882,
+      "executionMs": 1,
+      "bytesSaved": 433,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778203104507_11qekblu9.json",
+      "compressionRatio": 40.106477373558114,
+      "executionMs": 1,
+      "bytesSaved": 450,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778047695661_91dvqdhmk.json",
+      "compressionRatio": 40.13663535439795,
+      "executionMs": 1,
+      "bytesSaved": 468,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778070948605_5r32f8bzn.json",
+      "compressionRatio": 40.17543859649123,
+      "executionMs": 1,
+      "bytesSaved": 456,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778047896535_wt409naka.json",
+      "compressionRatio": 40.38929440389294,
+      "executionMs": 1,
+      "bytesSaved": 496,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778048302390_vktilrm9p.json",
+      "compressionRatio": 40.40485829959513,
+      "executionMs": 6,
+      "bytesSaved": 497,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778159302376_b6r08ulav.json",
+      "compressionRatio": 40.45045045045045,
+      "executionMs": 1,
+      "bytesSaved": 447,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778048391458_wm617f2bo.json",
+      "compressionRatio": 40.47829937998229,
+      "executionMs": 1,
+      "bytesSaved": 455,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778068660437_chgpbu4ae.json",
+      "compressionRatio": 40.56224899598394,
+      "executionMs": 1,
+      "bytesSaved": 503,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778131758187_44om2sh7u.json",
+      "compressionRatio": 40.66558441558441,
+      "executionMs": 1,
+      "bytesSaved": 499,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778129544990_9yqeg25f0.json",
+      "compressionRatio": 40.67796610169492,
+      "executionMs": 5,
+      "bytesSaved": 454,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778130122104_hpoq1tcru.json",
+      "compressionRatio": 40.746753246753244,
+      "executionMs": 1,
+      "bytesSaved": 500,
+      "type": "experience",
+      "context": "conversation"
+    },
+    {
+      "fileName": "experience_1778069251934_aw5trxn78.json",
+      "compressionRatio": 40.76433121019109,
+      "executionMs": 1,
+      "bytesSaved": 446,
+      "type": "experience",
+      "context": "conversation"
+    }
+  ]
+}

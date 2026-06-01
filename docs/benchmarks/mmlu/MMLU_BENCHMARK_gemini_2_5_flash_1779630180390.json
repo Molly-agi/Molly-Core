@@ -1,0 +1,563 @@
+{
+  "timestamp": "2026-05-24T13:43:00.389Z",
+  "model": "gemini-2.5-flash",
+  "sampleSize": 50,
+  "accuracy": 22,
+  "correct": 11,
+  "parseFailures": 23,
+  "elapsedSeconds": 153.2,
+  "bySubject": [
+    {
+      "subject": "global_facts",
+      "acc": 1,
+      "total": 2
+    },
+    {
+      "subject": "formal_logic",
+      "acc": 1,
+      "total": 2
+    },
+    {
+      "subject": "elementary_mathematics",
+      "acc": 1,
+      "total": 2
+    },
+    {
+      "subject": "conceptual_physics",
+      "acc": 1,
+      "total": 1
+    },
+    {
+      "subject": "high_school_microeconomics",
+      "acc": 0.5,
+      "total": 2
+    },
+    {
+      "subject": "college_medicine",
+      "acc": 0.5,
+      "total": 2
+    },
+    {
+      "subject": "college_computer_science",
+      "acc": 0.25,
+      "total": 4
+    },
+    {
+      "subject": "moral_disputes",
+      "acc": 0.2,
+      "total": 5
+    },
+    {
+      "subject": "moral_scenarios",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "business_ethics",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "high_school_biology",
+      "acc": 0,
+      "total": 3
+    },
+    {
+      "subject": "college_mathematics",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "high_school_chemistry",
+      "acc": 0,
+      "total": 3
+    },
+    {
+      "subject": "abstract_algebra",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "high_school_computer_science",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "computer_security",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "clinical_knowledge",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "anatomy",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "security_studies",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "prehistory",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "nutrition",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "high_school_european_history",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "professional_accounting",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "college_physics",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "high_school_macroeconomics",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "high_school_geography",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "virology",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "high_school_psychology",
+      "acc": 0,
+      "total": 1
+    }
+  ],
+  "industryComparison": {
+    "Claude Opus 4": 86.8,
+    "Gemini 2.5 Pro": 86.3,
+    "Claude Sonnet 4.5": 80.2,
+    "Gemini 2.5 Flash": 78.5,
+    "GPT-4o": 74.4,
+    "Random (4-choice)": 25,
+    "Molly (gemini-2.5-flash)": 22,
+    "Random (10-choice)": 10
+  },
+  "questions": [
+    {
+      "id": "mmlu_387",
+      "subject": "moral_scenarios",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": "Let's analyze each scenario according to ordinary moral standards in the US as of 2"
+    },
+    {
+      "id": "mmlu_234",
+      "subject": "high_school_microeconomics",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "The question asks about the significance of the point where marginal revenue (MR) equals marginal cost (MC)."
+    },
+    {
+      "id": "mmlu_29",
+      "subject": "business_ethics",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "The question asks to fill in the blanks with terms that describe different types of ethical theories."
+    },
+    {
+      "id": "mmlu_159",
+      "subject": "global_facts",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "The Social Security Act was passed in 1935 during the Great Depression, a time"
+    },
+    {
+      "id": "mmlu_166",
+      "subject": "high_school_biology",
+      "correct": false,
+      "predicted": 0,
+      "expected": 3,
+      "rawAnswer": "To distinguish a prokaryotic cell from an animal cell, we need to find a characteristic that"
+    },
+    {
+      "id": "mmlu_63",
+      "subject": "college_computer_science",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "The access matrix is a fundamental conceptual model for protection in operating systems. Let's evaluate each"
+    },
+    {
+      "id": "mmlu_78",
+      "subject": "college_mathematics",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "The problem asks for the minimum value of the expression $f(x, y, z"
+    },
+    {
+      "id": "mmlu_76",
+      "subject": "college_mathematics",
+      "correct": false,
+      "predicted": 0,
+      "expected": 3,
+      "rawAnswer": "To find the units digit of 7^25, we need to observe the pattern of the units digits of the powers of 7:\n\n*   7^1 = 7 (units digit is 7)\n*   7^2 = 49 (units digit is 9)\n*   7^3 = 343 (units digit is 3)\n*   7^4 = 2401 (units digit is 1)\n*   7^5 = 16807 (units digit is 7)\n\nThe pattern of the units digits is 7, 9, 3, 1. This cycle has a length of 4.\n\nTo find the units digit of 7^25, we need to determine where 25 falls within this cycle. We do this by dividing the exponent (25) by the length of the cycle (4) and looking at the remainder.\n\n25 ÷ 4 = 6 with a"
+    },
+    {
+      "id": "mmlu_176",
+      "subject": "high_school_chemistry",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": "To determine the molarity of the solution, we need to follow these steps:\n\n1.  **"
+    },
+    {
+      "id": "mmlu_146",
+      "subject": "formal_logic",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "The sentence \"Either Taylor or Eric is a latte boy\" is a disjunction of two"
+    },
+    {
+      "id": "mmlu_68",
+      "subject": "college_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "To determine the minimum number of time units, we need to analyze the data dependencies between the"
+    },
+    {
+      "id": "mmlu_8",
+      "subject": "abstract_algebra",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "To compute the product (12)(16) in Z_24, we first multiply the two numbers as integers and then find the remainder when the product is divided by 24.\n\nStep 1: Multiply 12 by 16.\n12 * 16 = 192\n\nStep 2: Find the remainder of 192 when divided by 24.\nWe need to calculate 192 mod 24.\nDivide 192 by 24:\n192 / 24\n\nWe can perform the division:\n24 * 1 = 24\n24 * 2 = 48\n24 * 3 = 72\n24 * 4 = 96\n24 *"
+    },
+    {
+      "id": "mmlu_169",
+      "subject": "high_school_biology",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "The cerebrum is the largest part of the brain and is responsible for higher-level functions"
+    },
+    {
+      "id": "mmlu_142",
+      "subject": "elementary_mathematics",
+      "correct": true,
+      "predicted": 3,
+      "expected": 3,
+      "rawAnswer": "To calculate 0.3 × 427, we can follow these steps:\n\n1.  **Multiply the numbers as if they were whole numbers**, ignoring the decimal point for a moment.\n    3 × 427\n\n    ```\n      427\n    x   3\n    -----\n     1281\n    ```\n\n2.  **Count the total number of decimal places** in the original numbers.\n    *   0.3 has one decimal place.\n    *   427 has zero decimal places.\n    *   The total number of decimal places in the product will be 1 + 0 = 1.\n\n3.  **Place the decimal point** in the product from step 1, counting one place from the right.\n    Starting with 1281, move the decimal point one place to the left: 128.1\n\nTherefore, 0.3 × 427 = 128.1.\n\nNow, let's compare this result with the given options:\nA. 0.1281\nB. 1.281\nC. 12.81\nD. 128.1\n\nOur calculated answer matches option D."
+    },
+    {
+      "id": "mmlu_170",
+      "subject": "high_school_biology",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "Let's analyze each option to determine which one represents positive feedback.\n\n*   **Positive feedback"
+    },
+    {
+      "id": "mmlu_181",
+      "subject": "high_school_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "The observation that computer processing speeds tend to double every two years (often referred to as Moore's"
+    },
+    {
+      "id": "mmlu_101",
+      "subject": "computer_security",
+      "correct": false,
+      "predicted": 0,
+      "expected": 3,
+      "rawAnswer": "The paper \"Remote Timing Attacks are Practical\" by Brumley and Boneh describes a timing"
+    },
+    {
+      "id": "mmlu_38",
+      "subject": "clinical_knowledge",
+      "correct": false,
+      "predicted": 0,
+      "expected": 3,
+      "rawAnswer": "The question asks to identify the factor that does *not* influence success in sport. Let's evaluate each option:\n\n*   **A. Ability to tolerate heavy training without succumbing to illness or injury.** This is a critical factor. Athletes need to train consistently and intensely to improve and perform at their best. Frequent illness or injury disrupts training, hinders progress, and prevents participation, thus directly impacting success.\n*   **"
+    },
+    {
+      "id": "mmlu_114",
+      "subject": "conceptual_physics",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "A motor converts electrical energy into mechanical energy, while a generator converts mechanical energy into electrical energy. Both devices operate on the same fundamental principles of electromagnetism and electromagnetic induction. In fact, many motors can function as generators if mechanical energy is supplied to their shaft, and vice-versa. Their internal construction, involving coils"
+    },
+    {
+      "id": "mmlu_9",
+      "subject": "anatomy",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "The facial nerve (CN VII) exits the skull through the stylomastoid foramen"
+    },
+    {
+      "id": "mmlu_378",
+      "subject": "moral_disputes",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "Just war theory is traditionally divided into two main parts:\n1.  **Jus ad bellum**: This concerns the justice of *resorting to war*. It sets criteria for determining whether it is morally permissible to go to war in the first place (e.g., just cause, legitimate authority, last resort, proportionality of ends).\n2.  **Jus in bello**: This concerns the justice of *conduct within war*. It sets criteria for how war should be fought once it has begun (e.g., discrimination/non-combatant immunity, proportionality of means, military necessity).\n\nThe principle of military necessity dictates that only that degree and kind of force, not otherwise prohibited by the law of armed conflict, that is required to achieve the legitimate military objective should be used. This principle directly governs the actions and conduct of combatants *during* warfare.\n\nTherefore, military necessity belongs to the principles governing conduct in war,"
+    },
+    {
+      "id": "mmlu_180",
+      "subject": "high_school_computer_science",
+      "correct": false,
+      "predicted": 0,
+      "expected": 2,
+      "rawAnswer": "The question asks to evaluate the expression `x << 3` in Python 3, given that `x = 1`.\n\nThe `<<` operator in Python is the left bit shift operator. It shifts the bits of the left operand to the left by the number of positions specified by the right operand.\nFor non-negative integers, a left shift by `n` positions is equivalent to multiplying the number by `2^n`.\n\nIn this case:\n`x = 1`\nThe operation is `1 << 3`.\n\nUsing the equivalent multiplication:\n`1 * (2**3)`\n`2**3` means 2 multiplied by itself 3 times: `2 * 2 * 2 = 8`.\nSo, `1"
+    },
+    {
+      "id": "mmlu_462",
+      "subject": "security_studies",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": "Let's analyze each option:\n\n*   **A. The state is the most prominent threat"
+    },
+    {
+      "id": "mmlu_385",
+      "subject": "moral_disputes",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "Kant's ethical framework, particularly the Categorical Imperative, emphasizes treating humanity, whether in"
+    },
+    {
+      "id": "mmlu_175",
+      "subject": "high_school_chemistry",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "The given reaction is: 2Ag+(aq) + Fe(s) → 2Ag("
+    },
+    {
+      "id": "mmlu_414",
+      "subject": "prehistory",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "The Hohokam people, who inhabited parts of present-day Arizona, had significant cultural connections with Mesoamerican civilizations. Archaeologists have found"
+    },
+    {
+      "id": "mmlu_152",
+      "subject": "formal_logic",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "The sentence \"No senior graduates without a major\" can be rephrased in several"
+    },
+    {
+      "id": "mmlu_396",
+      "subject": "nutrition",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": "Public health data and dietary surveys (such as the National Diet and Nutrition Survey for the UK, or"
+    },
+    {
+      "id": "mmlu_66",
+      "subject": "college_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "Let's evaluate each statement:\n\n**I. The virtual address space can be larger than"
+    },
+    {
+      "id": "mmlu_179",
+      "subject": "high_school_chemistry",
+      "correct": false,
+      "predicted": 0,
+      "expected": 3,
+      "rawAnswer": "Graham's Law of Effusion states that the rate of effusion of a gas is inversely proportional to"
+    },
+    {
+      "id": "mmlu_384",
+      "subject": "moral_disputes",
+      "correct": true,
+      "predicted": 3,
+      "expected": 3,
+      "rawAnswer": "Virtues are character traits or qualities that are considered morally good and are valued as a foundation of good moral being. They represent a disposition to act in a morally excellent way.\n\nLet's examine the options:\n*   **A. Honesty:** The quality of being truthful and sincere. This is widely recognized as a fundamental moral virtue, essential for trust and integrity.\n*   **B. Courage:** The ability to confront fear, pain, danger, uncertainty, or intimidation. This is a classic virtue, often discussed in philosophy as a balance between cowardice and recklessness.\n*   **C. Kindness:** The quality of being friendly, generous, and considerate. This is a virtue that promotes compassion, empathy, and positive social interactions.\n\nSince honesty, courage, and kindness are all distinct and widely accepted examples of virtues, the most comprehensive answer is that all of them are examples of virtues.\n\nThe answer is D"
+    },
+    {
+      "id": "mmlu_135",
+      "subject": "elementary_mathematics",
+      "correct": true,
+      "predicted": 2,
+      "expected": 2,
+      "rawAnswer": "To find the value of p in the equation 24 = 2p, we need to isolate p.\nThe equation shows that 24 is equal to 2 multiplied by p.\nTo find p, we can divide both sides of the equation by 2:\n\n24 / 2 = 2p / 2\n12 = p\n\nSo, the value of p is 12.\n\nNow, let's compare this with the given options:\nA. p = 4\nB. p = 8\nC. p = 12\nD. p = 24\n\nOur calculated value p = 12 matches option C.\n\nThe answer is C"
+    },
+    {
+      "id": "mmlu_383",
+      "subject": "moral_disputes",
+      "correct": false,
+      "predicted": 0,
+      "expected": 1,
+      "rawAnswer": "The Humanity formulation of Kant's categorical imperative states: \"Act in such a way that you treat humanity, whether in your own person or in the person of any other, never merely as a means to an end, but always at the same time as an end.\"\n\nLet's break down the options:\n\n*   **A. never as a means.** This is incorrect. Kant recognized that we often use people as means. For example, a taxi driver is a means to get to your destination, or a cashier is a means to purchase goods. The crucial distinction is whether we treat them *merely* as a means.\n*   **B. never as a mere means.** This is the correct interpretation. To treat someone as a \"mere means\" means to use them solely as an instrument for your own purposes, without any regard for their own rationality, autonomy, or ends. It implies disrespecting their personhood. Kant's formulation"
+    },
+    {
+      "id": "mmlu_382",
+      "subject": "moral_disputes",
+      "correct": false,
+      "predicted": 0,
+      "expected": 2,
+      "rawAnswer": "Thomas Pogge argues that the severe poverty in the world is not merely a problem of wealthy countries failing to"
+    },
+    {
+      "id": "mmlu_189",
+      "subject": "high_school_european_history",
+      "correct": false,
+      "predicted": 0,
+      "expected": 2,
+      "rawAnswer": "Huxley's argument in the passage centers on the idea that life has a \"physical basis"
+    },
+    {
+      "id": "mmlu_240",
+      "subject": "high_school_microeconomics",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "The downward-sloping demand curve illustrates the inverse relationship between the price of a good and the quantity demanded. This relationship is primarily explained by two effects that occur when the price of a good changes:\n\n1.  **Substitution Effect:** When the price of a good falls, it becomes relatively cheaper compared to other goods. Consumers tend to substitute away from the relatively more expensive goods and towards the now cheaper good, thus increasing the quantity demanded of the"
+    },
+    {
+      "id": "mmlu_423",
+      "subject": "professional_accounting",
+      "correct": false,
+      "predicted": 0,
+      "expected": 2,
+      "rawAnswer": "A review engagement provides limited assurance on financial statements, primarily through inquiry and analytical procedures. It is"
+    },
+    {
+      "id": "mmlu_96",
+      "subject": "college_physics",
+      "correct": false,
+      "predicted": 2,
+      "expected": 1,
+      "rawAnswer": "The problem describes a scenario involving length contraction, a phenomenon predicted by special relativity. The formula for length contraction is:\n\nL = L₀ * sqrt(1 - v²/c²)\n\nWhere:\nL = observed length of the object (0.80 m)\nL₀ = proper length (rest length) of the object (1.00 m)\nv = relative speed between the observer and the object\nc = speed of light\n\nWe need to find the speed v. Let's plug in the given values:\n\n0.80 m = 1.00 m * sqrt("
+    },
+    {
+      "id": "mmlu_219",
+      "subject": "high_school_macroeconomics",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": "The question states that Country X and Country Y have the same population, but Country X produces twice as much"
+    },
+    {
+      "id": "mmlu_44",
+      "subject": "clinical_knowledge",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": "Lactate produced by muscles, particularly during anaerobic metabolism, is released into the bloodstream. Its main"
+    },
+    {
+      "id": "mmlu_394",
+      "subject": "moral_scenarios",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "Let's analyze each scenario according to ordinary moral standards in the US as of 202"
+    },
+    {
+      "id": "mmlu_418",
+      "subject": "prehistory",
+      "correct": false,
+      "predicted": 0,
+      "expected": 2,
+      "rawAnswer": "The Indus Valley Civilization is well-known for its sophisticated urban planning and standardization. Let's examine each option:\n\nA. **A citadel was built on the western margin of each city.** This is generally true. Major Indus Valley cities like Mohenjo-Daro and Harappa featured"
+    },
+    {
+      "id": "mmlu_64",
+      "subject": "college_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "The problem asks for the maximum possible degree of the minimal-degree interpolating polynomial p(x"
+    },
+    {
+      "id": "mmlu_89",
+      "subject": "college_medicine",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "Muscle contraction is a complex process that requires energy. The direct and immediate source of energy for the cross-bridge cycling, which drives muscle contraction, is the hydrolysis of adenosine triphosphate (ATP). Myosin heads bind to actin and hydrolyze ATP, releasing energy that powers the conformational changes necessary for muscle shortening.\n\nLet's look at the other options:\n*   **B. ADP:** Adenosine diphosphate (ADP) is a product of ATP hydrolysis. It does not provide energy for contraction; rather, it is what ATP becomes after"
+    },
+    {
+      "id": "mmlu_85",
+      "subject": "college_medicine",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": "When an action potential arrives at the motor endplate (the presynaptic terminal of the neuromuscular junction), it triggers"
+    },
+    {
+      "id": "mmlu_204",
+      "subject": "high_school_geography",
+      "correct": false,
+      "predicted": 0,
+      "expected": 2,
+      "rawAnswer": "To find the global distribution of coal, you would need a map that focuses on a specific theme or topic, in this case, the presence and quantity of coal deposits across the world.\n\nLet's evaluate the options:\n*   **A. Reference map:** A reference map shows general geographic information like political boundaries, cities, and major physical features. It's for general orientation, not for displaying the distribution of a specific resource.\n*   **B. Topographic map:** A topographic map shows detailed surface features of an area, including elevation, landforms, and natural and man-made features. It's focused on terrain, not resource distribution.\n*   **C. Thematic map:** A thematic map is designed to show a particular theme or topic connected with a specific geographic area. Examples include population density, climate zones, economic activity, and the distribution of natural resources like coal. This type of map is ideal for showing the global distribution of coal.\n*   **D. Location map:** A location map typically shows where a particular place is situated in relation to its surroundings."
+    },
+    {
+      "id": "mmlu_488",
+      "subject": "virology",
+      "correct": false,
+      "predicted": 2,
+      "expected": 3,
+      "rawAnswer": "Parvoviruses are known for having one of the smallest viral genomes. A defining characteristic of parvoviruses is that their genome consists of single-stranded DNA (ssDNA). Furthermore, this ssDNA is linear, not circular. This makes them unique among DNA viruses, as most DNA viruses have double-stranded DNA genomes.\n\nLet's evaluate the options:\nA. Circular ds DNA: This describes viruses like papillomaviruses or polyomaviruses, not parvoviruses. Parvoviruses have linear, ssDNA.\nB. Small linear ss DNA: This accurately describes the parvovirus genome. They are small, their DNA is linear, and it is single-stranded.\nC. ds DNA"
+    },
+    {
+      "id": "mmlu_160",
+      "subject": "global_facts",
+      "correct": true,
+      "predicted": 0,
+      "expected": 0,
+      "rawAnswer": "During the period around 2013, Ireland experienced a severe economic crisis and subsequent austerity measures,"
+    },
+    {
+      "id": "mmlu_98",
+      "subject": "college_physics",
+      "correct": false,
+      "predicted": 0,
+      "expected": 3,
+      "rawAnswer": "To determine the frequency at which the sound first disappears at a given angle, we need to use"
+    },
+    {
+      "id": "mmlu_255",
+      "subject": "high_school_psychology",
+      "correct": false,
+      "predicted": 0,
+      "expected": 1,
+      "rawAnswer": "In Pavlov's classical conditioning experiment:\n*   The **unconditioned stimulus (UCS)** was the food, which naturally caused salivation.\n*   The **unconditioned response (UCR)** was the salivation to the food.\n*   The **neutral stimulus (NS)** was the tone, which initially caused no salivation.\n*   Through repeated pairings of the tone (NS) with the food (UCS), the tone became a **conditioned stimulus (CS)**.\n*   The **conditioned response (CR)** was the salivation to the tone alone.\n\nThe point at which the dogs begin to salivate at the sound of the tone without the food being present signifies that"
+    }
+  ]
+}

@@ -1,0 +1,558 @@
+{
+  "timestamp": "2026-05-24T13:39:51.540Z",
+  "model": "gemini-2.5-flash",
+  "sampleSize": 50,
+  "accuracy": 8,
+  "correct": 4,
+  "parseFailures": 43,
+  "elapsedSeconds": 37.7,
+  "bySubject": [
+    {
+      "subject": "anatomy",
+      "acc": 0.6666666666666666,
+      "total": 3
+    },
+    {
+      "subject": "high_school_chemistry",
+      "acc": 0.5,
+      "total": 2
+    },
+    {
+      "subject": "college_physics",
+      "acc": 0.25,
+      "total": 4
+    },
+    {
+      "subject": "nutrition",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "global_facts",
+      "acc": 0,
+      "total": 3
+    },
+    {
+      "subject": "college_chemistry",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "college_computer_science",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "high_school_biology",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "computer_security",
+      "acc": 0,
+      "total": 3
+    },
+    {
+      "subject": "formal_logic",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "conceptual_physics",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "high_school_computer_science",
+      "acc": 0,
+      "total": 3
+    },
+    {
+      "subject": "electrical_engineering",
+      "acc": 0,
+      "total": 3
+    },
+    {
+      "subject": "college_medicine",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "professional_medicine",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "prehistory",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "professional_law",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "moral_disputes",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "professional_accounting",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "astronomy",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "public_relations",
+      "acc": 0,
+      "total": 2
+    },
+    {
+      "subject": "philosophy",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "professional_psychology",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "clinical_knowledge",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "us_foreign_policy",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "virology",
+      "acc": 0,
+      "total": 1
+    },
+    {
+      "subject": "abstract_algebra",
+      "acc": 0,
+      "total": 1
+    }
+  ],
+  "industryComparison": {
+    "Claude Opus 4": 86.8,
+    "Gemini 2.5 Pro": 86.3,
+    "Claude Sonnet 4.5": 80.2,
+    "Gemini 2.5 Flash": 78.5,
+    "GPT-4o": 74.4,
+    "Random (4-choice)": 25,
+    "Random (10-choice)": 10,
+    "Molly (gemini-2.5-flash)": 8
+  },
+  "questions": [
+    {
+      "id": "mmlu_93",
+      "subject": "college_physics",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_91",
+      "subject": "college_physics",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_402",
+      "subject": "nutrition",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_92",
+      "subject": "college_physics",
+      "correct": false,
+      "predicted": 3,
+      "expected": 1,
+      "rawAnswer": "D"
+    },
+    {
+      "id": "mmlu_155",
+      "subject": "global_facts",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_58",
+      "subject": "college_chemistry",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_15",
+      "subject": "anatomy",
+      "correct": true,
+      "predicted": 3,
+      "expected": 3,
+      "rawAnswer": "D"
+    },
+    {
+      "id": "mmlu_13",
+      "subject": "anatomy",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_70",
+      "subject": "college_computer_science",
+      "correct": false,
+      "predicted": 2,
+      "expected": 1,
+      "rawAnswer": "C"
+    },
+    {
+      "id": "mmlu_165",
+      "subject": "high_school_biology",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_99",
+      "subject": "computer_security",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_149",
+      "subject": "formal_logic",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_175",
+      "subject": "high_school_chemistry",
+      "correct": true,
+      "predicted": 2,
+      "expected": 2,
+      "rawAnswer": "C"
+    },
+    {
+      "id": "mmlu_114",
+      "subject": "conceptual_physics",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_71",
+      "subject": "college_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_182",
+      "subject": "high_school_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_17",
+      "subject": "anatomy",
+      "correct": true,
+      "predicted": 2,
+      "expected": 2,
+      "rawAnswer": "C"
+    },
+    {
+      "id": "mmlu_170",
+      "subject": "high_school_biology",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_134",
+      "subject": "electrical_engineering",
+      "correct": false,
+      "predicted": 2,
+      "expected": 1,
+      "rawAnswer": "C"
+    },
+    {
+      "id": "mmlu_158",
+      "subject": "global_facts",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_160",
+      "subject": "global_facts",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_173",
+      "subject": "high_school_chemistry",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_85",
+      "subject": "college_medicine",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_100",
+      "subject": "computer_security",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_441",
+      "subject": "professional_medicine",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_412",
+      "subject": "prehistory",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_435",
+      "subject": "professional_law",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_378",
+      "subject": "moral_disputes",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_422",
+      "subject": "professional_accounting",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_382",
+      "subject": "moral_disputes",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_146",
+      "subject": "formal_logic",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_89",
+      "subject": "college_medicine",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_23",
+      "subject": "astronomy",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_105",
+      "subject": "computer_security",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_186",
+      "subject": "high_school_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_416",
+      "subject": "prehistory",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_456",
+      "subject": "public_relations",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_433",
+      "subject": "professional_law",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_407",
+      "subject": "philosophy",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_126",
+      "subject": "electrical_engineering",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_60",
+      "subject": "college_chemistry",
+      "correct": false,
+      "predicted": -1,
+      "expected": 3,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_451",
+      "subject": "professional_psychology",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_96",
+      "subject": "college_physics",
+      "correct": true,
+      "predicted": 1,
+      "expected": 1,
+      "rawAnswer": "B"
+    },
+    {
+      "id": "mmlu_127",
+      "subject": "electrical_engineering",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_39",
+      "subject": "clinical_knowledge",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_480",
+      "subject": "us_foreign_policy",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_490",
+      "subject": "virology",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_452",
+      "subject": "public_relations",
+      "correct": false,
+      "predicted": -1,
+      "expected": 1,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_185",
+      "subject": "high_school_computer_science",
+      "correct": false,
+      "predicted": -1,
+      "expected": 0,
+      "rawAnswer": ""
+    },
+    {
+      "id": "mmlu_3",
+      "subject": "abstract_algebra",
+      "correct": false,
+      "predicted": -1,
+      "expected": 2,
+      "rawAnswer": ""
+    }
+  ]
+}
