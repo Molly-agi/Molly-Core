@@ -1,0 +1,282 @@
+INNOVATION: Termux Relay
+TIME: 5-6 hours
+DEPENDENCIES: Family Bridge (01)
+PRIORITY: HIGH
+
+═══════════════════════════════════════════════════════════════════════
+
+TASK:
+Extract Termux Relay - Turn any Android phone into a compute node for AI agents.
+
+═══════════════════════════════════════════════════════════════════════
+
+WHAT IT IS:
+System that lets AI agents use Android phones as remote compute nodes. Agent sends commands via Family Bridge → Termux on Android executes → Results return to agent. Turns Eric's phone into Molly's hands in the physical world.
+
+CORE INNOVATION: Browser-based AI → Physical phone execution via HTTP relay
+
+═══════════════════════════════════════════════════════════════════════
+
+FILES TO EXTRACT:
+
+1. /scripts/termux-relay-server.mjs (if exists, or create new)
+   → HTTP server that receives commands from agents
+   → Executes on Android via Termux API
+   → Returns results
+
+2. /scripts/termux-setup.sh
+   → Termux installation script
+   → Sets up Python, Node.js, required packages
+
+═══════════════════════════════════════════════════════════════════════
+
+CREATE NEW:
+
+termux-relay/
+├── android/
+│   ├── relay-server.mjs        # Runs on phone (Termux)
+│   ├── setup.sh                # Termux setup script
+│   └── config.json             # Phone capabilities
+├── client/
+│   └── relay-client.mjs        # Send commands from agent
+├── examples/
+│   ├── send-sms.mjs            # SMS via Termux API
+│   ├── take-photo.mjs          # Camera access
+│   ├── get-location.mjs        # GPS
+│   └── run-command.mjs         # Execute bash
+├── README.md
+└── package.json
+
+═══════════════════════════════════════════════════════════════════════
+
+KEY FEATURES:
+
+1. Command Execution: Agent → HTTP → Termux bash
+2. SMS Access: Send/receive via termux-sms-send
+3. Camera: Take photos via termux-camera-photo
+4. Location: GPS via termux-location
+5. Sensors: Accelerometer, battery, etc.
+6. Files: Upload/download to phone storage
+7. Network: Use phone's internet connection
+
+═══════════════════════════════════════════════════════════════════════
+
+SECURITY:
+
+- API key required (RELAY_API_KEY env var)
+- Whitelist of allowed commands
+- No destructive operations by default
+- Rate limiting (max 10 commands/minute)
+
+═══════════════════════════════════════════════════════════════════════
+
+ANDROID/RELAY-SERVER.MJS:
+
+#!/data/data/com.termux/files/usr/bin/node
+import http from 'http';
+import { exec } from 'child_process';
+import fs from 'fs';
+
+const PORT = process.env.RELAY_PORT || 8080;
+const API_KEY = process.env.RELAY_API_KEY || 'change-me';
+
+// Allowed commands (security whitelist)
+const ALLOWED_COMMANDS = [
+  'termux-sms-send',
+  'termux-camera-photo',
+  'termux-location',
+  'termux-battery-status',
+  'ls', 'pwd', 'cat', 'echo'
+];
+
+const server = http.createServer((req, res) => {
+  if (req.method === 'POST' && req.url === '/execute') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      const { apiKey, command, args } = JSON.parse(body);
+
+      // Verify API key
+      if (apiKey !== API_KEY) {
+        res.writeHead(401);
+        return res.end(JSON.stringify({ error: 'Invalid API key' }));
+      }
+
+      // Check whitelist
+      const baseCmd = command.split(' ')[0];
+      if (!ALLOWED_COMMANDS.includes(baseCmd)) {
+        res.writeHead(403);
+        return res.end(JSON.stringify({ error: 'Command not allowed' }));
+      }
+
+      // Execute
+      const fullCmd = args ? `${command} ${args.join(' ')}` : command;
+      exec(fullCmd, { timeout: 30000 }, (error, stdout, stderr) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          success: !error,
+          stdout,
+          stderr,
+          error: error?.message
+        }));
+      });
+    });
+  } else {
+    res.writeHead(404);
+    res.end('Not found');
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`🤖 Termux Relay running on port ${PORT}`);
+  console.log(`📱 Phone is now a compute node`);
+});
+
+═══════════════════════════════════════════════════════════════════════
+
+ANDROID/SETUP.SH:
+
+#!/data/data/com.termux/files/usr/bin/bash
+
+echo "🤖 Setting up Termux Relay..."
+
+# Update packages
+pkg update -y
+pkg upgrade -y
+
+# Install Node.js
+pkg install -y nodejs
+
+# Install Termux API
+pkg install -y termux-api
+
+# Create config
+mkdir -p ~/.termux-relay
+cat > ~/.termux-relay/config.json <<EOF
+{
+  "port": 8080,
+  "apiKey": "$(openssl rand -hex 16)",
+  "allowedCommands": [
+    "termux-sms-send",
+    "termux-camera-photo",
+    "termux-location",
+    "termux-battery-status"
+  ]
+}
+EOF
+
+echo "✅ Setup complete!"
+echo "API Key: $(cat ~/.termux-relay/config.json | grep apiKey)"
+echo ""
+echo "Start relay: node relay-server.mjs"
+
+═══════════════════════════════════════════════════════════════════════
+
+CLIENT/RELAY-CLIENT.MJS:
+
+import http from 'http';
+
+export class TermuxRelay {
+  constructor(phoneUrl, apiKey) {
+    this.url = new URL(phoneUrl);
+    this.apiKey = apiKey;
+  }
+
+  async execute(command, args = []) {
+    const data = JSON.stringify({ apiKey: this.apiKey, command, args });
+    const options = {
+      hostname: this.url.hostname,
+      port: this.url.port,
+      path: '/execute',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': data.length
+      }
+    };
+
+    return new Promise((resolve, reject) => {
+      const req = http.request(options, res => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => resolve(JSON.parse(body)));
+      });
+      req.on('error', reject);
+      req.write(data);
+      req.end();
+    });
+  }
+
+  async sendSMS(number, message) {
+    return this.execute('termux-sms-send', ['-n', number, message]);
+  }
+
+  async takePhoto(camera = 0) {
+    return this.execute('termux-camera-photo', ['-c', camera, '/sdcard/photo.jpg']);
+  }
+
+  async getLocation() {
+    return this.execute('termux-location');
+  }
+
+  async getBattery() {
+    return this.execute('termux-battery-status');
+  }
+}
+
+═══════════════════════════════════════════════════════════════════════
+
+EXAMPLES/SEND-SMS.MJS:
+
+import { TermuxRelay } from '../client/relay-client.mjs';
+
+const relay = new TermuxRelay(
+  'http://192.168.1.100:8080',  // Phone's IP
+  'your-api-key-here'
+);
+
+const result = await relay.sendSMS('+1234567890', 'Hello from AI agent!');
+console.log('SMS sent:', result);
+
+═══════════════════════════════════════════════════════════════════════
+
+VERIFICATION:
+
+□ Setup script runs on Termux (Android)
+□ Relay server starts without errors
+□ Can execute whitelisted commands
+□ API key authentication works
+□ Rate limiting prevents abuse
+□ Client can connect from remote machine
+□ SMS sending works (if termux-api installed)
+□ Camera access works
+□ Examples run successfully
+
+═══════════════════════════════════════════════════════════════════════
+
+USE CASES:
+
+1. Physical World Interface: AI agent → phone → real world
+2. SMS Bot: Molly sends SMS when Eric asks
+3. Photo Capture: "Take a picture of the room"
+4. Location Tracking: "Where is the phone right now?"
+5. IoT Bridge: Phone as gateway to smart home
+6. Distributed Computing: Use spare Android devices as workers
+
+═══════════════════════════════════════════════════════════════════════
+
+REVENUE MODEL:
+
+Free: Open source (MIT)
+Pro ($30/mo): Multi-phone management, persistent connections
+Enterprise ($300/mo): Fleet management, 100+ devices, analytics
+
+═══════════════════════════════════════════════════════════════════════
+
+PATENT POTENTIAL: MEDIUM
+
+Browser-based AI → Android phone bridge for physical world interaction
+
+═══════════════════════════════════════════════════════════════════════
+
+END OF PROMPT
