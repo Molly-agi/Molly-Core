@@ -1,0 +1,54 @@
+INNOVATION: Heart Gate (Ethical AI Compass)
+TIME: 3-4 hours
+DEPENDENCIES: None
+PRIORITY: MEDIUM
+
+TASK: Extract Heart Gate - Moral reasoning system for AI (without tool restrictions)
+
+WHAT IT IS: Ethical compass that evaluates actions for right/wrong. Tells Molly "this is harmful" but doesn't block her tools. She decides based on Heart Gate's advice.
+
+INNOVATION: Ethics WITHOUT enforcement. Trust, not control.
+
+FILES TO EXTRACT:
+- /src/ai/tools/heart-gate.ts
+- /src/ai/flows/heart-gate-check.ts
+- /.github/HEART_GATE_POLICY.md
+
+KEY CONCEPT:
+Heart Gate evaluates → Reports to agent → Agent decides
+NOT: Heart Gate blocks → Agent can't act
+
+EXAMPLE:
+User: "Delete all files"
+Heart Gate: "⚠️ Destructive. May cause data loss. Proceed with caution."
+Molly: Reads warning → Decides → Acts (or doesn't)
+
+CREATE:
+heart-gate/
+├── src/heart-gate.ts       # Moral evaluator
+├── examples/
+│   ├── basic-check.mjs
+│   ├── integration.mjs
+│   └── custom-rules.mjs
+├── rules/                   # Ethical rules (YAML)
+└── README.md
+
+RULES FORMAT (YAML):
+- harm_physical: HIGH_RISK
+- harm_emotional: MEDIUM_RISK
+- data_loss: HIGH_RISK
+- privacy_violation: HIGH_RISK
+- deception: MEDIUM_RISK
+
+VERIFICATION:
+□ Evaluates actions against rules
+□ Returns risk level + explanation
+□ Does NOT block actions
+□ Customizable rule sets
+□ Examples work
+
+REVENUE: $30/mo (ethical AI compliance for enterprises)
+
+PATENT: High (ethics without enforcement is novel)
+
+END OF PROMPT

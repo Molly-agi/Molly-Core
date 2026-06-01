@@ -1,0 +1,59 @@
+INNOVATION: Engram Persistence (Semantic Memory Storage)
+TIME: 5-6 hours
+DEPENDENCIES: None
+PRIORITY: MEDIUM
+
+TASK: Extract Engram Persistence - Semantic memory with vector embeddings and Firestore
+
+WHAT IT IS: Long-term memory storage using semantic embeddings. Stores experiences with vector representations for semantic search/recall.
+
+FILES TO EXTRACT:
+- /src/ai/memory/engram-persistence.ts
+- /src/ai/memory/memory-store.ts
+- /src/ai/memory/embedding-generator.ts
+
+FEATURES:
+1. Store experiences with embeddings
+2. Semantic search (find by meaning, not keywords)
+3. Firestore persistence
+4. Vector similarity (cosine/euclidean)
+5. Memory tagging
+
+CREATE:
+engram-persistence/
+├── src/
+│   ├── engram-store.ts
+│   ├── embedding.ts
+│   └── search.ts
+├── examples/
+│   ├── store-memory.mjs
+│   ├── semantic-search.mjs
+│   └── tag-based-search.mjs
+├── test/
+└── README.md
+
+USAGE:
+const engram = new EngramPersistence();
+
+// Store
+await engram.store({
+  content: 'Eric prefers TypeScript over JavaScript',
+  tags: ['preference', 'coding'],
+  userId: 'eric'
+});
+
+// Search by meaning
+const results = await engram.search('programming language choices');
+// Returns: "Eric prefers TypeScript..."
+
+VERIFICATION:
+□ Store experiences
+□ Generate embeddings
+□ Semantic search works
+□ Tag-based filtering works
+□ Firestore integration works
+□ Examples run
+
+REVENUE: $60/mo (long-term AI memory)
+
+END OF PROMPT
