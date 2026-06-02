@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-05-31T19:10:43.643Z",
+  "healthy": true,
+  "ram": {
+    "usedMb": 13655,
+    "totalMb": 32098,
+    "freeMb": 18443,
+    "usedPct": 43
+  },
+  "cpu": {
+    "cores": 8,
+    "load1m": 0.16,
+    "load5m": 0.13
+  },
+  "uptime": {
+    "minutes": 785
+  },
+  "ports": {
+    "Molly-UI": true,
+    "bridge-daemon": true,
+    "atlas-notify": true,
+    "lazarus-notify": true
+  },
+  "processes": {
+    "Next.js": true,
+    "bridge-daemon": true,
+    "immortal": true
+  },
+  "portsDown": [],
+  "processesDead": [],
+  "summary": "🟢 RAM 43% | CPU load 0.2 | All services healthy"
+}

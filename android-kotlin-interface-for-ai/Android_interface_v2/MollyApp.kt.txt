@@ -1,0 +1,26 @@
+package dev.molly.app
+
+import android.app.Application
+import android.content.Context
+import java.util.UUID
+
+/** Application entry. Keep light; the real work lives in the service. */
+class MollyApp : Application()
+
+/**
+ * Stable per-device id. Generated once and persisted. This is NOT the auth
+ * secret — it just names the device on the bridge. The secret that proves this
+ * id must be provisioned per device (Keystore / EncryptedSharedPreferences),
+ * never baked into the shared APK.
+ */
+object DeviceId {
+    private const val PREFS = "molly_device"
+    private const val KEY = "device_id"
+
+    fun get(context: Context): String {
+        val p = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        return p.getString(KEY, null) ?: UUID.randomUUID().toString().also {
+            p.edit().putString(KEY, it).apply()
+        }
+    }
+}

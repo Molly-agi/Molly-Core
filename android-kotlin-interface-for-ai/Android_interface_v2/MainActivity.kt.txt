@@ -1,0 +1,74 @@
+package dev.molly.app
+
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+
+/**
+ * MainActivity — the launcher entry and Molly's first "face".
+ *
+ * Responsibilities (deliberately thin):
+ *   1. Ask for the runtime permissions the spine needs (notifications, mic).
+ *   2. Start MollyService (the spine), which owns the connection + mic.
+ *   3. Host a system WebView showing Molly's existing web UI.
+ *
+ * This is the seed of the multi-WebView "faces" layer. The key difference from
+ * Chrome: YOU own this WebView's lifecycle, so it isn't discarded behind your
+ * back — and crucially, the socket and heartbeat do NOT live here. They live in
+ * the service. This view is just a window; if it reloads, nothing important is lost.
+ */
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var webView: WebView
+
+    private val permLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { /* result map — start mic capture once RECORD_AUDIO is granted */ }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requestNeededPermissions()
+        MollyService.startWith(this)
+
+        webView = WebView(this).apply {
+            settings.javaScriptEnabled = true
+            settings.domStorageEnabled = true
+            settings.mediaPlaybackRequiresUserGesture = false  // let live audio/video flow
+            webViewClient = WebViewClient()
+            // TODO: load from config, not a constant. HTTPS required for mic/camera.
+            loadUrl("https://your-codespace-url:9002")
+            // NOTE: do NOT use addJavascriptInterface unless you fully trust the
+            // page — it bridges web JS into native and is an RCE surface. When you
+            // wire the faces to the native layer, prefer a vetted message channel.
+        }
+        setContentView(webView)
+    }
+
+    private fun requestNeededPermissions() {
+        val needed = buildList {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                !granted(Manifest.permission.POST_NOTIFICATIONS)
+            ) add(Manifest.permission.POST_NOTIFICATIONS)
+            if (!granted(Manifest.permission.RECORD_AUDIO)) add(Manifest.permission.RECORD_AUDIO)
+        }
+        if (needed.isNotEmpty()) permLauncher.launch(needed.toTypedArray())
+    }
+
+    private fun granted(p: String) =
+        ContextCompat.checkSelfPermission(this, p) == PackageManager.PERMISSION_GRANTED
+
+    override fun onDestroy() {
+        // The view dies; the spine does not. That's the whole point.
+        webView.destroy()
+        super.onDestroy()
+    }
+}

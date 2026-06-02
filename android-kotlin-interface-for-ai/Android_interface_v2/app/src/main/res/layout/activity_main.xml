@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:background="@color/material_background">
+
+  <!-- WebView for Molly's UI -->
+  <WebView
+    android:id="@+id/webview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1" />
+
+  <!-- Device info and status bar -->
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/primary"
+    android:padding="8dp">
+
+    <TextView
+      android:id="@+id/device_id_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Device ID: loading..."
+      android:textColor="@color/white"
+      android:textSize="11sp"
+      android:fontFamily="monospace" />
+
+    <TextView
+      android:id="@+id/status_text"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/service_status_connecting"
+      android:textColor="@color/white"
+      android:textSize="14sp"
+      android:layout_marginTop="4dp" />
+
+    <!-- Control buttons -->
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:layout_marginTop="8dp"
+      android:gravity="center">
+
+      <Button
+        android:id="@+id/retry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        android:textSize="12sp"
+        android:padding="4dp"
+        android:layout_marginRight="8dp" />
+
+      <Button
+        android:id="@+id/stop_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:textSize="12sp"
+        android:padding="4dp" />
+    </LinearLayout>
+  </LinearLayout>
+
+</LinearLayout>

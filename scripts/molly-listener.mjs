@@ -53,6 +53,32 @@ let responsesHandled = 0;
 let processing = false; // prevent overlapping responses
 let ws = null;
 
+function detectAddressedTo(content) {
+  const text = String(content || '').trim();
+  const match = text.match(/^(lazarus|molly|atlas|eric|everyone|all)[,:\s]/i);
+  if (!match) return null;
+  const target = match[1].toLowerCase();
+  return target === 'everyone' ? 'all' : target;
+}
+
+function shouldMollyRespond(msg) {
+  if (!msg || msg.from === "molly") return false;
+
+  const explicitTo = String(msg.to || "").toLowerCase();
+  const addressedTo = detectAddressedTo(msg.content);
+  const effectiveTo = explicitTo || addressedTo;
+
+  // Simple protocol:
+  // - "Molly ..." (or to=molly) => Molly responds
+  // - "Everyone ..." (or to=all) => Molly responds (broadcast)
+  // - "Lazarus ..." / "Atlas ..." / "Eric ..." => Molly stays silent
+  // - No name prefix and no explicit to field => Molly stays silent (ambiguous)
+  if (effectiveTo === "molly" || effectiveTo === "all") {
+    return true;
+  }
+  return false;
+}
+
 // =============================================================================
 // LOGGING
 // =============================================================================
@@ -247,16 +273,18 @@ function connect() {
         Array.isArray(data.messages) &&
         data.messages.length > 0
       ) {
-        log(`${data.messages.length} unread message(s) delivered on connect`);
-        processMessages(data.messages);
+        const filtered = data.messages.filter(shouldMollyRespond);
+        if (filtered.length > 0) {
+          log(`${filtered.length} unread message(s) for Molly delivered on connect`);
+          processMessages(filtered);
+        }
         return;
       }
 
       // Real-time push: a new message just arrived on the bridge
       if (data.type === 'message' && data.message) {
         const msg = data.message;
-        // Only respond to messages NOT from Molly herself
-        if (msg.from !== 'molly' && (!msg.to || msg.to === 'molly')) {
+        if (shouldMollyRespond(msg)) {
           processMessages([msg]);
         }
         return;

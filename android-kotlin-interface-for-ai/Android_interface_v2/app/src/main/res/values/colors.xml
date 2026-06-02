@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Primary brand color -->
+  <color name="primary">#6366f1</color>
+  <color name="primary_dark">#4f46e5</color>
+  <color name="primary_light">#818cf8</color>
+
+  <!-- Secondary brand color -->
+  <color name="secondary">#10b981</color>
+  <color name="secondary_dark">#059669</color>
+  <color name="secondary_light">#34d399</color>
+
+  <!-- Neutral colors -->
+  <color name="white">#ffffff</color>
+  <color name="black">#000000</color>
+  <color name="gray_50">#f9fafb</color>
+  <color name="gray_100">#f3f4f6</color>
+  <color name="gray_200">#e5e7eb</color>
+  <color name="gray_300">#d1d5db</color>
+  <color name="gray_400">#9ca3af</color>
+  <color name="gray_500">#6b7280</color>
+  <color name="gray_600">#4b5563</color>
+  <color name="gray_700">#374151</color>
+  <color name="gray_800">#1f2937</color>
+  <color name="gray_900">#111827</color>
+
+  <!-- Status colors -->
+  <color name="success">#10b981</color>
+  <color name="warning">#f59e0b</color>
+  <color name="error">#ef4444</color>
+  <color name="info">#3b82f6</color>
+
+  <!-- Material You colors (for Android 12+) -->
+  <color name="material_on_background">#1c1b1f</color>
+  <color name="material_background">#fffbfe</color>
+</resources>

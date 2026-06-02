@@ -1,0 +1,6 @@
+nohup: ignoring input
+[tunnel] Starting Android Bridge Tunnel on port 9100
+[tunnel] Daemon: localhost:9099
+[tunnel] Next.js: localhost:9002
+[tunnel] ✓ Listening on 9100
+[tunnel] wss://codespace-url:9100

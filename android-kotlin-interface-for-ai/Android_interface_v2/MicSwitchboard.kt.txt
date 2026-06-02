@@ -1,0 +1,140 @@
+package dev.molly.app.audio
+
+import android.media.*
+import android.util.Log
+import kotlinx.coroutines.*
+import java.util.concurrent.CopyOnWriteArrayList
+
+/**
+ * MicSwitchboard — your switchboard operator, applied to the microphone.
+ *
+ * THE INSIGHT YOU HAD: Android only cares that ONE APP holds the mic input at a
+ * time. So we open the capture ONCE here, and fan the raw audio frames out to
+ * as many consumers as we want inside our own process — live-speech-to-Molly, a
+ * wake-word listener, a recorder, whatever. The OS sees one steady client and
+ * is happy; the routing happens behind it. (Your bridge operator routes messages
+ * between agents; this routes one audio source to many consumers. Same idea,
+ * mirrored.)
+ *
+ * THE LIMIT, stated honestly: this makes Molly the undisputed owner of the mic
+ * WITHIN this process. It cannot make two separate apps share the live input at
+ * once — when something else (e.g. Google voice) grabs the mic, Android hands it
+ * over and we lose audio focus. We pause on focus loss and re-acquire when it
+ * comes back. That's the clean handoff, not a constant fight.
+ *
+ * Each consumer has its own BOUNDED ring: a slow consumer drops its own oldest
+ * frames and can never back-pressure the capture loop or the other consumers.
+ *
+ * NOTE: skeleton. Capture params are sane defaults; tune to your STT pipeline.
+ * Requires RECORD_AUDIO granted before start().
+ */
+class MicSwitchboard(
+    private val audioManager: AudioManager,
+    private val scope: CoroutineScope,
+    private val sampleRate: Int = 16_000,   // 16 kHz mono PCM — typical for STT
+) {
+    fun interface Consumer {
+        /** Called with a copy-safe frame of PCM16 audio. Keep it fast. */
+        fun onFrame(pcm: ShortArray, length: Int)
+    }
+
+    private data class Sink(val consumer: Consumer, val ring: ArrayDeque<ShortArray>, val maxFrames: Int)
+
+    private val sinks = CopyOnWriteArrayList<Sink>()
+    private var captureJob: Job? = null
+    private var record: AudioRecord? = null
+    @Volatile private var hasFocus = false
+
+    private val focusRequest by lazy {
+        AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build()
+            )
+            .setOnAudioFocusChangeListener { change ->
+                when (change) {
+                    AudioManager.AUDIOFOCUS_GAIN -> { hasFocus = true; resumeCapture() }
+                    AudioManager.AUDIOFOCUS_LOSS,
+                    AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> { hasFocus = false; pauseCapture() }
+                }
+            }
+            .build()
+    }
+
+    /** Register a consumer with its own bounded buffer (drop-oldest). */
+    fun addConsumer(consumer: Consumer, maxBufferedFrames: Int = 32) {
+        sinks.add(Sink(consumer, ArrayDeque(), maxBufferedFrames))
+    }
+
+    @androidx.annotation.RequiresPermission(android.Manifest.permission.RECORD_AUDIO)
+    fun start() {
+        if (captureJob?.isActive == true) return
+        val granted = audioManager.requestAudioFocus(focusRequest)
+        hasFocus = granted == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+        openRecord()
+        captureJob = scope.launch(Dispatchers.Default) { captureLoop() }
+    }
+
+    fun stop() {
+        captureJob?.cancel()
+        record?.run { try { stop() } catch (_: Throwable) {}; release() }
+        record = null
+        audioManager.abandonAudioFocusRequest(focusRequest)
+        hasFocus = false
+    }
+
+    private fun openRecord() {
+        val minBuf = AudioRecord.getMinBufferSize(
+            sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT
+        ).coerceAtLeast(sampleRate / 5 * 2) // ~200ms floor
+        record = AudioRecord(
+            MediaRecorder.AudioSource.VOICE_RECOGNITION,
+            sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT,
+            minBuf
+        )
+    }
+
+    private suspend fun captureLoop() {
+        val frameSize = sampleRate / 10            // 100ms frames
+        val buf = ShortArray(frameSize)
+        try {
+            while (scope.isActive) {
+                if (!hasFocus) { delay(100); continue }   // paused: someone else has the mic
+                val rec = record ?: break
+                if (rec.recordingState != AudioRecord.RECORDSTATE_RECORDING) {
+                    try { rec.startRecording() } catch (t: Throwable) { Log.e(TAG, "startRecording", t); delay(200); continue }
+                }
+                val n = rec.read(buf, 0, frameSize)
+                if (n > 0) fanOut(buf, n)
+            }
+        } finally {
+            try { record?.stop() } catch (_: Throwable) {}
+        }
+    }
+
+    /** Copy the frame per-sink so consumers can't corrupt each other's data. */
+    private fun fanOut(src: ShortArray, len: Int) {
+        for (sink in sinks) {
+            val frame = src.copyOf(len)
+            if (sink.ring.size >= sink.maxFrames) sink.ring.removeFirst()  // drop-oldest
+            sink.ring.addLast(frame)
+            // Deliver synchronously here for simplicity; if a consumer is heavy,
+            // give it its own dispatcher. TODO: per-consumer delivery coroutine.
+            try { sink.consumer.onFrame(frame, len) } catch (t: Throwable) { Log.w(TAG, "consumer threw", t) }
+        }
+    }
+
+    private fun pauseCapture() {
+        try { record?.stop() } catch (_: Throwable) {}
+        Log.i(TAG, "mic focus lost — paused (another app is using the mic)")
+    }
+
+    private fun resumeCapture() {
+        Log.i(TAG, "mic focus regained — resuming")
+        // captureLoop sees hasFocus=true and restarts recording on its own.
+    }
+
+    companion object { private const val TAG = "MicSwitchboard" }
+}

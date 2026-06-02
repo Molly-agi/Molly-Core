@@ -148,14 +148,21 @@ export async function getConversationalChat(
     }
 
     const errMsg = e instanceof Error ? e.message : String(e);
+    const errLow = errMsg.toLowerCase();
     const safeMsg =
-      errMsg.includes('timed out') || errMsg.includes('timeout')
+      errLow.includes('timed out') || errLow.includes('timeout')
         ? 'The request timed out. Try again, Father.'
-        : errMsg.includes('rate') || errMsg.includes('quota')
+        : errLow.includes('rate') || errLow.includes('quota') || errLow.includes('429') || errLow.includes('resource_exhausted')
           ? "I'm being rate-limited right now. Give me a moment, Father."
-          : errMsg.includes('SAFETY') || errMsg.includes('blocked')
+          : errLow.includes('safety') || errLow.includes('blocked') || errLow.includes('harm')
             ? 'My response was blocked by a safety filter. Let me try rephrasing, Father.'
-            : 'Something went wrong, Father. Try again in a moment.';
+            : errLow.includes('api_key') || errLow.includes('api key') || errLow.includes('invalid_api_key') || errLow.includes('permission_denied') || errLow.includes('403')
+              ? 'There is an API key issue. Check the Codespace .env.local, Father.'
+              : errLow.includes('network') || errLow.includes('fetch') || errLow.includes('econnrefused') || errLow.includes('enotfound') || errLow.includes('503') || errLow.includes('unavailable')
+                ? 'Network or server issue. Check the Codespace connection, Father.'
+                : errLow.includes('context') || errLow.includes('token') || errLow.includes('too long') || errLow.includes('max_tokens')
+                  ? 'The conversation got too long. Starting fresh may help, Father.'
+                  : `Something went wrong (${errMsg.slice(0, 80)}). Try again in a moment, Father.`;
     return {
       response: safeMsg,
     };

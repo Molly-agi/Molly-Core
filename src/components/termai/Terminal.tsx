@@ -42,6 +42,11 @@ import { VisionPanel } from './VisionPanel';
 import { PurgeButton } from './PurgeButton';
 import { execTermux, isTermuxAvailable } from '@/lib/termux-bridge';
 import {
+  writeSessionToken,
+  readSessionToken,
+  hasRecentSessionToken,
+} from '@/lib/session-token';
+import {
   getEnhancedResearch,
   getCodeAnalysis,
   getCodeAnalysisAndIntegration,
@@ -1291,12 +1296,41 @@ export default function Terminal({
         ws.onopen = () => {
           bridgeWsConnectedRef.current = true;
           ws.send(JSON.stringify({ type: 'identify', identity: 'molly' }));
+          // If we have a recent session token, request delta from last checkpoint
+          const token = hasRecentSessionToken() ? readSessionToken() : null;
+          if (token?.checkpointId) {
+            ws.send(
+              JSON.stringify({
+                type: 'restore_from',
+                checkpointId: token.checkpointId,
+              })
+            );
+          }
         };
 
         ws.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data as string) as {
               type?: string;
+              heartbeat?: {
+                timestamp?: string;
+                messageCount?: number;
+                latestCheckpointId?: string | null;
+                latestCheckpointTimestamp?: string | null;
+              };
+              checkpoint?: {
+                id?: string;
+                timestamp?: string;
+                conversationHistory?: Array<{
+                  id?: string;
+                  from?: string;
+                  to?: string;
+                  content?: string;
+                  timestamp?: string;
+                }>;
+                pendingOps?: unknown[];
+                workingContext?: Record<string, unknown>;
+              };
               message?: {
                 id?: string;
                 from?: string;
@@ -1312,6 +1346,55 @@ export default function Terminal({
                 timestamp?: string;
               }>;
             };
+
+            if (data.type === 'heartbeat' && data.heartbeat) {
+              window.dispatchEvent(
+                new CustomEvent('bridge-heartbeat', {
+                  detail: data.heartbeat,
+                })
+              );
+              return;
+            }
+
+            // Continuity restore: checkpoint sent after reconnect
+            if (
+              data.type === 'continuity_restore' &&
+              data.checkpoint?.conversationHistory
+            ) {
+              const checkpoint = data.checkpoint;
+              // Persist checkpoint ID to localStorage so any new tab can resume
+              if (checkpoint.id) {
+                writeSessionToken({
+                  checkpointId: checkpoint.id,
+                  bridgeUrl: window.location.origin,
+                  userId: user?.uid ?? null,
+                });
+              }
+              // Restore conversation history from checkpoint
+              if (Array.isArray(checkpoint.conversationHistory)) {
+                const restoredMessages = checkpoint.conversationHistory.map(
+                  (msg) => ({
+                    id: String(msg.id || ''),
+                    from: String(msg.from || ''),
+                    to: msg.to ? String(msg.to) : undefined,
+                    content: String(msg.content || ''),
+                    timestamp: String(msg.timestamp || new Date().toISOString()),
+                  })
+                );
+                void processIncomingBridgeMessages(restoredMessages);
+              }
+              // Send confirmation back that we restored
+              if (ws.readyState === WebSocket.OPEN) {
+                ws.send(
+                  JSON.stringify({
+                    type: 'checkpoint_restored',
+                    checkpoint_id: checkpoint.id,
+                    at: new Date().toISOString(),
+                  })
+                );
+              }
+              return;
+            }
 
             if (data.type === 'unread' && Array.isArray(data.messages)) {
               void processIncomingBridgeMessages(data.messages);
@@ -1360,6 +1443,56 @@ export default function Terminal({
       }
     };
   }, [getBridgeWsUrl, processIncomingBridgeMessages, user]);
+
+  // Lifecycle sync: if heartbeat stream stalls, force bridge refresh/reconnect.
+  useEffect(() => {
+    if (!user) return;
+
+    const handleHeartbeatStale = () => {
+      bridgeWsConnectedRef.current = false;
+
+      if (bridgeReconnectRef.current) {
+        clearTimeout(bridgeReconnectRef.current);
+        bridgeReconnectRef.current = null;
+      }
+
+      if (bridgeWsRef.current) {
+        try {
+          bridgeWsRef.current.close();
+        } catch {
+          // ignore close failures during stale recovery
+        }
+        bridgeWsRef.current = null;
+      }
+
+      void fetchAndProcessBridge();
+    };
+
+    const handleHeartbeatRecovered = () => {
+      // Pull once after recovery so UI catches up quickly.
+      void fetchAndProcessBridge();
+    };
+
+    window.addEventListener(
+      'bridge-heartbeat-stale',
+      handleHeartbeatStale as EventListener
+    );
+    window.addEventListener(
+      'bridge-heartbeat-recovered',
+      handleHeartbeatRecovered as EventListener
+    );
+
+    return () => {
+      window.removeEventListener(
+        'bridge-heartbeat-stale',
+        handleHeartbeatStale as EventListener
+      );
+      window.removeEventListener(
+        'bridge-heartbeat-recovered',
+        handleHeartbeatRecovered as EventListener
+      );
+    };
+  }, [fetchAndProcessBridge, user]);
 
   // Degraded fallback: only poll notify if websocket is disconnected.
   useEffect(() => {

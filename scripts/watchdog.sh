@@ -50,6 +50,7 @@ PIDFILE="$ROOT/.watchdog.pid"
 HEARTBEAT="$ROOT/.codespace-heartbeat"
 LOG="$ROOT/.watchdog.log"
 BRIDGE_PIDFILE="$ROOT/.bridge-daemon.pid"
+IMMORTAL_PIDFILE="$ROOT/.immortal.pid"
 
 # ---- Logging (auto-rotates at 200 lines) ----
 log() {
@@ -204,6 +205,41 @@ ensure_bridge() {
   log "[BRIDGE] Started (PID $NEW_PID)"
 }
 
+# ---- Job 4: Immortal Daemon Guardian ----
+# Ensures the Immortal Daemon (heartbeat API on 9100) is always running.
+# PROBLEM THIS FIXES: After OOM/crash, .immortal.pid goes stale and blocks restart.
+# The immortal daemon has stale-lock detection built in — we just need to launch it.
+ensure_immortal() {
+  # Check if heartbeat API is already running via port
+  if ss -tlnp 2>/dev/null | grep -q ":9100"; then
+    return
+  fi
+
+  # Clear stale PID lock if present (process dead but file remains)
+  if [[ -f "$IMMORTAL_PIDFILE" ]]; then
+    local IPID
+    IPID=$(cat "$IMMORTAL_PIDFILE" 2>/dev/null)
+    if [[ -n "$IPID" ]] && kill -0 "$IPID" 2>/dev/null; then
+      # Validate it's actually immortal-daemon, not a recycled PID
+      local CMDLINE
+      CMDLINE=$(cat "/proc/$IPID/cmdline" 2>/dev/null | tr '\0' ' ')
+      if echo "$CMDLINE" | grep -q "immortal-daemon"; then
+        return  # Legitimately running
+      fi
+    fi
+    # Stale lock — clear it so immortal-daemon can acquire on launch
+    rm -f "$IMMORTAL_PIDFILE"
+    log "[IMMORTAL] Cleared stale lock (PID $IPID)"
+  fi
+
+  # Start the immortal daemon
+  log "[IMMORTAL] Starting Immortal Daemon (heartbeat API on port 9100)"
+  nohup node "$ROOT/scripts/immortal-daemon.mjs" > "$ROOT/.immortal.log" 2>&1 &
+  local NEW_PID=$!
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[IMMORTAL] Started (PID $NEW_PID)"
+}
+
 # ---- Cleanup on intentional stop (SIGTERM/SIGINT only, NOT SIGHUP) ----
 on_exit() {
   log "[WATCHDOG] Stopped (PID $$)"
@@ -220,8 +256,9 @@ acquire_lock
 
 log "[WATCHDOG] v2 started | PID $$ | SIGHUP immune | Ghost check 30s | Pulse 120s"
 
-# Start bridge daemon immediately on watchdog boot
+# Start bridge and immortal daemons immediately on watchdog boot
 ensure_bridge
+ensure_immortal
 
 TICK=0
 
@@ -231,9 +268,10 @@ while true; do
   # Ghost hunt every 30 seconds
   hunt_ghosts
 
-  # Bridge guardian every 2 ticks (1 minute)
+  # Bridge + immortal guardian every 2 ticks (1 minute)
   if (( TICK % 2 == 0 )); then
     ensure_bridge
+    ensure_immortal
   fi
 
   # Keep-alive pulse every 4 ticks (2 minutes)

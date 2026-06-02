@@ -1,0 +1,136 @@
+package dev.molly.app
+
+import android.app.*
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.media.AudioManager
+import android.os.Build
+import android.os.IBinder
+import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
+import dev.molly.app.audio.MicSwitchboard
+import dev.molly.app.bridge.BridgeConnection
+import dev.molly.app.bridge.OkHttpBridgeConnection
+
+/**
+ * MollyService — the spine.
+ *
+ * This is the one process that must stay alive whether or not any UI is focused.
+ * It owns:
+ *   - the outbound bridge connection (with the bounded buffers that mean it can
+ *     never choke the way the browser tab did), and
+ *   - the mic switchboard.
+ *
+ * The connection and the mic live HERE, not in a WebView, on purpose: the web
+ * faces are disposable and reloadable; the nervous system is native and can't be
+ * casually frozen or discarded by the OS.
+ *
+ * HONEST PLATFORM NOTE (Android 14): a foregroundServiceType=microphone service
+ * is only legitimate while audio is actually being captured. There is no FGS type
+ * that means "run forever for any reason" — modern Android deliberately removed
+ * that. So the always-on story holds cleanly WHILE Molly is listening. For the
+ * "connection alive but mic idle" case you have a real decision: (a) keep voice
+ * capture genuinely active (justifies the type), (b) add a second type like
+ * dataSync (which has its own time limits), or (c) accept that when fully idle
+ * the OS may reclaim the service and rely on reconnect-on-resume. Don't let an
+ * agent paper over this with a fake "keep-alive" — it's a design choice to make
+ * deliberately. Flagging it rather than hiding it.
+ */
+class MollyService : LifecycleService() {
+
+    private lateinit var bridge: BridgeConnection
+    private lateinit var mic: MicSwitchboard
+
+    override fun onCreate() {
+        super.onCreate()
+        createChannel()
+
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        mic = MicSwitchboard(audioManager, lifecycleScope)
+
+        bridge = OkHttpBridgeConnection(
+            bridgeUrl = BRIDGE_URL,                 // TODO: from config, not constant
+            deviceId = DeviceId.get(this),          // TODO: stable per-device id
+            signer = object : OkHttpBridgeConnection.AuthSigner {
+                override fun sign(payload: String): String =
+                    TODO("HMAC over payload with the per-device secret from Keystore")
+            },
+            scope = lifecycleScope,
+        )
+
+        bridge.setListener(object : BridgeConnection.Listener {
+            override fun onConnected() { updateNotification("Connected") }
+            override fun onDisconnected(reason: String) { updateNotification("Reconnecting…") }
+            override fun onMessage(json: String) {
+                // TODO: route inbound bridge messages (commands from Molly / agents).
+                //       This is where the "thumb" and overlay get their instructions.
+            }
+        })
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+        startAsForeground()
+        bridge.start()
+        // mic.start() requires RECORD_AUDIO to already be granted (MainActivity
+        // handles the prompt). Guard it:
+        // if (hasRecordAudio()) mic.start()
+        return START_STICKY  // OS may still kill us; reconnect handles that honestly.
+    }
+
+    override fun onDestroy() {
+        bridge.stop()
+        mic.stop()
+        super.onDestroy()
+    }
+
+    override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
+        return null
+    }
+
+    // ---- foreground / notification ----
+
+    private fun startAsForeground() {
+        val notif = buildNotification("Starting…")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // 34
+            startForeground(NOTIF_ID, notif, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE)
+        } else {
+            startForeground(NOTIF_ID, notif)
+        }
+    }
+
+    private fun buildNotification(text: String): Notification =
+        NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Molly")
+            .setContentText(text)
+            .setSmallIcon(android.R.drawable.ic_lock_idle_lock) // TODO: real icon
+            .setOngoing(true)
+            .build()
+
+    private fun updateNotification(text: String) {
+        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
+            .notify(NOTIF_ID, buildNotification(text))
+    }
+
+    private fun createChannel() {
+        val mgr = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val ch = NotificationChannel(CHANNEL_ID, "Molly", NotificationManager.IMPORTANCE_LOW)
+        mgr.createNotificationChannel(ch)
+    }
+
+    companion object {
+        private const val CHANNEL_ID = "molly_spine"
+        private const val NOTIF_ID = 1
+        // TODO: move to runtime config; do not ship a hardcoded prod URL.
+        private const val BRIDGE_URL = "wss://your-bridge.example/ws"
+
+        fun startWith(context: Context) {
+            val i = Intent(context, MollyService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) context.startForegroundService(i)
+            else context.startService(i)
+        }
+    }
+}

@@ -1,14 +1,62 @@
 /**
  * @fileOverview Tab Keep-Alive Hook
  *
- * Prevents browser from suspending the tab by playing inaudible audio.
- * This tricks the browser into thinking media is playing, so it won't
- * kill WebSocket connections when you switch to another tab.
+ * Prevents Android Chrome from suspending the tab and killing WebSocket.
+ * Uses two layers:
+ *
+ * Layer 1 — Screen Wake Lock API (preferred, no tricks needed):
+ *   navigator.wakeLock.request('screen') tells the browser to keep the tab
+ *   alive and the screen on. Works in Android Chrome 84+. Auto-reacquires
+ *   when tab becomes visible again (Chrome releases it on visibility-hidden).
+ *
+ * Layer 2 — Silent audio fallback (older browsers / when wake lock unavailable):
+ *   Plays inaudible 1Hz oscillator at near-zero gain. Tricks the browser into
+ *   treating the tab as active media.
  *
  * Used by: VS Code web (Codespaces) to maintain connection
  * Critical for: Android Chrome which aggressively kills background tabs
  */
 
+// ---- Wake Lock layer ----
+let wakeLock: WakeLockSentinel | null = null;
+let wakeLockActive = false;
+
+async function requestWakeLock(): Promise<boolean> {
+  if (typeof navigator === 'undefined' || !('wakeLock' in navigator)) return false;
+  try {
+    wakeLock = await (navigator as Navigator & { wakeLock: { request(type: string): Promise<WakeLockSentinel> } }).wakeLock.request('screen');
+    wakeLockActive = true;
+    wakeLock.addEventListener('release', () => {
+      wakeLockActive = false;
+      wakeLock = null;
+      console.log('[KeepAlive] Wake lock released by browser');
+    });
+    console.log('[KeepAlive] Screen Wake Lock acquired — tab cannot be suspended');
+    return true;
+  } catch (err) {
+    console.warn('[KeepAlive] Wake Lock unavailable:', err);
+    return false;
+  }
+}
+
+async function releaseWakeLock(): Promise<void> {
+  if (wakeLock) {
+    await wakeLock.release().catch(() => {});
+    wakeLock = null;
+    wakeLockActive = false;
+  }
+}
+
+// Reacquire wake lock when tab becomes visible (browser releases it on hide)
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && wakeLockActive === false && isPlaying) {
+      requestWakeLock().catch(() => {});
+    }
+  });
+}
+
+// ---- Silent audio layer (fallback) ----
 let audioContext: AudioContext | null = null;
 let oscillator: OscillatorNode | null = null;
 let gainNode: GainNode | null = null;
@@ -25,13 +73,24 @@ function isMobile(): boolean {
 }
 
 /**
- * Start the silent audio heartbeat.
- * Creates inaudible audio that keeps the tab active.
+ * Start the keep-alive system.
+ * Layer 1: Screen Wake Lock (prevents tab suspension natively).
+ * Layer 2: Silent audio (fallback for browsers without Wake Lock support).
  */
 export function startTabKeepAlive(): boolean {
   if (isPlaying) return true;
 
+  // Layer 1: Try Wake Lock first — this is the real fix for Android Chrome
+  if (typeof navigator !== 'undefined' && 'wakeLock' in navigator) {
+    requestWakeLock().then((acquired) => {
+      if (acquired) {
+        console.log('[KeepAlive] Wake Lock active — tab will not be suspended');
+      }
+    }).catch(() => {});
+  }
+
   try {
+    // Layer 2: Silent audio fallback
     // Create audio context (lazy init to handle autoplay policies)
     audioContext = new (
       window.AudioContext ||
@@ -65,10 +124,13 @@ export function startTabKeepAlive(): boolean {
 }
 
 /**
- * Stop the silent audio heartbeat.
+ * Stop the keep-alive system — both Wake Lock and silent audio.
  */
 export function stopTabKeepAlive(): void {
   if (!isPlaying) return;
+
+  // Release Wake Lock
+  releaseWakeLock().catch(() => {});
 
   try {
     if (oscillator) {

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Material 3 theme (Android 12+) -->
+  <style name="Theme.MollyBridge" parent="Theme.Material3.Dark">
+    <!-- Primary color -->
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryContainer">@color/primary_light</item>
+    <item name="colorOnPrimary">@color/white</item>
+    <item name="colorOnPrimaryContainer">@color/primary_dark</item>
+
+    <!-- Secondary color -->
+    <item name="colorSecondary">@color/secondary</item>
+    <item name="colorSecondaryContainer">@color/secondary_light</item>
+    <item name="colorOnSecondary">@color/white</item>
+    <item name="colorOnSecondaryContainer">@color/secondary_dark</item>
+
+    <!-- Tertiary color (if using Material 3) -->
+    <item name="colorTertiary">@color/info</item>
+
+    <!-- Background -->
+    <item name="android:colorBackground">@color/material_background</item>
+    <item name="colorOnBackground">@color/material_on_background</item>
+
+    <!-- Surface -->
+    <item name="colorSurface">@color/gray_50</item>
+    <item name="colorOnSurface">@color/gray_900</item>
+
+    <!-- Other Material attributes -->
+    <item name="colorError">@color/error</item>
+    <item name="colorOnError">@color/white</item>
+  </style>
+
+  <!-- Activity theme -->
+  <style name="Theme.MollyBridge.MainActivity" parent="Theme.MollyBridge">
+    <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    <item name="android:windowLightStatusBar">false</item>
+  </style>
+</resources>

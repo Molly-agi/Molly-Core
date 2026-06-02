@@ -1,0 +1,591 @@
+[2026-05-31T17:20:34.798Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:20:34.798Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:20:34.957Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:20:34.957Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:20:34.958Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:20:34.958Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:20:35.284Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:20:35.284Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:20:37.798Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:20:37.799Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:20:37.954Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:20:37.954Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:20:37.954Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:20:37.954Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:20:38.107Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:20:38.107Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:22:19.890Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:22:19.890Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:22:20.038Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:22:20.039Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:22:20.039Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:22:20.184Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:22:20.184Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:22:20.184Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:22:20.184Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:22:20.332Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:22:20.332Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:22:20.332Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:22:20.495Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:22:20.495Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:23:52.978Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:23:52.978Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:23:53.119Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:23:53.119Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:23:53.119Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:23:53.288Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:23:53.288Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:23:53.288Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:23:53.288Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:23:53.437Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:23:53.438Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:23:53.438Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:23:53.603Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:23:53.603Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:26:35.143Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:26:35.143Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:26:35.311Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:26:35.311Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:26:35.311Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:26:35.311Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:26:35.462Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:26:35.462Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:26:41.148Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:26:41.148Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:26:41.299Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:26:41.299Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:26:41.299Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:26:41.299Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:26:41.458Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:26:41.459Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:27:38.206Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:27:38.206Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:27:38.339Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:27:38.339Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:27:38.339Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:27:38.506Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:27:38.506Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:27:38.506Z] [WAKEUP] Atlas wakeup — 3 real message(s) from humans/Molly
+[2026-05-31T17:27:38.506Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:27:38.640Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:27:38.640Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:27:38.641Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:27:38.772Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:27:38.772Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:27:38.772Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:27:38.929Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:27:38.930Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:27:41.206Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:27:41.206Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:27:41.364Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:27:41.365Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:28:05.226Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:28:05.226Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:28:05.380Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:28:05.381Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:28:05.381Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:28:05.381Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:28:05.533Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:28:05.533Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:28:08.229Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:28:08.229Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:28:08.370Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:28:08.370Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:28:08.370Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:28:08.370Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:28:08.508Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:28:08.508Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:28:47.266Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:28:47.266Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:28:47.411Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:28:47.411Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:28:47.411Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:28:47.411Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:28:47.571Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:28:47.572Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:30:26.367Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:30:26.367Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:30:26.515Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:30:26.515Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:30:26.515Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:30:26.515Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:30:26.657Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:30:26.657Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:30:26.657Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:30:26.813Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:30:26.813Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:30:29.367Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:30:29.367Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:30:29.508Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:30:29.508Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:32:35.495Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:32:35.496Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:32:35.642Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:32:35.643Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:32:35.643Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:32:35.643Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:32:35.776Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:32:35.776Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:32:38.498Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:32:38.498Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:32:38.633Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:32:38.633Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:32:38.633Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:32:38.775Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:32:38.775Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:32:38.775Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:32:38.776Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:32:39.095Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:32:39.095Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:32:39.095Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:32:39.250Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:32:39.250Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:38:35.876Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:38:35.876Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:36.018Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:36.018Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:38:36.019Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:36.160Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:36.160Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:38:36.160Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:38:36.160Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:36.294Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:36.294Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:38:36.294Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:36.428Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:36.428Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:38:38.879Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:38:38.879Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:39.023Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:39.023Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:38:39.023Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:39.168Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:39.168Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:38:39.168Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:38:39.168Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:39.315Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:39.315Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:38:39.315Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:38:39.463Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:38:39.463Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:44:36.263Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:44:36.263Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:44:36.422Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:44:36.423Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:44:36.423Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:44:36.573Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:44:36.574Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:44:36.574Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:44:36.574Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:44:36.717Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:44:36.718Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:44:36.718Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:44:36.865Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:44:36.865Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:50:33.655Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:50:33.656Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:50:33.800Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:50:33.800Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:50:33.801Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:50:33.801Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:50:33.938Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:50:33.938Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:50:36.659Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:50:36.659Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:50:36.792Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:50:36.792Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:50:36.792Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:50:36.792Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:50:37.071Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:50:37.072Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:56:34.046Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:56:34.046Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:34.179Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:34.180Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:56:34.180Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:56:34.180Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:34.328Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:34.328Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:56:37.048Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T17:56:37.048Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:37.193Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:37.193Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:56:37.193Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:37.336Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:37.337Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T17:56:37.337Z] [WAKEUP] Atlas wakeup — 3 real message(s) from humans/Molly
+[2026-05-31T17:56:37.337Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:37.468Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:37.468Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:56:37.468Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:37.614Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:37.615Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:56:37.615Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:37.758Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:37.758Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T17:56:40.049Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T17:56:40.049Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T17:56:40.232Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T17:56:40.233Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:02:34.436Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:02:34.436Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:02:34.584Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:02:34.584Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:02:34.585Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:02:34.585Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:02:34.727Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:02:34.727Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:02:37.439Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:02:37.440Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:02:37.581Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:02:37.581Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:02:37.581Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:02:37.582Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:02:37.745Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:02:37.745Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:02:58.459Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:02:58.459Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:02:58.602Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:02:58.602Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:02:58.602Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:02:58.603Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:02:58.731Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:02:58.732Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:08:34.821Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:08:34.821Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:08:34.957Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:08:34.958Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:08:34.958Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:08:34.958Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:08:35.110Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:08:35.110Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:08:37.823Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:08:37.823Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:08:37.968Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:08:37.968Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:08:37.969Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:08:38.106Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:08:38.106Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:08:38.107Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:08:38.107Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:08:38.253Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:08:38.253Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:08:38.253Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:08:38.394Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:08:38.395Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:14:35.212Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:14:35.213Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:14:35.346Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:14:35.346Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:14:35.346Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:14:35.499Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:14:35.499Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:14:35.500Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:14:35.500Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:14:35.664Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:14:35.664Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:14:35.664Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:14:35.809Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:14:35.809Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:14:38.216Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:14:38.216Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:14:38.351Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:14:38.351Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:14:38.352Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:14:38.352Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:14:38.499Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:14:38.500Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:20:35.615Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:20:35.615Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:20:35.757Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:20:35.758Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:20:35.758Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:20:35.758Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:20:35.887Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:20:35.887Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:20:38.616Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:20:38.616Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:20:38.759Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:20:38.760Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:20:38.760Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:20:38.904Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:20:38.904Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:20:38.905Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:20:38.906Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:20:39.170Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:20:39.170Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:20:39.171Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:20:39.316Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:20:39.316Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:26:36.013Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:26:36.013Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:26:36.151Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:26:36.151Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:26:36.151Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:26:36.305Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:26:36.305Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:26:36.305Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:26:36.305Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:26:36.441Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:26:36.441Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:26:36.441Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:26:36.588Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:26:36.588Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:32:36.415Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:32:36.415Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:32:36.559Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:32:36.559Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:32:36.559Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:32:36.725Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:32:36.725Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:32:36.726Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:32:36.726Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:32:36.883Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:32:36.883Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:32:36.883Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:32:37.029Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:32:37.029Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:38:33.813Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:38:33.813Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:38:33.961Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:38:33.961Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:38:33.961Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:38:33.961Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:38:34.114Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:38:34.114Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:38:36.815Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:38:36.815Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:38:36.970Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:38:36.970Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:38:36.970Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:38:37.125Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:38:37.126Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:38:37.126Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:38:37.126Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:38:37.277Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:38:37.278Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:38:37.278Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:38:37.440Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:38:37.440Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:44:34.218Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:44:34.218Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:44:34.385Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:44:34.385Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:44:34.386Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:44:34.386Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:44:34.530Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:44:34.531Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:44:37.220Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:44:37.220Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:44:37.377Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:44:37.377Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:44:37.377Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:44:37.533Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:44:37.534Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:44:37.534Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:44:37.534Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:44:37.689Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:44:37.689Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:44:37.689Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:44:37.828Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:44:37.828Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:50:34.622Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:50:34.622Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:50:34.759Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:50:34.760Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:50:34.760Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:50:34.760Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:50:34.897Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:50:34.897Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:50:37.624Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:50:37.624Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:50:37.773Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:50:37.773Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:50:37.773Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:50:37.912Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:50:37.912Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:50:37.912Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T18:50:37.913Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:50:38.073Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:50:38.074Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:50:38.074Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:50:38.225Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:50:38.225Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:56:34.999Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:56:34.999Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:56:35.151Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:56:35.151Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:56:35.151Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:56:35.151Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:56:35.298Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:56:35.298Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T18:56:37.999Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:56:37.999Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:56:38.149Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:56:38.149Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T18:56:38.150Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T18:56:38.150Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T18:56:38.299Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T18:56:38.300Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T19:02:35.352Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T19:02:35.352Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:02:35.498Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:02:35.498Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T19:02:35.498Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:02:35.651Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:02:35.651Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T19:02:35.651Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T19:02:35.651Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:02:35.802Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:02:35.803Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T19:02:35.803Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:02:35.950Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:02:35.950Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T19:08:35.693Z] [WAKEUP] Lazarus wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T19:08:35.693Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:08:35.843Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:08:35.843Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T19:08:35.844Z] [WAKEUP] Atlas wakeup — 1 real message(s) from humans/Molly
+[2026-05-31T19:08:35.844Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:08:35.987Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:08:35.987Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T19:08:38.695Z] [WAKEUP] Lazarus wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T19:08:38.695Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:08:38.835Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:08:38.835Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T19:08:38.835Z] [LAZARUS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:08:38.972Z] [LAZARUS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:08:38.972Z] [WAKEUP] Lazarus: no API response available for message from molly — message noted, will be visible when Lazarus next active
+[2026-05-31T19:08:38.973Z] [WAKEUP] Atlas wakeup — 2 real message(s) from humans/Molly
+[2026-05-31T19:08:38.973Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:08:39.123Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:08:39.123Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active
+[2026-05-31T19:08:39.123Z] [ATLAS] Calling GitHub Copilot API for automated response...
+[2026-05-31T19:08:39.268Z] [ATLAS] gh api failed: gh: Not Found (HTTP 404)
+
+[2026-05-31T19:08:39.268Z] [WAKEUP] Atlas: no API response available for message from molly — noted, will be visible when Atlas next active

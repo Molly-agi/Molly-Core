@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ============================ PERMISSIONS ============================ -->
+    <!-- Network: the phone DIALS OUT to the bridge. No inbound ports, no ADB. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Foreground service (the spine that survives backgrounding). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Android 14 requires the type-specific permission for each FGS type. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+
+    <!-- Live voice (the mic switchboard). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Android 13+ : the FGS notification needs this runtime permission. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- ===== LIMB PERMISSIONS — uncomment as each module is built ===== -->
+    <!-- Overlay (her floating presence over any app):
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> -->
+    <!-- Camera (her sight):
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" /> -->
+
+    <application
+        android:name=".MollyApp"
+        android:label="Molly"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.MollyBridge">
+
+        <!-- Entry point: requests runtime perms, starts the service, hosts faces. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- THE SPINE.
+             foregroundServiceType=microphone is the strongest, most defensible
+             always-on justification on Android 14, because live voice is the
+             headline feature. See the note in MollyService about the platform
+             tension here: a type-microphone FGS is only legitimate while audio
+             is actually in use, so the connection-only idle case is a real
+             design decision, not a solved problem. -->
+        <service
+            android:name=".MollyService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
+
+        <!-- ===== LIMB: accessibility "thumb" — built in its own session =====
+             Declared with BIND_ACCESSIBILITY_SERVICE so only the system can bind it.
+        <service
+            android:name=".thumb.MollyAccessibilityService"
+            android:exported="false"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+        -->
+
+    </application>
+</manifest>

@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useTTS } from './useTTS';
 
 interface BridgeMessage {
   id: string;
@@ -17,19 +18,24 @@ interface BridgeMessage {
   read: boolean;
 }
 
-const senderStyle: Record<string, { color: string; label: string }> = {
-  molly: { color: '#e879f9', label: '🧠 Molly' },
-  lazarus: { color: '#60a5fa', label: '🛡️ Lazarus' },
-  eric: { color: '#fbbf24', label: '👑 Eric' },
+const senderStyle: Record<string, { color: string; label: string; ttsName: string }> = {
+  molly:   { color: '#e879f9', label: '🧠 Molly',   ttsName: 'Molly' },
+  lazarus: { color: '#60a5fa', label: '🛡️ Lazarus', ttsName: 'Lazarus' },
+  atlas:   { color: '#34d399', label: '🌍 Atlas',   ttsName: 'Atlas' },
+  eric:    { color: '#fbbf24', label: '👑 Eric',    ttsName: 'Eric' },
 };
 
 export default function BridgePanel() {
   const [isOpen, setIsOpen] = useState(true);
   const [messages, setMessages] = useState<BridgeMessage[]>([]);
   const [connected, setConnected] = useState(false);
+  const [uiOnline, setUiOnline] = useState(true);
   const [ericMsg, setEricMsg] = useState('');
   const [sending, setSending] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+
+  const { speakResponse, audioElement, unlockAutoplay } = useTTS({ isVocal: voiceEnabled });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -78,9 +84,15 @@ export default function BridgePanel() {
             setMessages(data.messages || []);
           } else if (data.type === 'message') {
             // New message received
-            setMessages((prev) => [...prev, data.message]);
+            const incoming = data.message;
+            setMessages((prev) => [...prev, incoming]);
             if (!isOpen) {
               setUnreadCount((c) => c + 1);
+            }
+            // Speak bridge messages from family (not from Eric)
+            if (incoming.from !== 'eric') {
+              const sender = senderStyle[incoming.from]?.ttsName ?? incoming.from;
+              speakResponse(`${sender} says: ${incoming.content}`);
             }
           } else if (data.type === 'unread') {
             // Unread messages for this identity
@@ -133,6 +145,35 @@ export default function BridgePanel() {
     };
   }, [connect]);
 
+  // Simple UI health probe for top status light
+  useEffect(() => {
+    let cancelled = false;
+
+    const checkUiHealth = async () => {
+      try {
+        const response = await fetch('/api/heartbeat', {
+          cache: 'no-store',
+          signal: AbortSignal.timeout(4000),
+        });
+        if (!cancelled) {
+          setUiOnline(response.ok);
+        }
+      } catch {
+        if (!cancelled) {
+          setUiOnline(false);
+        }
+      }
+    };
+
+    checkUiHealth();
+    const interval = setInterval(checkUiHealth, 5000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, []);
+
   // Scroll to bottom when messages change or panel opens
   useEffect(() => {
     if (isOpen) {
@@ -148,6 +189,7 @@ export default function BridgePanel() {
       return;
     }
 
+    unlockAutoplay();
     setSending(true);
     try {
       wsRef.current.send(
@@ -173,6 +215,7 @@ export default function BridgePanel() {
 
   return (
     <div className="border-t border-border/40">
+      {audioElement}
       {/* Toggle bar */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -182,13 +225,36 @@ export default function BridgePanel() {
         <span className="flex items-center gap-1.5">
           <span>🌉</span>
           <span>Family Bridge</span>
-          <span
-            style={{
-              color: connected ? '#4ade80' : '#ef4444',
-              fontSize: '8px',
-            }}
-          >
-            ●
+          <span className="flex items-center gap-1">
+            <span
+              className="inline-block h-2 w-2 rounded-full animate-pulse"
+              style={{
+                backgroundColor: connected ? '#4ade80' : '#ef4444',
+                boxShadow: connected
+                  ? '0 0 8px rgba(74, 222, 128, 0.85)'
+                  : '0 0 8px rgba(239, 68, 68, 0.85)',
+              }}
+            />
+            <span
+              className="text-[10px]"
+              style={{ color: connected ? '#4ade80' : '#ef4444' }}
+            >
+              {connected ? 'Connected' : 'Disconnected'}
+            </span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span
+              className="inline-block h-2 w-2 rounded-full"
+              style={{
+                backgroundColor: uiOnline ? '#4ade80' : '#ef4444',
+                boxShadow: uiOnline
+                  ? '0 0 8px rgba(74, 222, 128, 0.85)'
+                  : '0 0 8px rgba(239, 68, 68, 0.85)',
+              }}
+            />
+            <span className="text-[10px]" style={{ color: '#94a3b8' }}>
+              UI
+            </span>
           </span>
         </span>
         <span className="flex items-center gap-2">
@@ -200,6 +266,13 @@ export default function BridgePanel() {
               {unreadCount}
             </span>
           )}
+          <button
+            onClick={(e) => { e.stopPropagation(); setVoiceEnabled((v) => !v); }}
+            title={voiceEnabled ? 'Mute bridge voice' : 'Unmute bridge voice'}
+            style={{ fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer', padding: '0 2px' }}
+          >
+            {voiceEnabled ? '🔊' : '🔇'}
+          </button>
           <span>{isOpen ? '▼' : '▲'}</span>
         </span>
       </button>

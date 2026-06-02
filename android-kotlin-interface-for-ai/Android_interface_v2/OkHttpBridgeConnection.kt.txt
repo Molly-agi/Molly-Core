@@ -1,0 +1,190 @@
+package dev.molly.app.bridge
+
+import android.util.Log
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import okhttp3.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.min
+import kotlin.random.Random
+
+/**
+ * Default transport: one outbound WebSocket to the bridge.
+ *
+ * Implements the two buffer disciplines from BridgeConnection:
+ *   - state: a coalescing map (key -> latest json). Flushed on a tick. Drops
+ *     stale values by construction — it physically cannot grow past the number
+ *     of distinct keys.
+ *   - events: a bounded channel. Reliable + ordered. Full = backpressure the
+ *     caller can see, never silent unbounded growth.
+ *
+ * Auth: on connect we send a signed hello FIRST, before anything else. The
+ * bridge must reject a socket that doesn't authenticate. The HMAC here mirrors
+ * the message-signing you already do on the switchboard — identity is proven,
+ * not asserted. (See AuthSigner stub.)
+ *
+ * NOTE: skeleton. The send/parse framing is minimal; wire it to your bridge's
+ * actual message envelope. Marked TODOs are real work, not decoration.
+ */
+class OkHttpBridgeConnection(
+    private val bridgeUrl: String,          // e.g. wss://your-bridge.example/ws
+    private val deviceId: String,
+    private val signer: AuthSigner,
+    private val scope: CoroutineScope,
+) : BridgeConnection {
+
+    private val client = OkHttpClient.Builder()
+        .pingInterval(20, java.util.concurrent.TimeUnit.SECONDS) // keepalive
+        .build()
+
+    private val state = AtomicReference<LinkState>(LinkState.IDLE)
+    private var listener: BridgeConnection.Listener? = null
+
+    private var webSocket: WebSocket? = null
+    private var runJob: Job? = null
+
+    // ---- buffers ----
+    // latest-wins state: distinct keys only, so bounded by key count.
+    private val stateBuffer = ConcurrentHashMap<String, String>()
+    // reliable events: bounded; full() => caller gets false from sendEvent.
+    private val eventQueue = Channel<String>(capacity = 256)
+
+    private var failures = 0
+
+    override fun setListener(listener: BridgeConnection.Listener) {
+        this.listener = listener
+    }
+
+    override fun start() {
+        if (runJob?.isActive == true) return
+        runJob = scope.launch { connectLoop() }
+    }
+
+    override fun stop() {
+        runJob?.cancel()
+        webSocket?.close(1000, "client stop")
+        webSocket = null
+        state.set(LinkState.IDLE)
+    }
+
+    override fun sendState(key: String, json: String) {
+        // O(1), cannot back up. Last write for a key wins until the next flush.
+        stateBuffer[key] = json
+    }
+
+    override fun sendEvent(json: String): Boolean {
+        val result = eventQueue.trySend(json)
+        if (result.isFailure) {
+            Log.w(TAG, "event queue full — link down too long; dropping/ rejecting")
+        }
+        return result.isSuccess
+    }
+
+    // ---- connection lifecycle ----
+
+    private suspend fun connectLoop() {
+        while (scope.isActive) {
+            state.set(LinkState.CONNECTING)
+            val connected = CompletableDeferred<Boolean>()
+
+            val req = Request.Builder().url(bridgeUrl).build()
+            val ws = client.newWebSocket(req, object : WebSocketListener() {
+                override fun onOpen(ws: WebSocket, response: Response) {
+                    // AUTH FIRST. Nothing else goes out until the hello is sent.
+                    val nonce = Random.nextLong().toString()
+                    val ts = System.currentTimeMillis()
+                    val sig = signer.sign("$deviceId|$ts|$nonce")
+                    ws.send("""{"op":"hello","device":"$deviceId","ts":$ts,"nonce":"$nonce","sig":"$sig"}""")
+                    failures = 0
+                    state.set(LinkState.CONNECTED)
+                    connected.complete(true)
+                    listener?.onConnected()
+                }
+
+                override fun onMessage(ws: WebSocket, text: String) {
+                    listener?.onMessage(text)
+                }
+
+                override fun onFailure(ws: WebSocket, t: Throwable, r: Response?) {
+                    if (!connected.isCompleted) connected.complete(false)
+                    listener?.onDisconnected(t.message ?: "failure")
+                }
+
+                override fun onClosed(ws: WebSocket, code: Int, reason: String) {
+                    if (!connected.isCompleted) connected.complete(false)
+                    listener?.onDisconnected("closed: $reason")
+                }
+            })
+            webSocket = ws
+
+            val ok = connected.await()
+            if (ok) {
+                // Drain buffers while connected; returns when the link drops.
+                pumpUntilClosed(ws)
+            }
+
+            if (!scope.isActive) break
+
+            // Reconnect with exponential backoff + jitter.
+            failures++
+            state.set(LinkState.BACKOFF)
+            val delayMs = backoff(failures)
+            Log.i(TAG, "reconnecting in ${delayMs}ms (failure #$failures)")
+            delay(delayMs)
+        }
+    }
+
+    /** Flush state (latest-wins) on a tick, and forward reliable events ASAP. */
+    private suspend fun pumpUntilClosed(ws: WebSocket) = coroutineScope {
+        val stateFlusher = launch {
+            while (isActive && state.get() == LinkState.CONNECTED) {
+                if (stateBuffer.isNotEmpty()) {
+                    // snapshot + clear: anything that arrived during send just
+                    // lands in the next tick. No growth.
+                    val snapshot = HashMap(stateBuffer)
+                    stateBuffer.clear()
+                    for ((k, v) in snapshot) {
+                        if (!ws.send("""{"op":"state","key":"$k","data":$v}""")) break
+                    }
+                }
+                delay(STATE_FLUSH_MS)
+            }
+        }
+        val eventForwarder = launch {
+            while (isActive && state.get() == LinkState.CONNECTED) {
+                val msg = eventQueue.receiveCatching().getOrNull() ?: break
+                if (!ws.send("""{"op":"event","data":$msg}""")) {
+                    // send failed -> link is going down; the loop will reconnect.
+                    // TODO: requeue `msg` if you need at-least-once delivery.
+                    break
+                }
+            }
+        }
+        // Wait until the link is no longer CONNECTED, then tear down pumps.
+        while (state.get() == LinkState.CONNECTED && isActive) delay(250)
+        stateFlusher.cancel()
+        eventForwarder.cancel()
+    }
+
+    private fun backoff(n: Int): Long {
+        val base = min(MAX_BACKOFF_MS, MIN_BACKOFF_MS * (1L shl min(n, 6)))
+        return base / 2 + Random.nextLong(base / 2 + 1) // jitter
+    }
+
+    /** Pluggable signer so identity is proven, not asserted. */
+    interface AuthSigner {
+        /** Return an HMAC (or similar) over [payload] using the device secret. */
+        fun sign(payload: String): String
+        // TODO: back this with a per-device secret in EncryptedSharedPreferences
+        //       or the Android Keystore — NEVER hardcode the secret in the APK,
+        //       because every device shares the same APK. Provision per device.
+    }
+
+    companion object {
+        private const val TAG = "BridgeConn"
+        private const val STATE_FLUSH_MS = 500L
+        private const val MIN_BACKOFF_MS = 1_000L
+        private const val MAX_BACKOFF_MS = 30_000L
+    }
+}

@@ -49,6 +49,8 @@ function sendSessionEvent(payload: SessionEventPayload) {
 
 export function SessionLifecycleManager() {
   const initializationAttempted = useRef(false);
+  const lastBridgeHeartbeatAtRef = useRef<number | null>(null);
+  const bridgeHeartbeatStaleRef = useRef(false);
 
   useEffect(() => {
     // Memory evolution system is available via manual trigger
@@ -93,16 +95,56 @@ export function SessionLifecycleManager() {
       });
     }, 60000);
 
-    // Bidirectional bridge ping - every 1 second
-    // This keeps both Molly's tab AND the codespace alive
-    const bridgePingId = window.setInterval(() => {
-      fetch('/api/bridge/ping', {
-        method: 'GET',
-        keepalive: true,
-      }).catch(() => {
-        // Silent - bridge may not be up yet
-      });
-    }, 1000);
+    const handleBridgeHeartbeat = (event: Event) => {
+      const customEvent = event as CustomEvent<{
+        timestamp?: string;
+        messageCount?: number;
+        latestCheckpointId?: string | null;
+      }>;
+
+      lastBridgeHeartbeatAtRef.current = Date.now();
+      if (customEvent.detail?.timestamp) {
+        console.log(
+          `[SessionLifecycle] Bridge heartbeat received @ ${customEvent.detail.timestamp}`
+        );
+      }
+
+      if (bridgeHeartbeatStaleRef.current) {
+        bridgeHeartbeatStaleRef.current = false;
+        sendSessionEvent({
+          event: 'bridge-heartbeat-recovered',
+          details: 'Bridge heartbeat stream resumed',
+          url: window.location.href,
+          timestamp: new Date().toISOString(),
+        });
+        window.dispatchEvent(
+          new CustomEvent('bridge-heartbeat-recovered', {
+            detail: { at: new Date().toISOString() },
+          })
+        );
+      }
+    };
+
+    const driftMonitorId = window.setInterval(() => {
+      if (!lastBridgeHeartbeatAtRef.current) return;
+      const driftMs = Date.now() - lastBridgeHeartbeatAtRef.current;
+      const staleThresholdMs = 90000;
+
+      if (driftMs > staleThresholdMs && !bridgeHeartbeatStaleRef.current) {
+        bridgeHeartbeatStaleRef.current = true;
+        sendSessionEvent({
+          event: 'bridge-heartbeat-stale',
+          details: `No bridge heartbeat for ${driftMs}ms`,
+          url: window.location.href,
+          timestamp: new Date().toISOString(),
+        });
+        window.dispatchEvent(
+          new CustomEvent('bridge-heartbeat-stale', {
+            detail: { driftMs, thresholdMs: staleThresholdMs },
+          })
+        );
+      }
+    }, 30000);
 
     const handleVisibilityChange = () => {
       // Restart keepalive if it died while backgrounded (critical for Android)
@@ -147,12 +189,20 @@ export function SessionLifecycleManager() {
     // beforeunload fires first and allows async operations with keepalive
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener(
+      'bridge-heartbeat',
+      handleBridgeHeartbeat as EventListener
+    );
 
     return () => {
       window.clearInterval(heartbeatId);
-      window.clearInterval(bridgePingId);
+      window.clearInterval(driftMonitorId);
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener(
+        'bridge-heartbeat',
+        handleBridgeHeartbeat as EventListener
+      );
     };
   }, []);
 

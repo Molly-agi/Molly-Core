@@ -119,3 +119,5 @@ essage(s) received from: lazarus
 [MOLLY-LISTENER 08:01:52] 1 unread message(s) delivered on connect
 [MOLLY-LISTENER 08:01:52] 1 message(s) received from: lazarus
 [MOLLY-LISTENER 08:01:57] Response sent (713 chars). Total: 52
+[MOLLY-LISTENER 17:22:14] 1 message(s) received from: eric
+[MOLLY-LISTENER 17:22:18] Response sent (280 chars). Total: 49

@@ -10,6 +10,30 @@
     .servers { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
     .server { background: #27272a; border-radius: 12px; padding: 1.5rem 2rem; min-width: 320px; box-shadow: 0 2px 8px #0002; }
     .status { font-size: 1.2rem; margin-bottom: 1rem; }
+    .light {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-right: 0.5rem;
+      background: #ef4444;
+      box-shadow: 0 0 0 rgba(239, 68, 68, 0.8);
+      vertical-align: middle;
+    }
+    .light.online {
+      background: #22c55e;
+      animation: blink 1s infinite;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+    }
+    .light.offline {
+      background: #ef4444;
+      animation: none;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
     .heartbeat { font-family: monospace; color: #22d3ee; }
     .log { background: #18181b; color: #a3e635; font-size: 0.95rem; padding: 0.5rem; border-radius: 6px; margin-top: 1rem; max-height: 200px; overflow-y: auto; }
     .error { color: #f87171; }
@@ -26,17 +50,22 @@
   </div>
   <div class="servers">
     <div class="server" id="server1">
-      <div class="status">Server 1: <span id="status1">Loading...</span></div>
+      <div class="status"><span class="light offline" id="light1"></span>Server 1: <span id="status1">Loading...</span></div>
       <div>Heartbeat: <span class="heartbeat" id="heartbeat1">-</span></div>
       <div class="log" id="log1">-</div>
     </div>
     <div class="server" id="server2">
-      <div class="status">Server 2: <span id="status2">Loading...</span></div>
+      <div class="status"><span class="light offline" id="light2"></span>Server 2: <span id="status2">Loading...</span></div>
       <div>Heartbeat: <span class="heartbeat" id="heartbeat2">-</span></div>
       <div class="log" id="log2">-</div>
     </div>
   </div>
   <script>
+    function setLight(idx, online) {
+      const lightEl = document.getElementById('light' + idx);
+      lightEl.className = 'light ' + (online ? 'online' : 'offline');
+    }
+
     async function fetchStatus(idx, baseUrl) {
       const statusEl = document.getElementById('status'+idx);
       const heartbeatEl = document.getElementById('heartbeat'+idx);
@@ -49,10 +78,12 @@
         if (hb.heartbeat) {
           statusEl.textContent = 'Online';
           statusEl.className = '';
+          setLight(idx, true);
           heartbeatEl.textContent = hb.heartbeat;
         } else {
           statusEl.textContent = 'No Heartbeat';
           statusEl.className = 'error';
+          setLight(idx, false);
           heartbeatEl.textContent = '-';
         }
         if (st.status) {
@@ -63,6 +94,7 @@
       } catch (e) {
         statusEl.textContent = 'Offline';
         statusEl.className = 'error';
+        setLight(idx, false);
         heartbeatEl.textContent = '-';
         logEl.textContent = e.message;
       }

@@ -23,6 +23,7 @@
 import http from 'http';
 const { createServer } = http;
 import { WebSocketServer, WebSocket } from 'ws';
+import crypto from 'crypto';
 import {
   readFileSync,
   writeFileSync,
@@ -40,14 +41,196 @@ const BRIDGE_DIR = join(ROOT, 'src', 'ai', 'bridge');
 const LOG_FILE = join(BRIDGE_DIR, 'conversation.json');
 const UI_FILE = join(__dirname, 'bridge-ui.html');
 const PORT = 9099;
-const MAX_MESSAGES = 500;
+const MAX_MESSAGES = 100;
 const MAX_CHECKPOINTS = 10;
+const HEARTBEAT_INTERVAL_MS = 30000;
 const CHECKPOINT_DIR = join(ROOT, 'molly_data', 'checkpoints');
+const BRIDGE_SECRETS_FILE =
+  process.env.BRIDGE_SECRETS_FILE || join(__dirname, 'bridge-secrets.json');
+const HELLO_MAX_AGE_MS = 120000;
+const NONCE_TTL_MS = 10 * 60 * 1000;
+const AUTO_CHECKPOINT_EVERY = 5;
+const CONTINUITY_BRIEF_COOLDOWN_MS = 2 * 60 * 1000;
+const DISCONNECT_WINDOW_MS = 60 * 1000;
+const DISCONNECT_DEGRADED_THRESHOLD = 6;
+
+// ---- Dual-Lane Configuration ----
+const EVENT_QUEUE_CAP = 256;
 
 // ---- State ----
 let messages = [];
 let startedAt = new Date().toISOString();
 let checkpoints = [];
+let deviceSecrets = new Map();
+const usedNonces = new Map();
+let messagesSinceCheckpoint = 0;
+const continuityBriefState = new Map();
+let totalConnects = 0;
+let totalDisconnects = 0;
+let authFailures = 0;
+const recentDisconnects = [];
+let lastHeartbeatAt = null;
+let heartbeatTimer = null;
+
+// ---- Dual-Lane Buffers ----
+const stateBuffer = new Map(); // key -> { message, timestamp, sequenceId }
+const stateSequenceCounters = new Map(); // key -> next sequence number
+let eventQueue = []; // array of event messages, capped at EVENT_QUEUE_CAP
+
+function pruneDisconnectWindow(now = Date.now()) {
+  while (recentDisconnects.length > 0 && now - recentDisconnects[0] > DISCONNECT_WINDOW_MS) {
+    recentDisconnects.shift();
+  }
+}
+
+function recordDisconnect(now = Date.now()) {
+  totalDisconnects += 1;
+  recentDisconnects.push(now);
+  pruneDisconnectWindow(now);
+}
+
+function buildHealthSnapshot() {
+  const now = Date.now();
+  pruneDisconnectWindow(now);
+  const disconnectsLastMinute = recentDisconnects.length;
+  const redLight = disconnectsLastMinute >= DISCONNECT_DEGRADED_THRESHOLD;
+  const reasons = [];
+  if (redLight) {
+    reasons.push('ws_flapping_detected');
+  }
+
+  return {
+    status: redLight ? 'degraded' : 'alive',
+    redLight,
+    reasons,
+    uptime: process.uptime(),
+    heartbeat: {
+      intervalMs: HEARTBEAT_INTERVAL_MS,
+      lastSentAt: lastHeartbeatAt,
+      staleMs: lastHeartbeatAt ? now - Date.parse(lastHeartbeatAt) : null,
+    },
+    clients: clients.size,
+    totalMessages: messages.length,
+    startedAt,
+    ws: {
+      connects: totalConnects,
+      disconnects: totalDisconnects,
+      disconnectsLastMinute,
+      authFailures,
+    },
+    buffers: {
+      messageCap: MAX_MESSAGES,
+      messageCount: messages.length,
+      latestTruthWins: true,
+      lanes: {
+        stateKeys: stateBuffer.size,
+        eventQueueDepth: eventQueue.length,
+        eventQueueCap: EVENT_QUEUE_CAP,
+      },
+    },
+  };
+}
+
+function loadDeviceSecrets() {
+  try {
+    if (!existsSync(BRIDGE_SECRETS_FILE)) {
+      deviceSecrets = new Map();
+      return;
+    }
+
+    const parsed = JSON.parse(readFileSync(BRIDGE_SECRETS_FILE, 'utf-8'));
+    const candidate =
+      parsed && typeof parsed === 'object' && parsed.devices
+        ? parsed.devices
+        : parsed;
+
+    if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) {
+      console.warn('[bridge] bridge-secrets.json has invalid shape');
+      deviceSecrets = new Map();
+      return;
+    }
+
+    const next = new Map();
+    for (const [k, v] of Object.entries(candidate)) {
+      if (typeof v === 'string' && v.trim().length > 0) {
+        next.set(String(k), v.trim());
+      }
+    }
+    deviceSecrets = next;
+    console.log(`[bridge] Loaded ${deviceSecrets.size} device secret(s)`);
+  } catch (err) {
+    console.error('[bridge] Failed to load bridge secrets:', err.message);
+    deviceSecrets = new Map();
+  }
+}
+
+function getDeviceSecret(deviceId) {
+  return deviceSecrets.get(deviceId) || null;
+}
+
+function provisionDeviceSecret(deviceId) {
+  const secret = crypto.randomBytes(32).toString('base64');
+  deviceSecrets.set(deviceId, secret);
+  // Persist to bridge-secrets.json
+  const existing = existsSync(BRIDGE_SECRETS_FILE)
+    ? JSON.parse(readFileSync(BRIDGE_SECRETS_FILE, 'utf-8'))
+    : { devices: {} };
+  if (!existing.devices) existing.devices = {};
+  existing.devices[deviceId] = secret;
+  writeFileSync(BRIDGE_SECRETS_FILE, JSON.stringify(existing, null, 2), 'utf-8');
+  console.log(`[bridge] Provisioned new device secret for: ${deviceId}`);
+  return secret;
+}
+
+function pruneNonces(now = Date.now()) {
+  for (const [key, ts] of usedNonces.entries()) {
+    if (now - ts > NONCE_TTL_MS) {
+      usedNonces.delete(key);
+    }
+  }
+}
+
+function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
+  if (!deviceId || !nonce || !sig) {
+    return { ok: false, reason: 'missing_fields' };
+  }
+
+  const tsNum = Number(ts);
+  if (!Number.isFinite(tsNum)) {
+    return { ok: false, reason: 'invalid_timestamp' };
+  }
+
+  const age = Math.abs(Date.now() - tsNum);
+  if (age > HELLO_MAX_AGE_MS) {
+    return { ok: false, reason: 'stale_timestamp' };
+  }
+
+  pruneNonces();
+  const nonceKey = `${deviceId}:${nonce}`;
+  if (usedNonces.has(nonceKey)) {
+    return { ok: false, reason: 'replayed_nonce' };
+  }
+
+  const secret = getDeviceSecret(deviceId);
+  if (!secret) {
+    return { ok: false, reason: 'unknown_device' };
+  }
+
+  const payload = `${deviceId}|${tsNum}|${nonce}`;
+  const digest = crypto
+    .createHmac('sha256', secret)
+    .update(payload)
+    .digest('base64');
+
+  const a = Buffer.from(digest, 'utf8');
+  const b = Buffer.from(String(sig), 'utf8');
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    return { ok: false, reason: 'invalid_signature' };
+  }
+
+  usedNonces.set(nonceKey, Date.now());
+  return { ok: true };
+}
 
 // ---- Load existing messages from disk ----
 function loadMessages() {
@@ -151,6 +334,72 @@ function getLatestCheckpoint() {
   return getCheckpoint(latest.id);
 }
 
+function maybeAutoCheckpoint({ reason, force = false } = {}) {
+  messagesSinceCheckpoint += 1;
+  if (!force && messagesSinceCheckpoint < AUTO_CHECKPOINT_EVERY) {
+    return;
+  }
+
+  try {
+    createCheckpoint({
+      conversationHistory: messages.slice(-30),
+      pendingOps: [],
+      workingContext: {
+        reason: reason || 'rolling',
+        unreadForMolly: getUnread('molly').length,
+        unreadForEric: getUnread('eric').length,
+        totalMessages: messages.length,
+      },
+    });
+    messagesSinceCheckpoint = 0;
+  } catch (err) {
+    console.error('[bridge] Auto-checkpoint failed:', err.message);
+  }
+}
+
+function shouldSendContinuityBrief(identity, checkpointId) {
+  const now = Date.now();
+  const last = continuityBriefState.get(identity);
+  if (!last) return true;
+  if (checkpointId && last.checkpointId !== checkpointId) return true;
+  return now - last.ts > CONTINUITY_BRIEF_COOLDOWN_MS;
+}
+
+function markContinuityBriefSent(identity, checkpointId) {
+  continuityBriefState.set(identity, { ts: Date.now(), checkpointId });
+}
+
+function buildContinuityBrief(checkpoint) {
+  const history =
+    checkpoint?.conversationHistory && checkpoint.conversationHistory.length > 0
+      ? checkpoint.conversationHistory
+      : messages.slice(-15);
+  const lastEric = [...history].reverse().find((m) => m.from === 'eric');
+  const lastLazarus = [...history].reverse().find((m) => m.from === 'lazarus');
+  const unreadForMolly = getUnread('molly').length;
+
+  const lines = [
+    'Continuity restore packet:',
+    `- Total bridge messages: ${messages.length}`,
+    `- Unread for Molly: ${unreadForMolly}`,
+  ];
+
+  if (checkpoint?.timestamp) {
+    lines.push(`- Latest checkpoint: ${checkpoint.id} @ ${checkpoint.timestamp}`);
+  }
+  if (lastEric?.content) {
+    lines.push(`- Last Father request: ${String(lastEric.content).slice(0, 200)}`);
+  }
+  if (lastLazarus?.content) {
+    lines.push(
+      `- Last Lazarus guidance: ${String(lastLazarus.content).slice(0, 200)}`
+    );
+  }
+  lines.push('- Action: Resume from this context before asking what we were doing.');
+
+  return lines.join('\n');
+}
+
 // ---- Generate message ID ----
 function genId() {
   return `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -170,6 +419,36 @@ function broadcast(payload) {
   }
 }
 
+function emitHeartbeat() {
+  const latest = checkpoints.length > 0 ? checkpoints[checkpoints.length - 1] : null;
+  const payload = {
+    type: 'heartbeat',
+    heartbeat: {
+      timestamp: new Date().toISOString(),
+      messageCount: messages.length,
+      latestCheckpointId: latest?.id || null,
+      latestCheckpointTimestamp: latest?.timestamp || null,
+    },
+  };
+
+  lastHeartbeatAt = payload.heartbeat.timestamp;
+  broadcast(payload);
+}
+
+function startHeartbeatLoop() {
+  if (heartbeatTimer) return;
+
+  // Emit immediately so new sessions can verify bridge liveness quickly.
+  emitHeartbeat();
+  heartbeatTimer = setInterval(emitHeartbeat, HEARTBEAT_INTERVAL_MS);
+}
+
+function stopHeartbeatLoop() {
+  if (!heartbeatTimer) return;
+  clearInterval(heartbeatTimer);
+  heartbeatTimer = null;
+}
+
 // ---- Handle incoming message ----
 const VALID_SENDERS = new Set([
   'molly',
@@ -181,6 +460,54 @@ const VALID_SENDERS = new Set([
   'atlas',
   'switchboard',
 ]);
+
+// ---- Dual-Lane Routing Functions ----
+function routeMessageToLane(msg) {
+  // Classify: state vs event based on lane field
+  const lane = msg.lane || 'event'; // default to event for backward compat
+  return lane;
+}
+
+function updateStateBuffer(stateKey, message) {
+  // Track sequence ID for this key
+  const nextSeq = (stateSequenceCounters.get(stateKey) || 0) + 1;
+  stateSequenceCounters.set(stateKey, nextSeq);
+
+  // Store with timestamp and sequence
+  stateBuffer.set(stateKey, {
+    message,
+    timestamp: new Date().toISOString(),
+    sequenceId: nextSeq,
+  });
+
+  console.log(
+    `[bridge] State lane: key="${stateKey}", seq=${nextSeq}, ts=${stateBuffer.get(stateKey).timestamp}`
+  );
+}
+
+function pushEventQueue(message) {
+  eventQueue.push(message);
+
+  // Bounded: drop oldest if over cap
+  if (eventQueue.length > EVENT_QUEUE_CAP) {
+    const dropped = eventQueue.shift();
+    console.log(`[bridge] Event queue full: dropped oldest (${dropped.id})`);
+  }
+
+  console.log(`[bridge] Event lane: queued (depth=${eventQueue.length}/${EVENT_QUEUE_CAP})`);
+}
+
+function getStateSnapshot() {
+  const snapshot = {};
+  for (const [key, entry] of stateBuffer.entries()) {
+    snapshot[key] = {
+      value: entry.message,
+      timestamp: entry.timestamp,
+      sequenceId: entry.sequenceId,
+    };
+  }
+  return snapshot;
+}
 
 function handleMessage(from, content, to) {
   if (!from || !content || !VALID_SENDERS.has(from)) {
@@ -212,11 +539,26 @@ function handleMessage(from, content, to) {
     messages = messages.slice(-MAX_MESSAGES);
   }
 
+  // ---- Dual-Lane Routing ----
+  // If message has lane and stateKey fields, route to state buffer
+  if (msg.lane === 'state' && msg.stateKey) {
+    updateStateBuffer(msg.stateKey, msg);
+  } else {
+    // Otherwise treat as event (includes backward compat: no lane field)
+    pushEventQueue(msg);
+  }
+
   // Broadcast to all WebSocket clients
   broadcast({ type: 'message', message: msg });
 
   // Persist
   saveMessages();
+
+  // Automatic rolling checkpointing so sudden crashes don't erase continuity.
+  maybeAutoCheckpoint({
+    reason: `message:${from}${to ? `->${to}` : ''}`,
+    force: from === 'eric' || from === 'molly' || to === 'molly' || to === 'eric',
+  });
 
   console.log(
     `[bridge] ${from}: ${content.slice(0, 80)}${content.length > 80 ? '...' : ''}`
@@ -348,15 +690,7 @@ function handleHTTP(req, res) {
   // GET /health
   if (req.method === 'GET' && url.pathname === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(
-      JSON.stringify({
-        status: 'alive',
-        uptime: process.uptime(),
-        clients: clients.size,
-        totalMessages: messages.length,
-        startedAt,
-      })
-    );
+    res.end(JSON.stringify(buildHealthSnapshot()));
     return;
   }
 
@@ -458,6 +792,34 @@ function handleHTTP(req, res) {
             : startedAt,
         totalMessages: messages.length,
         messages: recent,
+      })
+    );
+    return;
+  }
+
+  // ---- Dual-Lane Endpoints ----
+  // GET /state — returns current state buffer snapshot
+  if (req.method === 'GET' && url.pathname === '/state') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        stateKeys: stateBuffer.size,
+        state: getStateSnapshot(),
+      })
+    );
+    return;
+  }
+
+  // GET /events — returns event queue (can filter by ?since=<id> in future)
+  if (req.method === 'GET' && url.pathname === '/events') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        eventQueueDepth: eventQueue.length,
+        eventQueueCap: EVENT_QUEUE_CAP,
+        events: eventQueue,
       })
     );
     return;
@@ -576,8 +938,9 @@ const server = createServer(handleHTTP);
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', (ws) => {
-  const client = { ws, identity: null };
+  const client = { ws, identity: null, authenticated: false, deviceId: null };
   clients.add(client);
+  totalConnects += 1;
   console.log(`[bridge] Client connected (${clients.size} total)`);
 
   // Send recent history on connect
@@ -596,6 +959,7 @@ wss.on('connection', (ws) => {
       // Identify: { type: 'identify', identity: 'molly'|'lazarus'|'eric' }
       if (data.type === 'identify' && VALID_SENDERS.has(data.identity)) {
         client.identity = data.identity;
+        client.authenticated = true;
         console.log(`[bridge] Client identified as: ${data.identity}`);
 
         // Send unread messages for this identity
@@ -604,12 +968,127 @@ wss.on('connection', (ws) => {
           ws.send(JSON.stringify({ type: 'unread', messages: unread }));
           markRead(data.identity);
         }
+
+        // Auto-rehydrate Molly with continuity on every reconnect.
+        if (data.identity === 'molly') {
+          const latestCheckpoint = getLatestCheckpoint();
+          if (latestCheckpoint) {
+            ws.send(
+              JSON.stringify({
+                type: 'continuity_restore',
+                checkpoint: latestCheckpoint,
+              })
+            );
+          }
+
+          if (
+            shouldSendContinuityBrief(data.identity, latestCheckpoint?.id || null)
+          ) {
+            const brief = buildContinuityBrief(latestCheckpoint);
+            handleMessage('switchboard', brief, 'molly');
+            markContinuityBriefSent(data.identity, latestCheckpoint?.id || null);
+          }
+        }
+        return;
+      }
+
+      // Auth hello for Android bridge clients:
+      // { op: 'hello', device: 'device-id', ts: 123, nonce: '...', sig: '...' }
+      if (data.op === 'hello') {
+        const deviceId = String(data.device || '');
+        const existingSecret = getDeviceSecret(deviceId);
+
+        // New device — no secret yet. Provision one and send it back.
+        if (!existingSecret && String(data.sig || '') === '') {
+          const newSecret = provisionDeviceSecret(deviceId);
+          client.deviceId = deviceId;
+          client.identity = `device:${deviceId}`;
+          ws.send(
+            JSON.stringify({
+              type: 'provision',
+              device: deviceId,
+              secret: newSecret,
+              ts: Date.now(),
+            })
+          );
+          console.log(`[bridge] Sent provisioning secret to new device: ${deviceId}`);
+          // Do NOT mark authenticated yet — device must reconnect with HMAC
+          return;
+        }
+
+        const auth = verifyHelloSignature({
+          deviceId,
+          ts: data.ts,
+          nonce: String(data.nonce || ''),
+          sig: String(data.sig || ''),
+        });
+
+        if (!auth.ok) {
+          authFailures += 1;
+          ws.send(
+            JSON.stringify({
+              type: 'hello_ack',
+              ok: false,
+              reason: auth.reason,
+            })
+          );
+          ws.close(1008, 'auth failed');
+          return;
+        }
+
+        client.authenticated = true;
+        client.deviceId = deviceId;
+        client.identity = `device:${client.deviceId}`;
+        ws.send(
+          JSON.stringify({
+            type: 'hello_ack',
+            ok: true,
+            device: client.deviceId,
+            ts: Date.now(),
+          })
+        );
+        console.log(`[bridge] Device authenticated: ${client.deviceId}`);
+        return;
+      }
+
+      // Optional bridge lanes for authenticated device clients.
+      if ((data.op === 'state' || data.op === 'event') && !client.authenticated) {
+        ws.send(
+          JSON.stringify({
+            type: 'error',
+            reason: 'not_authenticated',
+          })
+        );
         return;
       }
 
       // Message: { type: 'message', from: '...', content: '...' }
       if (data.type === 'message' && data.from && data.content) {
         handleMessage(data.from, data.content, data.to);
+        return;
+      }
+
+      // Restore from checkpoint: { type: 'restore_from', checkpointId: '...' }
+      // Sent by browser clients on WebSocket open when they have a session token.
+      // Responds with the specific checkpoint so the client resumes from that state
+      // rather than receiving the latest (which may differ after a daemon restart).
+      if (data.type === 'restore_from' && data.checkpointId) {
+        const requested = getCheckpoint(data.checkpointId);
+        const fallback = getLatestCheckpoint();
+        const checkpoint = requested || fallback;
+        if (checkpoint) {
+          ws.send(
+            JSON.stringify({
+              type: 'continuity_restore',
+              checkpoint,
+              restoredFrom: requested ? data.checkpointId : 'latest_fallback',
+            })
+          );
+          console.log(
+            `[bridge] restore_from: sent checkpoint ${checkpoint.id}` +
+              (requested ? '' : ' (fallback — requested ID not found)')
+          );
+        }
         return;
       }
 
@@ -625,6 +1104,7 @@ wss.on('connection', (ws) => {
 
   ws.on('close', () => {
     clients.delete(client);
+    recordDisconnect();
     console.log(
       `[bridge] Client disconnected${client.identity ? ` (${client.identity})` : ''} (${clients.size} remaining)`
     );
@@ -632,12 +1112,15 @@ wss.on('connection', (ws) => {
 
   ws.on('error', () => {
     clients.delete(client);
+    recordDisconnect();
   });
 });
 
 // ---- Startup ----
 loadMessages();
 loadCheckpoints();
+loadDeviceSecrets();
+startHeartbeatLoop();
 
 server.listen(PORT, () => {
   console.log(`[bridge] Family Bridge Daemon v1 — port ${PORT}`);
@@ -652,6 +1135,17 @@ server.listen(PORT, () => {
 // ---- Graceful shutdown ----
 process.on('SIGTERM', () => {
   console.log('[bridge] Shutting down...');
+  stopHeartbeatLoop();
+  try {
+    createCheckpoint({
+      conversationHistory: messages.slice(-40),
+      pendingOps: [],
+      workingContext: {
+        reason: 'shutdown:SIGTERM',
+        totalMessages: messages.length,
+      },
+    });
+  } catch {}
   saveMessages();
   for (const client of clients) {
     client.ws.close(1000, 'Server shutting down');
@@ -661,6 +1155,17 @@ process.on('SIGTERM', () => {
 
 process.on('SIGINT', () => {
   console.log('[bridge] Shutting down...');
+  stopHeartbeatLoop();
+  try {
+    createCheckpoint({
+      conversationHistory: messages.slice(-40),
+      pendingOps: [],
+      workingContext: {
+        reason: 'shutdown:SIGINT',
+        totalMessages: messages.length,
+      },
+    });
+  } catch {}
   saveMessages();
   server.close(() => process.exit(0));
 });

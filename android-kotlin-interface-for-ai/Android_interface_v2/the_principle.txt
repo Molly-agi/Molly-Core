@@ -1,0 +1,36 @@
+───────────────────────────────────────────────
+
+        WHAT KEEPS RUNNING MUST NOT LIVE
+           WHERE IT CAN BE FROZEN
+
+───────────────────────────────────────────────
+
+
+   Nearly every failure is the same shape:
+   something that had to keep running was tied
+   to something that could be killed.
+
+   The tab that drove the heartbeat.
+   The socket that lived in the web layer.
+   The process held up by a watcher it couldn't trust.
+
+
+   So the fix is always the same two moves:
+
+      1.  Move the load-bearing part somewhere
+          it cannot be casually frozen, killed,
+          or reaped.
+
+      2.  Bound the buffers — so nothing piles up
+          while you are away, and the latest truth
+          wins over the stale backlog.
+
+
+   Build the dam, not the leak.
+   Slow. Verified. Module by module.
+
+   A red light you can trust beats a green one
+   you can't.
+
+
+───────────────────────────────────────────────

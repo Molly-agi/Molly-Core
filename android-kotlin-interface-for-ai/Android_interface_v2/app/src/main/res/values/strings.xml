@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Molly Bridge</string>
+  <string name="permission_mic_required">Microphone access required</string>
+  <string name="permission_notify_required">Notification permission required</string>
+  <string name="error_permissions_denied">Permissions denied. Cannot run Molly Bridge.</string>
+  <string name="service_status_connecting">Connecting to bridge...</string>
+  <string name="service_status_connected">Connected to bridge</string>
+  <string name="service_status_reconnecting">Reconnecting...</string>
+  <string name="service_status_disconnected">Disconnected</string>
+</resources>
