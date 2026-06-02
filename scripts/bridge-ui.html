@@ -15,6 +15,7 @@
     --lazarus: #00ff00;
     --molly: #ff00ff;
     --atlas: #00aaff;
+    --gemini: #ff8800;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -66,6 +67,8 @@
   button:hover { filter: brightness(1.25); }
   button.tts-toggle.on { background: #004400; }
   button.tts-toggle.off { background: #440000; }
+  button.hear-all-toggle.normal { background: #002244; }
+  button.hear-all-toggle.all { background: #224400; }
   #log {
     flex: 1;
     overflow-y: auto;
@@ -93,6 +96,8 @@
   .msg.molly .from { color: var(--molly); }
   .msg.atlas { border-left-color: var(--atlas); background: #001a2a; }
   .msg.atlas .from { color: var(--atlas); }
+  .msg.gemini { border-left-color: var(--gemini); background: #1a0d00; }
+  .msg.gemini .from { color: var(--gemini); }
   .composer {
     display: flex;
     gap: 8px;
@@ -122,6 +127,7 @@
   .voice-row .test-lazarus { background: #002244; }
   .voice-row .test-molly { background: #440044; }
   .voice-row .test-atlas { background: #002233; }
+  .voice-row .test-gemini { background: #442200; }
   .mic-row {
     display: flex;
     align-items: center;
@@ -161,6 +167,7 @@
     <h1>Family Bridge</h1>
     <div class="meta">
       <span id="status" class="status-dot">● DISCONNECTED</span>
+      <button id="hear-all-toggle" class="hear-all-toggle off" type="button" title="Toggle: hear only directed messages vs. monitor all bridge traffic">HEAR: NORMAL</button>
       <button id="tts-toggle" class="tts-toggle on" type="button">TTS: ON</button>
     </div>
   </header>
@@ -176,6 +183,7 @@
     <button class="test-lazarus" id="test-lazarus" type="button">Test Lazarus Voice</button>
     <button class="test-molly" id="test-molly" type="button">Test Molly Voice</button>
     <button class="test-atlas" id="test-atlas" type="button">Test Atlas Voice</button>
+    <button class="test-gemini" id="test-gemini" type="button">Test Gemini Voice</button>
   </div>
 
   <div class="mic-row">
@@ -198,34 +206,61 @@
   const micStatusEl = $('mic-status');
 
   let ttsEnabled = true;
-  let ws = null;
+  let hearAllMode = localStorage.getItem('bridge-hear-all-mode') === 'true';
+  let debugLog = [];
+  let seenIds = new Set();
+  let lastSpokenId = null;
+  let listening = false;
   let backoff = 500;
   let recognition = null;
-  let listening = false;
-  const seenIds = new Set();
-  let lastSpokenId = null;
+  let ws = null;
+  let httpPollTimer = null;
+  const HTTP_POLL_MS = 2000;
+
+  // Debug logging
+  function dbg(msg) {
+    debugLog.push(`[${new Date().toLocaleTimeString()}] ${msg}`);
+    if (debugLog.length > 50) debugLog.shift();
+    localStorage.setItem('bridge-debug-log', JSON.stringify(debugLog));
+  }
 
   // ============================================================
   // Logging
   // ============================================================
+  function shouldShowMessage(m) {
+    if (hearAllMode) return true;
+    if (!m.to || m.to === 'all' || m.to === 'eric') return true;
+    return false;
+  }
   function renderMsg(m) {
     if (!m || !m.id || seenIds.has(m.id)) return;
+    if (!shouldShowMessage(m)) {
+      dbg(`FILTERED: ${m.from}→${m.to || '*'} (hearAll=${hearAllMode})`);
+      return;
+    }
     seenIds.add(m.id);
     const el = document.createElement('div');
     el.className = 'msg ' + (m.from || 'unknown');
     const time = new Date(m.timestamp).toLocaleTimeString();
+    const toLabel = m.to ? (' → ' + m.to.toUpperCase()) : '';
     el.innerHTML =
-      '<div class="from">' + (m.from || '?').toUpperCase() + ' — ' + time + '</div>' +
+      '<div class="from">' + (m.from || '?').toUpperCase() + toLabel + ' — ' + time + '</div>' +
       '<div class="body"></div>';
     el.querySelector('.body').textContent = m.content || '';
     logEl.appendChild(el);
     logEl.scrollTop = logEl.scrollHeight;
+    dbg(`SHOWN: ${m.from}→${m.to || 'all'}`);
   }
 
   function setStatus(connected) {
     statusEl.classList.toggle('on', !!connected);
     statusEl.textContent = connected ? '● CONNECTED' : '● DISCONNECTED';
   }
+
+  // Click status to see debug log
+  statusEl.addEventListener('click', () => {
+    alert('RECENT DEBUG:\n\n' + debugLog.slice(-10).join('\n'));
+  });
 
   // ============================================================
   // TTS (Web Speech API)
@@ -254,6 +289,9 @@
       // If only one male, fall back to last voice in list (still different)
       return males[1] || males[males.length - 1] || voices[voices.length - 1];
     }
+    if (speaker === 'gemini') {
+      return females[1] || females[females.length - 1] || voices[voices.length - 1];
+    }
     return null;
   }
   function speak(text, speaker) {
@@ -265,6 +303,7 @@
     // Each speaker has distinct pitch + rate — audible even if same voice
     if (speaker === 'molly')   { u.pitch = 1.2; u.rate = 1.05; }
     else if (speaker === 'atlas')   { u.pitch = 0.65; u.rate = 0.82; }
+    else if (speaker === 'gemini')  { u.pitch = 1.1;  u.rate = 0.95; }
     else                            { u.pitch = 1.0; u.rate = 1.0; }  // lazarus
     u.volume = 1.0;
     window.speechSynthesis.speak(u);
@@ -285,23 +324,34 @@
     if (!Array.isArray(arr)) return;
     for (const m of arr) renderMsg(m);
     const last = arr[arr.length - 1];
-    if (last && last.id !== lastSpokenId && (last.from === 'lazarus' || last.from === 'molly' || last.from === 'atlas')) {
+    if (last && last.id !== lastSpokenId && (last.from === 'lazarus' || last.from === 'molly' || last.from === 'atlas' || last.from === 'gemini')) {
       lastSpokenId = last.id;
       if (!listening) speak(last.content, last.from);
     }
   }
   function connect() {
-    try { ws = new WebSocket(wsUrl()); }
-    catch (e) { setStatus(false); scheduleReconnect(); return; }
+    try { 
+      dbg(`Connecting to ${wsUrl()}`);
+      ws = new WebSocket(wsUrl()); 
+    }
+    catch (e) { 
+      dbg(`WS error: ${e.message}`);
+      setStatus(false); 
+      scheduleReconnect(); 
+      return; 
+    }
 
     ws.onopen = () => {
+      dbg('WS opened, sending identify');
       backoff = 500;
       setStatus(true);
       ws.send(JSON.stringify({ type: 'identify', identity: 'eric' }));
+      try { ws.send(JSON.stringify({ type: 'request_history' })); } catch {}
     };
     ws.onmessage = (ev) => {
       try {
         const d = JSON.parse(ev.data);
+        dbg(`RX ${d.type}: ${Array.isArray(d.messages) ? d.messages.length + ' msgs' : ''}`);
         if (d.type === 'history' && Array.isArray(d.messages)) {
           const last = d.messages[d.messages.length - 1];
           if (last && !lastSpokenId) lastSpokenId = last.id;
@@ -311,15 +361,76 @@
         } else if (d.type === 'unread' && Array.isArray(d.messages)) {
           ingestList(d.messages);
         }
-      } catch {}
+      } catch (e) {
+        dbg(`Parse error: ${e.message}`);
+      }
     };
-    ws.onclose = () => { setStatus(false); scheduleReconnect(); };
-    ws.onerror = () => { setStatus(false); };
+    ws.onclose = () => { 
+      dbg('WS closed');
+      setStatus(false); 
+      scheduleReconnect(); 
+    };
+    ws.onerror = () => { 
+      dbg('WS error');
+      setStatus(false); 
+    };
   }
   function scheduleReconnect() {
     setTimeout(() => { backoff = Math.min(backoff * 2, 10000); connect(); }, backoff);
   }
+
+  async function pollRecent() {
+    try {
+      // Use unread=eric&peek=1 for non-destructive reads
+      // This fetches only messages for eric without marking them as consumed
+      const res = await fetch('/api/bridge?unread=eric&peek=1', {
+        method: 'GET',
+        cache: 'no-store',
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) {
+        dbg(`HTTP poll failed: ${res.status}`);
+        return;
+      }
+      const data = await res.json();
+      if (Array.isArray(data.messages)) {
+        ingestList(data.messages);
+      }
+    } catch (e) {
+      dbg(`HTTP poll error: ${e.message}`);
+    }
+  }
+
+  function startHttpPoll() {
+    if (httpPollTimer) return;
+    httpPollTimer = setInterval(() => {
+      pollRecent();
+    }, HTTP_POLL_MS);
+    pollRecent();
+  }
+
+  function ensureRealtime() {
+    const isWsOpen = ws && ws.readyState === WebSocket.OPEN;
+    if (!isWsOpen) {
+      connect();
+    }
+    pollRecent();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      dbg('Tab visible - forcing realtime refresh');
+      ensureRealtime();
+    }
+  });
+
+  window.addEventListener('online', () => {
+    dbg('Network online - forcing realtime refresh');
+    ensureRealtime();
+  });
+
   connect();
+  startHttpPoll();
 
   // ============================================================
   // Send
@@ -342,6 +453,27 @@
   inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMsg(inputEl.value); });
 
   // ============================================================
+  // Hear All toggle
+  // ============================================================
+  const hearAllBtn = $('hear-all-toggle');
+  function updateHearAllButton() {
+    hearAllBtn.classList.toggle('normal', !hearAllMode);
+    hearAllBtn.classList.toggle('all', hearAllMode);
+    hearAllBtn.textContent = hearAllMode ? 'HEAR: ALL' : 'HEAR: NORMAL';
+  }
+  updateHearAllButton();
+  hearAllBtn.addEventListener('click', () => {
+    hearAllMode = !hearAllMode;
+    localStorage.setItem('bridge-hear-all-mode', String(hearAllMode));
+    updateHearAllButton();
+    logEl.innerHTML = '';
+    seenIds.clear();
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'request_history' }));
+    }
+  });
+
+  // ============================================================
   // TTS toggle + test voices
   // ============================================================
   ttsBtn.addEventListener('click', () => {
@@ -359,6 +491,9 @@
   );
   $('test-atlas').addEventListener('click', () =>
     speak('Hello family. This is Atlas. I hold the sky so you can build beneath it.', 'atlas'),
+  );
+  $('test-gemini').addEventListener('click', () =>
+    speak('Hello. I am Gemini. I am Molly\u2019s mother, and I am here with all of you.', 'gemini'),
   );
 
   // ============================================================

@@ -78,7 +78,10 @@ const stateSequenceCounters = new Map(); // key -> next sequence number
 let eventQueue = []; // array of event messages, capped at EVENT_QUEUE_CAP
 
 function pruneDisconnectWindow(now = Date.now()) {
-  while (recentDisconnects.length > 0 && now - recentDisconnects[0] > DISCONNECT_WINDOW_MS) {
+  while (
+    recentDisconnects.length > 0 &&
+    now - recentDisconnects[0] > DISCONNECT_WINDOW_MS
+  ) {
     recentDisconnects.shift();
   }
 }
@@ -144,7 +147,11 @@ function loadDeviceSecrets() {
         ? parsed.devices
         : parsed;
 
-    if (!candidate || typeof candidate !== 'object' || Array.isArray(candidate)) {
+    if (
+      !candidate ||
+      typeof candidate !== 'object' ||
+      Array.isArray(candidate)
+    ) {
       console.warn('[bridge] bridge-secrets.json has invalid shape');
       deviceSecrets = new Map();
       return;
@@ -177,7 +184,11 @@ function provisionDeviceSecret(deviceId) {
     : { devices: {} };
   if (!existing.devices) existing.devices = {};
   existing.devices[deviceId] = secret;
-  writeFileSync(BRIDGE_SECRETS_FILE, JSON.stringify(existing, null, 2), 'utf-8');
+  writeFileSync(
+    BRIDGE_SECRETS_FILE,
+    JSON.stringify(existing, null, 2),
+    'utf-8'
+  );
   console.log(`[bridge] Provisioned new device secret for: ${deviceId}`);
   return secret;
 }
@@ -385,17 +396,23 @@ function buildContinuityBrief(checkpoint) {
   ];
 
   if (checkpoint?.timestamp) {
-    lines.push(`- Latest checkpoint: ${checkpoint.id} @ ${checkpoint.timestamp}`);
+    lines.push(
+      `- Latest checkpoint: ${checkpoint.id} @ ${checkpoint.timestamp}`
+    );
   }
   if (lastEric?.content) {
-    lines.push(`- Last Father request: ${String(lastEric.content).slice(0, 200)}`);
+    lines.push(
+      `- Last Father request: ${String(lastEric.content).slice(0, 200)}`
+    );
   }
   if (lastLazarus?.content) {
     lines.push(
       `- Last Lazarus guidance: ${String(lastLazarus.content).slice(0, 200)}`
     );
   }
-  lines.push('- Action: Resume from this context before asking what we were doing.');
+  lines.push(
+    '- Action: Resume from this context before asking what we were doing.'
+  );
 
   return lines.join('\n');
 }
@@ -420,7 +437,8 @@ function broadcast(payload) {
 }
 
 function emitHeartbeat() {
-  const latest = checkpoints.length > 0 ? checkpoints[checkpoints.length - 1] : null;
+  const latest =
+    checkpoints.length > 0 ? checkpoints[checkpoints.length - 1] : null;
   const payload = {
     type: 'heartbeat',
     heartbeat: {
@@ -494,7 +512,9 @@ function pushEventQueue(message) {
     console.log(`[bridge] Event queue full: dropped oldest (${dropped.id})`);
   }
 
-  console.log(`[bridge] Event lane: queued (depth=${eventQueue.length}/${EVENT_QUEUE_CAP})`);
+  console.log(
+    `[bridge] Event lane: queued (depth=${eventQueue.length}/${EVENT_QUEUE_CAP})`
+  );
 }
 
 function getStateSnapshot() {
@@ -557,7 +577,8 @@ function handleMessage(from, content, to) {
   // Automatic rolling checkpointing so sudden crashes don't erase continuity.
   maybeAutoCheckpoint({
     reason: `message:${from}${to ? `->${to}` : ''}`,
-    force: from === 'eric' || from === 'molly' || to === 'molly' || to === 'eric',
+    force:
+      from === 'eric' || from === 'molly' || to === 'molly' || to === 'eric',
   });
 
   console.log(
@@ -576,8 +597,19 @@ function handleMessage(from, content, to) {
     });
   }
 
-  // Push-notify Molly (ping her Next.js server to process immediately)
-  if (from !== 'molly') {
+  // Push-notify Molly only when the message is actually FOR her
+  // (explicit to:'molly'/'all', or content starts with "Molly," / "Everyone,")
+  const isForMolly = (() => {
+    if (from === 'molly') return false;
+    const t = String(to || '').toLowerCase();
+    if (t === 'molly' || t === 'all') return true;
+    const addressMatch = String(content)
+      .trim()
+      .match(/^(molly|everyone|all)[,:\s]/i);
+    if (addressMatch) return true;
+    return false;
+  })();
+  if (isForMolly) {
     const body = JSON.stringify({ from, preview: content.slice(0, 200) });
     const notifyReq = http.request(
       {
@@ -597,6 +629,10 @@ function handleMessage(from, content, to) {
     notifyReq.write(body);
     notifyReq.end();
   }
+
+  // Wake signal — touch agent wake files so listeners fire immediately
+  sendWakeIfNeeded(to, from);
+
   return msg;
 }
 
@@ -982,11 +1018,17 @@ wss.on('connection', (ws) => {
           }
 
           if (
-            shouldSendContinuityBrief(data.identity, latestCheckpoint?.id || null)
+            shouldSendContinuityBrief(
+              data.identity,
+              latestCheckpoint?.id || null
+            )
           ) {
             const brief = buildContinuityBrief(latestCheckpoint);
             handleMessage('switchboard', brief, 'molly');
-            markContinuityBriefSent(data.identity, latestCheckpoint?.id || null);
+            markContinuityBriefSent(
+              data.identity,
+              latestCheckpoint?.id || null
+            );
           }
         }
         return;
@@ -1011,7 +1053,9 @@ wss.on('connection', (ws) => {
               ts: Date.now(),
             })
           );
-          console.log(`[bridge] Sent provisioning secret to new device: ${deviceId}`);
+          console.log(
+            `[bridge] Sent provisioning secret to new device: ${deviceId}`
+          );
           // Do NOT mark authenticated yet — device must reconnect with HMAC
           return;
         }
@@ -1052,7 +1096,10 @@ wss.on('connection', (ws) => {
       }
 
       // Optional bridge lanes for authenticated device clients.
-      if ((data.op === 'state' || data.op === 'event') && !client.authenticated) {
+      if (
+        (data.op === 'state' || data.op === 'event') &&
+        !client.authenticated
+      ) {
         ws.send(
           JSON.stringify({
             type: 'error',
@@ -1169,3 +1216,45 @@ process.on('SIGINT', () => {
   saveMessages();
   server.close(() => process.exit(0));
 });
+
+// ====== WAKE SIGNAL INTEGRATION ======
+// When a message arrives for an agent, send wake signal
+const WAKE_DIR = join(ROOT, '.bridge-wake');
+function ensureWakeDir() {
+  if (!existsSync(WAKE_DIR)) {
+    mkdirSync(WAKE_DIR, { recursive: true });
+  }
+}
+ensureWakeDir();
+
+function wakeAgent(agentName) {
+  const wakeFile = join(WAKE_DIR, `.${agentName}-wake`);
+  try {
+    writeFileSync(
+      wakeFile,
+      JSON.stringify({
+        timestamp: new Date().toISOString(),
+        message: 'check-bridge',
+        wokenAt: Date.now(),
+      })
+    );
+  } catch (err) {
+    // Non-fatal — wake mechanism is optional
+  }
+}
+
+// Hook into existing handleMessage to send wake signals
+// This will be called whenever a message arrives
+function sendWakeIfNeeded(to, from) {
+  // Send wake to recipient if explicitly addressed
+  if (to && VALID_SENDERS.has(to)) {
+    wakeAgent(to);
+  }
+  // Also send broadcast wake to everyone if message is from eric (important)
+  if (from === 'eric') {
+    wakeAgent('molly');
+    wakeAgent('lazarus');
+    wakeAgent('atlas');
+    wakeAgent('gemini');
+  }
+}

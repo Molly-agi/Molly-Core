@@ -12,6 +12,7 @@
  */
 
 import BridgeClient from './bridge-client.mjs';
+import { setupWakeListener } from './agent-wake-listener.mjs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -20,6 +21,11 @@ const logFile = join(__dirname, '..', 'logs', 'atlas-bridge.log');
 
 // Create bridge client
 const atlas = new BridgeClient('atlas', 'localhost', 9099);
+
+// Setup wake listener — when bridge has a message for me, I wake immediately
+setupWakeListener('atlas', () => {
+  console.log(`[${new Date().toISOString()}] 🔔 WAKE SIGNAL — checking bridge`);
+});
 
 // Setup event handlers
 atlas.on('connected', () => {

@@ -101,3 +101,29 @@ extensions/
 .aider*
 backups/restore-points/*.bundle
 backups/snapshots/**/*.bundle
+
+# Bridge runtime files
+.bridge-wake/
+.bridge.log
+.bridge.pid
+.eric-wakeup.json
+.eric-poller.log
+.eric-poller.pid
+.*-wakeup.json
+.*-bridge.log
+.*-bridge.pid
+.*-poller.log
+.*-poller.pid
+.queue-mirror.log
+.queue-mirror.pid
+.heartbeat-dashboard.pid
+
+# Session state (captured separately)
+COPILOT_SESSION_STATE.md
+COPILOT_SESSION_STATE.json
+
+# Local diagnostic/markdown files
+BRIDGE_STATUS_FINAL.md
+GEMINI.md
+PHASE_1_BRIDGE_UPGRADE.md
+bridge-diagnostic-for-opus.md

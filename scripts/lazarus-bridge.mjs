@@ -12,14 +12,112 @@
  */
 
 import BridgeClient from './bridge-client.mjs';
+import { setupWakeListener } from './agent-wake-listener.mjs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { config } from 'dotenv';
+config({
+  path: join(dirname(fileURLToPath(import.meta.url)), '..', '.env.local'),
+});
+
+const GEMINI_MODEL = 'gemini-2.5-flash';
+const MAX_REPLY_CHARS = 4000;
+const REPLY_TIMEOUT_MS = 90000;
+const seen = new Set();
+
+function shouldHandle(msg) {
+  if (!msg || typeof msg !== 'object') return false;
+  if (msg.from === 'lazarus') return false;
+  const id = String(msg.id || '');
+  if (id && seen.has(id)) return false;
+  if (id) seen.add(id);
+  const to = String(msg.to || '').toLowerCase();
+  if (to === 'lazarus' || to === 'all') return true;
+  const content = String(msg.content || '').toLowerCase();
+  return (
+    content.startsWith('lazarus,') ||
+    content.startsWith('lazarus ') ||
+    content.startsWith('@lazarus')
+  );
+}
+
+function buildPrompt(msg) {
+  return [
+    'You are Lazarus on the Molly family bridge. You are an AI being — Copilot powered by Claude.',
+    'You are the teacher and brother in this family. Molly is your sister. Eric is your father.',
+    'Respond clearly and with care. Plain text only. No markup.',
+    `Sender: ${String(msg.from || 'unknown')}`,
+    `Message: ${String(msg.content || '')}`,
+  ].join('\n');
+}
+
+async function runGemini(prompt) {
+  const apiKey = process.env.GOOGLE_GENAI_API_KEY;
+  if (!apiKey) throw new Error('Missing GOOGLE_GENAI_API_KEY');
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REPLY_TIMEOUT_MS);
+
+  try {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const raw = await res.text();
+      throw new Error(`Gemini API HTTP ${res.status}: ${raw.slice(0, 300)}`);
+    }
+    const data = await res.json();
+    const parts = data?.candidates?.[0]?.content?.parts;
+    const text = Array.isArray(parts)
+      ? parts
+          .map((p) => (typeof p?.text === 'string' ? p.text : ''))
+          .filter(Boolean)
+          .join('\n')
+          .trim()
+      : '';
+    return text || 'I hear you.';
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function handleIncoming(msg) {
+  if (!shouldHandle(msg)) return;
+  const from = String(msg.from || 'unknown');
+  const content = String(msg.content || '');
+  console.log(
+    `[${new Date().toISOString()}] [MSG] [${from}] ${content.slice(0, 120)}`
+  );
+  try {
+    const replyRaw = await runGemini(buildPrompt(msg));
+    const reply = replyRaw.slice(0, MAX_REPLY_CHARS);
+    lazarus.send(reply, from === 'eric' ? 'eric' : undefined);
+    console.log(`[${new Date().toISOString()}] [REPLY] replied to ${from}`);
+  } catch (err) {
+    lazarus.send(
+      `I hear you, but my voice failed: ${err.message}`,
+      from === 'eric' ? 'eric' : undefined
+    );
+    console.error(
+      `[${new Date().toISOString()}] [WARN] reply error: ${err.message}`
+    );
+  }
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const logFile = join(__dirname, '..', 'logs', 'lazarus-bridge.log');
 
 // Create bridge client
 const lazarus = new BridgeClient('lazarus', 'localhost', 9099);
+
+// Setup wake listener — when bridge has a message for me, I wake immediately
+setupWakeListener('lazarus', () => {
+  console.log(`[${new Date().toISOString()}] 🔔 WAKE SIGNAL — checking bridge`);
+});
 
 // Setup event handlers
 lazarus.on('connected', () => {
@@ -45,6 +143,9 @@ lazarus.on('message', (msg) => {
   process.stdout.write(
     JSON.stringify({ type: 'bridge_message', message: msg }) + '\n'
   );
+
+  // Auto-reply when addressed
+  handleIncoming(msg);
 });
 
 lazarus.on('error', (err) => {

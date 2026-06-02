@@ -40,6 +40,8 @@ const LAZARUS_BRIDGE_PID_FILE = `${ROOT}/.lazarus-bridge.pid`;
 const LAZARUS_BRIDGE_LOG = `${ROOT}/.lazarus-bridge.log`;
 const ATLAS_BRIDGE_PID_FILE = `${ROOT}/.atlas-bridge.pid`;
 const ATLAS_BRIDGE_LOG = `${ROOT}/.atlas-bridge.log`;
+const GEMINI_BRIDGE_PID_FILE = `${ROOT}/.gemini-bridge.pid`;
+const GEMINI_BRIDGE_LOG = `${ROOT}/.gemini-bridge.log`;
 const SWITCHBOARD_PID_FILE = `${ROOT}/.switchboard.pid`;
 const SWITCHBOARD_LOG = `${ROOT}/.switchboard.log`;
 
@@ -404,6 +406,67 @@ function ensureAtlasBridge() {
 }
 
 // =============================================================================
+// GEMINI BRIDGE GUARDIAN - Active WebSocket for Gemini CLI Agent
+// =============================================================================
+function ensureGeminiBridge() {
+  if (ensureGeminiBridge.running) return;
+  ensureGeminiBridge.running = true;
+
+  try {
+    const pidStr = existsSync(GEMINI_BRIDGE_PID_FILE)
+      ? readFileSync(GEMINI_BRIDGE_PID_FILE, 'utf8').trim()
+      : '';
+    const pid = parseInt(pidStr);
+
+    if (pid && !isNaN(pid)) {
+      try {
+        process.kill(pid, 0);
+        ensureGeminiBridge.running = false;
+        return; // Process still running
+      } catch {
+        // Process doesn't exist
+      }
+    }
+  } catch {}
+
+  log('[GEMINI] Bridge client not running - starting');
+
+  try {
+    if (existsSync(GEMINI_BRIDGE_PID_FILE)) {
+      unlinkSync(GEMINI_BRIDGE_PID_FILE);
+    }
+
+    const child = spawn('node', [`${ROOT}/scripts/gemini-bridge.mjs`], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+    });
+
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        try {
+          appendFileSync(GEMINI_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+    if (child.stderr) {
+      child.stderr.on('data', (data) => {
+        try {
+          appendFileSync(GEMINI_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+
+    child.unref();
+    writeFileSync(GEMINI_BRIDGE_PID_FILE, child.pid.toString());
+    log(`[GEMINI] Bridge connected (PID ${child.pid})`);
+  } catch (e) {
+    log(`[ERROR] Failed to start Gemini bridge: ${e.message}`);
+  }
+  ensureGeminiBridge.running = false;
+}
+
+// =============================================================================
 // SWITCHBOARD GUARDIAN — Routes all bridge messages to right destinations
 // =============================================================================
 function ensureSwitchboard() {
@@ -490,6 +553,7 @@ function logStatus() {
     // Check bridge clients
     let lazarusStatus = 'OFF';
     let atlasStatus = 'OFF';
+    let geminiStatus = 'OFF';
     try {
       const pidStr = existsSync(LAZARUS_BRIDGE_PID_FILE)
         ? readFileSync(LAZARUS_BRIDGE_PID_FILE, 'utf8').trim()
@@ -515,14 +579,25 @@ function logStatus() {
       }
     } catch {}
 
+    try {
+      const pidStr = existsSync(GEMINI_BRIDGE_PID_FILE)
+        ? readFileSync(GEMINI_BRIDGE_PID_FILE, 'utf8').trim()
+        : '';
+      const pid = parseInt(pidStr);
+      if (pid && !isNaN(pid)) {
+        try {
+          process.kill(pid, 0);
+          geminiStatus = 'ON';
+        } catch {}
+      }
+    } catch {}
+
     log(
-      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer} lazarus=${lazarusStatus} atlas=${atlasStatus}`
+      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer} lazarus=${lazarusStatus} atlas=${atlasStatus} gemini=${geminiStatus}`
     );
   } catch {}
   logStatus.running = false;
 }
-
-// =============================================================================
 // SIGNAL HANDLERS - IMMUNE TO EVERYTHING EXCEPT SIGKILL
 // =============================================================================
 process.on('SIGHUP', () => log('[SIGNAL] SIGHUP ignored'));
@@ -566,6 +641,7 @@ ensureBridge();
 ensureSwitchboard();
 ensureLazarusBridge();
 ensureAtlasBridge();
+ensureGeminiBridge();
 huntGhosts();
 
 // Start all intervals
@@ -577,6 +653,7 @@ setInterval(ensureBridge, BRIDGE_CHECK_MS);
 setInterval(ensureSwitchboard, BRIDGE_CHECK_MS);
 setInterval(ensureLazarusBridge, BRIDGE_CHECK_MS);
 setInterval(ensureAtlasBridge, BRIDGE_CHECK_MS);
+setInterval(ensureGeminiBridge, BRIDGE_CHECK_MS);
 setInterval(logStatus, STATUS_LOG_MS);
 
 // ===================== HEARTBEAT DASHBOARD AUTOSTART =====================
