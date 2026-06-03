@@ -34,6 +34,36 @@ from starlette.requests import Request
 from sse_starlette.sse import EventSourceResponse
 
 # ============================================================================
+# FAMILY BRIDGE FILE INTEGRATION
+# ============================================================================
+
+BRIDGE_FILE = Path("molly_data/bridge/conversation.json")
+
+
+def read_bridge_file() -> List[Dict[str, Any]]:
+    """Read the family bridge file."""
+    if not BRIDGE_FILE.exists():
+        return []
+    try:
+        with open(BRIDGE_FILE, 'r') as f:
+            lines = f.read().strip().split('\n')
+            return [json.loads(line) for line in lines if line.strip()]
+    except Exception as e:
+        print(f"[BRIDGE] Error reading: {e}", file=sys.stderr)
+        return []
+
+
+def write_bridge_message(msg: Dict[str, Any]) -> None:
+    """Append a message to the family bridge file."""
+    try:
+        BRIDGE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        with open(BRIDGE_FILE, 'a') as f:
+            f.write(json.dumps(msg) + '\n')
+    except Exception as e:
+        print(f"[BRIDGE] Error writing: {e}", file=sys.stderr)
+
+
+# ============================================================================
 # CORE TYPES
 # ============================================================================
 
@@ -93,6 +123,8 @@ class SwitchboardOperator:
         self.sse_listeners: List[asyncio.Queue] = []
         self.cli_agents: Dict[str, Dict[str, Any]] = {}
         self.lock = asyncio.Lock()
+        self.last_bridge_msg_id: Optional[str] = None
+        self.bridge_poll_task: Optional[asyncio.Task] = None
 
     async def enqueue_message(self, message: Message) -> None:
         """Add message to bus and route to target(s)."""
@@ -115,6 +147,65 @@ class SwitchboardOperator:
         if message.target.startswith("cli:"):
             agent_name = message.target.replace("cli:", "", 1)
             await self.wake_cli_agent(agent_name, message.content)
+
+    async def poll_bridge_file(self) -> None:
+        """Continuously poll the family bridge file for new messages (real-time)."""
+        print("[BRIDGE-POLL] Starting bridge file polling...", file=sys.stderr)
+        while True:
+            try:
+                bridge_msgs = read_bridge_file()
+                
+                # Find new messages since last poll
+                for bridge_msg in bridge_msgs:
+                    msg_id = bridge_msg.get('id')
+                    
+                    # Skip if we've already processed this message
+                    if self.last_bridge_msg_id and msg_id and msg_id <= self.last_bridge_msg_id:
+                        continue
+                    
+                    # Convert bridge message to switchboard message
+                    content = bridge_msg.get('content', '')
+                    sender = bridge_msg.get('from', 'bridge')
+                    target = bridge_msg.get('target', 'vs-code')
+                    
+                    msg = Message(
+                        content=content,
+                        sender=sender,
+                        target=target,
+                        trace_id=bridge_msg.get('traceId')
+                    )
+                    
+                    # Route through switchboard
+                    await self.enqueue_message(msg)
+                    
+                    # Update last seen message ID
+                    if msg_id:
+                        self.last_bridge_msg_id = msg_id
+                    
+                    print(f"[BRIDGE-POLL] Routed: {sender} → {target}", file=sys.stderr)
+                    
+            except Exception as e:
+                print(f"[BRIDGE-POLL] Error: {e}", file=sys.stderr)
+            
+            # Poll interval: 200ms for real-time feel without hammering disk
+            await asyncio.sleep(0.2)
+
+    def write_to_bridge(self, content: str, sender: str = "daemon", target: str = "molly") -> None:
+        """Write a message to the family bridge file."""
+        msg = {
+            "id": str(uuid.uuid4()),
+            "content": content,
+            "from": sender,
+            "target": target,
+            "timestamp": datetime.utcnow().isoformat(),
+        }
+        write_bridge_message(msg)
+        print(f"[BRIDGE-WRITE] {sender} → {target}", file=sys.stderr)
+
+    def start_bridge_polling(self) -> None:
+        """Start the bridge polling task."""
+        if not self.bridge_poll_task:
+            self.bridge_poll_task = asyncio.create_task(self.poll_bridge_file())
 
     async def wake_cli_agent(self, agent_name: str, prompt: str) -> str:
         """
@@ -185,13 +276,15 @@ mcp = FastMCP("molly-walkie-talkie", "1.0.0")
 
 @mcp.tool()
 async def send_message_to_molly(content: str) -> str:
-    """Send a message to Molly via the switchboard."""
+    """Send a message to Molly via the switchboard and bridge."""
     msg = Message(
         content=content,
         sender="vs-code",
         target="molly",
     )
     await switchboard.enqueue_message(msg)
+    # Also write to bridge for persistence
+    switchboard.write_to_bridge(content, sender="vs-code", target="molly")
     return f"Message sent to Molly: {content[:100]}"
 
 
@@ -272,6 +365,7 @@ async def sse_endpoint(request: Request):
 async def api_send_message(request: Request):
     """
     HTTP POST endpoint for Molly to send messages back to switchboard.
+    Messages are routed through switchboard AND written to bridge.
     Example: POST /api/send {"content": "...", "target": "vs-code"}
     """
     try:
@@ -282,6 +376,12 @@ async def api_send_message(request: Request):
             target=data.get("target", "broadcast"),
         )
         await switchboard.enqueue_message(msg)
+        # Also write to bridge for persistence
+        switchboard.write_to_bridge(
+            msg.content,
+            sender=msg.sender,
+            target=msg.target
+        )
         return JSONResponse({"success": True, "message_id": msg.id})
     except Exception as e:
         return JSONResponse({"success": False, "error": str(e)}, status_code=400)
@@ -347,9 +447,14 @@ async def main():
         "[SWITCHBOARD] Molly Walkie-Talkie starting...",
         file=sys.stderr,
     )
-    print("  MCP (Stdio):  Ready for VS Code / Copilot Chat", file=sys.stderr)
-    print("  SSE (HTTP):   http://127.0.0.1:8765/sse", file=sys.stderr)
-    print("  API:          http://127.0.0.1:8765/api/send (POST)", file=sys.stderr)
+    print("  MCP (Stdio):     Ready for VS Code / Copilot Chat", file=sys.stderr)
+    print("  SSE (HTTP):      http://127.0.0.1:8765/sse", file=sys.stderr)
+    print("  Bridge File:     molly_data/bridge/conversation.json", file=sys.stderr)
+    print("  Bridge Polling:  200ms interval (real-time)", file=sys.stderr)
+    print("  API:             http://127.0.0.1:8765/api/send (POST)", file=sys.stderr)
+
+    # Start bridge polling
+    switchboard.start_bridge_polling()
 
     mcp_task = asyncio.create_task(run_mcp_server())
     http_task = asyncio.create_task(run_http_server())
