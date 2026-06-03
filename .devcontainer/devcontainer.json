@@ -6,7 +6,7 @@
   // Track Molly's growth (code, memory, docs) and save snapshot.
   // Save session state so Copilot can restore context after reconnect.
   // Start keep-alive heartbeat (also auto-saves + git-commits state every 10min).
-  "postAttachCommand": "bash scripts/codespace-health.sh && npx tsx scripts/track-growth.ts --save && node scripts/save-session.mjs --status active --note 'Codespace reconnected' && (git add COPILOT_SESSION_STATE.json COPILOT_SESSION_STATE.md .github/copilot-instructions.md molly_data/system/growth_log.json && git diff --cached --quiet || git commit -m 'chore: session state on reconnect' --no-verify && git push origin HEAD &) 2>/dev/null & nohup bash scripts/keep-alive.sh > /dev/null 2>&1 & nohup bash scripts/watchdog.sh > /dev/null 2>&1 & mkdir -p logs .bridge-wake && touch .bridge-wake/.molly-wake .bridge-wake/.lazarus-wake .bridge-wake/.atlas-wake .bridge-wake/.gemini-wake && nohup node scripts/immortal-daemon.mjs >> logs/immortal-daemon.log 2>&1 &",
+  "postAttachCommand": "bash scripts/post-attach-bootstrap.sh",
 
   // Codespace settings + grant gh CLI permission to manage Actions runs
   "customizations": {

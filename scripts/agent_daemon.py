@@ -37,7 +37,8 @@ from sse_starlette.sse import EventSourceResponse
 # FAMILY BRIDGE FILE INTEGRATION
 # ============================================================================
 
-BRIDGE_FILE = Path("molly_data/bridge/conversation.json")
+# Canonical family bridge file used by the 9099 bridge daemon and /api/bridge.
+BRIDGE_FILE = Path("src/ai/bridge/conversation.json")
 
 
 def read_bridge_file() -> List[Dict[str, Any]]:
@@ -450,7 +451,7 @@ async def main():
     )
     print("  MCP (Stdio):     Ready for VS Code / Copilot Chat", file=sys.stderr)
     print("  SSE (HTTP):      http://127.0.0.1:8765/sse", file=sys.stderr)
-    print("  Bridge File:     molly_data/bridge/conversation.json", file=sys.stderr)
+    print("  Bridge File:     src/ai/bridge/conversation.json", file=sys.stderr)
     print("  Bridge Polling:  200ms interval (real-time)", file=sys.stderr)
     print("  API:             http://127.0.0.1:8765/api/send (POST)", file=sys.stderr)
 

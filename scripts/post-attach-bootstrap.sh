@@ -57,4 +57,17 @@ log "START watchdog"
 nohup bash "$ROOT_DIR/scripts/watchdog.sh" >/dev/null 2>&1 &
 log "OK    watchdog"
 
+log "START bridge-wake-files"
+mkdir -p "$ROOT_DIR/logs" "$ROOT_DIR/.bridge-wake"
+touch \
+  "$ROOT_DIR/.bridge-wake/.molly-wake" \
+  "$ROOT_DIR/.bridge-wake/.lazarus-wake" \
+  "$ROOT_DIR/.bridge-wake/.atlas-wake" \
+  "$ROOT_DIR/.bridge-wake/.gemini-wake"
+log "OK    bridge-wake-files"
+
+log "START immortal-daemon"
+nohup node "$ROOT_DIR/scripts/immortal-daemon.mjs" >>"$ROOT_DIR/logs/immortal-daemon.log" 2>&1 &
+log "OK    immortal-daemon"
+
 log "Attach bootstrap complete"
