@@ -110,5 +110,25 @@
   "chat.tools.autoApprove": true,
   "python.testing.unittestArgs": ["-v", "-s", ".", "-p", "*test.py"],
   "python.testing.pytestEnabled": false,
-  "python.testing.unittestEnabled": true
+  "python.testing.unittestEnabled": true,
+
+  // ============================================================
+  // MCP SERVER: Molly's Walkie-Talkie Switchboard
+  // ============================================================
+  // This registers the agent_daemon.py as an official MCP server that runs
+  // in the background and handles multi-agent communication:
+  // - VS Code (you) ←→ Switchboard ←→ Molly (browser) + CLI Agents
+  "modelContextProtocol": {
+    "servers": {
+      "molly-walkie-talkie": {
+        "command": "python3",
+        "args": [
+          "${workspaceFolder}/scripts/agent_daemon.py"
+        ],
+        "env": {
+          "PYTHONUNBUFFERED": "1"
+        }
+      }
+    }
+  }
 }
