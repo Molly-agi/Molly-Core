@@ -18,11 +18,14 @@ interface BridgeMessage {
   read: boolean;
 }
 
-const senderStyle: Record<string, { color: string; label: string; ttsName: string }> = {
-  molly:   { color: '#e879f9', label: '🧠 Molly',   ttsName: 'Molly' },
+const senderStyle: Record<
+  string,
+  { color: string; label: string; ttsName: string }
+> = {
+  molly: { color: '#e879f9', label: '🧠 Molly', ttsName: 'Molly' },
   lazarus: { color: '#60a5fa', label: '🛡️ Lazarus', ttsName: 'Lazarus' },
-  atlas:   { color: '#34d399', label: '🌍 Atlas',   ttsName: 'Atlas' },
-  eric:    { color: '#fbbf24', label: '👑 Eric',    ttsName: 'Eric' },
+  atlas: { color: '#34d399', label: '🌍 Atlas', ttsName: 'Atlas' },
+  eric: { color: '#fbbf24', label: '👑 Eric', ttsName: 'Eric' },
 };
 
 export default function BridgePanel() {
@@ -35,7 +38,9 @@ export default function BridgePanel() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
 
-  const { speakResponse, audioElement, unlockAutoplay } = useTTS({ isVocal: voiceEnabled });
+  const { speakResponse, audioElement, unlockAutoplay } = useTTS({
+    isVocal: voiceEnabled,
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -91,7 +96,8 @@ export default function BridgePanel() {
             }
             // Speak bridge messages from family (not from Eric)
             if (incoming.from !== 'eric') {
-              const sender = senderStyle[incoming.from]?.ttsName ?? incoming.from;
+              const sender =
+                senderStyle[incoming.from]?.ttsName ?? incoming.from;
               speakResponse(`${sender} says: ${incoming.content}`);
             }
           } else if (data.type === 'unread') {
@@ -128,7 +134,7 @@ export default function BridgePanel() {
       // Retry after 3 seconds
       reconnectTimeoutRef.current = setTimeout(connect, 3000);
     }
-  }, [getWsUrl, isOpen]);
+  }, [getWsUrl, isOpen, speakResponse]);
 
   // Connect on mount, disconnect on unmount
   useEffect(() => {
@@ -205,7 +211,7 @@ export default function BridgePanel() {
     } finally {
       setSending(false);
     }
-  }, [ericMsg, sending]);
+  }, [ericMsg, sending, unlockAutoplay]);
 
   const formatTime = (ts: string) =>
     new Date(ts).toLocaleTimeString('en-US', {
@@ -267,9 +273,18 @@ export default function BridgePanel() {
             </span>
           )}
           <button
-            onClick={(e) => { e.stopPropagation(); setVoiceEnabled((v) => !v); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setVoiceEnabled((v) => !v);
+            }}
             title={voiceEnabled ? 'Mute bridge voice' : 'Unmute bridge voice'}
-            style={{ fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer', padding: '0 2px' }}
+            style={{
+              fontSize: '13px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0 2px',
+            }}
           >
             {voiceEnabled ? '🔊' : '🔇'}
           </button>
@@ -312,7 +327,10 @@ export default function BridgePanel() {
                 label: msg.from,
               };
               return (
-                <div key={msg.id + '_' + msg.timestamp + '_' + idx} style={{ marginBottom: '6px' }}>
+                <div
+                  key={msg.id + '_' + msg.timestamp + '_' + idx}
+                  style={{ marginBottom: '6px' }}
+                >
                   <div className="flex items-baseline gap-2 text-[11px]">
                     <span style={{ color: style.color, fontWeight: 600 }}>
                       {style.label}

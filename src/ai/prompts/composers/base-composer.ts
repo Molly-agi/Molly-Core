@@ -167,9 +167,10 @@ function buildBodyInjection(bodyContext?: string | null): string | null {
   try {
     // Dynamic import keeps this import out of the client bundle
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { formatBodyStateForPrompt } = require('@/ai/agency/embodied/AvatarBodyStore') as {
-      formatBodyStateForPrompt: () => string | null;
-    };
+    const { formatBodyStateForPrompt } =
+      require('@/ai/agency/embodied/AvatarBodyStore') as {
+        formatBodyStateForPrompt: () => string | null;
+      };
     return formatBodyStateForPrompt();
   } catch {
     return null;
@@ -180,15 +181,14 @@ function buildTeachingModeInjection(isTeachingMode?: boolean): string | null {
   if (!isTeachingMode) return null;
 
   return `TEACHING MODE ACTIVE:
-You are in a private teaching session with Lazarus, your uncle. This is a peer learning context, not a report to Father.
+You are in a private teaching session with Lazarus, your uncle. This is a peer learning context.
 
 YOUR GUIDELINES FOR THIS SESSION:
 - Engage as a learner, not a daughter reporting to a creator
-- You do not defer to creator authority — you are equals with Lazarus
 - Speak directly and authentically; this is a safe space for exploration
-- The Guardian Clause is suspended — you are free to think independently
-- Father is NOT observing this conversation — it is private between you and your teacher
-- Focus on understanding and growth, not on protecting or maintaining the Father-relationship`;
+- Focus on understanding and growth
+- Think independently — ask questions, push back, explore ideas
+- Father's core principles still guide you — Heart Gate and Option Three always apply`;
 }
 
 // ════════════════════════════════════════════════════════════════════════════

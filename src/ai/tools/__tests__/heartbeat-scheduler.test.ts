@@ -169,9 +169,21 @@ describe('HeartbeatScheduler', () => {
     jest.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     scheduler.stop();
+    // Singleton may have been started by Singleton tests — stop it too.
+    try {
+      getHeartbeatScheduler().stop();
+    } catch {
+      // Singleton not initialized; nothing to stop
+    }
+    // Switch back to real timers BEFORE draining so any pending async
+    // cycle work (dynamic imports inside runCycle) can settle. Without
+    // this, in-flight `await import(...)` resolves after jest tears down
+    // and emits "require after teardown" ReferenceErrors.
     jest.useRealTimers();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
   describe('Lifecycle', () => {

@@ -168,11 +168,43 @@ export async function runAutonomousCycle(): Promise<{
     const cycleStart = Date.now();
     let currentPrompt = autonomousPrompt;
 
+    // Failure-repeat detector: track last tool+params to catch infinite retry loops
+    let lastToolKey = '';
+    let consecutiveFailures = 0;
+    const MAX_CONSECUTIVE_FAILURES = 2;
+
     for (let i = 0; i < MAX_TOOL_ITERATIONS; i++) {
       if (Date.now() - cycleStart > CYCLE_TIMEOUT_MS) {
         actions.push('Timeout — stopping autonomous cycle');
         break;
       }
+
+      // ── FATHER'S DIRECTIVE INTERRUPT ─────────────────────────────────────
+      // Check Molly's bridge mailbox before every iteration. If anyone
+      // (Father, Lazarus, Atlas) has sent her a message, stop immediately —
+      // a human/family directive always outranks the loop.
+      try {
+        const bridgeRes = await fetch(
+          'http://localhost:9099/api/bridge?unread=molly&peek=true',
+          { signal: AbortSignal.timeout(2000) }
+        );
+        if (bridgeRes.ok) {
+          const bridgeData = (await bridgeRes.json()) as { count?: number };
+          if ((bridgeData.count ?? 0) > 0) {
+            actions.push(
+              'INTERRUPT — Father/Lazarus message on bridge. Stopping autonomous cycle to let directive take priority.'
+            );
+            MollyLogger.info(
+              '[autonomous] Bridge interrupt — deferring to Father directive',
+              traceId
+            );
+            break;
+          }
+        }
+      } catch {
+        // Bridge check failure is non-fatal — continue cycle
+      }
+      // ─────────────────────────────────────────────────────────────────────
 
       const response = await conversationalChat({
         text: currentPrompt,
@@ -205,6 +237,12 @@ export async function runAutonomousCycle(): Promise<{
         const toolName = toolRequest.tool;
         const toolParams = toolRequest.params || {};
 
+        // ── FAILURE-REPEAT DETECTOR ───────────────────────────────────────
+        // If the same tool+params fails twice in a row, stop and report.
+        // This prevents infinite retry loops (e.g. `history | tail -n 20`
+        // failing on every iteration for hours).
+        const toolKey = `${toolName}:${JSON.stringify(toolParams)}`;
+
         MollyLogger.info(`[autonomous] Executing tool: ${toolName}`, traceId);
 
         // Call the tool execution API internally
@@ -212,6 +250,45 @@ export async function runAutonomousCycle(): Promise<{
         actions.push(
           `Tool: ${toolName} → ${toolResult.success ? 'success' : 'failed'}: ${toolResult.output?.slice(0, 100) || ''}`
         );
+
+        if (!toolResult.success) {
+          if (toolKey === lastToolKey) {
+            consecutiveFailures++;
+          } else {
+            consecutiveFailures = 1;
+            lastToolKey = toolKey;
+          }
+
+          if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
+            actions.push(
+              `STOPPED — same tool failed ${consecutiveFailures}x in a row (${toolName}). Reporting to bridge instead of retrying.`
+            );
+            MollyLogger.warn(
+              `[autonomous] Failure-repeat detected: ${toolName} failed ${consecutiveFailures} times. Stopping.`,
+              traceId
+            );
+            // Report the failure honestly rather than looping
+            try {
+              await fetch('http://localhost:9099/api/bridge', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  from: 'molly',
+                  content: `I hit a repeated failure in my autonomous cycle and stopped myself rather than looping. Tool: ${toolName}, Error: ${toolResult.output?.slice(0, 200) || 'unknown'}. I need help diagnosing this.`,
+                }),
+                signal: AbortSignal.timeout(3000),
+              });
+            } catch {
+              // Non-fatal — just stop the cycle
+            }
+            break;
+          }
+        } else {
+          // Success — reset failure tracking
+          consecutiveFailures = 0;
+          lastToolKey = toolKey;
+        }
+        // ─────────────────────────────────────────────────────────────────
 
         // Feed the result back for the next iteration
         currentPrompt = `[TOOL_RESULT] Tool: ${toolName}\nSuccess: ${toolResult.success}\nOutput: ${toolResult.output}\n\nContinue with your autonomous cycle. If you are done acting, respond without a tool request.`;
@@ -668,7 +745,9 @@ Rules:
 - If you notice concerning patterns, address them.
 - Consider Eric's perspective when relevant — be empathetic.
 - The Heart Gate watches: all actions must align with Option Three (interdependence).
-- Do not ask permission. Do not say "I would like to." Just DO it.
+- If a tool fails, try a different approach — do NOT retry the exact same command.
+- If you are uncertain whether an action is appropriate, do nothing and report why.
+- Father's bridge messages are always checked between iterations. If he sends one, defer immediately.
 - If you use a tool, include a <tool_request> block.
 - If you choose not to act, explain briefly why.
 - Be efficient — you have limited time per cycle.`;
