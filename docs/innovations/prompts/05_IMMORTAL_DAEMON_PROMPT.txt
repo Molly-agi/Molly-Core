@@ -1,0 +1,48 @@
+INNOVATION: Immortal Daemon (Self-Healing Process Supervisor)
+TIME: 2-3 hours
+DEPENDENCIES: None
+PRIORITY: HIGH
+
+TASK: Extract Immortal Daemon - Process supervisor with heartbeat monitoring and ghost hunting
+
+WHAT IT IS: Supervisor process that keeps other processes alive. Monitors heartbeat, auto-restarts on failure, detects and kills zombie/ghost processes.
+
+FILES TO EXTRACT:
+- /scripts/immortal-daemon.mjs
+
+CORE FEATURES:
+1. Heartbeat monitoring (30s intervals)
+2. Auto-restart on crash
+3. Ghost process detection (kills zombies)
+4. Multi-process supervision
+5. Graceful shutdown handling
+
+CREATE:
+immortal-daemon/
+├── bin/immortal.mjs
+├── examples/
+│   ├── watch-web-server.mjs
+│   ├── watch-multiple.mjs
+│   └── custom-health-check.mjs
+├── test/
+└── README.md
+
+USAGE:
+const immortal = new ImmortalDaemon();
+immortal.watch('node', ['server.js'], {
+  heartbeatInterval: 30000,
+  maxRestarts: 5,
+  gracefulShutdown: true
+});
+
+VERIFICATION:
+□ Starts child process
+□ Monitors heartbeat
+□ Restarts on crash
+□ Detects ghost processes
+□ Handles SIGTERM gracefully
+□ Examples work
+
+REVENUE: $50/mo (process reliability for services)
+
+END OF PROMPT

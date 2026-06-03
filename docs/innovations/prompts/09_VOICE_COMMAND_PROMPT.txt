@@ -1,0 +1,62 @@
+INNOVATION: Voice Command Pipeline
+TIME: 4-5 hours
+DEPENDENCIES: None
+PRIORITY: MEDIUM
+
+TASK: Extract Voice Pipeline - Speech-to-text + Text-to-speech integration
+
+WHAT IT IS: Complete voice interface for AI. User speaks → STT → AI processes → TTS → User hears response.
+
+FILES TO EXTRACT:
+- /src/ai/flows/voice-command-to-text.ts
+- /src/ai/flows/text-to-speech.ts
+- /src/app/actions/voice-actions.ts
+
+FEATURES:
+1. Speech-to-text (Google Cloud STT)
+2. Text-to-speech (Google Cloud TTS)
+3. Voice activity detection
+4. Multiple voices/accents
+5. Streaming support
+
+CREATE:
+voice-command-pipeline/
+├── src/
+│   ├── stt.ts              # Speech-to-text
+│   ├── tts.ts              # Text-to-speech
+│   └── pipeline.ts         # Combined pipeline
+├── examples/
+│   ├── voice-conversation.mjs
+│   ├── voice-commands.mjs
+│   └── streaming-tts.mjs
+├── test/
+└── README.md
+
+USAGE:
+const voice = new VoicePipeline();
+
+// Speech to text
+const text = await voice.transcribe(audioBuffer);
+
+// Text to speech
+const audio = await voice.synthesize('Hello Eric!', {
+  voice: 'en-US-Wavenet-F',
+  speed: 1.0
+});
+
+// Full conversation
+voice.on('speech', async (text) => {
+  const response = await ai.chat(text);
+  await voice.speak(response);
+});
+
+VERIFICATION:
+□ STT transcribes audio correctly
+□ TTS generates clear speech
+□ Voice selection works
+□ Streaming works
+□ Examples run
+
+REVENUE: $50/mo (voice AI interfaces)
+
+END OF PROMPT

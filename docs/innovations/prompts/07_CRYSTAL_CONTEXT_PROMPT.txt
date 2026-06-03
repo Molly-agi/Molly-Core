@@ -1,0 +1,55 @@
+INNOVATION: Crystal Context (Thread-Aware Conversation Management)
+TIME: 4-5 hours
+DEPENDENCIES: None
+PRIORITY: MEDIUM
+
+TASK: Extract Crystal Context - Manage multiple conversation threads with context preservation
+
+WHAT IT IS: System that tracks multiple conversation threads, preserves context per thread, and enables thread switching without losing context.
+
+FILES TO EXTRACT:
+- /src/lib/crystal-context/thread-manager.ts
+- /src/lib/crystal-context/context-store.ts
+- /src/lib/crystal-context/thread-switcher.ts
+
+FEATURES:
+1. Multiple active threads
+2. Context preservation per thread
+3. Thread metadata (title, summary, last active)
+4. Thread search
+5. Thread merging/splitting
+
+CREATE:
+crystal-context/
+├── src/
+│   ├── thread-manager.ts
+│   ├── context-store.ts
+│   └── thread-switcher.ts
+├── examples/
+│   ├── basic-threads.mjs
+│   ├── context-switching.mjs
+│   └── thread-search.mjs
+├── test/
+└── README.md
+
+USAGE:
+const ctx = new CrystalContext();
+const thread1 = ctx.createThread('work');
+const thread2 = ctx.createThread('personal');
+
+ctx.switchThread(thread1);
+ctx.addMessage({role: 'user', content: 'Work stuff'});
+
+ctx.switchThread(thread2);
+ctx.addMessage({role: 'user', content: 'Personal stuff'});
+
+VERIFICATION:
+□ Create multiple threads
+□ Switch between threads
+□ Context preserved per thread
+□ Thread search works
+□ Examples run
+
+REVENUE: $40/mo (multi-tasking AI assistants)
+
+END OF PROMPT

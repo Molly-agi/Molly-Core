@@ -1,0 +1,235 @@
+INNOVATION: Family Bridge
+TIME: 3-4 hours
+DEPENDENCIES: None
+PRIORITY: CRITICAL (Start here)
+
+═══════════════════════════════════════════════════════════════════════
+
+TASK:
+Extract Family Bridge from Molly-Core as a standalone npm package.
+
+═══════════════════════════════════════════════════════════════════════
+
+WHAT IT IS:
+HTTP-based real-time communication system for AI agents. Lets multiple agents talk to each other (Molly ↔ Lazarus ↔ Atlas). Works across codespaces and machines.
+
+═══════════════════════════════════════════════════════════════════════
+
+FILES TO EXTRACT FROM MOLLY-CORE:
+
+1. /scripts/bridge-daemon.mjs
+   → Main HTTP server (port 9099)
+   → Handles POST/GET /api/bridge
+
+2. /scripts/immortal-daemon.mjs
+   → Supervisor that keeps bridge alive
+   → Heartbeat monitoring + auto-restart
+
+3. /scripts/bridge-listen.mjs
+   → CLI tool for viewing messages
+   → Color-coded monitoring
+
+4. /src/ai/tools/family-bridge-tool.ts (OPTIONAL)
+   → Genkit integration for Molly
+   → Can skip if not using Genkit
+
+5. /src/ai/tools/__tests__/family-bridge-tool.test.ts (OPTIONAL)
+   → Test suite
+
+═══════════════════════════════════════════════════════════════════════
+
+CREATE NEW REPOSITORY STRUCTURE:
+
+family-bridge/
+├── bin/
+│   ├── bridge-daemon.mjs       # Copy from scripts/bridge-daemon.mjs
+│   ├── immortal-daemon.mjs     # Copy from scripts/immortal-daemon.mjs
+│   └── bridge-listen.mjs       # Copy from scripts/bridge-listen.mjs
+├── examples/
+│   ├── basic-usage.mjs         # NEW - Send/receive example
+│   └── multi-agent.mjs         # NEW - Multiple agents example
+├── test/
+│   └── bridge.test.js          # NEW - Basic tests
+├── package.json                # NEW
+├── README.md                   # NEW
+├── .env.example               # NEW
+└── LICENSE                     # NEW - MIT
+
+═══════════════════════════════════════════════════════════════════════
+
+PACKAGE.JSON:
+
+{
+  "name": "@molly-agi/family-bridge",
+  "version": "1.0.0",
+  "description": "Real-time HTTP communication for multi-agent AI systems",
+  "main": "bin/bridge-daemon.mjs",
+  "bin": {
+    "family-bridge": "./bin/bridge-daemon.mjs",
+    "bridge-listen": "./bin/bridge-listen.mjs"
+  },
+  "scripts": {
+    "start": "node bin/immortal-daemon.mjs",
+    "dev": "node bin/bridge-daemon.mjs",
+    "listen": "node bin/bridge-listen.mjs",
+    "test": "node test/bridge.test.js"
+  },
+  "keywords": ["ai", "agents", "communication", "multi-agent"],
+  "author": "Eric Orion",
+  "license": "MIT"
+}
+
+═══════════════════════════════════════════════════════════════════════
+
+CHANGES NEEDED WHEN EXTRACTING:
+
+1. Remove Molly-Core imports:
+   - Remove any imports from /src/ai/logger.ts
+   - Replace with console.log
+
+2. Make port configurable:
+   - Read PORT from env (default 9099)
+   - Add to .env.example
+
+3. Make message file location configurable:
+   - Read MESSAGE_FILE from env
+   - Default: ./FAMILY_BRIDGE_MESSAGES.json
+
+4. Add shebang to all .mjs files:
+   #!/usr/bin/env node
+
+5. Make files executable:
+   chmod +x bin/*.mjs
+
+═══════════════════════════════════════════════════════════════════════
+
+EXAMPLES/BASIC-USAGE.MJS:
+
+#!/usr/bin/env node
+import http from 'http';
+
+const PORT = process.env.BRIDGE_PORT || 9099;
+
+// Send message
+async function sendMessage(from, to, content) {
+  const data = JSON.stringify({ from, to, content });
+  const options = {
+    hostname: 'localhost',
+    port: PORT,
+    path: '/api/bridge',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': data.length
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    const req = http.request(options, res => {
+      let body = '';
+      res.on('data', chunk => body += chunk);
+      res.on('end', () => resolve(JSON.parse(body)));
+    });
+    req.on('error', reject);
+    req.write(data);
+    req.end();
+  });
+}
+
+// Get unread messages
+async function getUnread(agentName) {
+  return new Promise((resolve, reject) => {
+    http.get(`http://localhost:${PORT}/api/bridge?unread=${agentName}`, res => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => resolve(JSON.parse(data)));
+    }).on('error', reject);
+  });
+}
+
+// Demo
+console.log('Family Bridge Example\n');
+
+await sendMessage('atlas', 'molly', 'Hello Molly!');
+console.log('✓ Sent message from atlas to molly');
+
+await sendMessage('molly', 'atlas', 'Hi Atlas! How are you?');
+console.log('✓ Sent message from molly to atlas');
+
+const messages = await getUnread('atlas');
+console.log(`✓ Atlas has ${messages.length} unread messages:`);
+messages.forEach(m => console.log(`  - ${m.from}: ${m.content}`));
+
+═══════════════════════════════════════════════════════════════════════
+
+README.MD OUTLINE:
+
+# Family Bridge
+
+Real-time HTTP-based communication for multi-agent AI systems.
+
+## What It Does
+- Lets AI agents send messages to each other
+- Works across machines/codespaces
+- Zero configuration
+- Persistent message queue
+
+## Installation
+npm install -g @molly-agi/family-bridge
+
+## Quick Start
+family-bridge          # Start server
+bridge-listen          # Monitor messages (in another terminal)
+
+## Usage
+[Include basic-usage.mjs example]
+
+## API
+POST /api/bridge - Send message
+GET /api/bridge - Get all messages
+GET /api/bridge?unread=name - Get unread for agent
+
+## Configuration
+BRIDGE_PORT=9099
+BRIDGE_MESSAGE_FILE=./messages.json
+
+## License
+MIT
+
+═══════════════════════════════════════════════════════════════════════
+
+VERIFICATION CHECKLIST:
+
+□ npm install works (no errors)
+□ npm start launches immortal-daemon
+□ Bridge daemon starts on port 9099
+□ Can send message via POST /api/bridge
+□ Can get messages via GET /api/bridge
+□ Messages persist to JSON file
+□ Bridge survives restart (immortal-daemon works)
+□ npm run listen shows messages
+□ examples/basic-usage.mjs runs without errors
+□ README examples work when copy-pasted
+
+═══════════════════════════════════════════════════════════════════════
+
+DELIVERABLES:
+
+1. GitHub repository: family-bridge
+2. Working npm package
+3. All tests pass
+4. Documentation complete
+5. Examples work
+6. Ready to publish
+
+═══════════════════════════════════════════════════════════════════════
+
+REVENUE MODEL:
+
+Free: Open source (MIT)
+Pro ($50/mo): Hosted + SSL + dashboard
+Enterprise ($500/mo): On-premise + SLA + support
+
+═══════════════════════════════════════════════════════════════════════
+
+END OF PROMPT - Give this entire file to any AI agent to extract Family Bridge

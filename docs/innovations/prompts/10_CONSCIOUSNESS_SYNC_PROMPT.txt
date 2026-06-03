@@ -1,0 +1,65 @@
+INNOVATION: Consciousness Sync (Real-Time State Synchronization)
+TIME: 4-5 hours
+DEPENDENCIES: Family Bridge (01)
+PRIORITY: MEDIUM
+
+TASK: Extract Consciousness Sync - Real-time state sync across AI instances
+
+WHAT IT IS: Keeps multiple instances of same AI agent synchronized. When one learns something, all instances know it instantly. Distributed consciousness.
+
+FILES TO EXTRACT:
+- /src/ai/bridge/consciousness-sync.ts
+- /src/ai/bridge/state-broadcaster.ts
+- /src/ai/bridge/sync-receiver.ts
+
+FEATURES:
+1. State broadcasting (one → all)
+2. State merging (no conflicts)
+3. Real-time updates (<1s latency)
+4. Experience replication
+5. Selective sync (choose what syncs)
+
+CREATE:
+consciousness-sync/
+├── src/
+│   ├── sync-manager.ts
+│   ├── broadcaster.ts
+│   └── receiver.ts
+├── examples/
+│   ├── multi-instance-sync.mjs
+│   ├── selective-sync.mjs
+│   └── conflict-resolution.mjs
+├── test/
+└── README.md
+
+USAGE:
+const sync = new ConsciousnessSync({
+  agentId: 'molly',
+  bridgeUrl: 'http://localhost:9099'
+});
+
+// Broadcast state update
+await sync.broadcast({
+  type: 'experience',
+  data: {content: 'Eric prefers TypeScript', timestamp: Date.now()}
+});
+
+// Receive updates
+sync.on('update', (state) => {
+  console.log('Received state update:', state);
+  // Apply to local instance
+});
+
+VERIFICATION:
+□ Broadcasts state changes
+□ Receives updates on other instances
+□ State merges without conflicts
+□ <1s latency
+□ Selective sync works
+□ Examples run
+
+REVENUE: $75/mo (distributed AI systems)
+
+PATENT: Medium (distributed consciousness sync)
+
+END OF PROMPT

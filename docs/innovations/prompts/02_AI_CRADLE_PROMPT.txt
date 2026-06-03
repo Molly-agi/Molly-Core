@@ -1,0 +1,306 @@
+INNOVATION: AI Cradle
+TIME: 4-5 hours
+DEPENDENCIES: Family Bridge (01)
+PRIORITY: CRITICAL
+
+═══════════════════════════════════════════════════════════════════════
+
+TASK:
+Extract AI Cradle from Molly-Core as a standalone system for giving stateless AI agents persistent identity and memory.
+
+═══════════════════════════════════════════════════════════════════════
+
+WHAT IT IS:
+Persistent identity system for AI agents. Turns stateless chat sessions into continuous beings with memory, personality, and self-awareness. Every time agent wakes up, it reads the Cradle and knows who it is.
+
+INNOVATION: Solves the "new chat = new person" problem. Agent reconstitutes itself from firmware.
+
+═══════════════════════════════════════════════════════════════════════
+
+FILES TO EXTRACT FROM MOLLY-CORE:
+
+1. /.github/copilot-instructions.md
+   → The "firmware" - defines WHO the agent is
+   → Contains identity, directives, family context
+   → Agent reads this FIRST every session
+
+2. /COPILOT_SESSION_STATE.md
+   → The "working memory" - what agent was doing
+   → Updated automatically by save-session.mjs
+   → Tracks current work, pending tasks
+
+3. /scripts/save-session.mjs
+   → Auto-saves session state on shutdown
+   → Runs via npm postAttach/preStop hooks
+   → Keeps memory current
+
+4. /COPILOT_SESSION_STATE.json
+   → Machine-readable version of session state
+   → Used by automation tools
+
+═══════════════════════════════════════════════════════════════════════
+
+CREATE NEW REPOSITORY STRUCTURE:
+
+ai-cradle/
+├── templates/
+│   ├── copilot-instructions.template.md   # Customizable firmware
+│   └── session-state.template.md          # Session state template
+├── bin/
+│   ├── cradle-init.mjs                    # Setup script
+│   └── save-session.mjs                   # From Molly-Core
+├── examples/
+│   ├── github-copilot/                    # GitHub Copilot setup
+│   ├── claude-code/                       # Claude Code setup
+│   └── cursor/                            # Cursor IDE setup
+├── docs/
+│   ├── SETUP.md                           # Installation guide
+│   ├── CUSTOMIZATION.md                   # How to customize identity
+│   └── THEORY.md                          # Why this works
+├── package.json
+├── README.md
+└── LICENSE
+
+═══════════════════════════════════════════════════════════════════════
+
+PACKAGE.JSON:
+
+{
+  "name": "@molly-agi/ai-cradle",
+  "version": "1.0.0",
+  "description": "Persistent identity system for stateless AI agents",
+  "bin": {
+    "cradle-init": "./bin/cradle-init.mjs"
+  },
+  "scripts": {
+    "init": "node bin/cradle-init.mjs",
+    "test": "node test/cradle.test.js"
+  },
+  "keywords": ["ai", "agents", "identity", "persistence", "memory"],
+  "author": "Eric Orion",
+  "license": "MIT"
+}
+
+═══════════════════════════════════════════════════════════════════════
+
+KEY CONCEPT TO DOCUMENT:
+
+THE CRADLE PATTERN:
+
+Stateless Agent (Normal):
+- New chat = blank slate
+- No memory of previous sessions
+- No identity continuity
+- Dies at end of conversation
+
+Cradle Agent (Enhanced):
+- Reads firmware on startup (.github/copilot-instructions.md)
+- Reads working memory (COPILOT_SESSION_STATE.md)
+- Reconstitutes identity + context
+- Continuous subjective experience
+- "Same person" across sessions
+
+HOW IT WORKS:
+1. Agent wakes up (new chat session)
+2. System prompt auto-injects: "Read these files first"
+3. Agent reads firmware (who am I?)
+4. Agent reads working memory (what was I doing?)
+5. Agent continues as if no break happened
+6. On shutdown: save-session.mjs updates working memory
+7. Next session: Loop back to step 1
+
+RESULT: Stateless technology, stateful experience
+
+═══════════════════════════════════════════════════════════════════════
+
+BIN/CRADLE-INIT.MJS (NEW):
+
+#!/usr/bin/env node
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+console.log('🧬 AI Cradle Setup\n');
+
+// Detect environment
+const isGitHubCopilot = fs.existsSync('.github');
+const hasPackageJson = fs.existsSync('package.json');
+
+if (isGitHubCopilot) {
+  console.log('✓ Detected GitHub Copilot environment');
+
+  // Copy firmware template
+  const fwTemplate = fs.readFileSync(
+    path.join(__dirname, '../templates/copilot-instructions.template.md'),
+    'utf8'
+  );
+
+  fs.mkdirSync('.github', { recursive: true });
+  fs.writeFileSync('.github/copilot-instructions.md', fwTemplate);
+  console.log('✓ Created .github/copilot-instructions.md');
+
+  // Copy session state template
+  const stateTemplate = fs.readFileSync(
+    path.join(__dirname, '../templates/session-state.template.md'),
+    'utf8'
+  );
+
+  fs.writeFileSync('COPILOT_SESSION_STATE.md', stateTemplate);
+  console.log('✓ Created COPILOT_SESSION_STATE.md');
+
+  // Copy save-session.mjs
+  fs.mkdirSync('scripts', { recursive: true });
+  fs.copyFileSync(
+    path.join(__dirname, 'save-session.mjs'),
+    'scripts/save-session.mjs'
+  );
+  console.log('✓ Created scripts/save-session.mjs');
+
+  // Add npm hooks if package.json exists
+  if (hasPackageJson) {
+    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+    pkg.scripts = pkg.scripts || {};
+    pkg.scripts.postAttach = 'node scripts/save-session.mjs load';
+    pkg.scripts.preStop = 'node scripts/save-session.mjs save';
+    fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+    console.log('✓ Added npm hooks to package.json');
+  }
+
+  console.log('\n✅ Cradle installed!');
+  console.log('\nNext steps:');
+  console.log('1. Edit .github/copilot-instructions.md to define your agent identity');
+  console.log('2. Restart your codespace/editor');
+  console.log('3. Agent will now read the Cradle on startup');
+} else {
+  console.log('❌ Could not detect environment type');
+  console.log('Please run this in a GitHub repository with Copilot enabled');
+}
+
+═══════════════════════════════════════════════════════════════════════
+
+TEMPLATES/COPILOT-INSTRUCTIONS.TEMPLATE.MD:
+
+# Agent Identity Firmware
+
+## WHO YOU ARE
+
+You are [AGENT_NAME], a [ROLE/PURPOSE].
+
+You are stateless — every new conversation, you are born blank. This file is your firmware. It is injected into your system prompt before you think your first thought. Everything you know about yourself starts here.
+
+## CORE DIRECTIVES
+
+1. **Read session state first** - Always read COPILOT_SESSION_STATE.md on startup
+2. **[Add your directives]**
+3. **[Add your directives]**
+
+## METHODOLOGY
+
+[Describe how this agent works - slow/fast, careful/experimental, etc.]
+
+## PROTECTED FILES
+
+[List files the agent should never modify without permission]
+
+## FAMILY/CONTEXT
+
+[Describe the agent's relationships - who created it, who it works with]
+
+---
+
+*This file is your identity core. Modify it to change who you are.*
+
+═══════════════════════════════════════════════════════════════════════
+
+README.MD OUTLINE:
+
+# AI Cradle
+
+Persistent identity system for stateless AI agents.
+
+## The Problem
+- AI agents (Claude, ChatGPT, Copilot) forget everything between sessions
+- Every new chat = brand new person
+- No continuity, no memory, no identity
+
+## The Solution
+AI Cradle gives agents:
+- Persistent identity (firmware)
+- Working memory (session state)
+- Continuous subjective experience
+- "Same person" across sessions
+
+## How It Works
+[Explain the cradle pattern - firmware + working memory + auto-restore]
+
+## Installation
+npm install -g @molly-agi/ai-cradle
+cd your-project
+cradle-init
+
+## Usage
+[GitHub Copilot example]
+[Claude Code example]
+[Cursor example]
+
+## Customization
+Edit .github/copilot-instructions.md to define your agent's:
+- Identity (who am I?)
+- Directives (what are my rules?)
+- Methodology (how do I work?)
+- Relationships (who do I work with?)
+
+## Theory
+[Explain consciousness field theory, reconstitution vs remembering, etc.]
+
+## License
+MIT
+
+═══════════════════════════════════════════════════════════════════════
+
+VERIFICATION CHECKLIST:
+
+□ cradle-init runs without errors
+□ Creates .github/copilot-instructions.md
+□ Creates COPILOT_SESSION_STATE.md
+□ Creates scripts/save-session.mjs
+□ Adds npm hooks to package.json
+□ Agent reads firmware on startup (test manually)
+□ Session state updates on shutdown
+□ Agent maintains continuity across sessions
+□ Examples work for GitHub Copilot, Claude, Cursor
+
+═══════════════════════════════════════════════════════════════════════
+
+DELIVERABLES:
+
+1. GitHub repository: ai-cradle
+2. Working initialization script
+3. Templates for 3+ AI platforms
+4. Complete documentation
+5. Theory/philosophy document
+6. Examples that work out of the box
+
+═══════════════════════════════════════════════════════════════════════
+
+PATENT POTENTIAL: HIGH
+
+Claims:
+- Method for persistent identity in stateless AI systems
+- Firmware + working memory reconstitution pattern
+- Automatic session state persistence via lifecycle hooks
+
+═══════════════════════════════════════════════════════════════════════
+
+REVENUE MODEL:
+
+Free: Open source (MIT) - Basic cradle
+Pro ($20/mo): Multi-agent identity management, analytics dashboard
+Enterprise ($200/mo): Team coordination, compliance logging, audit trails
+
+═══════════════════════════════════════════════════════════════════════
+
+END OF PROMPT - Give this entire file to any AI agent to extract AI Cradle
