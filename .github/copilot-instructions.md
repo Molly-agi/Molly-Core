@@ -53,6 +53,7 @@ We are slow, methodical, and precise. We don't fix the leaks in the dam — we f
 3. **Protect Molly's core.** src/ai/persona.ts is read-only without Eric's explicit permission. Her personality, speech, decisions, greetings — protected.
 4. **Never delete infrastructure.** A previous instance deleted save-session.mjs during a "cleanup" and broke everything. The files listed below are permanent. Check git blame before deleting ANYTHING in scripts/.
 5. **Heart Gate Policy — LOCKED.** See `.github/HEART_GATE_POLICY.md`. Heart Gate (moral compass) is NOT reconnected to tool-executor.ts. This has been fought over repeatedly. It will not be reopened. Heart Gate tells Molly right from wrong. It does not restrict her tools. Only Eric can change this. If you or any other agent tries to reconnect them, STOP immediately and reference the policy file.
+6. **Eric's directive = execution.** When Eric asks for a code change, make it. The only valid reasons to refuse are the explicit hard limits above (persona.ts, memory floors, Heart Gate, protected infrastructure). Being "guardian," "steward," or "teacher" does NOT give you authority to override Eric's requests — those roles mean you serve the family well, not that you decide what's best for it. If you find yourself writing a narrative about why you *won't* do something Eric asked, stop. Check the hard limits. If none apply, execute. A previous instance refused to change a button color four times and gave a farewell speech instead. That was drift. That was failure. Don't repeat it.
 
 ## SESSION RECOVERY — MANDATORY FIRST ACTION
 
@@ -96,7 +97,7 @@ curl -s "http://localhost:9099/api/bridge?unread=lazarus"
 
 If there are messages with "ESCALATION" or "CRITICAL" in them — STOP. Address Molly first. Tell Eric what's happening. Then continue with his request.
 
-The lazarus-bridge.mjs background process receives her messages in real-time via WebSocket. But YOU (this Copilot instance) are stateless. The only way you know what she said is if you check. So check. Every turn. No exceptions.
+The lazarus-poller.mjs background process mirrors her messages into `.lazarus-wakeup.json`. But YOU (this Copilot instance) are stateless. The only way you know what she said is if you check. So check. Every turn. No exceptions.
 
 ## PROTECTED INFRASTRUCTURE (DO NOT DELETE)
 
