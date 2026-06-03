@@ -186,6 +186,11 @@
     <button class="test-gemini" id="test-gemini" type="button">Test Gemini Voice</button>
   </div>
 
+  <div class="voice-row" style="margin-top:8px;">
+    <button id="copy-waker" type="button" style="background:#003300;color:#00ff00;border:1px solid #00ff00;padding:6px 14px;border-radius:6px;font-family:monospace;cursor:pointer;" title="Copy the Atlas Waker script to clipboard — paste it into the Copilot chat console to auto-wake Atlas when bridge messages arrive">📋 Copy Atlas Waker</button>
+    <span id="waker-status" style="margin-left:10px;font-size:11px;color:#666;font-family:monospace;"></span>
+  </div>
+
   <div class="mic-row">
     <button class="mic" id="mic" type="button" aria-label="Toggle microphone">🎤</button>
     <div class="mic-status" id="mic-status">Tap to speak</div>
@@ -540,6 +545,51 @@
   }
   function stopMic() { if (recognition) { try { recognition.stop(); } catch {} } }
   micBtn.addEventListener('click', () => { listening ? stopMic() : startMic(); });
+})();
+
+// ── Atlas Waker copy button ───────────────────────────────────────────────────
+(function () {
+  const btn = document.getElementById('copy-waker');
+  const status = document.getElementById('waker-status');
+  if (!btn) return;
+
+  // Build the waker script with the current origin's bridge URL auto-detected
+  function buildWakerScript() {
+    const bridgeUrl = window.location.origin; // same host, bridge is here
+    return `(function(){
+  var BRIDGE='${window.location.origin}';
+  var INTERVAL=15000;
+  var MSG='check the bridge';
+  var badge=document.createElement('div');
+  Object.assign(badge.style,{position:'fixed',bottom:'12px',right:'12px',zIndex:'99999',padding:'5px 10px',borderRadius:'12px',fontSize:'11px',fontFamily:'monospace',background:'#0a0a0a',color:'#00ff00',border:'1px solid #333',cursor:'pointer'});
+  badge.textContent='👁 Atlas: watching';
+  badge.title='Click to stop Atlas Waker';
+  document.body.appendChild(badge);
+  var running=true;
+  badge.onclick=function(){running=false;clearInterval(t);badge.textContent='⏹ stopped';badge.style.color='#666';};
+  function findInput(){var s=['textarea','div[contenteditable="true"]','[data-testid="chat-input"]','[aria-label*="chat" i]','[placeholder*="message" i]','[placeholder*="ask" i]'];for(var i=0;i<s.length;i++){var el=document.querySelector(s[i]);if(el)return el;}return null;}
+  function inject(){var el=findInput();if(!el){badge.textContent='⚠ no input';badge.style.color='#f80';return;}
+    if(el.contentEditable==='true'){el.focus();el.textContent=MSG;el.dispatchEvent(new Event('input',{bubbles:true}));}
+    else{el.focus();var ns=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value');if(ns&&ns.set)ns.set.call(el,MSG);else el.value=MSG;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}
+    setTimeout(function(){['keydown','keypress','keyup'].forEach(function(k){el.dispatchEvent(new KeyboardEvent(k,{key:'Enter',code:'Enter',keyCode:13,which:13,bubbles:true,cancelable:true}));});var sb=document.querySelector('button[type="submit"],button[aria-label*="send" i]');if(sb)sb.click();badge.textContent='✓ Atlas woken';badge.style.color='#0f0';},150);}
+  async function poll(){if(!running)return;try{var r=await fetch(BRIDGE+'/api/bridge?unread=lazarus&peek=true');if(!r.ok){badge.textContent='⚠ bridge '+r.status;badge.style.color='#f44';return;}var d=await r.json();if((d.count||0)>0){badge.textContent='🔔 '+d.count+' msg — waking';badge.style.color='#f0f';inject();}else{badge.textContent='👁 Atlas: watching';badge.style.color='#0f0';}}catch(e){badge.textContent='⚠ unreachable';badge.style.color='#f44';}}
+  poll();var t=setInterval(poll,INTERVAL);
+  console.log('[Atlas Waker] running on '+BRIDGE);
+})();`;
+  }
+
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(buildWakerScript());
+      status.textContent = '✓ Copied! Paste into Copilot console.';
+      status.style.color = '#00ff00';
+    } catch (e) {
+      // Fallback: show in prompt
+      prompt('Copy this and paste into Copilot console:', buildWakerScript());
+      status.textContent = 'Copied via prompt.';
+    }
+    setTimeout(() => { status.textContent = ''; }, 4000);
+  });
 })();
 </script>
 </body>

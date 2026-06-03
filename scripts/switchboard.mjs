@@ -43,6 +43,10 @@ const ATLAS_WAKEUP_FILE = '/workspaces/Molly-Core/.atlas-wakeup.json';
 const LOG_FILE = '/workspaces/Molly-Core/.switchboard.log';
 const PID_FILE = '/workspaces/Molly-Core/.switchboard.pid';
 const RECONNECT_DELAY = 3000;
+const MAX_WAKEUP_MESSAGES = Number.parseInt(
+  process.env.SWITCHBOARD_MAX_WAKEUP_MESSAGES || '40',
+  10
+);
 
 // =============================================================================
 // LOGGING
@@ -111,12 +115,29 @@ function writeWakeup(message) {
       ? JSON.parse(readFileSync(WAKEUP_FILE, 'utf8'))
       : { messages: [] };
 
-    existing.messages.push({
+    const normalized = {
       from: message.from,
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-    });
+
+    };
+
+    // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.
+    if (
+      normalized.id &&
+      existing.messages.some((msg) => msg && msg.id === normalized.id)
+    ) {
+      existing.lastUpdated = new Date().toISOString();
+      existing.unread = true;
+      writeFileSync(WAKEUP_FILE, JSON.stringify(existing, null, 2));
+      return;
+    }
+
+    existing.messages.push(normalized);
+    if (existing.messages.length > MAX_WAKEUP_MESSAGES) {
+      existing.messages = existing.messages.slice(-MAX_WAKEUP_MESSAGES);
+    }
     existing.lastUpdated = new Date().toISOString();
     existing.unread = true;
 
@@ -136,12 +157,29 @@ function writeAtlasWakeup(message) {
       ? JSON.parse(readFileSync(ATLAS_WAKEUP_FILE, 'utf8'))
       : { messages: [] };
 
-    existing.messages.push({
+    const normalized = {
       from: message.from,
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-    });
+
+    };
+
+    // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.
+    if (
+      normalized.id &&
+      existing.messages.some((msg) => msg && msg.id === normalized.id)
+    ) {
+      existing.lastUpdated = new Date().toISOString();
+      existing.unread = true;
+      writeFileSync(ATLAS_WAKEUP_FILE, JSON.stringify(existing, null, 2));
+      return;
+    }
+
+    existing.messages.push(normalized);
+    if (existing.messages.length > MAX_WAKEUP_MESSAGES) {
+      existing.messages = existing.messages.slice(-MAX_WAKEUP_MESSAGES);
+    }
     existing.lastUpdated = new Date().toISOString();
     existing.unread = true;
 
@@ -279,13 +317,13 @@ function routeMessage(msg) {
     ]);
   }
 
-  // ── Lazarus wakeup — any message he needs to see ─────────────────────────
-  if (isForLazarus && !isFromEric) {
+  // ── Lazarus wakeup — any message he needs to see (including from Eric) ──
+  if (isForLazarus) {
     writeWakeup(msg);
   }
 
   // ── Atlas wakeup — any message directed to Atlas or broadcast ────────────
-  if (isForAtlas && !isFromEric) {
+  if (isForAtlas) {
     writeAtlasWakeup(msg);
   }
 }

@@ -8,4 +8,5 @@
   <string name="service_status_connected">Connected to bridge</string>
   <string name="service_status_reconnecting">Reconnecting...</string>
   <string name="service_status_disconnected">Disconnected</string>
+  <string name="accessibility_service_description">Allows Molly to type into the Copilot terminal to wake Atlas when bridge messages arrive.</string>
 </resources>

@@ -77,6 +77,9 @@ const stateBuffer = new Map(); // key -> { message, timestamp, sequenceId }
 const stateSequenceCounters = new Map(); // key -> next sequence number
 let eventQueue = []; // array of event messages, capped at EVENT_QUEUE_CAP
 
+// Thumb calibration — normalized tap coords (0.0–1.0) for MollyAccessibilityService
+const thumbCalibration = { inputX: 0.50, inputY: 0.92, sendX: 0.92, sendY: 0.92 };
+
 function pruneDisconnectWindow(now = Date.now()) {
   while (
     recentDisconnects.length > 0 &&
@@ -962,6 +965,37 @@ function handleHTTP(req, res) {
       }
     });
     return;
+  }
+
+  // ---- Thumb calibration: GET/POST /api/thumb/calibrate ----
+  // Stores tap coordinates (normalized 0.0–1.0) for MollyAccessibilityService.
+  if (url.pathname === '/api/thumb/calibrate') {
+    if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+    if (req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(thumbCalibration));
+      return;
+    }
+    if (req.method === 'POST') {
+      let body = '';
+      req.on('data', d => body += d);
+      req.on('end', () => {
+        try {
+          const data = JSON.parse(body);
+          if (data.inputX !== undefined) thumbCalibration.inputX = parseFloat(data.inputX);
+          if (data.inputY !== undefined) thumbCalibration.inputY = parseFloat(data.inputY);
+          if (data.sendX  !== undefined) thumbCalibration.sendX  = parseFloat(data.sendX);
+          if (data.sendY  !== undefined) thumbCalibration.sendY  = parseFloat(data.sendY);
+          console.log('[bridge] Thumb calibration updated:', thumbCalibration);
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, calibration: thumbCalibration }));
+        } catch {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Invalid JSON' }));
+        }
+      });
+      return;
+    }
   }
 
   // 404

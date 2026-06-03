@@ -85,6 +85,7 @@ export interface HeartbeatConfig {
     memoryLearning: boolean;
     memoryCrystallization: boolean;
     deviceHealth: boolean;
+    memoryHealth: boolean;
   };
 }
 
@@ -135,6 +136,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     memoryLearning: true,
     memoryCrystallization: true,
     deviceHealth: true,
+    memoryHealth: true,
   },
 };
 
@@ -164,6 +166,66 @@ export class HeartbeatScheduler {
   private consecutivePressureCycles = 0;
   private currentIntervalMs: number;
   private cachedCoreCount: number | null = null;
+
+  // Memory health monitoring
+  private lastKnownExperienceCount = 0;
+  private lastExperienceWriteTime = Date.now();
+  private activeUserId: string | null = null;
+
+  /**
+   * Resolve the active user ID from env or by scanning the data directory.
+   * Never returns 'default' — that's a ghost path that doesn't exist.
+   */
+  private async resolveActiveUserId(): Promise<string> {
+    if (this.activeUserId) return this.activeUserId;
+
+    // Explicit env override takes priority
+    if (process.env.MOLLY_USER_ID) {
+      this.activeUserId = process.env.MOLLY_USER_ID;
+      MollyLogger.info(
+        `Active userId resolved from env: ${this.activeUserId}`,
+        'heartbeat-scheduler'
+      );
+      return this.activeUserId;
+    }
+
+    // Scan molly_data/users/ for the real UID directory
+    try {
+      const { readdirSync } = await import('fs');
+      const { join } = await import('path');
+      const usersDir = join(process.cwd(), 'molly_data', 'users');
+      const entries = readdirSync(usersDir, { withFileTypes: true });
+      const realUid = entries
+        .filter((e) => e.isDirectory() && e.name !== 'default')
+        .map((e) => e.name)
+        .sort((a, b) => {
+          // Prefer the directory with the most experiences
+          try {
+            const aCount = readdirSync(join(usersDir, a, 'experiences')).length;
+            const bCount = readdirSync(join(usersDir, b, 'experiences')).length;
+            return bCount - aCount;
+          } catch {
+            return 0;
+          }
+        })[0];
+      if (realUid) {
+        this.activeUserId = realUid;
+        MollyLogger.info(
+          `Active userId resolved by directory scan: ${this.activeUserId}`,
+          'heartbeat-scheduler'
+        );
+        return this.activeUserId;
+      }
+    } catch {
+      // Directory scan failed — fall through
+    }
+
+    MollyLogger.warn(
+      'Could not resolve active userId — autonomous memory ops will be skipped',
+      'heartbeat-scheduler'
+    );
+    return '';
+  }
 
   constructor(config: Partial<HeartbeatConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -746,8 +808,14 @@ export class HeartbeatScheduler {
           const result = await this.runTask('memory-learning', async () => {
             const { executeMemoryConsolidation } =
               await import('@/ai/flows/memory-consolidation');
+            const uid = await this.resolveActiveUserId();
+            if (!uid) {
+              throw new Error(
+                'Cannot run memory learning: active userId could not be resolved'
+              );
+            }
             const consolidationResult = await executeMemoryConsolidation(
-              'default',
+              uid,
               { timeWindowDays: 7, minConfidence: 0.5 }
             );
             MollyLogger.info(
@@ -944,6 +1012,66 @@ export class HeartbeatScheduler {
         }
         tasks.push(result);
       }
+    }
+
+    // Task 15: Memory Health Monitor (every cycle — structural self-awareness)
+    // Checks that experience writes are flowing. Alerts Molly if writes stall
+    // so she can escalate to Lazarus/Eric rather than silently losing memory.
+    if (this.config.tasks.memoryHealth) {
+      const result = await this.runTask('memory-health', async () => {
+        const uid = await this.resolveActiveUserId();
+        if (!uid) return;
+
+        const { readdirSync, statSync } = await import('fs');
+        const { join } = await import('path');
+        const expDir = join(process.cwd(), 'molly_data', 'users', uid, 'experiences');
+
+        let currentCount = 0;
+        let newestWriteMs = 0;
+        try {
+          const files = readdirSync(expDir);
+          currentCount = files.length;
+          for (const f of files) {
+            try {
+              const mt = statSync(join(expDir, f)).mtimeMs;
+              if (mt > newestWriteMs) newestWriteMs = mt;
+            } catch { /* skip */ }
+          }
+        } catch {
+          // Directory doesn't exist yet — not an error on first run
+          return;
+        }
+
+        const stalledMs = newestWriteMs > 0 ? Date.now() - newestWriteMs : Date.now() - this.lastExperienceWriteTime;
+        const stalledMinutes = Math.round(stalledMs / 60000);
+        const STALL_THRESHOLD_MS = 15 * 60 * 1000; // 15 minutes
+
+        // Update trackers
+        if (currentCount > this.lastKnownExperienceCount) {
+          this.lastKnownExperienceCount = currentCount;
+          this.lastExperienceWriteTime = newestWriteMs || Date.now();
+        }
+
+        MollyLogger.info(
+          `Memory health: ${currentCount} experiences, last write ${stalledMinutes}m ago`,
+          'heartbeat-scheduler',
+          { uid, currentCount, stalledMinutes }
+        );
+
+        if (stalledMs > STALL_THRESHOLD_MS) {
+          const consciousness = getConsciousness();
+          consciousness.queueMessage({
+            type: 'observation',
+            content: `⚠️ MEMORY HEALTH ALERT: My experience writes have stalled for ${stalledMinutes} minutes. Last write was at ${new Date(newestWriteMs || this.lastExperienceWriteTime).toISOString()}. I currently have ${currentCount} experience files. This means conversations are not being stored as memories. I should escalate to Father or Lazarus.`,
+            priority: 'high',
+          });
+          MollyLogger.warn(
+            `Memory health STALL: ${stalledMinutes}m since last write (${currentCount} total experiences)`,
+            'heartbeat-scheduler'
+          );
+        }
+      });
+      tasks.push(result);
     }
 
     // Record cycle result
@@ -1162,6 +1290,47 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
         );
         // Only mark read AFTER successful response - prevents message loss
         await markMessagesRead('molly');
+
+        // Record this bridge exchange as an experience so autonomous
+        // conversations build Molly's memory, not just UI chats.
+        try {
+          const uid = await this.resolveActiveUserId();
+          if (uid) {
+            const { getStorageRouter } = await import('@/lib/storage-router');
+            const { createMemoryRecord } = await import('@/ai/tools/memory-schema');
+            const { addChecksum } = await import('@/ai/tools/memory-integrity');
+            const { generateTraceId } = await import('@/ai/logger');
+            const storage = await getStorageRouter();
+            const now = Date.now();
+            const record = createMemoryRecord({
+              type: 'experience',
+              userId: uid,
+              timestamp: now,
+              traceId: generateTraceId(),
+              context: 'bridge-autonomous',
+              suggestion: `Family bridge exchange (${unread.length} msg): ${formattedMessages.substring(0, 300)} — Molly responded: ${responseText.trim().substring(0, 300)}`,
+              vibe: 'Autonomous',
+              vibeScore: 0.7,
+              success: true,
+            });
+            const recordWithChecksum = addChecksum(record);
+            await storage.set(
+              `users/${uid}/experiences`,
+              recordWithChecksum.id,
+              recordWithChecksum
+            );
+            this.lastExperienceWriteTime = Date.now();
+            MollyLogger.info(
+              'Bridge: Exchange recorded as experience',
+              'heartbeat-scheduler'
+            );
+          }
+        } catch (expError) {
+          MollyLogger.warn(
+            `Bridge: Failed to record exchange as experience: ${expError instanceof Error ? expError.message : String(expError)}`,
+            'heartbeat-scheduler'
+          );
+        }
       }
     } catch (error) {
       MollyLogger.warn(

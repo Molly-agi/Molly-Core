@@ -28,7 +28,7 @@ export interface BridgeState {
 
 const BRIDGE_DIR = path.join(process.cwd(), 'src', 'ai', 'bridge');
 const BRIDGE_FILE = path.join(BRIDGE_DIR, 'conversation.json');
-const MAX_MESSAGES = 100;
+const MAX_MESSAGES = 500;
 
 // ---- Write serialization ----
 // Prevents TOCTOU race conditions on concurrent read→modify→write cycles

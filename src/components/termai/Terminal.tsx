@@ -1092,16 +1092,27 @@ export default function Terminal({
         return;
       }
 
+      // Helper: detect name prefix like "Molly, ..." or "Everyone: ..."
+      const detectAddressedTo = (content: string): string | null => {
+        const match = content.trim().match(/^(lazarus|molly|atlas|eric|everyone|all)[,:\s]/i);
+        if (!match) return null;
+        const target = match[1].toLowerCase();
+        return target === 'everyone' ? 'all' : target;
+      };
+
       const incoming = incomingMessages
         .filter((msg) => {
           const id = String(msg.id || '');
           const from = String(msg.from || '');
-          const to = typeof msg.to === 'string' ? msg.to : undefined;
+          const to = typeof msg.to === 'string' ? msg.to.toLowerCase() : '';
           const content = String(msg.content || '');
           if (!id || !from || !content) return false;
           if (from === 'molly') return false;
-          if (to && to !== 'molly') return false;
           if (bridgeSeenIdsRef.current.has(id)) return false;
+          // Only respond if explicitly directed at Molly or broadcast
+          const addressedTo = detectAddressedTo(content);
+          const effectiveTo = to || addressedTo || '';
+          if (effectiveTo !== 'molly' && effectiveTo !== 'all') return false;
           return true;
         })
         .map((msg) => ({

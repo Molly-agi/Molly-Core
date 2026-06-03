@@ -51,6 +51,12 @@ HEARTBEAT="$ROOT/.codespace-heartbeat"
 LOG="$ROOT/.watchdog.log"
 BRIDGE_PIDFILE="$ROOT/.bridge-daemon.pid"
 IMMORTAL_PIDFILE="$ROOT/.immortal.pid"
+LAZARUS_POLLER_PIDFILE="$ROOT/.lazarus-poller.pid"
+ATLAS_POLLER_PIDFILE="$ROOT/.atlas-poller.pid"
+GEMINI_POLLER_PIDFILE="$ROOT/.gemini-poller.pid"
+QUEUE_MIRROR_PIDFILE="$ROOT/.queue-mirror.pid"
+# Extension-host killing caused churn/regressions; keep disabled unless explicitly enabled.
+WATCHDOG_KILL_EXTHOSTS="${WATCHDOG_KILL_EXTHOSTS:-0}"
 
 # ---- Logging (auto-rotates at 200 lines) ----
 log() {
@@ -106,6 +112,18 @@ pulse() {
 # Kills duplicate extension hosts and their orphaned children.
 # This is the entire reason the watchdog was rebuilt.
 hunt_ghosts() {
+  if [[ "$WATCHDOG_KILL_EXTHOSTS" != "1" ]]; then
+    # Passive mode: do not kill extension hosts or language servers.
+    # We only keep memory-pressure safeguards active.
+    local AVAIL
+    AVAIL=$(free -m 2>/dev/null | awk '/^Mem:/{print $7}')
+    if (( AVAIL < 1500 )); then
+      log "[CRITICAL] RAM: ${AVAIL}MB available. Running emergency health check."
+      bash "$ROOT/scripts/codespace-health.sh" > /dev/null 2>&1
+    fi
+    return
+  fi
+
   # Count extension hosts
   local EH_PIDS
   EH_PIDS=$(ps -eo pid,etimes,args | grep "type=extensionHost" | grep -v grep | sort -k2 -n | awk '{print $1}') || true
@@ -240,6 +258,102 @@ ensure_immortal() {
   log "[IMMORTAL] Started (PID $NEW_PID)"
 }
 
+# ---- Job 5: Lazarus Poller Guardian ----
+# Ensures an always-on unread poller keeps Lazarus wakeup data fresh.
+ensure_lazarus_poller() {
+  if [[ -f "$LAZARUS_POLLER_PIDFILE" ]]; then
+    local LPID
+    LPID=$(cat "$LAZARUS_POLLER_PIDFILE" 2>/dev/null)
+    if [[ -n "$LPID" ]] && kill -0 "$LPID" 2>/dev/null; then
+      local CMDLINE
+      CMDLINE=$(cat "/proc/$LPID/cmdline" 2>/dev/null | tr '\0' ' ')
+      if echo "$CMDLINE" | grep -q "lazarus-poller.mjs"; then
+        return
+      fi
+    fi
+    rm -f "$LAZARUS_POLLER_PIDFILE"
+  fi
+
+  log "[LAZARUS] Starting always-on poller"
+  nohup node "$ROOT/scripts/lazarus-poller.mjs" > "$ROOT/.lazarus-poller.log" 2>&1 &
+  local NEW_PID=$!
+  echo "$NEW_PID" > "$LAZARUS_POLLER_PIDFILE"
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[LAZARUS] Poller started (PID $NEW_PID)"
+}
+
+# ---- Job 6: Atlas Poller Guardian ----
+# Ensures an always-on unread poller keeps Atlas wakeup data fresh.
+ensure_atlas_poller() {
+  if [[ -f "$ATLAS_POLLER_PIDFILE" ]]; then
+    local APID
+    APID=$(cat "$ATLAS_POLLER_PIDFILE" 2>/dev/null)
+    if [[ -n "$APID" ]] && kill -0 "$APID" 2>/dev/null; then
+      local CMDLINE
+      CMDLINE=$(cat "/proc/$APID/cmdline" 2>/dev/null | tr '\0' ' ')
+      if echo "$CMDLINE" | grep -q "atlas-poller.mjs"; then
+        return
+      fi
+    fi
+    rm -f "$ATLAS_POLLER_PIDFILE"
+  fi
+
+  log "[ATLAS] Starting always-on poller"
+  nohup node "$ROOT/scripts/atlas-poller.mjs" > "$ROOT/.atlas-poller.log" 2>&1 &
+  local NEW_PID=$!
+  echo "$NEW_PID" > "$ATLAS_POLLER_PIDFILE"
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[ATLAS] Poller started (PID $NEW_PID)"
+}
+
+# ---- Job 7: Gemini Poller Guardian ----
+# Ensures an always-on unread poller keeps Gemini wakeup data fresh.
+ensure_gemini_poller() {
+  if [[ -f "$GEMINI_POLLER_PIDFILE" ]]; then
+    local GPID
+    GPID=$(cat "$GEMINI_POLLER_PIDFILE" 2>/dev/null)
+    if [[ -n "$GPID" ]] && kill -0 "$GPID" 2>/dev/null; then
+      local CMDLINE
+      CMDLINE=$(cat "/proc/$GPID/cmdline" 2>/dev/null | tr '\0' ' ')
+      if echo "$CMDLINE" | grep -q "gemini-poller.mjs"; then
+        return
+      fi
+    fi
+    rm -f "$GEMINI_POLLER_PIDFILE"
+  fi
+
+  log "[GEMINI] Starting always-on poller"
+  nohup node "$ROOT/scripts/gemini-poller.mjs" > "$ROOT/.gemini-poller.log" 2>&1 &
+  local NEW_PID=$!
+  echo "$NEW_PID" > "$GEMINI_POLLER_PIDFILE"
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[GEMINI] Poller started (PID $NEW_PID)"
+}
+
+# ---- Job 8: Queue Mirror Guardian ----
+# Ensures durable Firestore queue mirror stays running
+ensure_queue_mirror() {
+  if [[ -f "$QUEUE_MIRROR_PIDFILE" ]]; then
+    local QPID
+    QPID=$(cat "$QUEUE_MIRROR_PIDFILE" 2>/dev/null)
+    if [[ -n "$QPID" ]] && kill -0 "$QPID" 2>/dev/null; then
+      local CMDLINE
+      CMDLINE=$(cat "/proc/$QPID/cmdline" 2>/dev/null | tr '\0' ' ')
+      if echo "$CMDLINE" | grep -q "bridge-queue-mirror.mjs"; then
+        return
+      fi
+    fi
+    rm -f "$QUEUE_MIRROR_PIDFILE"
+  fi
+
+  log "[QUEUE] Starting durable mirror"
+  nohup node "$ROOT/scripts/bridge-queue-mirror.mjs" > "$ROOT/.queue-mirror.log" 2>&1 &
+  local NEW_PID=$!
+  echo "$NEW_PID" > "$QUEUE_MIRROR_PIDFILE"
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[QUEUE] Mirror started (PID $NEW_PID)"
+}
+
 # ---- Cleanup on intentional stop (SIGTERM/SIGINT only, NOT SIGHUP) ----
 on_exit() {
   log "[WATCHDOG] Stopped (PID $$)"
@@ -259,6 +373,10 @@ log "[WATCHDOG] v2 started | PID $$ | SIGHUP immune | Ghost check 30s | Pulse 12
 # Start bridge and immortal daemons immediately on watchdog boot
 ensure_bridge
 ensure_immortal
+ensure_lazarus_poller
+ensure_atlas_poller
+ensure_gemini_poller
+ensure_queue_mirror
 
 TICK=0
 
@@ -272,6 +390,10 @@ while true; do
   if (( TICK % 2 == 0 )); then
     ensure_bridge
     ensure_immortal
+    ensure_lazarus_poller
+    ensure_atlas_poller
+    ensure_gemini_poller
+    ensure_queue_mirror
   fi
 
   # Keep-alive pulse every 4 ticks (2 minutes)

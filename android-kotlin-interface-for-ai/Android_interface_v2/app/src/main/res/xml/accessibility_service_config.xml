@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  MollyAccessibilityService config.
+
+  accessibilityEventTypes: none — we don't need window events, just the ability
+  to inspect and inject into the active window on demand.
+
+  capabilities: canRetrieveWindowContent — lets us read the DOM tree to find
+  the Copilot input node. canPerformGestures — lets us inject taps if needed.
+
+  packageNames: left empty (all packages) so it works regardless of which
+  browser Eric uses. The service itself filters by Chrome package if needed.
+-->
+<accessibility-service
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeAllMask"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagReportViewIds|flagRetrieveInteractiveWindows"
+    android:canPerformGestures="true"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/accessibility_service_description"
+    android:notificationTimeout="100"
+    android:settingsActivity=".MainActivity" />

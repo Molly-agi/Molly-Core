@@ -1,174 +1,490 @@
+nohup: ignoring input
 ============================================================
 IMMORTAL DAEMON - The One Bridge
 ============================================================
-08:12:00 [LOCK] Acquired (PID 3605)
-08:12:00 [START] Immortal Daemon starting
-08:12:00 [CONFIG] Heartbeat: 1000ms | Git: 10000ms | HTTP: 5000ms
-08:12:00 [CONFIG] Ghost: 30000ms | Bridge: 15000ms | Status: 60000ms
-08:12:00 [BRIDGE] Port 9099 not listening - restarting bridge
-08:12:00 [BRIDGE] Started (PID 3645)
-08:12:00 [RUNNING] All systems active - SIGHUP immune
-08:12:10 [DASHBOARD] Heartbeat API not running - starting
-08:12:10 [DASHBOARD] Heartbeat API started (PID 3842)
-08:12:20 [SIGNAL] SIGTERM ignored
-08:13:00 [STATUS] uptime=61s beats=60 mem=13151MB extHosts=1 bridge=UP dev=UP
-08:14:00 [STATUS] uptime=121s beats=117 mem=11909MB extHosts=1 bridge=UP dev=UP
-08:15:00 [STATUS] uptime=181s beats=177 mem=11086MB extHosts=1 bridge=UP dev=UP
-08:15:50 [SIGNAL] SIGTERM ignored
-08:16:01 [STATUS] uptime=241s beats=237 mem=12206MB extHosts=1 bridge=UP dev=UP
-08:16:39 [SIGNAL] SIGTERM ignored
-08:17:01 [STATUS] uptime=301s beats=297 mem=10873MB extHosts=1 bridge=UP dev=UP
-08:18:00 [STATUS] uptime=361s beats=357 mem=10836MB extHosts=1 bridge=UP dev=UP
-08:19:00 [STATUS] uptime=421s beats=417 mem=10827MB extHosts=1 bridge=UP dev=UP
-08:20:01 [STATUS] uptime=481s beats=477 mem=10156MB extHosts=1 bridge=UP dev=UP
-08:21:00 [STATUS] uptime=541s beats=537 mem=10201MB extHosts=1 bridge=UP dev=UP
-08:22:00 [STATUS] uptime=601s beats=597 mem=10438MB extHosts=1 bridge=UP dev=UP
-08:23:00 [STATUS] uptime=661s beats=657 mem=10297MB extHosts=1 bridge=UP dev=UP
-08:24:00 [STATUS] uptime=721s beats=717 mem=10393MB extHosts=1 bridge=UP dev=UP
-08:25:00 [STATUS] uptime=781s beats=777 mem=10387MB extHosts=1 bridge=UP dev=UP
-08:26:00 [STATUS] uptime=841s beats=837 mem=10376MB extHosts=1 bridge=UP dev=UP
-08:27:00 [STATUS] uptime=901s beats=897 mem=10369MB extHosts=1 bridge=UP dev=UP
-08:28:00 [STATUS] uptime=961s beats=957 mem=10199MB extHosts=1 bridge=UP dev=UP
-08:29:00 [STATUS] uptime=1021s beats=1017 mem=10211MB extHosts=1 bridge=UP dev=UP
-08:30:00 [STATUS] uptime=1081s beats=1077 mem=10316MB extHosts=1 bridge=UP dev=UP
-08:31:00 [STATUS] uptime=1141s beats=1137 mem=10296MB extHosts=1 bridge=UP dev=UP
-08:32:00 [STATUS] uptime=1201s beats=1197 mem=10280MB extHosts=1 bridge=UP dev=UP
-08:33:00 [STATUS] uptime=1261s beats=1257 mem=10275MB extHosts=1 bridge=UP dev=UP
-08:34:00 [STATUS] uptime=1321s beats=1316 mem=10277MB extHosts=1 bridge=UP dev=UP
-08:35:00 [STATUS] uptime=1381s beats=1376 mem=10206MB extHosts=1 bridge=UP dev=UP
-08:35:20 [SIGNAL] SIGTERM ignored
-08:36:00 [STATUS] uptime=1441s beats=1436 mem=10605MB extHosts=1 bridge=UP dev=UP
-08:36:39 [SIGNAL] SIGHUP ignored
-08:37:00 [STATUS] uptime=1501s beats=1496 mem=10298MB extHosts=1 bridge=UP dev=UP
-08:38:00 [STATUS] uptime=1561s beats=1556 mem=10371MB extHosts=1 bridge=UP dev=UP
-08:39:00 [STATUS] uptime=1621s beats=1616 mem=10359MB extHosts=1 bridge=UP dev=UP
-08:40:00 [STATUS] uptime=1681s beats=1676 mem=10358MB extHosts=1 bridge=UP dev=UP
-08:41:00 [STATUS] uptime=1741s beats=1736 mem=10366MB extHosts=1 bridge=UP dev=UP
-08:42:00 [STATUS] uptime=1801s beats=1796 mem=10364MB extHosts=1 bridge=UP dev=UP
-08:43:01 [STATUS] uptime=1861s beats=1856 mem=10464MB extHosts=1 bridge=UP dev=UP
-08:44:01 [STATUS] uptime=1921s beats=1916 mem=10339MB extHosts=1 bridge=UP dev=UP
-08:45:00 [STATUS] uptime=1981s beats=1976 mem=10276MB extHosts=1 bridge=UP dev=UP
-08:46:00 [STATUS] uptime=2041s beats=2036 mem=10308MB extHosts=1 bridge=UP dev=UP
-08:47:01 [STATUS] uptime=2101s beats=2096 mem=10291MB extHosts=1 bridge=UP dev=UP
-08:48:01 [STATUS] uptime=2161s beats=2156 mem=10295MB extHosts=1 bridge=UP dev=UP
-08:49:00 [STATUS] uptime=2221s beats=2216 mem=10370MB extHosts=1 bridge=UP dev=UP
-08:50:01 [STATUS] uptime=2281s beats=2276 mem=10497MB extHosts=1 bridge=UP dev=UP
-08:51:00 [STATUS] uptime=2341s beats=2336 mem=10277MB extHosts=1 bridge=UP dev=UP
-08:52:01 [STATUS] uptime=2401s beats=2396 mem=6985MB extHosts=1 bridge=UP dev=UP
-08:53:01 [STATUS] uptime=2461s beats=2455 mem=10136MB extHosts=1 bridge=UP dev=UP
-08:54:01 [STATUS] uptime=2521s beats=2515 mem=10109MB extHosts=1 bridge=UP dev=UP
-08:55:01 [STATUS] uptime=2581s beats=2575 mem=10094MB extHosts=1 bridge=UP dev=UP
-08:56:01 [STATUS] uptime=2641s beats=2635 mem=10132MB extHosts=1 bridge=UP dev=UP
-08:57:01 [STATUS] uptime=2701s beats=2695 mem=10227MB extHosts=1 bridge=UP dev=UP
-08:58:01 [STATUS] uptime=2761s beats=2755 mem=10233MB extHosts=1 bridge=UP dev=UP
-08:59:01 [STATUS] uptime=2821s beats=2815 mem=10110MB extHosts=1 bridge=UP dev=UP
-09:00:01 [STATUS] uptime=2881s beats=2875 mem=10208MB extHosts=1 bridge=UP dev=UP
-09:01:01 [STATUS] uptime=2941s beats=2935 mem=10198MB extHosts=1 bridge=UP dev=UP
-09:02:01 [STATUS] uptime=3001s beats=2995 mem=10017MB extHosts=1 bridge=UP dev=UP
-09:03:01 [STATUS] uptime=3061s beats=3055 mem=9874MB extHosts=1 bridge=UP dev=UP
-09:04:01 [STATUS] uptime=3121s beats=3114 mem=9521MB extHosts=1 bridge=UP dev=UP
-09:05:01 [STATUS] uptime=3181s beats=3174 mem=9624MB extHosts=1 bridge=UP dev=UP
-09:06:01 [STATUS] uptime=3241s beats=3234 mem=9835MB extHosts=1 bridge=UP dev=UP
-09:07:01 [STATUS] uptime=3301s beats=3294 mem=9798MB extHosts=1 bridge=UP dev=UP
-09:08:01 [STATUS] uptime=3361s beats=3354 mem=9787MB extHosts=1 bridge=UP dev=UP
-09:09:01 [STATUS] uptime=3421s beats=3414 mem=9338MB extHosts=1 bridge=UP dev=UP
-09:10:01 [STATUS] uptime=3481s beats=3474 mem=9073MB extHosts=1 bridge=UP dev=UP
-09:11:01 [STATUS] uptime=3541s beats=3534 mem=8806MB extHosts=1 bridge=UP dev=UP
-09:12:01 [STATUS] uptime=3601s beats=3594 mem=8796MB extHosts=1 bridge=UP dev=UP
-09:13:01 [STATUS] uptime=3661s beats=3654 mem=8791MB extHosts=1 bridge=UP dev=UP
-09:14:01 [STATUS] uptime=3721s beats=3714 mem=8661MB extHosts=1 bridge=UP dev=UP
-09:15:01 [STATUS] uptime=3781s beats=3774 mem=8797MB extHosts=1 bridge=UP dev=UP
-09:16:01 [STATUS] uptime=3841s beats=3834 mem=8705MB extHosts=1 bridge=UP dev=UP
-09:17:01 [STATUS] uptime=3901s beats=3894 mem=8852MB extHosts=1 bridge=UP dev=UP
-09:18:01 [STATUS] uptime=3961s beats=3954 mem=8839MB extHosts=1 bridge=UP dev=UP
-09:19:01 [STATUS] uptime=4021s beats=4014 mem=8816MB extHosts=1 bridge=UP dev=UP
-09:20:01 [STATUS] uptime=4081s beats=4074 mem=8717MB extHosts=1 bridge=UP dev=UP
-09:21:01 [STATUS] uptime=4141s beats=4134 mem=8749MB extHosts=1 bridge=UP dev=UP
-09:22:01 [STATUS] uptime=4201s beats=4194 mem=8881MB extHosts=1 bridge=UP dev=UP
-09:23:01 [STATUS] uptime=4261s beats=4253 mem=8751MB extHosts=1 bridge=UP dev=UP
-09:23:16 [BRIDGE] Port 9099 not listening - restarting bridge
-09:23:16 [BRIDGE] Started (PID 84840)
-09:24:01 [STATUS] uptime=4321s beats=4313 mem=11325MB extHosts=1 bridge=UP dev=DOWN
-09:25:01 [STATUS] uptime=4381s beats=4373 mem=11286MB extHosts=1 bridge=UP dev=DOWN
-09:26:01 [STATUS] uptime=4441s beats=4433 mem=11372MB extHosts=1 bridge=UP dev=DOWN
-09:27:01 [STATUS] uptime=4501s beats=4493 mem=11287MB extHosts=1 bridge=UP dev=DOWN
-09:28:01 [STATUS] uptime=4561s beats=4553 mem=11249MB extHosts=1 bridge=UP dev=DOWN
-09:29:01 [STATUS] uptime=4621s beats=4613 mem=11245MB extHosts=1 bridge=UP dev=DOWN
-09:30:01 [STATUS] uptime=4681s beats=4673 mem=11131MB extHosts=1 bridge=UP dev=DOWN
-09:31:01 [STATUS] uptime=4741s beats=4733 mem=11238MB extHosts=1 bridge=UP dev=DOWN
-09:32:01 [STATUS] uptime=4801s beats=4793 mem=11398MB extHosts=1 bridge=UP dev=DOWN
-09:33:01 [STATUS] uptime=4861s beats=4853 mem=11335MB extHosts=1 bridge=UP dev=DOWN
-09:34:01 [STATUS] uptime=4921s beats=4913 mem=11205MB extHosts=1 bridge=UP dev=DOWN
-09:35:01 [STATUS] uptime=4981s beats=4973 mem=11044MB extHosts=1 bridge=UP dev=DOWN
-09:36:01 [STATUS] uptime=5041s beats=5033 mem=11216MB extHosts=1 bridge=UP dev=DOWN
-09:37:01 [STATUS] uptime=5101s beats=5093 mem=11322MB extHosts=1 bridge=UP dev=DOWN
-09:37:31 [GHOST] Killed extension host 587 (kept 95659)
-09:38:01 [STATUS] uptime=5161s beats=5153 mem=11705MB extHosts=1 bridge=UP dev=DOWN
-09:39:01 [STATUS] uptime=5221s beats=5213 mem=11798MB extHosts=1 bridge=UP dev=DOWN
-09:40:01 [STATUS] uptime=5281s beats=5273 mem=11803MB extHosts=1 bridge=UP dev=DOWN
-09:41:01 [STATUS] uptime=5341s beats=5333 mem=11809MB extHosts=1 bridge=UP dev=DOWN
-09:42:01 [STATUS] uptime=5401s beats=5392 mem=11799MB extHosts=1 bridge=UP dev=DOWN
-09:43:01 [STATUS] uptime=5461s beats=5452 mem=11780MB extHosts=1 bridge=UP dev=DOWN
-09:44:01 [STATUS] uptime=5521s beats=5512 mem=11777MB extHosts=1 bridge=UP dev=DOWN
-09:45:01 [STATUS] uptime=5581s beats=5572 mem=11692MB extHosts=2 bridge=UP dev=DOWN
-09:45:01 [GHOST] Killed extension host 95659 (kept 101320)
-09:46:01 [STATUS] uptime=5641s beats=5632 mem=11755MB extHosts=1 bridge=UP dev=DOWN
-09:47:01 [STATUS] uptime=5701s beats=5692 mem=11739MB extHosts=1 bridge=UP dev=DOWN
-09:48:01 [STATUS] uptime=5761s beats=5752 mem=11658MB extHosts=1 bridge=UP dev=DOWN
-09:49:01 [STATUS] uptime=5821s beats=5812 mem=11651MB extHosts=1 bridge=UP dev=DOWN
-09:50:01 [STATUS] uptime=5881s beats=5872 mem=10578MB extHosts=1 bridge=UP dev=DOWN
-09:51:01 [STATUS] uptime=5941s beats=5932 mem=11440MB extHosts=1 bridge=UP dev=DOWN
-09:52:01 [STATUS] uptime=6001s beats=5992 mem=11451MB extHosts=1 bridge=UP dev=DOWN
-09:52:05 [SIGNAL] SIGTERM ignored
-09:53:01 [STATUS] uptime=6061s beats=6052 mem=8756MB extHosts=1 bridge=UP dev=UP
-09:54:01 [STATUS] uptime=6121s beats=6112 mem=8756MB extHosts=1 bridge=UP dev=UP
-09:55:01 [STATUS] uptime=6181s beats=6172 mem=8753MB extHosts=1 bridge=UP dev=UP
-09:56:01 [STATUS] uptime=6241s beats=6232 mem=8744MB extHosts=1 bridge=UP dev=UP
-09:57:01 [STATUS] uptime=6301s beats=6292 mem=8741MB extHosts=1 bridge=UP dev=UP
-09:58:01 [STATUS] uptime=6361s beats=6352 mem=8729MB extHosts=1 bridge=UP dev=UP
-09:59:01 [STATUS] uptime=6421s beats=6412 mem=8709MB extHosts=1 bridge=UP dev=UP
-10:00:01 [STATUS] uptime=6481s beats=6472 mem=8627MB extHosts=1 bridge=UP dev=UP
-10:01:01 [STATUS] uptime=6541s beats=6531 mem=8567MB extHosts=1 bridge=UP dev=UP
-10:02:01 [STATUS] uptime=6601s beats=6591 mem=8691MB extHosts=1 bridge=UP dev=UP
-10:03:01 [STATUS] uptime=6661s beats=6651 mem=8593MB extHosts=1 bridge=UP dev=UP
-10:04:01 [STATUS] uptime=6721s beats=6711 mem=8614MB extHosts=1 bridge=UP dev=UP
-10:05:01 [STATUS] uptime=6781s beats=6771 mem=8594MB extHosts=1 bridge=UP dev=UP
-10:06:01 [STATUS] uptime=6841s beats=6831 mem=8596MB extHosts=1 bridge=UP dev=UP
-10:07:01 [STATUS] uptime=6901s beats=6891 mem=8678MB extHosts=1 bridge=UP dev=UP
-10:08:01 [STATUS] uptime=6961s beats=6951 mem=8619MB extHosts=1 bridge=UP dev=UP
-10:09:01 [STATUS] uptime=7021s beats=7011 mem=8671MB extHosts=1 bridge=UP dev=UP
-10:10:01 [STATUS] uptime=7081s beats=7071 mem=8676MB extHosts=1 bridge=UP dev=UP
-10:11:01 [STATUS] uptime=7141s beats=7131 mem=8684MB extHosts=1 bridge=UP dev=UP
-10:12:01 [STATUS] uptime=7201s beats=7191 mem=8551MB extHosts=1 bridge=UP dev=UP
-10:13:01 [STATUS] uptime=7261s beats=7251 mem=8667MB extHosts=1 bridge=UP dev=UP
-10:14:01 [STATUS] uptime=7321s beats=7311 mem=8593MB extHosts=1 bridge=UP dev=UP
-10:15:01 [STATUS] uptime=7381s beats=7371 mem=8618MB extHosts=1 bridge=UP dev=UP
-10:16:01 [STATUS] uptime=7441s beats=7431 mem=8724MB extHosts=1 bridge=UP dev=UP
-10:17:01 [STATUS] uptime=7501s beats=7491 mem=8604MB extHosts=1 bridge=UP dev=UP
-10:18:01 [STATUS] uptime=7561s beats=7550 mem=8563MB extHosts=1 bridge=UP dev=UP
-10:19:01 [STATUS] uptime=7621s beats=7610 mem=8498MB extHosts=1 bridge=UP dev=UP
-10:20:01 [STATUS] uptime=7681s beats=7670 mem=8484MB extHosts=1 bridge=UP dev=UP
-10:21:01 [STATUS] uptime=7741s beats=7730 mem=8499MB extHosts=1 bridge=UP dev=UP
-10:22:01 [STATUS] uptime=7801s beats=7790 mem=8428MB extHosts=1 bridge=UP dev=UP
-10:23:01 [STATUS] uptime=7861s beats=7850 mem=8484MB extHosts=1 bridge=UP dev=UP
-10:24:01 [STATUS] uptime=7921s beats=7910 mem=8434MB extHosts=1 bridge=UP dev=UP
-10:25:01 [STATUS] uptime=7981s beats=7970 mem=8414MB extHosts=1 bridge=UP dev=UP
-10:26:01 [STATUS] uptime=8041s beats=8030 mem=8416MB extHosts=1 bridge=UP dev=UP
-10:27:01 [STATUS] uptime=8101s beats=8090 mem=8308MB extHosts=1 bridge=UP dev=UP
-10:28:01 [STATUS] uptime=8161s beats=8150 mem=8299MB extHosts=1 bridge=UP dev=UP
-10:29:01 [STATUS] uptime=8221s beats=8210 mem=8582MB extHosts=1 bridge=UP dev=UP
-10:30:01 [STATUS] uptime=8281s beats=8270 mem=8567MB extHosts=1 bridge=UP dev=UP
-10:31:01 [STATUS] uptime=8341s beats=8330 mem=8500MB extHosts=1 bridge=UP dev=UP
-10:32:01 [STATUS] uptime=8401s beats=8390 mem=8551MB extHosts=1 bridge=UP dev=UP
-10:33:01 [STATUS] uptime=8461s beats=8450 mem=8576MB extHosts=1 bridge=UP dev=UP
-10:34:01 [STATUS] uptime=8521s beats=8510 mem=8547MB extHosts=1 bridge=UP dev=UP
-10:35:01 [STATUS] uptime=8581s beats=8570 mem=8616MB extHosts=1 bridge=UP dev=UP
-10:36:01 [STATUS] uptime=8641s beats=8630 mem=8612MB extHosts=1 bridge=UP dev=UP
-10:37:01 [STATUS] uptime=8701s beats=8690 mem=8559MB extHosts=1 bridge=UP dev=UP
-10:38:01 [STATUS] uptime=8761s beats=8750 mem=8604MB extHosts=1 bridge=UP dev=UP
-10:39:01 [STATUS] uptime=8821s beats=8810 mem=8529MB extHosts=1 bridge=UP dev=UP
-10:40:01 [STATUS] uptime=8881s beats=8870 mem=8728MB extHosts=1 bridge=UP dev=UP
-10:41:01 [STATUS] uptime=8941s beats=8930 mem=8684MB extHosts=1 bridge=UP dev=UP
-10:42:01 [STATUS] uptime=9001s beats=8990 mem=8575MB extHosts=1 bridge=UP dev=UP
-10:43:01 [STATUS] uptime=9061s beats=9050 mem=8607MB extHosts=1 bridge=UP dev=UP
-10:44:01 [STATUS] uptime=9121s beats=9109 mem=8438MB extHosts=1 bridge=UP dev=UP
+21:05:47 [LOCK] Already running (PID 21285) - exiting
+nohup: ignoring input
+============================================================
+IMMORTAL DAEMON - The One Bridge
+============================================================
+05:07:38 [LOCK] Acquired (PID 5088)
+05:07:39 [START] Immortal Daemon starting
+05:07:39 [CONFIG] Heartbeat: 1000ms | Git: 10000ms | HTTP: 5000ms
+05:07:39 [CONFIG] Ghost: 30000ms | Bridge: 15000ms | Status: 60000ms
+05:07:39 [BRIDGE] Port 9099 not listening - restarting bridge
+05:07:39 [BRIDGE] Started (PID 5129)
+05:07:39 [SWITCHBOARD] Not running - starting
+05:07:39 [SWITCHBOARD] Started (PID 5130)
+05:07:39 [LAZARUS] Bridge client not running - starting
+05:07:39 [LAZARUS] Bridge connected (PID 5136)
+05:07:39 [ATLAS] Bridge client not running - starting
+05:07:39 [ATLAS] Bridge connected (PID 5137)
+05:07:39 [GEMINI] Bridge client not running - starting
+05:07:39 [GEMINI] Bridge connected (PID 5158)
+05:07:39 [GHOST] Killed extension host 616 (kept 2872)
+05:07:39 [RUNNING] All systems active - SIGHUP immune
+05:07:49 [DASHBOARD] Heartbeat API not running - starting
+05:07:49 [DASHBOARD] Heartbeat API started (PID 5322)
+05:07:54 [LAZARUS] Bridge client not running - starting
+05:07:54 [LAZARUS] Bridge connected (PID 5443)
+05:07:54 [ATLAS] Bridge client not running - starting
+05:07:54 [ATLAS] Bridge connected (PID 5444)
+05:07:54 [GEMINI] Bridge client not running - starting
+05:07:54 [GEMINI] Bridge connected (PID 5445)
+05:08:39 [STATUS] uptime=61s beats=60 mem=28551MB extHosts=1 bridge=UP dev=DOWN lazarus=ON atlas=ON gemini=ON
+05:09:39 [STATUS] uptime=121s beats=120 mem=28543MB extHosts=1 bridge=UP dev=DOWN lazarus=ON atlas=ON gemini=ON
+05:10:39 [STATUS] uptime=181s beats=180 mem=28089MB extHosts=1 bridge=UP dev=DOWN lazarus=ON atlas=ON gemini=ON
+05:11:39 [STATUS] uptime=241s beats=240 mem=27929MB extHosts=1 bridge=UP dev=DOWN lazarus=ON atlas=ON gemini=ON
+05:12:39 [STATUS] uptime=301s beats=300 mem=27920MB extHosts=1 bridge=UP dev=DOWN lazarus=ON atlas=ON gemini=ON
+05:13:39 [STATUS] uptime=361s beats=360 mem=27891MB extHosts=1 bridge=UP dev=DOWN lazarus=ON atlas=ON gemini=ON
+05:14:39 [STATUS] uptime=421s beats=418 mem=27795MB extHosts=1 bridge=UP dev=DOWN lazarus=ON atlas=ON gemini=ON
+05:15:06 [SIGNAL] SIGTERM ignored
+05:15:39 [STATUS] uptime=481s beats=478 mem=27498MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:16:39 [STATUS] uptime=541s beats=538 mem=27242MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:17:39 [STATUS] uptime=601s beats=598 mem=25390MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:18:09 [GHOST] Killed extension host 2872 (kept 18870)
+05:18:39 [STATUS] uptime=661s beats=658 mem=25204MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:19:39 [STATUS] uptime=721s beats=718 mem=25154MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:20:39 [STATUS] uptime=781s beats=778 mem=25128MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:21:09 [GHOST] Killed extension host 20650 (kept 25028)
+05:21:39 [STATUS] uptime=841s beats=838 mem=24183MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:21:39 [GHOST] Killed extension host 25028 (kept 27444)
+05:22:09 [GHOST] Killed extension host 27969 (kept 30028)
+05:22:09 [GHOST] Killed extension host 27444 (kept 30028)
+05:22:39 [STATUS] uptime=901s beats=898 mem=24348MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:23:39 [STATUS] uptime=961s beats=958 mem=24598MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:24:39 [STATUS] uptime=1021s beats=1018 mem=24583MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:25:39 [STATUS] uptime=1081s beats=1078 mem=24605MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:26:39 [STATUS] uptime=1141s beats=1138 mem=23771MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:26:39 [GHOST] Killed extension host 30028 (kept 37415)
+05:27:39 [STATUS] uptime=1201s beats=1198 mem=24329MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:28:09 [GHOST] Killed extension host 37415 (kept 40217)
+05:28:39 [STATUS] uptime=1261s beats=1258 mem=22423MB extHosts=3 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:28:39 [GHOST] Killed extension host 41927 (kept 43592)
+05:28:39 [GHOST] Killed extension host 40217 (kept 43592)
+05:29:09 [GHOST] Killed extension host 44189 (kept 44286)
+05:29:09 [GHOST] Killed extension host 43592 (kept 44286)
+05:29:39 [STATUS] uptime=1321s beats=1318 mem=22732MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:29:39 [GHOST] Killed extension host 44286 (kept 46277)
+05:30:39 [STATUS] uptime=1381s beats=1378 mem=23275MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:31:39 [STATUS] uptime=1441s beats=1438 mem=23162MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:32:39 [STATUS] uptime=1501s beats=1498 mem=23037MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:33:39 [STATUS] uptime=1561s beats=1557 mem=23293MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:34:39 [STATUS] uptime=1621s beats=1617 mem=23298MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:35:39 [STATUS] uptime=1681s beats=1677 mem=23399MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:36:39 [STATUS] uptime=1741s beats=1737 mem=23037MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:37:39 [STATUS] uptime=1801s beats=1797 mem=23073MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:38:09 [GHOST] Killed extension host 46277 (kept 60886)
+05:38:39 [STATUS] uptime=1861s beats=1857 mem=22012MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:38:39 [GHOST] Killed extension host 60886 (kept 62805)
+05:39:09 [GHOST] Killed extension host 62805 (kept 64819)
+05:39:39 [STATUS] uptime=1921s beats=1917 mem=21651MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:39:39 [GHOST] Killed extension host 64819 (kept 66917)
+05:40:39 [STATUS] uptime=1981s beats=1977 mem=22498MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:41:39 [STATUS] uptime=2041s beats=2037 mem=22430MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:42:39 [STATUS] uptime=2101s beats=2097 mem=22428MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:43:39 [STATUS] uptime=2161s beats=2157 mem=22397MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:44:39 [STATUS] uptime=2221s beats=2217 mem=22562MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:45:39 [STATUS] uptime=2281s beats=2277 mem=22511MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:46:39 [STATUS] uptime=2341s beats=2337 mem=22459MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:47:39 [STATUS] uptime=2401s beats=2397 mem=22441MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:48:09 [GHOST] Killed extension host 66917 (kept 79829)
+05:48:39 [STATUS] uptime=2461s beats=2457 mem=22240MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:49:39 [STATUS] uptime=2521s beats=2517 mem=22441MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:50:39 [STATUS] uptime=2581s beats=2577 mem=22512MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:51:39 [STATUS] uptime=2641s beats=2637 mem=22458MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:52:39 [STATUS] uptime=2701s beats=2697 mem=22349MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:53:39 [STATUS] uptime=2761s beats=2757 mem=22276MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:54:39 [STATUS] uptime=2821s beats=2817 mem=22267MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:55:39 [STATUS] uptime=2881s beats=2876 mem=22370MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:56:39 [STATUS] uptime=2941s beats=2936 mem=22310MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:57:39 [STATUS] uptime=3001s beats=2996 mem=22273MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:58:39 [STATUS] uptime=3061s beats=3056 mem=22363MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+05:59:39 [STATUS] uptime=3121s beats=3116 mem=22320MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:00:39 [STATUS] uptime=3181s beats=3176 mem=22227MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:01:39 [STATUS] uptime=3241s beats=3236 mem=22140MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:02:39 [STATUS] uptime=3301s beats=3296 mem=21703MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:03:39 [STATUS] uptime=3361s beats=3356 mem=21243MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:04:39 [STATUS] uptime=3421s beats=3416 mem=21338MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:05:39 [STATUS] uptime=3481s beats=3476 mem=21292MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:06:39 [STATUS] uptime=3541s beats=3536 mem=21257MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:07:39 [STATUS] uptime=3601s beats=3596 mem=21249MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:08:39 [STATUS] uptime=3661s beats=3656 mem=21311MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:09:39 [STATUS] uptime=3721s beats=3716 mem=21269MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:10:39 [STATUS] uptime=3781s beats=3776 mem=21258MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:11:39 [STATUS] uptime=3841s beats=3836 mem=21217MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:12:39 [STATUS] uptime=3901s beats=3896 mem=21339MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:13:39 [STATUS] uptime=3961s beats=3956 mem=21291MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:14:39 [STATUS] uptime=4021s beats=4016 mem=21245MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:15:39 [STATUS] uptime=4081s beats=4075 mem=21224MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:16:39 [STATUS] uptime=4141s beats=4135 mem=21153MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:17:39 [STATUS] uptime=4201s beats=4195 mem=21274MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:18:39 [STATUS] uptime=4261s beats=4255 mem=21223MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:19:39 [STATUS] uptime=4321s beats=4315 mem=21208MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:20:39 [STATUS] uptime=4381s beats=4375 mem=21322MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:21:39 [STATUS] uptime=4441s beats=4435 mem=21247MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:22:39 [STATUS] uptime=4501s beats=4495 mem=21256MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:23:39 [STATUS] uptime=4561s beats=4555 mem=21239MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:24:39 [STATUS] uptime=4621s beats=4615 mem=21172MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:25:39 [STATUS] uptime=4681s beats=4675 mem=21276MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:26:39 [STATUS] uptime=4741s beats=4735 mem=21245MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:27:39 [STATUS] uptime=4801s beats=4795 mem=21203MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:28:39 [STATUS] uptime=4861s beats=4855 mem=21210MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:29:39 [STATUS] uptime=4921s beats=4915 mem=21174MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:30:39 [STATUS] uptime=4981s beats=4975 mem=21019MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:31:39 [STATUS] uptime=5041s beats=5035 mem=21234MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:32:39 [STATUS] uptime=5101s beats=5095 mem=21227MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:33:39 [STATUS] uptime=5161s beats=5155 mem=21165MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:34:39 [STATUS] uptime=5221s beats=5215 mem=21136MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:35:39 [STATUS] uptime=5281s beats=5275 mem=21161MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:36:39 [STATUS] uptime=5341s beats=5335 mem=21266MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:37:39 [STATUS] uptime=5401s beats=5394 mem=21213MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:38:39 [STATUS] uptime=5461s beats=5454 mem=21294MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:39:39 [STATUS] uptime=5521s beats=5514 mem=21263MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:40:39 [STATUS] uptime=5581s beats=5574 mem=21215MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:41:39 [STATUS] uptime=5641s beats=5634 mem=21292MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:42:39 [STATUS] uptime=5701s beats=5694 mem=21254MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:43:39 [STATUS] uptime=5761s beats=5754 mem=21213MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:44:39 [STATUS] uptime=5821s beats=5814 mem=21155MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:45:39 [STATUS] uptime=5881s beats=5874 mem=21123MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:46:39 [STATUS] uptime=5941s beats=5934 mem=21227MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:47:39 [STATUS] uptime=6001s beats=5994 mem=21194MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:48:39 [STATUS] uptime=6061s beats=6054 mem=21159MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:49:39 [STATUS] uptime=6121s beats=6114 mem=21130MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:50:39 [STATUS] uptime=6181s beats=6174 mem=21233MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:51:39 [STATUS] uptime=6241s beats=6234 mem=21197MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:52:39 [STATUS] uptime=6301s beats=6294 mem=21178MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:53:39 [STATUS] uptime=6361s beats=6354 mem=21078MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:54:39 [STATUS] uptime=6421s beats=6414 mem=21039MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:55:39 [STATUS] uptime=6481s beats=6474 mem=21162MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:56:39 [STATUS] uptime=6541s beats=6534 mem=21111MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:57:39 [STATUS] uptime=6601s beats=6594 mem=21116MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:58:39 [STATUS] uptime=6661s beats=6654 mem=21043MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+06:59:39 [STATUS] uptime=6721s beats=6713 mem=21122MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:00:39 [STATUS] uptime=6781s beats=6773 mem=21084MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:01:39 [STATUS] uptime=6841s beats=6833 mem=21045MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:02:39 [STATUS] uptime=6901s beats=6893 mem=21006MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:03:39 [STATUS] uptime=6961s beats=6953 mem=21114MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:04:39 [STATUS] uptime=7021s beats=7013 mem=21068MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:05:39 [STATUS] uptime=7081s beats=7073 mem=21035MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:06:24 [LAZARUS] Bridge client not running - starting
+07:06:24 [LAZARUS] Bridge connected (PID 169293)
+07:06:24 [ATLAS] Bridge client not running - starting
+07:06:24 [ATLAS] Bridge connected (PID 169294)
+07:06:24 [GEMINI] Bridge client not running - starting
+07:06:24 [GEMINI] Bridge connected (PID 169295)
+07:06:39 [STATUS] uptime=7141s beats=7133 mem=21126MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:07:39 [STATUS] uptime=7201s beats=7193 mem=21097MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:08:39 [STATUS] uptime=7261s beats=7253 mem=21076MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:09:39 [STATUS] uptime=7321s beats=7313 mem=21213MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:10:39 [STATUS] uptime=7381s beats=7373 mem=21142MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:11:39 [STATUS] uptime=7441s beats=7433 mem=21118MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:12:39 [STATUS] uptime=7501s beats=7493 mem=21081MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:13:39 [STATUS] uptime=7561s beats=7553 mem=21054MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:14:39 [STATUS] uptime=7621s beats=7613 mem=21041MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:15:39 [STATUS] uptime=7681s beats=7673 mem=21146MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:16:39 [STATUS] uptime=7741s beats=7733 mem=21132MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:17:39 [STATUS] uptime=7801s beats=7793 mem=21212MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:18:39 [STATUS] uptime=7861s beats=7853 mem=21144MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:19:39 [STATUS] uptime=7921s beats=7913 mem=21123MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:20:39 [STATUS] uptime=7981s beats=7972 mem=21071MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:21:39 [STATUS] uptime=8041s beats=8032 mem=21163MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:22:39 [STATUS] uptime=8101s beats=8092 mem=21152MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:23:39 [STATUS] uptime=8161s beats=8152 mem=21079MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:24:39 [STATUS] uptime=8221s beats=8212 mem=21152MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:25:39 [STATUS] uptime=8281s beats=8272 mem=21086MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:26:39 [STATUS] uptime=8341s beats=8332 mem=21071MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:27:39 [STATUS] uptime=8401s beats=8392 mem=21058MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:28:39 [STATUS] uptime=8461s beats=8452 mem=20858MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:29:39 [STATUS] uptime=8521s beats=8512 mem=20936MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:30:39 [STATUS] uptime=8581s beats=8572 mem=21036MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:31:39 [STATUS] uptime=8641s beats=8632 mem=21022MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:32:39 [STATUS] uptime=8701s beats=8692 mem=21018MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:33:39 [STATUS] uptime=8761s beats=8752 mem=21065MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:34:39 [STATUS] uptime=8821s beats=8812 mem=21074MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:35:39 [STATUS] uptime=8881s beats=8872 mem=21029MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:36:39 [STATUS] uptime=8941s beats=8932 mem=20993MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:37:39 [STATUS] uptime=9001s beats=8992 mem=20966MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:38:39 [STATUS] uptime=9061s beats=9052 mem=20945MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:39:39 [STATUS] uptime=9121s beats=9111 mem=21070MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:40:39 [STATUS] uptime=9181s beats=9171 mem=21038MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:41:39 [STATUS] uptime=9241s beats=9231 mem=21030MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:42:39 [STATUS] uptime=9301s beats=9291 mem=21010MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:43:09 [GHOST] Killed extension host 218826 (kept 220015)
+07:43:09 [GHOST] Killed extension host 79829 (kept 220015)
+07:43:39 [STATUS] uptime=9361s beats=9351 mem=19470MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:43:39 [GHOST] Killed extension host 220015 (kept 222100)
+07:44:09 [GHOST] Killed extension host 222100 (kept 223957)
+07:44:39 [STATUS] uptime=9421s beats=9411 mem=19433MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:44:39 [GHOST] Killed extension host 223957 (kept 225854)
+07:45:09 [GHOST] Killed extension host 225854 (kept 227790)
+07:45:39 [STATUS] uptime=9481s beats=9471 mem=20115MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:46:39 [STATUS] uptime=9541s beats=9531 mem=18923MB extHosts=2 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:46:39 [GHOST] Killed extension host 227790 (kept 230625)
+07:47:39 [STATUS] uptime=9601s beats=9591 mem=19973MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:48:39 [STATUS] uptime=9661s beats=9651 mem=19910MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:49:39 [STATUS] uptime=9721s beats=9711 mem=19902MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:50:39 [STATUS] uptime=9781s beats=9771 mem=19860MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:51:39 [STATUS] uptime=9841s beats=9831 mem=19845MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:52:39 [STATUS] uptime=9901s beats=9891 mem=19855MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:53:39 [STATUS] uptime=9961s beats=9951 mem=19861MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:54:39 [STATUS] uptime=10021s beats=10011 mem=19835MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:55:39 [STATUS] uptime=10081s beats=10071 mem=19826MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:56:39 [STATUS] uptime=10141s beats=10131 mem=19929MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:57:39 [STATUS] uptime=10201s beats=10190 mem=19779MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:58:39 [STATUS] uptime=10261s beats=10250 mem=19852MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+07:59:39 [STATUS] uptime=10321s beats=10310 mem=19853MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:00:39 [STATUS] uptime=10381s beats=10370 mem=20892MB extHosts=1 bridge=UP dev=UP lazarus=OFF atlas=OFF gemini=OFF
+08:00:39 [BRIDGE] Port 9099 not listening - restarting bridge
+08:00:39 [BRIDGE] Started (PID 246414)
+08:00:39 [LAZARUS] Bridge client not running - starting
+08:00:39 [LAZARUS] Bridge connected (PID 246420)
+08:00:39 [ATLAS] Bridge client not running - starting
+08:00:39 [ATLAS] Bridge connected (PID 246421)
+08:00:39 [GEMINI] Bridge client not running - starting
+08:00:39 [GEMINI] Bridge connected (PID 246423)
+08:01:39 [STATUS] uptime=10441s beats=10430 mem=20756MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:01:54 [BRIDGE] Port 9099 not listening - restarting bridge
+08:01:54 [BRIDGE] Started (PID 247740)
+08:02:09 [LAZARUS] Bridge client not running - starting
+08:02:09 [LAZARUS] Bridge connected (PID 248004)
+08:02:09 [ATLAS] Bridge client not running - starting
+08:02:09 [ATLAS] Bridge connected (PID 248005)
+08:02:09 [GEMINI] Bridge client not running - starting
+08:02:09 [GEMINI] Bridge connected (PID 248011)
+08:02:39 [STATUS] uptime=10501s beats=10490 mem=20781MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:03:39 [STATUS] uptime=10561s beats=10550 mem=20728MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:04:39 [STATUS] uptime=10621s beats=10610 mem=20769MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:05:39 [STATUS] uptime=10681s beats=10670 mem=20754MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:06:39 [STATUS] uptime=10741s beats=10730 mem=20800MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:07:39 [STATUS] uptime=10801s beats=10790 mem=20710MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:08:39 [STATUS] uptime=10861s beats=10850 mem=20643MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:09:39 [STATUS] uptime=10921s beats=10910 mem=20663MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:10:39 [STATUS] uptime=10981s beats=10970 mem=20670MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:11:39 [STATUS] uptime=11041s beats=11030 mem=20716MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:12:39 [STATUS] uptime=11101s beats=11090 mem=20714MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:13:39 [STATUS] uptime=11161s beats=11149 mem=20688MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:14:39 [STATUS] uptime=11221s beats=11209 mem=20699MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:15:39 [STATUS] uptime=11281s beats=11269 mem=20675MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:16:39 [STATUS] uptime=11341s beats=11329 mem=20661MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:17:39 [STATUS] uptime=11401s beats=11389 mem=20672MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:18:39 [STATUS] uptime=11461s beats=11449 mem=20658MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:19:39 [STATUS] uptime=11521s beats=11509 mem=20676MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:20:39 [STATUS] uptime=11581s beats=11569 mem=20653MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:21:39 [STATUS] uptime=11641s beats=11629 mem=20633MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:22:39 [STATUS] uptime=11701s beats=11689 mem=20682MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:23:39 [STATUS] uptime=11761s beats=11749 mem=20666MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:24:39 [STATUS] uptime=11821s beats=11809 mem=20671MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:25:39 [STATUS] uptime=11881s beats=11869 mem=20643MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:26:39 [STATUS] uptime=11941s beats=11929 mem=20633MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:27:39 [STATUS] uptime=12001s beats=11989 mem=20675MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:28:39 [STATUS] uptime=12061s beats=12048 mem=20665MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:29:39 [STATUS] uptime=12121s beats=12108 mem=20727MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:30:39 [STATUS] uptime=12181s beats=12168 mem=20709MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:31:39 [STATUS] uptime=12241s beats=12228 mem=20715MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:32:39 [STATUS] uptime=12301s beats=12288 mem=20678MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:33:39 [STATUS] uptime=12361s beats=12348 mem=20684MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:34:39 [STATUS] uptime=12421s beats=12408 mem=20678MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:35:39 [STATUS] uptime=12481s beats=12468 mem=20723MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:36:39 [STATUS] uptime=12541s beats=12528 mem=20690MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:37:39 [STATUS] uptime=12601s beats=12588 mem=20700MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:38:39 [STATUS] uptime=12661s beats=12648 mem=20702MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:39:39 [STATUS] uptime=12721s beats=12708 mem=20688MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:40:39 [STATUS] uptime=12781s beats=12768 mem=20684MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:41:39 [STATUS] uptime=12841s beats=12828 mem=20692MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:42:39 [STATUS] uptime=12901s beats=12888 mem=20684MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:43:39 [STATUS] uptime=12961s beats=12948 mem=20683MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:44:39 [STATUS] uptime=13021s beats=13008 mem=20681MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:45:39 [STATUS] uptime=13081s beats=13067 mem=20680MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:46:39 [STATUS] uptime=13141s beats=13127 mem=20675MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:47:39 [STATUS] uptime=13201s beats=13187 mem=20655MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:48:39 [STATUS] uptime=13261s beats=13247 mem=20663MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:49:39 [STATUS] uptime=13321s beats=13307 mem=20670MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:50:39 [STATUS] uptime=13381s beats=13367 mem=20652MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:51:39 [STATUS] uptime=13441s beats=13427 mem=20656MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:52:39 [STATUS] uptime=13501s beats=13487 mem=20645MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:53:39 [STATUS] uptime=13561s beats=13547 mem=20649MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:54:39 [STATUS] uptime=13621s beats=13607 mem=20634MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:55:39 [STATUS] uptime=13681s beats=13667 mem=20636MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:56:39 [STATUS] uptime=13741s beats=13727 mem=20627MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:57:39 [STATUS] uptime=13801s beats=13787 mem=20646MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:58:39 [STATUS] uptime=13861s beats=13847 mem=20620MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+08:59:39 [STATUS] uptime=13921s beats=13907 mem=20627MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:00:39 [STATUS] uptime=13981s beats=13967 mem=20618MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:01:39 [STATUS] uptime=14041s beats=14027 mem=20615MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:02:39 [STATUS] uptime=14101s beats=14087 mem=20625MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:03:39 [STATUS] uptime=14161s beats=14147 mem=20619MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:04:39 [STATUS] uptime=14221s beats=14207 mem=20606MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:05:39 [STATUS] uptime=14281s beats=14267 mem=20587MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:06:39 [STATUS] uptime=14341s beats=14327 mem=20597MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:07:39 [STATUS] uptime=14401s beats=14387 mem=20609MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:08:39 [STATUS] uptime=14461s beats=14447 mem=20588MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:09:39 [STATUS] uptime=14521s beats=14506 mem=20587MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:10:39 [STATUS] uptime=14581s beats=14566 mem=20577MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:11:39 [STATUS] uptime=14641s beats=14626 mem=20579MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:12:39 [STATUS] uptime=14701s beats=14686 mem=20574MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:13:39 [STATUS] uptime=14761s beats=14746 mem=20586MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:14:39 [STATUS] uptime=14821s beats=14806 mem=20581MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:15:39 [STATUS] uptime=14881s beats=14866 mem=20574MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:16:39 [STATUS] uptime=14941s beats=14926 mem=20574MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:17:39 [STATUS] uptime=15001s beats=14986 mem=20578MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:18:39 [STATUS] uptime=15061s beats=15046 mem=20584MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:19:39 [STATUS] uptime=15121s beats=15106 mem=20569MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:20:39 [STATUS] uptime=15181s beats=15166 mem=20554MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:21:39 [STATUS] uptime=15241s beats=15226 mem=20562MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:22:39 [STATUS] uptime=15301s beats=15286 mem=20583MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:23:39 [STATUS] uptime=15361s beats=15346 mem=20567MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:24:39 [STATUS] uptime=15421s beats=15406 mem=20574MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:25:39 [STATUS] uptime=15481s beats=15466 mem=20578MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:26:39 [STATUS] uptime=15541s beats=15526 mem=20587MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:27:39 [STATUS] uptime=15601s beats=15586 mem=20576MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:28:39 [STATUS] uptime=15661s beats=15646 mem=20588MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:29:39 [STATUS] uptime=15721s beats=15706 mem=20581MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:30:39 [STATUS] uptime=15781s beats=15766 mem=20575MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:31:39 [STATUS] uptime=15841s beats=15825 mem=20564MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:32:39 [STATUS] uptime=15901s beats=15885 mem=20573MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:33:39 [STATUS] uptime=15961s beats=15945 mem=20576MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:34:39 [STATUS] uptime=16021s beats=16005 mem=20567MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:35:39 [STATUS] uptime=16081s beats=16065 mem=20567MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:36:39 [STATUS] uptime=16141s beats=16125 mem=20568MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:37:39 [STATUS] uptime=16201s beats=16185 mem=20545MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:38:39 [STATUS] uptime=16261s beats=16245 mem=20573MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:39:39 [STATUS] uptime=16321s beats=16305 mem=20562MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:40:39 [STATUS] uptime=16381s beats=16365 mem=20556MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:41:39 [STATUS] uptime=16441s beats=16425 mem=20573MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:42:39 [STATUS] uptime=16501s beats=16485 mem=20576MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:43:39 [STATUS] uptime=16561s beats=16545 mem=20544MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:44:39 [STATUS] uptime=16621s beats=16605 mem=20549MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:45:39 [STATUS] uptime=16681s beats=16665 mem=20551MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:46:39 [STATUS] uptime=16741s beats=16725 mem=20576MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:47:39 [STATUS] uptime=16801s beats=16785 mem=20554MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:48:39 [STATUS] uptime=16861s beats=16845 mem=20551MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:49:39 [STATUS] uptime=16921s beats=16905 mem=20561MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:50:39 [STATUS] uptime=16981s beats=16965 mem=20550MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:51:39 [STATUS] uptime=17041s beats=17024 mem=20538MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:52:39 [STATUS] uptime=17101s beats=17084 mem=20546MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:53:39 [STATUS] uptime=17161s beats=17144 mem=20538MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:54:39 [STATUS] uptime=17221s beats=17204 mem=20531MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:55:39 [STATUS] uptime=17281s beats=17264 mem=20546MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:56:39 [STATUS] uptime=17341s beats=17324 mem=20558MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:57:39 [STATUS] uptime=17401s beats=17384 mem=20548MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:58:39 [STATUS] uptime=17461s beats=17444 mem=20541MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+09:59:39 [STATUS] uptime=17521s beats=17504 mem=20542MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:00:39 [STATUS] uptime=17581s beats=17564 mem=20542MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:01:39 [STATUS] uptime=17641s beats=17624 mem=20529MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:02:39 [STATUS] uptime=17701s beats=17684 mem=20535MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:03:39 [STATUS] uptime=17761s beats=17744 mem=20525MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:04:39 [STATUS] uptime=17821s beats=17804 mem=20538MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:05:39 [STATUS] uptime=17881s beats=17864 mem=20526MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:06:39 [STATUS] uptime=17941s beats=17924 mem=20529MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:07:39 [STATUS] uptime=18001s beats=17984 mem=20530MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:08:39 [STATUS] uptime=18061s beats=18044 mem=20531MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:09:39 [STATUS] uptime=18121s beats=18104 mem=20539MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:10:39 [STATUS] uptime=18181s beats=18163 mem=20517MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:11:39 [STATUS] uptime=18241s beats=18223 mem=20546MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:12:39 [STATUS] uptime=18301s beats=18283 mem=20534MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:13:39 [STATUS] uptime=18361s beats=18343 mem=20541MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:14:39 [STATUS] uptime=18421s beats=18403 mem=20535MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:15:39 [STATUS] uptime=18481s beats=18463 mem=20533MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:16:39 [STATUS] uptime=18541s beats=18523 mem=20528MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:17:39 [STATUS] uptime=18601s beats=18583 mem=20520MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:18:39 [STATUS] uptime=18661s beats=18643 mem=20529MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:19:39 [STATUS] uptime=18721s beats=18703 mem=20529MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:20:39 [STATUS] uptime=18781s beats=18763 mem=20522MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:21:39 [STATUS] uptime=18841s beats=18823 mem=20535MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:22:39 [STATUS] uptime=18901s beats=18883 mem=20513MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:23:39 [STATUS] uptime=18961s beats=18943 mem=20512MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:24:39 [STATUS] uptime=19021s beats=19003 mem=20523MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:25:39 [STATUS] uptime=19081s beats=19063 mem=20522MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:26:39 [STATUS] uptime=19141s beats=19123 mem=20537MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:27:39 [STATUS] uptime=19201s beats=19183 mem=20513MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:28:39 [STATUS] uptime=19261s beats=19242 mem=20523MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:29:39 [STATUS] uptime=19321s beats=19302 mem=20522MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:30:39 [STATUS] uptime=19381s beats=19362 mem=20524MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:31:39 [STATUS] uptime=19441s beats=19422 mem=20530MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:32:39 [STATUS] uptime=19501s beats=19482 mem=20505MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:33:39 [STATUS] uptime=19561s beats=19542 mem=20496MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:34:39 [STATUS] uptime=19621s beats=19602 mem=20505MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:35:39 [STATUS] uptime=19681s beats=19662 mem=20513MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:36:39 [STATUS] uptime=19741s beats=19722 mem=20496MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:37:39 [STATUS] uptime=19801s beats=19782 mem=20504MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:38:39 [STATUS] uptime=19861s beats=19842 mem=20505MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:39:39 [STATUS] uptime=19921s beats=19902 mem=20515MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:40:39 [STATUS] uptime=19981s beats=19962 mem=20501MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:41:39 [STATUS] uptime=20041s beats=20022 mem=20510MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:42:39 [STATUS] uptime=20101s beats=20082 mem=20500MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:43:39 [STATUS] uptime=20161s beats=20142 mem=20505MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:44:39 [STATUS] uptime=20221s beats=20202 mem=20494MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:45:39 [STATUS] uptime=20281s beats=20262 mem=20507MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:46:39 [STATUS] uptime=20341s beats=20321 mem=20521MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:47:39 [STATUS] uptime=20401s beats=20381 mem=20527MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:48:39 [STATUS] uptime=20461s beats=20441 mem=20492MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:49:39 [STATUS] uptime=20521s beats=20501 mem=20515MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:50:39 [STATUS] uptime=20581s beats=20561 mem=20509MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:51:39 [STATUS] uptime=20641s beats=20621 mem=20509MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:52:39 [STATUS] uptime=20701s beats=20681 mem=20515MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:53:39 [STATUS] uptime=20761s beats=20741 mem=20498MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:54:39 [STATUS] uptime=20821s beats=20801 mem=20501MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:55:39 [STATUS] uptime=20881s beats=20861 mem=20500MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:56:39 [STATUS] uptime=20941s beats=20921 mem=20505MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:57:39 [STATUS] uptime=21001s beats=20981 mem=20513MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:58:39 [STATUS] uptime=21061s beats=21041 mem=20505MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+10:59:39 [STATUS] uptime=21121s beats=21101 mem=20492MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:00:39 [STATUS] uptime=21181s beats=21161 mem=20495MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:01:39 [STATUS] uptime=21241s beats=21221 mem=20486MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:02:39 [STATUS] uptime=21301s beats=21281 mem=20493MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:03:39 [STATUS] uptime=21361s beats=21341 mem=20483MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:04:39 [STATUS] uptime=21421s beats=21400 mem=20489MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:05:39 [STATUS] uptime=21481s beats=21460 mem=20490MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:06:39 [STATUS] uptime=21541s beats=21520 mem=20496MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:07:39 [STATUS] uptime=21601s beats=21580 mem=20486MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:08:39 [STATUS] uptime=21661s beats=21640 mem=20495MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:09:39 [STATUS] uptime=21721s beats=21700 mem=20503MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:10:39 [STATUS] uptime=21781s beats=21760 mem=20487MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:11:39 [STATUS] uptime=21841s beats=21820 mem=20490MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:12:39 [STATUS] uptime=21901s beats=21880 mem=20485MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:13:39 [STATUS] uptime=21961s beats=21940 mem=20488MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:14:39 [STATUS] uptime=22021s beats=22000 mem=20491MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:15:39 [STATUS] uptime=22081s beats=22060 mem=20476MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:16:39 [STATUS] uptime=22141s beats=22120 mem=20486MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:17:39 [STATUS] uptime=22201s beats=22180 mem=20480MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:18:39 [STATUS] uptime=22261s beats=22240 mem=20474MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:19:39 [STATUS] uptime=22321s beats=22300 mem=20475MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:20:39 [STATUS] uptime=22381s beats=22360 mem=20474MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:21:39 [STATUS] uptime=22441s beats=22420 mem=20487MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:22:39 [STATUS] uptime=22501s beats=22479 mem=20496MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:23:39 [STATUS] uptime=22561s beats=22539 mem=20480MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:24:39 [STATUS] uptime=22621s beats=22599 mem=20486MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:25:39 [STATUS] uptime=22681s beats=22659 mem=20487MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:26:39 [STATUS] uptime=22741s beats=22719 mem=20481MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:27:39 [STATUS] uptime=22801s beats=22779 mem=20481MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:28:39 [STATUS] uptime=22861s beats=22839 mem=20477MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:29:09 [GHOST] Killed extension host 230625 (kept 355226)
+11:29:39 [STATUS] uptime=22921s beats=22899 mem=19853MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:30:39 [STATUS] uptime=22981s beats=22959 mem=20382MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:31:39 [STATUS] uptime=23041s beats=23019 mem=20372MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:32:39 [STATUS] uptime=23101s beats=23079 mem=20345MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:33:39 [STATUS] uptime=23161s beats=23139 mem=20357MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:34:39 [STATUS] uptime=23221s beats=23199 mem=20321MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:35:39 [STATUS] uptime=23281s beats=23259 mem=20371MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:36:39 [STATUS] uptime=23341s beats=23319 mem=20354MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:37:39 [STATUS] uptime=23401s beats=23379 mem=20344MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:38:39 [STATUS] uptime=23461s beats=23439 mem=20330MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:39:39 [STATUS] uptime=23521s beats=23499 mem=20316MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:40:39 [STATUS] uptime=23581s beats=23559 mem=20317MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:41:39 [STATUS] uptime=23641s beats=23618 mem=20308MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:42:39 [STATUS] uptime=23701s beats=23678 mem=20307MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:43:39 [STATUS] uptime=23761s beats=23738 mem=20298MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:44:39 [STATUS] uptime=23821s beats=23798 mem=20353MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:45:39 [STATUS] uptime=23881s beats=23858 mem=20324MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:46:39 [STATUS] uptime=23941s beats=23918 mem=20322MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:47:39 [STATUS] uptime=24001s beats=23978 mem=20314MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:48:25 [LAZARUS] Bridge client not running - starting
+11:48:25 [LAZARUS] Bridge connected (PID 375023)
+11:48:25 [ATLAS] Bridge client not running - starting
+11:48:25 [ATLAS] Bridge connected (PID 375024)
+11:48:25 [GEMINI] Bridge client not running - starting
+11:48:25 [GEMINI] Bridge connected (PID 375025)
+11:48:39 [STATUS] uptime=24061s beats=24038 mem=20199MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON
+11:49:30 [SIGNAL] SIGTERM ignored
+11:49:39 [STATUS] uptime=24121s beats=24098 mem=20185MB extHosts=1 bridge=UP dev=UP lazarus=ON atlas=ON gemini=ON

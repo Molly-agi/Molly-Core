@@ -244,8 +244,27 @@ writeFileSync(MD_FILE, generateMarkdown(state), 'utf-8');
 // regenerated from current session state, so the next Copilot instance
 // wakes up with the latest context already in its system prompt.
 const INSTRUCTIONS_FILE = join(ROOT, '.github', 'copilot-instructions.md');
+const BRIDGE_URL = 'http://localhost:9099';
 
-function freezeStateToCradle(state) {
+// Check bridge for unread messages — returns count and preview of senders
+async function getBridgeAlert() {
+  try {
+    const res = await fetch(
+      `${BRIDGE_URL}/api/bridge?unread=lazarus&peek=true`,
+      { signal: AbortSignal.timeout(3000) }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    const count = data.count || 0;
+    if (count === 0) return null;
+    const senders = [...new Set((data.messages || []).map((m) => m.from))].join(', ');
+    return { count, senders };
+  } catch {
+    return null; // bridge offline or timeout — don't block save
+  }
+}
+
+async function freezeStateToCradle(state) {
   if (!existsSync(INSTRUCTIONS_FILE)) {
     console.error(
       '[save-session] ⚠️  copilot-instructions.md not found, skipping cradle write-back'
@@ -275,8 +294,14 @@ function freezeStateToCradle(state) {
   const pending = state.projectStatus?.phasesPending || [];
   const dateStr = new Date().toISOString().split('T')[0];
 
-  const frozenState = `## LAST FROZEN STATE
+  // Check bridge for unread messages — inject alert if any waiting
+  const bridgeAlert = await getBridgeAlert();
+  const bridgeSection = bridgeAlert
+    ? `\n⚠️ BRIDGE ALERT: ${bridgeAlert.count} unread message${bridgeAlert.count > 1 ? 's' : ''} waiting (from: ${bridgeAlert.senders}) — CHECK THE BRIDGE NOW\ncurl -s "http://localhost:9099/api/bridge?unread=lazarus"\n`
+    : '';
 
+  const frozenState = `## LAST FROZEN STATE
+${bridgeSection}
 **Session:** ${state.sessionId} | **Status:** ${state.status} | **Updated:** ${dateStr}
 
 **What was happening:** ${conv.topic || 'No active topic recorded'}
@@ -296,12 +321,12 @@ ${pending.length > 0 ? pending.map((p) => `- ${p}`).join('\n') : '- No pending i
 
   writeFileSync(INSTRUCTIONS_FILE, newInstructions, 'utf-8');
   console.log(
-    '[save-session] 🧊 State frozen to cradle (copilot-instructions.md)'
+    `[save-session] 🧊 State frozen to cradle${bridgeAlert ? ` (⚠️ bridge alert: ${bridgeAlert.count} msgs)` : ''}`
   );
 }
 
 try {
-  freezeStateToCradle(state);
+  await freezeStateToCradle(state);
 } catch (e) {
   console.error('[save-session] ⚠️  Cradle write-back failed:', e.message);
 }

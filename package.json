@@ -45,6 +45,7 @@
     "bridge": "node scripts/bridge-daemon.mjs",
     "bridge:listen": "node scripts/bridge-listen.mjs",
     "lazarus:bridge": "node scripts/lazarus-bridge.mjs",
+    "ticker": "node scripts/molly-ticker.mjs",
     "atlas:bridge": "node scripts/atlas-bridge.mjs",
     "switchboard": "node scripts/switchboard.mjs",
     "demon": "node scripts/demon-state.mjs",

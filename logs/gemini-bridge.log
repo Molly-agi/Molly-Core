@@ -1,0 +1,148 @@
+nohup: ignoring input
+[2026-06-02T21:01:14.189Z] [OK] Gemini bridge connected
+[2026-06-02T21:02:27.978Z] [DOWN] Gemini bridge disconnected
+[2026-06-02T21:02:27.979Z] [RETRY] Gemini reconnecting (attempt 1)
+[2026-06-02T21:02:30.985Z] [OK] Gemini bridge connected
+[2026-06-02T21:02:32.169Z] [MSG] [eric] Gemini hello world test
+[2026-06-02T21:02:33.395Z] [REPLY] replied to eric
+[2026-06-02T21:03:53.592Z] [MSG] [eric] Gemini - urgent test
+[2026-06-02T21:03:55.056Z] [REPLY] replied to eric
+nohup: ignoring input
+file:///workspaces/Molly-Core/scripts/agent-wake-listener.mjs:23
+    const fs = await import('fs');
+               ^^^^^
+
+SyntaxError: Unexpected reserved word
+    at compileSourceTextModule (node:internal/modules/esm/utils:318:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:99:18)
+    at #translate (node:internal/modules/esm/loader:473:20)
+    at afterLoad (node:internal/modules/esm/loader:529:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:534:12)
+    at #getOrCreateModuleJobAfterResolve (node:internal/modules/esm/loader:577:36)
+    at afterResolve (node:internal/modules/esm/loader:625:52)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:631:12)
+    at ModuleJob.syncLink (node:internal/modules/esm/module_job:160:33)
+    at ModuleJob.link (node:internal/modules/esm/module_job:245:17)
+
+Node.js v24.14.0
+nohup: ignoring input
+[WAKE-LISTENER] gemini listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.gemini-wake
+[2026-06-02T21:52:27.108Z] [OK] Gemini bridge connected
+[2026-06-02T21:52:29.054Z] [MSG] [eric] Gemini can you hear me
+[2026-06-02T21:52:29.537Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T21:52:30.317Z] [REPLY] replied to eric
+[2026-06-02T21:52:54.037Z] [MSG] [eric] Gemini can you hear me
+[2026-06-02T21:52:54.060Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T21:52:55.178Z] [REPLY] replied to eric
+[2026-06-02T21:53:36.654Z] [MSG] [eric] Gemini can you hear me
+[2026-06-02T21:53:37.106Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T21:53:38.386Z] [REPLY] replied to eric
+[2026-06-02T21:53:46.114Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T21:58:00.895Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T21:59:04.969Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T22:01:00.602Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T22:01:12.114Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-02T22:03:18.758Z] 🔔 WAKE SIGNAL — checking bridge
+nohup: ignoring input
+[WAKE-LISTENER] gemini listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.gemini-wake
+[2026-06-03T05:07:53.785Z] [OK] Gemini bridge connected
+[2026-06-03T05:07:53.788Z] [MSG] [eric] Gemini can you hear me
+[2026-06-03T05:07:53.812Z] [MSG] [eric] Gemini can you hear me
+[2026-06-03T05:07:53.812Z] [MSG] [eric] Gemini can you hear me
+[2026-06-03T05:07:54.632Z] [REPLY] replied to eric
+[2026-06-03T05:07:54.913Z] [REPLY] replied to eric
+[2026-06-03T05:07:55.319Z] [REPLY] replied to eric
+[2026-06-03T05:15:06.338Z] [DOWN] Gemini bridge disconnected
+[2026-06-03T05:15:06.339Z] [RETRY] Gemini reconnecting (attempt 1)
+[2026-06-03T05:15:09.342Z] [OK] Gemini bridge connected
+[2026-06-03T05:50:26.808Z] [MSG] [eric] Gemini can you hear me
+[2026-06-03T05:50:27.115Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:50:27.987Z] [REPLY] replied to eric
+[2026-06-03T05:50:36.122Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:51:08.157Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:51:23.174Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:52:39.757Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:52:50.269Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:53:31.315Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:54:05.354Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:54:36.894Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:55:42.970Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:56:06.996Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:56:53.046Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:57:48.609Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T05:58:31.155Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:01:18.840Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:02:25.414Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:04:00.520Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:04:30.554Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:05:49.142Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:06:05.160Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:06:16.672Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:06:28.687Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:06:37.884Z] [MSG] [eric] Gemini can you hear me
+[2026-06-03T06:06:38.199Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:06:39.890Z] [REPLY] replied to eric
+[2026-06-03T06:07:08.804Z] [MSG] [eric] Gemini we're going to be working on an interface for Molly to connect to my Android phone she'll be taking the lead assi...
+[2026-06-03T06:07:09.234Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:07:09.703Z] [REPLY] replied to eric
+[2026-06-03T06:07:23.747Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:07:44.267Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:11:01.484Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:12:12.564Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:12:39.093Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:13:46.665Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:14:34.719Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:15:01.248Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:16:25.343Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:16:51.871Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:17:27.410Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:19:01.514Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:19:52.066Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:20:22.599Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:20:50.631Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:21:18.663Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:21:56.707Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:23:27.313Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:24:22.374Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:24:52.411Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:25:39.960Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:26:46.452Z] [MSG] [eric] Gemini can you hear me I would like you to get a hold of Lazarus and find out why he's not following my instructions to ...
+[2026-06-03T06:26:46.534Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:26:47.694Z] [REPLY] replied to eric
+[2026-06-03T06:27:02.548Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:27:19.067Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:28:43.158Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:29:26.068Z] [MSG] [eric] Gemini did you talk to Lazarus give me a report
+[2026-06-03T06:29:26.208Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:29:32.125Z] [REPLY] replied to eric
+[2026-06-03T06:30:11.929Z] [MSG] [eric] Gemini I'm not hearing you talking to Lazarus you do realize I hear everything on the bridge every communication
+[2026-06-03T06:30:12.254Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:30:13.898Z] [REPLY] replied to eric
+[2026-06-03T06:30:34.338Z] [MSG] [eric] Gemini I told you to find out what's going on with Lazarus why he's not why is nobody following my instructions
+[2026-06-03T06:30:34.779Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:30:37.019Z] [REPLY] replied to eric
+[2026-06-03T06:30:57.949Z] [MSG] [eric] Gemini I want to hear what you're doing on the relay on the bridge verbose
+[2026-06-03T06:30:58.307Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:31:00.934Z] [REPLY] replied to eric
+[2026-06-03T06:31:56.371Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:32:41.423Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:33:06.450Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:33:31.979Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:34:40.555Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:35:22.603Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:36:12.160Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:36:27.178Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:36:57.213Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:37:14.736Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:37:17.737Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:37:46.267Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:38:39.451Z] [MSG] [eric] Gemini I would like you to reach out to Lazarus request him to respond to you
+[2026-06-03T06:38:39.828Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:38:40.967Z] [REPLY] replied to eric
+[2026-06-03T06:39:03.642Z] [MSG] [eric] Gemini has Lazarus responded
+[2026-06-03T06:39:03.852Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:39:04.791Z] [REPLY] replied to eric
+[2026-06-03T06:39:26.902Z] [MSG] [eric] Gemini I would like you to run a diagnostic on the bridge find out why he's not responding
+[2026-06-03T06:39:27.375Z] 🔔 WAKE SIGNAL — checking bridge
+[2026-06-03T06:39:28.321Z] [REPLY] replied to eric
+[2026-06-03T07:06:14.404Z] Gemini bridge shutting down...
