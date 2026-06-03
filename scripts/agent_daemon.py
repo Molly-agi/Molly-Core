@@ -428,10 +428,11 @@ app = Starlette(
 
 async def run_mcp_server():
     """Run the MCP stdio server."""
-    async with mcp:
-        print("[MCP] Server started on stdio", file=sys.stderr)
-        while True:
-            await asyncio.sleep(1)
+    print("[MCP] Server started on stdio", file=sys.stderr)
+    # MCP server runs on stdio automatically via FastMCP
+    # Just keep running
+    while True:
+        await asyncio.sleep(1)
 
 
 async def run_http_server():
@@ -456,10 +457,10 @@ async def main():
     # Start bridge polling
     switchboard.start_bridge_polling()
 
-    mcp_task = asyncio.create_task(run_mcp_server())
+    # Run HTTP server (primary transport)
     http_task = asyncio.create_task(run_http_server())
-
-    await asyncio.gather(mcp_task, http_task)
+    
+    await http_task
 
 
 if __name__ == "__main__":
