@@ -141,7 +141,7 @@ Guardian comments in the three files above will remind you. Read them before edi
 
 ## LAST FROZEN STATE
 
-⚠️ BRIDGE ALERT: 37 unread messages waiting (from: eric) — CHECK THE BRIDGE NOW
+⚠️ BRIDGE ALERT: 7 unread messages waiting (from: molly, eric) — CHECK THE BRIDGE NOW
 curl -s "http://localhost:9099/api/bridge?unread=lazarus"
 
 **Session:** unknown | **Status:** active | **Updated:** 2026-06-03
