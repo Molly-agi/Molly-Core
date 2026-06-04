@@ -65,3 +65,4 @@
 {"timestamp":"2026-05-31T08:45:03.269Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
 {"timestamp":"2026-05-31T08:46:22.043Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
 {"timestamp":"2026-06-04T03:01:59.792Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}
+{"timestamp":"2026-06-04T03:05:41.618Z","userId":"user-evict","engramId":"engram-0","actionTaken":"ARCHIVED","reasonCode":"CAPACITY_CONSTRAINT","impactMetrics":{"bytesSaved":1024,"retainedSimilarityScore":0.5}}

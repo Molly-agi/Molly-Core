@@ -1,7 +1,7 @@
 # GitHub Copilot Session State & Memory
-**Last Updated:** 2026-06-03T19:57:40.475Z
-**Session ID:** unknown
-**Status:** paused
+**Last Updated:** 2026-06-04T02:51:30.000Z
+**Session ID:** lazarus-wake-action-78-atlas
+**Status:** active
 
 ---
 
@@ -30,7 +30,11 @@
 ### Completion: 100%
 
 **✅ COMPLETED:**
-(none)
+- Lazarus Wake Action #78 (atlas) processed — receipt confirmation from Lazarus acknowledged
+- Fixed switchboard feedback loop: hive-mind-daemon broadcast receipts no longer re-enter `.atlas-wakeup.json`
+  - Added `[hive-mind` to `NOISE_PATTERNS` (silences phone spam from RECEIPT/KEEPALIVE/STATUS)
+  - Added `isFromAtlas` classifier to `classifyMessage()`
+  - `writeAtlasWakeup()` now guarded by `!isFromAtlas` — Atlas's own broadcasts stay out of its own wakeup file
 
 **⏳ PENDING:**
 (none)
@@ -41,7 +45,8 @@
 
 ## RECENT WORK COMPLETED
 
-(none recorded)
+- 2026-06-04: Lazarus Wake Action #78 (atlas) — fixed switchboard feedback loop from hive-mind-daemon receipts.
+  PR: copilot/lazarus-wake-action-78-atlas
 
 ---
 
@@ -49,7 +54,7 @@
 
 (none)
 
-**Recommended:** Restore context from previous session
+**Recommended:** Check bridge for any Molly messages (bridge alert showed 10 unread as of last freeze).
 
 ---
 
