@@ -1,3 +1,5 @@
+import { promises as fs } from 'fs';
+
 /**
  * @fileOverview Tests for Family Bridge — Molly/Lazarus Communication Channel
  *
@@ -464,6 +466,16 @@ describe('FamilyBridge', () => {
       expect(state).toHaveProperty('startedAt');
       expect(state).toHaveProperty('lastActivity');
       expect(state).toHaveProperty('messages');
+    });
+
+    it('should include atlas in default participants when bridge file is missing', async () => {
+      (fs.readFile as jest.Mock).mockRejectedValueOnce(new Error('missing'));
+
+      const state = await readBridgeState();
+
+      expect(state.participants).toEqual(
+        expect.arrayContaining(['molly', 'lazarus', 'eric', 'atlas'])
+      );
     });
   });
 
