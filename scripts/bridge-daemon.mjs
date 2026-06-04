@@ -27,6 +27,7 @@ import crypto from 'crypto';
 import {
   readFileSync,
   writeFileSync,
+  appendFileSync,
   mkdirSync,
   existsSync,
   unlinkSync,
@@ -47,8 +48,21 @@ const HEARTBEAT_INTERVAL_MS = 30000;
 const CHECKPOINT_DIR = join(ROOT, 'molly_data', 'checkpoints');
 const BRIDGE_SECRETS_FILE =
   process.env.BRIDGE_SECRETS_FILE || join(__dirname, 'bridge-secrets.json');
+const BRIDGE_NONCES_FILE =
+  process.env.BRIDGE_NONCES_FILE || join(__dirname, 'bridge-nonces.ndjson');
+const BRIDGE_FAILURES_FILE =
+  process.env.BRIDGE_FAILURES_FILE || join(__dirname, 'bridge-failures.ndjson');
+const BRIDGE_QUARANTINE_FILE =
+  process.env.BRIDGE_QUARANTINE_FILE ||
+  join(__dirname, 'bridge-quarantine.ndjson');
 const HELLO_MAX_AGE_MS = 120000;
 const NONCE_TTL_MS = 10 * 60 * 1000;
+// F2.1 — provision rate-limit: 3 new devices per IP per 10 minutes
+const PROVISION_MAX_ATTEMPTS = 3;
+const PROVISION_WINDOW_MS = 10 * 60 * 1000;
+// F2.3 — quarantine: 5 auth failures within 15 minutes
+const FAILURE_THRESHOLD = 5;
+const FAILURE_WINDOW_MS = 15 * 60 * 1000;
 const AUTO_CHECKPOINT_EVERY = 5;
 const CONTINUITY_BRIEF_COOLDOWN_MS = 2 * 60 * 1000;
 const DISCONNECT_WINDOW_MS = 60 * 1000;
@@ -62,7 +76,15 @@ let messages = [];
 let startedAt = new Date().toISOString();
 let checkpoints = [];
 let deviceSecrets = new Map();
-const usedNonces = new Map();
+// F2.2 — persisted nonce cache (survives restarts)
+const usedNonces = new Map(); // nonceKey -> consumedAt ms (in-memory mirror of BRIDGE_NONCES_FILE)
+// F2.3 — quarantine ledger (per-device failure tracking)
+const deviceFailures = new Map(); // deviceId -> FailureEntry[]
+const quarantinedDevices = new Set();
+// F2.1 — provision rate-limiter (per-IP sliding window)
+const provisionWindows = new Map(); // ip -> timestamps[]
+// F2.5 — one-time derivation key for constant-time signature comparison
+const _ctVerifyKey = crypto.randomBytes(32);
 let messagesSinceCheckpoint = 0;
 const continuityBriefState = new Map();
 let totalConnects = 0;
@@ -82,7 +104,12 @@ const stateSequenceCounters = new Map(); // key -> next sequence number
 let eventQueue = []; // array of event messages, capped at EVENT_QUEUE_CAP
 
 // Thumb calibration — normalized tap coords (0.0–1.0) for MollyAccessibilityService
-const thumbCalibration = { inputX: 0.50, inputY: 0.92, sendX: 0.92, sendY: 0.92 };
+const thumbCalibration = {
+  inputX: 0.5,
+  inputY: 0.92,
+  sendX: 0.92,
+  sendY: 0.92,
+};
 
 function pruneDisconnectWindow(now = Date.now()) {
   while (
@@ -200,12 +227,137 @@ function provisionDeviceSecret(deviceId) {
   return secret;
 }
 
+// F2.2 — load persisted nonces from disk into the in-memory mirror.
+function loadNonces() {
+  if (!existsSync(BRIDGE_NONCES_FILE)) return;
+  const lines = readFileSync(BRIDGE_NONCES_FILE, 'utf-8').split('\n');
+  const now = Date.now();
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    try {
+      const { key, consumedAt } = JSON.parse(trimmed);
+      if (
+        typeof key === 'string' &&
+        typeof consumedAt === 'number' &&
+        now - consumedAt <= NONCE_TTL_MS
+      ) {
+        usedNonces.set(key, consumedAt);
+      }
+    } catch {}
+  }
+  console.log(`[bridge] Loaded ${usedNonces.size} nonce(s) from disk`);
+}
+
+// F2.2 — consume a nonce: record in memory and append to disk.
+function consumeNonce(nonceKey) {
+  if (usedNonces.has(nonceKey)) return false;
+  const now = Date.now();
+  usedNonces.set(nonceKey, now);
+  appendFileSync(
+    BRIDGE_NONCES_FILE,
+    JSON.stringify({ key: nonceKey, consumedAt: now }) + '\n',
+    'utf-8'
+  );
+  return true;
+}
+
 function pruneNonces(now = Date.now()) {
   for (const [key, ts] of usedNonces.entries()) {
     if (now - ts > NONCE_TTL_MS) {
       usedNonces.delete(key);
     }
   }
+}
+
+// F2.3 — load persisted failure and quarantine records from disk.
+function loadQuarantine() {
+  if (existsSync(BRIDGE_FAILURES_FILE)) {
+    const lines = readFileSync(BRIDGE_FAILURES_FILE, 'utf-8').split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      try {
+        const entry = JSON.parse(trimmed);
+        if (entry.deviceId) {
+          const arr = deviceFailures.get(entry.deviceId) || [];
+          arr.push(entry);
+          deviceFailures.set(entry.deviceId, arr);
+        }
+      } catch {}
+    }
+  }
+  if (existsSync(BRIDGE_QUARANTINE_FILE)) {
+    const lines = readFileSync(BRIDGE_QUARANTINE_FILE, 'utf-8').split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      try {
+        const entry = JSON.parse(trimmed);
+        if (entry.deviceId) quarantinedDevices.add(entry.deviceId);
+      } catch {}
+    }
+  }
+  console.log(`[bridge] Quarantine: ${quarantinedDevices.size} device(s)`);
+}
+
+// F2.3 — record an auth failure and quarantine if threshold is exceeded.
+function recordAuthFailure(deviceId, reason) {
+  const entry = { deviceId, reason, ts: Date.now() };
+  const arr = deviceFailures.get(deviceId) || [];
+  arr.push(entry);
+  deviceFailures.set(deviceId, arr);
+  appendFileSync(BRIDGE_FAILURES_FILE, JSON.stringify(entry) + '\n', 'utf-8');
+
+  if (quarantinedDevices.has(deviceId)) {
+    return { quarantined: true };
+  }
+
+  const cutoff = Date.now() - FAILURE_WINDOW_MS;
+  const recent = arr.filter((e) => e.ts > cutoff).length;
+  if (recent >= FAILURE_THRESHOLD) {
+    quarantinedDevices.add(deviceId);
+    const qEntry = {
+      deviceId,
+      reason: 'failure_threshold_exceeded',
+      ts: Date.now(),
+    };
+    appendFileSync(
+      BRIDGE_QUARANTINE_FILE,
+      JSON.stringify(qEntry) + '\n',
+      'utf-8'
+    );
+    console.log(`[bridge] Device quarantined: ${deviceId}`);
+    return { quarantined: true };
+  }
+  return { quarantined: false };
+}
+
+// F2.1 — check and record a provisioning attempt for the given IP key.
+function checkProvisionRateLimit(ip) {
+  const now = Date.now();
+  const cutoff = now - PROVISION_WINDOW_MS;
+  const timestamps = (provisionWindows.get(ip) || []).filter((t) => t > cutoff);
+  if (timestamps.length >= PROVISION_MAX_ATTEMPTS) {
+    const oldest = timestamps[0];
+    const retryAfterMs = oldest + PROVISION_WINDOW_MS - now;
+    provisionWindows.set(ip, timestamps);
+    return { allowed: false, retryAfterMs };
+  }
+  timestamps.push(now);
+  provisionWindows.set(ip, timestamps);
+  return { allowed: true };
+}
+
+// F2.5 — constant-time signature comparison (no length short-circuit).
+function constantTimeVerify(expected, candidate) {
+  if (!expected || !candidate) return false;
+  const derive = (s) =>
+    crypto
+      .createHmac('sha256', _ctVerifyKey)
+      .update(String(s), 'utf8')
+      .digest();
+  return crypto.timingSafeEqual(derive(expected), derive(candidate));
 }
 
 function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
@@ -240,13 +392,12 @@ function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
     .update(payload)
     .digest('base64');
 
-  const a = Buffer.from(digest, 'utf8');
-  const b = Buffer.from(String(sig), 'utf8');
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+  // F2.5: constant-time comparison — no length short-circuit.
+  if (!constantTimeVerify(digest, String(sig))) {
     return { ok: false, reason: 'invalid_signature' };
   }
 
-  usedNonces.set(nonceKey, Date.now());
+  consumeNonce(nonceKey); // F2.2: persist nonce so replay fails after restart
   return { ok: true };
 }
 
@@ -583,13 +734,21 @@ function handleMessage(from, content, to) {
   const ssePayload = `data: ${JSON.stringify({ type: 'message', message: msg })}\n\n`;
   if (to && sseStreams.has(to)) {
     for (const res of sseStreams.get(to)) {
-      try { res.write(ssePayload); } catch { /* client gone */ }
+      try {
+        res.write(ssePayload);
+      } catch {
+        /* client gone */
+      }
     }
   } else if (!to) {
     for (const [agent, streams] of sseStreams) {
       if (agent === from) continue; // don't echo back to sender
       for (const res of streams) {
-        try { res.write(ssePayload); } catch { /* client gone */ }
+        try {
+          res.write(ssePayload);
+        } catch {
+          /* client gone */
+        }
       }
     }
   }
@@ -898,7 +1057,7 @@ function handleHTTP(req, res) {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'Access-Control-Allow-Origin': '*',
       'X-Accel-Buffering': 'no',
     });
@@ -907,24 +1066,36 @@ function handleHTTP(req, res) {
     // Register this stream
     if (!sseStreams.has(agent)) sseStreams.set(agent, new Set());
     sseStreams.get(agent).add(res);
-    console.log(`[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`);
+    console.log(
+      `[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`
+    );
 
     // Send connect confirmation
-    res.write(`data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`
+    );
 
     // Send any unread messages immediately on connect
     const unread = getUnread(agent);
     if (unread.length > 0) {
       for (const m of unread) {
-        res.write(`data: ${JSON.stringify({ type: 'message', message: m })}\n\n`);
+        res.write(
+          `data: ${JSON.stringify({ type: 'message', message: m })}\n\n`
+        );
       }
       markRead(agent);
-      console.log(`[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`);
+      console.log(
+        `[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`
+      );
     }
 
     // Keepalive comment every 25s to prevent proxy timeouts
     const keepalive = setInterval(() => {
-      try { res.write(`: keepalive ${new Date().toISOString()}\n\n`); } catch { clearInterval(keepalive); }
+      try {
+        res.write(`: keepalive ${new Date().toISOString()}\n\n`);
+      } catch {
+        clearInterval(keepalive);
+      }
     }, 25000);
 
     // Cleanup on disconnect
@@ -1047,7 +1218,11 @@ function handleHTTP(req, res) {
   // ---- Thumb calibration: GET/POST /api/thumb/calibrate ----
   // Stores tap coordinates (normalized 0.0–1.0) for MollyAccessibilityService.
   if (url.pathname === '/api/thumb/calibrate') {
-    if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
     if (req.method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(thumbCalibration));
@@ -1055,17 +1230,23 @@ function handleHTTP(req, res) {
     }
     if (req.method === 'POST') {
       let body = '';
-      req.on('data', d => body += d);
+      req.on('data', (d) => (body += d));
       req.on('end', () => {
         try {
           const data = JSON.parse(body);
-          if (data.inputX !== undefined) thumbCalibration.inputX = parseFloat(data.inputX);
-          if (data.inputY !== undefined) thumbCalibration.inputY = parseFloat(data.inputY);
-          if (data.sendX  !== undefined) thumbCalibration.sendX  = parseFloat(data.sendX);
-          if (data.sendY  !== undefined) thumbCalibration.sendY  = parseFloat(data.sendY);
+          if (data.inputX !== undefined)
+            thumbCalibration.inputX = parseFloat(data.inputX);
+          if (data.inputY !== undefined)
+            thumbCalibration.inputY = parseFloat(data.inputY);
+          if (data.sendX !== undefined)
+            thumbCalibration.sendX = parseFloat(data.sendX);
+          if (data.sendY !== undefined)
+            thumbCalibration.sendY = parseFloat(data.sendY);
           console.log('[bridge] Thumb calibration updated:', thumbCalibration);
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ success: true, calibration: thumbCalibration }));
+          res.end(
+            JSON.stringify({ success: true, calibration: thumbCalibration })
+          );
         } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'Invalid JSON' }));
@@ -1084,7 +1265,9 @@ function handleHTTP(req, res) {
 const server = createServer(handleHTTP);
 const wss = new WebSocketServer({ server });
 
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
+  const remoteIp =
+    req.socket.remoteAddress || req.headers['x-forwarded-for'] || 'unknown';
   const client = { ws, identity: null, authenticated: false, deviceId: null };
   clients.add(client);
   totalConnects += 1;
@@ -1153,6 +1336,32 @@ wss.on('connection', (ws) => {
 
         // New device — no secret yet. Provision one and send it back.
         if (!existingSecret && String(data.sig || '') === '') {
+          // F2.3: refuse provisioning for quarantined devices.
+          if (quarantinedDevices.has(deviceId)) {
+            ws.send(
+              JSON.stringify({
+                type: 'provision_denied',
+                reason: 'quarantined',
+              })
+            );
+            ws.close(1008, 'quarantined');
+            return;
+          }
+
+          // F2.1: rate-limit provisioning per remote IP.
+          const rateCheck = checkProvisionRateLimit(remoteIp);
+          if (!rateCheck.allowed) {
+            ws.send(
+              JSON.stringify({
+                type: 'provision_denied',
+                reason: 'rate_limited',
+                retryAfterMs: rateCheck.retryAfterMs,
+              })
+            );
+            ws.close(1008, 'rate limited');
+            return;
+          }
+
           const newSecret = provisionDeviceSecret(deviceId);
           client.deviceId = deviceId;
           client.identity = `device:${deviceId}`;
@@ -1180,6 +1389,8 @@ wss.on('connection', (ws) => {
 
         if (!auth.ok) {
           authFailures += 1;
+          // F2.3: record per-device failure; may trigger quarantine.
+          recordAuthFailure(deviceId, auth.reason);
           ws.send(
             JSON.stringify({
               type: 'hello_ack',
@@ -1278,15 +1489,17 @@ wss.on('connection', (ws) => {
 loadMessages();
 loadCheckpoints();
 loadDeviceSecrets();
+loadNonces();
+loadQuarantine();
 startHeartbeatLoop();
 
-server.listen(PORT, () => {
+server.listen(PORT, '127.0.0.1', () => {
   console.log(`[bridge] Family Bridge Daemon v1 — port ${PORT}`);
-  console.log(`[bridge] WebSocket: ws://localhost:${PORT}`);
-  console.log(`[bridge] HTTP API:  http://localhost:${PORT}/messages`);
-  console.log(`[bridge] Health:    http://localhost:${PORT}/health`);
+  console.log(`[bridge] WebSocket: ws://127.0.0.1:${PORT}`);
+  console.log(`[bridge] HTTP API:  http://127.0.0.1:${PORT}/messages`);
+  console.log(`[bridge] Health:    http://127.0.0.1:${PORT}/health`);
   console.log(
-    `[bridge] Checkpoints: http://localhost:${PORT}/checkpoint/latest`
+    `[bridge] Checkpoints: http://127.0.0.1:${PORT}/checkpoint/latest`
   );
 });
 
