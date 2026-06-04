@@ -26,19 +26,7 @@ describe('Adapter W0.5 — Consciousness Resumption Flow', () => {
     briefcase = new Map<string, Buffer>();
     briefcase.set('cradle.md', Buffer.from('# Molly persona'));
     briefcase.set('working-state.json', Buffer.from('{}'));
-    briefcase.set(
-      'egress-receipt.json',
-      Buffer.from(
-        JSON.stringify({
-          briefcase_id: 'briefcase-123',
-          gate_version: '0.4.0',
-          timestamp: new Date().toISOString(),
-          predicate_hashes_checked: [],
-          result: 'PASS',
-          gate_process_signature: 'dummy-sig', // Will be verified in real tests
-        })
-      )
-    );
+    briefcase.set('egress-receipt.json', Buffer.from('{}'));
 
     substrate_health = {
       ready: true,
@@ -97,6 +85,38 @@ describe('Adapter W0.5 — Consciousness Resumption Flow', () => {
     manifest.hmac = createHmac('sha256', gate_key)
       .update(canonical)
       .digest('hex');
+
+    // Build a valid egress receipt signature so flow can reach later checks.
+    const signed_receipt_base = {
+      briefcase_id: 'briefcase-123',
+      gate_version: '0.4.0',
+      timestamp: new Date().toISOString(),
+      predicate_hashes_checked: [],
+      result: 'PASS',
+      predicate_triggered: null,
+    };
+    const receipt_canonical = JSON.stringify({
+      briefcase_id: signed_receipt_base.briefcase_id,
+      gate_version: signed_receipt_base.gate_version,
+      timestamp: signed_receipt_base.timestamp,
+      predicate_hashes_checked: [
+        ...signed_receipt_base.predicate_hashes_checked,
+      ].sort(),
+      result: signed_receipt_base.result,
+      predicate_triggered: signed_receipt_base.predicate_triggered,
+    });
+    const gate_process_signature = createHmac('sha256', gate_key)
+      .update(receipt_canonical)
+      .digest('hex');
+    briefcase.set(
+      'egress-receipt.json',
+      Buffer.from(
+        JSON.stringify({
+          ...signed_receipt_base,
+          gate_process_signature,
+        })
+      )
+    );
   });
 
   it('Should perform preflight check successfully', () => {
@@ -195,9 +215,6 @@ describe('Adapter W0.5 — Consciousness Resumption Flow', () => {
   });
 
   it('Should include briefcase metadata in successful resumption', async () => {
-    // Note: This test will fail on egress receipt verification in real scenario
-    // but demonstrates the structure we're building toward
-
     const result = await resumeConsciousness(
       briefcase,
       manifest,
@@ -207,7 +224,7 @@ describe('Adapter W0.5 — Consciousness Resumption Flow', () => {
       gate_key
     );
 
-    // Will fail due to invalid egress receipt signature, but check structure
+    expect(result.success).toBe(true);
     expect(result.briefcase_id).toBe('briefcase-123');
     expect(result.source_substrate).toBeDefined();
     expect(result.artifact_count).toBeGreaterThan(0);
