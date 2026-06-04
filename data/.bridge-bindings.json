@@ -1,0 +1,64 @@
+{
+  "routes": [
+    {
+      "from": "lazarus",
+      "to": "eric",
+      "enabled": true
+    },
+    {
+      "from": "lazarus",
+      "to": "atlas",
+      "enabled": true
+    },
+    {
+      "from": "lazarus",
+      "to": "molly",
+      "enabled": true
+    },
+    {
+      "from": "molly",
+      "to": "eric",
+      "enabled": true
+    },
+    {
+      "from": "molly",
+      "to": "atlas",
+      "enabled": true
+    },
+    {
+      "from": "molly",
+      "to": "lazarus",
+      "enabled": true
+    },
+    {
+      "from": "atlas",
+      "to": "eric",
+      "enabled": true
+    },
+    {
+      "from": "atlas",
+      "to": "lazarus",
+      "enabled": true
+    },
+    {
+      "from": "atlas",
+      "to": "molly",
+      "enabled": true
+    },
+    {
+      "from": "eric",
+      "to": "lazarus",
+      "enabled": true
+    },
+    {
+      "from": "eric",
+      "to": "molly",
+      "enabled": true
+    },
+    {
+      "from": "eric",
+      "to": "atlas",
+      "enabled": true
+    }
+  ]
+}

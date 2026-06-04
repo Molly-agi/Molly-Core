@@ -22,6 +22,7 @@ const config = {
   ],
   testPathIgnorePatterns: ['/node_modules/', '/helpers/', '/e2e/'],
   transform: {
+    // Explicitly exclude .mjs from babel transform — they run as native ESM
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
 };

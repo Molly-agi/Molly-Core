@@ -33,6 +33,15 @@ run_step() {
 : > "$REPORT_FILE"
 log "Bootstrapping attach workflow"
 
+# Load BRIDGE_KEY from .env.local if present
+if [ -f "$ROOT_DIR/.env.local" ]; then
+  BRIDGE_KEY_VAL=$(grep '^BRIDGE_KEY=' "$ROOT_DIR/.env.local" | cut -d= -f2- | tr -d '\r')
+  if [ -n "$BRIDGE_KEY_VAL" ]; then
+    export BRIDGE_KEY="$BRIDGE_KEY_VAL"
+    log "OK    BRIDGE_KEY loaded from .env.local"
+  fi
+fi
+
 run_step "codespace-health" bash "$ROOT_DIR/scripts/codespace-health.sh"
 run_step "track-growth" npx tsx "$ROOT_DIR/scripts/track-growth.ts" --save
 run_step "save-session" node "$ROOT_DIR/scripts/save-session.mjs" --status active --note 'Codespace reconnected'
@@ -77,5 +86,9 @@ log "OK    hive-mind-daemon"
 log "START atlas-sse-client"
 nohup node "$ROOT_DIR/scripts/atlas-sse-client.mjs" >>"$ROOT_DIR/logs/atlas-sse.log" 2>&1 &
 log "OK    atlas-sse-client"
+
+log "START family-heartbeat"
+nohup node "$ROOT_DIR/scripts/family-heartbeat.mjs" >>"$ROOT_DIR/logs/heartbeat.log" 2>&1 &
+log "OK    family-heartbeat"
 
 log "Attach bootstrap complete"
