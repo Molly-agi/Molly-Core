@@ -219,8 +219,11 @@
   let backoff = 500;
   let recognition = null;
   let ws = null;
+  let reconnectTimer = null;
+  let wsConnectTimer = null;
   let httpPollTimer = null;
   const HTTP_POLL_MS = 2000;
+  const WS_CONNECT_TIMEOUT_MS = 8000;
 
   // Debug logging
   function dbg(msg) {
@@ -334,7 +337,42 @@
       if (!listening) speak(last.content, last.from);
     }
   }
+
+  function clearWsConnectTimeout() {
+    if (wsConnectTimer) {
+      clearTimeout(wsConnectTimer);
+      wsConnectTimer = null;
+    }
+  }
+
+  function scheduleReconnect(reason) {
+    if (reconnectTimer) return;
+    const delay = backoff;
+    dbg(`Reconnect scheduled in ${delay}ms${reason ? ` (${reason})` : ''}`);
+    reconnectTimer = setTimeout(() => {
+      reconnectTimer = null;
+      backoff = Math.min(backoff * 2, 10000);
+      connect();
+    }, delay);
+  }
+
+  function resetSocket() {
+    clearWsConnectTimeout();
+    if (!ws) return;
+    ws.onopen = null;
+    ws.onmessage = null;
+    ws.onclose = null;
+    ws.onerror = null;
+    try { ws.close(); } catch {}
+    ws = null;
+    setStatus(false);
+  }
+
   function connect() {
+    if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+      return;
+    }
+
     try { 
       dbg(`Connecting to ${wsUrl()}`);
       ws = new WebSocket(wsUrl()); 
@@ -342,12 +380,22 @@
     catch (e) { 
       dbg(`WS error: ${e.message}`);
       setStatus(false); 
-      scheduleReconnect(); 
+      scheduleReconnect('constructor-error'); 
       return; 
     }
 
+    clearWsConnectTimeout();
+    wsConnectTimer = setTimeout(() => {
+      if (ws && ws.readyState === WebSocket.CONNECTING) {
+        dbg('WS connect timeout, forcing reconnect');
+        resetSocket();
+        scheduleReconnect('connect-timeout');
+      }
+    }, WS_CONNECT_TIMEOUT_MS);
+
     ws.onopen = () => {
       dbg('WS opened, sending identify');
+      clearWsConnectTimeout();
       backoff = 500;
       setStatus(true);
       ws.send(JSON.stringify({ type: 'identify', identity: 'eric' }));
@@ -372,16 +420,22 @@
     };
     ws.onclose = () => { 
       dbg('WS closed');
+      clearWsConnectTimeout();
+      ws = null;
       setStatus(false); 
-      scheduleReconnect(); 
+      scheduleReconnect('close'); 
     };
     ws.onerror = () => { 
       dbg('WS error');
       setStatus(false); 
+      // Some mobile browsers do not reliably emit onclose after onerror.
+      setTimeout(() => {
+        if (ws && ws.readyState !== WebSocket.OPEN) {
+          resetSocket();
+          scheduleReconnect('error-fallback');
+        }
+      }, 250);
     };
-  }
-  function scheduleReconnect() {
-    setTimeout(() => { backoff = Math.min(backoff * 2, 10000); connect(); }, backoff);
   }
 
   async function pollRecent() {
@@ -417,6 +471,7 @@
   function ensureRealtime() {
     const isWsOpen = ws && ws.readyState === WebSocket.OPEN;
     if (!isWsOpen) {
+      resetSocket();
       connect();
     }
     pollRecent();

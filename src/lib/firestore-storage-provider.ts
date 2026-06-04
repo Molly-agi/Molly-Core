@@ -8,7 +8,7 @@
  * The provider handles the conversion to Firestore's collection/doc chain.
  */
 
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { _getAdminFirestore, _isAdminConfigured } from '@/firebase/admin';
 import type {
   StorageProvider,
   StorageDocument,
@@ -70,20 +70,26 @@ export class FirestoreStorageProvider implements StorageProvider {
   readonly id = 'firestore';
   readonly name = 'Firestore (Cloud)';
 
-  private getDb(): FirebaseFirestore.Firestore {
+  private async getDb(): Promise<FirebaseFirestore.Firestore> {
+    const { isAdminConfigured, getAdminFirestoreAsync } =
+      await import('@/firebase/admin');
     if (!isAdminConfigured()) {
       throw new Error(
         'Firebase Admin is not configured — cannot use Firestore storage'
       );
     }
-    return getAdminFirestore();
+    const db = await getAdminFirestoreAsync();
+    if (!db) {
+      throw new Error('Failed to initialize Firebase Admin');
+    }
+    return db;
   }
 
   async add(
     collectionPath: string,
     data: Record<string, unknown>
   ): Promise<StorageDocument> {
-    const db = this.getDb();
+    const db = await this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
     const now = new Date().toISOString();
     const docRef = await colRef.add(
@@ -105,7 +111,7 @@ export class FirestoreStorageProvider implements StorageProvider {
     docId: string,
     data: Record<string, unknown>
   ): Promise<void> {
-    const db = this.getDb();
+    const db = await this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
     const docRef = colRef.doc(docId);
     const now = new Date().toISOString();
@@ -128,7 +134,7 @@ export class FirestoreStorageProvider implements StorageProvider {
     collectionPath: string,
     docId: string
   ): Promise<StorageDocument | null> {
-    const db = this.getDb();
+    const db = await this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
     const doc = await colRef.doc(docId).get();
 
@@ -145,7 +151,7 @@ export class FirestoreStorageProvider implements StorageProvider {
     docId: string,
     updates: Record<string, unknown>
   ): Promise<void> {
-    const db = this.getDb();
+    const db = await this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
     await colRef.doc(docId).update(
       sanitizeForFirestore({
@@ -156,7 +162,7 @@ export class FirestoreStorageProvider implements StorageProvider {
   }
 
   async delete(collectionPath: string, docId: string): Promise<void> {
-    const db = this.getDb();
+    const db = await this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
     await colRef.doc(docId).delete();
   }
@@ -166,7 +172,7 @@ export class FirestoreStorageProvider implements StorageProvider {
     filters?: QueryFilter[],
     options?: QueryOptions
   ): Promise<StorageDocument[]> {
-    const db = this.getDb();
+    const db = await this.getDb();
     const colRef = getCollectionRef(db, collectionPath);
 
     // Build the query
@@ -197,7 +203,7 @@ export class FirestoreStorageProvider implements StorageProvider {
   }
 
   async batchWrite(operations: BatchOperation[]): Promise<void> {
-    const db = this.getDb();
+    const db = await this.getDb();
     const batch = db.batch();
     const now = new Date().toISOString();
 
@@ -229,7 +235,7 @@ export class FirestoreStorageProvider implements StorageProvider {
 
   async healthCheck(): Promise<boolean> {
     try {
-      const db = this.getDb();
+      const db = await this.getDb();
       // Lightweight read on a dedicated health collection to verify connectivity
       await db.collection('_health').limit(1).get();
       return true;

@@ -143,12 +143,13 @@ function deriveFieldNote(
  */
 async function persistToFirestore(entry: IntuitionEntry): Promise<void> {
   try {
-    const { isAdminConfigured, getAdminFirestore } = await import(
-      '@/firebase/admin'
-    );
+    const { isAdminConfigured, getAdminFirestoreAsync } =
+      await import('@/firebase/admin');
     if (!isAdminConfigured()) return;
 
-    const db = getAdminFirestore();
+    const db = await getAdminFirestoreAsync();
+    if (!db) return;
+
     await db
       .collection('molly_system')
       .doc('intuition')

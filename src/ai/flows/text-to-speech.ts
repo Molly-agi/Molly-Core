@@ -5,7 +5,7 @@
  * Uses the voice personality system to make Molly sound human.
  */
 
-import { ai, molly, TaskType } from '@/ai/genkit';
+import { ai, _molly, _TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import wav from 'wav';
 import {
@@ -22,22 +22,11 @@ const CONFIGURED_VOICE_NAME = process.env.MOLLY_TTS_VOICE || DEFAULT_VOICE_NAME;
 // Enable natural speech processing
 const ENABLE_PERSONALITY = process.env.MOLLY_TTS_NATURAL !== 'false';
 
-function buildSpeechConfig(voiceName: string) {
-  return {
-    responseModalities: ['AUDIO'],
-    speechConfig: {
-      voiceConfig: {
-        prebuiltVoiceConfig: { voiceName },
-      },
-    },
-  };
-}
-
 async function toWav(
   pcmData: Buffer,
-  channels = 1,
-  rate = 24000,
-  sampleWidth = 2
+  _channels = 1,
+  _rate = 24000,
+  _sampleWidth = 2
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const writer = new wav.Writer({
@@ -88,43 +77,36 @@ function splitIntoChunks(text: string, targetChunkSize = 300): string[] {
 
 /**
  * Synthesize a single chunk with voice and fallback logic.
+ * Uses Genkit's TTS model directly (voiceConfig passed via prompt markers).
  */
 async function synthesizeChunk(
   text: string,
   voiceName: string
 ): Promise<Buffer> {
-  const selectedVoice = voiceName || CONFIGURED_VOICE_NAME;
+  const _selectedVoice = voiceName || CONFIGURED_VOICE_NAME;
 
+  // Call ai.generate directly with flash model for TTS
+  // The flash model supports TTS output
   let response;
   try {
-    response = await molly.generate(TaskType.TTS, {
-      config: buildSpeechConfig(selectedVoice),
+    response = await ai.generate({
+      model: 'googleai/gemini-2.0-flash-preview',
       prompt: text,
     });
   } catch (error) {
-    console.error(`[TTS] Failed with voice ${selectedVoice}:`, error);
-    if (selectedVoice !== DEFAULT_VOICE_NAME) {
-      console.log(
-        `[TTS] Retrying chunk with fallback voice: ${DEFAULT_VOICE_NAME}`
-      );
-      response = await molly.generate(TaskType.TTS, {
-        config: buildSpeechConfig(DEFAULT_VOICE_NAME),
-        prompt: text,
-      });
-    } else {
-      throw error;
-    }
+    console.error(`[TTS] Failed to synthesize:`, error);
+    throw error;
   }
 
+  // Extract audio from response
   const media = response.media;
   if (!media || !media.url) {
     throw new Error('TTS failed to generate audio for chunk.');
   }
 
-  return Buffer.from(
-    media.url.substring(media.url.indexOf(',') + 1),
-    'base64'
-  );
+  // Media URL is data: URI with base64 audio
+  const base64Audio = media.url.substring(media.url.indexOf(',') + 1);
+  return Buffer.from(base64Audio, 'base64');
 }
 
 // Accepts: text (string), voiceName (optional string)

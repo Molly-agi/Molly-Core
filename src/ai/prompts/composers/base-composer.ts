@@ -165,18 +165,17 @@ function buildChannelInjection(channel?: 'voice' | 'text'): string | null {
   return `CHANNEL CONTEXT: ${channelDesc} Respond directly to him. If bridge messages appear, those are from a SEPARATE channel — handle them separately.`;
 }
 
-function buildBodyInjection(bodyContext?: string | null): string | null {
+async function buildBodyInjection(
+  bodyContext?: string | null
+): Promise<string | null> {
   // undefined = auto-read from server store; null = suppress; string = use directly
   if (bodyContext === null) return null;
   if (bodyContext !== undefined) return bodyContext;
-  // Auto-read from server-side store
+
+  // Auto-read from server-side store with lazy ESM import to keep client bundle clean.
   try {
-    // Dynamic import keeps this import out of the client bundle
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { formatBodyStateForPrompt } =
-      require('@/ai/agency/embodied/AvatarBodyStore') as {
-        formatBodyStateForPrompt: () => string | null;
-      };
+      await import('@/ai/agency/embodied/AvatarBodyStore');
     return formatBodyStateForPrompt();
   } catch {
     return null;

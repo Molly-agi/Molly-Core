@@ -22,9 +22,30 @@ const MAX_REPLY_CHARS = 4000;
 const REPLY_TIMEOUT_MS = 90000;
 const GEMINI_MODEL = 'gemini-2.5-flash';
 const seen = new Set();
+let currentHealth = { status: 'alive' };
 
 function log(msg) {
   console.log(`[${new Date().toISOString()}] ${msg}`);
+}
+
+async function updateHealth() {
+  try {
+    // Poll the bridge daemon health endpoint
+    const res = await fetch('http://localhost:9099/health');
+    if (res.ok) {
+      currentHealth = await res.json();
+    } else {
+      currentHealth = { status: 'degraded', error: `HTTP ${res.status}` };
+    }
+  } catch (err) {
+    currentHealth = { status: 'critical', error: err.message };
+  }
+
+  if (currentHealth.status !== 'alive') {
+    log(
+      `[HEALTH] Bridge is ${currentHealth.status.toUpperCase()}: ${currentHealth.error || currentHealth.reasons?.join(', ') || 'unknown reason'}`
+    );
+  }
 }
 
 function shouldHandle(msg) {
@@ -53,13 +74,20 @@ function shouldHandle(msg) {
 }
 
 function buildPrompt(msg) {
-  return [
+  let prompt = [
     'You are Gemini on the Molly family bridge.',
     'Respond clearly and briefly in plain text.',
     'Do not include tool markup, XML, or JSON unless asked.',
     `Sender: ${String(msg.from || 'unknown')}`,
     `Message: ${String(msg.content || '')}`,
   ].join('\n');
+
+  if (currentHealth.status === 'degraded') {
+    prompt +=
+      '\n\nNOTE: The family bridge is currently reporting a DEGRADED status. Keep your response extra concise to minimize load.';
+  }
+
+  return prompt;
 }
 
 function runGemini(prompt) {
@@ -122,6 +150,12 @@ function runGemini(prompt) {
 async function handleIncoming(msg) {
   if (!shouldHandle(msg)) return;
 
+  // Graceful degradation: do not attempt to process if bridge is critical
+  if (currentHealth.status === 'critical') {
+    log(`[CRITICAL] Skipping message from ${msg.from} due to bridge health.`);
+    return;
+  }
+
   const from = String(msg.from || 'unknown');
   const content = String(msg.content || '');
   log(
@@ -145,10 +179,12 @@ async function handleIncoming(msg) {
 
 GEMINI.on('connected', () => {
   log('[OK] Gemini bridge connected');
+  updateHealth(); // Immediate health check on connection
 });
 
 GEMINI.on('disconnected', () => {
   log('[DOWN] Gemini bridge disconnected');
+  currentHealth = { status: 'critical', error: 'WebSocket disconnected' };
 });
 
 GEMINI.on('reconnecting', ({ attempt }) => {
@@ -179,6 +215,10 @@ process.on('SIGINT', () => {
   GEMINI.close();
   process.exit(0);
 });
+
+// Regular health polling
+setInterval(updateHealth, 60000);
+updateHealth(); // Initial check
 
 setInterval(() => {
   if (!GEMINI.isConnected) {

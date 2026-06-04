@@ -540,12 +540,26 @@ export async function loadHeartGateState(): Promise<number> {
 
     return _state.totalVerifications;
   } catch (error) {
-    MollyLogger.warn(
-      'Could not load Heart Gate state, starting fresh',
-      'heart-gate',
-      { error: error instanceof Error ? error.message : String(error) },
-      traceId
-    );
+    const message =
+      error instanceof Error ? error.message : String(error ?? 'unknown error');
+    const isNotFound =
+      message.includes('NOT_FOUND') || message.includes('5 NOT_FOUND');
+
+    if (isNotFound) {
+      MollyLogger.info(
+        'Heart Gate state not found in Firestore; starting fresh',
+        'heart-gate',
+        { error: message },
+        traceId
+      );
+    } else {
+      MollyLogger.warn(
+        'Could not load Heart Gate state, starting fresh',
+        'heart-gate',
+        { error: message },
+        traceId
+      );
+    }
 
     persistenceEnabled = true;
     await ensureSeal();

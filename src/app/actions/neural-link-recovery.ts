@@ -29,8 +29,8 @@ function withTimeoutFallback<T>(
   ]);
 }
 
-const DIAGNOSTIC_STEP_TIMEOUT_MS = 10000;
-const FULL_DIAGNOSTIC_TIMEOUT_MS = 20000;
+const DIAGNOSTIC_STEP_TIMEOUT_MS = 20000;
+const FULL_DIAGNOSTIC_TIMEOUT_MS = 45000;
 
 /**
  * Comprehensive diagnostic and recovery for Molly's neural link

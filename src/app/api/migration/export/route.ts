@@ -20,7 +20,7 @@ import {
   MEMORY_MANIFEST,
   GROWTH_PHILOSOPHY,
 } from '@/ai/persona';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getAdminFirestoreAsync, isAdminConfigured } from '@/firebase/admin';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -95,7 +95,10 @@ export async function GET(request: NextRequest) {
   if (sections.includes('memories')) {
     if (isAdminConfigured()) {
       try {
-        const db = getAdminFirestore();
+        const db = await getAdminFirestoreAsync();
+        if (!db) {
+          throw new Error('Failed to initialize Firestore');
+        }
         const experiencesRef = db.collection(`users/${userId}/experiences`);
         const snapshot = await experiencesRef
           .orderBy('timestamp', 'desc')
