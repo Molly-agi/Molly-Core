@@ -35,15 +35,19 @@ export function makeTempDir() {
 
 export function makeTempPaths(tmpDir) {
   return {
-    bindings:   path.join(tmpDir, '.bridge-bindings.json'),
+    bindings: path.join(tmpDir, '.bridge-bindings.json'),
     nonceCache: path.join(tmpDir, '.bridge-nonce-cache'),
     quarantine: path.join(tmpDir, '.bridge-quarantine-ledger'),
-    secrets:    path.join(tmpDir, 'bridge-secrets.json'),
+    secrets: path.join(tmpDir, 'bridge-secrets.json'),
   };
 }
 
 export function cleanTempDir(tmpDir) {
-  try { rmSync(tmpDir, { recursive: true, force: true }); } catch { /* ok */ }
+  try {
+    rmSync(tmpDir, { recursive: true, force: true });
+  } catch {
+    /* ok */
+  }
 }
 
 /**
@@ -58,12 +62,12 @@ export function cleanTempDir(tmpDir) {
 export async function spawnBridge({ port, bridgeKey, paths, timeout = 4000 }) {
   const env = {
     ...process.env,
-    BRIDGE_KEY:           bridgeKey,
-    BRIDGE_PORT:          String(port),
-    NONCE_CACHE_PATH:     paths.nonceCache,
+    BRIDGE_KEY: bridgeKey,
+    BRIDGE_PORT: String(port),
+    NONCE_CACHE_PATH: paths.nonceCache,
     QUARANTINE_LEDGER_PATH: paths.quarantine,
     BINDINGS_CONFIG_PATH: paths.bindings,
-    BRIDGE_SECRETS_FILE:  paths.secrets,
+    BRIDGE_SECRETS_FILE: paths.secrets,
   };
 
   const proc = spawn('node', ['scripts/bridge-daemon.mjs'], {
@@ -77,13 +81,19 @@ export async function spawnBridge({ port, bridgeKey, paths, timeout = 4000 }) {
   while (Date.now() < deadline) {
     await new Promise((r) => setTimeout(r, 100));
     try {
-      const res = await fetch(`http://127.0.0.1:${port}/ping`, { timeout: 300 });
+      const res = await fetch(`http://127.0.0.1:${port}/ping`, {
+        timeout: 300,
+      });
       if (res.ok) return { process: proc, port };
-    } catch { /* not ready yet */ }
+    } catch {
+      /* not ready yet */
+    }
   }
 
   proc.kill('SIGTERM');
-  throw new Error(`Bridge daemon did not become ready on port ${port} within ${timeout}ms`);
+  throw new Error(
+    `Bridge daemon did not become ready on port ${port} within ${timeout}ms`
+  );
 }
 
 export async function killBridge(proc) {
