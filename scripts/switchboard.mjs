@@ -120,7 +120,6 @@ function writeWakeup(message) {
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-
     };
 
     // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.
@@ -162,7 +161,6 @@ function writeAtlasWakeup(message) {
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-
     };
 
     // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.
@@ -318,12 +316,14 @@ function routeMessage(msg) {
   }
 
   // ── Lazarus wakeup — any message he needs to see (including from Eric) ──
-  if (isForLazarus) {
+  // Skip messages FROM lazarus to prevent receipt-loop storms.
+  if (isForLazarus && msg.from !== 'lazarus') {
     writeWakeup(msg);
   }
 
   // ── Atlas wakeup — any message directed to Atlas or broadcast ────────────
-  if (isForAtlas) {
+  // Skip messages FROM atlas (hive-mind receipts) to prevent issue-flood loops.
+  if (isForAtlas && msg.from !== 'atlas') {
     writeAtlasWakeup(msg);
   }
 }
