@@ -68,10 +68,10 @@
 
 **Bug Fixes (Known):**
 
-- [ ] Fix sandboxReadFile return type in sandbox route.ts (outputs [object Object])
-- [ ] Fix sandboxWriteFile result.size undefined in sandbox route.ts
-- [ ] Fix memory-consolidation.ts — should use Firebase Admin SDK on server, not client SDK
-- [ ] Fix music-tools.ts ESM test isolation — `tool-executor.test.ts` suite fails due to genkit ESM import chain; fix with jest.unstable_mockModule or module mock
+- [x] Fix sandboxReadFile return type in sandbox route.ts (outputs [object Object]) — 2026-06-04
+- [x] Fix sandboxWriteFile result.size undefined in sandbox route.ts — 2026-06-04
+- [x] Fix memory-consolidation.ts — already uses getStorageRouter() (Admin SDK path); no client SDK import — confirmed 2026-06-04
+- [x] Fix music-tools.ts ESM test isolation — jest.mock() in tool-executor.test.ts already isolates genkit ESM chain; all 92 tests pass — confirmed 2026-06-04
 - [ ] Investigate and stabilize remote extension host termination loop (~5s cadence) impacting dev continuity
 
 ---
