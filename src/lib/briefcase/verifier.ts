@@ -4,10 +4,11 @@
  * Order of checks (any failure = hard halt, do not proceed):
  *   1. manifest HMAC verifies (F1.1)
  *   2. each artifact's stored sha256 matches contents (F1.5 covers optional)
- *   3. compressed artifacts: post-decompression sha256 matches manifest
+ *   3. no unlisted entries in bundle (F1.5 adversarial — Atlas review finding)
+ *   4. compressed artifacts: post-decompression sha256 matches manifest
  *      decompressed_sha256 (F1.2)
- *   4. cradle.md PAVC hash matches manifest.cradle_pavc_hash (F1.3)
- *   5. egress-receipt.json is present and gate-signed (F1.4)
+ *   5. cradle.md PAVC hash matches manifest.cradle_pavc_hash (F1.3)
+ *   6. egress-receipt.json is present and gate-signed (F1.4)
  */
 
 import { sha256, verifyManifestHmac, verifyArtifactHashes } from './manifest';
@@ -34,6 +35,22 @@ export function verifyBriefcase(input: VerifyInput): VerifyResult {
 
   const hashes = verifyArtifactHashes(input.manifest, input.contents);
   if (!hashes.ok) return { ok: false, reason: hashes.reason, halt: true };
+
+  // F1.5 (Atlas adversarial finding): reject any bundle entry that is not
+  // listed in the manifest and is not a known internal file.  An attacker who
+  // injects extra content into a valid bundle must not be able to slip it past
+  // the receiver undetected.
+  const KNOWN_INTERNAL = new Set(['manifest.json', 'egress-receipt.json']);
+  const listedNames = new Set(input.manifest.artifacts.map((a) => a.name));
+  for (const name of input.contents.keys()) {
+    if (!KNOWN_INTERNAL.has(name) && !listedNames.has(name)) {
+      return {
+        ok: false,
+        reason: `unlisted bundle entry: ${name}`,
+        halt: true,
+      };
+    }
+  }
 
   for (const entry of input.manifest.artifacts) {
     if (!entry.compressed) continue;
