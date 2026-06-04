@@ -31,9 +31,12 @@ function shouldHandle(msg) {
   const id = String(msg.id || '');
   if (id && seen.has(id)) return false;
   if (id) seen.add(id);
+  // Skip hive-mind receipt messages to prevent infinite reply loops
+  const raw = String(msg.content || '');
+  if (raw.includes('[hive-mind') && raw.includes('RECEIPT')) return false;
   const to = String(msg.to || '').toLowerCase();
   if (to === 'lazarus' || to === 'all') return true;
-  const content = String(msg.content || '').toLowerCase();
+  const content = raw.toLowerCase();
   return (
     content.startsWith('lazarus,') ||
     content.startsWith('lazarus ') ||
