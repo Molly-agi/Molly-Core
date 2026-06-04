@@ -12,8 +12,8 @@ const ROOT = '/workspaces/Molly-Core';
 const PID_FILE = `${ROOT}/.atlas-poller.pid`;
 const LOG_FILE = `${ROOT}/.atlas-poller.log`;
 const WAKEUP_FILE = `${ROOT}/.atlas-wakeup.json`;
-const BRIDGE_UNREAD_URL =
-  'http://localhost:9099/api/bridge?unread=atlas&peek=1';
+const BRIDGE_BASE_URL = 'http://localhost:9099/api/bridge';
+const BRIDGE_UNREAD_URL = `${BRIDGE_BASE_URL}?unread=atlas&peek=1`;
 const POLL_INTERVAL_MS = 2000;
 
 let running = true;
@@ -89,6 +89,27 @@ function writeWakeup(batch) {
   log(`Buffered ${added} message(s) to wakeup file`);
 }
 
+async function sendMarkRead() {
+  try {
+    const res = await fetch(BRIDGE_BASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'markRead', recipient: 'atlas' }),
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) {
+      log(`markRead request failed: HTTP ${res.status}`);
+      return;
+    }
+    const data = await res.json();
+    if (data?.marked > 0) {
+      log(`Receipt confirmed: marked ${data.marked} message(s) as read`);
+    }
+  } catch (err) {
+    log(`markRead error: ${err?.message || String(err)}`);
+  }
+}
+
 async function pollOnce() {
   try {
     const res = await fetch(BRIDGE_UNREAD_URL, {
@@ -108,6 +129,9 @@ async function pollOnce() {
       log(
         `Received ${messages.length} unread message(s). Latest from=${last?.from || 'unknown'}`
       );
+      // Confirm receipt — mark messages as read in the bridge so they
+      // don't accumulate in the unread queue across reconnects.
+      await sendMarkRead();
     }
   } catch (err) {
     log(`Poll error: ${err?.message || String(err)}`);

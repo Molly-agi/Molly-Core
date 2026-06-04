@@ -120,7 +120,6 @@ function writeWakeup(message) {
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-
     };
 
     // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.
@@ -159,10 +158,10 @@ function writeAtlasWakeup(message) {
 
     const normalized = {
       from: message.from,
+      ...(message.to ? { to: message.to } : {}),
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-
     };
 
     // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.
