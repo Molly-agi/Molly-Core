@@ -15,43 +15,50 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { promises as fs } from 'fs';
+import { promises as fs, mkdtempSync, rmSync } from 'fs';
+import os from 'os';
 import path from 'path';
 import { spawn } from 'child_process';
 import fetch from 'node-fetch';
+import net from 'net';
+
+/** Pick a free port so tests never collide with each other or the live bridge */
+function getFreePort() {
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.listen(0, '127.0.0.1', () => {
+      const { port } = srv.address();
+      srv.close(() => resolve(port));
+    });
+    srv.on('error', reject);
+  });
+}
+
+const VALID_BINDINGS = {
+  routes: [
+    { from: 'lazarus', to: 'eric',    enabled: true },
+    { from: 'lazarus', to: 'atlas',   enabled: true },
+    { from: 'lazarus', to: 'molly',   enabled: true },
+    { from: 'molly',   to: 'eric',    enabled: true },
+    { from: 'molly',   to: 'atlas',   enabled: true },
+    { from: 'atlas',   to: 'eric',    enabled: true },
+    { from: 'atlas',   to: 'lazarus', enabled: true },
+    { from: 'atlas',   to: 'molly',   enabled: true },
+  ],
+};
 
 describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
-  const BRIDGE_PORT = 9099;
-  const BINDINGS_CONFIG_PATH = path.join(
-    process.cwd(),
-    'data/.bridge-bindings.json'
-  );
+  let BINDINGS_CONFIG_PATH;
+  let tmpDir;
   let bridgeProcess;
   let validKey;
+  let BRIDGE_PORT;
 
   beforeEach(async () => {
-    // Create a valid bindings configuration
-    const bindings = {
-      routes: [
-        { from: 'lazarus', to: 'eric', enabled: true },
-        { from: 'lazarus', to: 'atlas', enabled: true },
-        { from: 'lazarus', to: 'molly', enabled: true },
-        { from: 'molly', to: 'eric', enabled: true },
-        { from: 'molly', to: 'atlas', enabled: true },
-        { from: 'atlas', to: 'eric', enabled: true },
-        { from: 'atlas', to: 'lazarus', enabled: true },
-        { from: 'atlas', to: 'molly', enabled: true },
-      ],
-    };
-
-    try {
-      await fs.writeFile(
-        BINDINGS_CONFIG_PATH,
-        JSON.stringify(bindings, null, 2)
-      );
-    } catch (e) {
-      // Will be created by daemon if not present
-    }
+    BRIDGE_PORT = await getFreePort();
+    tmpDir = mkdtempSync(os.tmpdir() + '/bridge-test-f2.4-');
+    BINDINGS_CONFIG_PATH = tmpDir + '/.bridge-bindings.json';
+    await fs.writeFile(BINDINGS_CONFIG_PATH, JSON.stringify(VALID_BINDINGS, null, 2));
 
     validKey = Buffer.from('e'.repeat(64), 'utf-8')
       .toString('hex')
@@ -62,12 +69,15 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
     if (bridgeProcess) {
       bridgeProcess.kill('SIGTERM');
       await new Promise((r) => setTimeout(r, 500));
+      bridgeProcess = null;
     }
+    // Always restore bindings so corrupt state never leaks to next test or live bridge
+    await fs.writeFile(BINDINGS_CONFIG_PATH, JSON.stringify(VALID_BINDINGS, null, 2));
   });
 
   it('F2.4.1: Message from unknown agent is rejected', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), BINDINGS_CONFIG_PATH: BINDINGS_CONFIG_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -77,7 +87,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
       // Try to send message from unknown agent
       try {
-        const res = await fetch(`http://localhost:${BRIDGE_PORT}/api/bridge`, {
+        const res = await fetch(`http://127.0.0.1:${BRIDGE_PORT}/api/bridge`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -107,7 +117,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
   it('F2.4.2: Message with unbound route is rejected', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), BINDINGS_CONFIG_PATH: BINDINGS_CONFIG_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -117,7 +127,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
       // Try to send message on unbound route (molly -> unknown-target)
       try {
-        const res = await fetch(`http://localhost:${BRIDGE_PORT}/api/bridge`, {
+        const res = await fetch(`http://127.0.0.1:${BRIDGE_PORT}/api/bridge`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -144,7 +154,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
   it('F2.4.3: Message on explicit bound route succeeds', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), BINDINGS_CONFIG_PATH: BINDINGS_CONFIG_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -154,7 +164,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
       // Send message on known explicit route
       try {
-        const res = await fetch(`http://localhost:${BRIDGE_PORT}/api/bridge`, {
+        const res = await fetch(`http://127.0.0.1:${BRIDGE_PORT}/api/bridge`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -183,7 +193,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
       const invalidBindings = { routes: 'not-an-array' };
       await fs.writeFile(BINDINGS_CONFIG_PATH, JSON.stringify(invalidBindings));
 
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), BINDINGS_CONFIG_PATH: BINDINGS_CONFIG_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -206,7 +216,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
         } else {
           // Try to access health endpoint
           try {
-            const res = await fetch(`http://localhost:${BRIDGE_PORT}/health`, {
+            const res = await fetch(`http://127.0.0.1:${BRIDGE_PORT}/health`, {
               timeout: 1000,
             });
             if (!res.ok) {
@@ -226,7 +236,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
   it('F2.4.5: Binding changes require daemon restart', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), BINDINGS_CONFIG_PATH: BINDINGS_CONFIG_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -236,7 +246,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
       // Verify initial binding works
       try {
-        const res1 = await fetch(`http://localhost:${BRIDGE_PORT}/api/bridge`, {
+        const res1 = await fetch(`http://127.0.0.1:${BRIDGE_PORT}/api/bridge`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -273,7 +283,7 @@ describe('W0.2 Finding F2.4: Explicit Bind Interface', () => {
 
       // Try the same route again — it should still work (not hot-reloaded)
       try {
-        const res2 = await fetch(`http://localhost:${BRIDGE_PORT}/api/bridge`, {
+        const res2 = await fetch(`http://127.0.0.1:${BRIDGE_PORT}/api/bridge`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

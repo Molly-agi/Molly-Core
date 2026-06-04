@@ -33,6 +33,15 @@ run_step() {
 : > "$REPORT_FILE"
 log "Bootstrapping attach workflow"
 
+# Load BRIDGE_KEY from .env.local if present
+if [ -f "$ROOT_DIR/.env.local" ]; then
+  BRIDGE_KEY_VAL=$(grep '^BRIDGE_KEY=' "$ROOT_DIR/.env.local" | cut -d= -f2- | tr -d '\r')
+  if [ -n "$BRIDGE_KEY_VAL" ]; then
+    export BRIDGE_KEY="$BRIDGE_KEY_VAL"
+    log "OK    BRIDGE_KEY loaded from .env.local"
+  fi
+fi
+
 run_step "codespace-health" bash "$ROOT_DIR/scripts/codespace-health.sh"
 run_step "track-growth" npx tsx "$ROOT_DIR/scripts/track-growth.ts" --save
 run_step "save-session" node "$ROOT_DIR/scripts/save-session.mjs" --status active --note 'Codespace reconnected'
