@@ -289,7 +289,7 @@ export class GeminiProvider implements ModelProvider {
     const flashLite =
       process.env.MOLLY_MODEL_FLASH_LITE || 'googleai/gemini-3.1-flash-lite';
     const tts =
-      process.env.MOLLY_MODEL_TTS || 'googleai/gemini-3.1-flash-tts-preview';
+      process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.0-flash-preview';
     const imagen =
       process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-4.0-generate-001';
     const embedding =

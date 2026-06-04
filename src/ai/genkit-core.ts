@@ -71,7 +71,7 @@ export const MODEL_PRO =
 export const MODEL_FLASH_LITE =
   process.env.MOLLY_MODEL_FLASH_LITE || 'googleai/gemini-3.1-flash-lite';
 export const MODEL_TTS =
-  process.env.MOLLY_MODEL_TTS || 'googleai/gemini-3.1-flash-tts-preview';
+  process.env.MOLLY_MODEL_TTS || 'googleai/gemini-2.0-flash-preview';
 export const MODEL_IMAGEN =
   process.env.MOLLY_MODEL_IMAGEN || 'googleai/imagen-4.0-generate-001';
 export const MODEL_EMBEDDING =

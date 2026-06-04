@@ -9,11 +9,22 @@ import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
  * Hardened gatekeeper to ensure environment stability.
  */
 export function ensureApiKey() {
-  if (!process.env.GOOGLE_GENAI_API_KEY) {
+  const apiKey = process.env.GOOGLE_GENAI_API_KEY;
+
+  if (!apiKey) {
     const error = new AuthenticationError(
       'GOOGLE_GENAI_API_KEY is not configured in the environment.'
     );
     MollyLogger.error('API key check failed', 'ensureApiKey', {}, error);
+    throw error;
+  }
+
+  // OAuth-style bearer tokens (e.g., "AQ...") are not valid GenAI API keys.
+  if (apiKey.startsWith('AQ.')) {
+    const error = new AuthenticationError(
+      'GOOGLE_GENAI_API_KEY appears to be an OAuth access token (AQ.*), not a Gemini API key. Use the AI Studio API key value instead.'
+    );
+    MollyLogger.error('API key format invalid', 'ensureApiKey', {}, error);
     throw error;
   }
 }
@@ -48,7 +59,7 @@ export async function checkRateLimit(
 
   const limiter = getRateLimiter();
   await limiter.checkLimit(flowName, estimatedTokens);
-  
+
   // After limit check passes, record that this flow can proceed (success)
   // This provides positive feedback to circuit breaker for success tracking
   breaker.recordSuccess(flowName);

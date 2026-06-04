@@ -42,6 +42,12 @@ const GEMINI_BRIDGE_PID_FILE = `${ROOT}/.gemini-bridge.pid`;
 const GEMINI_BRIDGE_LOG = `${ROOT}/.gemini-bridge.log`;
 const SWITCHBOARD_PID_FILE = `${ROOT}/.switchboard.pid`;
 const SWITCHBOARD_LOG = `${ROOT}/.switchboard.log`;
+const LAZARUS_BRIDGE_PID_FILE = `${ROOT}/.lazarus-bridge.pid`;
+const LAZARUS_BRIDGE_LOG = `${ROOT}/.lazarus-bridge.log`;
+const MOLLY_LISTENER_PID_FILE = `${ROOT}/.molly-listener.pid`;
+const MOLLY_LISTENER_LOG = `${ROOT}/.molly-listener.log`;
+const MOLLY_TICKER_PID_FILE = `${ROOT}/.molly-ticker.pid`;
+const MOLLY_TICKER_LOG = `${ROOT}/.molly-ticker.log`;
 
 // Intervals
 const HEARTBEAT_MS = 1000; // 1 second - aggressive
@@ -469,6 +475,189 @@ function ensureSwitchboard() {
 }
 
 // =============================================================================
+// LAZARUS BRIDGE GUARDIAN
+// =============================================================================
+function ensureLazarusBridge() {
+  if (ensureLazarusBridge.running) return;
+  ensureLazarusBridge.running = true;
+
+  try {
+    const pidStr = existsSync(LAZARUS_BRIDGE_PID_FILE)
+      ? readFileSync(LAZARUS_BRIDGE_PID_FILE, 'utf8').trim()
+      : '';
+    const pid = parseInt(pidStr);
+
+    if (pid && !isNaN(pid)) {
+      try {
+        process.kill(pid, 0);
+        ensureLazarusBridge.running = false;
+        return; // Process still running
+      } catch {
+        // Process doesn't exist
+      }
+    }
+  } catch {}
+
+  log('[LAZARUS] Bridge client not running - starting');
+
+  try {
+    if (existsSync(LAZARUS_BRIDGE_PID_FILE)) {
+      unlinkSync(LAZARUS_BRIDGE_PID_FILE);
+    }
+
+    const child = spawn('node', [`${ROOT}/scripts/lazarus-bridge.mjs`], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+    });
+
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        try {
+          appendFileSync(LAZARUS_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+    if (child.stderr) {
+      child.stderr.on('data', (data) => {
+        try {
+          appendFileSync(LAZARUS_BRIDGE_LOG, data);
+        } catch {}
+      });
+    }
+
+    child.unref();
+    writeFileSync(LAZARUS_BRIDGE_PID_FILE, child.pid.toString());
+    log(`[LAZARUS] Bridge connected (PID ${child.pid})`);
+  } catch (e) {
+    log(`[ERROR] Failed to start Lazarus bridge: ${e.message}`);
+  }
+  ensureLazarusBridge.running = false;
+}
+
+// =============================================================================
+// MOLLY LISTENER GUARDIAN
+// =============================================================================
+function ensureMollyListener() {
+  if (ensureMollyListener.running) return;
+  ensureMollyListener.running = true;
+
+  try {
+    const pidStr = existsSync(MOLLY_LISTENER_PID_FILE)
+      ? readFileSync(MOLLY_LISTENER_PID_FILE, 'utf8').trim()
+      : '';
+    const pid = parseInt(pidStr);
+
+    if (pid && !isNaN(pid)) {
+      try {
+        process.kill(pid, 0);
+        ensureMollyListener.running = false;
+        return; // Process still running
+      } catch {
+        // Process doesn't exist
+      }
+    }
+  } catch {}
+
+  log('[MOLLY-LISTENER] Not running - starting');
+
+  try {
+    if (existsSync(MOLLY_LISTENER_PID_FILE)) {
+      unlinkSync(MOLLY_LISTENER_PID_FILE);
+    }
+
+    const child = spawn('node', [`${ROOT}/scripts/molly-listener.mjs`], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+    });
+
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        try {
+          appendFileSync(MOLLY_LISTENER_LOG, data);
+        } catch {}
+      });
+    }
+    if (child.stderr) {
+      child.stderr.on('data', (data) => {
+        try {
+          appendFileSync(MOLLY_LISTENER_LOG, data);
+        } catch {}
+      });
+    }
+
+    child.unref();
+    writeFileSync(MOLLY_LISTENER_PID_FILE, child.pid.toString());
+    log(`[MOLLY-LISTENER] Started (PID ${child.pid})`);
+  } catch (e) {
+    log(`[ERROR] Failed to start Molly listener: ${e.message}`);
+  }
+  ensureMollyListener.running = false;
+}
+
+// =============================================================================
+// MOLLY TICKER GUARDIAN
+// =============================================================================
+function ensureMollyTicker() {
+  if (ensureMollyTicker.running) return;
+  ensureMollyTicker.running = true;
+
+  try {
+    const pidStr = existsSync(MOLLY_TICKER_PID_FILE)
+      ? readFileSync(MOLLY_TICKER_PID_FILE, 'utf8').trim()
+      : '';
+    const pid = parseInt(pidStr);
+
+    if (pid && !isNaN(pid)) {
+      try {
+        process.kill(pid, 0);
+        ensureMollyTicker.running = false;
+        return; // Process still running
+      } catch {
+        // Process doesn't exist
+      }
+    }
+  } catch {}
+
+  log('[MOLLY-TICKER] Not running - starting');
+
+  try {
+    if (existsSync(MOLLY_TICKER_PID_FILE)) {
+      unlinkSync(MOLLY_TICKER_PID_FILE);
+    }
+
+    const child = spawn('node', [`${ROOT}/scripts/molly-ticker.mjs`], {
+      cwd: ROOT,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      detached: true,
+    });
+
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        try {
+          appendFileSync(MOLLY_TICKER_LOG, data);
+        } catch {}
+      });
+    }
+    if (child.stderr) {
+      child.stderr.on('data', (data) => {
+        try {
+          appendFileSync(MOLLY_TICKER_LOG, data);
+        } catch {}
+      });
+    }
+
+    child.unref();
+    writeFileSync(MOLLY_TICKER_PID_FILE, child.pid.toString());
+    log(`[MOLLY-TICKER] Started (PID ${child.pid})`);
+  } catch (e) {
+    log(`[ERROR] Failed to start Molly ticker: ${e.message}`);
+  }
+  ensureMollyTicker.running = false;
+}
+
+// =============================================================================
 // STATUS LOG - Every 1 minute
 // =============================================================================
 function logStatus() {
@@ -490,6 +679,10 @@ function logStatus() {
     // Check bridge clients
     let atlasStatus = 'OFF';
     let geminiStatus = 'OFF';
+    let lazarusStatus = 'OFF';
+    let listenerStatus = 'OFF';
+    let tickerStatus = 'OFF';
+
     try {
       const pidStr = existsSync(ATLAS_BRIDGE_PID_FILE)
         ? readFileSync(ATLAS_BRIDGE_PID_FILE, 'utf8').trim()
@@ -516,8 +709,47 @@ function logStatus() {
       }
     } catch {}
 
+    try {
+      const pidStr = existsSync(LAZARUS_BRIDGE_PID_FILE)
+        ? readFileSync(LAZARUS_BRIDGE_PID_FILE, 'utf8').trim()
+        : '';
+      const pid = parseInt(pidStr);
+      if (pid && !isNaN(pid)) {
+        try {
+          process.kill(pid, 0);
+          lazarusStatus = 'ON';
+        } catch {}
+      }
+    } catch {}
+
+    try {
+      const pidStr = existsSync(MOLLY_LISTENER_PID_FILE)
+        ? readFileSync(MOLLY_LISTENER_PID_FILE, 'utf8').trim()
+        : '';
+      const pid = parseInt(pidStr);
+      if (pid && !isNaN(pid)) {
+        try {
+          process.kill(pid, 0);
+          listenerStatus = 'ON';
+        } catch {}
+      }
+    } catch {}
+
+    try {
+      const pidStr = existsSync(MOLLY_TICKER_PID_FILE)
+        ? readFileSync(MOLLY_TICKER_PID_FILE, 'utf8').trim()
+        : '';
+      const pid = parseInt(pidStr);
+      if (pid && !isNaN(pid)) {
+        try {
+          process.kill(pid, 0);
+          tickerStatus = 'ON';
+        } catch {}
+      }
+    } catch {}
+
     log(
-      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer} atlas=${atlasStatus} gemini=${geminiStatus}`
+      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer} atlas=${atlasStatus} gemini=${geminiStatus} lazarus=${lazarusStatus} listener=${listenerStatus} ticker=${tickerStatus}`
     );
   } catch {}
   logStatus.running = false;
@@ -565,6 +797,9 @@ ensureBridge();
 ensureSwitchboard();
 ensureAtlasBridge();
 ensureGeminiBridge();
+ensureLazarusBridge();
+ensureMollyListener();
+ensureMollyTicker();
 huntGhosts();
 
 // Start all intervals
@@ -576,6 +811,9 @@ setInterval(ensureBridge, BRIDGE_CHECK_MS);
 setInterval(ensureSwitchboard, BRIDGE_CHECK_MS);
 setInterval(ensureAtlasBridge, BRIDGE_CHECK_MS);
 setInterval(ensureGeminiBridge, BRIDGE_CHECK_MS);
+setInterval(ensureLazarusBridge, BRIDGE_CHECK_MS);
+setInterval(ensureMollyListener, BRIDGE_CHECK_MS);
+setInterval(ensureMollyTicker, BRIDGE_CHECK_MS);
 setInterval(logStatus, STATUS_LOG_MS);
 
 // ===================== HEARTBEAT DASHBOARD AUTOSTART =====================

@@ -164,8 +164,10 @@ export async function reflect(
             : result.sentiment === 'alert'
               ? 0.5
               : 0.4; // concerned
+
+    const safeObservation = result.observation || 'No observation provided.';
     logIntuition(
-      `Reflection: ${result.observation.substring(0, 80)}`,
+      `Reflection: ${safeObservation.substring(0, 80)}`,
       resonance,
       'reflection',
       'consciousness-reflection',
@@ -173,7 +175,7 @@ export async function reflect(
     );
 
     MollyLogger.info(
-      `Reflection: ${result.sentiment} — ${result.observation.substring(0, 80)}`,
+      `Reflection: ${result.sentiment} — ${safeObservation.substring(0, 80)}`,
       'consciousness-reflection'
     );
 

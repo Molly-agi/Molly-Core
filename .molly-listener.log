@@ -121,3 +121,11 @@ essage(s) received from: lazarus
 [MOLLY-LISTENER 08:01:57] Response sent (713 chars). Total: 52
 [MOLLY-LISTENER 17:22:14] 1 message(s) received from: eric
 [MOLLY-LISTENER 17:22:18] Response sent (280 chars). Total: 49
+[MOLLY-LISTENER 15:53:12] Starting. PID: 532928. Real-time WebSocket mode.
+[MOLLY-LISTENER 15:53:12] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 15:53:12] Connected. Identifying as molly...
+[MOLLY-LISTENER 15:53:12] 3 unread message(s) for Molly delivered on connect
+[MOLLY-LISTENER 15:53:12] 3 message(s) received from: lazarus
+[MOLLY-LISTENER 15:53:19] Response sent (1472 chars). Total: 1
+[MOLLY-LISTENER 15:55:18] 1 message(s) received from: lazarus
+[MOLLY-LISTENER 15:55:22] Response sent (200 chars). Total: 2

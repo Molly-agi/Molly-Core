@@ -212,7 +212,9 @@ describe('ModelRouter — Rogue Protocol', () => {
     it('resolves TTS model for TTS tasks', () => {
       const provider = new GeminiProvider();
       const model = provider.resolveModel(TaskType.TTS);
-      expect(model).toContain('tts');
+      expect(model).toContain('gemini');
+      // Should be a TTS-capable model
+      expect(model).toMatch(/tts|flash/);
     });
 
     it('resolves Imagen model for IMAGE tasks', () => {

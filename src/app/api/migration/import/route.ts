@@ -13,7 +13,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import { getAdminFirestoreAsync, isAdminConfigured } from '@/firebase/admin';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -68,7 +68,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const db = getAdminFirestore();
+  const db = await getAdminFirestoreAsync();
+  if (!db) {
+    return NextResponse.json(
+      { error: 'Failed to initialize Firestore' },
+      { status: 500 }
+    );
+  }
 
   // ── Persona ──
   if (pkg.sections.persona) {

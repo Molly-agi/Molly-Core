@@ -341,7 +341,8 @@ export async function checkNodeModulesHealth(): Promise<{
     'next',
     'react',
     'typescript',
-    '@genkit-ai/googleai',
+    '@genkit-ai/core',
+    'genkit',
     'supports-color',
     'debug',
   ];

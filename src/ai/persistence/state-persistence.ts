@@ -126,6 +126,26 @@ export class StatePersistence {
   private lastSaveTime = 0;
   private readonly MIN_SAVE_INTERVAL_MS = 30_000; // Don't save more often than every 30s
   private saving = false;
+  private firestoreUnavailable = false;
+  private firestoreUnavailableReason: string | null = null;
+
+  private shouldDisableFirestore(error: unknown): boolean {
+    const msg =
+      error instanceof Error ? error.message : String(error ?? 'unknown error');
+    // gRPC 5 NOT_FOUND means target Firestore database/project path is absent.
+    return msg.includes('NOT_FOUND') || msg.includes('5 NOT_FOUND');
+  }
+
+  private markFirestoreUnavailable(error: unknown): void {
+    const reason =
+      error instanceof Error ? error.message : String(error ?? 'unknown error');
+    this.firestoreUnavailable = true;
+    this.firestoreUnavailableReason = reason;
+    MollyLogger.warn(
+      `Firestore persistence disabled for this process: ${reason}`,
+      'persistence'
+    );
+  }
 
   /**
    * Save all state to Firestore.
@@ -230,6 +250,9 @@ export class StatePersistence {
 
       return true;
     } catch (error) {
+      if (this.shouldDisableFirestore(error)) {
+        this.markFirestoreUnavailable(error);
+      }
       MollyLogger.warn(
         `State persistence failed: ${error instanceof Error ? error.message : String(error)}`,
         'persistence'
@@ -309,6 +332,9 @@ export class StatePersistence {
 
       return snapshot;
     } catch (error) {
+      if (this.shouldDisableFirestore(error)) {
+        this.markFirestoreUnavailable(error);
+      }
       MollyLogger.warn(
         `State restoration failed: ${error instanceof Error ? error.message : String(error)}`,
         'persistence'
@@ -334,6 +360,9 @@ export class StatePersistence {
 
       return true;
     } catch (error) {
+      if (this.shouldDisableFirestore(error)) {
+        this.markFirestoreUnavailable(error);
+      }
       MollyLogger.warn(
         `Failed to delete job ${jobId}: ${error instanceof Error ? error.message : String(error)}`,
         'persistence'
@@ -346,12 +375,19 @@ export class StatePersistence {
    * Get Firestore instance (lazy, handles missing config gracefully).
    */
   private async getFirestore() {
-    try {
-      const { isAdminConfigured, getAdminFirestore } = await import(
-        '@/firebase/admin'
+    if (this.firestoreUnavailable) {
+      MollyLogger.debug(
+        `Persistence Firestore unavailable (cached): ${this.firestoreUnavailableReason || 'unknown reason'}`,
+        'persistence'
       );
+      return null;
+    }
+
+    try {
+      const { isAdminConfigured, getAdminFirestoreAsync } =
+        await import('@/firebase/admin');
       if (!isAdminConfigured()) return null;
-      return getAdminFirestore();
+      return getAdminFirestoreAsync();
     } catch {
       return null;
     }

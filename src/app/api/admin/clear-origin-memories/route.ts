@@ -8,7 +8,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { timingSafeEqual } from 'node:crypto';
-import { getAdminFirestore, isAdminConfigured } from '@/firebase/admin';
+import {
+  _getAdminFirestore,
+  getAdminFirestoreAsync,
+  _isAdminConfigured,
+} from '@/firebase/admin';
 import { checkAdminRateLimit, ADMIN_RATE_LIMITS } from '@/lib/admin-rate-limit';
 import { MollyLogger } from '@/ai/logger';
 
@@ -49,7 +53,10 @@ export async function POST(request: NextRequest) {
 
     MollyLogger.info('Clearing origin story memories', 'admin-clear-origins');
 
-    const db = getAdminFirestore();
+    const db = await getAdminFirestoreAsync();
+    if (!db) {
+      throw new Error('Failed to initialize Firestore');
+    }
 
     // Get all users
     const usersSnapshot = await db.collection('users').get();

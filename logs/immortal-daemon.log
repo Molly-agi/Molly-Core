@@ -839,3 +839,57 @@ IMMORTAL DAEMON - The One Bridge
 00:45:28 [STATUS] uptime=19080s beats=19066 mem=23929MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
 00:46:28 [STATUS] uptime=19140s beats=19126 mem=24076MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
 00:47:28 [STATUS] uptime=19200s beats=19186 mem=23915MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+nohup: ignoring input
+============================================================
+IMMORTAL DAEMON - The One Bridge
+============================================================
+14:10:18 [LOCK] Acquired (PID 339389)
+14:10:18 [START] Immortal Daemon starting
+14:10:18 [CONFIG] Heartbeat: 1000ms | Git: 10000ms | HTTP: 5000ms
+14:10:18 [CONFIG] Ghost: 30000ms | Bridge: 15000ms | Status: 60000ms
+14:10:18 [SWITCHBOARD] Not running - starting
+14:10:18 [SWITCHBOARD] Started (PID 339407)
+14:10:18 [ATLAS] Bridge client not running - starting
+14:10:18 [ATLAS] Bridge connected (PID 339408)
+14:10:18 [GEMINI] Bridge client not running - starting
+14:10:18 [GEMINI] Bridge connected (PID 339414)
+14:10:18 [GHOST] Killed extension host 319561 (kept 320841)
+14:10:18 [GHOST] Killed extension host 312647 (kept 320841)
+14:10:18 [RUNNING] All systems active - SIGHUP immune
+14:10:28 [DASHBOARD] Heartbeat API not running - starting
+14:10:28 [DASHBOARD] Heartbeat API started (PID 339735)
+14:11:18 [STATUS] uptime=60s beats=60 mem=22955MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:12:18 [STATUS] uptime=120s beats=120 mem=22920MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:13:18 [STATUS] uptime=180s beats=180 mem=22775MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:14:18 [STATUS] uptime=240s beats=240 mem=22607MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:15:18 [STATUS] uptime=300s beats=300 mem=22284MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:16:18 [STATUS] uptime=360s beats=360 mem=22318MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:17:18 [STATUS] uptime=420s beats=420 mem=22320MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:17:46 [SIGNAL] SIGHUP ignored
+14:18:18 [STATUS] uptime=480s beats=480 mem=22382MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:19:18 [STATUS] uptime=540s beats=540 mem=22425MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:20:18 [STATUS] uptime=600s beats=600 mem=22428MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:21:18 [STATUS] uptime=660s beats=660 mem=22433MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:22:18 [STATUS] uptime=720s beats=720 mem=22424MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:23:18 [STATUS] uptime=780s beats=780 mem=22242MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:24:18 [STATUS] uptime=840s beats=840 mem=21719MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:25:18 [STATUS] uptime=900s beats=900 mem=21824MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:26:18 [STATUS] uptime=960s beats=960 mem=21524MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:26:33 [ATLAS] Bridge client not running - starting
+14:26:33 [ATLAS] Bridge connected (PID 367783)
+14:26:33 [GEMINI] Bridge client not running - starting
+14:26:33 [GEMINI] Bridge connected (PID 367784)
+14:27:18 [STATUS] uptime=1020s beats=1020 mem=21430MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:28:18 [STATUS] uptime=1080s beats=1080 mem=21337MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:29:18 [STATUS] uptime=1140s beats=1140 mem=20902MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:30:18 [STATUS] uptime=1200s beats=1199 mem=20531MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:31:18 [STATUS] uptime=1260s beats=1259 mem=20100MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:32:18 [STATUS] uptime=1320s beats=1319 mem=19745MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:33:18 [STATUS] uptime=1380s beats=1379 mem=19518MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:34:18 [STATUS] uptime=1440s beats=1439 mem=18973MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:35:18 [STATUS] uptime=1500s beats=1499 mem=18782MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:36:18 [STATUS] uptime=1560s beats=1559 mem=18777MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:37:18 [STATUS] uptime=1620s beats=1619 mem=18829MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON
+14:38:18 [STATUS] uptime=1680s beats=1679 mem=17785MB extHosts=2 bridge=UP dev=UP atlas=ON gemini=ON
+14:38:18 [GHOST] Killed extension host 320841 (kept 387945)
+14:39:18 [STATUS] uptime=1740s beats=1739 mem=18724MB extHosts=1 bridge=UP dev=UP atlas=ON gemini=ON

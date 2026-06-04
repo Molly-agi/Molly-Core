@@ -120,7 +120,8 @@ class StorageRouter implements StorageProvider {
 
   static async create(): Promise<StorageRouter> {
     const requestedMode = detectStorageMode();
-    const { provider, mode } = await StorageRouter.createProvider(requestedMode);
+    const { provider, mode } =
+      await StorageRouter.createProvider(requestedMode);
     return new StorageRouter(mode, provider);
   }
 
@@ -136,10 +137,19 @@ class StorageRouter implements StorageProvider {
             'Firebase Admin SDK not configured (missing credentials)'
           );
         }
-        const { FirestoreStorageProvider } = await import(
-          './firestore-storage-provider'
-        );
-        return { provider: new FirestoreStorageProvider(), mode: 'firestore' };
+        const { FirestoreStorageProvider } =
+          await import('./firestore-storage-provider');
+        const firestoreProvider = new FirestoreStorageProvider();
+
+        // Validate Firestore once at startup. If the configured project/database
+        // path is invalid (e.g., 5 NOT_FOUND), fail over to local instead of
+        // letting every state loader repeatedly hit the same backend error.
+        const healthy = await firestoreProvider.healthCheck();
+        if (!healthy) {
+          throw new Error('Firestore health check failed');
+        }
+
+        return { provider: firestoreProvider, mode: 'firestore' };
       } catch (err) {
         MollyLogger.warn(
           `Firestore requested but unavailable, falling back to local storage: ${
@@ -317,7 +327,12 @@ export async function loadFromStorage<T = unknown>(
   const storage = await getStorageRouter();
   const doc = await storage.get(key, 'singleton');
   // `== null` intentionally uses loose equality to catch both null and undefined
-  if (!doc || doc.data == null || typeof doc.data !== 'object' || !('value' in doc.data))
+  if (
+    !doc ||
+    doc.data == null ||
+    typeof doc.data !== 'object' ||
+    !('value' in doc.data)
+  )
     return null;
   return doc.data.value as T;
 }

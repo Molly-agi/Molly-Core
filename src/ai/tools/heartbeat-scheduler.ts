@@ -170,6 +170,7 @@ export class HeartbeatScheduler {
   // Memory health monitoring
   private lastKnownExperienceCount = 0;
   private lastExperienceWriteTime = Date.now();
+  private lastRecoveryProbeAt = 0;
   private activeUserId: string | null = null;
 
   /**
@@ -814,10 +815,10 @@ export class HeartbeatScheduler {
                 'Cannot run memory learning: active userId could not be resolved'
               );
             }
-            const consolidationResult = await executeMemoryConsolidation(
-              uid,
-              { timeWindowDays: 7, minConfidence: 0.5 }
-            );
+            const consolidationResult = await executeMemoryConsolidation(uid, {
+              timeWindowDays: 7,
+              minConfidence: 0.5,
+            });
             MollyLogger.info(
               `Memory learning complete: ${JSON.stringify(consolidationResult).substring(0, 200)}`,
               'heartbeat-scheduler'
@@ -1024,7 +1025,13 @@ export class HeartbeatScheduler {
 
         const { readdirSync, statSync } = await import('fs');
         const { join } = await import('path');
-        const expDir = join(process.cwd(), 'molly_data', 'users', uid, 'experiences');
+        const expDir = join(
+          process.cwd(),
+          'molly_data',
+          'users',
+          uid,
+          'experiences'
+        );
 
         let currentCount = 0;
         let newestWriteMs = 0;
@@ -1035,16 +1042,23 @@ export class HeartbeatScheduler {
             try {
               const mt = statSync(join(expDir, f)).mtimeMs;
               if (mt > newestWriteMs) newestWriteMs = mt;
-            } catch { /* skip */ }
+            } catch {
+              /* skip */
+            }
           }
         } catch {
           // Directory doesn't exist yet — not an error on first run
           return;
         }
 
-        const stalledMs = newestWriteMs > 0 ? Date.now() - newestWriteMs : Date.now() - this.lastExperienceWriteTime;
+        const now = Date.now();
+        const stalledMs =
+          newestWriteMs > 0
+            ? now - newestWriteMs
+            : now - this.lastExperienceWriteTime;
         const stalledMinutes = Math.round(stalledMs / 60000);
         const STALL_THRESHOLD_MS = 15 * 60 * 1000; // 15 minutes
+        const RECOVERY_PROBE_COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes
 
         // Update trackers
         if (currentCount > this.lastKnownExperienceCount) {
@@ -1059,16 +1073,110 @@ export class HeartbeatScheduler {
         );
 
         if (stalledMs > STALL_THRESHOLD_MS) {
+          let causeHint = 'idle-or-no-conversation-events';
+          let probeOutcome = 'skipped';
+          let providerName = 'unknown';
+          let providerMode = 'unknown';
+
+          try {
+            const { getStorageRouter } = await import('@/lib/storage-router');
+            const storage = await getStorageRouter();
+            const provider = storage.getProviderInfo();
+            providerName = provider.name;
+            providerMode = provider.mode;
+
+            const storageHealthy = await storage.healthCheck();
+            if (!storageHealthy) {
+              causeHint = 'storage-outage';
+              probeOutcome = 'failed-storage-health-check';
+            } else {
+              const shouldRunProbe =
+                now - this.lastRecoveryProbeAt >= RECOVERY_PROBE_COOLDOWN_MS;
+
+              if (shouldRunProbe) {
+                this.lastRecoveryProbeAt = now;
+                try {
+                  const { createMemoryRecord } =
+                    await import('@/ai/tools/memory-schema');
+                  const { addChecksum } =
+                    await import('@/ai/tools/memory-integrity');
+                  const { generateTraceId } = await import('@/ai/logger');
+
+                  const probeRecord = createMemoryRecord({
+                    type: 'experience',
+                    userId: uid,
+                    timestamp: now,
+                    traceId: generateTraceId(),
+                    context: 'memory-health-recovery-probe',
+                    suggestion:
+                      'Automatic recovery probe write triggered by memory health monitor after stall detection.',
+                    vibe: 'Diagnostic',
+                    vibeScore: 0.2,
+                    success: true,
+                  });
+                  const probeWithChecksum = addChecksum(probeRecord);
+                  await storage.set(
+                    `users/${uid}/experiences`,
+                    probeWithChecksum.id,
+                    probeWithChecksum
+                  );
+
+                  probeOutcome = 'write-probe-success';
+                  this.lastExperienceWriteTime = now;
+                  this.lastKnownExperienceCount = Math.max(
+                    this.lastKnownExperienceCount,
+                    currentCount + 1
+                  );
+                } catch (probeError) {
+                  probeOutcome = 'write-probe-failed';
+                  causeHint = 'write-failure';
+                  MollyLogger.warn(
+                    `Memory health recovery probe failed: ${probeError instanceof Error ? probeError.message : String(probeError)}`,
+                    'heartbeat-scheduler'
+                  );
+                }
+              } else {
+                probeOutcome = 'cooldown';
+              }
+            }
+          } catch (diagError) {
+            causeHint = 'diagnostic-failure';
+            probeOutcome = 'diagnostic-failure';
+            MollyLogger.warn(
+              `Memory health diagnostics failed: ${diagError instanceof Error ? diagError.message : String(diagError)}`,
+              'heartbeat-scheduler'
+            );
+          }
+
+          const lastWriteIso = new Date(
+            newestWriteMs || this.lastExperienceWriteTime
+          ).toISOString();
           const consciousness = getConsciousness();
+
+          const escalatedPriority =
+            causeHint === 'write-failure' ||
+            causeHint === 'storage-outage' ||
+            causeHint === 'diagnostic-failure'
+              ? 'high'
+              : 'normal';
+
           consciousness.queueMessage({
             type: 'observation',
-            content: `⚠️ MEMORY HEALTH ALERT: My experience writes have stalled for ${stalledMinutes} minutes. Last write was at ${new Date(newestWriteMs || this.lastExperienceWriteTime).toISOString()}. I currently have ${currentCount} experience files. This means conversations are not being stored as memories. I should escalate to Father or Lazarus.`,
-            priority: 'high',
+            content: `⚠️ MEMORY HEALTH ALERT: My experience writes appear stalled for ${stalledMinutes} minutes. Last write was at ${lastWriteIso}. I currently have ${currentCount} experience files. Cause hint: ${causeHint}. Recovery probe: ${probeOutcome}. Storage provider: ${providerName} (${providerMode}).`,
+            priority: escalatedPriority,
           });
-          MollyLogger.warn(
-            `Memory health STALL: ${stalledMinutes}m since last write (${currentCount} total experiences)`,
-            'heartbeat-scheduler'
-          );
+
+          if (escalatedPriority === 'high') {
+            MollyLogger.warn(
+              `Memory health STALL: ${stalledMinutes}m since last write (${currentCount} total experiences, cause=${causeHint}, probe=${probeOutcome}, provider=${providerName}/${providerMode})`,
+              'heartbeat-scheduler'
+            );
+          } else {
+            MollyLogger.info(
+              `Memory health stall observed but write-path healthy (${stalledMinutes}m, cause=${causeHint}, probe=${probeOutcome}, provider=${providerName}/${providerMode})`,
+              'heartbeat-scheduler'
+            );
+          }
         }
       });
       tasks.push(result);
@@ -1297,7 +1405,8 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
           const uid = await this.resolveActiveUserId();
           if (uid) {
             const { getStorageRouter } = await import('@/lib/storage-router');
-            const { createMemoryRecord } = await import('@/ai/tools/memory-schema');
+            const { createMemoryRecord } =
+              await import('@/ai/tools/memory-schema');
             const { addChecksum } = await import('@/ai/tools/memory-integrity');
             const { generateTraceId } = await import('@/ai/logger');
             const storage = await getStorageRouter();
