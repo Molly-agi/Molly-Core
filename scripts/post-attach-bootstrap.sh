@@ -70,4 +70,12 @@ log "START immortal-daemon"
 nohup node "$ROOT_DIR/scripts/immortal-daemon.mjs" >>"$ROOT_DIR/logs/immortal-daemon.log" 2>&1 &
 log "OK    immortal-daemon"
 
+log "START hive-mind-daemon"
+nohup node "$ROOT_DIR/scripts/hive-mind-daemon.mjs" >>"$ROOT_DIR/logs/hive-mind.log" 2>&1 &
+log "OK    hive-mind-daemon"
+
+log "START atlas-sse-client"
+nohup node "$ROOT_DIR/scripts/atlas-sse-client.mjs" >>"$ROOT_DIR/logs/atlas-sse.log" 2>&1 &
+log "OK    atlas-sse-client"
+
 log "Attach bootstrap complete"

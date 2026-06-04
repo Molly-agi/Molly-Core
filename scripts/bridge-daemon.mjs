@@ -68,6 +68,10 @@ const continuityBriefState = new Map();
 let totalConnects = 0;
 let totalDisconnects = 0;
 let authFailures = 0;
+
+// ---- SSE Push Streams ----
+// Map<agentName, Set<res>> — open SSE connections per agent
+const sseStreams = new Map();
 const recentDisconnects = [];
 let lastHeartbeatAt = null;
 let heartbeatTimer = null;
@@ -574,6 +578,22 @@ function handleMessage(from, content, to) {
   // Broadcast to all WebSocket clients
   broadcast({ type: 'message', message: msg });
 
+  // ---- SSE Push — deliver to any open SSE streams ----
+  // Push to explicit recipient, or broadcast to all if no 'to'
+  const ssePayload = `data: ${JSON.stringify({ type: 'message', message: msg })}\n\n`;
+  if (to && sseStreams.has(to)) {
+    for (const res of sseStreams.get(to)) {
+      try { res.write(ssePayload); } catch { /* client gone */ }
+    }
+  } else if (!to) {
+    for (const [agent, streams] of sseStreams) {
+      if (agent === from) continue; // don't echo back to sender
+      for (const res of streams) {
+        try { res.write(ssePayload); } catch { /* client gone */ }
+      }
+    }
+  }
+
   // Persist
   saveMessages();
 
@@ -861,6 +881,63 @@ function handleHTTP(req, res) {
         events: eventQueue,
       })
     );
+    return;
+  }
+
+  // ---- SSE Push Stream: GET /api/bridge/sse?agent=<name> ----
+  // Agent holds this connection open. Messages pushed in real-time.
+  if (req.method === 'GET' && url.pathname === '/api/bridge/sse') {
+    const agent = url.searchParams.get('agent') || '';
+    if (!agent || !VALID_SENDERS.has(agent)) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid or missing agent param' }));
+      return;
+    }
+
+    // SSE headers
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'Access-Control-Allow-Origin': '*',
+      'X-Accel-Buffering': 'no',
+    });
+    res.flushHeaders();
+
+    // Register this stream
+    if (!sseStreams.has(agent)) sseStreams.set(agent, new Set());
+    sseStreams.get(agent).add(res);
+    console.log(`[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`);
+
+    // Send connect confirmation
+    res.write(`data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`);
+
+    // Send any unread messages immediately on connect
+    const unread = getUnread(agent);
+    if (unread.length > 0) {
+      for (const m of unread) {
+        res.write(`data: ${JSON.stringify({ type: 'message', message: m })}\n\n`);
+      }
+      markRead(agent);
+      console.log(`[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`);
+    }
+
+    // Keepalive comment every 25s to prevent proxy timeouts
+    const keepalive = setInterval(() => {
+      try { res.write(`: keepalive ${new Date().toISOString()}\n\n`); } catch { clearInterval(keepalive); }
+    }, 25000);
+
+    // Cleanup on disconnect
+    req.on('close', () => {
+      clearInterval(keepalive);
+      const streams = sseStreams.get(agent);
+      if (streams) {
+        streams.delete(res);
+        if (streams.size === 0) sseStreams.delete(agent);
+      }
+      console.log(`[bridge:sse] ${agent} disconnected`);
+    });
+
     return;
   }
 

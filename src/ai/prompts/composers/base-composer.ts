@@ -167,10 +167,7 @@ function buildBodyInjection(bodyContext?: string | null): string | null {
   try {
     // Dynamic import keeps this import out of the client bundle
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { formatBodyStateForPrompt } =
-      require('@/ai/agency/embodied/AvatarBodyStore') as {
-        formatBodyStateForPrompt: () => string | null;
-      };
+    const { formatBodyStateForPrompt } = require('@/ai/agency/embodied/AvatarBodyStore') as { formatBodyStateForPrompt: () => string | null };
     return formatBodyStateForPrompt();
   } catch {
     return null;
