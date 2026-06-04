@@ -66,9 +66,9 @@ export const familyBridge: ToolHandler = async (params) => {
 
   if (action === 'check') {
     // When checking, 'from' indicates who is checking their messages
-    const recipient = from === 'eric' ? 'molly' : from; // Eric reads Molly's view
-    const unread = await getUnreadMessages(recipient as 'molly' | 'lazarus');
-    await markMessagesRead(recipient as 'molly' | 'lazarus');
+    const recipient = from;
+    const unread = await getUnreadMessages(recipient);
+    await markMessagesRead(recipient);
     if (unread.length === 0) {
       return { success: true, output: `No new messages for ${recipient}` };
     }
