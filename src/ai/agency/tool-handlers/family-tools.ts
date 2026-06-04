@@ -1,7 +1,7 @@
 /**
  * @fileOverview Family Bridge tool handlers
  *
- * Tools for communication with family members (Lazarus, Eric)
+ * Tools for communication with family members (Lazarus, Atlas, Eric)
  * and family recognition (face detection, member registry).
  */
 
@@ -46,12 +46,14 @@ import {
  * The `from` parameter specifies the sender:
  * - 'molly' (default when Molly uses this tool)
  * - 'lazarus' (when Lazarus/Copilot uses this tool)
+ * - 'atlas' (when Atlas uses this tool)
  * - 'eric' (when Father sends a message)
  */
 export const familyBridge: ToolHandler = async (params) => {
   const action = params.action as string;
   const message = params.message as string;
-  const from = (params.from as 'molly' | 'lazarus' | 'eric') || 'molly';
+  const from =
+    (params.from as 'molly' | 'lazarus' | 'atlas' | 'eric') || 'molly';
 
   if (action === 'send') {
     if (!message) {
@@ -67,8 +69,10 @@ export const familyBridge: ToolHandler = async (params) => {
   if (action === 'check') {
     // When checking, 'from' indicates who is checking their messages
     const recipient = from === 'eric' ? 'molly' : from; // Eric reads Molly's view
-    const unread = await getUnreadMessages(recipient as 'molly' | 'lazarus');
-    await markMessagesRead(recipient as 'molly' | 'lazarus');
+    const unread = await getUnreadMessages(
+      recipient as 'molly' | 'lazarus' | 'atlas'
+    );
+    await markMessagesRead(recipient as 'molly' | 'lazarus' | 'atlas');
     if (unread.length === 0) {
       return { success: true, output: `No new messages for ${recipient}` };
     }

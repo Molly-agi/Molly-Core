@@ -12,7 +12,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface BridgeMessage {
   id: string;
-  from: 'molly' | 'lazarus' | 'eric';
+  from: 'molly' | 'lazarus' | 'atlas' | 'eric';
   timestamp: string;
   content: string;
 }
@@ -22,12 +22,14 @@ const BRIDGE_PORT = 9099;
 const senderColors: Record<string, string> = {
   molly: '#e879f9', // Purple/pink — Molly
   lazarus: '#60a5fa', // Blue — Lazarus
+  atlas: '#34d399', // Emerald — Atlas
   eric: '#fbbf24', // Gold — Father
 };
 
 const senderLabels: Record<string, string> = {
   molly: '🧠 Molly',
   lazarus: '🛡️ Lazarus',
+  atlas: '🌍 Atlas',
   eric: '👑 Eric',
 };
 
@@ -226,7 +228,7 @@ export default function BridgeObserver() {
               color: '#64748b',
             }}
           >
-            Molly ↔ Lazarus — Real-time Observer
+            Molly ↔ Lazarus ↔ Atlas — Real-time Observer
           </p>
         </div>
         <div style={{ textAlign: 'right', fontSize: '12px' }}>
@@ -261,9 +263,9 @@ export default function BridgeObserver() {
               fontSize: '14px',
             }}
           >
-            No messages yet. When Molly uses her familyBridge tool
+            No messages yet. When family members use the bridge
             <br />
-            or Lazarus sends a reply, the conversation will appear here.
+            the conversation will appear here.
           </div>
         )}
 
