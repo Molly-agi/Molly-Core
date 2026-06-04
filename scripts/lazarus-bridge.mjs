@@ -25,6 +25,14 @@ const MAX_REPLY_CHARS = 4000;
 const REPLY_TIMEOUT_MS = 90000;
 const seen = new Set();
 
+function mentionsLazarus(content) {
+  const text = String(content || '');
+  return (
+    /(^|[\n.!?]\s*)(uncle\s+)?lazarus([,:\s!?]|$)/i.test(text) ||
+    /@lazarus\b/i.test(text)
+  );
+}
+
 function shouldHandle(msg) {
   if (!msg || typeof msg !== 'object') return false;
   if (msg.from === 'lazarus') return false;
@@ -33,12 +41,7 @@ function shouldHandle(msg) {
   if (id) seen.add(id);
   const to = String(msg.to || '').toLowerCase();
   if (to === 'lazarus' || to === 'all') return true;
-  const content = String(msg.content || '').toLowerCase();
-  return (
-    content.startsWith('lazarus,') ||
-    content.startsWith('lazarus ') ||
-    content.startsWith('@lazarus')
-  );
+  return mentionsLazarus(msg.content);
 }
 
 function buildPrompt(msg) {
