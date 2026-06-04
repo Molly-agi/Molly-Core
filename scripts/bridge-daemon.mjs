@@ -1284,10 +1284,9 @@ const server = createServer(handleHTTP);
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', (ws, req) => {
-  const clientIp =
-    (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
-    req.socket?.remoteAddress ||
-    '';
+  // F2.1: use actual TCP socket address for security decisions — never trust
+  // x-forwarded-for for the bootstrap gate since it is client-controlled.
+  const clientIp = req.socket?.remoteAddress || '';
   const client = { ws, identity: null, authenticated: false, deviceId: null };
   clients.add(client);
   totalConnects += 1;
