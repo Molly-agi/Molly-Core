@@ -31,9 +31,13 @@ function shouldHandle(msg) {
   const id = String(msg.id || '');
   if (id && seen.has(id)) return false;
   if (id) seen.add(id);
+  // Never respond to hive-mind automated messages (RECEIPT, KEEPALIVE, STATUS, ONLINE)
+  // to avoid a receipt feedback loop where lazarus replies to every receipt.
+  const rawContent = String(msg.content || '');
+  if (rawContent.startsWith('[hive-mind')) return false;
   const to = String(msg.to || '').toLowerCase();
   if (to === 'lazarus' || to === 'all') return true;
-  const content = String(msg.content || '').toLowerCase();
+  const content = rawContent.toLowerCase();
   return (
     content.startsWith('lazarus,') ||
     content.startsWith('lazarus ') ||

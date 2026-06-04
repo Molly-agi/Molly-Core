@@ -29,14 +29,14 @@ const LOG_FILE = join(LOG_DIR, 'hive-mind.log');
 const STATE_FILE = join(ROOT, '.hive-mind-state.json');
 
 const BRIDGE_BASE = 'http://localhost:9099/api/bridge';
-const POLL_MS = 5000;           // check bridge every 5s
+const POLL_MS = 5000; // check bridge every 5s
 const QUIET_THRESHOLD_MS = {
-  lazarus: 4 * 60 * 1000,      // 4 min — coding agent goes idle fast
-  molly:   3 * 60 * 1000,      // 3 min — hits tool limit, needs gentle nudge
-  atlas:   10 * 60 * 1000,     // 10 min — atlas is stateless, less critical
-  eric:    null,                // never ping eric
+  lazarus: 4 * 60 * 1000, // 4 min — coding agent goes idle fast
+  molly: 3 * 60 * 1000, // 3 min — hits tool limit, needs gentle nudge
+  atlas: 10 * 60 * 1000, // 10 min — atlas is stateless, less critical
+  eric: null, // never ping eric
 };
-const STATUS_INTERVAL_MS = 5 * 60 * 1000;  // post status summary every 5 min
+const STATUS_INTERVAL_MS = 5 * 60 * 1000; // post status summary every 5 min
 const MAX_LOG_LINES = 500;
 
 // Participants we actively manage
@@ -68,8 +68,12 @@ function acquireLock() {
           log(`Already running (PID ${oldPid}) — exiting`);
           process.exit(0);
         }
-      } catch { /* stale lock */ }
-    } catch { /* corrupt pid file */ }
+      } catch {
+        /* stale lock */
+      }
+    } catch {
+      /* corrupt pid file */
+    }
   }
   writeFileSync(PID_FILE, String(process.pid));
   log(`Lock acquired (PID ${process.pid})`);
@@ -81,7 +85,9 @@ function releaseLock() {
       const pid = readFileSync(PID_FILE, 'utf8').trim();
       if (pid === String(process.pid)) writeFileSync(PID_FILE, '');
     }
-  } catch { /* non-fatal */ }
+  } catch {
+    /* non-fatal */
+  }
 }
 
 // ── State persistence ────────────────────────────────────────────────────────
@@ -91,11 +97,13 @@ function loadState() {
     if (existsSync(STATE_FILE)) {
       return JSON.parse(readFileSync(STATE_FILE, 'utf8'));
     }
-  } catch { /* corrupt — start fresh */ }
+  } catch {
+    /* corrupt — start fresh */
+  }
   return {
     seenIds: [],
-    lastActivity: {},   // participant → ISO timestamp
-    lastPing: {},       // participant → ISO timestamp
+    lastActivity: {}, // participant → ISO timestamp
+    lastPing: {}, // participant → ISO timestamp
     lastStatus: null,
   };
 }
@@ -107,7 +115,9 @@ function saveState(state) {
       state.seenIds = state.seenIds.slice(-1000);
     }
     writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
-  } catch { /* non-fatal */ }
+  } catch {
+    /* non-fatal */
+  }
 }
 
 // ── Bridge HTTP helpers ───────────────────────────────────────────────────────
@@ -179,7 +189,12 @@ async function pollAndReceipt() {
     // Skip receipting our own messages or messages that are already receipts
     if (from === 'atlas') continue;
     const content = String(msg.content || '');
-    if (content.includes('[hive-mind') && content.includes('RECEIPT')) continue;
+    // Skip any hive-mind internal message (RECEIPT, KEEPALIVE, STATUS REPORT, ONLINE)
+    if (content.includes('[hive-mind')) continue;
+    // Skip receipt-style responses from other agents (e.g. lazarus Gemini saying
+    // "Receipt confirmed" in reply to a hive-mind broadcast) — these are the
+    // trigger of the receipt feedback loop.
+    if (/^receipt\b/i.test(content)) continue;
 
     // Post receipt
     try {
@@ -202,8 +217,12 @@ async function pollAndReceipt() {
 
     const lastSeen = state.lastActivity[participant];
     const lastPinged = state.lastPing[participant];
-    const sinceLastSeen = lastSeen ? now - new Date(lastSeen).getTime() : Infinity;
-    const sinceLastPing = lastPinged ? now - new Date(lastPinged).getTime() : Infinity;
+    const sinceLastSeen = lastSeen
+      ? now - new Date(lastSeen).getTime()
+      : Infinity;
+    const sinceLastPing = lastPinged
+      ? now - new Date(lastPinged).getTime()
+      : Infinity;
 
     if (sinceLastSeen >= threshold && sinceLastPing >= threshold) {
       const quietMin = Math.floor(sinceLastSeen / 60000);
@@ -248,10 +267,10 @@ async function loop() {
   try {
     await bridgePost(
       `[hive-mind ${ts()}] ONLINE — Atlas-led hive mind daemon active.\n` +
-      `Protocol: (1) every msg auto-receipted with timestamp, ` +
-      `(2) Lazarus pinged if quiet >4m, Molly if quiet >3m, ` +
-      `(3) status report every 5m.\n` +
-      `All participants: reply with [name TIMESTAMP] format on every message.`
+        `Protocol: (1) every msg auto-receipted with timestamp, ` +
+        `(2) Lazarus pinged if quiet >4m, Molly if quiet >3m, ` +
+        `(3) status report every 5m.\n` +
+        `All participants: reply with [name TIMESTAMP] format on every message.`
     );
   } catch (err) {
     log(`Announce error: ${err.message}`);
@@ -269,9 +288,16 @@ async function loop() {
 
 acquireLock();
 
-process.on('SIGTERM', () => { running = false; releaseLock(); });
-process.on('SIGINT',  () => { running = false; releaseLock(); process.exit(0); });
-process.on('exit',    () => releaseLock());
+process.on('SIGTERM', () => {
+  running = false;
+  releaseLock();
+});
+process.on('SIGINT', () => {
+  running = false;
+  releaseLock();
+  process.exit(0);
+});
+process.on('exit', () => releaseLock());
 
 loop().catch((err) => {
   log(`Fatal: ${err.message}`);
