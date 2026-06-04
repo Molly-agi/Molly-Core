@@ -13,33 +13,25 @@
  * - Verify cache survives daemon restart
  */
 
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
-import { promises as fs, mkdtempSync, rmSync } from 'fs';
-import os from 'os';
-import net from 'net';
-
-function getFreePort() {
-  return new Promise((resolve, reject) => {
-    const srv = net.createServer();
-    srv.listen(0, '127.0.0.1', () => { const {port} = srv.address(); srv.close(() => resolve(port)); });
-    srv.on('error', reject);
-  });
-}
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { promises as fs } from 'fs';
 import path from 'path';
 import { spawn } from 'child_process';
 import fetch from 'node-fetch';
 
 describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
-  let BRIDGE_PORT;
-  let NONCE_CACHE_PATH;
-  let tmpDir;
+  const BRIDGE_PORT = 9099;
+  const NONCE_CACHE_PATH = path.join(process.cwd(), 'data/.bridge-nonce-cache');
   let bridgeProcess;
   let validKey;
 
   beforeEach(async () => {
-    BRIDGE_PORT = await getFreePort();
-    tmpDir = mkdtempSync(os.tmpdir() + '/bridge-test-f2.2-');
-    NONCE_CACHE_PATH = tmpDir + '/.bridge-nonce-cache';
+    // Clean up old nonce cache
+    try {
+      await fs.unlink(NONCE_CACHE_PATH);
+    } catch (e) {
+      // File doesn't exist yet
+    }
     validKey = Buffer.from('c'.repeat(64), 'utf-8')
       .toString('hex')
       .slice(0, 64);
@@ -50,12 +42,11 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
       bridgeProcess.kill('SIGTERM');
       await new Promise((r) => setTimeout(r, 500));
     }
-    if (tmpDir) { try { rmSync(tmpDir, { recursive: true, force: true }); } catch {} tmpDir = null; }
   });
 
   it('F2.2.1: Nonce cache file is created on daemon startup', async () => {
     return new Promise((resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), NONCE_CACHE_PATH: NONCE_CACHE_PATH };
+      const env = { ...process.env, BRIDGE_KEY: validKey };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -86,7 +77,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
 
   it('F2.2.2: Nonce is stored in persistent cache after use', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), NONCE_CACHE_PATH: NONCE_CACHE_PATH };
+      const env = { ...process.env, BRIDGE_KEY: validKey };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -95,7 +86,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
       const sendMessageWithNonce = async (nonce) => {
         try {
           const msg = {
-            from: 'lazarus',
+            from: 'f2.2-test',
             content: 'F2.2 nonce test',
             nonce: nonce,
             timestamp: new Date().toISOString(),
@@ -153,7 +144,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
 
   it('F2.2.3: Duplicate nonce is rejected', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), NONCE_CACHE_PATH: NONCE_CACHE_PATH };
+      const env = { ...process.env, BRIDGE_KEY: validKey };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -162,7 +153,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
       const sendMessageWithNonce = async (nonce) => {
         try {
           const msg = {
-            from: 'lazarus',
+            from: 'f2.2-test',
             content: 'F2.2 duplicate nonce test',
             nonce: nonce,
             timestamp: new Date().toISOString(),
@@ -210,22 +201,11 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
   });
 
   it('F2.2.4: Nonce cache survives daemon restart', async () => {
-    jest.setTimeout(20000);
     return new Promise(async (resolve, reject) => {
       const testNonce = `restart-test-${Date.now()}`;
-      const waitForDaemon = async () => {
-        for (let i = 0; i < 30; i++) {
-          try {
-            const r = await fetch(`http://localhost:${BRIDGE_PORT}/ping`, { timeout: 500 });
-            if (r.ok) return true;
-          } catch {}
-          await new Promise(r => setTimeout(r, 200));
-        }
-        return false;
-      };
 
       // Session 1: Send message with nonce
-      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), NONCE_CACHE_PATH: NONCE_CACHE_PATH };
+      const env = { ...process.env, BRIDGE_KEY: validKey };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -239,7 +219,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                from: 'lazarus',
+                from: 'f2.2-test',
                 content: 'F2.2 restart test',
                 nonce: nonce,
                 timestamp: new Date().toISOString(),
@@ -254,7 +234,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
       };
 
       // Wait for daemon to start
-      await waitForDaemon();
+      await new Promise((r) => setTimeout(r, 1000));
 
       // Send message with nonce
       const sent = await sendMessage(testNonce);
@@ -262,7 +242,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
 
       // Kill daemon
       bridgeProcess.kill('SIGTERM');
-      await new Promise((r) => setTimeout(r, 300));
+      await new Promise((r) => setTimeout(r, 1000));
 
       // Restart daemon
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
@@ -270,7 +250,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
         cwd: process.cwd(),
       });
 
-      await waitForDaemon();
+      await new Promise((r) => setTimeout(r, 1000));
 
       // Try to reuse same nonce
       const reused = await sendMessage(testNonce);

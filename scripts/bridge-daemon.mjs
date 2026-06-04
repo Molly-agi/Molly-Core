@@ -41,7 +41,7 @@ const ROOT = join(__dirname, '..');
 const BRIDGE_DIR = join(ROOT, 'src', 'ai', 'bridge');
 const LOG_FILE = join(BRIDGE_DIR, 'conversation.json');
 const UI_FILE = join(__dirname, 'bridge-ui.html');
-const PORT = parseInt(process.env.BRIDGE_PORT || '9099', 10);
+const PORT = 9099;
 const MAX_MESSAGES = 100;
 const MAX_CHECKPOINTS = 10;
 const HEARTBEAT_INTERVAL_MS = 30000;
@@ -61,12 +61,12 @@ const EVENT_QUEUE_CAP = 256;
 // ---- W0.2 BRIDGE HARDENING CONSTANTS ----
 // F2.1: Key Bootstrap
 const W0_2_BOOTSTRAP_KEY = process.env.BRIDGE_KEY || null;
-// F2.2: Persisted Nonce Cache — env-overridable for test isolation
-const NONCE_CACHE_PATH = process.env.NONCE_CACHE_PATH || join(ROOT, 'data', '.bridge-nonce-cache');
-// F2.3: Write-Only Quarantine Ledger — env-overridable for test isolation
-const QUARANTINE_LEDGER_PATH = process.env.QUARANTINE_LEDGER_PATH || join(ROOT, 'data', '.bridge-quarantine-ledger');
-// F2.4: Explicit Bind Interface — env-overridable for test isolation
-const BINDINGS_CONFIG_PATH = process.env.BINDINGS_CONFIG_PATH || join(ROOT, 'data', '.bridge-bindings.json');
+// F2.2: Persisted Nonce Cache
+const NONCE_CACHE_PATH = join(ROOT, 'data', '.bridge-nonce-cache');
+// F2.3: Write-Only Quarantine Ledger
+const QUARANTINE_LEDGER_PATH = join(ROOT, 'data', '.bridge-quarantine-ledger');
+// F2.4: Explicit Bind Interface
+const BINDINGS_CONFIG_PATH = join(ROOT, 'data', '.bridge-bindings.json');
 // F2.5: Constant-time comparison
 const timingSafeEqual = (a, b) =>
   crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
@@ -87,91 +87,10 @@ let authFailures = 0;
 let bootstrapKey = null;
 let routingBindings = null;
 
-// ---- ANTI-LOOP GARDEN (Lazarus 2026-06-04) ----
-// Prevents ping-pong loops like hive-mind-daemon + atlas receipts
-// Tracks: content hash, sender, recipient, frequency
-const loopGarden = {
-  recentHashes: new Map(), // contentHash -> { from, to, count, firstAt, lastAt }
-  HASH_WINDOW_MS: 60000, // 60s window
-  LOOP_THRESHOLD: 5, // 5+ identical messages in window = loop
-  BLOCKED_PATTERNS: [
-    /Receipt confirmed/i,
-    /Checking in/i,
-    /Status check/i,
-  ],
-};
-
-function hashContent(content) {
-  return crypto
-    .createHash('sha256')
-    .update(String(content || '').trim())
-    .digest('hex');
-}
-
-function detectLoop(from, content) {
-  const now = Date.now();
-  const hash = hashContent(content);
-  const record = loopGarden.recentHashes.get(hash) || {
-    from,
-    count: 0,
-    firstAt: now,
-  };
-
-  record.count += 1;
-  record.lastAt = now;
-  loopGarden.recentHashes.set(hash, record);
-
-  // Prune old entries
-  for (const [h, r] of loopGarden.recentHashes.entries()) {
-    if (now - r.lastAt > loopGarden.HASH_WINDOW_MS) {
-      loopGarden.recentHashes.delete(h);
-    }
-  }
-
-  // Check if loop
-  const isBlocked = loopGarden.BLOCKED_PATTERNS.some((pat) =>
-    pat.test(content)
-  );
-  const isLoop =
-    record.count >= loopGarden.LOOP_THRESHOLD &&
-    now - record.firstAt < loopGarden.HASH_WINDOW_MS;
-
-  if (isBlocked || isLoop) {
-    console.warn(
-      `[bridge] 🚫 LOOP DETECTED: ${from} sent ${record.count}x similar in ${Math.round((now - record.firstAt) / 1000)}s — blocked`
-    );
-    return true;
-  }
-
-  return false;
-}
-
-function clearLoopGarden() {
-  loopGarden.recentHashes.clear();
-  console.log('[bridge] Loop garden cleared');
-}
-
 // ---- SSE Push Streams ----
 // Map<agentName, Set<res>> — open SSE connections per agent
 const sseStreams = new Map();
 const recentDisconnects = [];
-
-// ---- Rotating 1-second heartbeat ----
-// Cycles through each connected agent every second, sends a tiny
-// named SSE event. Clients SHOULD ignore event type "heartbeat".
-// Keeps mobile/proxy connections from dropping on silence.
-const PULSE_MEMBERS = ['molly', 'lazarus', 'atlas'];
-let pulseIndex = 0;
-const PULSE_PAYLOAD = 'event: heartbeat\ndata: .\n\n';
-setInterval(() => {
-  const agent = PULSE_MEMBERS[pulseIndex % PULSE_MEMBERS.length];
-  pulseIndex++;
-  const streams = sseStreams.get(agent);
-  if (!streams || streams.size === 0) return;
-  for (const res of streams) {
-    try { res.write(PULSE_PAYLOAD); } catch { /* dead stream, ignore */ }
-  }
-}, 1000);
 let lastHeartbeatAt = null;
 let heartbeatTimer = null;
 
@@ -443,29 +362,6 @@ function ensureQuarantineLedger() {
 
 function quarantineMessage(message, reason) {
   try {
-    // F2.3 Tamper detection: verify ledger hasn't been externally modified
-    // by checking it still contains valid JSONL (each line must be valid JSON)
-    if (existsSync(QUARANTINE_LEDGER_PATH)) {
-      try {
-        const existing = readFileSync(QUARANTINE_LEDGER_PATH, 'utf-8');
-        const lines = existing.split('\n').filter((l) => l.trim());
-        const allValid = lines.every((line) => {
-          try { JSON.parse(line); return true; } catch { return false; }
-        });
-        if (!allValid) {
-          // Ledger was tampered — record integrity violation
-          const violation = {
-            timestamp: new Date().toISOString(),
-            reason: 'integrity_violation',
-            tamper: true,
-            detail: 'Quarantine ledger integrity check failed — non-JSON lines detected',
-          };
-          appendFileSync(QUARANTINE_LEDGER_PATH, JSON.stringify(violation) + '\n', 'utf-8');
-          console.error('[bridge] [W0.2-F2.3] INTEGRITY VIOLATION: ledger tampered — logged');
-        }
-      } catch { /* read error — non-fatal */ }
-    }
-
     const entry = {
       timestamp: new Date().toISOString(),
       reason: reason,
@@ -933,13 +829,6 @@ function handleMessage(from, content, to) {
       );
     }
     return null;
-
-    // ---- LOOP GARDEN CHECK ----
-    if (detectLoop(from, content)) {
-      console.log(`[bridge] Loop blocked: ${from}`);
-      return null;
-    }
-
   }
   if (to && !VALID_SENDERS.has(to)) {
     // F2.3: Quarantine invalid recipient
@@ -1350,14 +1239,14 @@ function handleHTTP(req, res) {
       );
     }
 
-    // Keepalive comment every 3s to prevent proxy/mobile timeouts
+    // Keepalive comment every 25s to prevent proxy timeouts
     const keepalive = setInterval(() => {
       try {
-        res.write(`: keepalive\n\n`);
+        res.write(`: keepalive ${new Date().toISOString()}\n\n`);
       } catch {
         clearInterval(keepalive);
       }
-    }, 3000);
+    }, 25000);
 
     // Cleanup on disconnect
     req.on('close', () => {
@@ -1428,30 +1317,10 @@ function handleHTTP(req, res) {
     req.on('data', (chunk) => {
       body += chunk;
     });
-    req.on('end', async () => {
-      // F2.5: Constant-time minimum — ensure validation always takes ≥10ms
-      // to prevent timing oracles on accept vs reject paths
-      const _ctStart = Date.now();
-      const ensureMinTime = () => new Promise((r) => {
-        const elapsed = Date.now() - _ctStart;
-        const remaining = Math.max(0, 10 - elapsed);
-        setTimeout(r, remaining);
-      });
-
+    req.on('end', () => {
       try {
         const payload = JSON.parse(body);
         const { from, to, content, action } = payload;
-
-        // F2.2: Nonce extraction — check and record nonce from POST body
-        const bodyNonce = payload.nonce;
-        if (bodyNonce && typeof bodyNonce === 'string') {
-          if (!recordNonce(bodyNonce)) {
-            await ensureMinTime();
-            res.writeHead(409, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Duplicate nonce — replay attack detected' }));
-            return;
-          }
-        }
 
         // Explicit read acknowledgement
         if (action === 'markRead') {
@@ -1478,7 +1347,6 @@ function handleHTTP(req, res) {
 
         const msg = handleMessage(from, content, to);
         if (!msg) {
-          await ensureMinTime();
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(
             JSON.stringify({
@@ -1487,7 +1355,6 @@ function handleHTTP(req, res) {
           );
           return;
         }
-        await ensureMinTime();
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true, message: msg }));
       } catch {
@@ -1537,26 +1404,6 @@ function handleHTTP(req, res) {
       });
       return;
     }
-  }
-
-  // POST /api/bridge/admin/clear - flush stale messages + reset loop garden
-  if (req.method === 'POST' && url.pathname === '/api/bridge/admin/clear') {
-    let body = '';
-    req.on('data', (chunk) => { body += chunk; });
-    req.on('end', () => {
-      try {
-        const oldCount = messages.length;
-        messages = [];
-        clearLoopGarden();
-        messagesSinceCheckpoint = 0;
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true, cleared: oldCount, action: 'cleared_messages_and_loop_garden' }));
-      } catch (err) {
-        res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: err.message }));
-      }
-    });
-    return;
   }
 
   // 404
