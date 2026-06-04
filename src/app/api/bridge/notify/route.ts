@@ -32,13 +32,20 @@ export function setPendingNotification(from: string, preview: string): void {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { from, preview } = body;
+    const { from, preview, content } = body;
 
     if (!from || typeof from !== 'string') {
       return NextResponse.json({ error: 'Missing sender' }, { status: 400 });
     }
 
-    setPendingNotification(from, preview || '');
+    const notificationContent =
+      typeof content === 'string'
+        ? content
+        : typeof preview === 'string'
+          ? preview
+          : '';
+
+    setPendingNotification(from, notificationContent);
 
     // Wake autonomous bridge processing even if no UI tab is active.
     // This prevents "bridge only works when Molly tab is foreground" behavior.
@@ -52,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     MollyLogger.debug('Bridge notification received', 'bridge-notify', {
       from,
-      preview: (preview || '').slice(0, 60),
+      preview: notificationContent.slice(0, 60),
     });
 
     return NextResponse.json({ received: true });
