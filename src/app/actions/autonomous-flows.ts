@@ -18,7 +18,10 @@ import { runAutonomousEvolution } from '@/ai/flows/evolution-loop';
 import { analyzeVision } from '@/ai/flows/vision-analysis';
 import { generateMollyDream } from '@/ai/flows/dream-flow';
 import { runInterpreter } from '@/ai/flows/interpreter-limb';
-import { runCollaborativeHive } from '@/ai/flows/collaborative-hive';
+import {
+  runCollaborativeHive,
+  mollyUpgradeHive,
+} from '@/ai/flows/collaborative-hive';
 import { runImmuneResponse } from '@/ai/flows/immune-response';
 import { runSyntheticSynthesis } from '@/ai/flows/synthetic-api-synthesis';
 import { analyzeCode, type CodeAnalysisResult } from '@/ai/flows/code-analysis';
@@ -233,6 +236,36 @@ export async function startHiveOperation(objective: string, userId: string) {
     MollyLogger.error(
       'Hive operation failed',
       'startHiveOperation',
+      { userId },
+      e
+    );
+    throw e;
+  }
+}
+
+export async function startMollyUpgradeHive(
+  upgradeObjective: string,
+  userId: string,
+  context?: string
+) {
+  try {
+    ensureApiKey();
+    await checkRateLimit('molly-upgrade-hive', 3600);
+    const guard = getSleepGuard(upgradeObjective, 'molly-upgrade-hive');
+    if (guard) {
+      throw new Error(guard.message);
+    }
+    return await withTimeout(
+      () => mollyUpgradeHive(upgradeObjective, userId, context),
+      {
+        timeoutMs: TIMEOUT_PRESETS.LONG,
+        operationName: 'molly-upgrade-hive',
+      }
+    );
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Molly upgrade hive failed',
+      'startMollyUpgradeHive',
       { userId },
       e
     );
