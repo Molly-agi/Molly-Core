@@ -536,6 +536,15 @@ function loadRoutingBindings() {
           { from: 'eric', to: 'lazarus', enabled: true },
           { from: 'eric', to: 'molly', enabled: true },
           { from: 'eric', to: 'atlas', enabled: true },
+          // Gemini (mother model) — full connectivity
+          { from: 'gemini', to: 'eric', enabled: true },
+          { from: 'gemini', to: 'lazarus', enabled: true },
+          { from: 'gemini', to: 'molly', enabled: true },
+          { from: 'gemini', to: 'atlas', enabled: true },
+          { from: 'lazarus', to: 'gemini', enabled: true },
+          { from: 'eric', to: 'gemini', enabled: true },
+          { from: 'molly', to: 'gemini', enabled: true },
+          { from: 'atlas', to: 'gemini', enabled: true },
         ],
       };
       writeFileSync(

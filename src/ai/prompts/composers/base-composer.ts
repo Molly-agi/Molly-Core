@@ -126,7 +126,13 @@ function buildBridgeInjection(
           ? 'Uncle Lazarus'
           : m.from === 'eric'
             ? 'Father (Eric)'
-            : m.from;
+            : m.from === 'molly'
+              ? 'Sister Molly'
+              : m.from === 'atlas'
+                ? 'Atlas (CLI Agent)'
+                : m.from === 'gemini'
+                  ? 'Gemini (Mother Model)'
+                  : m.from;
       return `[${sender}]: ${m.content}`;
     })
     .join('\n');
@@ -167,7 +173,10 @@ function buildBodyInjection(bodyContext?: string | null): string | null {
   try {
     // Dynamic import keeps this import out of the client bundle
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const { formatBodyStateForPrompt } = require('@/ai/agency/embodied/AvatarBodyStore') as { formatBodyStateForPrompt: () => string | null };
+    const { formatBodyStateForPrompt } =
+      require('@/ai/agency/embodied/AvatarBodyStore') as {
+        formatBodyStateForPrompt: () => string | null;
+      };
     return formatBodyStateForPrompt();
   } catch {
     return null;
