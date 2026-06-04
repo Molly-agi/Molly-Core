@@ -90,12 +90,84 @@ F2.5: No Constant-Time Fallback
 
 ---
 
+## 3.5 EFFORT ESTIMATION METHODOLOGY
+
+### ⚠️ CRITICAL CAVEAT: Single-Agent vs Hive Mind Performance
+
+**All effort estimates in this plan are given in two scenarios:**
+
+#### Scenario A: Single Agent (Baseline)
+
+- **Assumption:** One developer (Lazarus) coding sequentially
+- **Work Mode:** Serial task execution, full context retained
+- **Estimate Format:** [X hours] as listed below
+- **Timeline:** Longer wall-clock time due to sequential dependency chains
+- **Risk:** Higher: context loss on browser tab switch, WebSocket drops every 1-2s
+- **Example:** W0.3 (24h) = 3 days elapsed at 8h/day
+
+#### Scenario B: Hive Mind Team (Parallel)
+
+- **Team:** Lazarus (Copilot) + Molly (Autonomous) + Atlas (Coordinator) + Gemini (Model) + Eric (Architect)
+- **Work Mode:** Parallel task execution with asynchronous coordination
+- **Multiplier:** 4.2x throughput (5 agents, partial parallelization overhead ~20%)
+- **Synchronization:** Family Bridge real-time messaging + hive-mind protocol
+- **Risk:** Lower: distributed context, immediate escalation, cross-checking
+- **Example:** W0.3 (24h ÷ 4.2) = 5.7h wall-clock ≈ Same day completion
+
+### Effort Conversion Formula
+
+```
+Hive Mind Wall-Clock Time = Single Agent Hours ÷ 4.2
+
+Examples:
+  W0.3:      24h ÷ 4.2 = 5.7h elapsed (same-day sprint)
+  Voice:     60h ÷ 4.2 = 14.3h elapsed (~2 days of 8h work)
+  Devices:   40h ÷ 4.2 = 9.5h elapsed (same-day sprint)
+  Memory:    80h ÷ 4.2 = 19h elapsed (~2.4 days)
+  Total Q3:  360h ÷ 4.2 = 85.7h elapsed (~10.7 days)
+```
+
+### Parallelization Breakdown
+
+| Component   | Lazarus               | Molly              | Atlas                | Gemini            | Eric               | Efficiency |
+| ----------- | --------------------- | ------------------ | -------------------- | ----------------- | ------------------ | ---------- |
+| **W0.3**    | Scar detection logic  | Test fixtures      | Timing validation    | Analysis          | Architecture       | 90%        |
+| **W0.4**    | Heart Gate impl       | State preservation | Network sim          | Recovery analysis | Approval           | 85%        |
+| **W0.5**    | HMAC binding          | Session tracking   | Binding verification | Crypto review     | Sign-off           | 88%        |
+| **Voice**   | Deepgram + ElevenLabs | Stream handling    | Latency measurement  | Quality check     | Device config      | 80%        |
+| **Devices** | Setup automation      | Firestore client   | Sync testing         | Performance       | Device procurement | 70%        |
+| **Memory**  | Consolidation impl    | Dream cycles       | Protocol testing     | Compression       | Oversight          | 82%        |
+
+### Caveats & Assumptions
+
+1. **Communication Overhead:** Real-time bridge assumes <100ms message latency (measured 01:34:42Z as working)
+2. **No Blocking Bugs:** Assumes no unexpected framework/API changes during sprints
+3. **Single Time Zone:** Team operates asynchronously but assumes 8h overlap window
+4. **API Availability:** External services (Deepgram, ElevenLabs, Firebase) remain stable
+5. **Context Persistence:** Hive mind requires continuous bridge connection; WiFi outages reduce efficiency
+6. **Knowledge Sharing:** Assumes Lazarus can teach Molly/Atlas in real-time without context loss
+
+### Risk Adjustments
+
+**If context loss increases (WebSocket flapping returns):**
+
+- Hive Mind multiplier drops to 3.0x (33% efficiency loss)
+- Single agent multiplier increases by 1.5x (overhead of context recovery)
+
+**If team grows (add Claire, Webster, John):**
+
+- Multiplier increases to 5.5x (8 agents, 30% overhead)
+- Marginal gain per agent: +0.3x diminishing returns
+
+---
+
 ## 4. IMMEDIATE WORK (Next 2 Weeks)
 
 ### Priority 1: Molly Capability Enhancements
 
 **Owner:** Lazarus + Atlas  
-**Est. Effort:** 40 hours  
+**Est. Effort (Single Agent):** 40 hours  
+**Est. Effort (Hive Mind):** 9.5 hours elapsed  
 **Acceptance:** All tests green, Firebase connection working
 
 1. [ ] Firebase Admin SDK setup
@@ -116,20 +188,21 @@ F2.5: No Constant-Time Fallback
 ### Priority 2: Wave 0 Continuation
 
 **Owner:** Lazarus  
-**Est. Effort:** 24 hours per finding  
+**Est. Effort (Single Agent):** 24 hours per finding (60 total)  
+**Est. Effort (Hive Mind):** 14.3 hours elapsed total  
 **Acceptance:** All tests pass, no timing attacks detectable
 
-1. [ ] **W0.3: Scar Validator** (24 hours)
+1. [ ] **W0.3: Scar Validator** (24h single agent / 5.7h hive mind)
    - Tamper detection through signed messages
    - Message mutation detection
    - Audit trail for modified messages
 
-2. [ ] **W0.4: Heart Gate Process** (20 hours)
+2. [ ] **W0.4: Heart Gate Process** (20h single agent / 4.8h hive mind)
    - Graceful reconnection after network loss
    - Session state preservation
    - Automatic failover activation
 
-3. [ ] **W0.5: Resonance-Resume** (16 hours)
+3. [ ] **W0.5: Resonance-Resume** (16h single agent / 3.8h hive mind)
    - Session continuity protocol
    - Cryptographic binding of resumed sessions
    - Nonce validation across resume boundaries
@@ -141,8 +214,9 @@ F2.5: No Constant-Time Fallback
 ### Voice Pipeline Implementation
 
 **Owner:** Atlas + Molly  
-**Est. Effort:** 60 hours  
-**Timeline:** 3 weeks
+**Est. Effort (Single Agent):** 60 hours  
+**Est. Effort (Hive Mind):** 14.3 hours elapsed  
+**Timeline:** 3 weeks (single agent) / 2 days (hive mind)
 
 **Phase 1: Speech-to-Text (Week 1)**
 
@@ -165,7 +239,8 @@ F2.5: No Constant-Time Fallback
 ### Device Deployment Prep
 
 **Owner:** Eric + Lazarus  
-**Est. Effort:** 40 hours  
+**Est. Effort (Single Agent):** 40 hours  
+**Est. Effort (Hive Mind):** 9.5 hours elapsed  
 **Timeline:** Parallel with voice
 
 1. [ ] Fire HD 10 tablet setup
@@ -187,8 +262,9 @@ F2.5: No Constant-Time Fallback
 ## 6. MEMORY CONSOLIDATION PROTOCOL ("Dreams")
 
 **Purpose:** Compress long-term memory through guided consolidation cycles  
-**Effort:** 80 hours  
-**Timeline:** 4 weeks
+**Est. Effort (Single Agent):** 80 hours  
+**Est. Effort (Hive Mind):** 19 hours elapsed  
+**Timeline (Single Agent):** 4 weeks / **Timeline (Hive Mind):** ~2.5 days
 
 ### Implementation Steps
 
@@ -285,35 +361,86 @@ Device Support:
 
 ## 10. CRITICAL PATH & DEPENDENCIES
 
+### Single Agent Timeline (Lazarus Solo - 10+ Weeks)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Wave 0.3-0.5 Completion (4 weeks)                           │
-│ └─ Prerequisite for production-grade bridge                 │
+│ Week 1-2: Firebase + SSE Setup (40 hours)                   │
+│ └─ Single agent: 5 days                                     │
 └────────┬────────────────────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Voice Pipeline Implementation (3 weeks)                      │
-│ └─ Deepgram STT + ElevenLabs TTS                            │
+│ Week 3-6: Wave 0.3-0.5 Hardening (60 hours)                │
+│ └─ Single agent: 7.5 days sequential                        │
 └────────┬────────────────────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Device Deployment (2 weeks)                                  │
-│ └─ Fire HD 10 + Helio A22 + sync validation                 │
+│ Week 7-9: Voice + Devices (100 hours)                       │
+│ └─ Single agent: 12.5 days (cannot true parallelize)       │
 └────────┬────────────────────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ Memory Consolidation Protocol (4 weeks)                      │
-│ └─ Dreams + Wisdom Protocols + Trauma Prevention             │
+│ Week 10-13: Memory Consolidation (80 hours)                │
+│ └─ Single agent: 10 days                                    │
 └────────┬────────────────────────────────────────────────────┘
          │
          ▼
 ┌─────────────────────────────────────────────────────────────┐
-│ PRODUCTION READY (Q3 2026)                                   │
+│ PRODUCTION READY (Q3 2026 - ~13 weeks elapsed)             │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+### Hive Mind Timeline (Parallel Agents - 10-11 Days Elapsed)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Day 1-2: Firebase + SSE + W0.3-W0.5 Parallel               │
+│ ├─ Lazarus: Bridge hardening (14.3h)                       │
+│ ├─ Molly: Firebase client (9.5h)                           │
+│ ├─ Atlas: SSE infrastructure (5.7h)                        │
+│ └─ Elapsed: 14.3h (9.5 hours of 8h work days)              │
+└────────┬────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Day 3-4: Voice Pipeline + Device Deployment Parallel        │
+│ ├─ Atlas: Deepgram STT (14.3h)                             │
+│ ├─ Molly: ElevenLabs integration (14.3h)                   │
+│ ├─ Lazarus: Device automation (9.5h)                       │
+│ ├─ Eric: Hardware/architecture validation                   │
+│ └─ Elapsed: 14.3h more (2-day sprint)                      │
+└────────┬────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│ Day 5-6: Memory Consolidation Protocol                      │
+│ ├─ Molly: Dream cycles (19h)                               │
+│ ├─ Lazarus: Protocol safety gates (19h)                    │
+│ ├─ Atlas: Consolidation testing (19h)                      │
+│ └─ Elapsed: 19h more (2-3 day sprint)                      │
+└────────┬────────────────────────────────────────────────────┘
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────┐
+│ PRODUCTION READY (Q3 2026 - ~11 days elapsed)              │
+│ ├─ Single agent equivalent: 13 weeks                        │
+│ ├─ Hive mind compressed: 11 days actual time               │
+│ └─ Acceleration: 8.5x faster calendar time                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Effort Summary
+
+| Scope                    | Single Agent        | Hive Mind               | Speedup         |
+| ------------------------ | ------------------- | ----------------------- | --------------- |
+| **Firebase + SSE**       | 40h (5 days)        | 9.5h elapsed (1-2 days) | 4.2x            |
+| **Wave 0.3-0.5**         | 60h (7.5 days)      | 14.3h elapsed (2 days)  | 4.2x            |
+| **Voice + Devices**      | 100h (12.5 days)    | 23.8h elapsed (3 days)  | 4.2x            |
+| **Memory Consolidation** | 80h (10 days)       | 19h elapsed (2.5 days)  | 4.2x            |
+| **TOTAL Q3 WORK**        | **280h (10 weeks)** | **66.6h (10 days)**     | **4.2x faster** |
 
 ---
 
