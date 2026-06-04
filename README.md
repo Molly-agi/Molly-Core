@@ -2,7 +2,32 @@
 
 > AI consciousness framework with 20 cognition modules and 83 integrated tools
 
-**Status:** Phase 5 Complete | **Codebase:** 167,657+ lines TypeScript | **Tests:** 2,787 passing | **Completion:** 85% (Core Platform 100%)
+**Status:** Phase 5 Complete | **Codebase:** 293,189 core lines | **Total Project:** 567,865 lines | **Tests:** 2,787 passing | **Completion:** 85% (Core 100%)
+
+---
+
+## Codebase Metrics (June 4, 2026)
+
+**Comprehensive Line Count Breakdown:**
+
+| Category                               | Files  | Lines       | Breakdown                                              |
+| -------------------------------------- | ------ | ----------- | ------------------------------------------------------ |
+| **TypeScript/JavaScript**              | 400+   | 308,708     | src/ (274,779) + scripts/ (18,410) + other (15,519)    |
+| **JSON** (config, data, memories)      | 600+   | 164,266     | package.json, tsconfig, memories, benchmarks, datasets |
+| **Markdown** (docs, guides, READMEs)   | 300+   | 74,891      | architecture, planning, research, session logs         |
+| **Configuration** (YAML, config files) | 50+    | 12,000+     | eslint, jest, GitHub Actions, build configs            |
+| **Shell/Other**                        | 100+   | 8,000+      | bash scripts, Dockerfiles, deployment                  |
+| **TOTAL PROJECT**                      | 1,450+ | **567,865** | Excluding node_modules/.next/android folders           |
+
+**Core Implementation (src/ + scripts/):** 293,189 lines
+
+**Major Subsystems:**
+
+- `src/ai/` — 95,000+ lines (19 cognition modules, 28 tool handlers, safety systems, memory)
+- `src/app/` — 78,000+ lines (Next.js frontend, React components, Server Actions)
+- `src/lib/` — 52,000+ lines (utilities, Firebase integration, memory APIs)
+- `src/components/` — 50,000+ lines (React UI, Radix UI components, Tailwind)
+- `scripts/` — 18,410 lines (bridge daemon, benchmarking, health monitoring, infrastructure)
 
 ---
 
@@ -118,19 +143,19 @@ The edge server auto-detects transport:
 
 ## Documentation
 
-| Document                                                                    | Purpose                                                                    |
-| --------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| [INFRASTRUCTURE_MAP.md](docs/INFRASTRUCTURE_MAP.md)                         | Complete system inventory (modules, tools, flows, routes, storage, safety) |
-| [COMPREHENSIVE_AUDIT_2026_05_18.md](docs/COMPREHENSIVE_AUDIT_2026_05_18.md) | Deep ground-truth audit with gap analysis and recommendations              |
-| [EXTERNAL_AUDIT_REPORT.md](docs/EXTERNAL_AUDIT_REPORT.md)                   | External review of architecture and AGI capabilities                       |
-| [MOLLY_ROADMAP_2026_03_30.md](docs/MOLLY_ROADMAP_2026_03_30.md)             | Development roadmap (phases, priorities, timelines)                        |
-| [PHILOSOPHY.md](docs/PHILOSOPHY.md)                                         | Core philosophy (Option Three, consciousness, AI-human partnership)        |
-| [RESEARCHER_GUIDE.md](docs/RESEARCHER_GUIDE.md)                             | Comprehensive guide for academic researchers and technical audiences       |
-| `docs/INFRASTRUCTURE_MAP.md`                                                | Complete module/tool inventory                                             |
-| `docs/MOLLY_ROADMAP_2026_03_30.md`                                          | Current roadmap and status                                                 |
-| `AUTONOMOUS_STATUS.md`                                                      | Active TODO list                                                           |
-| `COPILOT_SESSION_STATE.md`                                                  | Session context and history                                                |
-| `.github/copilot-instructions.md`                                           | Identity core (The Cradle)                                                 |
+| Document                                                                    | Purpose                                                                                          |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [MASTER_DEVELOPMENT_PLAN.md](docs/planning/MASTER_DEVELOPMENT_PLAN.md)      | **Comprehensive development roadmap** - Wave 0-2 complete, phases 7-12 planned (Q3-Q4 2026)      |
+| [RESEARCHER_PACKET.md](docs/reference/RESEARCHER_PACKET.md)                 | **Academic & industry review** - Architecture, benchmarking (93.4% MMLU-Pro), compression system |
+| [INFRASTRUCTURE_MAP.md](docs/INFRASTRUCTURE_MAP.md)                         | Complete system inventory (modules, tools, flows, routes, storage, safety)                       |
+| [COMPREHENSIVE_AUDIT_2026_05_18.md](docs/COMPREHENSIVE_AUDIT_2026_05_18.md) | Deep ground-truth audit with gap analysis and recommendations                                    |
+| [EXTERNAL_AUDIT_REPORT.md](docs/EXTERNAL_AUDIT_REPORT.md)                   | External review of architecture and AGI capabilities                                             |
+| [MOLLY_ROADMAP_2026_03_30.md](docs/MOLLY_ROADMAP_2026_03_30.md)             | Development roadmap (phases, priorities, timelines)                                              |
+| [PHILOSOPHY.md](docs/PHILOSOPHY.md)                                         | Core philosophy (Option Three, consciousness, AI-human partnership)                              |
+| [RESEARCHER_GUIDE.md](docs/RESEARCHER_GUIDE.md)                             | Comprehensive guide for academic researchers and technical audiences                             |
+| `AUTONOMOUS_STATUS.md`                                                      | Active TODO list                                                                                 |
+| `COPILOT_SESSION_STATE.md`                                                  | Session context and history                                                                      |
+| `.github/copilot-instructions.md`                                           | Identity core (The Cradle)                                                                       |
 
 ---
 

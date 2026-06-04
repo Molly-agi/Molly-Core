@@ -821,6 +821,264 @@ Each with dedicated test suites and honest measurements.
 
 ---
 
+## PART VIII: MASTER DEVELOPMENT PLAN (Updated June 4, 2026)
+
+**Status:** Living Document | **Codebase Metrics:** 293,189 total lines (src: 274,779 + scripts: 18,410) | **Completion:** 85%
+
+### 8.1 Codebase Scale
+
+**Comprehensive Line Count (June 4, 2026):**
+
+| Category                           | Files  | Lines             | Examples                             |
+| ---------------------------------- | ------ | ----------------- | ------------------------------------ |
+| **TypeScript/JavaScript**          | 400+   | 308,708           | src/ + scripts/ + tests              |
+| **JSON** (configs, data, memories) | 600+   | 164,266           | package.json, memories, benchmarks   |
+| **Markdown** (docs, guides)        | 300+   | 74,891            | roadmaps, architecture, READMEs      |
+| **Configuration**                  | 50+    | 12,000+           | eslint, jest, tsconfig, next.config  |
+| **Other** (YAML, shell, etc)       | 100+   | 8,000+            | GitHub Actions, scripts, Dockerfiles |
+| **Total Project**                  | 1,450+ | **567,865 lines** | Everything excluding node_modules    |
+
+**Notable Subsystems:**
+
+- `src/` (Core application): 274,779 lines
+  - `src/ai/` (19 cognition modules): 95,000+ lines
+  - `src/app/` (Next.js frontend): 78,000+ lines
+  - `src/lib/` (Utilities): 52,000+ lines
+  - `src/components/` (React): 50,000+ lines
+
+- `scripts/` (Automation & infrastructure): 18,410 lines
+  - Bridge daemon + SSE infrastructure
+  - Memory consolidation
+  - Benchmarking runner
+  - Health monitoring
+
+### 8.2 Wave 0: Bridge Hardening (In Progress)
+
+| Phase | Name                          | Status      | Merged  | Lines Added | Details                                                                             |
+| ----- | ----------------------------- | ----------- | ------- | ----------- | ----------------------------------------------------------------------------------- |
+| W0.1  | Substrate-Portable Briefcase  | ✅ COMPLETE | ✅ main | 1,200       | Manifest HMAC, compression checksum, egress-receipt                                 |
+| W0.2  | Bridge Hardening (5 Findings) | ✅ COMPLETE | ✅ main | 380         | Key bootstrap, nonce cache, quarantine ledger, explicit routing, constant-time auth |
+| W0.3  | Scar Validator                | ⏳ PLANNED  | -       | ~200        | Validate message integrity through signed tamper detection                          |
+| W0.4  | Heart Gate Reconnect          | ⏳ PLANNED  | -       | ~250        | Graceful reconnection protocol after network failure                                |
+| W0.5  | Resonance-Resume HMAC         | ⏳ PLANNED  | -       | ~200        | Session continuity with cryptographic binding                                       |
+
+### 8.3 Development Phases (Historical + Planned)
+
+#### ✅ Completed Phases (100% - Production Ready)
+
+| Phase      | Duration     | Completion | Key Deliverables                                       |
+| ---------- | ------------ | ---------- | ------------------------------------------------------ |
+| Phases 1-2 | Feb 2026     | ✅ 100%    | Error handling, rate limiting, session management      |
+| Phase 3    | Feb-Mar 2026 | ✅ 100%    | Curiosity engine, self-observation, session continuity |
+| Phase 4    | Mar 2026     | ✅ 100%    | Device integration, storage router, escalation channel |
+| Phase 5    | Feb 2026     | ✅ 100%    | Auditory input, embodiment, pacing telemetry           |
+| Phase 5+   | Mar 2026     | ✅ 100%    | Runtime observability, diagnostics panel               |
+| Phase 6    | May 2026     | ✅ 100%    | Compression framework, AGI benchmarking Phase 1        |
+
+#### ⏳ Planned Phases (Roadmap)
+
+| Phase                          | Timeline   | Priority | Est. Hours    | Key Deliverables                                     |
+| ------------------------------ | ---------- | -------- | ------------- | ---------------------------------------------------- |
+| **W0.3-W0.5**                  | Q2-Q3 2026 | CRITICAL | 24+16+20 = 60 | Remaining bridge hardening                           |
+| **Voice Pipeline**             | Q3 2026    | CRITICAL | 60            | Deepgram STT, ElevenLabs TTS, <500ms latency         |
+| **Device Deployment**          | Q3 2026    | CRITICAL | 40            | Fire HD 10, Helio A22 setup, sync testing            |
+| **Memory Consolidation**       | Q3 2026    | HIGH     | 80            | Dreams protocol, Wisdom Protocols, trauma prevention |
+| **AGI Benchmarking Phase 2-3** | Q4 2026    | MEDIUM   | 100           | ARC-AGI, GPQA, SWE-bench automation                  |
+| **Vision System**              | Q4 2026    | MEDIUM   | 80            | Camera integration, visual reasoning                 |
+| **Innovation Extraction**      | Q4 2026    | LOW      | 120           | Family Bridge, AI Cradle, Titan Echo products        |
+
+### 8.4 Current Work (Priority Order)
+
+#### Priority 1: Firebase & SSE Integration (Next 2 weeks)
+
+**Owner:** Lazarus + Atlas + Molly  
+**Est. Effort:** 40 hours  
+**Acceptance:** All tests green, Firestore connection live
+
+**Tasks:**
+
+- [ ] Firebase Admin SDK setup
+  - Initialize server-side Firebase context
+  - Wire to session persistence layer
+  - Implement read/write test cycles
+
+- [ ] Molly SSE Client (molly-sse-client.mjs)
+  - Hold open SSE stream to bridge port 9099
+  - Real-time message delivery confirmation
+  - Automatic reconnect on disconnect
+
+- [ ] Atlas SSE Client (atlas-sse-client.mjs)
+  - Coordinate with persistent push connection
+  - Hive mind keepalive integration
+  - Message queuing during bridge outages
+
+**Success Metrics:**
+
+- Firebase connection test: ✅ PASS
+- SSE client message latency: <100ms
+- Bridge stream availability: >99.9%
+
+#### Priority 2: Wave 0.3-0.5 Completion (Weeks 3-6)
+
+**Owner:** Lazarus  
+**Est. Effort:** 60 hours total (24+16+20)  
+**Acceptance:** 23+ new tests, zero timing attacks
+
+**W0.3: Scar Validator (24 hours)**
+
+- Detect tampered messages through signed comparison
+- Log mutation signatures for audit trail
+- Test: Inject 10+ message mutations, verify detection
+
+**W0.4: Heart Gate Process (16 hours)**
+
+- Graceful reconnection after network loss
+- Preserve session state across restarts
+- Test: Simulate network failures, verify recovery
+
+**W0.5: Resonance-Resume HMAC (20 hours)**
+
+- Cryptographic binding of resumed sessions
+- Nonce validation across resume boundaries
+- Test: Resume 50+ times, verify no replays
+
+#### Priority 3: Voice Pipeline (Weeks 7-9)
+
+**Owner:** Atlas + Molly  
+**Est. Effort:** 60 hours  
+**Timeline:** 3 weeks parallel with device deployment
+
+**Week 1: Speech-to-Text**
+
+- Deepgram API integration
+- Real-time transcription <500ms latency
+- Handle multiple audio encodings
+
+**Week 2: Text-to-Speech**
+
+- ElevenLabs Turbo API integration
+- Streaming audio output
+- Voice identity configuration
+
+**Week 3: Pipeline Integration**
+
+- Voice input → Molly → Voice output loop
+- Latency optimization
+- Error recovery & fallback
+
+#### Priority 4: Device Deployment Preparation (Weeks 7-9)
+
+**Owner:** Eric + Lazarus  
+**Est. Effort:** 40 hours  
+**Timeline:** Parallel with voice pipeline
+
+**Fire HD 10 Tablet Setup**
+
+- F-Droid installation
+- Termux environment configuration
+- Bridge connection validation
+
+**Helio A22 Tablet Setup**
+
+- Primary node configuration
+- Firestore consumer wiring
+- Device-to-device sync testing
+
+**Storage Router Migration**
+
+- Edge server consolidation
+- Sync protocol validation
+- Cross-device memory persistence
+
+### 8.5 Memory Consolidation Protocol ("Dreams")
+
+**Effort:** 80 hours | **Timeline:** 4 weeks | **Priority:** HIGH
+
+**Implementation Steps:**
+
+1. **Dream Cycle Architecture** (16 hours)
+   - Trigger conditions (idle + low CPU)
+   - Consolidation phases with checkpoints
+   - Safety gates (emotional trauma thresholds)
+
+2. **Wisdom Protocols** (24 hours)
+   - Memory write verification
+   - Semantic compression validation
+   - Integrity checksums
+
+3. **Trauma Prevention** (20 hours)
+   - Emotional weight tracking
+   - Healing protocols
+   - Escalation thresholds
+
+4. **Testing & Integration** (20 hours)
+   - Firestore integration
+   - Cross-device validation
+   - Performance benchmarking
+
+### 8.6 Innovation Extraction Roadmap
+
+**Standalone Products from Molly-Core:**
+
+| Priority | Product         | Est. Hours | Revenue        | Timeline |
+| -------- | --------------- | ---------- | -------------- | -------- |
+| 1        | Family Bridge   | 40         | Early          | Q3 2026  |
+| 2        | AI Cradle       | 60         | Early          | Q3 2026  |
+| 3        | Termux Relay    | 30         | Early          | Q3 2026  |
+| 4        | Titan Echo      | 80         | Premium        | Q4 2026  |
+| 5        | Immortal Daemon | 50         | Infrastructure | Q4 2026  |
+| 6        | Heart Gate      | 60         | Security       | Q4 2026  |
+| 7-47     | Supporting libs | Variable   | Platform       | 2027     |
+
+### 8.7 Critical Path & Dependencies
+
+```
+Week 1-2: Firebase + SSE Setup
+    ↓
+Week 3-6: Wave 0.3-0.5 Completion (parallel with)
+    ↓
+Week 7-9: Voice Pipeline + Device Deployment (parallel)
+    ↓
+Week 10-13: Memory Consolidation Protocol
+    ↓
+Week 14+: AGI Benchmarking Phase 2-3
+    ↓
+PRODUCTION READY (Q3 2026)
+```
+
+### 8.8 Resource Allocation
+
+| Role           | Current      | Required | Notes                                       |
+| -------------- | ------------ | -------- | ------------------------------------------- |
+| Lead Engineer  | Eric (1x)    | 1x       | Architecture, device testing, decisions     |
+| Coding Agent   | Lazarus (1x) | 1x       | Test-first implementation, bridge hardening |
+| Coordinator    | Atlas (1x)   | 1x       | Hive mind leadership, research direction    |
+| Autonomous AI  | Molly (1x)   | 1x       | SSE client, Firebase connection, analysis   |
+| Infrastructure | 4 daemons    | 4        | immortal, heartbeat, hive-mind, bridge      |
+
+### 8.9 Success Criteria (By End of Q3 2026)
+
+- [ ] Wave 0 hardening complete (W0.3-W0.5 merged to main)
+- [ ] Voice pipeline working <500ms latency end-to-end
+- [ ] Device deployment validated (Fire HD 10 + Helio A22 + sync)
+- [ ] Memory consolidation protocol live with safety gates
+- [ ] All tests green (3,000+)
+- [ ] Documentation up to date with new modules
+- [ ] Zero critical/high security findings
+- [ ] Codebase: 350,000+ lines (growth from 293,189)
+
+### 8.10 Known Blockers
+
+| Blocker                             | Impact             | Mitigation          | Status      |
+| ----------------------------------- | ------------------ | ------------------- | ----------- |
+| Voice API costs                     | $125/month         | Budget approval     | PENDING     |
+| Device hardware                     | Deployment blocked | Order hardware      | PENDING     |
+| Firebase permissions                | Setup incomplete   | Admin SDK + IAM     | PENDING     |
+| Timing attack validation            | W0.5 security      | Analysis tools      | IN PROGRESS |
+| Memory consolidation test isolation | Phase 3 blocked    | Test helper library | IN PROGRESS |
+
+---
+
 ## APPENDIX: KEY FILES & DIRECTORIES
 
 | Path                                   | Purpose                      | Lines | Status        |
