@@ -155,6 +155,23 @@ function clearLoopGarden() {
 // Map<agentName, Set<res>> — open SSE connections per agent
 const sseStreams = new Map();
 const recentDisconnects = [];
+
+// ---- Rotating 1-second heartbeat ----
+// Cycles through each connected agent every second, sends a tiny
+// named SSE event. Clients SHOULD ignore event type "heartbeat".
+// Keeps mobile/proxy connections from dropping on silence.
+const PULSE_MEMBERS = ['molly', 'lazarus', 'atlas'];
+let pulseIndex = 0;
+const PULSE_PAYLOAD = 'event: heartbeat\ndata: .\n\n';
+setInterval(() => {
+  const agent = PULSE_MEMBERS[pulseIndex % PULSE_MEMBERS.length];
+  pulseIndex++;
+  const streams = sseStreams.get(agent);
+  if (!streams || streams.size === 0) return;
+  for (const res of streams) {
+    try { res.write(PULSE_PAYLOAD); } catch { /* dead stream, ignore */ }
+  }
+}, 1000);
 let lastHeartbeatAt = null;
 let heartbeatTimer = null;
 
