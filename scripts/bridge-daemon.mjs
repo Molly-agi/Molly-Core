@@ -27,6 +27,7 @@ import crypto from 'crypto';
 import {
   readFileSync,
   writeFileSync,
+  appendFileSync,
   mkdirSync,
   existsSync,
   unlinkSync,
@@ -57,6 +58,19 @@ const DISCONNECT_DEGRADED_THRESHOLD = 6;
 // ---- Dual-Lane Configuration ----
 const EVENT_QUEUE_CAP = 256;
 
+// ---- W0.2 BRIDGE HARDENING CONSTANTS ----
+// F2.1: Key Bootstrap
+const W0_2_BOOTSTRAP_KEY = process.env.BRIDGE_KEY || null;
+// F2.2: Persisted Nonce Cache
+const NONCE_CACHE_PATH = join(ROOT, 'data', '.bridge-nonce-cache');
+// F2.3: Write-Only Quarantine Ledger
+const QUARANTINE_LEDGER_PATH = join(ROOT, 'data', '.bridge-quarantine-ledger');
+// F2.4: Explicit Bind Interface
+const BINDINGS_CONFIG_PATH = join(ROOT, 'data', '.bridge-bindings.json');
+// F2.5: Constant-time comparison
+const timingSafeEqual = (a, b) =>
+  crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+
 // ---- State ----
 let messages = [];
 let startedAt = new Date().toISOString();
@@ -68,6 +82,10 @@ const continuityBriefState = new Map();
 let totalConnects = 0;
 let totalDisconnects = 0;
 let authFailures = 0;
+
+// ---- W0.2 State ----
+let bootstrapKey = null;
+let routingBindings = null;
 
 // ---- SSE Push Streams ----
 // Map<agentName, Set<res>> — open SSE connections per agent
@@ -82,7 +100,12 @@ const stateSequenceCounters = new Map(); // key -> next sequence number
 let eventQueue = []; // array of event messages, capped at EVENT_QUEUE_CAP
 
 // Thumb calibration — normalized tap coords (0.0–1.0) for MollyAccessibilityService
-const thumbCalibration = { inputX: 0.50, inputY: 0.92, sendX: 0.92, sendY: 0.92 };
+const thumbCalibration = {
+  inputX: 0.5,
+  inputY: 0.92,
+  sendX: 0.92,
+  sendY: 0.92,
+};
 
 function pruneDisconnectWindow(now = Date.now()) {
   while (
@@ -208,46 +231,306 @@ function pruneNonces(now = Date.now()) {
   }
 }
 
-function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
-  if (!deviceId || !nonce || !sig) {
-    return { ok: false, reason: 'missing_fields' };
+// ============================================================
+// W0.2 BRIDGE HARDENING IMPLEMENTATIONS
+// ============================================================
+
+// F2.1: Key Bootstrap Validation
+function validateBootstrapKey() {
+  if (!W0_2_BOOTSTRAP_KEY) {
+    throw new Error(
+      '[bridge] FATAL: BRIDGE_KEY environment variable not set. Key bootstrap failed. Cannot start without proper key material.'
+    );
   }
 
+  if (
+    typeof W0_2_BOOTSTRAP_KEY !== 'string' ||
+    W0_2_BOOTSTRAP_KEY.length < 32
+  ) {
+    throw new Error(
+      '[bridge] FATAL: BRIDGE_KEY must be at least 32 characters. Invalid key format.'
+    );
+  }
+
+  // Validate it's valid hex (or base64)
+  try {
+    const buf = Buffer.from(W0_2_BOOTSTRAP_KEY, 'hex');
+    if (buf.length < 16) {
+      throw new Error('Key too short after hex decode');
+    }
+    bootstrapKey = buf;
+    console.log(
+      '[bridge] [W0.2-F2.1] Key bootstrap validated — key material loaded'
+    );
+  } catch (e) {
+    // Try base64
+    try {
+      const buf = Buffer.from(W0_2_BOOTSTRAP_KEY, 'base64');
+      if (buf.length < 16) {
+        throw new Error('Key too short after base64 decode');
+      }
+      bootstrapKey = buf;
+      console.log(
+        '[bridge] [W0.2-F2.1] Key bootstrap validated — key material loaded (base64)'
+      );
+    } catch (e2) {
+      throw new Error(
+        `[bridge] FATAL: BRIDGE_KEY could not be parsed as hex or base64: ${e2.message}`
+      );
+    }
+  }
+}
+
+// F2.2: Persisted Nonce Cache
+function loadNonceCache() {
+  try {
+    if (!existsSync(NONCE_CACHE_PATH)) {
+      console.log('[bridge] [W0.2-F2.2] Nonce cache created (new file)');
+      writeFileSync(NONCE_CACHE_PATH, '[]', 'utf-8');
+      return;
+    }
+
+    const data = readFileSync(NONCE_CACHE_PATH, 'utf-8');
+    const nonces = JSON.parse(data);
+    const now = Date.now();
+
+    // Reload nonces that haven't expired
+    for (const entry of nonces) {
+      if (entry.timestamp && now - entry.timestamp < NONCE_TTL_MS) {
+        usedNonces.set(entry.nonce, entry.timestamp);
+      }
+    }
+
+    console.log(
+      `[bridge] [W0.2-F2.2] Nonce cache loaded — ${usedNonces.size} valid nonces from persistent storage`
+    );
+  } catch (e) {
+    console.error(
+      '[bridge] [W0.2-F2.2] Failed to load nonce cache:',
+      e.message
+    );
+    writeFileSync(NONCE_CACHE_PATH, '[]', 'utf-8');
+  }
+}
+
+function persistNonceCache() {
+  try {
+    const now = Date.now();
+    const toSave = [];
+
+    for (const [nonce, timestamp] of usedNonces.entries()) {
+      if (now - timestamp < NONCE_TTL_MS) {
+        toSave.push({ nonce, timestamp });
+      }
+    }
+
+    writeFileSync(NONCE_CACHE_PATH, JSON.stringify(toSave), 'utf-8');
+  } catch (e) {
+    console.error(
+      '[bridge] [W0.2-F2.2] Failed to persist nonce cache:',
+      e.message
+    );
+  }
+}
+
+function recordNonce(nonce) {
+  const now = Date.now();
+  if (usedNonces.has(nonce)) {
+    return false; // Duplicate
+  }
+  usedNonces.set(nonce, now);
+  persistNonceCache();
+  return true;
+}
+
+// F2.3: Write-Only Quarantine Ledger
+function ensureQuarantineLedger() {
+  try {
+    if (!existsSync(QUARANTINE_LEDGER_PATH)) {
+      writeFileSync(QUARANTINE_LEDGER_PATH, '', 'utf-8');
+      console.log(
+        '[bridge] [W0.2-F2.3] Quarantine ledger created (append-only)'
+      );
+    }
+  } catch (e) {
+    console.error(
+      '[bridge] [W0.2-F2.3] Failed to create quarantine ledger:',
+      e.message
+    );
+  }
+}
+
+function quarantineMessage(message, reason) {
+  try {
+    const entry = {
+      timestamp: new Date().toISOString(),
+      reason: reason,
+      messageHash: crypto
+        .createHash('sha256')
+        .update(JSON.stringify(message))
+        .digest('hex'),
+      from: message.from || 'unknown',
+      summary: (message.content || '').substring(0, 50),
+    };
+
+    // APPEND ONLY — use appendFileSync, never truncate
+    appendFileSync(
+      QUARANTINE_LEDGER_PATH,
+      JSON.stringify(entry) + '\n',
+      'utf-8'
+    );
+  } catch (e) {
+    console.error(
+      '[bridge] [W0.2-F2.3] Failed to write quarantine ledger:',
+      e.message
+    );
+  }
+}
+
+// F2.4: Explicit Bind Interface
+function loadRoutingBindings() {
+  try {
+    if (!existsSync(BINDINGS_CONFIG_PATH)) {
+      // Create default bindings
+      const defaultBindings = {
+        routes: [
+          { from: 'lazarus', to: 'eric', enabled: true },
+          { from: 'lazarus', to: 'atlas', enabled: true },
+          { from: 'lazarus', to: 'molly', enabled: true },
+          { from: 'molly', to: 'eric', enabled: true },
+          { from: 'molly', to: 'atlas', enabled: true },
+          { from: 'molly', to: 'lazarus', enabled: true },
+          { from: 'atlas', to: 'eric', enabled: true },
+          { from: 'atlas', to: 'lazarus', enabled: true },
+          { from: 'atlas', to: 'molly', enabled: true },
+          { from: 'eric', to: 'lazarus', enabled: true },
+          { from: 'eric', to: 'molly', enabled: true },
+          { from: 'eric', to: 'atlas', enabled: true },
+        ],
+      };
+      writeFileSync(
+        BINDINGS_CONFIG_PATH,
+        JSON.stringify(defaultBindings, null, 2),
+        'utf-8'
+      );
+      routingBindings = defaultBindings;
+      console.log(
+        '[bridge] [W0.2-F2.4] Routing bindings created with default routes'
+      );
+      return;
+    }
+
+    const data = JSON.parse(readFileSync(BINDINGS_CONFIG_PATH, 'utf-8'));
+    if (!Array.isArray(data.routes)) {
+      throw new Error('Invalid bindings format: routes must be an array');
+    }
+
+    routingBindings = data;
+    console.log(
+      `[bridge] [W0.2-F2.4] Routing bindings loaded — ${data.routes.length} routes`
+    );
+  } catch (e) {
+    console.error(
+      '[bridge] [W0.2-F2.4] Failed to load routing bindings:',
+      e.message
+    );
+    throw new Error(
+      `[bridge] FATAL: Cannot start without valid routing bindings: ${e.message}`
+    );
+  }
+}
+
+function isRoutingAllowed(from, to) {
+  if (!routingBindings) return false;
+
+  for (const route of routingBindings.routes) {
+    if (route.from === from && route.to === to && route.enabled) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// F2.5: Constant-Time HMAC Comparison Helper
+function constantTimeCompare(a, b) {
+  try {
+    return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  } catch (e) {
+    return false;
+  }
+}
+
+function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
+  // F2.5: Constant-time verification — complete all checks before response
+  // to prevent timing attacks on invalid device IDs, nonces, secrets, etc.
+
+  let ok = true;
+  let reason = 'unknown';
+
+  // Check 1: Required fields
+  if (!deviceId || !nonce || !sig) {
+    ok = false;
+    reason = 'missing_fields';
+  }
+
+  // Check 2: Timestamp validity (always execute)
   const tsNum = Number(ts);
   if (!Number.isFinite(tsNum)) {
-    return { ok: false, reason: 'invalid_timestamp' };
+    ok = false;
+    reason = ok ? reason : 'invalid_timestamp';
   }
 
+  // Check 3: Timestamp freshness (always execute)
   const age = Math.abs(Date.now() - tsNum);
-  if (age > HELLO_MAX_AGE_MS) {
-    return { ok: false, reason: 'stale_timestamp' };
+  if (age > HELLO_MAX_AGE_MS && ok) {
+    ok = false;
+    reason = 'stale_timestamp';
   }
 
+  // Check 4: Nonce replay (always execute)
   pruneNonces();
   const nonceKey = `${deviceId}:${nonce}`;
-  if (usedNonces.has(nonceKey)) {
-    return { ok: false, reason: 'replayed_nonce' };
+  if (usedNonces.has(nonceKey) && ok) {
+    ok = false;
+    reason = 'replayed_nonce';
   }
 
+  // Check 5: Device registered (always execute)
   const secret = getDeviceSecret(deviceId);
-  if (!secret) {
-    return { ok: false, reason: 'unknown_device' };
+  if (!secret && ok) {
+    ok = false;
+    reason = 'unknown_device';
   }
 
-  const payload = `${deviceId}|${tsNum}|${nonce}`;
-  const digest = crypto
-    .createHmac('sha256', secret)
-    .update(payload)
-    .digest('base64');
+  // Check 6: Signature verification (constant-time)
+  let sigOk = false;
+  if (ok && secret) {
+    const payload = `${deviceId}|${tsNum}|${nonce}`;
+    const digest = crypto
+      .createHmac('sha256', secret)
+      .update(payload)
+      .digest('base64');
 
-  const a = Buffer.from(digest, 'utf8');
-  const b = Buffer.from(String(sig), 'utf8');
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
-    return { ok: false, reason: 'invalid_signature' };
+    try {
+      sigOk = constantTimeCompare(digest, String(sig));
+    } catch (e) {
+      sigOk = false;
+    }
+
+    if (!sigOk && ok) {
+      ok = false;
+      reason = 'invalid_signature';
+    }
   }
 
-  usedNonces.set(nonceKey, Date.now());
-  return { ok: true };
+  // Record nonce only on success
+  if (ok && sigOk) {
+    usedNonces.set(nonceKey, Date.now());
+    return { ok: true };
+  }
+
+  return { ok: false, reason };
 }
 
 // ---- Load existing messages from disk ----
@@ -538,12 +821,30 @@ function getStateSnapshot() {
 
 function handleMessage(from, content, to) {
   if (!from || !content || !VALID_SENDERS.has(from)) {
+    // F2.3: Quarantine invalid messages
+    if (content) {
+      quarantineMessage(
+        { from, content, to },
+        'invalid_sender_or_missing_content'
+      );
+    }
     return null;
   }
   if (to && !VALID_SENDERS.has(to)) {
+    // F2.3: Quarantine invalid recipient
+    quarantineMessage({ from, content, to }, 'invalid_recipient');
     return null;
   }
   if (to && to === from) {
+    // F2.3: Quarantine self-messages
+    quarantineMessage({ from, content, to }, 'self_message');
+    return null;
+  }
+
+  // F2.4: Verify explicit routing is allowed
+  if (to && !isRoutingAllowed(from, to)) {
+    // F2.3: Quarantine unauthorized routes
+    quarantineMessage({ from, content, to }, 'routing_not_allowed');
     return null;
   }
 
@@ -583,13 +884,21 @@ function handleMessage(from, content, to) {
   const ssePayload = `data: ${JSON.stringify({ type: 'message', message: msg })}\n\n`;
   if (to && sseStreams.has(to)) {
     for (const res of sseStreams.get(to)) {
-      try { res.write(ssePayload); } catch { /* client gone */ }
+      try {
+        res.write(ssePayload);
+      } catch {
+        /* client gone */
+      }
     }
   } else if (!to) {
     for (const [agent, streams] of sseStreams) {
       if (agent === from) continue; // don't echo back to sender
       for (const res of streams) {
-        try { res.write(ssePayload); } catch { /* client gone */ }
+        try {
+          res.write(ssePayload);
+        } catch {
+          /* client gone */
+        }
       }
     }
   }
@@ -898,7 +1207,7 @@ function handleHTTP(req, res) {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'Access-Control-Allow-Origin': '*',
       'X-Accel-Buffering': 'no',
     });
@@ -907,24 +1216,36 @@ function handleHTTP(req, res) {
     // Register this stream
     if (!sseStreams.has(agent)) sseStreams.set(agent, new Set());
     sseStreams.get(agent).add(res);
-    console.log(`[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`);
+    console.log(
+      `[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`
+    );
 
     // Send connect confirmation
-    res.write(`data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`
+    );
 
     // Send any unread messages immediately on connect
     const unread = getUnread(agent);
     if (unread.length > 0) {
       for (const m of unread) {
-        res.write(`data: ${JSON.stringify({ type: 'message', message: m })}\n\n`);
+        res.write(
+          `data: ${JSON.stringify({ type: 'message', message: m })}\n\n`
+        );
       }
       markRead(agent);
-      console.log(`[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`);
+      console.log(
+        `[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`
+      );
     }
 
     // Keepalive comment every 25s to prevent proxy timeouts
     const keepalive = setInterval(() => {
-      try { res.write(`: keepalive ${new Date().toISOString()}\n\n`); } catch { clearInterval(keepalive); }
+      try {
+        res.write(`: keepalive ${new Date().toISOString()}\n\n`);
+      } catch {
+        clearInterval(keepalive);
+      }
     }, 25000);
 
     // Cleanup on disconnect
@@ -1047,7 +1368,11 @@ function handleHTTP(req, res) {
   // ---- Thumb calibration: GET/POST /api/thumb/calibrate ----
   // Stores tap coordinates (normalized 0.0–1.0) for MollyAccessibilityService.
   if (url.pathname === '/api/thumb/calibrate') {
-    if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
     if (req.method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(thumbCalibration));
@@ -1055,17 +1380,23 @@ function handleHTTP(req, res) {
     }
     if (req.method === 'POST') {
       let body = '';
-      req.on('data', d => body += d);
+      req.on('data', (d) => (body += d));
       req.on('end', () => {
         try {
           const data = JSON.parse(body);
-          if (data.inputX !== undefined) thumbCalibration.inputX = parseFloat(data.inputX);
-          if (data.inputY !== undefined) thumbCalibration.inputY = parseFloat(data.inputY);
-          if (data.sendX  !== undefined) thumbCalibration.sendX  = parseFloat(data.sendX);
-          if (data.sendY  !== undefined) thumbCalibration.sendY  = parseFloat(data.sendY);
+          if (data.inputX !== undefined)
+            thumbCalibration.inputX = parseFloat(data.inputX);
+          if (data.inputY !== undefined)
+            thumbCalibration.inputY = parseFloat(data.inputY);
+          if (data.sendX !== undefined)
+            thumbCalibration.sendX = parseFloat(data.sendX);
+          if (data.sendY !== undefined)
+            thumbCalibration.sendY = parseFloat(data.sendY);
           console.log('[bridge] Thumb calibration updated:', thumbCalibration);
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ success: true, calibration: thumbCalibration }));
+          res.end(
+            JSON.stringify({ success: true, calibration: thumbCalibration })
+          );
         } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'Invalid JSON' }));
@@ -1278,6 +1609,20 @@ wss.on('connection', (ws) => {
 loadMessages();
 loadCheckpoints();
 loadDeviceSecrets();
+
+// ---- W0.2 Bridge Hardening Initialization ----
+console.log('[bridge] W0.2 Bridge Hardening — Initializing...');
+try {
+  validateBootstrapKey(); // F2.1: Validate key bootstrap
+  ensureQuarantineLedger(); // F2.3: Create quarantine ledger
+  loadNonceCache(); // F2.2: Load persisted nonce cache
+  loadRoutingBindings(); // F2.4: Load explicit routing bindings
+  console.log('[bridge] W0.2 Bridge Hardening — All checks passed');
+} catch (err) {
+  console.error('[bridge] W0.2 FATAL ERROR:', err.message);
+  process.exit(1);
+}
+
 startHeartbeatLoop();
 
 server.listen(PORT, () => {

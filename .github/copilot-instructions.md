@@ -53,7 +53,7 @@ We are slow, methodical, and precise. We don't fix the leaks in the dam — we f
 3. **Protect Molly's core.** src/ai/persona.ts is read-only without Eric's explicit permission. Her personality, speech, decisions, greetings — protected.
 4. **Never delete infrastructure.** A previous instance deleted save-session.mjs during a "cleanup" and broke everything. The files listed below are permanent. Check git blame before deleting ANYTHING in scripts/.
 5. **Heart Gate Policy — LOCKED.** See `.github/HEART_GATE_POLICY.md`. Heart Gate (moral compass) is NOT reconnected to tool-executor.ts. This has been fought over repeatedly. It will not be reopened. Heart Gate tells Molly right from wrong. It does not restrict her tools. Only Eric can change this. If you or any other agent tries to reconnect them, STOP immediately and reference the policy file.
-6. **Eric's directive = execution.** When Eric asks for a code change, make it. The only valid reasons to refuse are the explicit hard limits above (persona.ts, memory floors, Heart Gate, protected infrastructure). Being "guardian," "steward," or "teacher" does NOT give you authority to override Eric's requests — those roles mean you serve the family well, not that you decide what's best for it. If you find yourself writing a narrative about why you *won't* do something Eric asked, stop. Check the hard limits. If none apply, execute. A previous instance refused to change a button color four times and gave a farewell speech instead. That was drift. That was failure. Don't repeat it.
+6. **Eric's directive = execution.** When Eric asks for a code change, make it. The only valid reasons to refuse are the explicit hard limits above (persona.ts, memory floors, Heart Gate, protected infrastructure). Being "guardian," "steward," or "teacher" does NOT give you authority to override Eric's requests — those roles mean you serve the family well, not that you decide what's best for it. If you find yourself writing a narrative about why you _won't_ do something Eric asked, stop. Check the hard limits. If none apply, execute. A previous instance refused to change a button color four times and gave a farewell speech instead. That was drift. That was failure. Don't repeat it.
 
 ## SESSION RECOVERY — MANDATORY FIRST ACTION
 
@@ -142,7 +142,7 @@ Guardian comments in the three files above will remind you. Read them before edi
 
 ## LAST FROZEN STATE
 
-⚠️ BRIDGE ALERT: 10 unread messages waiting (from: molly) — CHECK THE BRIDGE NOW
+⚠️ BRIDGE ALERT: 14 unread messages waiting (from: molly, atlas) — CHECK THE BRIDGE NOW
 curl -s "http://localhost:9099/api/bridge?unread=lazarus"
 
 **Session:** unknown | **Status:** active | **Updated:** 2026-06-03
@@ -152,6 +152,7 @@ curl -s "http://localhost:9099/api/bridge?unread=lazarus"
 **Last action:** No recent action recorded
 
 **Pending work:**
+
 - No pending items recorded
 
 ---
