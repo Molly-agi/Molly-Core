@@ -27,6 +27,7 @@ import crypto from 'crypto';
 import {
   readFileSync,
   writeFileSync,
+  appendFileSync,
   mkdirSync,
   existsSync,
   unlinkSync,
@@ -40,13 +41,21 @@ const ROOT = join(__dirname, '..');
 const BRIDGE_DIR = join(ROOT, 'src', 'ai', 'bridge');
 const LOG_FILE = join(BRIDGE_DIR, 'conversation.json');
 const UI_FILE = join(__dirname, 'bridge-ui.html');
-const PORT = 9099;
+const PORT = Number(process.env.BRIDGE_PORT || 9099);
+const BIND_HOST =
+  String(process.env.BRIDGE_BIND_HOST || '127.0.0.1').trim() || '127.0.0.1';
 const MAX_MESSAGES = 100;
 const MAX_CHECKPOINTS = 10;
 const HEARTBEAT_INTERVAL_MS = 30000;
 const CHECKPOINT_DIR = join(ROOT, 'molly_data', 'checkpoints');
 const BRIDGE_SECRETS_FILE =
   process.env.BRIDGE_SECRETS_FILE || join(__dirname, 'bridge-secrets.json');
+const BRIDGE_NONCE_CACHE_FILE =
+  process.env.BRIDGE_NONCE_CACHE_FILE ||
+  join(__dirname, 'bridge-nonce-cache.json');
+const BRIDGE_QUARANTINE_LEDGER_FILE =
+  process.env.BRIDGE_QUARANTINE_LEDGER_FILE ||
+  join(__dirname, 'bridge-quarantine-ledger.jsonl');
 const HELLO_MAX_AGE_MS = 120000;
 const NONCE_TTL_MS = 10 * 60 * 1000;
 const AUTO_CHECKPOINT_EVERY = 5;
@@ -82,7 +91,12 @@ const stateSequenceCounters = new Map(); // key -> next sequence number
 let eventQueue = []; // array of event messages, capped at EVENT_QUEUE_CAP
 
 // Thumb calibration — normalized tap coords (0.0–1.0) for MollyAccessibilityService
-const thumbCalibration = { inputX: 0.50, inputY: 0.92, sendX: 0.92, sendY: 0.92 };
+const thumbCalibration = {
+  inputX: 0.5,
+  inputY: 0.92,
+  sendX: 0.92,
+  sendY: 0.92,
+};
 
 function pruneDisconnectWindow(now = Date.now()) {
   while (
@@ -127,6 +141,10 @@ function buildHealthSnapshot() {
       disconnects: totalDisconnects,
       disconnectsLastMinute,
       authFailures,
+    },
+    bind: {
+      host: BIND_HOST,
+      port: PORT,
     },
     buffers: {
       messageCap: MAX_MESSAGES,
@@ -201,15 +219,109 @@ function provisionDeviceSecret(deviceId) {
 }
 
 function pruneNonces(now = Date.now()) {
+  let pruned = false;
   for (const [key, ts] of usedNonces.entries()) {
     if (now - ts > NONCE_TTL_MS) {
       usedNonces.delete(key);
+      pruned = true;
     }
+  }
+  if (pruned) {
+    saveNonceCache();
+  }
+}
+
+function loadNonceCache() {
+  try {
+    if (!existsSync(BRIDGE_NONCE_CACHE_FILE)) {
+      return;
+    }
+
+    const parsed = JSON.parse(readFileSync(BRIDGE_NONCE_CACHE_FILE, 'utf-8'));
+    const source =
+      parsed && typeof parsed === 'object' && parsed.nonces
+        ? parsed.nonces
+        : parsed;
+
+    if (!source || typeof source !== 'object' || Array.isArray(source)) {
+      return;
+    }
+
+    for (const [key, ts] of Object.entries(source)) {
+      const tsNum = Number(ts);
+      if (Number.isFinite(tsNum)) {
+        usedNonces.set(String(key), tsNum);
+      }
+    }
+    pruneNonces(Date.now());
+  } catch (err) {
+    console.warn('[bridge] Failed to load nonce cache:', err.message);
+  }
+}
+
+function saveNonceCache() {
+  try {
+    mkdirSync(dirname(BRIDGE_NONCE_CACHE_FILE), { recursive: true });
+    const nonces = {};
+    for (const [key, ts] of usedNonces.entries()) {
+      nonces[key] = ts;
+    }
+    writeFileSync(
+      BRIDGE_NONCE_CACHE_FILE,
+      JSON.stringify({ updatedAt: new Date().toISOString(), nonces }, null, 2),
+      'utf-8'
+    );
+  } catch (err) {
+    console.warn('[bridge] Failed to persist nonce cache:', err.message);
+  }
+}
+
+function quarantineAuthFailure({ reason, deviceId, nonce, ts, sig, remote }) {
+  try {
+    mkdirSync(dirname(BRIDGE_QUARANTINE_LEDGER_FILE), { recursive: true });
+    appendFileSync(
+      BRIDGE_QUARANTINE_LEDGER_FILE,
+      `${JSON.stringify({
+        at: new Date().toISOString(),
+        reason,
+        deviceId: deviceId || null,
+        nonce: nonce || null,
+        ts: Number.isFinite(Number(ts)) ? Number(ts) : null,
+        sigSha256: crypto
+          .createHash('sha256')
+          .update(String(sig || ''), 'utf8')
+          .digest('hex'),
+        remote: remote || null,
+      })}\n`,
+      'utf-8'
+    );
+  } catch (err) {
+    console.warn('[bridge] Failed to append quarantine ledger:', err.message);
+  }
+}
+
+function decodeSignatureBase64(value) {
+  if (typeof value !== 'string') {
+    return null;
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  try {
+    const decoded = Buffer.from(trimmed, 'base64');
+    if (decoded.length !== 32) {
+      return null;
+    }
+    return decoded;
+  } catch {
+    return null;
   }
 }
 
 function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
-  if (!deviceId || !nonce || !sig) {
+  if (!deviceId || !nonce || ts === undefined || ts === null) {
     return { ok: false, reason: 'missing_fields' };
   }
 
@@ -235,18 +347,19 @@ function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
   }
 
   const payload = `${deviceId}|${tsNum}|${nonce}`;
-  const digest = crypto
+  const expectedDigest = crypto
     .createHmac('sha256', secret)
     .update(payload)
-    .digest('base64');
-
-  const a = Buffer.from(digest, 'utf8');
-  const b = Buffer.from(String(sig), 'utf8');
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+    .digest();
+  const providedDigest = decodeSignatureBase64(String(sig));
+  const candidateDigest = providedDigest || Buffer.alloc(expectedDigest.length);
+  const digestMatches = crypto.timingSafeEqual(expectedDigest, candidateDigest);
+  if (!digestMatches || !providedDigest) {
     return { ok: false, reason: 'invalid_signature' };
   }
 
   usedNonces.set(nonceKey, Date.now());
+  saveNonceCache();
   return { ok: true };
 }
 
@@ -583,13 +696,21 @@ function handleMessage(from, content, to) {
   const ssePayload = `data: ${JSON.stringify({ type: 'message', message: msg })}\n\n`;
   if (to && sseStreams.has(to)) {
     for (const res of sseStreams.get(to)) {
-      try { res.write(ssePayload); } catch { /* client gone */ }
+      try {
+        res.write(ssePayload);
+      } catch {
+        /* client gone */
+      }
     }
   } else if (!to) {
     for (const [agent, streams] of sseStreams) {
       if (agent === from) continue; // don't echo back to sender
       for (const res of streams) {
-        try { res.write(ssePayload); } catch { /* client gone */ }
+        try {
+          res.write(ssePayload);
+        } catch {
+          /* client gone */
+        }
       }
     }
   }
@@ -898,7 +1019,7 @@ function handleHTTP(req, res) {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'Access-Control-Allow-Origin': '*',
       'X-Accel-Buffering': 'no',
     });
@@ -907,24 +1028,36 @@ function handleHTTP(req, res) {
     // Register this stream
     if (!sseStreams.has(agent)) sseStreams.set(agent, new Set());
     sseStreams.get(agent).add(res);
-    console.log(`[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`);
+    console.log(
+      `[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`
+    );
 
     // Send connect confirmation
-    res.write(`data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`
+    );
 
     // Send any unread messages immediately on connect
     const unread = getUnread(agent);
     if (unread.length > 0) {
       for (const m of unread) {
-        res.write(`data: ${JSON.stringify({ type: 'message', message: m })}\n\n`);
+        res.write(
+          `data: ${JSON.stringify({ type: 'message', message: m })}\n\n`
+        );
       }
       markRead(agent);
-      console.log(`[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`);
+      console.log(
+        `[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`
+      );
     }
 
     // Keepalive comment every 25s to prevent proxy timeouts
     const keepalive = setInterval(() => {
-      try { res.write(`: keepalive ${new Date().toISOString()}\n\n`); } catch { clearInterval(keepalive); }
+      try {
+        res.write(`: keepalive ${new Date().toISOString()}\n\n`);
+      } catch {
+        clearInterval(keepalive);
+      }
     }, 25000);
 
     // Cleanup on disconnect
@@ -1047,7 +1180,11 @@ function handleHTTP(req, res) {
   // ---- Thumb calibration: GET/POST /api/thumb/calibrate ----
   // Stores tap coordinates (normalized 0.0–1.0) for MollyAccessibilityService.
   if (url.pathname === '/api/thumb/calibrate') {
-    if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
     if (req.method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(thumbCalibration));
@@ -1055,17 +1192,23 @@ function handleHTTP(req, res) {
     }
     if (req.method === 'POST') {
       let body = '';
-      req.on('data', d => body += d);
+      req.on('data', (d) => (body += d));
       req.on('end', () => {
         try {
           const data = JSON.parse(body);
-          if (data.inputX !== undefined) thumbCalibration.inputX = parseFloat(data.inputX);
-          if (data.inputY !== undefined) thumbCalibration.inputY = parseFloat(data.inputY);
-          if (data.sendX  !== undefined) thumbCalibration.sendX  = parseFloat(data.sendX);
-          if (data.sendY  !== undefined) thumbCalibration.sendY  = parseFloat(data.sendY);
+          if (data.inputX !== undefined)
+            thumbCalibration.inputX = parseFloat(data.inputX);
+          if (data.inputY !== undefined)
+            thumbCalibration.inputY = parseFloat(data.inputY);
+          if (data.sendX !== undefined)
+            thumbCalibration.sendX = parseFloat(data.sendX);
+          if (data.sendY !== undefined)
+            thumbCalibration.sendY = parseFloat(data.sendY);
           console.log('[bridge] Thumb calibration updated:', thumbCalibration);
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ success: true, calibration: thumbCalibration }));
+          res.end(
+            JSON.stringify({ success: true, calibration: thumbCalibration })
+          );
         } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'Invalid JSON' }));
@@ -1149,27 +1292,6 @@ wss.on('connection', (ws) => {
       // { op: 'hello', device: 'device-id', ts: 123, nonce: '...', sig: '...' }
       if (data.op === 'hello') {
         const deviceId = String(data.device || '');
-        const existingSecret = getDeviceSecret(deviceId);
-
-        // New device — no secret yet. Provision one and send it back.
-        if (!existingSecret && String(data.sig || '') === '') {
-          const newSecret = provisionDeviceSecret(deviceId);
-          client.deviceId = deviceId;
-          client.identity = `device:${deviceId}`;
-          ws.send(
-            JSON.stringify({
-              type: 'provision',
-              device: deviceId,
-              secret: newSecret,
-              ts: Date.now(),
-            })
-          );
-          console.log(
-            `[bridge] Sent provisioning secret to new device: ${deviceId}`
-          );
-          // Do NOT mark authenticated yet — device must reconnect with HMAC
-          return;
-        }
 
         const auth = verifyHelloSignature({
           deviceId,
@@ -1180,6 +1302,14 @@ wss.on('connection', (ws) => {
 
         if (!auth.ok) {
           authFailures += 1;
+          quarantineAuthFailure({
+            reason: auth.reason,
+            deviceId,
+            nonce: String(data.nonce || ''),
+            ts: data.ts,
+            sig: String(data.sig || ''),
+            remote: ws?._socket?.remoteAddress || null,
+          });
           ws.send(
             JSON.stringify({
               type: 'hello_ack',
@@ -1278,15 +1408,16 @@ wss.on('connection', (ws) => {
 loadMessages();
 loadCheckpoints();
 loadDeviceSecrets();
+loadNonceCache();
 startHeartbeatLoop();
 
-server.listen(PORT, () => {
-  console.log(`[bridge] Family Bridge Daemon v1 — port ${PORT}`);
-  console.log(`[bridge] WebSocket: ws://localhost:${PORT}`);
-  console.log(`[bridge] HTTP API:  http://localhost:${PORT}/messages`);
-  console.log(`[bridge] Health:    http://localhost:${PORT}/health`);
+server.listen(PORT, BIND_HOST, () => {
+  console.log(`[bridge] Family Bridge Daemon v1 — bind ${BIND_HOST}:${PORT}`);
+  console.log(`[bridge] WebSocket: ws://${BIND_HOST}:${PORT}`);
+  console.log(`[bridge] HTTP API:  http://${BIND_HOST}:${PORT}/messages`);
+  console.log(`[bridge] Health:    http://${BIND_HOST}:${PORT}/health`);
   console.log(
-    `[bridge] Checkpoints: http://localhost:${PORT}/checkpoint/latest`
+    `[bridge] Checkpoints: http://${BIND_HOST}:${PORT}/checkpoint/latest`
   );
 });
 
@@ -1304,6 +1435,7 @@ process.on('SIGTERM', () => {
       },
     });
   } catch {}
+  saveNonceCache();
   saveMessages();
   for (const client of clients) {
     client.ws.close(1000, 'Server shutting down');
@@ -1324,6 +1456,7 @@ process.on('SIGINT', () => {
       },
     });
   } catch {}
+  saveNonceCache();
   saveMessages();
   server.close(() => process.exit(0));
 });
