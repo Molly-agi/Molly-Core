@@ -12,7 +12,7 @@ import { useTTS } from './useTTS';
 
 interface BridgeMessage {
   id: string;
-  from: 'molly' | 'lazarus' | 'eric';
+  from: 'molly' | 'lazarus' | 'eric' | 'atlas' | 'gemini';
   timestamp: string;
   content: string;
   read: boolean;
@@ -26,6 +26,7 @@ const senderStyle: Record<
   lazarus: { color: '#60a5fa', label: '🛡️ Lazarus', ttsName: 'Lazarus' },
   atlas: { color: '#34d399', label: '🌍 Atlas', ttsName: 'Atlas' },
   eric: { color: '#fbbf24', label: '👑 Eric', ttsName: 'Eric' },
+  gemini: { color: '#f97316', label: '🔥 Gemini', ttsName: 'Gemini' },
 };
 
 export default function BridgePanel() {

@@ -20,7 +20,12 @@ const config = {
   transformIgnorePatterns: [
     'node_modules/(?!(yaml|dotprompt|@genkit-ai|@radix-ui|lucide-react)/)',
   ],
-  testPathIgnorePatterns: ['/node_modules/', '/helpers/', '/e2e/'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/helpers/',
+    '/e2e/',
+    'src/ai/substrate/__tests__/fixtures/',
+  ],
   transform: {
     // Explicitly exclude .mjs from babel transform — they run as native ESM
     '^.+\\.[jt]sx?$': 'babel-jest',

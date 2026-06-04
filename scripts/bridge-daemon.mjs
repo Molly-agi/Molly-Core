@@ -38,6 +38,13 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
+
+// Load .env.local for development
+import dotenv from 'dotenv';
+const envPath = join(ROOT, '.env.local');
+if (existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+}
 const BRIDGE_DIR = join(ROOT, 'src', 'ai', 'bridge');
 const LOG_FILE = join(BRIDGE_DIR, 'conversation.json');
 const UI_FILE = join(__dirname, 'bridge-ui.html');
@@ -62,11 +69,16 @@ const EVENT_QUEUE_CAP = 256;
 // F2.1: Key Bootstrap
 const W0_2_BOOTSTRAP_KEY = process.env.BRIDGE_KEY || null;
 // F2.2: Persisted Nonce Cache — env-overridable for test isolation
-const NONCE_CACHE_PATH = process.env.NONCE_CACHE_PATH || join(ROOT, 'data', '.bridge-nonce-cache');
+const NONCE_CACHE_PATH =
+  process.env.NONCE_CACHE_PATH || join(ROOT, 'data', '.bridge-nonce-cache');
 // F2.3: Write-Only Quarantine Ledger — env-overridable for test isolation
-const QUARANTINE_LEDGER_PATH = process.env.QUARANTINE_LEDGER_PATH || join(ROOT, 'data', '.bridge-quarantine-ledger');
+const QUARANTINE_LEDGER_PATH =
+  process.env.QUARANTINE_LEDGER_PATH ||
+  join(ROOT, 'data', '.bridge-quarantine-ledger');
 // F2.4: Explicit Bind Interface — env-overridable for test isolation
-const BINDINGS_CONFIG_PATH = process.env.BINDINGS_CONFIG_PATH || join(ROOT, 'data', '.bridge-bindings.json');
+const BINDINGS_CONFIG_PATH =
+  process.env.BINDINGS_CONFIG_PATH ||
+  join(ROOT, 'data', '.bridge-bindings.json');
 // F2.5: Constant-time comparison
 const timingSafeEqual = (a, b) =>
   crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
@@ -94,11 +106,7 @@ const loopGarden = {
   recentHashes: new Map(), // contentHash -> { from, to, count, firstAt, lastAt }
   HASH_WINDOW_MS: 60000, // 60s window
   LOOP_THRESHOLD: 5, // 5+ identical messages in window = loop
-  BLOCKED_PATTERNS: [
-    /Receipt confirmed/i,
-    /Checking in/i,
-    /Status check/i,
-  ],
+  BLOCKED_PATTERNS: [/Receipt confirmed/i, /Checking in/i, /Status check/i],
 };
 
 function hashContent(content) {
@@ -169,7 +177,11 @@ setInterval(() => {
   const streams = sseStreams.get(agent);
   if (!streams || streams.size === 0) return;
   for (const res of streams) {
-    try { res.write(PULSE_PAYLOAD); } catch { /* dead stream, ignore */ }
+    try {
+      res.write(PULSE_PAYLOAD);
+    } catch {
+      /* dead stream, ignore */
+    }
   }
 }, 1000);
 let lastHeartbeatAt = null;
@@ -450,7 +462,12 @@ function quarantineMessage(message, reason) {
         const existing = readFileSync(QUARANTINE_LEDGER_PATH, 'utf-8');
         const lines = existing.split('\n').filter((l) => l.trim());
         const allValid = lines.every((line) => {
-          try { JSON.parse(line); return true; } catch { return false; }
+          try {
+            JSON.parse(line);
+            return true;
+          } catch {
+            return false;
+          }
         });
         if (!allValid) {
           // Ledger was tampered — record integrity violation
@@ -458,12 +475,21 @@ function quarantineMessage(message, reason) {
             timestamp: new Date().toISOString(),
             reason: 'integrity_violation',
             tamper: true,
-            detail: 'Quarantine ledger integrity check failed — non-JSON lines detected',
+            detail:
+              'Quarantine ledger integrity check failed — non-JSON lines detected',
           };
-          appendFileSync(QUARANTINE_LEDGER_PATH, JSON.stringify(violation) + '\n', 'utf-8');
-          console.error('[bridge] [W0.2-F2.3] INTEGRITY VIOLATION: ledger tampered — logged');
+          appendFileSync(
+            QUARANTINE_LEDGER_PATH,
+            JSON.stringify(violation) + '\n',
+            'utf-8'
+          );
+          console.error(
+            '[bridge] [W0.2-F2.3] INTEGRITY VIOLATION: ledger tampered — logged'
+          );
         }
-      } catch { /* read error — non-fatal */ }
+      } catch {
+        /* read error — non-fatal */
+      }
     }
 
     const entry = {
@@ -510,6 +536,15 @@ function loadRoutingBindings() {
           { from: 'eric', to: 'lazarus', enabled: true },
           { from: 'eric', to: 'molly', enabled: true },
           { from: 'eric', to: 'atlas', enabled: true },
+          // Gemini (mother model) — full connectivity
+          { from: 'gemini', to: 'eric', enabled: true },
+          { from: 'gemini', to: 'lazarus', enabled: true },
+          { from: 'gemini', to: 'molly', enabled: true },
+          { from: 'gemini', to: 'atlas', enabled: true },
+          { from: 'lazarus', to: 'gemini', enabled: true },
+          { from: 'eric', to: 'gemini', enabled: true },
+          { from: 'molly', to: 'gemini', enabled: true },
+          { from: 'atlas', to: 'gemini', enabled: true },
         ],
       };
       writeFileSync(
@@ -939,7 +974,6 @@ function handleMessage(from, content, to) {
       console.log(`[bridge] Loop blocked: ${from}`);
       return null;
     }
-
   }
   if (to && !VALID_SENDERS.has(to)) {
     // F2.3: Quarantine invalid recipient
@@ -1432,11 +1466,12 @@ function handleHTTP(req, res) {
       // F2.5: Constant-time minimum — ensure validation always takes ≥10ms
       // to prevent timing oracles on accept vs reject paths
       const _ctStart = Date.now();
-      const ensureMinTime = () => new Promise((r) => {
-        const elapsed = Date.now() - _ctStart;
-        const remaining = Math.max(0, 10 - elapsed);
-        setTimeout(r, remaining);
-      });
+      const ensureMinTime = () =>
+        new Promise((r) => {
+          const elapsed = Date.now() - _ctStart;
+          const remaining = Math.max(0, 10 - elapsed);
+          setTimeout(r, remaining);
+        });
 
       try {
         const payload = JSON.parse(body);
@@ -1448,7 +1483,11 @@ function handleHTTP(req, res) {
           if (!recordNonce(bodyNonce)) {
             await ensureMinTime();
             res.writeHead(409, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Duplicate nonce — replay attack detected' }));
+            res.end(
+              JSON.stringify({
+                error: 'Duplicate nonce — replay attack detected',
+              })
+            );
             return;
           }
         }
@@ -1542,7 +1581,9 @@ function handleHTTP(req, res) {
   // POST /api/bridge/admin/clear - flush stale messages + reset loop garden
   if (req.method === 'POST' && url.pathname === '/api/bridge/admin/clear') {
     let body = '';
-    req.on('data', (chunk) => { body += chunk; });
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
     req.on('end', () => {
       try {
         const oldCount = messages.length;
@@ -1550,7 +1591,13 @@ function handleHTTP(req, res) {
         clearLoopGarden();
         messagesSinceCheckpoint = 0;
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true, cleared: oldCount, action: 'cleared_messages_and_loop_garden' }));
+        res.end(
+          JSON.stringify({
+            success: true,
+            cleared: oldCount,
+            action: 'cleared_messages_and_loop_garden',
+          })
+        );
       } catch (err) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: err.message }));

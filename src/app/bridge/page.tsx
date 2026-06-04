@@ -12,7 +12,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface BridgeMessage {
   id: string;
-  from: 'molly' | 'lazarus' | 'eric';
+  from: 'molly' | 'lazarus' | 'eric' | 'atlas' | 'gemini';
   timestamp: string;
   content: string;
 }
@@ -23,12 +23,16 @@ const senderColors: Record<string, string> = {
   molly: '#e879f9', // Purple/pink — Molly
   lazarus: '#60a5fa', // Blue — Lazarus
   eric: '#fbbf24', // Gold — Father
+  atlas: '#34d399', // Green — Atlas
+  gemini: '#f97316', // Orange — Gemini
 };
 
 const senderLabels: Record<string, string> = {
   molly: '🧠 Molly',
   lazarus: '🛡️ Lazarus',
   eric: '👑 Eric',
+  atlas: '🌍 Atlas',
+  gemini: '🔥 Gemini',
 };
 
 export default function BridgeObserver() {
