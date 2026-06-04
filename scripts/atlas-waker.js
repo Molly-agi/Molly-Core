@@ -2,7 +2,7 @@
  * Atlas Waker — Bridge-to-Copilot Terminal Wake Script
  *
  * Paste into the browser console on the VS Code / Copilot CLI page.
- * Polls the family bridge; when messages for lazarus arrive, injects
+ * Polls the family bridge; when messages for atlas arrive, injects
  * "check the bridge\n" into the active xterm.js terminal via three
  * escalating strategies.
  *
@@ -17,7 +17,7 @@
     'https://redesigned-orbit-v6p4gw4rwjwjhw6g7-9099.app.github.dev';
   const POLL_INTERVAL_MS = 4000; // 4s — responsive wake time
   const TRIGGER_MESSAGE = 'check the bridge';
-  const RECIPIENT = 'lazarus';
+  const RECIPIENT = 'atlas';
 
   // ── Badge ─────────────────────────────────────────────────────────────────
   const badge = document.createElement('div');
