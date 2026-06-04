@@ -14,27 +14,32 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { promises as fs } from 'fs';
+import { promises as fs, mkdtempSync, rmSync } from 'fs';
+import os from 'os';
+import net from 'net';
+
+function getFreePort() {
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.listen(0, '127.0.0.1', () => { const {port} = srv.address(); srv.close(() => resolve(port)); });
+    srv.on('error', reject);
+  });
+}
 import path from 'path';
 import { spawn } from 'child_process';
 import fetch from 'node-fetch';
 
 describe('W0.2 Finding F2.3: Write-Only Quarantine Ledger', () => {
-  const BRIDGE_PORT = 9099;
-  const QUARANTINE_LEDGER_PATH = path.join(
-    process.cwd(),
-    'data/.bridge-quarantine-ledger'
-  );
+  let BRIDGE_PORT;
+  let QUARANTINE_LEDGER_PATH;
+  let tmpDir;
   let bridgeProcess;
   let validKey;
 
   beforeEach(async () => {
-    // Clean up old quarantine ledger
-    try {
-      await fs.unlink(QUARANTINE_LEDGER_PATH);
-    } catch (e) {
-      // File doesn't exist yet
-    }
+    BRIDGE_PORT = await getFreePort();
+    tmpDir = mkdtempSync(os.tmpdir() + '/bridge-test-f2.3-');
+    QUARANTINE_LEDGER_PATH = tmpDir + '/.bridge-quarantine-ledger';
     validKey = Buffer.from('d'.repeat(64), 'utf-8')
       .toString('hex')
       .slice(0, 64);
@@ -45,11 +50,12 @@ describe('W0.2 Finding F2.3: Write-Only Quarantine Ledger', () => {
       bridgeProcess.kill('SIGTERM');
       await new Promise((r) => setTimeout(r, 500));
     }
+    if (tmpDir) { try { rmSync(tmpDir, { recursive: true, force: true }); } catch {} tmpDir = null; }
   });
 
   it('F2.3.1: Quarantine ledger file is created on daemon startup', async () => {
     return new Promise((resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), QUARANTINE_LEDGER_PATH: QUARANTINE_LEDGER_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -80,7 +86,7 @@ describe('W0.2 Finding F2.3: Write-Only Quarantine Ledger', () => {
 
   it('F2.3.2: Invalid message is logged to ledger', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), QUARANTINE_LEDGER_PATH: QUARANTINE_LEDGER_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -142,7 +148,7 @@ describe('W0.2 Finding F2.3: Write-Only Quarantine Ledger', () => {
 
   it('F2.3.3: Ledger cannot be truncated or modified', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), QUARANTINE_LEDGER_PATH: QUARANTINE_LEDGER_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -218,7 +224,7 @@ describe('W0.2 Finding F2.3: Write-Only Quarantine Ledger', () => {
 
   it('F2.3.4: Ledger entries include required metadata', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), QUARANTINE_LEDGER_PATH: QUARANTINE_LEDGER_PATH };
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
         cwd: process.cwd(),
@@ -262,7 +268,7 @@ describe('W0.2 Finding F2.3: Write-Only Quarantine Ledger', () => {
 
   it('F2.3.5: Quarantine ledger survives daemon restart', async () => {
     return new Promise(async (resolve, reject) => {
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT), QUARANTINE_LEDGER_PATH: QUARANTINE_LEDGER_PATH };
 
       // Session 1: Generate quarantine entries
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {

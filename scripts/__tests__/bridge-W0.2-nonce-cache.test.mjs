@@ -13,7 +13,7 @@
  * - Verify cache survives daemon restart
  */
 
-import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import { promises as fs, mkdtempSync, rmSync } from 'fs';
 import os from 'os';
 import net from 'net';

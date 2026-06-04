@@ -16,10 +16,23 @@ import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import { spawn } from 'child_process';
 import { createServer } from 'http';
 import fetch from 'node-fetch';
+import net from 'net';
+
+function getFreePort() {
+  return new Promise((resolve, reject) => {
+    const srv = net.createServer();
+    srv.listen(0, '127.0.0.1', () => { const {port} = srv.address(); srv.close(() => resolve(port)); });
+    srv.on('error', reject);
+  });
+}
 
 describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
   let bridgeProcess;
-  const BRIDGE_PORT = 9099;
+  let BRIDGE_PORT;
+
+  beforeEach(async () => {
+    BRIDGE_PORT = await getFreePort();
+  });
 
   afterEach(async () => {
     if (bridgeProcess) {
@@ -101,7 +114,7 @@ describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
       const validKey = Buffer.from('a'.repeat(64), 'utf-8')
         .toString('hex')
         .slice(0, 64);
-      const env = { ...process.env, BRIDGE_KEY: validKey };
+      const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT) };
 
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
         env,
@@ -153,7 +166,7 @@ describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
     const validKey = Buffer.from('b'.repeat(64), 'utf-8')
       .toString('hex')
       .slice(0, 64);
-    const env = { ...process.env, BRIDGE_KEY: validKey };
+    const env = { ...process.env, BRIDGE_KEY: validKey, BRIDGE_PORT: String(BRIDGE_PORT) };
 
     bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
       env,
@@ -165,7 +178,7 @@ describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
         try {
           // Post a message
           const msg = {
-            from: 'test',
+            from: 'lazarus',
             content: 'F2.1 test message',
             timestamp: new Date().toISOString(),
           };
