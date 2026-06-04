@@ -87,4 +87,8 @@ log "START atlas-sse-client"
 nohup node "$ROOT_DIR/scripts/atlas-sse-client.mjs" >>"$ROOT_DIR/logs/atlas-sse.log" 2>&1 &
 log "OK    atlas-sse-client"
 
+log "START family-heartbeat"
+nohup node "$ROOT_DIR/scripts/family-heartbeat.mjs" >>"$ROOT_DIR/logs/heartbeat.log" 2>&1 &
+log "OK    family-heartbeat"
+
 log "Attach bootstrap complete"
