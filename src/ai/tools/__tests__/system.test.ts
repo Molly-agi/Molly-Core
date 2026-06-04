@@ -125,15 +125,15 @@ describe('System Tools', () => {
       const result = await getHandler()({});
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result).toContain('gemini-2.5-flash');
-      expect(result).toContain('gemini-embedding-001');
+      expect(result).toContain('gemini-3.1-flash-001');
+      expect(result).toContain('gemini-embedding-2-preview');
     });
 
     it('includes TTS and image models', async () => {
       const result = await getHandler()({});
 
-      expect(result).toContain('gemini-2.5-flash-preview-tts');
-      expect(result).toContain('imagen-3.0-generate-001');
+      expect(result).toContain('gemini-3.1-flash-tts-preview');
+      expect(result).toContain('imagen-4.0-generate-001');
     });
   });
 
