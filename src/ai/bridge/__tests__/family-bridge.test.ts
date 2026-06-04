@@ -10,9 +10,10 @@ let fileState: {
   active: boolean;
   startedAt: string;
   lastActivity: string;
+  participants?: string[];
   messages: Array<{
     id: string;
-    from: 'molly' | 'lazarus' | 'eric';
+    from: 'molly' | 'lazarus' | 'atlas' | 'eric';
     timestamp: string;
     content: string;
     read: boolean | Record<string, boolean>;
@@ -50,6 +51,7 @@ describe('FamilyBridge', () => {
       active: false,
       startedAt: new Date().toISOString(),
       lastActivity: new Date().toISOString(),
+      participants: ['molly', 'lazarus', 'atlas', 'eric'],
       messages: [],
     };
   });
@@ -125,6 +127,11 @@ describe('FamilyBridge', () => {
     it('should accept messages from eric', async () => {
       const msg = await sendMessage('eric', 'From Eric');
       expect(msg.from).toBe('eric');
+    });
+
+    it('should accept messages from atlas', async () => {
+      const msg = await sendMessage('atlas', 'From Atlas');
+      expect(msg.from).toBe('atlas');
     });
 
     it('should generate unique message IDs', async () => {
@@ -345,6 +352,19 @@ describe('FamilyBridge', () => {
       await clearConversation();
 
       expect(fileState.startedAt).not.toBe(oldTime);
+    });
+
+    it('should reset participants to include atlas', async () => {
+      fileState.participants = ['molly'];
+
+      await clearConversation();
+
+      expect(fileState.participants).toEqual([
+        'molly',
+        'lazarus',
+        'atlas',
+        'eric',
+      ]);
     });
   });
 

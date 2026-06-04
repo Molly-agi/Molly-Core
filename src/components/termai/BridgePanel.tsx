@@ -12,7 +12,7 @@ import { useTTS } from './useTTS';
 
 interface BridgeMessage {
   id: string;
-  from: 'molly' | 'lazarus' | 'eric';
+  from: 'molly' | 'lazarus' | 'atlas' | 'eric';
   timestamp: string;
   content: string;
   read: boolean;
