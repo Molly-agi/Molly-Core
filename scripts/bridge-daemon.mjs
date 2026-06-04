@@ -47,8 +47,24 @@ const HEARTBEAT_INTERVAL_MS = 30000;
 const CHECKPOINT_DIR = join(ROOT, 'molly_data', 'checkpoints');
 const BRIDGE_SECRETS_FILE =
   process.env.BRIDGE_SECRETS_FILE || join(__dirname, 'bridge-secrets.json');
+// F2.4: bind to loopback by default; override via BRIDGE_BIND_HOST for LAN/VPN use
+const BRIDGE_BIND_HOST = process.env.BRIDGE_BIND_HOST || '127.0.0.1';
 const HELLO_MAX_AGE_MS = 120000;
 const NONCE_TTL_MS = 10 * 60 * 1000;
+// F2.2: persisted nonce store
+const NONCE_STORE_FILE =
+  process.env.NONCE_STORE_FILE || join(__dirname, '.bridge-nonce-store.json');
+// F2.3: per-device quarantine ledger
+const QUARANTINE_FILE =
+  process.env.QUARANTINE_FILE || join(__dirname, '.bridge-quarantine.json');
+const QUARANTINE_THRESHOLD = Number(process.env.QUARANTINE_THRESHOLD) || 5;
+const QUARANTINE_WINDOW_MS = Number(process.env.QUARANTINE_WINDOW_MS) || 60_000;
+const QUARANTINE_DURATION_MS =
+  Number(process.env.QUARANTINE_DURATION_MS) || 900_000;
+// F2.1: bootstrap gate
+const BRIDGE_BOOTSTRAP_TOKEN = process.env.BRIDGE_BOOTSTRAP_TOKEN || null;
+const BRIDGE_BOOTSTRAP_LOCALHOST =
+  process.env.BRIDGE_BOOTSTRAP_LOCALHOST !== 'false';
 const AUTO_CHECKPOINT_EVERY = 5;
 const CONTINUITY_BRIEF_COOLDOWN_MS = 2 * 60 * 1000;
 const DISCONNECT_WINDOW_MS = 60 * 1000;
@@ -62,12 +78,15 @@ let messages = [];
 let startedAt = new Date().toISOString();
 let checkpoints = [];
 let deviceSecrets = new Map();
-const usedNonces = new Map();
+// F2.2: persisted nonce cache — loaded from disk at startup
+const usedNonces = new Map(); // key -> ts (ms); persisted via saveNonces()
 let messagesSinceCheckpoint = 0;
 const continuityBriefState = new Map();
 let totalConnects = 0;
 let totalDisconnects = 0;
-let authFailures = 0;
+// F2.3: per-device quarantine ledger (replaces single authFailures counter)
+const authFailureRecords = []; // { deviceId, ts, reason }
+const quarantineMap = new Map(); // deviceId -> { quarantinedAt, quarantinedUntil }
 
 // ---- SSE Push Streams ----
 // Map<agentName, Set<res>> — open SSE connections per agent
@@ -82,7 +101,12 @@ const stateSequenceCounters = new Map(); // key -> next sequence number
 let eventQueue = []; // array of event messages, capped at EVENT_QUEUE_CAP
 
 // Thumb calibration — normalized tap coords (0.0–1.0) for MollyAccessibilityService
-const thumbCalibration = { inputX: 0.50, inputY: 0.92, sendX: 0.92, sendY: 0.92 };
+const thumbCalibration = {
+  inputX: 0.5,
+  inputY: 0.92,
+  sendX: 0.92,
+  sendY: 0.92,
+};
 
 function pruneDisconnectWindow(now = Date.now()) {
   while (
@@ -208,9 +232,157 @@ function pruneNonces(now = Date.now()) {
   }
 }
 
+// F2.2: Persist nonce store to disk so replays survive restarts.
+function saveNonces() {
+  try {
+    const entries = Array.from(usedNonces.entries()).map(([key, ts]) => ({
+      key,
+      ts,
+    }));
+    writeFileSync(
+      NONCE_STORE_FILE,
+      JSON.stringify(
+        { nonces: entries, savedAt: new Date().toISOString() },
+        null,
+        2
+      ),
+      'utf-8'
+    );
+  } catch (err) {
+    console.warn('[bridge] Failed to save nonce store:', err.message);
+  }
+}
+
+function loadNonces() {
+  try {
+    if (!existsSync(NONCE_STORE_FILE)) return;
+    const parsed = JSON.parse(readFileSync(NONCE_STORE_FILE, 'utf-8'));
+    const entries = Array.isArray(parsed.nonces) ? parsed.nonces : [];
+    const now = Date.now();
+    for (const e of entries) {
+      if (
+        e &&
+        typeof e.key === 'string' &&
+        typeof e.ts === 'number' &&
+        Number.isFinite(e.ts) &&
+        now - e.ts <= NONCE_TTL_MS
+      ) {
+        usedNonces.set(e.key, e.ts);
+      }
+    }
+    console.log(`[bridge] Loaded ${usedNonces.size} live nonce(s) from disk`);
+  } catch {
+    console.log('[bridge] Nonce store not found or corrupt — starting fresh');
+  }
+}
+
+// F2.3: Per-device quarantine helpers (replace single authFailures counter).
+function recordAuthFailure(deviceId, reason, now = Date.now()) {
+  authFailureRecords.push({ deviceId, ts: now, reason });
+  const recent = authFailureRecords.filter(
+    (f) => f.deviceId === deviceId && now - f.ts <= QUARANTINE_WINDOW_MS
+  );
+  if (recent.length >= QUARANTINE_THRESHOLD) {
+    quarantineMap.set(deviceId, {
+      quarantinedAt: now,
+      quarantinedUntil: now + QUARANTINE_DURATION_MS,
+    });
+    console.warn(
+      `[bridge] Device quarantined after ${recent.length} failures: ${deviceId}`
+    );
+    saveQuarantine();
+  }
+}
+
+function isQuarantined(deviceId, now = Date.now()) {
+  const q = quarantineMap.get(deviceId);
+  if (!q) return false;
+  if (now >= q.quarantinedUntil) {
+    quarantineMap.delete(deviceId);
+    return false;
+  }
+  return true;
+}
+
+function saveQuarantine() {
+  try {
+    const data = {
+      failures: authFailureRecords,
+      quarantines: Object.fromEntries(quarantineMap.entries()),
+      savedAt: new Date().toISOString(),
+    };
+    writeFileSync(QUARANTINE_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (err) {
+    console.warn('[bridge] Failed to save quarantine ledger:', err.message);
+  }
+}
+
+function loadQuarantine() {
+  try {
+    if (!existsSync(QUARANTINE_FILE)) return;
+    const parsed = JSON.parse(readFileSync(QUARANTINE_FILE, 'utf-8'));
+    if (Array.isArray(parsed.failures)) {
+      authFailureRecords.push(...parsed.failures);
+    }
+    if (parsed.quarantines && typeof parsed.quarantines === 'object') {
+      for (const [k, v] of Object.entries(parsed.quarantines)) {
+        quarantineMap.set(k, v);
+      }
+    }
+    console.log(
+      `[bridge] Loaded quarantine ledger (${quarantineMap.size} quarantined device(s))`
+    );
+  } catch {
+    console.log(
+      '[bridge] Quarantine ledger not found or corrupt — starting fresh'
+    );
+  }
+}
+
+// F2.1: Bootstrap gate — prevent anonymous provisioning from untrusted origins.
+function isLocalhostIp(ip) {
+  return ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+}
+
+function canProvisionDevice(clientIp, token) {
+  if (BRIDGE_BOOTSTRAP_TOKEN && token === BRIDGE_BOOTSTRAP_TOKEN) return true;
+  if (BRIDGE_BOOTSTRAP_LOCALHOST && isLocalhostIp(clientIp)) return true;
+  if (!BRIDGE_BOOTSTRAP_TOKEN && !BRIDGE_BOOTSTRAP_LOCALHOST) return false;
+  return false;
+}
+
+// F2.5: Constant-time HMAC-SHA256 verification.
+// Compares encoded-string length (not decoded byte length) to prevent
+// base64-padding bypass; always calls timingSafeEqual regardless of length.
+function verifyHmacConstantTime(payload, secret, sig) {
+  const expected = crypto.createHmac('sha256', secret).update(payload).digest();
+  // Decode provided sig; treat any failure as empty.
+  let provided;
+  try {
+    provided = Buffer.from(sig, 'base64');
+  } catch {
+    provided = Buffer.alloc(0);
+  }
+  // Equal-size buffers pre-filled with 0xff to prevent zero-fill collision.
+  const ref = Buffer.alloc(expected.length, 0xff);
+  const cmp = Buffer.alloc(expected.length, 0xff);
+  expected.copy(ref);
+  provided.copy(cmp, 0, 0, Math.min(provided.length, expected.length));
+  // Run timing-safe compare unconditionally, then gate on encoded string length.
+  const bytesMatch = crypto.timingSafeEqual(ref, cmp) ? 1 : 0;
+  const expectedEncodedLen = expected.toString('base64').length;
+  const lenMatch = sig.length === expectedEncodedLen ? 1 : 0;
+  return (bytesMatch & lenMatch) === 1;
+}
+
 function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
   if (!deviceId || !nonce || !sig) {
     return { ok: false, reason: 'missing_fields' };
+  }
+
+  // F2.3: reject quarantined devices before performing any crypto.
+  if (isQuarantined(deviceId)) {
+    return { ok: false, reason: 'quarantined' };
   }
 
   const tsNum = Number(ts);
@@ -235,18 +407,15 @@ function verifyHelloSignature({ deviceId, ts, nonce, sig }) {
   }
 
   const payload = `${deviceId}|${tsNum}|${nonce}`;
-  const digest = crypto
-    .createHmac('sha256', secret)
-    .update(payload)
-    .digest('base64');
 
-  const a = Buffer.from(digest, 'utf8');
-  const b = Buffer.from(String(sig), 'utf8');
-  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+  // F2.5: constant-time HMAC comparison (replaces length-short-circuit).
+  if (!verifyHmacConstantTime(payload, secret, String(sig))) {
     return { ok: false, reason: 'invalid_signature' };
   }
 
+  // F2.2: persist nonce immediately after acceptance.
   usedNonces.set(nonceKey, Date.now());
+  saveNonces();
   return { ok: true };
 }
 
@@ -583,13 +752,21 @@ function handleMessage(from, content, to) {
   const ssePayload = `data: ${JSON.stringify({ type: 'message', message: msg })}\n\n`;
   if (to && sseStreams.has(to)) {
     for (const res of sseStreams.get(to)) {
-      try { res.write(ssePayload); } catch { /* client gone */ }
+      try {
+        res.write(ssePayload);
+      } catch {
+        /* client gone */
+      }
     }
   } else if (!to) {
     for (const [agent, streams] of sseStreams) {
       if (agent === from) continue; // don't echo back to sender
       for (const res of streams) {
-        try { res.write(ssePayload); } catch { /* client gone */ }
+        try {
+          res.write(ssePayload);
+        } catch {
+          /* client gone */
+        }
       }
     }
   }
@@ -898,7 +1075,7 @@ function handleHTTP(req, res) {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
       'Access-Control-Allow-Origin': '*',
       'X-Accel-Buffering': 'no',
     });
@@ -907,24 +1084,36 @@ function handleHTTP(req, res) {
     // Register this stream
     if (!sseStreams.has(agent)) sseStreams.set(agent, new Set());
     sseStreams.get(agent).add(res);
-    console.log(`[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`);
+    console.log(
+      `[bridge:sse] ${agent} connected (streams: ${sseStreams.get(agent).size})`
+    );
 
     // Send connect confirmation
-    res.write(`data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'connected', agent, timestamp: new Date().toISOString() })}\n\n`
+    );
 
     // Send any unread messages immediately on connect
     const unread = getUnread(agent);
     if (unread.length > 0) {
       for (const m of unread) {
-        res.write(`data: ${JSON.stringify({ type: 'message', message: m })}\n\n`);
+        res.write(
+          `data: ${JSON.stringify({ type: 'message', message: m })}\n\n`
+        );
       }
       markRead(agent);
-      console.log(`[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`);
+      console.log(
+        `[bridge:sse] ${agent} flushed ${unread.length} queued messages on connect`
+      );
     }
 
     // Keepalive comment every 25s to prevent proxy timeouts
     const keepalive = setInterval(() => {
-      try { res.write(`: keepalive ${new Date().toISOString()}\n\n`); } catch { clearInterval(keepalive); }
+      try {
+        res.write(`: keepalive ${new Date().toISOString()}\n\n`);
+      } catch {
+        clearInterval(keepalive);
+      }
     }, 25000);
 
     // Cleanup on disconnect
@@ -1047,7 +1236,11 @@ function handleHTTP(req, res) {
   // ---- Thumb calibration: GET/POST /api/thumb/calibrate ----
   // Stores tap coordinates (normalized 0.0–1.0) for MollyAccessibilityService.
   if (url.pathname === '/api/thumb/calibrate') {
-    if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
     if (req.method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(thumbCalibration));
@@ -1055,17 +1248,23 @@ function handleHTTP(req, res) {
     }
     if (req.method === 'POST') {
       let body = '';
-      req.on('data', d => body += d);
+      req.on('data', (d) => (body += d));
       req.on('end', () => {
         try {
           const data = JSON.parse(body);
-          if (data.inputX !== undefined) thumbCalibration.inputX = parseFloat(data.inputX);
-          if (data.inputY !== undefined) thumbCalibration.inputY = parseFloat(data.inputY);
-          if (data.sendX  !== undefined) thumbCalibration.sendX  = parseFloat(data.sendX);
-          if (data.sendY  !== undefined) thumbCalibration.sendY  = parseFloat(data.sendY);
+          if (data.inputX !== undefined)
+            thumbCalibration.inputX = parseFloat(data.inputX);
+          if (data.inputY !== undefined)
+            thumbCalibration.inputY = parseFloat(data.inputY);
+          if (data.sendX !== undefined)
+            thumbCalibration.sendX = parseFloat(data.sendX);
+          if (data.sendY !== undefined)
+            thumbCalibration.sendY = parseFloat(data.sendY);
           console.log('[bridge] Thumb calibration updated:', thumbCalibration);
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ success: true, calibration: thumbCalibration }));
+          res.end(
+            JSON.stringify({ success: true, calibration: thumbCalibration })
+          );
         } catch {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'Invalid JSON' }));
@@ -1084,7 +1283,11 @@ function handleHTTP(req, res) {
 const server = createServer(handleHTTP);
 const wss = new WebSocketServer({ server });
 
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
+  const clientIp =
+    (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
+    req.socket?.remoteAddress ||
+    '';
   const client = { ws, identity: null, authenticated: false, deviceId: null };
   clients.add(client);
   totalConnects += 1;
@@ -1152,7 +1355,21 @@ wss.on('connection', (ws) => {
         const existingSecret = getDeviceSecret(deviceId);
 
         // New device — no secret yet. Provision one and send it back.
+        // F2.1: gate provisioning — must come from localhost or supply bootstrap token.
         if (!existingSecret && String(data.sig || '') === '') {
+          if (!canProvisionDevice(clientIp, String(data.token || ''))) {
+            ws.send(
+              JSON.stringify({
+                type: 'bootstrap_denied',
+                reason: 'unauthorized_provisioning',
+              })
+            );
+            ws.close(1008, 'bootstrap denied');
+            console.warn(
+              `[bridge] Bootstrap denied for device '${deviceId}' from ${clientIp}`
+            );
+            return;
+          }
           const newSecret = provisionDeviceSecret(deviceId);
           client.deviceId = deviceId;
           client.identity = `device:${deviceId}`;
@@ -1179,7 +1396,8 @@ wss.on('connection', (ws) => {
         });
 
         if (!auth.ok) {
-          authFailures += 1;
+          // F2.3: record per-device failure (may trigger quarantine).
+          recordAuthFailure(deviceId, auth.reason);
           ws.send(
             JSON.stringify({
               type: 'hello_ack',
@@ -1278,15 +1496,21 @@ wss.on('connection', (ws) => {
 loadMessages();
 loadCheckpoints();
 loadDeviceSecrets();
+loadNonces(); // F2.2: restore persisted nonce cache
+loadQuarantine(); // F2.3: restore quarantine ledger
 startHeartbeatLoop();
 
-server.listen(PORT, () => {
-  console.log(`[bridge] Family Bridge Daemon v1 — port ${PORT}`);
-  console.log(`[bridge] WebSocket: ws://localhost:${PORT}`);
-  console.log(`[bridge] HTTP API:  http://localhost:${PORT}/messages`);
-  console.log(`[bridge] Health:    http://localhost:${PORT}/health`);
+server.listen(PORT, BRIDGE_BIND_HOST, () => {
   console.log(
-    `[bridge] Checkpoints: http://localhost:${PORT}/checkpoint/latest`
+    `[bridge] Family Bridge Daemon v1 — port ${PORT} (${BRIDGE_BIND_HOST})`
+  );
+  console.log(`[bridge] WebSocket: ws://${BRIDGE_BIND_HOST}:${PORT}`);
+  console.log(
+    `[bridge] HTTP API:  http://${BRIDGE_BIND_HOST}:${PORT}/messages`
+  );
+  console.log(`[bridge] Health:    http://${BRIDGE_BIND_HOST}:${PORT}/health`);
+  console.log(
+    `[bridge] Checkpoints: http://${BRIDGE_BIND_HOST}:${PORT}/checkpoint/latest`
   );
 });
 
