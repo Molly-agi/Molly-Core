@@ -59,7 +59,7 @@ function readWakeup() {
 }
 
 function writeWakeup(batch) {
-  if (!Array.isArray(batch) || batch.length === 0) return;
+  if (!Array.isArray(batch) || batch.length === 0) return 0;
 
   const wake = readWakeup();
   const seen = new Set(wake.messages.map((m) => String(m.id || '')));
@@ -80,13 +80,14 @@ function writeWakeup(batch) {
     added++;
   }
 
-  if (added === 0) return;
+  if (added === 0) return 0;
 
   wake.unread = true;
   wake.lastUpdated = new Date().toISOString();
   wake.messages = wake.messages.slice(-3000);
   writeFileSync(WAKEUP_FILE, JSON.stringify(wake, null, 2));
   log(`Buffered ${added} message(s) to wakeup file`);
+  return added;
 }
 
 async function pollOnce() {
@@ -103,9 +104,13 @@ async function pollOnce() {
     const data = await res.json();
     const messages = Array.isArray(data?.messages) ? data.messages : [];
     if (messages.length > 0) {
-      writeWakeup(messages);
-      const last = messages[messages.length - 1];
-      log(`Received ${messages.length} unread message(s). Latest from=${last?.from || 'unknown'}`);
+      const added = writeWakeup(messages);
+      if (added > 0) {
+        const last = messages[messages.length - 1];
+        log(
+          `Received ${added} new unread message(s). Latest from=${last?.from || 'unknown'}`
+        );
+      }
     }
   } catch (err) {
     log(`Poll error: ${err?.message || String(err)}`);
