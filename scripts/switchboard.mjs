@@ -200,6 +200,7 @@ const NOISE_PATTERNS = [
   'getSystemHealth',
   '"tool":',
   '<tool_request>',
+  '[hive-mind', // hive-mind-daemon internal coordination (RECEIPT, KEEPALIVE, STATUS)
 ];
 
 function isNoise(content) {
@@ -230,6 +231,7 @@ function classifyMessage(msg) {
   const isForAtlas = isBroadcast || to === 'atlas';
   const isFromMolly = from === 'molly';
   const isFromEric = from === 'eric';
+  const isFromAtlas = from === 'atlas';
 
   return {
     isEscalation,
@@ -240,6 +242,7 @@ function classifyMessage(msg) {
     isForAtlas,
     isFromMolly,
     isFromEric,
+    isFromAtlas,
   };
 }
 
@@ -265,6 +268,7 @@ function routeMessage(msg) {
     isForAtlas,
     isFromMolly,
     isFromEric,
+    isFromAtlas,
   } = classifyMessage(msg);
 
   const content = msg.content || '';
@@ -322,8 +326,9 @@ function routeMessage(msg) {
     writeWakeup(msg);
   }
 
-  // ── Atlas wakeup — any message directed to Atlas or broadcast ────────────
-  if (isForAtlas) {
+  // ── Atlas wakeup — any message directed to Atlas or broadcast, but not
+  //    Atlas's own broadcasts (hive-mind receipts, keepalives, status reports)
+  if (isForAtlas && !isFromAtlas) {
     writeAtlasWakeup(msg);
   }
 }
