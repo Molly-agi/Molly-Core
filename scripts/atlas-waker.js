@@ -13,8 +13,9 @@
 (function () {
   'use strict';
 
-  const BRIDGE_URL = 'https://redesigned-orbit-v6p4gw4rwjwjhw6g7-9099.app.github.dev';
-  const POLL_INTERVAL_MS = 8000; // 8s — fast enough to feel instant
+  const BRIDGE_URL =
+    'https://redesigned-orbit-v6p4gw4rwjwjhw6g7-9099.app.github.dev';
+  const POLL_INTERVAL_MS = 4000; // 4s — responsive wake time
   const TRIGGER_MESSAGE = 'check the bridge';
   const RECIPIENT = 'lazarus';
 
@@ -22,10 +23,19 @@
   const badge = document.createElement('div');
   badge.id = 'atlas-waker-badge';
   Object.assign(badge.style, {
-    position: 'fixed', bottom: '12px', right: '12px', zIndex: '99999',
-    padding: '5px 10px', borderRadius: '12px', fontSize: '11px',
-    fontFamily: 'monospace', background: '#0a0a0a', color: '#00ff00',
-    border: '1px solid #333', cursor: 'pointer', userSelect: 'none',
+    position: 'fixed',
+    bottom: '12px',
+    right: '12px',
+    zIndex: '99999',
+    padding: '5px 10px',
+    borderRadius: '12px',
+    fontSize: '11px',
+    fontFamily: 'monospace',
+    background: '#0a0a0a',
+    color: '#00ff00',
+    border: '1px solid #333',
+    cursor: 'pointer',
+    userSelect: 'none',
   });
   badge.title = 'Atlas Waker — click to stop';
   badge.textContent = '👁 Atlas: watching';
@@ -33,12 +43,15 @@
 
   let running = true;
   badge.addEventListener('click', () => {
-    running = false; clearInterval(timer);
-    badge.textContent = '⏹ Atlas: stopped'; badge.style.color = '#666';
+    running = false;
+    clearInterval(timer);
+    badge.textContent = '⏹ Atlas: stopped';
+    badge.style.color = '#666';
   });
 
   function setBadge(text, color) {
-    badge.textContent = text; badge.style.color = color || '#00ff00';
+    badge.textContent = text;
+    badge.style.color = color || '#00ff00';
   }
 
   // ── Strategy 1: xterm.js hidden textarea (keyboard event injection) ───────
@@ -57,7 +70,8 @@
         keyCode: ch === '\r' ? 13 : ch.charCodeAt(0),
         which: ch === '\r' ? 13 : ch.charCodeAt(0),
         charCode: ch === '\r' ? 13 : ch.charCodeAt(0),
-        bubbles: true, cancelable: true,
+        bubbles: true,
+        cancelable: true,
       };
       ta.dispatchEvent(new KeyboardEvent('keydown', opts));
       ta.dispatchEvent(new KeyboardEvent('keypress', opts));
@@ -83,10 +97,15 @@
       }
       // Try via VS Code's workbench accessor
       if (window.vscodeApi && window.vscodeApi.commands) {
-        window.vscodeApi.commands.executeCommand('workbench.action.terminal.sendSequence', { text: text + '\r' });
+        window.vscodeApi.commands.executeCommand(
+          'workbench.action.terminal.sendSequence',
+          { text: text + '\r' }
+        );
         return true;
       }
-    } catch (_) { /* not available in this build */ }
+    } catch (_) {
+      /* not available in this build */
+    }
     return false;
   }
 
@@ -95,10 +114,13 @@
   // contenteditable and click the send button. Covers future UI variants.
   function injectViaChatPanel(text) {
     const selectors = [
-      'textarea[data-testid*="chat"]', 'textarea[aria-label*="chat" i]',
+      'textarea[data-testid*="chat"]',
+      'textarea[aria-label*="chat" i]',
       'div[contenteditable="true"][data-testid*="chat"]',
-      'textarea[placeholder*="message" i]', 'textarea[placeholder*="Ask" i]',
-      'textarea', 'div[contenteditable="true"]',
+      'textarea[placeholder*="message" i]',
+      'textarea[placeholder*="Ask" i]',
+      'textarea',
+      'div[contenteditable="true"]',
     ];
     let input = null;
     for (const sel of selectors) {
@@ -112,16 +134,26 @@
       input.textContent = text;
       input.dispatchEvent(new Event('input', { bubbles: true }));
     } else {
-      const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
+      const setter = Object.getOwnPropertyDescriptor(
+        HTMLTextAreaElement.prototype,
+        'value'
+      );
       if (setter && setter.set) setter.set.call(input, text);
       else input.value = text;
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
     }
     setTimeout(() => {
-      input.dispatchEvent(new KeyboardEvent('keydown', {
-        key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true, cancelable: true,
-      }));
+      input.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'Enter',
+          code: 'Enter',
+          keyCode: 13,
+          which: 13,
+          bubbles: true,
+          cancelable: true,
+        })
+      );
       const btn = document.querySelector(
         'button[type="submit"], button[aria-label*="send" i], button[aria-label*="submit" i]'
       );
@@ -152,8 +184,13 @@
   async function poll() {
     if (!running) return;
     try {
-      const res = await fetch(`${BRIDGE_URL}/api/bridge?unread=${RECIPIENT}&peek=true`);
-      if (!res.ok) { setBadge(`⚠ bridge ${res.status}`, '#ff4444'); return; }
+      const res = await fetch(
+        `${BRIDGE_URL}/api/bridge?unread=${RECIPIENT}&peek=true`
+      );
+      if (!res.ok) {
+        setBadge(`⚠ bridge ${res.status}`, '#ff4444');
+        return;
+      }
       const data = await res.json();
       const count = data.count || 0;
       if (count > 0 && count !== lastCount) {
@@ -171,5 +208,11 @@
 
   poll();
   const timer = setInterval(poll, POLL_INTERVAL_MS);
-  console.log('[Atlas Waker] Running. Bridge:', BRIDGE_URL, '| Poll:', POLL_INTERVAL_MS / 1000, 's');
+  console.log(
+    '[Atlas Waker] Running. Bridge:',
+    BRIDGE_URL,
+    '| Poll:',
+    POLL_INTERVAL_MS / 1000,
+    's'
+  );
 })();
