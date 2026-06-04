@@ -163,7 +163,7 @@ async function sendMessage(){
 
   // Build Gemini API request
   const contents=history.map(m=>({role:m.role==='user'?'user':'model',parts:[{text:m.content}]}));
-  const body={model:'gemini-2.5-flash',contents};
+  const body={model:'gemini-3.1-flash-001',contents};
   if(systemPrompt)body.systemInstruction={parts:[{text:systemPrompt}]};
 
   showTyping();
@@ -466,7 +466,7 @@ async function handleAiProxy(
     return;
   }
 
-  const model = (body.model as string) || 'gemini-2.5-flash';
+  const model = (body.model as string) || 'gemini-3.1-flash-001';
   const contents = body.contents;
   const systemInstruction = body.systemInstruction;
   const generationConfig = body.generationConfig;
