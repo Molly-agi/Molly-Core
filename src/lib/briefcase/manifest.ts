@@ -8,7 +8,7 @@
  * present — manifest.artifacts lists every artifact that contributed.
  */
 
-import { createHmac, createHash } from 'crypto';
+import { createHmac, createHash, timingSafeEqual } from 'crypto';
 import type { Manifest, ArtifactEntry } from './schema';
 
 export function sha256(buf: Buffer): string {
@@ -36,13 +36,11 @@ export function computeManifestHmac(manifest: Manifest, key: Buffer): string {
 
 export function verifyManifestHmac(manifest: Manifest, key: Buffer): boolean {
   const expected = computeManifestHmac(manifest, key);
-  // constant-time equality
-  if (expected.length !== manifest.hmac.length) return false;
-  let mismatch = 0;
-  for (let i = 0; i < expected.length; i++) {
-    mismatch |= expected.charCodeAt(i) ^ manifest.hmac.charCodeAt(i);
-  }
-  return mismatch === 0;
+  // constant-time equality using Node.js crypto.timingSafeEqual (F2.5)
+  const a = Buffer.from(expected, 'utf8');
+  const b = Buffer.from(manifest.hmac, 'utf8');
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
 }
 
 export function verifyArtifactHashes(
