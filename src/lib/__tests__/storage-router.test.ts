@@ -159,6 +159,11 @@ describe('StorageRouter — Environment Detection', () => {
     delete process.env.MOLLY_STORAGE_PROVIDER;
     delete process.env.TERMUX_VERSION;
     delete process.env.CODESPACES;
+    delete process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    delete process.env.FIREBASE_PROJECT_ID;
+    delete process.env.FIREBASE_CLIENT_EMAIL;
+    delete process.env.FIREBASE_PRIVATE_KEY;
+    delete process.env.GOOGLE_APPLICATION_CREDENTIALS;
     jest.resetModules();
   });
 
@@ -184,6 +189,27 @@ describe('StorageRouter — Environment Detection', () => {
     const { getStorageRouter } = require('../storage-router');
     const router = await getStorageRouter();
     expect(router.getMode()).toBe('local');
+  });
+
+  it('prefers firestore path when Firebase Admin split credentials are configured', async () => {
+    delete process.env.MOLLY_STORAGE_PROVIDER;
+    delete process.env.TERMUX_VERSION;
+    delete process.env.CODESPACES;
+    process.env.FIREBASE_PROJECT_ID = 'molly-project';
+    process.env.FIREBASE_CLIENT_EMAIL = 'molly@example.com';
+    process.env.FIREBASE_PRIVATE_KEY = 'fake-private-key';
+
+    const { MollyLogger } = require('../../ai/logger');
+    const { getStorageRouter } = require('../storage-router');
+    const router = await getStorageRouter();
+
+    // Jest runs in jsdom, so admin is unavailable and the router falls back.
+    // This assertion verifies it tried Firestore first.
+    expect(router.getMode()).toBe('local');
+    expect(MollyLogger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Firestore requested but unavailable'),
+      'storage-router'
+    );
   });
 });
 
@@ -247,4 +273,3 @@ describe('StorageRouter — Firestore Fallback', () => {
     );
   });
 });
-

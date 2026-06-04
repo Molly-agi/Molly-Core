@@ -70,13 +70,13 @@ function detectStorageMode(): StorageMode {
     return 'firestore';
   }
 
-  // Codespace with Firebase credentials configured — use Firestore
-  // Accepts service account JSON or ADC-style project ID vars
+  // Any Node server with Firebase Admin credentials configured — use Firestore
   if (
-    process.env.CODESPACES === 'true' &&
-    (process.env.FIREBASE_SERVICE_ACCOUNT_JSON ||
-      process.env.FIREBASE_PROJECT_ID ||
-      process.env.GOOGLE_CLOUD_PROJECT)
+    process.env.FIREBASE_SERVICE_ACCOUNT_JSON ||
+    (process.env.FIREBASE_PROJECT_ID &&
+      process.env.FIREBASE_CLIENT_EMAIL &&
+      process.env.FIREBASE_PRIVATE_KEY) ||
+    process.env.GOOGLE_APPLICATION_CREDENTIALS
   ) {
     return 'firestore';
   }
@@ -120,7 +120,8 @@ class StorageRouter implements StorageProvider {
 
   static async create(): Promise<StorageRouter> {
     const requestedMode = detectStorageMode();
-    const { provider, mode } = await StorageRouter.createProvider(requestedMode);
+    const { provider, mode } =
+      await StorageRouter.createProvider(requestedMode);
     return new StorageRouter(mode, provider);
   }
 
@@ -136,9 +137,8 @@ class StorageRouter implements StorageProvider {
             'Firebase Admin SDK not configured (missing credentials)'
           );
         }
-        const { FirestoreStorageProvider } = await import(
-          './firestore-storage-provider'
-        );
+        const { FirestoreStorageProvider } =
+          await import('./firestore-storage-provider');
         return { provider: new FirestoreStorageProvider(), mode: 'firestore' };
       } catch (err) {
         MollyLogger.warn(
@@ -317,7 +317,12 @@ export async function loadFromStorage<T = unknown>(
   const storage = await getStorageRouter();
   const doc = await storage.get(key, 'singleton');
   // `== null` intentionally uses loose equality to catch both null and undefined
-  if (!doc || doc.data == null || typeof doc.data !== 'object' || !('value' in doc.data))
+  if (
+    !doc ||
+    doc.data == null ||
+    typeof doc.data !== 'object' ||
+    !('value' in doc.data)
+  )
     return null;
   return doc.data.value as T;
 }
