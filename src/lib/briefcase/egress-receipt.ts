@@ -7,7 +7,7 @@
  * over the receipt bytes against the gate's public key/secret.
  */
 
-import { createHmac } from 'crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 import type { EgressReceipt } from './schema';
 
 export function signEgressReceipt(
@@ -38,11 +38,11 @@ export function verifyEgressReceipt(
   if (expected.length !== gate_process_signature.length) {
     return { ok: false, reason: 'gate signature length mismatch' };
   }
-  let mismatch = 0;
-  for (let i = 0; i < expected.length; i++) {
-    mismatch |= expected.charCodeAt(i) ^ gate_process_signature.charCodeAt(i);
-  }
-  if (mismatch !== 0) return { ok: false, reason: 'gate signature invalid' };
+  // constant-time equality using Node.js crypto.timingSafeEqual (F2.5)
+  const a = Buffer.from(expected, 'utf8');
+  const b = Buffer.from(gate_process_signature, 'utf8');
+  if (!timingSafeEqual(a, b))
+    return { ok: false, reason: 'gate signature invalid' };
   return { ok: true };
 }
 
