@@ -1,5 +1,5 @@
 /**
- * @fileOverview Tests for Family Bridge — Molly/Lazarus Communication Channel
+ * @fileOverview Tests for Family Bridge communication channel
  *
  * Tests message sending, reading, marking as read, and state management.
  * Uses mocked fs operations to avoid actual file I/O.
@@ -12,7 +12,7 @@ let fileState: {
   lastActivity: string;
   messages: Array<{
     id: string;
-    from: 'molly' | 'lazarus' | 'eric';
+    from: 'molly' | 'lazarus' | 'eric' | 'atlas';
     timestamp: string;
     content: string;
     read: boolean | Record<string, boolean>;
@@ -125,6 +125,11 @@ describe('FamilyBridge', () => {
     it('should accept messages from eric', async () => {
       const msg = await sendMessage('eric', 'From Eric');
       expect(msg.from).toBe('eric');
+    });
+
+    it('should accept messages from atlas', async () => {
+      const msg = await sendMessage('atlas', 'From Atlas');
+      expect(msg.from).toBe('atlas');
     });
 
     it('should generate unique message IDs', async () => {
@@ -336,6 +341,14 @@ describe('FamilyBridge', () => {
       await clearConversation();
 
       expect(fileState.active).toBe(false);
+    });
+
+    it('should reset participants to include atlas', async () => {
+      await clearConversation();
+      const state = await readBridgeState();
+      expect(state.participants).toEqual(
+        expect.arrayContaining(['molly', 'lazarus', 'eric', 'atlas'])
+      );
     });
 
     it('should update timestamps', async () => {

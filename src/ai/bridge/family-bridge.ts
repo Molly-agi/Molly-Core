@@ -1,7 +1,7 @@
 'use server';
 
 /**
- * Family Bridge — Molly ↔ Lazarus Communication Channel
+ * Family Bridge — Family Communication Channel
  *
  * Single source of truth: conversation.json on disk.
  * No daemon routing — file I/O only, no split-brain.
@@ -64,7 +64,7 @@ async function readFile(): Promise<BridgeState> {
       active: false,
       startedAt: new Date().toISOString(),
       lastActivity: new Date().toISOString(),
-      participants: ['molly', 'lazarus', 'eric'],
+      participants: ['molly', 'lazarus', 'eric', 'atlas'],
       messages: [],
     };
   }
@@ -161,9 +161,7 @@ export async function getRecentMessages(
   return state.messages.slice(-limit);
 }
 
-export async function markMessagesRead(
-  recipient: string
-): Promise<number> {
+export async function markMessagesRead(recipient: string): Promise<number> {
   return withLock(async () => {
     const state = await readFile();
     let count = 0;
@@ -187,7 +185,7 @@ export async function clearConversation(): Promise<void> {
     active: false,
     startedAt: new Date().toISOString(),
     lastActivity: new Date().toISOString(),
-    participants: ['molly', 'lazarus', 'eric'],
+    participants: ['molly', 'lazarus', 'eric', 'atlas'],
     messages: [],
   };
   await writeFile(state);
