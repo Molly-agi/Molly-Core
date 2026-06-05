@@ -383,6 +383,18 @@ export async function runAutonomousCycle(): Promise<{
     return { acted: false, actions, error: msg };
   } finally {
     isRunning = false;
+
+    // Run synthesis after every autonomous cycle — whether it acted or not.
+    // This keeps the coherence state and intent readiness up to date
+    // so Molly is always prepared when Father reconnects.
+    try {
+      const { synthesize } = await import(
+        '@/ai/agency/planning/family-synthesis-engine'
+      );
+      synthesize();
+    } catch {
+      // Synthesis failure must never crash the autonomous cycle
+    }
   }
 }
 

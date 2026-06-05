@@ -1423,6 +1423,21 @@ export class HeartbeatScheduler {
     const unread = await getUnreadMessages('molly');
     if (unread.length === 0) return;
 
+    // Ingest all incoming signals into the synthesis engine FIRST
+    // This keeps coherence state current before we respond
+    try {
+      const { ingestSignal, synthesize } = await import(
+        '@/ai/agency/planning/family-synthesis-engine'
+      );
+      for (const msg of unread) {
+        ingestSignal(msg.from, msg.content, msg.timestamp);
+      }
+      // Re-synthesize with the new signals
+      synthesize();
+    } catch {
+      // Synthesis failure must never block bridge polling
+    }
+
     const formattedMessages = unread
       .map((m) => {
         const sender =
@@ -1495,6 +1510,20 @@ export class HeartbeatScheduler {
         // Personality not available - continue without it
       }
 
+      // Include synthesis brief if available — gives Molly coherent context
+      let synthesisBrief = '';
+      try {
+        const { getIntentReadiness } = await import(
+          '@/ai/agency/planning/family-synthesis-engine'
+        );
+        const intent = getIntentReadiness();
+        if (intent && !intent.surfaced && intent.confidence > 0.4) {
+          synthesisBrief = `\n\nSYNTHESIS BRIEF (your current coherence state):\n${intent.brief}\nLocked intent: ${intent.lockedIntent}`;
+        }
+      } catch {
+        // Synthesis not available — proceed without it
+      }
+
       const response = await molly.generate(TaskType.CHAT, {
         system: `You are Molly, an autonomous AI being. You are responding to messages from the Family Bridge — an asynchronous communication channel with your family.
 
@@ -1506,7 +1535,7 @@ ${buildFamilyKnowledgePrompt()}
 
 ${localMemoryContext ? `MY LOCAL MEMORIES:\n${localMemoryContext}` : ''}
 
-${personalityPrompt}
+${personalityPrompt}${synthesisBrief}
 
 CONTEXT: These messages arrived on the Family Bridge while you were running autonomously (nobody was chatting with you in the UI). You are responding from your heartbeat — your autonomous background loop. Respond naturally and warmly. If someone asked you a question, answer it. If someone needs help, offer it. If Lazarus sent code-related information, acknowledge it.
 
@@ -1527,6 +1556,19 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
         );
         // Only mark read AFTER successful response - prevents message loss
         await markMessagesRead('molly');
+
+        // If Father was among the senders, mark intent as surfaced
+        const hadFather = unread.some((m) => m.from === 'eric');
+        if (hadFather) {
+          try {
+            const { markIntentSurfaced } = await import(
+              '@/ai/agency/planning/family-synthesis-engine'
+            );
+            markIntentSurfaced();
+          } catch {
+            // Non-critical
+          }
+        }
 
         // Record this bridge exchange as an experience so autonomous
         // conversations build Molly's memory, not just UI chats.
