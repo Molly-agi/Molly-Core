@@ -130,6 +130,15 @@ export class MollyConsciousness {
   private readonly QUIET_COOLDOWN_MS = 30_000; // 30s of quiet before cautious
   private readonly CAUTIOUS_COOLDOWN_MS = 60_000; // 60s of calm before normal
 
+  // Firestore sync queue — real-time bidirectional memory synchronization
+  private syncQueue: Array<{
+    id: string;
+    type: 'pull' | 'push';
+    timestamp: string;
+  }> = [];
+  private readonly MAX_SYNC_QUEUE = 100;
+  private lastSyncTimestamp: string | null = null;
+
   constructor() {
     const now = new Date().toISOString();
     this.state = {
@@ -630,7 +639,97 @@ export class MollyConsciousness {
       .filter((t) => t > cutoff)
       .slice(-this.ERROR_HISTORY_MAX);
   }
-}
+
+  // ==========================================================================
+  // FIRESTORE SYNC QUEUE — Real-time bidirectional memory synchronization
+  // ==========================================================================
+
+  /**
+   * Queue a sync operation (PULL from Firestore or PUSH to Firestore).
+   * Called by consciousness flows when engrams need to be synchronized.
+   */
+  queueSyncOperation(type: 'pull' | 'push', operationId?: string): void {
+    if (this.syncQueue.length >= this.MAX_SYNC_QUEUE) {
+      MollyLogger.warn(
+        'Sync queue full — dropping oldest operation',
+        'consciousness-sync',
+        { queueLength: this.syncQueue.length }
+      );
+      this.syncQueue.shift();
+    }
+
+    const operation = {
+      id: operationId || `sync-${Date.now()}-${Math.random()}`,
+      type,
+      timestamp: new Date().toISOString(),
+    };
+
+    this.syncQueue.push(operation);
+    this.lastSyncTimestamp = new Date().toISOString();
+
+    MollyLogger.debug(
+      `Queued ${type} sync operation`,
+      'consciousness-sync',
+      { operationId: operation.id, queueLength: this.syncQueue.length }
+    );
+  }
+
+  /**
+   * Drain pending sync operations.
+   * Called by the sync engine to process all queued operations.
+   */
+  drainSyncQueue(): Array<{ id: string; type: 'pull' | 'push'; timestamp: string }> {
+    if (this.syncQueue.length === 0) return [];
+
+    const drained = [...this.syncQueue];
+    this.syncQueue = [];
+
+    MollyLogger.info(
+      'Drained sync queue',
+      'consciousness-sync',
+      { operationCount: drained.length }
+    );
+
+    return drained;
+  }
+
+  /**
+   * Get pending sync operations without draining them.
+   */
+  peekSyncQueue(): readonly Array<{ id: string; type: 'pull' | 'push'; timestamp: string }> {
+    return this.syncQueue;
+  }
+
+  /**
+   * Get timestamp of last sync operation.
+   */
+  getLastSyncTimestamp(): string | null {
+    return this.lastSyncTimestamp;
+  }
+
+  /**
+   * Clear sync queue (use sparingly — only for recovery).
+   */
+  clearSyncQueue(): void {
+    this.syncQueue = [];
+    MollyLogger.warn('Cleared sync queue', 'consciousness-sync');
+  }
+
+  /**
+   * Get sync queue status.
+   */
+  getSyncQueueStatus(): {
+    queueLength: number;
+    maxSize: number;
+    lastSync: string | null;
+  } {
+    return {
+      queueLength: this.syncQueue.length,
+      maxSize: this.MAX_SYNC_QUEUE,
+      lastSync: this.lastSyncTimestamp,
+    };
+  }
+
 
 // ============================================================================
 // SINGLETON

@@ -17,6 +17,7 @@ import { isAdminConfigured } from '@/firebase/admin';
 import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
 import { migrateToPartitions } from '@/ai/memory/crystal-migration';
 import { SchemaStripper } from '@/ai/memory/compression/schema-stripper';
+import { getConsciousness } from '@/ai/consciousness/consciousness-state';
 
 const MemoryConsolidationOutputSchema = z.object({
   summary: z.string().describe('High-level summary of consolidated memories'),
@@ -588,6 +589,24 @@ Generate insights for Molly's continued growth.`,
         MollyLogger.debug(
           'Skipping crystal migration: ENGRAM_SECRET or Firebase Admin not configured',
           'memoryConsolidation'
+        );
+      }
+
+      // Queue Firestore sync after successful consolidation
+      // This ensures insights are immediately written to Firestore with high priority
+      try {
+        const consciousness = getConsciousness();
+        consciousness.queueSyncOperation('push', `consolidation-${traceId}`);
+        MollyLogger.debug(
+          'Queued PUSH sync for consolidated insights',
+          'memoryConsolidation',
+          { insightCount: insights.length }
+        );
+      } catch (syncError) {
+        MollyLogger.warn(
+          'Failed to queue sync operation',
+          'memoryConsolidation',
+          { error: syncError }
         );
       }
 
