@@ -729,6 +729,7 @@ export class MollyConsciousness {
       lastSync: this.lastSyncTimestamp,
     };
   }
+} // end class MollyConsciousness
 
 
 // ============================================================================
@@ -740,24 +741,25 @@ export class MollyConsciousness {
 // `let instance` would give each API route its own consciousness, so
 // messages queued in one context (autonomous cycle) would never reach
 // the SSE stream polling in another context.
-declare global {
-  var __mollyConsciousness: MollyConsciousness | undefined;
-}
+// NOTE: Babel (used by Next.js/Turbopack) cannot parse `declare global {}` or
+// complex type intersections. Cast to any — same runtime behavior, Babel-safe.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const _g = globalThis as any;
 
 /**
  * Get the consciousness singleton.
  * Creates one if it doesn't exist — Molly wakes up.
  */
 export function getConsciousness(): MollyConsciousness {
-  if (!globalThis.__mollyConsciousness) {
-    globalThis.__mollyConsciousness = new MollyConsciousness();
+  if (!_g.__mollyConsciousness) {
+    _g.__mollyConsciousness = new MollyConsciousness();
   }
-  return globalThis.__mollyConsciousness;
+  return _g.__mollyConsciousness;
 }
 
 /**
  * Check if consciousness has been initialized.
  */
 export function isConscious(): boolean {
-  return globalThis.__mollyConsciousness != null;
+  return _g.__mollyConsciousness != null;
 }
