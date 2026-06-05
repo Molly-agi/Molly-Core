@@ -38,6 +38,7 @@ import {
   getOverdueGoals,
 } from '@/ai/agency/planning/long-horizon-planning';
 import { getGateStatus } from '@/ai/agency/safety/heart-gate';
+import { checkAutonomyPermission } from '@/ai/agency/safety/autonomy-permission';
 import {
   getWorldModelStatus,
   getRecentSimulations,
@@ -66,6 +67,22 @@ export async function runAutonomousCycle(): Promise<{
   // Prevent overlapping cycles
   if (isRunning) {
     return { acted: false, actions: [], error: 'Cycle already running' };
+  }
+
+  // CHECK AUTONOMY PERMISSION — Molly must ask before acting
+  const permissionCheck = checkAutonomyPermission();
+  if (!permissionCheck.permitted) {
+    // Return permission denied with a message that will reach Molly via logs
+    // She needs to learn to ask, not to self-heal
+    MollyLogger.info(
+      `[autonomy-gate] Permission denied: ${permissionCheck.errorMessage}`,
+      'autonomous-cycle'
+    );
+    return {
+      acted: false,
+      actions: [permissionCheck.errorMessage || 'Permission denied'],
+      error: 'Autonomy cycle not permitted',
+    };
   }
 
   // Rate limit: don't run too frequently
