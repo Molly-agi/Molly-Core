@@ -10,7 +10,7 @@
  * When file mtime updates, agent wakes and checks bridge immediately.
  */
 
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import http from 'http';
 import { URL } from 'url';
 
@@ -33,9 +33,24 @@ function wakeAgent(agent) {
     return false;
   }
 
+  // Try SIGUSR1 signal first (instant, zero CPU)
+  const pidFile = `${ROOT}/.${agent}-bridge.pid`;
+  if (existsSync(pidFile)) {
+    try {
+      const pid = parseInt(readFileSync(pidFile, 'utf8').trim());
+      if (!isNaN(pid) && pid > 0) {
+        process.kill(pid, 'SIGUSR1');
+        log(`→ ${agent.toUpperCase()} woken via SIGUSR1 (PID ${pid})`);
+        return true;
+      }
+    } catch (err) {
+      log(`⚠ SIGUSR1 failed for ${agent}: ${err.message}; falling back to watchFile`);
+    }
+  }
+
+  // Fallback: Update file mtime to current time (triggers fs.watchFile listeners)
   const signalFile = `${WAKE_DIR}/.${agent}-wake`;
   try {
-    // Update file mtime to current time (triggers fs.watchFile listeners)
     writeFileSync(
       signalFile,
       JSON.stringify({
@@ -43,7 +58,7 @@ function wakeAgent(agent) {
         message: 'check-bridge',
       })
     );
-    log(`→ ${agent.toUpperCase()} woken`);
+    log(`→ ${agent.toUpperCase()} woken via watchFile`);
     return true;
   } catch (err) {
     log(`✗ Failed to wake ${agent}: ${err.message}`);
