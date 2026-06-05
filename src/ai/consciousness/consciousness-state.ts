@@ -696,7 +696,7 @@ export class MollyConsciousness {
   /**
    * Get pending sync operations without draining them.
    */
-  peekSyncQueue(): readonly Array<{ id: string; type: 'pull' | 'push'; timestamp: string }> {
+  peekSyncQueue(): ReadonlyArray<{ id: string; type: 'pull' | 'push'; timestamp: string }> {
     return this.syncQueue;
   }
 

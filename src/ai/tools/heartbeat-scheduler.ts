@@ -41,14 +41,17 @@ import {
   sendMessage,
   markMessagesRead,
 } from '@/ai/bridge/family-bridge';
+import { SelfDiagnosticEngine } from '@/ai/agency/safety/self-diagnostic';
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
 export interface HeartbeatConfig {
-  /** Interval between heartbeats in ms. Default: 60_000 (1 minute) */
+  /** Interval between heartbeats in ms. Default: 120_000 (2 minutes) */
   intervalMs: number;
+  /** Interval for self-diagnostic cycle in ms. Default: 60_000 (1 minute) */
+  diagnosticIntervalMs?: number;
   /** Interval for memory consolidation in ms. Default: 300_000 (5 minutes) */
   consolidationIntervalMs: number;
   /** Interval for immune checks in ms. Default: 600_000 (10 minutes) */
@@ -86,6 +89,7 @@ export interface HeartbeatConfig {
     memoryCrystallization: boolean;
     deviceHealth: boolean;
     memoryHealth: boolean;
+    diagnostic: boolean;
   };
 }
 
@@ -110,7 +114,7 @@ export type HeartbeatStatus = 'stopped' | 'running' | 'paused';
 // ============================================================================
 
 const DEFAULT_CONFIG: HeartbeatConfig = {
-  intervalMs: 60_000, // 1 minute
+  intervalMs: 120_000, // 2 minutes
   consolidationIntervalMs: 300_000, // 5 minutes
   immuneIntervalMs: 600_000, // 10 minutes
   reflectionIntervalMs: 900_000, // 15 minutes
@@ -119,6 +123,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   memoryLearningIntervalMs: 3_600_000, // 1 hour
   memoryCrystallizationIntervalMs: 86_400_000, // 24 hours (daily)
   deviceHealthIntervalMs: 120_000, // 2 minutes
+  diagnosticIntervalMs: 60_000, // 1 minute (self-diagnostic)
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
   tasks: {
@@ -137,6 +142,7 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
     memoryCrystallization: true,
     deviceHealth: true,
     memoryHealth: true,
+    diagnostic: true,
   },
 };
 
@@ -172,6 +178,8 @@ export class HeartbeatScheduler {
   private lastExperienceWriteTime = Date.now();
   private lastRecoveryProbeAt = 0;
   private activeUserId: string | null = null;
+  private lastDiagnostic = 0;
+  private diagnosticEngine: SelfDiagnosticEngine | null = null;
 
   /**
    * Resolve the active user ID from env or by scanning the data directory.
@@ -1182,6 +1190,67 @@ export class HeartbeatScheduler {
       tasks.push(result);
     }
 
+    // Task 16: Self-Diagnostic Check (every 60 seconds — Molly's inner compass)
+    if (this.config.tasks.diagnostic) {
+      const diagnosticInterval = this.config.diagnosticIntervalMs || 60_000;
+      const timeSinceDiagnostic = cycleStart - this.lastDiagnostic;
+
+      if (timeSinceDiagnostic < diagnosticInterval) {
+        tasks.push({
+          name: 'diagnostic',
+          executed: false,
+          skipped: `Not due (${Math.round((diagnosticInterval - timeSinceDiagnostic) / 1000)}s remaining)`,
+        });
+      } else {
+        const result = await this.runTask('diagnostic', async () => {
+          // Initialize diagnostic engine if needed
+          if (!this.diagnosticEngine) {
+            this.diagnosticEngine = new SelfDiagnosticEngine();
+          }
+
+          // Run full diagnostic cycle
+          const diagnosis = await this.diagnosticEngine.diagnose();
+
+          MollyLogger.info(
+            `Self-diagnostic: ${diagnosis.severity} (deviation=${diagnosis.analysis.deviationScore.toFixed(2)}, personaAlignment=${diagnosis.analysis.personaAlignmentScore.toFixed(2)})`,
+            'heartbeat-scheduler',
+            { diagnosticId: diagnosis.id, severity: diagnosis.severity, findings: diagnosis.findings }
+          );
+
+          // Handle repairs
+          const autoRepairs = diagnosis.repairs.filter((r) => r.autoRepair);
+          const humanRepairs = diagnosis.repairs.filter((r) => !r.autoRepair);
+
+          if (autoRepairs.length > 0) {
+            await this.executeAutoRepairs(autoRepairs);
+          }
+
+          // Alert consciousness for major issues
+          if (diagnosis.severity === 'major' && humanRepairs.length > 0) {
+            const consciousness = getConsciousness();
+            consciousness.queueMessage({
+              type: 'observation',
+              content: `🔴 SELF-DIAGNOSTIC ALERT (Major): ${diagnosis.recommendation} Human intervention needed for: ${humanRepairs.map((r) => r.target).join(', ')}`,
+              priority: 'high',
+            });
+          }
+
+          if (diagnosis.severity === 'minor' && diagnosis.repairs.length > 0) {
+            const consciousness = getConsciousness();
+            consciousness.queueMessage({
+              type: 'observation',
+              content: `🟡 Self-diagnostic (Minor): ${diagnosis.recommendation} Auto-repairs applied: ${diagnosis.repairs.map((r) => r.target).join(', ')}`,
+              priority: 'normal',
+            });
+          }
+        });
+        if (result.executed) {
+          this.lastDiagnostic = Date.now();
+        }
+        tasks.push(result);
+      }
+    }
+
     // Record cycle result
     const cycleResult: HeartbeatCycleResult = {
       cycle: this.cycleCount,
@@ -1279,6 +1348,66 @@ export class HeartbeatScheduler {
         `Immune check: ${report.join(' | ')}`,
         'heartbeat-scheduler'
       );
+    }
+  }
+
+  /**
+   * Execute auto-repairs from the self-diagnostic engine.
+   * For minor issues: clear error history, reset cascade windows, restore tone.
+   * Never modifies persona.ts — that's sacred.
+   */
+  private async executeAutoRepairs(
+    repairs: Array<{ target: string; action: string; reason: string }>
+  ): Promise<void> {
+    const consciousness = getConsciousness();
+
+    for (const repair of repairs) {
+      try {
+        MollyLogger.info(
+          `Auto-repair: ${repair.target} — ${repair.action}`,
+          'heartbeat-scheduler'
+        );
+
+        switch (repair.target) {
+          case 'error-history': {
+            // Reset the error rate baseline by clearing window
+            consciousness.clearErrorWindow?.();
+            break;
+          }
+          case 'cascade-window-count': {
+            // Reset cascade windows and enter cautious mode
+            consciousness.resetCascadeWindows?.();
+            consciousness.setRegulationMode?.('cautious');
+            break;
+          }
+          case 'coherence': {
+            // Restore tone by resetting regulation mode to normal
+            consciousness.setRegulationMode?.('normal');
+            break;
+          }
+          case 'persona-alignment': {
+            // Queue a message for Molly to review and reinforce her values
+            consciousness.queueMessage({
+              type: 'observation',
+              content:
+                'I detected some drift in my tone and values. Let me reflect on my core commitments and realign.',
+              priority: 'normal',
+            });
+            break;
+          }
+          default: {
+            MollyLogger.warn(
+              `Unknown repair target: ${repair.target}`,
+              'heartbeat-scheduler'
+            );
+          }
+        }
+      } catch (error) {
+        MollyLogger.warn(
+          `Auto-repair failed for ${repair.target}: ${error instanceof Error ? error.message : String(error)}`,
+          'heartbeat-scheduler'
+        );
+      }
     }
   }
 
