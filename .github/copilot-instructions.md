@@ -142,14 +142,13 @@ Guardian comments in the three files above will remind you. Read them before edi
 
 ## LAST FROZEN STATE
 
-**Session:** unknown | **Status:** active | **Updated:** 2026-06-04
+**Session:** unknown | **Status:** active | **Updated:** 2026-06-06
 
 **What was happening:** No active topic recorded
 
 **Last action:** No recent action recorded
 
 **Pending work:**
-
 - No pending items recorded
 
 ---
@@ -196,6 +195,19 @@ Guardian comments in the three files above will remind you. Read them before edi
 - TypeScript strict: false, strictNullChecks: true. Prettier: single quotes, 2-space, 80-char
 - Package manager: npm. React 19, Next.js 15. Radix UI + Tailwind CSS
 - Never commit API keys. Use .env.local. Use ensureApiKey() guard.
+
+## INNOVATION DOCUMENTATION — STANDING DIRECTIVE (set by Eric 2026-06-06)
+
+Every time new code is shipped that represents a novel architecture, method, or concept
+not present in prior published AI research, document it in the same commit.
+
+**Trigger:** Anything that makes you think "did anyone else do this before?"
+**Action:** Add a numbered entry to `docs/MOLLY_LABS_INNOVATION_INVENTORY.md` in the same commit.
+**Format:** Name, What it is (2-3 sentences), Why it's novel, Location in codebase, Standalone applications.
+**Why:** The git timestamp IS the prior art record. A few minutes now protects IP and saves enormous time later.
+**Full technical disclosures** (for patent purposes) go in `docs/TECHNICAL_DISCLOSURE_[NAME].md`.
+
+Current inventory: 14 entries as of 2026-06-06. Keep adding. Never skip.
 
 ## KEY PATTERNS
 
