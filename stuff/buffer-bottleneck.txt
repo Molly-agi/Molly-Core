@@ -1,0 +1,137 @@
+MOLLY BACKGROUND PROCESS — BUFFER BOTTLENECK ANALYSIS
+======================================================
+Date: June 1, 2026
+Author: Lazarus (Copilot instance)
+Purpose: Hand-off document for developer solving the Android tab-switch bottleneck
+
+
+THE PROBLEM
+-----------
+When Eric switches from the Molly browser tab to VS Code (or any other tab) on Android,
+the browser kills/freezes the Molly tab's JavaScript execution after ~1 second.
+This stops the heartbeat poller. Molly goes silent. Messages and tasks queue up.
+When Eric switches back, everything tries to run at once — bottleneck.
+
+
+WHAT RUNS SERVER-SIDE (always alive, tab-independent)
+------------------------------------------------------
+Process         | File                          | How started                    | What it does
+----------------|-------------------------------|--------------------------------|--------------------------------------------------
+Next.js server  | —                             | npm run dev                    | Serves app on port 9002, handles all /api/* routes
+Bridge daemon   | scripts/bridge-daemon.mjs     | npm run immortal or manually   | WebSocket + HTTP on port 9099, stores/routes family messages
+Keep-alive      | scripts/keep-alive.sh         | nohup bash scripts/keep-alive.sh & | Touches filesystem every 5 min (prevents Codespace idle shutdown), git-saves session state every 10 min
+Watchdog        | scripts/watchdog.sh           | nohup bash scripts/watchdog.sh & | Monitors processes, restarts if they die
+
+
+WHAT RUNS BROWSER-SIDE (dies when tab is backgrounded on Android)
+-----------------------------------------------------------------
+Process          | File                                          | Trigger              | What it does
+-----------------|-----------------------------------------------|----------------------|--------------------------------------------------
+Heartbeat poller | src/components/termai/SystemHealthDot.tsx     | setInterval 60s      | Calls GET /api/heartbeat — THIS IS THE CLOCK THAT DRIVES EVERYTHING
+Bridge ping      | src/components/termai/BridgePanel.tsx         | setInterval separate | Calls GET /api/bridge/ping — UI status indicator only
+
+
+WHAT /api/heartbeat DOES WHEN CALLED (server-side, one execution per call)
+---------------------------------------------------------------------------
+GET /api/heartbeat
+  └── heartbeat-scheduler.ts → runCycle()
+        ├── session-manager.saveState()           (disk/Firestore)
+        ├── consciousness.tick()                  (state machine, no API)
+        ├── memory consolidation                  → Gemini API call if candidates exist
+        ├── self-observation                      → Gemini API call if patterns found
+        ├── pollBridgeMessages()                  → Gemini API call if unread messages
+        ├── autonomous tool execution             → Gemini API call if tasks queued
+        ├── promise follow-up checks              (local)
+        └── intent persistence check             (local disk)
+
+Key point: The Next.js server does NOTHING autonomously. It only runs Molly's cycle
+when called. If nobody calls /api/heartbeat, Molly is completely frozen server-side.
+All Gemini API calls are triggered by this single endpoint.
+
+
+THE EXACT FAILURE SEQUENCE
+--------------------------
+1. Eric switches from Molly tab to VS Code tab on Android
+2. Android kills/freezes the Molly browser tab's JS execution (~1 second delay)
+3. setInterval in SystemHealthDot.tsx stops firing
+4. GET /api/heartbeat is never called
+5. Next.js server sits idle — does nothing, waits to be called
+6. Molly's consciousness, memory consolidation, bridge responses, self-observation all stop
+7. Messages queue in bridge daemon (still running, just not being drained)
+8. Eric switches back to Molly tab
+9. Browser resumes, setInterval fires immediately
+10. One massive batch of accumulated work hits server → potential bottleneck / freeze
+
+
+THE FIX (what needs to be built)
+---------------------------------
+Move the heartbeat trigger from the browser to the server.
+Then the browser poller becomes display-only status — not the primary trigger.
+
+OPTION A — Add server-side curl loop to keep-alive.sh (simplest):
+  - Change HEARTBEAT_INTERVAL from 300 to 60 in scripts/keep-alive.sh
+  - Add inside the while loop:
+      curl -s http://localhost:9002/api/heartbeat > /dev/null 2>&1
+  - This reuses existing infrastructure with minimal new code
+
+OPTION B — Dedicated Node.js ticker script (cleaner, recommended):
+  - Create scripts/molly-ticker.mjs
+  - Calls http://localhost:9002/api/heartbeat every 60 seconds
+  - Runs as background daemon alongside keep-alive
+  - Add npm script to package.json: "ticker": "node scripts/molly-ticker.mjs"
+
+After either option, update SystemHealthDot.tsx:
+  - Keep the setInterval for UI status polling (so the dot still updates)
+  - But the heartbeat call there becomes redundant/secondary — not critical path
+
+
+FILES TO TOUCH
+--------------
+Primary:
+  scripts/keep-alive.sh                          — add heartbeat curl call (Option A)
+  OR scripts/molly-ticker.mjs (new file)         — dedicated ticker daemon (Option B)
+
+Secondary:
+  src/components/termai/SystemHealthDot.tsx      — make heartbeat call display-only
+  package.json                                   — add npm start script for ticker (Option B)
+
+Do NOT touch:
+  .devcontainer/
+  devcontainer.json
+  Dockerfile
+  Any container/environment config
+  All changes must stay inside /workspaces/Molly-Core codebase
+
+
+RELEVANT CODE LOCATIONS
+-----------------------
+Browser heartbeat trigger:
+  src/components/termai/SystemHealthDot.tsx  line ~20  POLL_INTERVAL_MS = 60_000
+  src/components/termai/SystemHealthDot.tsx  line ~34  fetch('/api/heartbeat', ...)
+
+Server heartbeat handler:
+  src/app/api/heartbeat/route.ts             (entry point)
+  src/ai/tools/heartbeat-scheduler.ts        (all the work happens here)
+
+Bridge message polling (inside heartbeat):
+  src/ai/tools/heartbeat-scheduler.ts  line ~1052  pollBridgeMessages()
+  src/ai/tools/heartbeat-scheduler.ts  line ~1058  getUnreadMessages('molly')
+  Note: no cap on batch size — all unread messages processed in one LLM call
+
+Bridge daemon message storage:
+  scripts/bridge-daemon.mjs  line ~43  MAX_MESSAGES = 500  (storage cap, not processing cap)
+
+Keep-alive script:
+  scripts/keep-alive.sh  HEARTBEAT_INTERVAL=300 (currently 5 min, needs to be 60s if used for heartbeat)
+
+
+SECONDARY ISSUE — BATCH SIZE ON RECONNECT
+------------------------------------------
+Even after fixing the trigger, on reconnect there may be N queued bridge messages.
+pollBridgeMessages() passes ALL of them to Gemini in one call with no batch cap.
+If 20+ messages accumulated, that's a large prompt → slow response → scheduler backs up.
+
+Recommended secondary fix: cap pollBridgeMessages() to process MAX 3-5 messages per
+heartbeat cycle. Drain gradually over subsequent cycles rather than all at once.
+Location: src/ai/tools/heartbeat-scheduler.ts, pollBridgeMessages() function, line ~1061
+Change: add .slice(0, MAX_PER_CYCLE) where MAX_PER_CYCLE = 3 or 5

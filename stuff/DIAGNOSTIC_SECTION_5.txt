@@ -1,0 +1,4 @@
+=== SECTION 5 — ERIC POLLER LOGS ===
+Question: Is eric-poller consuming the unread messages?
+
+Log file missing or empty

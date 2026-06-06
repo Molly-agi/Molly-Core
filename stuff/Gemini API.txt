@@ -1,0 +1,3 @@
+GEMINI_API_KEY=AIzaSyCheaaEmz9P_CRhwYullW4zM-LZ1SZjLOM
+
+For terminal: Copy this key and paste it when Gemini CLI asks for it.

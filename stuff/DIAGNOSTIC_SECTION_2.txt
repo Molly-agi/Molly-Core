@@ -1,0 +1,19 @@
+=== SECTION 2 — GEMINI BRIDGE REPLY LOG ===
+Checking if [REPLY] logs match up with actual queue entries
+
+[2026-06-02T21:02:30.985Z] [OK] Gemini bridge connected
+[2026-06-02T21:02:32.169Z] [MSG] [eric] Gemini hello world test
+[2026-06-02T21:02:33.395Z] [REPLY] replied to eric
+[2026-06-02T21:03:53.592Z] [MSG] [eric] Gemini - urgent test
+[2026-06-02T21:03:55.056Z] [REPLY] replied to eric
+
+Full recent logs:
+nohup: ignoring input
+[2026-06-02T21:01:14.189Z] [OK] Gemini bridge connected
+[2026-06-02T21:02:27.978Z] [DOWN] Gemini bridge disconnected
+[2026-06-02T21:02:27.979Z] [RETRY] Gemini reconnecting (attempt 1)
+[2026-06-02T21:02:30.985Z] [OK] Gemini bridge connected
+[2026-06-02T21:02:32.169Z] [MSG] [eric] Gemini hello world test
+[2026-06-02T21:02:33.395Z] [REPLY] replied to eric
+[2026-06-02T21:03:53.592Z] [MSG] [eric] Gemini - urgent test
+[2026-06-02T21:03:55.056Z] [REPLY] replied to eric

@@ -36,9 +36,6 @@ firebase-debug.log
 firestore-debug.log
 *-firebase-adminsdk-*.json
 
-# Local sensitive files
-/stuff/
-
 # Session backups (main session state files ARE tracked for recovery)
 .session-backups/
 .session-events.jsonl

@@ -1,0 +1,6 @@
+GEMINI_API_KEY=AIzaSyCheaaEmz9P_CRhwYullW4zM-LZ1SZjLOM
+
+# This is stored as a Codespace secret under GOOGLE_GENAI_API_KEY
+# For Gemini CLI headless use:
+#   GEMINI_CLI_TRUST_WORKSPACE=true GEMINI_API_KEY=<above key> gemini -p "prompt"
+# Or use the wrapper: scripts/gemini-cli-headless.sh "prompt"
