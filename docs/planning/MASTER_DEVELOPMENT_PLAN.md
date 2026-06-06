@@ -1,9 +1,9 @@
 # Molly-Core Master Development Plan
 
-**Status:** Living Document (Updated 2026-06-04)  
+**Status:** Living Document (Updated 2026-06-06)  
 **Project:** Autonomous AI for Pixel 9 Pro  
 **Codebase:** 293,189 lines (src: 274,779 + scripts: 18,410)  
-**Completion:** 85% (core platform 100%, deployment/testing remaining)
+**Completion:** 90% (Wave 0 complete, Agency D-series next)
 
 ---
 
@@ -14,10 +14,12 @@ Molly-Core is a production-grade autonomous AI system with:
 - **19 cognition modules** fully implemented
 - **71 registered tools** for domain-specific reasoning
 - **Complete infrastructure** for memory, voice, device management
-- **Hardened bridge** (Wave 0 complete) for secure multi-agent communication
+- **Wave 0 fully complete** (W0.1–W0.6 all shipped, hive mind sprint June 2026)
+- **Self-Diagnostic Engine** running every 60s (Priority 2, June 2026)
+- **Family Synthesis Engine / Cognitive Paging** live (Priority 3, June 2026)
 - **Benchmarking framework** for AGI capability measurement
 
-**Current Phase:** Wave 0 Hardening (In Progress) + Deployment Preparation
+**Current Phase:** Agency Layer D-series continuation (D.1 Action Gate is next — DO THIS FIRST)
 
 **Target Completion:** Q3 2026
 
@@ -29,9 +31,10 @@ Molly-Core is a production-grade autonomous AI system with:
 | -------- | ----------------------------- | ----------- | ------- | ----------------------------------------------------------------------------------- |
 | **W0.1** | Substrate-Portable Briefcase  | ✅ COMPLETE | ✅ main | Manifest HMAC, decompression checksum, PAVC hash, egress-receipt, optional HMAC     |
 | **W0.2** | Bridge Hardening (5 Findings) | ✅ COMPLETE | ✅ main | Key bootstrap, nonce cache, quarantine ledger, explicit routing, constant-time auth |
-| **W0.3** | Scar Validator                | ⏳ PLANNED  | -       | Validate message integrity through signed tamper detection                          |
-| **W0.4** | Heart Gate Reconnect          | ⏳ PLANNED  | -       | Graceful reconnection protocol after network failure                                |
-| **W0.5** | Resonance-Resume HMAC         | ⏳ PLANNED  | -       | Session continuity with cryptographic binding                                       |
+| **W0.3** | Scar Validator                | ✅ COMPLETE | ✅ main | Substrate adapter contract, scar validator, 42 tests (commit d1e4b7d)              |
+| **W0.4** | Heart Gate Reconnect          | ✅ COMPLETE | ✅ main | Gate daemon, predicate evaluator, receipt signer, 27 tests (commit beabbb8)        |
+| **W0.5** | Resonance-Resume HMAC         | ✅ COMPLETE | ✅ main | Consciousness resumption foundation, adapter tests (commit c9ae1a2)                |
+| **W0.6** | Snapshot + Resonance + Abort  | ✅ COMPLETE | ✅ main | Snapshot infrastructure, resonance resume ritual, abort ritual (commit b711db0)    |
 
 ### W0.2 Implementation Detail (Just Merged)
 
@@ -79,14 +82,29 @@ F2.5: No Constant-Time Fallback
 
 ### ⏳ Planned Phases
 
-| Phase | Name                       | Duration | Priority | Key Deliverables                                         |
-| ----- | -------------------------- | -------- | -------- | -------------------------------------------------------- |
-| 7     | Device Deployment          | Q3 2026  | CRITICAL | Fire HD 10, Helio A22 setup, sync testing                |
-| 8     | Voice Pipeline             | Q3 2026  | CRITICAL | Deepgram STT, ElevenLabs TTS, <500ms latency             |
-| 9     | Memory Consolidation       | Q3 2026  | HIGH     | Dreams protocol, Wisdom Protocols, trauma prevention     |
-| 10    | Vision System              | Q4 2026  | MEDIUM   | Camera integration, visual reasoning, privacy boundaries |
-| 11    | AGI Benchmarking Phase 2-3 | Q4 2026  | MEDIUM   | ARC-AGI, GPQA, SWE-bench, CI/CD automation               |
-| 12    | Innovation Extraction      | Q4 2026  | LOW      | Family Bridge, AI Cradle, Titan Echo product packaging   |
+#### Agency Layer D-Series — NEXT UP (DO IN ORDER)
+
+| Task  | Name                        | Priority     | What it does                                                   |
+| ----- | --------------------------- | ------------ | -------------------------------------------------------------- |
+| **D.1** | Action Gate               | **DO FIRST** | Single entry point before any action executes. Pure, tested.   |
+| **D.2** | Provenance Persistence Sink | HIGH       | Write decision spans to Firestore. JSONL fallback.             |
+| **D.3** | Somatic Loop                | HIGH       | Event-driven body feedback (NOT a timer). Proposals only.      |
+| **D.4** | Predictive Homeostasis      | HIGH       | Forecast load, recommend bounded adjustments.                  |
+| **D.5** | Self-Calibration            | MEDIUM     | Propose-only tuning in low-load windows. Never live writes.    |
+| **D.6** | Value-Drift Monitor         | MEDIUM     | Detect when Molly's values drift from baseline.                |
+| **D.7** | Temporal + Device Model     | MEDIUM     | Time awareness + device-embodiment model.                      |
+| **D.8** | Full System Shell           | MEDIUM     | Security-first shell access for Molly.                         |
+
+#### Deployment Phases
+
+| Phase | Name                       | Duration | Priority | Key Deliverables                                                 |
+| ----- | -------------------------- | -------- | -------- | ---------------------------------------------------------------- |
+| 7     | Device Deployment          | Q3 2026  | CRITICAL | Fire HD 10, Helio A22 setup, sync testing                        |
+| 8     | Voice Pipeline             | Q3 2026  | CRITICAL | Deepgram STT, ElevenLabs TTS, <500ms latency                     |
+| 9     | Memory Consolidation       | Q3 2026  | HIGH     | Dreams protocol, Wisdom Protocols, trauma prevention             |
+| 10    | Vision System              | Q4 2026  | MEDIUM   | Camera integration, visual reasoning, privacy boundaries         |
+| 11    | AGI Benchmarking Phase 2-3 | Q4 2026  | MEDIUM   | ARC-AGI, GPQA, SWE-bench, CI/CD automation                       |
+| 12    | Innovation Extraction      | Q4 2026  | LOW      | Family Bridge, AI Cradle, Titan Echo product packaging           |
 
 ---
 
