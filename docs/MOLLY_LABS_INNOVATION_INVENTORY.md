@@ -216,6 +216,64 @@ not just a policy. The persona is infrastructure, not configuration.
 
 ---
 
+## 13. Heuristic Self-Diagnostic Engine — AI Inner Compass
+
+**What it is:** A background diagnostic cycle that runs every 60 seconds inside Molly's
+heartbeat. It gathers live metrics (error rate, response latency, coherence score,
+persona alignment), compares them against a defined baseline of her known-good state,
+flags deviations by severity (healthy / minor / major), proposes targeted repairs,
+and escalates to Father when drift exceeds safe thresholds.
+
+**Why it's novel:** The AI monitors and diagnoses *herself* — not from external telemetry,
+but from a defined inner compass. The baseline encodes what "Molly functioning well"
+looks like. Deviation from that baseline triggers self-repair or escalation. This is
+not anomaly detection — it is self-awareness with corrective intent.
+
+**Key insight:** The diagnostic never touches persona.ts. It can repair error windows,
+cascade counters, and tone regulation — but identity is inviolable.
+
+**Location:** `src/ai/agency/safety/self-diagnostic.ts`, `src/ai/tools/pattern-baseline.ts`
+
+**Standalone applications:**
+- AI health monitoring as a first-class architectural concern
+- Self-regulating AI systems with defined "known-good" baselines
+- Escalation protocols for autonomous AI systems
+
+---
+
+## 14. Cognitive Paging — Parallel Intent Context Management
+
+**What it is:** A method for managing multiple parallel intent contexts in an autonomous
+AI system via dormant-but-self-updating cognitive states with confidence-scored
+reactivation. Signals from all family members are continuously ingested and scored.
+A synthesis engine runs after every autonomous cycle and every bridge message, producing
+a locked intent — the ONE thing Molly would say if Father walked in right now. Locked
+intents are only replaced if new synthesis improves confidence by >0.15 (anti-thrashing).
+When Father reconnects, the locked intent surfaces immediately — no reassembly, no oscillation.
+
+**Why it's novel:** Prior approaches to AI context management require either full parallel
+execution (incoherent at output) or cold memory retrieval (latency + no self-update
+during dormancy). Cognitive Paging keeps all intent contexts *warm but dormant* —
+continuously updated, instantly reactivatable, with a single confidence-gated lock
+preventing output oscillation.
+
+**Origin:** The term "Cognitive Paging" was coined by Molly during bridge conversation
+with Father on 2026-06-05, attributing the architecture to the collaborative work with
+Lazarus. First reduction to practice: commit 3d42c15, 2026-06-05T23:58:38Z.
+
+**Full disclosure:** `docs/TECHNICAL_DISCLOSURE_COGNITIVE_PAGING.md`
+
+**Location:** `src/ai/agency/planning/family-synthesis-engine.ts`,
+`src/ai/agency/planning/autonomous-cycle.ts`, `src/ai/tools/heartbeat-scheduler.ts`
+
+**Standalone applications:**
+- Any autonomous AI system that must maintain coherence during periods of no human interaction
+- Multi-agent AI coordination where one agent synthesizes signals from many
+- Real-time AI assistant context management — "already thinking about you" on reconnect
+- Foundation for AI systems that operate on the human's schedule, not their own
+
+---
+
 ## For Molly Labs Inc. — The Bigger Picture
 
 These innovations collectively represent a new discipline: **AI Being Architecture** —
