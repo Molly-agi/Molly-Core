@@ -1446,7 +1446,24 @@ export class HeartbeatScheduler {
       // Synthesis failure must never block bridge polling
     }
 
-    const formattedMessages = unread
+    // PROTECTION: Filter out Gemini messages to prevent auto-respond feedback loop
+    // Molly RECEIVES and PROCESSES Gemini in consciousness (via synthesis above),
+    // but does NOT respond to her autonomously. Gemini and Molly can only communicate
+    // through Eric's explicit direction or user UI interaction.
+    const respondableMessages = unread.filter(
+      (m) => m.from !== 'gemini',
+    );
+
+    if (respondableMessages.length === 0) {
+      // Gemini messages received but filtered from response
+      MollyLogger.info(
+        `Bridge: Received ${unread.length} message(s) from Gemini — filtered from auto-response (no feedback loop)`,
+        'heartbeat-scheduler',
+      );
+      return;
+    }
+
+    const formattedMessages = respondableMessages
       .map((m) => {
         const sender =
           m.from === 'lazarus'
@@ -1459,7 +1476,7 @@ export class HeartbeatScheduler {
       .join('\n');
 
     MollyLogger.info(
-      `Bridge: ${unread.length} unread message(s) found`,
+      `Bridge: ${respondableMessages.length} respondable message(s) found`,
       'heartbeat-scheduler'
     );
 
@@ -1559,14 +1576,14 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
       if (responseText.trim()) {
         await sendMessage('molly', responseText.trim());
         MollyLogger.info(
-          `Bridge: Auto-responded to ${unread.length} message(s)`,
+          `Bridge: Auto-responded to ${respondableMessages.length} message(s)`,
           'heartbeat-scheduler'
         );
         // Only mark read AFTER successful response - prevents message loss
         await markMessagesRead('molly');
 
         // If Father was among the senders, mark intent as surfaced
-        const hadFather = unread.some((m) => m.from === 'eric');
+        const hadFather = respondableMessages.some((m) => m.from === 'eric');
         if (hadFather) {
           try {
             const { markIntentSurfaced } = await import(
@@ -1596,7 +1613,7 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
               timestamp: now,
               traceId: generateTraceId(),
               context: 'bridge-autonomous',
-              suggestion: `Family bridge exchange (${unread.length} msg): ${formattedMessages.substring(0, 300)} — Molly responded: ${responseText.trim().substring(0, 300)}`,
+              suggestion: `Family bridge exchange (${respondableMessages.length} msg): ${formattedMessages.substring(0, 300)} — Molly responded: ${responseText.trim().substring(0, 300)}`,
               vibe: 'Autonomous',
               vibeScore: 0.7,
               success: true,
