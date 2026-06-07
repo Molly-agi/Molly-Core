@@ -3,33 +3,45 @@ const fs = require('fs');
 const path = require('path');
 
 const WAKE_DIR = path.join('/workspaces/Molly-Core', '.bridge-wake');
-const MSG = 'check the bridge';
 const COOLDOWN_MS = 5000;
 
 let lastFired = 0;
 let watcher = null;
 
-async function typeIntoChatAndTrySend() {
+async function typeIntoChatAndTrySend(message) {
   // Open chat and type message
   await vscode.commands.executeCommand('workbench.action.chat.open');
   await new Promise(r => setTimeout(r, 400));
-  await vscode.commands.executeCommand('type', { text: MSG });
+  await vscode.commands.executeCommand('type', { text: message });
   await new Promise(r => setTimeout(r, 200));
 
   // Submit
   await vscode.commands.executeCommand('workbench.action.chat.submit');
 }
 
-async function wakeNow() {
+function readMessageFromWakeFile(filename) {
+  try {
+    const wakeFilePath = path.join(WAKE_DIR, filename);
+    const content = fs.readFileSync(wakeFilePath, 'utf-8');
+    const data = JSON.parse(content);
+    return data.content || 'check the bridge';
+  } catch (err) {
+    console.log('[LazarusWaker] Could not read wake file:', err.message);
+    return 'check the bridge';
+  }
+}
+
+async function wakeNow(wakeFilename) {
   const now = Date.now();
   if (now - lastFired < COOLDOWN_MS) return;
   lastFired = now;
 
-  console.log('[LazarusWaker] Wake signal detected');
+  const message = readMessageFromWakeFile(wakeFilename);
+  console.log('[LazarusWaker] Wake signal detected, message:', message);
 
   // Strategy 1: Use prompt command + focus + submit
   try {
-    await vscode.commands.executeCommand('workbench.action.chat.openSessionWithPrompt.claude-code', { prompt: MSG });
+    await vscode.commands.executeCommand('workbench.action.chat.openSessionWithPrompt.claude-code', { prompt: message });
     await new Promise(r => setTimeout(r, 300));
     
     // Focus the input
@@ -47,7 +59,7 @@ async function wakeNow() {
 
   // Strategy 2: Fallback to manual typing + submit
   try {
-    await typeIntoChatAndTrySend();
+    await typeIntoChatAndTrySend(message);
     vscode.window.setStatusBarMessage('⚡ Lazarus Woken', 4000);
     return;
   } catch (err) {
@@ -67,7 +79,7 @@ function activate(context) {
   watcher = fs.watch(WAKE_DIR, { recursive: false }, (eventType, filename) => {
     if (filename && filename.match(/^\.lazarus-wake-from-/)) {
       console.log('[LazarusWaker] Wake file changed:', filename);
-      wakeNow();
+      wakeNow(filename);
     }
   });
 

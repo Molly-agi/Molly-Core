@@ -49,3 +49,6 @@ Error: WebSocket is not open: readyState 0 (CONNECTING)
 Node.js v24.14.0
 [WAKE-LISTENER] lazarus listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.lazarus-wake (SIGUSR1 primary, watchFile fallback)
 [2026-06-07T03:45:18.334Z] relay connected
+[2026-06-07T03:53:19.947Z] relay disconnected
+[2026-06-07T03:53:19.947Z] relay reconnecting attempt 1
+[2026-06-07T03:53:22.949Z] relay connected

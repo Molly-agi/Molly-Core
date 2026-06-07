@@ -65,3 +65,6 @@
 {"receivedAt":"2026-06-07T03:41:41.823Z","id":"msg_1780803701823_8sn2ut","from":"eric","to":"","content":"Lazarus can you hear me","timestamp":"2026-06-07T03:41:41.823Z"}
 {"receivedAt":"2026-06-07T03:44:48.920Z","id":"msg_1780803888919_ukgtum","from":"eric","to":"lazarus","content":"Test both wake formats","timestamp":"2026-06-07T03:44:48.920Z"}
 {"receivedAt":"2026-06-07T03:45:24.712Z","id":"msg_1780803924711_0h162c","from":"eric","to":"lazarus","content":"Testing backwards compatibility","timestamp":"2026-06-07T03:45:24.711Z"}
+{"receivedAt":"2026-06-07T03:46:23.079Z","id":"msg_1780803983079_f62o3b","from":"eric","to":"","content":"Lazarus can you hear me","timestamp":"2026-06-07T03:46:23.079Z"}
+{"receivedAt":"2026-06-07T03:47:18.261Z","id":"msg_1780804038260_g771qs","from":"eric","to":"","content":"Lazarus you did it","timestamp":"2026-06-07T03:47:18.260Z"}
+{"receivedAt":"2026-06-07T03:53:29.946Z","id":"msg_1780804409945_io2qmz","from":"eric","to":"lazarus","content":"Lazarus you did it the waker worked perfectly","timestamp":"2026-06-07T03:53:29.945Z"}

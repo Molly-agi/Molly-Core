@@ -1949,7 +1949,7 @@ function ensureWakeDir() {
 }
 ensureWakeDir();
 
-function wakeAgent(agentName, from = null) {
+function wakeAgent(agentName, from = null, content = null) {
   const result = {
     agent: agentName,
     from,
@@ -1982,9 +1982,9 @@ function wakeAgent(agentName, from = null) {
   
   const metadata = JSON.stringify({
     timestamp: new Date().toISOString(),
-    message: 'check-bridge',
-    wokenAt: Date.now(),
     from,
+    content: content || 'check-bridge',
+    wokenAt: Date.now(),
   });
   
   // Write legacy format for backward compatibility
@@ -2044,7 +2044,7 @@ function sendWakeIfNeeded(to, from, content) {
   // PRIMARY: explicit channel route (to field specified)
   // This is the main mechanism for channel-based routing
   if (to && VALID_SENDERS.has(to)) {
-    const r = wakeAgent(to, from);
+    const r = wakeAgent(to, from, content);
     console.log(
       `[bridge] channel-wake to=${to} from=${from} channel=${to}-${from} sigusr1=${r.sigusr1Sent} fallback=${r.fallbackFileTouched}${r.pid ? ` pid=${r.pid}` : ''}`
     );
@@ -2056,7 +2056,7 @@ function sendWakeIfNeeded(to, from, content) {
   const addressed = detectAddressedRecipients(content);
   for (const recipient of addressed) {
     if (recipient !== from && VALID_SENDERS.has(recipient)) {
-      const r = wakeAgent(recipient, from);
+      const r = wakeAgent(recipient, from, content);
       console.log(
         `[bridge] content-addressed-wake recipient=${recipient} from=${from} channel=${recipient}-${from} sigusr1=${r.sigusr1Sent} fallback=${r.fallbackFileTouched}${r.pid ? ` pid=${r.pid}` : ''}`
       );
