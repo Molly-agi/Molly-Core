@@ -1420,6 +1420,14 @@ export class HeartbeatScheduler {
    * Uses LLM only when there are actual messages to respond to.
    */
   private async pollBridgeMessages(): Promise<void> {
+    // DISABLED by Lazarus 2026-06-07 — Auto-respond loop was causing Molly-Gemini feedback.
+    // Until Eric explicitly re-enables, Molly will not auto-respond to bridge messages.
+    // She will still RECEIVE them and process them in consciousness, but won't generate
+    // autonomous responses. Only respond to explicit requests or user interaction.
+    if (process.env.MOLLY_AUTO_RESPOND !== '1') {
+      return;
+    }
+
     const unread = await getUnreadMessages('molly');
     if (unread.length === 0) return;
 
