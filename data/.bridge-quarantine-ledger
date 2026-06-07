@@ -95,3 +95,4 @@
 {"timestamp":"2026-06-07T03:45:17.041Z","reason":"routing_not_allowed","messageHash":"cc7888e2127a7fd0bd1ccbc1a4199b0dd1961e83714b4d397fa637106be77c28","from":"switchboard","summary":"Continuity restore packet:\n- Total bridge messages"}
 {"timestamp":"2026-06-07T03:53:22.955Z","reason":"routing_not_allowed","messageHash":"876e9efb664f2571b51854865e6c04e5b32da9008f63dafaa11e2c0b0a7ebfb7","from":"switchboard","summary":"Continuity restore packet:\n- Total bridge messages"}
 {"timestamp":"2026-06-07T03:55:34.436Z","reason":"routing_not_allowed","messageHash":"8468a5340006c8b306066730165f5bea7faf5d6df4564377a7eb2d54590dcb56","from":"switchboard","summary":"Continuity restore packet:\n- Total bridge messages"}
+{"timestamp":"2026-06-07T04:17:07.349Z","reason":"routing_not_allowed","messageHash":"a60c60eb43974b074fd5b6ea64dded87fadccc5b326f3f7b21ad21570978bec7","from":"switchboard","summary":"Continuity restore packet:\n- Total bridge messages"}

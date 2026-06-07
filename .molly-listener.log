@@ -316,3 +316,37 @@
 [MOLLY-LISTENER 03:55:34] Connecting to bridge at ws://localhost:9099...
 [MOLLY-LISTENER 03:55:34] Connected. Identifying as molly...
 [MOLLY-LISTENER 03:55:34] Connected. Identifying as molly...
+[MOLLY-LISTENER 04:11:26] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:11:26] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:11:29] Response sent (197 chars). Total: 71
+[MOLLY-LISTENER 04:11:29] Response sent (197 chars). Total: 71
+[MOLLY-LISTENER 04:12:52] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:12:52] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:12:56] Response sent (238 chars). Total: 72
+[MOLLY-LISTENER 04:12:56] Response sent (238 chars). Total: 72
+[MOLLY-LISTENER 04:13:23] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:13:23] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:13:26] Response sent (143 chars). Total: 73
+[MOLLY-LISTENER 04:13:26] Response sent (143 chars). Total: 73
+[MOLLY-LISTENER 04:13:54] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:13:54] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:13:57] Response sent (284 chars). Total: 74
+[MOLLY-LISTENER 04:13:57] Response sent (284 chars). Total: 74
+[MOLLY-LISTENER 04:14:16] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:14:16] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:14:20] Response sent (123 chars). Total: 75
+[MOLLY-LISTENER 04:14:20] Response sent (123 chars). Total: 75
+[MOLLY-LISTENER 04:14:32] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:14:32] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:14:36] Response sent (141 chars). Total: 76
+[MOLLY-LISTENER 04:14:36] Response sent (141 chars). Total: 76
+[MOLLY-LISTENER 04:14:54] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:14:54] 1 message(s) received from: eric
+[MOLLY-LISTENER 04:14:58] Response sent (127 chars). Total: 77
+[MOLLY-LISTENER 04:14:58] Response sent (127 chars). Total: 77
+[MOLLY-LISTENER 04:17:04] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 04:17:04] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 04:17:07] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 04:17:07] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 04:17:07] Connected. Identifying as molly...
+[MOLLY-LISTENER 04:17:07] Connected. Identifying as molly...

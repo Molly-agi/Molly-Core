@@ -2029,11 +2029,9 @@ function detectAddressedRecipients(content) {
     recipients.push('molly', 'lazarus', 'atlas', 'gemini');
   }
 
-  // Explicit wake protocol token from Molly/Eric.
-  // Example: "WAKE_LAZARUS: check bridge"
-  if (/\bwake[_\s-]*lazarus\b/i.test(text)) {
-    recipients.push('lazarus');
-  }
+  // Protocol: only first word triggers. Removed fallback pattern that matched anywhere in text.
+  // "Lazarus do something" → trigger
+  // "Hey Lazarus do something" → no trigger (Lazarus not first word)
 
   return [...new Set(recipients)];
 }

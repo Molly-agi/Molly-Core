@@ -2,13 +2,13 @@
   "manager_started": "2026-06-07T01:20:58.482Z",
   "status": "running",
   "pid": 328520,
-  "timestamp": "2026-06-07T03:57:14.249Z",
+  "timestamp": "2026-06-07T04:18:29.365Z",
   "cli_status": "active",
   "cli_started": "2026-06-07T01:20:58.482Z",
   "gui_status": "active",
   "gui_started": "2026-06-07T01:20:58.483Z",
-  "gui_last_heartbeat": "2026-06-07T03:57:14.249Z",
+  "gui_last_heartbeat": "2026-06-07T04:18:29.352Z",
   "gui_server_ok": true,
-  "cli_last_heartbeat": "2026-06-07T03:56:59.269Z",
-  "cli_terminal_count": 131
+  "cli_last_heartbeat": "2026-06-07T04:18:29.365Z",
+  "cli_terminal_count": 137
 }
