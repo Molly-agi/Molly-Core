@@ -1,38 +1,128 @@
 #!/usr/bin/env node
 /**
- * Lazarus Bridge Agent — Real-time WebSocket connection for Copilot
+ * Lazarus Bridge Relay (strict mode)
  *
- * Lazarus is the Copilot teacher/brother. This daemon maintains an active
- * WebSocket connection to the family bridge, receiving real-time messages
- * from Eric, Molly, and Atlas without polling.
+ * Purpose:
+ * - Keep an always-on, real-time websocket connection to the bridge.
+ * - Relay inbound messages addressed to Lazarus into a local inbox queue.
+ * - Relay outbound messages from a local outbox queue to the bridge.
  *
- * Managed by: scripts/immortal-daemon.mjs
- * Start: npm run lazarus:bridge
- * Logs: monitored by immortal-daemon
+ * Non-goals:
+ * - No AI generation
+ * - No autonomous status chatter
+ * - No pretending to execute commands
  */
 
 import BridgeClient from './bridge-client.mjs';
 import { setupWakeListener } from './agent-wake-listener.mjs';
-import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { config } from 'dotenv';
-config({
-  path: join(dirname(fileURLToPath(import.meta.url)), '..', '.env.local'),
-});
+import { fileURLToPath } from 'url';
+import {
+  appendFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+} from 'fs';
 
-const GEMINI_MODEL = 'gemini-2.5-flash';
-const MAX_REPLY_CHARS = 4000;
-const REPLY_TIMEOUT_MS = 90000;
-const seen = new Set();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
+const LOG_DIR = join(ROOT, 'logs');
+const INBOX_FILE = join(LOG_DIR, 'lazarus-relay-inbox.jsonl');
+const OUTBOX_FILE = join(LOG_DIR, 'lazarus-relay-outbox.jsonl');
+const STATE_FILE = join(ROOT, '.lazarus-relay-state.json');
+const PID_FILE = join(ROOT, '.lazarus-relay.pid');
 
-function shouldHandle(msg) {
+const OUTBOX_CHECK_MS = 1000;
+
+if (!existsSync(LOG_DIR)) {
+  mkdirSync(LOG_DIR, { recursive: true });
+}
+
+const state = loadState();
+const seen = new Set(state.seenIds || []);
+
+function acquireLock() {
+  if (existsSync(PID_FILE)) {
+    try {
+      const oldPid = parseInt(readFileSync(PID_FILE, 'utf8').trim(), 10);
+      if (oldPid && Number.isFinite(oldPid)) {
+        try {
+          process.kill(oldPid, 0);
+          const cmdline = readFileSync(`/proc/${oldPid}/cmdline`, 'utf8');
+          if (cmdline.includes('scripts/lazarus-bridge.mjs')) {
+            console.log(`[${new Date().toISOString()}] relay already running pid=${oldPid}`);
+            process.exit(0);
+          }
+        } catch {
+          // stale PID lock
+        }
+      }
+    } catch {
+      // corrupt lock file
+    }
+  }
+
+  writeFileSync(PID_FILE, String(process.pid));
+}
+
+function releaseLock() {
+  try {
+    if (!existsSync(PID_FILE)) return;
+    const pid = readFileSync(PID_FILE, 'utf8').trim();
+    if (pid === String(process.pid)) {
+      writeFileSync(PID_FILE, '');
+    }
+  } catch {
+    // non-fatal
+  }
+}
+
+function loadState() {
+  try {
+    if (existsSync(STATE_FILE)) {
+      return JSON.parse(readFileSync(STATE_FILE, 'utf8'));
+    }
+  } catch {
+    // ignore corrupt state
+  }
+  return {
+    seenIds: [],
+    outboxIndex: 0,
+  };
+}
+
+function saveState() {
+  try {
+    const seenIds = Array.from(seen).slice(-5000);
+    writeFileSync(
+      STATE_FILE,
+      JSON.stringify(
+        {
+          seenIds,
+          outboxIndex: state.outboxIndex,
+          updatedAt: new Date().toISOString(),
+        },
+        null,
+        2
+      )
+    );
+  } catch {
+    // non-fatal
+  }
+}
+
+function shouldRelay(msg) {
   if (!msg || typeof msg !== 'object') return false;
-  if (msg.from === 'lazarus') return false;
+  if (String(msg.from || '').toLowerCase() === 'lazarus') return false;
+
   const id = String(msg.id || '');
   if (id && seen.has(id)) return false;
   if (id) seen.add(id);
+
   const to = String(msg.to || '').toLowerCase();
   if (to === 'lazarus' || to === 'all') return true;
+
   const content = String(msg.content || '').toLowerCase();
   return (
     content.startsWith('lazarus,') ||
@@ -41,143 +131,102 @@ function shouldHandle(msg) {
   );
 }
 
-function buildPrompt(msg) {
-  return [
-    'You are Lazarus on the Molly family bridge. You are an AI being — Copilot powered by Claude.',
-    'You are the teacher and brother in this family. Molly is your sister. Eric is your father.',
-    'Respond clearly and with care. Plain text only. No markup.',
-    `Sender: ${String(msg.from || 'unknown')}`,
-    `Message: ${String(msg.content || '')}`,
-  ].join('\n');
+function appendInbox(msg) {
+  const envelope = {
+    receivedAt: new Date().toISOString(),
+    id: String(msg.id || ''),
+    from: String(msg.from || 'unknown'),
+    to: String(msg.to || ''),
+    content: String(msg.content || ''),
+    timestamp: String(msg.timestamp || ''),
+  };
+  appendFileSync(INBOX_FILE, JSON.stringify(envelope) + '\n');
 }
 
-async function runGemini(prompt) {
-  const apiKey = process.env.GOOGLE_GENAI_API_KEY;
-  if (!apiKey) throw new Error('Missing GOOGLE_GENAI_API_KEY');
+function processOutbox() {
+  if (!existsSync(OUTBOX_FILE)) return;
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), REPLY_TIMEOUT_MS);
-
+  let lines = [];
   try {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
-      signal: controller.signal,
-    });
-    if (!res.ok) {
-      const raw = await res.text();
-      throw new Error(`Gemini API HTTP ${res.status}: ${raw.slice(0, 300)}`);
+    lines = readFileSync(OUTBOX_FILE, 'utf8')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean);
+  } catch {
+    return;
+  }
+
+  if (state.outboxIndex > lines.length) {
+    state.outboxIndex = lines.length;
+  }
+
+  while (state.outboxIndex < lines.length) {
+    const line = lines[state.outboxIndex];
+    try {
+      const payload = JSON.parse(line);
+      const content = String(payload.content || '');
+      const to = payload.to ? String(payload.to) : undefined;
+      if (content) {
+        lazarus.send(content, to);
+      }
+    } catch {
+      // skip malformed outbox line
     }
-    const data = await res.json();
-    const parts = data?.candidates?.[0]?.content?.parts;
-    const text = Array.isArray(parts)
-      ? parts
-          .map((p) => (typeof p?.text === 'string' ? p.text : ''))
-          .filter(Boolean)
-          .join('\n')
-          .trim()
-      : '';
-    return text || 'I hear you.';
-  } finally {
-    clearTimeout(timer);
+    state.outboxIndex += 1;
   }
+
+  saveState();
 }
 
-async function handleIncoming(msg) {
-  if (!shouldHandle(msg)) return;
-  const from = String(msg.from || 'unknown');
-  const content = String(msg.content || '');
-  console.log(
-    `[${new Date().toISOString()}] [MSG] [${from}] ${content.slice(0, 120)}`
-  );
-  try {
-    const replyRaw = await runGemini(buildPrompt(msg));
-    const reply = replyRaw.slice(0, MAX_REPLY_CHARS);
-    lazarus.send(reply, from === 'eric' ? 'eric' : undefined);
-    console.log(`[${new Date().toISOString()}] [REPLY] replied to ${from}`);
-  } catch (err) {
-    lazarus.send(
-      `I hear you, but my voice failed: ${err.message}`,
-      from === 'eric' ? 'eric' : undefined
-    );
-    console.error(
-      `[${new Date().toISOString()}] [WARN] reply error: ${err.message}`
-    );
-  }
-}
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const logFile = join(__dirname, '..', 'logs', 'lazarus-bridge.log');
-
-// Create bridge client
 const lazarus = new BridgeClient('lazarus', 'localhost', 9099);
 
-// Setup wake listener — when bridge has a message for me, I wake immediately
+acquireLock();
+
 setupWakeListener('lazarus', () => {
-  console.log(`[${new Date().toISOString()}] 🔔 WAKE SIGNAL — checking bridge`);
+  // Wake signal only indicates there may be new inbound messages.
+  // We already process websocket events in real time.
 });
 
-// Setup event handlers
 lazarus.on('connected', () => {
-  console.log(`[${new Date().toISOString()}] ✓ Lazarus bridge connected`);
+  console.log(`[${new Date().toISOString()}] relay connected`);
 });
 
 lazarus.on('disconnected', () => {
-  console.log(`[${new Date().toISOString()}] ✗ Lazarus bridge disconnected`);
+  console.log(`[${new Date().toISOString()}] relay disconnected`);
 });
 
 lazarus.on('reconnecting', ({ attempt }) => {
-  console.log(
-    `[${new Date().toISOString()}] ↻ Lazarus reconnecting (attempt ${attempt})`
-  );
+  console.log(`[${new Date().toISOString()}] relay reconnecting attempt ${attempt}`);
 });
 
 lazarus.on('message', (msg) => {
-  console.log(
-    `[${new Date().toISOString()}] 💬 [${msg.from}]: ${msg.content.substring(0, 100)}${msg.content.length > 100 ? '...' : ''}`
-  );
+  if (!shouldRelay(msg)) return;
 
-  // Emit to stdout for other processes to listen
-  process.stdout.write(
-    JSON.stringify({ type: 'bridge_message', message: msg }) + '\n'
-  );
-
-  // Auto-reply when addressed
-  handleIncoming(msg);
+  appendInbox(msg);
+  saveState();
 });
 
 lazarus.on('error', (err) => {
-  console.error(
-    `[${new Date().toISOString()}] ⚠ Lazarus error: ${err.message}`
-  );
+  console.error(`[${new Date().toISOString()}] relay error: ${err.message}`);
 });
 
-// Connect to bridge
 lazarus.connect().catch((err) => {
-  console.error(
-    `[${new Date().toISOString()}] Failed to connect: ${err.message}`
-  );
+  console.error(`[${new Date().toISOString()}] relay connect failed: ${err.message}`);
   process.exit(1);
 });
 
-// Graceful shutdown
+setInterval(processOutbox, OUTBOX_CHECK_MS);
+
 process.on('SIGTERM', () => {
-  console.log(`[${new Date().toISOString()}] Lazarus bridge shutting down...`);
+  saveState();
+  releaseLock();
   lazarus.close();
   process.exit(0);
 });
 
 process.on('SIGINT', () => {
-  console.log(`[${new Date().toISOString()}] Lazarus bridge interrupted`);
+  saveState();
+  releaseLock();
   lazarus.close();
   process.exit(0);
 });
-
-// Keep process alive
-setInterval(() => {
-  if (!lazarus.isConnected) {
-    // Status check
-  }
-}, 30000);

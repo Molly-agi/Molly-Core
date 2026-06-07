@@ -1,0 +1,6 @@
+nohup: ignoring input
+[WAKE-LISTENER] lazarus listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.lazarus-wake (SIGUSR1 primary, watchFile fallback)
+[2026-06-07T00:12:42.988Z] relay connected
+nohup: ignoring input
+[WAKE-LISTENER] lazarus listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.lazarus-wake (SIGUSR1 primary, watchFile fallback)
+[2026-06-07T00:13:10.662Z] relay connected

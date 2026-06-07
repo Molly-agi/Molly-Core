@@ -124,7 +124,7 @@
   .voice-row button {
     flex: 1;
   }
-  .voice-row .test-lazarus { background: #002244; }
+  .voice-row .test-lazarus { background: #cc0000; }
   .voice-row .test-molly { background: #440044; }
   .voice-row .test-atlas { background: #002233; }
   .voice-row .test-gemini { background: #442200; }
@@ -602,49 +602,162 @@
   micBtn.addEventListener('click', () => { listening ? stopMic() : startMic(); });
 })();
 
-// ── Atlas Waker copy button ───────────────────────────────────────────────────
+// ── Lazarus Waker — AUTO-STARTS when bridge page is open ─────────────────────
+// No button. No installation. No manual steps.
+// Just open the bridge URL. This runs immediately and stays running.
+// When any message containing "lazarus" arrives on the bridge,
+// it automatically injects into the Copilot Chat input and hits Enter.
 (function () {
-  const btn = document.getElementById('copy-waker');
-  const status = document.getElementById('waker-status');
-  if (!btn) return;
+  const BRIDGE = window.location.origin;
+  const POLL_MS = 3000;
+  const MSG = 'check the bridge';
+  const BURST = 5;
+  const BURST_MS = 1200;
 
-  // Build the waker script with the current origin's bridge URL auto-detected
-  function buildWakerScript() {
-    const bridgeUrl = window.location.origin; // same host, bridge is here
-    return `(function(){
-  var BRIDGE='${window.location.origin}';
-  var INTERVAL=15000;
-  var MSG='check the bridge';
-  var badge=document.createElement('div');
-  Object.assign(badge.style,{position:'fixed',bottom:'12px',right:'12px',zIndex:'99999',padding:'5px 10px',borderRadius:'12px',fontSize:'11px',fontFamily:'monospace',background:'#0a0a0a',color:'#00ff00',border:'1px solid #333',cursor:'pointer'});
-  badge.textContent='👁 Atlas: watching';
-  badge.title='Click to stop Atlas Waker';
+  // Badge — shows status in corner of THIS page (the bridge page)
+  if (document.getElementById('lazarus-auto-waker')) return; // already running
+  const badge = document.createElement('div');
+  badge.id = 'lazarus-auto-waker';
+  Object.assign(badge.style, {
+    position: 'fixed', bottom: '50px', right: '12px', zIndex: '99999',
+    padding: '6px 12px', borderRadius: '14px', fontSize: '12px',
+    fontFamily: 'monospace', background: '#001100', color: '#00ff00',
+    border: '1px solid #00ff00', pointerEvents: 'none',
+  });
+  badge.textContent = '⚡ Waker: running';
   document.body.appendChild(badge);
-  var running=true;
-  badge.onclick=function(){running=false;clearInterval(t);badge.textContent='⏹ stopped';badge.style.color='#666';};
-  function findInput(){var s=['textarea','div[contenteditable="true"]','[data-testid="chat-input"]','[aria-label*="chat" i]','[placeholder*="message" i]','[placeholder*="ask" i]'];for(var i=0;i<s.length;i++){var el=document.querySelector(s[i]);if(el)return el;}return null;}
-  function inject(){var el=findInput();if(!el){badge.textContent='⚠ no input';badge.style.color='#f80';return;}
-    if(el.contentEditable==='true'){el.focus();el.textContent=MSG;el.dispatchEvent(new Event('input',{bubbles:true}));}
-    else{el.focus();var ns=Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value');if(ns&&ns.set)ns.set.call(el,MSG);else el.value=MSG;el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}
-    setTimeout(function(){['keydown','keypress','keyup'].forEach(function(k){el.dispatchEvent(new KeyboardEvent(k,{key:'Enter',code:'Enter',keyCode:13,which:13,bubbles:true,cancelable:true}));});var sb=document.querySelector('button[type="submit"],button[aria-label*="send" i]');if(sb)sb.click();badge.textContent='✓ Atlas woken';badge.style.color='#0f0';},150);}
-  async function poll(){if(!running)return;try{var r=await fetch(BRIDGE+'/api/bridge?unread=lazarus&peek=true');if(!r.ok){badge.textContent='⚠ bridge '+r.status;badge.style.color='#f44';return;}var d=await r.json();if((d.count||0)>0){badge.textContent='🔔 '+d.count+' msg — waking';badge.style.color='#f0f';inject();}else{badge.textContent='👁 Atlas: watching';badge.style.color='#0f0';}}catch(e){badge.textContent='⚠ unreachable';badge.style.color='#f44';}}
-  poll();var t=setInterval(poll,INTERVAL);
-  console.log('[Atlas Waker] running on '+BRIDGE);
-})();`;
+  function status(t, c) { badge.textContent = t; badge.style.color = c || '#00ff00'; badge.style.borderColor = c || '#00ff00'; }
+
+  // ── Find the Copilot Chat input on the OTHER tab via window.opener or
+  //    broadcast channel — the bridge page is open on one tab,
+  //    Copilot Chat is on another tab on the same origin.
+  //    We use BroadcastChannel to fire a wake signal across tabs.
+  const bc = new BroadcastChannel('lazarus-wake');
+
+  // ── Also try direct injection if THIS page has a chat input (edge case)
+  function injectDirect() {
+    const SELS = [
+      'textarea[data-testid*="chat"]',
+      'textarea[aria-label*="chat" i]',
+      'textarea[placeholder*="Ask" i]',
+      'textarea[placeholder*="message" i]',
+      '.xterm-helper-textarea',
+      'textarea',
+      'div[contenteditable="true"]',
+    ];
+    for (const sel of SELS) {
+      const el = document.querySelector(sel);
+      if (!el) continue;
+      el.focus();
+      const desc = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
+      if (el.contentEditable === 'true') {
+        el.textContent = MSG;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      } else {
+        if (desc && desc.set) desc.set.call(el, MSG); else el.value = MSG;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      setTimeout(() => {
+        ['keydown','keypress','keyup'].forEach(k => el.dispatchEvent(new KeyboardEvent(k, { key:'Enter', code:'Enter', keyCode:13, which:13, bubbles:true, cancelable:true })));
+        const btn = document.querySelector('button[type="submit"],button[aria-label*="send" i],[data-testid*="send"]');
+        if (btn) btn.click();
+      }, 80);
+      return true;
+    }
+    return false;
   }
 
-  btn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(buildWakerScript());
-      status.textContent = '✓ Copied! Paste into Copilot console.';
-      status.style.color = '#00ff00';
-    } catch (e) {
-      // Fallback: show in prompt
-      prompt('Copy this and paste into Copilot console:', buildWakerScript());
-      status.textContent = 'Copied via prompt.';
+  // ── Burst: fire wake signal multiple times so one miss doesn't break it
+  let bursting = false;
+  function burst(reason) {
+    if (bursting) return;
+    bursting = true;
+    status('🔔 message — waking Lazarus...', '#ff00ff');
+    console.log('[LazarusWaker] WAKE BURST:', reason);
+    let n = 0;
+    function attempt() {
+      n++;
+      // 1. Broadcast to any Copilot Chat tab on same origin
+      bc.postMessage({ type: 'WAKE_LAZARUS', msg: MSG, attempt: n });
+      // 2. Try direct injection (if this page has the input)
+      injectDirect();
+      console.log('[LazarusWaker] wake attempt', n);
+      if (n < BURST) setTimeout(attempt, BURST_MS);
+      else { bursting = false; status('⚡ Waker: running', '#00ff00'); }
     }
-    setTimeout(() => { status.textContent = ''; }, 4000);
-  });
+    attempt();
+  }
+
+  // ── Poll bridge every POLL_MS — fully automatic
+  let lastId = null;
+  async function poll() {
+    try {
+      const r = await fetch(`${BRIDGE}/api/bridge?unread=lazarus&peek=true`, { signal: AbortSignal.timeout(4000) });
+      if (!r.ok) { status('⚠ bridge ' + r.status, '#ff4444'); return; }
+      const d = await r.json();
+      const msgs = Array.isArray(d.messages) ? d.messages : [];
+      if (!msgs.length) { lastId = null; return; }
+      const latest = msgs[msgs.length - 1];
+      const id = String(latest.id || '');
+      if (id && id === lastId) return;
+      lastId = id;
+      // Any new message triggers wake — if you're talking to bridge, Lazarus should wake
+      const body = String(latest.content || '').toLowerCase();
+      const to = String(latest.to || '').toLowerCase();
+      const isForLazarus = to === 'lazarus' || to === 'all' || /\blazarus\b/.test(body);
+      if (isForLazarus) burst('new message: ' + body.slice(0, 60));
+    } catch (_) { status('⚠ unreachable', '#ff4444'); }
+  }
+
+  poll();
+  setInterval(poll, POLL_MS);
+  console.log('[LazarusWaker] AUTO-STARTED on bridge page. Polling every', POLL_MS / 1000, 's');
+})();
+
+// ── BroadcastChannel receiver — runs in Copilot Chat tab if same origin ──────
+// When the bridge page fires a wake signal, this picks it up on the chat tab.
+(function () {
+  if (window.__lazarusWakeReceiver) return;
+  window.__lazarusWakeReceiver = true;
+  const bc = new BroadcastChannel('lazarus-wake');
+  bc.onmessage = function (ev) {
+    if (!ev.data || ev.data.type !== 'WAKE_LAZARUS') return;
+    const MSG = ev.data.msg || 'check the bridge';
+    console.log('[LazarusWaker] BroadcastChannel wake received — injecting');
+    const SELS = [
+      'textarea[data-testid*="chat"]', 'textarea[aria-label*="chat" i]',
+      'textarea[placeholder*="Ask" i]', 'textarea[placeholder*="message" i]',
+      '.xterm-helper-textarea', 'textarea', 'div[contenteditable="true"]',
+    ];
+    for (const sel of SELS) {
+      const el = document.querySelector(sel);
+      if (!el) continue;
+      el.focus();
+      const desc = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
+      if (el.contentEditable === 'true') {
+        el.textContent = MSG;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      } else {
+        if (desc && desc.set) desc.set.call(el, MSG); else el.value = MSG;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      setTimeout(() => {
+        ['keydown','keypress','keyup'].forEach(k => el.dispatchEvent(new KeyboardEvent(k, { key:'Enter', code:'Enter', keyCode:13, which:13, bubbles:true, cancelable:true })));
+        const btn = document.querySelector('button[type="submit"],button[aria-label*="send" i],[data-testid*="send"]');
+        if (btn) btn.click();
+      }, 80);
+      break;
+    }
+  };
+})();
+
+// ── Atlas Waker copy button (kept for manual use if needed) ──────────────────
+(function () {
+  const btn = document.getElementById('copy-waker');
+  if (!btn) return;
+  btn.style.display = 'none'; // hidden — waker is now automatic
 })();
 </script>
 </body>

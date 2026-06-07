@@ -1107,8 +1107,9 @@ function handleMessage(from, content, to) {
     notifyReq.end();
   }
 
-  // Wake signal — touch agent wake files so listeners fire immediately
-  sendWakeIfNeeded(to, from);
+  // Wake signal — direct process signal first, file-touch fallback.
+  // Also supports implicit addressing like "Lazarus, ..." when `to` is omitted.
+  sendWakeIfNeeded(to, from, content);
 
   return msg;
 }
@@ -1409,6 +1410,71 @@ function handleHTTP(req, res) {
 
   // Canonical endpoints: GET /api/bridge and POST /api/bridge
   // So old curl commands still work during transition
+  if (req.method === 'POST' && url.pathname === '/api/bridge/wake') {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      try {
+        const payload = body ? JSON.parse(body) : {};
+        const target = String(payload.agent || payload.target || 'lazarus')
+          .trim()
+          .toLowerCase();
+        const reason = String(payload.reason || 'bridge-wake').trim();
+        const queueInstruction = payload.queueInstruction !== false;
+
+        const allowedTargets = ['molly', 'lazarus', 'atlas', 'gemini', 'all'];
+        if (!allowedTargets.includes(target)) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(
+            JSON.stringify({
+              error: 'Invalid wake target',
+              allowedTargets,
+            })
+          );
+          return;
+        }
+
+        const wakeTargets =
+          target === 'all' ? ['molly', 'lazarus', 'atlas', 'gemini'] : [target];
+        for (const t of wakeTargets) {
+          wakeAgent(t);
+        }
+
+        let instructionMsg = null;
+        if (queueInstruction) {
+          const content =
+            target === 'all'
+              ? `ALL, check the bridge now. Trigger: ${reason}`
+              : `${target.toUpperCase()}, check the bridge now. Trigger: ${reason}`;
+          const to = target === 'all' ? undefined : target;
+          instructionMsg = handleMessage('eric', content, to);
+        }
+
+        console.log(
+          `[bridge] WAKE endpoint: target=${target} reason="${reason}" queueInstruction=${queueInstruction}`
+        );
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(
+          JSON.stringify({
+            success: true,
+            target,
+            wakeTargets,
+            reason,
+            queueInstruction,
+            message: instructionMsg,
+          })
+        );
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid JSON body' }));
+      }
+    });
+    return;
+  }
+
   if (req.method === 'GET' && url.pathname === '/api/bridge') {
     loadMessages(); // Re-read from disk
     const unreadFor = url.searchParams.get('unread');
@@ -1883,8 +1949,38 @@ function ensureWakeDir() {
 }
 ensureWakeDir();
 
-function wakeAgent(agentName) {
-  const wakeFile = join(WAKE_DIR, `.${agentName}-wake`);
+function wakeAgent(agentName, from = null) {
+  const result = {
+    agent: agentName,
+    from,
+    sigusr1Sent: false,
+    fallbackFileTouched: false,
+    pid: null,
+  };
+  const pidFile = join(ROOT, `.${agentName}-bridge.pid`);
+
+  // PRIMARY: instant OS signal wake
+  try {
+    if (existsSync(pidFile)) {
+      const pidRaw = readFileSync(pidFile, 'utf8').trim();
+      const pid = parseInt(pidRaw, 10);
+      if (!Number.isNaN(pid) && pid > 0) {
+        process.kill(pid, 'SIGUSR1');
+        result.sigusr1Sent = true;
+        result.pid = pid;
+      }
+    }
+  } catch {
+    // Non-fatal — fall through to file wake.
+  }
+
+  // FALLBACK: wake file touch for watchFile listeners
+  // Channel format: .{recipient}-wake-from-{sender}
+  // If sender not provided, use legacy format: .{recipient}-wake
+  const wakeFileName = from
+    ? `.${agentName}-wake-from-${from}`
+    : `.${agentName}-wake`;
+  const wakeFile = join(WAKE_DIR, wakeFileName);
   try {
     writeFileSync(
       wakeFile,
@@ -1892,25 +1988,68 @@ function wakeAgent(agentName) {
         timestamp: new Date().toISOString(),
         message: 'check-bridge',
         wokenAt: Date.now(),
+        from,
       })
     );
+    result.fallbackFileTouched = true;
   } catch (err) {
     // Non-fatal — wake mechanism is optional
   }
+
+  return result;
 }
 
-// Hook into existing handleMessage to send wake signals
-// This will be called whenever a message arrives
-function sendWakeIfNeeded(to, from) {
-  // Send wake to recipient if explicitly addressed
-  if (to && VALID_SENDERS.has(to)) {
-    wakeAgent(to);
+function detectAddressedRecipients(content) {
+  const text = String(content || '').trim().toLowerCase();
+  if (!text) return [];
+
+  const recipients = [];
+  const checks = [
+    ['molly', /^(molly|@molly)\b/],
+    ['lazarus', /^(lazarus|@lazarus)\b/],
+    ['atlas', /^(atlas|@atlas)\b/],
+    ['gemini', /^(gemini|@gemini)\b/],
+  ];
+
+  for (const [name, pattern] of checks) {
+    if (pattern.test(text)) recipients.push(name);
   }
-  // Also send broadcast wake to everyone if message is from eric (important)
-  if (from === 'eric') {
-    wakeAgent('molly');
-    wakeAgent('lazarus');
-    wakeAgent('atlas');
-    wakeAgent('gemini');
+
+  if (/^(everyone|all)\b/.test(text)) {
+    recipients.push('molly', 'lazarus', 'atlas', 'gemini');
+  }
+
+  // Explicit wake protocol token from Molly/Eric.
+  // Example: "WAKE_LAZARUS: check bridge"
+  if (/\bwake[_\s-]*lazarus\b/i.test(text)) {
+    recipients.push('lazarus');
+  }
+
+  return [...new Set(recipients)];
+}
+
+// Hook into existing handleMessage to send wake signals.
+// Channel-based: each recipient gets wake file with sender info: .{to}-wake-from-{from}
+function sendWakeIfNeeded(to, from, content) {
+  // PRIMARY: explicit channel route (to field specified)
+  // This is the main mechanism for channel-based routing
+  if (to && VALID_SENDERS.has(to)) {
+    const r = wakeAgent(to, from);
+    console.log(
+      `[bridge] channel-wake to=${to} from=${from} channel=${to}-${from} sigusr1=${r.sigusr1Sent} fallback=${r.fallbackFileTouched}${r.pid ? ` pid=${r.pid}` : ''}`
+    );
+    return; // For explicit channels, we're done
+  }
+
+  // FALLBACK: content-addressed wake for backward compatibility
+  // This covers curl usage where `to` is omitted (e.g., "Lazarus, ...")
+  const addressed = detectAddressedRecipients(content);
+  for (const recipient of addressed) {
+    if (recipient !== from && VALID_SENDERS.has(recipient)) {
+      const r = wakeAgent(recipient, from);
+      console.log(
+        `[bridge] content-addressed-wake recipient=${recipient} from=${from} channel=${recipient}-${from} sigusr1=${r.sigusr1Sent} fallback=${r.fallbackFileTouched}${r.pid ? ` pid=${r.pid}` : ''}`
+      );
+    }
   }
 }

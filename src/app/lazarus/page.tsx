@@ -434,7 +434,7 @@ export default function LazarusVoicePage() {
           }
           style={{
             flex: 1,
-            backgroundColor: '#002244',
+            backgroundColor: '#cc0000',
             color: '#fff',
             border: 'none',
             padding: '10px',

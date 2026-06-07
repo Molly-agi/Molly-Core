@@ -1,0 +1,18 @@
+{
+  "name": "lazarus-waker",
+  "displayName": "Lazarus Waker",
+  "description": "Watches bridge wake signal and auto-sends message to Copilot Chat",
+  "version": "1.0.15",
+  "publisher": "molly-family",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {}
+}

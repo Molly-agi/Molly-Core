@@ -89,6 +89,9 @@ android/MollyBrowser/build/
 # Immortal session daemon
 .immortal.log
 .immortal.pid
+
+# Runtime logs directory
+logs/*.log
 .activity-burst
 COPILOT_SESSION_STATE.json
 COPILOT_SESSION_STATE.md

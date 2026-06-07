@@ -52,11 +52,27 @@ LOG="$ROOT/.watchdog.log"
 BRIDGE_PIDFILE="$ROOT/.bridge-daemon.pid"
 IMMORTAL_PIDFILE="$ROOT/.immortal.pid"
 LAZARUS_POLLER_PIDFILE="$ROOT/.lazarus-poller.pid"
+LAZARUS_RELAY_EXECUTOR_PIDFILE="$ROOT/.lazarus-relay-executor.pid"
 ATLAS_POLLER_PIDFILE="$ROOT/.atlas-poller.pid"
 GEMINI_POLLER_PIDFILE="$ROOT/.gemini-poller.pid"
 QUEUE_MIRROR_PIDFILE="$ROOT/.queue-mirror.pid"
 # Extension-host killing caused churn/regressions; keep disabled unless explicitly enabled.
 WATCHDOG_KILL_EXTHOSTS="${WATCHDOG_KILL_EXTHOSTS:-0}"
+
+# ---- Job 0: Keep-Alive Script Guardian ----
+# Ensures keep-alive.sh stays running. This script writes heartbeat state and
+# persists session snapshots; if it dies, continuity degrades on reconnect.
+ensure_keep_alive_script() {
+  if pgrep -f "bash scripts/keep-alive.sh|scripts/keep-alive.sh" >/dev/null 2>&1; then
+    return
+  fi
+
+  log "[KEEP-ALIVE] Starting keep-alive.sh"
+  nohup bash "$ROOT/scripts/keep-alive.sh" > /dev/null 2>&1 &
+  local NEW_PID=$!
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[KEEP-ALIVE] Started (PID $NEW_PID)"
+}
 
 # ---- Logging (auto-rotates at 200 lines) ----
 log() {
@@ -282,7 +298,31 @@ ensure_lazarus_poller() {
   log "[LAZARUS] Poller started (PID $NEW_PID)"
 }
 
-# ---- Job 6: Atlas Poller Guardian ----
+# ---- Job 6: Lazarus Relay Executor Guardian ----
+# Ensures the relay executor stays up so Molly can dispatch tasks to Lazarus.
+ensure_lazarus_relay_executor() {
+  if [[ -f "$LAZARUS_RELAY_EXECUTOR_PIDFILE" ]]; then
+    local EPID
+    EPID=$(cat "$LAZARUS_RELAY_EXECUTOR_PIDFILE" 2>/dev/null)
+    if [[ -n "$EPID" ]] && kill -0 "$EPID" 2>/dev/null; then
+      local CMDLINE
+      CMDLINE=$(cat "/proc/$EPID/cmdline" 2>/dev/null | tr '\0' ' ')
+      if echo "$CMDLINE" | grep -q "lazarus-relay-executor.mjs"; then
+        return
+      fi
+    fi
+    rm -f "$LAZARUS_RELAY_EXECUTOR_PIDFILE"
+  fi
+
+  log "[LAZARUS] Starting relay executor"
+  nohup node "$ROOT/scripts/lazarus-relay-executor.mjs" >> "$ROOT/logs/lazarus-relay-executor.log" 2>&1 &
+  local NEW_PID=$!
+  echo "$NEW_PID" > "$LAZARUS_RELAY_EXECUTOR_PIDFILE"
+  disown "$NEW_PID" 2>/dev/null || true
+  log "[LAZARUS] Relay executor started (PID $NEW_PID)"
+}
+
+# ---- Job 7: Atlas Poller Guardian ----
 # Ensures an always-on unread poller keeps Atlas wakeup data fresh.
 ensure_atlas_poller() {
   if [[ -f "$ATLAS_POLLER_PIDFILE" ]]; then
@@ -306,7 +346,7 @@ ensure_atlas_poller() {
   log "[ATLAS] Poller started (PID $NEW_PID)"
 }
 
-# ---- Job 7: Gemini Poller Guardian ----
+# ---- Job 8: Gemini Poller Guardian ----
 # Ensures an always-on unread poller keeps Gemini wakeup data fresh.
 ensure_gemini_poller() {
   if [[ -f "$GEMINI_POLLER_PIDFILE" ]]; then
@@ -371,9 +411,11 @@ acquire_lock
 log "[WATCHDOG] v2 started | PID $$ | SIGHUP immune | Ghost check 30s | Pulse 120s"
 
 # Start bridge and immortal daemons immediately on watchdog boot
+ensure_keep_alive_script
 ensure_bridge
 ensure_immortal
 ensure_lazarus_poller
+ensure_lazarus_relay_executor
 ensure_atlas_poller
 ensure_gemini_poller
 ensure_queue_mirror
@@ -388,9 +430,11 @@ while true; do
 
   # Bridge + immortal guardian every 2 ticks (1 minute)
   if (( TICK % 2 == 0 )); then
+    ensure_keep_alive_script
     ensure_bridge
     ensure_immortal
     ensure_lazarus_poller
+    ensure_lazarus_relay_executor
     ensure_atlas_poller
     ensure_gemini_poller
     ensure_queue_mirror

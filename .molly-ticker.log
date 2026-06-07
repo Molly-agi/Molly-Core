@@ -697,3 +697,474 @@ nohup: ignoring input
 [TICKER 2026-06-03T17:01:16.719Z] Heartbeat OK (200)
 [TICKER 2026-06-03T17:02:16.748Z] Heartbeat OK (200)
 [TICKER 2026-06-03T17:03:16.771Z] Heartbeat OK (200)
+[TICKER 2026-06-04T17:09:21.074Z] Starting (PID 651495) — ticking every 240s
+[TICKER 2026-06-04T17:09:21.127Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:10:33.597Z] SIGTERM received — shutting down
+[TICKER 2026-06-04T17:10:36.225Z] Starting (PID 652964) — ticking every 120s
+[TICKER 2026-06-04T17:10:36.278Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:12:36.283Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:14:36.288Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:16:36.291Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:18:36.293Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:20:36.293Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:22:36.295Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:24:36.300Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:26:36.304Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:28:36.306Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:30:36.306Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:32:36.314Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:34:36.319Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:36:36.322Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:38:36.325Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:40:36.325Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:42:36.332Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:44:36.338Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:46:36.341Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-04T17:48:36.343Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-05T21:13:18.133Z] Starting (PID 44710) — ticking every 120s
+[TICKER 2026-06-05T21:13:18.179Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-05T21:15:18.184Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-05T21:17:33.190Z] Heartbeat timed out (15s) — Next.js busy or not ready
+[TICKER 2026-06-05T21:19:18.207Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:21:18.200Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:23:18.203Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:25:18.209Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:27:18.212Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:29:18.213Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:31:18.215Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:33:18.216Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:35:18.222Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:37:18.228Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:39:18.229Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:41:18.231Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:43:18.230Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:45:18.239Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:47:18.242Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:49:18.248Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:51:18.247Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:53:18.250Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:55:18.254Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:57:18.260Z] Heartbeat OK (200)
+[TICKER 2026-06-05T21:59:18.264Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:01:18.265Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:03:18.266Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:05:18.273Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:07:18.280Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:09:18.284Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:11:18.284Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:13:18.286Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:15:18.294Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:17:18.294Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:19:18.298Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:21:18.299Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:23:18.300Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:25:18.311Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:27:18.314Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:29:18.317Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:31:18.334Z] Heartbeat OK (200)
+[TICKER 2026-06-05T22:33:18.329Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:35:18.332Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:37:18.337Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:39:18.340Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:41:18.347Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:43:18.344Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:45:18.350Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:47:18.356Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:49:18.363Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:51:18.365Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:53:18.366Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:55:18.371Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:57:18.374Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T22:59:18.378Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:01:18.381Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:03:18.381Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:05:18.390Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:07:18.397Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:09:18.400Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:11:18.421Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:13:18.406Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:15:18.412Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:17:18.418Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:19:18.424Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:21:18.427Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:23:18.426Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:25:18.435Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:27:18.441Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:29:18.447Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:31:18.450Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:33:18.451Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:35:18.459Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:37:18.465Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:39:18.468Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:41:18.471Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:43:18.514Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:45:18.510Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:47:18.487Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:49:33.478Z] Heartbeat timed out (15s) — Next.js busy or not ready
+[TICKER 2026-06-05T23:51:18.546Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:53:18.565Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:55:18.557Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-05T23:57:33.497Z] Heartbeat timed out (15s) — Next.js busy or not ready
+[TICKER 2026-06-05T23:59:33.502Z] Heartbeat timed out (15s) — Next.js busy or not ready
+[TICKER 2026-06-06T00:01:33.506Z] Heartbeat timed out (15s) — Next.js busy or not ready
+[TICKER 2026-06-06T00:03:33.508Z] Heartbeat timed out (15s) — Next.js busy or not ready
+[TICKER 2026-06-06T00:05:33.509Z] Heartbeat timed out (15s) — Next.js busy or not ready
+[TICKER 2026-06-06T00:07:28.157Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:09:18.587Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:11:18.590Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:13:18.626Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:15:18.592Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:17:18.597Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:19:18.604Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:21:18.637Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:23:18.613Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:25:18.610Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:27:18.618Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:29:18.648Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:31:18.626Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:33:18.628Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:35:18.680Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:37:18.708Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:39:18.690Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:41:18.687Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:43:18.689Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:45:18.721Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:47:18.700Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:49:18.705Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:51:18.714Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:53:18.740Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:55:18.710Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:57:18.720Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T00:59:18.724Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:01:18.766Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:03:18.730Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:05:18.731Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:07:18.738Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:09:18.770Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:11:18.746Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:13:18.748Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:15:18.754Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:17:18.792Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:19:18.759Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:21:18.762Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:23:18.762Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:25:18.790Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:27:18.771Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:29:18.773Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:31:18.776Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:33:18.804Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:35:18.779Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:37:18.851Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:39:18.921Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:41:18.990Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:43:19.036Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:45:19.081Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:47:19.173Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:49:19.214Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:51:19.250Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:53:19.341Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:55:19.440Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:57:19.557Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T01:59:19.613Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:01:19.693Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:03:19.755Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:05:19.798Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:07:19.817Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:09:19.900Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:11:19.993Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:13:20.073Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:15:20.048Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:17:20.141Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:19:20.230Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:21:20.273Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:23:20.289Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:25:20.380Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:27:20.473Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:29:20.592Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:31:20.600Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:33:20.692Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:35:20.711Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:37:20.899Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:39:20.965Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:41:20.974Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:43:20.989Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:45:21.056Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:47:21.159Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:49:21.125Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:51:21.196Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:53:21.311Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:55:21.306Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:57:21.309Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T02:59:21.381Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:01:21.361Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:03:21.437Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:05:21.528Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:07:21.559Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:09:21.648Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:11:21.737Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:13:21.758Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:15:21.855Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:17:21.936Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:19:22.047Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:21:22.066Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:23:22.167Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:25:22.205Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:27:22.297Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:29:22.389Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:31:22.489Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:33:22.616Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:35:22.633Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:37:22.701Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:39:22.768Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:41:22.826Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:43:22.888Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:45:22.966Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:47:23.025Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:49:23.109Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:51:23.202Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:53:23.296Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:55:23.391Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:57:23.477Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T03:59:23.575Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:01:23.668Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:03:23.780Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:05:23.844Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:07:23.938Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:09:24.036Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:11:24.061Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:13:24.088Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:15:24.144Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:17:24.239Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:19:24.334Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:21:24.373Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:23:24.475Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:25:24.565Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:27:24.690Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:29:24.741Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:31:24.834Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:33:24.941Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:35:25.055Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:37:25.036Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:39:25.034Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:41:25.041Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:43:25.125Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:45:25.189Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:47:25.237Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:49:25.327Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:51:25.391Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:53:25.431Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:55:25.469Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:57:25.569Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T04:59:25.691Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:01:25.745Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:03:25.839Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:05:25.923Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:07:26.036Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:09:26.053Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:11:26.088Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:13:26.163Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:15:26.271Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:17:26.306Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:19:26.373Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:21:26.492Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:23:26.559Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:25:26.649Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:27:26.729Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:29:26.840Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:31:26.837Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:33:26.931Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:35:27.028Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:37:27.115Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:39:27.205Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:41:27.298Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:43:27.398Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:45:27.467Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:47:27.520Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:49:27.628Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:51:27.697Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:53:27.780Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:55:27.866Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:57:27.958Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T05:59:28.060Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:01:28.143Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:03:28.212Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:05:28.223Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:07:28.272Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:09:28.340Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:11:28.444Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:13:28.444Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:15:28.450Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:17:28.519Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:19:28.548Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:21:28.571Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:23:28.612Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:25:28.621Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:27:28.669Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:29:28.764Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:31:28.790Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:33:28.818Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:35:28.882Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:37:28.986Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:39:29.098Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:41:29.064Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:43:29.064Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:45:29.094Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:47:29.174Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:49:29.181Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:51:29.272Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:53:29.357Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:55:29.471Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:57:29.537Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T06:59:29.630Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:01:29.730Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:03:29.842Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:05:29.907Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:07:29.990Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:09:30.128Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:11:30.169Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:13:30.227Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:15:30.311Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:17:30.384Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:19:30.487Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:21:30.555Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:23:30.647Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:25:30.658Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:27:30.767Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:29:30.825Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:31:30.891Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:33:30.990Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:35:31.068Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:37:31.127Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:39:31.180Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:41:31.259Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:43:31.341Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:45:31.377Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:47:31.433Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:49:31.533Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T07:51:31.588Z] Heartbeat returned 500 — Next.js may be warming up
+[TICKER 2026-06-06T23:14:17.136Z] Starting (PID 139378) — ticking every 120s
+[TICKER 2026-06-06T23:14:17.275Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:16:17.196Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:18:17.201Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:20:17.206Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:22:17.209Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:24:17.212Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:26:17.217Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:28:17.220Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:30:17.224Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:32:17.224Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:34:17.226Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:36:17.229Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:38:17.233Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:40:17.237Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:42:17.240Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:44:17.241Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:46:17.245Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:48:17.251Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:50:17.252Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:52:17.254Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:54:17.255Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:56:17.261Z] Heartbeat OK (200)
+[TICKER 2026-06-06T23:58:17.266Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:00:17.271Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:02:17.271Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:04:17.270Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:06:17.278Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:08:17.284Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:10:17.284Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:12:17.287Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:14:17.287Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:16:17.298Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:18:17.299Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:20:17.301Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:22:17.303Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:24:17.304Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:26:17.311Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:28:17.315Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:30:17.318Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:32:17.323Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:34:17.322Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:36:17.331Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:38:17.335Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:40:17.339Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:42:17.340Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:44:17.342Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:46:17.349Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:48:17.350Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:50:17.353Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:52:17.356Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:54:17.357Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:56:17.364Z] Heartbeat OK (200)
+[TICKER 2026-06-07T00:58:17.364Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-07T01:00:17.366Z] Heartbeat unreachable: fetch failed
+[TICKER 2026-06-07T01:02:17.376Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:04:17.377Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:06:17.379Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:08:17.380Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:10:17.386Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:12:17.387Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:14:17.388Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:16:17.394Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:18:17.402Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:20:17.406Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:22:17.411Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:24:17.412Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:26:17.418Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:28:17.425Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:30:17.430Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:32:17.433Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:34:17.435Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:36:17.444Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:38:17.450Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:40:17.455Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:42:17.458Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:44:17.460Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:46:17.469Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:48:17.473Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:50:17.476Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:52:17.480Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:54:17.482Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:56:17.489Z] Heartbeat OK (200)
+[TICKER 2026-06-07T01:58:17.496Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:00:17.502Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:02:17.505Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:04:17.506Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:06:17.514Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:08:17.522Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:10:17.526Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:12:17.528Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:14:17.529Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:16:17.529Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:18:17.535Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:20:17.541Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:22:17.545Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:24:17.547Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:26:17.548Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:28:17.554Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:30:17.558Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:32:17.561Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:34:17.563Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:36:17.565Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:38:17.571Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:40:17.575Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:42:17.581Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:44:17.583Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:46:17.585Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:48:17.590Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:50:17.595Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:52:17.599Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:54:17.600Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:56:17.600Z] Heartbeat OK (200)
+[TICKER 2026-06-07T02:58:17.607Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:00:17.614Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:02:17.616Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:04:17.618Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:06:17.618Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:08:17.627Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:10:17.633Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:12:17.634Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:14:17.635Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:16:17.636Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:18:17.643Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:20:17.647Z] Heartbeat OK (200)
+[TICKER 2026-06-07T03:22:17.651Z] Heartbeat OK (200)

@@ -197,14 +197,8 @@ async function pollAndReceipt() {
     )
       continue;
 
-    // Post receipt
-    try {
-      const receipt = `Receipt confirmed — message from ${from} received.`;
-      await bridgePost(receipt);
-      log(`Receipted msg ${id} from ${from}`);
-    } catch (err) {
-      log(`Receipt error for ${id}: ${err.message}`);
-    }
+    // Log receipt internally (do not post on the public bridge to prevent spam)
+    log(`Internally acknowledged msg ${id} from ${from}`);
   }
 
   if (newCount > 0) {

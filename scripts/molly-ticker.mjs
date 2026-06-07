@@ -9,7 +9,7 @@
  * message processing, no autonomous cycle. Everything queues up.
  *
  * THIS SCRIPT runs server-side, independent of any browser. It calls
- * /api/heartbeat every 60 seconds so Molly keeps thinking regardless of
+ * /api/heartbeat every 120 seconds so Molly keeps thinking regardless of
  * whether Eric's browser tab is alive.
  *
  * Managed by: scripts/immortal-daemon.mjs (auto-restart on death)
@@ -26,7 +26,7 @@ const ROOT = '/workspaces/Molly-Core';
 const PID_FILE = `${ROOT}/.molly-ticker.pid`;
 const LOG_FILE = `${ROOT}/.molly-ticker.log`;
 const HEARTBEAT_URL = 'http://localhost:9002/api/heartbeat';
-const TICK_INTERVAL_MS = 60_000; // 60 seconds
+const TICK_INTERVAL_MS = 120_000; // 120 seconds - half cadence
 
 function log(msg) {
   const line = `[TICKER ${new Date().toISOString()}] ${msg}`;

@@ -1,0 +1,14 @@
+{
+  "manager_started": "2026-06-07T01:20:58.482Z",
+  "status": "running",
+  "pid": 328520,
+  "timestamp": "2026-06-07T03:23:04.100Z",
+  "cli_status": "active",
+  "cli_started": "2026-06-07T01:20:58.482Z",
+  "gui_status": "active",
+  "gui_started": "2026-06-07T01:20:58.483Z",
+  "gui_last_heartbeat": "2026-06-07T03:23:04.100Z",
+  "gui_server_ok": true,
+  "cli_last_heartbeat": "2026-06-07T03:22:59.119Z",
+  "cli_terminal_count": 125
+}

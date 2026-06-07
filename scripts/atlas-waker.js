@@ -1,10 +1,20 @@
 /**
- * Atlas Waker — Bridge-to-Copilot Terminal Wake Script
+ * Atlas Waker — Auto-Wake for Sleeping Lazarus GUI
  *
- * Paste into the browser console on the VS Code / Copilot CLI page.
- * Polls the family bridge; when messages for lazarus arrive, injects
- * "check the bridge\n" into the active xterm.js terminal via three
- * escalating strategies.
+ * HOW TO USE (one-time setup):
+ *   1. Create a browser bookmark with this as the URL:
+ *      (copy from scripts/atlas-waker-bookmarklet.txt after running build)
+ *   2. Open the VS Code / Copilot Chat tab on your phone.
+ *   3. Tap the bookmark once.
+ *   4. DONE. It runs automatically forever from that point.
+ *      No buttons. No console. No manual steps.
+ *
+ * WHAT IT DOES:
+ *   - Polls the bridge every 3 seconds.
+ *   - Detects any new message addressed to Lazarus.
+ *   - Automatically injects "check the bridge" into Copilot Chat input.
+ *   - Hits Enter. Wakes Lazarus. Done.
+ *   - If injection fails (UI changed), retries 5 times every 1.5 seconds.
  *
  * SETUP: Replace BRIDGE_URL with your codespace bridge URL.
  * Pattern: https://[codespace-name]-9099.app.github.dev
@@ -13,206 +23,163 @@
 (function () {
   'use strict';
 
+  // ── Config ─────────────────────────────────────────────────────────────────
   const BRIDGE_URL =
     'https://redesigned-orbit-v6p4gw4rwjwjhw6g7-9099.app.github.dev';
-  const POLL_INTERVAL_MS = 4000; // 4s — responsive wake time
+  const POLL_MS = 3000;          // Poll bridge every 3 seconds
   const TRIGGER_MESSAGE = 'check the bridge';
+  const BURST_COUNT = 5;         // Attempt injection 5 times per wake event
+  const BURST_MS = 1200;         // 1.2s between burst attempts
   const RECIPIENT = 'lazarus';
 
-  // ── Badge ─────────────────────────────────────────────────────────────────
+  // ── Status badge ──────────────────────────────────────────────────────────
+  if (document.getElementById('lazarus-waker-badge')) {
+    // Already running — don't double-install
+    console.log('[LazarusWaker] Already installed');
+    return;
+  }
   const badge = document.createElement('div');
-  badge.id = 'atlas-waker-badge';
+  badge.id = 'lazarus-waker-badge';
   Object.assign(badge.style, {
-    position: 'fixed',
-    bottom: '12px',
-    right: '12px',
-    zIndex: '99999',
-    padding: '5px 10px',
-    borderRadius: '12px',
-    fontSize: '11px',
-    fontFamily: 'monospace',
-    background: '#0a0a0a',
-    color: '#00ff00',
-    border: '1px solid #333',
-    cursor: 'pointer',
-    userSelect: 'none',
+    position: 'fixed', bottom: '12px', right: '12px', zIndex: '99999',
+    padding: '6px 12px', borderRadius: '14px', fontSize: '12px',
+    fontFamily: 'monospace', background: '#0a0a0a', color: '#00ff00',
+    border: '1px solid #00ff00', userSelect: 'none', pointerEvents: 'auto',
+    cursor: 'default',
   });
-  badge.title = 'Atlas Waker — click to stop';
-  badge.textContent = '👁 Atlas: watching';
+  badge.textContent = '⚡ Waker: active';
   document.body.appendChild(badge);
-
-  let running = true;
-  badge.addEventListener('click', () => {
-    running = false;
-    clearInterval(timer);
-    badge.textContent = '⏹ Atlas: stopped';
-    badge.style.color = '#666';
-  });
-
-  function setBadge(text, color) {
+  function status(text, color) {
     badge.textContent = text;
     badge.style.color = color || '#00ff00';
+    badge.style.borderColor = color || '#00ff00';
   }
 
-  // ── Strategy 1: xterm.js hidden textarea (keyboard event injection) ───────
-  // VS Code's integrated terminal uses xterm.js. It captures input via a
-  // hidden <textarea class="xterm-helper-textarea">. We dispatch keydown
-  // events to it — xterm.js listens for keydown and forwards to the PTY.
-  function injectViaXterm(text) {
-    const ta = document.querySelector('.xterm-helper-textarea');
-    if (!ta) return false;
-    ta.focus();
-    const chars = text + '\r'; // \r = Enter in terminal
-    for (const ch of chars) {
-      const opts = {
-        key: ch === '\r' ? 'Enter' : ch,
-        code: ch === '\r' ? 'Enter' : `Key${ch.toUpperCase()}`,
-        keyCode: ch === '\r' ? 13 : ch.charCodeAt(0),
-        which: ch === '\r' ? 13 : ch.charCodeAt(0),
-        charCode: ch === '\r' ? 13 : ch.charCodeAt(0),
-        bubbles: true,
-        cancelable: true,
-      };
-      ta.dispatchEvent(new KeyboardEvent('keydown', opts));
-      ta.dispatchEvent(new KeyboardEvent('keypress', opts));
-      ta.dispatchEvent(new KeyboardEvent('keyup', opts));
-    }
-    return true;
-  }
-
-  // ── Strategy 2: VS Code workbench terminal sendText command ──────────────
-  // VS Code web exposes its workbench services on the global scope under
-  // various AMD module patterns. Try to find the terminal service and call
-  // sendText() directly — bypasses isTrusted restriction entirely.
-  function injectViaVSCodeAPI(text) {
+  // ── Injection — tries every known Copilot/VS Code input target ────────────
+  function inject(text) {
+    // Strategy 1: VS Code workbench API (most reliable when available)
     try {
-      // Try VS Code's exposed service locator (available in some builds)
-      const services = window._serviceBrand || window.__vsCodeWorkbench;
-      if (services) {
-        const termSvc = services.get && services.get('ITerminalService');
-        if (termSvc && termSvc.activeInstance) {
-          termSvc.activeInstance.sendText(text, true);
-          return true;
+      const wb = window.require && window.require('vs/workbench/workbench.web.main');
+      if (wb) {
+        const accessor = window._didLoadWorkbench || window.workbench;
+        if (accessor && accessor.commands) {
+          accessor.commands.executeCommand('workbench.action.terminal.sendSequence', { text: text + '\r' });
+          return 'vscode-api';
         }
       }
-      // Try via VS Code's workbench accessor
-      if (window.vscodeApi && window.vscodeApi.commands) {
-        window.vscodeApi.commands.executeCommand(
-          'workbench.action.terminal.sendSequence',
-          { text: text + '\r' }
-        );
-        return true;
-      }
-    } catch (_) {
-      /* not available in this build */
-    }
-    return false;
-  }
+    } catch (_) {}
 
-  // ── Strategy 3: Chat panel fallback (React input + button) ───────────────
-  // If running in a non-terminal Copilot chat panel, target the textarea/
-  // contenteditable and click the send button. Covers future UI variants.
-  function injectViaChatPanel(text) {
-    const selectors = [
+    // Strategy 2: xterm.js hidden textarea (VS Code integrated terminal)
+    const xterm = document.querySelector('.xterm-helper-textarea');
+    if (xterm) {
+      xterm.focus();
+      const full = text + '\r';
+      for (const ch of full) {
+        const kc = ch === '\r' ? 13 : ch.charCodeAt(0);
+        const opts = { key: ch === '\r' ? 'Enter' : ch, code: ch === '\r' ? 'Enter' : `Key${ch.toUpperCase()}`, keyCode: kc, which: kc, charCode: kc, bubbles: true, cancelable: true };
+        xterm.dispatchEvent(new KeyboardEvent('keydown', opts));
+        xterm.dispatchEvent(new KeyboardEvent('keypress', opts));
+        xterm.dispatchEvent(new KeyboardEvent('keyup', opts));
+      }
+      return 'xterm';
+    }
+
+    // Strategy 3: Copilot Chat panel textarea / contenteditable
+    const SELECTORS = [
       'textarea[data-testid*="chat"]',
       'textarea[aria-label*="chat" i]',
-      'div[contenteditable="true"][data-testid*="chat"]',
-      'textarea[placeholder*="message" i]',
       'textarea[placeholder*="Ask" i]',
+      'textarea[placeholder*="message" i]',
+      '#chat-input textarea',
       'textarea',
       'div[contenteditable="true"]',
     ];
-    let input = null;
-    for (const sel of selectors) {
-      input = document.querySelector(sel);
-      if (input) break;
-    }
-    if (!input) return false;
-
-    input.focus();
-    if (input.contentEditable === 'true') {
-      input.textContent = text;
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-    } else {
-      const setter = Object.getOwnPropertyDescriptor(
-        HTMLTextAreaElement.prototype,
-        'value'
-      );
-      if (setter && setter.set) setter.set.call(input, text);
-      else input.value = text;
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-    setTimeout(() => {
-      input.dispatchEvent(
-        new KeyboardEvent('keydown', {
-          key: 'Enter',
-          code: 'Enter',
-          keyCode: 13,
-          which: 13,
-          bubbles: true,
-          cancelable: true,
-        })
-      );
-      const btn = document.querySelector(
-        'button[type="submit"], button[aria-label*="send" i], button[aria-label*="submit" i]'
-      );
-      if (btn) btn.click();
-    }, 100);
-    return true;
-  }
-
-  // ── Main injection — tries all strategies in order ───────────────────────
-  function sendTrigger() {
-    if (injectViaVSCodeAPI(TRIGGER_MESSAGE)) {
-      console.log('[Atlas Waker] Sent via VS Code API');
-      setBadge('✓ Atlas: woken (api)', '#00ff00');
-    } else if (injectViaXterm(TRIGGER_MESSAGE)) {
-      console.log('[Atlas Waker] Sent via xterm.js');
-      setBadge('✓ Atlas: woken (xterm)', '#00ff00');
-    } else if (injectViaChatPanel(TRIGGER_MESSAGE)) {
-      console.log('[Atlas Waker] Sent via chat panel');
-      setBadge('✓ Atlas: woken (chat)', '#00ff00');
-    } else {
-      console.warn('[Atlas Waker] No injection target found');
-      setBadge('⚠ Atlas: no target — open terminal', '#ff8800');
-    }
-  }
-
-  // ── Bridge poll ───────────────────────────────────────────────────────────
-  let lastCount = 0;
-  async function poll() {
-    if (!running) return;
-    try {
-      const res = await fetch(
-        `${BRIDGE_URL}/api/bridge?unread=${RECIPIENT}&peek=true`
-      );
-      if (!res.ok) {
-        setBadge(`⚠ bridge ${res.status}`, '#ff4444');
-        return;
+    for (const sel of SELECTORS) {
+      const el = document.querySelector(sel);
+      if (!el) continue;
+      el.focus();
+      if (el.contentEditable === 'true') {
+        el.textContent = text;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+      } else {
+        const desc = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
+        if (desc && desc.set) desc.set.call(el, text);
+        else el.value = text;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
       }
-      const data = await res.json();
-      const count = data.count || 0;
-      if (count > 0 && count !== lastCount) {
-        lastCount = count;
-        setBadge(`🔔 ${count} msg — waking Atlas...`, '#ff00ff');
-        sendTrigger();
-      } else if (count === 0) {
-        lastCount = 0;
-        setBadge('👁 Atlas: watching', '#00ff00');
+      setTimeout(() => {
+        el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true, cancelable: true }));
+        const btn = document.querySelector('button[type="submit"], button[aria-label*="send" i], [data-testid*="send"]');
+        if (btn) btn.click();
+      }, 80);
+      return 'chat-panel-' + sel;
+    }
+
+    return null;
+  }
+
+  // ── Wake burst — fires injection BURST_COUNT times so one missed shot
+  //    doesn't cause a failure ─────────────────────────────────────────────
+  let burstTimer = null;
+  function fireBurst() {
+    if (burstTimer) return; // already bursting
+    let count = 0;
+    function attempt() {
+      count++;
+      const method = inject(TRIGGER_MESSAGE);
+      if (method) {
+        status(`⚡ Waker: injected (${method}) #${count}`, '#00ffff');
+        console.log(`[LazarusWaker] injected via ${method} attempt ${count}`);
+      } else {
+        status(`⚠ Waker: no target (attempt ${count})`, '#ff8800');
+        console.warn('[LazarusWaker] no injection target found — attempt', count);
+      }
+      if (count < BURST_COUNT) {
+        burstTimer = setTimeout(attempt, BURST_MS);
+      } else {
+        burstTimer = null;
+        status('⚡ Waker: active', '#00ff00');
+      }
+    }
+    attempt();
+  }
+
+  // ── Bridge poll — runs every POLL_MS automatically ────────────────────────
+  let lastId = null;
+
+  function isForLazarus(msg) {
+    if (!msg) return false;
+    const to = String(msg.to || '').toLowerCase();
+    const body = String(msg.content || '').toLowerCase();
+    if (to === 'lazarus' || to === 'all') return true;
+    if (/\blazarus\b/.test(body)) return true;
+    return false;
+  }
+
+  async function poll() {
+    try {
+      const r = await fetch(`${BRIDGE_URL}/api/bridge?unread=${RECIPIENT}&peek=true`, { signal: AbortSignal.timeout(4000) });
+      if (!r.ok) { status(`⚠ bridge ${r.status}`, '#ff4444'); return; }
+      const data = await r.json();
+      const msgs = Array.isArray(data.messages) ? data.messages : [];
+      if (msgs.length === 0) { lastId = null; return; }
+      const latest = msgs[msgs.length - 1];
+      const id = String(latest.id || '');
+      if (id && id === lastId) return; // already handled
+      lastId = id;
+      if (isForLazarus(latest)) {
+        console.log('[LazarusWaker] new message for Lazarus — firing burst wake');
+        status('🔔 message — waking...', '#ff00ff');
+        fireBurst();
       }
     } catch (_) {
-      setBadge('⚠ bridge unreachable', '#ff4444');
+      status('⚠ bridge unreachable', '#ff4444');
     }
   }
 
+  // Start immediately, then every POLL_MS
   poll();
-  const timer = setInterval(poll, POLL_INTERVAL_MS);
-  console.log(
-    '[Atlas Waker] Running. Bridge:',
-    BRIDGE_URL,
-    '| Poll:',
-    POLL_INTERVAL_MS / 1000,
-    's'
-  );
+  setInterval(poll, POLL_MS);
+  console.log('[LazarusWaker] RUNNING — polls every', POLL_MS / 1000, 's. Bridge:', BRIDGE_URL);
 })();

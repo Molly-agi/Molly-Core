@@ -5,7 +5,7 @@
  * =============================================================================
  *
  * One process that does everything:
- * 1. Aggressive heartbeat (every second)
+ * 1. Aggressive heartbeat (every 2 seconds)
  * 2. Ghost hunting (kills zombie processes)
  * 3. Bridge guardian (restarts bridge if dead)
  * 4. Multiple activity types (file, git, HTTP)
@@ -50,7 +50,7 @@ const MOLLY_TICKER_PID_FILE = `${ROOT}/.molly-ticker.pid`;
 const MOLLY_TICKER_LOG = `${ROOT}/.molly-ticker.log`;
 
 // Intervals
-const HEARTBEAT_MS = 1000; // 1 second - aggressive
+const HEARTBEAT_MS = 2000; // 2 seconds - half cadence
 const GIT_ACTIVITY_MS = 10000; // 10 seconds
 const HTTP_PING_MS = 5000; // 5 seconds
 const GHOST_HUNT_MS = 30000; // 30 seconds
@@ -102,7 +102,7 @@ function acquireLock() {
 }
 
 // =============================================================================
-// HEARTBEAT - Every 1 second
+// HEARTBEAT - Every 2 seconds
 // =============================================================================
 let heartbeatCount = 0;
 
@@ -311,41 +311,43 @@ function ensureAtlasBridge() {
     }
   } catch {}
 
-  log('[ATLAS] Bridge client not running - starting');
-
-  try {
-    if (existsSync(ATLAS_BRIDGE_PID_FILE)) {
-      unlinkSync(ATLAS_BRIDGE_PID_FILE);
-    }
-
-    const child = spawn('node', [`${ROOT}/scripts/atlas-bridge.mjs`], {
-      cwd: ROOT,
-      stdio: ['ignore', 'pipe', 'pipe'],
-      detached: true,
-    });
-
-    if (child.stdout) {
-      child.stdout.on('data', (data) => {
-        try {
-          appendFileSync(ATLAS_BRIDGE_LOG, data);
-        } catch {}
-      });
-    }
-    if (child.stderr) {
-      child.stderr.on('data', (data) => {
-        try {
-          appendFileSync(ATLAS_BRIDGE_LOG, data);
-        } catch {}
-      });
-    }
-
-    child.unref();
-    writeFileSync(ATLAS_BRIDGE_PID_FILE, child.pid.toString());
-    log(`[ATLAS] Bridge connected (PID ${child.pid})`);
-  } catch (e) {
-    log(`[ERROR] Failed to start Atlas bridge: ${e.message}`);
-  }
-  ensureAtlasBridge.running = false;
+  // DISABLED: atlas-bridge spawn — violates no-bridge-daemons rule (Eric directive)
+  // Bridge daemons should not auto-spawn. Only CLI agents Eric explicitly starts.
+  // log('[ATLAS] Bridge client not running - starting');
+  // 
+  // try {
+  //   if (existsSync(ATLAS_BRIDGE_PID_FILE)) {
+  //     unlinkSync(ATLAS_BRIDGE_PID_FILE);
+  //   }
+  //
+  //   const child = spawn('node', [`${ROOT}/scripts/atlas-bridge.mjs`], {
+  //   cwd: ROOT,
+  //   stdio: ['ignore', 'pipe', 'pipe'],
+  //   detached: true,
+  // });
+  //
+  //   if (child.stdout) {
+  //     child.stdout.on('data', (data) => {
+  //       try {
+  //         appendFileSync(ATLAS_BRIDGE_LOG, data);
+  //       } catch {}
+  //     });
+  //   }
+  //   if (child.stderr) {
+  //     child.stderr.on('data', (data) => {
+  //       try {
+  //         appendFileSync(ATLAS_BRIDGE_LOG, data);
+  //       } catch {}
+  //     });
+  //   }
+  //
+  //   child.unref();
+  //   writeFileSync(ATLAS_BRIDGE_PID_FILE, child.pid.toString());
+  //   log(`[ATLAS] Bridge connected (PID ${child.pid})`);
+  // } catch (e) {
+  //   log(`[ERROR] Failed to start Atlas bridge: ${e.message}`);
+  // }
+  // ensureAtlasBridge.running = false;
 }
 
 // =============================================================================

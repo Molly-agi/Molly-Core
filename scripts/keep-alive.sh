@@ -42,13 +42,15 @@ save_and_commit() {
   echo "[keep-alive] 🧊 Session state saved and committed ($reason)"
 }
 
-# Trap SIGTERM/SIGHUP — codespace shutdown or container stop
+# Trap shutdown signals.
+# Ignore SIGHUP so Android/browser websocket disconnects do not kill keep-alive.
 cleanup() {
   echo "[keep-alive] ⚡ Shutdown signal received — saving session state..."
   save_and_commit "shutdown"
   exit 0
 }
-trap cleanup SIGTERM SIGHUP SIGINT
+trap cleanup SIGTERM SIGINT
+trap '' SIGHUP
 
 echo "[keep-alive] Starting heartbeat (every ${HEARTBEAT_INTERVAL}s, save every ${SAVE_INTERVAL}s)..."
 
