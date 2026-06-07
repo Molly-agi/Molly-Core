@@ -12,3 +12,40 @@ nohup: ignoring input
 [2026-06-07T03:21:16.039Z] relay disconnected
 [2026-06-07T03:21:16.039Z] relay reconnecting attempt 1
 [2026-06-07T03:21:19.044Z] relay connected
+[2026-06-07T03:44:56.607Z] relay disconnected
+[2026-06-07T03:44:56.607Z] relay reconnecting attempt 1
+[2026-06-07T03:44:59.609Z] relay error: 
+[2026-06-07T03:44:59.610Z] relay error: 
+[2026-06-07T03:44:59.609Z] relay disconnected
+[2026-06-07T03:44:59.609Z] relay reconnecting attempt 2
+[2026-06-07T03:44:59.610Z] relay reconnecting attempt 3
+[2026-06-07T03:45:02.612Z] relay error: 
+[2026-06-07T03:45:02.612Z] relay error: 
+[2026-06-07T03:45:02.612Z] relay disconnected
+[2026-06-07T03:45:02.612Z] relay reconnecting attempt 4
+[2026-06-07T03:45:02.612Z] relay reconnecting attempt 5
+[2026-06-07T03:45:02.612Z] relay error: 
+[2026-06-07T03:45:02.612Z] relay disconnected
+[2026-06-07T03:45:02.612Z] relay reconnecting attempt 6
+[2026-06-07T03:45:02.612Z] relay reconnecting attempt 7
+[2026-06-07T03:45:02.612Z] relay error: 
+[2026-06-07T03:45:05.616Z] relay connected
+/workspaces/Molly-Core/node_modules/ws/lib/websocket.js:451
+      throw new Error('WebSocket is not open: readyState 0 (CONNECTING)');
+      ^
+
+Error: WebSocket is not open: readyState 0 (CONNECTING)
+    at WebSocket.send (/workspaces/Molly-Core/node_modules/ws/lib/websocket.js:451:13)
+    at ws.onopen (file:///workspaces/Molly-Core/scripts/bridge-client.mjs:45:19)
+    at callListener (/workspaces/Molly-Core/node_modules/ws/lib/event-target.js:290:14)
+    at WebSocket.onOpen (/workspaces/Molly-Core/node_modules/ws/lib/event-target.js:237:9)
+    at WebSocket.emit (node:events:508:28)
+    at WebSocket.setSocket (/workspaces/Molly-Core/node_modules/ws/lib/websocket.js:252:10)
+    at ClientRequest.<anonymous> (/workspaces/Molly-Core/node_modules/ws/lib/websocket.js:1017:15)
+    at ClientRequest.emit (node:events:508:28)
+    at Socket.socketOnData (node:_http_client:655:11)
+    at Socket.emit (node:events:508:28)
+
+Node.js v24.14.0
+[WAKE-LISTENER] lazarus listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.lazarus-wake (SIGUSR1 primary, watchFile fallback)
+[2026-06-07T03:45:18.334Z] relay connected

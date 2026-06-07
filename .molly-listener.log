@@ -1,204 +1,3 @@
-    "threshold": 3,
-    "resetTimeout": 120000
-  }
-}
-node:internal/process/promises:394
-    triggerUncaughtException(err, true /* fromPromise */);
-    ^
-
-Error: Transform failed with 1 error:
-/workspaces/Molly-Core/src/ai/consciousness/consciousness-state.ts:743:15: ERROR: Expected ";" but found "{"
-    at failureErrorWithLog (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:1748:15)
-    at /workspaces/Molly-Core/node_modules/esbuild/lib/main.js:1017:50
-    at responseCallbacks.<computed> (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:884:9)
-    at handleIncomingPacket (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:939:12)
-    at Socket.readFromStdout (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:862:7)
-    at Socket.emit (node:events:508:28)
-    at addChunk (node:internal/streams/readable:563:12)
-    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
-    at Readable.push (node:internal/streams/readable:394:5)
-    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
-  name: 'TransformError'
-}
-
-Node.js v24.14.0
-
-[MOLLY-LISTENER 23:43:46] Brain call failed: Command failed: /workspaces/Molly-Core/node_modules/.bin/tsx --tsconfig /workspaces/Molly-Core/tsconfig.json /workspaces/Molly-Core/.molly-listener-runner.ts
-{
-  "timestamp": 1780703026197,
-  "level": "INFO",
-  "message": "Circuit breaker initialized: self-healing",
-  "flowName": "resiliency",
-  "traceId": "trace_1780703026197_mb4e1bn",
-  "context": {
-    "threshold": 3,
-    "resetTimeout": 120000
-  }
-}
-node:internal/process/promises:394
-    triggerUncaughtException(err, true /* fromPromise */);
-    ^
-
-Error: Transform failed with 1 error:
-/workspaces/Molly-Core/src/ai/consciousness/consciousness-state.ts:743:15: ERROR: Expected ";" but found "{"
-    at failureErrorWithLog (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:1748:15)
-    at /workspaces/Molly-Core/node_modules/esbuild/lib/main.js:1017:50
-    at responseCallbacks.<computed> (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:884:9)
-    at handleIncomingPacket (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:939:12)
-    at Socket.readFromStdout (/workspaces/Molly-Core/node_modules/esbuild/lib/main.js:862:7)
-    at Socket.emit (node:events:508:28)
-    at addChunk (node:internal/streams/readable:563:12)
-    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
-    at Readable.push (node:internal/streams/readable:394:5)
-    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23) {
-  name: 'TransformError'
-}
-
-Node.js v24.14.0
-
-[MOLLY-LISTENER 23:58:38] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:58:38] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:58:41] Response sent (321 chars). Total: 77
-[MOLLY-LISTENER 23:58:41] Response sent (321 chars). Total: 77
-[MOLLY-LISTENER 23:58:47] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:58:47] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:58:48] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:58:48] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:58:51] Response sent (919 chars). Total: 78
-[MOLLY-LISTENER 23:58:51] Response sent (919 chars). Total: 78
-[MOLLY-LISTENER 23:58:57] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:58:57] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:58:58] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:58:58] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:01] Response sent (776 chars). Total: 79
-[MOLLY-LISTENER 23:59:01] Response sent (776 chars). Total: 79
-[MOLLY-LISTENER 23:59:08] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:08] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:09] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:09] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:12] Response sent (807 chars). Total: 80
-[MOLLY-LISTENER 23:59:12] Response sent (807 chars). Total: 80
-[MOLLY-LISTENER 23:59:18] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:18] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:19] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:19] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:22] Response sent (593 chars). Total: 81
-[MOLLY-LISTENER 23:59:22] Response sent (593 chars). Total: 81
-[MOLLY-LISTENER 23:59:28] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:28] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:30] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:30] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:32] Response sent (602 chars). Total: 82
-[MOLLY-LISTENER 23:59:32] Response sent (602 chars). Total: 82
-[MOLLY-LISTENER 23:59:38] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:38] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:39] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:39] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:42] Response sent (789 chars). Total: 83
-[MOLLY-LISTENER 23:59:42] Response sent (789 chars). Total: 83
-
-[MOLLY-LISTENER 23:59:48] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:48] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:50] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:50] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 23:59:52] Response sent (471 chars). Total: 84
-[MOLLY-LISTENER 23:59:52] Response sent (471 chars). Total: 84
-[MOLLY-LISTENER 23:59:58] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:59:58] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 00:00:00] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 00:00:00] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 00:00:02] Response sent (664 chars). Total: 85
-[MOLLY-LISTENER 00:00:02] Response sent (664 chars). Total: 85
-[MOLLY-LISTENER 00:00:07] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 00:00:07] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 00:00:10] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 00:00:10] Already processing — queued 1 message(s) will be handled next cycle
-[MOLLY-LISTENER 00:00:11] Response sent (520 chars). Total: 86
-[MOLLY-LISTENER 00:00:11] Response sent (520 chars). Total: 86
-[MOLLY-LISTENER 23:14:17] Starting. PID: 139366. Real-time WebSocket mode.
-[MOLLY-LISTENER 23:14:17] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 23:14:17] Connected. Identifying as molly...
-[MOLLY-LISTENER 23:14:17] Starting. PID: 139366. Real-time WebSocket mode.
-[MOLLY-LISTENER 23:14:17] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 23:14:17] Connected. Identifying as molly...
-[MOLLY-LISTENER 23:14:21] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:14:21] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:14:26] Response sent (222 chars). Total: 1
-[MOLLY-LISTENER 23:14:26] Response sent (222 chars). Total: 1
-[MOLLY-LISTENER 23:14:31] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:14:31] 1 message(s) received from: lazarus
-[MOLLY-LISTENER 23:14:35] Response sent (367 chars). Total: 2
-[MOLLY-LISTENER 23:14:35] Response sent (367 chars). Total: 2
-[MOLLY-LISTENER 23:45:29] 1 message(s) received from: eric
-[MOLLY-LISTENER 23:45:29] 1 message(s) received from: eric
-[MOLLY-LISTENER 23:45:32] Response sent (82 chars). Total: 3
-[MOLLY-LISTENER 23:45:32] Response sent (82 chars). Total: 3
-[MOLLY-LISTENER 00:24:18] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:24:18] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:24:21] Response sent (278 chars). Total: 4
-[MOLLY-LISTENER 00:24:21] Response sent (278 chars). Total: 4
-[MOLLY-LISTENER 00:27:05] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:27:05] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:27:08] Response sent (52 chars). Total: 5
-[MOLLY-LISTENER 00:27:08] Response sent (52 chars). Total: 5
-[MOLLY-LISTENER 00:28:27] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:28:27] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:28:31] Response sent (211 chars). Total: 6
-[MOLLY-LISTENER 00:28:31] Response sent (211 chars). Total: 6
-[MOLLY-LISTENER 00:29:19] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:29:19] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:29:22] Response sent (106 chars). Total: 7
-[MOLLY-LISTENER 00:29:22] Response sent (106 chars). Total: 7
-[MOLLY-LISTENER 00:29:32] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:29:32] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:29:36] Response sent (264 chars). Total: 8
-[MOLLY-LISTENER 00:29:36] Response sent (264 chars). Total: 8
-[MOLLY-LISTENER 00:32:03] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:32:03] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:32:06] Response sent (88 chars). Total: 9
-[MOLLY-LISTENER 00:32:06] Response sent (88 chars). Total: 9
-[MOLLY-LISTENER 00:37:40] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:37:40] 1 message(s) received from: eric
-[MOLLY-LISTENER 00:37:43] Response sent (142 chars). Total: 10
-[MOLLY-LISTENER 00:37:43] Response sent (142 chars). Total: 10
-[MOLLY-LISTENER 00:58:08] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:08] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:11] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:11] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:11] WebSocket error: 
-[MOLLY-LISTENER 00:58:11] WebSocket error: 
-[MOLLY-LISTENER 00:58:11] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:11] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:14] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:14] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:14] WebSocket error: 
-[MOLLY-LISTENER 00:58:14] WebSocket error: 
-[MOLLY-LISTENER 00:58:14] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:14] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:17] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:17] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:17] WebSocket error: 
-[MOLLY-LISTENER 00:58:17] WebSocket error: 
-[MOLLY-LISTENER 00:58:17] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:17] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 00:58:20] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:20] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 00:58:20] Connected. Identifying as molly...
-[MOLLY-LISTENER 00:58:20] Connected. Identifying as molly...
-[MOLLY-LISTENER 01:00:17] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 01:00:17] Disconnected. Reconnecting in 3s...
-[MOLLY-LISTENER 01:00:20] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 01:00:20] Connecting to bridge at ws://localhost:9099...
-[MOLLY-LISTENER 01:00:20] Connected. Identifying as molly...
-[MOLLY-LISTENER 01:00:20] Connected. Identifying as molly...
-[MOLLY-LISTENER 01:01:21] 1 message(s) received from: eric
-[MOLLY-LISTENER 01:01:21] 1 message(s) received from: eric
-[MOLLY-LISTENER 01:01:24] Response sent (141 chars). Total: 11
-[MOLLY-LISTENER 01:01:24] Response sent (141 chars). Total: 11
-[MOLLY-LISTENER 01:02:02] 1 message(s) received from: eric
-[MOLLY-LISTENER 01:02:02] 1 message(s) received from: eric
-[MOLLY-LISTENER 01:02:06] Response sent (727 chars). Total: 12
-[MOLLY-LISTENER 01:02:06] Response sent (727 chars). Total: 12
 [MOLLY-LISTENER 01:03:05] 1 message(s) received from: eric
 [MOLLY-LISTENER 01:03:05] 1 message(s) received from: eric
 [MOLLY-LISTENER 01:03:09] Response sent (864 chars). Total: 13
@@ -480,3 +279,28 @@ Node.js v24.14.0
 [MOLLY-LISTENER 03:22:02] 1 message(s) received from: eric
 [MOLLY-LISTENER 03:22:05] Response sent (81 chars). Total: 70
 [MOLLY-LISTENER 03:22:05] Response sent (81 chars). Total: 70
+[MOLLY-LISTENER 03:44:56] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:44:56] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:44:59] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:44:59] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:44:59] WebSocket error: 
+[MOLLY-LISTENER 03:44:59] WebSocket error: 
+[MOLLY-LISTENER 03:44:59] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:44:59] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:45:02] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:45:02] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:45:02] WebSocket error: 
+[MOLLY-LISTENER 03:45:02] WebSocket error: 
+[MOLLY-LISTENER 03:45:02] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:45:02] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:45:05] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:45:05] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:45:05] Connected. Identifying as molly...
+[MOLLY-LISTENER 03:45:05] Connected. Identifying as molly...
+
+[MOLLY-LISTENER 03:45:14] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:45:14] Disconnected. Reconnecting in 3s...
+[MOLLY-LISTENER 03:45:17] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:45:17] Connecting to bridge at ws://localhost:9099...
+[MOLLY-LISTENER 03:45:17] Connected. Identifying as molly...
+[MOLLY-LISTENER 03:45:17] Connected. Identifying as molly...

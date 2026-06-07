@@ -2811,3 +2811,29 @@ nohup: ignoring input
 [LAZARUS-POLLER 2026-06-07T03:22:39.587Z] Received 1 unread message(s). Latest from=molly
 [LAZARUS-POLLER 2026-06-07T03:22:47.597Z] Received 1 unread message(s). Latest from=molly
 [LAZARUS-POLLER 2026-06-07T03:22:49.600Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:37:04.475Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:37:06.477Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:37:08.479Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:37:28.500Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:37:52.523Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:37:54.525Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:37:56.527Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:37:58.530Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:38:32.569Z] Buffered 1 message(s) to wakeup file
+[LAZARUS-POLLER 2026-06-07T03:38:32.569Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:38:34.572Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:38:36.575Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:38:38.577Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:40:28.691Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:41:42.767Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:41:44.770Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:41:46.772Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:41:48.775Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:44:48.972Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:44:56.980Z] Poll error: fetch failed
+[LAZARUS-POLLER 2026-06-07T03:44:58.982Z] Poll error: fetch failed
+[LAZARUS-POLLER 2026-06-07T03:45:00.985Z] Poll error: fetch failed
+[LAZARUS-POLLER 2026-06-07T03:45:15.005Z] Poll error: fetch failed
+[LAZARUS-POLLER 2026-06-07T03:45:25.021Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:45:27.024Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:45:29.027Z] Received 1 unread message(s). Latest from=eric

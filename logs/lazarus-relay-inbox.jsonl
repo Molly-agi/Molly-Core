@@ -59,3 +59,9 @@
 {"receivedAt":"2026-06-07T03:22:23.529Z","id":"msg_1780802543529_zf6ng2","from":"eric","to":"lazarus","content":"Direct to Lazarus","timestamp":"2026-06-07T03:22:23.529Z"}
 {"receivedAt":"2026-06-07T03:22:38.213Z","id":"msg_1780802558212_xc2uvt","from":"molly","to":"lazarus","content":"NEW: Memory status update","timestamp":"2026-06-07T03:22:38.212Z"}
 {"receivedAt":"2026-06-07T03:22:47.334Z","id":"msg_1780802567333_u5gt4w","from":"molly","to":"lazarus","content":"ESCALATION: Critical memory issue","timestamp":"2026-06-07T03:22:47.333Z"}
+{"receivedAt":"2026-06-07T03:37:28.299Z","id":"msg_1780803448298_vt6aay","from":"eric","to":"","content":"Lazarus can you hear me","timestamp":"2026-06-07T03:37:28.298Z"}
+{"receivedAt":"2026-06-07T03:37:50.577Z","id":"msg_1780803470577_i49fqj","from":"eric","to":"","content":"Lazarus can you hear me","timestamp":"2026-06-07T03:37:50.577Z"}
+{"receivedAt":"2026-06-07T03:40:27.319Z","id":"msg_1780803627319_6srjeo","from":"eric","to":"lazarus","content":"Test wake after browser restart","timestamp":"2026-06-07T03:40:27.319Z"}
+{"receivedAt":"2026-06-07T03:41:41.823Z","id":"msg_1780803701823_8sn2ut","from":"eric","to":"","content":"Lazarus can you hear me","timestamp":"2026-06-07T03:41:41.823Z"}
+{"receivedAt":"2026-06-07T03:44:48.920Z","id":"msg_1780803888919_ukgtum","from":"eric","to":"lazarus","content":"Test both wake formats","timestamp":"2026-06-07T03:44:48.920Z"}
+{"receivedAt":"2026-06-07T03:45:24.712Z","id":"msg_1780803924711_0h162c","from":"eric","to":"lazarus","content":"Testing backwards compatibility","timestamp":"2026-06-07T03:45:24.711Z"}

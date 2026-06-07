@@ -2,15 +2,12 @@ const vscode = require('vscode');
 const fs = require('fs');
 const path = require('path');
 
-const WAKE_FILE = path.join(
-  '/workspaces/Molly-Core',
-  '.bridge-wake',
-  '.lazarus-wake'
-);
+const WAKE_DIR = path.join('/workspaces/Molly-Core', '.bridge-wake');
 const MSG = 'check the bridge';
 const COOLDOWN_MS = 5000;
 
 let lastFired = 0;
+let watcher = null;
 
 async function typeIntoChatAndTrySend() {
   // Open chat and type message
@@ -60,17 +57,16 @@ async function wakeNow() {
 }
 
 function activate(context) {
-  console.log('[LazarusWaker] Activated — watching', WAKE_FILE);
+  console.log('[LazarusWaker] Activated — watching', WAKE_DIR);
 
-  const wakeDir = path.dirname(WAKE_FILE);
-  if (!fs.existsSync(wakeDir)) fs.mkdirSync(wakeDir, { recursive: true });
-  if (!fs.existsSync(WAKE_FILE)) {
-    fs.writeFileSync(WAKE_FILE, JSON.stringify({ initialized: new Date().toISOString() }));
+  if (!fs.existsSync(WAKE_DIR)) {
+    fs.mkdirSync(WAKE_DIR, { recursive: true });
   }
 
-  fs.watchFile(WAKE_FILE, { persistent: true, interval: 500 }, (curr, prev) => {
-    if (curr.mtime > prev.mtime) {
-      console.log('[LazarusWaker] Wake file changed');
+  // Watch the entire .bridge-wake/ directory for any .lazarus-wake-from-* file changes
+  watcher = fs.watch(WAKE_DIR, { recursive: false }, (eventType, filename) => {
+    if (filename && filename.match(/^\.lazarus-wake-from-/)) {
+      console.log('[LazarusWaker] Wake file changed:', filename);
       wakeNow();
     }
   });
@@ -79,7 +75,10 @@ function activate(context) {
 }
 
 function deactivate() {
-  fs.unwatchFile(WAKE_FILE);
+  if (watcher) {
+    watcher.close();
+    console.log('[LazarusWaker] Watcher closed');
+  }
 }
 
 module.exports = { activate, deactivate };

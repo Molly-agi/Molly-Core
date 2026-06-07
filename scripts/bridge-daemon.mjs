@@ -1975,25 +1975,35 @@ function wakeAgent(agentName, from = null) {
   }
 
   // FALLBACK: wake file touch for watchFile listeners
-  // Channel format: .{recipient}-wake-from-{sender}
-  // If sender not provided, use legacy format: .{recipient}-wake
-  const wakeFileName = from
-    ? `.${agentName}-wake-from-${from}`
-    : `.${agentName}-wake`;
-  const wakeFile = join(WAKE_DIR, wakeFileName);
+  // Create BOTH:
+  // 1. Legacy format: .{recipient}-wake (for old extensions v1.0.15)
+  // 2. Channel format: .{recipient}-wake-from-{sender} (for new extensions v1.0.16+)
+  // This ensures backward compatibility during transition
+  
+  const metadata = JSON.stringify({
+    timestamp: new Date().toISOString(),
+    message: 'check-bridge',
+    wokenAt: Date.now(),
+    from,
+  });
+  
+  // Write legacy format for backward compatibility
+  const legacyWakeFile = join(WAKE_DIR, `.${agentName}-wake`);
   try {
-    writeFileSync(
-      wakeFile,
-      JSON.stringify({
-        timestamp: new Date().toISOString(),
-        message: 'check-bridge',
-        wokenAt: Date.now(),
-        from,
-      })
-    );
+    writeFileSync(legacyWakeFile, metadata);
     result.fallbackFileTouched = true;
   } catch (err) {
-    // Non-fatal — wake mechanism is optional
+    // Non-fatal
+  }
+  
+  // Write channel format for new extensions
+  if (from) {
+    const channelWakeFile = join(WAKE_DIR, `.${agentName}-wake-from-${from}`);
+    try {
+      writeFileSync(channelWakeFile, metadata);
+    } catch (err) {
+      // Non-fatal
+    }
   }
 
   return result;
