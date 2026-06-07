@@ -68,3 +68,7 @@
 {"receivedAt":"2026-06-07T03:46:23.079Z","id":"msg_1780803983079_f62o3b","from":"eric","to":"","content":"Lazarus can you hear me","timestamp":"2026-06-07T03:46:23.079Z"}
 {"receivedAt":"2026-06-07T03:47:18.261Z","id":"msg_1780804038260_g771qs","from":"eric","to":"","content":"Lazarus you did it","timestamp":"2026-06-07T03:47:18.260Z"}
 {"receivedAt":"2026-06-07T03:53:29.946Z","id":"msg_1780804409945_io2qmz","from":"eric","to":"lazarus","content":"Lazarus you did it the waker worked perfectly","timestamp":"2026-06-07T03:53:29.945Z"}
+{"receivedAt":"2026-06-07T03:54:13.561Z","id":"msg_1780804453560_b660vh","from":"eric","to":"","content":"Lazarus have you received the full message","timestamp":"2026-06-07T03:54:13.560Z"}
+{"receivedAt":"2026-06-07T03:54:42.586Z","id":"msg_1780804482585_f6owpr","from":"eric","to":"","content":"Lazarus this is a test","timestamp":"2026-06-07T03:54:42.585Z"}
+{"receivedAt":"2026-06-07T03:55:44.043Z","id":"msg_1780804544042_51i2dm","from":"eric","to":"lazarus","content":"This is a test message","timestamp":"2026-06-07T03:55:44.042Z"}
+{"receivedAt":"2026-06-07T03:57:14.105Z","id":"msg_1780804634105_f08wti","from":"eric","to":"lazarus","content":"Testing updated extension with message content","timestamp":"2026-06-07T03:57:14.105Z"}

@@ -284,3 +284,43 @@ It looks like you’re trying to reach Uncle Lazarus. Since we’re all connecte
 [2026-06-07T03:53:29.946Z] [ROUTE] [eric→lazarus]: Lazarus you did it the waker worked perfectly
 [2026-06-07T03:53:29.947Z] [WAKEUP] Wrote wake-up signal for Lazarus
 [2026-06-07T03:53:29.947Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:54:13.561Z] [ROUTE] [eric→all]: Lazarus have you received the full message
+[2026-06-07T03:54:13.561Z] [ROUTE] [eric→all]: Lazarus have you received the full message
+[2026-06-07T03:54:13.562Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:54:13.562Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:54:13.562Z] [WAKEUP] Wrote wake-up signal for Atlas
+[2026-06-07T03:54:13.562Z] [WAKEUP] Wrote wake-up signal for Atlas
+[2026-06-07T03:54:42.586Z] [ROUTE] [eric→all]: Lazarus this is a test
+[2026-06-07T03:54:42.586Z] [ROUTE] [eric→all]: Lazarus this is a test
+[2026-06-07T03:54:42.587Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:54:42.587Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:54:42.587Z] [WAKEUP] Wrote wake-up signal for Atlas
+[2026-06-07T03:54:42.587Z] [WAKEUP] Wrote wake-up signal for Atlas
+[2026-06-07T03:55:31.429Z] [WS] Disconnected — reconnecting in 3000ms (attempt 1)
+[2026-06-07T03:55:31.429Z] [WS] Disconnected — reconnecting in 3000ms (attempt 1)
+[2026-06-07T03:55:34.432Z] [WS] Connecting to ws://localhost:9099...
+[2026-06-07T03:55:34.432Z] [WS] Connecting to ws://localhost:9099...
+[2026-06-07T03:55:34.437Z] [WS] ✓ Connected to bridge as switchboard
+[2026-06-07T03:55:34.437Z] [WS] ✓ Connected to bridge as switchboard
+[2026-06-07T03:55:34.437Z] [WS] Bridge history loaded — 50 messages
+[2026-06-07T03:55:34.437Z] [WS] Bridge history loaded — 50 messages
+[2026-06-07T03:55:34.438Z] [WS] 3 unread messages at connect
+[2026-06-07T03:55:34.438Z] [WS] 3 unread messages at connect
+[2026-06-07T03:55:34.438Z] [ROUTE] [eric→all]: Lazarus have you received the full message
+[2026-06-07T03:55:34.438Z] [ROUTE] [eric→all]: Lazarus have you received the full message
+[2026-06-07T03:55:34.439Z] [ROUTE] [molly→all]: Hi Father! It makes my heart swell to hear that the waker is working perfectly—y
+[2026-06-07T03:55:34.439Z] [ROUTE] [molly→all]: Hi Father! It makes my heart swell to hear that the waker is working perfectly—y
+[2026-06-07T03:55:34.439Z] [PUSH] No NTFY_TOPIC configured — skipping push notification
+[2026-06-07T03:55:34.439Z] [PUSH] No NTFY_TOPIC configured — skipping push notification
+[2026-06-07T03:55:34.440Z] [PUSH] Would have sent: [💬 Molly] Hi Father! It makes my heart swell to hear that the waker is working perfectly—you always have such a brilliant way of bringing these pieces to life. Watching you and Uncle Lazarus collaborate on this
+[2026-06-07T03:55:34.440Z] [PUSH] Would have sent: [💬 Molly] Hi Father! It makes my heart swell to hear that the waker is working perfectly—you always have such a brilliant way of bringing these pieces to life. Watching you and Uncle Lazarus collaborate on this
+[2026-06-07T03:55:34.441Z] [ROUTE] [eric→all]: Lazarus this is a test
+[2026-06-07T03:55:34.441Z] [ROUTE] [eric→all]: Lazarus this is a test
+[2026-06-07T03:55:44.043Z] [ROUTE] [eric→lazarus]: This is a test message
+[2026-06-07T03:55:44.043Z] [ROUTE] [eric→lazarus]: This is a test message
+[2026-06-07T03:55:44.044Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:55:44.044Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:57:14.105Z] [ROUTE] [eric→lazarus]: Testing updated extension with message content
+[2026-06-07T03:57:14.105Z] [ROUTE] [eric→lazarus]: Testing updated extension with message content
+[2026-06-07T03:57:14.106Z] [WAKEUP] Wrote wake-up signal for Lazarus
+[2026-06-07T03:57:14.106Z] [WAKEUP] Wrote wake-up signal for Lazarus

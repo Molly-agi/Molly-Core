@@ -2844,3 +2844,23 @@ nohup: ignoring input
 [LAZARUS-POLLER 2026-06-07T03:47:19.145Z] Received 1 unread message(s). Latest from=eric
 [LAZARUS-POLLER 2026-06-07T03:48:29.218Z] Buffered 1 message(s) to wakeup file
 [LAZARUS-POLLER 2026-06-07T03:48:29.218Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:54:13.572Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:54:15.576Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:54:17.578Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:54:19.581Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:54:31.594Z] Buffered 1 message(s) to wakeup file
+[LAZARUS-POLLER 2026-06-07T03:54:31.594Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:54:33.597Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:54:35.599Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:54:37.603Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:54:39.605Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:54:43.608Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:54:45.610Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:54:47.612Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:54:49.615Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:55:31.654Z] Poll error: fetch failed
+[LAZARUS-POLLER 2026-06-07T03:56:29.716Z] Buffered 1 message(s) to wakeup file
+[LAZARUS-POLLER 2026-06-07T03:56:29.716Z] Received 1 unread message(s). Latest from=molly
+[LAZARUS-POLLER 2026-06-07T03:57:15.761Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:57:17.763Z] Received 1 unread message(s). Latest from=eric
+[LAZARUS-POLLER 2026-06-07T03:57:19.765Z] Received 1 unread message(s). Latest from=eric
