@@ -28,14 +28,17 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
   private buffer: ProvenanceSpan[] = [];
   private failedSpans: ProvenanceSpan[] = [];
   private timer: ReturnType<typeof setInterval> | null = null;
+  // null = unprobed (try-then-fallback), true = admin reachable, false = skip Firestore
+  private cloudReady: boolean | null = null;
 
   constructor(
     private readonly userId: string,
     private readonly batchSize = 25,
     flushIntervalMs = 5_000,
     private readonly shadowLogPath = './.molly/provenance-shadow.jsonl',
-    private readonly jsonlPath = './.molly/provenance.jsonl',
+    private readonly jsonlPath = './.molly/provenance.jsonl'
   ) {
+    this.ensureDirs();
     if (flushIntervalMs > 0) {
       this.timer = setInterval(() => {
         this.flush().catch(() => {});
@@ -43,6 +46,40 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
       if (this.timer.unref) this.timer.unref();
     }
     this.recoverFromShadowLog().catch(() => {});
+  }
+
+  /**
+   * Probe Firebase admin context. Call once at startup (fire-and-forget OK).
+   * Sets cloudReady so subsequent flushes can skip the SDK import when offline.
+   * Returns true iff admin Firestore is reachable.
+   */
+  async init(): Promise<boolean> {
+    try {
+      const { getAdminFirestoreAsync } = await import('@/firebase/admin');
+      const db = await getAdminFirestoreAsync();
+      this.cloudReady = !!db;
+    } catch {
+      this.cloudReady = false;
+    }
+    if (this.cloudReady === false) {
+      // Loud-but-tolerant: warn once, keep operating via JSONL fallback.
+      console.warn(
+        '[FirestoreProvenanceSink] admin context unavailable — provenance will write to JSONL only'
+      );
+    }
+    return this.cloudReady === true;
+  }
+
+  /** Test/inspection helper. */
+  getCloudReady(): boolean | null {
+    return this.cloudReady;
+  }
+
+  private ensureDirs(): void {
+    for (const p of [this.shadowLogPath, this.jsonlPath]) {
+      const dir = p.split('/').slice(0, -1).join('/');
+      if (dir) fs.mkdirSync(dir, { recursive: true });
+    }
   }
 
   write(span: ProvenanceSpan): void {
@@ -61,7 +98,13 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
 
     const batchId = `batch-${Date.now()}`;
     const checksum = this.computeChecksum(spansToWrite);
-    const batch: BatchRecord = { batchId, timestamp: Date.now(), spans: spansToWrite, checksum, status: 'pending' };
+    const batch: BatchRecord = {
+      batchId,
+      timestamp: Date.now(),
+      spans: spansToWrite,
+      checksum,
+      status: 'pending',
+    };
 
     await this.writeShadowLog(batch).catch((err) => {
       this.failedSpans.push(...spansToWrite);
@@ -94,7 +137,12 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     return { buffered: this.buffer.length, failed: this.failedSpans.length };
   }
 
-  private async writeToFirestore(spans: ProvenanceSpan[], batchId: string): Promise<void> {
+  private async writeToFirestore(
+    spans: ProvenanceSpan[],
+    batchId: string
+  ): Promise<void> {
+    if (this.cloudReady === false)
+      throw new Error('Admin Firestore unavailable (probed)');
     const { getAdminFirestoreAsync } = await import('@/firebase/admin');
     const db = await getAdminFirestoreAsync();
     if (!db) throw new Error('Admin Firestore not available');
@@ -111,17 +159,27 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     }
   }
 
-  private async writeToJsonl(spans: ProvenanceSpan[], batchId: string): Promise<void> {
+  private async writeToJsonl(
+    spans: ProvenanceSpan[],
+    batchId: string
+  ): Promise<void> {
     const dir = this.jsonlPath.split('/').slice(0, -1).join('/');
     if (dir) await fs.promises.mkdir(dir, { recursive: true }).catch(() => {});
-    const lines = spans.map((s) => JSON.stringify({ ...s, batchId, writtenAt: Date.now() })).join('\n') + '\n';
+    const lines =
+      spans
+        .map((s) => JSON.stringify({ ...s, batchId, writtenAt: Date.now() }))
+        .join('\n') + '\n';
     await fs.promises.appendFile(this.jsonlPath, lines, 'utf8');
   }
 
   private async writeShadowLog(batch: BatchRecord): Promise<void> {
     const dir = this.shadowLogPath.split('/').slice(0, -1).join('/');
     if (dir) await fs.promises.mkdir(dir, { recursive: true }).catch(() => {});
-    await fs.promises.appendFile(this.shadowLogPath, JSON.stringify(batch) + '\n', 'utf8');
+    await fs.promises.appendFile(
+      this.shadowLogPath,
+      JSON.stringify(batch) + '\n',
+      'utf8'
+    );
   }
 
   private async recoverFromShadowLog(): Promise<void> {
@@ -134,7 +192,10 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     for (const line of content.trim().split('\n').filter(Boolean)) {
       try {
         const record: BatchRecord = JSON.parse(line);
-        if (record.status === 'pending' && this.computeChecksum(record.spans) === record.checksum) {
+        if (
+          record.status === 'pending' &&
+          this.computeChecksum(record.spans) === record.checksum
+        ) {
           this.failedSpans.push(...record.spans);
         }
       } catch {
@@ -144,7 +205,10 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
   }
 
   private computeChecksum(spans: ProvenanceSpan[]): string {
-    return crypto.createHash('sha256').update(JSON.stringify(spans)).digest('hex');
+    return crypto
+      .createHash('sha256')
+      .update(JSON.stringify(spans))
+      .digest('hex');
   }
 }
 
