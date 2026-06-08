@@ -13,11 +13,13 @@ import { ParameterRegistry } from './registry/parameter-registry';
 import { CognitiveGovernor } from './governor/cognitive-governor';
 import { ProvenanceLog } from './provenance/provenance-log';
 import { FirestoreProvenanceSink } from './provenance/provenance-persistence-sink';
+import { SomaticLoop } from './embodiment/somatic-loop';
 
 export interface AgencyRuntime {
   registry: ParameterRegistry;
   governor: CognitiveGovernor;
   provenance: ProvenanceLog;
+  somatic: SomaticLoop;
 }
 
 let runtime: AgencyRuntime | null = null;
@@ -25,11 +27,19 @@ let runtime: AgencyRuntime | null = null;
 export function initAgencyRuntime(): AgencyRuntime {
   if (runtime) return runtime;
   const registry = new ParameterRegistry();
-  const governor = new CognitiveGovernor(registry); // defines + owns its params
-  // Attach persistence sink — Firestore with JSONL fallback, 5s auto-flush
+  const governor = new CognitiveGovernor(registry);
   const sink = new FirestoreProvenanceSink('molly-system');
   const provenance = new ProvenanceLog(5000, sink);
-  runtime = { registry, governor, provenance };
+  // Somatic loop wires emotional intensity lazily to avoid import cycle
+  const somatic = new SomaticLoop(registry, governor, () => {
+    try {
+      const { getCurrentState } = require('@/ai/agency/cognition/emotional-state');
+      return getCurrentState().intensity ?? 0.5;
+    } catch {
+      return 0.5;
+    }
+  });
+  runtime = { registry, governor, provenance, somatic };
   return runtime;
 }
 

@@ -69,9 +69,17 @@ export interface GovernorSnapshot {
   inFlight: ActiveWork[];
 }
 
+export type GovernorEventKind = 'start' | 'end';
+export interface GovernorEvent {
+  kind: GovernorEventKind;
+  work: ActiveWork;
+}
+export type GovernorListener = (event: GovernorEvent) => void;
+
 export class CognitiveGovernor {
   private active = new Map<string, ActiveWork>();
   private seq = 0;
+  private listeners = new Set<GovernorListener>();
 
   constructor(private readonly registry: ParameterRegistry) {
     // Governor registers + owns its own tunables. Defaults are conservative.
@@ -112,16 +120,35 @@ export class CognitiveGovernor {
     };
   }
 
+  /** Subscribe to flow start/end events. */
+  on(listener: GovernorListener): void {
+    this.listeners.add(listener);
+  }
+
+  /** Unsubscribe. */
+  off(listener: GovernorListener): void {
+    this.listeners.delete(listener);
+  }
+
   /** Register that work actually started. Returns the assigned id. */
   registerStart(req: WorkRequest): ActiveWork {
     const work: ActiveWork = { ...req, id: `${req.kind}_${++this.seq}`, startedAt: Date.now() };
     this.active.set(work.id, work);
+    this.emit({ kind: 'start', work });
     return work;
   }
 
   /** Register that work finished (or was cancelled). Idempotent. */
   registerEnd(id: string): void {
+    const work = this.active.get(id);
     this.active.delete(id);
+    if (work) this.emit({ kind: 'end', work });
+  }
+
+  private emit(event: GovernorEvent): void {
+    for (const l of this.listeners) {
+      try { l(event); } catch { /* listener errors must not crash the governor */ }
+    }
   }
 
   /**
