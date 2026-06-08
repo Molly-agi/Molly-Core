@@ -325,4 +325,16 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  // ── Agency Runtime (registry + cognitive governor) ──
+  try {
+    const { initAgencyRuntime } = await import('@/ai/agency/agency-runtime');
+    initAgencyRuntime();
+    console.log('[Startup] ✅ Agency runtime initialized (registry + governor)');
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not initialize agency runtime:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
