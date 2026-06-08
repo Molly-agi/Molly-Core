@@ -11,10 +11,13 @@
 
 import { ParameterRegistry } from './registry/parameter-registry';
 import { CognitiveGovernor } from './governor/cognitive-governor';
+import { ProvenanceLog } from './provenance/provenance-log';
+import { FirestoreProvenanceSink } from './provenance/provenance-persistence-sink';
 
 export interface AgencyRuntime {
   registry: ParameterRegistry;
   governor: CognitiveGovernor;
+  provenance: ProvenanceLog;
 }
 
 let runtime: AgencyRuntime | null = null;
@@ -23,7 +26,10 @@ export function initAgencyRuntime(): AgencyRuntime {
   if (runtime) return runtime;
   const registry = new ParameterRegistry();
   const governor = new CognitiveGovernor(registry); // defines + owns its params
-  runtime = { registry, governor };
+  // Attach persistence sink — Firestore with JSONL fallback, 5s auto-flush
+  const sink = new FirestoreProvenanceSink('molly-system');
+  const provenance = new ProvenanceLog(5000, sink);
+  runtime = { registry, governor, provenance };
   return runtime;
 }
 
