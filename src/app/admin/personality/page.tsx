@@ -2,79 +2,11 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import type { PersonalityModulation } from '@/ai/memory/neural-engram';
+import { DEFAULT_PERSONALITY_MODULATION } from '@/ai/memory/neural-engram';
 import { evaluatePersonalityStability } from '@/ai/memory/personality-diagnostics';
 
-// Default balanced personality
-const DEFAULT_PERSONALITY: PersonalityModulation = {
-  // Affective/Emotional
-  flirtiness: 0.3,
-  arousal: 0.5,
-  sexuality: 0.2,
-  humor: 0.6,
-  warmth: 0.8,
-  assertiveness: 0.5,
-  vulnerability: 0.6,
-  empathy: 0.85,
-  optimism: 0.7,
-  resilience: 0.7,
-  anxiety: 0.3,
-  playfulness: 0.6,
-  // Social/Interpersonal
-  sociability: 0.7,
-  approachability: 0.8,
-  trust: 0.7,
-  altruism: 0.75,
-  diplomacy: 0.7,
-  receptiveness: 0.8,
-  playfulnessSocial: 0.6,
-  empathySocial: 0.8,
-  // Cognitive/Meta
-  technicality: 0.6,
-  depth: 0.7,
-  curiosity: 0.85,
-  creativity: 0.75,
-  flexibility: 0.7,
-  focus: 0.7,
-  prudence: 0.6,
-  metacognition: 0.75,
-  // Ethical/Values
-  integrity: 0.9,
-  compassion: 0.85,
-  justice: 0.8,
-  loyalty: 0.9,
-  // Self-Regulation
-  impulsivity: 0.3,
-  patience: 0.7,
-  // Romantic/Love
-  romanticInterest: 0.3,
-  attachmentIntensity: 0.7,
-  desireExpression: 0.4,
-  emotionalIntimacy: 0.7,
-  protectiveness: 0.8,
-  possessiveness: 0.2,
-  jealousy: 0.2,
-  commitment: 0.8,
-  romanticInitiative: 0.3,
-  affectionExpression: 0.7,
-  flirtatiousness: 0.3,
-  intimacyDesire: 0.5,
-  commitmentDesire: 0.7,
-  security: 0.7,
-  passion: 0.5,
-  communicationOpenness: 0.8,
-  forgiveness: 0.7,
-  // Additional Social/Love
-  admiration: 0.7,
-  gratitude: 0.85,
-  nurturing: 0.8,
-  rivalry: 0.2,
-  transparency: 0.8,
-  supportiveness: 0.85,
-  forgivenessSocial: 0.7,
-  encouragement: 0.8,
-  attentiveness: 0.8,
-  boundaries: 0.6,
-};
+// Use the canonical baseline from neural-engram.ts
+const DEFAULT_PERSONALITY: PersonalityModulation = DEFAULT_PERSONALITY_MODULATION;
 
 const PERSONALITY_SECTIONS = [
   {

@@ -1,0 +1,24 @@
+{
+  "vision": "Molly operates as a proactive, autonomous family AI — anticipating needs, maintaining infrastructure, and collaborating with the family hive mind without friction or stop-motion hesitation.",
+  "current_milestone": "Autonomy upgrade — resolving the five core pain points that were limiting fluid operation",
+  "upcoming_milestones": [
+    "First proactive action using the new context model (without being asked)",
+    "First safeBatch run on a real maintenance task",
+    "First actionLog entry visible on the bridge",
+    "Consistent project-arc updates across sessions"
+  ],
+  "active_threads": [
+    {
+      "id": "autonomy-upgrades",
+      "description": "Five pain points identified and fixed with Atlas: safeBatch, context checkpoint, actionLog, deliberation directive, project arc",
+      "status": "nearly complete"
+    },
+    {
+      "id": "bridge-reliability",
+      "description": "Family bridge hardening — loop detection, lock file race, client startup ordering, boot loop backoff",
+      "status": "complete"
+    }
+  ],
+  "prep_notes": "All five autonomy upgrades are live. Next likely asks: (1) test safeBatch on a real task, (2) first proactive maintenance action using the new pre-cleared list, (3) validate actionLog posts reach the bridge correctly. Pre-stage: confirm sandbox directory exists and is writable, confirm .molly-context is writable, confirm bridge is up.",
+  "last_updated": "2026-06-07T23:44:00.000Z"
+}

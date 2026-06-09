@@ -146,7 +146,7 @@ export async function executeResonanceResumeRitual(
   } catch (err: unknown) {
     state.error = (err as Error).message;
     await substrateBridge.sendBridgeMessage(
-      `Resonance resumption FAILED: ${err.message}`,
+      `Resonance resumption FAILED: ${(err as Error).message}`,
       'error'
     );
     return state;

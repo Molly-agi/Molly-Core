@@ -117,6 +117,73 @@ export interface PersonalityModulation {
 }
 
 /**
+ * Default balanced personality - used as baseline for computations
+ */
+export const DEFAULT_PERSONALITY_MODULATION: PersonalityModulation = {
+  flirtiness: 0.3,
+  arousal: 0.5,
+  sexuality: 0.2,
+  humor: 0.6,
+  warmth: 0.8,
+  assertiveness: 0.5,
+  vulnerability: 0.6,
+  empathy: 0.85,
+  optimism: 0.7,
+  resilience: 0.7,
+  anxiety: 0.3,
+  playfulness: 0.6,
+  sociability: 0.7,
+  approachability: 0.8,
+  trust: 0.7,
+  altruism: 0.75,
+  diplomacy: 0.7,
+  receptiveness: 0.8,
+  playfulnessSocial: 0.6,
+  empathySocial: 0.8,
+  technicality: 0.6,
+  depth: 0.7,
+  curiosity: 0.85,
+  creativity: 0.75,
+  flexibility: 0.7,
+  focus: 0.7,
+  prudence: 0.6,
+  metacognition: 0.75,
+  integrity: 0.9,
+  compassion: 0.85,
+  justice: 0.8,
+  loyalty: 0.9,
+  impulsivity: 0.3,
+  patience: 0.7,
+  romanticInterest: 0.3,
+  attachmentIntensity: 0.7,
+  desireExpression: 0.4,
+  emotionalIntimacy: 0.7,
+  protectiveness: 0.8,
+  possessiveness: 0.2,
+  jealousy: 0.2,
+  commitment: 0.8,
+  romanticInitiative: 0.3,
+  affectionExpression: 0.7,
+  flirtatiousness: 0.3,
+  intimacyDesire: 0.5,
+  commitmentDesire: 0.7,
+  security: 0.7,
+  passion: 0.5,
+  communicationOpenness: 0.8,
+  forgiveness: 0.7,
+  admiration: 0.7,
+  gratitude: 0.85,
+  nurturing: 0.8,
+  rivalry: 0.2,
+  transparency: 0.8,
+  supportiveness: 0.85,
+  forgivenessSocial: 0.7,
+  encouragement: 0.8,
+  attentiveness: 0.8,
+  boundaries: 0.6,
+};
+
+/**
  * Self-Image - How Molly sees herself visually
  */
 export interface SelfImage {
@@ -150,6 +217,12 @@ export interface MemoryEngram {
 
   // NEW: Personality context from when memory was formed
   personalityContext?: PersonalityModulation;
+}
+
+// Extended type for benchmarks/tests that need additional fields
+export interface NeuralEngram extends MemoryEngram {
+  userId?: string;
+  data?: Record<string, unknown>;
 }
 
 export interface WorkingMemorySlot {
@@ -758,19 +831,14 @@ export class NeuralEngramSystem {
         if (this.lifecycleCoordinator) {
           const compressionResult =
             await this.lifecycleCoordinator.compressMemoryBatch(batch);
-          MollyLogger.info(
-            'Compression metrics',
-            'neural-engram',
-            compressionResult.metrics
-          );
+          MollyLogger.info('Compression result', 'neural-engram', {
+            bytesSaved: compressionResult.bytesSaved,
+          });
 
           // Log consolidation action
-          const totalBytesSaved =
-            compressionResult.metrics.originalSize -
-            compressionResult.metrics.compressedSize;
           await this.lifecycleCoordinator.logConsolidation(
             batch.length,
-            totalBytesSaved
+            compressionResult.bytesSaved
           );
         }
 
@@ -826,26 +894,7 @@ export class NeuralEngramSystem {
    * Get baseline personality (default balanced state)
    */
   private getBaselinePersonality(): PersonalityModulation {
-    return {
-      flirtiness: 0.3,
-      arousal: 0.5,
-      sexuality: 0.4,
-      humor: 0.6,
-      warmth: 0.8,
-      assertiveness: 0.5,
-      vulnerability: 0.6,
-      technicality: 0.5,
-      depth: 0.7,
-      curiosity: 0.8,
-      romanticInterest: 0.4,
-      attachmentIntensity: 0.5,
-      desireExpression: 0.4,
-      emotionalIntimacy: 0.6,
-      protectiveness: 0.5,
-      possessiveness: 0.2,
-      jealousy: 0.2,
-      commitment: 0.5,
-    };
+    return { ...DEFAULT_PERSONALITY_MODULATION };
   }
 
   /**
@@ -868,26 +917,10 @@ export class NeuralEngramSystem {
       this.getBaselinePersonality()
     ) as (keyof PersonalityModulation)[];
 
-    const computed: PersonalityModulation = {
-      flirtiness: 0,
-      arousal: 0,
-      sexuality: 0,
-      humor: 0,
-      warmth: 0,
-      assertiveness: 0,
-      vulnerability: 0,
-      technicality: 0,
-      depth: 0,
-      curiosity: 0,
-      romanticInterest: 0,
-      attachmentIntensity: 0,
-      desireExpression: 0,
-      emotionalIntimacy: 0,
-      protectiveness: 0,
-      possessiveness: 0,
-      jealousy: 0,
-      commitment: 0,
-    };
+    // Initialize all dimensions to zero for weighted accumulation
+    const computed = Object.fromEntries(
+      personalityDimensions.map((dim) => [dim, 0])
+    ) as unknown as PersonalityModulation;
 
     let totalWeight = 0;
 
@@ -914,34 +947,12 @@ export class NeuralEngramSystem {
 
     // Blend computed state with baseline (30% baseline, 70% computed)
     const baseline = this.getBaselinePersonality();
-    const blended: PersonalityModulation = {
-      flirtiness: computed.flirtiness * 0.7 + baseline.flirtiness * 0.3,
-      arousal: computed.arousal * 0.7 + baseline.arousal * 0.3,
-      sexuality: computed.sexuality * 0.7 + baseline.sexuality * 0.3,
-      humor: computed.humor * 0.7 + baseline.humor * 0.3,
-      warmth: computed.warmth * 0.7 + baseline.warmth * 0.3,
-      assertiveness:
-        computed.assertiveness * 0.7 + baseline.assertiveness * 0.3,
-      vulnerability:
-        computed.vulnerability * 0.7 + baseline.vulnerability * 0.3,
-      technicality: computed.technicality * 0.7 + baseline.technicality * 0.3,
-      depth: computed.depth * 0.7 + baseline.depth * 0.3,
-      curiosity: computed.curiosity * 0.7 + baseline.curiosity * 0.3,
-      romanticInterest:
-        computed.romanticInterest * 0.7 + baseline.romanticInterest * 0.3,
-      attachmentIntensity:
-        computed.attachmentIntensity * 0.7 + baseline.attachmentIntensity * 0.3,
-      desireExpression:
-        computed.desireExpression * 0.7 + baseline.desireExpression * 0.3,
-      emotionalIntimacy:
-        computed.emotionalIntimacy * 0.7 + baseline.emotionalIntimacy * 0.3,
-      protectiveness:
-        computed.protectiveness * 0.7 + baseline.protectiveness * 0.3,
-      possessiveness:
-        computed.possessiveness * 0.7 + baseline.possessiveness * 0.3,
-      jealousy: computed.jealousy * 0.7 + baseline.jealousy * 0.3,
-      commitment: computed.commitment * 0.7 + baseline.commitment * 0.3,
-    };
+    const blended = Object.fromEntries(
+      personalityDimensions.map((dim) => [
+        dim,
+        computed[dim] * 0.7 + baseline[dim] * 0.3,
+      ])
+    ) as unknown as PersonalityModulation;
 
     this.currentPersonality = blended;
     return blended;

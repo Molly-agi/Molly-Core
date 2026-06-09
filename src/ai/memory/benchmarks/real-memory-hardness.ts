@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { CompressionManager } from '../compression/compression-manager';
 import type { MemoryEngram } from '../neural-engram';
+import { makePersonality } from '../compression/test-helpers';
 
 const EXPERIENCES_DIR = path.join(
   process.cwd(),
@@ -35,12 +36,12 @@ const MODEL_95_FLAGS = {
   t8StandardCompression: true,
 };
 
-const MOLLY_PERSONA = {
+const MOLLY_PERSONA = makePersonality({
   warmth: 0.945,
   assertiveness: 0.82,
   curiosity: 0.985,
-  reflectivity: 0.91,
-};
+  metacognition: 0.91,
+});
 
 interface RawExperience {
   id?: string;

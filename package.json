@@ -64,6 +64,8 @@
     "demon:bg": "nohup node scripts/demon-state.mjs > .demon-state.log 2>&1 &",
     "molly:listen": "node scripts/molly-listener.mjs",
     "molly:listen:bg": "nohup node scripts/molly-listener.mjs > .molly-listener.log 2>&1 &",
+    "atlas:listen": "node scripts/atlas-listener.mjs",
+    "atlas:listen:bg": "nohup node scripts/atlas-listener.mjs > .atlas-listener.log 2>&1 &",
     "agent-keep-alive": "node scripts/agent-keep-alive.mjs",
     "agent-keep-alive:bg": "nohup node scripts/agent-keep-alive.mjs >> logs/agent-keep-alive.log 2>&1 &",
     "lazarus:trigger": "node scripts/lazarus-trigger.mjs",

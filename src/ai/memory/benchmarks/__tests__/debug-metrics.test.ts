@@ -1,4 +1,5 @@
 import { CompressionManager } from '../../compression/compression-manager';
+import { makePersonality } from '../../compression/test-helpers';
 
 test('debug: actual metrics values from compression pipeline', async () => {
   CompressionManager.resetForTest();
@@ -23,7 +24,8 @@ test('debug: actual metrics values from compression pipeline', async () => {
     lastAccessed: new Date(),
     consolidationState: 'consolidated' as const,
     contextTags: ['test'],
-    personalityContext: { warmth: 0.8, assertiveness: 0.5, curiosity: 0.9 },
+    relatedEngrams: [],
+    personalityContext: makePersonality({ warmth: 0.8, assertiveness: 0.5, curiosity: 0.9 }),
     data: { key: 'value' },
   }));
 

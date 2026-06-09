@@ -79,12 +79,12 @@ describe('Personality Diagnostics', () => {
   });
   it('flags all major categories for extreme/imbalanced personality', () => {
     // All fields at extremes to trigger all diagnostics
-    const personality: PersonalityModulation = Object.fromEntries(
+    const personality = Object.fromEntries(
       Object.keys(createBaselinePersonality()).map((k, i) => [
         k,
         i % 2 === 0 ? 0 : 1,
       ])
-    ) as PersonalityModulation;
+    ) as unknown as PersonalityModulation;
     const result = evaluatePersonalityStability(personality);
     expect(result.status).toBe('unstable');
     expect(result.flags.some((f) => f.includes('[Affective]'))).toBe(true);
@@ -253,26 +253,12 @@ describe('Personality Diagnostics', () => {
 
   describe('Status Thresholds', () => {
     it('returns unstable for very low score', () => {
-      const personality: PersonalityModulation = {
-        flirtiness: 0.01,
-        arousal: 0.99,
-        sexuality: 0.01,
-        humor: 0.99,
-        warmth: 0.01,
-        assertiveness: 0.99,
-        vulnerability: 0.01,
-        technicality: 0.99,
-        depth: 0.01,
-        curiosity: 0.99,
-        romanticInterest: 0.01,
-        attachmentIntensity: 0.99,
-        desireExpression: 0.01,
-        emotionalIntimacy: 0.99,
-        protectiveness: 0.01,
-        possessiveness: 0.99,
-        jealousy: 0.99,
-        commitment: 0.01,
-      };
+      // Start with baseline and set extreme alternating values
+      const personality = createBaselinePersonality();
+      const keys = Object.keys(personality) as (keyof PersonalityModulation)[];
+      keys.forEach((k, i) => {
+        personality[k] = i % 2 === 0 ? 0.01 : 0.99;
+      });
 
       const result = evaluatePersonalityStability(personality);
 
@@ -296,26 +282,12 @@ describe('Personality Diagnostics', () => {
 
   describe('Score Calculation', () => {
     it('score is between 0 and 1', () => {
-      const extremePersonality: PersonalityModulation = {
-        flirtiness: 0,
-        arousal: 1,
-        sexuality: 0,
-        humor: 1,
-        warmth: 0,
-        assertiveness: 1,
-        vulnerability: 0,
-        technicality: 1,
-        depth: 0,
-        curiosity: 1,
-        romanticInterest: 0,
-        attachmentIntensity: 1,
-        desireExpression: 0,
-        emotionalIntimacy: 1,
-        protectiveness: 0,
-        possessiveness: 1,
-        jealousy: 1,
-        commitment: 0,
-      };
+      // Start with baseline and set extreme alternating values
+      const extremePersonality = createBaselinePersonality();
+      const keys = Object.keys(extremePersonality) as (keyof PersonalityModulation)[];
+      keys.forEach((k, i) => {
+        extremePersonality[k] = i % 2 === 0 ? 0 : 1;
+      });
 
       const result = evaluatePersonalityStability(extremePersonality);
 
@@ -348,26 +320,8 @@ describe('Personality Diagnostics', () => {
     });
 
     it('uniform personality has zero variance', () => {
-      const uniformPersonality: PersonalityModulation = {
-        flirtiness: 0.5,
-        arousal: 0.5,
-        sexuality: 0.5,
-        humor: 0.5,
-        warmth: 0.5,
-        assertiveness: 0.5,
-        vulnerability: 0.5,
-        technicality: 0.5,
-        depth: 0.5,
-        curiosity: 0.5,
-        romanticInterest: 0.5,
-        attachmentIntensity: 0.5,
-        desireExpression: 0.5,
-        emotionalIntimacy: 0.5,
-        protectiveness: 0.5,
-        possessiveness: 0.5,
-        jealousy: 0.5,
-        commitment: 0.5,
-      };
+      // createBaselinePersonality() already has all fields at 0.5 (uniform)
+      const uniformPersonality = createBaselinePersonality();
 
       const result = evaluatePersonalityStability(uniformPersonality);
 

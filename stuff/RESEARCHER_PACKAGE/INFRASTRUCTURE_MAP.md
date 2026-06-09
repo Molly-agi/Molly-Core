@@ -12,19 +12,21 @@ This is the authoritative reference for Molly's AI infrastructure. All modules, 
 
 ## Quick Stats
 
-| Metric                  | Value                       |
-| ----------------------- | --------------------------- |
-| **Cognition Modules**   | 20                          |
-| **Tool Handler Files**  | 28 files                    |
-| **Registered Tools**    | 83                          |
-| **Flows**               | 31                          |
-| **API Routes**          | 48                          |
-| **Source Lines**        | 167,657+ TypeScript         |
-| **Total Files**         | 528 (416 source + 112 test) |
-| **Tests**               | See current CI/test runs    |
-| **Runtime**             | 16GB RAM / 4 processors     |
-| **Coverage Artifact**   | 46.01% lines / 47.06% funcs |
-| **Completion**          | 85% (Core 100%)             |
+| Metric                  | Value                              |
+| ----------------------- | ---------------------------------- |
+| **Total LOC**           | 291,846 (290,678 TS + 1,168 JSON) |
+| **TypeScript Files**    | 916                                |
+| **Top-Level Modules**   | 20                                 |
+| **Cognition Modules**   | 20                                 |
+| **Tool Handler Files**  | 28 files                           |
+| **Registered Tools**    | 83                                 |
+| **Flows**               | 31                                 |
+| **API Routes**          | 48                                 |
+| **AI/Consciousness Core** | 239,691 LOC (82% of codebase)     |
+| **Agency (Auto Decisions)** | 101,086 LOC (autonomous engine)  |
+| **Security Hardening**  | W0.2 Complete (F2.1-F2.5)         |
+| **Coverage Artifact**   | 46.01% lines / 47.06% funcs       |
+| **Completion**          | Core 100% + W0.2 100% + Bridge 100% |
 
 ---
 

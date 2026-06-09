@@ -9,7 +9,8 @@
  */
 
 import { CompressionManager } from '../compression-manager';
-import type { NeuralEngram } from '../neural-engram';
+import type { NeuralEngram } from '../../neural-engram';
+import { makePersonality } from '../test-helpers';
 
 /**
  * Deep-compare two engram arrays by content, ignoring field order.
@@ -57,12 +58,12 @@ function engramsEqual(
 }
 
 describe('Round-Trip Compression Validation', () => {
-  const PERSONA_BASE = {
+  const PERSONA_BASE = makePersonality({
     warmth: 0.945,
     assertiveness: 0.82,
     curiosity: 0.985,
-    reflectivity: 0.91,
-  };
+    metacognition: 0.91,
+  });
 
   function generateTestEngram(id: string): NeuralEngram {
     return {
@@ -77,7 +78,8 @@ describe('Round-Trip Compression Validation', () => {
       lastAccessed: new Date(),
       consolidationState: 'consolidated',
       contextTags: ['test', 'round-trip'],
-      personalityContext: { ...PERSONA_BASE },
+      relatedEngrams: [],
+      personalityContext: PERSONA_BASE,
       data: {
         context: {
           primary: `Round-trip test memory ${id}`,
@@ -213,7 +215,7 @@ describe('Round-Trip Compression Validation', () => {
       engram.importance = 0.123456789;
       engram.emotionalValence = -0.987654321;
       engram.arousal = 0.555555555;
-      engram.data.emotionalState.intensity = 0.333333333;
+      (engram.data!.emotionalState as { intensity: number }).intensity = 0.333333333;
       return engram;
     });
 
@@ -323,7 +325,7 @@ describe('Round-Trip Compression Validation', () => {
     const decompressed = await manager.decompress(result.bundle);
 
     // Verify the compressed payload was actually gzipped
-    const firstEngram = result.bundle.finalEngrams[0] as Record<
+    const firstEngram = result.bundle.finalEngrams[0] as unknown as Record<
       string,
       unknown
     >;
@@ -364,7 +366,7 @@ describe('Round-Trip Compression Validation', () => {
     // Compressed engrams should NOT have __compressed flag since T8 is off
     for (const engram of result.bundle.finalEngrams) {
       expect(
-        (engram as Record<string, unknown>)['__compressed']
+        (engram as unknown as Record<string, unknown>)['__compressed']
       ).toBeUndefined();
     }
 

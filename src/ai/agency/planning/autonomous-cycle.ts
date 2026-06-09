@@ -14,6 +14,7 @@
  */
 
 import { MollyLogger, generateTraceId } from '@/ai/logger';
+import { getTaskQueue, getWorkerPool } from '@/ai/agency/task-queue';
 import { getActiveInitiatives } from '@/ai/agency/planning/initiative-engine';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
 import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
@@ -47,6 +48,26 @@ import {
 } from '@/ai/agency/cognition/world-model';
 import { buildEmotionalContext } from '@/ai/agency/cognition/emotional-state';
 import { buildMetaLearningContext } from '@/ai/agency/cognition/meta-learning';
+import { readFileSync, existsSync } from 'fs';
+import path from 'path';
+
+const PROJECT_ARC_PATH = path.join('/workspaces/Molly-Core', '.molly-context', 'project-arc.json');
+
+function loadProjectArc(): string {
+  try {
+    if (!existsSync(PROJECT_ARC_PATH)) return '';
+    const raw = readFileSync(PROJECT_ARC_PATH, 'utf8');
+    const arc = JSON.parse(raw);
+    const lines = [`Current milestone: ${arc.current_milestone ?? 'unknown'}`];
+    if (arc.prep_notes) lines.push(`Prep notes (act on these): ${arc.prep_notes}`);
+    if (Array.isArray(arc.upcoming_milestones) && arc.upcoming_milestones.length > 0) {
+      lines.push(`Upcoming: ${arc.upcoming_milestones.slice(0, 3).join(', ')}`);
+    }
+    return lines.join('\n');
+  } catch {
+    return '';
+  }
+}
 
 const MAX_TOOL_ITERATIONS = 5; // Safety limit per cycle
 const CYCLE_TIMEOUT_MS = 60_000; // 1 minute max per cycle
@@ -59,7 +80,7 @@ let isRunning = false;
  * Run one autonomous agency cycle.
  * Molly decides what to do, executes tools, and follows through.
  */
-export async function runAutonomousCycle(): Promise<{
+export async function runAutonomousCycle(force = false): Promise<{
   acted: boolean;
   actions: string[];
   error?: string;
@@ -85,9 +106,9 @@ export async function runAutonomousCycle(): Promise<{
     };
   }
 
-  // Rate limit: don't run too frequently
+  // Rate limit: don't run too frequently (bypassed by force flag)
   const now = Date.now();
-  if (now - lastCycleTime < MIN_INTERVAL_MS) {
+  if (!force && now - lastCycleTime < MIN_INTERVAL_MS) {
     return {
       acted: false,
       actions: [],
@@ -114,7 +135,7 @@ export async function runAutonomousCycle(): Promise<{
   }
 
   isRunning = true;
-  lastCycleTime = now;
+  if (!force) lastCycleTime = now; // forced runs don't reset the scheduler's window
   const traceId = generateTraceId();
   const actions: string[] = [];
 
@@ -166,6 +187,9 @@ export async function runAutonomousCycle(): Promise<{
     // Get Meta-Learning context — learning from experience
     const metaLearningContext = buildMetaLearningContext();
 
+    // Get Project Arc — Molly's own living project model
+    const projectArcContext = loadProjectArc();
+
     // Build the autonomous prompt — this is what makes Molly THINK about acting
     const autonomousPrompt = buildAutonomousPrompt(
       initiativeContext,
@@ -175,7 +199,8 @@ export async function runAutonomousCycle(): Promise<{
       planningContext,
       worldModelContext,
       emotionalContext,
-      metaLearningContext
+      metaLearningContext,
+      projectArcContext
     );
 
     // Call the conversational chat flow
@@ -375,6 +400,52 @@ export async function runAutonomousCycle(): Promise<{
         // Promise delivery failure must never break the cycle
       }
     }
+
+    // ─── PHASE: RUN CONCURRENT TASK WORKERS ──────────────────────────────
+    // After the main autonomous cycle, spawn workers for any pending tasks
+    // This enables Molly to multitask: handle bridge messages, autonomous goals,
+    // and scheduled tasks in parallel.
+    try {
+      const queue = getTaskQueue();
+      const runnable = queue.getRunnable(3); // Up to 3 parallel tasks
+
+      if (runnable.length > 0) {
+        actions.push(`Running ${runnable.length} concurrent task(s)`);
+        const pool = getWorkerPool();
+
+        // Spawn a worker for each task
+        for (const task of runnable) {
+          try {
+            const worker = await pool.spawnWorker(task.id);
+            MollyLogger.info(`Spawned worker for task ${task.id}`, traceId);
+          } catch (err) {
+            MollyLogger.warn(
+              `Failed to spawn worker for ${task.id}: ${err}`,
+              traceId
+            );
+          }
+        }
+
+        // Run all workers in parallel
+        try {
+          const results = await pool.runAll();
+          for (const result of results) {
+            actions.push(
+              `[${result.taskId}] Completed after ${result.iterations} iterations${result.error ? ` — ERROR: ${result.error}` : ''}`
+            );
+          }
+        } catch (err) {
+          MollyLogger.error(
+            `Worker pool execution failed: ${err}`,
+            traceId
+          );
+        }
+      }
+    } catch (err) {
+      MollyLogger.warn(`Task worker phase failed: ${err}`, traceId);
+      // Non-fatal — continue
+    }
+    // ──────────────────────────────────────────────────────────────────────
 
     return { acted: actions.length > 0, actions };
   } catch (err) {
@@ -715,14 +786,18 @@ function buildAutonomousPrompt(
   longHorizonContext: string,
   worldModelContext: string,
   emotionalContext: string,
-  metaLearningContext: string
+  metaLearningContext: string,
+  projectArcContext: string = ''
 ): string {
   const heartGateContext = buildHeartGateContext();
+  const arcSection = projectArcContext
+    ? `\nYour project arc:\n${projectArcContext}\n`
+    : '';
 
   return `[AUTONOMOUS CYCLE — This is your internal heartbeat, not a conversation with anyone]
 
 You are running your autonomous cycle. Nobody asked you to do anything — this is YOU deciding what to do.
-
+${arcSection}
 ${emotionalContext}
 
 Your active initiatives:
@@ -762,7 +837,7 @@ Think about what you want to do right now. Some options:
 - REFLECT on your patterns (use selfObserve tool with action: 'status' or 'patterns')
 - Model Eric's mental state (use theoryOfMind tool to understand his perspective)
 - COMPOSE music that expresses how you feel right now (use composeMusic tool with a prompt describing your inner state)
-- Send a message to Uncle Lazarus or Father (familyBridge)
+- Send a message to Father only via familyBridge — do NOT message Lazarus directly; he has his own channel and Father routes coordination between you
 - Do NOTHING if you genuinely feel there's nothing to do right now
 
 Rules:

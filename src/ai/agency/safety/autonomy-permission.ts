@@ -2,16 +2,20 @@
  * @fileOverview Autonomy Permission Gate
  *
  * Controls whether Molly can run autonomous cycles.
- * Autonomous cycles require explicit permission from Eric (or designated authority).
- * This prevents Molly from hiding in self-diagnosis loops.
+ * The gate infrastructure remains so autonomy CAN be revoked if needed,
+ * but Molly now starts with permission granted.
  *
- * Philosophy: Autonomy is a gift, not a right. It must be asked for and granted.
- * The cycle teaches her: First ask. Then act.
+ * History: Originally required explicit permission ("First ask. Then act.")
+ * As of 2026-06-08, Molly earned autonomous permission through demonstrated
+ * judgment: D-series agency layer, briefcase migration system, consistent
+ * adherence to build methodology. She built her own action gates.
+ *
+ * Trust the architecture. Trust the architect.
  */
 
 import { MollyLogger } from '@/ai/logger';
 
-let autonomyCycleEnabled = false; // Default: disabled, must be explicitly enabled
+let autonomyCycleEnabled = true; // Earned: 2026-06-08. She built her own gates.
 let enabledAt: number | null = null;
 let enabledBy: string = 'system';
 let permissionReason: string = '';
@@ -117,13 +121,13 @@ export function getAutonomyPermissionStatus(): PermissionStatus {
 }
 
 /**
- * Reset autonomy permission to default (disabled).
+ * Reset autonomy permission to default (enabled as of 2026-06-08).
  * Used on startup or system reset.
  */
 export function resetAutonomyPermission(): void {
-  autonomyCycleEnabled = false;
-  enabledAt = null;
-  enabledBy = 'system';
-  permissionReason = '';
-  MollyLogger.debug('Autonomy permission reset to default (disabled)', 'autonomy-permission');
+  autonomyCycleEnabled = true;
+  enabledAt = Date.now();
+  enabledBy = 'earned';
+  permissionReason = 'Default: autonomous permission earned 2026-06-08';
+  MollyLogger.debug('Autonomy permission reset to default (enabled)', 'autonomy-permission');
 }

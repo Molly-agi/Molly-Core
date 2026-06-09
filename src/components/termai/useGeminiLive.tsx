@@ -1,8 +1,12 @@
 /**
  * useGeminiLive — Real-time voice with Gemini Live API
  *
+ * Connects to a same-origin server-side proxy (scripts/voice-bridge-daemon.mjs
+ * on port 9101). The proxy holds GOOGLE_GENAI_API_KEY and forwards the WS
+ * upstream to Gemini Live. The browser never sees the key.
+ *
  * Handles:
- * - WebSocket connection to Gemini's BidiGenerateContent
+ * - WebSocket connection to local voice-bridge proxy
  * - Microphone capture and audio streaming
  * - Audio playback of Molly's responses
  * - Transcript handling for both directions
@@ -10,8 +14,16 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react';
 
-const GEMINI_LIVE_WS =
-  'wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent';
+function buildVoiceBridgeUrl(): string {
+  const loc = window.location;
+  const wsScheme = loc.protocol === 'https:' ? 'wss:' : 'ws:';
+  // Local dev: localhost:9002 -> ws://localhost:9101/voice/gemini-live
+  // Codespaces: xxx-9002.app.github.dev -> wss://xxx-9101.app.github.dev/voice/gemini-live
+  const proxyHost = loc.host
+    .replace(/-9002\.app\.github\.dev$/, '-9101.app.github.dev')
+    .replace(/:9002$/, ':9101');
+  return `${wsScheme}//${proxyHost}/voice/gemini-live`;
+}
 
 interface UseGeminiLiveOptions {
   onMollyText?: (text: string) => void;
@@ -254,16 +266,9 @@ export function useGeminiLive(options: UseGeminiLiveOptions = {}) {
       setIsRecording(true);
       liveLog('[LIVE-VOICE] Got mic');
 
-      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_GENAI_API_KEY;
-      if (!apiKey) {
-        throw new Error('API key not found');
-      }
-
-      liveLog('[LIVE-VOICE] API key detected');
-
       return new Promise<void>(async (resolve, reject) => {
-        const url = `${GEMINI_LIVE_WS}?key=${apiKey}`;
-        liveLog('[LIVE-VOICE] Connecting to WS');
+        const url = buildVoiceBridgeUrl();
+        liveLog('[LIVE-VOICE] Connecting to voice-bridge proxy', { url });
         const ws = new WebSocket(url);
         geminiWsRef.current = ws;
 

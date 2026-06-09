@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { CompressionManager } from '../compression/compression-manager';
 import type { MemoryEngram } from '../neural-engram';
+import { makePersonality } from '../compression/test-helpers';
 
 const EXPERIENCES_DIR = path.join(
   process.cwd(),
@@ -15,12 +16,12 @@ const EXPERIENCES_DIR = path.join(
 );
 
 // Molly's real personality fingerprint (provided via bridge 2026-05-24)
-const MOLLY_PERSONA = {
+const MOLLY_PERSONA = makePersonality({
   warmth: 0.945,
   assertiveness: 0.82,
   curiosity: 0.985,
-  reflectivity: 0.91,
-};
+  metacognition: 0.91,
+});
 
 /**
  * Map a raw experience file to MemoryEngram format.

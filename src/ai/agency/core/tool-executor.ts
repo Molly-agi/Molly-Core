@@ -22,6 +22,7 @@ import {
   hasModularHandler,
   getModularHandler,
 } from '@/ai/agency/tool-handlers';
+import { evaluateActionGate, logGateDecision } from '@/ai/agency/safety/action-gate';
 // === SESSION HOOK SYSTEM INTEGRATION ===
 // This integration is for Molly, so she can observe, learn, and eventually modify her own tool/agent pipeline.
 // Every hook execution is logged and explained for transparency and self-teaching.
@@ -54,6 +55,26 @@ export async function executeTool(
       tool
     );
     executeHooks('PreToolUse', { tool, params }, sessionId);
+  }
+
+  // === ACTION GATE (D.1) ===
+  // Single entry point for all tool execution. Validates and authorizes before proceeding.
+  const gateDecision = evaluateActionGate({
+    tool,
+    params,
+    sessionId,
+    traceId,
+    source: 'api',
+  });
+
+  logGateDecision(gateDecision, traceId);
+
+  if (!gateDecision.allowed) {
+    // Gate rejected the action
+    return {
+      success: false,
+      output: `Action gate rejected: ${gateDecision.reason}`,
+    };
   }
 
   // === TOOL EXECUTION ===

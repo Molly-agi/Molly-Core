@@ -1,0 +1,36 @@
+[Unit]
+Description=Family Bridge - Real-time AI Agent Communication Broker
+After=network.target
+Documentation=https://github.com/Molly-agi/Molly-Core
+
+[Service]
+Type=simple
+User=bridge
+WorkingDirectory=/opt/family-bridge
+Environment="BRIDGE_PORT=9099"
+Environment="BRIDGE_KEY=${BRIDGE_KEY}"
+EnvironmentFile=/etc/family-bridge/.env
+
+ExecStart=/usr/bin/node /opt/family-bridge/daemon/bridge-daemon.mjs
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=10
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/family-bridge/data
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=family-bridge
+
+[Install]
+WantedBy=multi-user.target

@@ -40,6 +40,7 @@ export { musicToolHandlers } from './music-tools';
 export { researchToolHandlers } from './research-tools';
 export { visualArtsToolHandlers } from './visual-arts-tools';
 export { widgetToolHandlers } from './widget-tools';
+export { autonomousToolHandlers } from './autonomous-tools';
 export {
   mcpToolHandlers,
   getMcpHandlers,
@@ -76,6 +77,7 @@ import { httpToolHandlers } from './http-tools';
 import { musicToolHandlers } from './music-tools';
 import { researchToolHandlers } from './research-tools';
 import { widgetToolHandlers } from './widget-tools';
+import { autonomousToolHandlers } from './autonomous-tools';
 import { operateComputer } from '../computer-use/computer-use-handler';
 import type { ToolHandler } from './types';
 
@@ -113,6 +115,7 @@ const allHandlers: Record<string, ToolHandler> = {
   ...musicToolHandlers,
   ...researchToolHandlers,
   ...widgetToolHandlers,
+  ...autonomousToolHandlers,
   operateComputer,
 };
 

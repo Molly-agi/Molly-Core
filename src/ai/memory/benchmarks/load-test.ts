@@ -5,9 +5,10 @@
 
 import { CompressionManager } from '../compression/compression-manager';
 import type { NeuralEngram } from '../neural-engram';
+import { makePersonality } from '../compression/test-helpers';
 
 // Stable persona baseline — mirrors real AI memory patterns for T1 deduplication
-const PERSONA_BASE = { warmth: 0.945, assertiveness: 0.820, curiosity: 0.985, reflectivity: 0.910 };
+const PERSONA_BASE = makePersonality({ warmth: 0.945, assertiveness: 0.820, curiosity: 0.985, metacognition: 0.910 });
 const drift = () => (Math.random() - 0.5) * 0.04; // ±2% natural variance
 
 export interface LoadTestScenario {
@@ -102,12 +103,13 @@ function generateLoadTestEngrams(scenario: LoadTestScenario): NeuralEngram[] {
       lastAccessed: new Date(),
       consolidationState: 'consolidated',
       contextTags: ['load-test', scenario.patternType],
-      personalityContext: {
+      relatedEngrams: [],
+      personalityContext: makePersonality({
         warmth: PERSONA_BASE.warmth + drift(),
         assertiveness: PERSONA_BASE.assertiveness + drift(),
         curiosity: PERSONA_BASE.curiosity + drift(),
-        reflectivity: PERSONA_BASE.reflectivity + drift(),
-      },
+        metacognition: PERSONA_BASE.metacognition + drift(),
+      }),
       data: {
         context: {
           primary: scenario.name,

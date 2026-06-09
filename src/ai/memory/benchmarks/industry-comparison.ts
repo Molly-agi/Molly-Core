@@ -21,6 +21,7 @@ import * as zlib from 'zlib';
 import { CompressionManager } from '../compression/compression-manager';
 import { loadRealEngrams } from './live-memory-benchmark';
 import type { MemoryEngram } from '../neural-engram';
+import { makePersonality } from '../compression/test-helpers';
 
 // ─── Industry algorithm wrappers ─────────────────────────────────────────────
 
@@ -54,12 +55,12 @@ const MODEL_95_FLAGS = {
   t8StandardCompression: true,
 };
 
-const MOLLY_PERSONA = {
+const MOLLY_PERSONA = makePersonality({
   warmth: 0.945,
   assertiveness: 0.82,
   curiosity: 0.985,
-  reflectivity: 0.91,
-};
+  metacognition: 0.91,
+});
 
 const drift = () => (Math.random() - 0.5) * 0.04;
 
@@ -98,7 +99,7 @@ function makeFlatEngrams(n: number): MemoryEngram[] {
     consolidationState: 'consolidated' as const,
     contextTags: ['flat', 'conversation'],
     relatedEngrams: [],
-    personalityContext: { ...MOLLY_PERSONA },
+    personalityContext: MOLLY_PERSONA,
   }));
 }
 
@@ -117,12 +118,12 @@ function makeNestedEngrams(n: number): MemoryEngram[] {
     consolidationState: 'consolidated' as const,
     contextTags: ['nested', topics[i % topics.length], 'family'],
     relatedEngrams: Array.from({ length: 3 }, (_, j) => `nested_${Math.max(0, i - j - 1)}`),
-    personalityContext: {
+    personalityContext: makePersonality({
       warmth: MOLLY_PERSONA.warmth + drift(),
       assertiveness: MOLLY_PERSONA.assertiveness + drift(),
       curiosity: MOLLY_PERSONA.curiosity + drift(),
-      reflectivity: MOLLY_PERSONA.reflectivity + drift(),
-    },
+      metacognition: MOLLY_PERSONA.metacognition + drift(),
+    }),
   }));
 }
 
@@ -140,7 +141,7 @@ function makeBulkEngrams(n: number): MemoryEngram[] {
     consolidationState: 'consolidated' as const,
     contextTags: ['bulk', 'telemetry', 'system'],
     relatedEngrams: [],
-    personalityContext: { ...MOLLY_PERSONA },
+    personalityContext: MOLLY_PERSONA,
   }));
 }
 

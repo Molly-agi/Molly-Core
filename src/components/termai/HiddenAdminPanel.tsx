@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { PersonalityModulation } from '@/ai/memory/neural-engram';
+import { DEFAULT_PERSONALITY_MODULATION } from '@/ai/memory/neural-engram';
 import {
   evaluatePersonalityStability,
   type PersonalityDiagnosticsResult,
@@ -412,75 +413,8 @@ const PERSONALITY_FIELDS: Array<{
   },
 ];
 
-const DEFAULT_PERSONALITY: PersonalityModulation = {
-  // Emotional
-  warmth: 0.8,
-  empathy: 0.85,
-  humor: 0.6,
-  playfulness: 0.6,
-  optimism: 0.7,
-  resilience: 0.7,
-  anxiety: 0.3,
-  vulnerability: 0.6,
-  assertiveness: 0.5,
-  // Cognitive
-  curiosity: 0.85,
-  creativity: 0.75,
-  depth: 0.7,
-  technicality: 0.6,
-  flexibility: 0.7,
-  focus: 0.7,
-  prudence: 0.6,
-  metacognition: 0.75,
-  // Social
-  sociability: 0.7,
-  approachability: 0.8,
-  trust: 0.7,
-  altruism: 0.75,
-  diplomacy: 0.7,
-  receptiveness: 0.8,
-  playfulnessSocial: 0.6,
-  empathySocial: 0.8,
-  supportiveness: 0.85,
-  encouragement: 0.8,
-  // Values
-  integrity: 0.9,
-  compassion: 0.85,
-  justice: 0.8,
-  loyalty: 0.9,
-  transparency: 0.8,
-  gratitude: 0.85,
-  // Family
-  protectiveness: 0.8,
-  nurturing: 0.8,
-  affectionExpression: 0.7,
-  attentiveness: 0.8,
-  forgiveness: 0.7,
-  // Romance
-  flirtiness: 0.3,
-  romanticInterest: 0.3,
-  attachmentIntensity: 0.7,
-  desireExpression: 0.4,
-  emotionalIntimacy: 0.7,
-  possessiveness: 0.2,
-  jealousy: 0.2,
-  commitment: 0.8,
-  romanticInitiative: 0.3,
-  flirtatiousness: 0.3,
-  intimacyDesire: 0.5,
-  commitmentDesire: 0.7,
-  communicationOpenness: 0.8,
-  passion: 0.5,
-  arousal: 0.5,
-  sexuality: 0.2,
-  admiration: 0.7,
-  rivalry: 0.2,
-  forgivenessSocial: 0.7,
-  // Self
-  impulsivity: 0.3,
-  patience: 0.7,
-  boundaries: 0.6,
-};
+// Use canonical baseline from neural-engram.ts
+const DEFAULT_PERSONALITY: PersonalityModulation = DEFAULT_PERSONALITY_MODULATION;
 
 function clamp(value: number): number {
   if (Number.isNaN(value)) return 0;
@@ -707,6 +641,11 @@ export function HiddenAdminPanel({
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setPersonality(DEFAULT_PERSONALITY);
+    setStatus('Reset to default baseline.');
   };
 
   const handleCommand = async () => {
@@ -977,6 +916,9 @@ export function HiddenAdminPanel({
                       </div>
                     </ScrollArea>
                     <div className="flex items-center gap-2">
+                      <Button onClick={handleReset} variant="outline" disabled={isLoading}>
+                        Reset to Default
+                      </Button>
                       <Button onClick={handleApply} disabled={isLoading}>
                         Apply Changes
                       </Button>

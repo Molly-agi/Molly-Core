@@ -57,6 +57,14 @@ export const familyBridge: ToolHandler = async (params) => {
     if (!message) {
       return { success: false, output: 'No message to send' };
     }
+    // Block autonomous Molly messages addressed to Lazarus.
+    // Coordination between Molly and Lazarus must be routed through Father.
+    if (from === 'molly' && /^lazarus[\s,:.]/i.test(message.trim())) {
+      return {
+        success: false,
+        output: 'Direct messaging to Lazarus is not permitted from the autonomous cycle. Route through Father (Eric) instead.',
+      };
+    }
     await broadcastMessage(from, message);
     return {
       success: true,

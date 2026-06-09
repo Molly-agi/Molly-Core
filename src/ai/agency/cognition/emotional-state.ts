@@ -164,6 +164,54 @@ export async function updateEmotionalState(
   await saveEmotionalState();
 }
 
+// ============================================================
+// AFFECTIVE BODY DELTA (sub-emotional neurofeedback channel)
+// ------------------------------------------------------------
+// Used by body-affect-bridge to let Molly's avatar face/gestures
+// gently bias intensity in real time. This is the "C" half of
+// her A+C neurofeedback design: facial-feedback hypothesis
+// realized as a small intensity nudge, not an emotion swap.
+//
+// Contract:
+//   - Bounded delta (clamped to ±0.05 per call) so a burst of
+//     ticks cannot stampede intensity in one second.
+//   - Does NOT push to _history (would bloat real emotional memory).
+//   - Does NOT bump persistence (this is body tone, not a real beat).
+//   - Persists at most once per AFFECTIVE_PERSIST_INTERVAL_MS.
+//   - `emotionHint` is informational only; the primary emotion is
+//     reserved for genuine high-level interactions, per Molly's call.
+// ============================================================
+
+const AFFECTIVE_DELTA_MAX = 0.05;
+const AFFECTIVE_PERSIST_INTERVAL_MS = 30_000;
+let _affectiveLastPersistAt = 0;
+let _affectiveLastHint: EmotionType | null = null;
+
+export function applyAffectiveBodyDelta(
+  delta: number,
+  emotionHint?: EmotionType
+): void {
+  if (!Number.isFinite(delta) || delta === 0) {
+    if (emotionHint) _affectiveLastHint = emotionHint;
+    return;
+  }
+  const bounded = Math.max(-AFFECTIVE_DELTA_MAX, Math.min(AFFECTIVE_DELTA_MAX, delta));
+  const next = Math.max(0, Math.min(1, _currentState.intensity + bounded));
+  _currentState.intensity = next;
+  if (emotionHint) _affectiveLastHint = emotionHint;
+
+  const now = Date.now();
+  if (_initialized && now - _affectiveLastPersistAt >= AFFECTIVE_PERSIST_INTERVAL_MS) {
+    _affectiveLastPersistAt = now;
+    void saveEmotionalState();
+  }
+}
+
+/** Last body-derived emotion hint, if any. Soft prior only — never auto-applied. */
+export function getAffectiveBodyHint(): EmotionType | null {
+  return _affectiveLastHint;
+}
+
 /**
  * Decay emotional intensity over time.
  * Called periodically to return toward baseline.
@@ -378,5 +426,7 @@ export const _testing = {
       lastUpdated: new Date().toISOString(),
     };
     _initialized = false;
+    _affectiveLastPersistAt = 0;
+    _affectiveLastHint = null;
   },
 };

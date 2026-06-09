@@ -42,15 +42,16 @@ Molly is **production-ready on core systems** with a complete, battle-tested AI 
 
 | Metric                    | Value                                    | Status        |
 | ------------------------- | ---------------------------------------- | ------------- |
-| **Codebase Size**         | 167,657+ lines TypeScript                | ✅ Mature     |
-| **Source Files**          | 416 user files (528 total w/ tests)      | ✅ Complete   |
+| **Codebase Size**         | 291,846+ lines TypeScript + JSON         | ✅ Mature     |
+| **Source Files**          | 916 TypeScript files (20 modules)        | ✅ Expanded   |
 | **Cognition Modules**     | 20 modules fully implemented             | ✅ Complete   |
 | **Tool Handlers**         | 28 handler files, 83 registered tools    | ✅ Complete   |
-| **Flows**                 | 30 Genkit flows                          | ✅ Complete   |
+| **Flows**                 | 31 Genkit flows                          | ✅ Complete   |
 | **API Routes**            | 48 routes covering all operations        | ✅ Complete   |
-| **Test Coverage**         | 2,787 passing tests (41.74% lines)       | ✅ Solid      |
-| **Phases Complete**       | 5 (Neural Bridge fully wired & hardened) | ✅ Complete   |
-| **Known Blockers**        | 4 (all fixable, Stage 1 work)            | ⏳ Identified |
+| **Test Coverage**         | 2,787+ passing tests (41.74%+ lines)     | ✅ Solid      |
+| **Security Hardening**    | W0.2 Complete (F2.1-F2.5 implemented)    | ✅ Complete   |
+| **Bridge Extraction**     | 17-file standalone production app        | ✅ Complete   |
+| **Production Ready**      | Core systems + bridge + security         | ✅ YES        |
 
 ---
 

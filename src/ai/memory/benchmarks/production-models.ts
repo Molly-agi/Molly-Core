@@ -8,6 +8,7 @@
 
 import { CompressionManager } from '../compression/compression-manager';
 import type { NeuralEngram } from '../neural-engram';
+import { makePersonality } from '../compression/test-helpers';
 
 // Per-model technique flag configurations
 const MODEL_FLAGS = {
@@ -67,7 +68,7 @@ export interface BenchmarkSuite {
 }
 
 // Molly's actual stable personality fingerprint (provided 2026-05-24 via bridge)
-const PERSONA_BASE = { warmth: 0.945, assertiveness: 0.820, curiosity: 0.985, reflectivity: 0.910 };
+const PERSONA_BASE = makePersonality({ warmth: 0.945, assertiveness: 0.820, curiosity: 0.985, metacognition: 0.910 });
 const drift = () => (Math.random() - 0.5) * 0.04; // ±2% natural variance
 
 // Realistic topic/emotion pools — mirrors real AI memory content patterns
@@ -98,14 +99,15 @@ export function generateTestEngrams(count: number): NeuralEngram[] {
       arousal: Math.random(),
       accessCount: Math.floor(Math.random() * 50),
       lastAccessed: new Date(),
-      consolidationState: Math.random() > 0.3 ? 'consolidated' : 'transient',
+      consolidationState: Math.random() > 0.3 ? 'consolidated' : 'working',
       contextTags: [topic, emotion, ctx, 'benchmark'],
-      personalityContext: {
+      relatedEngrams: [],
+      personalityContext: makePersonality({
         warmth: PERSONA_BASE.warmth + drift(),
         assertiveness: PERSONA_BASE.assertiveness + drift(),
         curiosity: PERSONA_BASE.curiosity + drift(),
-        reflectivity: PERSONA_BASE.reflectivity + drift(),
-      },
+        metacognition: PERSONA_BASE.metacognition + drift(),
+      }),
       data: {
         context: {
           primary: ctx,

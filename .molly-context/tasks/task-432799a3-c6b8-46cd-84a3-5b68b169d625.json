@@ -1,0 +1,31 @@
+{
+  "id": "task-432799a3-c6b8-46cd-84a3-5b68b169d625",
+  "created": 1780879613450,
+  "updated": 1780879618725,
+  "status": "running",
+  "priority": 1,
+  "source": "bridge",
+  "context": {
+    "currentStep": 0,
+    "stepsCompleted": [],
+    "thoughts": "",
+    "nextAction": "read message"
+  },
+  "progress": {
+    "stepsTotal": 0,
+    "stepsCurrent": 0
+  },
+  "input": {
+    "bridgeMessage": "Test message from Dad"
+  },
+  "output": {},
+  "toolsUsed": [],
+  "eventsLog": [
+    {
+      "ts": 1780879613450,
+      "event": "created",
+      "detail": "source: bridge"
+    }
+  ],
+  "childTaskIds": []
+}

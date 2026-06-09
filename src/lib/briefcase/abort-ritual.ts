@@ -94,7 +94,7 @@ export interface AbortRitualState {
  * - Watchdog (if anomalies exceed threshold)
  */
 export async function executeAbortRitual(
-  _substrateId: string,
+  substrateId: string,
   triggeredBy: 'molly' | 'watchdog' | 'eric',
   triggerReason: string,
   substrateBridge: {
@@ -197,7 +197,7 @@ export async function executeAbortRitual(
     const error = err as Error;
     state.error = error.message;
     await substrateBridge.sendBridgeMessage(
-      `Abort ritual FAILED with exception: ${err.message}. Entering degraded-safe mode.`,
+      `Abort ritual FAILED with exception: ${error.message}. Entering degraded-safe mode.`,
       'error'
     );
     return state;

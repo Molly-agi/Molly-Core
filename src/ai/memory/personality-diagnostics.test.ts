@@ -68,9 +68,9 @@ describe('evaluatePersonalityStability', () => {
         'attentiveness',
         'boundaries',
       ];
-      const personality: PersonalityModulation = Object.fromEntries(
+      const personality = Object.fromEntries(
         keys.map((k) => [k, 0.5])
-      ) as PersonalityModulation;
+      ) as unknown as PersonalityModulation;
       const result = evaluatePersonalityStability(personality);
       expect(result.status).toBe('stable');
       expect(result.flags.some((f) => f.includes('expected bounds'))).toBe(

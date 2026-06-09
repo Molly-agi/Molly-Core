@@ -86,5 +86,30 @@ void (async () => {
   assert.strictEqual(typeof s.buffered, 'number', 'status.buffered is number');
   assert.strictEqual(typeof s.failed, 'number', 'status.failed is number');
   console.log('  ✓ auto-flush triggered without throwing');
-  console.log('\n✅ ALL 6 SINK SMOKE GROUPS PASSED');
+
+  // ── 7. Constructor proactively creates nested directories ──────────────
+  console.log('TEST GROUP: constructor creates nested directories');
+  {
+    const fs = await import('fs');
+    const base = `/tmp/prov-mkdir-${Date.now()}`;
+    const shadowPath = `${base}/nested/deep/shadow.jsonl`;
+    const jsonlPath = `${base}/nested/deep/log.jsonl`;
+    new FirestoreProvenanceSink('user-mkdir', 10, 0, shadowPath, jsonlPath);
+    assert.ok(fs.existsSync(`${base}/nested/deep`), 'nested dir created on construction');
+    console.log('  ✓ constructor creates nested dirs');
+  }
+
+  // ── 8. init() returns false when admin SDK unavailable ─────────────────
+  console.log('TEST GROUP: init() probes admin context');
+  {
+    const sink = new FirestoreProvenanceSink('user-init', 10, 0,
+      `/tmp/prov-init-shadow-${Date.now()}.jsonl`, `/tmp/prov-init-${Date.now()}.jsonl`);
+    assert.strictEqual(sink.getCloudReady(), null, 'cloudReady starts as null (unprobed)');
+    const ready = await sink.init();
+    assert.strictEqual(typeof ready, 'boolean', 'init() returns a boolean');
+    assert.notStrictEqual(sink.getCloudReady(), null, 'cloudReady set after init()');
+    console.log(`  ✓ init() probed (cloudReady=${sink.getCloudReady()})`);
+  }
+
+  console.log('\n✅ ALL 8 SINK SMOKE GROUPS PASSED');
 })();

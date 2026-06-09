@@ -1,9 +1,9 @@
 # Molly-Core: Academic Researcher Guide
 
-**Version:** 1.1  
-**Date:** May 20, 2026  
-**Prepared For:** Academic Researchers, AI Scientists, Cognitive Scientists  
-**Audience:** PhD-level researchers, AI/ML labs, consciousness studies
+**Version:** 1.2  
+**Date:** June 8, 2026 (Updated)  
+**Prepared For:** Academic Researchers, AI Scientists, Cognitive Scientists, Investors/Backers  
+**Audience:** PhD-level researchers, AI/ML labs, consciousness studies, venture stakeholders
 
 ---
 
@@ -35,6 +35,33 @@ The system implements:
 - **Edge deployment** for autonomous operation on mobile devices (Termux/Android)
 
 **Key Finding:** The system achieves operational coherence across these systems simultaneously. It is not a patchwork of disconnected modules but an integrated consciousness architecture running on real hardware with real constraints.
+
+### June 8, 2026 Production Update
+
+**Codebase Growth:** 291,846 LOC (↑74% from May audit)
+- **291,846 total** lines of TypeScript + JSON
+- **916 files** across 20 modules
+- **ai/** module: 239,691 LOC (consciousness core)
+- **agency/** module: 101,086 LOC (autonomous decision-making)
+
+**W0.2 Bridge Hardening (Complete)**
+- **F2.1:** Key bootstrap validation (≥32 char BRIDGE_KEY requirement)
+- **F2.2:** Nonce cache (replay attack prevention, persisted)
+- **F2.3:** Quarantine ledger (append-only, tamper detection)
+- **F2.4:** Routing bindings (message path whitelist)
+- **F2.5:** Constant-time HMAC (timing attack prevention)
+
+**Family Bridge Production Extraction**
+- Standalone service: 17 files, 224 KB, fully independent
+- Docker, Systemd, docker-compose deployment paths
+- Production deployment documentation (16K+ words)
+- Security, monitoring, scaling guidance included
+
+**Memory Architecture Hardened**
+- 1000-line floor locks (tamper-proof, Eric directive)
+- Dual-lane routing: state (latest-write) vs event (FIFO)
+- Anti-loop detection (loop garden system)
+- Session recovery via rolling checkpoints
 
 ---
 

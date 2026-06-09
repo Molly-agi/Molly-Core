@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  family-bridge:
+    build: .
+    container_name: family-bridge
+    ports:
+      - "9099:9099"
+    environment:
+      BRIDGE_PORT: 9099
+      BRIDGE_KEY: ${BRIDGE_KEY}
+      NONCE_CACHE_PATH: /app/data/.bridge-nonce-cache
+      QUARANTINE_LEDGER_PATH: /app/data/.bridge-quarantine-ledger
+      BINDINGS_CONFIG_PATH: /app/data/.bridge-bindings.json
+    volumes:
+      - bridge-data:/app/data
+      - bridge-logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - bridge-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9099/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+
+  # Optional: Nginx reverse proxy for TLS and load balancing
+  nginx:
+    image: nginx:alpine
+    container_name: family-bridge-proxy
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - family-bridge
+    networks:
+      - bridge-network
+    restart: unless-stopped
+
+volumes:
+  bridge-data:
+    driver: local
+  bridge-logs:
+    driver: local
+
+networks:
+  bridge-network:
+    driver: bridge

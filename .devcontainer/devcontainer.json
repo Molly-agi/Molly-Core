@@ -36,7 +36,7 @@
   },
 
   // Forward Molly's ports
-  "forwardPorts": [9002, 9099],
+  "forwardPorts": [9002, 9099, 9101],
   "portsAttributes": {
     "9002": {
       "label": "Molly Dev Server",
@@ -44,6 +44,10 @@
     },
     "9099": {
       "label": "Family Bridge (WebSocket)",
+      "onAutoForward": "notify"
+    },
+    "9101": {
+      "label": "Voice Bridge (Gemini Live Proxy)",
       "onAutoForward": "notify"
     }
   }

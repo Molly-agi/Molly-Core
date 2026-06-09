@@ -182,7 +182,7 @@ async function processMessages(msgs) {
   if (!msgs || msgs.length === 0) return;
   if (processing) {
     log(
-      `Already processing — queued ${msgs.length} message(s) will be handled next cycle`
+      `Already processing — dropping ${msgs.length} message(s) (arrive again on next bridge push or reconnect)`
     );
     return;
   }
@@ -194,8 +194,8 @@ async function processMessages(msgs) {
   const summary = msgs
     .map((m) => `[${m.from}]: ${m.content.slice(0, 400)}`)
     .join('\n\n');
-  // Explicitly suppress tool calls — we're already on the bridge, just respond with text
-  const trigger = `[BRIDGE MESSAGE — respond with plain text only, no tool calls]\n\n${summary}\n\n[IMPORTANT: Do not use familyBridge or any other tools. Your response will be posted to the bridge automatically. Just write your reply as natural text.]`;
+  // Explicitly suppress tool calls — bridge is chat-only; tool execution runs in the autonomous cycle (heartbeat)
+  const trigger = `[BRIDGE MESSAGE — respond with plain text only, no tool calls]\n\n${summary}\n\n[IMPORTANT: Do not use familyBridge or any other tools. Your response will be posted to the bridge automatically. Just write your reply as natural text.\n\nNote: Tool execution (safeBatch, actionLog, file writes, shell commands) only happens during your autonomous cycle (heartbeat). If you need to take an action, note it mentally and it will run on the next cycle. Bridge responses are chat only.\n\nIMPORTANT: Father's directives are ATOMIC. Treat each message as ONE cohesive task, not multiple subtasks. Do not decompose or parallelize unless Father explicitly uses "and then" or "also".]`;
 
   try {
     const response = await callMollyFlow(trigger);
@@ -234,7 +234,7 @@ async function processMessages(msgs) {
       );
       responsesHandled++;
       log(
-        `Response sent (${response.length} chars). Total: ${responsesHandled}`
+        `Response sent (${finalResponse.length} chars). Total: ${responsesHandled}`
       );
     } else if (!response) {
       log('Flow returned empty response');

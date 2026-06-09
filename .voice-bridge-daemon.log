@@ -1,0 +1,4 @@
+◇ injected env (10) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[voice-bridge] Listening on http://localhost:9101
+[voice-bridge] WS upgrade path: ws://localhost:9101/voice/gemini-live
+[voice-bridge] Health: http://localhost:9101/health
