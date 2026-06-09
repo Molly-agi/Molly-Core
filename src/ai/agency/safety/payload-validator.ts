@@ -216,7 +216,7 @@ export async function validatePayload(
   const contentStr = scriptContent.toString('utf-8');
   const dangerPatterns = [
     /rm\s+-rf\s+\/[^/]/i,
-    /:(){ \|:& };:/,
+    /:\(\)\{\s*:\|:&/,
     /dd\s+if=.*of=\/dev\//i,
     /mkfs\./i,
     />\s*\/dev\/sd[a-z]/i,
