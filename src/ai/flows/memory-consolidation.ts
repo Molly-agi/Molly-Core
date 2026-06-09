@@ -8,7 +8,12 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
 import { z } from 'zod';
 import { getStorageRouter } from '@/lib/storage-router';
-import { getEmbeddingProvider } from '@/ai/tools/embedding-provider';
+import {
+  getEmbeddingProvider,
+  isEmbeddingProviderReady,
+  setEmbeddingProvider,
+} from '@/ai/tools/embedding-provider';
+import { createGoogleEmbeddingProvider } from '@/ai/tools/google-embedding-provider';
 import { MollyLogger, generateTraceId } from '@/ai/logger';
 import { semanticPriority, addChecksum } from '@/ai/tools/memory-integrity';
 import { ExperienceRecord, createMemoryRecord } from '@/ai/tools/memory-schema';
@@ -332,6 +337,27 @@ export const memoryConsolidationFlow = ai.defineFlow(
         };
       }
       const storage = await getStorageRouter();
+
+      // Lazy-init embedding provider if not ready (e.g. after server restart)
+      if (!isEmbeddingProviderReady()) {
+        try {
+          const provider = await createGoogleEmbeddingProvider();
+          setEmbeddingProvider(provider);
+        } catch {
+          MollyLogger.warn(
+            'Memory consolidation: embedding provider init failed, skipping',
+            'memoryConsolidation'
+          );
+          return {
+            consolidatedMemories: [],
+            patterns: [],
+            insights: [],
+            tokensUsed: 0,
+            semanticDensity: 0,
+            recommendations: ['Embedding provider unavailable'],
+          };
+        }
+      }
       const embeddingProvider = getEmbeddingProvider();
 
       // STEP 1: Fetch Memories
@@ -418,14 +444,19 @@ export const memoryConsolidationFlow = ai.defineFlow(
       // STEP 2.5: S1 Semantic Deduplication
       // Remove memories with >92% cosine similarity to a higher-priority memory.
       // Uses already-computed embeddings — no extra API cost.
-      MollyLogger.info('Step 2.5: S1 semantic deduplication', 'memoryConsolidation');
+      MollyLogger.info(
+        'Step 2.5: S1 semantic deduplication',
+        'memoryConsolidation'
+      );
       const S1_SIMILARITY_THRESHOLD = 0.92;
       const deduplicated: typeof memoriesWithVectors = [];
       for (const memory of memoriesWithVectors) {
         const isDuplicate = deduplicated.some(
           (existing) =>
-            embeddingProvider.similarity(existing.embedding, memory.embedding) >=
-            S1_SIMILARITY_THRESHOLD
+            embeddingProvider.similarity(
+              existing.embedding,
+              memory.embedding
+            ) >= S1_SIMILARITY_THRESHOLD
         );
         if (!isDuplicate) {
           deduplicated.push(memory);
