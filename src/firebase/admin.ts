@@ -147,11 +147,30 @@ async function ensureInitialized(): Promise<boolean> {
         initOptions.projectId = process.env.FIREBASE_PROJECT_ID;
       } else {
         // ADC path via GOOGLE_APPLICATION_CREDENTIALS
-        initOptions.projectId =
+        // Also check FIREBASE_CONFIG environment variable
+        let configProjectId =
           process.env.GOOGLE_CLOUD_PROJECT ??
           process.env.GCLOUD_PROJECT ??
-          process.env.FIREBASE_PROJECT_ID ??
-          'termai-molly-55988354-f7535'; // Explicit hardcoded fail-safe
+          process.env.FIREBASE_PROJECT_ID;
+
+        // Parse FIREBASE_CONFIG if available
+        if (!configProjectId && process.env.FIREBASE_CONFIG) {
+          try {
+            const firebaseConfigEnv = JSON.parse(process.env.FIREBASE_CONFIG);
+            configProjectId = firebaseConfigEnv.projectId;
+            console.log(
+              '[Firebase Admin] Using projectId from FIREBASE_CONFIG'
+            );
+          } catch (parseErr) {
+            console.warn(
+              '[Firebase Admin] Invalid FIREBASE_CONFIG JSON:',
+              parseErr
+            );
+          }
+        }
+
+        initOptions.projectId =
+          configProjectId ?? 'termai-molly-55988354-f7535'; // Explicit hardcoded fail-safe
       }
 
       // Ensure projectId is always set (fail-safe)

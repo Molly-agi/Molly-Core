@@ -21,9 +21,23 @@ export function initializeFirebase() {
           e
         );
       }
+
+      // Check for FIREBASE_CONFIG environment variable first
+      let configToUse = firebaseConfig;
+      if (process.env.FIREBASE_CONFIG) {
+        try {
+          const envConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+          configToUse = { ...firebaseConfig, ...envConfig };
+          console.log('[Firebase] Using FIREBASE_CONFIG from environment');
+        } catch (parseErr) {
+          console.warn('[Firebase] Invalid FIREBASE_CONFIG JSON:', parseErr);
+        }
+      }
+
+      // Ensure projectId is explicitly set
       const configWithProjectId = {
-        ...firebaseConfig,
-        projectId: 'termai-molly-55988354-f7535', // Explicit fail-safe for v4.0+
+        ...configToUse,
+        projectId: configToUse.projectId || 'termai-molly-55988354-f7535',
       };
       firebaseApp = initializeApp(configWithProjectId);
     }
