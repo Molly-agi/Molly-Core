@@ -25,7 +25,10 @@ import {
   type CalibrationSignal,
   type CalibrationReport,
 } from './cognition/self-calibration';
-import { ValueDriftMonitor, type DriftReport } from './cognition/value-drift-monitor';
+import {
+  ValueDriftMonitor,
+  type DriftReport,
+} from './cognition/value-drift-monitor';
 
 export interface AgencyRuntime {
   registry: ParameterRegistry;
@@ -39,7 +42,10 @@ export interface AgencyRuntime {
   /** Trigger a homeostasis plan on demand. Returns the plan (proposals only). */
   runHomeostasisPlan: () => Promise<HomeostasisPlan>;
   /** Run self-calibration against provided signals (propose-only, low-load check). */
-  runCalibration: (signals: CalibrationSignal[], plan: HomeostasisPlan) => CalibrationReport;
+  runCalibration: (
+    plan: HomeostasisPlan,
+    signals: CalibrationSignal[]
+  ) => CalibrationReport;
   /** Get current value-drift report (read-only). */
   getDriftReport: () => DriftReport;
 }
@@ -50,10 +56,10 @@ export function initAgencyRuntime(): AgencyRuntime {
   if (runtime) return runtime;
   const registry = new ParameterRegistry();
   const governor = new CognitiveGovernor(registry);
-  
+
   // Initialize D-series emotional intensity registers (for embodiment feedback)
   initEmotionalIntensityRegisters(registry);
-  
+
   const sink = new FirestoreProvenanceSink('molly-system');
   // Probe admin context once at startup (fire-and-forget; failure is logged + tolerated).
   sink.init().catch(() => {});
@@ -62,7 +68,9 @@ export function initAgencyRuntime(): AgencyRuntime {
   const getEmotionalIntensity = () => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { getCurrentState } = require('@/ai/agency/cognition/emotional-state');
+      const {
+        getCurrentState,
+      } = require('@/ai/agency/cognition/emotional-state');
       return getCurrentState().intensity ?? 0.5;
     } catch {
       return 0.5;
@@ -103,6 +111,13 @@ export function initAgencyRuntime(): AgencyRuntime {
     return homeostasis.plan(stats, somaticSnapshot);
   };
 
+  const runCalibration = (
+    plan: HomeostasisPlan,
+    signals: CalibrationSignal[]
+  ): CalibrationReport => calibration.calibrate(plan, signals);
+
+  const getDriftReport = (): DriftReport => driftMonitor.report();
+
   runtime = {
     registry,
     governor,
@@ -110,7 +125,11 @@ export function initAgencyRuntime(): AgencyRuntime {
     somatic,
     bodyAffect: new BodyAffectBridge(registry),
     homeostasis,
+    calibration,
+    driftMonitor,
     runHomeostasisPlan,
+    runCalibration,
+    getDriftReport,
   };
   return runtime;
 }
