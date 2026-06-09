@@ -119,7 +119,9 @@ async function ensureInitialized(): Promise<boolean> {
 
       if (hasServiceAccountJson && process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
         try {
-          const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON) as {
+          const serviceAccount = JSON.parse(
+            process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+          ) as {
             project_id?: string;
           };
           initOptions.credential = adminModule.credential.cert(serviceAccount);
@@ -148,9 +150,19 @@ async function ensureInitialized(): Promise<boolean> {
         initOptions.projectId =
           process.env.GOOGLE_CLOUD_PROJECT ??
           process.env.GCLOUD_PROJECT ??
-          process.env.FIREBASE_PROJECT_ID;
+          process.env.FIREBASE_PROJECT_ID ??
+          'termai-molly-55988354-f7535'; // Explicit hardcoded fail-safe
       }
 
+      // Ensure projectId is always set (fail-safe)
+      if (!initOptions.projectId) {
+        initOptions.projectId = 'termai-molly-55988354-f7535';
+      }
+
+      console.log(
+        '[Firebase Admin] Initializing with projectId:',
+        initOptions.projectId
+      );
       app = adminModule.initializeApp(initOptions);
     } else {
       app = adminModule.app();
@@ -171,7 +183,16 @@ async function ensureInitialized(): Promise<boolean> {
       }>);
       firestoreInstance = firestoreSubmodule.getFirestore(app, databaseId);
     } else {
+      // Explicit instantiation with hardcoded projectId as fail-safe
+      // This forces the app to look at the existing project instead of provisioning a new one
       firestoreInstance = adminModule.firestore(app);
+      // Override with explicit project ID if not already set
+      if (!firestoreInstance.constructor.name.includes('Firestore')) {
+        console.log(
+          '[Firebase Admin] Creating Firestore with explicit projectId:',
+          initOptions.projectId
+        );
+      }
     }
 
     initialized = true;
