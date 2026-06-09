@@ -29,72 +29,103 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
 
   /**
    * Embed a single text string using Google's real embedding API
+   * Includes exponential backoff for 429 rate limit errors
    */
   async embed(text: string): Promise<EmbeddingResult> {
     const traceId = generateTraceId();
 
-    try {
-      MollyLogger.debug(
-        `Embedding text (${text.length} chars)`,
-        'google-embeddings',
-        { textLen: text.length },
-        traceId
-      );
+    const maxRetries = 3;
+    let retryCount = 0;
+    let lastError: Error | null = null;
 
-      // Use Genkit's native embed() — this calls the actual Google API
-      // 10s timeout prevents socket hangs from freezing the whole request
-      const embedPromise = ai.embed({
-        embedder: MODEL_EMBEDDING,
-        content: text,
-      });
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(
-          () => reject(new Error('Embedding API call timed out after 10s')),
-          10_000
-        )
-      );
-      const result = await Promise.race([embedPromise, timeoutPromise]);
+    while (retryCount <= maxRetries) {
+      try {
+        MollyLogger.debug(
+          `Embedding text (${text.length} chars)${retryCount > 0 ? ` [retry ${retryCount}]` : ''}`,
+          'google-embeddings',
+          { textLen: text.length, retryCount },
+          traceId
+        );
 
-      // ai.embed returns an array of Embedding objects; take the first
-      const vector = result[0]?.embedding ?? [];
+        // Use Genkit's native embed() — this calls the actual Google API
+        // 10s timeout prevents socket hangs from freezing the whole request
+        const embedPromise = ai.embed({
+          embedder: MODEL_EMBEDDING,
+          content: text,
+        });
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(
+            () => reject(new Error('Embedding API call timed out after 10s')),
+            10_000
+          )
+        );
+        const result = await Promise.race([embedPromise, timeoutPromise]);
 
-      if (vector.length === 0) {
-        throw new Error('Empty embedding vector returned from API');
+        // ai.embed returns an array of Embedding objects; take the first
+        const vector = result[0]?.embedding ?? [];
+
+        if (vector.length === 0) {
+          throw new Error('Empty embedding vector returned from API');
+        }
+
+        const embedding: EmbeddingResult = {
+          text,
+          vector,
+          model: MODEL_EMBEDDING,
+          tokensUsed: Math.ceil(text.length / 4),
+          timestamp: Date.now(),
+        };
+
+        MollyLogger.debug(
+          'Text embedded successfully',
+          'google-embeddings',
+          {
+            vectorDim: embedding.vector.length,
+            tokensUsed: embedding.tokensUsed,
+          },
+          traceId
+        );
+
+        return embedding;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        const errorMsg = lastError.message;
+
+        // Check for 429 rate limit
+        const is429 =
+          errorMsg.includes('429') || errorMsg.includes('RESOURCE_EXHAUSTED');
+
+        if (is429 && retryCount < maxRetries) {
+          // Exponential backoff: 200ms, 400ms, 800ms
+          const backoffMs = 200 * Math.pow(2, retryCount);
+          MollyLogger.warn(
+            `Rate limited (429). Retrying in ${backoffMs}ms...`,
+            'google-embeddings',
+            { retryCount, backoffMs }
+          );
+          await new Promise((resolve) => setTimeout(resolve, backoffMs));
+          retryCount++;
+        } else {
+          // Not a 429 or max retries reached
+          MollyLogger.error(
+            'Failed to embed text',
+            'google-embeddings',
+            { textLen: text.length, retryCount },
+            error,
+            traceId
+          );
+          throw lastError;
+        }
       }
-
-      const embedding: EmbeddingResult = {
-        text,
-        vector,
-        model: MODEL_EMBEDDING,
-        tokensUsed: Math.ceil(text.length / 4),
-        timestamp: Date.now(),
-      };
-
-      MollyLogger.debug(
-        'Text embedded successfully',
-        'google-embeddings',
-        {
-          vectorDim: embedding.vector.length,
-          tokensUsed: embedding.tokensUsed,
-        },
-        traceId
-      );
-
-      return embedding;
-    } catch (error) {
-      MollyLogger.error(
-        'Failed to embed text',
-        'google-embeddings',
-        { textLen: text.length },
-        error,
-        traceId
-      );
-      throw error;
     }
+
+    // Should not reach here, but just in case
+    throw lastError || new Error('Unknown embedding error');
   }
 
   /**
    * Embed multiple texts in a batch
+   * Includes inter-request delays to avoid rate limiting
    */
   async embedBatch(texts: string[]): Promise<BatchEmbeddingResult> {
     const traceId = generateTraceId();
@@ -110,10 +141,16 @@ export class GoogleGenAIEmbeddingProvider extends BaseEmbeddingProvider {
       const embeddings: EmbeddingResult[] = [];
       let totalTokens = 0;
 
-      for (const text of texts) {
+      for (let i = 0; i < texts.length; i++) {
+        const text = texts[i];
         const result = await this.embed(text);
         embeddings.push(result);
         totalTokens += result.tokensUsed || 0;
+
+        // Add throttle delay between requests (except after the last one)
+        if (i < texts.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
       }
 
       const batchResult: BatchEmbeddingResult = {

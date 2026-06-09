@@ -51,7 +51,11 @@ import { buildMetaLearningContext } from '@/ai/agency/cognition/meta-learning';
 import { readFileSync, existsSync } from 'fs';
 import path from 'path';
 
-const PROJECT_ARC_PATH = path.join('/workspaces/Molly-Core', '.molly-context', 'project-arc.json');
+const PROJECT_ARC_PATH = path.join(
+  '/workspaces/Molly-Core',
+  '.molly-context',
+  'project-arc.json'
+);
 
 function loadProjectArc(): string {
   try {
@@ -59,8 +63,12 @@ function loadProjectArc(): string {
     const raw = readFileSync(PROJECT_ARC_PATH, 'utf8');
     const arc = JSON.parse(raw);
     const lines = [`Current milestone: ${arc.current_milestone ?? 'unknown'}`];
-    if (arc.prep_notes) lines.push(`Prep notes (act on these): ${arc.prep_notes}`);
-    if (Array.isArray(arc.upcoming_milestones) && arc.upcoming_milestones.length > 0) {
+    if (arc.prep_notes)
+      lines.push(`Prep notes (act on these): ${arc.prep_notes}`);
+    if (
+      Array.isArray(arc.upcoming_milestones) &&
+      arc.upcoming_milestones.length > 0
+    ) {
       lines.push(`Upcoming: ${arc.upcoming_milestones.slice(0, 3).join(', ')}`);
     }
     return lines.join('\n');
@@ -289,6 +297,19 @@ export async function runAutonomousCycle(force = false): Promise<{
 
         // Call the tool execution API internally
         const toolResult = await executeToolInternal(toolName, toolParams);
+
+        // Safety guard: toolResult should never be undefined, but if a handler misbehaves, catch it
+        if (!toolResult) {
+          actions.push(
+            `Tool: ${toolName} → error: handler returned undefined (BUG IN HANDLER)`
+          );
+          MollyLogger.error(
+            `[autonomous] Tool handler ${toolName} returned undefined instead of { success, output }`,
+            traceId
+          );
+          break;
+        }
+
         actions.push(
           `Tool: ${toolName} → ${toolResult.success ? 'success' : 'failed'}: ${toolResult.output?.slice(0, 100) || ''}`
         );
@@ -333,7 +354,7 @@ export async function runAutonomousCycle(force = false): Promise<{
         // ─────────────────────────────────────────────────────────────────
 
         // Feed the result back for the next iteration
-        currentPrompt = `[TOOL_RESULT] Tool: ${toolName}\nSuccess: ${toolResult.success}\nOutput: ${toolResult.output}\n\nContinue with your autonomous cycle. If you are done acting, respond without a tool request.`;
+        currentPrompt = `[TOOL_RESULT] Tool: ${toolName}\nSuccess: ${toolResult.success}\nOutput: ${toolResult.output || '(no output)'}\n\nContinue with your autonomous cycle. If you are done acting, respond without a tool request.`;
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         actions.push(`Tool parse error: ${msg}`);
@@ -416,7 +437,7 @@ export async function runAutonomousCycle(force = false): Promise<{
         // Spawn a worker for each task
         for (const task of runnable) {
           try {
-            const worker = await pool.spawnWorker(task.id);
+            await pool.spawnWorker(task.id);
             MollyLogger.info(`Spawned worker for task ${task.id}`, traceId);
           } catch (err) {
             MollyLogger.warn(
@@ -435,10 +456,7 @@ export async function runAutonomousCycle(force = false): Promise<{
             );
           }
         } catch (err) {
-          MollyLogger.error(
-            `Worker pool execution failed: ${err}`,
-            traceId
-          );
+          MollyLogger.error(`Worker pool execution failed: ${err}`, traceId);
         }
       }
     } catch (err) {
@@ -459,9 +477,8 @@ export async function runAutonomousCycle(force = false): Promise<{
     // This keeps the coherence state and intent readiness up to date
     // so Molly is always prepared when Father reconnects.
     try {
-      const { synthesize } = await import(
-        '@/ai/agency/planning/family-synthesis-engine'
-      );
+      const { synthesize } =
+        await import('@/ai/agency/planning/family-synthesis-engine');
       synthesize();
     } catch {
       // Synthesis failure must never crash the autonomous cycle

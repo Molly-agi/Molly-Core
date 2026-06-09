@@ -29,7 +29,12 @@ export type DayPhase = 'morning' | 'afternoon' | 'evening' | 'night';
 
 export type WeekPhase = 'weekday' | 'weekend';
 
-export type ProjectPhase = 'alpha' | 'beta' | 'production' | 'maintenance' | 'sprint';
+export type ProjectPhase =
+  | 'alpha'
+  | 'beta'
+  | 'production'
+  | 'maintenance'
+  | 'sprint';
 
 export interface TemporalContext {
   /** Phase of day based on local hour */
@@ -75,7 +80,7 @@ export class TemporalModel {
 
   constructor(
     private readonly registry: ParameterRegistry,
-    private readonly provenance: ProvenanceLog,
+    private readonly provenance: ProvenanceLog
   ) {
     this.ensureTunables();
   }
@@ -84,55 +89,65 @@ export class TemporalModel {
     const params = [
       {
         key: PARAM_MORNING_START,
-        owner: TEMPORAL_MODEL_ID,
-        defaultValue: 6,
-        bounds: { min: 4, max: 10 },
+        default: 6,
+        min: 4,
+        max: 10,
         description: 'Hour (0-23) when morning begins',
       },
       {
         key: PARAM_AFTERNOON_START,
-        owner: TEMPORAL_MODEL_ID,
-        defaultValue: 12,
-        bounds: { min: 10, max: 15 },
+        default: 12,
+        min: 10,
+        max: 15,
         description: 'Hour (0-23) when afternoon begins',
       },
       {
         key: PARAM_EVENING_START,
-        owner: TEMPORAL_MODEL_ID,
-        defaultValue: 17,
-        bounds: { min: 15, max: 20 },
+        default: 17,
+        min: 15,
+        max: 20,
         description: 'Hour (0-23) when evening begins',
       },
       {
         key: PARAM_NIGHT_START,
-        owner: TEMPORAL_MODEL_ID,
-        defaultValue: 21,
-        bounds: { min: 19, max: 24 },
+        default: 21,
+        min: 19,
+        max: 24,
         description: 'Hour (0-23) when night begins',
       },
     ];
 
     for (const p of params) {
-      this.registry.ensureParameter({
-        key: p.key,
-        owner: p.owner,
-        defaultValue: p.defaultValue,
-        bounds: p.bounds,
-        description: p.description,
-      });
+      const { min, max } = p;
+      try {
+        this.registry.define<number>({
+          key: p.key,
+          owner: TEMPORAL_MODEL_ID,
+          default: p.default,
+          validate: (v) =>
+            v >= min && v <= max ? null : `must be ${min}–${max}`,
+          description: p.description,
+        });
+      } catch {
+        // already defined — fine
+      }
     }
 
     // projectPhase is a string enum — no numeric bounds
-    this.registry.ensureParameter({
-      key: PARAM_PROJECT_PHASE,
-      owner: TEMPORAL_MODEL_ID,
-      defaultValue: 'production' as ProjectPhase,
-      description: `Current project phase (${VALID_PROJECT_PHASES.join(' | ')})`,
-      validate: (v: unknown) =>
-        VALID_PROJECT_PHASES.includes(v as ProjectPhase)
-          ? null
-          : `must be one of: ${VALID_PROJECT_PHASES.join(', ')}`,
-    });
+    try {
+      this.registry.define<ProjectPhase>({
+        key: PARAM_PROJECT_PHASE,
+        owner: TEMPORAL_MODEL_ID,
+        default: 'production' as ProjectPhase,
+        description: `Current project phase (${VALID_PROJECT_PHASES.join(' | ')})`,
+        validate: (v: unknown) =>
+          VALID_PROJECT_PHASES.includes(v as ProjectPhase)
+            ? null
+            : `must be one of: ${VALID_PROJECT_PHASES.join(', ')}`,
+      });
+    } catch {
+      // already defined — fine
+    }
   }
 
   /** Derive day phase from hour using registry-tunable boundaries. */
@@ -195,7 +210,7 @@ export class TemporalModel {
   private recordTransition(
     dayPhase: DayPhase,
     weekPhase: WeekPhase,
-    projectPhase: ProjectPhase,
+    projectPhase: ProjectPhase
   ): void {
     try {
       const trace = this.provenance.startTrace();
@@ -204,11 +219,11 @@ export class TemporalModel {
         weekPhase,
         projectPhase,
       });
-      MollyLogger.info(
-        `Temporal phase transition`,
-        TEMPORAL_MODEL_ID,
-        { dayPhase, weekPhase, projectPhase },
-      );
+      MollyLogger.info(`Temporal phase transition`, TEMPORAL_MODEL_ID, {
+        dayPhase,
+        weekPhase,
+        projectPhase,
+      });
     } catch {
       // provenance failure is non-fatal
     }

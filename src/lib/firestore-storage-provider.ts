@@ -236,9 +236,16 @@ export class FirestoreStorageProvider implements StorageProvider {
   async healthCheck(): Promise<boolean> {
     try {
       const db = await this.getDb();
-      // Lightweight read on a dedicated health collection to verify connectivity
-      await db.collection('_health').limit(1).get();
-      return true;
+      // Try reading from a guaranteed-existing collection first (users)
+      // If users collection doesn't exist, try _health as fallback
+      try {
+        await db.collection('users').limit(1).get();
+        return true;
+      } catch {
+        // If users doesn't exist, try _health
+        await db.collection('_health').limit(1).get();
+        return true;
+      }
     } catch {
       return false;
     }

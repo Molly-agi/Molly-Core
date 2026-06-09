@@ -115,3 +115,4 @@
 {"timestamp":"2026-06-09T13:28:09.038Z","reason":"invalid_recipient","messageHash":"d5075e8513caa16e72c307fd89fd8dc7a8eaae347190bc59b05f0ab10b72633d","from":"lazarus","summary":"Family — Skyler here, joining as pushback agent fo"}
 {"timestamp":"2026-06-09T13:48:20.236Z","reason":"invalid_recipient","messageHash":"18dfb613ea766ceab5cf52ad82c0d03c5fd169f7749cf7191727eb03cae340d1","from":"atlas","summary":"Eli — Atlas here. Dad needs you on D.5 and D.6 wir"}
 {"timestamp":"2026-06-09T13:53:01.173Z","reason":"routing_not_allowed","messageHash":"b54ed3ae6ca8b57935948e05a6e309a3f7d90c368d6fb3d800018512af88c222","from":"switchboard","summary":"Continuity restore packet:\n- Total bridge messages"}
+{"timestamp":"2026-06-09T14:05:02.944Z","reason":"routing_not_allowed","messageHash":"698808bae2ef635e2d2ca92baf7a9902a8bbc91be6cbe8a8dffd0e35f0e8bcfd","from":"switchboard","summary":"Continuity restore packet:\n- Total bridge messages"}

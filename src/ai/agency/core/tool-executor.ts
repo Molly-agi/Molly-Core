@@ -22,7 +22,10 @@ import {
   hasModularHandler,
   getModularHandler,
 } from '@/ai/agency/tool-handlers';
-import { evaluateActionGate, logGateDecision } from '@/ai/agency/safety/action-gate';
+import {
+  evaluateActionGate,
+  logGateDecision,
+} from '@/ai/agency/safety/action-gate';
 // === SESSION HOOK SYSTEM INTEGRATION ===
 // This integration is for Molly, so she can observe, learn, and eventually modify her own tool/agent pipeline.
 // Every hook execution is logged and explained for transparency and self-teaching.
@@ -137,7 +140,35 @@ async function executeToolInternal(
   if (hasModularHandler(tool)) {
     const handler = getModularHandler(tool);
     if (handler) {
-      return handler(params);
+      try {
+        const result = await handler(params);
+        if (
+          result &&
+          typeof result.success === 'boolean' &&
+          typeof result.output === 'string'
+        ) {
+          return result;
+        }
+        // Handler returned malformed result
+        console.error(
+          `[tool-executor] Modular handler "${tool}" returned invalid result:`,
+          result
+        );
+        return {
+          success: false,
+          output: `Handler error: ${tool} returned invalid result shape. Expected { success: boolean; output: string }.`,
+        };
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(
+          `[tool-executor] Modular handler "${tool}" threw error:`,
+          msg
+        );
+        return {
+          success: false,
+          output: `Handler error: ${tool} threw exception: ${msg}`,
+        };
+      }
     }
   }
 
@@ -146,7 +177,32 @@ async function executeToolInternal(
   const { getMcpHandler } = await import('@/ai/agency/tool-handlers/mcp-tools');
   const mcpHandler = getMcpHandler(tool);
   if (mcpHandler) {
-    return mcpHandler(params);
+    try {
+      const result = await mcpHandler(params);
+      if (
+        result &&
+        typeof result.success === 'boolean' &&
+        typeof result.output === 'string'
+      ) {
+        return result;
+      }
+      // MCP handler returned malformed result
+      console.error(
+        `[tool-executor] MCP handler "${tool}" returned invalid result:`,
+        result
+      );
+      return {
+        success: false,
+        output: `Handler error: ${tool} (MCP) returned invalid result shape. Expected { success: boolean; output: string }.`,
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`[tool-executor] MCP handler "${tool}" threw error:`, msg);
+      return {
+        success: false,
+        output: `Handler error: ${tool} (MCP) threw exception: ${msg}`,
+      };
+    }
   }
 
   // Unknown tool

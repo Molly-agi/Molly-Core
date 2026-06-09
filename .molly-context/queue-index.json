@@ -1,9 +1,7 @@
 {
-  "activeTaskIds": [
-    "task-432799a3-c6b8-46cd-84a3-5b68b169d625"
-  ],
+  "activeTaskIds": ["task-432799a3-c6b8-46cd-84a3-5b68b169d625"],
   "pendingTaskIds": [],
-  "lastUpdated": 1781013095213,
+  "lastUpdated": 1781014893802,
   "maxConcurrent": 3,
   "circuitBreakerTripped": false
 }
