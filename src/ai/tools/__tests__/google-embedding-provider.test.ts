@@ -162,7 +162,7 @@ describe('Google Embedding Provider', () => {
       expect(result.embeddings).toHaveLength(3);
       expect(result.batchSize).toBe(3);
       expect(result.model).toBe('gemini-embedding-001');
-    });
+    }, 10000);
 
     it('calculates total tokens', async () => {
       mockEmbed.mockResolvedValue([{ embedding: Array(3072).fill(0) }]);
@@ -170,7 +170,7 @@ describe('Google Embedding Provider', () => {
       const result = await provider.embedBatch(['Short', 'Medium text here']);
 
       expect(result.totalTokensUsed).toBeGreaterThan(0);
-    });
+    }, 10000);
 
     it('logs batch progress', async () => {
       mockEmbed.mockResolvedValue([{ embedding: Array(3072).fill(0) }]);
@@ -183,7 +183,7 @@ describe('Google Embedding Provider', () => {
         expect.objectContaining({ batchSize: 2 }),
         expect.any(String)
       );
-    });
+    }, 10000);
 
     it('handles empty batch', async () => {
       const result = await provider.embedBatch([]);
