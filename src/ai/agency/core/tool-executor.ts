@@ -62,7 +62,7 @@ export async function executeTool(
 
   // === ACTION GATE (D.1) ===
   // Single entry point for all tool execution. Validates and authorizes before proceeding.
-  const gateDecision = evaluateActionGate({
+  const gateDecision = await evaluateActionGate({
     tool,
     params,
     sessionId,

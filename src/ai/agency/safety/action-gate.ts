@@ -38,9 +38,11 @@ export interface GateContext {
  * @param context Tool request context
  * @returns Gate decision (allowed/denied with reason)
  */
-export function evaluateActionGate(context: GateContext): GateDecision {
+export async function evaluateActionGate(
+  context: GateContext
+): Promise<GateDecision> {
   const timestamp = Date.now();
-  const { tool, params, sessionId, traceId, source } = context;
+  const { tool, params, _sessionId, traceId, source } = context;
 
   // === PHASE 1: STRUCTURAL VALIDATION ===
 
@@ -70,7 +72,8 @@ export function evaluateActionGate(context: GateContext): GateDecision {
 
   // Check autonomy permission (from autonomy-permission module)
   try {
-    const { checkAutonomyPermission } = require('@/ai/agency/safety/autonomy-permission');
+    const { checkAutonomyPermission } =
+      await import('@/ai/agency/safety/autonomy-permission');
     const permissionCheck = checkAutonomyPermission();
     if (!permissionCheck.permitted && source === 'autonomous') {
       return {
@@ -91,7 +94,8 @@ export function evaluateActionGate(context: GateContext): GateDecision {
 
   // Check circuit breaker
   try {
-    const { getCircuitBreaker, CircuitState } = require('@/ai/tools/circuit-breaker');
+    const { getCircuitBreaker, CircuitState } =
+      await import('@/ai/tools/circuit-breaker');
     const cb = getCircuitBreaker();
     if (cb.getState() === CircuitState.OPEN) {
       return {
@@ -112,7 +116,7 @@ export function evaluateActionGate(context: GateContext): GateDecision {
 
   // Check rate limiter budget
   try {
-    const { getRateLimiter } = require('@/ai/tools/rate-limiter');
+    const { getRateLimiter } = await import('@/ai/tools/rate-limiter');
     const rateLimiter = getRateLimiter();
     const rlStatus = rateLimiter.getStatus();
     if (rlStatus.percentageUsed > 85) {
@@ -139,7 +143,7 @@ export function evaluateActionGate(context: GateContext): GateDecision {
   if (destructiveTools.includes(tool)) {
     // Check if we have explicit confirmation (e.g., via params)
     // This would be set by Molly's atomic directive handler
-    const confirmed = (params?.confirmed === true) || (params?.dryRun === true);
+    const confirmed = params?.confirmed === true || params?.dryRun === true;
     if (!confirmed && source === 'autonomous') {
       // For autonomous mode, allow but log for audit
       MollyLogger.info(
@@ -175,12 +179,14 @@ export function evaluateActionGate(context: GateContext): GateDecision {
 /**
  * Log gate decision for audit trail
  */
-export function logGateDecision(decision: GateDecision, traceId?: string): void {
-  const level = decision.allowed ? 'info' : 'warn';
-  const logFn = level === 'info' ? MollyLogger.info : MollyLogger.warn;
-
-  logFn(
-    `[action-gate] ${decision.toolName}: ${decision.allowed ? 'ALLOWED' : 'DENIED'} — ${decision.reason}`,
-    traceId || 'unknown'
-  );
+export function logGateDecision(
+  decision: GateDecision,
+  traceId?: string
+): void {
+  const msg = `[action-gate] ${decision.toolName}: ${decision.allowed ? 'ALLOWED' : 'DENIED'} — ${decision.reason}`;
+  if (decision.allowed) {
+    MollyLogger.info(msg, traceId || 'unknown');
+  } else {
+    MollyLogger.warn(msg, traceId || 'unknown');
+  }
 }
