@@ -14,12 +14,21 @@ import { CognitiveGovernor } from './governor/cognitive-governor';
 import { ProvenanceLog } from './provenance/provenance-log';
 import { FirestoreProvenanceSink } from './provenance/provenance-persistence-sink';
 import { SomaticLoop } from './embodiment/somatic-loop';
+import { BodyAffectBridge } from './embodiment/body-affect-bridge';
+import {
+  PredictiveHomeostasis,
+  type HomeostasisPlan,
+} from './cognition/predictive-homeostasis';
 
 export interface AgencyRuntime {
   registry: ParameterRegistry;
   governor: CognitiveGovernor;
   provenance: ProvenanceLog;
   somatic: SomaticLoop;
+  bodyAffect: BodyAffectBridge;
+  homeostasis: PredictiveHomeostasis;
+  /** Trigger a homeostasis plan on demand. Returns the plan (proposals only). */
+  runHomeostasisPlan: () => Promise<HomeostasisPlan>;
 }
 
 let runtime: AgencyRuntime | null = null;
@@ -29,17 +38,63 @@ export function initAgencyRuntime(): AgencyRuntime {
   const registry = new ParameterRegistry();
   const governor = new CognitiveGovernor(registry);
   const sink = new FirestoreProvenanceSink('molly-system');
+  // Probe admin context once at startup (fire-and-forget; failure is logged + tolerated).
+  sink.init().catch(() => {});
   const provenance = new ProvenanceLog(5000, sink);
   // Somatic loop wires emotional intensity lazily to avoid import cycle
-  const somatic = new SomaticLoop(registry, governor, () => {
+  const getEmotionalIntensity = () => {
     try {
-      const { getCurrentState } = require('@/ai/agency/cognition/emotional-state');
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const {
+        getCurrentState,
+      } = require('@/ai/agency/cognition/emotional-state');
       return getCurrentState().intensity ?? 0.5;
     } catch {
       return 0.5;
     }
-  });
-  runtime = { registry, governor, provenance, somatic };
+  };
+  const somatic = new SomaticLoop(registry, governor, getEmotionalIntensity);
+  const homeostasis = new PredictiveHomeostasis(registry, provenance);
+
+  /** Build stats from governor snapshot + somatic for homeostasis planning. */
+  const runHomeostasisPlan = async (): Promise<HomeostasisPlan> => {
+    const govSnap = governor.snapshot();
+    const somSnap = somatic.snapshot();
+    const emotionalIntensity = getEmotionalIntensity();
+
+    // Build HistoricalStats from live governor state
+    const stats = {
+      recentFlowCount: govSnap.active.flow,
+      avgFlowDurationMs: 2000, // placeholder — would come from metrics
+      peakConcurrentFlows: govSnap.limits.flow,
+      errorRate: 0, // placeholder — would come from error tracking
+      latencyP95Ms: 500, // placeholder — would come from metrics
+      consolidationBacklogSize: 0, // placeholder — would come from memory system
+      windowMs: 60_000,
+      collectedAt: new Date().toISOString(),
+    };
+
+    // Build SomaticSnapshot
+    const somaticSnapshot = {
+      intensity: emotionalIntensity,
+      regulationMode:
+        emotionalIntensity > 0.7 ? ('cautious' as const) : ('normal' as const),
+      recentEventCount: somSnap.eventsSinceLastTick,
+      snapshotAt: new Date().toISOString(),
+    };
+
+    return homeostasis.plan(stats, somaticSnapshot);
+  };
+
+  runtime = {
+    registry,
+    governor,
+    provenance,
+    somatic,
+    bodyAffect: new BodyAffectBridge(registry),
+    homeostasis,
+    runHomeostasisPlan,
+  };
   return runtime;
 }
 
