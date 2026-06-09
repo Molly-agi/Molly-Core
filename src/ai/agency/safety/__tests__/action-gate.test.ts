@@ -2,12 +2,12 @@
  * @fileOverview Tests for Action Gate (D.1)
  */
 
-import { evaluateActionGate, GateDecision } from '../action-gate';
+import { evaluateActionGate } from '../action-gate';
 
 describe('Action Gate (D.1)', () => {
   describe('Structural Validation', () => {
-    test('rejects empty tool name', () => {
-      const decision = evaluateActionGate({
+    test('rejects empty tool name', async () => {
+      const decision = await evaluateActionGate({
         tool: '',
         params: {},
       });
@@ -16,9 +16,9 @@ describe('Action Gate (D.1)', () => {
       expect(decision.reason).toContain('Invalid tool name');
     });
 
-    test('rejects null tool name', () => {
-      const decision = evaluateActionGate({
-        tool: null as any,
+    test('rejects null tool name', async () => {
+      const decision = await evaluateActionGate({
+        tool: null as unknown as string,
         params: {},
       });
 
@@ -26,8 +26,8 @@ describe('Action Gate (D.1)', () => {
       expect(decision.reason).toContain('Invalid tool name');
     });
 
-    test('accepts valid tool name', () => {
-      const decision = evaluateActionGate({
+    test('accepts valid tool name', async () => {
+      const decision = await evaluateActionGate({
         tool: 'readProjectFile',
         params: { path: 'src/index.ts' },
       });
@@ -35,27 +35,27 @@ describe('Action Gate (D.1)', () => {
       expect(decision.allowed).toBe(true);
     });
 
-    test('rejects non-object params', () => {
-      const decision = evaluateActionGate({
+    test('rejects non-object params', async () => {
+      const decision = await evaluateActionGate({
         tool: 'readProjectFile',
-        params: 'not an object' as any,
+        params: 'not an object' as unknown as Record<string, unknown>,
       });
 
       expect(decision.allowed).toBe(false);
       expect(decision.reason).toContain('Invalid params');
     });
 
-    test('accepts undefined params', () => {
-      const decision = evaluateActionGate({
+    test('accepts undefined params', async () => {
+      const decision = await evaluateActionGate({
         tool: 'listCapabilities',
-        params: undefined as any,
+        params: undefined as unknown as Record<string, unknown>,
       });
 
       expect(decision.allowed).toBe(true);
     });
 
-    test('accepts empty params object', () => {
-      const decision = evaluateActionGate({
+    test('accepts empty params object', async () => {
+      const decision = await evaluateActionGate({
         tool: 'listCapabilities',
         params: {},
       });
@@ -65,8 +65,8 @@ describe('Action Gate (D.1)', () => {
   });
 
   describe('Decision Logging', () => {
-    test('includes tool name in decision', () => {
-      const decision = evaluateActionGate({
+    test('includes tool name in decision', async () => {
+      const decision = await evaluateActionGate({
         tool: 'safeBatch',
         params: {},
       });
@@ -74,9 +74,9 @@ describe('Action Gate (D.1)', () => {
       expect(decision.toolName).toBe('safeBatch');
     });
 
-    test('includes timestamp', () => {
+    test('includes timestamp', async () => {
       const before = Date.now();
-      const decision = evaluateActionGate({
+      const decision = await evaluateActionGate({
         tool: 'readProjectFile',
         params: {},
       });
@@ -86,8 +86,8 @@ describe('Action Gate (D.1)', () => {
       expect(decision.timestamp).toBeLessThanOrEqual(after);
     });
 
-    test('includes reason for approval', () => {
-      const decision = evaluateActionGate({
+    test('includes reason for approval', async () => {
+      const decision = await evaluateActionGate({
         tool: 'getSystemHealth',
         params: {},
       });
@@ -95,8 +95,8 @@ describe('Action Gate (D.1)', () => {
       expect(decision.reason).toContain('approved');
     });
 
-    test('includes reason for rejection', () => {
-      const decision = evaluateActionGate({
+    test('includes reason for rejection', async () => {
+      const decision = await evaluateActionGate({
         tool: '',
         params: {},
       });
@@ -104,15 +104,15 @@ describe('Action Gate (D.1)', () => {
       expect(decision.reason.length).toBeGreaterThan(0);
     });
 
-    test('sets severity appropriately', () => {
-      const approved = evaluateActionGate({
+    test('sets severity appropriately', async () => {
+      const approved = await evaluateActionGate({
         tool: 'readProjectFile',
         params: {},
       });
 
       expect(approved.severity).toBe('info');
 
-      const rejected = evaluateActionGate({
+      const rejected = await evaluateActionGate({
         tool: '',
         params: {},
       });
@@ -122,8 +122,8 @@ describe('Action Gate (D.1)', () => {
   });
 
   describe('Atomic Directive Enforcement', () => {
-    test('recognizes atomic directive context', () => {
-      const decision = evaluateActionGate({
+    test('recognizes atomic directive context', async () => {
+      const decision = await evaluateActionGate({
         tool: 'safeBatch',
         params: { isAtomicDirective: true },
         source: 'task',
@@ -132,8 +132,8 @@ describe('Action Gate (D.1)', () => {
       expect(decision.allowed).toBe(true);
     });
 
-    test('allows single action for atomic directive', () => {
-      const decision = evaluateActionGate({
+    test('allows single action for atomic directive', async () => {
+      const decision = await evaluateActionGate({
         tool: 'writeProjectFile',
         params: {
           isAtomicDirective: true,
@@ -148,11 +148,15 @@ describe('Action Gate (D.1)', () => {
   });
 
   describe('Destructive Operations', () => {
-    const destructiveTools = ['writeProjectFile', 'codespaceShell', 'deleteFile'];
+    const destructiveTools = [
+      'writeProjectFile',
+      'codespaceShell',
+      'deleteFile',
+    ];
 
     destructiveTools.forEach((tool) => {
-      test(`allows ${tool} with dryRun flag`, () => {
-        const decision = evaluateActionGate({
+      test(`allows ${tool} with dryRun flag`, async () => {
+        const decision = await evaluateActionGate({
           tool,
           params: { dryRun: true },
         });
@@ -160,8 +164,8 @@ describe('Action Gate (D.1)', () => {
         expect(decision.allowed).toBe(true);
       });
 
-      test(`allows ${tool} with confirmed flag`, () => {
-        const decision = evaluateActionGate({
+      test(`allows ${tool} with confirmed flag`, async () => {
+        const decision = await evaluateActionGate({
           tool,
           params: { confirmed: true },
         });
@@ -172,8 +176,8 @@ describe('Action Gate (D.1)', () => {
   });
 
   describe('Context Awareness', () => {
-    test('includes tool name in decision', () => {
-      const decision = evaluateActionGate({
+    test('includes tool name in decision', async () => {
+      const decision = await evaluateActionGate({
         tool: 'codespaceShell',
         params: { command: 'ls' },
       });
@@ -181,14 +185,14 @@ describe('Action Gate (D.1)', () => {
       expect(decision.toolName).toBe('codespaceShell');
     });
 
-    test('accepts source context', () => {
-      const decisionAuto = evaluateActionGate({
+    test('accepts source context', async () => {
+      const decisionAuto = await evaluateActionGate({
         tool: 'readProjectFile',
         params: {},
         source: 'autonomous',
       });
 
-      const decisionBridge = evaluateActionGate({
+      const decisionBridge = await evaluateActionGate({
         tool: 'readProjectFile',
         params: {},
         source: 'bridge',
@@ -198,8 +202,8 @@ describe('Action Gate (D.1)', () => {
       expect(decisionBridge.allowed).toBe(true);
     });
 
-    test('tracks session ID in context', () => {
-      const decision = evaluateActionGate({
+    test('tracks session ID in context', async () => {
+      const decision = await evaluateActionGate({
         tool: 'getSystemHealth',
         params: {},
         sessionId: 'session-123',
@@ -209,8 +213,8 @@ describe('Action Gate (D.1)', () => {
       // Session ID is passed to gate but not returned; it's used for logging
     });
 
-    test('tracks trace ID in context', () => {
-      const decision = evaluateActionGate({
+    test('tracks trace ID in context', async () => {
+      const decision = await evaluateActionGate({
         tool: 'getSystemHealth',
         params: {},
         traceId: 'trace-456',
@@ -222,8 +226,8 @@ describe('Action Gate (D.1)', () => {
   });
 
   describe('Edge Cases', () => {
-    test('handles whitespace-only tool name', () => {
-      const decision = evaluateActionGate({
+    test('handles whitespace-only tool name', async () => {
+      const decision = await evaluateActionGate({
         tool: '   ',
         params: {},
       });
@@ -231,8 +235,8 @@ describe('Action Gate (D.1)', () => {
       expect(decision.allowed).toBe(false);
     });
 
-    test('allows complex params', () => {
-      const decision = evaluateActionGate({
+    test('allows complex params', async () => {
+      const decision = await evaluateActionGate({
         tool: 'safeBatch',
         params: {
           steps: [
