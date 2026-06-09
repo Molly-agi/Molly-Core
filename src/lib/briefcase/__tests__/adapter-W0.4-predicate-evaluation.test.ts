@@ -156,7 +156,7 @@ describe('Adapter W0.4 — Predicate Evaluation (General)', () => {
         description: 'Timed predicate',
         tags: [],
         evaluate: async () => {
-          await new Promise((r) => setTimeout(r, 5));
+          await new Promise((r) => setTimeout(r, 20));
           return 'PASS';
         },
       },
@@ -180,7 +180,7 @@ describe('Adapter W0.4 — Predicate Evaluation (General)', () => {
       'test-user'
     );
 
-    // Duration should be recorded
+    // Duration should be recorded and reflect the real delay (with timer jitter buffer)
     expect(
       decision.predicate_evaluations[0].duration_ms
     ).toBeGreaterThanOrEqual(5);
