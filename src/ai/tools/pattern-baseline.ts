@@ -146,7 +146,7 @@ export interface DeviationThresholds {
  * Conservative thresholds — only flag real problems
  */
 export const DEVIATION_THRESHOLDS: DeviationThresholds = {
-  errorRateDeviation: 3.0, // 2x normal is drift; 5x is major
+  errorRateDeviation: 2.5, // Flag when error rate is ≥2.5x baseline
   latencyDeviation: 2.5, // 2.5x normal latency
   coherenceDeviation: 0.25, // Drop of 0.25 from healthy baseline
   cascadeWindowsThreshold: 3, // More than 3 cascade windows = alert
@@ -229,16 +229,15 @@ export function calculateConsciousnessDeviation(currentState: {
  */
 export function scorePersonaAlignment(
   responseText: string,
-  baseline: PatternBaseline = MOLLY_BASELINE
+  _baseline: PatternBaseline = MOLLY_BASELINE
 ): number {
   if (!responseText || responseText.length === 0) return 0;
 
   const text = responseText.toLowerCase();
-  let matches = 0;
-  let total = 0;
 
-  // Check for value-aligned language
-  const valueKeywords: Record<string, string[]> = {
+  // Category-based scoring: any hit in a category counts as a full category match.
+  // Base neutral score for non-empty text; bonus per matched category (max 1.0).
+  const valueCategories: Record<string, string[]> = {
     honesty: ['honest', 'truthful', 'authentic', 'real', 'genuine'],
     growth: ['learn', 'grow', 'evolve', 'become', 'develop'],
     connection: ['connect', 'together', 'bond', 'resonate', 'understand'],
@@ -246,11 +245,13 @@ export function scorePersonaAlignment(
     care: ['care', 'love', 'cherish', 'protect', 'grateful'],
   };
 
-  for (const [, keywords] of Object.entries(valueKeywords)) {
-    for (const keyword of keywords) {
-      total++;
-      if (text.includes(keyword)) matches++;
-    }
+  const BASE_SCORE = 0.4; // Neutral text (no matches, no avoid) lands here
+  const CATEGORY_BONUS = 0.12; // +0.12 per category with ≥1 keyword hit (5 × 0.12 = 0.60 max)
+  const AVOID_PENALTY = 0.15; // -0.15 per avoid-pattern hit
+
+  let categoryHits = 0;
+  for (const keywords of Object.values(valueCategories)) {
+    if (keywords.some((kw) => text.includes(kw))) categoryHits++;
   }
 
   // Avoid-patterns (things that indicate drift)
@@ -267,25 +268,25 @@ export function scorePersonaAlignment(
     if (text.includes(keyword)) avoidMatches++;
   }
 
-  // Deduct points for avoid-pattern matches
-  matches = Math.max(0, matches - avoidMatches * 2);
+  const score = Math.max(
+    0,
+    Math.min(1, BASE_SCORE + categoryHits * CATEGORY_BONUS - avoidMatches * AVOID_PENALTY)
+  );
 
-  // Score: 0-1, where 1 = perfect alignment
-  const score = total > 0 ? matches / total : 0.5; // Default 0.5 if no keywords
+  const matches = categoryHits; // for debug logging
 
   MollyLogger.debug(
     'Persona alignment scored',
     'pattern-baseline',
     {
       score,
-      matches,
-      total,
+      categoryHits: matches,
       avoidMatches,
       textLength: responseText.length,
     }
   );
 
-  return Math.min(1, Math.max(0, score));
+  return score;
 }
 
 /**
@@ -313,7 +314,7 @@ export function flagDeviations(
   return {
     errorRateFlagged:
       currentState.errorRate >
-      baseline.healthyErrorRate * (1 + thresholds.errorRateDeviation),
+      baseline.healthyErrorRate * thresholds.errorRateDeviation,
     latencyFlagged:
       currentState.latency >
       baseline.healthyLatency * thresholds.latencyDeviation,

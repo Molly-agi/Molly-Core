@@ -13,7 +13,7 @@
  * - Verify cache survives daemon restart
  */
 
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { promises as fs, mkdtempSync, rmSync } from 'fs';
 import os from 'os';
 import net from 'net';
@@ -25,7 +25,6 @@ function getFreePort() {
     srv.on('error', reject);
   });
 }
-import path from 'path';
 import { spawn } from 'child_process';
 import fetch from 'node-fetch';
 
@@ -67,7 +66,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
           if (stat.isFile()) {
             resolve();
           }
-        } catch (e) {
+        } catch {
           // File not created yet
         }
       };
@@ -112,7 +111,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
           );
 
           return res.ok;
-        } catch (e) {
+        } catch {
           return false;
         }
       };
@@ -121,7 +120,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
         try {
           const cacheData = await fs.readFile(NONCE_CACHE_PATH, 'utf-8');
           return cacheData.includes(nonce);
-        } catch (e) {
+        } catch {
           return false;
         }
       };
@@ -179,7 +178,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
           );
 
           return { ok: res.ok, status: res.status };
-        } catch (e) {
+        } catch {
           return { ok: false, status: 0 };
         }
       };
@@ -210,7 +209,6 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
   });
 
   it('F2.2.4: Nonce cache survives daemon restart', async () => {
-    jest.setTimeout(20000);
     return new Promise(async (resolve, reject) => {
       const testNonce = `restart-test-${Date.now()}`;
       const waitForDaemon = async () => {
@@ -248,7 +246,7 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
             }
           );
           return res.ok;
-        } catch (e) {
+        } catch {
           return false;
         }
       };
@@ -284,5 +282,5 @@ describe('W0.2 Finding F2.2: Persisted Nonce Cache', () => {
         );
       }
     });
-  });
+  }, 20000);
 });

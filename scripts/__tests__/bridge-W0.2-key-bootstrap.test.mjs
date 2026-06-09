@@ -12,9 +12,8 @@
  * - Verify message verification fails if key bootstrap was incomplete
  */
 
-import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
+import { describe, it, expect } from '@jest/globals';
 import { spawn } from 'child_process';
-import { createServer } from 'http';
 import fetch from 'node-fetch';
 import net from 'net';
 
@@ -43,9 +42,9 @@ describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
 
   it('F2.1.1: Daemon startup without BRIDGE_KEY env var should fail', async () => {
     return new Promise((resolve, reject) => {
-      // Start daemon WITHOUT BRIDGE_KEY
-      const env = { ...process.env };
-      delete env.BRIDGE_KEY;
+      // Start daemon WITHOUT BRIDGE_KEY — set empty string so dotenv won't
+      // overwrite it with a valid key from .env.local
+      const env = { ...process.env, BRIDGE_KEY: '', BRIDGE_PORT: String(BRIDGE_PORT) };
       delete env.SIGNING_KEY;
 
       bridgeProcess = spawn('node', ['scripts/bridge-daemon.mjs'], {
@@ -121,17 +120,6 @@ describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
         cwd: process.cwd(),
       });
 
-      let stdout = '';
-      let stderr = '';
-
-      bridgeProcess.stdout.on('data', (data) => {
-        stdout += data.toString();
-      });
-
-      bridgeProcess.stderr.on('data', (data) => {
-        stderr += data.toString();
-      });
-
       // Check if daemon started successfully
       const checkStartup = async () => {
         try {
@@ -141,7 +129,7 @@ describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
           if (res.ok) {
             resolve();
           }
-        } catch (e) {
+        } catch {
           // Not ready yet
         }
       };
@@ -201,7 +189,7 @@ describe('W0.2 Finding F2.1: Key Bootstrap Gap', () => {
               resolve();
             }
           }
-        } catch (e) {
+        } catch {
           // Still starting
         }
       };

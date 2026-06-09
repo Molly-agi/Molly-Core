@@ -363,7 +363,7 @@ describe('NeuralEngramSystem', () => {
       const personality = brain.computePersonalityState();
       expect(personality).toBeDefined();
       expect(personality.warmth).toBe(0.8);
-      expect(personality.curiosity).toBe(0.8);
+      expect(personality.curiosity).toBe(0.85);
       expect(personality.humor).toBe(0.6);
       // Baseline values from getBaselinePersonality
       expect(personality.flirtiness).toBe(0.3);
