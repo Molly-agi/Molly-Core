@@ -85,11 +85,18 @@ export async function evaluateActionGate(
       };
     }
   } catch {
-    // Autonomy permission check failure — log but don't block (graceful degradation)
+    // Autonomy permission check threw — fail CLOSED (L1 fix: no longer fail-open)
     MollyLogger.warn(
-      `[action-gate] Failed to check autonomy permission for ${tool}`,
+      `[action-gate] Autonomy permission check failed — denying ${tool} for safety`,
       traceId || 'unknown'
     );
+    return {
+      allowed: false,
+      reason: 'Autonomy permission check unavailable — denied for safety',
+      severity: 'error',
+      toolName: tool,
+      timestamp,
+    };
   }
 
   // Check circuit breaker
@@ -107,11 +114,18 @@ export async function evaluateActionGate(
       };
     }
   } catch {
-    // Circuit breaker check failure — log but don't block
+    // Circuit breaker threw — fail CLOSED (L1 fix: no longer fail-open)
     MollyLogger.warn(
-      `[action-gate] Failed to check circuit breaker for ${tool}`,
+      `[action-gate] Circuit breaker check failed — denying ${tool} for safety`,
       traceId || 'unknown'
     );
+    return {
+      allowed: false,
+      reason: 'Circuit breaker check unavailable — denied for safety',
+      severity: 'error',
+      toolName: tool,
+      timestamp,
+    };
   }
 
   // Check rate limiter budget
@@ -129,11 +143,18 @@ export async function evaluateActionGate(
       };
     }
   } catch {
-    // Rate limiter check failure — log but don't block
+    // Rate limiter threw — fail CLOSED (L1 fix: no longer fail-open)
     MollyLogger.warn(
-      `[action-gate] Failed to check rate limiter for ${tool}`,
+      `[action-gate] Rate limiter check failed — denying ${tool} for safety`,
       traceId || 'unknown'
     );
+    return {
+      allowed: false,
+      reason: 'Rate limiter check unavailable — denied for safety',
+      severity: 'error',
+      toolName: tool,
+      timestamp,
+    };
   }
 
   // === PHASE 3: TOOL-SPECIFIC VALIDATION ===
