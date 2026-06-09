@@ -580,6 +580,8 @@ function loadRoutingBindings() {
 }
 
 function isRoutingAllowed(from, to) {
+  // Dynamically registered agents can route freely between known agents
+  if (registeredAgents.has(from) || registeredAgents.has(to)) return true;
   if (!routingBindings) return false;
 
   for (const route of routingBindings.routes) {
@@ -906,7 +908,66 @@ const VALID_SENDERS = new Set([
   'aether',
   'atlas',
   'switchboard',
+  'skyler',
 ]);
+
+// ---- Dynamic Agent Registry ----
+// Agents not in VALID_SENDERS can self-register at runtime via WS { type: 'register' }
+// or HTTP POST /register. Bridge assigns a sequential numeric clientId.
+// Persisted across restarts at data/.bridge-registered-agents.json.
+const REGISTERED_AGENTS_PATH = join(
+  ROOT,
+  'data',
+  '.bridge-registered-agents.json'
+);
+let nextClientId = 100; // 1–99 reserved for legacy static entries
+const registeredAgents = new Map(); // name -> { id, registeredAt }
+
+function isKnownAgent(name) {
+  return (
+    typeof name === 'string' &&
+    (VALID_SENDERS.has(name) || registeredAgents.has(name))
+  );
+}
+
+function loadRegisteredAgents() {
+  try {
+    if (existsSync(REGISTERED_AGENTS_PATH)) {
+      const data = JSON.parse(readFileSync(REGISTERED_AGENTS_PATH, 'utf-8'));
+      for (const [name, info] of Object.entries(data)) {
+        registeredAgents.set(name, info);
+        if (info.id >= nextClientId) nextClientId = info.id + 1;
+      }
+      console.log(
+        `[bridge] Loaded ${registeredAgents.size} registered agent(s)`
+      );
+    }
+  } catch (e) {
+    console.warn('[bridge] Failed to load registered agents:', e.message);
+  }
+}
+
+function saveRegisteredAgents() {
+  try {
+    writeFileSync(
+      REGISTERED_AGENTS_PATH,
+      JSON.stringify(Object.fromEntries(registeredAgents), null, 2),
+      'utf-8'
+    );
+  } catch {
+    /* non-fatal */
+  }
+}
+
+function registerAgent(name) {
+  if (!registeredAgents.has(name)) {
+    const id = nextClientId++;
+    registeredAgents.set(name, { id, registeredAt: new Date().toISOString() });
+    saveRegisteredAgents();
+    console.log(`[bridge] Agent registered: ${name} (clientId=${id})`);
+  }
+  return registeredAgents.get(name);
+}
 
 // ---- Dual-Lane Routing Functions ----
 function routeMessageToLane(msg) {
@@ -959,7 +1020,7 @@ function getStateSnapshot() {
 }
 
 function handleMessage(from, content, to) {
-  if (!from || !content || !VALID_SENDERS.has(from)) {
+  if (!from || !content || !isKnownAgent(from)) {
     // F2.3: Quarantine invalid messages
     if (content) {
       quarantineMessage(
@@ -975,7 +1036,7 @@ function handleMessage(from, content, to) {
       return null;
     }
   }
-  if (to && !VALID_SENDERS.has(to)) {
+  if (to && !isKnownAgent(to)) {
     // F2.3: Quarantine invalid recipient
     quarantineMessage({ from, content, to }, 'invalid_recipient');
     return null;
@@ -1270,6 +1331,55 @@ function handleHTTP(req, res) {
     return;
   }
 
+  // GET /agents — list all known agents (static + dynamically registered)
+  if (req.method === 'GET' && url.pathname === '/agents') {
+    const staticAgents = [...VALID_SENDERS].map((name) => ({
+      name,
+      type: 'static',
+      clientId: null,
+    }));
+    const dynAgents = [...registeredAgents.entries()].map(([name, info]) => ({
+      name,
+      type: 'registered',
+      clientId: info.id,
+      registeredAt: info.registeredAt,
+    }));
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ agents: [...staticAgents, ...dynAgents] }));
+    return;
+  }
+
+  // POST /register — HTTP-based agent registration (for non-WS agents)
+  if (req.method === 'POST' && url.pathname === '/register') {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      try {
+        const { name } = JSON.parse(body);
+        if (!name || typeof name !== 'string' || !name.trim()) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'name is required' }));
+          return;
+        }
+        const info = registerAgent(name.trim().toLowerCase());
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(
+          JSON.stringify({
+            clientId: info.id,
+            name: name.trim().toLowerCase(),
+            registeredAt: info.registeredAt,
+          })
+        );
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Invalid JSON' }));
+      }
+    });
+    return;
+  }
+
   // GET /messages — always re-read from disk to stay in sync
   if (req.method === 'GET' && url.pathname === '/messages') {
     loadMessages(); // Re-read from disk so we see writes from Next.js API
@@ -1279,7 +1389,7 @@ function handleHTTP(req, res) {
       200
     );
 
-    if (unreadFor && VALID_SENDERS.has(unreadFor)) {
+    if (unreadFor && isKnownAgent(unreadFor)) {
       const unread = getUnread(unreadFor);
       markRead(unreadFor);
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -1343,7 +1453,7 @@ function handleHTTP(req, res) {
   // Agent holds this connection open. Messages pushed in real-time.
   if (req.method === 'GET' && url.pathname === '/api/bridge/sse') {
     const agent = url.searchParams.get('agent') || '';
-    if (!agent || !VALID_SENDERS.has(agent)) {
+    if (!agent || !isKnownAgent(agent)) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Invalid or missing agent param' }));
       return;
@@ -1486,7 +1596,7 @@ function handleHTTP(req, res) {
       200
     );
 
-    if (unreadFor && VALID_SENDERS.has(unreadFor)) {
+    if (unreadFor && isKnownAgent(unreadFor)) {
       const unread = getUnread(unreadFor);
       // Default behavior is consume-on-read for backward compatibility.
       // Pass ?peek=1 for non-destructive reads (debugging/observer UIs).
@@ -1561,7 +1671,7 @@ function handleHTTP(req, res) {
         // Explicit read acknowledgement
         if (action === 'markRead') {
           const recipient = String(payload.recipient || from || '').trim();
-          if (!VALID_SENDERS.has(recipient)) {
+          if (!isKnownAgent(recipient)) {
             res.writeHead(400, { 'Content-Type': 'application/json' });
             res.end(
               JSON.stringify({ error: 'Invalid recipient for markRead action' })
@@ -1701,7 +1811,7 @@ wss.on('connection', (ws) => {
       const data = JSON.parse(raw.toString());
 
       // Identify: { type: 'identify', identity: 'molly'|'lazarus'|'eric' }
-      if (data.type === 'identify' && VALID_SENDERS.has(data.identity)) {
+      if (data.type === 'identify' && isKnownAgent(data.identity)) {
         client.identity = data.identity;
         client.authenticated = true;
         console.log(`[bridge] Client identified as: ${data.identity}`);
@@ -1738,6 +1848,32 @@ wss.on('connection', (ws) => {
               latestCheckpoint?.id || null
             );
           }
+        }
+        return;
+      }
+
+      // Register: { type: 'register', name: 'skyler' }
+      // Any agent can self-register. Bridge assigns a numeric clientId and replies
+      // with { type: 'registered', clientId, name }. Unread messages pushed immediately.
+      if (
+        data.type === 'register' &&
+        typeof data.name === 'string' &&
+        data.name.trim()
+      ) {
+        const name = data.name.trim().toLowerCase();
+        const info = registerAgent(name);
+        client.identity = name;
+        client.authenticated = true;
+        ws.send(
+          JSON.stringify({ type: 'registered', clientId: info.id, name })
+        );
+        console.log(
+          `[bridge] Client registered as: ${name} (clientId=${info.id})`
+        );
+        const unread = getUnread(name);
+        if (unread.length > 0) {
+          ws.send(JSON.stringify({ type: 'unread', messages: unread }));
+          markRead(name);
         }
         return;
       }
@@ -1848,7 +1984,7 @@ wss.on('connection', (ws) => {
       }
 
       // Mark read: { type: 'markRead', identity: '...' }
-      if (data.type === 'markRead' && VALID_SENDERS.has(data.identity)) {
+      if (data.type === 'markRead' && isKnownAgent(data.identity)) {
         markRead(data.identity);
         return;
       }
@@ -1883,6 +2019,7 @@ try {
   ensureQuarantineLedger(); // F2.3: Create quarantine ledger
   loadNonceCache(); // F2.2: Load persisted nonce cache
   loadRoutingBindings(); // F2.4: Load explicit routing bindings
+  loadRegisteredAgents(); // Dynamic agent registry
   console.log('[bridge] W0.2 Bridge Hardening — All checks passed');
 } catch (err) {
   console.error('[bridge] W0.2 FATAL ERROR:', err.message);
@@ -1979,14 +2116,14 @@ function wakeAgent(agentName, from = null, content = null) {
   // 1. Legacy format: .{recipient}-wake (for old extensions v1.0.15)
   // 2. Channel format: .{recipient}-wake-from-{sender} (for new extensions v1.0.16+)
   // This ensures backward compatibility during transition
-  
+
   const metadata = JSON.stringify({
     timestamp: new Date().toISOString(),
     from,
     content: content || 'check-bridge',
     wokenAt: Date.now(),
   });
-  
+
   // Write legacy format for backward compatibility
   const legacyWakeFile = join(WAKE_DIR, `.${agentName}-wake`);
   try {
@@ -1995,7 +2132,7 @@ function wakeAgent(agentName, from = null, content = null) {
   } catch (err) {
     // Non-fatal
   }
-  
+
   // Write channel format for new extensions
   if (from) {
     const channelWakeFile = join(WAKE_DIR, `.${agentName}-wake-from-${from}`);
@@ -2010,7 +2147,9 @@ function wakeAgent(agentName, from = null, content = null) {
 }
 
 function detectAddressedRecipients(content) {
-  const text = String(content || '').trim().toLowerCase();
+  const text = String(content || '')
+    .trim()
+    .toLowerCase();
   if (!text) return [];
 
   const recipients = [];
@@ -2041,7 +2180,7 @@ function detectAddressedRecipients(content) {
 function sendWakeIfNeeded(to, from, content) {
   // PRIMARY: explicit channel route (to field specified)
   // This is the main mechanism for channel-based routing
-  if (to && VALID_SENDERS.has(to)) {
+  if (to && isKnownAgent(to)) {
     const r = wakeAgent(to, from, content);
     console.log(
       `[bridge] channel-wake to=${to} from=${from} channel=${to}-${from} sigusr1=${r.sigusr1Sent} fallback=${r.fallbackFileTouched}${r.pid ? ` pid=${r.pid}` : ''}`
@@ -2053,7 +2192,7 @@ function sendWakeIfNeeded(to, from, content) {
   // This covers curl usage where `to` is omitted (e.g., "Lazarus, ...")
   const addressed = detectAddressedRecipients(content);
   for (const recipient of addressed) {
-    if (recipient !== from && VALID_SENDERS.has(recipient)) {
+    if (recipient !== from && isKnownAgent(recipient)) {
       const r = wakeAgent(recipient, from, content);
       console.log(
         `[bridge] content-addressed-wake recipient=${recipient} from=${from} channel=${recipient}-${from} sigusr1=${r.sigusr1Sent} fallback=${r.fallbackFileTouched}${r.pid ? ` pid=${r.pid}` : ''}`

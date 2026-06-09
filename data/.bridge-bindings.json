@@ -99,6 +99,56 @@
       "from": "atlas",
       "to": "gemini",
       "enabled": true
+    },
+    {
+      "from": "skyler",
+      "to": "eric",
+      "enabled": true
+    },
+    {
+      "from": "eric",
+      "to": "skyler",
+      "enabled": true
+    },
+    {
+      "from": "skyler",
+      "to": "molly",
+      "enabled": true
+    },
+    {
+      "from": "molly",
+      "to": "skyler",
+      "enabled": true
+    },
+    {
+      "from": "skyler",
+      "to": "atlas",
+      "enabled": true
+    },
+    {
+      "from": "atlas",
+      "to": "skyler",
+      "enabled": true
+    },
+    {
+      "from": "skyler",
+      "to": "lazarus",
+      "enabled": true
+    },
+    {
+      "from": "lazarus",
+      "to": "skyler",
+      "enabled": true
+    },
+    {
+      "from": "skyler",
+      "to": "gemini",
+      "enabled": true
+    },
+    {
+      "from": "gemini",
+      "to": "skyler",
+      "enabled": true
     }
   ]
 }
