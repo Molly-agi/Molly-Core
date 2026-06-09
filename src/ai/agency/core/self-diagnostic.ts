@@ -973,7 +973,32 @@ export async function runFullDiagnostic(
   const agency = await diagnoseAgency();
   const network = await diagnoseNetwork();
 
-  const domains = { system, aiCore, memory, agency, network };
+  // Build resiliency diagnostic from health metrics
+  const healthMetrics = _getHealthMetrics();
+  const openCircuits = Object.values(healthMetrics.circuitBreakers).filter(
+    (s) => s === 'OPEN'
+  ).length;
+  const resiliency: DiagnosticResult = {
+    domain: 'resiliency',
+    status:
+      healthMetrics.healthScore >= 70
+        ? 'healthy'
+        : healthMetrics.healthScore >= 40
+          ? 'degraded'
+          : 'critical',
+    checks: [
+      {
+        name: 'circuit-breakers',
+        status: openCircuits === 0 ? 'healthy' : 'degraded',
+        value: openCircuits,
+      },
+    ],
+    recommendations:
+      openCircuits > 0 ? [`Circuit breakers open: ${openCircuits}`] : [],
+    healingActions: [],
+  };
+
+  const domains = { system, aiCore, memory, agency, network, resiliency };
 
   // Determine overall status
   let overallStatus: DiagnosticSeverity = 'healthy';

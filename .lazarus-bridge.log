@@ -62,3 +62,16 @@ Node.js v24.14.0
 [2026-06-08T00:10:22.202Z] relay connected
 [WAKE-LISTENER] lazarus listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.lazarus-wake (SIGUSR1 primary, watchFile fallback)
 [2026-06-08T16:59:21.704Z] relay connected
+[WAKE-LISTENER] lazarus listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.lazarus-wake (SIGUSR1 primary, watchFile fallback)
+[2026-06-09T14:35:36.157Z] relay error: 
+[2026-06-09T14:35:36.158Z] relay disconnected
+[2026-06-09T14:35:36.158Z] relay reconnecting attempt 1
+[2026-06-09T14:35:36.158Z] relay connect failed: 
+[WAKE-LISTENER] lazarus listening for wake signals at /workspaces/Molly-Core/.bridge-wake/.lazarus-wake (SIGUSR1 primary, watchFile fallback)
+[2026-06-09T14:35:51.184Z] relay connected
+[2026-06-09T14:36:10.504Z] relay disconnected
+[2026-06-09T14:36:10.504Z] relay reconnecting attempt 1
+[2026-06-09T14:36:13.510Z] relay connected
+[2026-06-09T14:36:58.060Z] relay disconnected
+[2026-06-09T14:36:58.060Z] relay reconnecting attempt 1
+[2026-06-09T14:37:01.067Z] relay connected

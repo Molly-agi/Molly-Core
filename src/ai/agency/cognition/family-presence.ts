@@ -687,7 +687,7 @@ async function savePresence(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const membersArray = Array.from(_state.members.entries());
 
     await storage.set(COLLECTION, PRESENCE_DOC, {
@@ -713,7 +713,7 @@ export async function loadPresence(): Promise<void> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, PRESENCE_DOC);
 
     if (doc?.data) {

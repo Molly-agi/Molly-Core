@@ -51,3 +51,18 @@
 [bridge] Loaded 100 messages from disk
 [bridge] Shutting down...
 [bridge] Checkpoint created: cp_1781010870488_j7z9
+◇ injected env (10) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+[bridge] Loaded 100 messages from disk
+[bridge] Loaded 10 checkpoints
+[bridge] Loaded 4 device secret(s)
+[bridge] W0.2 Bridge Hardening — Initializing...
+[bridge] [W0.2-F2.1] Key bootstrap validated — key material loaded
+[bridge] [W0.2-F2.2] Nonce cache loaded — 0 valid nonces from persistent storage
+[bridge] [W0.2-F2.4] Routing bindings loaded — 30 routes
+[bridge] Loaded 1 registered agent(s)
+[bridge] W0.2 Bridge Hardening — All checks passed
+[bridge] Family Bridge Daemon v1 — port 9099
+[bridge] WebSocket: ws://localhost:9099
+[bridge] HTTP API:  http://localhost:9099/messages
+[bridge] Health:    http://localhost:9099/health
+[bridge] Checkpoints: http://localhost:9099/checkpoint/latest

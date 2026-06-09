@@ -151,7 +151,12 @@ console.log('TEST GROUP: projectPhase is registry-tunable');
   const model = new TemporalModel(registry, provenance);
 
   // Override via registry
-  registry.commit('temporal.projectPhase', 'alpha', 'temporal-model');
+  registry.commit(
+    'temporal.projectPhase',
+    'alpha',
+    'temporal-model',
+    'test override'
+  );
 
   const ctx = model.getTemporalContext(fakeDate(10, 1));
   assert.strictEqual(
