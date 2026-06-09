@@ -95,7 +95,7 @@ export class SecureShell {
       {
         key: 'shell.maxOutputBytes',
         default: 32 * 1024, // 32 KB
-        min: 1024,
+        min: 64, // 64 bytes minimum — allows meaningful truncation testing
         max: 512 * 1024,
         description: 'Max stdout/stderr bytes returned from a shell command',
       },
@@ -194,17 +194,17 @@ export class SecureShell {
 
     try {
       this.executionTimestamps.push(Date.now());
+      const safeEnv: NodeJS.ProcessEnv = Object.fromEntries(
+        Object.entries(process.env).filter(
+          ([k]) =>
+            !/API_KEY|SECRET|TOKEN|PASSWORD|CREDENTIAL|SERVICE_ACCOUNT/i.test(k)
+        )
+      ) as NodeJS.ProcessEnv;
       const result = await execAsync(command, {
         cwd: this.workspaceRoot,
         timeout: timeoutMs,
         maxBuffer: 1024 * 1024, // 1MB exec buffer — we do our own truncation below
-        // Strip known credential keys from the child's environment
-        env: Object.fromEntries(
-          Object.entries(process.env).filter(
-            ([k]) =>
-              !/API_KEY|SECRET|TOKEN|PASSWORD|CREDENTIAL|SERVICE_ACCOUNT/i.test(k)
-          )
-        ),
+        env: safeEnv,
       });
       rawStdout = result.stdout ?? '';
       rawStderr = result.stderr ?? '';
@@ -229,7 +229,7 @@ export class SecureShell {
     // ── 6. Secret scan output ────────────────────────────────────────────
     const stdoutScan = scanForSecrets(truncStdout);
     const stderrScan = scanForSecrets(truncStderr);
-    const hadSecretsRedacted = stdoutScan.found || stderrScan.found;
+    const hadSecretsRedacted = stdoutScan.hasSecrets || stderrScan.hasSecrets;
 
     if (hadSecretsRedacted) {
       MollyLogger.warn(
@@ -300,7 +300,9 @@ export class SecureShell {
 
   private pruneExpiredTimestamps(): void {
     const cutoff = Date.now() - 60_000;
-    this.executionTimestamps = this.executionTimestamps.filter((t) => t > cutoff);
+    this.executionTimestamps = this.executionTimestamps.filter(
+      (t) => t > cutoff
+    );
   }
 
   private blocked(

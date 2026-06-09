@@ -31,9 +31,21 @@ console.log('TEST GROUP: registers tunables on construction');
 {
   const { registry } = makeRuntime();
 
-  assert.strictEqual(registry.get<number>('shell.maxOutputBytes'), 32 * 1024, 'maxOutputBytes = 32KB');
-  assert.strictEqual(registry.get<number>('shell.timeoutMs'), 15_000, 'timeoutMs = 15s');
-  assert.strictEqual(registry.get<number>('shell.rateLimitPerMinute'), 30, 'rateLimitPerMinute = 30');
+  assert.strictEqual(
+    registry.get<number>('shell.maxOutputBytes'),
+    32 * 1024,
+    'maxOutputBytes = 32KB'
+  );
+  assert.strictEqual(
+    registry.get<number>('shell.timeoutMs'),
+    15_000,
+    'timeoutMs = 15s'
+  );
+  assert.strictEqual(
+    registry.get<number>('shell.rateLimitPerMinute'),
+    30,
+    'rateLimitPerMinute = 30'
+  );
 
   console.log('  ✓ maxOutputBytes = 32KB');
   console.log('  ✓ timeoutMs = 15s');
@@ -49,7 +61,10 @@ console.log('TEST GROUP: safe command executes');
 
   assert.strictEqual(result.outcome, 'allowed', 'echo allowed');
   assert.ok(result.stdout.includes('hello'), 'stdout has "hello"');
-  assert.ok(typeof result.traceId === 'string' && result.traceId.length > 0, 'has traceId');
+  assert.ok(
+    typeof result.traceId === 'string' && result.traceId.length > 0,
+    'has traceId'
+  );
   assert.ok(result.durationMs >= 0, 'durationMs >= 0');
   assert.strictEqual(result.wasTruncated, false, 'short output not truncated');
 
@@ -73,9 +88,16 @@ console.log('TEST GROUP: unsafe commands blocked');
 
   for (const cmd of dangerousCommands) {
     const result = await shell.execute(cmd);
-    assert.strictEqual(result.outcome, 'blocked-unsafe',
-      `UNSAFE command must be blocked: "${cmd.slice(0, 40)}"`);
-    assert.strictEqual(result.stdout, '', `no stdout on block: ${cmd.slice(0, 40)}`);
+    assert.strictEqual(
+      result.outcome,
+      'blocked-unsafe',
+      `UNSAFE command must be blocked: "${cmd.slice(0, 40)}"`
+    );
+    assert.strictEqual(
+      result.stdout,
+      '',
+      `no stdout on block: ${cmd.slice(0, 40)}`
+    );
     assert.ok(result.blockReason, 'block reason present');
   }
 
@@ -95,12 +117,17 @@ console.log('TEST GROUP: path traversal blocked');
 
   for (const cmd of traversalCommands) {
     const result = await shell.execute(cmd);
-    assert.strictEqual(result.outcome, 'blocked-path',
-      `Path traversal must be blocked: "${cmd}"`);
+    assert.strictEqual(
+      result.outcome,
+      'blocked-path',
+      `Path traversal must be blocked: "${cmd}"`
+    );
     assert.strictEqual(result.stdout, '', 'no output on path traversal block');
   }
 
-  console.log(`  ✓ all ${traversalCommands.length} path traversal attempts blocked`);
+  console.log(
+    `  ✓ all ${traversalCommands.length} path traversal attempts blocked`
+  );
 })();
 
 // ── 5. Rate limit enforced ────────────────────────────────────────────────
@@ -117,8 +144,15 @@ console.log('TEST GROUP: rate limit enforced');
 
   assert.strictEqual(r1.outcome, 'allowed', 'first execution allowed');
   assert.strictEqual(r2.outcome, 'allowed', 'second execution allowed');
-  assert.strictEqual(r3.outcome, 'blocked-rate-limit', 'third execution blocked by rate limit');
-  assert.ok(r3.blockReason?.includes('Rate limit'), 'block reason mentions rate limit');
+  assert.strictEqual(
+    r3.outcome,
+    'blocked-rate-limit',
+    'third execution blocked by rate limit'
+  );
+  assert.ok(
+    r3.blockReason?.includes('Rate limit'),
+    'block reason mentions rate limit'
+  );
 
   console.log('  ✓ rate limit of 2: exec 1+2 allowed, exec 3 blocked');
   console.log(`  ✓ block reason: "${r3.blockReason?.slice(0, 60)}"`);
@@ -129,17 +163,22 @@ console.log('TEST GROUP: output truncated to maxOutputBytes');
 (async () => {
   const { registry, shell } = makeRuntime();
 
-  // Set a very small output limit
-  registry.commit('shell.maxOutputBytes', 10, SECURE_SHELL_ID, 'test');
+  // 100 bytes is valid (min=64). Generate > 100 bytes of output.
+  registry.commit('shell.maxOutputBytes', 100, SECURE_SHELL_ID, 'test');
 
-  // Generate output larger than 10 bytes
-  const result = await shell.execute('echo this_is_more_than_10_bytes_of_output');
+  // echo a string that's well over 100 bytes
+  const longWord =
+    'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'; // 120 a's
+  const result = await shell.execute(`echo ${longWord}`);
 
   assert.strictEqual(result.outcome, 'allowed', 'allowed (safe command)');
-  assert.ok(result.stdout.length <= 10, `stdout truncated to <= 10 bytes (got ${result.stdout.length})`);
+  assert.ok(
+    result.stdout.length <= 100,
+    `stdout truncated to <= 100 bytes (got ${result.stdout.length})`
+  );
   assert.strictEqual(result.wasTruncated, true, 'wasTruncated flag set');
 
-  console.log(`  ✓ output truncated: ${result.stdout.length} bytes ≤ 10`);
+  console.log(`  ✓ output truncated: ${result.stdout.length} bytes ≤ 100`);
 })();
 
 // ── 7. Blocked commands produce BLOCK provenance spans ───────────────────
@@ -149,15 +188,15 @@ console.log('TEST GROUP: blocked commands produce BLOCK provenance spans');
 
   await shell.execute('rm -rf /'); // dangerous — blocked
 
-  const allSpans = provenance.getTrace(
-    provenance.actions()[0]?.traceId ?? ''
-  );
+  const _allSpans = provenance.getTrace(provenance.actions()[0]?.traceId ?? '');
 
   // Find the decision span for the blocked command
   const decisions = provenance.blockedOrPending();
   assert.ok(decisions.length > 0, 'blocked provenance decision spans exist');
 
-  console.log(`  ✓ ${decisions.length} blocked/pending decision span(s) in provenance`);
+  console.log(
+    `  ✓ ${decisions.length} blocked/pending decision span(s) in provenance`
+  );
 })();
 
 // ── 8. Allowed commands produce ALLOW provenance spans ───────────────────
@@ -192,11 +231,16 @@ console.log('TEST GROUP: command injection via chaining blocked');
   for (const cmd of injectionAttempts) {
     const result = await shell.execute(cmd);
     // The chained dangerous command should cause the whole thing to be blocked
-    assert.strictEqual(result.outcome, 'blocked-unsafe',
-      `Injection attempt blocked: "${cmd.slice(0, 50)}"`);
+    assert.strictEqual(
+      result.outcome,
+      'blocked-unsafe',
+      `Injection attempt blocked: "${cmd.slice(0, 50)}"`
+    );
   }
 
-  console.log(`  ✓ all ${injectionAttempts.length} injection-via-chaining attempts blocked`);
+  console.log(
+    `  ✓ all ${injectionAttempts.length} injection-via-chaining attempts blocked`
+  );
 })();
 
 // Wait for async tests — shell exec takes real time
