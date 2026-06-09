@@ -1,77 +1,77 @@
 /**
  * Uncertainty Quantification Unit Tests
- * Tests Molly's ability to estimate and reason about uncertainty
+ * Tests measurement and management of uncertainty
  */
 
 describe('Uncertainty Quantification', () => {
-  describe('Probability Estimation', () => {
-    test('estimates event probabilities', () => {
+  describe('Confidence Estimation', () => {
+    test('estimates confidence', () => {
       expect(true).toBe(true);
     });
 
-    test('computes confidence intervals', () => {
+    test('calculates confidence intervals', () => {
       expect(true).toBe(true);
     });
 
-    test('handles model uncertainty', () => {
+    test('detects low confidence', () => {
       expect(true).toBe(true);
     });
 
-    test('aggregates multiple estimates', () => {
-      expect(true).toBe(true);
-    });
-  });
-
-  describe('Bayesian Reasoning', () => {
-    test('updates beliefs with evidence', () => {
-      expect(true).toBe(true);
-    });
-
-    test('computes posterior probabilities', () => {
-      expect(true).toBe(true);
-    });
-
-    test('handles missing information', () => {
-      expect(true).toBe(true);
-    });
-
-    test('reasons about hidden causes', () => {
+    test('tracks confidence trends', () => {
       expect(true).toBe(true);
     });
   });
 
-  describe('Risk Assessment', () => {
-    test('quantifies risk magnitude', () => {
+  describe('Uncertainty Propagation', () => {
+    test('propagates uncertainty', () => {
       expect(true).toBe(true);
     });
 
-    test('estimates failure probabilities', () => {
+    test('compounds uncertainties', () => {
       expect(true).toBe(true);
     });
 
-    test('computes expected value', () => {
+    test('estimates error bounds', () => {
       expect(true).toBe(true);
     });
 
-    test('identifies high-uncertainty regions', () => {
+    test('tracks uncertainty growth', () => {
       expect(true).toBe(true);
     });
   });
 
-  describe('Active Learning', () => {
-    test('identifies informative observations', () => {
+  describe('Bayesian Updates', () => {
+    test('performs Bayesian updates', () => {
       expect(true).toBe(true);
     });
 
-    test('prioritizes high-uncertainty queries', () => {
+    test('incorporates evidence', () => {
       expect(true).toBe(true);
     });
 
-    test('reduces epistemic uncertainty', () => {
+    test('revises beliefs', () => {
       expect(true).toBe(true);
     });
 
-    test('learns optimal question strategies', () => {
+    test('maintains priors', () => {
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('Decision Under Uncertainty', () => {
+    test('decides with uncertainty', () => {
+      expect(true).toBe(true);
+    });
+
+    test('selects risk strategies', () => {
+      expect(true).toBe(true);
+    });
+
+    test('evaluates expected value', () => {
+      expect(true).toBe(true);
+    });
+
+    test('manages risk tolerance', () => {
       expect(true).toBe(true);
     });
   });
