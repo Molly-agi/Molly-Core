@@ -76,13 +76,13 @@ function testStructuralValidation() {
 
   // Test: missing type
   result = evaluateActionGate(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     {
       target: 'x',
       payload: {},
       confidence: 0.5,
       ambiguity: 0.2,
       risk: 0.1,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any,
     ctx
   );
