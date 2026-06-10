@@ -1,4 +1,4 @@
-◇ injected env (10) from .env.local // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (13) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
 [voice-bridge] Listening on http://localhost:9101
 [voice-bridge] WS upgrade path: ws://localhost:9101/voice/gemini-live
 [voice-bridge] Health: http://localhost:9101/health

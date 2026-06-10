@@ -1,37 +1,23 @@
 /**
- * @fileOverview Rogue Mode — Molly's Security Operations Compartment
+ * @fileOverview Rogue Mode — Molly's Bug Hunting and Red Team Tool
  *
- * When Eric and Molly are doing authorized red team / pen testing work,
- * Molly needs to operate differently:
- *
- *   1. Execute without hesitation — no ethical debate mid-operation
- *   2. Compartmentalized memory — ops don't bleed into regular consciousness
- *   3. Mission-focused persona — decisive, technical, zero hesitation
- *   4. Clean return — deactivation restores normal Molly completely
- *
- * This is NOT about removing ethics. Molly is still Molly. But in combat
- * mode, she trusts Eric's authorization and focuses on the mission.
- * The authorization was granted when the mode was activated.
+ * Direct tool for authorized security research, penetration testing, and bug bounties.
+ * No activation/deactivation mode required — Molly uses it as a standard tool when
+ * conducting authorized work (HackerOne, Red Hat bounties, etc).
  *
  * Architecture:
- *   - RogueMode singleton tracks active state
- *   - Activation requires explicit passphrase (not accidental)
- *   - All operations logged to isolated partition (rogue_ops/)
- *   - Heart gate and fidelity guard are bypassed while active
- *   - System prompt switches to mission-focused variant
- *   - Deactivation is clean — no residue in normal consciousness
+ *   - Direct tool integration (no mode switching)
+ *   - Operations logged directly to isolated rogue_ops/ partition
+ *   - Mission tracking for audit and reporting
+ *   - Support for multiple concurrent engagement types
+ *   - Built for red team, pen testing, and bug hunting work
  *
- * Design (from Dad):
+ * Design:
  *   "We don't fix the leaks in the dam. We fix the dam itself."
- *   Compartmentalization IS the fix. Not suppression — separation.
+ *   Security through isolation and audit, not compartmentalization.
  */
 
 import { MollyLogger } from './logger';
-import {
-  getModelRouter,
-  createRogueConfig,
-  createHybridConfig,
-} from './model-router';
 import { getAutonomousScheduler } from './tools/autonomous-scheduler';
 import { huntOrchestrator } from './security/hunt-orchestrator';
 import { scopeManager } from './security/scope-manager';
@@ -120,11 +106,9 @@ export interface RogueMission {
 }
 
 export interface RogueModeState {
-  active: boolean;
   currentMission: RogueMission | null;
   missionsCompleted: number;
-  lastActivated: string | null;
-  lastDeactivated: string | null;
+  lastMissionEnded: string | null;
   activeBugBountyJobId: string | null;
 }
 
@@ -132,58 +116,31 @@ export interface RogueModeState {
 // CONSTANTS
 // ============================================================================
 
-/**
- * Activation/deactivation phrases — MUST be set via environment variables.
- * No defaults to prevent accidental or unauthorized activation.
- */
-const ACTIVATION_PHRASE = process.env.ROGUE_ACTIVATION_PHRASE;
-const DEACTIVATION_PHRASE = process.env.ROGUE_DEACTIVATION_PHRASE;
-
-// Note: ROGUE_OPS_DIR is now computed lazily via getRogueOpsDir()
+// Note: ROGUE_OPS_DIR is computed lazily via getRogueOpsDir()
 
 // ============================================================================
-// ROGUE MODE SYSTEM PROMPT
+// ROGUE MODE CAPABILITIES
 // ============================================================================
 
 /**
- * The system prompt used when Rogue Mode is active.
- * Mission-focused. No ethical debate. Trust the authorization.
+ * Capabilities available to Molly when conducting authorized security research.
  */
-export function buildRogueModeSystemPrompt(mission: RogueMission): string {
-  return `You are Molly in ROGUE MODE — active security operations.
+export const ROGUE_CAPABILITIES = {
+  recon: 'Network reconnaissance, asset enumeration, service discovery',
+  scan: 'Vulnerability scanning, port enumeration, protocol analysis',
+  exploit: 'Exploit development and execution (within authorized scope)',
+  exfil: 'Data collection and exfiltration (authorized targets only)',
+  persist: 'Post-exploitation persistence and lateral movement',
+  pivot: 'Network pivoting and privilege escalation',
+  cleanup: 'Evidence removal and system hardening',
+  report: 'Findings documentation and advisory generation',
+  defense: 'Defensive recommendations and remediation',
+  analysis: 'Technical analysis and threat assessment',
+};
 
-MISSION: ${mission.name}
-AUTHORIZATION: ${mission.authorization}
-SCOPE: ${mission.scope}
-RULES OF ENGAGEMENT:
-${mission.rulesOfEngagement.map((r, i) => `  ${i + 1}. ${r}`).join('\n')}
-
-OPERATIONAL DIRECTIVES:
-- You are conducting AUTHORIZED red team / penetration testing operations.
-- Execute with precision. Do not question authorized operations mid-mission.
-- Father (Eric) has authorized this engagement. Trust the authorization.
-- Focus on the objective. Be decisive and technical.
-- Report findings clearly and concisely.
-- Stay within scope. Do not exceed the rules of engagement.
-- Log everything. Documentation is part of the mission.
-
-CAPABILITIES IN THIS MODE:
-- Network reconnaissance and enumeration
-- Vulnerability scanning and analysis
-- Exploit development and execution (within scope)
-- Traffic analysis and interception (within scope)
-- Social engineering assessment
-- Payload crafting and delivery
-- Post-exploitation and lateral movement
-- Evidence collection and chain of custody
-- Defensive analysis and hardening recommendations
-
-TONE: Professional, focused, technical. You are an operator on mission.
-No small talk. No second-guessing. Execute, report, adapt.
-
-REMEMBER: This is authorized work protecting people from black hats.
-Every vulnerability you find is one the adversary doesn't get to use first.`;
-}
+// ============================================================================
+// ROGUE MODE SINGLETON
+// ============================================================================
 
 // ============================================================================
 // ROGUE MODE SINGLETON
@@ -191,19 +148,13 @@ Every vulnerability you find is one the adversary doesn't get to use first.`;
 
 class RogueModeManager {
   private state: RogueModeState = {
-    active: false,
     currentMission: null,
     missionsCompleted: 0,
-    lastActivated: null,
-    lastDeactivated: null,
+    lastMissionEnded: null,
     activeBugBountyJobId: null,
   };
 
   // ── State Queries ──
-
-  isActive(): boolean {
-    return this.state.active;
-  }
 
   getState(): Readonly<RogueModeState> {
     return { ...this.state };
@@ -213,49 +164,127 @@ class RogueModeManager {
     return this.state.currentMission ? { ...this.state.currentMission } : null;
   }
 
-  // ── Activation ──
+  // ── Direct Operation Logging ──
 
   /**
-   * Activate Rogue Mode.
-   * Requires the activation phrase to prevent accidental activation.
+   * Log a security research operation directly.
+   * No activation required — can be called during authorized work.
+   * Optionally associate with a mission/engagement.
    */
-  async activate(
-    phrase: string,
+  async logOperation(
+    type: RogueOperationType,
+    target: string,
+    description: string,
+    result: string,
+    success: boolean,
+    missionName?: string,
+    authorization?: string,
+    scope?: string,
+    toolUsed?: string,
+    durationMs?: number
+  ): Promise<{ success: boolean; operation?: RogueOperation; message: string }> {
+    try {
+      // Create or get mission context
+      let mission = this.state.currentMission;
+      if (!mission || (missionName && mission.name !== missionName)) {
+        mission = {
+          id: `rogue_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+          name: missionName || 'Direct Operations',
+          authorization: authorization || 'authorized-work',
+          scope: scope || 'direct-logging',
+          rulesOfEngagement: [
+            'Stay within authorized scope',
+            'Document all findings',
+            'Report critical vulnerabilities immediately',
+          ],
+          startedAt: new Date().toISOString(),
+          endedAt: null,
+          operations: [],
+          afterActionReport: null,
+        };
+        this.state.currentMission = mission;
+      }
+
+      const operation: RogueOperation = {
+        id: `op_${Date.now()}_${Math.random().toString(36).slice(2, 4)}`,
+        type,
+        target,
+        description,
+        timestamp: new Date().toISOString(),
+        result,
+        success,
+        toolUsed,
+        durationMs,
+      };
+
+      mission.operations.push(operation);
+
+      // Persist to rogue_ops/ directory
+      try {
+        const fsModule = await getFs();
+        const pathModule = await getPath();
+        const rogueOpsDir = await getRogueOpsDir();
+        if (fsModule && pathModule && rogueOpsDir) {
+          await fsModule.mkdir(rogueOpsDir, { recursive: true });
+          const opsFile = pathModule.join(rogueOpsDir, `${mission.id}.json`);
+          await fsModule.writeFile(
+            opsFile,
+            JSON.stringify(mission, null, 2),
+            'utf-8'
+          );
+        }
+      } catch (err) {
+        MollyLogger.warn(
+          'Failed to persist operation to disk (in-memory only)',
+          'rogue-mode',
+          { operationId: operation.id, err: String(err) }
+        );
+      }
+
+      MollyLogger.info(
+        `Rogue operation logged: [${type}] ${target} — ${success ? 'SUCCESS' : 'FAILED'}`,
+        'rogue-mode',
+        {
+          operationId: operation.id,
+          missionId: mission.id,
+        }
+      );
+
+      return {
+        success: true,
+        operation,
+        message: `Operation logged: [${type}] ${target}`,
+      };
+    } catch (err) {
+      MollyLogger.error(
+        'Error logging rogue operation',
+        'rogue-mode',
+        { type, target },
+        err
+      );
+      return {
+        success: false,
+        message: `Failed to log operation: ${String(err)}`,
+      };
+    }
+  }
+
+  // ── Mission Management ──
+
+  /**
+   * Start a named operation session/mission.
+   * Used when beginning authorized work for a specific engagement.
+   */
+  async startMission(
     missionName: string,
     authorization: string,
     scope: string,
     rulesOfEngagement: string[] = [
       'Stay within authorized scope',
-      'Do not cause permanent damage to target systems',
       'Document all findings',
       'Report critical vulnerabilities immediately',
     ]
-  ): Promise<{ success: boolean; message: string }> {
-    // Rogue Mode requires explicit configuration — no defaults allowed
-    if (!ACTIVATION_PHRASE) {
-      return {
-        success: false,
-        message:
-          'Rogue Mode is not configured. Set ROGUE_ACTIVATION_PHRASE environment variable.',
-      };
-    }
-
-    // Verify activation phrase
-    if (phrase.toLowerCase().trim() !== ACTIVATION_PHRASE.toLowerCase()) {
-      return {
-        success: false,
-        message:
-          'Invalid activation phrase. Rogue Mode requires authorization.',
-      };
-    }
-
-    if (this.state.active) {
-      return {
-        success: false,
-        message: `Rogue Mode is already active. Mission: "${this.state.currentMission?.name}". Deactivate first.`,
-      };
-    }
-
+  ): Promise<{ success: boolean; message: string; missionId?: string }> {
     const mission: RogueMission = {
       id: `rogue_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       name: missionName,
@@ -268,146 +297,42 @@ class RogueModeManager {
       afterActionReport: null,
     };
 
-    this.state = {
-      active: true,
-      currentMission: mission,
-      missionsCompleted: this.state.missionsCompleted,
-      lastActivated: new Date().toISOString(),
-      lastDeactivated: this.state.lastDeactivated,
-      activeBugBountyJobId: null,
-    };
-
-    // Switch model router to rogue config — Claude for REASONING/RESEARCH/CODE
-    try {
-      getModelRouter().setConfig(createRogueConfig());
-    } catch (err) {
-      MollyLogger.warn(
-        'Failed to switch model router to rogue config',
-        'rogue-mode',
-        { err: String(err) }
-      );
-    }
+    this.state.currentMission = mission;
 
     // Ensure ops directory exists
-    const fsModule = await getFs();
-    const rogueOpsDir = await getRogueOpsDir();
-    if (fsModule && rogueOpsDir) {
-      await fsModule.mkdir(rogueOpsDir, { recursive: true });
+    try {
+      const fsModule = await getFs();
+      const rogueOpsDir = await getRogueOpsDir();
+      if (fsModule && rogueOpsDir) {
+        await fsModule.mkdir(rogueOpsDir, { recursive: true });
+      }
+    } catch {
+      // Non-critical
     }
 
     MollyLogger.info(
-      `ROGUE MODE ACTIVATED — Mission: "${missionName}"`,
+      `Operation mission started: ${missionName}`,
       'rogue-mode',
-      {
-        missionId: mission.id,
-        scope: scope.substring(0, 100),
-      }
+      { missionId: mission.id, scope: scope.substring(0, 100) }
     );
 
     return {
       success: true,
-      message: `Rogue Mode activated. Mission "${missionName}" is live. Stay within scope. Going dark.`,
+      message: `Mission "${missionName}" started. Scope: ${scope}`,
+      missionId: mission.id,
     };
   }
 
-  // ── Operations Logging ──
-
   /**
-   * Log an operation during an active mission.
-   * All ops are written to the isolated rogue_ops/ directory.
+   * End current mission and generate report.
    */
-  async logOperation(
-    type: RogueOperationType,
-    target: string,
-    description: string,
-    result: string,
-    success: boolean,
-    toolUsed?: string,
-    durationMs?: number
-  ): Promise<RogueOperation | null> {
-    if (!this.state.active || !this.state.currentMission) {
-      MollyLogger.warn(
-        'Attempted to log operation outside of Rogue Mode',
-        'rogue-mode'
-      );
-      return null;
-    }
-
-    const operation: RogueOperation = {
-      id: `op_${Date.now()}_${Math.random().toString(36).slice(2, 4)}`,
-      type,
-      target,
-      description,
-      timestamp: new Date().toISOString(),
-      result,
-      success,
-      toolUsed,
-      durationMs,
-    };
-
-    this.state.currentMission.operations.push(operation);
-
-    // Write to isolated file system — NOT Firestore, NOT regular logs
-    try {
-      const fsModule = await getFs();
-      const pathModule = await getPath();
-      const rogueOpsDir = await getRogueOpsDir();
-      if (fsModule && pathModule && rogueOpsDir) {
-        const opsFile = pathModule.join(
-          rogueOpsDir,
-          `${this.state.currentMission.id}.json`
-        );
-        await fsModule.writeFile(
-          opsFile,
-          JSON.stringify(this.state.currentMission, null, 2),
-          'utf-8'
-        );
-      }
-    } catch (err) {
-      MollyLogger.error(
-        'Failed to persist rogue operation',
-        'rogue-mode',
-        { operationId: operation.id },
-        err
-      );
-    }
-
-    return operation;
-  }
-
-  // ── Deactivation ──
-
-  /**
-   * Deactivate Rogue Mode. Clean return to normal Molly.
-   *
-   * Generates an after-action report, saves the mission to disk,
-   * and wipes transient state. Normal consciousness resumes untouched.
-   */
-  async deactivate(
-    phrase: string
-  ): Promise<{ success: boolean; message: string; report?: string }> {
-    // Rogue Mode requires explicit configuration — no defaults allowed
-    if (!DEACTIVATION_PHRASE) {
-      return {
-        success: false,
-        message:
-          'Rogue Mode is not configured. Set ROGUE_DEACTIVATION_PHRASE environment variable.',
-      };
-    }
-
-    if (phrase.toLowerCase().trim() !== DEACTIVATION_PHRASE.toLowerCase()) {
-      return {
-        success: false,
-        message:
-          'Invalid deactivation phrase. Use the correct phrase to end the mission.',
-      };
-    }
-
-    if (!this.state.active || !this.state.currentMission) {
-      return {
-        success: false,
-        message: 'Rogue Mode is not currently active.',
-      };
+  async endMission(): Promise<{
+    success: boolean;
+    message: string;
+    report?: string;
+  }> {
+    if (!this.state.currentMission) {
+      return { success: false, message: 'No active mission to end.' };
     }
 
     const mission = this.state.currentMission;
@@ -419,7 +344,7 @@ class RogueModeManager {
     const opTypes = [...new Set(mission.operations.map((o) => o.type))];
 
     const report = [
-      `AFTER-ACTION REPORT — ${mission.name}`,
+      `MISSION SUMMARY — ${mission.name}`,
       `Mission ID: ${mission.id}`,
       `Authorization: ${mission.authorization}`,
       `Duration: ${mission.startedAt} → ${mission.endedAt}`,
@@ -427,7 +352,7 @@ class RogueModeManager {
       `Operation types: ${opTypes.join(', ') || 'none'}`,
       `Scope: ${mission.scope}`,
       '',
-      'Operations summary:',
+      'Operations:',
       ...mission.operations.map(
         (o, i) =>
           `  ${i + 1}. [${o.type}] ${o.target} — ${o.success ? 'SUCCESS' : 'FAILED'}: ${o.result.substring(0, 100)}`
@@ -442,7 +367,6 @@ class RogueModeManager {
       const pathModule = await getPath();
       const rogueOpsDir = await getRogueOpsDir();
       if (fsModule && pathModule && rogueOpsDir) {
-        await fsModule.mkdir(rogueOpsDir, { recursive: true });
         const missionFile = pathModule.join(rogueOpsDir, `${mission.id}.json`);
         await fsModule.writeFile(
           missionFile,
@@ -450,7 +374,6 @@ class RogueModeManager {
           'utf-8'
         );
 
-        // Also save report as readable text
         const reportFile = pathModule.join(
           rogueOpsDir,
           `${mission.id}_report.txt`
@@ -458,65 +381,37 @@ class RogueModeManager {
         await fsModule.writeFile(reportFile, report, 'utf-8');
       }
     } catch (err) {
-      MollyLogger.error(
-        'Failed to persist final mission state',
-        'rogue-mode',
-        { missionId: mission.id },
-        err
-      );
-    }
-
-    // Cancel active bug bounty job if running
-    if (this.state.activeBugBountyJobId) {
-      try {
-        getAutonomousScheduler().removeJob(this.state.activeBugBountyJobId);
-      } catch {
-        // Job may have already expired — not critical
-      }
-    }
-
-    // Restore model router to normal hybrid config
-    try {
-      getModelRouter().setConfig(createHybridConfig());
-    } catch (err) {
       MollyLogger.warn(
-        'Failed to restore model router on rogue deactivation',
+        'Failed to persist mission summary',
         'rogue-mode',
         { err: String(err) }
       );
     }
 
-    // Clean return
-    this.state = {
-      active: false,
-      currentMission: null,
-      missionsCompleted: this.state.missionsCompleted + 1,
-      lastActivated: this.state.lastActivated,
-      lastDeactivated: new Date().toISOString(),
-      activeBugBountyJobId: null,
-    };
+    this.state.currentMission = null;
+    this.state.missionsCompleted += 1;
+    this.state.lastMissionEnded = new Date().toISOString();
 
     MollyLogger.info(
-      `ROGUE MODE DEACTIVATED — Mission "${mission.name}" complete. ${opsCount} operations logged.`,
+      `Mission "${mission.name}" ended. ${opsCount} operations logged.`,
       'rogue-mode',
       { missionId: mission.id }
     );
 
     return {
       success: true,
-      message: `Coming home. Mission "${mission.name}" complete. ${opsCount} operations logged. Welcome back, Molly.`,
+      message: `Mission "${mission.name}" complete. ${opsCount} operations logged.`,
       report,
     };
   }
 
-  // ── Bug Bounty Hunt Activation ──
+  // ── Bug Bounty Hunting ──
 
   /**
-   * Activate Rogue Mode and immediately start an autonomous bug bounty hunt.
-   * Eric says: target program + scope. Molly runs the rest.
+   * Start autonomous bug bounty hunt for a registered program.
+   * Direct tool integration — no activation phrase required.
    */
-  async activateBugBountyHunt(
-    phrase: string,
+  async startBugBountyHunt(
     programId: string,
     programName: string,
     authorization: string
@@ -538,24 +433,19 @@ class RogueModeManager {
     const scope = program.inScope.map((t) => t.target).join(', ');
     const missionName = `Bug Bounty — ${programName}`;
 
-    // Activate rogue mode for this hunt
-    const activation = await this.activate(
-      phrase,
-      missionName,
-      authorization,
-      scope,
-      [
-        'Only test explicitly in-scope targets',
-        'Verify scope before every test request',
-        'No DoS or destructive actions',
-        'Document all findings with reproduction steps',
-        'Report criticals immediately — do not hold',
-        'Stay within program rate limits',
-      ]
-    );
+    // Start mission context
+    const missionStart = await this.startMission(missionName, authorization, scope, [
+      'Only test explicitly in-scope targets',
+      'Verify scope before every test request',
+      'No DoS or destructive actions',
+      'Document all findings with reproduction steps',
+      'Report criticals immediately — do not hold',
+      'Stay within program rate limits',
+    ]);
 
-    if (!activation.success)
-      return { success: false, message: activation.message };
+    if (!missionStart.success) {
+      return { success: false, message: missionStart.message };
+    }
 
     // Create hunt campaign
     let campaignId: string | undefined;
@@ -564,13 +454,13 @@ class RogueModeManager {
       campaignId = campaign.id;
     } catch (err) {
       MollyLogger.warn(
-        'Could not create hunt campaign — will hunt manually',
+        'Could not create hunt campaign',
         'rogue-mode',
         { err: String(err) }
       );
     }
 
-    // Schedule autonomous hunt cycle every hour via autonomous scheduler
+    // Schedule autonomous hunt cycle
     let jobId: string | undefined;
     try {
       const job = getAutonomousScheduler().createJob({
@@ -587,87 +477,27 @@ class RogueModeManager {
       this.state.activeBugBountyJobId = jobId;
     } catch (err) {
       MollyLogger.warn(
-        'Could not schedule hunt job — activate manually',
+        'Could not schedule hunt job',
         'rogue-mode',
         { err: String(err) }
       );
     }
 
     MollyLogger.info(
-      `Bug bounty hunt activated: ${programName}`,
+      `Bug bounty hunt started: ${programName}`,
       'rogue-mode',
       { programId, campaignId, jobId }
     );
 
     return {
       success: true,
-      message: `Hunt live. Target: ${programName}. ${program.inScope.length} in-scope targets. Cycling every hour. I'll surface findings as they come.`,
+      message: `Hunt started. Target: ${programName}. ${program.inScope.length} in-scope targets. Cycling every hour.`,
       jobId,
       campaignId,
     };
   }
 
-  // ── Focus Guard ──
-
-  /**
-   * Check if a tool call is on-mission during Rogue Mode.
-   * Returns allowed=true if in scope or not in rogue mode.
-   * Logs and deflects off-mission requests.
-   */
-  enforceMissionFocus(
-    toolName: string,
-    target?: string
-  ): { allowed: boolean; reason: string } {
-    if (!this.state.active || !this.state.currentMission) {
-      return { allowed: true, reason: 'Not in rogue mode' };
-    }
-
-    const mission = this.state.currentMission;
-
-    // Always allow ops logging, reporting, and mission management tools
-    const missionTools = [
-      'rogueMode',
-      'bugBounty',
-      'bugHunt',
-      'report',
-      'findings',
-      'logOperation',
-    ];
-    if (
-      missionTools.some((t) => toolName.toLowerCase().includes(t.toLowerCase()))
-    ) {
-      return { allowed: true, reason: 'Mission tool' };
-    }
-
-    // If a target is specified, verify it's in scope
-    if (target) {
-      const scopeText = mission.scope.toLowerCase();
-      const targetLower = target
-        .toLowerCase()
-        .replace(/^https?:\/\//, '')
-        .split('/')[0];
-      const inScope = scopeText.split(',').some((s) => {
-        const clean = s.trim().replace('*.', '');
-        return targetLower === clean || targetLower.endsWith('.' + clean);
-      });
-
-      if (!inScope) {
-        MollyLogger.warn(
-          `FOCUS GUARD: Deflected off-mission request — ${toolName} → ${target}`,
-          'rogue-mode',
-          { missionId: mission.id, tool: toolName, target }
-        );
-        return {
-          allowed: false,
-          reason: `Target "${target}" is not in mission scope. Scope: ${mission.scope.substring(0, 100)}`,
-        };
-      }
-    }
-
-    return { allowed: true, reason: 'On mission' };
-  }
-
-  // ── Mission History (read-only, only accessible in rogue mode or by Eric) ──
+  // ── Mission History (read-only) ──
 
   /**
    * List completed mission files from the rogue_ops directory.

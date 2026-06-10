@@ -10,6 +10,7 @@ import {
   BrainCircuit,
   Library,
   Activity,
+  TerminalSquare,
 } from 'lucide-react';
 
 // ── Lazy-loaded panels ────────────────────────────────────────
@@ -64,12 +65,20 @@ const MemoryViewer = dynamic(
   { ssr: false, loading: loadingPlaceholder('memories') }
 );
 
-const DiagnosticPanel = dynamic(
+const DiagnosticsTabContent = dynamic(
   () =>
     retryImport(() =>
-      import('@/components/DiagnosticPanel').then((mod) => mod.DiagnosticPanel)
+      import('./DiagnosticsTabContent').then((mod) => mod.DiagnosticsTabContent)
     ),
   { ssr: false, loading: loadingPlaceholder('diagnostics') }
+);
+
+const AgencyConsole = dynamic(
+  () =>
+    retryImport(() =>
+      import('@/components/agency/AgencyConsole').then((mod) => mod.default)
+    ),
+  { ssr: false, loading: loadingPlaceholder('agency console') }
 );
 
 // ── Shared Error Boundary ─────────────────────────────────────
@@ -152,6 +161,8 @@ export function TermAISidebar() {
   const [memoryKey, setMemoryKey] = useState(0);
   const [diagnosticsReady, setDiagnosticsReady] = useState(false);
   const [diagnosticsKey, setDiagnosticsKey] = useState(0);
+  const [consoleReady, setConsoleReady] = useState(false);
+  const [consoleKey, setConsoleKey] = useState(0);
 
   const tabs = [
     { value: 'research', icon: Search, label: 'Demon' },
@@ -159,6 +170,7 @@ export function TermAISidebar() {
     { value: 'partner', icon: HeartPulse, label: 'Spiritual' },
     { value: 'memory', icon: BrainCircuit, label: 'Memory' },
     { value: 'diagnostics', icon: Activity, label: 'System' },
+    { value: 'console', icon: TerminalSquare, label: 'Console' },
   ] as const;
 
   return (
@@ -172,7 +184,7 @@ export function TermAISidebar() {
         className="flex h-full flex-col"
       >
         <SidebarHeader className="p-0">
-          <TabsList className="sticky top-0 z-10 grid grid-cols-5 bg-sidebar/95 backdrop-blur border-b border-sidebar-border rounded-none h-12">
+          <TabsList className="sticky top-0 z-10 grid grid-cols-6 bg-sidebar/95 backdrop-blur border-b border-sidebar-border rounded-none h-12">
             {tabs.map(({ value, icon: Icon, label }) => (
               <TabsTrigger
                 key={value}
@@ -242,7 +254,28 @@ export function TermAISidebar() {
                 }}
               >
                 <div key={diagnosticsKey} className="h-full">
-                  <DiagnosticPanel />
+                  <DiagnosticsTabContent />
+                </div>
+              </OnDemandPanel>
+            </TabsContent>
+          )}
+
+          {activeTab === 'console' && (
+            <TabsContent
+              value="console"
+              className="flex-1 m-0 overflow-hidden p-4"
+            >
+              <OnDemandPanel
+                label="Console"
+                ready={consoleReady}
+                onLoad={() => setConsoleReady(true)}
+                onRetry={() => {
+                  setConsoleReady(false);
+                  setConsoleKey((k) => k + 1);
+                }}
+              >
+                <div key={consoleKey} className="h-full">
+                  <AgencyConsole compact />
                 </div>
               </OnDemandPanel>
             </TabsContent>

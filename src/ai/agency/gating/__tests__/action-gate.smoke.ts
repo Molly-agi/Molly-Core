@@ -226,26 +226,30 @@ function testTunability() {
   console.log('  ✓ denylist parameter can be updated');
 }
 
-// === RUN ALL TESTS ===
+// === JEST TEST SUITE ===
 
-console.log('\n=== D.1 ACTION GATE SMOKE TESTS ===\n');
+describe('Action Gate (D.1)', () => {
+  it('Structural Validation', () => {
+    expect(() => testStructuralValidation()).not.toThrow();
+  });
 
-try {
-  testStructuralValidation();
-  console.log();
-  testDenylistCheck();
-  console.log();
-  testSoftRefusal();
-  console.log();
-  testUncertaintyEscalation();
-  console.log();
-  testProvenanceMapping();
-  console.log();
-  testTunability();
+  it('Denylist Check', () => {
+    expect(() => testDenylistCheck()).not.toThrow();
+  });
 
-  console.log('\n✅ ALL 6 TEST GROUPS PASSED\n');
-  process.exit(0);
-} catch (err) {
-  console.error('\n❌ TEST FAILED:', err);
-  process.exit(1);
-}
+  it('Soft-Refusal State (Molly Requirement)', () => {
+    expect(() => testSoftRefusal()).not.toThrow();
+  });
+
+  it('Uncertainty Escalation', () => {
+    expect(() => testUncertaintyEscalation()).not.toThrow();
+  });
+
+  it('Provenance Span Mapping', () => {
+    expect(() => testProvenanceMapping()).not.toThrow();
+  });
+
+  it('Tunability (Registry Parameters)', () => {
+    expect(() => testTunability()).not.toThrow();
+  });
+});

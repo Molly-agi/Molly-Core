@@ -22,7 +22,7 @@ interface Line {
 const ACCENT = '#7CFFB2';
 const COMMANDS = ['help', 'ls', 'snapshot', 'get', 'desc', 'propose', 'override', 'pending', 'resolve', 'history', 'gov'];
 
-export default function AgencyConsole() {
+export default function AgencyConsole({ compact = false }: { compact?: boolean } = {}) {
   const [lines, setLines] = useState<Line[]>([
     { stream: 'out', text: "molly agency console — type 'help'" },
   ]);
@@ -105,7 +105,7 @@ export default function AgencyConsole() {
   };
 
   return (
-    <div style={styles.root}>
+    <div style={compact ? { ...styles.root, ...styles.rootCompact } : styles.root}>
       <div style={styles.bar}>
         <span style={styles.title}>AGENCY CONSOLE</span>
         <div style={styles.fields}>
@@ -139,6 +139,7 @@ export default function AgencyConsole() {
 const mono = "'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace";
 const styles: Record<string, React.CSSProperties> = {
   root: { background: '#07090B', border: '1px solid #1C262E', borderRadius: 4, fontFamily: mono, fontSize: 12.5, color: '#9FB4C2', display: 'flex', flexDirection: 'column', height: 460 },
+  rootCompact: { height: '100%', minHeight: 360, fontSize: 11 },
   bar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid #1C262E' },
   title: { letterSpacing: 2, color: '#5A6B7B', fontSize: 11 },
   fields: { display: 'flex', gap: 6 },

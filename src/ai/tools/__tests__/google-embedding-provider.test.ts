@@ -46,12 +46,11 @@ describe('Google Embedding Provider', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
     provider = new GoogleGenAIEmbeddingProvider();
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    // No need to restore timers since we're not using fake timers
   });
 
   describe('getName()', () => {
@@ -133,24 +132,29 @@ describe('Google Embedding Provider', () => {
     });
 
     it('handles timeout', async () => {
-      // Create a slow promise that won't resolve quickly
-      mockEmbed.mockImplementation(
-        () =>
-          new Promise((resolve) => {
-            setTimeout(
-              () => resolve([{ embedding: Array(3072).fill(0) }]),
-              15000
-            );
-          })
-      );
+      jest.useFakeTimers();
+      try {
+        // Create a slow promise that won't resolve quickly
+        mockEmbed.mockImplementation(
+          () =>
+            new Promise((resolve) => {
+              setTimeout(
+                () => resolve([{ embedding: Array(3072).fill(0) }]),
+                15000
+              );
+            })
+        );
 
-      const embedPromise = provider.embed('Slow text');
+        const embedPromise = provider.embed('Slow text');
 
-      // Advance timers past the 10s timeout
-      jest.advanceTimersByTime(11000);
+        // Advance timers past the 10s timeout
+        jest.advanceTimersByTime(11000);
 
-      await expect(embedPromise).rejects.toThrow('timed out');
-    });
+        await expect(embedPromise).rejects.toThrow('timed out');
+      } finally {
+        jest.useRealTimers();
+      }
+    }, 30000); // Give extra time for timer advancement
   });
 
   describe('embedBatch()', () => {

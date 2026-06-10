@@ -73,11 +73,11 @@ describe('Somatic Loop', () => {
       // (owners accept proposals; somatic-loop is not the owner of governor params)
       // So the current value stays at initialTools — somatic-loop can only propose
       const currentTools = registry.get<number>('governor.maxConcurrentTools');
-      assert(currentTools === initialTools, 'value unchanged — only proposed, not committed');
+      assert.strictEqual(currentTools, initialTools, 'value unchanged — only proposed, not committed');
 
       // But there should be a proposal in the registry queue
       const pendingProposals = registry.pendingProposals('governor.maxConcurrentTools');
-      assert(pendingProposals.length > 0, 'proposal queued for tool concurrency reduction');
+      assert.ok(pendingProposals.length > 0, 'proposal queued for tool concurrency reduction');
 
       loop.destroy();
       works.forEach((w) => governor.registerEnd(w.id));
@@ -92,11 +92,11 @@ describe('Somatic Loop', () => {
       // Owner can change the tick param
       registry.commit('somatic.tickSeconds', 30, 'somatic-loop', 'reduce tick interval');
       const newTick = registry.get<number>('somatic.tickSeconds');
-      assert(newTick === 30, 'tick param updated to 30s');
+      assert.strictEqual(newTick, 30, 'tick param updated to 30s');
 
       // Out-of-bounds rejected
       const result = registry.commit('somatic.tickSeconds', 1, 'somatic-loop', 'too fast');
-      assert(result.ok === false, 'out-of-bounds tick rejected');
+      assert.strictEqual(result.ok, false, 'out-of-bounds tick rejected');
 
       loop.destroy();
     }
@@ -112,7 +112,7 @@ describe('Somatic Loop', () => {
       const before = loop.snapshot().eventsSinceLastTick;
       governor.registerStart({ kind: 'flow', type: 'post-destroy', priority: 5 });
       const after = loop.snapshot().eventsSinceLastTick;
-      assert(after === before, 'events not counted after destroy');
+      assert.strictEqual(after, before, 'events not counted after destroy');
     }
 
     // ── 6. emotional intensity influences proposals ─────────────────────────
@@ -126,7 +126,7 @@ describe('Somatic Loop', () => {
       // (we test the behavior indirectly via snapshot after destroy+rebuild)
       // Instead: verify snapshot is accessible and lastProposals is an array
       const snap = loop.snapshot();
-      assert(Array.isArray(snap.lastProposals), 'lastProposals is array');
+      assert.ok(Array.isArray(snap.lastProposals), 'lastProposals is array');
 
       loop.destroy();
     }

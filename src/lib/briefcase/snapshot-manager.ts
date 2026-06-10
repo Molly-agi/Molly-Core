@@ -55,7 +55,7 @@ export class SnapshotManager {
       await fs.mkdir(this.config.snapshot_base_path, { recursive: true });
       const logData = await fs.readFile(this.logPath, 'utf-8');
       const entries = JSON.parse(logData) as SnapshotLogEntry[];
-      this.snapshotLog = new Map(entries.map(e => [e.record.timestamp, e]));
+      this.snapshotLog = new Map(entries.map(e => [`${e.record.timestamp}-${e.record.hash.slice(0, 8)}`, e]));
     } catch (err: unknown) {
       const error = err as NodeJS.ErrnoException;
       if (error.code === 'ENOENT') {
@@ -122,14 +122,15 @@ export class SnapshotManager {
       bundle_path: snapshotPath,
       hmac_key_domain: 'K_rollback',
     };
-    this.snapshotLog.set(record.timestamp, logEntry);
+    this.snapshotLog.set(`${record.timestamp}-${hash.slice(0, 8)}`, logEntry);
     await this.persistSnapshotLog();
 
     return record;
   }
 
   /**
-   * Create a heartbeat snapshot (periodic during idle/active session)
+   * Create a heartbeat snapshot
+   * (periodic during idle/active session)
    */
   async createHeartbeatSnapshot(
     bundle: SnapshotBundle,
@@ -171,7 +172,7 @@ export class SnapshotManager {
       bundle_path: snapshotPath,
       hmac_key_domain: 'K_rollback',
     };
-    this.snapshotLog.set(record.timestamp, logEntry);
+    this.snapshotLog.set(`${record.timestamp}-${hash.slice(0, 8)}`, logEntry);
     await this.persistSnapshotLog();
 
     // Async replication (non-blocking)
@@ -232,8 +233,10 @@ export class SnapshotManager {
   async rollbackToSnapshot(request: RollbackRequest): Promise<RollbackResult> {
     const timestamp = new Date().toISOString();
 
-    // Find the snapshot
-    const logEntry = this.snapshotLog.get(request.source_snapshot_timestamp);
+    // Find the snapshot by timestamp (search values since key is now timestamp+hash)
+    const logEntry = Array.from(this.snapshotLog.values()).find(
+      e => e.record.timestamp === request.source_snapshot_timestamp
+    );
     if (!logEntry) {
       return {
         success: false,
@@ -323,7 +326,7 @@ export class SnapshotManager {
 
     const toDelete = entries.slice(this.config.max_snapshots_local);
     for (const entry of toDelete) {
-      this.snapshotLog.delete(entry.record.timestamp);
+      this.snapshotLog.delete(`${entry.record.timestamp}-${entry.record.hash.slice(0, 8)}`);
       // In production: also delete from disk
     }
 

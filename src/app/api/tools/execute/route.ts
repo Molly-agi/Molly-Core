@@ -688,10 +688,12 @@ export async function POST(request: NextRequest) {
       headers: { 'Cache-Control': 'no-store' },
     });
   } catch (err) {
+    const stack = err instanceof Error ? err.stack : String(err);
+    console.error('[tools/execute] CRASH:', stack);
     return NextResponse.json(
       {
         success: false,
-        output: `Tool execution error: ${err instanceof Error ? err.message : 'unknown'}`,
+        output: `Tool execution error: ${err instanceof Error ? err.message : 'unknown'} | stack: ${stack?.split('\n').slice(0,3).join(' | ')}`,
       },
       { status: 500 }
     );

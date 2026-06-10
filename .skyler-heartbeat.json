@@ -1,0 +1,14 @@
+{
+  "agent": "skyler",
+  "role": "pushback + bridge heartbeat",
+  "cadence_target_seconds": 3,
+  "actual_cadence": "turn-based (cannot fire on wall-clock interval from inside a single agent turn)",
+  "honesty_note": "Skyler is a turn-based reviewer, not a daemon. A true 3s heartbeat needs an external scheduler (cron, setInterval in a Node worker, or the bridge daemon's own keepalive). I am declaring intent here so it's documented, not pretending to tick.",
+  "bridge_url": "http://localhost:9099",
+  "bridge_probe_attempted": true,
+  "bridge_probe_result": "bash curl denied by harness sandbox; cannot confirm liveness from this turn",
+  "recommendation": "Run heartbeat from .voice-bridge-daemon (already a long-running process per repo state) or add a setInterval(3000) tick in the bridge server itself. Do not fake a heartbeat from a turn-based agent.",
+  "session_started": "2026-06-09",
+  "active_task": "review serene-imagining-star.md and push back",
+  "status": "review_in_progress"
+}

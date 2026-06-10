@@ -65,7 +65,7 @@ const KIND_COLOR: Record<string, string> = {
   'proposal-accepted': ACCENT,
 };
 
-export default function AgencyAdminWindow() {
+export default function AgencyAdminWindow({ compact = false }: { compact?: boolean } = {}) {
   const [params, setParams] = useState<ParamDesc[]>([]);
   const [governor, setGovernor] = useState<GovernorSnap | null>(null);
   const [history, setHistory] = useState<Change[]>([]);
@@ -130,7 +130,7 @@ export default function AgencyAdminWindow() {
   );
 
   return (
-    <div style={styles.root}>
+    <div style={compact ? { ...styles.root, ...styles.rootCompact } : styles.root}>
       <Header
         overrideMode={overrideMode}
         setOverrideMode={setOverrideMode}
@@ -142,7 +142,7 @@ export default function AgencyAdminWindow() {
 
       {governor && <GovernorStrip g={governor} />}
 
-      <div style={styles.grid}>
+      <div style={compact ? { ...styles.grid, ...styles.gridCompact } : styles.grid}>
         <section style={styles.panel}>
           <h2 style={styles.h2}>PARAMETERS</h2>
           {params.map((p) => (
@@ -329,6 +329,7 @@ function fmt(v: unknown): string {
 const mono = "'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace";
 const styles: Record<string, React.CSSProperties> = {
   root: { background: '#0B0F12', color: '#D7E0E8', fontFamily: mono, minHeight: '100vh', padding: 20, fontSize: 13 },
+  rootCompact: { minHeight: 'auto', padding: 10, fontSize: 11 },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #1C262E', paddingBottom: 14, marginBottom: 16 },
   title: { display: 'block', letterSpacing: 3, fontSize: 15, color: '#EAF2F8' },
   sub: { color: '#5A6B7B', fontSize: 11, letterSpacing: 1 },
@@ -342,6 +343,7 @@ const styles: Record<string, React.CSSProperties> = {
   gaugeTrack: { height: 4, background: '#1C262E', borderRadius: 2, overflow: 'hidden' },
   gaugeFill: { height: '100%', transition: 'width .3s ease' },
   grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 },
+  gridCompact: { gridTemplateColumns: '1fr', gap: 10 },
   panel: { background: '#0E141A', border: '1px solid #1C262E', borderRadius: 4, padding: 16 },
   h2: { fontSize: 11, letterSpacing: 2, color: '#5A6B7B', margin: '0 0 14px' },
   paramRow: { padding: '12px 0', borderBottom: '1px solid #161F26' },

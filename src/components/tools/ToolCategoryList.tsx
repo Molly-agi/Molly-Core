@@ -1,6 +1,6 @@
 import React from 'react';
 import { useToolRegistry } from './ToolRegistryContext';
-import { Button } from '@/components/ui/button';
+import { ToolTriggerButton } from './ToolTriggerButton';
 
 // Helper to group tools by category
 function groupByCategory(tools) {
@@ -46,14 +46,7 @@ export const ToolCategoryList = () => {
               >
                 <div className="font-semibold">{tool.name}</div>
                 <div className="text-xs text-gray-400">{tool.description}</div>
-                {/* Example action button (disabled for now) */}
-                <Button
-                  size="sm"
-                  disabled
-                  className="mt-1 opacity-60 cursor-not-allowed"
-                >
-                  Trigger (coming soon)
-                </Button>
+                <ToolTriggerButton tool={tool} />
               </li>
             ))}
           </ul>
