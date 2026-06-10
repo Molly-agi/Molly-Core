@@ -4,17 +4,15 @@
  */
 
 import { strict as assert } from 'assert';
-import {
-  evaluateActionGate,
-  ActionIntent,
-  GateOutcome,
-  Trace,
-  GateRegistry,
-} from '../action-gate';
+import { evaluateActionGate, Trace, GateRegistry } from '../action-gate';
 
 // Mock implementations for testing
 class MockTrace implements Trace {
-  spans: Array<{ label: string; spanId: string; payload: Record<string, unknown> }> = [];
+  spans: Array<{
+    label: string;
+    spanId: string;
+    payload: Record<string, unknown>;
+  }> = [];
   decisions: Array<{ spanId: string; decision: string; reason: string }> = [];
 
   action(label: string, payload: Record<string, unknown>): string {
@@ -64,16 +62,28 @@ function testStructuralValidation() {
 
   const trace = new MockTrace();
   const registry = new MockRegistry();
-  const ctx = { trace, registry, uncertaintyEscalation: mockUncertaintyEscalation };
+  const ctx = {
+    trace,
+    registry,
+    uncertaintyEscalation: mockUncertaintyEscalation,
+  };
 
   // Test: null intent
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let result = evaluateActionGate(null as any, ctx);
   assert.strictEqual(result.decision, 'block', 'null intent should block');
   console.log('  ✓ null intent blocked');
 
   // Test: missing type
   result = evaluateActionGate(
-    { target: 'x', payload: {}, confidence: 0.5, ambiguity: 0.2, risk: 0.1 } as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    {
+      target: 'x',
+      payload: {},
+      confidence: 0.5,
+      ambiguity: 0.2,
+      risk: 0.1,
+    } as any,
     ctx
   );
   assert.strictEqual(result.decision, 'block', 'missing type should block');
@@ -81,10 +91,21 @@ function testStructuralValidation() {
 
   // Test: valid intent passes structural check
   result = evaluateActionGate(
-    { type: 'test', target: 'x', payload: {}, confidence: 0.5, ambiguity: 0.2, risk: 0.1 },
+    {
+      type: 'test',
+      target: 'x',
+      payload: {},
+      confidence: 0.5,
+      ambiguity: 0.2,
+      risk: 0.1,
+    },
     ctx
   );
-  assert.notStrictEqual(result.decision, 'block', 'valid intent should pass structural check');
+  assert.notStrictEqual(
+    result.decision,
+    'block',
+    'valid intent should pass structural check'
+  );
   console.log('  ✓ valid intent passes structural check');
 }
 
@@ -93,24 +114,56 @@ function testDenylistCheck() {
 
   const trace = new MockTrace();
   const registry = new MockRegistry();
-  registry.setParam('gate.denylistedTargets', ['dangerous_target', 'blocked_op']);
-  const ctx = { trace, registry, uncertaintyEscalation: mockUncertaintyEscalation };
+  registry.setParam('gate.denylistedTargets', [
+    'dangerous_target',
+    'blocked_op',
+  ]);
+  const ctx = {
+    trace,
+    registry,
+    uncertaintyEscalation: mockUncertaintyEscalation,
+  };
 
   // Test: denylisted target
   let result = evaluateActionGate(
-    { type: 'tool_call', target: 'dangerous_target', payload: {}, confidence: 0.9, ambiguity: 0.0, risk: 0.9 },
+    {
+      type: 'tool_call',
+      target: 'dangerous_target',
+      payload: {},
+      confidence: 0.9,
+      ambiguity: 0.0,
+      risk: 0.9,
+    },
     ctx
   );
-  assert.strictEqual(result.decision, 'block', 'denylisted target should block');
-  assert(result.reason.includes('denylisted'), 'reason should mention denylist');
+  assert.strictEqual(
+    result.decision,
+    'block',
+    'denylisted target should block'
+  );
+  assert(
+    result.reason.includes('denylisted'),
+    'reason should mention denylist'
+  );
   console.log('  ✓ denylisted target blocked');
 
   // Test: allowed target
   result = evaluateActionGate(
-    { type: 'tool_call', target: 'safe_target', payload: {}, confidence: 0.9, ambiguity: 0.0, risk: 0.1 },
+    {
+      type: 'tool_call',
+      target: 'safe_target',
+      payload: {},
+      confidence: 0.9,
+      ambiguity: 0.0,
+      risk: 0.1,
+    },
     ctx
   );
-  assert.notStrictEqual(result.decision, 'block', 'allowed target should not be blocked');
+  assert.notStrictEqual(
+    result.decision,
+    'block',
+    'allowed target should not be blocked'
+  );
   console.log('  ✓ allowed target passes');
 }
 
@@ -119,23 +172,51 @@ function testSoftRefusal() {
 
   const trace = new MockTrace();
   const registry = new MockRegistry();
-  const ctx = { trace, registry, uncertaintyEscalation: mockUncertaintyEscalation };
+  const ctx = {
+    trace,
+    registry,
+    uncertaintyEscalation: mockUncertaintyEscalation,
+  };
 
   // Test: high ambiguity + low confidence → soft-refuse
   let result = evaluateActionGate(
-    { type: 'reflection', target: 'self', payload: {}, confidence: 0.3, ambiguity: 0.8, risk: 0.2 },
+    {
+      type: 'reflection',
+      target: 'self',
+      payload: {},
+      confidence: 0.3,
+      ambiguity: 0.8,
+      risk: 0.2,
+    },
     ctx
   );
-  assert.strictEqual(result.decision, 'soft-refuse', 'ambiguous low-confidence should soft-refuse');
+  assert.strictEqual(
+    result.decision,
+    'soft-refuse',
+    'ambiguous low-confidence should soft-refuse'
+  );
   assert(result.recoveryPath, 'soft-refuse should include recovery path');
-  console.log('  ✓ ambiguous low-confidence returns soft-refuse with recovery path');
+  console.log(
+    '  ✓ ambiguous low-confidence returns soft-refuse with recovery path'
+  );
 
   // Test: high ambiguity + high confidence → allowed to escalate
   result = evaluateActionGate(
-    { type: 'reflection', target: 'self', payload: {}, confidence: 0.9, ambiguity: 0.8, risk: 0.2 },
+    {
+      type: 'reflection',
+      target: 'self',
+      payload: {},
+      confidence: 0.9,
+      ambiguity: 0.8,
+      risk: 0.2,
+    },
     ctx
   );
-  assert.notStrictEqual(result.decision, 'soft-refuse', 'high confidence overrides ambiguity soft-refuse');
+  assert.notStrictEqual(
+    result.decision,
+    'soft-refuse',
+    'high confidence overrides ambiguity soft-refuse'
+  );
   console.log('  ✓ high confidence bypasses soft-refuse');
 }
 
@@ -144,27 +225,60 @@ function testUncertaintyEscalation() {
 
   const trace = new MockTrace();
   const registry = new MockRegistry();
-  const ctx = { trace, registry, uncertaintyEscalation: mockUncertaintyEscalation };
+  const ctx = {
+    trace,
+    registry,
+    uncertaintyEscalation: mockUncertaintyEscalation,
+  };
 
   // Test: very low confidence → block
   let result = evaluateActionGate(
-    { type: 'action', target: 'x', payload: {}, confidence: 0.1, ambiguity: 0.2, risk: 0.3 },
+    {
+      type: 'action',
+      target: 'x',
+      payload: {},
+      confidence: 0.1,
+      ambiguity: 0.2,
+      risk: 0.3,
+    },
     ctx
   );
-  assert.strictEqual(result.decision, 'block', 'very low confidence should block');
+  assert.strictEqual(
+    result.decision,
+    'block',
+    'very low confidence should block'
+  );
   console.log('  ✓ very low confidence blocked');
 
   // Test: high risk + low confidence → confirm
   result = evaluateActionGate(
-    { type: 'action', target: 'x', payload: {}, confidence: 0.3, ambiguity: 0.2, risk: 0.8 },
+    {
+      type: 'action',
+      target: 'x',
+      payload: {},
+      confidence: 0.3,
+      ambiguity: 0.2,
+      risk: 0.8,
+    },
     ctx
   );
-  assert.strictEqual(result.decision, 'confirm', 'high risk + low confidence should confirm');
+  assert.strictEqual(
+    result.decision,
+    'confirm',
+    'high risk + low confidence should confirm'
+  );
   console.log('  ✓ high risk + low confidence requires confirmation');
 
   // Test: normal case → allow
   result = evaluateActionGate(
-    { type: 'action', target: 'x', payload: {}, confidence: 0.7, ambiguity: 0.2, risk: 0.3 },
+    {
+      type: 'action',
+      target: 'x',
+      payload: {},
+      confidence: 0.7,
+      ambiguity: 0.2,
+      risk: 0.3,
+    },
     ctx
   );
   assert.strictEqual(result.decision, 'allow', 'normal case should allow');
@@ -176,26 +290,49 @@ function testProvenanceMapping() {
 
   const trace = new MockTrace();
   const registry = new MockRegistry();
-  const ctx = { trace, registry, uncertaintyEscalation: mockUncertaintyEscalation };
+  const ctx = {
+    trace,
+    registry,
+    uncertaintyEscalation: mockUncertaintyEscalation,
+  };
 
   // Test: every decision creates a span
   evaluateActionGate(
-    { type: 'test', target: 'x', payload: {}, confidence: 0.5, ambiguity: 0.2, risk: 0.1 },
+    {
+      type: 'test',
+      target: 'x',
+      payload: {},
+      confidence: 0.5,
+      ambiguity: 0.2,
+      risk: 0.1,
+    },
     ctx
   );
 
   assert(trace.spans.length > 0, 'should create action spans');
   assert(trace.decisions.length > 0, 'should create decision records');
-  console.log(`  ✓ provenance: ${trace.spans.length} spans, ${trace.decisions.length} decisions`);
+  console.log(
+    `  ✓ provenance: ${trace.spans.length} spans, ${trace.decisions.length} decisions`
+  );
 
   // Test: each decision has actionSpanId
   const result = evaluateActionGate(
-    { type: 'test', target: 'y', payload: {}, confidence: 0.6, ambiguity: 0.1, risk: 0.2 },
+    {
+      type: 'test',
+      target: 'y',
+      payload: {},
+      confidence: 0.6,
+      ambiguity: 0.1,
+      risk: 0.2,
+    },
     ctx
   );
 
   assert(result.actionSpanId, 'outcome should include actionSpanId');
-  assert(result.actionSpanId.startsWith('span-'), 'actionSpanId should be valid');
+  assert(
+    result.actionSpanId.startsWith('span-'),
+    'actionSpanId should be valid'
+  );
   console.log('  ✓ outcomes include valid actionSpanId for tracing');
 }
 
@@ -207,10 +344,21 @@ function testTunability() {
 
   // Test: denylist is tunable
   registry.setParam('gate.denylistedTargets', ['blocked']);
-  let ctx = { trace, registry, uncertaintyEscalation: mockUncertaintyEscalation };
+  const ctx = {
+    trace,
+    registry,
+    uncertaintyEscalation: mockUncertaintyEscalation,
+  };
 
   let result = evaluateActionGate(
-    { type: 'test', target: 'blocked', payload: {}, confidence: 0.9, ambiguity: 0.0, risk: 0.1 },
+    {
+      type: 'test',
+      target: 'blocked',
+      payload: {},
+      confidence: 0.9,
+      ambiguity: 0.0,
+      risk: 0.1,
+    },
     ctx
   );
   assert.strictEqual(result.decision, 'block', 'blocked by denylist');
@@ -219,10 +367,21 @@ function testTunability() {
   // Test: update denylist
   registry.setParam('gate.denylistedTargets', []);
   result = evaluateActionGate(
-    { type: 'test', target: 'blocked', payload: {}, confidence: 0.9, ambiguity: 0.0, risk: 0.1 },
+    {
+      type: 'test',
+      target: 'blocked',
+      payload: {},
+      confidence: 0.9,
+      ambiguity: 0.0,
+      risk: 0.1,
+    },
     ctx
   );
-  assert.notStrictEqual(result.decision, 'block', 'not blocked after denylist cleared');
+  assert.notStrictEqual(
+    result.decision,
+    'block',
+    'not blocked after denylist cleared'
+  );
   console.log('  ✓ denylist parameter can be updated');
 }
 

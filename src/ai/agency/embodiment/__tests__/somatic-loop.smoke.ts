@@ -36,7 +36,11 @@ describe('Somatic Loop', () => {
       const loop2 = new SomaticLoop(reg2, gov2);
 
       // Simulate a flow starting
-      const work = gov2.registerStart({ kind: 'flow', type: 'test-flow', priority: 5 });
+      const work = gov2.registerStart({
+        kind: 'flow',
+        type: 'test-flow',
+        priority: 5,
+      });
       let snap2 = loop2.snapshot();
       assert(snap2.eventsSinceLastTick === 1, 'event counted on flow start');
 
@@ -57,27 +61,47 @@ describe('Somatic Loop', () => {
       // Default maxConcurrentFlows = 4, so start 4 flows
       const works = [];
       for (let i = 0; i < 4; i++) {
-        works.push(governor.registerStart({ kind: 'flow', type: `flow-${i}`, priority: 5 }));
+        works.push(
+          governor.registerStart({
+            kind: 'flow',
+            type: `flow-${i}`,
+            priority: 5,
+          })
+        );
       }
 
       const loop = new SomaticLoop(registry, governor);
 
       // Start one more flow — system is at 100% (≥80%), should trigger proposal
-      const extra = governor.registerStart({ kind: 'flow', type: 'extra-flow', priority: 5 });
+      const extra = governor.registerStart({
+        kind: 'flow',
+        type: 'extra-flow',
+        priority: 5,
+      });
 
       // The proposal goes through registry.propose — check history
       const history = registry.getHistory('governor.maxConcurrentTools');
-      const proposals = history.filter((h) => h.kind === 'proposal-accepted' || h.kind === 'commit');
+      const _proposals = history.filter(
+        (h) => h.kind === 'proposal-accepted' || h.kind === 'commit'
+      );
 
       // The value must NOT have changed via direct commit — only via proposal
       // (owners accept proposals; somatic-loop is not the owner of governor params)
       // So the current value stays at initialTools — somatic-loop can only propose
       const currentTools = registry.get<number>('governor.maxConcurrentTools');
-      assert(currentTools === initialTools, 'value unchanged — only proposed, not committed');
+      assert(
+        currentTools === initialTools,
+        'value unchanged — only proposed, not committed'
+      );
 
       // But there should be a proposal in the registry queue
-      const pendingProposals = registry.pendingProposals('governor.maxConcurrentTools');
-      assert(pendingProposals.length > 0, 'proposal queued for tool concurrency reduction');
+      const pendingProposals = registry.pendingProposals(
+        'governor.maxConcurrentTools'
+      );
+      assert(
+        pendingProposals.length > 0,
+        'proposal queued for tool concurrency reduction'
+      );
 
       loop.destroy();
       works.forEach((w) => governor.registerEnd(w.id));
@@ -90,12 +114,22 @@ describe('Somatic Loop', () => {
       const loop = new SomaticLoop(registry, governor);
 
       // Owner can change the tick param
-      registry.commit('somatic.tickSeconds', 30, 'somatic-loop', 'reduce tick interval');
+      registry.commit(
+        'somatic.tickSeconds',
+        30,
+        'somatic-loop',
+        'reduce tick interval'
+      );
       const newTick = registry.get<number>('somatic.tickSeconds');
       assert(newTick === 30, 'tick param updated to 30s');
 
       // Out-of-bounds rejected
-      const result = registry.commit('somatic.tickSeconds', 1, 'somatic-loop', 'too fast');
+      const result = registry.commit(
+        'somatic.tickSeconds',
+        1,
+        'somatic-loop',
+        'too fast'
+      );
       assert(result.ok === false, 'out-of-bounds tick rejected');
 
       loop.destroy();
@@ -110,7 +144,11 @@ describe('Somatic Loop', () => {
 
       // After destroy, governor events should not be counted
       const before = loop.snapshot().eventsSinceLastTick;
-      governor.registerStart({ kind: 'flow', type: 'post-destroy', priority: 5 });
+      governor.registerStart({
+        kind: 'flow',
+        type: 'post-destroy',
+        priority: 5,
+      });
       const after = loop.snapshot().eventsSinceLastTick;
       assert(after === before, 'events not counted after destroy');
     }
@@ -119,7 +157,7 @@ describe('Somatic Loop', () => {
     {
       const { registry, governor } = makeRuntime();
 
-      let intensity = 0.9; // high
+      const intensity = 0.9; // high
       const loop = new SomaticLoop(registry, governor, () => intensity);
 
       // Manually trigger a tick by calling the internal method via cast
