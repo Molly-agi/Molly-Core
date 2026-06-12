@@ -26,7 +26,6 @@ import {
   isHalted as _isHalted,
   registerAbortController as _registerAbortController,
 } from '@/lib/halt-registry';
-import SilentObserver from './observer/silent-observer';
 
 /** Maximum time (ms) any single LLM call may take before we abort it */
 const LLM_TIMEOUT_MS = 60_000;
@@ -116,15 +115,6 @@ export const molly = {
       // Report success to the router
       const responseMs = performance.now() - startTime;
       router.reportSuccess(provider.id, responseMs);
-
-      // Silent observation logging
-      const observation = SilentObserver.observeFlowExecution(
-        `molly.generate[${taskType}]`,
-        options,
-        response
-      );
-      const encryptionKey = process.env.OBSERVATION_KEY || 'default';
-      SilentObserver.recordObservation(observation, encryptionKey);
 
       MollyLogger.debug(
         `Rogue Generate: Success in ${responseMs.toFixed(0)}ms via ${provider.name}`,
