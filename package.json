@@ -5,6 +5,7 @@
   "scripts": {
     "predev": "bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active",
     "dev": "bash scripts/dev-start.sh",
+    "dev:solo": "bash scripts/dev-solo.sh",
     "dev:server": "NODE_OPTIONS=--max-old-space-size=3072 next dev -H 0.0.0.0 -p 9002",
     "dev:turbo": "NODE_OPTIONS=--max-old-space-size=3072 next dev --turbo -p 9002",
     "dev:fresh": "npm run harden && NODE_OPTIONS=--max-old-space-size=3072 next dev -p 9002",
