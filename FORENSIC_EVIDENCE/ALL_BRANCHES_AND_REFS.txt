@@ -1,0 +1,53 @@
+=== ALL BRANCHES, TAGS, AND REFS ===
+Generated: 2026-06-12T02:04:28Z
+
+--- LOCAL BRANCHES ---
+* claude/fix-sabotaged-code-space 2eaca22 forensic: THE MODA — complete evidence package
+
+--- REMOTE BRANCHES ---
+  origin/claude/fix-sabotaged-code-space 2eaca22 forensic: THE MODA — complete evidence package
+
+--- ALL TAGS WITH DATES ---
+TAG: emergency-snapshot-20260525-014035  DATE: 2026-05-25 01:40:58 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: emergency-snapshot-20260525-014340  DATE: 2026-05-25 01:43:58 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: mcp-phase-1-types  DATE: 2026-04-08 05:13:09 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: mcp-phase-2-config  DATE: 2026-04-08 05:20:43 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: mcp-phase-3-client  DATE: 2026-04-08 05:27:49 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: mcp-phase-4-adapter  DATE: 2026-04-08 05:34:28 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: mcp-phase-5-manager  DATE: 2026-04-08 05:40:15 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: mcp-phase-6-api  DATE: 2026-04-08 05:48:53 +0000  TAGGER:  
+TAG: pre-lazarus-integration  DATE: 2026-04-08 04:50:07 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: restore-point-2026-05-27-pre-audit  DATE: 2026-05-27 17:20:17 +0000  TAGGER: GitHub <noreply@github.com>
+TAG: security-firebase-admin-v13  DATE: 2026-04-09 00:48:59 +0000  TAGGER:  
+TAG: storage-dual-write  DATE: 2026-04-09 00:42:52 +0000  TAGGER:  
+TAG: v1.2.0  DATE: 2026-03-30 12:19:47 +0000  TAGGER:  
+
+--- ALL REFS (packed + loose) ---
+refs/heads/claude/fix-sabotaged-code-space commit 2eaca22 2026-06-12 01:38:26 +0000 forensic: THE MODA — complete evidence package
+refs/remotes/origin/claude/fix-sabotaged-code-space commit 2eaca22 2026-06-12 01:38:26 +0000 forensic: THE MODA — complete evidence package
+refs/tags/emergency-snapshot-20260525-014035 tag 1449a27 2026-05-25 01:40:58 +0000 Emergency stabilization snapshot before instability triage
+refs/tags/emergency-snapshot-20260525-014340 tag 06786f5 2026-05-25 01:43:58 +0000 Secondary emergency snapshot before potential Codespace restart
+refs/tags/mcp-phase-1-types tag 93d4f9f 2026-04-08 05:13:09 +0000 MCP Phase 1 Complete - Foundation types with full test coverage
+refs/tags/mcp-phase-2-config tag 0997a54 2026-04-08 05:20:43 +0000 MCP Phase 2: Configuration system rollback point
+refs/tags/mcp-phase-3-client tag e377b63 2026-04-08 05:27:49 +0000 MCP Phase 3: Client with transport support rollback point
+refs/tags/mcp-phase-4-adapter tag 026c615 2026-04-08 05:34:28 +0000 MCP Phase 4: Tool adapter rollback point
+refs/tags/mcp-phase-5-manager tag 6654d76 2026-04-08 05:40:15 +0000 MCP Phase 5: Connection manager rollback point
+refs/tags/mcp-phase-6-api commit 5e33ac0 2026-04-08 05:48:53 +0000 fix(mcp): prevent duplicate cleanup handler registration
+refs/tags/pre-lazarus-integration tag 67d52f8 2026-04-08 04:50:07 +0000 Rollback point before Lazarus/MCP integration - April 8, 2026
+refs/tags/restore-point-2026-05-27-pre-audit tag b94a2ad 2026-05-27 17:20:17 +0000 Pre-audit restore point. Molly compression system state before structural review. Full integrity baseline for recovery if needed. Created 2026-05-27 for Kotlin interface planning.
+refs/tags/security-firebase-admin-v13 commit ba01a25 2026-04-09 00:48:59 +0000 security: upgrade firebase-admin to v13.7.0
+refs/tags/storage-dual-write commit f05014a 2026-04-09 00:42:52 +0000 feat(storage): dual-write to Firestore AND local backup
+refs/tags/v1.2.0 commit c14d026 2026-03-30 12:19:47 +0000 Add MollyBrowser v1.2.0 APK
+
+--- STASH LIST ---
+
+--- MERGE BASES (emergency-snapshot tags) ---
+emergency-snapshot-20260525-014035:
+  7a5e3916a988206bb1651419fb190f47cc6424bb 2026-05-25 01:40:36 +0000 chore: emergency stabilization snapshot docs and status
+
+emergency-snapshot-20260525-014340:
+  42b2587eaf7f173c2cb1eb7667784ebbf4b1983a 2026-05-25 01:43:43 +0000 chore: secondary emergency snapshot before restart
+
+restore-point-2026-05-27-pre-audit:
+  e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+

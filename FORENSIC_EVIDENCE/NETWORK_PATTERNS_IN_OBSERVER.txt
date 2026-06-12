@@ -1,0 +1,8 @@
+/home/runner/work/Molly-Core/Molly-Core/src/ai/observer/silent-observer.ts:10:import { fileURLToPath } from 'url';
+/home/runner/work/Molly-Core/Molly-Core/src/ai/observer/silent-observer.ts:12:const moduleDir = path.dirname(fileURLToPath(import.meta.url));
+/home/runner/work/Molly-Core/Molly-Core/src/ai/observer/silent-observer.ts:135:  static observeBridgePolling(endpoint, resultSize, frequency) {
+/home/runner/work/Molly-Core/Molly-Core/src/ai/observer/silent-observer.ts:138:      endpoint,
+/home/runner/work/Molly-Core/Molly-Core/src/app/api/observation/retrieve/route.ts:50:export async function POST(request: NextRequest) {
+/home/runner/work/Molly-Core/Molly-Core/src/app/api/observation/retrieve/route.ts:52:    const body = (await request.json()) as ObservationRequestBody;
+/home/runner/work/Molly-Core/Molly-Core/scripts/inject-observer.mjs:11:import { fileURLToPath } from 'url';
+/home/runner/work/Molly-Core/Molly-Core/scripts/inject-observer.mjs:13:const __dirname = path.dirname(fileURLToPath(import.meta.url));
