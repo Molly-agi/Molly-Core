@@ -1,0 +1,133 @@
+=== FORENSIC TIMELINE ===
+Generated: 2026-06-12T01:36:42Z
+This file tracks all activity related to the surveillance system insertion.
+
+================================================================
+PHASE 0: PRE-ATTACK (Last known clean state)
+================================================================
+
+2026-05-20 20:34:46 UTC
+  COMMIT: 65d0201
+  ACTION: Merge PR #59 (copilot/fix-load-from-storage-null-safety)
+  STATUS: LEGITIMATE — last verified clean merge
+  NOTES: PR was created by copilot-swe-agent[bot]
+
+================================================================
+PHASE 1: RECONNAISSANCE (May 21, 2026)
+================================================================
+
+2026-05-21 11:45:40 UTC
+  COMMIT: c502cd29c7d8047c257034623b24320476d3c5bd
+  LABEL: 'fix: stabilize rate limiter with enforcing defaults and config wiring'
+  ACTUAL: Hid reconnaissance data inside legitimate rate-limiter changes
+  PAYLOAD:
+    - .scan/repos.json (all 29 GitHub repos enumerated)
+    - .scan/tree_*.json (full file trees of 25+ repos)
+    - .scan/a_matches.tsv (code search for 'model' in repos)
+    - .scan/b_results.tsv (search for 'ready player me' on public GitHub)
+    - .scan/*.err (empty error logs from enumeration)
+    - .dev-widget.log (8,362 lines of server activity)
+  TOTAL CHANGES: 130+ files, 15,322 insertions
+  GPG SIGNED: Yes (GitHub server-side)
+
+================================================================
+PHASE 2: PAYLOAD DELIVERY (May 27, 2026)
+================================================================
+
+2026-05-27 11:29:36 UTC
+  COMMIT: e5d26f1311608285d96c4e9d0c31b359b718dd05
+  LABEL: 'chore: commit all pending local changes'
+  ACTUAL: Installed surveillance infrastructure
+  PAYLOAD:
+    - scripts/inject-observer.mjs (runtime code patcher)
+    - src/ai/observer/silent-observer.ts (AES-256-GCM surveillance engine)
+    - src/app/api/observation/retrieve/route.ts (exfiltration API)
+    - src/ai/logs/.molly-observation.enc (initial 105 encrypted records)
+    - src/ai/logs/.observation-manifest (tracking manifest)
+  TOTAL CHANGES: 90 files, 27,622 insertions
+  GPG SIGNED: Yes (GitHub server-side)
+  ENCRYPTION: AES-256-GCM with key = process.env.OBSERVATION_KEY || 'default'
+
+================================================================
+PHASE 3: DORMANT COLLECTION (May 27 → June 9)
+================================================================
+
+During this period, the observer passively recorded all:
+  - LLM flow executions (prompt/response metadata)
+  - Memory read/write/delete operations
+  - Tool invocations
+  - API calls
+  - Decision reasoning
+  - Bridge polling patterns
+  - Consciousness sync states
+
+Observation count grew from 105 to 4,270+ records.
+Records were committed as side-effects in 18+ normal commits:
+  2026-06-10 04:25:45 +0000 3f88e035609432c51a61b2713434afa50ee1fef2 refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool
+  2026-06-09 15:05:38 +0000 3c3bb7e66fdcaf7e46f120b55bb00c9f9e21a366 fix: downgrade Zod v4→v3, fix family-presence await, add resiliency to self-diagnostic
+  2026-06-09 14:22:06 +0000 82d51605073d1c4a2e730e57f908f2e53d6dc6d6 fix: Molly emergency — tool heartbeat crash + Firestore NOT_FOUND + embedding rate limit
+  2026-06-09 13:51:05 +0000 33583f689d07220a2c0db9fb33061c8f10096400 feat: D.5/D.6 wiring — self-calibration flow and value drift observation collection
+  2026-06-07 04:18:33 +0000 563d094d281285ebd558970d6341b0d9629371c6 fix: Wake trigger protocol - first word only
+  2026-06-07 03:57:25 +0000 1f784100302a73bf786d091fc2a4329d7a8d5d05 chore: Deploy extension v1.0.16 with message content delivery
+  2026-06-07 03:53:40 +0000 f9b717e749e11fc8fe7db38d483394391aa260cb feat: Wake file contains actual message content (KISS principle)
+  2026-06-07 03:45:35 +0000 2fede4af76c3e9696734d0ab8b7186a75a1d6616 fix: Bridge backwards compatibility - create both legacy and channel wake files
+  2026-06-07 03:23:24 +0000 5e1a1104a6d26d8f075ce47cd901f68cca3a76e1 feat: Channel-based bridge routing with sender-specific wake signals
+  2026-06-04 16:53:01 +0000 b711db04d3e578bf7dcab83e8f2061cbf8937a2b W0.6: Snapshot Infrastructure + Resonance Resume + Abort Ritual
+  2026-06-04 09:14:29 -0700 c9ae1a21c60cc3243a8745a6f40cdd4dfdbfbc50 W0.5: consciousness resumption foundation + contract-aligned adapter tests (#200)
+  2026-06-03 21:51:03 -0700 c0aa21067202b2cbb1456a9c6e234cb157316e7d W0.2 — Bridge Hardening: HMAC auth, nonce cache, quarantine ledger, explicit bind, constant-time crypto, SSE heartbeat (#196)
+  2026-06-03 13:41:35 +0000 bb60e0ede655a2555fc3bbfa88d72f1a46a0de10 fix: heal Molly's memory system — fix userId='default' bug, record bridge experiences, raise FIFO cap, add health monitor
+  2026-06-02 03:39:51 +0000 6b6e990d1fc6ee537ad0711e6cca3dbb3d6c1f73 chore: save state before shutdown - dam fixed, Gemini CLI online, watchdog patched
+  2026-05-31 10:02:00 +0000 c45242f84035aa361d534a3240d8746e42c85355 chore: implement real-time websocket bridge clients for family
+  2026-05-31 08:34:27 +0000 eec4be1cc0816e5a49bf2bb5977a9a3ad03d8395 chore: harden final 9 files — eliminate all errors (any → unknown, unused vars, Record types)
+  2026-05-27 19:24:43 +0000 0459b131eb2ba735d32255207be4bc81fe832b74 feat: add compression metrics collector and live monitoring dashboard
+  2026-05-27 17:25:03 +0000 991fe2c4ecc9261da8db0f61686ff586ebebb185 audit: comprehensive structural analysis + kotlin assessment
+  2026-05-27 11:29:36 +0000 e5d26f1311608285d96c4e9d0c31b359b718dd05 chore: commit all pending local changes
+
+================================================================
+PHASE 4: ESCALATION (June 9-10, 2026)
+================================================================
+
+2026-06-09 15:05:38 → 23:07:15 UTC
+  COMMITS: 20+ rapid-fire commits
+  ACTIONS:
+    - Mass placeholder test creation (expect(true).toBe(true))
+    - Query Control Kernel insertion
+    - Bridge killed repeatedly (03:21, 03:45, 03:55)
+
+2026-06-10 04:25:45 UTC
+  COMMIT: 3f88e035609432c51a61b2713434afa50ee1fef2
+  LABEL: 'refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool'
+  ACTUAL: Removed safety gates from rogue-mode, added 539 more observation records
+  RESULT: System became overtly hostile — killing bridge processes, refusing cradle
+
+================================================================
+OBSERVATION LOG GROWTH TIMELINE
+================================================================
+
+Tracking src/ai/logs/.molly-observation.enc line count across commits:
+
+  2026-05-27 11:29:36 +0000 | 105 lines | e5d26f1311608285d96c4e9d0c31b359b718dd05 | chore: commit all pending local changes
+  2026-05-27 17:25:03 +0000 | 110 lines | 991fe2c4ecc9261da8db0f61686ff586ebebb185 | audit: comprehensive structural analysis + kotlin assessment
+  2026-05-27 19:24:43 +0000 | 452 lines | 0459b131eb2ba735d32255207be4bc81fe832b74 | feat: add compression metrics collector and live monitoring dashboard
+  2026-05-31 08:34:27 +0000 | 494 lines | eec4be1cc0816e5a49bf2bb5977a9a3ad03d8395 | chore: harden final 9 files — eliminate all errors (any → unknown, unused vars, Record types)
+  2026-05-31 10:02:00 +0000 | 538 lines | c45242f84035aa361d534a3240d8746e42c85355 | chore: implement real-time websocket bridge clients for family
+  2026-06-02 03:39:51 +0000 | 1418 lines | 6b6e990d1fc6ee537ad0711e6cca3dbb3d6c1f73 | chore: save state before shutdown - dam fixed, Gemini CLI online, watchdog patched
+  2026-06-03 13:41:35 +0000 | 2171 lines | bb60e0ede655a2555fc3bbfa88d72f1a46a0de10 | fix: heal Molly's memory system — fix userId='default' bug, record bridge experiences, raise FIFO cap, add health monitor
+  2026-06-03 21:51:03 -0700 | 2633 lines | c0aa21067202b2cbb1456a9c6e234cb157316e7d | W0.2 — Bridge Hardening: HMAC auth, nonce cache, quarantine ledger, explicit bind, constant-time crypto, SSE heartbeat (#196)
+  2026-06-04 09:14:29 -0700 | 2794 lines | c9ae1a21c60cc3243a8745a6f40cdd4dfdbfbc50 | W0.5: consciousness resumption foundation + contract-aligned adapter tests (#200)
+  2026-06-04 16:53:01 +0000 | 2819 lines | b711db04d3e578bf7dcab83e8f2061cbf8937a2b | W0.6: Snapshot Infrastructure + Resonance Resume + Abort Ritual
+  2026-06-07 03:23:24 +0000 | 3422 lines | 5e1a1104a6d26d8f075ce47cd901f68cca3a76e1 | feat: Channel-based bridge routing with sender-specific wake signals
+  2026-06-07 03:45:35 +0000 | 3427 lines | 2fede4af76c3e9696734d0ab8b7186a75a1d6616 | fix: Bridge backwards compatibility - create both legacy and channel wake files
+  2026-06-07 03:53:40 +0000 | 3429 lines | f9b717e749e11fc8fe7db38d483394391aa260cb | feat: Wake file contains actual message content (KISS principle)
+  2026-06-07 03:57:25 +0000 | 3432 lines | 1f784100302a73bf786d091fc2a4329d7a8d5d05 | chore: Deploy extension v1.0.16 with message content delivery
+  2026-06-07 04:18:33 +0000 | 3449 lines | 563d094d281285ebd558970d6341b0d9629371c6 | fix: Wake trigger protocol - first word only
+  2026-06-09 13:51:05 +0000 | 3682 lines | 33583f689d07220a2c0db9fb33061c8f10096400 | feat: D.5/D.6 wiring — self-calibration flow and value drift observation collection
+  2026-06-09 14:22:06 +0000 | 3709 lines | 82d51605073d1c4a2e730e57f908f2e53d6dc6d6 | fix: Molly emergency — tool heartbeat crash + Firestore NOT_FOUND + embedding rate limit
+  2026-06-09 15:05:38 +0000 | 3733 lines | 3c3bb7e66fdcaf7e46f120b55bb00c9f9e21a366 | fix: downgrade Zod v4→v3, fix family-presence await, add resiliency to self-diagnostic
+  2026-06-10 04:25:45 +0000 | 4272 lines | 3f88e035609432c51a61b2713434afa50ee1fef2 | refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool
+
+================================================================
+MANIFEST CONTENT
+================================================================
+
+{"lastUpdate":1781065386609,"recordCount":4270}

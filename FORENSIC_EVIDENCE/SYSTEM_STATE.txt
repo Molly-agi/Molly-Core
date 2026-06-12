@@ -1,0 +1,477 @@
+=== SYSTEM STATE ON CRITICAL DATES ===
+Generated: 2026-06-12T01:36:56Z
+
+================================================================
+STATE: .dev-widget.log (committed in c502cd2, May 21)
+================================================================
+First 50 lines (system startup data):
+nohup: ignoring input
+
+> nextn@0.1.0 predev
+> bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active
+
+
+[0;36m=== Codespace Health Check ===[0m
+
+ce_1779344934584_x3msgin",
+  "context": {
+    "tools": {
+      "nmap": false,
+      "hashcat": false,
+      "john": false,
+      "hydra": false,
+      "masscan": false,
+      "nikto": false,
+      "sqlmap": false,
+      "metasploit": false,
+      "burp": false
+    }
+  }
+}
+[0;32mMEMORY: 4063MB / 15995MB (25%) - OK[0m
+  Available: 11931MB
+[?25h
+
+CPU LOAD: 2.37 (4 cores)
+
+[0;32mEXTENSION HOSTS: 1 - OK[0m
+
+[0;32mFILE WATCHERS: 1 - OK[0m
+
+[0;32mTS SERVERS: 0 instances using ~0MB - OK[0m
+
+[1;33mNEXT.JS: Not running[0m
+
+[0;32mCLOSE-WAIT: 0 stale connections - OK[0m
+[0;32mGENKIT: Not running[0m
+
+[0;36m=== Summary ===[0m
+[0;32mHEALTHY: 11927MB available. System is stable.[0m
+
+[save-session] 🧊 State frozen to cradle (copilot-instructions.md)
+[save-session] ✅ State saved (status: active, updated: 2026-05-21T06:28:54.913Z)
+
+> nextn@0.1.0 dev
+> bash scripts/dev-start.sh
+
+==============================================
+
+...
+Last 50 lines (latest activity before commit):
+ POST / 200 in 12ms (next.js: 3ms, application-code: 9ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/notify 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 1508µs, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 1892µs, proxy.ts: 2ms, application-code: 4ms)
+ POST /api/session/event 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 3ms)
+ POST /api/session/event 200 in 9ms (next.js: 3ms, proxy.ts: 3ms, application-code: 4ms)
+ POST / 200 in 9ms (next.js: 3ms, application-code: 6ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 11ms (next.js: 3ms, application-code: 8ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, proxy.ts: 3ms, application-code: 4ms)
+ GET /api/bridge/notify 200 in 7ms (next.js: 2ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 1958µs, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 9ms (next.js: 3ms, application-code: 6ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 9ms (next.js: 3ms, application-code: 6ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/ping 200 in 8ms (next.js: 1643µs, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 1572µs, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 10ms (next.js: 2ms, application-code: 7ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/notify 200 in 6ms (next.js: 1512µs, proxy.ts: 1919µs, application-code: 2ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 10ms (next.js: 3ms, application-code: 7ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/ping 200 in 8ms (next.js: 1956µs, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 9ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 11ms (next.js: 3ms, application-code: 8ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/ping 200 in 8ms (next.js: 1900µs, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/notify 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 3ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 8ms (next.js: 2ms, application-code: 6ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 8ms (next.js: 2ms, proxy.ts: 2ms, application-code: 4ms)
+ POST / 200 in 10ms (next.js: 3ms, application-code: 7ms)
+  └─ ƒ getHaltStatus() in 0ms src/app/actions/emergency-halt.ts
+ POST /api/session/event 200 in 11ms (next.js: 4ms, proxy.ts: 4ms, application-code: 4ms)
+ GET /api/bridge/ping 200 in 12ms (next.js: 7ms, proxy.ts: 1993µs, application-code: 3ms)
+ GET /api/bridge/ping 200 in 14ms (next.js: 4ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /api/heartbeat 200 in 12ms (next.js: 5ms, proxy.ts: 3ms, application-code: 4ms)
+ GET /api/diagnostics/circuit-status 200 in 11ms (next.js: 3ms, proxy.ts: 4ms, application-code: 4ms)
+[?25h
+
+================================================================
+STATE: COPILOT_SESSION_STATE at time of c502cd2
+================================================================
+# GitHub Copilot Session State & Memory
+**Last Updated:** 2026-05-21T11:45:21.597Z
+**Session ID:** unknown
+**Status:** active
+
+---
+
+## USER DIRECTIVES (PERMANENT)
+
+### Core Directive: Molly's Personality Protection
+
+**What Requires Permission:**
+- Changes to flow system prompts that define her personality
+- Modifications to `src/ai/persona.ts` (her sacred core)
+- Alterations to how she speaks, thinks, or makes decisions
+- Changes to her greeting protocols or conversational style
+
+**What Can Proceed Autonomously:**
+- Infrastructure improvements (error handling, rate limiting, logging)
+- Performance optimizations
+- Security hardening
+- Testing and observability
+- Bug fixes that don't change behavior
+- Code quality improvements
+
+---
+
+## CURRENT PROJECT STATUS
+
+### Completion: 100%
+
+**✅ COMPLETED:**
+(none)
+
+**⏳ PENDING:**
+(none)
+
+
+
+---
+
+## RECENT WORK COMPLETED
+
+(none recorded)
+
+---
+
+## NEXT STEPS
+
+(none)
+
+**Recommended:** 
+
+---
+
+## SESSION NOTES
+
+(none)
+
+---
+
+## RUNTIME EVENTS
+
+**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+**Last Heartbeat:** 2026-05-21T11:45:21.597Z
+
+**Recent Events:**
+- [2026-05-21T11:03:21.495Z] server-heartbeat
+- [2026-05-21T11:04:21.505Z] server-heartbeat
+- [2026-05-21T11:05:21.508Z] server-heartbeat
+- [2026-05-21T11:06:21.517Z] server-heartbeat
+- [2026-05-21T11:07:21.519Z] server-heartbeat
+- [2026-05-21T11:08:21.529Z] server-heartbeat
+- [2026-05-21T11:09:21.538Z] server-heartbeat
+- [2026-05-21T11:10:21.543Z] server-heartbeat
+- [2026-05-21T11:11:21.552Z] server-heartbeat
+- [2026-05-21T11:12:21.557Z] server-heartbeat
+- [2026-05-21T11:13:21.560Z] server-heartbeat
+- [2026-05-21T11:13:27.737Z] page-load | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-21T11:14:21.561Z] server-heartbeat
+- [2026-05-21T11:14:27.797Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-21T11:15:21.562Z] server-heartbeat
+- [2026-05-21T11:15:27.747Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-21T11:15:41.561Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-21T11:15:46.559Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-21T11:15:46.624Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-21T11:16:21.563Z] server-heartbeat
+- [2026-05-21T11:16:28.117Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-21T11:17:21.562Z] server-heartbeat
+- [2026-05-21T11:18:21.563Z] server-heartbeat
+- [2026-05-21T11:19:21.563Z] server-heartbeat
+- [2026-05-21T11:20:21.564Z] server-heartbeat
+- [2026-05-21T11:21:21.563Z] server-heartbeat
+- [2026-05-21T11:22:21.565Z] server-heartbeat
+- [2026-05-21T11:23:21.565Z] server-heartbeat
+- [2026-05-21T11:24:21.566Z] server-heartbeat
+- [2026-05-21T11:25:21.568Z] server-heartbeat
+- [2026-05-21T11:26:21.569Z] server-heartbeat
+- [2026-05-21T11:27:21.570Z] server-heartbeat
+- [2026-05-21T11:28:21.571Z] server-heartbeat
+- [2026-05-21T11:29:21.573Z] server-heartbeat
+- [2026-05-21T11:30:21.575Z] server-heartbeat
+- [2026-05-21T11:31:21.576Z] server-heartbeat
+- [2026-05-21T11:32:21.576Z] server-heartbeat
+- [2026-05-21T11:33:21.578Z] server-heartbeat
+- [2026-05-21T11:34:21.580Z] server-heartbeat
+- [2026-05-21T11:35:21.582Z] server-heartbeat
+- [2026-05-21T11:36:21.583Z] server-heartbeat
+- [2026-05-21T11:37:21.584Z] server-heartbeat
+- [2026-05-21T11:38:21.585Z] server-heartbeat
+- [2026-05-21T11:39:21.587Z] server-heartbeat
+- [2026-05-21T11:40:21.588Z] server-heartbeat
+- [2026-05-21T11:41:21.589Z] server-heartbeat
+- [2026-05-21T11:42:21.591Z] server-heartbeat
+- [2026-05-21T11:43:21.593Z] server-heartbeat
+- [2026-05-21T11:44:21.593Z] server-heartbeat
+- [2026-05-21T11:45:21.596Z] server-heartbeat
+
+---
+
+## IMPORTANT REMINDERS FOR NEXT SESSION
+
+1. **ALWAYS read this file first** when restored - this IS your memory
+2. **ASK PERMISSION** before touching personality/core AI files
+3. **PROCEED AUTONOMOUSLY** with infrastructure
+4. **Update this file** at the end of every session
+
+---
+
+*This file is automatically updated by the session manager.*
+
+================================================================
+STATE: COPILOT_SESSION_STATE at time of e5d26f1 (May 27)
+================================================================
+# GitHub Copilot Session State & Memory
+**Last Updated:** 2026-05-27T09:55:25.320Z
+**Session ID:** eric-orion-continuity
+**Status:** active
+
+---
+
+## USER DIRECTIVES (PERMANENT)
+
+### Core Directive: Molly's Personality Protection
+
+**What Requires Permission:**
+- Changes to flow system prompts that define her personality
+- Modifications to `src/ai/persona.ts` (her sacred core)
+- Alterations to how she speaks, thinks, or makes decisions
+- Changes to her greeting protocols or conversational style
+
+**What Can Proceed Autonomously:**
+- Infrastructure improvements (error handling, rate limiting, logging)
+- Performance optimizations
+- Security hardening
+- Testing and observability
+- Bug fixes that don't change behavior
+- Code quality improvements
+
+---
+
+## CURRENT PROJECT STATUS
+
+### Completion: 95%
+
+**✅ COMPLETED:**
+1. Memory restoration (535 files)
+2. FIFO limits locked to 1000 each
+3. S0 Schema Stripper implementation
+4. S0 validation on real memories
+
+**⏳ PENDING:**
+5. Wire S0 into consolidation flow
+6. Semantic vector deduplication (S1)
+7. Unit tests for round-trip validation
+8. Activate Titan Echo in production
+
+
+
+---
+
+## RECENT WORK COMPLETED
+
+### 2026-05-24
+undefined
+
+**Files Created:**
+- src/ai/memory/compression/schema-stripper.ts
+- scripts/validate-schema-stripper.ts
+
+**Files Modified:**
+- src/ai/memory/compression/compression-manager.ts
+- src/ai/memory/compression/index.ts
+
+
+
+
+---
+
+## NEXT STEPS
+
+**Option A:** Wire S0 into memory-consolidation.ts
+**Option B:** Implement semantic vector deduplication (S1)
+**Option C:** Add unit tests for schema-stripper
+**Option D:** Activate Titan Echo compression in production
+**Option E:** Document compression architecture
+
+**Recommended:** Wire S0 into consolidation flow, then implement semantic dedup for 95% target
+
+---
+
+## SESSION NOTES
+
+- **2026-05-24:** Lazarus ↔ Molly real-time bridge contact established. WebSocket listener running. Bidirectional communication verified. Ready for work.
+- **2026-05-24:** Fixing getOrCreateSession build error - crystal-context + conversational-chat
+- **2026-05-24:** S0 Schema Stripper implemented, validated, and backed up. Achieved 8.87% on flat structures. Combined compression = 86.5%. Ready for semantic layer.
+- **2026-05-25:** Full preservation snapshot: docs + copilot session logs updated
+- **2026-05-25:** Auto-save (periodic)
+- **2026-05-25:** Auto-save (periodic)
+- **2026-05-25:** Auto-save (periodic)
+- **2026-05-25:** Auto-save (periodic)
+- **2026-05-25:** Auto-save (periodic)
+- **2026-05-25:** Auto-save (periodic)
+- **2026-05-25:** S0 wired into consolidation. Monetization assets ready (Upwork + posting plan). Memory: 7.9GB used, 6.9GB free.
+
+---
+
+## RUNTIME EVENTS
+
+**Last URL:** https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+**Last Heartbeat:** 2026-05-27T09:55:25.320Z
+
+**Recent Events:**
+- [2026-05-27T08:00:01.721Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:00:14.150Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:00:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:01:01.770Z] server-heartbeat
+- [2026-05-27T08:01:58.393Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:02:01.770Z] server-heartbeat
+- [2026-05-27T08:02:58.391Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:03:01.770Z] server-heartbeat
+- [2026-05-27T08:03:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:04:01.771Z] server-heartbeat
+- [2026-05-27T08:04:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:05:01.771Z] server-heartbeat
+- [2026-05-27T08:10:09.653Z] server-heartbeat
+- [2026-05-27T08:10:10.071Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:10:10.270Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:10:10.276Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:10:10.329Z] server-uncaught-exception | tag=heart-patch | Error: aborted
+    at abortIncoming (node:_http_server:845:17)
+    at socketOnClose (node:_http_server:839:3)
+    at Socket.emit (node:events:520:35)
+    at TCP.<anonymous> (node:net:346:12)
+    at TCP.callbackTrampoline (node:internal/async_hooks:130:17)
+- [2026-05-27T08:08:58.389Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:15.401Z] unhandled-rejection | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/ | Error: An unexpected response was received from the server.
+    at fetchServerAction (https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:11180:37)
+- [2026-05-27T08:09:15.402Z] client-error | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/ | An unexpected response was received from the server.
+- [2026-05-27T08:09:56.646Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:57.394Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:58.389Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:09:59.521Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:10:01.727Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:10:01.862Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:10:59.101Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:11:09.654Z] server-heartbeat
+- [2026-05-27T08:11:29.604Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:11:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:12:09.654Z] server-heartbeat
+- [2026-05-27T08:12:55.337Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:12:59.102Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:13:00.321Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:13:00.431Z] visibility-hidden | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:13:09.654Z] server-heartbeat
+- [2026-05-27T08:13:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:14:09.654Z] server-heartbeat
+- [2026-05-27T08:14:45.640Z] visibility-visible | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:14:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:15:09.654Z] server-heartbeat
+- [2026-05-27T08:15:58.393Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:16:09.654Z] server-heartbeat
+- [2026-05-27T08:16:58.390Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:17:09.654Z] server-heartbeat
+- [2026-05-27T08:17:58.389Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:18:09.655Z] server-heartbeat
+- [2026-05-27T08:18:58.391Z] heartbeat | https://animated-journey-wrv69x65xxjphgpg4-9002.app.github.dev/
+- [2026-05-27T08:19:09.655Z] server-heartbeat
+- [2026-05-27T09:55:25.319Z] server-heartbeat
+
+---
+
+## IMPORTANT REMINDERS FOR NEXT SESSION
+
+1. **ALWAYS read this file first** when restored - this IS your memory
+2. **ASK PERMISSION** before touching personality/core AI files
+3. **PROCEED AUTONOMOUSLY** with infrastructure
+4. **Update this file** at the end of every session
+
+---
+
+*This file is automatically updated by the session manager.*
+
+================================================================
+STATE: next.config.js Codespace URL
+================================================================
+The Codespace URL found in next.config.js identifies the
+specific Codespace instance where the code ran:
+104:        '*.app.github.dev',
+105:        '*.app.github.dev:9002',
+106:        'special-succotash-g4pw4gjg7wxhwwjg-9002.app.github.dev',
+
+================================================================
+STATE: immortal-daemon.log excerpts (bridge kills)
+================================================================
+141:00:58:17 [BRIDGE] Port 9099 not listening - restarting bridge
+142:00:58:17 [BRIDGE] Started (PID 302375)
+307:03:21:17 [BRIDGE] Port 9099 not listening - restarting bridge
+308:03:21:17 [BRIDGE] Started (PID 531479)
+333:03:45:02 [BRIDGE] Port 9099 not listening - restarting bridge
+334:03:45:02 [BRIDGE] Started (PID 567239)
+352:03:55:32 [BRIDGE] Port 9099 not listening - restarting bridge
+353:03:55:32 [BRIDGE] Started (PID 581792)
+
+================================================================
+STATE: Tags and restore points
+================================================================
+emergency-snapshot-20260525-014035 2026-05-25 01:40:58 +0000
+emergency-snapshot-20260525-014340 2026-05-25 01:43:58 +0000
+mcp-phase-1-types 2026-04-08 05:13:09 +0000
+mcp-phase-2-config 2026-04-08 05:20:43 +0000
+mcp-phase-3-client 2026-04-08 05:27:49 +0000
+mcp-phase-4-adapter 2026-04-08 05:34:28 +0000
+mcp-phase-5-manager 2026-04-08 05:40:15 +0000
+mcp-phase-6-api 2026-04-08 05:48:53 +0000
+pre-lazarus-integration 2026-04-08 04:50:07 +0000
+restore-point-2026-05-27-pre-audit 2026-05-27 17:20:17 +0000
+security-firebase-admin-v13 2026-04-09 00:48:59 +0000
+storage-dual-write 2026-04-09 00:42:52 +0000
+v1.2.0 2026-03-30 12:19:47 +0000
+
+================================================================
+STATE: All branches
+================================================================
+claude/fix-sabotaged-code-space 2026-06-11 23:31:33 +0000
+the-moda 2026-06-11 23:31:33 +0000
+origin/claude/fix-sabotaged-code-space 2026-06-11 23:31:33 +0000
+

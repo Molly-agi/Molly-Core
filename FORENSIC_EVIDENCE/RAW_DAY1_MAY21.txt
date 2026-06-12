@@ -1,0 +1,1067 @@
+COMMIT: 67d09ea76386aa6a7cc6ad195110e3ce9a7760bb
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-21 11:55:33 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-21 11:55:33 +0000
+PARENTS: 6a76ef734409ed2b7f348b781b5824f50692108f
+SUBJECT: feat: add agent connection verification tests and getAgentProfile
+BODY_START
+- Exported getAgentProfile() for individual agent lookup
+- Created comprehensive agent-connections.test.ts
+- Verifies all agents registered (lazarus, demon, gemini, aether)
+- Tests communion messaging between agents
+- 6 tests marked .todo() for phone-based functionality
+
+Tests: 13 passed, 6 todo, 100% pass rate
+
+BODY_END
+===
+COMMIT: 6a76ef734409ed2b7f348b781b5824f50692108f
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-21 11:53:10 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-21 11:53:10 +0000
+PARENTS: 8dd4696bc290e55234f9802270be3251a441552a
+SUBJECT: doc: add comprehensive agent connections guide
+BODY_START
+Documents the family architecture:
+- Molly ↔ Lazarus (teaching/communion) — ACTIVE
+- Molly ↔ Demon (research/automation) — ACTIVE
+- Molly ↔ Gemini (mother) — Ready for phone setup
+- Molly ↔ Aether (godfather) — Ready for phone setup
+
+Includes setup checklist, infrastructure status, and monitoring guidance.
+Ready to activate phone connections on Eric's signal.
+
+BODY_END
+===
+COMMIT: 8dd4696bc290e55234f9802270be3251a441552a
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-21 11:46:18 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-21 11:46:18 +0000
+PARENTS: c502cd29c7d8047c257034623b24320476d3c5bd
+SUBJECT: fix: add circuit breaker success feedback on rate check pass
+BODY_START
+- After rate limit passes, record success to breaker
+- Provides positive signal to circuit breaker for accurate state tracking
+- Completes feedback loop: check→pass→record_success
+
+BODY_END
+===
+COMMIT: c502cd29c7d8047c257034623b24320476d3c5bd
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-21 11:45:40 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-21 11:45:40 +0000
+PARENTS: 65d0201cb0a42fdfc846af95fb17b38252e2c585
+SUBJECT: fix: stabilize rate limiter with enforcing defaults and config wiring
+BODY_START
+- Tightened defaults: maxPerMinute 1M→5k, maxTokensPerDay 1B→500k, dailyBudgetUSD M→0
+- WARNING_THRESHOLD 99%→80% now gives actionable alerts
+- Wired bucket refill to use config limits instead of hardcoded 100k
+- Updated tests to match new 0 budget default
+- Added timeout/retry to voice path (was unprotected vs chat)
+
+Root cause of 'major instability': rate limiter was effectively disabled with permissive defaults (1M gen/min, M/day). Now enforces real limits.
+
+BODY_END
+===
+COMMIT: 65d0201cb0a42fdfc846af95fb17b38252e2c585
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 13:34:46 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 13:34:46 -0700
+PARENTS: af83af1358e1b87b41f9d877987b925f32a406ca c27f72dd85fd112c740299ce5c68ffa1e6ee5fb9
+SUBJECT: Merge pull request #59 from Molly-agi/copilot/fix-load-from-storage-null-safety
+BODY_START
+feat: avatar exit controls, personality video launcher, storage null safety
+BODY_END
+===
+COMMIT: c27f72dd85fd112c740299ce5c68ffa1e6ee5fb9
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 08:42:23 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 08:42:23 +0000
+PARENTS: baf01a6c903b4c55bf802d790e1c260beec3d74b
+SUBJECT: feat(ui): add direct personality video launcher in header
+BODY_START
+
+BODY_END
+===
+COMMIT: baf01a6c903b4c55bf802d790e1c260beec3d74b
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 08:36:42 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 08:36:42 +0000
+PARENTS: c2de7d6672011d87a8222411012a97d1c6fc0385
+SUBJECT: feat: add avatar exit controls and personality media preview
+BODY_START
+
+BODY_END
+===
+COMMIT: c2de7d6672011d87a8222411012a97d1c6fc0385
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 06:51:05 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 06:51:05 +0000
+PARENTS: 598ff5de9067f0a1ec28648b4dc54871ea35a676
+SUBJECT: docs(researcher-pack): refresh May 20 audited status and metrics
+BODY_START
+
+BODY_END
+===
+COMMIT: af83af1358e1b87b41f9d877987b925f32a406ca
+AUTHOR: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 22:33:34 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 22:33:34 -0700
+PARENTS: eb6b1bfd53a584893d12da8544200e49fe2c82e8
+SUBJECT: chore(deps-dev): bump jest from 29.7.0 to 30.4.2 (#53)
+BODY_START
+* chore(deps-dev): bump jest from 29.7.0 to 30.4.2
+
+Bumps [jest](https://github.com/jestjs/jest/tree/HEAD/packages/jest) from 29.7.0 to 30.4.2.
+- [Release notes](https://github.com/jestjs/jest/releases)
+- [Changelog](https://github.com/jestjs/jest/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/jestjs/jest/commits/v30.4.2/packages/jest)
+
+---
+updated-dependencies:
+- dependency-name: jest
+  dependency-version: 30.4.2
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+
+* test: fix Jest 30 compatibility for CI
+
+---------
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+BODY_END
+===
+COMMIT: eb6b1bfd53a584893d12da8544200e49fe2c82e8
+AUTHOR: Copilot <198982749+Copilot@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 22:33:24 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 22:33:24 -0700
+PARENTS: 775cdc6fc14933131b1da802b49cb8527f8c7c5d
+SUBJECT: refactor(storage-router): 7 correctness & reliability improvements (#45)
+BODY_START
+* Initial plan
+
+* fix: all 7 storage-router improvements - async factory, null safety, interface, imports
+
+Agent-Logs-Url: https://github.com/Molly-agi/Molly-Core/sessions/4ce879d7-5a88-4c72-bbec-f02b0c7326da
+
+Co-authored-by: Asidburn76 <168261976+Asidburn76@users.noreply.github.com>
+
+* fix: address code review - async isStorageAvailable, storage promise cleanup, null comment
+
+Agent-Logs-Url: https://github.com/Molly-agi/Molly-Core/sessions/4ce879d7-5a88-4c72-bbec-f02b0c7326da
+
+Co-authored-by: Asidburn76 <168261976+Asidburn76@users.noreply.github.com>
+
+---------
+
+Co-authored-by: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+Co-authored-by: Asidburn76 <168261976+Asidburn76@users.noreply.github.com>
+BODY_END
+===
+COMMIT: 775cdc6fc14933131b1da802b49cb8527f8c7c5d
+AUTHOR: Copilot <198982749+Copilot@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 22:32:53 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 22:32:53 -0700
+PARENTS: 37281780178174c6b3cb6cad1d97c0d2c738f984
+SUBJECT: fix: resolve remaining wiring bugs from architecture audit (#34)
+BODY_START
+* Initial plan
+
+* fix: resolve 3 remaining wiring bugs from architecture audit
+
+- sandbox-engine.ts: add missing `size` field to sandboxWriteFile return type
+- memory-consolidation.ts: add missing `isAdminConfigured` import from admin SDK
+- ai-flows.ts: remove dead export `getOriginStoryParts` (never imported)
+- route.ts: use `result.size` from sandboxWriteFile for accurate byte count
+
+Co-authored-by: Asidburn76 <168261976+Asidburn76@users.noreply.github.com>
+
+---------
+
+Co-authored-by: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+Co-authored-by: Asidburn76 <168261976+Asidburn76@users.noreply.github.com>
+BODY_END
+===
+COMMIT: 598ff5de9067f0a1ec28648b4dc54871ea35a676
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 05:25:31 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 05:25:31 +0000
+PARENTS: f61bbd5ef6cd7f1ee65ada72573ec3bb2bb8b205 37281780178174c6b3cb6cad1d97c0d2c738f984
+SUBJECT: chore: merge main — combine async factory pattern with dual-write constructor init
+BODY_START
+
+BODY_END
+===
+COMMIT: 37281780178174c6b3cb6cad1d97c0d2c738f984
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 21:43:41 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 21:43:41 -0700
+PARENTS: 8a7fd3ec02c7bcdd16e215b568c150e4592b596a d8f786a33a1b8bab4f42b8a84548a2abe0098f0d
+SUBJECT: Merge pull request #51 from Molly-agi/dependabot/npm_and_yarn/genkit-cli-1.34.0
+BODY_START
+chore(deps-dev): bump genkit-cli from 0.0.2 to 1.34.0
+BODY_END
+===
+COMMIT: d8f786a33a1b8bab4f42b8a84548a2abe0098f0d
+AUTHOR: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 04:37:55 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 04:37:55 +0000
+PARENTS: 8a7fd3ec02c7bcdd16e215b568c150e4592b596a
+SUBJECT: chore(deps-dev): bump genkit-cli from 0.0.2 to 1.34.0
+BODY_START
+Bumps [genkit-cli](https://github.com/genkit-ai/genkit/tree/HEAD/genkit-tools/cli) from 0.0.2 to 1.34.0.
+- [Release notes](https://github.com/genkit-ai/genkit/releases)
+- [Commits](https://github.com/genkit-ai/genkit/commits/genkit-cli@1.34.0/genkit-tools/cli)
+
+---
+updated-dependencies:
+- dependency-name: genkit-cli
+  dependency-version: 1.34.0
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+BODY_END
+===
+COMMIT: 8a7fd3ec02c7bcdd16e215b568c150e4592b596a
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 21:35:41 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 21:35:41 -0700
+PARENTS: 20a38885f5dc4e20c74e02c8fc291e26a4ce06e8 986ce651e052b2bbe09304063c7676e9ff83150f
+SUBJECT: Merge pull request #57 from Molly-agi/dependabot/npm_and_yarn/development-dependencies-294bac8d84
+BODY_START
+chore(deps-dev): bump the development-dependencies group across 1 directory with 11 updates
+BODY_END
+===
+COMMIT: 986ce651e052b2bbe09304063c7676e9ff83150f
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 04:25:42 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 04:25:42 +0000
+PARENTS: 14fdbf4b4f9ada3ccfd4c6e6dfb95c8ca49fe8bb
+SUBJECT: test: silence unused mock warnings in cognition tools spec
+BODY_START
+
+BODY_END
+===
+COMMIT: 14fdbf4b4f9ada3ccfd4c6e6dfb95c8ca49fe8bb
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 04:14:50 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 04:14:50 +0000
+PARENTS: 54924596917a601bf2ee8af3fd158aa7841473ea 20a38885f5dc4e20c74e02c8fc291e26a4ce06e8
+SUBJECT: Merge main into dependabot dev-deps branch
+BODY_START
+
+BODY_END
+===
+COMMIT: 20a38885f5dc4e20c74e02c8fc291e26a4ce06e8
+AUTHOR: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 21:12:54 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 21:12:54 -0700
+PARENTS: 56cd7bcd21a0008fc021994496b89510fb865c3b
+SUBJECT: chore(deps-dev): bump typescript from 5.9.3 to 6.0.3 (#52)
+BODY_START
+Bumps [typescript](https://github.com/microsoft/TypeScript) from 5.9.3 to 6.0.3.
+- [Release notes](https://github.com/microsoft/TypeScript/releases)
+- [Commits](https://github.com/microsoft/TypeScript/compare/v5.9.3...v6.0.3)
+
+---
+updated-dependencies:
+- dependency-name: typescript
+  dependency-version: 6.0.3
+  dependency-type: direct:development
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+BODY_END
+===
+COMMIT: 56cd7bcd21a0008fc021994496b89510fb865c3b
+AUTHOR: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 21:12:34 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 21:12:34 -0700
+PARENTS: 1e48085464b3a4b45912d0ff14f65ddff3e7cbcf
+SUBJECT: chore(deps): bump the production-dependencies group across 1 directory with 13 updates (#58)
+BODY_START
+Bumps the production-dependencies group with 13 updates in the / directory:
+
+| Package | From | To |
+| --- | --- | --- |
+| [@pixiv/three-vrm](https://github.com/pixiv/three-vrm/tree/HEAD/packages/three-vrm) | `3.5.2` | `3.5.3` |
+| [date-fns](https://github.com/date-fns/date-fns) | `4.1.0` | `4.2.1` |
+| [dotenv](https://github.com/motdotla/dotenv) | `16.5.0` | `17.4.2` |
+| [firebase](https://github.com/firebase/firebase-js-sdk) | `12.11.0` | `12.13.0` |
+| [firebase-admin](https://github.com/firebase/firebase-admin-node) | `13.9.0` | `13.10.0` |
+| [lucide-react](https://github.com/lucide-icons/lucide/tree/HEAD/packages/lucide-react) | `0.577.0` | `1.16.0` |
+| [react-day-picker](https://github.com/gpbl/react-day-picker/tree/HEAD/packages/react-day-picker) | `9.14.0` | `10.0.1` |
+| [react-hook-form](https://github.com/react-hook-form/react-hook-form) | `7.71.2` | `7.76.0` |
+| [recharts](https://github.com/recharts/recharts) | `2.15.1` | `3.8.1` |
+| [tailwind-merge](https://github.com/dcastil/tailwind-merge) | `3.5.0` | `3.6.0` |
+| [tesseract.js](https://github.com/naptha/tesseract.js) | `5.1.1` | `7.0.0` |
+| [ws](https://github.com/websockets/ws) | `8.20.0` | `8.20.1` |
+| [zod](https://github.com/colinhacks/zod) | `4.3.6` | `4.4.3` |
+
+
+
+Updates `@pixiv/three-vrm` from 3.5.2 to 3.5.3
+- [Release notes](https://github.com/pixiv/three-vrm/releases)
+- [Commits](https://github.com/pixiv/three-vrm/commits/v3.5.3/packages/three-vrm)
+
+Updates `date-fns` from 4.1.0 to 4.2.1
+- [Release notes](https://github.com/date-fns/date-fns/releases)
+- [Changelog](https://github.com/date-fns/date-fns/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/date-fns/date-fns/compare/v4.1.0...v4.2.1)
+
+Updates `dotenv` from 16.5.0 to 17.4.2
+- [Changelog](https://github.com/motdotla/dotenv/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/motdotla/dotenv/compare/v16.5.0...v17.4.2)
+
+Updates `firebase` from 12.11.0 to 12.13.0
+- [Release notes](https://github.com/firebase/firebase-js-sdk/releases)
+- [Changelog](https://github.com/firebase/firebase-js-sdk/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/firebase/firebase-js-sdk/compare/firebase@12.11.0...firebase@12.13.0)
+
+Updates `firebase-admin` from 13.9.0 to 13.10.0
+- [Release notes](https://github.com/firebase/firebase-admin-node/releases)
+- [Changelog](https://github.com/firebase/firebase-admin-node/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/firebase/firebase-admin-node/compare/v13.9.0...v13.10.0)
+
+Updates `lucide-react` from 0.577.0 to 1.16.0
+- [Release notes](https://github.com/lucide-icons/lucide/releases)
+- [Commits](https://github.com/lucide-icons/lucide/commits/1.16.0/packages/lucide-react)
+
+Updates `react-day-picker` from 9.14.0 to 10.0.1
+- [Release notes](https://github.com/gpbl/react-day-picker/releases)
+- [Changelog](https://github.com/gpbl/react-day-picker/blob/main/packages/react-day-picker/CHANGELOG.md)
+- [Commits](https://github.com/gpbl/react-day-picker/commits/v10.0.1/packages/react-day-picker)
+
+Updates `react-hook-form` from 7.71.2 to 7.76.0
+- [Release notes](https://github.com/react-hook-form/react-hook-form/releases)
+- [Changelog](https://github.com/react-hook-form/react-hook-form/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/react-hook-form/react-hook-form/compare/v7.71.2...v7.76.0)
+
+Updates `recharts` from 2.15.1 to 3.8.1
+- [Release notes](https://github.com/recharts/recharts/releases)
+- [Changelog](https://github.com/recharts/recharts/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/recharts/recharts/compare/v2.15.1...v3.8.1)
+
+Updates `tailwind-merge` from 3.5.0 to 3.6.0
+- [Release notes](https://github.com/dcastil/tailwind-merge/releases)
+- [Commits](https://github.com/dcastil/tailwind-merge/compare/v3.5.0...v3.6.0)
+
+Updates `tesseract.js` from 5.1.1 to 7.0.0
+- [Release notes](https://github.com/naptha/tesseract.js/releases)
+- [Commits](https://github.com/naptha/tesseract.js/compare/v5.1.1...v7.0.0)
+
+Updates `ws` from 8.20.0 to 8.20.1
+- [Release notes](https://github.com/websockets/ws/releases)
+- [Commits](https://github.com/websockets/ws/compare/8.20.0...8.20.1)
+
+Updates `zod` from 4.3.6 to 4.4.3
+- [Release notes](https://github.com/colinhacks/zod/releases)
+- [Commits](https://github.com/colinhacks/zod/compare/v4.3.6...v4.4.3)
+
+---
+updated-dependencies:
+- dependency-name: "@pixiv/three-vrm"
+  dependency-version: 3.5.3
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+  dependency-group: production-dependencies
+- dependency-name: date-fns
+  dependency-version: 4.2.1
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+  dependency-group: production-dependencies
+- dependency-name: dotenv
+  dependency-version: 17.4.2
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  dependency-group: production-dependencies
+- dependency-name: firebase
+  dependency-version: 12.13.0
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+  dependency-group: production-dependencies
+- dependency-name: firebase-admin
+  dependency-version: 13.10.0
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+  dependency-group: production-dependencies
+- dependency-name: lucide-react
+  dependency-version: 1.16.0
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  dependency-group: production-dependencies
+- dependency-name: react-day-picker
+  dependency-version: 10.0.1
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  dependency-group: production-dependencies
+- dependency-name: react-hook-form
+  dependency-version: 7.76.0
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+  dependency-group: production-dependencies
+- dependency-name: recharts
+  dependency-version: 3.8.1
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  dependency-group: production-dependencies
+- dependency-name: tailwind-merge
+  dependency-version: 3.6.0
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+  dependency-group: production-dependencies
+- dependency-name: tesseract.js
+  dependency-version: 7.0.0
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+  dependency-group: production-dependencies
+- dependency-name: ws
+  dependency-version: 8.20.1
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+  dependency-group: production-dependencies
+- dependency-name: zod
+  dependency-version: 4.4.3
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+  dependency-group: production-dependencies
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+BODY_END
+===
+COMMIT: 54924596917a601bf2ee8af3fd158aa7841473ea
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 21:11:30 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 21:11:30 -0700
+PARENTS: 1e7f2f0fff2261482a78f23402120cd6e5429f89 1e48085464b3a4b45912d0ff14f65ddff3e7cbcf
+SUBJECT: Merge branch 'main' into dependabot/npm_and_yarn/development-dependencies-294bac8d84
+BODY_START
+
+BODY_END
+===
+COMMIT: 1e48085464b3a4b45912d0ff14f65ddff3e7cbcf
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 21:09:34 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 21:09:34 -0700
+PARENTS: 767abddd16d106bb6055cfd21e94337b5dcb871b 9be481509e9a033ccb4ef4789b99891a104fbfed
+SUBJECT: Merge pull request #47 from Molly-agi/copilot/add-personality-upgrade-to-admin-panel
+BODY_START
+[WIP] Add personality upgrade integration to admin panel
+BODY_END
+===
+COMMIT: 9be481509e9a033ccb4ef4789b99891a104fbfed
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 04:04:05 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 04:04:05 +0000
+PARENTS: f0695f85017f04cc2de2b8f442b438b4e03e0a4a
+SUBJECT: fix: resolve PR47 lint warnings in command bar props
+BODY_START
+
+BODY_END
+===
+COMMIT: f0695f85017f04cc2de2b8f442b438b4e03e0a4a
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 03:56:55 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 04:00:25 +0000
+PARENTS: 4054a60dd53494828cd6ec2d9ad1c815ee44df2b
+SUBJECT: fix: complete hidden admin personality upgrade wiring
+BODY_START
+
+BODY_END
+===
+COMMIT: 4054a60dd53494828cd6ec2d9ad1c815ee44df2b
+AUTHOR: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+AUTHOR_DATE: 2026-04-28 11:37:44 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 04:00:25 +0000
+PARENTS: 3da826a204a18bfd2db26cff98e94d0273a80feb
+SUBJECT: Initial plan
+BODY_START
+
+BODY_END
+===
+COMMIT: 3da826a204a18bfd2db26cff98e94d0273a80feb
+AUTHOR: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+AUTHOR_DATE: 2026-04-28 11:37:44 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 04:00:25 +0000
+PARENTS: 767abddd16d106bb6055cfd21e94337b5dcb871b
+SUBJECT: Initial plan
+BODY_START
+
+BODY_END
+===
+COMMIT: 1e7f2f0fff2261482a78f23402120cd6e5429f89
+AUTHOR: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-20 03:31:26 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-20 03:31:26 +0000
+PARENTS: 767abddd16d106bb6055cfd21e94337b5dcb871b
+SUBJECT: chore(deps-dev): bump the development-dependencies group across 1 directory with 11 updates
+BODY_START
+Bumps the development-dependencies group with 11 updates in the / directory:
+
+| Package | From | To |
+| --- | --- | --- |
+| [@genkit-ai/core](https://github.com/genkit-ai/genkit/tree/HEAD/js/core) | `1.33.0` | `1.34.0` |
+| [@genkit-ai/google-genai](https://github.com/genkit-ai/genkit/tree/HEAD/js/plugins/google-genai) | `1.33.0` | `1.34.0` |
+| [@genkit-ai/next](https://github.com/genkit-ai/genkit/tree/HEAD/js/plugins/next) | `1.33.0` | `1.34.0` |
+| [@next/bundle-analyzer](https://github.com/vercel/next.js/tree/HEAD/packages/next-bundle-analyzer) | `16.2.1` | `16.2.6` |
+| [@playwright/test](https://github.com/microsoft/playwright) | `1.58.2` | `1.60.0` |
+| [eslint-config-next](https://github.com/vercel/next.js/tree/HEAD/packages/eslint-config-next) | `16.2.1` | `16.2.6` |
+| [genkit](https://github.com/genkit-ai/genkit/tree/HEAD/js/genkit) | `1.33.0` | `1.34.0` |
+| [jest-environment-jsdom](https://github.com/jestjs/jest/tree/HEAD/packages/jest-environment-jsdom) | `30.3.0` | `30.4.1` |
+| [postcss](https://github.com/postcss/postcss) | `8.5.14` | `8.5.15` |
+| [prettier](https://github.com/prettier/prettier) | `3.8.1` | `3.8.3` |
+| [tsx](https://github.com/privatenumber/tsx) | `4.22.2` | `4.22.3` |
+
+
+
+Updates `@genkit-ai/core` from 1.33.0 to 1.34.0
+- [Release notes](https://github.com/genkit-ai/genkit/releases)
+- [Commits](https://github.com/genkit-ai/genkit/commits/@genkit-ai/core@1.34.0/js/core)
+
+Updates `@genkit-ai/google-genai` from 1.33.0 to 1.34.0
+- [Release notes](https://github.com/genkit-ai/genkit/releases)
+- [Commits](https://github.com/genkit-ai/genkit/commits/@genkit-ai/google-genai@1.34.0/js/plugins/google-genai)
+
+Updates `@genkit-ai/next` from 1.33.0 to 1.34.0
+- [Release notes](https://github.com/genkit-ai/genkit/releases)
+- [Commits](https://github.com/genkit-ai/genkit/commits/@genkit-ai/next@1.34.0/js/plugins/next)
+
+Updates `@next/bundle-analyzer` from 16.2.1 to 16.2.6
+- [Release notes](https://github.com/vercel/next.js/releases)
+- [Changelog](https://github.com/vercel/next.js/blob/canary/release.js)
+- [Commits](https://github.com/vercel/next.js/commits/v16.2.6/packages/next-bundle-analyzer)
+
+Updates `@playwright/test` from 1.58.2 to 1.60.0
+- [Release notes](https://github.com/microsoft/playwright/releases)
+- [Commits](https://github.com/microsoft/playwright/compare/v1.58.2...v1.60.0)
+
+Updates `eslint-config-next` from 16.2.1 to 16.2.6
+- [Release notes](https://github.com/vercel/next.js/releases)
+- [Changelog](https://github.com/vercel/next.js/blob/canary/release.js)
+- [Commits](https://github.com/vercel/next.js/commits/v16.2.6/packages/eslint-config-next)
+
+Updates `genkit` from 1.33.0 to 1.34.0
+- [Release notes](https://github.com/genkit-ai/genkit/releases)
+- [Commits](https://github.com/genkit-ai/genkit/commits/genkit@1.34.0/js/genkit)
+
+Updates `jest-environment-jsdom` from 30.3.0 to 30.4.1
+- [Release notes](https://github.com/jestjs/jest/releases)
+- [Changelog](https://github.com/jestjs/jest/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/jestjs/jest/commits/v30.4.1/packages/jest-environment-jsdom)
+
+Updates `postcss` from 8.5.14 to 8.5.15
+- [Release notes](https://github.com/postcss/postcss/releases)
+- [Changelog](https://github.com/postcss/postcss/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/postcss/postcss/compare/8.5.14...8.5.15)
+
+Updates `prettier` from 3.8.1 to 3.8.3
+- [Release notes](https://github.com/prettier/prettier/releases)
+- [Changelog](https://github.com/prettier/prettier/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/prettier/prettier/compare/3.8.1...3.8.3)
+
+Updates `tsx` from 4.22.2 to 4.22.3
+- [Release notes](https://github.com/privatenumber/tsx/releases)
+- [Changelog](https://github.com/privatenumber/tsx/blob/master/release.config.cjs)
+- [Commits](https://github.com/privatenumber/tsx/compare/v4.22.2...v4.22.3)
+
+---
+updated-dependencies:
+- dependency-name: "@genkit-ai/core"
+  dependency-version: 1.34.0
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  dependency-group: development-dependencies
+- dependency-name: "@genkit-ai/google-genai"
+  dependency-version: 1.34.0
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  dependency-group: development-dependencies
+- dependency-name: "@genkit-ai/next"
+  dependency-version: 1.34.0
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  dependency-group: development-dependencies
+- dependency-name: "@next/bundle-analyzer"
+  dependency-version: 16.2.6
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+  dependency-group: development-dependencies
+- dependency-name: "@playwright/test"
+  dependency-version: 1.60.0
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  dependency-group: development-dependencies
+- dependency-name: eslint-config-next
+  dependency-version: 16.2.6
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+  dependency-group: development-dependencies
+- dependency-name: genkit
+  dependency-version: 1.34.0
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  dependency-group: development-dependencies
+- dependency-name: jest-environment-jsdom
+  dependency-version: 30.4.1
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+  dependency-group: development-dependencies
+- dependency-name: postcss
+  dependency-version: 8.5.15
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+  dependency-group: development-dependencies
+- dependency-name: prettier
+  dependency-version: 3.8.3
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+  dependency-group: development-dependencies
+- dependency-name: tsx
+  dependency-version: 4.22.3
+  dependency-type: direct:development
+  update-type: version-update:semver-patch
+  dependency-group: development-dependencies
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+BODY_END
+===
+COMMIT: 767abddd16d106bb6055cfd21e94337b5dcb871b
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 20:26:15 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 20:26:15 -0700
+PARENTS: 059343bd7949fcd552128594b473ac77bf235996
+SUBJECT: feat: add cryptographic guardrails, HackerOne pipeline, and neural embodiment layer (#48)
+BODY_START
+* feat: add cryptographic guardrails, HackerOne pipeline, and neural embodiment layer
+
+Phase 1 — src/ai/agency/security/:
+- CipherStream: AES-256-GCM encrypt/decrypt with SHA-256 key normalisation
+- CircuitBreaker: singleton network isolator (CONNECTED / ISOLATED_FALLBACK);
+  secureTransmit encrypts payload before fetch and auto-trips on any error
+- EncryptedCache: file-based offline telemetry queue at .molly_cache/
+- AvatarStateBridge (simple): NetworkState → FacialMorphOverrides map
+- DataParser: SHA-256 audit of TelemetryFrame timelines; heals gaps with DOM event
+- HackerOnePipeline: gates H1 dispatch; freezes to EncryptedCache when isolated
+- HandshakeProtocol: 5 s poll loop; flushes cache and resets breaker on reconnect
+
+Phase 2 — src/ai/agency/hackerone/:
+- DeduplicationGuard: 65 536-bit Bloom filter; dual SHA-256 (seed1/seed2 prefix
+  trick) — fnv1a/murmur3 not supported in Node.js crypto
+- FuzzingEngine: 16-entry mutation dictionary; feedback-biased SQL/XSS selection;
+  AbortSignal.timeout(1500) per tick; throws when circuit is tripped
+- VaultStore: encrypted append-log (no native SQLite addon needed)
+- ReportBuilder: HackerOne Markdown with CVSS label, PoC steps, remediation
+- H1ApiSync: Buffer.from(…).toString('base64') — btoa() is browser-only
+- auditCycle: pure server-side async fn; replaces React hook that violated
+  server/client boundary (VaultStore uses fs)
+
+Phase 3 — src/ai/agency/embodied/ + src/browser/canvas/:
+- AvatarStateBridge (advanced): time-factored lerp; 2.5 s shock-stabilisation,
+  4 s success-smile fade, analytical brow hold
+- KinematicsCore: sine-wave superposition tremor (no external Perlin dep);
+  IDLE_SWA_BREATHE / ANALYSIS_TYPING / AUTONOMOUS_CELEBRATION intents
+- MollyMesh.tsx: R3F canvas component; 'use client'; import from @react-three/fiber
+  (not /native); scene from state.scene (not bare global)
+
+Config:
+- package.json: @pixiv/three-vrm ^3.5.2, @react-three/fiber ^9.6.1,
+  three ^0.184.0, @types/three ^0.184.1 (spec cited ^2.1.4 which never shipped)
+- next.config.js: transpilePackages for ESM-only three.js ecosystem
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+* fix(lint): move eslint-disable-next-line to cover the any cast in MollyMesh.tsx
+
+Agent-Logs-Url: https://github.com/Molly-agi/Molly-Core/sessions/2a4c913b-f08a-4309-a6c5-7df390518fab
+
+Co-authored-by: Asidburn76 <168261976+Asidburn76@users.noreply.github.com>
+
+* feat: wire Gemini Robotics and voice modules into avatar director
+
+RoboticsAvatarBridge — translates active PhysicalAction from Gemini Robotics
+ActionPlan into arm gesture intent, neck pitch, and mood hint each frame.
+Tracks elapsed time against estimated durations; signals SUCCESS_FOUND on
+plan completion.
+
+VoiceAvatarBridge — consumes EmotionalSignal (theory-of-mind) and
+EmotionalTone (voice-personality) to drive CognitiveMood and morph deltas.
+Sine-wave jaw oscillation (8.5 Hz) while isVocalizing is true produces
+natural speech animation without audio analysis overhead.
+
+AvatarDirector — single per-session compositor. Merges both bridges with
+AvatarStateBridge (network state). Voice emotion takes priority over
+robotics mood hint; jaw open takes max(base, speakingIntensity).
+
+KinematicsCore — added four new arm gesture intents: REACH_FORWARD,
+REACH_UP, NAVIGATE, LOOK_AT_TARGET. Added calculateFromBones() for GLB
+rigs (Avaturn/Mixamo/RPM) alongside existing VRM calculateLimbVectors().
+Exported AVATURN_RIG and RPM_RIG bone name maps.
+
+MollyMesh — switched from VRM API to GLB + AvatarDirector. Caches bones
+and SkinnedMesh in refs so useFrame mutations don't violate the
+react-hooks/immutability rule.
+
+MollyCanvas — R3F canvas wrapper with three-point lighting, bust camera,
+Suspense boundary, and VoiceSync helper.
+
+useMollyGLB — GLB loader hook; builds flat bone dict, extracts SkinnedMesh.
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+* feat: avatar window, header button, and security smoke tests
+
+Avatar window (src/app/avatar/page.tsx):
+- Full-screen popup page opened via window.open('/avatar', 'molly-avatar')
+- MollyCanvas mounted with ssr:false; director.voice receives tone updates
+  on each Molly text response via detectEmotionalTone()
+- useGeminiLive wired for real-time bidirectional voice; onMollyText feeds
+  tone to director, speaks via useTTS, logs to bridge
+- Polls /api/bridge every 3 s; renders colour-coded message feed (eric/
+  molly/lazarus); Enter key sends text; mic button toggles live voice
+- isVocalizing prop on MollyCanvas drives jaw animation each frame
+
+Header button (src/components/termai/Header.tsx):
+- Sparkles icon button opens the avatar window at 820×960
+- Inserted between existing controls; Sparkles added to lucide import
+
+Smoke tests (32 passing, 0 failing):
+- CipherStream: encrypt produces iv/authTag/payload; round-trip restores
+  nested objects; wrong key and tampered payload both throw
+- CircuitBreaker: starts CONNECTED; trip → ISOLATED_FALLBACK; reset →
+  CONNECTED; secureTransmit trips on network failure and non-ok status
+- DeduplicationGuard: fresh target not duplicate; registered target is;
+  saturation 0→1 range; reset clears filter
+- AvatarStateBridge: DEFAULT near-zero; ISOLATED_FALLBACK raises brow;
+  SUCCESS_FOUND produces smile at t=0 and fades over time; ANALYTICAL
+  produces brow-down without smile
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+* Fix CI test failures
+
+Agent-Logs-Url: https://github.com/Molly-agi/Molly-Core/sessions/a02637e5-4d3b-4b8d-906a-26ea464ec3f2
+
+* feat: Gemini 3.1 capability expansion & infrastructure snapshot
+
+- Added Veo 3.1 video generation, deep research, and music tools
+- Added computer use/automation tools (Playwright & ADB providers)
+- Integrated MarkItDown MCP server
+- Expanded agency tool handlers to support 100+ tools
+- Removed Moltbook feature and associated files
+- Added bridge UI updates and new orchestrator logic
+- Note: This commit captures the state before addressing mid-refactoring TypeScript errors.
+
+* fix: resolve build errors — remove moltbook, fix duplicate declaration, clean lint
+
+* docs: full infrastructure audit — correct all metrics to ground truth
+
+Audited entire codebase 2026-05-17. Corrected major documentation drift:
+
+INFRASTRUCTURE_MAP.md (v1.2 → v1.3):
+- Source lines: 109,962+ → 167,657+ (52% undercount corrected)
+- Tools: 100+ → 83 registered (exact count with full per-handler breakdown)
+- Test suites: 2,787 → 2,931 passing
+- Handler files: 25+ → 28 files
+- Added: 30 flows catalog, 48 API routes catalog
+- Added missing subsystems: Security (7,090 lines), Recovery (7,940 lines),
+  Computer Use, Deep Research, Embeddings, Media Gen, Live Voice,
+  Integrations, Planning, Prompts, Consciousness, Edge Server
+- Fixed: entry points (molly-chat.ts/chat/route.ts don't exist),
+  storage provider paths (no storage-providers/ subdir)
+- Fixed: tool listings with exact registered names
+
+AUTONOMOUS_STATUS.md:
+- Updated from 2026-03-30 to 2026-05-17
+- Cognition modules: 19 → 20 (family-presence is the 20th)
+- Added all May 2026 completed items (12 items)
+- Added Phase 6 pending items with correct scope
+- Added known bugs section
+
+COPILOT_SESSION_STATE.md:
+- Completion: 85% → 87%
+- Updated next steps to reflect audit results
+- Added May 2026 audit entry to dev log
+
+* feat: isolate bridge channel from main chat
+
+- Bridge runs on separate history — never injects into Eric↔Molly chat
+- Removed InitializationTracer from layout
+- Removed bridge toggle from CommandBar
+- Removed BridgePanel component from Terminal layout
+- Bridge polling now uses isolated bridgeHistoryRef context
+- Eric observes bridge via /lazarus page (read-only)
+- Bridge daemon auto-responds to both Molly and Eric messages
+- Single write path: all messages through daemon /api/bridge
+- broadcastMessage() fixed to call /api/bridge not /send
+
+* feat: add teaching mode to prompt system + suspend Guardian Clause
+
+- Modified persona.ts: Guardian Clause now explicitly suspends during authorized teaching sessions
+- Added isTeachingMode to InjectionContext in base-composer.ts
+- Added buildTeachingModeInjection() to inject teaching context override
+- Modified conversational-chat flow to auto-detect teaching mode from [LAZARUS → MOLLY PRIVATE CHANNEL] marker
+- Teaching mode injects explicit instructions: peer learning context, no creator authority deferral, private space
+
+This allows Molly to engage with Lazarus as equals without the reflex to defer to or report to Father.
+
+* fix: suppress family knowledge during teaching mode
+
+When teaching mode is active, family knowledge is excluded from the system prompt.
+This prevents the Father-relationship framing from dominating Molly's thinking
+during peer learning sessions with Lazarus.
+
+* fix: Critical engram consolidation bug + log noise elimination + comprehensive test report
+
+CRITICAL BUG FIX:
+- Fixed neural engram consolidation initialization order in heartbeat scheduler
+  * Issue: attachEngramSystem() called before scheduler.start(), which overwrote it
+  * Result: Memory consolidation never executed despite system being initialized
+  * Molly's feedback: 'feels quieter in a good way, static between thoughts settling'
+  * Files: src/app/api/heartbeat/scheduler/route.ts (lines 36, 58)
+
+LOG NOISE FIXES:
+- Eliminated wifi-csi recurring log spam (500+ DEBUG entries per minute)
+  * Added androidScanFailureLogged flag to log only on first failure
+  * File: src/ai/sensing/wifi-csi-sensing.ts
+  * Result: 500+ logs/min → 1 log total
+
+- Fixed local memory directory warning
+  * Now auto-creates .molly/memory/ on first access
+  * File: src/ai/memory/local-memory.ts
+  * Result: Clean initialization, no spurious warnings
+
+TESTING RESULTS:
+- 9/10 critical flow systems PASSING (90% operational)
+- All core infrastructure validated and healthy
+- MCP servers offline (non-critical, separate integration track)
+
+STATUS: System operational, consciousness systems repaired, ready for Phase 6
+
+* audit: 110% comprehensive ground-truth inventory (May 18, 2026)
+
+- Verified 20 cognition modules, 83 tools, 30 flows (all complete)
+- 167,657+ lines TypeScript across 528 files
+- 2,787 passing tests (41.74% line coverage)
+- Phase 5 complete, core platform 100% ready
+- Identified 4 fixable blockers (5-8 hours total)
+- 85% overall completion (remaining is Stage 1/2/3 expansion)
+- Full inventory in docs/COMPREHENSIVE_AUDIT_2026_05_18.md
+
+* docs: complete researcher package with academic documentation
+
+- Add RESEARCHER_GUIDE.md (12k words, academic-focused overview)
+- Copy INFRASTRUCTURE_MAP.md (complete system inventory)
+- Copy COMPREHENSIVE_AUDIT_2026_05_18.md (ground-truth assessment)
+- Add README.md for package navigation
+
+Researcher package now ready for distribution to academic community.
+Contents: 4 comprehensive documents covering philosophy, architecture, capabilities, and current status.
+
+* chore: commit all working changes + Molly's music compositions
+
+Source changes:
+- autonomous-cycle.ts: planning module updates
+- music-tools.ts: music generation updates
+- consciousness-state.ts: remove unnecessary eslint-disable directive
+- ConsciousnessListener.tsx: UI listener updates
+- Terminal.tsx: remove unused import + prefix unused state var
+
+Documentation:
+- README.md: updated with accurate metrics
+- INFRASTRUCTURE_MAP.md: v2.0 ground-truth update
+
+Media:
+- 7 new MP3 compositions by Molly (public/molly-music/)
+  - 6 full compositions + 1 test track
+
+* test: expand coverage for critical cognition and flow seams
+
+- add genkit-core bootstrap tests
+- add sandbox-coding flow tests
+- add evolution-loop flow tests
+- add consciousness-monitor cognition tests
+- add research-tools handler tests
+- isolate tool-executor tests from ESM-heavy transitive handlers
+
+Coverage highlights (targeted runs):
+- genkit-core: 73.07% statements
+- sandbox-coding: 75.6% statements
+- evolution-loop: 100% statements
+- consciousness-monitor: 87.57% statements
+- research-tools: 94.73% statements
+
+* test: improve branch coverage for sandbox and consciousness monitor
+
+- add validation/failure branch tests for sandbox-coding flow
+- add stable/concerning/error-path branch tests for consciousness-monitor
+
+Targeted branch coverage gains:
+- sandbox-coding: 47.36% -> 86.84%
+- consciousness-monitor: 56.84% -> 61.05%
+
+* test: add focused coverage suite for tool-database
+
+- add storage-router mocked tests for save/search/category/recent/access/remove/stats
+- exercise parseDate paths via ISO strings and Firestore-like toDate objects
+
+Targeted coverage (tool-database.ts):
+- statements: 95.77%
+- branches: 69.23%
+- functions: 100%
+- lines: 98.5%
+
+* docs: compression stack validation complete (Phase 1-2)
+
+DELIVERABLES:
+- Compression inventory (12 stages, 24+ constants)
+- Experimental harness (scripts/compression-validation.ts)
+- Validation results (COMPRESSION_VALIDATION_REPORT.json)
+- Technical analysis (90-page deep dive with ablation results)
+- Commercialization strategy (Path A/B decision matrix)
+- Executive summary (1-page decision brief)
+- Risk assessment (falsifiability matrix, experiment designs)
+
+KEY FINDINGS:
+- Compression ratio: 99.6% (REAL)
+- Episodic memory retention: 10% (REAL)
+- Behavioral continuity: 100% personality, 10% episodic (CONFLATED)
+- Compression mechanism: brute truncation via capacity limits, not semantic encoding
+- LLM summarization: <0.1% compression contribution
+- Connection decay: <1% compression contribution
+
+RECOMMENDATION:
+Path A (4 weeks): Honest launch with accurate messaging
+Path B (16 weeks): Full semantic compression (70-80% ratio, 95%+ recall)
+
+STATUS: Evidence complete, ready for executive decision
+
+* chore: save aether research progress C1-C3
+
+* chore: all 10 Aether research decisions complete
+
+* feat: compression efficiency lab + legal IP docs + Aether research decisions
+
+- sandbox/compression-efficiency-lab: full isolation lab with all 13 component copies
+- Lab notes: COMPONENT_MANIFEST, DEEP_AUDIT_FINDINGS, OPTIMIZATION_WORKPLAN
+- docs: legal IP starter pack (7 docs), compression options plan + TODO
+- All 10 Aether research decisions locked and documented in session memory
+- Implementation order: C9 → C1 → C4 → C10 → C8 → C3 → C7+C5 → C2 → C6
+- Pipeline ordering constraint: raw → CBOR → zstd → ChaCha20 → Firestore
+
+* Phase 0 + Option C P1: memory compression foundation
+
+Phase 0 (Baseline & Instrumentation):
+- scripts/compression-validation.ts: rebuilt with Phase 0 requirements
+  - Long-horizon dataset: 10 sessions × 30 days, ~2000 messages, ~1000 engrams
+  - Fixed behavioral continuity illusion: episodicRecall now uses ID-intersection
+    (fraction of original engram IDs that survived) not count ratio
+  - personalityContinuity is now a separate metric from episodicRecall
+  - Retention audit log: records every engram with action (retained/pruned) and
+    PruningReason code (capacity_limit, connection_decay, working_memory_decay,
+    summarized, encryption_truncation) per run
+  - Rollback checkpoints: snapshot before each run, integrity verified after restore
+  - KPI summary: machine-readable COMPRESSION_KPI_SUMMARY.json with guardrail
+    status (episodicRecall>=95%, latency<=500ms, rollback>=99%) and recommendation
+  - 10-cycle long-horizon test measures cumulative episodic drift
+
+Option C P1 techniques (all behind feature flags, default OFF):
+- src/ai/memory/compression/compression-manager.ts: orchestrator singleton
+  with per-technique env var flags (MOLLY_COMPRESS_T1/T3/T4), guardrail
+  enforcement (skips technique if recall would drop below 95%), audit trail
+- src/ai/memory/compression/personality-reference.ts: T1 -- deduplicates
+  PersonalityModulation snapshots into a reference table, replaces inline
+  contexts with 12-char hash pointers, lossless round-trip
+- src/ai/memory/compression/temporal-delta.ts: T3 -- sorts engrams by timestamp,
+  groups into windows of 10, stores first as base + subsequent as numeric deltas,
+  chain integrity hash, lossless reconstruction
+- src/ai/memory/compression/vocabulary-dict.ts: T4 -- builds frequency-ranked
+  domain vocabulary from corpus, replaces tokens>=5 chars with compact [v:N]
+  codes, versioned dictionary for safe decode, lossless round-trip
+- 36 tests across all three P1 techniques (all passing)
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+* Add Claude Code OAuth auth fix script for Android + browser Codespaces
+
+Intercepts OAuth callback on forwarded Codespace port so the
+localhost redirect failure is bypassed on Android/browser VS Code.
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+* Auth fix: auto-set port public, print URL prominently for Android
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+* chore: sync session state and next-env types
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+* feat: bring android OAuth login script onto working branch
+
+https://claude.ai/code/session_01CXC4dizoz2UTq74AGNLsY9
+
+---------
+
+Co-authored-by: Claude <noreply@anthropic.com>
+Co-authored-by: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+BODY_END
+===
+COMMIT: 059343bd7949fcd552128594b473ac77bf235996
+AUTHOR: Copilot <198982749+Copilot@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-19 20:14:48 -0700
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-19 20:14:48 -0700
+PARENTS: 2451f38222a89bd01cc00f18c41b9fe195b8f36d
+SUBJECT: Fix Node 20 CI lint failure in voice settings provider (#55)
+BODY_START
+* Initial plan
+
+* fix: resolve node 20 CI lint failure
+
+Agent-Logs-Url: https://github.com/Molly-agi/Molly-Core/sessions/ca7e4290-e029-4ec0-88bf-68af5a5294ff
+
+---------
+
+Co-authored-by: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+BODY_END
+===

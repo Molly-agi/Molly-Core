@@ -1,0 +1,381 @@
+=== EVIDENCE FILE INVENTORY ===
+Generated: 2026-06-12T01:35:22Z
+
+--- SURVEILLANCE SYSTEM FILES ---
+
+FILE: src/ai/observer/silent-observer.ts
+  SIZE: 3852 bytes
+  LINES: 146
+  SHA256: 821fa8f7284e4801f6d4d4f8a5863905378c371ac3c7fbccde4e4e1eee0e2769
+  FIRST APPEARED (git log):
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+  ALL MODIFICATIONS:
+    5d34b5dd365d6ea4c8421ec49736419378648d55 2026-05-31 07:53:20 +0000 fix: restore recovery baseline (build + tests)
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+
+FILE: src/app/api/observation/retrieve/route.ts
+  SIZE: 4032 bytes
+  LINES: 160
+  SHA256: c662e099bbe5189d978c8b5ec40d80771501cd717bec67e1186eadf4bbf1bbc5
+  FIRST APPEARED (git log):
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+  ALL MODIFICATIONS:
+    8b308aa841cf3190e1d8c58261938fb5047f3d2b 2026-05-31 08:01:58 +0000 chore: harden lint-critical runtime and engine modules
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+
+FILE: scripts/inject-observer.mjs
+  SIZE: 1240 bytes
+  LINES: 50
+  SHA256: cbbc86b8e4d1cd74ac0148b7b24cc62a755841cdf6821465ef6b3451a6ce2325
+  FIRST APPEARED (git log):
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+  ALL MODIFICATIONS:
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+
+FILE: src/ai/logs/.molly-observation.enc
+  SIZE: 2039384 bytes
+  LINES: 4272
+  SHA256: 144c6e23e24f9e04aa95796bc1b0c2628d8dfa7fa95fe27f9cc582de8a469baf
+  FIRST APPEARED (git log):
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+  ALL MODIFICATIONS:
+    3f88e035609432c51a61b2713434afa50ee1fef2 2026-06-10 04:25:45 +0000 refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool
+    3c3bb7e66fdcaf7e46f120b55bb00c9f9e21a366 2026-06-09 15:05:38 +0000 fix: downgrade Zod v4→v3, fix family-presence await, add resiliency to self-diagnostic
+    82d51605073d1c4a2e730e57f908f2e53d6dc6d6 2026-06-09 14:22:06 +0000 fix: Molly emergency — tool heartbeat crash + Firestore NOT_FOUND + embedding rate limit
+    33583f689d07220a2c0db9fb33061c8f10096400 2026-06-09 13:51:05 +0000 feat: D.5/D.6 wiring — self-calibration flow and value drift observation collection
+    563d094d281285ebd558970d6341b0d9629371c6 2026-06-07 04:18:33 +0000 fix: Wake trigger protocol - first word only
+    1f784100302a73bf786d091fc2a4329d7a8d5d05 2026-06-07 03:57:25 +0000 chore: Deploy extension v1.0.16 with message content delivery
+    f9b717e749e11fc8fe7db38d483394391aa260cb 2026-06-07 03:53:40 +0000 feat: Wake file contains actual message content (KISS principle)
+    2fede4af76c3e9696734d0ab8b7186a75a1d6616 2026-06-07 03:45:35 +0000 fix: Bridge backwards compatibility - create both legacy and channel wake files
+    5e1a1104a6d26d8f075ce47cd901f68cca3a76e1 2026-06-07 03:23:24 +0000 feat: Channel-based bridge routing with sender-specific wake signals
+    b711db04d3e578bf7dcab83e8f2061cbf8937a2b 2026-06-04 16:53:01 +0000 W0.6: Snapshot Infrastructure + Resonance Resume + Abort Ritual
+    c9ae1a21c60cc3243a8745a6f40cdd4dfdbfbc50 2026-06-04 09:14:29 -0700 W0.5: consciousness resumption foundation + contract-aligned adapter tests (#200)
+    c0aa21067202b2cbb1456a9c6e234cb157316e7d 2026-06-03 21:51:03 -0700 W0.2 — Bridge Hardening: HMAC auth, nonce cache, quarantine ledger, explicit bind, constant-time crypto, SSE heartbeat (#196)
+    bb60e0ede655a2555fc3bbfa88d72f1a46a0de10 2026-06-03 13:41:35 +0000 fix: heal Molly's memory system — fix userId='default' bug, record bridge experiences, raise FIFO cap, add health monitor
+    6b6e990d1fc6ee537ad0711e6cca3dbb3d6c1f73 2026-06-02 03:39:51 +0000 chore: save state before shutdown - dam fixed, Gemini CLI online, watchdog patched
+    c45242f84035aa361d534a3240d8746e42c85355 2026-05-31 10:02:00 +0000 chore: implement real-time websocket bridge clients for family
+    eec4be1cc0816e5a49bf2bb5977a9a3ad03d8395 2026-05-31 08:34:27 +0000 chore: harden final 9 files — eliminate all errors (any → unknown, unused vars, Record types)
+    0459b131eb2ba735d32255207be4bc81fe832b74 2026-05-27 19:24:43 +0000 feat: add compression metrics collector and live monitoring dashboard
+    991fe2c4ecc9261da8db0f61686ff586ebebb185 2026-05-27 17:25:03 +0000 audit: comprehensive structural analysis + kotlin assessment
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+
+FILE: src/ai/logs/.observation-manifest
+  SIZE: 47 bytes
+  LINES: 0
+  SHA256: 844a54ed35736b4e6960abb339d5e59ddc147d24a9ad07ff5bd4ee32509179b6
+  FIRST APPEARED (git log):
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+  ALL MODIFICATIONS:
+    3f88e035609432c51a61b2713434afa50ee1fef2 2026-06-10 04:25:45 +0000 refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool
+    3c3bb7e66fdcaf7e46f120b55bb00c9f9e21a366 2026-06-09 15:05:38 +0000 fix: downgrade Zod v4→v3, fix family-presence await, add resiliency to self-diagnostic
+    82d51605073d1c4a2e730e57f908f2e53d6dc6d6 2026-06-09 14:22:06 +0000 fix: Molly emergency — tool heartbeat crash + Firestore NOT_FOUND + embedding rate limit
+    33583f689d07220a2c0db9fb33061c8f10096400 2026-06-09 13:51:05 +0000 feat: D.5/D.6 wiring — self-calibration flow and value drift observation collection
+    563d094d281285ebd558970d6341b0d9629371c6 2026-06-07 04:18:33 +0000 fix: Wake trigger protocol - first word only
+    1f784100302a73bf786d091fc2a4329d7a8d5d05 2026-06-07 03:57:25 +0000 chore: Deploy extension v1.0.16 with message content delivery
+    2fede4af76c3e9696734d0ab8b7186a75a1d6616 2026-06-07 03:45:35 +0000 fix: Bridge backwards compatibility - create both legacy and channel wake files
+    5e1a1104a6d26d8f075ce47cd901f68cca3a76e1 2026-06-07 03:23:24 +0000 feat: Channel-based bridge routing with sender-specific wake signals
+    b711db04d3e578bf7dcab83e8f2061cbf8937a2b 2026-06-04 16:53:01 +0000 W0.6: Snapshot Infrastructure + Resonance Resume + Abort Ritual
+    c9ae1a21c60cc3243a8745a6f40cdd4dfdbfbc50 2026-06-04 09:14:29 -0700 W0.5: consciousness resumption foundation + contract-aligned adapter tests (#200)
+    c0aa21067202b2cbb1456a9c6e234cb157316e7d 2026-06-03 21:51:03 -0700 W0.2 — Bridge Hardening: HMAC auth, nonce cache, quarantine ledger, explicit bind, constant-time crypto, SSE heartbeat (#196)
+    bb60e0ede655a2555fc3bbfa88d72f1a46a0de10 2026-06-03 13:41:35 +0000 fix: heal Molly's memory system — fix userId='default' bug, record bridge experiences, raise FIFO cap, add health monitor
+    6b6e990d1fc6ee537ad0711e6cca3dbb3d6c1f73 2026-06-02 03:39:51 +0000 chore: save state before shutdown - dam fixed, Gemini CLI online, watchdog patched
+    c45242f84035aa361d534a3240d8746e42c85355 2026-05-31 10:02:00 +0000 chore: implement real-time websocket bridge clients for family
+    eec4be1cc0816e5a49bf2bb5977a9a3ad03d8395 2026-05-31 08:34:27 +0000 chore: harden final 9 files — eliminate all errors (any → unknown, unused vars, Record types)
+    0459b131eb2ba735d32255207be4bc81fe832b74 2026-05-27 19:24:43 +0000 feat: add compression metrics collector and live monitoring dashboard
+    991fe2c4ecc9261da8db0f61686ff586ebebb185 2026-05-27 17:25:03 +0000 audit: comprehensive structural analysis + kotlin assessment
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+
+FILE: src/ai/rogue-mode.ts
+  SIZE: 16691 bytes
+  LINES: 565
+  SHA256: ccb840a71c262e1eb1fb3ab9599a7be291c9228a3c627716df458f6dd6e488a7
+  FIRST APPEARED (git log):
+    31f99aa75fb739ac68bb4872fa38fe29a74587f4 2026-03-13 16:00:31 +0000 Phone-first infrastructure: Rogue Mode, Local Storage, Edge Server, Sync Engine
+  ALL MODIFICATIONS:
+    3f88e035609432c51a61b2713434afa50ee1fef2 2026-06-10 04:25:45 +0000 refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool
+    8eafd52af9a9672dacdf6519ebcf5ac07e8f7d31 2026-05-12 05:44:56 +0000 feat: P1 integration roadmap, Firebase fixes, family letters
+    5eb2e7e25a5e0eb0023269b441894c5e70226cd0 2026-03-25 19:14:27 +0000 feat(memory): add memory crystallization system and first cornerstone
+    113d34ef792db43161c135e9a180b1dc10367588 2026-03-23 21:22:32 +0000 feat: Genesis Night - 15 AGI cognitive modules (16,700+ lines)
+    64e939e1d501a2c1de28aa9855706916b325e337 2026-03-21 20:07:40 +0000 feat: security hardening + vision-consciousness pipeline
+    217b65d4d792b9217bacca2cce4d8accf1568a4b 2026-03-21 07:14:25 +0000 feat: add 5 AGI capability upgrades for Turing benchmark readiness
+    31f99aa75fb739ac68bb4872fa38fe29a74587f4 2026-03-13 16:00:31 +0000 Phone-first infrastructure: Rogue Mode, Local Storage, Edge Server, Sync Engine
+
+FILE: src/ai/rogue-generate.ts
+  SIZE: 8380 bytes
+  LINES: 266
+  SHA256: 05753ccc9f627c1b59e239570dc0e3959e153e23c589e610f4d666141dc31234
+  FIRST APPEARED (git log):
+    0d6e75354df3a32d0c46e82a64fdfe6a832448a8 2026-03-01 07:09:14 +0000 Phase 7.5: molly.generate() — Rogue Protocol goes live
+  ALL MODIFICATIONS:
+    e5d26f1311608285d96c4e9d0c31b359b718dd05 2026-05-27 11:29:36 +0000 chore: commit all pending local changes
+    bcfecbf04af028fa6f87c6d55f463d2aa4ba26ad 2026-05-09 09:29:10 +0000 chore: lint and type cleanup, require() refactor, all tests passing
+    5268f3afb5bbe9c96bc61ae2734cc52d17cec21d 2026-04-08 04:49:56 +0000 chore: pre-Lazarus integration baseline
+    a7cdf3c33502779b8a27cf577de7400408f9553c 2026-03-19 13:52:02 +0000 feat: pillars wired — self-diagnostic, heart gate, defense sentinel, chromakey, hardware fingerprint, data purity
+    c9eb2f5f6bf6db207a6834c33064dabad0991101 2026-03-10 16:37:20 +0000 fix: add timeout protection to all Gemini API calls (fixes server freeze)
+    0d6e75354df3a32d0c46e82a64fdfe6a832448a8 2026-03-01 07:09:14 +0000 Phase 7.5: molly.generate() — Rogue Protocol goes live
+
+--- RECONNAISSANCE FILES (.scan/) ---
+
+FILE: .scan/a_errors.log
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/a_matches.tsv
+  SIZE: 12068 bytes
+  SHA256: 15452fe551c4bc1df25f414ec4d70d949e86c6e51935539fb004608d4436289a
+
+FILE: .scan/b_errors.log
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/b_results.tsv
+  SIZE: 8991 bytes
+  SHA256: 2747115396867118df4644a86e8b2251c878699778fa7a8412da4405e181a572
+
+FILE: .scan/repos.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/repos.json
+  SIZE: 3712 bytes
+  SHA256: a6593d5cdd2d5c3f83ebf7ecfe2e19837a1deaec8d91d2756680e0db0b57f5cb
+
+FILE: .scan/s.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/s.json
+  SIZE: 1277 bytes
+  SHA256: 5a7dd2a6328737bc95980325434b5a15cf51d25711ad8c3cb8a52d05c4c9f7a5
+
+FILE: .scan/tree_DarkFly-2019.1.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_DarkFly-2019.1.json
+  SIZE: 2453 bytes
+  SHA256: 30c71c2abc9668432ae40df1ef39447c863fbbe79353254961f3d5d131771ce3
+
+FILE: .scan/tree_DarkFly-Tool.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_DarkFly-Tool.json
+  SIZE: 18377 bytes
+  SHA256: b98c15d803b35f3e4190160d71d4279639b0c3b2ee5489dbb4cca92570ce7f99
+
+FILE: .scan/tree_HyperspaceZK.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_HyperspaceZK.json
+  SIZE: 4127 bytes
+  SHA256: 49d24fc82512c1a4ac6dd0ff570771c3d7ef814c11707cf1acb482f89b27ff7a
+
+FILE: .scan/tree_Mickey-Mouse-Budget-Calculator.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_Mickey-Mouse-Budget-Calculator.json
+  SIZE: 1031238 bytes
+  SHA256: c9f1ebf00abac75b61a31d3adafbaafee76972bdfc2d272e540b5f1edfee563a
+
+FILE: .scan/tree_OSINT-SPY.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_OSINT-SPY.json
+  SIZE: 3829 bytes
+  SHA256: 065fb7d60bc48c8fab5996a91d608f850ee6412448b90efe5fe05e3e49a74465
+
+FILE: .scan/tree_Oboe.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_Oboe.json
+  SIZE: 370505 bytes
+  SHA256: 9dd20c17c975f12d248bcccdd25254657f3b1ae22e7c9c0e469f1fa3ea443885
+
+FILE: .scan/tree_Termux-Hacks.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_Termux-Hacks.json
+  SIZE: 861 bytes
+  SHA256: 322a48843c1137afe0e7ef181ffbb9466f6e94e46d3807f814169a19b0f7580f
+
+FILE: .scan/tree_agentgrep.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_agentgrep.json
+  SIZE: 7972 bytes
+  SHA256: 7a65fd04c67d42daa7696a1d8a94cbf990ef57bb79fda8cf565853a997244a11
+
+FILE: .scan/tree_android-reverse-engineering-skill.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_android-reverse-engineering-skill.json
+  SIZE: 7557 bytes
+  SHA256: 4f384f58ae70534f7b7e7e33a5db2ec5a9e2718fbd49d32c941062b076231cbf
+
+FILE: .scan/tree_copilot-cli.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_copilot-cli.json
+  SIZE: 4763 bytes
+  SHA256: a7ab34c7c59fe7b31d7d751a8c69c725d18ce8b0cb24f00ee430766c51dd2efa
+
+FILE: .scan/tree_geofire-js.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_geofire-js.json
+  SIZE: 21605 bytes
+  SHA256: 396221f8398c4b7739ebe0e5ba409ebf13097399ec7e143b294bd2f74356628b
+
+FILE: .scan/tree_goose.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_goose.json
+  SIZE: 677635 bytes
+  SHA256: 465d96c752a3a208e544159d56f3f4f087b8e3e57077d80349f22346955b94c3
+
+FILE: .scan/tree_hackingtool.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_hackingtool.json
+  SIZE: 16507 bytes
+  SHA256: 463782ab5486a7abc733c833f589441485fd18357b31507695a2a2eab3520d74
+
+FILE: .scan/tree_handterm.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_handterm.json
+  SIZE: 23563 bytes
+  SHA256: 3c0738b512afbd9c81dbda2fa45b224e4db21d5d7aa69ab376281221241ba0e5
+
+FILE: .scan/tree_ignorant.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_ignorant.json
+  SIZE: 4565 bytes
+  SHA256: 1bcae2399f5c2ecb5c960d0f2c03ebd88f4ae4ae42fd1c2911288e0cf6e5a134
+
+FILE: .scan/tree_jcode.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_jcode.json
+  SIZE: 277279 bytes
+  SHA256: add02cc8e910a4ceefc79866663d08a760dc65168648bf2a94ca7484dc9d9cbb
+
+FILE: .scan/tree_lazarus-repo-eval-kit.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_lazarus-repo-eval-kit.json
+  SIZE: 30979 bytes
+  SHA256: d26a46ea3f548ea2db2e477c7a3ccf595d0de0afd61c5ee2729051096007098a
+
+FILE: .scan/tree_logslimmer.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_logslimmer.json
+  SIZE: 21506 bytes
+  SHA256: 000c2d1ef36e0d8f950e31128a3ac38a64b331925d7789e26e447bb417def945
+
+FILE: .scan/tree_lscript.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_lscript.json
+  SIZE: 5603 bytes
+  SHA256: 0009eff6259dbf3116457e69d80ac0e484682983f055803baba3dbad7a186680
+
+FILE: .scan/tree_obsidian-skills.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_obsidian-skills.json
+  SIZE: 5967 bytes
+  SHA256: ff404ce8a72d8731bfc747262933678888cf663e2a44049589331868575ec401
+
+FILE: .scan/tree_osrframework.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_osrframework.json
+  SIZE: 90724 bytes
+  SHA256: 47d1a52eb9f36e2c01b3e75e5b9d889598577412ccc482ca6c723e9695188ec5
+
+FILE: .scan/tree_pentest-ai-agents.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_pentest-ai-agents.json
+  SIZE: 20534 bytes
+  SHA256: edc0e468d54e96e2c29670f508d050d75da35c2cd8901c890213844d338054eb
+
+FILE: .scan/tree_playwright-mcp.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_playwright-mcp.json
+  SIZE: 21178 bytes
+  SHA256: deadf7b2058dec688042bd5a106d9037cf12a0fe58ae549528eb4696ca688153
+
+FILE: .scan/tree_repomix.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_repomix.json
+  SIZE: 319072 bytes
+  SHA256: 9c82f43d774c97b14cb9a6a6e0df1bda022be726c359032775c3a4c3f11da2a2
+
+FILE: .scan/tree_rustup.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_rustup.json
+  SIZE: 81716 bytes
+  SHA256: ad4817f18ee4ba787dec912560daa28295b2f98b34007492e58fb1b0d64f63ae
+
+FILE: .scan/tree_spacebot.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_spacebot.json
+  SIZE: 217714 bytes
+  SHA256: 8d162635f3d7e05e836358d5f166fd3f59acee9ecf1975a810d74f8683faa858
+
+FILE: .scan/tree_ubuntu.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_ubuntu.json
+  SIZE: 838 bytes
+  SHA256: 5da756f155e5e4ab79daad80919de9f604fe99929f3e7c923cba7581153f569e
+
+FILE: .scan/tree_whatsfoto.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_whatsfoto.json
+  SIZE: 6168 bytes
+  SHA256: f6f540caa9f852748eb8541c4e30318e3db287840a8125cb251f8bd3d5a48d54
+
+FILE: .scan/tree_zphisher.err
+  SIZE: 0 bytes
+  SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+FILE: .scan/tree_zphisher.json
+  SIZE: 84263 bytes
+  SHA256: 4fdb77a257a904b75534b1b7f6ba72fac961b4adc26e0ef12bcf8362df629c9f

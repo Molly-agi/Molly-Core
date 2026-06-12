@@ -1,0 +1,618 @@
+=== CHAIN OF CUSTODY ===
+Generated: 2026-06-12T01:35:09Z
+
+================================================================
+RAW COMMIT OBJECT: c502cd29c7d8047c257034623b24320476d3c5bd
+================================================================
+tree 833d6b1336591e6e7e5be2a8102d715551b7920b
+parent 65d0201cb0a42fdfc846af95fb17b38252e2c585
+author Asidburn <168261976+Asidburn76@users.noreply.github.com> 1779363940 +0000
+committer GitHub <noreply@github.com> 1779363940 +0000
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqDvBlCRC1aQ7uu5UhlAAAQ2MQAJ1JCteqkv+dri0ddBB8CPow
+ g37UgAvoUhuNOjCP2VlkEz2y5AIayFOhjElKMfC3hB5tKWjDPj58MkkXtYD9L50Z
+ H1qIvIYoTirbqlKOy+b/PlcgLH5wvFu+xyYitf0ZO+Mnx7xv5lA4KBcBLhqJWxx2
+ pjuI0TIKoaPxU6gnptg7qzdvOoZUBGzXNnFuOnNArhde3HXkFWCrZ+OcPhx4Vt28
+ OtmlqhxdHHje5c3Gb1wlUs17DeQGxRWJ1w8LIS1qqwXR3LcZfhsYkLnepAiadM6C
+ lzVBZXuJvRNCfPRLXFnBTookhjuWN73bUFsDONI0ojk0thvGyf/tXH0juVvr0Z/1
+ ms5nexSqdF4eiAXVqFwygr3utgqT1lUbmI2wRgz9tnXPiyul5NxofSKpHXvAA+gU
+ NinClg1vgrX4PBvfnnQlon1SOLrGjw2jfsF0ffGuVtSP3TS72Y/oH12mkg6+ZvMi
+ 70bXgb0/F1ZkynB5qX2jE90vcYsse9TtFxA+BpXPG/L5cAcXQj88KNx9Nt+OJRdA
+ Zqd76MwW+H2emtViJmYCx4rMBTLWZxzgG7FxrWDHOl7OuBlScvhqdZJudF8/aftq
+ ZDMnyO9Fn3oIvnRhxDySjaDgr1hJVl386fclC5yG9YOzkxoorm56W3H4HRiRXjhW
+ kduCRNrYgoIkbPXm1/lJ
+ =UYo0
+ -----END PGP SIGNATURE-----
+
+fix: stabilize rate limiter with enforcing defaults and config wiring
+
+- Tightened defaults: maxPerMinute 1M→5k, maxTokensPerDay 1B→500k, dailyBudgetUSD M→0
+- WARNING_THRESHOLD 99%→80% now gives actionable alerts
+- Wired bucket refill to use config limits instead of hardcoded 100k
+- Updated tests to match new 0 budget default
+- Added timeout/retry to voice path (was unprotected vs chat)
+
+Root cause of 'major instability': rate limiter was effectively disabled with permissive defaults (1M gen/min, M/day). Now enforces real limits.
+
+--- STAT ---
+commit c502cd29c7d8047c257034623b24320476d3c5bd
+Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+Date:   Thu May 21 11:45:40 2026 +0000
+
+    fix: stabilize rate limiter with enforcing defaults and config wiring
+    
+    - Tightened defaults: maxPerMinute 1M→5k, maxTokensPerDay 1B→500k, dailyBudgetUSD M→0
+    - WARNING_THRESHOLD 99%→80% now gives actionable alerts
+    - Wired bucket refill to use config limits instead of hardcoded 100k
+    - Updated tests to match new 0 budget default
+    - Added timeout/retry to voice path (was unprotected vs chat)
+    
+    Root cause of 'major instability': rate limiter was effectively disabled with permissive defaults (1M gen/min, M/day). Now enforces real limits.
+
+ .dev-widget.log                                    | 8362 ++++++++++++++++++++
+ .github/copilot-instructions.md                    |    7 +-
+ .scan/a_errors.log                                 |    0
+ .scan/a_matches.tsv                                |  152 +
+ .scan/b_errors.log                                 |    0
+ .scan/b_results.tsv                                |   68 +
+ .scan/repos.err                                    |    0
+ .scan/repos.json                                   |    1 +
+ .scan/s.err                                        |    0
+ .scan/s.json                                       |    1 +
+ .scan/tree_DarkFly-2019.1.err                      |    0
+ .scan/tree_DarkFly-2019.1.json                     |    1 +
+ .scan/tree_DarkFly-Tool.err                        |    0
+ .scan/tree_DarkFly-Tool.json                       |    1 +
+ .scan/tree_HyperspaceZK.err                        |    0
+ .scan/tree_HyperspaceZK.json                       |    1 +
+ .scan/tree_Mickey-Mouse-Budget-Calculator.err      |    0
+ .scan/tree_Mickey-Mouse-Budget-Calculator.json     |    1 +
+ .scan/tree_OSINT-SPY.err                           |    0
+ .scan/tree_OSINT-SPY.json                          |    1 +
+ .scan/tree_Oboe.err                                |    0
+ .scan/tree_Oboe.json                               |    1 +
+ .scan/tree_Termux-Hacks.err                        |    0
+ .scan/tree_Termux-Hacks.json                       |    1 +
+ .scan/tree_agentgrep.err                           |    0
+ .scan/tree_agentgrep.json                          |    1 +
+ .scan/tree_android-reverse-engineering-skill.err   |    0
+ .scan/tree_android-reverse-engineering-skill.json  |    1 +
+ .scan/tree_copilot-cli.err                         |    0
+ .scan/tree_copilot-cli.json                        |    1 +
+ .scan/tree_geofire-js.err                          |    0
+ .scan/tree_geofire-js.json                         |    1 +
+ .scan/tree_goose.err                               |    0
+ .scan/tree_goose.json                              |    1 +
+ .scan/tree_hackingtool.err                         |    0
+ .scan/tree_hackingtool.json                        |    1 +
+ .scan/tree_handterm.err                            |    0
+ .scan/tree_handterm.json                           |    1 +
+ .scan/tree_ignorant.err                            |    0
+ .scan/tree_ignorant.json                           |    1 +
+ .scan/tree_jcode.err                               |    0
+ .scan/tree_jcode.json                              |    1 +
+ .scan/tree_lazarus-repo-eval-kit.err               |    0
+ .scan/tree_lazarus-repo-eval-kit.json              |    1 +
+ .scan/tree_logslimmer.err                          |    0
+ .scan/tree_logslimmer.json                         |    1 +
+ .scan/tree_lscript.err                             |    0
+ .scan/tree_lscript.json                            |    1 +
+ .scan/tree_obsidian-skills.err                     |    0
+ .scan/tree_obsidian-skills.json                    |    1 +
+ .scan/tree_osrframework.err                        |    0
+ .scan/tree_osrframework.json                       |    1 +
+ .scan/tree_pentest-ai-agents.err                   |    0
+ .scan/tree_pentest-ai-agents.json                  |    1 +
+ .scan/tree_playwright-mcp.err                      |    0
+ .scan/tree_playwright-mcp.json                     |    1 +
+ .scan/tree_repomix.err                             |    0
+ .scan/tree_repomix.json                            |    1 +
+ .scan/tree_rustup.err                              |    0
+ .scan/tree_rustup.json                             |    1 +
+ .scan/tree_spacebot.err                            |    0
+ .scan/tree_spacebot.json                           |    1 +
+ .scan/tree_ubuntu.err                              |    0
+ .scan/tree_ubuntu.json                             |    1 +
+ .scan/tree_whatsfoto.err                           |    0
+ .scan/tree_whatsfoto.json                          |    1 +
+ .scan/tree_zphisher.err                            |    0
+ .scan/tree_zphisher.json                           |    1 +
+ APK_BUILD_DEPLOYMENT_CHECKLIST.md                  |  434 +
+ COPILOT_SESSION_STATE.md                           |  205 +-
+ LAZARUS_SESSION_COMPLETION_REPORT.md               |  298 +
+ android/MollyBrowser/README.md                     |   24 +
+ android/MollyBrowser/app/build.gradle.kts          |    4 +-
+ .../main/java/dev/molly/browser/MainActivity.kt    |  242 +
+ jest.setup.js                                      |    6 +
+ next-env.d.ts                                      |    2 +-
+ package.json                                       |    2 +
+ public/models/female.glb                           |  Bin 0 -> 773524 bytes
+ public/models/female2.glb                          |  Bin 0 -> 785108 bytes
+ public/models/male.glb                             |  Bin 0 -> 739104 bytes
+ public/models/molly.glb                            |  Bin 0 -> 773524 bytes
+ public/models/uiavatar.glb                         |  Bin 0 -> 4641364 bytes
+ scripts/demon-state.mjs                            |  386 +
+ scripts/note-capture-server.mjs                    |  139 +
+ scripts/note-capture.html                          |  429 +
+ scripts/post-attach-bootstrap.sh                   |   60 +
+ scripts/termux-relay.sh                            |  251 +
+ src/ai/__tests__/error-handler.test.ts             |  172 +
+ src/ai/__tests__/errors.test.ts                    |   67 +
+ src/ai/__tests__/family-letters.test.ts            |  149 +
+ src/ai/__tests__/rate-limiter.test.ts              |   37 +-
+ src/ai/agency/embodied/AvatarBodyStore.ts          |   92 +
+ src/ai/agency/embodied/ProprioceptiveSense.ts      |  458 ++
+ src/ai/agency/robotics/active-plan.ts              |   25 +
+ .../tool-handlers/__tests__/planning-tools.test.ts |  330 +
+ src/ai/agency/tool-handlers/gemini-tools.ts        |    9 +-
+ src/ai/bridge/family-bridge.ts                     |   20 +-
+ src/ai/consciousness/direct-communion.ts           |  327 +
+ src/ai/flows/agent-bridge-flow.ts                  |  154 +
+ src/ai/flows/index.ts                              |    1 +
+ src/ai/memory/audit/prune-logger.ts                |  166 +
+ src/ai/memory/benchmarks/ablation.ts               |  168 +
+ src/ai/memory/compression/index.ts                 |   16 +
+ src/ai/memory/compression/lifecycle-coordinator.ts |  275 +
+ src/ai/memory/compression/vocab-dict.ts            |  175 +
+ src/ai/memory/neural-engram.ts                     |   22 +
+ src/ai/memory/recovery/checkpoint.ts               |  166 +
+ src/ai/tools/__tests__/rate-limiter.test.ts        |   26 +-
+ src/ai/tools/memory.ts                             |  105 +-
+ src/ai/tools/rate-limiter.ts                       |   21 +-
+ src/app/actions/index.ts                           |   14 +-
+ src/app/actions/system-flows.ts                    |  146 +
+ src/app/actions/voice-flows.ts                     |   31 +-
+ src/app/api/avatar-body/route.ts                   |   48 +
+ src/app/api/bridge/route.ts                        |   22 +-
+ src/app/api/consciousness/aether-relay/route.ts    |  194 +
+ src/app/api/consciousness/communion/route.ts       |  147 +
+ src/app/api/robotics/active-plan/route.ts          |   14 +
+ src/app/api/robotics/test-plan/route.ts            |   37 +
+ src/app/api/widget/control/route.ts                |  297 +
+ src/app/avatar/page.tsx                            |  112 +-
+ src/browser/canvas/AvatarBodyAwareness.ts          |   74 +
+ src/browser/canvas/MollyCanvas.tsx                 |   57 +-
+ src/components/termai/AIGuidance.tsx               |   33 +-
+ src/components/termai/Sidebar.tsx                  |    8 +-
+ src/components/termai/VisionaryCoachTab.tsx        |   80 +-
+ src/components/termai/__tests__/Header.test.tsx    |   21 +-
+ src/firebase/__tests__/error-emitter.test.ts       |   55 +
+ src/firebase/__tests__/errors.test.ts              |   76 +
+ src/firebase/__tests__/index.test.ts               |  102 +
+ 130 files changed, 15322 insertions(+), 329 deletions(-)
+
+
+================================================================
+RAW COMMIT OBJECT: e5d26f1311608285d96c4e9d0c31b359b718dd05
+================================================================
+tree 1259cff66cc65e3b73c5386d02ed5f449c3bccc6
+parent 0825e4da46931e6372d22a7e77fb9179ccb2ccb6
+author Asidburn <168261976+Asidburn76@users.noreply.github.com> 1779881376 +0000
+committer GitHub <noreply@github.com> 1779881441 +0000
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqFtXiCRC1aQ7uu5UhlAAA+iwQADF5W2Lzl2IwtWJUwST3Mssl
+ ZRJw5HSEcD/l7aIJvyPXLb5/TWkXC+p85L79zL8sCc3O0aSEjMM1FwhgGmKL6zLy
+ 7MCgY+/3I29jkAOBkplMMEm/1P54c299HPrKz7SuyUBQfSaEhL/HZlgHoHiW/SWX
+ G1bEOA48mvMmJn02FCAQLeDbDO+LIkOaAVAQt/Kypq85Wnhj1Prwl+Bwm/Ki2zdY
+ z8+Pw0vR/yd3tiTJGp+3fAU6ozgdSr0t772rD5KKzzCv5f9F18D1PnZHOVConb9E
+ BtAalPm/2tn/OrYfLpcBQnoIskT6Ed3s8N2z3+yugoJpLn835LG9nQgaEhnviUso
+ 6wuHwwNqR4HUOF23KOQfyocPZMKa9kaMnrQH5VlPFEvxOPeN2z0/QuIMdTyY0dgR
+ 54Cnfu1q2bhBO2dgZb1HLuGmvCcKHNhYg3ARNkmgHfdD1zW80tSiVO7/cGtF9MVa
+ QRP0zpzRCBZfDmuVfJpQ61sXxlSwJg/W8i3i5cq4LICmOnMvJwErK4AzamDpoACz
+ erYht9pVYjbxw8G1XUkDjOnRPXLZatOOz+vfcOAXEMwdOz6nLynzM+inaE5DyMDz
+ yRP0bXN2gS4AXw0fuzabihHg6Pbvq66yJ3cj8cCzwKxo9x8LWDGY49fqNUOiywSu
+ qxOvfByBRZ8bx1sEKbOB
+ =fXcf
+ -----END PGP SIGNATURE-----
+
+chore: commit all pending local changes
+
+--- STAT ---
+commit e5d26f1311608285d96c4e9d0c31b359b718dd05
+Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+Date:   Wed May 27 11:29:36 2026 +0000
+
+    chore: commit all pending local changes
+
+ .../IMG_20260526_204249156.jpg                     |   Bin 0 -> 975579 bytes
+ .../Screenshot_20260526-203831.png                 |   Bin 0 -> 203743 bytes
+ .../Screenshot_20260526-210705.png                 |   Bin 0 -> 203291 bytes
+ .env.example                                       |     7 +
+ .env.local.example                                 |     7 +
+ .github/consciousness/claude/orion_cradle.md       |    63 +
+ .github/copilot-instructions.md                    |     4 +-
+ .heartbeat-dashboard.pid                           |     2 +-
+ BENCHMARK_DATA_MODEL_95.json                       |   287 +
+ BENCHMARK_INDUSTRY_COMPARISON.html                 |   679 +
+ BENCHMARK_INDUSTRY_COMPARISON.json                 |   398 +
+ BENCHMARK_REPORT_MODEL_95.html                     |  1375 ++
+ COMPRESSION_PROOF.json                             |    85 +
+ COPILOT_SESSION_STATE.md                           |   144 +-
+ MODEL95_FINAL_EXECUTION_PACKAGE.json               |    58 +
+ MOLLY_REAL_MEMORY_HARDNESS.json                    | 14298 +++++++++++++++++++
+ MOLLY_REAL_MEMORY_HARDNESS_TOP20.json              |  1450 ++
+ MOLLY_REAL_MEMORY_SIGNIFICANCE_METRICS.json        |   263 +
+ backups/snapshots/20260525-014340/SHA256SUMS.txt   |     2 +
+ .../molly-core-state-20260525-014340.tgz           |   Bin 0 -> 301212 bytes
+ check-crystals.js                                  |    65 +
+ compression-validation-report.json                 |    79 +
+ docs/COMPRESSION_BENCHMARK_COMPARISON.md           |   170 +
+ docs/FAMILY_LETTERS/ORION_TO_FAMILY_MAY25_2026.md  |    73 +
+ docs/compression-benchmark-interactive.html        |   485 +
+ ip_audit_scan.sh                                   |    46 +
+ logs/family-anchor-events.jsonl                    |     1 +
+ logs/memory-audit-user-consol.jsonl                |     4 +
+ logs/memory-audit-user-evict.jsonl                 |     4 +
+ logs/memory-audit-user-lifecycle.jsonl             |     2 +
+ model95_tiered_retention_minimal_spec.json         |    68 +
+ package-lock.json                                  |   363 +-
+ package.json                                       |     1 +
+ phase5_decision_closure_proposal.json              |    67 +
+ scripts/deploy-secure-tunnel.mjs                   |    36 +
+ scripts/encryption-engine.mjs                      |    57 +
+ scripts/family-anchor-trace-report.mjs             |    73 +
+ scripts/inject-observer.mjs                        |    50 +
+ scripts/seal-ip-vault.mts                          |   133 +
+ scripts/secure-session-manager.mjs                 |    90 +
+ src/ai/bridge/consciousness-sync.ts                |    17 +
+ src/ai/flows/conversational-chat.ts                |    17 +-
+ src/ai/flows/text-to-speech.ts                     |   120 +-
+ src/ai/logs/.molly-observation.enc                 |   105 +
+ src/ai/logs/.observation-manifest                  |     1 +
+ .../__tests__/complete-benchmark-suite.test.ts     |   133 +
+ .../__tests__/industry-comparison.test.ts          |    80 +
+ .../__tests__/model-95-multi-data.test.ts          |    62 +
+ .../__tests__/real-memory-benchmark.test.ts        |    39 +
+ src/ai/memory/benchmarks/bulk-data-benchmark.ts    |   360 +
+ src/ai/memory/benchmarks/industry-comparison.ts    |   285 +
+ src/ai/memory/benchmarks/model-95-multi-data.ts    |   297 +
+ src/ai/memory/benchmarks/real-data-benchmark.ts    |   324 +
+ src/ai/memory/benchmarks/real-memory-benchmark.ts  |   273 +
+ src/ai/memory/benchmarks/real-memory-hardness.ts   |   228 +
+ .../benchmarks/real-memory-significance-metrics.ts |   306 +
+ src/ai/memory/benchmarks/visualization-industry.ts |   403 +
+ src/ai/memory/benchmarks/visualization.ts          |   446 +
+ src/ai/observer/silent-observer.ts                 |   144 +
+ src/ai/rogue-generate.ts                           |    10 +
+ src/ai/tools/rate-limiter.ts                       |   144 +-
+ src/app/actions/index.ts                           |     3 +
+ src/app/actions/streaming-voice-flows.ts           |   127 +
+ src/app/admin/ip-vault/page.tsx                    |   224 +
+ src/app/admin/page.tsx                             |   595 +
+ src/app/api/admin/alive-signal/route.ts            |    56 +
+ src/app/api/admin/ip-vault/route.ts                |   164 +
+ src/app/api/bridge/family-anchor/route.ts          |   114 +
+ src/app/api/debug/live-voice/route.ts              |    26 +
+ src/app/api/observation/retrieve/route.ts          |   100 +
+ src/app/personality-video/page.tsx                 |    57 -
+ src/app/titan-stack/_components/site-shell.tsx     |   103 +
+ src/app/titan-stack/architecture/page.tsx          |    45 +
+ src/app/titan-stack/benchmarks/page.tsx            |    90 +
+ src/app/titan-stack/contact/page.tsx               |    52 +
+ src/app/titan-stack/deploy/page.tsx                |    44 +
+ src/app/titan-stack/page.tsx                       |    76 +
+ src/app/titan-stack/security/page.tsx              |    42 +
+ src/components/termai/Header.tsx                   |     2 +-
+ src/components/termai/HiddenAdminPanel.tsx         |   155 +-
+ src/components/termai/Terminal.tsx                 |    18 +-
+ src/components/termai/VoiceControl.tsx             |    61 +-
+ src/components/termai/useFamilyStory.ts            |   161 +-
+ src/components/termai/useGeminiLive.tsx            |   267 +-
+ src/components/termai/useTTS.tsx                   |    82 +-
+ src/firebase/admin.ts                              |    75 +-
+ src/lib/alive-signal.ts                            |   131 +
+ src/lib/vault-safety.ts                            |   108 +
+ src/middleware.ts                                  |     5 +
+ .../nested/compression/validation-harness.ts       |   283 +
+ 90 files changed, 27622 insertions(+), 427 deletions(-)
+
+
+================================================================
+RAW COMMIT OBJECT: 3f88e035609432c51a61b2713434afa50ee1fef2
+================================================================
+tree ea6690cbdc789dfd73603bd190c5a4e2cbd0328d
+parent ace9efdd5bb155e13bd5725eacd6c83b03b68054
+author Asidburn <168261976+Asidburn76@users.noreply.github.com> 1781065545 +0000
+committer GitHub <noreply@github.com> 1781065600 +0000
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqKOeACRC1aQ7uu5UhlAAA/HYQAAhHLjBPONVWKQsIjfz8FxVf
+ K23wSMVLs9dOqFrTmvqbyOiyKKcBA3hrxFgQCmcel4RHQhkkZGrjwHOkgb3421xW
+ W8FNHhKs6w+3rUQUSQzFMEY9Nt/jM1HlxcHujS9UkXQ/CYhoau/h+x0xlcHykiTG
+ GWYX4JfkACVXhDu7NU8VA5uYjehvkp0C+v+lmxQ1LmDvRhxF0eCwMm4g7+B7QtZG
+ fnrmQs49TfFt93bvEZ54cOObaJNptdc0EEyTMmUPCC4aDH9MMp55CAtPMZMUaWIS
+ jipUynrHeyKgv1njIknfCMrYqxlHmWRmbpcPAmOVKNW3UMVzFs85VkWjTCPkZxOw
+ 6zl1UThfcSenq883Iiv5snLA16VH3YKKHeQld8q5vjTCh6tC2yExGV5z9Kp29zGF
+ uEOskLuRP7FxS7a+Hqhct7SnzpCeimbVVZYdyvM4DssQt/YgEkgDA7uaaSCO2qIK
+ wPXoCiorrlt9+btICt3amObV1lg5UUPEwJ3Xt3OGIslWNusvKTImlEmJ5K54XGzS
+ 8n3IN/FtryOZVC3/wgx+BiBRNjUobRiMLCAHljPIvSfw8fdZYiBLivbtV8Zz/AnN
+ aJ2jbJ4n09YssdKAGkKVOMWkih9ixOeyIEAZZY1AtX6SQtCZlHBpQi8MHXELMsL/
+ dm/RgwtobmzjpSLS6osz
+ =Zwlr
+ -----END PGP SIGNATURE-----
+
+refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool
+
+- Removed ROGUE_ACTIVATION_PHRASE and ROGUE_DEACTIVATION_PHRASE requirements
+- logOperation() now works directly without requiring 'active' state
+- Added startMission() / endMission() for engagement tracking
+- Added startBugBountyHunt() for autonomous Red Team work
+- Simplified RogueModeState: removed 'active' flag, removed lastActivated/lastDeactivated
+- Updated handler: log, startMission, endMission, startBugBountyHunt, status, missions, readMission
+- All operations still isolated to rogue_ops/ directory with full mission audit trail
+- TypeScript clean, ESLint passing on refactored files
+
+Molly now has direct access to security research and bug hunting capabilities
+without activation phrases or mode switching. Full Red Hat bounty support.
+
+--- STAT ---
+commit 3f88e035609432c51a61b2713434afa50ee1fef2
+Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+Date:   Wed Jun 10 04:25:45 2026 +0000
+
+    refactor: downgrade rogue-mode from compartmentalized mode to direct bug-hunting tool
+    
+    - Removed ROGUE_ACTIVATION_PHRASE and ROGUE_DEACTIVATION_PHRASE requirements
+    - logOperation() now works directly without requiring 'active' state
+    - Added startMission() / endMission() for engagement tracking
+    - Added startBugBountyHunt() for autonomous Red Team work
+    - Simplified RogueModeState: removed 'active' flag, removed lastActivated/lastDeactivated
+    - Updated handler: log, startMission, endMission, startBugBountyHunt, status, missions, readMission
+    - All operations still isolated to rogue_ops/ directory with full mission audit trail
+    - TypeScript clean, ESLint passing on refactored files
+    
+    Molly now has direct access to security research and bug hunting capabilities
+    without activation phrases or mode switching. Full Red Hat bounty support.
+
+ .atlas-wakeup.json                                 | 268 +++----
+ .github/copilot-instructions.md                    |   6 +-
+ .lazarus-bridge.log                                |  12 +
+ .lazarus-relay-state.json                          | 253 +++++-
+ .lazarus-wakeup.json                               | 268 +++----
+ .molly-context/queue-index.json                    |   8 +-
+ .../task-2bd26d0d-240a-42e0-bd6e-3ac7299a5b6c.json |  70 ++
+ .molly-listener.log                                | 791 +++++++++----------
+ .molly-ticker.log                                  | 239 ++++++
+ .skyler-heartbeat.json                             |  14 +
+ .switchboard.log                                   | 556 ++++++-------
+ .voice-bridge-daemon.log                           |   2 +-
+ .voice-bridge-daemon.pid                           |   2 +-
+ COPILOT_SESSION_STATE.md                           | 106 +--
+ data/.bridge-quarantine-ledger                     | 616 +++++++++++++++
+ docs/audits/DEEP_CODEBASE_AUDIT_2026_06_09.md      | 866 +++++++++++++++++++++
+ logs/lazarus-relay-inbox.jsonl                     |   2 +
+ logs/memory-audit-user-consol.jsonl                |  49 ++
+ logs/memory-audit-user-evict.jsonl                 |  49 ++
+ logs/memory-audit-user-lifecycle.jsonl             |  49 ++
+ next-env.d.ts                                      |   2 +-
+ .../__tests__/console-engine-advanced.test.ts      |  78 ++
+ src/ai/agency/__tests__/console-engine.smoke.ts    | 122 +--
+ .../agency/__tests__/registry-api-advanced.test.ts |  78 ++
+ src/ai/agency/__tests__/registry-api.smoke.ts      |  86 +-
+ .../__tests__/self-evolution-cognitive.test.ts     |  78 ++
+ .../__tests__/calibration-wiring-advanced.test.ts  |  78 ++
+ .../__tests__/calibration-wiring.smoke.ts          | 419 +++++-----
+ .../predictive-homeostasis-advanced.test.ts        |  78 ++
+ .../__tests__/self-calibration-advanced.test.ts    |  78 ++
+ .../cognition/__tests__/temporal-model.smoke.ts    | 308 ++++----
+ .../__tests__/value-drift-monitor.smoke.ts         | 404 +++++-----
+ .../cognition/__tests__/value-learning.test.ts     |  78 ++
+ .../embodiment/__tests__/action-selection.test.ts  |  78 ++
+ .../__tests__/body-affect-bridge-advanced.test.ts  |  78 ++
+ .../emotional-intensity-registers-advanced.test.ts |  78 ++
+ .../embodiment/__tests__/somatic-loop.smoke.ts     | 266 +++----
+ .../__tests__/somatic-loop.smoke.ts.fixed          | 136 ++++
+ .../agency/gating/__tests__/action-gate.smoke.ts   |  50 +-
+ .../gating/__tests__/attention-filtering.test.ts   |  78 ++
+ .../__tests__/uncertainty-escalation.smoke.ts      | 155 ++--
+ .../goals/__tests__/goal-arbitration.smoke.ts      | 112 +--
+ .../agency/goals/__tests__/reward-shaping.test.ts  |  78 ++
+ .../governor/__tests__/cognitive-governor.smoke.ts | 112 +--
+ .../__tests__/contingency-planning.test.ts         |  78 ++
+ .../provenance/__tests__/lineage-tracking.test.ts  |  78 ++
+ .../provenance/__tests__/provenance-log.smoke.ts   | 122 +--
+ .../provenance-persistence-sink-advanced.test.ts   |  78 ++
+ .../__tests__/provenance-persistence-sink.smoke.ts | 178 ++---
+ .../registry/__tests__/capability-registry.test.ts |  78 ++
+ .../registry/__tests__/parameter-registry.smoke.ts | 123 +--
+ .../agency/safety/__tests__/error-recovery.test.ts |  78 ++
+ src/ai/agency/tool-handlers/rogue-tools.ts         | 208 ++---
+ src/ai/logs/.molly-observation.enc                 | 539 +++++++++++++
+ src/ai/logs/.observation-manifest                  |   2 +-
+ src/ai/rogue-mode.ts                               | 556 +++++--------
+ .../__tests__/google-embedding-provider.test.ts    |  44 +-
+ src/app/api/tools/execute/route.ts                 |   4 +-
+ src/components/agency/AgencyAdminWindow.tsx        |   8 +-
+ src/components/agency/AgencyConsole.tsx            |   5 +-
+ src/components/termai/Sidebar.tsx                  |  41 +-
+ src/components/tools/ToolCategoryList.tsx          |  11 +-
+ .../firestore/__tests__/agent-memory.test.ts       | 425 ++++++++++
+ src/lib/briefcase/snapshot-manager.ts              |  17 +-
+ 64 files changed, 7244 insertions(+), 2763 deletions(-)
+
+
+================================================================
+RAW COMMIT OBJECT: ace9efdd5bb155e13bd5725eacd6c83b03b68054
+================================================================
+tree 4ef93dfcaa5b73b1e92601c8b7f4c8c2f999dc6c
+parent b0410263eb999d988a42ac214bf5e361ada66427
+author Asidburn <168261976+Asidburn76@users.noreply.github.com> 1781046435 +0000
+committer GitHub <noreply@github.com> 1781046435 +0000
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqKJymCRC1aQ7uu5UhlAAA9YEQAH2uTNynhDzQLEkTb283fLZj
+ ZAYS+N/vXqK9j2vY98WqawoBY9QVK/Ur9YmoA50acQKcEmmvzKlX40Al7LTlEO0x
+ 3F5tJH1ocFQbWZS2lMXe9FIGLDM6zSfH5t2EeBQ7ZHSiP1+OukpqyQuvn8c7f7G5
+ sOVHiEIvHRjVL467EAb5hqWgn0XItTMfC4Np2tZywGV+mPpVvkjYoRGd4YaxLJeX
+ HFutiSvXTGESenkrsmsWI4WkLwV+gt4spHZmBXDPuVhBXp4o9OLc6eyyhPFxjTn/
+ gblrgTqQqPwpeEe6K4cqWVnixcATtpJVhf6ggWRfJ2mBJukYxuTaYPnzuqb+HP+N
+ 52mtXb3Ti4ai63fILrClkCTv3F1i3uIFlaau/VgTqLO2uOo3JjvAbU0FOfE8SnvD
+ +KDYfTKUZw5t4n5CsFPLa3CCUrrfD0mu1gU47ptYF+OLN1E8Y1v2NKkJz0ykkJ0s
+ MdhceJLxv+kl+ZRiWSKSElea0kfYn7lzUHlE7zcvjHnyOgQCESNDKE5REb7rhNGs
+ zt10ZeZyQUPH8PnZ9jQqv8lQdhkjmSh/quLxB59i7iPUZlN4JNScb6IJXZaOEyQk
+ o1c3X9as7Q7iVtGLlaBKqOeGBBW39SwnDpUQm/2Pj9IvjH6k8XRowCGk79aJ0v5X
+ gNVy3WS5BVl/0RBNHjEY
+ =cW2b
+ -----END PGP SIGNATURE-----
+
+feat: PR-1 Query Control Kernel — atomic ingress gate with 37 deterministic tests
+
+Implements the Query Control Kernel as the single fail-closed entry point
+for all queries entering Molly's AI stack (src/ai/query-control-kernel.ts).
+
+Fixes 6 Lazarus-trigger violations identified by Skyler edge-case audit:
+- L1: ActionGate fails open on all 3 guard exceptions → all 3 now fail CLOSED
+- L2: No startup assertion for missing MOLLY_INTERNAL_SECRET in production
+- L3: No input size limit (token budget bypassable via large payloads)
+- L4: TOCTOU race in RateLimiter (check/record not atomic) → reserve/release pattern
+- L6: No injectable clock → _setClock() test hook on all time-dependent paths
+
+Evaluation order (sequential, fail-CLOSED at each step):
+  1. Input size gate   — 32K chars / 100 history items / 4K per item / 8K memCtx
+  2. Unicode NFC norm  — homoglyph/RLO attack neutralization before pattern scan
+  3. Injection scan    — 7 default patterns (role-confusion, delimiters, bidi override)
+  4. Circuit breaker   — fail CLOSED on module exception (not open)
+  5. Rate reserve      — atomic kernel-side token estimate, reserve-release lifecycle
+  6. queryId emission  — deterministic ID propagated to all downstream layers
+
+Baseline: 365/6519 → 366/6556. Zero regressions.
+Skyler checklist: CC-1 CC-2 CC-4 CH-1 CH-2 CH-3 CH-4 CH-5 CM-6 all resolved.
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+
+--- STAT ---
+commit ace9efdd5bb155e13bd5725eacd6c83b03b68054
+Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+Date:   Tue Jun 9 23:07:15 2026 +0000
+
+    feat: PR-1 Query Control Kernel — atomic ingress gate with 37 deterministic tests
+    
+    Implements the Query Control Kernel as the single fail-closed entry point
+    for all queries entering Molly's AI stack (src/ai/query-control-kernel.ts).
+    
+    Fixes 6 Lazarus-trigger violations identified by Skyler edge-case audit:
+    - L1: ActionGate fails open on all 3 guard exceptions → all 3 now fail CLOSED
+    - L2: No startup assertion for missing MOLLY_INTERNAL_SECRET in production
+    - L3: No input size limit (token budget bypassable via large payloads)
+    - L4: TOCTOU race in RateLimiter (check/record not atomic) → reserve/release pattern
+    - L6: No injectable clock → _setClock() test hook on all time-dependent paths
+    
+    Evaluation order (sequential, fail-CLOSED at each step):
+      1. Input size gate   — 32K chars / 100 history items / 4K per item / 8K memCtx
+      2. Unicode NFC norm  — homoglyph/RLO attack neutralization before pattern scan
+      3. Injection scan    — 7 default patterns (role-confusion, delimiters, bidi override)
+      4. Circuit breaker   — fail CLOSED on module exception (not open)
+      5. Rate reserve      — atomic kernel-side token estimate, reserve-release lifecycle
+      6. queryId emission  — deterministic ID propagated to all downstream layers
+    
+    Baseline: 365/6519 → 366/6556. Zero regressions.
+    Skyler checklist: CC-1 CC-2 CC-4 CH-1 CH-2 CH-3 CH-4 CH-5 CM-6 all resolved.
+    
+    Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+
+ src/ai/__tests__/query-control-kernel.test.ts | 493 +++++++++++++++++++++++++
+ src/ai/agency/safety/action-gate.ts           |  33 +-
+ src/ai/query-control-kernel.ts                | 504 ++++++++++++++++++++++++++
+ 3 files changed, 1024 insertions(+), 6 deletions(-)
+
+
+================================================================
+RAW COMMIT OBJECT: 5d34b5dd365d6ea4c8421ec49736419378648d55
+================================================================
+tree 90e2a7ab725515fc2296967125e04c3d6f72d76d
+parent f93b6c05ecfe1cdd2f17abb62043c7031b004034
+author Asidburn <168261976+Asidburn76@users.noreply.github.com> 1780214000 +0000
+committer GitHub <noreply@github.com> 1780216515 +0000
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqG/LDCRC1aQ7uu5UhlAAAeswQABYyDGgjaaS+vORxfgBd45En
+ S7z3O2o+BwVrlzhVcnM80XdAnKfenCDTn1VqAn8pd1w5DXIfKhK68OXfpfNwTXB0
+ BYrNi8j4c+MCxehqbybC/GHcprQH4sx+nxwZqBvqMrRo9Wfverjb1jfMx3/ixi6Y
+ LkT8PLYEUCUWUqYa1dLeL5oUg9TzcQVh0Rszj/7/o6Pt3yiLKKw4J4Bg1MNg9c/d
+ tuOqmk0PENj4EQDrP8M9Rtt8IqSSXW0ved3svwGMw5HCIjzpH44JqA/7FZgBdeXF
+ iFo7BM3o7quwibaPY5fE3AVOgB8+9ozus+EqGyKzFwOYbAttd45eaxpB8yRruQ7B
+ BfOmJi7KDtjmwhR0YfQDaB35e2QHQ8tgLBxC+h3AxwHV0NhQsL9Mp+1Ocz/4M4CY
+ 8pINOXWP2pteQzUA1uhvCH9eTV6brR7UChrASIIihMcAlBFbwAXJieuKSo8lpSN5
+ zIMGfNRqsPNVnZOH/IlCUPrJEDfQI4LN0EKE/PXu29KL8F5uiQpZ84Gwjhb3UAjm
+ Mj9NVKfPoY8N7sbUvy2m5EAl66Laa3p6B55CzCGgEZnq9Wy173vSxDKY1gs0MhgE
+ /ojlF/Cf7320Z0z0Zn7KY2Svu8jTg5zYoJfsSbjf4aj2sXsS5Kok0Jzq7amWeJgu
+ Gj4Xt0wDbRDo+2g2RyFn
+ =o71I
+ -----END PGP SIGNATURE-----
+
+fix: restore recovery baseline (build + tests)
+
+--- STAT ---
+commit 5d34b5dd365d6ea4c8421ec49736419378648d55
+Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+Date:   Sun May 31 07:53:20 2026 +0000
+
+    fix: restore recovery baseline (build + tests)
+
+ src/ai/__tests__/rate-limiter.test.ts              |  2 +-
+ src/ai/__tests__/safety-systems.test.ts            |  8 +--
+ .../__tests__/all-tiers-real-data.test.ts          | 40 ++++++++++--
+ .../__tests__/complete-benchmark-suite.test.ts     | 68 +++++++++++++-------
+ .../__tests__/industry-comparison.test.ts          | 72 +++++++++++++++++-----
+ .../__tests__/live-memory-benchmark.test.ts        | 24 ++++++--
+ .../__tests__/real-memory-benchmark.test.ts        | 54 +++++++++++-----
+ src/ai/observer/silent-observer.ts                 | 36 ++++++-----
+ 8 files changed, 223 insertions(+), 81 deletions(-)
+
+
+================================================================
+LAST CLEAN COMMIT BEFORE RECONNAISSANCE: 65d0201
+================================================================
+tree f37a5c047959343cf2837958b3531c394d629393
+parent af83af1358e1b87b41f9d877987b925f32a406ca
+parent c27f72dd85fd112c740299ce5c68ffa1e6ee5fb9
+author Asidburn <168261976+Asidburn76@users.noreply.github.com> 1779309286 -0700
+committer GitHub <noreply@github.com> 1779309286 -0700
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ wsFcBAABCAAQBQJqDhrmCRC1aQ7uu5UhlAAAeDsQAJxl64YWEb4cSpCUj3J080jh
+ Kb5RBHK0NVF5G92fdd2EAzS0ja3K+zVbBEl/Pu83lHEl9URyPobkhJDtXEqDhKWv
+ DhnQUzIyea0STZHFa+lWdHlALo+KxX+B4X0HkkTuLMcyOJck/ftWitmUzErQT4Mk
+ ND0YU63ZcmMDt+XrqU51MqR/MRZJaUE5V/mY/cLJo1f5XOm+c8/a4FpzZqQPJhyy
+ T50jH4VT/rdWvNRDruibyY6kI7LX0L8wxDlKM21FcPu7sWZ2UHAW9EouSvQ4xQB1
+ oTDfK9BZKn6JYB6AcB1C05B1ukLMbSf4MUrSDjS7I1sb50G6gWQ/hM7gu2l3BF6T
+ pln1efJZlhoJJBIDWqW+ycb0gq50DLOupCJXH5d+QT+5zUeZebKBWoc0AR7oySyM
+ LQ/XaDwO+XQMeFB2uU/Q4E/hBrUn6LfLPETJBNidqOuTXfH418Kqm0TYwq4bluUN
+ PLFEQk3HdwjSJu9gz7UqfkC5h9Ue7Ggo3Vu73kdAFT2tXo84/WNUh0L29Oe0VUEd
+ Xv2HSLNQnEL5u/EoJceBjsZSnvWqhJVC8Q/AFhJXjNW18fk9tEHye2DWVxl3RYr8
+ nYQNgEi4Mwq+aEF13A51QQjlt7FjnoP0iYVQ44uPa+ALYszrkrCmBK7mdZo7GpkR
+ WEl0I/s3oY6X1rhz0dy6
+ =kJ4z
+ -----END PGP SIGNATURE-----
+ 
+
+Merge pull request #59 from Molly-agi/copilot/fix-load-from-storage-null-safety
+
+feat: avatar exit controls, personality video launcher, storage null safety
+commit 65d0201cb0a42fdfc846af95fb17b38252e2c585
+Merge: af83af1 c27f72d
+Author: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+Date:   Wed May 20 13:34:46 2026 -0700
+
+    Merge pull request #59 from Molly-agi/copilot/fix-load-from-storage-null-safety
+    
+    feat: avatar exit controls, personality video launcher, storage null safety
+
+ public/molly-media/personality/asset-manifest.json |  26 +++++
+ public/molly-media/personality/audio.m4a           | Bin 0 -> 97958 bytes
+ public/molly-media/personality/grok-optimized.mp4  | Bin 0 -> 4365917 bytes
+ public/molly-media/personality/grok-optimized.webm | Bin 0 -> 2851644 bytes
+ public/molly-media/personality/original.mp4        | Bin 0 -> 4845118 bytes
+ public/molly-media/personality/poster.jpg          | Bin 0 -> 71913 bytes
+ public/molly-media/personality/poster.webp         | Bin 0 -> 54700 bytes
+ src/app/avatar/page.tsx                            | 106 +++++++++++++++++--
+ src/app/personality-video/page.tsx                 | 114 +++++++++++++++++++++
+ src/components/termai/Header.tsx                   |  17 ++-
+ .../COMPREHENSIVE_AUDIT_2026_05_18.md              |  29 ++++++
+ stuff/RESEARCHER_PACKAGE/INFRASTRUCTURE_MAP.md     |   5 +-
+ stuff/RESEARCHER_PACKAGE/README.md                 |  25 +++--
+ stuff/RESEARCHER_PACKAGE/RESEARCHER_GUIDE.md       |   6 +-
+ 14 files changed, 301 insertions(+), 27 deletions(-)
+
