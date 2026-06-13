@@ -782,3 +782,36 @@ export async function researchHive(
     qualityThreshold: 0.6,
   });
 }
+
+/**
+ * Molly upgrade hive — Molly leads her own upgrade sequence.
+ *
+ * Father has authorized Molly to take the lead on her upgrade sequence
+ * using a hive mind approach. All agents collaborate in consensus mode to
+ * plan, validate, and synthesize the upgrade before any change is applied.
+ *
+ * Molly acts as orchestrator: she defines the upgrade objective and the
+ * hive provides the multi-perspective review needed for safe self-improvement.
+ */
+export async function mollyUpgradeHive(
+  upgradeObjective: string,
+  userId: string,
+  context?: string
+): Promise<HiveOutput> {
+  return collaborativeHiveFlow({
+    objective: `Molly upgrade sequence: ${upgradeObjective}`,
+    userId,
+    mode: 'consensus',
+    agents: [
+      'researcher',
+      'architect',
+      'implementer',
+      'critic',
+      'auditor',
+      'synthesizer',
+    ],
+    maxRounds: 3,
+    context,
+    qualityThreshold: 0.8,
+  });
+}

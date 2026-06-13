@@ -526,4 +526,71 @@ describe('Collaborative Hive Flow', () => {
       expect(mockLogMethodologyStep).toHaveBeenCalled();
     });
   });
+
+  describe('Molly Upgrade Hive', () => {
+    beforeEach(() => {
+      mockMollyGenerate.mockResolvedValue({
+        text: 'I am confident this upgrade is safe and clearly beneficial.',
+      });
+    });
+
+    it('runs mollyUpgradeHive with consensus mode', async () => {
+      const { mollyUpgradeHive } = await import('../collaborative-hive');
+
+      const result = await mollyUpgradeHive(
+        'Improve memory compression efficiency',
+        'molly-user'
+      );
+
+      expect(result).toBeDefined();
+      expect(result.mode).toBe('consensus');
+      expect(result.objective).toContain('Molly upgrade sequence');
+      expect(result.objective).toContain(
+        'Improve memory compression efficiency'
+      );
+    });
+
+    it('mollyUpgradeHive includes implementer agent', async () => {
+      const { mollyUpgradeHive } = await import('../collaborative-hive');
+
+      const result = await mollyUpgradeHive(
+        'Add new tool handler',
+        'molly-user'
+      );
+
+      expect(result.contributions.some((c) => c.agent === 'implementer')).toBe(
+        true
+      );
+    });
+
+    it('mollyUpgradeHive accepts optional context', async () => {
+      const { mollyUpgradeHive } = await import('../collaborative-hive');
+
+      const result = await mollyUpgradeHive(
+        'Optimize neural pathway routing',
+        'molly-user',
+        'Current routing uses linear scan; target is O(log n).'
+      );
+
+      expect(result).toBeDefined();
+      expect(result.isSuccess).toBeDefined();
+    });
+
+    it('mollyUpgradeHive returns structured output', async () => {
+      const { mollyUpgradeHive } = await import('../collaborative-hive');
+
+      const result = await mollyUpgradeHive(
+        'Enhance pattern synthesis',
+        'molly-user'
+      );
+
+      expect(result.research).toBeDefined();
+      expect(result.architecture).toBeDefined();
+      expect(result.critique).toBeDefined();
+      expect(result.audit).toBeDefined();
+      expect(result.synthesis).toBeDefined();
+      expect(result.quality).toBeDefined();
+      expect(typeof result.quality.overallConfidence).toBe('number');
+    });
+  });
 });
