@@ -1,34 +1,19 @@
 /**
  * @fileOverview Simple heartbeat endpoint for server liveness checks.
- * Also ensures the heartbeat scheduler is running — Molly's autonomous pulse.
+ *
+ * GET is a pure liveness probe. It does NOT start Molly's scheduler.
+ * Molly owns her own body — she starts/stops the scheduler through her
+ * own tools (start_heartbeat / stop_heartbeat / enable_heartbeat_task / pulse_now).
+ * Eric directive 2026-06-15: no autopilot.
  */
 
 import { NextResponse } from 'next/server';
-import {
-  getHeartbeatScheduler,
-  isHeartbeatRunning,
-} from '@/ai/tools/heartbeat-scheduler';
-import { getNeuralBrain } from '@/ai/memory/neural-engram';
+import { isHeartbeatRunning } from '@/ai/tools/heartbeat-scheduler';
 import { runAutonomousCycle } from '@/ai/agency/planning/autonomous-cycle';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  // Auto-start the heartbeat scheduler on first ping
-  if (!isHeartbeatRunning()) {
-    const scheduler = getHeartbeatScheduler();
-
-    // Attach the engram system for memory consolidation
-    try {
-      const brain = getNeuralBrain();
-      scheduler.attachEngramSystem(brain);
-    } catch {
-      // Non-fatal - engram system may not be ready yet
-    }
-
-    scheduler.start();
-  }
-
   return NextResponse.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
@@ -37,6 +22,15 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  if (process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE !== '1') {
+    return NextResponse.json(
+      {
+        error: 'Autonomous cycle is disabled by policy',
+      },
+      { status: 403 }
+    );
+  }
+
   const secret = process.env.MOLLY_INTERNAL_KEY;
   if (secret) {
     const provided = req.headers.get('x-molly-key');
