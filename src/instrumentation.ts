@@ -82,6 +82,7 @@ export async function register() {
   ];
 
   let hasCriticalMissing = false;
+  const missingOptional: string[] = [];
 
   for (const { key, hint } of required) {
     if (!process.env[key]) {
@@ -92,8 +93,14 @@ export async function register() {
 
   for (const { key, hint } of optional) {
     if (!process.env[key]) {
-      console.warn(`[Startup] ⚠️  Missing optional: ${key} — ${hint}`);
+      missingOptional.push(`${key} (${hint})`);
     }
+  }
+
+  if (missingOptional.length > 0) {
+    console.log(
+      `[Startup] Optional config missing (${missingOptional.length}): ${missingOptional.join(', ')}`
+    );
   }
 
   if (hasCriticalMissing) {
@@ -330,7 +337,9 @@ export async function register() {
   try {
     const { initAgencyRuntime } = await import('@/ai/agency/agency-runtime');
     initAgencyRuntime();
-    console.log('[Startup] ✅ Agency runtime initialized (registry + governor)');
+    console.log(
+      '[Startup] ✅ Agency runtime initialized (registry + governor)'
+    );
   } catch (err) {
     console.warn(
       '[Startup] ⚠️  Could not initialize agency runtime:',

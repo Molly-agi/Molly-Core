@@ -34,6 +34,22 @@ const SINGLETON_DOCS: SyncEntry[] = getSyncSingletons();
 
 const MULTI_DOC_COLLECTIONS = getSyncCollections();
 
+function isFirestoreNotFoundError(err: unknown): boolean {
+  if (!err || typeof err !== 'object') return false;
+
+  const maybeCode = (err as { code?: unknown }).code;
+  if (maybeCode === 5 || maybeCode === '5' || maybeCode === 'NOT_FOUND') {
+    return true;
+  }
+
+  const message =
+    err instanceof Error
+      ? err.message
+      : String((err as { message?: unknown }).message ?? err);
+
+  return /\bNOT_FOUND\b/i.test(message);
+}
+
 // ── Result type ──────────────────────────────────────────────────────────────
 
 export interface SyncResult {
@@ -230,6 +246,14 @@ export async function syncStorageOnStartup(): Promise<SyncResult> {
     try {
       await syncDoc(db, local, entry.collection, entry.docId, result);
     } catch (err) {
+      if (isFirestoreNotFoundError(err)) {
+        MollyLogger.warn(
+          'Storage sync skipped — Firestore returned NOT_FOUND; using local state for this session',
+          'storage-sync'
+        );
+        result.durationMs = Date.now() - startMs;
+        return result;
+      }
       MollyLogger.warn(
         `[sync] ${entry.label}: ${err instanceof Error ? err.message : String(err)}`,
         'storage-sync'
@@ -243,6 +267,14 @@ export async function syncStorageOnStartup(): Promise<SyncResult> {
     try {
       await syncCollection(db, local, col.collection, col.limit, result);
     } catch (err) {
+      if (isFirestoreNotFoundError(err)) {
+        MollyLogger.warn(
+          'Storage sync skipped — Firestore returned NOT_FOUND; using local state for this session',
+          'storage-sync'
+        );
+        result.durationMs = Date.now() - startMs;
+        return result;
+      }
       MollyLogger.warn(
         `[sync] ${col.label}: ${err instanceof Error ? err.message : String(err)}`,
         'storage-sync'

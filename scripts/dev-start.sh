@@ -62,8 +62,12 @@ sleep 1
 if kill -0 "$IMMORTAL_PID" 2>/dev/null; then
   echo "  Verified running."
 else
-  echo "  WARNING: Immortal daemon may have failed to start"
-  cat "$ROOT/.immortal.log" | tail -5
+  if grep -q "\[LOCK\] Already running" "$ROOT/.immortal.log" 2>/dev/null; then
+    echo "  Info: Immortal daemon already active (lock engaged)."
+  else
+    echo "  WARNING: Immortal daemon may have failed to start"
+    cat "$ROOT/.immortal.log" | tail -5
+  fi
 fi
 
 # -----------------------------------------------------------------------------
@@ -119,5 +123,7 @@ echo "  Molly is waking up on http://localhost:9002"
 echo "=============================================="
 echo ""
 
-# Run Next.js in foreground (Ctrl+C will stop everything)
-exec env NODE_OPTIONS="--max-old-space-size=3072" npx next dev -H 0.0.0.0 -p 9002
+# Run Next.js in webpack mode (not Turbopack).
+# Next 16 defaults to Turbopack, but our watch ignore rules for
+# COPILOT_SESSION_STATE files are configured in webpack watchOptions.
+exec env NODE_OPTIONS="--max-old-space-size=3072" npx next dev --webpack -H 0.0.0.0 -p 9002
