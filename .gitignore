@@ -55,6 +55,13 @@ firestore-debug.log
 eng.traineddata
 .molly-logs/
 .molly/
+# Allow Molly's personality state to be committed so changes persist across
+# codespace rebuilds and clones. The file is just slider values 0..1, not
+# secrets, and losing it silently was a major part of the "admin panel
+# doesn't lock in changes" bug (Eric directive 2026-06-15).
+!.molly/
+.molly/*
+!.molly/personality-state.json
 
 # Shrouded Memory — sensitive identity data, never commit with real values
 molly_sentinel/identity_manifest.json
@@ -95,6 +102,13 @@ logs/*.log
 .activity-burst
 COPILOT_SESSION_STATE.json
 COPILOT_SESSION_STATE.md
+
+# Local TermAI service account keys (never commit)
+stuff/logs/firebase/*.json
+
+# API vault secrets (keep templates only)
+config/api_vault/api-vault.json
+config/api_vault/*.local.env
 
 # VS Code extensions (dev workspace)
 extensions/
