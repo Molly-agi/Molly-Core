@@ -1,0 +1,2637 @@
+{
+  "sha": "d32f88bba027fda2efad7fc67ba34a03fa481fad",
+  "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/d32f88bba027fda2efad7fc67ba34a03fa481fad",
+  "tree": [
+    {
+      "path": ".cargo",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a03b3713e3f6dc14e39b4830dda3869c99c99291",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/a03b3713e3f6dc14e39b4830dda3869c99c99291"
+    },
+    {
+      "path": ".cargo/config.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f229a1ae508831c9a457b639b6facfdfc158c189",
+      "size": 51,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f229a1ae508831c9a457b639b6facfdfc158c189"
+    },
+    {
+      "path": ".dockerignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5874b8c3054120934381fc0fa1b8982b4e67482d",
+      "size": 12,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/5874b8c3054120934381fc0fa1b8982b4e67482d"
+    },
+    {
+      "path": ".envrc",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3550a30f2de389e537ee40ca5e64a77dc185c79b",
+      "size": 10,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3550a30f2de389e537ee40ca5e64a77dc185c79b"
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "132d25b58eea36f2d0656fce6f9b362dc9be8b18",
+      "size": 73,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/132d25b58eea36f2d0656fce6f9b362dc9be8b18"
+    },
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8ba70abe5cf18d1515d7094933cbf64982545442",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/8ba70abe5cf18d1515d7094933cbf64982545442"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0562754ebdb2d5432868af0310eac20b3f23e07d",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/0562754ebdb2d5432868af0310eac20b3f23e07d"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "051fa00e06cc8304cb7a19277f5d2914ffd568a8",
+      "size": 1959,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/051fa00e06cc8304cb7a19277f5d2914ffd568a8"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/enhancement_request.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c1cf2d9f1ed28e097d754f466795ddf70980005d",
+      "size": 865,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c1cf2d9f1ed28e097d754f466795ddf70980005d"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/wsl_panic.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7c295fb00b66d1356159586fe127f565c23f983",
+      "size": 2408,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f7c295fb00b66d1356159586fe127f565c23f983"
+    },
+    {
+      "path": ".github/renovate.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c29f701037bf070091e988e63c36b9ba323bdf4",
+      "size": 1313,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1c29f701037bf070091e988e63c36b9ba323bdf4"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b938b480ff9b71f20d085674b6dee6036316ce5e",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/b938b480ff9b71f20d085674b6dee6036316ce5e"
+    },
+    {
+      "path": ".github/workflows/ci.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6a00b4eb5fc42066e8b3e38cd8bfd6ba28f27cd",
+      "size": 68861,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e6a00b4eb5fc42066e8b3e38cd8bfd6ba28f27cd"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ca4609753d15ff11e133d5b0b29181bd84768911",
+      "size": 115,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ca4609753d15ff11e133d5b0b29181bd84768911"
+    },
+    {
+      "path": ".taplo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d8e41e5dc5db517d6eda137151e2157196c0e3e",
+      "size": 223,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/4d8e41e5dc5db517d6eda137151e2157196c0e3e"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "182c57795abc4bf792cf8bab88e7f510faff45c3",
+      "size": 152892,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/182c57795abc4bf792cf8bab88e7f510faff45c3"
+    },
+    {
+      "path": "Cargo.lock",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8950018df53d10219a55990406949fabe3132b4e",
+      "size": 95076,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/8950018df53d10219a55990406949fabe3132b4e"
+    },
+    {
+      "path": "Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a3ae5f941df1585fa9f23f4d5ba21bc297741cc",
+      "size": 5767,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0a3ae5f941df1585fa9f23f4d5ba21bc297741cc"
+    },
+    {
+      "path": "LICENSE-APACHE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11069edd79019f7dafbe3138841cf289209270dd",
+      "size": 10850,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/11069edd79019f7dafbe3138841cf289209270dd"
+    },
+    {
+      "path": "LICENSE-MIT",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40b8817a47beba464cd86e3f81260cd41b5e70dd",
+      "size": 1071,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/40b8817a47beba464cd86e3f81260cd41b5e70dd"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8f4e7dbc615c3b782de87c4353216ae8b5271920",
+      "size": 1433,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/8f4e7dbc615c3b782de87c4353216ae8b5271920"
+    },
+    {
+      "path": "build.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7012d6119cfcc50cb747505ef25b549daccf3455",
+      "size": 3751,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/7012d6119cfcc50cb747505ef25b549daccf3455"
+    },
+    {
+      "path": "ci",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "11868a25479de05c8f7b19ab2a618ee6af98ef1e",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/11868a25479de05c8f7b19ab2a618ee6af98ef1e"
+    },
+    {
+      "path": "ci/actions-templates",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1b12f6c994ecc0710aeef1cb576ff2b99fde5064",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/1b12f6c994ecc0710aeef1cb576ff2b99fde5064"
+    },
+    {
+      "path": "ci/actions-templates/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e70f7ecaad2d9139563ba7b0e95bf690e87da5f9",
+      "size": 2950,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e70f7ecaad2d9139563ba7b0e95bf690e87da5f9"
+    },
+    {
+      "path": "ci/actions-templates/all-features-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3370531fa677745d048d555a3da1ed54e2cc96d3",
+      "size": 2388,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3370531fa677745d048d555a3da1ed54e2cc96d3"
+    },
+    {
+      "path": "ci/actions-templates/centos-fmt-clippy-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ad7ebd3fe88f5532922db2969099bbf5f14e681e",
+      "size": 3138,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ad7ebd3fe88f5532922db2969099bbf5f14e681e"
+    },
+    {
+      "path": "ci/actions-templates/conclusion-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "451398a09361b6b6ddd83c1046c524ec46677736",
+      "size": 607,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/451398a09361b6b6ddd83c1046c524ec46677736"
+    },
+    {
+      "path": "ci/actions-templates/freebsd-builds-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c5ff819539327214c091a19f1878d746cba43e5f",
+      "size": 1488,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c5ff819539327214c091a19f1878d746cba43e5f"
+    },
+    {
+      "path": "ci/actions-templates/gen-workflows.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "b4985a9c2bd67460c165ba0318956246dc2cf354",
+      "size": 1214,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b4985a9c2bd67460c165ba0318956246dc2cf354"
+    },
+    {
+      "path": "ci/actions-templates/linux-builds-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02fd76155f9e9c8d2ec58010d5a8ebc55047b0fb",
+      "size": 9506,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/02fd76155f9e9c8d2ec58010d5a8ebc55047b0fb"
+    },
+    {
+      "path": "ci/actions-templates/macos-builds-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e5dcd261519f833415ed8121de117c167dbac85",
+      "size": 5969,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/7e5dcd261519f833415ed8121de117c167dbac85"
+    },
+    {
+      "path": "ci/actions-templates/test-docs-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae8e9abdaac471a0e329cc4b79b5c353ce41da40",
+      "size": 2082,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ae8e9abdaac471a0e329cc4b79b5c353ce41da40"
+    },
+    {
+      "path": "ci/actions-templates/windows-builds-template.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68c5a1bb1edb8e9980dbb2eb1157b0c41fbff107",
+      "size": 8024,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/68c5a1bb1edb8e9980dbb2eb1157b0c41fbff107"
+    },
+    {
+      "path": "ci/changelog_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f1537042c97a1524266f51a5f282c106a6580ee0",
+      "size": 2562,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f1537042c97a1524266f51a5f282c106a6580ee0"
+    },
+    {
+      "path": "ci/cloudfront-invalidation.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd484f79dd03653b046e74fd7284a0f352fa0c6c",
+      "size": 4061,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/cd484f79dd03653b046e74fd7284a0f352fa0c6c"
+    },
+    {
+      "path": "ci/deploy.bash",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "cef0f95f111202cb503691c2e17dc465de2dac2c",
+      "size": 1589,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/cef0f95f111202cb503691c2e17dc465de2dac2c"
+    },
+    {
+      "path": "ci/docker",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "19e42354ad674a8a2fff863bbcd1a76d54e5005b",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/19e42354ad674a8a2fff863bbcd1a76d54e5005b"
+    },
+    {
+      "path": "ci/docker/aarch64-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3799084e86fb0ea87461562c20b396824a967ae3",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/3799084e86fb0ea87461562c20b396824a967ae3"
+    },
+    {
+      "path": "ci/docker/aarch64-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ea689399f528ecac93a4a2dc30d98d188bfaf36",
+      "size": 36,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0ea689399f528ecac93a4a2dc30d98d188bfaf36"
+    },
+    {
+      "path": "ci/docker/aarch64-unknown-linux-musl",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "589b178ebbf7cf81309fa65edb1909cce5c70947",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/589b178ebbf7cf81309fa65edb1909cce5c70947"
+    },
+    {
+      "path": "ci/docker/aarch64-unknown-linux-musl/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a99ae4e21e4b2155811618c8fd8a3b05140436f9",
+      "size": 450,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a99ae4e21e4b2155811618c8fd8a3b05140436f9"
+    },
+    {
+      "path": "ci/docker/android",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fe43752829318e73e9ad514d4f62c9d882174dcb",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/fe43752829318e73e9ad514d4f62c9d882174dcb"
+    },
+    {
+      "path": "ci/docker/android/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "77dc569ee554035acb8c6709934bab71c9fb964c",
+      "size": 1775,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/77dc569ee554035acb8c6709934bab71c9fb964c"
+    },
+    {
+      "path": "ci/docker/arm-unknown-linux-gnueabi",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c5a55ffe0ea1a2bd56edcbf985922517fb307293",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/c5a55ffe0ea1a2bd56edcbf985922517fb307293"
+    },
+    {
+      "path": "ci/docker/arm-unknown-linux-gnueabi/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb8b137d94e703487f149986d8b3a45a58d53275",
+      "size": 395,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/fb8b137d94e703487f149986d8b3a45a58d53275"
+    },
+    {
+      "path": "ci/docker/arm-unknown-linux-gnueabihf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "360c41f623b9cd6d58b9e5cef954c14f3be616fa",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/360c41f623b9cd6d58b9e5cef954c14f3be616fa"
+    },
+    {
+      "path": "ci/docker/arm-unknown-linux-gnueabihf/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba60e282023f4569cdaf89bf6dfe649139c18a97",
+      "size": 405,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ba60e282023f4569cdaf89bf6dfe649139c18a97"
+    },
+    {
+      "path": "ci/docker/armv7-unknown-linux-gnueabihf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "998d12bdd81a83f9710d5859dbd46ecc708e493a",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/998d12bdd81a83f9710d5859dbd46ecc708e493a"
+    },
+    {
+      "path": "ci/docker/armv7-unknown-linux-gnueabihf/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2aee75771c8c4718fef79ec5d39701fe2b2666d",
+      "size": 415,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c2aee75771c8c4718fef79ec5d39701fe2b2666d"
+    },
+    {
+      "path": "ci/docker/i686-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3a14eb54d1c91721bc1e3e4f8a4722630e3232c8",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/3a14eb54d1c91721bc1e3e4f8a4722630e3232c8"
+    },
+    {
+      "path": "ci/docker/i686-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f99f4e3870a63e6e79956b2352608dd37244917b",
+      "size": 389,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f99f4e3870a63e6e79956b2352608dd37244917b"
+    },
+    {
+      "path": "ci/docker/loongarch64-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6f1e24a53c0dff7afb1b1c27c49231e7f098bc10",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/6f1e24a53c0dff7afb1b1c27c49231e7f098bc10"
+    },
+    {
+      "path": "ci/docker/loongarch64-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a73233fbe192022794a824162c314ebae5c543d",
+      "size": 415,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/7a73233fbe192022794a824162c314ebae5c543d"
+    },
+    {
+      "path": "ci/docker/loongarch64-unknown-linux-musl",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "606f4cd4ae71ab15bd22ed270100adc2a11fa0f7",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/606f4cd4ae71ab15bd22ed270100adc2a11fa0f7"
+    },
+    {
+      "path": "ci/docker/loongarch64-unknown-linux-musl/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "605a695d46f07bf07665db0f70bceec3f02c41f3",
+      "size": 420,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/605a695d46f07bf07665db0f70bceec3f02c41f3"
+    },
+    {
+      "path": "ci/docker/mips-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "aa29c0d6c3bd5f2682c705bc61e14ef331c107f5",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/aa29c0d6c3bd5f2682c705bc61e14ef331c107f5"
+    },
+    {
+      "path": "ci/docker/mips-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5801ef9d0bca5c990a44d4b942da9a15640f32cb",
+      "size": 167,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/5801ef9d0bca5c990a44d4b942da9a15640f32cb"
+    },
+    {
+      "path": "ci/docker/mips64-unknown-linux-gnuabi64",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "620cad19a64a800938381ca6834533cdefd55bc6",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/620cad19a64a800938381ca6834533cdefd55bc6"
+    },
+    {
+      "path": "ci/docker/mips64-unknown-linux-gnuabi64/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8345fe421de2e1a04d05536589cdb8210bb419e5",
+      "size": 192,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/8345fe421de2e1a04d05536589cdb8210bb419e5"
+    },
+    {
+      "path": "ci/docker/mips64el-unknown-linux-gnuabi64",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "83df7432f824e06b8f799e359dca87db251c66a2",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/83df7432f824e06b8f799e359dca87db251c66a2"
+    },
+    {
+      "path": "ci/docker/mips64el-unknown-linux-gnuabi64/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0e5871c93ac36c18f2fd573d1e04a270e8d1162",
+      "size": 202,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c0e5871c93ac36c18f2fd573d1e04a270e8d1162"
+    },
+    {
+      "path": "ci/docker/mipsel-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "039a5a25349be07a7238aa313d7923aefbedf979",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/039a5a25349be07a7238aa313d7923aefbedf979"
+    },
+    {
+      "path": "ci/docker/mipsel-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ee9161fac50d31396daab1731497e1a4dc184a03",
+      "size": 177,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ee9161fac50d31396daab1731497e1a4dc184a03"
+    },
+    {
+      "path": "ci/docker/powerpc-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "317375fbd4638661693e3a4ec25fcae335565232",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/317375fbd4638661693e3a4ec25fcae335565232"
+    },
+    {
+      "path": "ci/docker/powerpc-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "62b0aacb6c207410933c0a6390bdb64d228293b8",
+      "size": 395,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/62b0aacb6c207410933c0a6390bdb64d228293b8"
+    },
+    {
+      "path": "ci/docker/powerpc64-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e75a9849953c956d75e72a9516aefbc954153473",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/e75a9849953c956d75e72a9516aefbc954153473"
+    },
+    {
+      "path": "ci/docker/powerpc64-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb757b49ca8f926abfcff2e6d0add74b7a4b431a",
+      "size": 405,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/cb757b49ca8f926abfcff2e6d0add74b7a4b431a"
+    },
+    {
+      "path": "ci/docker/powerpc64-unknown-linux-musl",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d65418d2d4ca9b99e3bf5b67336781fe183a231e",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/d65418d2d4ca9b99e3bf5b67336781fe183a231e"
+    },
+    {
+      "path": "ci/docker/powerpc64-unknown-linux-musl/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1dab875eed011be5a98593cc9ebbce8617f0a63f",
+      "size": 476,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1dab875eed011be5a98593cc9ebbce8617f0a63f"
+    },
+    {
+      "path": "ci/docker/powerpc64le-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e87b31f161f4132bfcb46dd0ff5825693659bd1c",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/e87b31f161f4132bfcb46dd0ff5825693659bd1c"
+    },
+    {
+      "path": "ci/docker/powerpc64le-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ec76f56833eb1c70f1aefbc424acaa454a7b59ff",
+      "size": 415,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ec76f56833eb1c70f1aefbc424acaa454a7b59ff"
+    },
+    {
+      "path": "ci/docker/powerpc64le-unknown-linux-musl",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a723744e56517d488e4d7f1a72fac583bbeb8cd0",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/a723744e56517d488e4d7f1a72fac583bbeb8cd0"
+    },
+    {
+      "path": "ci/docker/powerpc64le-unknown-linux-musl/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05614b3c1c6833b84352dcdd5f9dcef2abd8dbf7",
+      "size": 485,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/05614b3c1c6833b84352dcdd5f9dcef2abd8dbf7"
+    },
+    {
+      "path": "ci/docker/riscv64gc-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bf1da5e83014fb326ca8b805719e55be566f9f13",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/bf1da5e83014fb326ca8b805719e55be566f9f13"
+    },
+    {
+      "path": "ci/docker/riscv64gc-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b65c26939c7dd4933284a253d6686ad4f5212cd8",
+      "size": 401,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b65c26939c7dd4933284a253d6686ad4f5212cd8"
+    },
+    {
+      "path": "ci/docker/s390x-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a27fe8cf1ce7019c7f31cddf441cd665fbc146cf",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/a27fe8cf1ce7019c7f31cddf441cd665fbc146cf"
+    },
+    {
+      "path": "ci/docker/s390x-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9adbe6c609de15eeb748ca6094af499c22bccc1",
+      "size": 377,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/d9adbe6c609de15eeb748ca6094af499c22bccc1"
+    },
+    {
+      "path": "ci/docker/scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3df38d71231b45bc075fe427ed170bf7f61684a7",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/3df38d71231b45bc075fe427ed170bf7f61684a7"
+    },
+    {
+      "path": "ci/docker/scripts/sccache.bash",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be5ba2a9d73f590bf44181487debf6ed648afb35",
+      "size": 589,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/be5ba2a9d73f590bf44181487debf6ed648afb35"
+    },
+    {
+      "path": "ci/docker/sparcv9-sun-solaris",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a6f8622658d88e7db02d00b276e1d561882826ec",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/a6f8622658d88e7db02d00b276e1d561882826ec"
+    },
+    {
+      "path": "ci/docker/sparcv9-sun-solaris/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f29ff3a7100513e5f1a7d9bf566c75af1fc60961",
+      "size": 518,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f29ff3a7100513e5f1a7d9bf566c75af1fc60961"
+    },
+    {
+      "path": "ci/docker/x86_64-pc-solaris",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bd56f72c584459f2f3bac318e3e221751ba8fc84",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/bd56f72c584459f2f3bac318e3e221751ba8fc84"
+    },
+    {
+      "path": "ci/docker/x86_64-pc-solaris/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fc77945204907a9173634d5c992c7b00b3685025",
+      "size": 501,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/fc77945204907a9173634d5c992c7b00b3685025"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-freebsd",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1f4edd2119ef50ea28487e5ee7974485e59f5ccc",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/1f4edd2119ef50ea28487e5ee7974485e59f5ccc"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-freebsd/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ec9cb15f235dba6fc42fe41652aab60f894c28e",
+      "size": 399,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6ec9cb15f235dba6fc42fe41652aab60f894c28e"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-illumos",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b1ae975dc60c5cff8f37791b64587d7d6d0dc4a0",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/b1ae975dc60c5cff8f37791b64587d7d6d0dc4a0"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-illumos/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db2962c88a784342832920764b6dbfbb45d21cbc",
+      "size": 535,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/db2962c88a784342832920764b6dbfbb45d21cbc"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-linux-gnu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3d4c98c2947ec3e314fa2108cbce74b73ec7865e",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/3d4c98c2947ec3e314fa2108cbce74b73ec7865e"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-linux-gnu/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "180179730f6f768092ec41577a710d76225513ae",
+      "size": 209,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/180179730f6f768092ec41577a710d76225513ae"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-linux-musl",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "791ca3426fb9c1afbb8bf883ea48571d782c35a2",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/791ca3426fb9c1afbb8bf883ea48571d782c35a2"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-linux-musl/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff39bd82eef4c64e7b1eaa2071553aebef11e0a6",
+      "size": 247,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ff39bd82eef4c64e7b1eaa2071553aebef11e0a6"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-netbsd",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d9a14fe627be4c5164ecabe807ff4b236532b2dd",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/d9a14fe627be4c5164ecabe807ff4b236532b2dd"
+    },
+    {
+      "path": "ci/docker/x86_64-unknown-netbsd/Dockerfile",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef64cd8aa6905c16c34a303b2c7922d7db280724",
+      "size": 329,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ef64cd8aa6905c16c34a303b2c7922d7db280724"
+    },
+    {
+      "path": "ci/fetch-rust-docker.bash",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f7714873e60b3d2aaa9f257d39c5ba8375c7ecf",
+      "size": 3056,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6f7714873e60b3d2aaa9f257d39c5ba8375c7ecf"
+    },
+    {
+      "path": "ci/freebsd",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ae964ec7f3b1876b6ad83fbe300a97f9d9564e5c",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/ae964ec7f3b1876b6ad83fbe300a97f9d9564e5c"
+    },
+    {
+      "path": "ci/freebsd/script.bash",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "572fd068a18c731ca0aaacbce6d4148f2b2d3fde",
+      "size": 1132,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/572fd068a18c731ca0aaacbce6d4148f2b2d3fde"
+    },
+    {
+      "path": "ci/prepare-deploy.bash",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "494f8ea38e6b1a45050d473d80b06d5cd06bfc7a",
+      "size": 970,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/494f8ea38e6b1a45050d473d80b06d5cd06bfc7a"
+    },
+    {
+      "path": "ci/prepare-deploy.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b964e211d13bab1e080f8b75ee9c5045acb85dd",
+      "size": 641,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/8b964e211d13bab1e080f8b75ee9c5045acb85dd"
+    },
+    {
+      "path": "ci/raw_init.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3ff2580ccc0266a42dcbc6445792e61c2999c6b",
+      "size": 147,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e3ff2580ccc0266a42dcbc6445792e61c2999c6b"
+    },
+    {
+      "path": "ci/run.bash",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9d28cd6e64857fa7921b1dfa6e84ad54317e325",
+      "size": 2618,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f9d28cd6e64857fa7921b1dfa6e84ad54317e325"
+    },
+    {
+      "path": "ci/shared.bash",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b54030437190f70919df95f7860d2128cd7707c0",
+      "size": 1043,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b54030437190f70919df95f7860d2128cd7707c0"
+    },
+    {
+      "path": "ci/sync-dist.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28d97ab9dd9f23e291b486b368a48a3c13e8dc9e",
+      "size": 5972,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/28d97ab9dd9f23e291b486b368a48a3c13e8dc9e"
+    },
+    {
+      "path": "doc",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f28ce0c07aebe3e0cfc71f22848cafa032050e9f",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/f28ce0c07aebe3e0cfc71f22848cafa032050e9f"
+    },
+    {
+      "path": "doc/dev-guide",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "acfda60271a31f2221386a09aa4d35e900a63fa3",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/acfda60271a31f2221386a09aa4d35e900a63fa3"
+    },
+    {
+      "path": "doc/dev-guide/.gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7585238efedfc33acdd9494b0269951aaf3909ec",
+      "size": 5,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/7585238efedfc33acdd9494b0269951aaf3909ec"
+    },
+    {
+      "path": "doc/dev-guide/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c711803f270b0be3a9a2af5fe155636452fbdc7a",
+      "size": 738,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c711803f270b0be3a9a2af5fe155636452fbdc7a"
+    },
+    {
+      "path": "doc/dev-guide/book.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b79ef09280b4751c9076520371b9aa195ceeab31",
+      "size": 347,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b79ef09280b4751c9076520371b9aa195ceeab31"
+    },
+    {
+      "path": "doc/dev-guide/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "754240744497e94ca2af88641a4863c7e4540366",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/754240744497e94ca2af88641a4863c7e4540366"
+    },
+    {
+      "path": "doc/dev-guide/src/SUMMARY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15e9b2b4b113fd74389e23e3bd1f1744f28a44da",
+      "size": 251,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/15e9b2b4b113fd74389e23e3bd1f1744f28a44da"
+    },
+    {
+      "path": "doc/dev-guide/src/coding-standards.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "077b635d8cb2d4be2f7b1c19e36e3a498ff5721d",
+      "size": 2954,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/077b635d8cb2d4be2f7b1c19e36e3a498ff5721d"
+    },
+    {
+      "path": "doc/dev-guide/src/index.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24ba3f4da27367188155982b22cfadb6612be7c6",
+      "size": 2165,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/24ba3f4da27367188155982b22cfadb6612be7c6"
+    },
+    {
+      "path": "doc/dev-guide/src/linting.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d20236672fc41939fa9560ab192c5b5a1cc92adf",
+      "size": 2568,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/d20236672fc41939fa9560ab192c5b5a1cc92adf"
+    },
+    {
+      "path": "doc/dev-guide/src/release-process.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "adec1c0f412e8207e79765b4f226054a03aca79d",
+      "size": 6983,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/adec1c0f412e8207e79765b4f226054a03aca79d"
+    },
+    {
+      "path": "doc/dev-guide/src/tips-and-tricks.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff3671ffadd16d78d16ef66e769312c55c673278",
+      "size": 4807,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ff3671ffadd16d78d16ef66e769312c55c673278"
+    },
+    {
+      "path": "doc/dev-guide/src/tracing.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75caca1efcfb482b9716c72f41cb1d7fcd839ff5",
+      "size": 5227,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/75caca1efcfb482b9716c72f41cb1d7fcd839ff5"
+    },
+    {
+      "path": "doc/dev-guide/src/version-numbers.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c233704165a8ee686cd915ff892dc5d7980423d",
+      "size": 2376,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2c233704165a8ee686cd915ff892dc5d7980423d"
+    },
+    {
+      "path": "doc/user-guide",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e848734b0ae840ce598edd7857b3d635ceefb537",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/e848734b0ae840ce598edd7857b3d635ceefb537"
+    },
+    {
+      "path": "doc/user-guide/.gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3155cd2e4d8b1f0e8c3330d65cded0f501a7c20e",
+      "size": 26,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3155cd2e4d8b1f0e8c3330d65cded0f501a7c20e"
+    },
+    {
+      "path": "doc/user-guide/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0569e7d546e9fe22f370cd5f7614b5f81f0bc1b9",
+      "size": 713,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0569e7d546e9fe22f370cd5f7614b5f81f0bc1b9"
+    },
+    {
+      "path": "doc/user-guide/book.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2fe51d754009c8d65727caaf00b0983486a37e65",
+      "size": 407,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2fe51d754009c8d65727caaf00b0983486a37e65"
+    },
+    {
+      "path": "doc/user-guide/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0edcf0f4e5962afe542a28a4eb569fdb6f040cc6",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/0edcf0f4e5962afe542a28a4eb569fdb6f040cc6"
+    },
+    {
+      "path": "doc/user-guide/src/SUMMARY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b761d6d166afdaf612dd89a1b071143dad6d208",
+      "size": 836,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1b761d6d166afdaf612dd89a1b071143dad6d208"
+    },
+    {
+      "path": "doc/user-guide/src/basics.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47b224992008954cfa314c718d93e4791d02c210",
+      "size": 2659,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/47b224992008954cfa314c718d93e4791d02c210"
+    },
+    {
+      "path": "doc/user-guide/src/concepts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ee384656956078dcd944455812bae6e2af2c067b",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/ee384656956078dcd944455812bae6e2af2c067b"
+    },
+    {
+      "path": "doc/user-guide/src/concepts/channels.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed5c090e4ca3beb20eb7f63a9578c8b384f4e521",
+      "size": 4613,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ed5c090e4ca3beb20eb7f63a9578c8b384f4e521"
+    },
+    {
+      "path": "doc/user-guide/src/concepts/components.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea56b844c6d7475c7e40ef0d12e006930883776f",
+      "size": 4836,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ea56b844c6d7475c7e40ef0d12e006930883776f"
+    },
+    {
+      "path": "doc/user-guide/src/concepts/index.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1e4795dcd75823be62b0d77d34324f12f7ff6744",
+      "size": 2664,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1e4795dcd75823be62b0d77d34324f12f7ff6744"
+    },
+    {
+      "path": "doc/user-guide/src/concepts/profiles.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68b30287c7fbcdeacf8cf8b7f2e7d6bb4a952cf8",
+      "size": 2014,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/68b30287c7fbcdeacf8cf8b7f2e7d6bb4a952cf8"
+    },
+    {
+      "path": "doc/user-guide/src/concepts/proxies.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "692d4dd4b12c26a032f32678b18e3bac4dba01f8",
+      "size": 1780,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/692d4dd4b12c26a032f32678b18e3bac4dba01f8"
+    },
+    {
+      "path": "doc/user-guide/src/concepts/toolchains.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d4d0a3bfc5608eec765562f1defb0d7a56b0b36",
+      "size": 2641,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2d4d0a3bfc5608eec765562f1defb0d7a56b0b36"
+    },
+    {
+      "path": "doc/user-guide/src/configuration.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b30c837f3d1985576449fb94f2990f0fa0180184",
+      "size": 507,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b30c837f3d1985576449fb94f2990f0fa0180184"
+    },
+    {
+      "path": "doc/user-guide/src/cross-compilation.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8782143885d54efe1b5fddcfdb04f86a3c3be446",
+      "size": 1946,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/8782143885d54efe1b5fddcfdb04f86a3c3be446"
+    },
+    {
+      "path": "doc/user-guide/src/environment-variables.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e45fff7a052eed897964c3fc054ba8a040645cf6",
+      "size": 4323,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e45fff7a052eed897964c3fc054ba8a040645cf6"
+    },
+    {
+      "path": "doc/user-guide/src/examples.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de7e0b6865e247848a45395c42c54cc7c1240a4d",
+      "size": 2026,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/de7e0b6865e247848a45395c42c54cc7c1240a4d"
+    },
+    {
+      "path": "doc/user-guide/src/faq.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ed00934d9c3a4f3338bb0ca6bd05bdd7e7662f8",
+      "size": 1652,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0ed00934d9c3a4f3338bb0ca6bd05bdd7e7662f8"
+    },
+    {
+      "path": "doc/user-guide/src/index.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8030f17ffa3795922da43706e6e53189470813ef",
+      "size": 981,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/8030f17ffa3795922da43706e6e53189470813ef"
+    },
+    {
+      "path": "doc/user-guide/src/installation",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f2a490c0f20325519867e8f78d82e67493012a56",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/f2a490c0f20325519867e8f78d82e67493012a56"
+    },
+    {
+      "path": "doc/user-guide/src/installation/already-installed-rust.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0056c25c41630e27ec619e90c0fd55d0fa65be97",
+      "size": 3617,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0056c25c41630e27ec619e90c0fd55d0fa65be97"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "23d0e20491d2387a8b52c6c6ad280bf8b1e9af72",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/23d0e20491d2387a8b52c6c6ad280bf8b1e9af72"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images/component-msvc.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db301d6be7167caa4ed2a83e252d2f4f42307672",
+      "size": 32393,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/db301d6be7167caa4ed2a83e252d2f4f42307672"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images/component-sdk.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4d11f0e21d1e239add82af3246dbb195f3b50c0",
+      "size": 26191,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f4d11f0e21d1e239add82af3246dbb195f3b50c0"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images/step1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d450b05211a01f2634b26b6218dfc96cbec4e51b",
+      "size": 6754,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/d450b05211a01f2634b26b6218dfc96cbec4e51b"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images/step2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c5daca1f4df40fcb6228e2cd1f9306b518acf4b5",
+      "size": 4351,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c5daca1f4df40fcb6228e2cd1f9306b518acf4b5"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images/step3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04ce4913dd0208fac8aecee5c0dda7b3091a01ad",
+      "size": 52435,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/04ce4913dd0208fac8aecee5c0dda7b3091a01ad"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images/step4.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6caef3036fc8faeeedeb3a88a8fc82a2bc60d3c0",
+      "size": 30087,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6caef3036fc8faeeedeb3a88a8fc82a2bc60d3c0"
+    },
+    {
+      "path": "doc/user-guide/src/installation/images/step5.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "867a65fa3f1a076929adcfdde6421890706e5272",
+      "size": 17751,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/867a65fa3f1a076929adcfdde6421890706e5272"
+    },
+    {
+      "path": "doc/user-guide/src/installation/index.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "87300885419352f1eb31406f575b016fa8a1c8ba",
+      "size": 3816,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/87300885419352f1eb31406f575b016fa8a1c8ba"
+    },
+    {
+      "path": "doc/user-guide/src/installation/other.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73fac6e6d494789d60f901975987281befac6170",
+      "size": 13547,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/73fac6e6d494789d60f901975987281befac6170"
+    },
+    {
+      "path": "doc/user-guide/src/installation/windows-msvc.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57cad73e8c94711bc77cbb2ac841d89d38555f1b",
+      "size": 5549,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/57cad73e8c94711bc77cbb2ac841d89d38555f1b"
+    },
+    {
+      "path": "doc/user-guide/src/installation/windows.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97499c049d06f7d09efd48a30daad1b97bfd26c8",
+      "size": 2859,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/97499c049d06f7d09efd48a30daad1b97bfd26c8"
+    },
+    {
+      "path": "doc/user-guide/src/network-proxies.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19a42090b875457137d9f8d5575acd644275a54e",
+      "size": 1767,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/19a42090b875457137d9f8d5575acd644275a54e"
+    },
+    {
+      "path": "doc/user-guide/src/overrides.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "849ed515d2d65a4e04155576f9bb0d92497186c5",
+      "size": 6565,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/849ed515d2d65a4e04155576f9bb0d92497186c5"
+    },
+    {
+      "path": "doc/user-guide/src/security.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "54ca719b0ed592b4d93d8018042a51766b0574c6",
+      "size": 521,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/54ca719b0ed592b4d93d8018042a51766b0574c6"
+    },
+    {
+      "path": "flake.nix",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4cfbec25b9dc5d548195f714a0082d5c62ba93e",
+      "size": 626,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a4cfbec25b9dc5d548195f714a0082d5c62ba93e"
+    },
+    {
+      "path": "rustup-init.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "51cbc6996c78c29d9b3b418cc2a1ac443a0751a5",
+      "size": 29580,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/51cbc6996c78c29d9b3b418cc2a1ac443a0751a5"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6588212a358f8fef9fd2d70e6a9ff525234fe2a6",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/6588212a358f8fef9fd2d70e6a9ff525234fe2a6"
+    },
+    {
+      "path": "src/anchors.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "337641a1784268fb18a6e0d85e18169087f32ad9",
+      "size": 8057,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/337641a1784268fb18a6e0d85e18169087f32ad9"
+    },
+    {
+      "path": "src/bin",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8081171625f9e7bcda1cee3acd2b70ae7febf2ab",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/8081171625f9e7bcda1cee3acd2b70ae7febf2ab"
+    },
+    {
+      "path": "src/bin/rustup-init.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e844ddc19edfb608f6fb0b81bd6eccdfb4650c2b",
+      "size": 5684,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e844ddc19edfb608f6fb0b81bd6eccdfb4650c2b"
+    },
+    {
+      "path": "src/cli.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88a7586ce235ec2d07b805fd5d6ce61afa6b819f",
+      "size": 257,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/88a7586ce235ec2d07b805fd5d6ce61afa6b819f"
+    },
+    {
+      "path": "src/cli",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "14b7e1ba5bc374b1c6e4f46bf3aed10f1796f37a",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/14b7e1ba5bc374b1c6e4f46bf3aed10f1796f37a"
+    },
+    {
+      "path": "src/cli/common.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11f8f698e5801d839edf2a006b7a3cdeb17cc109",
+      "size": 18355,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/11f8f698e5801d839edf2a006b7a3cdeb17cc109"
+    },
+    {
+      "path": "src/cli/errors.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "598b71d9c37f8fa80215c9e8fc97333edb4f8d71",
+      "size": 1651,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/598b71d9c37f8fa80215c9e8fc97333edb4f8d71"
+    },
+    {
+      "path": "src/cli/help.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75bb8e3ca88fe33ff18202bffca1c954c122fc19",
+      "size": 14833,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/75bb8e3ca88fe33ff18202bffca1c954c122fc19"
+    },
+    {
+      "path": "src/cli/job.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f9d936901039789108d73fd1bf9b8bbfbb974e7",
+      "size": 5127,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1f9d936901039789108d73fd1bf9b8bbfbb974e7"
+    },
+    {
+      "path": "src/cli/log.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab20922aa61c7da0801e268cefece52b11f4948d",
+      "size": 6037,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ab20922aa61c7da0801e268cefece52b11f4948d"
+    },
+    {
+      "path": "src/cli/markdown.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b52a264471940b0143477d93217c0de30322995b",
+      "size": 8108,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b52a264471940b0143477d93217c0de30322995b"
+    },
+    {
+      "path": "src/cli/proxy_mode.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e387cd7ed764fb52d899628603258119d08e8449",
+      "size": 1526,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e387cd7ed764fb52d899628603258119d08e8449"
+    },
+    {
+      "path": "src/cli/rustup_mode.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50d4da2c68db3e72d87e8e480a5db543bb447a8b",
+      "size": 65097,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/50d4da2c68db3e72d87e8e480a5db543bb447a8b"
+    },
+    {
+      "path": "src/cli/self_update.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ef4726955554df7a80d3a8153ae827884ac148a",
+      "size": 50989,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2ef4726955554df7a80d3a8153ae827884ac148a"
+    },
+    {
+      "path": "src/cli/self_update",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e1c9bfe15070b8f0ba22fda60a7dac69b6785401",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/e1c9bfe15070b8f0ba22fda60a7dac69b6785401"
+    },
+    {
+      "path": "src/cli/self_update/env.fish",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b6549f504dd329ab0a7075a29c26b767c5a687e3",
+      "size": 175,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b6549f504dd329ab0a7075a29c26b767c5a687e3"
+    },
+    {
+      "path": "src/cli/self_update/env.nu",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "782e41e7c51237e335406dfd0aac01b16e4eacfb",
+      "size": 47,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/782e41e7c51237e335406dfd0aac01b16e4eacfb"
+    },
+    {
+      "path": "src/cli/self_update/env.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6cc7b290ed93800c9aa3a0e87d6805b2559c798c",
+      "size": 122,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6cc7b290ed93800c9aa3a0e87d6805b2559c798c"
+    },
+    {
+      "path": "src/cli/self_update/env.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cc2b57a060ba9485a445f5252ef4bb230ca42f7",
+      "size": 290,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/7cc2b57a060ba9485a445f5252ef4bb230ca42f7"
+    },
+    {
+      "path": "src/cli/self_update/env.tcsh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd89ed32fffb50302e5e1f33ae179429eec24209",
+      "size": 181,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/bd89ed32fffb50302e5e1f33ae179429eec24209"
+    },
+    {
+      "path": "src/cli/self_update/env.xsh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "469274c80f7ca9f1c627e99ca022f155c8f8a4a0",
+      "size": 81,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/469274c80f7ca9f1c627e99ca022f155c8f8a4a0"
+    },
+    {
+      "path": "src/cli/self_update/shell.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4caa12a7a628c19cb3f544436a7e3de803dbd0e",
+      "size": 17490,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f4caa12a7a628c19cb3f544436a7e3de803dbd0e"
+    },
+    {
+      "path": "src/cli/self_update/unix.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05c598f551a7d7a9109fc8a326e9e0b8f2b383f7",
+      "size": 6896,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/05c598f551a7d7a9109fc8a326e9e0b8f2b383f7"
+    },
+    {
+      "path": "src/cli/self_update/windows.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9487976337cbbda64a6a88534759e86f98526bce",
+      "size": 33381,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/9487976337cbbda64a6a88534759e86f98526bce"
+    },
+    {
+      "path": "src/cli/setup_mode.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4ec420e5c10e8fe5cda09ada643dee19b1ce6eb",
+      "size": 3843,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c4ec420e5c10e8fe5cda09ada643dee19b1ce6eb"
+    },
+    {
+      "path": "src/cli/topical_doc.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "750f2d4d3f9ece42eecc4b99ac1a99c4d90a2b8e",
+      "size": 5138,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/750f2d4d3f9ece42eecc4b99ac1a99c4d90a2b8e"
+    },
+    {
+      "path": "src/command.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "695b9ab801b529644ca7e16ec40b684f03f47e53",
+      "size": 1582,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/695b9ab801b529644ca7e16ec40b684f03f47e53"
+    },
+    {
+      "path": "src/config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fdb45a0d9c5be356ba3fe00696e146a9b052f231",
+      "size": 43102,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/fdb45a0d9c5be356ba3fe00696e146a9b052f231"
+    },
+    {
+      "path": "src/diskio",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "df466eedd451b5c6f6e864cdbc79a5e7e9c10464",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/df466eedd451b5c6f6e864cdbc79a5e7e9c10464"
+    },
+    {
+      "path": "src/diskio/immediate.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c7dd518a442bce289ba382a57865df21dc22927",
+      "size": 7131,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2c7dd518a442bce289ba382a57865df21dc22927"
+    },
+    {
+      "path": "src/diskio/mod.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2400ed118e03a152d71ae177f55dc77984f55a7",
+      "size": 19486,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f2400ed118e03a152d71ae177f55dc77984f55a7"
+    },
+    {
+      "path": "src/diskio/test.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d82fbf6ca885066266870a862a51ddfe87c01022",
+      "size": 6177,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/d82fbf6ca885066266870a862a51ddfe87c01022"
+    },
+    {
+      "path": "src/diskio/threaded.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3933d418137b44dd918d485f64c9815e5f30c6f",
+      "size": 14300,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b3933d418137b44dd918d485f64c9815e5f30c6f"
+    },
+    {
+      "path": "src/dist",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f372a470de8c6c21d5170d14dbc61d6a314cf35c",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/f372a470de8c6c21d5170d14dbc61d6a314cf35c"
+    },
+    {
+      "path": "src/dist/component",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b07d9acd51df599abd6a73851acdb6a3af81bc0e",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/b07d9acd51df599abd6a73851acdb6a3af81bc0e"
+    },
+    {
+      "path": "src/dist/component/components.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4240c591a9d2f2fcb1a9d7146fb257b09684f7c",
+      "size": 13473,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a4240c591a9d2f2fcb1a9d7146fb257b09684f7c"
+    },
+    {
+      "path": "src/dist/component/mod.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9df43bbf112f377908cbe800c8b57080f0791bb7",
+      "size": 448,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/9df43bbf112f377908cbe800c8b57080f0791bb7"
+    },
+    {
+      "path": "src/dist/component/package.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc545d4b62451c786b17205a0277dd6017eac911",
+      "size": 16786,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/dc545d4b62451c786b17205a0277dd6017eac911"
+    },
+    {
+      "path": "src/dist/component/tests.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5a5a2b6fcc9f98a238a279b0938e5a1ae3bf62a",
+      "size": 20928,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b5a5a2b6fcc9f98a238a279b0938e5a1ae3bf62a"
+    },
+    {
+      "path": "src/dist/component/transaction.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "386a2ea82b5929ab9deb011c8365957e47d91b72",
+      "size": 10113,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/386a2ea82b5929ab9deb011c8365957e47d91b72"
+    },
+    {
+      "path": "src/dist/config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2bcfb85b75152eaa7269304a3d00b74094c947f3",
+      "size": 1262,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2bcfb85b75152eaa7269304a3d00b74094c947f3"
+    },
+    {
+      "path": "src/dist/download.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "39283f7f38bebbe0849c1de45c1d0562644fd0f6",
+      "size": 16028,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/39283f7f38bebbe0849c1de45c1d0562644fd0f6"
+    },
+    {
+      "path": "src/dist/manifest.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36842a30c05e6b38fa9885f8292fd71733fb1840",
+      "size": 24571,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/36842a30c05e6b38fa9885f8292fd71733fb1840"
+    },
+    {
+      "path": "src/dist/manifest",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4902b8f0bdf6bc0e7441f9104b452243efed1c14",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/4902b8f0bdf6bc0e7441f9104b452243efed1c14"
+    },
+    {
+      "path": "src/dist/manifest/tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "67e935b5bbcc800ec8d6dcc231a05c134fc73921",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/67e935b5bbcc800ec8d6dcc231a05c134fc73921"
+    },
+    {
+      "path": "src/dist/manifest/tests/channel-rust-nightly-example-reordered.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb63ac9de2afd46af824e49944d2e283a1a8e731",
+      "size": 1755,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/cb63ac9de2afd46af824e49944d2e283a1a8e731"
+    },
+    {
+      "path": "src/dist/manifest/tests/channel-rust-nightly-example.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86297b5ab7006577056da35894813e5e79f819b8",
+      "size": 1755,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/86297b5ab7006577056da35894813e5e79f819b8"
+    },
+    {
+      "path": "src/dist/manifest/tests/channel-rust-nightly-example2.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d95cd1568b2cce68e1e7ca776bdb4b3340409a93",
+      "size": 26016,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/d95cd1568b2cce68e1e7ca776bdb4b3340409a93"
+    },
+    {
+      "path": "src/dist/manifestation.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "174307d5fdbd18c1b70f63817807dc4ee0d55327",
+      "size": 32003,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/174307d5fdbd18c1b70f63817807dc4ee0d55327"
+    },
+    {
+      "path": "src/dist/manifestation",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "441d9127499b8fded3ff9c9fd95092cf9f012497",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/441d9127499b8fded3ff9c9fd95092cf9f012497"
+    },
+    {
+      "path": "src/dist/manifestation/tests.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29e87b7cbfa8f55f072dcedf06d366fda5f5f62f",
+      "size": 49021,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/29e87b7cbfa8f55f072dcedf06d366fda5f5f62f"
+    },
+    {
+      "path": "src/dist/mod.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "185f903a9ba89d546dbd6a115d5eb210b1879179",
+      "size": 55531,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/185f903a9ba89d546dbd6a115d5eb210b1879179"
+    },
+    {
+      "path": "src/dist/prefix.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9b71118017060c34981bc6d2413ecab0fd0c83ad",
+      "size": 2073,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/9b71118017060c34981bc6d2413ecab0fd0c83ad"
+    },
+    {
+      "path": "src/dist/temp.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0eacbb44f610bb4f665d9bb6eea0b6ce1abd41ae",
+      "size": 4241,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0eacbb44f610bb4f665d9bb6eea0b6ce1abd41ae"
+    },
+    {
+      "path": "src/dist/triple.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "34aff1475c5fc455a10f68ec1d101448e17af0fb",
+      "size": 3405,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/34aff1475c5fc455a10f68ec1d101448e17af0fb"
+    },
+    {
+      "path": "src/dist/triple",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1365ce73e3ec5e611c83fdd359a37ff923ca63d8",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/1365ce73e3ec5e611c83fdd359a37ff923ca63d8"
+    },
+    {
+      "path": "src/dist/triple/known.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c60eb2fbedbdc0f12a29eb7d41aedeb00f1d3c8",
+      "size": 3405,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/4c60eb2fbedbdc0f12a29eb7d41aedeb00f1d3c8"
+    },
+    {
+      "path": "src/download",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e7ca0ce270fe9673791bd3d6126e3696d2c8b286",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/e7ca0ce270fe9673791bd3d6126e3696d2c8b286"
+    },
+    {
+      "path": "src/download/mod.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31f7c83624c0b3d535d8a01b3f08ae21c3dea9fe",
+      "size": 26475,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/31f7c83624c0b3d535d8a01b3f08ae21c3dea9fe"
+    },
+    {
+      "path": "src/download/tests.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36552a5ce2d379d5b1dfbd4c337c067089f19b37",
+      "size": 15218,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/36552a5ce2d379d5b1dfbd4c337c067089f19b37"
+    },
+    {
+      "path": "src/env_var.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45b19c638901f75d9b0007cc085241cb3fbbdcad",
+      "size": 5049,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/45b19c638901f75d9b0007cc085241cb3fbbdcad"
+    },
+    {
+      "path": "src/errors.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a406f269939f2791cabf9ed10327d80a3871579",
+      "size": 11398,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0a406f269939f2791cabf9ed10327d80a3871579"
+    },
+    {
+      "path": "src/fallback_settings.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16588e3bd1cf2c1e57952998e82decc123e2ceeb",
+      "size": 1344,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/16588e3bd1cf2c1e57952998e82decc123e2ceeb"
+    },
+    {
+      "path": "src/install.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b7f4df76b9552ae77e1c6a344a8a10d42c93a6e3",
+      "size": 5164,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b7f4df76b9552ae77e1c6a344a8a10d42c93a6e3"
+    },
+    {
+      "path": "src/lib.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7192d9eafc3bedd1ba624db305312249b4fcf388",
+      "size": 3149,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/7192d9eafc3bedd1ba624db305312249b4fcf388"
+    },
+    {
+      "path": "src/process.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c209fc52986de78bedba6aa62b5c4fceedc236b",
+      "size": 12437,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2c209fc52986de78bedba6aa62b5c4fceedc236b"
+    },
+    {
+      "path": "src/process",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "edf772e1fc0a947cd322cde984e35ae40e1bc487",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/edf772e1fc0a947cd322cde984e35ae40e1bc487"
+    },
+    {
+      "path": "src/process/file_source.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c3e0c15fd33b81131f8e6aad190a33e734d4fc3",
+      "size": 2326,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/4c3e0c15fd33b81131f8e6aad190a33e734d4fc3"
+    },
+    {
+      "path": "src/process/terminal_source.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "abdf050aefca884ba4d706cd57f1b8eb2adb647a",
+      "size": 7385,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/abdf050aefca884ba4d706cd57f1b8eb2adb647a"
+    },
+    {
+      "path": "src/settings.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15d7669fa0ca494be95e04c0948cedc6f3e7a2dd",
+      "size": 6213,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/15d7669fa0ca494be95e04c0948cedc6f3e7a2dd"
+    },
+    {
+      "path": "src/test.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "479c490415c5bd9c6ddd38bccf5efdb5f0204c1f",
+      "size": 10652,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/479c490415c5bd9c6ddd38bccf5efdb5f0204c1f"
+    },
+    {
+      "path": "src/test",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9670f776f16d693f61d38db7853ccee2bf1a9458",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/9670f776f16d693f61d38db7853ccee2bf1a9458"
+    },
+    {
+      "path": "src/test/clitools.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1ff39c6f7b653f8cd0b2ae830ce559f2da1314f",
+      "size": 45941,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e1ff39c6f7b653f8cd0b2ae830ce559f2da1314f"
+    },
+    {
+      "path": "src/test/dist.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1f2f98dcf1e7b89b9d460eef67a4224f4ce49b1",
+      "size": 33228,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e1f2f98dcf1e7b89b9d460eef67a4224f4ce49b1"
+    },
+    {
+      "path": "src/test/mock.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37162c3498140bc3620450dbde44042cde4be488",
+      "size": 8219,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/37162c3498140bc3620450dbde44042cde4be488"
+    },
+    {
+      "path": "src/test/mock_bin_src.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ca84dba18ed59cda111a54acc24e632ba494163",
+      "size": 6403,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/5ca84dba18ed59cda111a54acc24e632ba494163"
+    },
+    {
+      "path": "src/toolchain.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f13ef0aaf378d395e64f3642ad0c17b40f12831b",
+      "size": 24606,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f13ef0aaf378d395e64f3642ad0c17b40f12831b"
+    },
+    {
+      "path": "src/toolchain",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "55b98b7037e429d71b5256836bb4df1bac34ea52",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/55b98b7037e429d71b5256836bb4df1bac34ea52"
+    },
+    {
+      "path": "src/toolchain/distributable.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea4b2f676a2a8dfc7f72623d7d23fd5ffaf1145f",
+      "size": 18527,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ea4b2f676a2a8dfc7f72623d7d23fd5ffaf1145f"
+    },
+    {
+      "path": "src/toolchain/names.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9ea7404d4444bf86b91b3d756f8057987469887",
+      "size": 20689,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b9ea7404d4444bf86b91b3d756f8057987469887"
+    },
+    {
+      "path": "src/utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1dec4c9d343ee70e5ad6151b686f2473b7018d0f",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/1dec4c9d343ee70e5ad6151b686f2473b7018d0f"
+    },
+    {
+      "path": "src/utils/mod.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "649cfb97585765ca5e3cf0455f25a4dbe23253d6",
+      "size": 16932,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/649cfb97585765ca5e3cf0455f25a4dbe23253d6"
+    },
+    {
+      "path": "src/utils/notify.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e541f3e96e9c299f9849efb4259a78465c36098",
+      "size": 862,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/7e541f3e96e9c299f9849efb4259a78465c36098"
+    },
+    {
+      "path": "src/utils/raw.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "42b565d434240b58e0d06ac50881f104995c6e49",
+      "size": 10737,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/42b565d434240b58e0d06ac50881f104995c6e49"
+    },
+    {
+      "path": "src/utils/units.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f45ce72f680e99824ad6789ac7d9129645f68a04",
+      "size": 1238,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f45ce72f680e99824ad6789ac7d9129645f68a04"
+    },
+    {
+      "path": "tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a258697be658078e7098bcbf0eda840d1a8b92a2",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/a258697be658078e7098bcbf0eda840d1a8b92a2"
+    },
+    {
+      "path": "tests/suite",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2632eb8495bb5d7648f2673ea516b6d9b2cd0145",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/2632eb8495bb5d7648f2673ea516b6d9b2cd0145"
+    },
+    {
+      "path": "tests/suite/cli_exact.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a277c43e0aee5f32e9a92f2720b27510a17ed8da",
+      "size": 25454,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a277c43e0aee5f32e9a92f2720b27510a17ed8da"
+    },
+    {
+      "path": "tests/suite/cli_inst_interactive.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "659cfc486cedad6eff1cacf99603d5dde74857cc",
+      "size": 17571,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/659cfc486cedad6eff1cacf99603d5dde74857cc"
+    },
+    {
+      "path": "tests/suite/cli_misc.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb5ac8a303c4c02bee44bb46a895c5939321a689",
+      "size": 47143,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/eb5ac8a303c4c02bee44bb46a895c5939321a689"
+    },
+    {
+      "path": "tests/suite/cli_paths.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f102dd52342322bea06481acf93be5cb33f5fe4d",
+      "size": 19354,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f102dd52342322bea06481acf93be5cb33f5fe4d"
+    },
+    {
+      "path": "tests/suite/cli_rustup.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b658d0007bbe0c4f07c334552872faaa55a65fa3",
+      "size": 106886,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b658d0007bbe0c4f07c334552872faaa55a65fa3"
+    },
+    {
+      "path": "tests/suite/cli_rustup_init_ui.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f8cda670850644bea07992e894c03def4f30341",
+      "size": 2738,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1f8cda670850644bea07992e894c03def4f30341"
+    },
+    {
+      "path": "tests/suite/cli_rustup_init_ui",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b696a6aa4272e80b67cd0d00b937fb73a1c92355",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/b696a6aa4272e80b67cd0d00b937fb73a1c92355"
+    },
+    {
+      "path": "tests/suite/cli_rustup_init_ui/rustup_init_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a239c6c51b3c55b6febe1829bbd46ccc42a6d3d0",
+      "size": 4730,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a239c6c51b3c55b6febe1829bbd46ccc42a6d3d0"
+    },
+    {
+      "path": "tests/suite/cli_rustup_init_ui/rustup_init_sh_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1212cc88625949f6d1fa2895415ce0e02c5a702",
+      "size": 3278,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e1212cc88625949f6d1fa2895415ce0e02c5a702"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "289b8c8713f8afd8339cd78aa9f1ac5ea5f92b68",
+      "size": 13973,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/289b8c8713f8afd8339cd78aa9f1ac5ea5f92b68"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a7d07fcbe69c06b6b06c5b0f4cdc9a3e49e23e08",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/a7d07fcbe69c06b6b06c5b0f4cdc9a3e49e23e08"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_check_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35f8114209634cf0be955e928f26928c319cb34a",
+      "size": 2145,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/35f8114209634cf0be955e928f26928c319cb34a"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_check_updates_none.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1e9b9229efac33d8e279e984d27462cf09b3a8c2",
+      "size": 1156,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1e9b9229efac33d8e279e984d27462cf09b3a8c2"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_check_updates_some.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bd67b78d08959c36af73e29b119e6f2362c2da5",
+      "size": 1241,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0bd67b78d08959c36af73e29b119e6f2362c2da5"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_completions_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "55a676da479c48649a366965e50d1b4a7e43a63e",
+      "size": 13274,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/55a676da479c48649a366965e50d1b4a7e43a63e"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_component_cmd_add_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1fb2c48d893dce89141ccd0f3fbc788b7c0c9bba",
+      "size": 2315,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1fb2c48d893dce89141ccd0f3fbc788b7c0c9bba"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_component_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd1baee8544a9fffd4b909d611924edc53db1508",
+      "size": 2162,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/bd1baee8544a9fffd4b909d611924edc53db1508"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_component_cmd_list_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d62b24affc4a25b6518f9ae9a9f236589db78ef4",
+      "size": 2196,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/d62b24affc4a25b6518f9ae9a9f236589db78ef4"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_component_cmd_remove_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "533f3e8a827ecfdd783589dd0c6c2a32096a2d0f",
+      "size": 2323,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/533f3e8a827ecfdd783589dd0c6c2a32096a2d0f"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_component_list.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d693f5507fc4684b5b26388b68b06e85799c465",
+      "size": 1570,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/4d693f5507fc4684b5b26388b68b06e85799c465"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_default.stderr.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bbcfefe316fb96c346d3c912441e3867734839a",
+      "size": 1100,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0bbcfefe316fb96c346d3c912441e3867734839a"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_default.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0fd28b918f66240b01b0768f22820a744b40932f",
+      "size": 853,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0fd28b918f66240b01b0768f22820a744b40932f"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_default_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4964b4a9a653e300d5ae364068704d65432157d",
+      "size": 2559,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e4964b4a9a653e300d5ae364068704d65432157d"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_doc_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1a2571939b617c61563c71733bc2f98327dffabd",
+      "size": 7066,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1a2571939b617c61563c71733bc2f98327dffabd"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_help_cmd.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ac00ed0a2b41d7ad54e17681a8050a507a03337",
+      "size": 7495,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1ac00ed0a2b41d7ad54e17681a8050a507a03337"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ac00ed0a2b41d7ad54e17681a8050a507a03337",
+      "size": 7495,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1ac00ed0a2b41d7ad54e17681a8050a507a03337"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_init_unknown_arg.stderr.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b438540aecd7f0061b9bb07b7ef1eeb987f367b7",
+      "size": 1510,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b438540aecd7f0061b9bb07b7ef1eeb987f367b7"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_man_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eca243d1010d39a0b6a019a084d6542b512e6b3d",
+      "size": 2085,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/eca243d1010d39a0b6a019a084d6542b512e6b3d"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_only_options.stderr.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ed355b4dcdb4428b0d1b11c4453ba2d6b758f04",
+      "size": 7899,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/4ed355b4dcdb4428b0d1b11c4453ba2d6b758f04"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_override_cmd_add_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0fb908085d17af0ff0755bcc2227e5a3a607804a",
+      "size": 2113,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0fb908085d17af0ff0755bcc2227e5a3a607804a"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_override_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce12b59086e11de8c8820ba01f8e87fc8f9a5d8f",
+      "size": 3958,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ce12b59086e11de8c8820ba01f8e87fc8f9a5d8f"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_override_cmd_list_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a8485df7507f6d015abcbcb3f73ba502d058ce4",
+      "size": 1270,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/9a8485df7507f6d015abcbcb3f73ba502d058ce4"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_override_cmd_remove_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4b0991fe66738bee874e9ef531013d456bb12f7",
+      "size": 2471,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a4b0991fe66738bee874e9ef531013d456bb12f7"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_override_cmd_set_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0fb908085d17af0ff0755bcc2227e5a3a607804a",
+      "size": 2113,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/0fb908085d17af0ff0755bcc2227e5a3a607804a"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_override_cmd_unset_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4b0991fe66738bee874e9ef531013d456bb12f7",
+      "size": 2471,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a4b0991fe66738bee874e9ef531013d456bb12f7"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_run_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab54a0335f7e15f72090443827f32cf02d18bc48",
+      "size": 3674,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ab54a0335f7e15f72090443827f32cf02d18bc48"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_self_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "100ab286288b49f756b946ca1f2835aa7d303503",
+      "size": 2142,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/100ab286288b49f756b946ca1f2835aa7d303503"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_self_cmd_uninstall_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a49ee07d1d650a39cdeac6f900cf501a9ccb3b9",
+      "size": 1698,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/5a49ee07d1d650a39cdeac6f900cf501a9ccb3b9"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_self_cmd_update_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5045d427d02d7ced484d23d018df6f5b3028881",
+      "size": 1272,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/b5045d427d02d7ced484d23d018df6f5b3028881"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_self_cmd_upgrade_data_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f5e05e74aed11a4d86e4d6c948039c4f458a9100",
+      "size": 1272,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f5e05e74aed11a4d86e4d6c948039c4f458a9100"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_set_cmd_auto_install_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae77c7ab8b005703fe66fd9fd0ff6810cef1bccf",
+      "size": 1677,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ae77c7ab8b005703fe66fd9fd0ff6810cef1bccf"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_set_cmd_auto_self_update_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e0106f03ababac2349acc0cac6f533ca98d21517",
+      "size": 1702,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e0106f03ababac2349acc0cac6f533ca98d21517"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_set_cmd_default_host_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "099258a6e584593334372c479cec9b35585eb239",
+      "size": 1651,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/099258a6e584593334372c479cec9b35585eb239"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_set_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "54cb5a7e5b709559570e88c7e5a875f8fbd23675",
+      "size": 2364,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/54cb5a7e5b709559570e88c7e5a875f8fbd23675"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_set_cmd_profile_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af4a8715c5be40dcd775e3bc791884ccd4c64332",
+      "size": 1692,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/af4a8715c5be40dcd775e3bc791884ccd4c64332"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_show_cmd_active_toolchain_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c52e4eb2f66abe36a05b91660d695adbf1186bfd",
+      "size": 2304,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c52e4eb2f66abe36a05b91660d695adbf1186bfd"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_show_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "59c4ce8314239f2f1be85bf78adb2b651022c41b",
+      "size": 3303,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/59c4ce8314239f2f1be85bf78adb2b651022c41b"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_show_cmd_home_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c9515f7227f6d0b5c5f82e3dec9468f38763e35",
+      "size": 1273,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1c9515f7227f6d0b5c5f82e3dec9468f38763e35"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_show_cmd_profile_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6786b14519b08c9ae02859cdb2db3c7626a9d03f",
+      "size": 1297,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6786b14519b08c9ae02859cdb2db3c7626a9d03f"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_show_toolchain.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1dda66273f9da3faa9707102ff3eb12ceff06de1",
+      "size": 1838,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1dda66273f9da3faa9707102ff3eb12ceff06de1"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_target_cmd_add_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f400831e53d562f5f634e7f61a587d1a8320413",
+      "size": 2155,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6f400831e53d562f5f634e7f61a587d1a8320413"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_target_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9f39939860e1f466ad84a776b0d87f227673dc52",
+      "size": 2147,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/9f39939860e1f466ad84a776b0d87f227673dc52"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_target_cmd_list_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a3ecb8a432454b46fbb28a86c2188e6ed814924",
+      "size": 2187,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/2a3ecb8a432454b46fbb28a86c2188e6ed814924"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_target_cmd_remove_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a8909e560713000c2f9fec80b7dd24302af00c5",
+      "size": 2127,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3a8909e560713000c2f9fec80b7dd24302af00c5"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_toolchain_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a3c2b5bc146c304622d573570d988552ab8e8855",
+      "size": 6799,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a3c2b5bc146c304622d573570d988552ab8e8855"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_toolchain_cmd_install_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f996dc99028b011ee5ed8f9d8ebbbfbb2099262f",
+      "size": 5252,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f996dc99028b011ee5ed8f9d8ebbbfbb2099262f"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_toolchain_cmd_link_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e268d3af2caece9b0088aee81d13f71c434b7e6e",
+      "size": 4026,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e268d3af2caece9b0088aee81d13f71c434b7e6e"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_toolchain_cmd_list_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "89ea0268187b75a801f423aa69624ef0630e0cfb",
+      "size": 1814,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/89ea0268187b75a801f423aa69624ef0630e0cfb"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_toolchain_cmd_uninstall_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31fe89f62057ebef01d52c8becbf7e893e19cdf9",
+      "size": 1831,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/31fe89f62057ebef01d52c8becbf7e893e19cdf9"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_toolchain_list.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "47d24275159de5de9aae24ad520bd1eed09fb2dc",
+      "size": 822,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/47d24275159de5de9aae24ad520bd1eed09fb2dc"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_unknown_arg.stderr.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a0696f02ec110c7a4bf5a14b7fc3d96a1a1f1f1d",
+      "size": 1344,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a0696f02ec110c7a4bf5a14b7fc3d96a1a1f1f1d"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_up_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d78c43eaa68ab658dbb924e775d45adf71d3ad3",
+      "size": 4073,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3d78c43eaa68ab658dbb924e775d45adf71d3ad3"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_update_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d78c43eaa68ab658dbb924e775d45adf71d3ad3",
+      "size": 4073,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3d78c43eaa68ab658dbb924e775d45adf71d3ad3"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_update_no_change.stderr.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e974042abe98817a8ca0af6f28828191352d4eed",
+      "size": 696,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e974042abe98817a8ca0af6f28828191352d4eed"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_update_no_change.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6395bf9b7dbbf2b69aa651e10d3cb9445ef4ead5",
+      "size": 800,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6395bf9b7dbbf2b69aa651e10d3cb9445ef4ead5"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_update_updated.stderr.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28887fcda6a3cb2ed6cbe67776c228684ba68b79",
+      "size": 1638,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/28887fcda6a3cb2ed6cbe67776c228684ba68b79"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_update_updated.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a2cb7c670273971215b0af752f601d5b7a4db0d7",
+      "size": 886,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/a2cb7c670273971215b0af752f601d5b7a4db0d7"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_upgrade_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d78c43eaa68ab658dbb924e775d45adf71d3ad3",
+      "size": 4073,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3d78c43eaa68ab658dbb924e775d45adf71d3ad3"
+    },
+    {
+      "path": "tests/suite/cli_rustup_ui/rustup_which_cmd_help_flag.stdout.term.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1834b5fb0ad4c4789a36b4cce3c08a89e91c251",
+      "size": 2127,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e1834b5fb0ad4c4789a36b4cce3c08a89e91c251"
+    },
+    {
+      "path": "tests/suite/cli_self_upd.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78de02ef3d5a2ae5ff65dee251c18a8896d221e7",
+      "size": 33043,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/78de02ef3d5a2ae5ff65dee251c18a8896d221e7"
+    },
+    {
+      "path": "tests/suite/cli_v1.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3374d9e74af9a5c9a630613c5b946599225d0570",
+      "size": 18051,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3374d9e74af9a5c9a630613c5b946599225d0570"
+    },
+    {
+      "path": "tests/suite/cli_v2.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3099c3b19496b1bd3dcac321bd7f9303d7a1a414",
+      "size": 68953,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/3099c3b19496b1bd3dcac321bd7f9303d7a1a414"
+    },
+    {
+      "path": "tests/suite/dist_install.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "892f6c7cd7f8ff968bfa638fa79760ad62f31cee",
+      "size": 8390,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/892f6c7cd7f8ff968bfa638fa79760ad62f31cee"
+    },
+    {
+      "path": "tests/suite/known_tuples.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd0b7385cc850de382467ee54e91852f66db07c0",
+      "size": 2962,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/fd0b7385cc850de382467ee54e91852f66db07c0"
+    },
+    {
+      "path": "tests/suite/mod.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "296102d67ac74d32d563de4256a3ff55206ca15d",
+      "size": 225,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/296102d67ac74d32d563de4256a3ff55206ca15d"
+    },
+    {
+      "path": "tests/suite/static_roots.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ace10ea36f9c4e989326aa367584b40aeac1cc6b",
+      "size": 5231,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/ace10ea36f9c4e989326aa367584b40aeac1cc6b"
+    },
+    {
+      "path": "tests/test_bonanza.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f09810a93b68e93ab0c66056e004c5b046926415",
+      "size": 40,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f09810a93b68e93ab0c66056e004c5b046926415"
+    },
+    {
+      "path": "triagebot.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e8ab69136d69b2e4b613805acf0d94d4bd3703a9",
+      "size": 319,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/e8ab69136d69b2e4b613805acf0d94d4bd3703a9"
+    },
+    {
+      "path": "www",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "08cb91d9f8e984bc494895e7d6c28c0ebb3d038f",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/08cb91d9f8e984bc494895e7d6c28c0ebb3d038f"
+    },
+    {
+      "path": "www/fonts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1b6104b377c1d567bbb040315af89dfae14aec67",
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/trees/1b6104b377c1d567bbb040315af89dfae14aec67"
+    },
+    {
+      "path": "www/fonts/AlfaSlabOne-Regular.woff",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10aa99d69a7053175c00b29d20f6794eb3e0309d",
+      "size": 23524,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/10aa99d69a7053175c00b29d20f6794eb3e0309d"
+    },
+    {
+      "path": "www/fonts/AlfaSlabOne-Regular.woff2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4611065c041bafa1a9f3157ac5aa6cd6c1b8547",
+      "size": 17372,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/f4611065c041bafa1a9f3157ac5aa6cd6c1b8547"
+    },
+    {
+      "path": "www/fonts/FiraMono-Regular.ttf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "59e1e1a1d3b8894fcd446cdc031b6caef0fc4716",
+      "size": 174632,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/59e1e1a1d3b8894fcd446cdc031b6caef0fc4716"
+    },
+    {
+      "path": "www/fonts/FiraSans-Light.woff",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af97f5022bdae95bd52ebf078fa52ae69aff5fd5",
+      "size": 83388,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/af97f5022bdae95bd52ebf078fa52ae69aff5fd5"
+    },
+    {
+      "path": "www/fonts/FiraSans-Medium.woff",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61a59e010c640e3f76f4a26d58efecc09a6270b1",
+      "size": 84076,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/61a59e010c640e3f76f4a26d58efecc09a6270b1"
+    },
+    {
+      "path": "www/fonts/FiraSans-Regular.woff",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16e74f2b406319f7a443624e16e1c069f308b1d6",
+      "size": 83136,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/16e74f2b406319f7a443624e16e1c069f308b1d6"
+    },
+    {
+      "path": "www/fonts/OFL.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9ae615922b15d40d7038887dbc99eefc22c64f1",
+      "size": 4406,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/d9ae615922b15d40d7038887dbc99eefc22c64f1"
+    },
+    {
+      "path": "www/fonts/WorkSans-Medium.ttf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "137cf564c9e675dfbb8c2d6d574027b8763ff2ec",
+      "size": 143036,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/137cf564c9e675dfbb8c2d6d574027b8763ff2ec"
+    },
+    {
+      "path": "www/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3961d2b61f156c1ca57d35fdca7016d5307da40",
+      "size": 12962,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/c3961d2b61f156c1ca57d35fdca7016d5307da40"
+    },
+    {
+      "path": "www/normalize.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "192eb9ce43389039996bc2e9344c5bb14b730d72",
+      "size": 6138,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/192eb9ce43389039996bc2e9344c5bb14b730d72"
+    },
+    {
+      "path": "www/rustup.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ee3873b344a53593ed2b79068b4da838f8fa653",
+      "size": 6516,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/1ee3873b344a53593ed2b79068b4da838f8fa653"
+    },
+    {
+      "path": "www/rustup.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "20d3e7f7c59c2a04f6ca39fe42decceef9b00c4e",
+      "size": 7747,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/20d3e7f7c59c2a04f6ca39fe42decceef9b00c4e"
+    },
+    {
+      "path": "www/website_config.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6132692633ce749cba7f4a5cdd7bc1047a65505d",
+      "size": 460,
+      "url": "https://api.github.com/repos/Asidburn76/rustup/git/blobs/6132692633ce749cba7f4a5cdd7bc1047a65505d"
+    }
+  ],
+  "truncated": false
+}

@@ -1,0 +1,31 @@
+{
+  "sha": "9da14bf197ffc8806bb6694215fc4acd08739047",
+  "url": "https://api.github.com/repos/Asidburn76/Termux-Hacks/git/trees/9da14bf197ffc8806bb6694215fc4acd08739047",
+  "tree": [
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "size": 35149,
+      "url": "https://api.github.com/repos/Asidburn76/Termux-Hacks/git/blobs/f288702d2fa16d3cdf0035b15a9fcbc552cd88e7"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e0d79badba54efdfdde73fa2a4520a1f9fad6967",
+      "size": 399,
+      "url": "https://api.github.com/repos/Asidburn76/Termux-Hacks/git/blobs/e0d79badba54efdfdde73fa2a4520a1f9fad6967"
+    },
+    {
+      "path": "install.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de1680a11211501e244f70bcb4efea07f254ee9a",
+      "size": 10040,
+      "url": "https://api.github.com/repos/Asidburn76/Termux-Hacks/git/blobs/de1680a11211501e244f70bcb4efea07f254ee9a"
+    }
+  ],
+  "truncated": false
+}

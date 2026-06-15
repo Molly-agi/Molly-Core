@@ -1,0 +1,31 @@
+{
+  "sha": "9b98b01065235c76d48f7676f60b8286851bb59a",
+  "url": "https://api.github.com/repos/Asidburn76/ubuntu/git/trees/9b98b01065235c76d48f7676f60b8286851bb59a",
+  "tree": [
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "size": 35149,
+      "url": "https://api.github.com/repos/Asidburn76/ubuntu/git/blobs/f288702d2fa16d3cdf0035b15a9fcbc552cd88e7"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "beb29cf36b4fbc8f5048a9a65ad809f9b16cf959",
+      "size": 1154,
+      "url": "https://api.github.com/repos/Asidburn76/ubuntu/git/blobs/beb29cf36b4fbc8f5048a9a65ad809f9b16cf959"
+    },
+    {
+      "path": "ubuntu.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d21086f5a558aabea36b9d049dc2c313bf5219f0",
+      "size": 211554,
+      "url": "https://api.github.com/repos/Asidburn76/ubuntu/git/blobs/d21086f5a558aabea36b9d049dc2c313bf5219f0"
+    }
+  ],
+  "truncated": false
+}

@@ -1,0 +1,140 @@
+{
+  "sha": "767201524b68663867125506a6efdeaab807126e",
+  "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/trees/767201524b68663867125506a6efdeaab807126e",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6bba591381216b569cdcb512d98b53c53fd167d",
+      "size": 2047,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/c6bba591381216b569cdcb512d98b53c53fd167d"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b055a781c8d3e5060e85cc7a0c1a8cf22a601d3b",
+      "size": 536,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/b055a781c8d3e5060e85cc7a0c1a8cf22a601d3b"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "71813c00740b0cf6993791d8b76c7fdae7262b1f",
+      "size": 5025,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/71813c00740b0cf6993791d8b76c7fdae7262b1f"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9068db697afb0bca00e6f70d23b4ac518893b8eb",
+      "size": 1072,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/9068db697afb0bca00e6f70d23b4ac518893b8eb"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e2099ab56f21dbd1afc46ed48fca286092a539c",
+      "size": 2999,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/6e2099ab56f21dbd1afc46ed48fca286092a539c"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08972b8f04088a32f2fb49d02235947dd1b0a851",
+      "size": 174,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/08972b8f04088a32f2fb49d02235947dd1b0a851"
+    },
+    {
+      "path": "packages",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c3eae866be932a059abda374bb98e5bf97ddce9c",
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/trees/c3eae866be932a059abda374bb98e5bf97ddce9c"
+    },
+    {
+      "path": "packages/sdk-ts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a47879625367682ed80d971ea90df328774c6714",
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/trees/a47879625367682ed80d971ea90df328774c6714"
+    },
+    {
+      "path": "packages/sdk-ts/.npmignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ec2b7b86245cb44acde4910d1d2506beeae9ca7",
+      "size": 34,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/8ec2b7b86245cb44acde4910d1d2506beeae9ca7"
+    },
+    {
+      "path": "packages/sdk-ts/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "654897ba30ef3a59da7e04656886775a036e6a53",
+      "size": 681,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/654897ba30ef3a59da7e04656886775a036e6a53"
+    },
+    {
+      "path": "packages/sdk-ts/package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "367f62466e22c5ce48e89a29561cb8dba10b9193",
+      "size": 1002,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/367f62466e22c5ce48e89a29561cb8dba10b9193"
+    },
+    {
+      "path": "packages/sdk-ts/rollup.config.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f1421dd248b236fc72d7b6dc30035632afcf0f32",
+      "size": 586,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/f1421dd248b236fc72d7b6dc30035632afcf0f32"
+    },
+    {
+      "path": "packages/sdk-ts/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5d290692c7034d20447600a1005b2495debce29b",
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/trees/5d290692c7034d20447600a1005b2495debce29b"
+    },
+    {
+      "path": "packages/sdk-ts/src/zkwasm.test.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "305ba96f637a46c0817c845aff14ff487e8a6702",
+      "size": 382,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/305ba96f637a46c0817c845aff14ff487e8a6702"
+    },
+    {
+      "path": "packages/sdk-ts/src/zkwasm.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d40254e609f56ee94b9ac23c78ca2544a354749d",
+      "size": 9611,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/d40254e609f56ee94b9ac23c78ca2544a354749d"
+    },
+    {
+      "path": "packages/sdk-ts/tsconfig.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0c9ddad458011964e32d0af6e135c756ef3ac48",
+      "size": 166,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/d0c9ddad458011964e32d0af6e135c756ef3ac48"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e7eb69ed56d38f857533b6576b8a8c3b73e85cf9",
+      "size": 29,
+      "url": "https://api.github.com/repos/Asidburn76/HyperspaceZK/git/blobs/e7eb69ed56d38f857533b6576b8a8c3b73e85cf9"
+    }
+  ],
+  "truncated": false
+}

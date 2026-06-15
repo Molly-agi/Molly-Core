@@ -1,0 +1,2887 @@
+{
+  "sha": "e02a6e9b1346ab5a01244c0d19bcec8232bf1a37",
+  "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/e02a6e9b1346ab5a01244c0d19bcec8232bf1a37",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ec0d3c519f2bf4e5255bfb47e6775345dffa7b2",
+      "size": 251,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0ec0d3c519f2bf4e5255bfb47e6775345dffa7b2"
+    },
+    {
+      "path": "AUTHORS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48cd217bd4fcafb0fbb6cf4a1b7fd7658735791d",
+      "size": 766,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/48cd217bd4fcafb0fbb6cf4a1b7fd7658735791d"
+    },
+    {
+      "path": "COPYING",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dba13ed2ddf783ee8118c6a581dbf75305f816a3",
+      "size": 34520,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/dba13ed2ddf783ee8118c6a581dbf75305f816a3"
+    },
+    {
+      "path": "MANIFEST.in",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b055d793078af320ee9dc37bd0bcbdf226fb2b11",
+      "size": 346,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b055d793078af320ee9dc37bd0bcbdf226fb2b11"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b99d90d22cc566a3e17d1911b1dcf249a4c33dac",
+      "size": 5278,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b99d90d22cc566a3e17d1911b1dcf249a4c33dac"
+    },
+    {
+      "path": "config",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "312dfde23932384affa09fa18a53537d441ba786",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/312dfde23932384affa09fa18a53537d441ba786"
+    },
+    {
+      "path": "config/accounts.cfg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70800a31ffbc7b9d185bb426400b66458323fe7d",
+      "size": 1591,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/70800a31ffbc7b9d185bb426400b66458323fe7d"
+    },
+    {
+      "path": "config/api_keys.cfg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "513be162a41b4243b0606da97b28ee4241a1adbc",
+      "size": 1910,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/513be162a41b4243b0606da97b28ee4241a1adbc"
+    },
+    {
+      "path": "config/browser.cfg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f1da3820815f60f9d11ac5a2520922fbf69817f",
+      "size": 2916,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6f1da3820815f60f9d11ac5a2520922fbf69817f"
+    },
+    {
+      "path": "config/general.cfg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bc047090917c2b4819244d5d0dbdb47f21557a4",
+      "size": 7011,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3bc047090917c2b4819244d5d0dbdb47f21557a4"
+    },
+    {
+      "path": "config/plugins",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "652b90f3d91a09bba5fcdad765a4f65e9d15eb6a",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/652b90f3d91a09bba5fcdad765a4f65e9d15eb6a"
+    },
+    {
+      "path": "config/plugins/wrapper.py.sample",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ebcf03b04244b627f8b2c18dbe0a03f46971cdb",
+      "size": 4113,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9ebcf03b04244b627f8b2c18dbe0a03f46971cdb"
+    },
+    {
+      "path": "config/plugins/wrapper_v2.py.sample",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe4b8161e0e81cc40396eb86b9513cd6791e9c43",
+      "size": 2909,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/fe4b8161e0e81cc40396eb86b9513cd6791e9c43"
+    },
+    {
+      "path": "doc",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b669047035d72ac15ff81b6de2ac4e230582c9c4",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/b669047035d72ac15ff81b6de2ac4e230582c9c4"
+    },
+    {
+      "path": "doc/CHANGES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "20ab3c697018e43a3ad05056a96401acd8cbcc0a",
+      "size": 53819,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/20ab3c697018e43a3ad05056a96401acd8cbcc0a"
+    },
+    {
+      "path": "doc/FAQ.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "762d9d80a3618cc018d4444dd123b099d4c0c9c9",
+      "size": 6214,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/762d9d80a3618cc018d4444dd123b099d4c0c9c9"
+    },
+    {
+      "path": "doc/HACKING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "766ee0baea7b64f8ab621ccd7c5b374ee3429bf3",
+      "size": 7569,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/766ee0baea7b64f8ab621ccd7c5b374ee3429bf3"
+    },
+    {
+      "path": "doc/INSTALL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c82934df95a6964fef92638ca7235aa036392e8e",
+      "size": 7207,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c82934df95a6964fef92638ca7235aa036392e8e"
+    },
+    {
+      "path": "osrframework",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1688a76f273a9f99253cc3a589cce4c16cc91b57",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/1688a76f273a9f99253cc3a589cce4c16cc91b57"
+    },
+    {
+      "path": "osrframework/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3de13d1afac8a3778fb2318cda9b68f8151926d",
+      "size": 958,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c3de13d1afac8a3778fb2318cda9b68f8151926d"
+    },
+    {
+      "path": "osrframework/alias_generator.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d30fc0a2ef9219879452e98f12ad6ee44ab3041",
+      "size": 95470,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9d30fc0a2ef9219879452e98f12ad6ee44ab3041"
+    },
+    {
+      "path": "osrframework/api",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5db40f7db28105ad210c179235e4965361411a6e",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/5db40f7db28105ad210c179235e4965361411a6e"
+    },
+    {
+      "path": "osrframework/api/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/api/twitter_api.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9f59a792dc20517552446bd598dde1aa61d48a7",
+      "size": 30485,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d9f59a792dc20517552446bd598dde1aa61d48a7"
+    },
+    {
+      "path": "osrframework/checkfy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc60ac4a128b589bdb4abc8cadb89ffb643b0480",
+      "size": 8992,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bc60ac4a128b589bdb4abc8cadb89ffb643b0480"
+    },
+    {
+      "path": "osrframework/domainfy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7342dcb602bc1c711f71ca039f112c9bef814e52",
+      "size": 22372,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/7342dcb602bc1c711f71ca039f112c9bef814e52"
+    },
+    {
+      "path": "osrframework/domains",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8b00de883bf82340e64b22a58b91757b8fe44b8e",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/8b00de883bf82340e64b22a58b91757b8fe44b8e"
+    },
+    {
+      "path": "osrframework/domains/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d980c519c5a185d3113aa9d4a815944ee199613e",
+      "size": 887,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d980c519c5a185d3113aa9d4a815944ee199613e"
+    },
+    {
+      "path": "osrframework/domains/brand_tld.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "411898debf2c4801d643ab4d32ec9b6e7b235e67",
+      "size": 3580,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/411898debf2c4801d643ab4d32ec9b6e7b235e67"
+    },
+    {
+      "path": "osrframework/domains/cctld.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2cae25baf01f091be4e5afd1e049edcf1b6f416",
+      "size": 10027,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f2cae25baf01f091be4e5afd1e049edcf1b6f416"
+    },
+    {
+      "path": "osrframework/domains/email_providers.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ee4f1abc95b7d07e940212d950bd39cddc3af48",
+      "size": 128746,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3ee4f1abc95b7d07e940212d950bd39cddc3af48"
+    },
+    {
+      "path": "osrframework/domains/generic_tld.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e44cc22c5f877154015d97160378ad4acb8643e",
+      "size": 15158,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9e44cc22c5f877154015d97160378ad4acb8643e"
+    },
+    {
+      "path": "osrframework/domains/geographic_tld.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8466d09656b82067041aca34efd79a9d4d21a2c6",
+      "size": 2833,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8466d09656b82067041aca34efd79a9d4d21a2c6"
+    },
+    {
+      "path": "osrframework/domains/gtld.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b196bb3d86fff38e0a2dcda3315cfedb26d9bf2",
+      "size": 994,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8b196bb3d86fff38e0a2dcda3315cfedb26d9bf2"
+    },
+    {
+      "path": "osrframework/domains/other_subdomains.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "495574bb8e71771a11d7f0a7cf28405a19471cb1",
+      "size": 17273,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/495574bb8e71771a11d7f0a7cf28405a19471cb1"
+    },
+    {
+      "path": "osrframework/launcher.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32e162216071b620b79e7c14bbd620a084241f5d",
+      "size": 5702,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/32e162216071b620b79e7c14bbd620a084241f5d"
+    },
+    {
+      "path": "osrframework/mailfy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "25cab0fa21d38c864bddfaa2327f983bf7770302",
+      "size": 21624,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/25cab0fa21d38c864bddfaa2327f983bf7770302"
+    },
+    {
+      "path": "osrframework/phonefy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd52e07085835278b480bded964febb483202e38",
+      "size": 9096,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cd52e07085835278b480bded964febb483202e38"
+    },
+    {
+      "path": "osrframework/searchengines",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0e769fba01feb39969eafd634523d3406a635f48",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/0e769fba01feb39969eafd634523d3406a635f48"
+    },
+    {
+      "path": "osrframework/searchengines/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db867f48c3273c75923993035824bd26564a3685",
+      "size": 977,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/db867f48c3273c75923993035824bd26564a3685"
+    },
+    {
+      "path": "osrframework/searchengines/google.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76e176838dfacc2b8f8cfa55b1a9ad6441cfeebe",
+      "size": 10558,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/76e176838dfacc2b8f8cfa55b1a9ad6441cfeebe"
+    },
+    {
+      "path": "osrframework/searchfy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "812fd506a2659a4446b536ba7f9d72410e5449c4",
+      "size": 9100,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/812fd506a2659a4446b536ba7f9d72410e5449c4"
+    },
+    {
+      "path": "osrframework/thirdparties",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "33ab95b85077f2c73652b26976fccd688780715f",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/33ab95b85077f2c73652b26976fccd688780715f"
+    },
+    {
+      "path": "osrframework/thirdparties/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/blockchain_info",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "77dc66aebd7984923d9874be8e8e6688ad93f8b7",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/77dc66aebd7984923d9874be8e8e6688ad93f8b7"
+    },
+    {
+      "path": "osrframework/thirdparties/blockchain_info/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/blockchain_info/getBitcoinAddressDetails.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b188f025f0ac0f7c8329dec2215f91612f7b85e",
+      "size": 2772,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0b188f025f0ac0f7c8329dec2215f91612f7b85e"
+    },
+    {
+      "path": "osrframework/thirdparties/checkIfHashIsCracked.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef5036995fde4f21bd95f8c249d83e5712c8a994",
+      "size": 2110,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ef5036995fde4f21bd95f8c249d83e5712c8a994"
+    },
+    {
+      "path": "osrframework/thirdparties/checkIpDetails.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d0625a404a451ff956920eb4a76cead6854441a",
+      "size": 2002,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8d0625a404a451ff956920eb4a76cead6854441a"
+    },
+    {
+      "path": "osrframework/thirdparties/checkIpFromAlias.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b711e0cfacd7c2627c6c9606e0ac04fbc965d2d7",
+      "size": 1886,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b711e0cfacd7c2627c6c9606e0ac04fbc965d2d7"
+    },
+    {
+      "path": "osrframework/thirdparties/checkPhoneDetails.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a390d3f320f68ce74f7f9fe6f1cee9132eec4aff",
+      "size": 1928,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a390d3f320f68ce74f7f9fe6f1cee9132eec4aff"
+    },
+    {
+      "path": "osrframework/thirdparties/dehashed_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2ce79cff2e062edbb95bf46a7df62caa13f7d5f9",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/2ce79cff2e062edbb95bf46a7df62caa13f7d5f9"
+    },
+    {
+      "path": "osrframework/thirdparties/dehashed_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/dehashed_com/dehashed.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b87064cb661b773705cbb8fb2a514dde9c857f26",
+      "size": 3745,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b87064cb661b773705cbb8fb2a514dde9c857f26"
+    },
+    {
+      "path": "osrframework/thirdparties/duckduckgo_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bd84ccf0187e1cc8ab02e87877eddab014e35579",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/bd84ccf0187e1cc8ab02e87877eddab014e35579"
+    },
+    {
+      "path": "osrframework/thirdparties/duckduckgo_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "osrframework/thirdparties/duckduckgo_com/duckduckgo.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e4ac879684f31994c8d734bb8df6fe931b800cf",
+      "size": 3682,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3e4ac879684f31994c8d734bb8df6fe931b800cf"
+    },
+    {
+      "path": "osrframework/thirdparties/getBitcoinAddressDetails.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13bf1ddf20daf0a35e5a7de7958514257704e0bc",
+      "size": 1943,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/13bf1ddf20daf0a35e5a7de7958514257704e0bc"
+    },
+    {
+      "path": "osrframework/thirdparties/haveibeenpwned_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ddc6379bf5407885463911e9f4fef7b05e754b57",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/ddc6379bf5407885463911e9f4fef7b05e754b57"
+    },
+    {
+      "path": "osrframework/thirdparties/haveibeenpwned_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/haveibeenpwned_com/hibp.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d19eedac846348a08ecc29246fca30741f091e20",
+      "size": 6365,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d19eedac846348a08ecc29246fca30741f091e20"
+    },
+    {
+      "path": "osrframework/thirdparties/infobel_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7d86e14e1d3367fe8210883be2b2511c566fb0fe",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/7d86e14e1d3367fe8210883be2b2511c566fb0fe"
+    },
+    {
+      "path": "osrframework/thirdparties/infobel_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/infobel_com/checkPhoneDetails.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bee532edb39086a94aa71fa369e6925907226ccd",
+      "size": 3778,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bee532edb39086a94aa71fa369e6925907226ccd"
+    },
+    {
+      "path": "osrframework/thirdparties/infobel_com/processing.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ce089c440bb49514d62b524aafcd4a9383f19d3",
+      "size": 2706,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8ce089c440bb49514d62b524aafcd4a9383f19d3"
+    },
+    {
+      "path": "osrframework/thirdparties/ip_api_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b37291bbf79639ba2eb686aa924619c83efb01af",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/b37291bbf79639ba2eb686aa924619c83efb01af"
+    },
+    {
+      "path": "osrframework/thirdparties/ip_api_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/ip_api_com/checkIpDetails.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68310ed31dcfe7b2e012cd1ef1ba9d12ab136736",
+      "size": 6983,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/68310ed31dcfe7b2e012cd1ef1ba9d12ab136736"
+    },
+    {
+      "path": "osrframework/thirdparties/md5crack_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b6fdb308dc8f1ae4d143ab1317a1b5393ba27164",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/b6fdb308dc8f1ae4d143ab1317a1b5393ba27164"
+    },
+    {
+      "path": "osrframework/thirdparties/md5crack_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/md5crack_com/checkIfHashIsCracked.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6866ee38a7741fa36a7379ba230e805bcfa3eaa6",
+      "size": 3335,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6866ee38a7741fa36a7379ba230e805bcfa3eaa6"
+    },
+    {
+      "path": "osrframework/thirdparties/md5db_net",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a406b7160333a9b14cb5e2efa8f31cc3358873f3",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/a406b7160333a9b14cb5e2efa8f31cc3358873f3"
+    },
+    {
+      "path": "osrframework/thirdparties/md5db_net/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/md5db_net/checkIfHashIsCracked.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "987169a2e157b45e919b301bdbf482fddabd5867",
+      "size": 2344,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/987169a2e157b45e919b301bdbf482fddabd5867"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4c140cc5838d23d296016c2b7f7d9203512bbb55",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/4c140cc5838d23d296016c2b7f7d9203512bbb55"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/checkInfo.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8346f6f696fc0746d8042dd49509cc6825661c22",
+      "size": 4690,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8346f6f696fc0746d8042dd49509cc6825661c22"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "dd093e2b361253ca71f262b8d5c33c1749422e94",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/dd093e2b361253ca71f262b8d5c33c1749422e94"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb0d6bb3da449fbbae1d61c6ef930345cf12e51b",
+      "size": 1942,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cb0d6bb3da449fbbae1d61c6ef930345cf12e51b"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/containers.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5d70236a046b7498b044b8995f0d7ebdfc5458e",
+      "size": 10643,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e5d70236a046b7498b044b8995f0d7ebdfc5458e"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/error.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c37bdc4b06eb3da0107630a2fbafa5d6b6644be",
+      "size": 1187,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9c37bdc4b06eb3da0107630a2fbafa5d6b6644be"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/fields.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4149d89718ad06b2beb1b8660bc2ef121af6342e",
+      "size": 31638,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4149d89718ad06b2beb1b8660bc2ef121af6342e"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/search.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f03e76a72425348d059d37d13f9475914b68804a",
+      "size": 30440,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f03e76a72425348d059d37d13f9475914b68804a"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/source.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e932002c66b2ca589eed05a45768255ccf8915f",
+      "size": 2189,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6e932002c66b2ca589eed05a45768255ccf8915f"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/thumbnail.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0cdfa86bb6cec5f779439d173d593abc97b356e2",
+      "size": 4576,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0cdfa86bb6cec5f779439d173d593abc97b356e2"
+    },
+    {
+      "path": "osrframework/thirdparties/pipl_com/lib/utils.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a7656ce1422201412ecf80565a209dcc625fe422",
+      "size": 10147,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a7656ce1422201412ecf80565a209dcc625fe422"
+    },
+    {
+      "path": "osrframework/thirdparties/resolvethem_com",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "85719c2a553732c777fe314b9007f929bd9b7d52",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/85719c2a553732c777fe314b9007f929bd9b7d52"
+    },
+    {
+      "path": "osrframework/thirdparties/resolvethem_com/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/resolvethem_com/processing.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9375c987a4793504c1ed128b2f4d581fa4477ae7",
+      "size": 2410,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9375c987a4793504c1ed128b2f4d581fa4477ae7"
+    },
+    {
+      "path": "osrframework/thirdparties/viewdns_info",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "38c35663c392863be86e08ce6b053cbffd2c2d36",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/38c35663c392863be86e08ce6b053cbffd2c2d36"
+    },
+    {
+      "path": "osrframework/thirdparties/viewdns_info/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/thirdparties/viewdns_info/viewdns.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b5033a4c87cce563d99ed52e2666611d8c792a0",
+      "size": 4035,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/7b5033a4c87cce563d99ed52e2666611d8c792a0"
+    },
+    {
+      "path": "osrframework/upgrade.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed3181558717df42510b2b3166a99f1ed9030318",
+      "size": 4591,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ed3181558717df42510b2b3166a99f1ed9030318"
+    },
+    {
+      "path": "osrframework/usufy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1651f1dff7b531b8bd1e96d02e7d4adce517c33c",
+      "size": 27803,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1651f1dff7b531b8bd1e96d02e7d4adce517c33c"
+    },
+    {
+      "path": "osrframework/utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "50a1932dd1dd31ad2395a7e967072e90e9f9ed51",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/50a1932dd1dd31ad2395a7e967072e90e9f9ed51"
+    },
+    {
+      "path": "osrframework/utils/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/utils/banner.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5eb2e690eee8d678d5013af77a88afef3b51226f",
+      "size": 4423,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5eb2e690eee8d678d5013af77a88afef3b51226f"
+    },
+    {
+      "path": "osrframework/utils/benchmark.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86770453a76b9ab8e45abdc3e8e743359661654e",
+      "size": 2317,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/86770453a76b9ab8e45abdc3e8e743359661654e"
+    },
+    {
+      "path": "osrframework/utils/browser.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f582bdf6e4bb4286bffd2fc8335cf2d1b319921e",
+      "size": 6104,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f582bdf6e4bb4286bffd2fc8335cf2d1b319921e"
+    },
+    {
+      "path": "osrframework/utils/config_api_keys.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bd85c0d3af8dfc76f15fc1f3c4f0d9389e4519a",
+      "size": 2736,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0bd85c0d3af8dfc76f15fc1f3c4f0d9389e4519a"
+    },
+    {
+      "path": "osrframework/utils/config_credentials.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7cb4fad7e69c4de0480db1f12b9289a06d22c54",
+      "size": 2947,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c7cb4fad7e69c4de0480db1f12b9289a06d22c54"
+    },
+    {
+      "path": "osrframework/utils/configuration.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a75a21a1156b3d9814710e755f5fdaf71153fff6",
+      "size": 7071,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a75a21a1156b3d9814710e755f5fdaf71153fff6"
+    },
+    {
+      "path": "osrframework/utils/credentials.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18730361a963dc7ff5e34b789e3481158666ba1b",
+      "size": 1946,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/18730361a963dc7ff5e34b789e3481158666ba1b"
+    },
+    {
+      "path": "osrframework/utils/errors.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35b8398add7cccc306241ffff9e0bc6d74b28149",
+      "size": 3525,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/35b8398add7cccc306241ffff9e0bc6d74b28149"
+    },
+    {
+      "path": "osrframework/utils/exceptions.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16ecd8e58c5937c9892997db693f3ef29e288393",
+      "size": 3670,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/16ecd8e58c5937c9892997db693f3ef29e288393"
+    },
+    {
+      "path": "osrframework/utils/fortunes.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cdbc86af0f12279c8126866cce9ee35ec75995d2",
+      "size": 3937,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cdbc86af0f12279c8126866cce9ee35ec75995d2"
+    },
+    {
+      "path": "osrframework/utils/general.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7eb278e646d5d8f95acda50b62e58a44d0d15c99",
+      "size": 26117,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/7eb278e646d5d8f95acda50b62e58a44d0d15c99"
+    },
+    {
+      "path": "osrframework/utils/global_api.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc478e22763facd1ae794af3e270dc0c702550fb",
+      "size": 2287,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cc478e22763facd1ae794af3e270dc0c702550fb"
+    },
+    {
+      "path": "osrframework/utils/platform_selection.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46ac7ff170350b961d1a807e0c3700eca5d9920e",
+      "size": 9546,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/46ac7ff170350b961d1a807e0c3700eca5d9920e"
+    },
+    {
+      "path": "osrframework/utils/platforms.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd422f8382e4ec59f0a7f21485e989a09cd3eb8c",
+      "size": 26314,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cd422f8382e4ec59f0a7f21485e989a09cd3eb8c"
+    },
+    {
+      "path": "osrframework/utils/updates.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1b5dc73cabacc3ecd4528e07964c4db84228adf",
+      "size": 3351,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a1b5dc73cabacc3ecd4528e07964c4db84228adf"
+    },
+    {
+      "path": "osrframework/wrappers",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4c81cadbe6d8b4de6e52c96c3cf9ef801f6829d0",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/4c81cadbe6d8b4de6e52c96c3cf9ef801f6829d0"
+    },
+    {
+      "path": "osrframework/wrappers/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5c18f161e973ce59bc7dc122cfd19c11bc36918",
+      "size": 914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d5c18f161e973ce59bc7dc122cfd19c11bc36918"
+    },
+    {
+      "path": "osrframework/wrappers/about.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9dec1ba3a158a4e8e689a5d9d1e1db18a0632e6d",
+      "size": 4647,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9dec1ba3a158a4e8e689a5d9d1e1db18a0632e6d"
+    },
+    {
+      "path": "osrframework/wrappers/affilorama.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5dd80bcfc6b90c6ed9988eea47f7cd4c09f4fdcd",
+      "size": 4732,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5dd80bcfc6b90c6ed9988eea47f7cd4c09f4fdcd"
+    },
+    {
+      "path": "osrframework/wrappers/archive.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30532fb1f14eb49089ccd3de9b8e60c9f4f962ea",
+      "size": 4037,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/30532fb1f14eb49089ccd3de9b8e60c9f4f962ea"
+    },
+    {
+      "path": "osrframework/wrappers/arduino.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "575cc56f29ecd1f1c76bb62b551ebde990d61a0c",
+      "size": 6197,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/575cc56f29ecd1f1c76bb62b551ebde990d61a0c"
+    },
+    {
+      "path": "osrframework/wrappers/ariva.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1ec69c04d3060f1b6aa928cfcb2663f3d0fd2ef",
+      "size": 5803,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d1ec69c04d3060f1b6aa928cfcb2663f3d0fd2ef"
+    },
+    {
+      "path": "osrframework/wrappers/armorgames.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d68c5669d2e95e520a87757cc0f81c694d32ba4",
+      "size": 4187,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4d68c5669d2e95e520a87757cc0f81c694d32ba4"
+    },
+    {
+      "path": "osrframework/wrappers/askfm.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "903777b9f2741fd04586b3981834b2d2c134192d",
+      "size": 4060,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/903777b9f2741fd04586b3981834b2d2c134192d"
+    },
+    {
+      "path": "osrframework/wrappers/audiob.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "798710bf2bd52c9fca8fc38e74b12dd16d54e9ed",
+      "size": 4532,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/798710bf2bd52c9fca8fc38e74b12dd16d54e9ed"
+    },
+    {
+      "path": "osrframework/wrappers/audioboom.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bbcd05383f0e992341deed098a18635e5226654d",
+      "size": 4259,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bbcd05383f0e992341deed098a18635e5226654d"
+    },
+    {
+      "path": "osrframework/wrappers/badoo.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bb2ab87c0bc5eac3690a1637927526b26935ad8",
+      "size": 3910,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9bb2ab87c0bc5eac3690a1637927526b26935ad8"
+    },
+    {
+      "path": "osrframework/wrappers/bandcamp.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30d35bd53c089fa31d7b2b93643088edee4999d5",
+      "size": 4103,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/30d35bd53c089fa31d7b2b93643088edee4999d5"
+    },
+    {
+      "path": "osrframework/wrappers/bennugd.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "709b50ec091c727aa9e80f3384db9041cb4ab539",
+      "size": 4691,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/709b50ec091c727aa9e80f3384db9041cb4ab539"
+    },
+    {
+      "path": "osrframework/wrappers/betblog.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e32c2b38f794a85288a3fb0197fb270949ebc8cd",
+      "size": 3888,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e32c2b38f794a85288a3fb0197fb270949ebc8cd"
+    },
+    {
+      "path": "osrframework/wrappers/bitbucket.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4c91902f2a4d4447b531861225e654182e6bcd4",
+      "size": 4200,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f4c91902f2a4d4447b531861225e654182e6bcd4"
+    },
+    {
+      "path": "osrframework/wrappers/bitcointalk.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6f4aa6cb52b9f9a41f6b085fcabd3f349ac34bf",
+      "size": 5458,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c6f4aa6cb52b9f9a41f6b085fcabd3f349ac34bf"
+    },
+    {
+      "path": "osrframework/wrappers/bitrated.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "20d13c51733aa00bda142ab167c477cc49421d30",
+      "size": 3937,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/20d13c51733aa00bda142ab167c477cc49421d30"
+    },
+    {
+      "path": "osrframework/wrappers/blogmarks.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "376c9419b81f194539b811ae2c37c78e5f607dbc",
+      "size": 3896,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/376c9419b81f194539b811ae2c37c78e5f607dbc"
+    },
+    {
+      "path": "osrframework/wrappers/blogspot.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "49cdcaa0d5c029c77139baecad584c7b6be5be59",
+      "size": 3914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/49cdcaa0d5c029c77139baecad584c7b6be5be59"
+    },
+    {
+      "path": "osrframework/wrappers/boonex.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa9326d3c1a966e265e5536340c5421422388c8c",
+      "size": 3887,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/aa9326d3c1a966e265e5536340c5421422388c8c"
+    },
+    {
+      "path": "osrframework/wrappers/bubok.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5132c89798930ff98ab7ef2fede10c364708ebfc",
+      "size": 3970,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5132c89798930ff98ab7ef2fede10c364708ebfc"
+    },
+    {
+      "path": "osrframework/wrappers/buddypic.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edf75f4a9513207480b16bd3ea77012cf99a071e",
+      "size": 3885,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/edf75f4a9513207480b16bd3ea77012cf99a071e"
+    },
+    {
+      "path": "osrframework/wrappers/burbuja.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "557e79bb88dbe3027076fc589390bcfd1440fce1",
+      "size": 3995,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/557e79bb88dbe3027076fc589390bcfd1440fce1"
+    },
+    {
+      "path": "osrframework/wrappers/carbonmade.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "064c8ad351696552e893b2b58e7a34805e0fe05c",
+      "size": 3891,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/064c8ad351696552e893b2b58e7a34805e0fe05c"
+    },
+    {
+      "path": "osrframework/wrappers/cartodb.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4191fc67a16f9ffe9d72f8136d4da53ffc655f8",
+      "size": 3902,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b4191fc67a16f9ffe9d72f8136d4da53ffc655f8"
+    },
+    {
+      "path": "osrframework/wrappers/causes.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bafbb4e35f4bd180c783ff3aa8c144d5161754d4",
+      "size": 3869,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bafbb4e35f4bd180c783ff3aa8c144d5161754d4"
+    },
+    {
+      "path": "osrframework/wrappers/ccm.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40347658adc51979c8db14e0e13047dcc63a2282",
+      "size": 3868,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/40347658adc51979c8db14e0e13047dcc63a2282"
+    },
+    {
+      "path": "osrframework/wrappers/ccsinfo.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "072851b6d4569769b6e813a07b0396b9141d506f",
+      "size": 3928,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/072851b6d4569769b6e813a07b0396b9141d506f"
+    },
+    {
+      "path": "osrframework/wrappers/chess.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e7998d1649cd13123e3a3ed402aa4b331517d5a4",
+      "size": 3881,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e7998d1649cd13123e3a3ed402aa4b331517d5a4"
+    },
+    {
+      "path": "osrframework/wrappers/cockos.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9cfeaa36ddb086849c3e8a4645d691de0ce632a5",
+      "size": 3950,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9cfeaa36ddb086849c3e8a4645d691de0ce632a5"
+    },
+    {
+      "path": "osrframework/wrappers/codecademy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "124b83986d528d237dd09499b1e312126c0a299b",
+      "size": 3923,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/124b83986d528d237dd09499b1e312126c0a299b"
+    },
+    {
+      "path": "osrframework/wrappers/codementor.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b310513c3818cdf0040f1b9acf992e6fe010dd8d",
+      "size": 3909,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b310513c3818cdf0040f1b9acf992e6fe010dd8d"
+    },
+    {
+      "path": "osrframework/wrappers/coderwall.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46c7fd6dccfe9e5f455ad065a8349ae7e4d55ebb",
+      "size": 3919,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/46c7fd6dccfe9e5f455ad065a8349ae7e4d55ebb"
+    },
+    {
+      "path": "osrframework/wrappers/connectingsingles.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "684a9aeccd9a4ddfd7ec63627f5b0110488fd4a1",
+      "size": 3924,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/684a9aeccd9a4ddfd7ec63627f5b0110488fd4a1"
+    },
+    {
+      "path": "osrframework/wrappers/couchsurfing.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "df90416a6a86e58b836bb6eb9c69741a398a8946",
+      "size": 4498,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/df90416a6a86e58b836bb6eb9c69741a398a8946"
+    },
+    {
+      "path": "osrframework/wrappers/crokes.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0d76c8be44f6a633b2b6993fbf6500c52db9f80d",
+      "size": 3926,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0d76c8be44f6a633b2b6993fbf6500c52db9f80d"
+    },
+    {
+      "path": "osrframework/wrappers/crowdin.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66bfa290905b59520195c7daf7fec5a41afb6454",
+      "size": 3880,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/66bfa290905b59520195c7daf7fec5a41afb6454"
+    },
+    {
+      "path": "osrframework/wrappers/cryptocompare.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "991b9f5a8215297346b1afe8305c6a07344fcce4",
+      "size": 3946,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/991b9f5a8215297346b1afe8305c6a07344fcce4"
+    },
+    {
+      "path": "osrframework/wrappers/dailymotion.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "163048a78efb206fcb956344dbbd7f6476176996",
+      "size": 3938,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/163048a78efb206fcb956344dbbd7f6476176996"
+    },
+    {
+      "path": "osrframework/wrappers/datpiff.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "473820986b3c983c323ecda4727554bef137ace8",
+      "size": 3907,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/473820986b3c983c323ecda4727554bef137ace8"
+    },
+    {
+      "path": "osrframework/wrappers/deviantart.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ca33f55a58d323c01497521f7a05f5d3cb280e0c",
+      "size": 3876,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ca33f55a58d323c01497521f7a05f5d3cb280e0c"
+    },
+    {
+      "path": "osrframework/wrappers/digitalspy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c5791708fa0f1fe52e028739f9bcb200c632cc5",
+      "size": 3922,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6c5791708fa0f1fe52e028739f9bcb200c632cc5"
+    },
+    {
+      "path": "osrframework/wrappers/disqus.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "efd0cf440efe6a89ddbc0ada0268bb41c8cc0866",
+      "size": 3885,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/efd0cf440efe6a89ddbc0ada0268bb41c8cc0866"
+    },
+    {
+      "path": "osrframework/wrappers/doodle.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d654aadc49ffe6bc252e93daab2a4ffeee04d725",
+      "size": 3933,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d654aadc49ffe6bc252e93daab2a4ffeee04d725"
+    },
+    {
+      "path": "osrframework/wrappers/douban.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf6c1bd02661949393700db02ccd2202524c002b",
+      "size": 1695,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bf6c1bd02661949393700db02ccd2202524c002b"
+    },
+    {
+      "path": "osrframework/wrappers/dribbble.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93f011f1fc06207d0508eb7b47f7a67a52e61fe4",
+      "size": 3926,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/93f011f1fc06207d0508eb7b47f7a67a52e61fe4"
+    },
+    {
+      "path": "osrframework/wrappers/drupal.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "433b3b7a1003e2680fb09e56440d44395f22dfee",
+      "size": 3869,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/433b3b7a1003e2680fb09e56440d44395f22dfee"
+    },
+    {
+      "path": "osrframework/wrappers/dzone.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8887ea19643287257b74f4ebbfe6bf6da6fe10a4",
+      "size": 3898,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8887ea19643287257b74f4ebbfe6bf6da6fe10a4"
+    },
+    {
+      "path": "osrframework/wrappers/ebay.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3afcc5346e332a96c734e6c4e24da6815003f6e3",
+      "size": 3925,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3afcc5346e332a96c734e6c4e24da6815003f6e3"
+    },
+    {
+      "path": "osrframework/wrappers/echatta.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0896b6bae4ecddedd62537aadf10230b71952708",
+      "size": 3968,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0896b6bae4ecddedd62537aadf10230b71952708"
+    },
+    {
+      "path": "osrframework/wrappers/ello.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4972f4c69c9628d1ad85ef152f104787d91a68c0",
+      "size": 3859,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4972f4c69c9628d1ad85ef152f104787d91a68c0"
+    },
+    {
+      "path": "osrframework/wrappers/emoneyspace.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8b8737104785b619d8e87fe2db9823a57c1c798",
+      "size": 3977,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b8b8737104785b619d8e87fe2db9823a57c1c798"
+    },
+    {
+      "path": "osrframework/wrappers/enfemenino.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "827d65ce87524c55d79589a96e43424ba60d4515",
+      "size": 3960,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/827d65ce87524c55d79589a96e43424ba60d4515"
+    },
+    {
+      "path": "osrframework/wrappers/etsy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ffb23421bbf7a418f5e8a4ab3ddb52c727995d4",
+      "size": 3868,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1ffb23421bbf7a418f5e8a4ab3ddb52c727995d4"
+    },
+    {
+      "path": "osrframework/wrappers/eyeem.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6147e7528772c1c42cbe67014c0adb59031265d",
+      "size": 3861,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f6147e7528772c1c42cbe67014c0adb59031265d"
+    },
+    {
+      "path": "osrframework/wrappers/fandom.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5f60ecb08000cf789a7196b91cf467c7ae7da5f9",
+      "size": 3914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5f60ecb08000cf789a7196b91cf467c7ae7da5f9"
+    },
+    {
+      "path": "osrframework/wrappers/fanpop.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f9ca1b724fa11199a7fc55eed29c9aa73fd5420",
+      "size": 3988,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6f9ca1b724fa11199a7fc55eed29c9aa73fd5420"
+    },
+    {
+      "path": "osrframework/wrappers/fark.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f483d2f4b63fca07deed80c4bd218eb5a09ae454",
+      "size": 3887,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f483d2f4b63fca07deed80c4bd218eb5a09ae454"
+    },
+    {
+      "path": "osrframework/wrappers/flickr.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a695c827f7fb27f1128acb2527c1cb33ec57191",
+      "size": 3885,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6a695c827f7fb27f1128acb2527c1cb33ec57191"
+    },
+    {
+      "path": "osrframework/wrappers/foros24h.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdb9af014fbbda774c55038f77696dd327568c4e",
+      "size": 3934,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bdb9af014fbbda774c55038f77696dd327568c4e"
+    },
+    {
+      "path": "osrframework/wrappers/forosperu.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ede8d32e2d7b6b35beaa2a34977dc816c81695e",
+      "size": 4078,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5ede8d32e2d7b6b35beaa2a34977dc816c81695e"
+    },
+    {
+      "path": "osrframework/wrappers/forospyware.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d6f8d17fc620c33b9f192b94b9a273f59e609e9",
+      "size": 3886,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1d6f8d17fc620c33b9f192b94b9a273f59e609e9"
+    },
+    {
+      "path": "osrframework/wrappers/freelancer.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c63aaaf08737e327f5e4c505fa110300f90741d",
+      "size": 1951,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/7c63aaaf08737e327f5e4c505fa110300f90741d"
+    },
+    {
+      "path": "osrframework/wrappers/freerepublic.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b021825ca44f92db7f573f14588d554d5a2b2d4d",
+      "size": 3893,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b021825ca44f92db7f573f14588d554d5a2b2d4d"
+    },
+    {
+      "path": "osrframework/wrappers/github.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b62204c93d43919426db5757574873af54e3dbf",
+      "size": 4148,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8b62204c93d43919426db5757574873af54e3dbf"
+    },
+    {
+      "path": "osrframework/wrappers/goodreads.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "166ed28c24b8e720018de8afb78f847526b66b2f",
+      "size": 3899,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/166ed28c24b8e720018de8afb78f847526b66b2f"
+    },
+    {
+      "path": "osrframework/wrappers/gravatar.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b5aa67889426c24cd2221da468e9c207b9be8256",
+      "size": 3920,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b5aa67889426c24cd2221da468e9c207b9be8256"
+    },
+    {
+      "path": "osrframework/wrappers/gsmspain.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d219c9adc60b027ef5e572ea2996afbb5123f80c",
+      "size": 3930,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d219c9adc60b027ef5e572ea2996afbb5123f80c"
+    },
+    {
+      "path": "osrframework/wrappers/houzz.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff5b240962167f49e0da78bff95370724e37b002",
+      "size": 3896,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ff5b240962167f49e0da78bff95370724e37b002"
+    },
+    {
+      "path": "osrframework/wrappers/htcmania.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3cdcb7d8a8b6d112799b3f3f79c016925bc4da53",
+      "size": 3969,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3cdcb7d8a8b6d112799b3f3f79c016925bc4da53"
+    },
+    {
+      "path": "osrframework/wrappers/hubpages.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e9f81e9dceb908376125090c5651caf3f0c0adf",
+      "size": 3904,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0e9f81e9dceb908376125090c5651caf3f0c0adf"
+    },
+    {
+      "path": "osrframework/wrappers/ibosocial.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f1cc71fd137ef637cd3212a8d9a7532eb0ca0d5",
+      "size": 3892,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1f1cc71fd137ef637cd3212a8d9a7532eb0ca0d5"
+    },
+    {
+      "path": "osrframework/wrappers/ifunny.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74f6a3ae3bb8ba761a211539f9be22d2e509013d",
+      "size": 3918,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/74f6a3ae3bb8ba761a211539f9be22d2e509013d"
+    },
+    {
+      "path": "osrframework/wrappers/infojobs.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ebaac8be2f903918509079e5cb7d9b35b73456a2",
+      "size": 2782,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ebaac8be2f903918509079e5cb7d9b35b73456a2"
+    },
+    {
+      "path": "osrframework/wrappers/infotelefonica.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3da1bd0a7492db152ab2d35e4982823d62945dcc",
+      "size": 4177,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3da1bd0a7492db152ab2d35e4982823d62945dcc"
+    },
+    {
+      "path": "osrframework/wrappers/instagram.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48ddf20c19e08150cf7ccd33462673c7a41ddcb0",
+      "size": 5261,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/48ddf20c19e08150cf7ccd33462673c7a41ddcb0"
+    },
+    {
+      "path": "osrframework/wrappers/instructables.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dbf390660f17a09885d63ed196576bcde7fa4f89",
+      "size": 3895,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/dbf390660f17a09885d63ed196576bcde7fa4f89"
+    },
+    {
+      "path": "osrframework/wrappers/issuu.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ee8ab204b87b2702cd2e481142b3fc3f756604d",
+      "size": 3859,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0ee8ab204b87b2702cd2e481142b3fc3f756604d"
+    },
+    {
+      "path": "osrframework/wrappers/ivoox.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b84e3fb1f8bca2b8a809ed8d8786264e88952532",
+      "size": 3864,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b84e3fb1f8bca2b8a809ed8d8786264e88952532"
+    },
+    {
+      "path": "osrframework/wrappers/jamiiforums.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "249d193f5c464e193ef34342ff43421bc146f0ff",
+      "size": 1858,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/249d193f5c464e193ef34342ff43421bc146f0ff"
+    },
+    {
+      "path": "osrframework/wrappers/kali.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6320b5bf2d5da1a1a164391cb2b671ef6ecd296a",
+      "size": 3890,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6320b5bf2d5da1a1a164391cb2b671ef6ecd296a"
+    },
+    {
+      "path": "osrframework/wrappers/kanogames.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "badf9552f0282fd8a4af43ccfc4abb6393bef2c9",
+      "size": 3926,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/badf9552f0282fd8a4af43ccfc4abb6393bef2c9"
+    },
+    {
+      "path": "osrframework/wrappers/keybase.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "38be9ef7dbb7123380bb168016877fa81f988722",
+      "size": 3928,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/38be9ef7dbb7123380bb168016877fa81f988722"
+    },
+    {
+      "path": "osrframework/wrappers/keyserverubuntu.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6229aad3760c09e83b19159a7113fb571feba091",
+      "size": 8155,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6229aad3760c09e83b19159a7113fb571feba091"
+    },
+    {
+      "path": "osrframework/wrappers/kickstarter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e745448b33e6f973a4a6d322551e2278fb54b45",
+      "size": 3908,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4e745448b33e6f973a4a6d322551e2278fb54b45"
+    },
+    {
+      "path": "osrframework/wrappers/kinja.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "55b18a79a8524f120774594fe1b2db5bd34d471d",
+      "size": 3861,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/55b18a79a8524f120774594fe1b2db5bd34d471d"
+    },
+    {
+      "path": "osrframework/wrappers/kongregate.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5b813b275f09b8941083e998562c3dbef0350e21",
+      "size": 3937,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5b813b275f09b8941083e998562c3dbef0350e21"
+    },
+    {
+      "path": "osrframework/wrappers/lastfm.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "723e8aacade457fc1fd6765d9724c80cb6a255d8",
+      "size": 3926,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/723e8aacade457fc1fd6765d9724c80cb6a255d8"
+    },
+    {
+      "path": "osrframework/wrappers/listaspam.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfc0de141a7bfd864fa03a21965f00af6915314d",
+      "size": 1992,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cfc0de141a7bfd864fa03a21965f00af6915314d"
+    },
+    {
+      "path": "osrframework/wrappers/livejournal.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5eff0f7d4e0b6ab705651412995c1e566328a317",
+      "size": 3901,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5eff0f7d4e0b6ab705651412995c1e566328a317"
+    },
+    {
+      "path": "osrframework/wrappers/losviajeros.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff1b084eeaa6593911a5584adf9457cc44e2a688",
+      "size": 3936,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ff1b084eeaa6593911a5584adf9457cc44e2a688"
+    },
+    {
+      "path": "osrframework/wrappers/mastodon_social.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edf5ab867ee2255a9fd4836aa173a372d39ba196",
+      "size": 3957,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/edf5ab867ee2255a9fd4836aa173a372d39ba196"
+    },
+    {
+      "path": "osrframework/wrappers/mastodon_xyz.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e00d3ab69ab7aedc380c4ffc683bc965d7763f06",
+      "size": 3951,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e00d3ab69ab7aedc380c4ffc683bc965d7763f06"
+    },
+    {
+      "path": "osrframework/wrappers/mcneel.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e564a1efc7da185ca1fbd7ec0452aa93ccbdc286",
+      "size": 3873,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e564a1efc7da185ca1fbd7ec0452aa93ccbdc286"
+    },
+    {
+      "path": "osrframework/wrappers/mediavida.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5fc0db092502165f6eacfba1f8536c47f16bc70f",
+      "size": 3904,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5fc0db092502165f6eacfba1f8536c47f16bc70f"
+    },
+    {
+      "path": "osrframework/wrappers/medium.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0923355744aab2038a3f54e0ab12176cb13a6818",
+      "size": 3856,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0923355744aab2038a3f54e0ab12176cb13a6818"
+    },
+    {
+      "path": "osrframework/wrappers/memrise.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "873d4f330b27827c162689df9ce155fa15c66b53",
+      "size": 4031,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/873d4f330b27827c162689df9ce155fa15c66b53"
+    },
+    {
+      "path": "osrframework/wrappers/meneame.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a74f2ec44cf20c17f24736a8211b13bca522ccb0",
+      "size": 3879,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a74f2ec44cf20c17f24736a8211b13bca522ccb0"
+    },
+    {
+      "path": "osrframework/wrappers/mercadolibre.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f07abc677dedc2f8f27493c66063aab712848409",
+      "size": 3953,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f07abc677dedc2f8f27493c66063aab712848409"
+    },
+    {
+      "path": "osrframework/wrappers/meteor.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19e1b4176646834fb2511d36308a7047fd871e3f",
+      "size": 3906,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/19e1b4176646834fb2511d36308a7047fd871e3f"
+    },
+    {
+      "path": "osrframework/wrappers/minds.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a3cf9d738b42f6f85e0220dc9086bda063c643c2",
+      "size": 1771,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a3cf9d738b42f6f85e0220dc9086bda063c643c2"
+    },
+    {
+      "path": "osrframework/wrappers/mozilla.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfd93b37d322bc60f43618fa8c89c624bb2f4361",
+      "size": 3883,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cfd93b37d322bc60f43618fa8c89c624bb2f4361"
+    },
+    {
+      "path": "osrframework/wrappers/mstdn_jp.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7e9ad6bbf8c48239e4ea5cd5f9a825fd8309909",
+      "size": 2089,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d7e9ad6bbf8c48239e4ea5cd5f9a825fd8309909"
+    },
+    {
+      "path": "osrframework/wrappers/musicasacra.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36b235cb9a8c9619c2a55e961f5a9587ec0573e5",
+      "size": 3938,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/36b235cb9a8c9619c2a55e961f5a9587ec0573e5"
+    },
+    {
+      "path": "osrframework/wrappers/myeloma.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d4914e3191d95b50462ddc128693b8abe1d393a",
+      "size": 3879,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6d4914e3191d95b50462ddc128693b8abe1d393a"
+    },
+    {
+      "path": "osrframework/wrappers/myfitnesspal.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "002919111bf94e39cba74b9d8fca7cafde193ccb",
+      "size": 3950,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/002919111bf94e39cba74b9d8fca7cafde193ccb"
+    },
+    {
+      "path": "osrframework/wrappers/myspace.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dfcc8ca221fbb8d066921fcf8126d7c83aa55d2e",
+      "size": 3855,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/dfcc8ca221fbb8d066921fcf8126d7c83aa55d2e"
+    },
+    {
+      "path": "osrframework/wrappers/nairaland.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24a1f723ce0ca0b4addb28cdc73e6980ac07b69b",
+      "size": 3884,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/24a1f723ce0ca0b4addb28cdc73e6980ac07b69b"
+    },
+    {
+      "path": "osrframework/wrappers/netvibes.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8610a15bdd536e75e092d101a01ac68164f70d9",
+      "size": 3862,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f8610a15bdd536e75e092d101a01ac68164f70d9"
+    },
+    {
+      "path": "osrframework/wrappers/newgrounds.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4ea632ee9ffc615541ef3a7af9b15958f3c87ad",
+      "size": 3893,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e4ea632ee9ffc615541ef3a7af9b15958f3c87ad"
+    },
+    {
+      "path": "osrframework/wrappers/notabug.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8b9ffa2586875a7b7f62905378dacd2d1b77fc7",
+      "size": 3857,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f8b9ffa2586875a7b7f62905378dacd2d1b77fc7"
+    },
+    {
+      "path": "osrframework/wrappers/occupywallst.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db1d5da0d6deb11bd7037c5f352e44175943e865",
+      "size": 3900,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/db1d5da0d6deb11bd7037c5f352e44175943e865"
+    },
+    {
+      "path": "osrframework/wrappers/ok.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a17f865908146a062caba92b2bef4fb390388718",
+      "size": 3840,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a17f865908146a062caba92b2bef4fb390388718"
+    },
+    {
+      "path": "osrframework/wrappers/okcupid.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bfe2552929eb1febe061a8406ae9804ef203e53b",
+      "size": 2379,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bfe2552929eb1febe061a8406ae9804ef203e53b"
+    },
+    {
+      "path": "osrframework/wrappers/openframeworks.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4905c1910ccce515fbedd0f577ac8c6aaf1abeb6",
+      "size": 3908,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4905c1910ccce515fbedd0f577ac8c6aaf1abeb6"
+    },
+    {
+      "path": "osrframework/wrappers/openstreetmap.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f03070b12c78107e7c20a0fe1b3f3428ff9f515",
+      "size": 3906,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0f03070b12c78107e7c20a0fe1b3f3428ff9f515"
+    },
+    {
+      "path": "osrframework/wrappers/papaly.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "013c0541647d75a647ea82198355947e482d8586",
+      "size": 3867,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/013c0541647d75a647ea82198355947e482d8586"
+    },
+    {
+      "path": "osrframework/wrappers/pastebin.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35c7aec0ca7235b57f7eaa3f899c73d9bc7387ab",
+      "size": 3875,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/35c7aec0ca7235b57f7eaa3f899c73d9bc7387ab"
+    },
+    {
+      "path": "osrframework/wrappers/patreon.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a685b3670886666962f5895c947328a224ce2876",
+      "size": 3861,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a685b3670886666962f5895c947328a224ce2876"
+    },
+    {
+      "path": "osrframework/wrappers/pawoo.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e6cb28a278e56aaf94d2183331439597e457648",
+      "size": 2094,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8e6cb28a278e56aaf94d2183331439597e457648"
+    },
+    {
+      "path": "osrframework/wrappers/pearltrees.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "535abb8d7b87a1b3ef4da14fb14775d17d450f96",
+      "size": 3892,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/535abb8d7b87a1b3ef4da14fb14775d17d450f96"
+    },
+    {
+      "path": "osrframework/wrappers/pending",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2e70adeed28feb3ae1b3bf89dd58854cbf952953",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/2e70adeed28feb3ae1b3bf89dd58854cbf952953"
+    },
+    {
+      "path": "osrframework/wrappers/pending/INFO.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fa2539b71c122b7e65b533540770029190ef6c3c",
+      "size": 176,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/fa2539b71c122b7e65b533540770029190ef6c3c"
+    },
+    {
+      "path": "osrframework/wrappers/pending/aporrealos.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4411be68755282ad2e59b4efc8620f5cd4afcb67",
+      "size": 5263,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4411be68755282ad2e59b4efc8620f5cd4afcb67"
+    },
+    {
+      "path": "osrframework/wrappers/pending/apsense.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c4d2d3a79c106d34bead8ed566a847bb96a5e82",
+      "size": 4508,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3c4d2d3a79c106d34bead8ed566a847bb96a5e82"
+    },
+    {
+      "path": "osrframework/wrappers/pending/backyardchickens.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bc4688eafb2d1e9e87f1791b738afaba6b17c98",
+      "size": 5119,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9bc4688eafb2d1e9e87f1791b738afaba6b17c98"
+    },
+    {
+      "path": "osrframework/wrappers/pending/bebee.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dfc72fb5d28e6c2c542cdb124d9edba2da1e97c9",
+      "size": 4625,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/dfc72fb5d28e6c2c542cdb124d9edba2da1e97c9"
+    },
+    {
+      "path": "osrframework/wrappers/pending/blackplanet.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5a3c3de88a1feb2b0bb3a7fb65ea6a484b12b6f",
+      "size": 4164,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a5a3c3de88a1feb2b0bb3a7fb65ea6a484b12b6f"
+    },
+    {
+      "path": "osrframework/wrappers/pending/breakcom.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b25ed82b6ef28692b64da16489c16134b8eef301",
+      "size": 4110,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b25ed82b6ef28692b64da16489c16134b8eef301"
+    },
+    {
+      "path": "osrframework/wrappers/pending/cafemom.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c85cf04d1bc9e83ba822bcaf406e67196a73abdb",
+      "size": 4195,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c85cf04d1bc9e83ba822bcaf406e67196a73abdb"
+    },
+    {
+      "path": "osrframework/wrappers/pending/cardingbins.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2315de7833cc4c5bec4b68b2d221ce211857731a",
+      "size": 4262,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/2315de7833cc4c5bec4b68b2d221ce211857731a"
+    },
+    {
+      "path": "osrframework/wrappers/pending/cloudflare",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "83434f73c5c8dd76523f90610f98766dfbd425bd",
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/trees/83434f73c5c8dd76523f90610f98766dfbd425bd"
+    },
+    {
+      "path": "osrframework/wrappers/pending/cloudflare/forocoches.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "377fbe320ea5270102ecaf0273b3d1ad21d247ae",
+      "size": 4071,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/377fbe320ea5270102ecaf0273b3d1ad21d247ae"
+    },
+    {
+      "path": "osrframework/wrappers/pending/cloudflare/openbugbounty.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95bbdb93cc6d59d086298d3562057cbe8295b1f7",
+      "size": 3892,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/95bbdb93cc6d59d086298d3562057cbe8295b1f7"
+    },
+    {
+      "path": "osrframework/wrappers/pending/cloudflare/phishtank.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b10b7a4b6b1fa9c2f6c5a4780a5e8854444834e6",
+      "size": 4012,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b10b7a4b6b1fa9c2f6c5a4780a5e8854444834e6"
+    },
+    {
+      "path": "osrframework/wrappers/pending/colourlovers.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd093f970ffd037e370b15b2972ef16aae5f3446",
+      "size": 2283,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bd093f970ffd037e370b15b2972ef16aae5f3446"
+    },
+    {
+      "path": "osrframework/wrappers/pending/creativemarket.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "317d262b9424323283c1c75c4a78f0f567ce91fe",
+      "size": 4165,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/317d262b9424323283c1c75c4a78f0f567ce91fe"
+    },
+    {
+      "path": "osrframework/wrappers/pending/csu.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2fb16ce76c497abfa4a61608f7d8725049eccc2f",
+      "size": 4199,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/2fb16ce76c497abfa4a61608f7d8725049eccc2f"
+    },
+    {
+      "path": "osrframework/wrappers/pending/dailymail.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32ce13dec355e2d540f0855bcccd6128b7e4bd84",
+      "size": 4255,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/32ce13dec355e2d540f0855bcccd6128b7e4bd84"
+    },
+    {
+      "path": "osrframework/wrappers/pending/dreamstime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f963951ace80ef948b59d586e81b4efea5acc5ae",
+      "size": 3880,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f963951ace80ef948b59d586e81b4efea5acc5ae"
+    },
+    {
+      "path": "osrframework/wrappers/pending/drugbuyersforum.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8617ccf1054dec77082a63acfac73f08be93c39f",
+      "size": 4271,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8617ccf1054dec77082a63acfac73f08be93c39f"
+    },
+    {
+      "path": "osrframework/wrappers/pending/ehow.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3cc40a8477e45452fd79ed2d15b44c97c97d456c",
+      "size": 4212,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3cc40a8477e45452fd79ed2d15b44c97c97d456c"
+    },
+    {
+      "path": "osrframework/wrappers/pending/epinions.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f3f05ca19a31a8c3b3a3cf08e3f63344e54fd834",
+      "size": 4233,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f3f05ca19a31a8c3b3a3cf08e3f63344e54fd834"
+    },
+    {
+      "path": "osrframework/wrappers/pending/espaciolinux.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdf2e41642bea97a393af9ea8e726c0074b718c9",
+      "size": 4145,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bdf2e41642bea97a393af9ea8e726c0074b718c9"
+    },
+    {
+      "path": "osrframework/wrappers/pending/facebook.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e850c4705f6499f9919d6e13990d6e031ffdb06",
+      "size": 2618,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6e850c4705f6499f9919d6e13990d6e031ffdb06"
+    },
+    {
+      "path": "osrframework/wrappers/pending/forocompraventa.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c05bb965b76e4a779b2f068f0acfa68e15432d5e",
+      "size": 4186,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c05bb965b76e4a779b2f068f0acfa68e15432d5e"
+    },
+    {
+      "path": "osrframework/wrappers/pending/forominecraft.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "87b60be6ba2bad274060d8a94198c93a88e746fe",
+      "size": 4112,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/87b60be6ba2bad274060d8a94198c93a88e746fe"
+    },
+    {
+      "path": "osrframework/wrappers/pending/foursquare.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db32aede7d8bf7eb70a0e25c544115cbc6f86449",
+      "size": 3941,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/db32aede7d8bf7eb70a0e25c544115cbc6f86449"
+    },
+    {
+      "path": "osrframework/wrappers/pending/garage4hackers.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9568ed7c36540c4bdbf6666d6c45016b419ecc6d",
+      "size": 4050,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9568ed7c36540c4bdbf6666d6c45016b419ecc6d"
+    },
+    {
+      "path": "osrframework/wrappers/pending/gather.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37d0d009e088135e3e077fea161c28027752ca9f",
+      "size": 4200,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/37d0d009e088135e3e077fea161c28027752ca9f"
+    },
+    {
+      "path": "osrframework/wrappers/pending/hellboundhackers.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e9426821141cf3d377a68ed311a5ef3adda6387",
+      "size": 4243,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0e9426821141cf3d377a68ed311a5ef3adda6387"
+    },
+    {
+      "path": "osrframework/wrappers/pending/interracialmatch.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a67912a988c855633104c8dc7c112e04fcbfac66",
+      "size": 5047,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a67912a988c855633104c8dc7c112e04fcbfac66"
+    },
+    {
+      "path": "osrframework/wrappers/pending/intersect.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "511caa637fca6893bed8fa049a84b31d6e5fd5e8",
+      "size": 4194,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/511caa637fca6893bed8fa049a84b31d6e5fd5e8"
+    },
+    {
+      "path": "osrframework/wrappers/pending/islamicawakening.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "393a10c6bd0df4e64973e8382dddcbc6ddbcdb6b",
+      "size": 4285,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/393a10c6bd0df4e64973e8382dddcbc6ddbcdb6b"
+    },
+    {
+      "path": "osrframework/wrappers/pending/linkedin.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c0abdc51061120508956cd52774ec97b5a2f26a",
+      "size": 7330,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/7c0abdc51061120508956cd52774ec97b5a2f26a"
+    },
+    {
+      "path": "osrframework/wrappers/pending/looki.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "644a042c9e155842a018549ff7246d948a758596",
+      "size": 4168,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/644a042c9e155842a018549ff7246d948a758596"
+    },
+    {
+      "path": "osrframework/wrappers/pending/mig.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "207e4ec00b6a2c607d59187267c1378af6d2a50d",
+      "size": 4092,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/207e4ec00b6a2c607d59187267c1378af6d2a50d"
+    },
+    {
+      "path": "osrframework/wrappers/pending/naver.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5f77c5645fa8e32402d49eee9d9121a586d660ff",
+      "size": 4212,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5f77c5645fa8e32402d49eee9d9121a586d660ff"
+    },
+    {
+      "path": "osrframework/wrappers/pending/oroom.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ea7e23bb5f5ffcf54749da52a7b952882ff953b",
+      "size": 4264,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8ea7e23bb5f5ffcf54749da52a7b952882ff953b"
+    },
+    {
+      "path": "osrframework/wrappers/pending/paypal.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d98be0de766c26823c7489bf77546e4186bb7926",
+      "size": 4140,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d98be0de766c26823c7489bf77546e4186bb7926"
+    },
+    {
+      "path": "osrframework/wrappers/pending/peerbackers.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bcc59c35b163aef9543f9d430f71f3ab472b117",
+      "size": 4241,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3bcc59c35b163aef9543f9d430f71f3ab472b117"
+    },
+    {
+      "path": "osrframework/wrappers/pending/photobucket.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "251f472ab33f768766b6187072ed94ab64d62678",
+      "size": 3958,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/251f472ab33f768766b6187072ed94ab64d62678"
+    },
+    {
+      "path": "osrframework/wrappers/pending/pinterest.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f508d362d6557e337b922e35fc89961ed67f328e",
+      "size": 4064,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f508d362d6557e337b922e35fc89961ed67f328e"
+    },
+    {
+      "path": "osrframework/wrappers/pending/pokerstrategy.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d16356814ddee7989534a2968bd85bde24696f06",
+      "size": 4028,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d16356814ddee7989534a2968bd85bde24696f06"
+    },
+    {
+      "path": "osrframework/wrappers/pending/rapid7.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d672a6149217bfb7d6fb0dd72e17136c2a2de276",
+      "size": 4142,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d672a6149217bfb7d6fb0dd72e17136c2a2de276"
+    },
+    {
+      "path": "osrframework/wrappers/pending/realcarders.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f6eeb8eb6bcc3948c14253d3dc96e8516b3d0f3",
+      "size": 4231,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1f6eeb8eb6bcc3948c14253d3dc96e8516b3d0f3"
+    },
+    {
+      "path": "osrframework/wrappers/pending/retailmenot.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1340ca5b3a1103973eb3993ab27f34da37f291aa",
+      "size": 4229,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1340ca5b3a1103973eb3993ab27f34da37f291aa"
+    },
+    {
+      "path": "osrframework/wrappers/pending/sarahah.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e21bede5276e0f529dc2e8121d377cec3c1c70b3",
+      "size": 3911,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e21bede5276e0f529dc2e8121d377cec3c1c70b3"
+    },
+    {
+      "path": "osrframework/wrappers/pending/sokule.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c88012fe1c26e5143a296c4637c75b5ca292e92",
+      "size": 4149,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5c88012fe1c26e5143a296c4637c75b5ca292e92"
+    },
+    {
+      "path": "osrframework/wrappers/pending/sourceforge.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13edd73de1ee7536ece1ec5603468e8ede3f5db7",
+      "size": 4283,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/13edd73de1ee7536ece1ec5603468e8ede3f5db7"
+    },
+    {
+      "path": "osrframework/wrappers/pending/streakgaming.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "adff4e8282f507b2625beed498229e30f14ea8c0",
+      "size": 4315,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/adff4e8282f507b2625beed498229e30f14ea8c0"
+    },
+    {
+      "path": "osrframework/wrappers/pending/switter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b72becd4a1ce0324d6b46d4e9b6d35d68e950c38",
+      "size": 2196,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b72becd4a1ce0324d6b46d4e9b6d35d68e950c38"
+    },
+    {
+      "path": "osrframework/wrappers/pending/taringa.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dbf3aed76aad2e697e2fd50e246c050194ccc1a0",
+      "size": 2100,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/dbf3aed76aad2e697e2fd50e246c050194ccc1a0"
+    },
+    {
+      "path": "osrframework/wrappers/pending/theguardian.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ca2788bedce60bb8e2844464ad11a059d9fd945",
+      "size": 4189,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/6ca2788bedce60bb8e2844464ad11a059d9fd945"
+    },
+    {
+      "path": "osrframework/wrappers/pending/thepiratebay.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66617a9975e5e27e6669cedf6cfb22449f6a5b67",
+      "size": 4081,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/66617a9975e5e27e6669cedf6cfb22449f6a5b67"
+    },
+    {
+      "path": "osrframework/wrappers/pending/thesims.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "720fda48f012180601e3d55b1a5c974fef2ea2a4",
+      "size": 3922,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/720fda48f012180601e3d55b1a5c974fef2ea2a4"
+    },
+    {
+      "path": "osrframework/wrappers/pending/torsearch.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "22558b9e3bbe9425ad59df282a628777c76d46e0",
+      "size": 4687,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/22558b9e3bbe9425ad59df282a628777c76d46e0"
+    },
+    {
+      "path": "osrframework/wrappers/pending/trip.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "691306242612d0a785186e19b7776c2ad834b751",
+      "size": 4135,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/691306242612d0a785186e19b7776c2ad834b751"
+    },
+    {
+      "path": "osrframework/wrappers/pending/tripadvisor.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9da695a380e72301628adad41ae788b439d6ea2e",
+      "size": 4196,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/9da695a380e72301628adad41ae788b439d6ea2e"
+    },
+    {
+      "path": "osrframework/wrappers/pending/tripit.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b88c7237c36df1cad647f50ff4603f532fa3b556",
+      "size": 4291,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b88c7237c36df1cad647f50ff4603f532fa3b556"
+    },
+    {
+      "path": "osrframework/wrappers/pending/tumblr.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b850c3d5da54c109cb510a7c7c9415d63d294ce8",
+      "size": 4137,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b850c3d5da54c109cb510a7c7c9415d63d294ce8"
+    },
+    {
+      "path": "osrframework/wrappers/pending/tune.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ef5f9d782f7b5ed44243c316b48c1ff7eed4dc6",
+      "size": 4271,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5ef5f9d782f7b5ed44243c316b48c1ff7eed4dc6"
+    },
+    {
+      "path": "osrframework/wrappers/pending/v7n.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "914ad6256981d5fae91f39c51ef5b9350455a03b",
+      "size": 3955,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/914ad6256981d5fae91f39c51ef5b9350455a03b"
+    },
+    {
+      "path": "osrframework/wrappers/pending/virustotal.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a536463548c8eabb885b35567245beaa87ed502",
+      "size": 3939,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/3a536463548c8eabb885b35567245beaa87ed502"
+    },
+    {
+      "path": "osrframework/wrappers/pending/wattpad.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1391115ebb4602d10ced1b8afdad7ea294950f26",
+      "size": 3863,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1391115ebb4602d10ced1b8afdad7ea294950f26"
+    },
+    {
+      "path": "osrframework/wrappers/pending/wordpress.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d8250ee888e22dc2e24d6d9629bb233de6f73c2",
+      "size": 4200,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8d8250ee888e22dc2e24d6d9629bb233de6f73c2"
+    },
+    {
+      "path": "osrframework/wrappers/pending/xat.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a6b9586338e023ae493720b17dcfdf38323fc59d",
+      "size": 5107,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a6b9586338e023ae493720b17dcfdf38323fc59d"
+    },
+    {
+      "path": "osrframework/wrappers/pending/youku.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2063101533512a84f1c7378816e2514770ce73f5",
+      "size": 4058,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/2063101533512a84f1c7378816e2514770ce73f5"
+    },
+    {
+      "path": "osrframework/wrappers/pending/youtube.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f53ceff66d0a19d147b76cc2014e0e98f69df846",
+      "size": 2745,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/f53ceff66d0a19d147b76cc2014e0e98f69df846"
+    },
+    {
+      "path": "osrframework/wrappers/periscope.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fabf5f5248a8e94d81a76c6fde428ec7124c5158",
+      "size": 3865,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/fabf5f5248a8e94d81a76c6fde428ec7124c5158"
+    },
+    {
+      "path": "osrframework/wrappers/pjrc.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "805e1d5366e452ab173cbc6658115be0b5fd0118",
+      "size": 3971,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/805e1d5366e452ab173cbc6658115be0b5fd0118"
+    },
+    {
+      "path": "osrframework/wrappers/pokerred.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a018265dcad564c741a71d404e433dfebe4db266",
+      "size": 3908,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a018265dcad564c741a71d404e433dfebe4db266"
+    },
+    {
+      "path": "osrframework/wrappers/pornhub.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6856a22147a57161200fe6739c3562f9eb3149a",
+      "size": 3912,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d6856a22147a57161200fe6739c3562f9eb3149a"
+    },
+    {
+      "path": "osrframework/wrappers/rankia.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2868416d805f75f99281fec7798694474e7f93a",
+      "size": 3932,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e2868416d805f75f99281fec7798694474e7f93a"
+    },
+    {
+      "path": "osrframework/wrappers/reddit.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23a0ec97f6959dafb1387b34b6551a288ef6584e",
+      "size": 3889,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/23a0ec97f6959dafb1387b34b6551a288ef6584e"
+    },
+    {
+      "path": "osrframework/wrappers/redtube.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4eb8b69b228570f1737e70976feb4f6f9a1ef81a",
+      "size": 3873,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4eb8b69b228570f1737e70976feb4f6f9a1ef81a"
+    },
+    {
+      "path": "osrframework/wrappers/reverbnation.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fed38e9a83947b6a6bcfed54da3156780863eae1",
+      "size": 3907,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/fed38e9a83947b6a6bcfed54da3156780863eae1"
+    },
+    {
+      "path": "osrframework/wrappers/ripenear.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f12d452cb265369b4c8b25e3bb62baf109bdf93",
+      "size": 3911,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1f12d452cb265369b4c8b25e3bb62baf109bdf93"
+    },
+    {
+      "path": "osrframework/wrappers/rojadirecta.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "299b5ffb42860df704ad03dd5a15e9563f213815",
+      "size": 3995,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/299b5ffb42860df704ad03dd5a15e9563f213815"
+    },
+    {
+      "path": "osrframework/wrappers/ruby.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5a437000dde2a992b58d0f897ed633d3b5ae8ff",
+      "size": 3904,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e5a437000dde2a992b58d0f897ed633d3b5ae8ff"
+    },
+    {
+      "path": "osrframework/wrappers/scribd.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50c2a5ca78a1ebde377abb7fb1b8d9f2e82b7f89",
+      "size": 3874,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/50c2a5ca78a1ebde377abb7fb1b8d9f2e82b7f89"
+    },
+    {
+      "path": "osrframework/wrappers/seatwish.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab47898945d1e3b88fb5c3311d3b59683ab912b4",
+      "size": 3893,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ab47898945d1e3b88fb5c3311d3b59683ab912b4"
+    },
+    {
+      "path": "osrframework/wrappers/sencha.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b13ede1fb0ddf973824c3436affa722a8f5907b",
+      "size": 3912,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/1b13ede1fb0ddf973824c3436affa722a8f5907b"
+    },
+    {
+      "path": "osrframework/wrappers/slashdot.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "52c7772744ade0966531f97e285d6206d0c526d4",
+      "size": 3949,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/52c7772744ade0966531f97e285d6206d0c526d4"
+    },
+    {
+      "path": "osrframework/wrappers/slideshare.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "496bbaa4470e1abf351a39f8c2c1b41244f30e23",
+      "size": 3886,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/496bbaa4470e1abf351a39f8c2c1b41244f30e23"
+    },
+    {
+      "path": "osrframework/wrappers/smartcitizen.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67784d339b30fb12ac9a49c990162f241ff66eaf",
+      "size": 3901,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/67784d339b30fb12ac9a49c990162f241ff66eaf"
+    },
+    {
+      "path": "osrframework/wrappers/smugmug.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4fb427ef717ab4f9f6f4b46053cbb5130bb7b693",
+      "size": 3870,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4fb427ef717ab4f9f6f4b46053cbb5130bb7b693"
+    },
+    {
+      "path": "osrframework/wrappers/soundcloud.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c35b4eaa9549b58d587f96cda9d04e0d25c67c78",
+      "size": 3888,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c35b4eaa9549b58d587f96cda9d04e0d25c67c78"
+    },
+    {
+      "path": "osrframework/wrappers/spaniards.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a051f518b4946b0d4d3bd763e093edf1cd2438f0",
+      "size": 3958,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a051f518b4946b0d4d3bd763e093edf1cd2438f0"
+    },
+    {
+      "path": "osrframework/wrappers/spoj.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9cc1c68c3141b0863eee921e8ff4add148183f8",
+      "size": 4652,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d9cc1c68c3141b0863eee921e8ff4add148183f8"
+    },
+    {
+      "path": "osrframework/wrappers/spotify.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "feb7e578ed514918a8c79a94f632a419b474595c",
+      "size": 3877,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/feb7e578ed514918a8c79a94f632a419b474595c"
+    },
+    {
+      "path": "osrframework/wrappers/spreaker.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "469e933b960d5f3ec645a2f9609d0d1f841a0431",
+      "size": 3976,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/469e933b960d5f3ec645a2f9609d0d1f841a0431"
+    },
+    {
+      "path": "osrframework/wrappers/steamcommunity.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d6298bf8df585405a76ab599eb5321315e414d6",
+      "size": 4591,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/8d6298bf8df585405a76ab599eb5321315e414d6"
+    },
+    {
+      "path": "osrframework/wrappers/steemit.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "65f4ef46da8ab403387c1957289a70c88c6c947f",
+      "size": 3897,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/65f4ef46da8ab403387c1957289a70c88c6c947f"
+    },
+    {
+      "path": "osrframework/wrappers/steinberg.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba2412a4cdd86237a2b570beccd0792d806c5331",
+      "size": 3891,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ba2412a4cdd86237a2b570beccd0792d806c5331"
+    },
+    {
+      "path": "osrframework/wrappers/teamtreehouse.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "543447ff9801a7e8102925e02cb5a747b37a8a2c",
+      "size": 3948,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/543447ff9801a7e8102925e02cb5a747b37a8a2c"
+    },
+    {
+      "path": "osrframework/wrappers/telegram.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d771d278f3c569e886cbcac509846f1f5c4404b7",
+      "size": 3878,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d771d278f3c569e886cbcac509846f1f5c4404b7"
+    },
+    {
+      "path": "osrframework/wrappers/thestudentroom.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a7a1339773f4f392aa14305285e5b409d845f391",
+      "size": 3985,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a7a1339773f4f392aa14305285e5b409d845f391"
+    },
+    {
+      "path": "osrframework/wrappers/theverge.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac66d3d440497b360b79962a5f21c93aa1083d96",
+      "size": 3897,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/ac66d3d440497b360b79962a5f21c93aa1083d96"
+    },
+    {
+      "path": "osrframework/wrappers/tippin_me.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06825095961b3859af2d09605462f392f83afce9",
+      "size": 3876,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/06825095961b3859af2d09605462f392f83afce9"
+    },
+    {
+      "path": "osrframework/wrappers/trakt.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "52bcbf7b0e70338cb8729dd40c6ab79805fa26cb",
+      "size": 3856,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/52bcbf7b0e70338cb8729dd40c6ab79805fa26cb"
+    },
+    {
+      "path": "osrframework/wrappers/twitter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f85ea60d652011e9aa88efd81581825ac0357ef",
+      "size": 5297,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4f85ea60d652011e9aa88efd81581825ac0357ef"
+    },
+    {
+      "path": "osrframework/wrappers/typepad.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "96d587b8c71e086ac868720d4674613efa4925e3",
+      "size": 3907,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/96d587b8c71e086ac868720d4674613efa4925e3"
+    },
+    {
+      "path": "osrframework/wrappers/unsplash.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19e3e11713bc059babe93bbc835438da3fe7631a",
+      "size": 3914,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/19e3e11713bc059babe93bbc835438da3fe7631a"
+    },
+    {
+      "path": "osrframework/wrappers/verbling.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd9bc3cca3bf99ce542ee4722b2a6a878d2585d3",
+      "size": 3948,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/cd9bc3cca3bf99ce542ee4722b2a6a878d2585d3"
+    },
+    {
+      "path": "osrframework/wrappers/vexforum.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f501b4bb60a8379dcd502b1f9ccbb1fbb8b62b2",
+      "size": 3956,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/0f501b4bb60a8379dcd502b1f9ccbb1fbb8b62b2"
+    },
+    {
+      "path": "osrframework/wrappers/viddler.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "525286682c109c2836b22e9cd880d59ac2858e98",
+      "size": 3929,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/525286682c109c2836b22e9cd880d59ac2858e98"
+    },
+    {
+      "path": "osrframework/wrappers/videohelp.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1a53c2b2058855ce5ccb3f9b039369568f3a7ee",
+      "size": 4009,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e1a53c2b2058855ce5ccb3f9b039369568f3a7ee"
+    },
+    {
+      "path": "osrframework/wrappers/vimeo.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23439bd09edd2042d6b7f8ae26690b6151923b70",
+      "size": 3915,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/23439bd09edd2042d6b7f8ae26690b6151923b70"
+    },
+    {
+      "path": "osrframework/wrappers/vk.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ede62a0764a0da4a450a0b96e1c9eb5fa277d29",
+      "size": 3841,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5ede62a0764a0da4a450a0b96e1c9eb5fa277d29"
+    },
+    {
+      "path": "osrframework/wrappers/warriorforum.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d702c3bf72cee36f2867f59d44be3b1b9315a334",
+      "size": 4499,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/d702c3bf72cee36f2867f59d44be3b1b9315a334"
+    },
+    {
+      "path": "osrframework/wrappers/webtv.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e66b3ad76a1279680c7163a1dd67a9b88cb9606",
+      "size": 3856,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/7e66b3ad76a1279680c7163a1dd67a9b88cb9606"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediaar.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98a0470a5a179353089b082e592dc532bca67dc5",
+      "size": 3920,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/98a0470a5a179353089b082e592dc532bca67dc5"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediaca.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5fccc76d713028051bcbd05ea325c886822ce76d",
+      "size": 3907,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5fccc76d713028051bcbd05ea325c886822ce76d"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediade.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "58e33356161d28e4f5d56196503343ae63c9ee9c",
+      "size": 3911,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/58e33356161d28e4f5d56196503343ae63c9ee9c"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediaen.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "83e01917328d08bf5640d40a8db21bb030d1bcc4",
+      "size": 4001,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/83e01917328d08bf5640d40a8db21bb030d1bcc4"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediaes.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b54a97dd3536aae57475176f614b1be19a369544",
+      "size": 3969,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b54a97dd3536aae57475176f614b1be19a369544"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediaeu.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4f9da4a5c63bbe03742cf93d341f2f6ca204043",
+      "size": 3946,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/c4f9da4a5c63bbe03742cf93d341f2f6ca204043"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediafr.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a81fdd0894fb4ffe863278160fd558ae384a22fe",
+      "size": 3940,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/a81fdd0894fb4ffe863278160fd558ae384a22fe"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediapt.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e70a120fd1f93cacf2ae8c558ab46be392fec9d",
+      "size": 3974,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/4e70a120fd1f93cacf2ae8c558ab46be392fec9d"
+    },
+    {
+      "path": "osrframework/wrappers/wikipediaru.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "424ccd6831efe0d750f71a40e590b468fd53bcee",
+      "size": 3965,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/424ccd6831efe0d750f71a40e590b468fd53bcee"
+    },
+    {
+      "path": "osrframework/wrappers/winamp.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b1f922bb4268f99c8cb6c6cd388ee25df039f351",
+      "size": 3905,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/b1f922bb4268f99c8cb6c6cd388ee25df039f351"
+    },
+    {
+      "path": "osrframework/wrappers/wishlistr.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36648b560a95f1afeb3f82ac74b6b01ef2ea2422",
+      "size": 3929,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/36648b560a95f1afeb3f82ac74b6b01ef2ea2422"
+    },
+    {
+      "path": "osrframework/wrappers/witty.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "41e3bdb1b14183249c2d81229e0e09a9b2e4439c",
+      "size": 3941,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/41e3bdb1b14183249c2d81229e0e09a9b2e4439c"
+    },
+    {
+      "path": "osrframework/wrappers/wykop.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e215293110b7249ef000deb5d733ae0048dec5af",
+      "size": 3896,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e215293110b7249ef000deb5d733ae0048dec5af"
+    },
+    {
+      "path": "osrframework/wrappers/xing.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7aafbf93153ae3a61a009bb4c954a2de91ab1a42",
+      "size": 4940,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/7aafbf93153ae3a61a009bb4c954a2de91ab1a42"
+    },
+    {
+      "path": "osrframework/wrappers/xtelefonos.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5372f00c5cee1f88b5032e29409b60f3d7c2aaba",
+      "size": 4064,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/5372f00c5cee1f88b5032e29409b60f3d7c2aaba"
+    },
+    {
+      "path": "osrframework/wrappers/zentyal.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08204f86fbdd69eb1d577cbe6699a568752e5eba",
+      "size": 4692,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/08204f86fbdd69eb1d577cbe6699a568752e5eba"
+    },
+    {
+      "path": "osrframework/wrappers/zotero.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1411ac328039b8b3634de2572fdca2cb4aff450",
+      "size": 3873,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e1411ac328039b8b3634de2572fdca2cb4aff450"
+    },
+    {
+      "path": "requirements.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd47748df3fddbd6eed78d6033960140373714c9",
+      "size": 277,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/bd47748df3fddbd6eed78d6033960140373714c9"
+    },
+    {
+      "path": "setup.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e71c57e1d4eda3700e8164cfda47ce58d235967a",
+      "size": 7045,
+      "url": "https://api.github.com/repos/Asidburn76/osrframework/git/blobs/e71c57e1d4eda3700e8164cfda47ce58d235967a"
+    }
+  ],
+  "truncated": false
+}

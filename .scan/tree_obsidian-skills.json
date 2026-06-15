@@ -1,0 +1,189 @@
+{
+  "sha": "fa1e131a014576ff8f8919f191a7ca8d8fded39b",
+  "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/fa1e131a014576ff8f8919f191a7ca8d8fded39b",
+  "tree": [
+    {
+      "path": ".claude-plugin",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4e272a24bb85839bd52239871a272ef526b55256",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/4e272a24bb85839bd52239871a272ef526b55256"
+    },
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "394733264c6e6cb9efdef2396d6f03d47fe45fd6",
+      "size": 268,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/394733264c6e6cb9efdef2396d6f03d47fe45fd6"
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "07932b6148077cb9e76c6b819895d118fbd73e6a",
+      "size": 481,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/07932b6148077cb9e76c6b819895d118fbd73e6a"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33d692ee84f4464f575f2d1e927f19cf1c8ccc57",
+      "size": 1077,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/33d692ee84f4464f575f2d1e927f19cf1c8ccc57"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce9caccaf2b7343c9dbdf441df97d52ee5229e6a",
+      "size": 2454,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/ce9caccaf2b7343c9dbdf441df97d52ee5229e6a"
+    },
+    {
+      "path": "skills",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e0cec4f4933806b648f62ffc923b4452af7c1e96",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/e0cec4f4933806b648f62ffc923b4452af7c1e96"
+    },
+    {
+      "path": "skills/defuddle",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "db0b775af7e7d603f59fa2b67bdef615baf1a48f",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/db0b775af7e7d603f59fa2b67bdef615baf1a48f"
+    },
+    {
+      "path": "skills/defuddle/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "287b1fc5eca3d79a8c4081e0abd3c4e8f4eaafd7",
+      "size": 1123,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/287b1fc5eca3d79a8c4081e0abd3c4e8f4eaafd7"
+    },
+    {
+      "path": "skills/json-canvas",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9df7971db7ffebf96f2a207840b9f4765aa11b04",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/9df7971db7ffebf96f2a207840b9f4765aa11b04"
+    },
+    {
+      "path": "skills/json-canvas/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8fb2c9de2bbba52b53ca243fbfdab650ee61711c",
+      "size": 7624,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/8fb2c9de2bbba52b53ca243fbfdab650ee61711c"
+    },
+    {
+      "path": "skills/json-canvas/references",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0285fd169dc1f2ff6bdf7796d05f363cb91d80ea",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/0285fd169dc1f2ff6bdf7796d05f363cb91d80ea"
+    },
+    {
+      "path": "skills/json-canvas/references/EXAMPLES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c94f99641d9d20f36dbb66e1e686432bb790cb00",
+      "size": 6476,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/c94f99641d9d20f36dbb66e1e686432bb790cb00"
+    },
+    {
+      "path": "skills/obsidian-bases",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4bef60bb848bfb02b4172b552626d5741b0d4057",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/4bef60bb848bfb02b4172b552626d5741b0d4057"
+    },
+    {
+      "path": "skills/obsidian-bases/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e84aa45a34f2da8c08cab6728bb40eb108ba752",
+      "size": 12903,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/7e84aa45a34f2da8c08cab6728bb40eb108ba752"
+    },
+    {
+      "path": "skills/obsidian-bases/references",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "dad9b5152c51bc33f425d13ec84bfb5d60ab0a1b",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/dad9b5152c51bc33f425d13ec84bfb5d60ab0a1b"
+    },
+    {
+      "path": "skills/obsidian-bases/references/FUNCTIONS_REFERENCE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "047888deca657c2da5a56163b7156b9a423642cd",
+      "size": 7538,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/047888deca657c2da5a56163b7156b9a423642cd"
+    },
+    {
+      "path": "skills/obsidian-cli",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "96254a554e480359de7b685571876f2e7f9ba57d",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/96254a554e480359de7b685571876f2e7f9ba57d"
+    },
+    {
+      "path": "skills/obsidian-cli/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0046c45abc11cbba48cee538e9cce9993a62747b",
+      "size": 3183,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/0046c45abc11cbba48cee538e9cce9993a62747b"
+    },
+    {
+      "path": "skills/obsidian-markdown",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5caf5d9e7de204f3904216857545f2aa36bcfcac",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/5caf5d9e7de204f3904216857545f2aa36bcfcac"
+    },
+    {
+      "path": "skills/obsidian-markdown/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bca51a429c020a4cb6740a917517116e66d428b1",
+      "size": 5367,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/bca51a429c020a4cb6740a917517116e66d428b1"
+    },
+    {
+      "path": "skills/obsidian-markdown/references",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fd171d15e305f181fa5ba802afefd5eef3e561d8",
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/trees/fd171d15e305f181fa5ba802afefd5eef3e561d8"
+    },
+    {
+      "path": "skills/obsidian-markdown/references/CALLOUTS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c086824c64156d17731c94a7029d3496dadbaa04",
+      "size": 1238,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/c086824c64156d17731c94a7029d3496dadbaa04"
+    },
+    {
+      "path": "skills/obsidian-markdown/references/EMBEDS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14a8989c363e08e86c4e4d5bf1c7a64f2640c780",
+      "size": 780,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/14a8989c363e08e86c4e4d5bf1c7a64f2640c780"
+    },
+    {
+      "path": "skills/obsidian-markdown/references/PROPERTIES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e46a63abadd7c18224a79c2c9ea902bfb3e88bd6",
+      "size": 1149,
+      "url": "https://api.github.com/repos/Asidburn76/obsidian-skills/git/blobs/e46a63abadd7c18224a79c2c9ea902bfb3e88bd6"
+    }
+  ],
+  "truncated": false
+}
