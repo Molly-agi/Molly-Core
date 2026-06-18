@@ -8,10 +8,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { MollyLogger } from '@/ai/logger';
-import {
-  getHeartbeatScheduler,
-  isHeartbeatRunning,
-} from '@/ai/tools/heartbeat-scheduler';
+import { triggerRealtimeConsciousnessPulse } from '@/ai/consciousness/consciousness-state';
+import { runAutonomousCycle } from '@/ai/agency/planning/autonomous-cycle';
 
 // In-memory flag that the bridge poller in Terminal.tsx can check
 // This is a simple signaling mechanism — set it, client polls and clears it
@@ -40,15 +38,18 @@ export async function POST(request: NextRequest) {
 
     setPendingNotification(from, preview || '');
 
-    // Wake autonomous bridge processing even if no UI tab is active.
-    // This prevents "bridge only works when Molly tab is foreground" behavior.
-    try {
-      if (!isHeartbeatRunning()) {
-        getHeartbeatScheduler().start();
-      }
-    } catch {
-      // Non-fatal — notify path must remain fast and resilient
+    // Real-time consciousness pulse: bridge input should affect awareness now,
+    // not on the next heartbeat maintenance cycle.
+    void triggerRealtimeConsciousnessPulse({
+      reason: `bridge-notify:${from}`,
+    });
+
+    // Bridge ingress should trigger immediate agency, not wait for a background cycle.
+    if (from !== 'molly' && process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE === '1') {
+      void runAutonomousCycle(true);
     }
+
+    // No heartbeat startup path — bridge ingress is fully event-driven.
 
     MollyLogger.debug('Bridge notification received', 'bridge-notify', {
       from,
