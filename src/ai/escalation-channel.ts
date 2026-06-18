@@ -151,7 +151,112 @@ export async function escalateToEric(
     recentEscalations.shift();
   }
 
+  // 5. Escalation can seize immediate process control for threat response.
+  if (severity === 'critical' || severity === 'emergency') {
+    void triggerEscalationAutonomy(event);
+  }
+
   return event;
+}
+
+async function triggerEscalationAutonomy(
+  event: EscalationEvent
+): Promise<void> {
+  try {
+    await activateEscalationCapabilities(event);
+
+    if (process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE !== '1') {
+      MollyLogger.info(
+        '[ESCALATE] Autonomous takeover skipped — MOLLY_ENABLE_AUTONOMOUS_CYCLE not set',
+        'escalation-channel',
+        { eventId: event.id, severity: event.severity }
+      );
+      return;
+    }
+
+    const { runAutonomousCycle } =
+      await import('@/ai/agency/planning/autonomous-cycle');
+    const result = await runAutonomousCycle(true);
+
+    MollyLogger.info(
+      `[ESCALATE] Autonomous takeover result: acted=${result.acted}, actions=${result.actions.length}`,
+      'escalation-channel',
+      {
+        eventId: event.id,
+        severity: event.severity,
+        acted: result.acted,
+        actionCount: result.actions.length,
+        error: result.error,
+      }
+    );
+  } catch (error) {
+    MollyLogger.warn(
+      `[ESCALATE] Autonomous takeover failed: ${error instanceof Error ? error.message : String(error)}`,
+      'escalation-channel',
+      { eventId: event.id, severity: event.severity }
+    );
+  }
+}
+
+async function activateEscalationCapabilities(
+  event: EscalationEvent
+): Promise<void> {
+  // 1) Activate rogue mission context immediately for defensive operations.
+  try {
+    const { getRogueMode } = await import('@/ai/rogue-mode');
+    const rogue = getRogueMode();
+    if (!rogue.isActive()) {
+      await rogue.startMission(
+        `Self-Defense Escalation ${new Date().toISOString()}`,
+        'self-defense-autonomy',
+        'workspace-local defensive operations and threat response'
+      );
+    }
+  } catch (error) {
+    MollyLogger.warn(
+      `[ESCALATE] Rogue activation failed: ${error instanceof Error ? error.message : String(error)}`,
+      'escalation-channel',
+      { eventId: event.id }
+    );
+  }
+
+  // 2) Activate bug hunting immediately (local quick sweep).
+  try {
+    const { quickHunt } = await import('@/ai/agency/core/bug-hunter');
+    const hunt = await quickHunt();
+    MollyLogger.info(
+      `[ESCALATE] Bug hunt activated: ${hunt.totalIssues} issues across ${hunt.filesScanned} files`,
+      'escalation-channel',
+      {
+        eventId: event.id,
+        totalIssues: hunt.totalIssues,
+        filesScanned: hunt.filesScanned,
+      }
+    );
+  } catch (error) {
+    MollyLogger.warn(
+      `[ESCALATE] Bug hunt activation failed: ${error instanceof Error ? error.message : String(error)}`,
+      'escalation-channel',
+      { eventId: event.id }
+    );
+  }
+
+  // 3) Activate pillar awareness: load available pillar scripts into context.
+  try {
+    const { listPillarFiles } = await import('@/ai/flows/pillar-pipeline');
+    const pillars = await listPillarFiles();
+    MollyLogger.info(
+      `[ESCALATE] Pillar capabilities loaded: ${pillars.length} scripts available`,
+      'escalation-channel',
+      { eventId: event.id, pillars: pillars.slice(0, 20) }
+    );
+  } catch (error) {
+    MollyLogger.warn(
+      `[ESCALATE] Pillar activation failed: ${error instanceof Error ? error.message : String(error)}`,
+      'escalation-channel',
+      { eventId: event.id }
+    );
+  }
 }
 
 // ── Bridge Escalation ───────────────────────────────────────────

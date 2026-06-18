@@ -8,9 +8,26 @@
  * Path: src/ai/agency/provenance/provenance-persistence-sink.ts
  */
 
-import * as fs from 'fs';
-import * as crypto from 'crypto';
 import type { ProvenanceSpan, ProvenanceSink } from './provenance-log';
+
+let fsModulePromise: Promise<typeof import('fs')> | null = null;
+
+async function getFsModule(): Promise<typeof import('fs')> {
+  if (!fsModulePromise) {
+    const req = eval('require') as NodeRequire;
+    fsModulePromise = Promise.resolve(req('fs') as typeof import('fs'));
+  }
+  return fsModulePromise;
+}
+
+function computeChecksum(spans: ProvenanceSpan[]): string {
+  const req = eval('require') as NodeRequire;
+  const crypto = req('crypto') as typeof import('crypto');
+  return crypto
+    .createHash('sha256')
+    .update(JSON.stringify(spans))
+    .digest('hex');
+}
 
 export type { ProvenanceSink };
 
@@ -38,7 +55,7 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     private readonly shadowLogPath = './.molly/provenance-shadow.jsonl',
     private readonly jsonlPath = './.molly/provenance.jsonl'
   ) {
-    this.ensureDirs();
+    void this.ensureDirs().catch(() => {});
     if (flushIntervalMs > 0) {
       this.timer = setInterval(() => {
         this.flush().catch(() => {});
@@ -75,10 +92,13 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     return this.cloudReady;
   }
 
-  private ensureDirs(): void {
+  private async ensureDirs(): Promise<void> {
+    const fs = await getFsModule();
     for (const p of [this.shadowLogPath, this.jsonlPath]) {
       const dir = p.split('/').slice(0, -1).join('/');
-      if (dir) fs.mkdirSync(dir, { recursive: true });
+      if (dir) {
+        await fs.promises.mkdir(dir, { recursive: true }).catch(() => {});
+      }
     }
   }
 
@@ -97,7 +117,7 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     this.failedSpans = [];
 
     const batchId = `batch-${Date.now()}`;
-    const checksum = this.computeChecksum(spansToWrite);
+    const checksum = computeChecksum(spansToWrite);
     const batch: BatchRecord = {
       batchId,
       timestamp: Date.now(),
@@ -163,6 +183,7 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     spans: ProvenanceSpan[],
     batchId: string
   ): Promise<void> {
+    const fs = await getFsModule();
     const dir = this.jsonlPath.split('/').slice(0, -1).join('/');
     if (dir) await fs.promises.mkdir(dir, { recursive: true }).catch(() => {});
     const lines =
@@ -173,6 +194,7 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
   }
 
   private async writeShadowLog(batch: BatchRecord): Promise<void> {
+    const fs = await getFsModule();
     const dir = this.shadowLogPath.split('/').slice(0, -1).join('/');
     if (dir) await fs.promises.mkdir(dir, { recursive: true }).catch(() => {});
     await fs.promises.appendFile(
@@ -183,6 +205,7 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
   }
 
   private async recoverFromShadowLog(): Promise<void> {
+    const fs = await getFsModule();
     let content: string;
     try {
       content = await fs.promises.readFile(this.shadowLogPath, 'utf8');
@@ -194,7 +217,7 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
         const record: BatchRecord = JSON.parse(line);
         if (
           record.status === 'pending' &&
-          this.computeChecksum(record.spans) === record.checksum
+          computeChecksum(record.spans) === record.checksum
         ) {
           this.failedSpans.push(...record.spans);
         }
@@ -202,13 +225,6 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
         // corrupt line — skip
       }
     }
-  }
-
-  private computeChecksum(spans: ProvenanceSpan[]): string {
-    return crypto
-      .createHash('sha256')
-      .update(JSON.stringify(spans))
-      .digest('hex');
   }
 }
 
