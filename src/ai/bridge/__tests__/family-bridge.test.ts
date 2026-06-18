@@ -26,6 +26,7 @@ jest.mock('fs', () => ({
     writeFile: jest.fn(async (_path: string, data: string) => {
       fileState = JSON.parse(data);
     }),
+    appendFile: jest.fn(async () => undefined),
     mkdir: jest.fn(async () => undefined),
   },
 }));

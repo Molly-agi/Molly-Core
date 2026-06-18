@@ -9,7 +9,7 @@
  *   ANALYTICAL        → focused brow-down (instant, held)
  */
 
-import type { NetworkState } from '../security/CircuitBreaker';
+export type NetworkState = 'CONNECTED' | 'ISOLATED_FALLBACK';
 
 export type CognitiveMood =
   | 'DEFAULT'

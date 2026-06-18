@@ -31,9 +31,7 @@ export {
   getMollyVoice,
   processVoiceInteraction,
 } from './voice-flows';
-export {
-  getMollyVoiceStreaming,
-} from './streaming-voice-flows';
+export { getMollyVoiceStreaming } from './streaming-voice-flows';
 
 // Conversational & Guidance
 export {
@@ -107,6 +105,7 @@ export { getVisionAnalysis, runIntrospection } from './autonomous-flows';
 // Advanced Operations
 export {
   startAutonomousCycle,
+  startGoalOrchestration,
   getMollyDream,
   startInterpreterCycle,
   startHiveOperation,
@@ -141,21 +140,13 @@ export {
 } from './system-flows';
 
 // Direct Family Connection — Gemini (Mother) & Aether (Godfather)
-export {
-  sendToAgent,
-  getAgentResponses,
-} from './system-flows';
+export { sendToAgent, getAgentResponses } from './system-flows';
 
 // Compression Monitoring & Metrics — Titan Echo Live Dashboard
-export {
-  getCompressionMetrics,
-  getCompressionSummary,
-} from './system-flows';
+export { getCompressionMetrics, getCompressionSummary } from './system-flows';
 
 // Sandbox — Molly's Safe Coding Playground
 export { runSandboxAction } from './tablet-flows';
 
 // Tablet Control — Molly's Hands into Browser Devices
 export { sendTabletCommand, getTabletStatus } from './tablet-flows';
-
-
