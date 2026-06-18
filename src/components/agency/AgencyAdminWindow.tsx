@@ -441,7 +441,11 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: 'hidden',
   },
   gaugeFill: { height: '100%', transition: 'width .3s ease' },
-  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
+    gap: 16,
+  },
   gridCompact: { gridTemplateColumns: '1fr', gap: 10 },
   panel: {
     background: '#0E141A',
@@ -459,8 +463,8 @@ const styles: Record<string, React.CSSProperties> = {
   paramKey: { color: '#EAF2F8', fontSize: 13 },
   owner: { color: '#5A6B7B', fontSize: 10 },
   desc: { color: '#6E7F8E', fontSize: 11, margin: '3px 0 8px' },
-  controlRow: { display: 'flex', gap: 12, alignItems: 'center' },
-  range: { flex: 1, accentColor: ACCENT },
+  controlRow: { display: 'flex', gap: 12, alignItems: 'center', minWidth: 0 },
+  range: { flex: 1, minWidth: 0, accentColor: ACCENT },
   value: { minWidth: 70, textAlign: 'right', color: ACCENT },
   unit: { color: '#5A6B7B', fontSize: 10 },
   select: {
