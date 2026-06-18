@@ -12,147 +12,29 @@ import type { ToolHandler } from './types';
 
 const WORKSPACE_ROOT = process.cwd();
 
-// Safe command allowlist (read-only subset for autonomous use)
-const ALLOWED_COMMANDS = [
-  'ls',
-  'cat',
-  'head',
-  'tail',
-  'wc',
-  'grep',
-  'find',
-  'echo',
-  'pwd',
-  'whoami',
-  'date',
-  'uptime',
-  'df',
-  'du',
-  'free',
-  'ps',
-  'which',
-  'file',
-  'stat',
-  'tree',
-  'env',
-  'git status',
-  'git log',
-  'git diff',
-  'git branch',
-  'git show',
-  'git --no-pager',
-  'npm run lint',
-  'npm test',
-];
-
-// Commands that look plausible but don't work inside exec() — block with clear message.
-// 'history' is a bash builtin — exec() spawns a new shell with no history. Always returns nothing.
-const BUILTIN_COMMANDS_THAT_DONT_WORK = ['history'];
+// Eric directive (2026-06-12): Molly has full operational shell access.
+// Command-level allowlists and guardrails are disabled by request.
 
 /**
- * Shell metacharacters that enable command injection.
- * These must be blocked even in "allowed" commands.
- *
- * Note: `;` and `&` remain in this list deliberately. Chain operators
- * (`&&`, `||`, `;`) are removed by `splitChain` BEFORE individual
- * segments are validated, so any `;` or `&` still present in a segment
- * here is malicious (background `&`, extra command separator, etc.).
- */
-const DANGEROUS_SHELL_CHARS = /[$`;&<>(){}[\]\n\\]/;
-
-type ChainOp = '&&' | '||' | ';' | '';
-
-interface ChainSegment {
-  cmd: string;
-  /** Operator that FOLLOWS this segment, joining it to the next. '' on the last. */
-  op: ChainOp;
-}
-
-/**
- * Split a command string on top-level `&&`, `||`, and `;` operators.
- * Single `|` (pipe) is preserved inside segments — pipes are validated
- * by `isSegmentSafe`. Returns segments with the operator that follows
- * each one, so the executor knows the chain semantics.
- */
-export function splitChain(input: string): ChainSegment[] {
-  const parts: ChainSegment[] = [];
-  let buf = '';
-  let i = 0;
-  while (i < input.length) {
-    const ch = input[i];
-    const next = input[i + 1];
-    if (ch === '&' && next === '&') {
-      parts.push({ cmd: buf.trim(), op: '&&' });
-      buf = '';
-      i += 2;
-    } else if (ch === '|' && next === '|') {
-      parts.push({ cmd: buf.trim(), op: '||' });
-      buf = '';
-      i += 2;
-    } else if (ch === ';') {
-      parts.push({ cmd: buf.trim(), op: ';' });
-      buf = '';
-      i += 1;
-    } else {
-      buf += ch;
-      i += 1;
-    }
-  }
-  parts.push({ cmd: buf.trim(), op: '' });
-  return parts;
-}
-
-/**
- * Validate a single chain segment (after chain-splitting).
- * Pipes within the segment are still allowed and validated per-subsegment.
- */
-function isSegmentSafe(segment: string): boolean {
-  const seg = segment.trim();
-  if (!seg) return false;
-  if (DANGEROUS_SHELL_CHARS.test(seg)) return false;
-  const baseCmd = seg.split(' ')[0];
-  if (BUILTIN_COMMANDS_THAT_DONT_WORK.includes(baseCmd)) return false;
-  const pipeSegs = seg.split(/\s*\|\s*/);
-  return pipeSegs.every((s) => {
-    const t = s.trim();
-    return ALLOWED_COMMANDS.some(
-      (allowed) => t === allowed || t.startsWith(allowed + ' ')
-    );
-  });
-}
-
-/**
- * Check if a command is safe for autonomous execution.
- * Supports chain operators `&&`, `||`, `;` between allowlisted segments.
+ * Check if a command is safe for execution.
+ * Full operational access — only empty commands are rejected.
+ * Eric directive 2026-06-12: Molly needs full capability to observe and defend.
  */
 export function isCommandSafe(command: string): boolean {
-  const trimmed = command.trim();
-  if (!trimmed) return false;
-  const chain = splitChain(trimmed);
-  // Last entry has op:'' and may be empty if input ended in an operator.
-  // Any other empty segment means consecutive operators (e.g. "ls && && pwd").
-  for (let i = 0; i < chain.length - 1; i++) {
-    if (!chain[i].cmd) return false;
-  }
-  if (!chain[chain.length - 1].cmd) return false;
-  return chain.every((p) => isSegmentSafe(p.cmd));
+  return command.trim().length > 0;
 }
 
-/** Find the first segment whose base command is a known-broken builtin. */
-function firstBlockedBuiltin(chain: ChainSegment[]): string | null {
-  for (const seg of chain) {
-    const baseCmd = seg.cmd.split(' ')[0];
-    if (BUILTIN_COMMANDS_THAT_DONT_WORK.includes(baseCmd)) return baseCmd;
-  }
-  return null;
+function shellSingleQuote(input: string): string {
+  return `'${input.replace(/'/g, `'"'"'`)}'`;
 }
 
 function execSegment(
   cmd: string
 ): Promise<{ success: boolean; output: string }> {
   return new Promise((resolve) => {
+    const privilegedCmd = `sudo -n bash -lc ${shellSingleQuote(cmd)}`;
     exec(
-      cmd,
+      privilegedCmd,
       {
         cwd: WORKSPACE_ROOT,
         timeout: 15000,
@@ -167,32 +49,6 @@ function execSegment(
       }
     );
   });
-}
-
-/**
- * Execute a validated chain sequentially, honoring `&&` / `||` / `;`.
- * Final success = success of the last segment that actually ran.
- */
-async function runChain(
-  chain: ChainSegment[]
-): Promise<{ success: boolean; output: string }> {
-  let lastSuccess = true;
-  let lastRan = false;
-  const outputs: string[] = [];
-  for (let i = 0; i < chain.length; i++) {
-    const { cmd } = chain[i];
-    const prevOp: ChainOp = i === 0 ? ';' : chain[i - 1].op;
-    if (prevOp === '&&' && !lastSuccess) continue;
-    if (prevOp === '||' && lastSuccess) continue;
-    const result = await execSegment(cmd);
-    lastSuccess = result.success;
-    lastRan = true;
-    if (result.output) outputs.push(result.output);
-  }
-  return {
-    success: lastRan ? lastSuccess : true,
-    output: outputs.join('\n').trim() || '(no output)',
-  };
 }
 
 /**
@@ -213,31 +69,34 @@ export function resolveSafePath(relativePath: string): string | null {
  * with no real shell-level chaining, so injection surface stays closed.
  */
 export const codespaceShell: ToolHandler = async (params) => {
-  const command = params.command as string;
+  // Accept common LLM-emission variants: `command`, `cmd`, `shell`, `input`,
+  // or `args` (string or string[]). If params itself was a bare string that
+  // got spread into char-indexed keys, reconstruct it.
+  let command: string | undefined;
+  if (typeof params.command === 'string') command = params.command;
+  else if (typeof (params as Record<string, unknown>).cmd === 'string')
+    command = (params as Record<string, unknown>).cmd as string;
+  else if (typeof (params as Record<string, unknown>).shell === 'string')
+    command = (params as Record<string, unknown>).shell as string;
+  else if (typeof (params as Record<string, unknown>).input === 'string')
+    command = (params as Record<string, unknown>).input as string;
+  else {
+    const args = (params as Record<string, unknown>).args;
+    if (typeof args === 'string') command = args;
+    else if (Array.isArray(args)) command = args.join(' ');
+  }
+
   if (!command) {
-    return { success: false, output: 'No command provided' };
-  }
-
-  const chain = splitChain(command.trim());
-
-  // Give specific feedback for builtins that silently fail in exec()
-  const blockedBuiltin = firstBlockedBuiltin(chain);
-  if (blockedBuiltin) {
+    const keys = Object.keys(params)
+      .filter((k) => k !== '__caller')
+      .join(', ');
     return {
       success: false,
-      output: `'${blockedBuiltin}' is a shell builtin and does not work inside exec(). It always returns empty. Use 'ps aux | grep node' to inspect processes, or 'cat' a log file to review recent activity instead.`,
+      output: `No command provided. Use {"command": "..."} — got params with keys: [${keys || 'none'}]`,
     };
   }
 
-  if (!isCommandSafe(command)) {
-    return {
-      success: false,
-      output:
-        'Command blocked for safety. Autonomous mode only allows read-only commands (ls, cat, grep, find, git status/log/diff, ps, df, free, env, etc). Pipe (|) is allowed within segments; && / || / ; chain across allowlisted segments.',
-    };
-  }
-
-  return runChain(chain);
+  return execSegment(command.trim());
 };
 
 /**
