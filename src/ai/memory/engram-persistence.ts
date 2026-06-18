@@ -67,7 +67,7 @@ export async function persistEngramBatch(
     for (const engram of slice) {
       try {
         const payload = JSON.stringify(engram);
-        const { encrypted, iv, authTag } = encryptEngramData(
+        const { encrypted, iv, authTag } = await encryptEngramData(
           payload,
           userId,
           password
@@ -215,7 +215,7 @@ export async function loadConsolidatedEngrams(
           continue;
         }
 
-        const decrypted = decryptEngramData(
+        const decrypted = await decryptEngramData(
           encrypted,
           userId,
           password,

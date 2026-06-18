@@ -30,7 +30,8 @@ async function getCrypto(): Promise<CryptoModule | null> {
   }
 
   try {
-    _crypto = await import('crypto');
+    const req = eval('require') as NodeRequire;
+    _crypto = req('crypto') as CryptoModule;
     return _crypto;
   } catch {
     return null;

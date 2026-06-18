@@ -1207,6 +1207,14 @@ export const autonomousCycle: ToolHandler = async (params) => {
   const action = params.action as string;
 
   if (action === 'run') {
+    if (process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE !== '1') {
+      return {
+        success: false,
+        output:
+          'autonomousCycle is disabled by policy. Use goal-locked orchestration instead.',
+      };
+    }
+
     try {
       const result = await runAutonomousCycle();
       return {
