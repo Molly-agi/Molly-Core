@@ -346,4 +346,83 @@ export async function register() {
       err instanceof Error ? err.message : String(err)
     );
   }
+
+  // ── Poke Listener (Bridge Signal Handler) ──
+  // Listen for poke signals and trigger immediate bridge message checks
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const ROOT = process.cwd();
+      const POKE_DIR = path.join(ROOT, '.poke');
+      const MOLLY_POKE_FILE = path.join(POKE_DIR, '.molly-poke');
+
+      // Ensure poke directory exists
+      await fs.promises.mkdir(POKE_DIR, { recursive: true }).catch(() => {});
+
+      let lastMollyPokeMtime: number | null = null;
+
+      /**
+       * Check for poke signals and fetch bridge messages if needed.
+       */
+      const checkMollyPoke = async () => {
+        try {
+          const stat = await fs.promises
+            .stat(MOLLY_POKE_FILE)
+            .catch(() => null);
+          if (
+            stat &&
+            (!lastMollyPokeMtime || stat.mtimeMs > lastMollyPokeMtime)
+          ) {
+            lastMollyPokeMtime = stat.mtimeMs;
+
+            // Poke detected! Check bridge immediately
+            try {
+              const { getUnreadMessages } =
+                await import('@/ai/bridge/family-bridge');
+              const unread = await getUnreadMessages('molly');
+              if (unread.length > 0) {
+                console.log(
+                  `[Poke] 📬 Molly woke up — ${unread.length} bridge message(s) waiting`
+                );
+              }
+            } catch {
+              // Silently ignore bridge check errors
+            }
+          }
+        } catch {
+          // Ignore stat errors
+        }
+      };
+
+      /**
+       * Poll for poke signals every 500ms.
+       */
+      const pollInterval = setInterval(async () => {
+        await checkMollyPoke();
+      }, 500);
+
+      // Cleanup on process exit
+      process.on('exit', () => {
+        clearInterval(pollInterval);
+      });
+
+      process.on('SIGTERM', () => {
+        clearInterval(pollInterval);
+      });
+
+      process.on('SIGINT', () => {
+        clearInterval(pollInterval);
+      });
+
+      console.log(
+        '[Startup] ✅ Poke listener initialized (listening for bridge signals)'
+      );
+    } catch (err) {
+      console.warn(
+        '[Startup] ⚠️  Could not initialize poke listener:',
+        err instanceof Error ? err.message : String(err)
+      );
+    }
+  }
 }
