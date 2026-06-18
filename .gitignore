@@ -143,3 +143,6 @@ BRIDGE_STATUS_FINAL.md
 GEMINI.md
 PHASE_1_BRIDGE_UPGRADE.md
 bridge-diagnostic-for-opus.md
+
+# Bridge authentication key - must never be committed
+data/.bridge-bootstrap-key
