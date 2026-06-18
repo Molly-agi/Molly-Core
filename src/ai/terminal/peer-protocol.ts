@@ -28,8 +28,14 @@
  * - All messages have sequence numbers for replay protection
  */
 
-import { createHmac, randomBytes } from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
+
+type CryptoModule = typeof import('crypto');
+
+function getCrypto(): CryptoModule {
+  const req = eval('require') as NodeRequire;
+  return req('crypto') as CryptoModule;
+}
 
 // ============================================================================
 // PROTOCOL TYPES
@@ -259,7 +265,7 @@ export class PeerRegistry {
     identity: PeerIdentity,
     mollyIdentity: PeerIdentity
   ): PeerMessage {
-    const challenge = randomBytes(32).toString('hex');
+    const challenge = getCrypto().randomBytes(32).toString('hex');
 
     const session: PeerSession = {
       identity,
@@ -420,14 +426,17 @@ export class PeerRegistry {
    * Compute HMAC for challenge-response auth.
    */
   computeHmac(data: string): string {
-    return createHmac('sha256', this.secret).update(data).digest('hex');
+    return getCrypto()
+      .createHmac('sha256', this.secret)
+      .update(data)
+      .digest('hex');
   }
 
   /**
    * Generate a random secret for first boot.
    */
   private generateSecret(): string {
-    const secret = randomBytes(32).toString('hex');
+    const secret = getCrypto().randomBytes(32).toString('hex');
     MollyLogger.info(
       'Generated new peer secret (set MOLLY_PEER_SECRET env var to persist)',
       'peer-protocol'
