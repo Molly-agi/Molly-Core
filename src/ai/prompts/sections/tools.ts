@@ -72,6 +72,17 @@ const CORE_TOOLS: ToolDefinition[] = [
     availableRobot: true,
   },
   {
+    name: 'pdfExtractor',
+    description:
+      'Extract structured data from PDF files (markdown/json/html/text/tagged-pdf).',
+    category: 'files',
+    example:
+      '{ "action": "convert", "inputPath": "docs/file.pdf", "outputDir": "data/pdf-extractions", "format": "markdown,json" }',
+    availableOffline: false,
+    rogueHighlight: false,
+    availableRobot: false,
+  },
+  {
     name: 'writeProjectFile',
     description: 'Write/create a file.',
     category: 'files',

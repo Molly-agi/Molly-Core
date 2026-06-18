@@ -770,7 +770,10 @@ export default function Terminal({
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   tool: toolRequest.tool,
-                  params: toolRequest.params,
+                  params: {
+                    ...(toolRequest.params || {}),
+                    __caller: 'molly-conversation',
+                  },
                 }),
                 signal: toolAbort.signal,
               });
@@ -1094,7 +1097,9 @@ export default function Terminal({
 
       // Helper: detect name prefix like "Molly, ..." or "Everyone: ..."
       const detectAddressedTo = (content: string): string | null => {
-        const match = content.trim().match(/^(lazarus|molly|atlas|eric|everyone|all)[,:\s]/i);
+        const match = content
+          .trim()
+          .match(/^(lazarus|molly|atlas|eric|everyone|all)[,:\s]/i);
         if (!match) return null;
         const target = match[1].toLowerCase();
         return target === 'everyone' ? 'all' : target;
@@ -1389,7 +1394,9 @@ export default function Terminal({
                     from: String(msg.from || ''),
                     to: msg.to ? String(msg.to) : undefined,
                     content: String(msg.content || ''),
-                    timestamp: String(msg.timestamp || new Date().toISOString()),
+                    timestamp: String(
+                      msg.timestamp || new Date().toISOString()
+                    ),
                   })
                 );
                 void processIncomingBridgeMessages(restoredMessages);

@@ -26,12 +26,16 @@ import {
   AvatarStateBridge,
   type FacialMorphOverrides,
   type CognitiveMood,
+  type NetworkState,
 } from './AvatarStateBridge';
 import { RoboticsAvatarBridge } from './RoboticsAvatarBridge';
 import { VoiceAvatarBridge } from './VoiceAvatarBridge';
-import { CircuitBreaker } from '@/ai/agency/security/CircuitBreaker';
 import type { ArmGestureIntent } from './KinematicsCore';
-import { ProprioceptiveSense, type JointState, type MorphSnapshot } from './ProprioceptiveSense';
+import {
+  ProprioceptiveSense,
+  type JointState,
+  type MorphSnapshot,
+} from './ProprioceptiveSense';
 
 export interface AvatarFrame {
   intent: ArmGestureIntent;
@@ -49,6 +53,8 @@ export class AvatarDirector {
 
   /** Override the cognitive mood directly (e.g. from auditCycle results). */
   moodOverride: CognitiveMood | null = null;
+  /** Browser-safe mirror of network state used by avatar expressions. */
+  networkState: NetworkState = 'CONNECTED';
 
   /**
    * Called by MollyMesh after bones and morphs are written each frame.
@@ -72,7 +78,7 @@ export class AvatarDirector {
 
   /** Call once per render frame. Returns the merged avatar frame. */
   getFrame(elapsedTime: number): AvatarFrame {
-    const networkState = CircuitBreaker.getInstance().getNetworkState();
+    const networkState = this.networkState;
     const roboticsFrame = this.robotics.getMotionFrame(elapsedTime);
     const voiceFrame = this.voice.getFrame(elapsedTime);
 

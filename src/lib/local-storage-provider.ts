@@ -35,7 +35,8 @@ async function getFs(): Promise<FsModule | null> {
   if (_fs) return _fs;
   if (typeof process === 'undefined' || !process.versions?.node) return null;
   try {
-    const fs = await import('fs');
+    const req = eval('require') as NodeRequire;
+    const fs = req('fs') as typeof import('fs');
     _fs = fs.promises;
     return _fs;
   } catch {
@@ -48,8 +49,8 @@ function getPathSync(): PathModule | null {
   if (typeof process === 'undefined' || !process.versions?.node) return null;
   // Path module is synchronous in Node.js, used for constructor
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    _path = require('path');
+    const req = eval('require') as NodeRequire;
+    _path = req('path') as PathModule;
     return _path;
   } catch {
     return null;
@@ -60,7 +61,8 @@ async function getPath(): Promise<PathModule | null> {
   if (_path) return _path;
   if (typeof process === 'undefined' || !process.versions?.node) return null;
   try {
-    _path = await import('path');
+    const req = eval('require') as NodeRequire;
+    _path = req('path') as PathModule;
     return _path;
   } catch {
     return null;
