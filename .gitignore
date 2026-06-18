@@ -105,6 +105,8 @@ COPILOT_SESSION_STATE.md
 
 # Local TermAI service account keys (never commit)
 stuff/logs/firebase/*.json
+stuff/firebase/*.json
+stuff/firebase/firebase
 
 # API vault secrets (keep templates only)
 config/api_vault/api-vault.json
