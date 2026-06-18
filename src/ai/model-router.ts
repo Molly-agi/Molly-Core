@@ -234,6 +234,47 @@ export interface RoutingDecision {
   routingLatencyMs: number;
 }
 
+function isLazarusModelLockEnabled(): boolean {
+  return process.env.MOLLY_LAZARUS_MODEL_LOCK === '1';
+}
+
+function getLazarusForcedClaudeModel(): string {
+  return (
+    process.env.MOLLY_LAZARUS_CLAUDE_MODEL?.trim() || 'claude-sonnet-4-20250514'
+  );
+}
+
+function applyLazarusClaudePriority(config: RoutingConfig): RoutingConfig {
+  const claudeFirstTasks = new Set<TaskType>([
+    TaskType.REASONING,
+    TaskType.CODE,
+    TaskType.CHAT,
+    TaskType.RESEARCH,
+    TaskType.BACKGROUND,
+  ]);
+
+  const rules = config.rules.map((rule) => {
+    if (!claudeFirstTasks.has(rule.taskType)) {
+      return rule;
+    }
+
+    const chain = [
+      'claude',
+      ...rule.providerChain.filter((id) => id !== 'claude'),
+    ];
+    return { ...rule, providerChain: chain };
+  });
+
+  return {
+    ...config,
+    name: `${config.name}-lazarus-lock`,
+    description: `${config.description} [Lazarus Claude lock active]`,
+    defaultProviderId: 'claude',
+    rules,
+    updatedAt: Date.now(),
+  };
+}
+
 // ============================================================
 // BUILT-IN PROVIDERS
 // ============================================================
@@ -479,11 +520,21 @@ export class ClaudeProvider implements ModelProvider {
   readonly baseUrl: string | undefined;
 
   constructor() {
-    this.model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
+    const forcedModel = getLazarusForcedClaudeModel();
+    this.model = isLazarusModelLockEnabled()
+      ? forcedModel
+      : process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
     this.baseUrl =
       process.env.MOLLY_ANTHROPIC_BASE_URL?.trim() ||
       process.env.ANTHROPIC_BASE_URL?.trim() ||
       undefined;
+
+    if (isLazarusModelLockEnabled()) {
+      MollyLogger.info(
+        `Model Router: Lazarus Claude lock enabled (${this.model})`,
+        'model-router'
+      );
+    }
   }
 
   resolveModel(_taskType: TaskType): string {
@@ -1260,6 +1311,13 @@ export function getModelRouter(): ModelRouter {
       default:
         // Keep default — Gemini only, identical to pre-abstraction behavior
         break;
+    }
+
+    if (isLazarusModelLockEnabled()) {
+      const lockedConfig = applyLazarusClaudePriority(
+        _routerInstance.getConfig()
+      );
+      _routerInstance.setConfig(lockedConfig);
     }
 
     MollyLogger.info(

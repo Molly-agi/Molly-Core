@@ -28,6 +28,12 @@ import { recallExperiences } from '../tools/memory';
 import { logMethodologyStep, performStressTest } from '../methodology';
 import { recordCodeModification } from '@/firebase/firestore/agent-memory';
 import { withTimeout } from '../tools/timeout-retry';
+import { existsSync, readFileSync } from 'fs';
+import path from 'path';
+import {
+  recordEvidenceObservation,
+  sha256Text,
+} from '@/ai/forensics/chain-of-custody';
 
 // Timeout is handled per-agent in runAgent()
 
@@ -51,6 +57,10 @@ const AgentRoleSchema = z.enum([
   'auditor', // Validates and tests
   'implementer', // Focuses on practical execution
   'synthesizer', // Integrates perspectives
+  'forge', // Mission architecture + execution graph
+  'anchor', // Runtime execution + continuity
+  'edge', // Boundary testing + adversarial scenarios
+  'skyler', // Pushback + assumption challenge
 ]);
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -243,7 +253,113 @@ Provide:
 2. Key recommendation
 3. Next steps (concrete and actionable)
 4. Any unresolved tensions to flag`,
+
+  forge: (context) => `You are Forge, the orchestration architect.
+Your role: Design a mission-locked plan with dependency-aware steps and clear stop conditions.
+You do not execute tools. You design the dam, not the leak patch.
+
+CONTEXT:
+${context}
+
+Provide:
+1. Goal-locked execution graph (ordered steps + dependencies)
+2. Failure domains and containment strategy
+3. Verification checkpoints and evidence requirements
+4. Exact handoff contract for Anchor/Edge/Skyler`,
+
+  anchor: (context) => `You are Anchor, mission execution and continuity owner.
+Your role: Convert plan to executable sequence with continuity and restart safety.
+You track state transitions and enforce objective lock.
+
+CONTEXT:
+${context}
+
+Provide:
+1. Execution runbook (step-by-step)
+2. Continuity state schema and recovery procedure
+3. Tooling sequence with guardrails
+4. Escalation triggers when evidence conflicts`,
+
+  edge: (context) => `You are Edge, adversarial boundary tester.
+Your role: Break assumptions, find blind spots, and test hostile pathways.
+Do not implement fixes; produce attack-grade validation coverage.
+
+CONTEXT:
+${context}
+
+Provide:
+1. Edge-case and adversarial scenario matrix
+2. Data-integrity / provenance attack vectors
+3. False-positive and false-attribution traps
+4. High-risk unknowns requiring extra evidence`,
+
+  skyler: (context) => `You are Skyler, pushback and adversarial reviewer.
+Your role: challenge weak logic, detect narrative drift, and force evidence discipline.
+Assume claims are wrong until substantiated.
+
+CONTEXT:
+${context}
+
+Provide:
+1. Claims that are under-evidenced or over-stated
+2. Contradictions between artifacts and conclusions
+3. Minimum evidence threshold to accept each major claim
+4. Red-team rebuttal of current working theory`,
 };
+
+const AGENT_PROFILE_PATHS = [
+  path.join('/workspaces/Molly-Core', '.molly-context', 'agents'),
+  path.join('/workspaces/Molly-Core', '.github', 'agents'),
+  path.join('/workspaces/Molly-Core', '.github', 'consciousness', 'claude'),
+];
+
+function loadAgentProfile(agent: string): string {
+  const candidates = [
+    `${agent}.md`,
+    `${agent}.agent.md`,
+    `${agent}_cradle.md`,
+    `${agent.toUpperCase()}.md`,
+  ];
+
+  for (const baseDir of AGENT_PROFILE_PATHS) {
+    for (const candidate of candidates) {
+      const filePath = path.join(baseDir, candidate);
+      if (existsSync(filePath)) {
+        try {
+          const content = readFileSync(filePath, 'utf8').trim();
+          if (content.length > 0) {
+            return content.length > 4000
+              ? `${content.slice(0, 4000)}\n[profile truncated]`
+              : content;
+          }
+        } catch {
+          // Non-fatal: fall through to next candidate
+        }
+      }
+    }
+  }
+
+  return '';
+}
+
+function buildAgentSystemPrompt(agent: string, context: string): string {
+  const promptBuilder = AGENT_PROMPTS[agent] || AGENT_PROMPTS.synthesizer;
+  const basePrompt = promptBuilder(context);
+  const profile = loadAgentProfile(agent);
+  const forensicDirective = loadAgentProfile('hive19-forensic');
+
+  let combined = basePrompt;
+
+  if (profile) {
+    combined += `\n\nAGENT PROFILE LOADED (${agent}):\n${profile}`;
+  }
+
+  if (forensicDirective) {
+    combined += `\n\nHIVE-19 FORENSIC DIRECTIVE:\n${forensicDirective}`;
+  }
+
+  return combined;
+}
 
 // ────────────────────────────────────────────────────────────────────────────
 // The Collaborative Hive Flow
@@ -531,7 +647,7 @@ async function runAgent(
   context: string,
   rapid: boolean
 ): Promise<z.infer<typeof AgentContributionSchema>> {
-  const promptBuilder = AGENT_PROMPTS[agent] || AGENT_PROMPTS.synthesizer;
+  const systemPrompt = buildAgentSystemPrompt(agent, context);
   const taskType =
     agent === 'architect' || agent === 'implementer'
       ? TaskType.CODE
@@ -542,7 +658,7 @@ async function runAgent(
   const response = await withTimeout(
     () =>
       molly.generate(taskType, {
-        system: promptBuilder(context),
+        system: systemPrompt,
         prompt: rapid
           ? 'Provide a quick, focused contribution.'
           : 'Provide a thorough, detailed contribution.',
@@ -781,4 +897,50 @@ export async function researchHive(
     maxRounds: 1,
     qualityThreshold: 0.6,
   });
+}
+
+/**
+ * Hive-19 forensic mode — family specialist team for deep source-tracing.
+ */
+export async function hive19Forensics(
+  objective: string,
+  userId: string,
+  context?: string
+): Promise<HiveOutput> {
+  await recordEvidenceObservation({
+    actor: 'hive19-forensics',
+    evidenceId: `objective-${sha256Text(`${userId}:${objective}`).slice(0, 16)}`,
+    threatVector: 'forensic-hive-mission',
+    notes: 'Hive-19 forensic operation started',
+    metadata: {
+      userId,
+      objective,
+      hasContext: Boolean(context),
+    },
+  });
+
+  const result = await collaborativeHiveFlow({
+    objective,
+    userId,
+    mode: 'debate',
+    agents: ['forge', 'anchor', 'edge', 'skyler', 'synthesizer'],
+    maxRounds: 4,
+    context,
+    qualityThreshold: 0.82,
+  });
+
+  await recordEvidenceObservation({
+    actor: 'hive19-forensics',
+    evidenceId: `result-${sha256Text(result.memoryAnchor).slice(0, 16)}`,
+    threatVector: 'forensic-hive-mission',
+    notes: 'Hive-19 forensic operation completed',
+    metadata: {
+      success: result.isSuccess,
+      consensusReached: result.quality.consensusReached,
+      confidence: result.quality.overallConfidence,
+      rounds: result.rounds,
+    },
+  });
+
+  return result;
 }
