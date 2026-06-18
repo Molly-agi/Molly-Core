@@ -6,7 +6,7 @@
     "predev": "bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active",
     "dev": "bash scripts/dev-start.sh",
     "dev:solo": "bash scripts/dev-solo.sh",
-    "dev:server": "NODE_OPTIONS=--max-old-space-size=3072 next dev -H 0.0.0.0 -p 9002",
+    "dev:server": "NODE_OPTIONS=--max-old-space-size=3072 next dev --webpack -H 0.0.0.0 -p 9002",
     "dev:turbo": "NODE_OPTIONS=--max-old-space-size=3072 next dev --turbo -p 9002",
     "dev:fresh": "npm run harden && NODE_OPTIONS=--max-old-space-size=3072 next dev -p 9002",
     "dev:unsafe": "NODE_OPTIONS=--max-old-space-size=4096 next dev -H 0.0.0.0 -p 9002",
@@ -80,6 +80,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "@octokit/rest": "^22.0.1",
+    "@opendataloader/pdf": "^2.4.7",
     "@pixiv/three-vrm": "^3.5.3",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -133,9 +134,9 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
-    "@genkit-ai/core": "1.36.0",
-    "@genkit-ai/google-genai": "1.36.0",
-    "@genkit-ai/next": "1.36.0",
+    "@genkit-ai/core": "^1.37.0",
+    "@genkit-ai/google-genai": "^1.37.0",
+    "@genkit-ai/next": "^1.37.0",
     "@next/bundle-analyzer": "^16.2.6",
     "@playwright/test": "^1.60.0",
     "@testing-library/dom": "^10.4.1",
@@ -152,8 +153,8 @@
     "eslint-config-next": "^16.2.6",
     "eslint-config-prettier": "^10.1.8",
     "firebase-admin": "^13.10.0",
-    "genkit": "1.36.0",
-    "genkit-cli": "1.36.0",
+    "genkit": "^1.37.0",
+    "genkit-cli": "^1.37.0",
     "husky": "9.1.7",
     "jest": "30.4.2",
     "jest-environment-jsdom": "^30.4.1",
@@ -168,7 +169,14 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "uuid": "^14.0.0",
+    "@opentelemetry/core": "^2.8.0",
+    "@opentelemetry/sdk-node": "^0.219.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.77.0",
+    "postcss": "^8.5.15",
+    "js-yaml": "^4.2.0",
+    "esbuild": "^0.28.1"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
