@@ -14,6 +14,7 @@
     "harden": "rm -rf .next",
     "monitor": "node scripts/molly-monitor.mjs",
     "monitor:watch": "node scripts/molly-monitor.mjs --continuous",
+    "threat-monitor": "tsx src/ai/threat-monitor/cli.ts",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "npm run harden && NODE_OPTIONS=--max-old-space-size=12288 NODE_ENV=production next build",
