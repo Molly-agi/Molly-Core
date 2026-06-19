@@ -25,6 +25,8 @@ export class ProfileStore {
   private readonly snapshotPath: string;
   private readonly profiles = new Map<string, AttackerProfile>();
   private mutationsSinceSnapshot = 0;
+  private nextSeqCounter = 0;
+  private lastAppliedSeqCounter = 0;
 
   constructor(opts: ProfileStoreOptions = {}) {
     this.dir = opts.dir ?? DEFAULT_DIR;
@@ -38,6 +40,8 @@ export class ProfileStore {
   load(): void {
     this.ensureDir();
     this.profiles.clear();
+    this.nextSeqCounter = 0;
+    this.lastAppliedSeqCounter = 0;
     this.loadSnapshot();
     this.replayLog();
   }
@@ -56,23 +60,38 @@ export class ProfileStore {
 
   apply(mutation: ProfileMutation): void {
     this.ensureDir();
-    this.mutate(mutation);
-    appendFileSync(this.logPath, JSON.stringify(mutation) + '\n');
+    const stamped = { ...mutation, seq: ++this.nextSeqCounter };
+    this.mutate(stamped);
+    appendFileSync(this.logPath, JSON.stringify(stamped) + '\n');
     this.mutationsSinceSnapshot++;
+  }
+
+  nextSeq(): number {
+    return this.nextSeqCounter;
+  }
+
+  lastAppliedSeq(): number {
+    return this.lastAppliedSeqCounter;
+  }
+
+  setCounters(nextSeq: number, lastAppliedSeq: number): void {
+    this.nextSeqCounter = nextSeq;
+    this.lastAppliedSeqCounter = lastAppliedSeq;
   }
 
   snapshot(): void {
     this.ensureDir();
     const tmp = `${this.snapshotPath}.tmp`;
     const payload = {
-      version: 1,
+      schema: 2,
+      nextSeq: this.nextSeqCounter,
+      lastAppliedSeq: this.lastAppliedSeqCounter,
       writtenAt: new Date().toISOString(),
       profiles: this.list(),
     };
     writeFileSync(tmp, JSON.stringify(payload));
     renameSync(tmp, this.snapshotPath);
     this.mutationsSinceSnapshot = 0;
-    // Truncate log: everything is now captured in the snapshot.
     writeFileSync(this.logPath, '');
   }
 
@@ -98,12 +117,22 @@ export class ProfileStore {
       return;
     }
     if (!raw.trim()) return;
-    let parsed: { profiles?: AttackerProfile[] };
+    let parsed: {
+      schema?: number;
+      nextSeq?: number;
+      lastAppliedSeq?: number;
+      profiles?: AttackerProfile[];
+    };
     try {
-      parsed = JSON.parse(raw) as { profiles?: AttackerProfile[] };
+      parsed = JSON.parse(raw);
     } catch {
       return;
     }
+
+    if (parsed.schema === 2) {
+      this.setCounters(parsed.nextSeq ?? 0, parsed.lastAppliedSeq ?? 0);
+    }
+
     for (const p of parsed.profiles ?? []) {
       this.profiles.set(p.key, p);
     }
@@ -116,7 +145,10 @@ export class ProfileStore {
     for (const line of raw.split('\n')) {
       if (!line.trim()) continue;
       try {
-        this.mutate(JSON.parse(line) as ProfileMutation);
+        const m = JSON.parse(line) as ProfileMutation;
+        if (m.seq !== undefined && m.seq <= this.lastAppliedSeqCounter)
+          continue;
+        this.mutate(m);
       } catch {
         // skip malformed line
       }
@@ -124,6 +156,11 @@ export class ProfileStore {
   }
 
   private mutate(m: ProfileMutation): void {
+    if (m.seq !== undefined) {
+      if (m.seq > this.lastAppliedSeqCounter)
+        this.lastAppliedSeqCounter = m.seq;
+      if (m.seq > this.nextSeqCounter) this.nextSeqCounter = m.seq;
+    }
     if (m.kind === 'create') {
       if (!this.profiles.has(m.profile.key)) {
         this.profiles.set(m.profile.key, m.profile);

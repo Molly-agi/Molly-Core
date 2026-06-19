@@ -22,9 +22,10 @@ export interface ProfileEventRef {
 }
 
 export type ProfileMutation =
-  | { kind: 'create'; profile: AttackerProfile }
+  | { kind: 'create'; seq?: number; profile: AttackerProfile }
   | {
       kind: 'update';
+      seq?: number;
       key: string;
       patch: Partial<AttackerProfile> & { lastSeen: string };
       event: ProfileEventRef;
