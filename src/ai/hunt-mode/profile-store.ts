@@ -19,11 +19,21 @@ export interface ProfileStoreOptions {
   snapshotFile?: string;
 }
 
+export interface MutationEvent {
+  key: string;
+  prev: AttackerProfile | null;
+  curr: AttackerProfile;
+  mutation: ProfileMutation;
+}
+
+export type MutationListener = (event: MutationEvent) => void;
+
 export class ProfileStore {
   private readonly dir: string;
   private readonly logPath: string;
   private readonly snapshotPath: string;
   private readonly profiles = new Map<string, AttackerProfile>();
+  private readonly listeners = new Set<MutationListener>();
   private mutationsSinceSnapshot = 0;
   private nextSeqCounter = 0;
   private lastAppliedSeqCounter = 0;
@@ -61,9 +71,28 @@ export class ProfileStore {
   apply(mutation: ProfileMutation): void {
     this.ensureDir();
     const stamped = { ...mutation, seq: ++this.nextSeqCounter };
+    const key = stamped.kind === 'create' ? stamped.profile.key : stamped.key;
+    const prev = this.profiles.get(key) ?? null;
     this.mutate(stamped);
     appendFileSync(this.logPath, JSON.stringify(stamped) + '\n');
     this.mutationsSinceSnapshot++;
+    const curr = this.profiles.get(key);
+    if (curr && this.listeners.size > 0) {
+      const event: MutationEvent = {
+        key,
+        prev,
+        curr,
+        mutation: stamped,
+      };
+      for (const listener of this.listeners) listener(event);
+    }
+  }
+
+  onMutation(listener: MutationListener): () => void {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   nextSeq(): number {

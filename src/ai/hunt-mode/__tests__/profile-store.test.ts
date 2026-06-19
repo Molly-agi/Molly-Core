@@ -359,4 +359,93 @@ describe('ProfileStore', () => {
       expect(reload.lastAppliedSeq()).toBe(2);
     });
   });
+
+  describe('onMutation hook (engine seam)', () => {
+    it('fires after create with prev=null and curr=newly-created profile', () => {
+      const events: Array<{ key: string; prev: unknown; curr: unknown }> = [];
+      store.onMutation((e) =>
+        events.push({ key: e.key, prev: e.prev, curr: e.curr })
+      );
+      const profile = baseProfile('ip:1.1.1.1');
+      store.apply({ kind: 'create', profile });
+      expect(events.length).toBe(1);
+      expect(events[0].key).toBe('ip:1.1.1.1');
+      expect(events[0].prev).toBeNull();
+      expect(events[0].curr).toEqual(profile);
+    });
+
+    it('fires after update with prev=pre-state and curr=post-state', () => {
+      store.apply({ kind: 'create', profile: baseProfile('ip:1.1.1.1') });
+      const events: Array<{ prevCount: number; currCount: number }> = [];
+      store.onMutation((e) =>
+        events.push({
+          prevCount: e.prev?.signalCount ?? -1,
+          currCount: e.curr.signalCount,
+        })
+      );
+      store.apply({
+        kind: 'update',
+        key: 'ip:1.1.1.1',
+        patch: { lastSeen: '2026-06-19T00:01:00.000Z', signalCount: 5 },
+        event: {
+          timestamp: '2026-06-19T00:01:00.000Z',
+          source: 's',
+          severity: 'info',
+          summary: 'm',
+        },
+      });
+      expect(events.length).toBe(1);
+      expect(events[0].prevCount).toBe(1);
+      expect(events[0].currCount).toBe(5);
+    });
+
+    it('does not fire for update on missing key (no-op)', () => {
+      const events: unknown[] = [];
+      store.onMutation((e) => events.push(e));
+      store.apply({
+        kind: 'update',
+        key: 'nope',
+        patch: { lastSeen: 'x' },
+        event: {
+          timestamp: 'x',
+          source: 's',
+          severity: 'info',
+          summary: 'm',
+        },
+      });
+      expect(events.length).toBe(0);
+    });
+
+    it('returns unsubscribe function that removes the listener', () => {
+      let count = 0;
+      const off = store.onMutation(() => count++);
+      store.apply({ kind: 'create', profile: baseProfile('ip:1.1.1.1') });
+      expect(count).toBe(1);
+      off();
+      store.apply({ kind: 'create', profile: baseProfile('ip:2.2.2.2') });
+      expect(count).toBe(1);
+    });
+
+    it('supports multiple listeners; all fire per mutation', () => {
+      let a = 0;
+      let b = 0;
+      store.onMutation(() => a++);
+      store.onMutation(() => b++);
+      store.apply({ kind: 'create', profile: baseProfile('ip:1.1.1.1') });
+      store.apply({ kind: 'create', profile: baseProfile('ip:2.2.2.2') });
+      expect(a).toBe(2);
+      expect(b).toBe(2);
+    });
+
+    it('does not fire during replay on load (replay is recovery, not real-time)', () => {
+      store.apply({ kind: 'create', profile: baseProfile('ip:1.1.1.1') });
+      store.apply({ kind: 'create', profile: baseProfile('ip:2.2.2.2') });
+      const reload = new ProfileStore({ dir });
+      let count = 0;
+      reload.onMutation(() => count++);
+      reload.load();
+      expect(count).toBe(0);
+      expect(reload.size()).toBe(2);
+    });
+  });
 });
