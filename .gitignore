@@ -146,3 +146,17 @@ bridge-diagnostic-for-opus.md
 
 # Bridge authentication key - must never be committed
 data/.bridge-bootstrap-key
+
+# Sensitive files and working dirs that must never be committed
+stuff/
+backups/
+sandbox/test.txt
+.sandbox/
+.lazarus-copilot-session.json
+.lazarus-twin-channel.jsonl
+.lazarus-bridge-5s.pid
+
+# Threat-monitor + hunt-mode runtime state
+.threat-monitor.pid
+.hunt-mode.pid
+.hunt/
