@@ -11,7 +11,14 @@ export interface ThreatSignal {
 }
 
 class ThreatSignalBus extends EventEmitter {
+  private paused = false;
+  private suppressedCount = 0;
+
   emitSignal(signal: ThreatSignal): void {
+    if (this.paused) {
+      this.suppressedCount++;
+      return;
+    }
     this.emit('signal', signal);
     this.emit(`signal:${signal.source}`, signal);
   }
@@ -19,6 +26,26 @@ class ThreatSignalBus extends EventEmitter {
   onSignal(listener: (signal: ThreatSignal) => void): () => void {
     this.on('signal', listener);
     return () => this.off('signal', listener);
+  }
+
+  pause(): void {
+    this.paused = true;
+  }
+
+  resume(): void {
+    this.paused = false;
+  }
+
+  isPaused(): boolean {
+    return this.paused;
+  }
+
+  getSuppressedCount(): number {
+    return this.suppressedCount;
+  }
+
+  resetSuppressedCount(): void {
+    this.suppressedCount = 0;
   }
 }
 
