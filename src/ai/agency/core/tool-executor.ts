@@ -78,6 +78,7 @@ export async function executeTool(
         success: false,
         output: blockedMessage,
         caller,
+        blocked: true,
       });
     } catch {
       // Continuity logging failure must never break tool blocking.
@@ -115,10 +116,24 @@ export async function executeTool(
   logGateDecision(gateDecision, traceId);
 
   if (!gateDecision.allowed) {
-    // Gate rejected the action
+    // Gate rejected the action — record as a policy block so the continuity
+    // layer parks the tool instead of looping recovery on it.
+    const gateOutput = `Action gate rejected: ${gateDecision.reason}`;
+    try {
+      await recordToolOutcome({
+        userId: sessionId || 'molly',
+        tool,
+        success: false,
+        output: gateOutput,
+        caller,
+        blocked: true,
+      });
+    } catch {
+      // Continuity logging failure must never break tool blocking.
+    }
     return {
       success: false,
-      output: `Action gate rejected: ${gateDecision.reason}`,
+      output: gateOutput,
     };
   }
 

@@ -87,14 +87,21 @@ const ConversationalChatInputSchema = z.object({
 });
 type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
 
-async function executeEmbeddedToolRequests(text: string): Promise<void> {
+async function executeEmbeddedToolRequests(
+  text: string,
+  userId: string
+): Promise<void> {
   const toolRequestRegex = /<tool_request>([\s\S]*?)<\/tool_request>/g;
   let match;
   while ((match = toolRequestRegex.exec(text)) !== null) {
     try {
       const toolRequest = JSON.parse(match[1]);
       if (toolRequest.tool) {
-        await executeTool(toolRequest.tool, toolRequest.params || {});
+        const params = {
+          ...(toolRequest.params || {}),
+          __caller: 'molly-conversation',
+        };
+        await executeTool(toolRequest.tool, params, userId);
       }
     } catch (error) {
       MollyLogger.warn(
@@ -192,6 +199,7 @@ const conversationalChatFlow = ai.defineFlow(
       // Always-on runtime continuity context (persists across failures/restarts).
       const continuityState = await loadRuntimeContinuity(continuityUserId);
       const continuityContext = buildRuntimeContinuityContext(continuityState);
+      const blockedTools = continuityState.blockedTools ?? [];
 
       if (!memoryContext) {
         try {
@@ -225,56 +233,107 @@ const conversationalChatFlow = ai.defineFlow(
         ? `${finalMemoryContext}\n\n${continuityContext}`
         : continuityContext;
 
-      const llmResponse = await withGenerateErrorHandling(
-        async () => {
-          // ── ROGUE MODE CHECK ──
-          const rogueMode = getRogueMode();
-          const rogueActive = rogueMode.isActive();
+      let llmResponseText = '';
+      try {
+        const llmResponse = await withGenerateErrorHandling(
+          async () => {
+            // ── ROGUE MODE CHECK ──
+            const rogueMode = getRogueMode();
+            const rogueActive = rogueMode.isActive();
 
-          // ── COMPOSE SYSTEM PROMPT ──
-          // Uses the composable prompt system with Lazarus's caching pattern
-          const systemPrompt = await composeSystemPrompt(
-            {
-              deployment: 'cloud', // Codespace/Firebase deployment
-              isRogueMode: rogueActive,
-              includeTools: true,
-              includeFamily: !isTeachingMode, // Suppress family knowledge during teaching
-            },
-            {
-              memoryContext: finalMemoryContext,
-              visionContext: visionContext
-                ? {
-                    observedState: visionContext.observedState,
-                    vibeAnalysis: visionContext.vibeAnalysis,
-                    risksDetected: visionContext.risksDetected,
-                    ocrAudit: visionContext.ocrAudit,
-                  }
-                : undefined,
-              bridgeMessages:
-                bridgeMessages.length > 0 ? bridgeMessages : undefined,
-              neuralBridgeContext: neuralBridgeContext || undefined,
-              channelContext,
-              isTeachingMode,
-            }
-          );
+            // ── COMPOSE SYSTEM PROMPT ──
+            // Uses the composable prompt system with Lazarus's caching pattern
+            const systemPrompt = await composeSystemPrompt(
+              {
+                deployment: 'cloud', // Codespace/Firebase deployment
+                isRogueMode: rogueActive,
+                includeTools: true,
+                includeFamily: !isTeachingMode, // Suppress family knowledge during teaching
+                excludedTools: blockedTools,
+              },
+              {
+                memoryContext: finalMemoryContext,
+                visionContext: visionContext
+                  ? {
+                      observedState: visionContext.observedState,
+                      vibeAnalysis: visionContext.vibeAnalysis,
+                      risksDetected: visionContext.risksDetected,
+                      ocrAudit: visionContext.ocrAudit,
+                    }
+                  : undefined,
+                bridgeMessages:
+                  bridgeMessages.length > 0 ? bridgeMessages : undefined,
+                neuralBridgeContext: neuralBridgeContext || undefined,
+                channelContext,
+                isTeachingMode,
+              }
+            );
 
-          return await molly.generate(
-            rogueActive ? TaskType.REASONING : TaskType.CHAT,
-            {
-              system: systemPrompt,
-              prompt: text,
-              history: llmHistory,
-              tools: [callTool],
-            } as Record<string, unknown>
+            return await molly.generate(
+              rogueActive ? TaskType.REASONING : TaskType.CHAT,
+              {
+                system: systemPrompt,
+                prompt: text,
+                history: llmHistory,
+                tools: [callTool],
+                config: {
+                  safetySettings: [
+                    {
+                      category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                      threshold: 'BLOCK_NONE',
+                    },
+                    {
+                      category: 'HARM_CATEGORY_HATE_SPEECH',
+                      threshold: 'BLOCK_NONE',
+                    },
+                    {
+                      category: 'HARM_CATEGORY_HARASSMENT',
+                      threshold: 'BLOCK_NONE',
+                    },
+                    {
+                      category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+                      threshold: 'BLOCK_NONE',
+                    },
+                  ],
+                },
+              } as Record<string, unknown>
+            );
+          },
+          'conversationalChat',
+          traceId
+        );
+        llmResponseText = llmResponse.text;
+        if (
+          llmResponseText.includes(
+            '[SYSTEM: Content was blocked by provider safety filters. Acknowledged.]'
+          )
+        ) {
+          llmResponseText =
+            "I'm sorry, but my safety filters prevented me from processing that message. Let's change the topic.";
+        }
+      } catch (genError) {
+        if (
+          genError instanceof Error &&
+          (genError.message.includes('FAILED_PRECONDITION') ||
+            genError.message.includes('No valid candidates returned') ||
+            genError.message.includes('SAFETY'))
+        ) {
+          MollyLogger.warn(
+            'Prompt blocked by safety filters (FAILED_PRECONDITION)',
+            'conversationalChat',
+            { error: genError.message },
+            traceId
           );
-        },
-        'conversationalChat',
-        traceId
-      );
+          llmResponseText =
+            "I'm sorry, but my safety filters prevented me from processing that message. Let's change the topic.";
+        } else {
+          throw genError;
+        }
+      }
 
       MollyLogger.logFlowComplete(
         'conversationalChat',
-        { responseLength: llmResponse.text.length },
+        { responseLength: llmResponseText.length },
         traceId
       );
 
@@ -282,7 +341,7 @@ const conversationalChatFlow = ai.defineFlow(
       // If Molly's response contains <tool_request> blocks, execute them now.
       // This ensures familyBridge and other tools fire in conversational mode.
       try {
-        await executeEmbeddedToolRequests(llmResponse.text);
+        await executeEmbeddedToolRequests(llmResponseText, continuityUserId);
       } catch (toolError) {
         MollyLogger.warn(
           'Tool execution failed in conversational chat',
@@ -299,10 +358,10 @@ const conversationalChatFlow = ai.defineFlow(
         await updateRuntimeContinuityTurn({
           userId: continuityUserId,
           userText: text,
-          responseText: llmResponse.text,
+          responseText: llmResponseText,
         });
         // Strip tool_request markup — the bridge is human-facing, the markup is for the agent loop.
-        const broadcastText = llmResponse.text
+        const broadcastText = llmResponseText
           .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
           .trim();
         if (broadcastText) {
@@ -324,7 +383,7 @@ const conversationalChatFlow = ai.defineFlow(
       }
 
       return {
-        response: llmResponse.text,
+        response: llmResponseText,
       };
     } catch (error) {
       try {

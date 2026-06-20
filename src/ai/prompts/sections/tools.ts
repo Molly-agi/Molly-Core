@@ -361,7 +361,8 @@ export type DeploymentContext = 'cloud' | 'local' | 'edge' | 'robot';
 
 export function getToolsSection(
   deployment: DeploymentContext = 'cloud',
-  isRogueMode: boolean = false
+  isRogueMode: boolean = false,
+  excludedTools: string[] = []
 ): string {
   // If there are connected MCP servers but no MCP tools, log a warning (race condition)
   (async () => {
@@ -402,6 +403,13 @@ export function getToolsSection(
         return true;
     }
   });
+
+  // Drop tools currently parked by the continuity layer (policy-blocked this
+  // turn). Advertising them invites the model to retry against a wall.
+  const excludedSet = new Set(excludedTools);
+  if (excludedSet.size > 0) {
+    availableTools = availableTools.filter((t) => !excludedSet.has(t.name));
+  }
 
   // Add dynamically registered MCP tools
   try {
