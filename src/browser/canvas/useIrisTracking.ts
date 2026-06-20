@@ -26,6 +26,24 @@ import {
   type FaceLandmarkerResult,
 } from '@mediapipe/tasks-vision';
 
+/**
+ * Subset of FacialMorphOverrides driven by the blendshape path. Kept narrow
+ * on purpose — the GLB only ships `mouthOpen` and `mouthSmile` morph targets,
+ * so we only mirror the two ARKit shapes that map cleanly. Expanding this
+ * shape without first upgrading molly.glb would be a no-op at best and could
+ * mislead reviewers about what fidelity we actually deliver.
+ */
+export interface ExpressionOverrides {
+  /** 0..1 from MediaPipe ARKit `jawOpen` blendshape. */
+  jawOpen: number;
+  /**
+   * 0..1, averaged from MediaPipe `mouthSmileLeft` + `mouthSmileRight`.
+   * Molly directive 2026-06-20: average the two sides for stability; avoid
+   * erratic asymmetry unless intentional.
+   */
+  mouthSmileLeft: number;
+}
+
 /** Shared buffer written by MediaPipe (async), read by useFrame (60 Hz). */
 export interface IrisTrackingBuffer {
   /** Yaw in radians, suitable for eye bone .rotation.y */
@@ -36,6 +54,14 @@ export interface IrisTrackingBuffer {
   lastUpdate: number;
   /** True if face was detected in most recent inference. */
   faceDetected: boolean;
+  /**
+   * Blendshape-derived facial morphs. Independent of the iris path — has its
+   * own stale clock (`expressionLastUpdate`) so an iris failure does not
+   * silence expression mirroring, and vice-versa.
+   */
+  expressionOverrides: ExpressionOverrides;
+  /** Timestamp (performance.now ms) of last successful blendshape read. */
+  expressionLastUpdate: number;
 }
 
 const INITIAL_BUFFER: IrisTrackingBuffer = {
@@ -43,6 +69,8 @@ const INITIAL_BUFFER: IrisTrackingBuffer = {
   pitch: 0,
   lastUpdate: 0,
   faceDetected: false,
+  expressionOverrides: { jawOpen: 0, mouthSmileLeft: 0 },
+  expressionLastUpdate: 0,
 };
 
 // Maximum realistic eye-bone rotation (radians). Beyond this looks cross-eyed.
@@ -123,7 +151,7 @@ export function useIrisTracking(
           },
           runningMode: 'VIDEO',
           numFaces: 1,
-          outputFaceBlendshapes: false,
+          outputFaceBlendshapes: true,
           outputFacialTransformationMatrixes: false,
         });
         if (cancelled) return;
@@ -185,27 +213,82 @@ export function useIrisTracking(
       }
       const lm = faces[0];
 
+      // ── Iris block ────────────────────────────────────────────────────────
       // Need 478 landmarks (with iris refinement). Without iris refinement
       // the model returns the base 468-landmark mesh and we cannot compute gaze.
       if (lm.length < 478) {
         buffer.current.faceDetected = false;
-        return;
+      } else {
+        const yaw = computeYaw(lm);
+        const pitch = computePitch(lm);
+
+        // Guard: a degenerate eye socket (zero width/height in landmark space) can
+        // surface NaN/Infinity here. Letting that through poisons the eye bone
+        // rotation, which propagates NaN quaternions through the whole scene graph.
+        if (Number.isFinite(yaw) && Number.isFinite(pitch)) {
+          const sign = mirror ? -1 : 1;
+          buffer.current.yaw = sign * yaw;
+          buffer.current.pitch = pitch;
+          buffer.current.lastUpdate = performance.now();
+          buffer.current.faceDetected = true;
+        } else {
+          buffer.current.faceDetected = false;
+        }
       }
 
-      const yaw = computeYaw(lm);
-      const pitch = computePitch(lm);
+      // ── Expression block (path-separated from iris) ──────────────────────
+      // Independent stale clock: a 478-landmark shortfall above does not
+      // suppress blendshape mirroring, and a blendshape miss here does not
+      // touch the iris fields written above. Same defensive shape as Phase 2.
+      const blendshapes = result.faceBlendshapes;
+      if (blendshapes && blendshapes.length > 0) {
+        const categories = blendshapes[0].categories;
+        if (categories && categories.length > 0) {
+          let jawOpen = 0;
+          let smileLeft = 0;
+          let smileRight = 0;
+          let sawJawOpen = false;
+          let sawSmileLeft = false;
+          let sawSmileRight = false;
+          for (const cat of categories) {
+            const name = cat.categoryName;
+            const score = cat.score;
+            if (name === 'jawOpen') {
+              jawOpen = score;
+              sawJawOpen = true;
+            } else if (name === 'mouthSmileLeft') {
+              smileLeft = score;
+              sawSmileLeft = true;
+            } else if (name === 'mouthSmileRight') {
+              smileRight = score;
+              sawSmileRight = true;
+            }
+          }
+          // Average per Molly directive 2026-06-20 — stable over honest asymmetry.
+          // If only one side reported, use it; if neither reported, leave NaN
+          // and let the finiteness guard below skip the write so the stale
+          // clock catches it downstream.
+          const smileAvg =
+            sawSmileLeft && sawSmileRight
+              ? (smileLeft + smileRight) / 2
+              : sawSmileLeft
+                ? smileLeft
+                : sawSmileRight
+                  ? smileRight
+                  : NaN;
+          const jaw = sawJawOpen ? jawOpen : NaN;
 
-      // Guard: a degenerate eye socket (zero width/height in landmark space) can
-      // surface NaN/Infinity here. Letting that through poisons the eye bone
-      // rotation, which propagates NaN quaternions through the whole scene graph.
-      if (Number.isFinite(yaw) && Number.isFinite(pitch)) {
-        const sign = mirror ? -1 : 1;
-        buffer.current.yaw = sign * yaw;
-        buffer.current.pitch = pitch;
-        buffer.current.lastUpdate = performance.now();
-        buffer.current.faceDetected = true;
-      } else {
-        buffer.current.faceDetected = false;
+          // NaN/Infinity guard + [0,1] clamp (blendshape semantic range).
+          if (Number.isFinite(jaw) && Number.isFinite(smileAvg)) {
+            buffer.current.expressionOverrides.jawOpen = clamp(jaw, 0, 1);
+            buffer.current.expressionOverrides.mouthSmileLeft = clamp(
+              smileAvg,
+              0,
+              1
+            );
+            buffer.current.expressionLastUpdate = performance.now();
+          }
+        }
       }
     }
 

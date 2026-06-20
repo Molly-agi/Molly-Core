@@ -30,6 +30,9 @@ import * as THREE from 'three';
 /** Iris tracker output is considered fresh for this many ms after last update. */
 const IRIS_STALE_MS = 500;
 
+/** Expression tracker output is considered fresh for this many ms after last update. */
+const EXPR_STALE_MS = 500;
+
 /** How many render frames between proprioception snapshots (6 = ~10 Hz at 60fps). */
 const PROPRIO_FRAME_SKIP = 6;
 
@@ -85,6 +88,14 @@ interface MollyMeshProps {
    * to procedural saccade when no face is visible. Default false (opt-in).
    */
   enableIrisTracking?: boolean;
+  /**
+   * Enable real-time facial expression mirroring via the SAME MediaPipe
+   * FaceLandmarker that powers iris tracking (`outputFaceBlendshapes`). When
+   * true and a face is detected, jaw-open and smile come from the tracker
+   * and override the voice/director morphs. When stale or disabled, the
+   * voice path drives unchanged. Default false (opt-in).
+   */
+  enableExpressionTracking?: boolean;
 }
 
 // --- Component ---
@@ -95,14 +106,18 @@ function LoadedMollyMesh({
   modelOffset,
   modelPath,
   enableIrisTracking = false,
+  enableExpressionTracking = false,
 }: MollyMeshProps) {
   const { scene, bones, morphMeshes } = useMollyGLB(modelPath ?? MODEL_PATH);
 
   // Async-to-frame-sync buffer for MediaPipe iris tracking. The hook writes to
   // buffer.current at MediaPipe's ~30 Hz cadence; useFrame reads at 60 Hz and
   // lerps the eye bones toward the latest target.
+  //
+  // The same hook also fills `expressionOverrides` from face blendshapes when
+  // `enableExpressionTracking` is true — single inference, two buffer slots.
   const iris = useIrisTracking({
-    enabled: enableIrisTracking,
+    enabled: enableIrisTracking || enableExpressionTracking,
   });
 
   // Auto-detect rig: prefer caller-supplied, else pick whichever convention's
@@ -277,7 +292,19 @@ function LoadedMollyMesh({
     KinematicsCore.calculateFromBones(b, activeRig, frame.intent, time);
 
     // 3. Facial morph targets
-    applyMorphs(morphMeshesRef.current, frame.morphOverrides);
+    //    Phase 3: when expression tracking is fresh, override the voice/director
+    //    morphs with MediaPipe blendshapes. Molly directive 2026-06-20:
+    //    tracker wins when fresh, voice wins when stale. Path-separated from
+    //    the iris clock above so a blink-driven iris stall does not suppress
+    //    mouth mirroring (and vice-versa).
+    const expressionFresh =
+      enableExpressionTracking &&
+      performance.now() - iris.buffer.current.expressionLastUpdate <
+        EXPR_STALE_MS;
+    const morphsForFrame: FacialMorphOverrides = expressionFresh
+      ? { ...frame.morphOverrides, ...iris.buffer.current.expressionOverrides }
+      : frame.morphOverrides;
+    applyMorphs(morphMeshesRef.current, morphsForFrame);
 
     // 4. Gaze — eyes follow neck direction + intent-specific offset
     // frame.neckYaw/neckPitch are the same values driving the neck bone above,
@@ -427,6 +454,7 @@ export function MollyMesh({
   modelOffset = [0, 0, 0],
   modelPath = MODEL_PATH,
   enableIrisTracking = false,
+  enableExpressionTracking = false,
 }: MollyMeshProps) {
   const [modelAvailable, setModelAvailable] = useState<boolean | null>(null);
 
@@ -467,6 +495,7 @@ export function MollyMesh({
       modelOffset={modelOffset}
       modelPath={modelPath}
       enableIrisTracking={enableIrisTracking}
+      enableExpressionTracking={enableExpressionTracking}
     />
   );
 }
