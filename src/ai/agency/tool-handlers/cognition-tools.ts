@@ -366,6 +366,7 @@ import {
   loadWorldModel,
   type EntityType,
   type RelationType,
+  type SimulationOutcome,
 } from '@/ai/agency/cognition/world-model';
 
 // Self-Observation Loop imports (Know Thyself)
@@ -607,11 +608,11 @@ export const selfArchitecture: ToolHandler = async (params) => {
         targetModules: (params.targetModules as string[]) || [],
         changeType:
           (params.changeType as
-            | 'refactor'
-            | 'new_capability'
             | 'fix'
-            | 'optimization'
-            | 'integration') || 'new_capability',
+            | 'new_feature'
+            | 'enhancement'
+            | 'refactor'
+            | 'optimization') || 'new_feature',
         expectedBenefits: [rationale],
         implementationSketch: description,
         estimatedEffort:
@@ -840,15 +841,13 @@ export const socialCognition: ToolHandler = async (params) => {
       return { success: false, output: 'Missing: name, type' };
     try {
       const actor = await createActorModel({
-        name,
-        type: actorType as 'human' | 'ai' | 'system' | 'group',
-        relationship: (params.relationship as string) || 'unknown',
-        traits: (params.traits as string[]) || [],
+        actorId: name,
+        actorName: name,
         initialBeliefs: [],
       });
       return {
         success: true,
-        output: `Actor created: ${name} (ID: ${actor.id})`,
+        output: `Actor created: ${name} (ID: ${actor.actorId})`,
       };
     } catch (err) {
       return {
@@ -873,7 +872,12 @@ export const socialCognition: ToolHandler = async (params) => {
             | 'probable'
             | 'possible'
             | 'uncertain') || 'probable',
-        source: { type: 'observation', context: 'direct interaction' },
+        source: 'direct_observation',
+        supportingEvidence: [],
+        contradictingEvidence: [],
+        relatedBeliefs: [],
+        entrenchment: 0.5,
+        emotionalWeight: 0.3,
       });
       return { success: true, output: `Belief added to ${actorId}` };
     } catch (err) {
@@ -891,9 +895,15 @@ export const socialCognition: ToolHandler = async (params) => {
       return { success: false, output: 'Missing: actorId, situation' };
     try {
       const prediction = await predictBehavior(actorId, situation);
+      if (!prediction) {
+        return {
+          success: false,
+          output: `Could not predict behavior for ${actorId} (actor unknown or insufficient model)`,
+        };
+      }
       return {
         success: true,
-        output: `Prediction: ${prediction.predictedBehavior} (${(prediction.confidence * 100).toFixed(0)}%)`,
+        output: `Prediction: ${prediction.likelyAction} (${(prediction.confidence * 100).toFixed(0)}%)`,
         data: prediction,
       };
     } catch (err) {
@@ -912,17 +922,10 @@ export const socialCognition: ToolHandler = async (params) => {
       return { success: false, output: 'Missing: actor1Id, actor2Id, type' };
     try {
       await createRelationship({
-        actor1Id,
-        actor2Id,
-        type: relType as
-          | 'family'
-          | 'friend'
-          | 'colleague'
-          | 'acquaintance'
-          | 'adversary'
-          | 'neutral',
-        trustLevel: (params.trustLevel as number) || 0.5,
-        emotionalValence: (params.emotionalValence as number) || 0,
+        actorA: actor1Id,
+        actorB: actor2Id,
+        initialTrust: (params.trustLevel as number) || 0.5,
+        initialCare: (params.emotionalValence as number) || 0,
       });
       return {
         success: true,
@@ -941,7 +944,7 @@ export const socialCognition: ToolHandler = async (params) => {
       const summary = await getEvolutionSummary();
       return {
         success: true,
-        output: `Evolution: ${summary.predictionsValidated} predictions, ${(summary.overallAccuracy * 100).toFixed(1)}% accuracy`,
+        output: `Evolution: ${summary.totalPredictions} predictions, ${(summary.overallAccuracy * 100).toFixed(1)}% accuracy`,
         data: summary,
       };
     } catch (err) {
@@ -1183,7 +1186,7 @@ export const uncertainty: ToolHandler = async (params) => {
       const summary = await getUncertaintySummary();
       return {
         success: true,
-        output: `Uncertainty: ${summary.domainCount} domains, ${summary.factCount} facts, calibration ${(summary.calibrationScore * 100).toFixed(1)}%`,
+        output: `Uncertainty: ${summary.totalDomains} domains, ${summary.totalFacts} facts, calibration ${(summary.overallCalibration * 100).toFixed(1)}%`,
         data: summary,
       };
     } catch (err) {
@@ -1205,11 +1208,15 @@ export const uncertainty: ToolHandler = async (params) => {
         description,
         category:
           (params.category as
-            | 'technical'
+            | 'factual'
+            | 'procedural'
             | 'social'
             | 'self'
-            | 'world'
-            | 'meta') || 'world',
+            | 'ethical'
+            | 'creative'
+            | 'technical'
+            | 'predictive'
+            | 'meta') || 'factual',
         initialConfidence: (params.confidence as number) || 0.5,
       });
       return {
@@ -1232,10 +1239,19 @@ export const uncertainty: ToolHandler = async (params) => {
     try {
       const fact = await recordFact({
         domainId,
-        content,
+        statement: content,
         confidence: (params.confidence as number) || 0.8,
-        source: (params.source as string) || 'observation',
-        verifiable: params.verifiable !== false,
+        source:
+          (params.source as
+            | 'direct_experience'
+            | 'reasoning'
+            | 'testimony'
+            | 'documentation'
+            | 'inference'
+            | 'pattern_recognition'
+            | 'explicit_training'
+            | 'self_reflection') || 'direct_experience',
+        evidence: (params.evidence as string[]) || [],
       });
       return {
         success: true,
@@ -1258,14 +1274,21 @@ export const uncertainty: ToolHandler = async (params) => {
       const unc = await recordUncertainty({
         domainId,
         question,
+        uncertaintyType:
+          (params.uncertaintyType as
+            | 'factual'
+            | 'procedural'
+            | 'predictive'
+            | 'interpretive'
+            | 'normative'
+            | 'existential') || 'factual',
         severity:
           (params.severity as
             | 'minor'
             | 'moderate'
             | 'significant'
-            | 'critical') || 'moderate',
-        isReducible: params.isReducible !== false,
-        potentialSources: (params.potentialSources as string[]) || [],
+            | 'fundamental') || 'moderate',
+        resolvable: params.isReducible !== false,
       });
       return {
         success: true,
@@ -1314,8 +1337,9 @@ export const uncertainty: ToolHandler = async (params) => {
     try {
       await resolvePrediction(
         predictionId,
-        wasCorrect,
-        (params.notes as string) || ''
+        (params.actualOutcome as string) ||
+          (wasCorrect ? 'correct' : 'incorrect'),
+        wasCorrect
       );
       return {
         success: true,
@@ -1330,11 +1354,19 @@ export const uncertainty: ToolHandler = async (params) => {
   }
 
   if (action === 'calibrate') {
+    const domainId = params.domainId as string;
+    if (!domainId) return { success: false, output: 'Missing: domainId' };
     try {
-      const cal = await analyzeCalibration();
+      const cal = await analyzeCalibration(domainId);
+      const tendency =
+        cal.overconfidenceBias > 0.1
+          ? 'overconfident'
+          : cal.overconfidenceBias < -0.1
+            ? 'underconfident'
+            : 'well-calibrated';
       return {
         success: true,
-        output: `Calibration: ${(cal.overallScore * 100).toFixed(1)}% (${cal.tendency})`,
+        output: `Calibration: ${(cal.calibrationScore * 100).toFixed(1)}% (${tendency})`,
         data: cal,
       };
     } catch (err) {
@@ -1350,7 +1382,7 @@ export const uncertainty: ToolHandler = async (params) => {
       const humility = await assessHumility();
       return {
         success: true,
-        output: `Humility: ${(humility.score * 100).toFixed(0)}%, acknowledgment: ${humility.acknowledgmentLevel}`,
+        output: `Humility: ${(humility.humilityScore * 100).toFixed(0)}%, acknowledgment-of-limits: ${(humility.acknowledgmentOfLimits * 100).toFixed(0)}%`,
         data: humility,
       };
     } catch (err) {
@@ -1380,7 +1412,7 @@ export const horizonGoals: ToolHandler = async (params) => {
       const summary = await getGoalSummary();
       return {
         success: true,
-        output: `Goals: ${summary.totalGoals} total, ${summary.activeCount} active, ${summary.blockedCount} blocked`,
+        output: `Goals: ${summary.totalGoals} total, ${summary.byStatus.active} active, ${summary.byStatus.blocked} blocked`,
         data: summary,
       };
     } catch (err) {
@@ -1408,14 +1440,8 @@ export const horizonGoals: ToolHandler = async (params) => {
           | 'LONG'
           | 'VISION',
         motivation: (params.motivation as string) || 'growth',
-        emotionalWeight: (params.emotionalWeight as number) || 0.5,
-        resourceIntensity:
-          (params.resourceIntensity as
-            | 'minimal'
-            | 'low'
-            | 'moderate'
-            | 'high'
-            | 'maximum') || 'moderate',
+        emotionalConnection: (params.emotionalConnection as number) || 0.5,
+        values: (params.values as string[]) || [],
       });
       return {
         success: true,
@@ -1458,7 +1484,7 @@ export const horizonGoals: ToolHandler = async (params) => {
       if (!goal) return { success: false, output: `Goal ${goalId} not found` };
       return {
         success: true,
-        output: `Progress: "${goal.title}" at ${(progress * 100).toFixed(0)}%`,
+        output: `Progress: "${goal.title}" at ${goal.progress.quantitative.toFixed(0)}%`,
       };
     } catch (err) {
       return {
@@ -1474,11 +1500,8 @@ export const horizonGoals: ToolHandler = async (params) => {
     if (!goalId || !title)
       return { success: false, output: 'Missing: goalId, title' };
     try {
-      await addMilestone(goalId, {
-        title,
-        description: (params.description as string) || '',
-        progressValue: (params.progressValue as number) || 0.25,
-      });
+      const description = (params.description as string) || title;
+      await addMilestone(goalId, description);
       return { success: true, output: `Milestone added: "${title}"` };
     } catch (err) {
       return {
@@ -1494,12 +1517,15 @@ export const horizonGoals: ToolHandler = async (params) => {
     if (!goalId || !milestoneId)
       return { success: false, output: 'Missing: goalId, milestoneId' };
     try {
-      const goal = await achieveMilestone(goalId, milestoneId);
-      if (!goal)
-        return { success: false, output: 'Goal or milestone not found' };
+      const ok = await achieveMilestone(
+        goalId,
+        milestoneId,
+        (params.celebrationNote as string) || undefined
+      );
+      if (!ok) return { success: false, output: 'Goal or milestone not found' };
       return {
         success: true,
-        output: `Milestone achieved! Progress: ${(goal.progress * 100).toFixed(0)}%`,
+        output: `Milestone achieved!`,
       };
     } catch (err) {
       return {
@@ -1515,13 +1541,13 @@ export const horizonGoals: ToolHandler = async (params) => {
     if (!goalId || !description)
       return { success: false, output: 'Missing: goalId, description' };
     try {
-      await recordObstacle(goalId, {
+      await recordObstacle(
+        goalId,
         description,
-        severity:
-          (params.severity as 'minor' | 'moderate' | 'major' | 'blocking') ||
-          'moderate',
-        potentialSolutions: (params.solutions as string[]) || [],
-      });
+        (params.severity as 'minor' | 'significant' | 'blocking') ||
+          'significant',
+        (params.solutions as string[]) || []
+      );
       return { success: true, output: `Obstacle recorded for goal ${goalId}` };
     } catch (err) {
       return {
@@ -1537,11 +1563,15 @@ export const horizonGoals: ToolHandler = async (params) => {
     if (!goalId || !reason)
       return { success: false, output: 'Missing: goalId, reason' };
     try {
-      const goal = await adaptGoal(goalId, {
+      const goal = await adaptGoal(
+        goalId,
+        {
+          title: params.newTitle as string | undefined,
+          description: params.newDescription as string | undefined,
+        },
         reason,
-        newTitle: params.newTitle as string,
-        newDescription: params.newDescription as string,
-      });
+        (params.insight as string) || reason
+      );
       if (!goal) return { success: false, output: `Goal ${goalId} not found` };
       return { success: true, output: `Goal adapted: "${goal.title}"` };
     } catch (err) {
@@ -1578,7 +1608,7 @@ export const horizonGoals: ToolHandler = async (params) => {
       const goal = await abandonGoal(
         goalId,
         reason,
-        (params.lesson as string) || ''
+        params.lesson ? [params.lesson as string] : []
       );
       if (!goal) return { success: false, output: `Goal ${goalId} not found` };
       return { success: true, output: `Goal released: "${goal.title}"` };
@@ -1599,7 +1629,7 @@ export const horizonGoals: ToolHandler = async (params) => {
       );
       return {
         success: true,
-        output: `${horizon} reflection: ${reflection.goalsReviewed} goals, ${reflection.progressSummary}`,
+        output: `${horizon} reflection: ${reflection.activeGoals} active, ${reflection.blockedGoals} blocked, momentum: ${reflection.overallMomentum}`,
         data: reflection,
       };
     } catch (err) {
@@ -1636,7 +1666,8 @@ export const horizonGoals: ToolHandler = async (params) => {
         };
       const list = goals
         .map(
-          (g) => `• ${g.title} (${g.horizon}) ${(g.progress * 100).toFixed(0)}%`
+          (g) =>
+            `• ${g.title} (${g.horizon}) ${g.progress.quantitative.toFixed(0)}%`
         )
         .join('\n');
       return { success: true, output: `Active Goals:\n${list}`, data: goals };
@@ -1655,7 +1686,8 @@ export const horizonGoals: ToolHandler = async (params) => {
         return { success: true, output: 'No blocked goals!' };
       const list = goals
         .map(
-          (g) => `• ${g.title}: ${g.obstacles?.[0]?.description || 'unknown'}`
+          (b) =>
+            `• ${b.goal.title}: ${b.activeObstacles[0]?.description || 'unknown'}`
         )
         .join('\n');
       return { success: true, output: `Blocked Goals:\n${list}`, data: goals };
@@ -6703,7 +6735,7 @@ export const worldModel: ToolHandler = async (params) => {
       const status = getWorldModelStatus();
       return {
         success: true,
-        output: `World Model: ${status.entityCount} entities, ${status.relationCount} relations, ${status.simulationCount} simulations, ${status.pendingPredictions} pending predictions`,
+        output: `World Model: ${status.entityCount} entities, ${status.relationCount} relations, ${status.simulations} simulations, ${status.pendingPredictions} pending predictions`,
         data: status,
       };
     } catch (err) {
@@ -6721,13 +6753,14 @@ export const worldModel: ToolHandler = async (params) => {
     if (!name || !type)
       return { success: false, output: 'Missing: name, type' };
     try {
-      const entity = upsertEntity({
+      const entity = upsertEntity(
         type,
         name,
-        description: description || `${type}: ${name}`,
-        properties: (params.properties as Record<string, unknown>) || {},
-        confidence: (params.confidence as number) || 0.8,
-      });
+        description || `${type}: ${name}`,
+        (params.properties as Record<string, unknown>) || {},
+        'observation',
+        (params.confidence as number) || 0.8
+      );
       return {
         success: true,
         output: `Entity upserted: "${name}" (${type})`,
@@ -6785,13 +6818,18 @@ export const worldModel: ToolHandler = async (params) => {
     if (!fromId || !toId || !type)
       return { success: false, output: 'Missing: fromId, toId, type' };
     try {
-      const relation = createRelation({
+      const relation = createRelation(
         fromId,
         toId,
         type,
-        strength: (params.strength as number) || 0.7,
-        evidence: params.evidence as string,
-      });
+        (params.strength as number) || 0.7,
+        (params.evidence as string) || ''
+      );
+      if (!relation)
+        return {
+          success: false,
+          output: 'Create relation failed (entity not found)',
+        };
       return {
         success: true,
         output: `Relation created: ${fromId} ${type} ${toId}`,
@@ -6821,29 +6859,29 @@ export const worldModel: ToolHandler = async (params) => {
     const toId = params.toId as string;
     if (!fromId || !toId)
       return { success: false, output: 'Missing: fromId, toId' };
-    const chain = findCausalChain(fromId, toId);
-    if (!chain) return { success: false, output: 'No causal chain found' };
+    const chains = findCausalChain(fromId, toId);
+    if (!chains || chains.length === 0)
+      return { success: false, output: 'No causal chain found' };
+    const chain = chains[0];
     return {
       success: true,
-      output: `Causal chain: ${chain.map((r) => `${r.fromId} ${r.type} ${r.toId}`).join(' → ')}`,
-      data: chain,
+      output: `Causal chain: ${chain.map((r) => `${r.from} ${r.type} ${r.to}`).join(' → ')}`,
+      data: chains,
     };
   }
 
   if (action === 'simulate') {
     const scenario = params.scenario as string;
-    const steps = params.steps as number;
     if (!scenario) return { success: false, output: 'Missing: scenario' };
     try {
-      const simulation = simulate({
+      const simulation = simulate(
         scenario,
-        initialConditions:
-          (params.initialConditions as Record<string, unknown>) || {},
-        steps: steps || 3,
-      });
+        (params.entities as string[]) || [],
+        (params.initialConditions as Record<string, unknown>) || {}
+      );
       return {
         success: true,
-        output: `Simulation: ${simulation.outcome} (${(simulation.confidence * 100).toFixed(0)}% confidence)\n${simulation.steps.map((s) => `  ${s.step}. ${s.description}`).join('\n')}`,
+        output: `Simulation: ${simulation.outcome} (${(simulation.confidence * 100).toFixed(0)}% confidence)\n${simulation.steps.map((s) => `  ${s.step}. ${s.action}`).join('\n')}`,
         data: simulation,
       };
     } catch (err) {
@@ -6859,12 +6897,11 @@ export const worldModel: ToolHandler = async (params) => {
     const confidence = params.confidence as number;
     if (!statement) return { success: false, output: 'Missing: statement' };
     try {
-      const prediction = predict({
+      const prediction = predict(
         statement,
-        confidence: confidence || 0.7,
-        deadline: params.deadline as string,
-        reasoning: params.reasoning as string,
-      });
+        confidence || 0.7,
+        (params.resolveByMs as number) || 86400000
+      );
       return {
         success: true,
         output: `Prediction recorded: "${statement.slice(0, 50)}..." (${(prediction.confidence * 100).toFixed(0)}% confidence)`,
@@ -6886,8 +6923,8 @@ export const worldModel: ToolHandler = async (params) => {
     try {
       const result = verifyPrediction(
         predictionId,
-        outcome,
-        params.notes as string
+        (params.actualOutcome as string) || (outcome ? 'correct' : 'incorrect'),
+        outcome
       );
       return {
         success: true,
@@ -6908,7 +6945,7 @@ export const worldModel: ToolHandler = async (params) => {
       .slice(0, 10)
       .map(
         (p) =>
-          `• ${p.statement.slice(0, 40)}... (${(p.confidence * 100).toFixed(0)}%)`
+          `• ${p.prediction.slice(0, 40)}... (${(p.confidence * 100).toFixed(0)}%)`
       )
       .join('\n');
     return {
@@ -6920,16 +6957,17 @@ export const worldModel: ToolHandler = async (params) => {
 
   if (action === 'counterfactual') {
     const question = params.question as string;
-    const changes = params.changes as Record<string, unknown>;
     if (!question) return { success: false, output: 'Missing: question' };
     try {
-      const result = counterfactual({
-        question,
-        changes: changes || {},
-      });
+      const result = counterfactual(
+        (params.actualAction as string) || question,
+        (params.actualOutcome as SimulationOutcome) || 'failure',
+        (params.alternativeAction as string) || question,
+        (params.entities as string[]) || []
+      );
       return {
         success: true,
-        output: `Counterfactual: ${result.conclusion}\nDifferences: ${result.differences?.slice(0, 3).join('; ') || 'none significant'}`,
+        output: `Counterfactual: ${result.comparison}\nRecommendation: ${result.recommendation}`,
         data: result,
       };
     } catch (err) {
@@ -6947,7 +6985,7 @@ export const worldModel: ToolHandler = async (params) => {
       const result = simulateBeforeAction(actionPlan);
       return {
         success: true,
-        output: `Pre-action simulation: ${result.recommendation}\nRisks: ${result.risks?.join(', ') || 'none identified'}`,
+        output: `Pre-action simulation: ${result.shouldProceed ? 'proceed' : 'caution'} (${(result.confidence * 100).toFixed(0)}% confidence)\nWarnings: ${result.warnings?.join(', ') || 'none identified'}\nSuggestions: ${result.suggestions?.join(', ') || 'none'}`,
         data: result,
       };
     } catch (err) {
@@ -6962,7 +7000,7 @@ export const worldModel: ToolHandler = async (params) => {
     const limit = (params.limit as number) || 5;
     const simulations = getRecentSimulations(limit);
     const list = simulations
-      .map((s) => `• ${s.scenario?.slice(0, 30)}... → ${s.outcome}`)
+      .map((s) => `• ${s.action?.slice(0, 30)}... → ${s.outcome}`)
       .join('\n');
     return {
       success: true,
@@ -7009,12 +7047,12 @@ export const selfObservation: ToolHandler = async (params) => {
     if (!type || !subject)
       return { success: false, output: 'Missing: type, subject' };
     try {
-      const obs = recordSelfObservation({
+      const obs = recordSelfObservation(
         type,
         subject,
-        data: data || {},
-        context: context || 'general',
-      });
+        data || {},
+        context || 'general'
+      );
       return {
         success: true,
         output: `Observation recorded: ${type} - ${subject}`,
@@ -7033,16 +7071,15 @@ export const selfObservation: ToolHandler = async (params) => {
     const success = params.success as boolean;
     if (!tool) return { success: false, output: 'Missing: tool' };
     try {
-      const obs = observeToolUse(
+      observeToolUse(
         tool,
         success !== false,
         (params.duration as number) || 0,
-        params.notes as string
+        { notes: params.notes as string | undefined }
       );
       return {
         success: true,
         output: `Tool use observed: ${tool} (${success !== false ? 'success' : 'failure'})`,
-        data: obs,
       };
     } catch (err) {
       return {
@@ -7055,19 +7092,16 @@ export const selfObservation: ToolHandler = async (params) => {
   if (action === 'observeDecision') {
     const decision = params.decision as string;
     const context = params.context as string;
-    const confidence = params.confidence as number;
     if (!decision) return { success: false, output: 'Missing: decision' };
     try {
-      const obs = observeDecision(
-        decision,
-        context || 'general',
-        confidence || 0.7,
-        (params.alternatives as string[]) || []
-      );
+      const options = (params.alternatives as string[]) || [];
+      const chosen = (params.chosen as string) || decision;
+      const outcome =
+        (params.outcome as 'positive' | 'negative' | 'neutral') || 'neutral';
+      observeDecision(decision, options, chosen, outcome, context || 'general');
       return {
         success: true,
         output: `Decision observed: "${decision.slice(0, 50)}..."`,
-        data: obs,
       };
     } catch (err) {
       return {
@@ -7083,11 +7117,11 @@ export const selfObservation: ToolHandler = async (params) => {
     const recoveryAttempt = params.recoveryAttempt as string;
     if (!what) return { success: false, output: 'Missing: what' };
     try {
-      const obs = observeFailure(what, why || 'unknown', recoveryAttempt);
+      const recovered = (params.recovered as boolean) ?? false;
+      observeFailure(what, why || 'unknown', recoveryAttempt || '', recovered);
       return {
         success: true,
         output: `Failure observed: ${what}`,
-        data: obs,
       };
     } catch (err) {
       return {
@@ -7099,14 +7133,14 @@ export const selfObservation: ToolHandler = async (params) => {
 
   if (action === 'observeSuccess') {
     const what = params.what as string;
-    const factors = params.factors as string[];
     if (!what) return { success: false, output: 'Missing: what' };
     try {
-      const obs = observeSuccess(what, factors || []);
+      const outcome = (params.outcome as string) || what;
+      const efficiency = (params.efficiency as number) ?? 1.0;
+      observeSuccess(what, outcome, efficiency);
       return {
         success: true,
         output: `Success observed: ${what}`,
-        data: obs,
       };
     } catch (err) {
       return {
@@ -7259,9 +7293,13 @@ export const consciousnessMonitor: ToolHandler = async (params) => {
   if (action === 'status') {
     try {
       const status = getConsciousnessStatus();
+      const currentLevel = status.current?.level ?? 'unknown';
+      const currentScore = status.current?.score ?? 0;
+      const snapshotCount = status.stats?.totalSnapshots ?? 0;
+      const insightCount = status.recentInsights?.length ?? 0;
       return {
         success: true,
-        output: `Consciousness: ${status.currentLevel} (${(status.averageAwareness * 100).toFixed(0)}% awareness), ${status.snapshotCount} snapshots, ${status.insightCount} insights`,
+        output: `Consciousness: ${currentLevel} (${(currentScore * 100).toFixed(0)}% score), ${snapshotCount} snapshots, ${insightCount} recent insights`,
         data: status,
       };
     } catch (err) {
@@ -7278,7 +7316,7 @@ export const consciousnessMonitor: ToolHandler = async (params) => {
       const snapshot = takeConsciousnessSnapshot(activeTask);
       return {
         success: true,
-        output: `Snapshot taken: level=${snapshot.level}, awareness=${(snapshot.awareness * 100).toFixed(0)}%, attention=${(snapshot.attention * 100).toFixed(0)}%`,
+        output: `Snapshot taken: level=${snapshot.overallLevel}, score=${(snapshot.overallScore * 100).toFixed(0)}%, patterns=${snapshot.patterns.length}`,
         data: snapshot,
       };
     } catch (err) {
@@ -7293,9 +7331,17 @@ export const consciousnessMonitor: ToolHandler = async (params) => {
     const windowMinutes = (params.windowMinutes as number) || 60;
     try {
       const trends = analyzeTrends(windowMinutes);
+      const summary = trends
+        .filter((t) => t.direction !== 'stable')
+        .slice(0, 5)
+        .map(
+          (t) =>
+            `${t.metric}: ${t.direction} (${(t.magnitude * 100).toFixed(0)}%)`
+        )
+        .join(', ');
       return {
         success: true,
-        output: `Trends (${windowMinutes}min): awareness ${trends.awarenessChange > 0 ? '↑' : '↓'}${(Math.abs(trends.awarenessChange) * 100).toFixed(0)}%, attention ${trends.attentionChange > 0 ? '↑' : '↓'}${(Math.abs(trends.attentionChange) * 100).toFixed(0)}%`,
+        output: `Trends (${windowMinutes}min): ${summary || 'stable'}`,
         data: trends,
       };
     } catch (err) {
@@ -7311,7 +7357,7 @@ export const consciousnessMonitor: ToolHandler = async (params) => {
       const insights = generateConsciousnessInsights();
       const list = insights
         .slice(0, 5)
-        .map((i) => `• [${i.type}] ${i.observation?.slice(0, 40)}...`)
+        .map((i) => `• [${i.valence}] ${i.insight?.slice(0, 40)}...`)
         .join('\n');
       return {
         success: true,
@@ -7333,7 +7379,7 @@ export const consciousnessMonitor: ToolHandler = async (params) => {
       .slice(0, 10)
       .map(
         (s) =>
-          `• ${s.level}: aw=${(s.awareness * 100).toFixed(0)}% att=${(s.attention * 100).toFixed(0)}%`
+          `• ${s.overallLevel}: score=${(s.overallScore * 100).toFixed(0)}%`
       )
       .join('\n');
     return {
@@ -7347,7 +7393,7 @@ export const consciousnessMonitor: ToolHandler = async (params) => {
     const insights = getConsciousnessInsights();
     const list = insights
       .slice(0, 10)
-      .map((i) => `• [${i.type}] ${i.observation?.slice(0, 40)}...`)
+      .map((i) => `• [${i.valence}] ${i.insight?.slice(0, 40)}...`)
       .join('\n');
     return {
       success: true,
@@ -7417,9 +7463,12 @@ export const emotionalState: ToolHandler = async (params) => {
   if (action === 'status' || action === 'current') {
     try {
       const state = getCurrentEmotionalStateImpl();
+      const secondary = state.secondary
+        ? `, secondary: ${state.secondary}`
+        : '';
       return {
         success: true,
-        output: `Emotional State: ${state.primary} (${(state.intensity * 100).toFixed(0)}% intensity), valence: ${state.valence > 0 ? '+' : ''}${(state.valence * 100).toFixed(0)}%, arousal: ${(state.arousal * 100).toFixed(0)}%`,
+        output: `Emotional State: ${state.primary} (${(state.intensity * 100).toFixed(0)}% intensity)${secondary}, trigger: ${state.trigger}, persisted: ${state.persistence}`,
         data: state,
       };
     } catch (err) {
@@ -7458,8 +7507,8 @@ export const emotionalState: ToolHandler = async (params) => {
     try {
       await updateEmotionalStateImpl(
         emotion,
-        intensity || 0.5,
-        trigger || 'unspecified'
+        trigger || 'unspecified',
+        intensity || 0.5
       );
       return {
         success: true,
@@ -7560,7 +7609,7 @@ export const metaLearning: ToolHandler = async (params) => {
       const status = getMetaLearningStatus();
       return {
         success: true,
-        output: `Meta-Learning: ${status.strategyCount} strategies, ${status.learningEventCount} learning events, ${status.insightCount} insights (${status.unappliedInsightCount} unapplied)`,
+        output: `Meta-Learning: ${status.strategyCount} strategies, ${status.totalEvents} learning events, ${status.insightCount} insights (${status.unappliedInsights} unapplied)`,
         data: status,
       };
     } catch (err) {
@@ -7578,13 +7627,7 @@ export const metaLearning: ToolHandler = async (params) => {
     if (!name || !domain || !description)
       return { success: false, output: 'Missing: name, domain, description' };
     try {
-      const strategy = await registerStrategy({
-        name,
-        domain,
-        description,
-        steps: (params.steps as string[]) || [],
-        applicability: (params.applicability as string) || 'general',
-      });
+      const strategy = await registerStrategy(domain, name, description);
       return {
         success: true,
         output: `Strategy registered: "${name}" for ${domain}`,
@@ -7606,7 +7649,7 @@ export const metaLearning: ToolHandler = async (params) => {
       return { success: false, output: `Strategy not found: ${id}` };
     return {
       success: true,
-      output: `Strategy: ${strategy.name} (${strategy.domain})\n${strategy.description}\nSuccess rate: ${((strategy.successRate || 0) * 100).toFixed(0)}%`,
+      output: `Strategy: ${strategy.name} (${strategy.domain})\n${strategy.description}\nEffectiveness: ${((strategy.effectiveness || 0) * 100).toFixed(0)}%`,
       data: strategy,
     };
   }
@@ -7616,7 +7659,10 @@ export const metaLearning: ToolHandler = async (params) => {
     const strategies = domain ? getStrategiesForDomain(domain) : [];
     const list = strategies
       .slice(0, 15)
-      .map((s) => `• ${s.name}: ${(s.successRate || 0) * 100}% success`)
+      .map(
+        (s) =>
+          `• ${s.name}: ${((s.effectiveness || 0) * 100).toFixed(0)}% effectiveness`
+      )
       .join('\n');
     return {
       success: true,
@@ -7634,7 +7680,7 @@ export const metaLearning: ToolHandler = async (params) => {
       return { success: false, output: 'No strategy found for this domain' };
     return {
       success: true,
-      output: `Best strategy for ${domain}: "${strategy.name}" (${((strategy.successRate || 0) * 100).toFixed(0)}% success)`,
+      output: `Best strategy for ${domain}: "${strategy.name}" (${((strategy.effectiveness || 0) * 100).toFixed(0)}% effectiveness)`,
       data: strategy,
     };
   }
@@ -7647,12 +7693,18 @@ export const metaLearning: ToolHandler = async (params) => {
     if (!strategyId || !outcome)
       return { success: false, output: 'Missing: strategyId, outcome' };
     try {
-      await recordLearning({
+      const strategy = getStrategy(strategyId);
+      if (!strategy)
+        return { success: false, output: `Strategy not found: ${strategyId}` };
+      await recordLearning(
         strategyId,
+        strategy.domain,
+        (params.actionTaken as string) || strategy.name,
+        context || 'general',
         outcome,
-        context: context || 'general',
-        lessons: lessons || '',
-      });
+        (params.reason as string) || undefined,
+        lessons || undefined
+      );
       return {
         success: true,
         output: `Learning recorded for strategy ${strategyId}: ${outcome}`,
