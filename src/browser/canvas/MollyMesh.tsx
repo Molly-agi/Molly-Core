@@ -33,6 +33,9 @@ const IRIS_STALE_MS = 500;
 /** Expression tracker output is considered fresh for this many ms after last update. */
 const EXPR_STALE_MS = 500;
 
+/** Head pose tracker output is considered fresh for this many ms after last update. */
+const HEAD_STALE_MS = 500;
+
 /** How many render frames between proprioception snapshots (6 = ~10 Hz at 60fps). */
 const PROPRIO_FRAME_SKIP = 6;
 
@@ -96,6 +99,14 @@ interface MollyMeshProps {
    * voice path drives unchanged. Default false (opt-in).
    */
   enableExpressionTracking?: boolean;
+  /**
+   * Enable real-time head pose tracking (yaw/pitch) via the SAME MediaPipe
+   * FaceLandmarker that powers iris tracking (`outputFacialTransformationMatrixes`).
+   * When true and face is detected, the avatar's neck bone follows the user's
+   * head rotation. When stale or disabled, falls back to procedural animation
+   * from AvatarDirector. Default false (opt-in). Orthogonal to iris/expression.
+   */
+  enableHeadTracking?: boolean;
 }
 
 // --- Component ---
@@ -107,6 +118,7 @@ function LoadedMollyMesh({
   modelPath,
   enableIrisTracking = false,
   enableExpressionTracking = false,
+  enableHeadTracking = false,
 }: MollyMeshProps) {
   const { scene, bones, morphMeshes } = useMollyGLB(modelPath ?? MODEL_PATH);
 
@@ -116,8 +128,11 @@ function LoadedMollyMesh({
   //
   // The same hook also fills `expressionOverrides` from face blendshapes when
   // `enableExpressionTracking` is true — single inference, two buffer slots.
+  // And fills `headYaw/headPitch` from facial transformation matrix when
+  // `enableHeadTracking` is true — same inference, three independent buffer slots.
   const iris = useIrisTracking({
-    enabled: enableIrisTracking || enableExpressionTracking,
+    enabled:
+      enableIrisTracking || enableExpressionTracking || enableHeadTracking,
   });
 
   // Auto-detect rig: prefer caller-supplied, else pick whichever convention's
@@ -281,11 +296,25 @@ function LoadedMollyMesh({
     const frame = director.getFrame(time);
     const b = bonesRef.current;
 
-    // 1. Neck orientation — drive from AvatarDirector's procedural targets.
+    // 1. Neck orientation — drive from AvatarDirector's procedural targets,
+    //    or from head pose tracker when fresh and enabled.
     const neck = b[activeRig.neck];
     if (neck) {
-      neck.rotation.x += (frame.neckPitch - neck.rotation.x) * LERP;
-      neck.rotation.y += (frame.neckYaw - neck.rotation.y) * LERP;
+      // Determine neck targets: tracker fresh (Phase 2) or procedural (fallback).
+      let targetNeckPitch = frame.neckPitch;
+      let targetNeckYaw = frame.neckYaw;
+      if (enableHeadTracking && iris.ready.current) {
+        const now = performance.now();
+        const headFresh =
+          now - iris.buffer.current.headLastUpdate < HEAD_STALE_MS;
+        if (headFresh) {
+          targetNeckYaw = iris.buffer.current.headYaw;
+          targetNeckPitch = iris.buffer.current.headPitch;
+        }
+      }
+      // LERP to target (same smoothing as iris gaze).
+      neck.rotation.x += (targetNeckPitch - neck.rotation.x) * LERP;
+      neck.rotation.y += (targetNeckYaw - neck.rotation.y) * LERP;
     }
 
     // 2. Arm kinematics
@@ -455,6 +484,7 @@ export function MollyMesh({
   modelPath = MODEL_PATH,
   enableIrisTracking = false,
   enableExpressionTracking = false,
+  enableHeadTracking = false,
 }: MollyMeshProps) {
   const [modelAvailable, setModelAvailable] = useState<boolean | null>(null);
 
@@ -496,6 +526,7 @@ export function MollyMesh({
       modelPath={modelPath}
       enableIrisTracking={enableIrisTracking}
       enableExpressionTracking={enableExpressionTracking}
+      enableHeadTracking={enableHeadTracking}
     />
   );
 }
