@@ -204,6 +204,11 @@ export default function AdminPage() {
             desc="Adjust personality parameters"
           />
           <AdminLink
+            href="/admin/agency"
+            title="Agency Panel"
+            desc="Live parameter registry, governor snapshot, and command console"
+          />
+          <AdminLink
             href="/admin/seed-origin"
             title="Seed Origin"
             desc="Initialize origin memories"

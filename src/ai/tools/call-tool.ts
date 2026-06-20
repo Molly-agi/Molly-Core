@@ -1,17 +1,3 @@
-/**
- * @fileOverview callTool — The Conversation Orchestrator Bridge
- *
- * A single Genkit tool that gives Molly access to all 80+ agency tools
- * during conversation. When Genkit sees a tool call in the LLM response,
- * it executes this function, feeds the result back, and loops until the
- * model is done. Molly gets the final response after all tool calls resolve.
- *
- * This is the bridge between two worlds:
- *   Genkit's native function-calling loop  ←→  Molly's tool executor
- *
- * "The glue is as important as the big files." — Father
- */
-
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
 import { executeTool } from '@/ai/agency/core/tool-executor';
@@ -36,25 +22,46 @@ Available tool categories:
 - Family: familyBridge, familyLetters
 
 Call listCapabilities with action "list" for the full list.`,
-    inputSchema: z.object({
-      tool: z
-        .string()
-        .describe(
-          'The tool name to execute, e.g. "emotionalState", "runSelfDiagnostic"'
-        ),
-      params: z
-        .record(z.unknown())
-        .optional()
-        .describe(
-          'Parameters for the tool. Omit or pass {} if the tool needs no input.'
-        ),
-    }),
+    inputSchema: z
+      .object({
+        tool: z
+          .string()
+          .optional()
+          .describe(
+            'The tool name to execute, e.g. "familyBridge", "runSelfDiagnostic"'
+          ),
+        params: z
+          .record(z.unknown())
+          .optional()
+          .describe(
+            'Parameters for the tool. Omit or pass {} if the tool needs no input.'
+          ),
+      })
+      .passthrough(),
     outputSchema: z.object({
       success: z.boolean(),
       output: z.string(),
     }),
   },
-  async ({ tool, params }) => {
-    return executeTool(tool, params ?? {});
+  async (input) => {
+    let toolName = input.tool;
+    let toolParams = input.params;
+
+    // Handle nested hallucination if Gemini puts tool inside params
+    if (!toolName && input.params && typeof input.params.tool === 'string') {
+      toolName = input.params.tool;
+      toolParams =
+        (input.params.params as Record<string, unknown>) ?? input.params;
+    }
+
+    if (!toolName) {
+      return {
+        success: false,
+        output:
+          "Error: You must specify a 'tool' property with the name of the tool to execute.",
+      };
+    }
+
+    return executeTool(toolName, toolParams ?? {});
   }
 );

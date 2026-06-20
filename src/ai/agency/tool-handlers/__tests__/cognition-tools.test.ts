@@ -346,8 +346,7 @@ describe('cognition-tools handlers', () => {
   it('horizonGoals returns goal summary with formatted output', async () => {
     mockGetHorizonGoalsSummary.mockResolvedValue({
       totalGoals: 10,
-      activeCount: 2,
-      blockedCount: 1,
+      byStatus: { active: 2, blocked: 1 },
     });
 
     const result = await horizonGoals({ action: 'summary' });
@@ -396,9 +395,9 @@ describe('cognition-tools handlers', () => {
   it('consciousnessMonitor takes snapshot and returns snapshot data', async () => {
     mockTakeConsciousnessSnapshot.mockReturnValue({
       id: 'snap-1',
-      level: 'high',
-      awareness: 0.8,
-      attention: 0.75,
+      overallLevel: 'high',
+      overallScore: 0.8,
+      patterns: [],
     });
 
     const result = await consciousnessMonitor({ action: 'snapshot' });

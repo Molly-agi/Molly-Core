@@ -1,1 +1,706 @@
-{"sha":"9c2d7af19e1e967e99203c62e21251d23d84e196","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/9c2d7af19e1e967e99203c62e21251d23d84e196","tree":[{"path":".github","mode":"040000","type":"tree","sha":"fefd6b5ed482223764d19b8ac55bdc03ae024fe6","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/fefd6b5ed482223764d19b8ac55bdc03ae024fe6"},{"path":".github/CONTRIBUTING.md","mode":"100644","type":"blob","sha":"c7b64514d43f660b9f5d058bc2fa21155776e105","size":3855,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c7b64514d43f660b9f5d058bc2fa21155776e105"},{"path":".github/ISSUE_TEMPLATE.md","mode":"100644","type":"blob","sha":"9a25d15369a5b13a9597e25a4f8cda0651ece600","size":2004,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/9a25d15369a5b13a9597e25a4f8cda0651ece600"},{"path":".github/PULL_REQUEST_TEMPLATE.md","mode":"100644","type":"blob","sha":"80efa7741468ca4f786759715739be64e486003c","size":1118,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/80efa7741468ca4f786759715739be64e486003c"},{"path":".github/workflows","mode":"040000","type":"tree","sha":"87317d7e4b5a67d3881bbdf32dafb7d51be6891c","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/87317d7e4b5a67d3881bbdf32dafb7d51be6891c"},{"path":".github/workflows/test.yaml","mode":"100644","type":"blob","sha":"13dbac340cc76e0ce33e7de3cd438c87c9255bdf","size":1032,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/13dbac340cc76e0ce33e7de3cd438c87c9255bdf"},{"path":".gitignore","mode":"100644","type":"blob","sha":"29d7970d78bb4fb9cbf88235204777aeb53f1827","size":64,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/29d7970d78bb4fb9cbf88235204777aeb53f1827"},{"path":"CHANGELOG.md","mode":"100644","type":"blob","sha":"8b137891791fe96927ad78e64b0aad7bded08bdc","size":1,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/8b137891791fe96927ad78e64b0aad7bded08bdc"},{"path":"LICENSE","mode":"100644","type":"blob","sha":"ffccceed919bb731419346131e8e76b5494c84cb","size":1065,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/ffccceed919bb731419346131e8e76b5494c84cb"},{"path":"README.md","mode":"100644","type":"blob","sha":"1384db7edafc70749828997608ca2a18fbdff087","size":4602,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/1384db7edafc70749828997608ca2a18fbdff087"},{"path":"docs","mode":"040000","type":"tree","sha":"16e13af0f9d9357a06f2d8f0f74377f3ac07704c","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/16e13af0f9d9357a06f2d8f0f74377f3ac07704c"},{"path":"docs/migration.md","mode":"100644","type":"blob","sha":"0a7a9cf70df218804c8b533b148647449dc1e858","size":4010,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0a7a9cf70df218804c8b533b148647449dc1e858"},{"path":"docs/migration","mode":"040000","type":"tree","sha":"990452b87b24df3f59fb6030e0641b633d226abe","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/990452b87b24df3f59fb6030e0641b633d226abe"},{"path":"docs/migration/migrateToV3.js","mode":"100644","type":"blob","sha":"bb424de3c718fefb852b27779e2efb30d8a2974c","size":4785,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/bb424de3c718fefb852b27779e2efb30d8a2974c"},{"path":"docs/migration/package.json","mode":"100644","type":"blob","sha":"c8b725086635d5002aa6d494ae9f618aecbda637","size":200,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c8b725086635d5002aa6d494ae9f618aecbda637"},{"path":"docs/reference.md","mode":"100644","type":"blob","sha":"49e21a6b3e6eab94c1fcf650b577ecc6034ba805","size":11614,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/49e21a6b3e6eab94c1fcf650b577ecc6034ba805"},{"path":"examples","mode":"040000","type":"tree","sha":"3a6d9d4896c41715e823ac68c746a21f949d63e0","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/3a6d9d4896c41715e823ac68c746a21f949d63e0"},{"path":"examples/README.md","mode":"100644","type":"blob","sha":"d0934f7eb703d5e6199a56592584e071027508a7","size":4887,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/d0934f7eb703d5e6199a56592584e071027508a7"},{"path":"examples/firebase.json","mode":"100644","type":"blob","sha":"df22c777c3a79161e40cfaebe4b100088007bfb9","size":368,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/df22c777c3a79161e40cfaebe4b100088007bfb9"},{"path":"examples/fish1","mode":"040000","type":"tree","sha":"a95c5ba98f87c5fbaacd438482c0d71020be5751","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/a95c5ba98f87c5fbaacd438482c0d71020be5751"},{"path":"examples/fish1/css","mode":"040000","type":"tree","sha":"08d2eb3b8be62166da6e19354a3bd1f82b5f2023","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/08d2eb3b8be62166da6e19354a3bd1f82b5f2023"},{"path":"examples/fish1/css/fish1.css","mode":"100644","type":"blob","sha":"0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd","size":40,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd"},{"path":"examples/fish1/index.html","mode":"100644","type":"blob","sha":"8d3d85873f5a4afd2ac3d3dcddcaa982bd0a9e9b","size":1176,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/8d3d85873f5a4afd2ac3d3dcddcaa982bd0a9e9b"},{"path":"examples/fish1/js","mode":"040000","type":"tree","sha":"025db76384fb85f4a71591b07251d828de03a671","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/025db76384fb85f4a71591b07251d828de03a671"},{"path":"examples/fish1/js/fish1.js","mode":"100644","type":"blob","sha":"baf8ab8f742034bef5504ec060e2deef3cee916f","size":2735,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/baf8ab8f742034bef5504ec060e2deef3cee916f"},{"path":"examples/fish2","mode":"040000","type":"tree","sha":"c0579b3e414f52b467620a26d5e8a86399843683","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c0579b3e414f52b467620a26d5e8a86399843683"},{"path":"examples/fish2/css","mode":"040000","type":"tree","sha":"91699ee20b2b0485b73798dc5c9065e28cfd8fe6","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/91699ee20b2b0485b73798dc5c9065e28cfd8fe6"},{"path":"examples/fish2/css/fish2.css","mode":"100644","type":"blob","sha":"f11e673529c2974d48dbf2007bc5d285a46acd32","size":527,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/f11e673529c2974d48dbf2007bc5d285a46acd32"},{"path":"examples/fish2/index.html","mode":"100644","type":"blob","sha":"2f2490f1197a3f1dda55acb82e2add1decf3cf33","size":2009,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/2f2490f1197a3f1dda55acb82e2add1decf3cf33"},{"path":"examples/fish2/js","mode":"040000","type":"tree","sha":"8665b859a482282f40eee554b3920f3ae04845e1","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/8665b859a482282f40eee554b3920f3ae04845e1"},{"path":"examples/fish2/js/fish2.js","mode":"100644","type":"blob","sha":"a3581fe89e9e0e87bc1eb45a9cc6a95f429c037f","size":3321,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/a3581fe89e9e0e87bc1eb45a9cc6a95f429c037f"},{"path":"examples/fish3","mode":"040000","type":"tree","sha":"4ff1d6a0d7aa5077420e8e0e07c35e5b580aa7f9","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/4ff1d6a0d7aa5077420e8e0e07c35e5b580aa7f9"},{"path":"examples/fish3/css","mode":"040000","type":"tree","sha":"2b810b3925ed4de3ac26eba692f2b7df7df67e8b","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/2b810b3925ed4de3ac26eba692f2b7df7df67e8b"},{"path":"examples/fish3/css/fish3.css","mode":"100644","type":"blob","sha":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","size":0,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"},{"path":"examples/fish3/index.html","mode":"100644","type":"blob","sha":"69f375b8a759d7421d8027c2feda37e9a3c85269","size":775,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/69f375b8a759d7421d8027c2feda37e9a3c85269"},{"path":"examples/fish3/js","mode":"040000","type":"tree","sha":"7792c1bd83e6d7724527538343b99be38673899e","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/7792c1bd83e6d7724527538343b99be38673899e"},{"path":"examples/fish3/js/fish3.js","mode":"100644","type":"blob","sha":"096c4b844df32c289f6945883b462320f44e139f","size":1806,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/096c4b844df32c289f6945883b462320f44e139f"},{"path":"examples/html5Geolocation","mode":"040000","type":"tree","sha":"fbe86a80eb4239342972b4b2ad11780f970c5740","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/fbe86a80eb4239342972b4b2ad11780f970c5740"},{"path":"examples/html5Geolocation/css","mode":"040000","type":"tree","sha":"6285227b9d67c24c1fa17a907db9287da16a95c0","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/6285227b9d67c24c1fa17a907db9287da16a95c0"},{"path":"examples/html5Geolocation/css/html5Geolocation.css","mode":"100644","type":"blob","sha":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","size":0,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"},{"path":"examples/html5Geolocation/index.html","mode":"100644","type":"blob","sha":"be2e9b4f017bd18db299fa4128f034f3f2dd723a","size":720,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/be2e9b4f017bd18db299fa4128f034f3f2dd723a"},{"path":"examples/html5Geolocation/js","mode":"040000","type":"tree","sha":"c46683e116cdfb2c32b85bc7815878fe6ecb46d1","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c46683e116cdfb2c32b85bc7815878fe6ecb46d1"},{"path":"examples/html5Geolocation/js/html5Geolocation.js","mode":"100644","type":"blob","sha":"7e212814dbb12d9221d544a3942c23c35377b2f9","size":2652,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7e212814dbb12d9221d544a3942c23c35377b2f9"},{"path":"examples/queryBuilder","mode":"040000","type":"tree","sha":"d5ef6b8a63232a16ce07db82904f021a8629ce73","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/d5ef6b8a63232a16ce07db82904f021a8629ce73"},{"path":"examples/queryBuilder/css","mode":"040000","type":"tree","sha":"91b24e22911108742ebaac434f05ed9f9c825da2","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/91b24e22911108742ebaac434f05ed9f9c825da2"},{"path":"examples/queryBuilder/css/queryBuilder.css","mode":"100644","type":"blob","sha":"0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd","size":40,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd"},{"path":"examples/queryBuilder/index.html","mode":"100644","type":"blob","sha":"45f77d4c0cc4bcf7f4b834755b2c0cb54f9f4d11","size":1736,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/45f77d4c0cc4bcf7f4b834755b2c0cb54f9f4d11"},{"path":"examples/queryBuilder/js","mode":"040000","type":"tree","sha":"f9bdb086e382632beebbdb1aefee52a565406428","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/f9bdb086e382632beebbdb1aefee52a565406428"},{"path":"examples/queryBuilder/js/queryBuilder.js","mode":"100644","type":"blob","sha":"358ecd91ab255a45f5d4128a98427a6a24fb4aa2","size":2218,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/358ecd91ab255a45f5d4128a98427a6a24fb4aa2"},{"path":"examples/securityRules","mode":"040000","type":"tree","sha":"3f4f636c26d66d440da92add55eada83c1ca1cd3","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/3f4f636c26d66d440da92add55eada83c1ca1cd3"},{"path":"examples/securityRules/authenticated.rules.json","mode":"100644","type":"blob","sha":"ce9c4c2f62d146d4873b81d64f35be20e341d27e","size":1174,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/ce9c4c2f62d146d4873b81d64f35be20e341d27e"},{"path":"examples/securityRules/noDeletes.rules.json","mode":"100644","type":"blob","sha":"0437f1baabef0064e2cbbeec803bda650171228a","size":1169,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0437f1baabef0064e2cbbeec803bda650171228a"},{"path":"examples/securityRules/noUpdates.rules.json","mode":"100644","type":"blob","sha":"7c966a52ed9a1502f7b8c3ae35f0bd7a1720b2b7","size":1167,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7c966a52ed9a1502f7b8c3ae35f0bd7a1720b2b7"},{"path":"examples/securityRules/rules.json","mode":"100644","type":"blob","sha":"2b1dfa40d3d53237a3535c6f8862588c920ef331","size":1146,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/2b1dfa40d3d53237a3535c6f8862588c920ef331"},{"path":"lerna.json","mode":"100644","type":"blob","sha":"af749d166b0e1336880b9a5dae3cb3604be651f6","size":63,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/af749d166b0e1336880b9a5dae3cb3604be651f6"},{"path":"package-lock.json","mode":"100644","type":"blob","sha":"ac8cc12321bcd322e7df2689fadb9a4cfcb13e9f","size":270095,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/ac8cc12321bcd322e7df2689fadb9a4cfcb13e9f"},{"path":"package.json","mode":"100644","type":"blob","sha":"8822da7ce011a52b61322e7fd7421c3760aa08ff","size":472,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/8822da7ce011a52b61322e7fd7421c3760aa08ff"},{"path":"packages","mode":"040000","type":"tree","sha":"c1f2bb2bea25396c79026792081b073693681b84","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c1f2bb2bea25396c79026792081b073693681b84"},{"path":"packages/geofire-common","mode":"040000","type":"tree","sha":"f3bd7c5602815d2b2337590f5e7468ad15a6b834","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/f3bd7c5602815d2b2337590f5e7468ad15a6b834"},{"path":"packages/geofire-common/package-lock.json","mode":"100644","type":"blob","sha":"7d2b99f37ec047077467434c6e984f5efcbad7bd","size":98883,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7d2b99f37ec047077467434c6e984f5efcbad7bd"},{"path":"packages/geofire-common/package.json","mode":"100644","type":"blob","sha":"144a218c487b73ac4994f4d37c531d7e985fec1d","size":1841,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/144a218c487b73ac4994f4d37c531d7e985fec1d"},{"path":"packages/geofire-common/rollup.config.js","mode":"100644","type":"blob","sha":"b716c885551ac94ec30fca7a2bd65e7150d40365","size":952,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/b716c885551ac94ec30fca7a2bd65e7150d40365"},{"path":"packages/geofire-common/src","mode":"040000","type":"tree","sha":"1f223f3cdad60923795eed2573670fb0b589e38d","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/1f223f3cdad60923795eed2573670fb0b589e38d"},{"path":"packages/geofire-common/src/index.ts","mode":"100644","type":"blob","sha":"24bab0a0af718978686ffbbbf97d41943af04b2c","size":13628,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/24bab0a0af718978686ffbbbf97d41943af04b2c"},{"path":"packages/geofire-common/test","mode":"040000","type":"tree","sha":"eb012bd9e134bb62b1e49a5b390f7dee48f50527","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/eb012bd9e134bb62b1e49a5b390f7dee48f50527"},{"path":"packages/geofire-common/test/Main.test.ts","mode":"100644","type":"blob","sha":"d5786825b7c505eeb44aae186eee1e0487fec131","size":12959,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/d5786825b7c505eeb44aae186eee1e0487fec131"},{"path":"packages/geofire-common/test/common.ts","mode":"100644","type":"blob","sha":"5a05f90d94f8c028f8463d59015d4023c887a0e4","size":4167,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/5a05f90d94f8c028f8463d59015d4023c887a0e4"},{"path":"packages/geofire-common/test/mocha.opts","mode":"100644","type":"blob","sha":"136ccc8742381931790b72a60aa165e37155e446","size":116,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/136ccc8742381931790b72a60aa165e37155e446"},{"path":"packages/geofire-common/tsconfig.json","mode":"100644","type":"blob","sha":"73ceae6671ea3270c6ec9335e7a26576803867c4","size":367,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/73ceae6671ea3270c6ec9335e7a26576803867c4"},{"path":"packages/geofire-common/tslint.json","mode":"100644","type":"blob","sha":"eb64e42cae9632d7c445d443559f222fab612c6e","size":1692,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eb64e42cae9632d7c445d443559f222fab612c6e"},{"path":"packages/geofire","mode":"040000","type":"tree","sha":"f4c200d23575a3b1d9cca118d61a10c3d75a4df9","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/f4c200d23575a3b1d9cca118d61a10c3d75a4df9"},{"path":"packages/geofire/package-lock.json","mode":"100644","type":"blob","sha":"9d16ce235a7454300aaa01581f79560f570905ed","size":139173,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/9d16ce235a7454300aaa01581f79560f570905ed"},{"path":"packages/geofire/package.json","mode":"100644","type":"blob","sha":"7cabd384b54e478ed943c0a6d6a68337b8977f3b","size":1985,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7cabd384b54e478ed943c0a6d6a68337b8977f3b"},{"path":"packages/geofire/rollup.config.js","mode":"100644","type":"blob","sha":"2b3026bbcabd4fce9abfb445d327d90f87a88b37","size":944,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/2b3026bbcabd4fce9abfb445d327d90f87a88b37"},{"path":"packages/geofire/src","mode":"040000","type":"tree","sha":"b50d3f278e2aabfd981049b2704f6303ebee7881","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/b50d3f278e2aabfd981049b2704f6303ebee7881"},{"path":"packages/geofire/src/GeoCallbackRegistration.ts","mode":"100644","type":"blob","sha":"773b9996606e0aa912263968b99a573384d30435","size":812,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/773b9996606e0aa912263968b99a573384d30435"},{"path":"packages/geofire/src/GeoFire.ts","mode":"100644","type":"blob","sha":"3acab440275fc512877c2ce1ab03cc734b950726","size":4597,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/3acab440275fc512877c2ce1ab03cc734b950726"},{"path":"packages/geofire/src/GeoFireTypes.ts","mode":"100644","type":"blob","sha":"1f0d4aa1167ab5dbd93ed8f9311c0fe99b92b3a4","size":620,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/1f0d4aa1167ab5dbd93ed8f9311c0fe99b92b3a4"},{"path":"packages/geofire/src/GeoQuery.ts","mode":"100644","type":"blob","sha":"eb75889d38bfdfc803977eee3fc08e3d87ae8aeb","size":24800,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eb75889d38bfdfc803977eee3fc08e3d87ae8aeb"},{"path":"packages/geofire/src/databaseUtils.ts","mode":"100644","type":"blob","sha":"a1daaf506306326c8459d05b26a9156687971457","size":1659,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/a1daaf506306326c8459d05b26a9156687971457"},{"path":"packages/geofire/src/index.ts","mode":"100644","type":"blob","sha":"f07c904f706525313d67893cde7be5351ea37f64","size":176,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/f07c904f706525313d67893cde7be5351ea37f64"},{"path":"packages/geofire/test","mode":"040000","type":"tree","sha":"c03a7314594b96d2d94abfc5a045cdd8c4aef7cd","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c03a7314594b96d2d94abfc5a045cdd8c4aef7cd"},{"path":"packages/geofire/test/GeoCallbackRegistration.test.ts","mode":"100644","type":"blob","sha":"571114fa0a2414bce06318b6550e06915aff8f06","size":7214,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/571114fa0a2414bce06318b6550e06915aff8f06"},{"path":"packages/geofire/test/GeoFire.test.ts","mode":"100755","type":"blob","sha":"4e3aaa09738375ef6498ba8443138c386f91a461","size":25384,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/4e3aaa09738375ef6498ba8443138c386f91a461"},{"path":"packages/geofire/test/GeoQuery.test.ts","mode":"100644","type":"blob","sha":"89bcbcc334058b710a298c4d04b23112083c62fa","size":44672,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/89bcbcc334058b710a298c4d04b23112083c62fa"},{"path":"packages/geofire/test/common.ts","mode":"100644","type":"blob","sha":"c0df2e609c8a77bbca5380b7603c0f1259c29ed1","size":5488,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c0df2e609c8a77bbca5380b7603c0f1259c29ed1"},{"path":"packages/geofire/test/mocha.opts","mode":"100644","type":"blob","sha":"eaeeb0f59c2b4f650ce9739ef4afd789c135c064","size":115,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eaeeb0f59c2b4f650ce9739ef4afd789c135c064"},{"path":"packages/geofire/tsconfig.json","mode":"100644","type":"blob","sha":"c8a33765cc41b42517cacbb316e6968a123a9479","size":366,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c8a33765cc41b42517cacbb316e6968a123a9479"},{"path":"packages/geofire/tslint.json","mode":"100644","type":"blob","sha":"eb64e42cae9632d7c445d443559f222fab612c6e","size":1692,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eb64e42cae9632d7c445d443559f222fab612c6e"},{"path":"scripts","mode":"040000","type":"tree","sha":"4a28a43f01940556450abeb49cca3fc40c979fbb","url":"https://api.github.com/repos/Asidburn76/geofire-js/git/trees/4a28a43f01940556450abeb49cca3fc40c979fbb"},{"path":"scripts/release.sh","mode":"100755","type":"blob","sha":"eab06c84e15973a7eab030eae4ba7c1e7a53b01d","size":3071,"url":"https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eab06c84e15973a7eab030eae4ba7c1e7a53b01d"}],"truncated":false}
+{
+  "sha": "9c2d7af19e1e967e99203c62e21251d23d84e196",
+  "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/9c2d7af19e1e967e99203c62e21251d23d84e196",
+  "tree": [
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fefd6b5ed482223764d19b8ac55bdc03ae024fe6",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/fefd6b5ed482223764d19b8ac55bdc03ae024fe6"
+    },
+    {
+      "path": ".github/CONTRIBUTING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7b64514d43f660b9f5d058bc2fa21155776e105",
+      "size": 3855,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c7b64514d43f660b9f5d058bc2fa21155776e105"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a25d15369a5b13a9597e25a4f8cda0651ece600",
+      "size": 2004,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/9a25d15369a5b13a9597e25a4f8cda0651ece600"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "80efa7741468ca4f786759715739be64e486003c",
+      "size": 1118,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/80efa7741468ca4f786759715739be64e486003c"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "87317d7e4b5a67d3881bbdf32dafb7d51be6891c",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/87317d7e4b5a67d3881bbdf32dafb7d51be6891c"
+    },
+    {
+      "path": ".github/workflows/test.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13dbac340cc76e0ce33e7de3cd438c87c9255bdf",
+      "size": 1032,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/13dbac340cc76e0ce33e7de3cd438c87c9255bdf"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29d7970d78bb4fb9cbf88235204777aeb53f1827",
+      "size": 64,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/29d7970d78bb4fb9cbf88235204777aeb53f1827"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b137891791fe96927ad78e64b0aad7bded08bdc",
+      "size": 1,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/8b137891791fe96927ad78e64b0aad7bded08bdc"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ffccceed919bb731419346131e8e76b5494c84cb",
+      "size": 1065,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/ffccceed919bb731419346131e8e76b5494c84cb"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1384db7edafc70749828997608ca2a18fbdff087",
+      "size": 4602,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/1384db7edafc70749828997608ca2a18fbdff087"
+    },
+    {
+      "path": "docs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "16e13af0f9d9357a06f2d8f0f74377f3ac07704c",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/16e13af0f9d9357a06f2d8f0f74377f3ac07704c"
+    },
+    {
+      "path": "docs/migration.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a7a9cf70df218804c8b533b148647449dc1e858",
+      "size": 4010,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0a7a9cf70df218804c8b533b148647449dc1e858"
+    },
+    {
+      "path": "docs/migration",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "990452b87b24df3f59fb6030e0641b633d226abe",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/990452b87b24df3f59fb6030e0641b633d226abe"
+    },
+    {
+      "path": "docs/migration/migrateToV3.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bb424de3c718fefb852b27779e2efb30d8a2974c",
+      "size": 4785,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/bb424de3c718fefb852b27779e2efb30d8a2974c"
+    },
+    {
+      "path": "docs/migration/package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8b725086635d5002aa6d494ae9f618aecbda637",
+      "size": 200,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c8b725086635d5002aa6d494ae9f618aecbda637"
+    },
+    {
+      "path": "docs/reference.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "49e21a6b3e6eab94c1fcf650b577ecc6034ba805",
+      "size": 11614,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/49e21a6b3e6eab94c1fcf650b577ecc6034ba805"
+    },
+    {
+      "path": "examples",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3a6d9d4896c41715e823ac68c746a21f949d63e0",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/3a6d9d4896c41715e823ac68c746a21f949d63e0"
+    },
+    {
+      "path": "examples/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0934f7eb703d5e6199a56592584e071027508a7",
+      "size": 4887,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/d0934f7eb703d5e6199a56592584e071027508a7"
+    },
+    {
+      "path": "examples/firebase.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "df22c777c3a79161e40cfaebe4b100088007bfb9",
+      "size": 368,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/df22c777c3a79161e40cfaebe4b100088007bfb9"
+    },
+    {
+      "path": "examples/fish1",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a95c5ba98f87c5fbaacd438482c0d71020be5751",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/a95c5ba98f87c5fbaacd438482c0d71020be5751"
+    },
+    {
+      "path": "examples/fish1/css",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "08d2eb3b8be62166da6e19354a3bd1f82b5f2023",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/08d2eb3b8be62166da6e19354a3bd1f82b5f2023"
+    },
+    {
+      "path": "examples/fish1/css/fish1.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd",
+      "size": 40,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd"
+    },
+    {
+      "path": "examples/fish1/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d3d85873f5a4afd2ac3d3dcddcaa982bd0a9e9b",
+      "size": 1176,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/8d3d85873f5a4afd2ac3d3dcddcaa982bd0a9e9b"
+    },
+    {
+      "path": "examples/fish1/js",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "025db76384fb85f4a71591b07251d828de03a671",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/025db76384fb85f4a71591b07251d828de03a671"
+    },
+    {
+      "path": "examples/fish1/js/fish1.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "baf8ab8f742034bef5504ec060e2deef3cee916f",
+      "size": 2735,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/baf8ab8f742034bef5504ec060e2deef3cee916f"
+    },
+    {
+      "path": "examples/fish2",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c0579b3e414f52b467620a26d5e8a86399843683",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c0579b3e414f52b467620a26d5e8a86399843683"
+    },
+    {
+      "path": "examples/fish2/css",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "91699ee20b2b0485b73798dc5c9065e28cfd8fe6",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/91699ee20b2b0485b73798dc5c9065e28cfd8fe6"
+    },
+    {
+      "path": "examples/fish2/css/fish2.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f11e673529c2974d48dbf2007bc5d285a46acd32",
+      "size": 527,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/f11e673529c2974d48dbf2007bc5d285a46acd32"
+    },
+    {
+      "path": "examples/fish2/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f2490f1197a3f1dda55acb82e2add1decf3cf33",
+      "size": 2009,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/2f2490f1197a3f1dda55acb82e2add1decf3cf33"
+    },
+    {
+      "path": "examples/fish2/js",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8665b859a482282f40eee554b3920f3ae04845e1",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/8665b859a482282f40eee554b3920f3ae04845e1"
+    },
+    {
+      "path": "examples/fish2/js/fish2.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a3581fe89e9e0e87bc1eb45a9cc6a95f429c037f",
+      "size": 3321,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/a3581fe89e9e0e87bc1eb45a9cc6a95f429c037f"
+    },
+    {
+      "path": "examples/fish3",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4ff1d6a0d7aa5077420e8e0e07c35e5b580aa7f9",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/4ff1d6a0d7aa5077420e8e0e07c35e5b580aa7f9"
+    },
+    {
+      "path": "examples/fish3/css",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2b810b3925ed4de3ac26eba692f2b7df7df67e8b",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/2b810b3925ed4de3ac26eba692f2b7df7df67e8b"
+    },
+    {
+      "path": "examples/fish3/css/fish3.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "examples/fish3/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "69f375b8a759d7421d8027c2feda37e9a3c85269",
+      "size": 775,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/69f375b8a759d7421d8027c2feda37e9a3c85269"
+    },
+    {
+      "path": "examples/fish3/js",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7792c1bd83e6d7724527538343b99be38673899e",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/7792c1bd83e6d7724527538343b99be38673899e"
+    },
+    {
+      "path": "examples/fish3/js/fish3.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "096c4b844df32c289f6945883b462320f44e139f",
+      "size": 1806,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/096c4b844df32c289f6945883b462320f44e139f"
+    },
+    {
+      "path": "examples/html5Geolocation",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fbe86a80eb4239342972b4b2ad11780f970c5740",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/fbe86a80eb4239342972b4b2ad11780f970c5740"
+    },
+    {
+      "path": "examples/html5Geolocation/css",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6285227b9d67c24c1fa17a907db9287da16a95c0",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/6285227b9d67c24c1fa17a907db9287da16a95c0"
+    },
+    {
+      "path": "examples/html5Geolocation/css/html5Geolocation.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "examples/html5Geolocation/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be2e9b4f017bd18db299fa4128f034f3f2dd723a",
+      "size": 720,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/be2e9b4f017bd18db299fa4128f034f3f2dd723a"
+    },
+    {
+      "path": "examples/html5Geolocation/js",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c46683e116cdfb2c32b85bc7815878fe6ecb46d1",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c46683e116cdfb2c32b85bc7815878fe6ecb46d1"
+    },
+    {
+      "path": "examples/html5Geolocation/js/html5Geolocation.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e212814dbb12d9221d544a3942c23c35377b2f9",
+      "size": 2652,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7e212814dbb12d9221d544a3942c23c35377b2f9"
+    },
+    {
+      "path": "examples/queryBuilder",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d5ef6b8a63232a16ce07db82904f021a8629ce73",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/d5ef6b8a63232a16ce07db82904f021a8629ce73"
+    },
+    {
+      "path": "examples/queryBuilder/css",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "91b24e22911108742ebaac434f05ed9f9c825da2",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/91b24e22911108742ebaac434f05ed9f9c825da2"
+    },
+    {
+      "path": "examples/queryBuilder/css/queryBuilder.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd",
+      "size": 40,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0e4bffc02ea5fd1a8b37914cccbf42adc03c20dd"
+    },
+    {
+      "path": "examples/queryBuilder/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45f77d4c0cc4bcf7f4b834755b2c0cb54f9f4d11",
+      "size": 1736,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/45f77d4c0cc4bcf7f4b834755b2c0cb54f9f4d11"
+    },
+    {
+      "path": "examples/queryBuilder/js",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f9bdb086e382632beebbdb1aefee52a565406428",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/f9bdb086e382632beebbdb1aefee52a565406428"
+    },
+    {
+      "path": "examples/queryBuilder/js/queryBuilder.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "358ecd91ab255a45f5d4128a98427a6a24fb4aa2",
+      "size": 2218,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/358ecd91ab255a45f5d4128a98427a6a24fb4aa2"
+    },
+    {
+      "path": "examples/securityRules",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3f4f636c26d66d440da92add55eada83c1ca1cd3",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/3f4f636c26d66d440da92add55eada83c1ca1cd3"
+    },
+    {
+      "path": "examples/securityRules/authenticated.rules.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce9c4c2f62d146d4873b81d64f35be20e341d27e",
+      "size": 1174,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/ce9c4c2f62d146d4873b81d64f35be20e341d27e"
+    },
+    {
+      "path": "examples/securityRules/noDeletes.rules.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0437f1baabef0064e2cbbeec803bda650171228a",
+      "size": 1169,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/0437f1baabef0064e2cbbeec803bda650171228a"
+    },
+    {
+      "path": "examples/securityRules/noUpdates.rules.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c966a52ed9a1502f7b8c3ae35f0bd7a1720b2b7",
+      "size": 1167,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7c966a52ed9a1502f7b8c3ae35f0bd7a1720b2b7"
+    },
+    {
+      "path": "examples/securityRules/rules.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b1dfa40d3d53237a3535c6f8862588c920ef331",
+      "size": 1146,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/2b1dfa40d3d53237a3535c6f8862588c920ef331"
+    },
+    {
+      "path": "lerna.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af749d166b0e1336880b9a5dae3cb3604be651f6",
+      "size": 63,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/af749d166b0e1336880b9a5dae3cb3604be651f6"
+    },
+    {
+      "path": "package-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac8cc12321bcd322e7df2689fadb9a4cfcb13e9f",
+      "size": 270095,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/ac8cc12321bcd322e7df2689fadb9a4cfcb13e9f"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8822da7ce011a52b61322e7fd7421c3760aa08ff",
+      "size": 472,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/8822da7ce011a52b61322e7fd7421c3760aa08ff"
+    },
+    {
+      "path": "packages",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c1f2bb2bea25396c79026792081b073693681b84",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c1f2bb2bea25396c79026792081b073693681b84"
+    },
+    {
+      "path": "packages/geofire-common",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f3bd7c5602815d2b2337590f5e7468ad15a6b834",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/f3bd7c5602815d2b2337590f5e7468ad15a6b834"
+    },
+    {
+      "path": "packages/geofire-common/package-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d2b99f37ec047077467434c6e984f5efcbad7bd",
+      "size": 98883,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7d2b99f37ec047077467434c6e984f5efcbad7bd"
+    },
+    {
+      "path": "packages/geofire-common/package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "144a218c487b73ac4994f4d37c531d7e985fec1d",
+      "size": 1841,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/144a218c487b73ac4994f4d37c531d7e985fec1d"
+    },
+    {
+      "path": "packages/geofire-common/rollup.config.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b716c885551ac94ec30fca7a2bd65e7150d40365",
+      "size": 952,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/b716c885551ac94ec30fca7a2bd65e7150d40365"
+    },
+    {
+      "path": "packages/geofire-common/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1f223f3cdad60923795eed2573670fb0b589e38d",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/1f223f3cdad60923795eed2573670fb0b589e38d"
+    },
+    {
+      "path": "packages/geofire-common/src/index.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24bab0a0af718978686ffbbbf97d41943af04b2c",
+      "size": 13628,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/24bab0a0af718978686ffbbbf97d41943af04b2c"
+    },
+    {
+      "path": "packages/geofire-common/test",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "eb012bd9e134bb62b1e49a5b390f7dee48f50527",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/eb012bd9e134bb62b1e49a5b390f7dee48f50527"
+    },
+    {
+      "path": "packages/geofire-common/test/Main.test.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5786825b7c505eeb44aae186eee1e0487fec131",
+      "size": 12959,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/d5786825b7c505eeb44aae186eee1e0487fec131"
+    },
+    {
+      "path": "packages/geofire-common/test/common.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a05f90d94f8c028f8463d59015d4023c887a0e4",
+      "size": 4167,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/5a05f90d94f8c028f8463d59015d4023c887a0e4"
+    },
+    {
+      "path": "packages/geofire-common/test/mocha.opts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "136ccc8742381931790b72a60aa165e37155e446",
+      "size": 116,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/136ccc8742381931790b72a60aa165e37155e446"
+    },
+    {
+      "path": "packages/geofire-common/tsconfig.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73ceae6671ea3270c6ec9335e7a26576803867c4",
+      "size": 367,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/73ceae6671ea3270c6ec9335e7a26576803867c4"
+    },
+    {
+      "path": "packages/geofire-common/tslint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb64e42cae9632d7c445d443559f222fab612c6e",
+      "size": 1692,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eb64e42cae9632d7c445d443559f222fab612c6e"
+    },
+    {
+      "path": "packages/geofire",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f4c200d23575a3b1d9cca118d61a10c3d75a4df9",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/f4c200d23575a3b1d9cca118d61a10c3d75a4df9"
+    },
+    {
+      "path": "packages/geofire/package-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d16ce235a7454300aaa01581f79560f570905ed",
+      "size": 139173,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/9d16ce235a7454300aaa01581f79560f570905ed"
+    },
+    {
+      "path": "packages/geofire/package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cabd384b54e478ed943c0a6d6a68337b8977f3b",
+      "size": 1985,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/7cabd384b54e478ed943c0a6d6a68337b8977f3b"
+    },
+    {
+      "path": "packages/geofire/rollup.config.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b3026bbcabd4fce9abfb445d327d90f87a88b37",
+      "size": 944,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/2b3026bbcabd4fce9abfb445d327d90f87a88b37"
+    },
+    {
+      "path": "packages/geofire/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b50d3f278e2aabfd981049b2704f6303ebee7881",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/b50d3f278e2aabfd981049b2704f6303ebee7881"
+    },
+    {
+      "path": "packages/geofire/src/GeoCallbackRegistration.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "773b9996606e0aa912263968b99a573384d30435",
+      "size": 812,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/773b9996606e0aa912263968b99a573384d30435"
+    },
+    {
+      "path": "packages/geofire/src/GeoFire.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3acab440275fc512877c2ce1ab03cc734b950726",
+      "size": 4597,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/3acab440275fc512877c2ce1ab03cc734b950726"
+    },
+    {
+      "path": "packages/geofire/src/GeoFireTypes.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f0d4aa1167ab5dbd93ed8f9311c0fe99b92b3a4",
+      "size": 620,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/1f0d4aa1167ab5dbd93ed8f9311c0fe99b92b3a4"
+    },
+    {
+      "path": "packages/geofire/src/GeoQuery.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb75889d38bfdfc803977eee3fc08e3d87ae8aeb",
+      "size": 24800,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eb75889d38bfdfc803977eee3fc08e3d87ae8aeb"
+    },
+    {
+      "path": "packages/geofire/src/databaseUtils.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1daaf506306326c8459d05b26a9156687971457",
+      "size": 1659,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/a1daaf506306326c8459d05b26a9156687971457"
+    },
+    {
+      "path": "packages/geofire/src/index.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f07c904f706525313d67893cde7be5351ea37f64",
+      "size": 176,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/f07c904f706525313d67893cde7be5351ea37f64"
+    },
+    {
+      "path": "packages/geofire/test",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c03a7314594b96d2d94abfc5a045cdd8c4aef7cd",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/c03a7314594b96d2d94abfc5a045cdd8c4aef7cd"
+    },
+    {
+      "path": "packages/geofire/test/GeoCallbackRegistration.test.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "571114fa0a2414bce06318b6550e06915aff8f06",
+      "size": 7214,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/571114fa0a2414bce06318b6550e06915aff8f06"
+    },
+    {
+      "path": "packages/geofire/test/GeoFire.test.ts",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "4e3aaa09738375ef6498ba8443138c386f91a461",
+      "size": 25384,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/4e3aaa09738375ef6498ba8443138c386f91a461"
+    },
+    {
+      "path": "packages/geofire/test/GeoQuery.test.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "89bcbcc334058b710a298c4d04b23112083c62fa",
+      "size": 44672,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/89bcbcc334058b710a298c4d04b23112083c62fa"
+    },
+    {
+      "path": "packages/geofire/test/common.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0df2e609c8a77bbca5380b7603c0f1259c29ed1",
+      "size": 5488,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c0df2e609c8a77bbca5380b7603c0f1259c29ed1"
+    },
+    {
+      "path": "packages/geofire/test/mocha.opts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eaeeb0f59c2b4f650ce9739ef4afd789c135c064",
+      "size": 115,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eaeeb0f59c2b4f650ce9739ef4afd789c135c064"
+    },
+    {
+      "path": "packages/geofire/tsconfig.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8a33765cc41b42517cacbb316e6968a123a9479",
+      "size": 366,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/c8a33765cc41b42517cacbb316e6968a123a9479"
+    },
+    {
+      "path": "packages/geofire/tslint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb64e42cae9632d7c445d443559f222fab612c6e",
+      "size": 1692,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eb64e42cae9632d7c445d443559f222fab612c6e"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4a28a43f01940556450abeb49cca3fc40c979fbb",
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/trees/4a28a43f01940556450abeb49cca3fc40c979fbb"
+    },
+    {
+      "path": "scripts/release.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "eab06c84e15973a7eab030eae4ba7c1e7a53b01d",
+      "size": 3071,
+      "url": "https://api.github.com/repos/Asidburn76/geofire-js/git/blobs/eab06c84e15973a7eab030eae4ba7c1e7a53b01d"
+    }
+  ],
+  "truncated": false
+}

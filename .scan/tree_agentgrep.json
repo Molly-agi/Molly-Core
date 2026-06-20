@@ -1,1 +1,274 @@
-{"sha":"63e420bb4e035490d28cbca3f58e26baf297048e","url":"https://api.github.com/repos/Asidburn76/agentgrep/git/trees/63e420bb4e035490d28cbca3f58e26baf297048e","tree":[{"path":".gitignore","mode":"100644","type":"blob","sha":"36af0a5db37b7d3080b5cb819700cc9998735a25","size":47,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/36af0a5db37b7d3080b5cb819700cc9998735a25"},{"path":"Cargo.toml","mode":"100644","type":"blob","sha":"8fe3a19e27054a8041e166ffdb6162611c3f6a36","size":389,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/8fe3a19e27054a8041e166ffdb6162611c3f6a36"},{"path":"README.md","mode":"100644","type":"blob","sha":"8727eddece21892b9bc86ee7241bcc55db70ae70","size":13785,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/8727eddece21892b9bc86ee7241bcc55db70ae70"},{"path":"assets","mode":"040000","type":"tree","sha":"f1191fcdc0d9254f028b0c877ff1abaa9305403b","url":"https://api.github.com/repos/Asidburn76/agentgrep/git/trees/f1191fcdc0d9254f028b0c877ff1abaa9305403b"},{"path":"assets/demos","mode":"040000","type":"tree","sha":"b7f7d9eb525dd4ddaeae77e4e6ac6c627af75f72","url":"https://api.github.com/repos/Asidburn76/agentgrep/git/trees/b7f7d9eb525dd4ddaeae77e4e6ac6c627af75f72"},{"path":"assets/demos/agentgrep_navigation_race.mp4","mode":"100644","type":"blob","sha":"52a39bbb386b4d9785fa58839387d0cf53f4a02f","size":4656949,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/52a39bbb386b4d9785fa58839387d0cf53f4a02f"},{"path":"assets/demos/agentgrep_navigation_race_preview.gif","mode":"100644","type":"blob","sha":"9e2ec63b93d13841d5ac8fd17b8276962ef4464c","size":1397595,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/9e2ec63b93d13841d5ac8fd17b8276962ef4464c"},{"path":"assets/demos/rg_navigation_race.mp4","mode":"100644","type":"blob","sha":"bad1bb680b06a8251da72d62db4719a8c5256eae","size":5422349,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/bad1bb680b06a8251da72d62db4719a8c5256eae"},{"path":"assets/demos/rg_navigation_race_preview.gif","mode":"100644","type":"blob","sha":"1b4568ef5cb792c6bd47f69e4f4e0a180ea99c42","size":1331824,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/1b4568ef5cb792c6bd47f69e4f4e0a180ea99c42"},{"path":"docs","mode":"040000","type":"tree","sha":"70efad4434608d457ceee5cc833dbed4428bab0c","url":"https://api.github.com/repos/Asidburn76/agentgrep/git/trees/70efad4434608d457ceee5cc833dbed4428bab0c"},{"path":"docs/ARCHITECTURE.md","mode":"100644","type":"blob","sha":"4f1b4ec7522ef18d6300cbf34579bb6b58203e58","size":4957,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/4f1b4ec7522ef18d6300cbf34579bb6b58203e58"},{"path":"docs/BENCHMARKS.md","mode":"100644","type":"blob","sha":"aaababb3189bffca212dda530d75efc532b69de9","size":7737,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/aaababb3189bffca212dda530d75efc532b69de9"},{"path":"docs/HARNESS_CONTEXT.md","mode":"100644","type":"blob","sha":"361a4aeb75b3d2c67131e4d5cccac0aeeaf8bce2","size":13434,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/361a4aeb75b3d2c67131e4d5cccac0aeeaf8bce2"},{"path":"docs/IMPLEMENTATION_PLAN.md","mode":"100644","type":"blob","sha":"c19949957caee5de16e5cbec5e72555e21b0230e","size":2886,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/c19949957caee5de16e5cbec5e72555e21b0230e"},{"path":"docs/INTERFACE.md","mode":"100644","type":"blob","sha":"d4aa04a42d9f5fd132721083995defc43e308cb7","size":3871,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/d4aa04a42d9f5fd132721083995defc43e308cb7"},{"path":"docs/QUERY_INTENT.md","mode":"100644","type":"blob","sha":"9aa017cf6d4c86696fc8941c2a99bf8c3a6aa793","size":4076,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/9aa017cf6d4c86696fc8941c2a99bf8c3a6aa793"},{"path":"docs/SMART_OUTPUT.md","mode":"100644","type":"blob","sha":"40f0bcd66b7d20ff35353e61c549ab7b86bc5001","size":7848,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/40f0bcd66b7d20ff35353e61c549ab7b86bc5001"},{"path":"scripts","mode":"040000","type":"tree","sha":"cebe6aa5016116f0e7e43d85ce2d73d9b86986fd","url":"https://api.github.com/repos/Asidburn76/agentgrep/git/trees/cebe6aa5016116f0e7e43d85ce2d73d9b86986fd"},{"path":"scripts/benchmark.sh","mode":"100755","type":"blob","sha":"66d931d17adba6952679db6aca4ac3e87947016c","size":2270,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/66d931d17adba6952679db6aca4ac3e87947016c"},{"path":"scripts/benchmark_matrix.sh","mode":"100755","type":"blob","sha":"78ac470bcb644223071194934b26c59dc16be9a5","size":2985,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/78ac470bcb644223071194934b26c59dc16be9a5"},{"path":"scripts/generate_synthetic_corpus.py","mode":"100755","type":"blob","sha":"119ba21f90622b508675e8de116bb42bf162cf6a","size":3712,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/119ba21f90622b508675e8de116bb42bf162cf6a"},{"path":"scripts/smoke.sh","mode":"100755","type":"blob","sha":"7a4ffd093067d925c06ead204e5af99c3b226784","size":917,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/7a4ffd093067d925c06ead204e5af99c3b226784"},{"path":"src","mode":"040000","type":"tree","sha":"c9bdb0d5bc4a15006ef419aa3118e358de41c4f9","url":"https://api.github.com/repos/Asidburn76/agentgrep/git/trees/c9bdb0d5bc4a15006ef419aa3118e358de41c4f9"},{"path":"src/cli.rs","mode":"100644","type":"blob","sha":"a64f81bb7b8942a8565e258a4702f4dc46fac770","size":4761,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/a64f81bb7b8942a8565e258a4702f4dc46fac770"},{"path":"src/context.rs","mode":"100644","type":"blob","sha":"c8614b8833b4949a87232f7e8ec6dda1e3f817bb","size":8798,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/c8614b8833b4949a87232f7e8ec6dda1e3f817bb"},{"path":"src/find.rs","mode":"100644","type":"blob","sha":"5d488f9db8c6ad2598914bfc7828c4781355ea04","size":8451,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/5d488f9db8c6ad2598914bfc7828c4781355ea04"},{"path":"src/lib.rs","mode":"100644","type":"blob","sha":"36c17e87e50d1c03045e93bd7197c733b6ebaf23","size":156,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/36c17e87e50d1c03045e93bd7197c733b6ebaf23"},{"path":"src/main.rs","mode":"100644","type":"blob","sha":"cc24a0267552c379af3851bbc88c7048a47e6d56","size":16626,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/cc24a0267552c379af3851bbc88c7048a47e6d56"},{"path":"src/outline.rs","mode":"100644","type":"blob","sha":"f95dc58f891b46c267dfa65aaded9cbffc82db30","size":5730,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/f95dc58f891b46c267dfa65aaded9cbffc82db30"},{"path":"src/search.rs","mode":"100644","type":"blob","sha":"96b2938b6954417579c8fde9011a92d1beae038e","size":35104,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/96b2938b6954417579c8fde9011a92d1beae038e"},{"path":"src/smart_dsl.rs","mode":"100644","type":"blob","sha":"2eaf30b8296734ce90122d03b1af536b0447eaec","size":7426,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/2eaf30b8296734ce90122d03b1af536b0447eaec"},{"path":"src/smart_engine.rs","mode":"100644","type":"blob","sha":"988eda4a227618b3577e4b1318dc275b25c2568f","size":32613,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/988eda4a227618b3577e4b1318dc275b25c2568f"},{"path":"src/structure.rs","mode":"100644","type":"blob","sha":"3c590d1c5b11346e17fc4aa7fb7c432834dec11a","size":13132,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/3c590d1c5b11346e17fc4aa7fb7c432834dec11a"},{"path":"src/workspace.rs","mode":"100644","type":"blob","sha":"1cbc6fda60c33adb0ef4d14e00d300327c2738bb","size":3041,"url":"https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/1cbc6fda60c33adb0ef4d14e00d300327c2738bb"}],"truncated":false}
+{
+  "sha": "63e420bb4e035490d28cbca3f58e26baf297048e",
+  "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/trees/63e420bb4e035490d28cbca3f58e26baf297048e",
+  "tree": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36af0a5db37b7d3080b5cb819700cc9998735a25",
+      "size": 47,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/36af0a5db37b7d3080b5cb819700cc9998735a25"
+    },
+    {
+      "path": "Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8fe3a19e27054a8041e166ffdb6162611c3f6a36",
+      "size": 389,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/8fe3a19e27054a8041e166ffdb6162611c3f6a36"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8727eddece21892b9bc86ee7241bcc55db70ae70",
+      "size": 13785,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/8727eddece21892b9bc86ee7241bcc55db70ae70"
+    },
+    {
+      "path": "assets",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f1191fcdc0d9254f028b0c877ff1abaa9305403b",
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/trees/f1191fcdc0d9254f028b0c877ff1abaa9305403b"
+    },
+    {
+      "path": "assets/demos",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b7f7d9eb525dd4ddaeae77e4e6ac6c627af75f72",
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/trees/b7f7d9eb525dd4ddaeae77e4e6ac6c627af75f72"
+    },
+    {
+      "path": "assets/demos/agentgrep_navigation_race.mp4",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "52a39bbb386b4d9785fa58839387d0cf53f4a02f",
+      "size": 4656949,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/52a39bbb386b4d9785fa58839387d0cf53f4a02f"
+    },
+    {
+      "path": "assets/demos/agentgrep_navigation_race_preview.gif",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e2ec63b93d13841d5ac8fd17b8276962ef4464c",
+      "size": 1397595,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/9e2ec63b93d13841d5ac8fd17b8276962ef4464c"
+    },
+    {
+      "path": "assets/demos/rg_navigation_race.mp4",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bad1bb680b06a8251da72d62db4719a8c5256eae",
+      "size": 5422349,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/bad1bb680b06a8251da72d62db4719a8c5256eae"
+    },
+    {
+      "path": "assets/demos/rg_navigation_race_preview.gif",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b4568ef5cb792c6bd47f69e4f4e0a180ea99c42",
+      "size": 1331824,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/1b4568ef5cb792c6bd47f69e4f4e0a180ea99c42"
+    },
+    {
+      "path": "docs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "70efad4434608d457ceee5cc833dbed4428bab0c",
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/trees/70efad4434608d457ceee5cc833dbed4428bab0c"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f1b4ec7522ef18d6300cbf34579bb6b58203e58",
+      "size": 4957,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/4f1b4ec7522ef18d6300cbf34579bb6b58203e58"
+    },
+    {
+      "path": "docs/BENCHMARKS.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aaababb3189bffca212dda530d75efc532b69de9",
+      "size": 7737,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/aaababb3189bffca212dda530d75efc532b69de9"
+    },
+    {
+      "path": "docs/HARNESS_CONTEXT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "361a4aeb75b3d2c67131e4d5cccac0aeeaf8bce2",
+      "size": 13434,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/361a4aeb75b3d2c67131e4d5cccac0aeeaf8bce2"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_PLAN.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c19949957caee5de16e5cbec5e72555e21b0230e",
+      "size": 2886,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/c19949957caee5de16e5cbec5e72555e21b0230e"
+    },
+    {
+      "path": "docs/INTERFACE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4aa04a42d9f5fd132721083995defc43e308cb7",
+      "size": 3871,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/d4aa04a42d9f5fd132721083995defc43e308cb7"
+    },
+    {
+      "path": "docs/QUERY_INTENT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9aa017cf6d4c86696fc8941c2a99bf8c3a6aa793",
+      "size": 4076,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/9aa017cf6d4c86696fc8941c2a99bf8c3a6aa793"
+    },
+    {
+      "path": "docs/SMART_OUTPUT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40f0bcd66b7d20ff35353e61c549ab7b86bc5001",
+      "size": 7848,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/40f0bcd66b7d20ff35353e61c549ab7b86bc5001"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cebe6aa5016116f0e7e43d85ce2d73d9b86986fd",
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/trees/cebe6aa5016116f0e7e43d85ce2d73d9b86986fd"
+    },
+    {
+      "path": "scripts/benchmark.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "66d931d17adba6952679db6aca4ac3e87947016c",
+      "size": 2270,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/66d931d17adba6952679db6aca4ac3e87947016c"
+    },
+    {
+      "path": "scripts/benchmark_matrix.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "78ac470bcb644223071194934b26c59dc16be9a5",
+      "size": 2985,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/78ac470bcb644223071194934b26c59dc16be9a5"
+    },
+    {
+      "path": "scripts/generate_synthetic_corpus.py",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "119ba21f90622b508675e8de116bb42bf162cf6a",
+      "size": 3712,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/119ba21f90622b508675e8de116bb42bf162cf6a"
+    },
+    {
+      "path": "scripts/smoke.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "7a4ffd093067d925c06ead204e5af99c3b226784",
+      "size": 917,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/7a4ffd093067d925c06ead204e5af99c3b226784"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c9bdb0d5bc4a15006ef419aa3118e358de41c4f9",
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/trees/c9bdb0d5bc4a15006ef419aa3118e358de41c4f9"
+    },
+    {
+      "path": "src/cli.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a64f81bb7b8942a8565e258a4702f4dc46fac770",
+      "size": 4761,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/a64f81bb7b8942a8565e258a4702f4dc46fac770"
+    },
+    {
+      "path": "src/context.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8614b8833b4949a87232f7e8ec6dda1e3f817bb",
+      "size": 8798,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/c8614b8833b4949a87232f7e8ec6dda1e3f817bb"
+    },
+    {
+      "path": "src/find.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5d488f9db8c6ad2598914bfc7828c4781355ea04",
+      "size": 8451,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/5d488f9db8c6ad2598914bfc7828c4781355ea04"
+    },
+    {
+      "path": "src/lib.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36c17e87e50d1c03045e93bd7197c733b6ebaf23",
+      "size": 156,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/36c17e87e50d1c03045e93bd7197c733b6ebaf23"
+    },
+    {
+      "path": "src/main.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc24a0267552c379af3851bbc88c7048a47e6d56",
+      "size": 16626,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/cc24a0267552c379af3851bbc88c7048a47e6d56"
+    },
+    {
+      "path": "src/outline.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f95dc58f891b46c267dfa65aaded9cbffc82db30",
+      "size": 5730,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/f95dc58f891b46c267dfa65aaded9cbffc82db30"
+    },
+    {
+      "path": "src/search.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "96b2938b6954417579c8fde9011a92d1beae038e",
+      "size": 35104,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/96b2938b6954417579c8fde9011a92d1beae038e"
+    },
+    {
+      "path": "src/smart_dsl.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2eaf30b8296734ce90122d03b1af536b0447eaec",
+      "size": 7426,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/2eaf30b8296734ce90122d03b1af536b0447eaec"
+    },
+    {
+      "path": "src/smart_engine.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "988eda4a227618b3577e4b1318dc275b25c2568f",
+      "size": 32613,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/988eda4a227618b3577e4b1318dc275b25c2568f"
+    },
+    {
+      "path": "src/structure.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c590d1c5b11346e17fc4aa7fb7c432834dec11a",
+      "size": 13132,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/3c590d1c5b11346e17fc4aa7fb7c432834dec11a"
+    },
+    {
+      "path": "src/workspace.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1cbc6fda60c33adb0ef4d14e00d300327c2738bb",
+      "size": 3041,
+      "url": "https://api.github.com/repos/Asidburn76/agentgrep/git/blobs/1cbc6fda60c33adb0ef4d14e00d300327c2738bb"
+    }
+  ],
+  "truncated": false
+}

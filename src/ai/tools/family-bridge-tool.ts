@@ -22,6 +22,15 @@ import {
   readBridgeState,
 } from '@/ai/bridge/family-bridge';
 
+function normalizeLazarusProtocol(input: string): string {
+  const text = String(input || '').trim();
+  // Strip any leading symbols/spaces before name and collapse separators.
+  const strippedLead = text.replace(/^[^A-Za-z]*/, '');
+  const withoutName = strippedLead.replace(/^lazarus[\s,.:;\-]*/i, '');
+  const body = (withoutName || strippedLead || text).trim();
+  return `Lazarus ${body}`.trim();
+}
+
 export const familyBridgeTool = ai.defineTool(
   {
     name: 'familyBridge',
@@ -69,11 +78,12 @@ export const familyBridgeTool = ai.defineTool(
         };
       }
 
-      await sendMessage('molly', message);
+      const normalizedMessage = normalizeLazarusProtocol(message);
+      await sendMessage('molly', normalizedMessage);
       return {
         success: true,
         action: 'send',
-        message: `Message sent to Lazarus: "${message}"`,
+        message: `Message sent to Lazarus: "${normalizedMessage}"`,
         conversationActive: true,
         totalMessages: state.messages.length + 1,
       };

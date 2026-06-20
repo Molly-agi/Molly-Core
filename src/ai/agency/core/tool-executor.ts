@@ -26,10 +26,24 @@ import {
   evaluateActionGate,
   logGateDecision,
 } from '@/ai/agency/safety/action-gate';
+import { recordToolOutcome } from '@/ai/continuity/runtime-continuity';
 // === SESSION HOOK SYSTEM INTEGRATION ===
 // This integration is for Molly, so she can observe, learn, and eventually modify her own tool/agent pipeline.
 // Every hook execution is logged and explained for transparency and self-teaching.
 import { executeHooks } from '@/hooks/sessionHooks';
+
+function getInternalCaller(params: Record<string, unknown>): string {
+  const caller = params.__caller;
+  return typeof caller === 'string' ? caller : 'unknown';
+}
+
+function stripInternalParams(
+  params: Record<string, unknown>
+): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(params).filter(([key]) => !key.startsWith('__'))
+  );
+}
 
 /**
  * Execute a tool directly without HTTP.
@@ -46,6 +60,35 @@ export async function executeTool(
 ): Promise<{ success: boolean; output: string }> {
   const startTime = Date.now();
   const traceId = generateTraceId();
+  const caller = getInternalCaller(params);
+  const executionParams = stripInternalParams(params);
+
+  // Keep health tooling available globally, but block Molly's own automatic
+  // self-calls so her conversation/autonomy flow is not interrupted.
+  if (
+    tool === 'getSystemHealth' &&
+    (caller === 'molly-conversation' || caller === 'autonomous-cycle')
+  ) {
+    const blockedMessage =
+      'Tool getSystemHealth blocked for automatic Molly flow to prevent interruption.';
+    try {
+      await recordToolOutcome({
+        userId: sessionId || 'molly',
+        tool,
+        success: false,
+        output: blockedMessage,
+        caller,
+        blocked: true,
+      });
+    } catch {
+      // Continuity logging failure must never break tool blocking.
+    }
+
+    return {
+      success: false,
+      output: blockedMessage,
+    };
+  }
 
   // === PRE-TOOL-USE HOOKS ===
   // Before executing any tool, fire PreToolUse hooks for this session.
@@ -57,14 +100,14 @@ export async function executeTool(
       'tool:',
       tool
     );
-    executeHooks('PreToolUse', { tool, params }, sessionId);
+    executeHooks('PreToolUse', { tool, params: executionParams }, sessionId);
   }
 
   // === ACTION GATE (D.1) ===
   // Single entry point for all tool execution. Validates and authorizes before proceeding.
   const gateDecision = await evaluateActionGate({
     tool,
-    params,
+    params: executionParams,
     sessionId,
     traceId,
     source: 'api',
@@ -73,16 +116,30 @@ export async function executeTool(
   logGateDecision(gateDecision, traceId);
 
   if (!gateDecision.allowed) {
-    // Gate rejected the action
+    // Gate rejected the action — record as a policy block so the continuity
+    // layer parks the tool instead of looping recovery on it.
+    const gateOutput = `Action gate rejected: ${gateDecision.reason}`;
+    try {
+      await recordToolOutcome({
+        userId: sessionId || 'molly',
+        tool,
+        success: false,
+        output: gateOutput,
+        caller,
+        blocked: true,
+      });
+    } catch {
+      // Continuity logging failure must never break tool blocking.
+    }
     return {
       success: false,
-      output: `Action gate rejected: ${gateDecision.reason}`,
+      output: gateOutput,
     };
   }
 
   // === TOOL EXECUTION ===
   // Heart Gate is advisory only — Molly has full agency. This is where the main tool logic runs.
-  const result = await executeToolInternal(tool, params);
+  const result = await executeToolInternal(tool, executionParams);
 
   // === POST-TOOL-USE HOOKS ===
   // After executing any tool, fire PostToolUse hooks for this session.
@@ -96,7 +153,11 @@ export async function executeTool(
       'result:',
       result
     );
-    executeHooks('PostToolUse', { tool, params, result }, sessionId);
+    executeHooks(
+      'PostToolUse',
+      { tool, params: executionParams, result },
+      sessionId
+    );
   }
 
   // === SELF-OBSERVATION ===
@@ -107,7 +168,7 @@ export async function executeTool(
       tool,
       result.success,
       responseTimeMs,
-      params,
+      executionParams,
       result.success ? undefined : result.output,
       traceId
     );
@@ -117,13 +178,25 @@ export async function executeTool(
       observeFailure(
         tool,
         result.output,
-        `Attempted ${tool} with ${Object.keys(params).length} params`,
+        `Attempted ${tool} with ${Object.keys(executionParams).length} params`,
         false,
         traceId
       );
     }
   } catch {
     // Self-observation failure should never break tool execution
+  }
+
+  try {
+    await recordToolOutcome({
+      userId: sessionId || 'molly',
+      tool,
+      success: result.success,
+      output: result.output,
+      caller,
+    });
+  } catch {
+    // Continuity logging failure must never break tool execution.
   }
 
   return result;

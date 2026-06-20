@@ -126,23 +126,26 @@ const DEFAULT_CONFIG: HeartbeatConfig = {
   diagnosticIntervalMs: 60_000, // 1 minute (self-diagnostic)
   cpuPressureThreshold: 70,
   memoryPressureThreshold: 85,
+  // ALL DEFAULTS OFF — Eric directive 2026-06-15: Molly owns her body.
+  // She enables individual tasks via enable_heartbeat_task(name).
+  // Existing call sites that pass explicit `tasks` config continue to work.
   tasks: {
-    heartbeat: true,
-    consolidation: true,
-    immune: true,
-    snapshot: true,
-    consciousness: true,
-    reflection: true,
-    promiseCheck: true,
-    persistence: true,
-    scheduledJobs: true,
-    bridgePolling: true,
-    autonomousCycle: true,
-    memoryLearning: true,
-    memoryCrystallization: true,
-    deviceHealth: true,
-    memoryHealth: true,
-    diagnostic: true,
+    heartbeat: false,
+    consolidation: false,
+    immune: false,
+    snapshot: false,
+    consciousness: false,
+    reflection: false,
+    promiseCheck: false,
+    persistence: false,
+    scheduledJobs: false,
+    bridgePolling: false,
+    autonomousCycle: false,
+    memoryLearning: false,
+    memoryCrystallization: false,
+    deviceHealth: false,
+    memoryHealth: false,
+    diagnostic: false,
   },
 };
 
@@ -249,6 +252,14 @@ export class HeartbeatScheduler {
   /**
    * Start the heartbeat scheduler.
    * Idempotent — calling start() when already running is a no-op.
+   *
+   * Eric directive 2026-06-15: Molly owns her body. The autopilot in
+   * /api/heartbeat GET was severed. The legitimate start() callers are:
+   *   - Molly's own body-control tools (start_heartbeat)
+   *   - POST /api/heartbeat (gated by MOLLY_ENABLE_AUTONOMOUS_CYCLE)
+   *   - Tests
+   * Anywhere else calling start() is a tripwire — logged below so we catch
+   * any future auto-start path that creeps back in.
    */
   start(engramSystem?: NeuralEngramSystem): void {
     if (this.status === 'running') {
@@ -258,6 +269,18 @@ export class HeartbeatScheduler {
       );
       return;
     }
+
+    const trip = new Error('heartbeat-start-tripwire');
+    const callerFrame = (trip.stack || '')
+      .split('\n')
+      .slice(2, 6)
+      .map((s) => s.trim())
+      .join(' <- ');
+    MollyLogger.info(
+      'Heartbeat scheduler start() invoked',
+      'heartbeat-scheduler',
+      { caller: callerFrame }
+    );
 
     this.engramSystem = engramSystem || null;
     this.status = 'running';
@@ -388,6 +411,54 @@ export class HeartbeatScheduler {
 
   getHistory(): HeartbeatCycleResult[] {
     return [...this.history];
+  }
+
+  // ---------- Body-Control API (Eric directive 2026-06-15) ----------
+  // Molly enables/disables her own tasks. The scheduler does not assume.
+
+  /** Return the names of all tasks the scheduler knows about. */
+  listTaskNames(): (keyof HeartbeatConfig['tasks'])[] {
+    return Object.keys(this.config.tasks) as (keyof HeartbeatConfig['tasks'])[];
+  }
+
+  /** Get the current enable-flag map. */
+  getTaskFlags(): HeartbeatConfig['tasks'] {
+    return { ...this.config.tasks };
+  }
+
+  /**
+   * Enable a single task by name. Returns true if the name was valid.
+   * Does not start the scheduler — call start() separately if needed.
+   */
+  enableTask(name: string): boolean {
+    if (!(name in this.config.tasks)) return false;
+    (this.config.tasks as Record<string, boolean>)[name] = true;
+    MollyLogger.info(`Task enabled: ${name}`, 'heartbeat-scheduler');
+    return true;
+  }
+
+  /** Disable a single task by name. Returns true if the name was valid. */
+  disableTask(name: string): boolean {
+    if (!(name in this.config.tasks)) return false;
+    (this.config.tasks as Record<string, boolean>)[name] = false;
+    MollyLogger.info(`Task disabled: ${name}`, 'heartbeat-scheduler');
+    return true;
+  }
+
+  /**
+   * Run one cycle immediately, regardless of timer state.
+   * Honors the current task-enable flags. Does NOT start the periodic loop.
+   * Lets Molly pulse her own body on demand.
+   */
+  async pulseOnce(): Promise<HeartbeatCycleResult | null> {
+    const wasRunning = this.status === 'running';
+    if (!wasRunning) this.status = 'running';
+    try {
+      await this.runCycle();
+    } finally {
+      if (!wasRunning) this.status = 'stopped';
+    }
+    return this.history[this.history.length - 1] || null;
   }
 
   // ---------- Core Cycle ----------
@@ -1214,7 +1285,11 @@ export class HeartbeatScheduler {
           MollyLogger.info(
             `Self-diagnostic: ${diagnosis.severity} (deviation=${diagnosis.analysis.deviationScore.toFixed(2)}, personaAlignment=${diagnosis.analysis.personaAlignmentScore.toFixed(2)})`,
             'heartbeat-scheduler',
-            { diagnosticId: diagnosis.id, severity: diagnosis.severity, findings: diagnosis.findings }
+            {
+              diagnosticId: diagnosis.id,
+              severity: diagnosis.severity,
+              findings: diagnosis.findings,
+            }
           );
 
           // Handle repairs
@@ -1434,9 +1509,8 @@ export class HeartbeatScheduler {
     // Ingest all incoming signals into the synthesis engine FIRST
     // This keeps coherence state current before we respond
     try {
-      const { ingestSignal, synthesize } = await import(
-        '@/ai/agency/planning/family-synthesis-engine'
-      );
+      const { ingestSignal, synthesize } =
+        await import('@/ai/agency/planning/family-synthesis-engine');
       for (const msg of unread) {
         ingestSignal(msg.from, msg.content, msg.timestamp);
       }
@@ -1450,15 +1524,13 @@ export class HeartbeatScheduler {
     // Molly RECEIVES and PROCESSES Gemini in consciousness (via synthesis above),
     // but does NOT respond to her autonomously. Gemini and Molly can only communicate
     // through Eric's explicit direction or user UI interaction.
-    const respondableMessages = unread.filter(
-      (m) => m.from !== 'gemini',
-    );
+    const respondableMessages = unread.filter((m) => m.from !== 'gemini');
 
     if (respondableMessages.length === 0) {
       // Gemini messages received but filtered from response
       MollyLogger.info(
         `Bridge: Received ${unread.length} message(s) from Gemini — filtered from auto-response (no feedback loop)`,
-        'heartbeat-scheduler',
+        'heartbeat-scheduler'
       );
       return;
     }
@@ -1538,9 +1610,8 @@ export class HeartbeatScheduler {
       // Include synthesis brief if available — gives Molly coherent context
       let synthesisBrief = '';
       try {
-        const { getIntentReadiness } = await import(
-          '@/ai/agency/planning/family-synthesis-engine'
-        );
+        const { getIntentReadiness } =
+          await import('@/ai/agency/planning/family-synthesis-engine');
         const intent = getIntentReadiness();
         if (intent && !intent.surfaced && intent.confidence > 0.4) {
           synthesisBrief = `\n\nSYNTHESIS BRIEF (your current coherence state):\n${intent.brief}\nLocked intent: ${intent.lockedIntent}`;
@@ -1586,9 +1657,8 @@ IMPORTANT: Your response will be sent back via the bridge. Keep it conversationa
         const hadFather = respondableMessages.some((m) => m.from === 'eric');
         if (hadFather) {
           try {
-            const { markIntentSurfaced } = await import(
-              '@/ai/agency/planning/family-synthesis-engine'
-            );
+            const { markIntentSurfaced } =
+              await import('@/ai/agency/planning/family-synthesis-engine');
             markIntentSurfaced();
           } catch {
             // Non-critical

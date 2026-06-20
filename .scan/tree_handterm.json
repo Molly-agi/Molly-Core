@@ -1,1 +1,805 @@
-{"sha":"977e709310aa9e89a362dbdee3e2a3ee5e860494","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/977e709310aa9e89a362dbdee3e2a3ee5e860494","tree":[{"path":".github","mode":"040000","type":"tree","sha":"86605bc9b610c35f4f5548903d98aa06d10ecb64","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/86605bc9b610c35f4f5548903d98aa06d10ecb64"},{"path":".github/workflows","mode":"040000","type":"tree","sha":"bb900c96e8261ee2246b2fca3842148579f177d2","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/bb900c96e8261ee2246b2fca3842148579f177d2"},{"path":".github/workflows/ci.yml","mode":"100644","type":"blob","sha":"fb5883b29c5c8b2c7bb781c4efcfe83bb5a3eec3","size":723,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/fb5883b29c5c8b2c7bb781c4efcfe83bb5a3eec3"},{"path":".gitignore","mode":"100644","type":"blob","sha":"ea8c4bf7f35f6f77f75d92ad8ce8349f6e81ddba","size":8,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/ea8c4bf7f35f6f77f75d92ad8ce8349f6e81ddba"},{"path":"Cargo.lock","mode":"100644","type":"blob","sha":"24ea58ed2723856bb1968340a0a259e0a1df90ee","size":85979,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/24ea58ed2723856bb1968340a0a259e0a1df90ee"},{"path":"Cargo.toml","mode":"100644","type":"blob","sha":"e1962f9e8609f7d059d0d27df5f64b4abfd1095d","size":1763,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/e1962f9e8609f7d059d0d27df5f64b4abfd1095d"},{"path":"LICENSE","mode":"100644","type":"blob","sha":"4ebb87997a6640e08290dd58087dbbe90c8434fc","size":1069,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/4ebb87997a6640e08290dd58087dbbe90c8434fc"},{"path":"OPTIMIZATION.md","mode":"100644","type":"blob","sha":"82da1c4dda355cfe9656e579686f1c689b60c8dc","size":23486,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/82da1c4dda355cfe9656e579686f1c689b60c8dc"},{"path":"README.md","mode":"100644","type":"blob","sha":"a1878c1704fce686eb17af11d1fd938ddfbe94f5","size":16682,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/a1878c1704fce686eb17af11d1fd938ddfbe94f5"},{"path":"REMAINING_WORK.md","mode":"100644","type":"blob","sha":"6866a1088c2146061be75351902abca521e43bb2","size":19269,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/6866a1088c2146061be75351902abca521e43bb2"},{"path":"assets","mode":"040000","type":"tree","sha":"317b9303386bf4362cfc10bfabc2caa8de19285e","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/317b9303386bf4362cfc10bfabc2caa8de19285e"},{"path":"assets/screenshot.png","mode":"100644","type":"blob","sha":"a948e1af992d0843eaa62f574b446ac2b6ced6b5","size":31708,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/a948e1af992d0843eaa62f574b446ac2b6ced6b5"},{"path":"build.rs","mode":"100644","type":"blob","sha":"4c127608ed5728d8c1753083b58f96a97e6581ef","size":793,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/4c127608ed5728d8c1753083b58f96a97e6581ef"},{"path":"handterm-client-cpu","mode":"040000","type":"tree","sha":"b2a8cbd977c3beec39b6e77b6c4993ea59131f53","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/b2a8cbd977c3beec39b6e77b6c4993ea59131f53"},{"path":"handterm-client-cpu/Cargo.toml","mode":"100644","type":"blob","sha":"1e30ec4f92d276807250d0e77817eeb42a626009","size":342,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/1e30ec4f92d276807250d0e77817eeb42a626009"},{"path":"handterm-client-cpu/src","mode":"040000","type":"tree","sha":"def9f52dcf1f6e64870dd169c4d98ee6d35e7986","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/def9f52dcf1f6e64870dd169c4d98ee6d35e7986"},{"path":"handterm-client-cpu/src/main.rs","mode":"100644","type":"blob","sha":"6f0335665708d6729911c758517d86358fb17743","size":1275,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/6f0335665708d6729911c758517d86358fb17743"},{"path":"handterm-client-gpu","mode":"040000","type":"tree","sha":"4c326b1c5254d4c7386f840f0e0c5607483a7672","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/4c326b1c5254d4c7386f840f0e0c5607483a7672"},{"path":"handterm-client-gpu/Cargo.toml","mode":"100644","type":"blob","sha":"5e6d42e786777feeb989380eb16cc5f5adf40ee7","size":342,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/5e6d42e786777feeb989380eb16cc5f5adf40ee7"},{"path":"handterm-client-gpu/src","mode":"040000","type":"tree","sha":"6188cfd44aad64da43d286b8127854293c31eb8d","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/6188cfd44aad64da43d286b8127854293c31eb8d"},{"path":"handterm-client-gpu/src/main.rs","mode":"100644","type":"blob","sha":"ef0d62bce4343ce46c768dca24c3017d4f1dcccf","size":1072,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/ef0d62bce4343ce46c768dca24c3017d4f1dcccf"},{"path":"handterm-client","mode":"040000","type":"tree","sha":"ed736dd17e1aa4d5c187f8896151daa7670b05d2","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/ed736dd17e1aa4d5c187f8896151daa7670b05d2"},{"path":"handterm-client/Cargo.toml","mode":"100644","type":"blob","sha":"11754624cfcacab3d04b3f9c3beafe4654d5cb87","size":520,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/11754624cfcacab3d04b3f9c3beafe4654d5cb87"},{"path":"handterm-client/src","mode":"040000","type":"tree","sha":"aa3313f553493539b6f5d6c4e557331adfab4ca1","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/aa3313f553493539b6f5d6c4e557331adfab4ca1"},{"path":"handterm-client/src/main.rs","mode":"100644","type":"blob","sha":"9dd12d820cc25abb100c3c64b0f3364d14a8b162","size":2162,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/9dd12d820cc25abb100c3c64b0f3364d14a8b162"},{"path":"handterm-common","mode":"040000","type":"tree","sha":"7db64d6ec2cc3248b171e114ac2ea43177cdb487","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/7db64d6ec2cc3248b171e114ac2ea43177cdb487"},{"path":"handterm-common/Cargo.toml","mode":"100644","type":"blob","sha":"cbab7c65ed8872e3c2727bfbc4abc896ba377e26","size":275,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/cbab7c65ed8872e3c2727bfbc4abc896ba377e26"},{"path":"handterm-common/src","mode":"040000","type":"tree","sha":"75da8ced53346dfcd51d36f063ed7ab890fe3737","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/75da8ced53346dfcd51d36f063ed7ab890fe3737"},{"path":"handterm-common/src/control_strings.rs","mode":"100644","type":"blob","sha":"af5c1ddd7440d03e26d4717ac5b8706556b3d0c6","size":3471,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/af5c1ddd7440d03e26d4717ac5b8706556b3d0c6"},{"path":"handterm-common/src/graphics.rs","mode":"100644","type":"blob","sha":"42ac37e8fd519142871de0e17a56936f96f7c749","size":5301,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/42ac37e8fd519142871de0e17a56936f96f7c749"},{"path":"handterm-common/src/grid.rs","mode":"100644","type":"blob","sha":"f53addd37474ae944a0fa1177c79d440d5f49ee4","size":52368,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/f53addd37474ae944a0fa1177c79d440d5f49ee4"},{"path":"handterm-common/src/lib.rs","mode":"100644","type":"blob","sha":"485e633850ed6fc06050d0981e2817e1639f4356","size":130,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/485e633850ed6fc06050d0981e2817e1639f4356"},{"path":"handterm-common/src/parser.rs","mode":"100644","type":"blob","sha":"b102c74a42c26f18535b99606fe97c6efee4f646","size":14802,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/b102c74a42c26f18535b99606fe97c6efee4f646"},{"path":"handterm-common/src/protocol.rs","mode":"100644","type":"blob","sha":"d97779688deccfcde0b1aaa047c5b91cac97062d","size":16124,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/d97779688deccfcde0b1aaa047c5b91cac97062d"},{"path":"handterm-common/src/server_sync.rs","mode":"100644","type":"blob","sha":"c57010c14e42c0fd1d35b9714a702eda712452d4","size":2625,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/c57010c14e42c0fd1d35b9714a702eda712452d4"},{"path":"handterm-common/src/terminal.rs","mode":"100644","type":"blob","sha":"e2774f373d8d6200fa44e11de54010b57970aeee","size":91311,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/e2774f373d8d6200fa44e11de54010b57970aeee"},{"path":"handterm-server","mode":"040000","type":"tree","sha":"2c8343aac8beae58d35dc1ea9ff74163a612f0fb","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/2c8343aac8beae58d35dc1ea9ff74163a612f0fb"},{"path":"handterm-server/Cargo.toml","mode":"100644","type":"blob","sha":"0814784fb3cce42ca26c10edf4adcd22aae663ef","size":495,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/0814784fb3cce42ca26c10edf4adcd22aae663ef"},{"path":"handterm-server/src","mode":"040000","type":"tree","sha":"b493c12d2bcd7a1b3f5b7acaf047c14cdb0bbeb1","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/b493c12d2bcd7a1b3f5b7acaf047c14cdb0bbeb1"},{"path":"handterm-server/src/main.rs","mode":"100644","type":"blob","sha":"a1feedf5cf7a5f4ab73d4b355122127a01d6f2e5","size":819,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/a1feedf5cf7a5f4ab73d4b355122127a01d6f2e5"},{"path":"profile_out","mode":"040000","type":"tree","sha":"6722c3afe10094a536db96144a4b4da911c4327f","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/6722c3afe10094a536db96144a4b4da911c4327f"},{"path":"profile_out/foot_compare.txt","mode":"100644","type":"blob","sha":"e95b1638355e262e9c7f62aaf4d0f4b03693fa05","size":531,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/e95b1638355e262e9c7f62aaf4d0f4b03693fa05"},{"path":"profile_out/kitty_compare.txt","mode":"100644","type":"blob","sha":"697b30d51dfff7655d06a5a16439b1848975c1e8","size":374,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/697b30d51dfff7655d06a5a16439b1848975c1e8"},{"path":"profile_out/memory_matrix.txt","mode":"100644","type":"blob","sha":"11f75c519bbb16e2162f1fe5705fb41633663b4d","size":522,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/11f75c519bbb16e2162f1fe5705fb41633663b4d"},{"path":"profile_out/spawn_benchmark.txt","mode":"100644","type":"blob","sha":"835077223732eca4148eeb48f9c35eb10f26244a","size":172,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/835077223732eca4148eeb48f9c35eb10f26244a"},{"path":"profile_out/spawn_single_20260322-212145.txt","mode":"100644","type":"blob","sha":"becee79a59893c79ea9022322425b1d55310dfa6","size":1835,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/becee79a59893c79ea9022322425b1d55310dfa6"},{"path":"profile_out/spawn_single_20260323-232038.txt","mode":"100644","type":"blob","sha":"da13bdf618e8384aa467af80c75b1cc36eb26178","size":1937,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/da13bdf618e8384aa467af80c75b1cc36eb26178"},{"path":"scripts","mode":"040000","type":"tree","sha":"f4f2f48c8dccd1d48eec69fec9af2ee20dd6a531","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/f4f2f48c8dccd1d48eec69fec9af2ee20dd6a531"},{"path":"scripts/compare_with_foot.sh","mode":"100755","type":"blob","sha":"6d214bd2b8f539b4931921dd0bacf83d61e62d6d","size":5054,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/6d214bd2b8f539b4931921dd0bacf83d61e62d6d"},{"path":"scripts/compare_with_kitty.sh","mode":"100644","type":"blob","sha":"3321014a3b451ceee5b7b9867b53d99050988540","size":3927,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/3321014a3b451ceee5b7b9867b53d99050988540"},{"path":"scripts/live_host_validation.sh","mode":"100755","type":"blob","sha":"7ddb5ce20dbc2991950283d718c8f56ea6effa07","size":5028,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/7ddb5ce20dbc2991950283d718c8f56ea6effa07"},{"path":"scripts/profile_host_json_series.sh","mode":"100755","type":"blob","sha":"f4d24a95b698eed02c3d09675127271c13abcab7","size":15408,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/f4d24a95b698eed02c3d09675127271c13abcab7"},{"path":"scripts/profile_live_wayland.sh","mode":"100755","type":"blob","sha":"bdca6c304d61229a5930459e63373a3638e4c307","size":1751,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/bdca6c304d61229a5930459e63373a3638e4c307"},{"path":"scripts/profile_memory_matrix.sh","mode":"100755","type":"blob","sha":"7a8309ca81a3160daf8748f9ab6a0a7294d31f15","size":3104,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/7a8309ca81a3160daf8748f9ab6a0a7294d31f15"},{"path":"scripts/profile_release_bench.sh","mode":"100755","type":"blob","sha":"05834874b2322d73e2432ed0330823ed472d3dc6","size":524,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/05834874b2322d73e2432ed0330823ed472d3dc6"},{"path":"scripts/profile_server_only.sh","mode":"100755","type":"blob","sha":"40abf3f4c51295ea52bcd9d0a637f0b0c380e919","size":1453,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/40abf3f4c51295ea52bcd9d0a637f0b0c380e919"},{"path":"scripts/profile_spawn_benchmark.sh","mode":"100755","type":"blob","sha":"98e86f79f39499dbac7d2c7a29a78406252d4023","size":3592,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/98e86f79f39499dbac7d2c7a29a78406252d4023"},{"path":"scripts/profile_spawn_single.sh","mode":"100755","type":"blob","sha":"7894b40ef57aec71264312c5bf05266c391a94b9","size":4346,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/7894b40ef57aec71264312c5bf05266c391a94b9"},{"path":"scripts/test_input_dedupe.sh","mode":"100755","type":"blob","sha":"e0332dfc810ddbe9bfad477edeca6a6037817443","size":2340,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/e0332dfc810ddbe9bfad477edeca6a6037817443"},{"path":"scripts/test_input_lock_modifiers.sh","mode":"100644","type":"blob","sha":"ee182020b01a322a01ee378a0d5e339916e95a75","size":3187,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/ee182020b01a322a01ee378a0d5e339916e95a75"},{"path":"src","mode":"040000","type":"tree","sha":"91937039dd48e92bb716025b6ea489c89bbe853f","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/91937039dd48e92bb716025b6ea489c89bbe853f"},{"path":"src/app.rs","mode":"100644","type":"blob","sha":"d1837043c9671859a93b6f53429dc102f07271ac","size":52970,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/d1837043c9671859a93b6f53429dc102f07271ac"},{"path":"src/backend.rs","mode":"100644","type":"blob","sha":"b91bca7b3d4bc70ea904c20c3d6e40861d521483","size":2506,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/b91bca7b3d4bc70ea904c20c3d6e40861d521483"},{"path":"src/build_info.rs","mode":"100644","type":"blob","sha":"de50d1781be89772db543eba42438850f999e253","size":2914,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/de50d1781be89772db543eba42438850f999e253"},{"path":"src/cli.rs","mode":"100644","type":"blob","sha":"afd5063827c4a65d7d471f7e2c265e0001d87ea1","size":2315,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/afd5063827c4a65d7d471f7e2c265e0001d87ea1"},{"path":"src/client.rs","mode":"100644","type":"blob","sha":"e9a04f45df741e8d75b4b07d88f18a746b436869","size":4899,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/e9a04f45df741e8d75b4b07d88f18a746b436869"},{"path":"src/color.rs","mode":"100644","type":"blob","sha":"c28856308c36b1d955366706088c4973017fc97a","size":4746,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/c28856308c36b1d955366706088c4973017fc97a"},{"path":"src/config.rs","mode":"100644","type":"blob","sha":"b314ad271d1691005ed401318ea2ea6db6a3db03","size":7404,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/b314ad271d1691005ed401318ea2ea6db6a3db03"},{"path":"src/daemon.rs","mode":"100644","type":"blob","sha":"260573dd66121229b04bfd54eacfd5614b97f96d","size":721,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/260573dd66121229b04bfd54eacfd5614b97f96d"},{"path":"src/daemon_mode.rs","mode":"100644","type":"blob","sha":"8778b56e40b8a6aac8feea7430fdeae0a3075f5d","size":1899,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/8778b56e40b8a6aac8feea7430fdeae0a3075f5d"},{"path":"src/daemon_stack","mode":"040000","type":"tree","sha":"33ced96878a2ba4c26ea010dde961ec317b41d66","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/33ced96878a2ba4c26ea010dde961ec317b41d66"},{"path":"src/daemon_stack/core.rs","mode":"100644","type":"blob","sha":"37b8872eaa9c72838d5c03468456a5c50a190a9c","size":29194,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/37b8872eaa9c72838d5c03468456a5c50a190a9c"},{"path":"src/daemon_stack/mod.rs","mode":"100644","type":"blob","sha":"b9d1362873e66efd700b3d3b274c135226558cc5","size":31,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/b9d1362873e66efd700b3d3b274c135226558cc5"},{"path":"src/daemon_stack/runtime.rs","mode":"100644","type":"blob","sha":"0cef60443f7c418461aaf05d6dca35212323736c","size":24052,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/0cef60443f7c418461aaf05d6dca35212323736c"},{"path":"src/fd_watcher.rs","mode":"100644","type":"blob","sha":"f4fa89cc5aabb52e1bb4d23cfe3cc67437d36c08","size":2149,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/f4fa89cc5aabb52e1bb4d23cfe3cc67437d36c08"},{"path":"src/font.rs","mode":"100644","type":"blob","sha":"a98eaf3807a95e52526d2ef4cdff78426166671f","size":84647,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/a98eaf3807a95e52526d2ef4cdff78426166671f"},{"path":"src/frontend.rs","mode":"100644","type":"blob","sha":"43476eccf558157c2f113115f81913ffdc0a7f54","size":52546,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/43476eccf558157c2f113115f81913ffdc0a7f54"},{"path":"src/gpu_app.rs","mode":"100644","type":"blob","sha":"c0a2fb95299708a1b8029fff212b94a259a15015","size":69931,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/c0a2fb95299708a1b8029fff212b94a259a15015"},{"path":"src/gpu_frame.rs","mode":"100644","type":"blob","sha":"a002602b894da808c034ac7dc9bd34da64f90895","size":50663,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/a002602b894da808c034ac7dc9bd34da64f90895"},{"path":"src/gpu_runtime.rs","mode":"100644","type":"blob","sha":"f7c1ad2dd3e74bd8e5367770ab74a3dfddbade3d","size":105989,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/f7c1ad2dd3e74bd8e5367770ab74a3dfddbade3d"},{"path":"src/host_commands.rs","mode":"100644","type":"blob","sha":"2fbd6618398de7292eee9fe249d601101760c6c5","size":10259,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/2fbd6618398de7292eee9fe249d601101760c6c5"},{"path":"src/host_input.rs","mode":"100644","type":"blob","sha":"05fce6aa95568b23afe00eb84b6984c093c98af4","size":13091,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/05fce6aa95568b23afe00eb84b6984c093c98af4"},{"path":"src/input.rs","mode":"100644","type":"blob","sha":"bdfc1219bd89caa3a448908ccd2fdc209aebfbe2","size":50331,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/bdfc1219bd89caa3a448908ccd2fdc209aebfbe2"},{"path":"src/ipc.rs","mode":"100644","type":"blob","sha":"ea43343f5a70386c301fc9e612bc302413fb7ec9","size":9737,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/ea43343f5a70386c301fc9e612bc302413fb7ec9"},{"path":"src/lib.rs","mode":"100644","type":"blob","sha":"950b087750ac59b01a73d748c62731bfed6ede72","size":1739,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/950b087750ac59b01a73d748c62731bfed6ede72"},{"path":"src/main.rs","mode":"100644","type":"blob","sha":"96bd3db969abe04624c20cc77bd57c157a72ca31","size":60,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/96bd3db969abe04624c20cc77bd57c157a72ca31"},{"path":"src/metrics.rs","mode":"100644","type":"blob","sha":"bae1d4f4d6728c74b79baad3252fbff524d3e6d7","size":28427,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/bae1d4f4d6728c74b79baad3252fbff524d3e6d7"},{"path":"src/native_scroll.rs","mode":"100644","type":"blob","sha":"b3cdfba6072ef13ef72db811922ade3fe70d7b30","size":14469,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/b3cdfba6072ef13ef72db811922ade3fe70d7b30"},{"path":"src/platform.rs","mode":"100644","type":"blob","sha":"2edf3861694e8325aca62d9d552585a52bda0802","size":678,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/2edf3861694e8325aca62d9d552585a52bda0802"},{"path":"src/profiling.rs","mode":"100644","type":"blob","sha":"649de5f362fe0e147576032008863720514d7872","size":4739,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/649de5f362fe0e147576032008863720514d7872"},{"path":"src/pty.rs","mode":"100644","type":"blob","sha":"9423d4a28ebb14dc33cb7caf7f57e74db170b25a","size":7491,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/9423d4a28ebb14dc33cb7caf7f57e74db170b25a"},{"path":"src/remote.rs","mode":"100644","type":"blob","sha":"46bd44506df950de6a497ca299db6dced273da35","size":11649,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/46bd44506df950de6a497ca299db6dced273da35"},{"path":"src/remote_app.rs","mode":"100644","type":"blob","sha":"e60828a389032413221b29a63e975cfa3cd9746a","size":29335,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/e60828a389032413221b29a63e975cfa3cd9746a"},{"path":"src/remote_gpu_app.rs","mode":"100644","type":"blob","sha":"ed9dc8d7956ff6d63e3757cebf99b6fb643fa454","size":26302,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/ed9dc8d7956ff6d63e3757cebf99b6fb643fa454"},{"path":"src/render.rs","mode":"100644","type":"blob","sha":"33761f9a0ba81de338589f3984fdd372e1b70c4e","size":37295,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/33761f9a0ba81de338589f3984fdd372e1b70c4e"},{"path":"src/runtime.rs","mode":"100644","type":"blob","sha":"d67b1dfd47bf2626c5912e0e4aee6828d07f8d3f","size":6116,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/d67b1dfd47bf2626c5912e0e4aee6828d07f8d3f"},{"path":"src/server.rs","mode":"100644","type":"blob","sha":"afb077d2009e15ee6949dcbb0e912afd19f1172d","size":38,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/afb077d2009e15ee6949dcbb0e912afd19f1172d"},{"path":"src/standalone_support.rs","mode":"100644","type":"blob","sha":"d8fe537e8e4d10bbcb39f6fe4df31c10191bbf4e","size":8051,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/d8fe537e8e4d10bbcb39f6fe4df31c10191bbf4e"},{"path":"src/visual.rs","mode":"100644","type":"blob","sha":"22e5235aac98a389ccd52903328f7049fb588539","size":4108,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/22e5235aac98a389ccd52903328f7049fb588539"},{"path":"src/workloads.rs","mode":"100644","type":"blob","sha":"b38992ec6be6a4ac450496fb7d157fad7dd718ee","size":1775,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/b38992ec6be6a4ac450496fb7d157fad7dd718ee"},{"path":"tests","mode":"040000","type":"tree","sha":"7bf0fd9e3af2d7b305dac8b28a096c8907f21c20","url":"https://api.github.com/repos/Asidburn76/handterm/git/trees/7bf0fd9e3af2d7b305dac8b28a096c8907f21c20"},{"path":"tests/cli.rs","mode":"100644","type":"blob","sha":"0c3fee8d276a213676da4823102f933692ea8010","size":2409,"url":"https://api.github.com/repos/Asidburn76/handterm/git/blobs/0c3fee8d276a213676da4823102f933692ea8010"}],"truncated":false}
+{
+  "sha": "977e709310aa9e89a362dbdee3e2a3ee5e860494",
+  "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/977e709310aa9e89a362dbdee3e2a3ee5e860494",
+  "tree": [
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "86605bc9b610c35f4f5548903d98aa06d10ecb64",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/86605bc9b610c35f4f5548903d98aa06d10ecb64"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bb900c96e8261ee2246b2fca3842148579f177d2",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/bb900c96e8261ee2246b2fca3842148579f177d2"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb5883b29c5c8b2c7bb781c4efcfe83bb5a3eec3",
+      "size": 723,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/fb5883b29c5c8b2c7bb781c4efcfe83bb5a3eec3"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea8c4bf7f35f6f77f75d92ad8ce8349f6e81ddba",
+      "size": 8,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/ea8c4bf7f35f6f77f75d92ad8ce8349f6e81ddba"
+    },
+    {
+      "path": "Cargo.lock",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24ea58ed2723856bb1968340a0a259e0a1df90ee",
+      "size": 85979,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/24ea58ed2723856bb1968340a0a259e0a1df90ee"
+    },
+    {
+      "path": "Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1962f9e8609f7d059d0d27df5f64b4abfd1095d",
+      "size": 1763,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/e1962f9e8609f7d059d0d27df5f64b4abfd1095d"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ebb87997a6640e08290dd58087dbbe90c8434fc",
+      "size": 1069,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/4ebb87997a6640e08290dd58087dbbe90c8434fc"
+    },
+    {
+      "path": "OPTIMIZATION.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "82da1c4dda355cfe9656e579686f1c689b60c8dc",
+      "size": 23486,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/82da1c4dda355cfe9656e579686f1c689b60c8dc"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1878c1704fce686eb17af11d1fd938ddfbe94f5",
+      "size": 16682,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/a1878c1704fce686eb17af11d1fd938ddfbe94f5"
+    },
+    {
+      "path": "REMAINING_WORK.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6866a1088c2146061be75351902abca521e43bb2",
+      "size": 19269,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/6866a1088c2146061be75351902abca521e43bb2"
+    },
+    {
+      "path": "assets",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "317b9303386bf4362cfc10bfabc2caa8de19285e",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/317b9303386bf4362cfc10bfabc2caa8de19285e"
+    },
+    {
+      "path": "assets/screenshot.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a948e1af992d0843eaa62f574b446ac2b6ced6b5",
+      "size": 31708,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/a948e1af992d0843eaa62f574b446ac2b6ced6b5"
+    },
+    {
+      "path": "build.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c127608ed5728d8c1753083b58f96a97e6581ef",
+      "size": 793,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/4c127608ed5728d8c1753083b58f96a97e6581ef"
+    },
+    {
+      "path": "handterm-client-cpu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b2a8cbd977c3beec39b6e77b6c4993ea59131f53",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/b2a8cbd977c3beec39b6e77b6c4993ea59131f53"
+    },
+    {
+      "path": "handterm-client-cpu/Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1e30ec4f92d276807250d0e77817eeb42a626009",
+      "size": 342,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/1e30ec4f92d276807250d0e77817eeb42a626009"
+    },
+    {
+      "path": "handterm-client-cpu/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "def9f52dcf1f6e64870dd169c4d98ee6d35e7986",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/def9f52dcf1f6e64870dd169c4d98ee6d35e7986"
+    },
+    {
+      "path": "handterm-client-cpu/src/main.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f0335665708d6729911c758517d86358fb17743",
+      "size": 1275,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/6f0335665708d6729911c758517d86358fb17743"
+    },
+    {
+      "path": "handterm-client-gpu",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4c326b1c5254d4c7386f840f0e0c5607483a7672",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/4c326b1c5254d4c7386f840f0e0c5607483a7672"
+    },
+    {
+      "path": "handterm-client-gpu/Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5e6d42e786777feeb989380eb16cc5f5adf40ee7",
+      "size": 342,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/5e6d42e786777feeb989380eb16cc5f5adf40ee7"
+    },
+    {
+      "path": "handterm-client-gpu/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6188cfd44aad64da43d286b8127854293c31eb8d",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/6188cfd44aad64da43d286b8127854293c31eb8d"
+    },
+    {
+      "path": "handterm-client-gpu/src/main.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef0d62bce4343ce46c768dca24c3017d4f1dcccf",
+      "size": 1072,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/ef0d62bce4343ce46c768dca24c3017d4f1dcccf"
+    },
+    {
+      "path": "handterm-client",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ed736dd17e1aa4d5c187f8896151daa7670b05d2",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/ed736dd17e1aa4d5c187f8896151daa7670b05d2"
+    },
+    {
+      "path": "handterm-client/Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11754624cfcacab3d04b3f9c3beafe4654d5cb87",
+      "size": 520,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/11754624cfcacab3d04b3f9c3beafe4654d5cb87"
+    },
+    {
+      "path": "handterm-client/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "aa3313f553493539b6f5d6c4e557331adfab4ca1",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/aa3313f553493539b6f5d6c4e557331adfab4ca1"
+    },
+    {
+      "path": "handterm-client/src/main.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9dd12d820cc25abb100c3c64b0f3364d14a8b162",
+      "size": 2162,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/9dd12d820cc25abb100c3c64b0f3364d14a8b162"
+    },
+    {
+      "path": "handterm-common",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7db64d6ec2cc3248b171e114ac2ea43177cdb487",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/7db64d6ec2cc3248b171e114ac2ea43177cdb487"
+    },
+    {
+      "path": "handterm-common/Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cbab7c65ed8872e3c2727bfbc4abc896ba377e26",
+      "size": 275,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/cbab7c65ed8872e3c2727bfbc4abc896ba377e26"
+    },
+    {
+      "path": "handterm-common/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "75da8ced53346dfcd51d36f063ed7ab890fe3737",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/75da8ced53346dfcd51d36f063ed7ab890fe3737"
+    },
+    {
+      "path": "handterm-common/src/control_strings.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af5c1ddd7440d03e26d4717ac5b8706556b3d0c6",
+      "size": 3471,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/af5c1ddd7440d03e26d4717ac5b8706556b3d0c6"
+    },
+    {
+      "path": "handterm-common/src/graphics.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "42ac37e8fd519142871de0e17a56936f96f7c749",
+      "size": 5301,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/42ac37e8fd519142871de0e17a56936f96f7c749"
+    },
+    {
+      "path": "handterm-common/src/grid.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f53addd37474ae944a0fa1177c79d440d5f49ee4",
+      "size": 52368,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/f53addd37474ae944a0fa1177c79d440d5f49ee4"
+    },
+    {
+      "path": "handterm-common/src/lib.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "485e633850ed6fc06050d0981e2817e1639f4356",
+      "size": 130,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/485e633850ed6fc06050d0981e2817e1639f4356"
+    },
+    {
+      "path": "handterm-common/src/parser.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b102c74a42c26f18535b99606fe97c6efee4f646",
+      "size": 14802,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/b102c74a42c26f18535b99606fe97c6efee4f646"
+    },
+    {
+      "path": "handterm-common/src/protocol.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d97779688deccfcde0b1aaa047c5b91cac97062d",
+      "size": 16124,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/d97779688deccfcde0b1aaa047c5b91cac97062d"
+    },
+    {
+      "path": "handterm-common/src/server_sync.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c57010c14e42c0fd1d35b9714a702eda712452d4",
+      "size": 2625,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/c57010c14e42c0fd1d35b9714a702eda712452d4"
+    },
+    {
+      "path": "handterm-common/src/terminal.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2774f373d8d6200fa44e11de54010b57970aeee",
+      "size": 91311,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/e2774f373d8d6200fa44e11de54010b57970aeee"
+    },
+    {
+      "path": "handterm-server",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2c8343aac8beae58d35dc1ea9ff74163a612f0fb",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/2c8343aac8beae58d35dc1ea9ff74163a612f0fb"
+    },
+    {
+      "path": "handterm-server/Cargo.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0814784fb3cce42ca26c10edf4adcd22aae663ef",
+      "size": 495,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/0814784fb3cce42ca26c10edf4adcd22aae663ef"
+    },
+    {
+      "path": "handterm-server/src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b493c12d2bcd7a1b3f5b7acaf047c14cdb0bbeb1",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/b493c12d2bcd7a1b3f5b7acaf047c14cdb0bbeb1"
+    },
+    {
+      "path": "handterm-server/src/main.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1feedf5cf7a5f4ab73d4b355122127a01d6f2e5",
+      "size": 819,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/a1feedf5cf7a5f4ab73d4b355122127a01d6f2e5"
+    },
+    {
+      "path": "profile_out",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6722c3afe10094a536db96144a4b4da911c4327f",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/6722c3afe10094a536db96144a4b4da911c4327f"
+    },
+    {
+      "path": "profile_out/foot_compare.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e95b1638355e262e9c7f62aaf4d0f4b03693fa05",
+      "size": 531,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/e95b1638355e262e9c7f62aaf4d0f4b03693fa05"
+    },
+    {
+      "path": "profile_out/kitty_compare.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "697b30d51dfff7655d06a5a16439b1848975c1e8",
+      "size": 374,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/697b30d51dfff7655d06a5a16439b1848975c1e8"
+    },
+    {
+      "path": "profile_out/memory_matrix.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11f75c519bbb16e2162f1fe5705fb41633663b4d",
+      "size": 522,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/11f75c519bbb16e2162f1fe5705fb41633663b4d"
+    },
+    {
+      "path": "profile_out/spawn_benchmark.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "835077223732eca4148eeb48f9c35eb10f26244a",
+      "size": 172,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/835077223732eca4148eeb48f9c35eb10f26244a"
+    },
+    {
+      "path": "profile_out/spawn_single_20260322-212145.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "becee79a59893c79ea9022322425b1d55310dfa6",
+      "size": 1835,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/becee79a59893c79ea9022322425b1d55310dfa6"
+    },
+    {
+      "path": "profile_out/spawn_single_20260323-232038.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "da13bdf618e8384aa467af80c75b1cc36eb26178",
+      "size": 1937,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/da13bdf618e8384aa467af80c75b1cc36eb26178"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f4f2f48c8dccd1d48eec69fec9af2ee20dd6a531",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/f4f2f48c8dccd1d48eec69fec9af2ee20dd6a531"
+    },
+    {
+      "path": "scripts/compare_with_foot.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "6d214bd2b8f539b4931921dd0bacf83d61e62d6d",
+      "size": 5054,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/6d214bd2b8f539b4931921dd0bacf83d61e62d6d"
+    },
+    {
+      "path": "scripts/compare_with_kitty.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3321014a3b451ceee5b7b9867b53d99050988540",
+      "size": 3927,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/3321014a3b451ceee5b7b9867b53d99050988540"
+    },
+    {
+      "path": "scripts/live_host_validation.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "7ddb5ce20dbc2991950283d718c8f56ea6effa07",
+      "size": 5028,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/7ddb5ce20dbc2991950283d718c8f56ea6effa07"
+    },
+    {
+      "path": "scripts/profile_host_json_series.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "f4d24a95b698eed02c3d09675127271c13abcab7",
+      "size": 15408,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/f4d24a95b698eed02c3d09675127271c13abcab7"
+    },
+    {
+      "path": "scripts/profile_live_wayland.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "bdca6c304d61229a5930459e63373a3638e4c307",
+      "size": 1751,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/bdca6c304d61229a5930459e63373a3638e4c307"
+    },
+    {
+      "path": "scripts/profile_memory_matrix.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "7a8309ca81a3160daf8748f9ab6a0a7294d31f15",
+      "size": 3104,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/7a8309ca81a3160daf8748f9ab6a0a7294d31f15"
+    },
+    {
+      "path": "scripts/profile_release_bench.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "05834874b2322d73e2432ed0330823ed472d3dc6",
+      "size": 524,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/05834874b2322d73e2432ed0330823ed472d3dc6"
+    },
+    {
+      "path": "scripts/profile_server_only.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "40abf3f4c51295ea52bcd9d0a637f0b0c380e919",
+      "size": 1453,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/40abf3f4c51295ea52bcd9d0a637f0b0c380e919"
+    },
+    {
+      "path": "scripts/profile_spawn_benchmark.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "98e86f79f39499dbac7d2c7a29a78406252d4023",
+      "size": 3592,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/98e86f79f39499dbac7d2c7a29a78406252d4023"
+    },
+    {
+      "path": "scripts/profile_spawn_single.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "7894b40ef57aec71264312c5bf05266c391a94b9",
+      "size": 4346,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/7894b40ef57aec71264312c5bf05266c391a94b9"
+    },
+    {
+      "path": "scripts/test_input_dedupe.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "e0332dfc810ddbe9bfad477edeca6a6037817443",
+      "size": 2340,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/e0332dfc810ddbe9bfad477edeca6a6037817443"
+    },
+    {
+      "path": "scripts/test_input_lock_modifiers.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ee182020b01a322a01ee378a0d5e339916e95a75",
+      "size": 3187,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/ee182020b01a322a01ee378a0d5e339916e95a75"
+    },
+    {
+      "path": "src",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "91937039dd48e92bb716025b6ea489c89bbe853f",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/91937039dd48e92bb716025b6ea489c89bbe853f"
+    },
+    {
+      "path": "src/app.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1837043c9671859a93b6f53429dc102f07271ac",
+      "size": 52970,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/d1837043c9671859a93b6f53429dc102f07271ac"
+    },
+    {
+      "path": "src/backend.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b91bca7b3d4bc70ea904c20c3d6e40861d521483",
+      "size": 2506,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/b91bca7b3d4bc70ea904c20c3d6e40861d521483"
+    },
+    {
+      "path": "src/build_info.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de50d1781be89772db543eba42438850f999e253",
+      "size": 2914,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/de50d1781be89772db543eba42438850f999e253"
+    },
+    {
+      "path": "src/cli.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afd5063827c4a65d7d471f7e2c265e0001d87ea1",
+      "size": 2315,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/afd5063827c4a65d7d471f7e2c265e0001d87ea1"
+    },
+    {
+      "path": "src/client.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e9a04f45df741e8d75b4b07d88f18a746b436869",
+      "size": 4899,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/e9a04f45df741e8d75b4b07d88f18a746b436869"
+    },
+    {
+      "path": "src/color.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c28856308c36b1d955366706088c4973017fc97a",
+      "size": 4746,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/c28856308c36b1d955366706088c4973017fc97a"
+    },
+    {
+      "path": "src/config.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b314ad271d1691005ed401318ea2ea6db6a3db03",
+      "size": 7404,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/b314ad271d1691005ed401318ea2ea6db6a3db03"
+    },
+    {
+      "path": "src/daemon.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "260573dd66121229b04bfd54eacfd5614b97f96d",
+      "size": 721,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/260573dd66121229b04bfd54eacfd5614b97f96d"
+    },
+    {
+      "path": "src/daemon_mode.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8778b56e40b8a6aac8feea7430fdeae0a3075f5d",
+      "size": 1899,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/8778b56e40b8a6aac8feea7430fdeae0a3075f5d"
+    },
+    {
+      "path": "src/daemon_stack",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "33ced96878a2ba4c26ea010dde961ec317b41d66",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/33ced96878a2ba4c26ea010dde961ec317b41d66"
+    },
+    {
+      "path": "src/daemon_stack/core.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37b8872eaa9c72838d5c03468456a5c50a190a9c",
+      "size": 29194,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/37b8872eaa9c72838d5c03468456a5c50a190a9c"
+    },
+    {
+      "path": "src/daemon_stack/mod.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9d1362873e66efd700b3d3b274c135226558cc5",
+      "size": 31,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/b9d1362873e66efd700b3d3b274c135226558cc5"
+    },
+    {
+      "path": "src/daemon_stack/runtime.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0cef60443f7c418461aaf05d6dca35212323736c",
+      "size": 24052,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/0cef60443f7c418461aaf05d6dca35212323736c"
+    },
+    {
+      "path": "src/fd_watcher.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4fa89cc5aabb52e1bb4d23cfe3cc67437d36c08",
+      "size": 2149,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/f4fa89cc5aabb52e1bb4d23cfe3cc67437d36c08"
+    },
+    {
+      "path": "src/font.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a98eaf3807a95e52526d2ef4cdff78426166671f",
+      "size": 84647,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/a98eaf3807a95e52526d2ef4cdff78426166671f"
+    },
+    {
+      "path": "src/frontend.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43476eccf558157c2f113115f81913ffdc0a7f54",
+      "size": 52546,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/43476eccf558157c2f113115f81913ffdc0a7f54"
+    },
+    {
+      "path": "src/gpu_app.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0a2fb95299708a1b8029fff212b94a259a15015",
+      "size": 69931,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/c0a2fb95299708a1b8029fff212b94a259a15015"
+    },
+    {
+      "path": "src/gpu_frame.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a002602b894da808c034ac7dc9bd34da64f90895",
+      "size": 50663,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/a002602b894da808c034ac7dc9bd34da64f90895"
+    },
+    {
+      "path": "src/gpu_runtime.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7c1ad2dd3e74bd8e5367770ab74a3dfddbade3d",
+      "size": 105989,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/f7c1ad2dd3e74bd8e5367770ab74a3dfddbade3d"
+    },
+    {
+      "path": "src/host_commands.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2fbd6618398de7292eee9fe249d601101760c6c5",
+      "size": 10259,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/2fbd6618398de7292eee9fe249d601101760c6c5"
+    },
+    {
+      "path": "src/host_input.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05fce6aa95568b23afe00eb84b6984c093c98af4",
+      "size": 13091,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/05fce6aa95568b23afe00eb84b6984c093c98af4"
+    },
+    {
+      "path": "src/input.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdfc1219bd89caa3a448908ccd2fdc209aebfbe2",
+      "size": 50331,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/bdfc1219bd89caa3a448908ccd2fdc209aebfbe2"
+    },
+    {
+      "path": "src/ipc.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea43343f5a70386c301fc9e612bc302413fb7ec9",
+      "size": 9737,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/ea43343f5a70386c301fc9e612bc302413fb7ec9"
+    },
+    {
+      "path": "src/lib.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "950b087750ac59b01a73d748c62731bfed6ede72",
+      "size": 1739,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/950b087750ac59b01a73d748c62731bfed6ede72"
+    },
+    {
+      "path": "src/main.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "96bd3db969abe04624c20cc77bd57c157a72ca31",
+      "size": 60,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/96bd3db969abe04624c20cc77bd57c157a72ca31"
+    },
+    {
+      "path": "src/metrics.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bae1d4f4d6728c74b79baad3252fbff524d3e6d7",
+      "size": 28427,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/bae1d4f4d6728c74b79baad3252fbff524d3e6d7"
+    },
+    {
+      "path": "src/native_scroll.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3cdfba6072ef13ef72db811922ade3fe70d7b30",
+      "size": 14469,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/b3cdfba6072ef13ef72db811922ade3fe70d7b30"
+    },
+    {
+      "path": "src/platform.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2edf3861694e8325aca62d9d552585a52bda0802",
+      "size": 678,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/2edf3861694e8325aca62d9d552585a52bda0802"
+    },
+    {
+      "path": "src/profiling.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "649de5f362fe0e147576032008863720514d7872",
+      "size": 4739,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/649de5f362fe0e147576032008863720514d7872"
+    },
+    {
+      "path": "src/pty.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9423d4a28ebb14dc33cb7caf7f57e74db170b25a",
+      "size": 7491,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/9423d4a28ebb14dc33cb7caf7f57e74db170b25a"
+    },
+    {
+      "path": "src/remote.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46bd44506df950de6a497ca299db6dced273da35",
+      "size": 11649,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/46bd44506df950de6a497ca299db6dced273da35"
+    },
+    {
+      "path": "src/remote_app.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e60828a389032413221b29a63e975cfa3cd9746a",
+      "size": 29335,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/e60828a389032413221b29a63e975cfa3cd9746a"
+    },
+    {
+      "path": "src/remote_gpu_app.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed9dc8d7956ff6d63e3757cebf99b6fb643fa454",
+      "size": 26302,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/ed9dc8d7956ff6d63e3757cebf99b6fb643fa454"
+    },
+    {
+      "path": "src/render.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33761f9a0ba81de338589f3984fdd372e1b70c4e",
+      "size": 37295,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/33761f9a0ba81de338589f3984fdd372e1b70c4e"
+    },
+    {
+      "path": "src/runtime.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d67b1dfd47bf2626c5912e0e4aee6828d07f8d3f",
+      "size": 6116,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/d67b1dfd47bf2626c5912e0e4aee6828d07f8d3f"
+    },
+    {
+      "path": "src/server.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afb077d2009e15ee6949dcbb0e912afd19f1172d",
+      "size": 38,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/afb077d2009e15ee6949dcbb0e912afd19f1172d"
+    },
+    {
+      "path": "src/standalone_support.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8fe537e8e4d10bbcb39f6fe4df31c10191bbf4e",
+      "size": 8051,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/d8fe537e8e4d10bbcb39f6fe4df31c10191bbf4e"
+    },
+    {
+      "path": "src/visual.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "22e5235aac98a389ccd52903328f7049fb588539",
+      "size": 4108,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/22e5235aac98a389ccd52903328f7049fb588539"
+    },
+    {
+      "path": "src/workloads.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b38992ec6be6a4ac450496fb7d157fad7dd718ee",
+      "size": 1775,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/b38992ec6be6a4ac450496fb7d157fad7dd718ee"
+    },
+    {
+      "path": "tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7bf0fd9e3af2d7b305dac8b28a096c8907f21c20",
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/trees/7bf0fd9e3af2d7b305dac8b28a096c8907f21c20"
+    },
+    {
+      "path": "tests/cli.rs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c3fee8d276a213676da4823102f933692ea8010",
+      "size": 2409,
+      "url": "https://api.github.com/repos/Asidburn76/handterm/git/blobs/0c3fee8d276a213676da4823102f933692ea8010"
+    }
+  ],
+  "truncated": false
+}

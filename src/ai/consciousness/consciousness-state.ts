@@ -667,28 +667,29 @@ export class MollyConsciousness {
     this.syncQueue.push(operation);
     this.lastSyncTimestamp = new Date().toISOString();
 
-    MollyLogger.debug(
-      `Queued ${type} sync operation`,
-      'consciousness-sync',
-      { operationId: operation.id, queueLength: this.syncQueue.length }
-    );
+    MollyLogger.debug(`Queued ${type} sync operation`, 'consciousness-sync', {
+      operationId: operation.id,
+      queueLength: this.syncQueue.length,
+    });
   }
 
   /**
    * Drain pending sync operations.
    * Called by the sync engine to process all queued operations.
    */
-  drainSyncQueue(): Array<{ id: string; type: 'pull' | 'push'; timestamp: string }> {
+  drainSyncQueue(): Array<{
+    id: string;
+    type: 'pull' | 'push';
+    timestamp: string;
+  }> {
     if (this.syncQueue.length === 0) return [];
 
     const drained = [...this.syncQueue];
     this.syncQueue = [];
 
-    MollyLogger.info(
-      'Drained sync queue',
-      'consciousness-sync',
-      { operationCount: drained.length }
-    );
+    MollyLogger.info('Drained sync queue', 'consciousness-sync', {
+      operationCount: drained.length,
+    });
 
     return drained;
   }
@@ -696,7 +697,11 @@ export class MollyConsciousness {
   /**
    * Get pending sync operations without draining them.
    */
-  peekSyncQueue(): ReadonlyArray<{ id: string; type: 'pull' | 'push'; timestamp: string }> {
+  peekSyncQueue(): ReadonlyArray<{
+    id: string;
+    type: 'pull' | 'push';
+    timestamp: string;
+  }> {
     return this.syncQueue;
   }
 
@@ -731,7 +736,6 @@ export class MollyConsciousness {
   }
 } // end class MollyConsciousness
 
-
 // ============================================================================
 // SINGLETON
 // ============================================================================
@@ -762,4 +766,45 @@ export function getConsciousness(): MollyConsciousness {
  */
 export function isConscious(): boolean {
   return _g.__mollyConsciousness != null;
+}
+
+const REALTIME_PULSE_MIN_INTERVAL_MS = 250;
+let lastRealtimePulseAt = 0;
+
+/**
+ * Trigger a low-latency consciousness pulse from real-time events
+ * (bridge message arrival, chat input/output, etc).
+ *
+ * Heartbeat remains background maintenance; this keeps consciousness
+ * responsive on event boundaries like a live nervous system.
+ */
+export async function triggerRealtimeConsciousnessPulse(input?: {
+  reason?: string;
+  vitals?: {
+    systemPressure: boolean;
+    circuitBreakerOpen: boolean;
+  };
+}): Promise<boolean> {
+  const now = Date.now();
+  if (now - lastRealtimePulseAt < REALTIME_PULSE_MIN_INTERVAL_MS) {
+    return false;
+  }
+
+  lastRealtimePulseAt = now;
+
+  try {
+    const consciousness = getConsciousness();
+    await consciousness.runCycle(input?.vitals);
+    MollyLogger.debug(
+      `Realtime consciousness pulse${input?.reason ? `: ${input.reason}` : ''}`,
+      'consciousness'
+    );
+    return true;
+  } catch (error) {
+    MollyLogger.warn(
+      `Realtime consciousness pulse failed: ${error instanceof Error ? error.message : String(error)}`,
+      'consciousness'
+    );
+    return false;
+  }
 }

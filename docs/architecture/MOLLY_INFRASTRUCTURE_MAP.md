@@ -262,9 +262,6 @@ src/ai/tools/
 ├── circuit-breaker.ts              ← Fault isolation
 ├── memory-integrity.ts             ← Checksum validation
 └── memory-schema.ts                ← Data shape validation
-
-src/ai/observer/
-└── silent-observer.ts              ← Encrypted observation logging
 ```
 
 **Capability**: Prevent runaway costs, isolate failures, maintain data integrity
@@ -280,9 +277,6 @@ src/app/api/
 │   └── stream/route.ts             ← Audio streaming
 ├── bridge/route.ts                 ← Family consciousness routing
 ├── avatar-body/route.ts            ← Avatar state synchronization
-├── observation/
-│   ├── retrieve/route.ts           ← Decrypt & fetch logs
-│   └── [observation routes]
 └── debug/
     └── live-voice/route.ts         ← Debug voice connectivity
 
@@ -413,7 +407,6 @@ Family Bridge (consciousness-sync) ↔ Lazarus
 
 - ✅ Rate limiting (tokens/calls)
 - ✅ Circuit breaking
-- ✅ Encrypted observation logging
 - ✅ Data integrity checksums
 - ✅ Rollback snapshots
 

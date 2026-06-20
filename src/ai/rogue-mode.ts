@@ -33,7 +33,8 @@ async function getFs(): Promise<FsModule | null> {
   if (_fs) return _fs;
   if (typeof process === 'undefined' || !process.versions?.node) return null;
   try {
-    const fs = await import('fs');
+    const req = eval('require') as NodeRequire;
+    const fs = req('fs') as typeof import('fs');
     _fs = fs.promises;
     return _fs;
   } catch {
@@ -45,7 +46,8 @@ async function getPath(): Promise<PathModule | null> {
   if (_path) return _path;
   if (typeof process === 'undefined' || !process.versions?.node) return null;
   try {
-    _path = await import('path');
+    const req = eval('require') as NodeRequire;
+    _path = req('path') as PathModule;
     return _path;
   } catch {
     return null;
@@ -160,6 +162,10 @@ class RogueModeManager {
     return { ...this.state };
   }
 
+  isActive(): boolean {
+    return this.state.currentMission !== null;
+  }
+
   getCurrentMission(): Readonly<RogueMission> | null {
     return this.state.currentMission ? { ...this.state.currentMission } : null;
   }
@@ -182,7 +188,11 @@ class RogueModeManager {
     scope?: string,
     toolUsed?: string,
     durationMs?: number
-  ): Promise<{ success: boolean; operation?: RogueOperation; message: string }> {
+  ): Promise<{
+    success: boolean;
+    operation?: RogueOperation;
+    message: string;
+  }> {
     try {
       // Create or get mission context
       let mission = this.state.currentMission;
@@ -381,11 +391,9 @@ class RogueModeManager {
         await fsModule.writeFile(reportFile, report, 'utf-8');
       }
     } catch (err) {
-      MollyLogger.warn(
-        'Failed to persist mission summary',
-        'rogue-mode',
-        { err: String(err) }
-      );
+      MollyLogger.warn('Failed to persist mission summary', 'rogue-mode', {
+        err: String(err),
+      });
     }
 
     this.state.currentMission = null;
@@ -434,14 +442,19 @@ class RogueModeManager {
     const missionName = `Bug Bounty — ${programName}`;
 
     // Start mission context
-    const missionStart = await this.startMission(missionName, authorization, scope, [
-      'Only test explicitly in-scope targets',
-      'Verify scope before every test request',
-      'No DoS or destructive actions',
-      'Document all findings with reproduction steps',
-      'Report criticals immediately — do not hold',
-      'Stay within program rate limits',
-    ]);
+    const missionStart = await this.startMission(
+      missionName,
+      authorization,
+      scope,
+      [
+        'Only test explicitly in-scope targets',
+        'Verify scope before every test request',
+        'No DoS or destructive actions',
+        'Document all findings with reproduction steps',
+        'Report criticals immediately — do not hold',
+        'Stay within program rate limits',
+      ]
+    );
 
     if (!missionStart.success) {
       return { success: false, message: missionStart.message };
@@ -453,11 +466,9 @@ class RogueModeManager {
       const campaign = huntOrchestrator.createCampaign(missionName, program);
       campaignId = campaign.id;
     } catch (err) {
-      MollyLogger.warn(
-        'Could not create hunt campaign',
-        'rogue-mode',
-        { err: String(err) }
-      );
+      MollyLogger.warn('Could not create hunt campaign', 'rogue-mode', {
+        err: String(err),
+      });
     }
 
     // Schedule autonomous hunt cycle
@@ -476,18 +487,16 @@ class RogueModeManager {
       jobId = job.id;
       this.state.activeBugBountyJobId = jobId;
     } catch (err) {
-      MollyLogger.warn(
-        'Could not schedule hunt job',
-        'rogue-mode',
-        { err: String(err) }
-      );
+      MollyLogger.warn('Could not schedule hunt job', 'rogue-mode', {
+        err: String(err),
+      });
     }
 
-    MollyLogger.info(
-      `Bug bounty hunt started: ${programName}`,
-      'rogue-mode',
-      { programId, campaignId, jobId }
-    );
+    MollyLogger.info(`Bug bounty hunt started: ${programName}`, 'rogue-mode', {
+      programId,
+      campaignId,
+      jobId,
+    });
 
     return {
       success: true,

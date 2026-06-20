@@ -1,47 +1,23 @@
 /**
  * @fileOverview Heartbeat Scheduler API — Control Molly's autonomous pulse
  *
- * GET  — Status of the heartbeat scheduler
- * POST — Start/stop/pause/resume the scheduler
- *
- * The scheduler auto-starts on first GET or POST if not already running.
+ * GET  — Legacy status endpoint (event-driven mode)
+ * POST — Start/resume are disabled in event-driven mode
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  getHeartbeatScheduler,
-  isHeartbeatRunning,
-} from '@/ai/tools/heartbeat-scheduler';
-import { getNeuralBrain } from '@/ai/memory/neural-engram';
+import { getHeartbeatScheduler } from '@/ai/tools/heartbeat-scheduler';
 
 export const dynamic = 'force-dynamic';
 
-/**
- * Ensures engram system is attached to scheduler for memory consolidation
- */
-function ensureEngramAttached() {
-  try {
-    const scheduler = getHeartbeatScheduler();
-    const brain = getNeuralBrain();
-    scheduler.attachEngramSystem(brain);
-  } catch {
-    // Non-fatal - engram system may not be ready
-  }
-}
-
 export async function GET() {
   const scheduler = getHeartbeatScheduler();
-
-  // Auto-start if not running
-  if (!isHeartbeatRunning()) {
-    scheduler.start();
-    ensureEngramAttached(); // must come AFTER start() — start() resets engramSystem to null
-  }
 
   const status = scheduler.getStatus();
   const history = scheduler.getHistory().slice(-10); // Last 10 cycles
 
   return NextResponse.json({
+    eventDrivenMode: true,
     ...status,
     recentHistory: history,
   });
@@ -56,13 +32,16 @@ export async function POST(request: NextRequest) {
 
     switch (action) {
       case 'start':
-        scheduler.start();
-        ensureEngramAttached(); // must come AFTER start() — start() resets engramSystem to null
-        return NextResponse.json({
-          success: true,
-          action: 'started',
-          status: scheduler.getStatus(),
-        });
+        return NextResponse.json(
+          {
+            success: false,
+            action: 'start-disabled',
+            message:
+              'Heartbeat scheduler start is disabled. Runtime is event-driven.',
+            status: scheduler.getStatus(),
+          },
+          { status: 409 }
+        );
 
       case 'stop':
         scheduler.stop();
@@ -81,12 +60,16 @@ export async function POST(request: NextRequest) {
         });
 
       case 'resume':
-        scheduler.resume();
-        return NextResponse.json({
-          success: true,
-          action: 'resumed',
-          status: scheduler.getStatus(),
-        });
+        return NextResponse.json(
+          {
+            success: false,
+            action: 'resume-disabled',
+            message:
+              'Heartbeat scheduler resume is disabled. Runtime is event-driven.',
+            status: scheduler.getStatus(),
+          },
+          { status: 409 }
+        );
 
       default:
         return NextResponse.json(

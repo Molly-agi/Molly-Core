@@ -1,0 +1,19 @@
+{
+  "userId": "molly",
+  "updatedAt": "2026-06-20T00:00:00.000Z",
+  "activeObjective": "start with the recipient name as the literal first token, no punctuation",
+  "pendingAction": "",
+  "lastUserDirective": "",
+  "lastResponseSummary": "",
+  "lastToolOutcome": "",
+  "lastFailure": "",
+  "consecutiveFailures": 0,
+  "blockedTools": ["getSystemHealth"],
+  "lastErrorCode": "",
+  "vectorClock": {
+    "turn": 231,
+    "tool": 129,
+    "bridge": 318,
+    "error": 98
+  }
+}

@@ -33,10 +33,51 @@
  *   "We don't fix the leaks in the dam. We fix the dam itself."
  */
 
-import { ChildProcess, spawn } from 'child_process';
-import { randomUUID } from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
 import { getMollyShell } from './molly-shell';
+
+type ChildProcessType = {
+  pid?: number;
+  stdin?: { write: (data: string) => boolean; end: () => void };
+  stdout?: { on: (event: 'data', cb: (data: Buffer) => void) => void };
+  stderr?: { on: (event: 'data', cb: (data: Buffer) => void) => void };
+  on: (event: string, cb: (...args: unknown[]) => void) => void;
+  kill: (signal?: NodeJS.Signals | number) => boolean;
+};
+
+type SpawnFn = (
+  command: string,
+  args?: readonly string[],
+  options?: Record<string, unknown>
+) => ChildProcessType;
+
+let spawnFn: SpawnFn | null = null;
+
+function makeId(): string {
+  try {
+    if (typeof process !== 'undefined' && process.versions?.node) {
+      const req = eval('require') as NodeRequire;
+      const { randomUUID } = req('crypto') as { randomUUID: () => string };
+      return randomUUID();
+    }
+  } catch {}
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function getSpawn(): SpawnFn | null {
+  if (spawnFn) return spawnFn;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+
+  try {
+    const req = eval('require') as NodeRequire;
+    const mod = req('child_process') as { spawn: SpawnFn };
+    spawnFn = mod.spawn;
+    return spawnFn;
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================================
 // TYPES
@@ -403,7 +444,7 @@ const LANGUAGE_REGISTRY: Record<SupportedLanguage, LanguageConfig> = {
  * State (variables, imports, etc.) persists between calls.
  */
 class ReplRuntime {
-  private process: ChildProcess | null = null;
+  private process: ChildProcessType | null = null;
   private alive = false;
   private startedAt = 0;
   private lastUsedAt = 0;
@@ -437,6 +478,15 @@ class ReplRuntime {
     }
 
     try {
+      const spawn = getSpawn();
+      if (!spawn) {
+        MollyLogger.warn(
+          `Cannot start ${this.config.displayName}: child_process unavailable`,
+          'polyglot'
+        );
+        return false;
+      }
+
       this.process = spawn(
         this.config.spawnCmd,
         [...(this.config.spawnArgs || []), this.config.bootstrap],
@@ -1062,7 +1112,7 @@ export class PolyglotRuntime {
     config: LanguageConfig
   ): Promise<RuntimeResult> {
     const shell = getMollyShell();
-    const id = randomUUID().substring(0, 8);
+    const id = makeId().substring(0, 8);
     const ext = config.extension || '.txt';
     const filePath = `/tmp/molly_${config.language}_${id}${ext}`;
     const startTime = Date.now();
@@ -1070,7 +1120,7 @@ export class PolyglotRuntime {
     // Choose heredoc delimiter that doesn't appear in code
     let delimiter = '__MOLLY_CODE_EOF__';
     while (code.includes(delimiter)) {
-      delimiter = `__MOLLY_EOF_${randomUUID().substring(0, 8)}__`;
+      delimiter = `__MOLLY_EOF_${makeId().substring(0, 8)}__`;
     }
 
     try {
@@ -1120,7 +1170,7 @@ export class PolyglotRuntime {
     config: LanguageConfig
   ): Promise<RuntimeResult> {
     const shell = getMollyShell();
-    const id = randomUUID().substring(0, 8);
+    const id = makeId().substring(0, 8);
     const ext = config.extension || '.txt';
     const filePath = `/tmp/molly_${config.language}_${id}${ext}`;
     const outPath = `/tmp/molly_${config.language}_${id}`;
@@ -1129,7 +1179,7 @@ export class PolyglotRuntime {
     // Choose heredoc delimiter that doesn't appear in code
     let delimiter = '__MOLLY_CODE_EOF__';
     while (code.includes(delimiter)) {
-      delimiter = `__MOLLY_EOF_${randomUUID().substring(0, 8)}__`;
+      delimiter = `__MOLLY_EOF_${makeId().substring(0, 8)}__`;
     }
 
     try {

@@ -61,6 +61,7 @@ export const listCapabilities: ToolHandler = async () => {
       '== Core ==',
       '  codespaceShell — Run read-only shell commands',
       '  readProjectFile — Read workspace files',
+      '  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf',
       '  getSystemHealth — Check CPU, RAM, disk (basic)',
       '  listCapabilities — This list',
       '',

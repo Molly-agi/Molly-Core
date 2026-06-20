@@ -28,6 +28,7 @@ import {
   listIntegrations,
   type IntegrationResult,
 } from '@/ai/flows/code-integration';
+import { goalOrchestrator } from '@/ai/flows/goal-orchestrator';
 import { MollyLogger } from '@/ai/logger';
 import { withTimeout, TIMEOUT_PRESETS } from '@/ai/tools/timeout-retry';
 import { ensureApiKey, checkRateLimit } from './utils';
@@ -146,6 +147,12 @@ export async function startAutonomousCycle(
   userId: string,
   count: number
 ) {
+  if (process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE !== '1') {
+    throw new Error(
+      'Autonomous cycle is disabled by policy. Use goal orchestrator mission mode.'
+    );
+  }
+
   try {
     ensureApiKey();
     await checkRateLimit('evolution-loop', 2000);
@@ -164,6 +171,36 @@ export async function startAutonomousCycle(
     MollyLogger.error(
       'Autonomous cycle failed',
       'startAutonomousCycle',
+      { userId },
+      e
+    );
+    throw e;
+  }
+}
+
+export async function startGoalOrchestration(
+  goal: string,
+  userId: string,
+  constraints: string[] = []
+) {
+  try {
+    ensureApiKey();
+    await checkRateLimit('goal-orchestrator', 700);
+    const guard = getSleepGuard(goal, 'goal-orchestrator');
+    if (guard) {
+      throw new Error(guard.message);
+    }
+    return await goalOrchestrator({
+      goal,
+      userId,
+      constraints,
+      mode: 'mission',
+      maxSteps: 8,
+    });
+  } catch (e: unknown) {
+    MollyLogger.error(
+      'Goal orchestration start failed',
+      'startGoalOrchestration',
       { userId },
       e
     );

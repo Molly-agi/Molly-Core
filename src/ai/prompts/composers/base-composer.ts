@@ -55,6 +55,8 @@ export interface ComposerContext {
   includeTools?: boolean;
   /** Include family knowledge? */
   includeFamily?: boolean;
+  /** Tools to drop from the advertised list (e.g. policy-blocked this turn) */
+  excludedTools?: string[];
 }
 
 export interface InjectionContext {
@@ -258,7 +260,12 @@ function buildDynamicSections(
       ? [
           volatileSection(
             'tools',
-            () => getToolsSection(context.deployment, context.isRogueMode),
+            () =>
+              getToolsSection(
+                context.deployment,
+                context.isRogueMode,
+                context.excludedTools
+              ),
             'Tool availability varies by deployment and mode'
           ),
         ]
@@ -368,6 +375,7 @@ export async function composeSystemPrompt(
     isRogueMode: context?.isRogueMode ?? rogueMode.isActive(),
     includeTools: context?.includeTools ?? true,
     includeFamily: context?.includeFamily ?? true,
+    excludedTools: context?.excludedTools,
   };
 
   // Build section lists

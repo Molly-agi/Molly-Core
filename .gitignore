@@ -55,6 +55,13 @@ firestore-debug.log
 eng.traineddata
 .molly-logs/
 .molly/
+# Allow Molly's personality state to be committed so changes persist across
+# codespace rebuilds and clones. The file is just slider values 0..1, not
+# secrets, and losing it silently was a major part of the "admin panel
+# doesn't lock in changes" bug (Eric directive 2026-06-15).
+!.molly/
+.molly/*
+!.molly/personality-state.json
 
 # Shrouded Memory — sensitive identity data, never commit with real values
 molly_sentinel/identity_manifest.json
@@ -96,6 +103,15 @@ logs/*.log
 COPILOT_SESSION_STATE.json
 COPILOT_SESSION_STATE.md
 
+# Local TermAI service account keys (never commit)
+stuff/logs/firebase/*.json
+stuff/firebase/*.json
+stuff/firebase/firebase
+
+# API vault secrets (keep templates only)
+config/api_vault/api-vault.json
+config/api_vault/*.local.env
+
 # VS Code extensions (dev workspace)
 extensions/
 .aider*
@@ -127,3 +143,20 @@ BRIDGE_STATUS_FINAL.md
 GEMINI.md
 PHASE_1_BRIDGE_UPGRADE.md
 bridge-diagnostic-for-opus.md
+
+# Bridge authentication key - must never be committed
+data/.bridge-bootstrap-key
+
+# Sensitive files and working dirs that must never be committed
+stuff/
+backups/
+sandbox/test.txt
+.sandbox/
+.lazarus-copilot-session.json
+.lazarus-twin-channel.jsonl
+.lazarus-bridge-5s.pid
+
+# Threat-monitor + hunt-mode runtime state
+.threat-monitor.pid
+.hunt-mode.pid
+.hunt/

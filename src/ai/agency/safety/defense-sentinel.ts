@@ -57,8 +57,9 @@ async function getExecAsync(): Promise<ExecAsyncFn | null> {
   }
 
   try {
-    const { exec } = await import('child_process');
-    const { promisify } = await import('util');
+    const req = eval('require') as NodeRequire;
+    const { exec } = req('child_process') as typeof import('child_process');
+    const { promisify } = req('util') as typeof import('util');
     execAsync = promisify(exec) as ExecAsyncFn;
     return execAsync;
   } catch {

@@ -18,7 +18,7 @@ const config = {
     'lucide-react': '<rootDir>/__mocks__/lucide-react.js',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(yaml|dotprompt|@genkit-ai|@radix-ui|lucide-react)/)',
+    'node_modules/(?!(yaml|dotprompt|@genkit-ai|@radix-ui|lucide-react|uuid)/)',
   ],
   testPathIgnorePatterns: [
     '/node_modules/',

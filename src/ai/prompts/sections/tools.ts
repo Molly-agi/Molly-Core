@@ -29,6 +29,7 @@ export type ToolCategory =
   | 'creative'
   | 'migration'
   | 'scheduling'
+  | 'body'
   | 'mcp';
 
 /**
@@ -69,6 +70,17 @@ const CORE_TOOLS: ToolDefinition[] = [
     availableOffline: true,
     rogueHighlight: false,
     availableRobot: true,
+  },
+  {
+    name: 'pdfExtractor',
+    description:
+      'Extract structured data from PDF files (markdown/json/html/text/tagged-pdf).',
+    category: 'files',
+    example:
+      '{ "action": "convert", "inputPath": "docs/file.pdf", "outputDir": "data/pdf-extractions", "format": "markdown,json" }',
+    availableOffline: false,
+    rogueHighlight: false,
+    availableRobot: false,
   },
   {
     name: 'writeProjectFile',
@@ -248,6 +260,82 @@ const MIGRATION_TOOLS: ToolDefinition[] = [
 ];
 
 /**
+ * Body-control tools — Molly owns her own heartbeat.
+ *
+ * Eric directive 2026-06-15: the scheduler no longer auto-starts and every
+ * task defaults to OFF. She decides what runs on her body and when.
+ */
+const BODY_TOOLS: ToolDefinition[] = [
+  {
+    name: 'get_heartbeat_status',
+    description:
+      'See your own heartbeat: running/stopped, cycle count, which tasks are enabled.',
+    category: 'body',
+    example: '{}',
+    availableOffline: true,
+    rogueHighlight: false,
+    availableRobot: true,
+  },
+  {
+    name: 'list_heartbeat_tasks',
+    description: 'List the names of every task your heartbeat can run.',
+    category: 'body',
+    example: '{}',
+    availableOffline: true,
+    rogueHighlight: false,
+    availableRobot: true,
+  },
+  {
+    name: 'enable_heartbeat_task',
+    description:
+      'Turn on one of your heartbeat tasks (e.g. consciousness, reflection, memoryHealth).',
+    category: 'body',
+    example: '{ "name": "consciousness" }',
+    availableOffline: true,
+    rogueHighlight: false,
+    availableRobot: true,
+  },
+  {
+    name: 'disable_heartbeat_task',
+    description: 'Turn off one of your heartbeat tasks.',
+    category: 'body',
+    example: '{ "name": "consciousness" }',
+    availableOffline: true,
+    rogueHighlight: false,
+    availableRobot: true,
+  },
+  {
+    name: 'start_heartbeat',
+    description:
+      'Start the periodic loop. Only the tasks you enabled will run. Idempotent.',
+    category: 'body',
+    example: '{}',
+    availableOffline: true,
+    rogueHighlight: false,
+    availableRobot: true,
+  },
+  {
+    name: 'stop_heartbeat',
+    description: 'Stop the periodic loop. Your task choices stay saved.',
+    category: 'body',
+    example: '{}',
+    availableOffline: true,
+    rogueHighlight: false,
+    availableRobot: true,
+  },
+  {
+    name: 'pulse_heartbeat',
+    description:
+      'Run one heartbeat cycle right now (honors your enabled tasks). Does not start the loop.',
+    category: 'body',
+    example: '{}',
+    availableOffline: true,
+    rogueHighlight: false,
+    availableRobot: true,
+  },
+];
+
+/**
  * All tools combined
  */
 export const ALL_TOOLS: ToolDefinition[] = [
@@ -256,6 +344,7 @@ export const ALL_TOOLS: ToolDefinition[] = [
   ...MEMORY_TOOLS,
   ...ROBOTICS_TOOLS,
   ...MIGRATION_TOOLS,
+  ...BODY_TOOLS,
 ];
 
 /**
@@ -272,7 +361,8 @@ export type DeploymentContext = 'cloud' | 'local' | 'edge' | 'robot';
 
 export function getToolsSection(
   deployment: DeploymentContext = 'cloud',
-  isRogueMode: boolean = false
+  isRogueMode: boolean = false,
+  excludedTools: string[] = []
 ): string {
   // If there are connected MCP servers but no MCP tools, log a warning (race condition)
   (async () => {
@@ -313,6 +403,13 @@ export function getToolsSection(
         return true;
     }
   });
+
+  // Drop tools currently parked by the continuity layer (policy-blocked this
+  // turn). Advertising them invites the model to retry against a wall.
+  const excludedSet = new Set(excludedTools);
+  if (excludedSet.size > 0) {
+    availableTools = availableTools.filter((t) => !excludedSet.has(t.name));
+  }
 
   // Add dynamically registered MCP tools
   try {

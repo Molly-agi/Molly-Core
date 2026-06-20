@@ -1,1 +1,198 @@
-{"sha":"ddeb9bc33272db1e34107fd286098bb1e9896e51","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/ddeb9bc33272db1e34107fd286098bb1e9896e51","tree":[{"path":".claude-plugin","mode":"040000","type":"tree","sha":"7966252f0de3c2b585e11e956851e369fd1b46bb","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/7966252f0de3c2b585e11e956851e369fd1b46bb"},{"path":".claude-plugin/marketplace.json","mode":"100644","type":"blob","sha":"e4f258212ddaf474e71e3732010380c203e8bc0d","size":964,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/e4f258212ddaf474e71e3732010380c203e8bc0d"},{"path":".gitattributes","mode":"100644","type":"blob","sha":"60a69c8d8ed93e9443a6a4e7742cb4e5cd90a1a3","size":219,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/60a69c8d8ed93e9443a6a4e7742cb4e5cd90a1a3"},{"path":"LICENSE","mode":"100644","type":"blob","sha":"9a4b1522e20c78e52794773324c851876bd6f44b","size":10766,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/9a4b1522e20c78e52794773324c851876bd6f44b"},{"path":"README.md","mode":"100644","type":"blob","sha":"1764dbe5267f6ecafe9eab442fb84009a8192248","size":6250,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/1764dbe5267f6ecafe9eab442fb84009a8192248"},{"path":"plugins","mode":"040000","type":"tree","sha":"52e5b43adac71d972cbb87a26699472fb4a0d265","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/52e5b43adac71d972cbb87a26699472fb4a0d265"},{"path":"plugins/android-reverse-engineering","mode":"040000","type":"tree","sha":"168bcf4636a6870c042d8c0a1b685849f77f8409","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/168bcf4636a6870c042d8c0a1b685849f77f8409"},{"path":"plugins/android-reverse-engineering/.claude-plugin","mode":"040000","type":"tree","sha":"b78a80eacd58309960dea3e0f0923623e082114f","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/b78a80eacd58309960dea3e0f0923623e082114f"},{"path":"plugins/android-reverse-engineering/.claude-plugin/plugin.json","mode":"100644","type":"blob","sha":"be386ee3626e70dddc6e7cf6df7b48cffd8e52cb","size":505,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/be386ee3626e70dddc6e7cf6df7b48cffd8e52cb"},{"path":"plugins/android-reverse-engineering/commands","mode":"040000","type":"tree","sha":"0fc768de010be67957cf358713338b0ef838a71c","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/0fc768de010be67957cf358713338b0ef838a71c"},{"path":"plugins/android-reverse-engineering/commands/decompile.md","mode":"100644","type":"blob","sha":"2489b821844e2881c8e91103d033f1c383ee98c8","size":3718,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/2489b821844e2881c8e91103d033f1c383ee98c8"},{"path":"plugins/android-reverse-engineering/skills","mode":"040000","type":"tree","sha":"23af3f284c59ce2a182ede4dabaab14287a3ebcc","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/23af3f284c59ce2a182ede4dabaab14287a3ebcc"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering","mode":"040000","type":"tree","sha":"81c52bb3cf7d66254a958eaff3bff0b96ae39739","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/81c52bb3cf7d66254a958eaff3bff0b96ae39739"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/SKILL.md","mode":"100644","type":"blob","sha":"0979ffb4dfe77e63aaf9893e2d44c7d8440e5a42","size":9690,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/0979ffb4dfe77e63aaf9893e2d44c7d8440e5a42"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/references","mode":"040000","type":"tree","sha":"66874a6b9ad4dc1caf2cace19da0dfcfddca028c","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/66874a6b9ad4dc1caf2cace19da0dfcfddca028c"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/references/api-extraction-patterns.md","mode":"100644","type":"blob","sha":"5467eb194a192a7dadd05dc1b32294f917f2451e","size":3655,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/5467eb194a192a7dadd05dc1b32294f917f2451e"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/references/call-flow-analysis.md","mode":"100644","type":"blob","sha":"7669f6265d09eb67f083d11d730f06899e3a47ad","size":5368,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/7669f6265d09eb67f083d11d730f06899e3a47ad"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/references/fernflower-usage.md","mode":"100644","type":"blob","sha":"e92f1dd830af5dd5dc76c7f597d983d056ff25f2","size":3785,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/e92f1dd830af5dd5dc76c7f597d983d056ff25f2"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/references/jadx-usage.md","mode":"100644","type":"blob","sha":"953f27af370c1e78ab79821d95a8415b5ae174a4","size":3078,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/953f27af370c1e78ab79821d95a8415b5ae174a4"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/references/setup-guide.md","mode":"100644","type":"blob","sha":"75e5303b7cb7678078003158ae7305cadc5cb002","size":4759,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/75e5303b7cb7678078003158ae7305cadc5cb002"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts","mode":"040000","type":"tree","sha":"38dfa587613a6744f62a6cdeca6cde02bb7de02d","url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/38dfa587613a6744f62a6cdeca6cde02bb7de02d"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/check-deps.sh","mode":"100755","type":"blob","sha":"b7f1bf70b73a1eb5c088cd3c96dda11b702cdd07","size":3927,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/b7f1bf70b73a1eb5c088cd3c96dda11b702cdd07"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/decompile.sh","mode":"100755","type":"blob","sha":"e36ca1ad18caf3c227c724f6cdafa668265f50b7","size":10618,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/e36ca1ad18caf3c227c724f6cdafa668265f50b7"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/find-api-calls.sh","mode":"100755","type":"blob","sha":"db52acfae5aaa8b17556f72958eaa496ab200050","size":3651,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/db52acfae5aaa8b17556f72958eaa496ab200050"},{"path":"plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/install-dep.sh","mode":"100755","type":"blob","sha":"b25e8e2695a690df19ac8a7bc0c62d0de4fc1e88","size":13032,"url":"https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/b25e8e2695a690df19ac8a7bc0c62d0de4fc1e88"}],"truncated":false}
+{
+  "sha": "ddeb9bc33272db1e34107fd286098bb1e9896e51",
+  "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/ddeb9bc33272db1e34107fd286098bb1e9896e51",
+  "tree": [
+    {
+      "path": ".claude-plugin",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7966252f0de3c2b585e11e956851e369fd1b46bb",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/7966252f0de3c2b585e11e956851e369fd1b46bb"
+    },
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4f258212ddaf474e71e3732010380c203e8bc0d",
+      "size": 964,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/e4f258212ddaf474e71e3732010380c203e8bc0d"
+    },
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "60a69c8d8ed93e9443a6a4e7742cb4e5cd90a1a3",
+      "size": 219,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/60a69c8d8ed93e9443a6a4e7742cb4e5cd90a1a3"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a4b1522e20c78e52794773324c851876bd6f44b",
+      "size": 10766,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/9a4b1522e20c78e52794773324c851876bd6f44b"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1764dbe5267f6ecafe9eab442fb84009a8192248",
+      "size": 6250,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/1764dbe5267f6ecafe9eab442fb84009a8192248"
+    },
+    {
+      "path": "plugins",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "52e5b43adac71d972cbb87a26699472fb4a0d265",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/52e5b43adac71d972cbb87a26699472fb4a0d265"
+    },
+    {
+      "path": "plugins/android-reverse-engineering",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "168bcf4636a6870c042d8c0a1b685849f77f8409",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/168bcf4636a6870c042d8c0a1b685849f77f8409"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/.claude-plugin",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b78a80eacd58309960dea3e0f0923623e082114f",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/b78a80eacd58309960dea3e0f0923623e082114f"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/.claude-plugin/plugin.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be386ee3626e70dddc6e7cf6df7b48cffd8e52cb",
+      "size": 505,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/be386ee3626e70dddc6e7cf6df7b48cffd8e52cb"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/commands",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0fc768de010be67957cf358713338b0ef838a71c",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/0fc768de010be67957cf358713338b0ef838a71c"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/commands/decompile.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2489b821844e2881c8e91103d033f1c383ee98c8",
+      "size": 3718,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/2489b821844e2881c8e91103d033f1c383ee98c8"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "23af3f284c59ce2a182ede4dabaab14287a3ebcc",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/23af3f284c59ce2a182ede4dabaab14287a3ebcc"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "81c52bb3cf7d66254a958eaff3bff0b96ae39739",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/81c52bb3cf7d66254a958eaff3bff0b96ae39739"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0979ffb4dfe77e63aaf9893e2d44c7d8440e5a42",
+      "size": 9690,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/0979ffb4dfe77e63aaf9893e2d44c7d8440e5a42"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/references",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "66874a6b9ad4dc1caf2cace19da0dfcfddca028c",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/66874a6b9ad4dc1caf2cace19da0dfcfddca028c"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/references/api-extraction-patterns.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5467eb194a192a7dadd05dc1b32294f917f2451e",
+      "size": 3655,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/5467eb194a192a7dadd05dc1b32294f917f2451e"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/references/call-flow-analysis.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7669f6265d09eb67f083d11d730f06899e3a47ad",
+      "size": 5368,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/7669f6265d09eb67f083d11d730f06899e3a47ad"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/references/fernflower-usage.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e92f1dd830af5dd5dc76c7f597d983d056ff25f2",
+      "size": 3785,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/e92f1dd830af5dd5dc76c7f597d983d056ff25f2"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/references/jadx-usage.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "953f27af370c1e78ab79821d95a8415b5ae174a4",
+      "size": 3078,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/953f27af370c1e78ab79821d95a8415b5ae174a4"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/references/setup-guide.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75e5303b7cb7678078003158ae7305cadc5cb002",
+      "size": 4759,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/75e5303b7cb7678078003158ae7305cadc5cb002"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "38dfa587613a6744f62a6cdeca6cde02bb7de02d",
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/trees/38dfa587613a6744f62a6cdeca6cde02bb7de02d"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/check-deps.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "b7f1bf70b73a1eb5c088cd3c96dda11b702cdd07",
+      "size": 3927,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/b7f1bf70b73a1eb5c088cd3c96dda11b702cdd07"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/decompile.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "e36ca1ad18caf3c227c724f6cdafa668265f50b7",
+      "size": 10618,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/e36ca1ad18caf3c227c724f6cdafa668265f50b7"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/find-api-calls.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "db52acfae5aaa8b17556f72958eaa496ab200050",
+      "size": 3651,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/db52acfae5aaa8b17556f72958eaa496ab200050"
+    },
+    {
+      "path": "plugins/android-reverse-engineering/skills/android-reverse-engineering/scripts/install-dep.sh",
+      "mode": "100755",
+      "type": "blob",
+      "sha": "b25e8e2695a690df19ac8a7bc0c62d0de4fc1e88",
+      "size": 13032,
+      "url": "https://api.github.com/repos/Asidburn76/android-reverse-engineering-skill/git/blobs/b25e8e2695a690df19ac8a7bc0c62d0de4fc1e88"
+    }
+  ],
+  "truncated": false
+}

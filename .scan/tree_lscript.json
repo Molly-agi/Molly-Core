@@ -1,1 +1,204 @@
-{"sha":"507477c94d19e29bbcb7fbebb4b85556d5222cb5","url":"https://api.github.com/repos/Asidburn76/lscript/git/trees/507477c94d19e29bbcb7fbebb4b85556d5222cb5","tree":[{"path":".gitattributes","mode":"100644","type":"blob","sha":"bdb0cabc87cf50106df6e15097dff816c8c3eb34","size":378,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/bdb0cabc87cf50106df6e15097dff816c8c3eb34"},{"path":".github","mode":"040000","type":"tree","sha":"c1a5e73e9443676f47a684db6e75149aa0d0980d","url":"https://api.github.com/repos/Asidburn76/lscript/git/trees/c1a5e73e9443676f47a684db6e75149aa0d0980d"},{"path":".github/ISSUE_TEMPLATE","mode":"040000","type":"tree","sha":"9f2a3bf20bbf177f5cd145c2cb2739f5cd3e0dcd","url":"https://api.github.com/repos/Asidburn76/lscript/git/trees/9f2a3bf20bbf177f5cd145c2cb2739f5cd3e0dcd"},{"path":".github/ISSUE_TEMPLATE/bug_report.md","mode":"100644","type":"blob","sha":"ae5dedfde8bf735556cdee914618b9f8d7404261","size":656,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/ae5dedfde8bf735556cdee914618b9f8d7404261"},{"path":".gitignore","mode":"100644","type":"blob","sha":"cd2946ad76b4402e5b3cab9243a9281aad228670","size":649,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/cd2946ad76b4402e5b3cab9243a9281aad228670"},{"path":"Changelog","mode":"100644","type":"blob","sha":"e921ccc9772615ef2f280eeac0ad82d20235804f","size":14150,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/e921ccc9772615ef2f280eeac0ad82d20235804f"},{"path":"LICENSE.md","mode":"100644","type":"blob","sha":"f288702d2fa16d3cdf0035b15a9fcbc552cd88e7","size":35149,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/f288702d2fa16d3cdf0035b15a9fcbc552cd88e7"},{"path":"README.md","mode":"100644","type":"blob","sha":"8d5cc3504310071560dfe840a5a169c86b2f0458","size":7142,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/8d5cc3504310071560dfe840a5a169c86b2f0458"},{"path":"install.sh","mode":"100644","type":"blob","sha":"eb9a4c36069967b714fda1f923b35c1c33e9079b","size":2695,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/eb9a4c36069967b714fda1f923b35c1c33e9079b"},{"path":"l","mode":"100644","type":"blob","sha":"d1c1f48a9f09d5ad22add5dabf439ea8f0e44b15","size":244931,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/d1c1f48a9f09d5ad22add5dabf439ea8f0e44b15"},{"path":"lh1","mode":"100644","type":"blob","sha":"f4e0ef93f4d24b0dfca2da261f3cdc888c85be0e","size":21491,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/f4e0ef93f4d24b0dfca2da261f3cdc888c85be0e"},{"path":"lh2","mode":"100644","type":"blob","sha":"71678e306cf68278442402ee51b6074ebc36e5f4","size":9792,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/71678e306cf68278442402ee51b6074ebc36e5f4"},{"path":"lh21","mode":"100644","type":"blob","sha":"894c38cc66ecab498c9809baa1aac027999a0e23","size":985,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/894c38cc66ecab498c9809baa1aac027999a0e23"},{"path":"lh3","mode":"100644","type":"blob","sha":"e8915609f94afaa84689b3d3e6fa5314d77e8269","size":27507,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/e8915609f94afaa84689b3d3e6fa5314d77e8269"},{"path":"lh31","mode":"100644","type":"blob","sha":"a418c5f99f7919ae2efa3892b6e65397ec3c0cf7","size":894,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/a418c5f99f7919ae2efa3892b6e65397ec3c0cf7"},{"path":"lh4","mode":"100644","type":"blob","sha":"641b516db29ed91143c0aaf89b96200249a70f11","size":9507,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/641b516db29ed91143c0aaf89b96200249a70f11"},{"path":"lh41","mode":"100644","type":"blob","sha":"5dbfe81399eddf12a565f3ba76b1de5727133bf8","size":207,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/5dbfe81399eddf12a565f3ba76b1de5727133bf8"},{"path":"lh42","mode":"100644","type":"blob","sha":"0c921395d5a1da4aeaea190fe21df82c3d27f162","size":1216,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/0c921395d5a1da4aeaea190fe21df82c3d27f162"},{"path":"lh43","mode":"100644","type":"blob","sha":"afadcaa81330575b4965e6318445d8aef2745294","size":1282,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/afadcaa81330575b4965e6318445d8aef2745294"},{"path":"ls","mode":"040000","type":"tree","sha":"a7c0f380b3c08bd222bd01a88783677d7121cba3","url":"https://api.github.com/repos/Asidburn76/lscript/git/trees/a7c0f380b3c08bd222bd01a88783677d7121cba3"},{"path":"ls/l131.sh","mode":"100644","type":"blob","sha":"3548d108d5c3da5898bea51b5685a8d160f1e60b","size":70,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/3548d108d5c3da5898bea51b5685a8d160f1e60b"},{"path":"ls/l132.sh","mode":"100644","type":"blob","sha":"3e56db1b13e85224fbedae8731abac6ee5453c72","size":58,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/3e56db1b13e85224fbedae8731abac6ee5453c72"},{"path":"ls/l133.sh","mode":"100644","type":"blob","sha":"772451d9aaabd1326ee9ae7ffd9403334ecf3cf2","size":58,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/772451d9aaabd1326ee9ae7ffd9403334ecf3cf2"},{"path":"uninstall.sh","mode":"100644","type":"blob","sha":"e844d269a2927be1f263734a7fa139eec02d1cf0","size":845,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/e844d269a2927be1f263734a7fa139eec02d1cf0"},{"path":"version.txt","mode":"100644","type":"blob","sha":"cd57a8b95d6d1de42ed8ae15fa6c449ed7c9863c","size":6,"url":"https://api.github.com/repos/Asidburn76/lscript/git/blobs/cd57a8b95d6d1de42ed8ae15fa6c449ed7c9863c"}],"truncated":false}
+{
+  "sha": "507477c94d19e29bbcb7fbebb4b85556d5222cb5",
+  "url": "https://api.github.com/repos/Asidburn76/lscript/git/trees/507477c94d19e29bbcb7fbebb4b85556d5222cb5",
+  "tree": [
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdb0cabc87cf50106df6e15097dff816c8c3eb34",
+      "size": 378,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/bdb0cabc87cf50106df6e15097dff816c8c3eb34"
+    },
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c1a5e73e9443676f47a684db6e75149aa0d0980d",
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/trees/c1a5e73e9443676f47a684db6e75149aa0d0980d"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9f2a3bf20bbf177f5cd145c2cb2739f5cd3e0dcd",
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/trees/9f2a3bf20bbf177f5cd145c2cb2739f5cd3e0dcd"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae5dedfde8bf735556cdee914618b9f8d7404261",
+      "size": 656,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/ae5dedfde8bf735556cdee914618b9f8d7404261"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd2946ad76b4402e5b3cab9243a9281aad228670",
+      "size": 649,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/cd2946ad76b4402e5b3cab9243a9281aad228670"
+    },
+    {
+      "path": "Changelog",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e921ccc9772615ef2f280eeac0ad82d20235804f",
+      "size": 14150,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/e921ccc9772615ef2f280eeac0ad82d20235804f"
+    },
+    {
+      "path": "LICENSE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "size": 35149,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/f288702d2fa16d3cdf0035b15a9fcbc552cd88e7"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d5cc3504310071560dfe840a5a169c86b2f0458",
+      "size": 7142,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/8d5cc3504310071560dfe840a5a169c86b2f0458"
+    },
+    {
+      "path": "install.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb9a4c36069967b714fda1f923b35c1c33e9079b",
+      "size": 2695,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/eb9a4c36069967b714fda1f923b35c1c33e9079b"
+    },
+    {
+      "path": "l",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1c1f48a9f09d5ad22add5dabf439ea8f0e44b15",
+      "size": 244931,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/d1c1f48a9f09d5ad22add5dabf439ea8f0e44b15"
+    },
+    {
+      "path": "lh1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4e0ef93f4d24b0dfca2da261f3cdc888c85be0e",
+      "size": 21491,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/f4e0ef93f4d24b0dfca2da261f3cdc888c85be0e"
+    },
+    {
+      "path": "lh2",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "71678e306cf68278442402ee51b6074ebc36e5f4",
+      "size": 9792,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/71678e306cf68278442402ee51b6074ebc36e5f4"
+    },
+    {
+      "path": "lh21",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "894c38cc66ecab498c9809baa1aac027999a0e23",
+      "size": 985,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/894c38cc66ecab498c9809baa1aac027999a0e23"
+    },
+    {
+      "path": "lh3",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e8915609f94afaa84689b3d3e6fa5314d77e8269",
+      "size": 27507,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/e8915609f94afaa84689b3d3e6fa5314d77e8269"
+    },
+    {
+      "path": "lh31",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a418c5f99f7919ae2efa3892b6e65397ec3c0cf7",
+      "size": 894,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/a418c5f99f7919ae2efa3892b6e65397ec3c0cf7"
+    },
+    {
+      "path": "lh4",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "641b516db29ed91143c0aaf89b96200249a70f11",
+      "size": 9507,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/641b516db29ed91143c0aaf89b96200249a70f11"
+    },
+    {
+      "path": "lh41",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5dbfe81399eddf12a565f3ba76b1de5727133bf8",
+      "size": 207,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/5dbfe81399eddf12a565f3ba76b1de5727133bf8"
+    },
+    {
+      "path": "lh42",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c921395d5a1da4aeaea190fe21df82c3d27f162",
+      "size": 1216,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/0c921395d5a1da4aeaea190fe21df82c3d27f162"
+    },
+    {
+      "path": "lh43",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afadcaa81330575b4965e6318445d8aef2745294",
+      "size": 1282,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/afadcaa81330575b4965e6318445d8aef2745294"
+    },
+    {
+      "path": "ls",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a7c0f380b3c08bd222bd01a88783677d7121cba3",
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/trees/a7c0f380b3c08bd222bd01a88783677d7121cba3"
+    },
+    {
+      "path": "ls/l131.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3548d108d5c3da5898bea51b5685a8d160f1e60b",
+      "size": 70,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/3548d108d5c3da5898bea51b5685a8d160f1e60b"
+    },
+    {
+      "path": "ls/l132.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e56db1b13e85224fbedae8731abac6ee5453c72",
+      "size": 58,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/3e56db1b13e85224fbedae8731abac6ee5453c72"
+    },
+    {
+      "path": "ls/l133.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "772451d9aaabd1326ee9ae7ffd9403334ecf3cf2",
+      "size": 58,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/772451d9aaabd1326ee9ae7ffd9403334ecf3cf2"
+    },
+    {
+      "path": "uninstall.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e844d269a2927be1f263734a7fa139eec02d1cf0",
+      "size": 845,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/e844d269a2927be1f263734a7fa139eec02d1cf0"
+    },
+    {
+      "path": "version.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd57a8b95d6d1de42ed8ae15fa6c449ed7c9863c",
+      "size": 6,
+      "url": "https://api.github.com/repos/Asidburn76/lscript/git/blobs/cd57a8b95d6d1de42ed8ae15fa6c449ed7c9863c"
+    }
+  ],
+  "truncated": false
+}

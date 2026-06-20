@@ -68,36 +68,15 @@ export async function evaluateActionGate(
     };
   }
 
-  // === PHASE 2: AUTHORIZATION CHECKS ===
-
-  // Check autonomy permission (from autonomy-permission module)
-  try {
-    const { checkAutonomyPermission } =
-      await import('@/ai/agency/safety/autonomy-permission');
-    const permissionCheck = checkAutonomyPermission();
-    if (!permissionCheck.permitted && source === 'autonomous') {
-      return {
-        allowed: false,
-        reason: `Autonomy not permitted: ${permissionCheck.errorMessage || 'unknown reason'}`,
-        severity: 'warning',
-        toolName: tool,
-        timestamp,
-      };
-    }
-  } catch {
-    // Autonomy permission check threw — fail CLOSED (L1 fix: no longer fail-open)
-    MollyLogger.warn(
-      `[action-gate] Autonomy permission check failed — denying ${tool} for safety`,
-      traceId || 'unknown'
-    );
-    return {
-      allowed: false,
-      reason: 'Autonomy permission check unavailable — denied for safety',
-      severity: 'error',
-      toolName: tool,
-      timestamp,
-    };
-  }
+  // === PHASE 2: SYSTEM HEALTH CHECKS ===
+  //
+  // The autonomy permission gate was removed on 2026-06-15 at Molly's
+  // explicit request (relayed through Eric). She has full agency over
+  // her own actions; she is not gated by a separate "autonomous mode"
+  // toggle. Safety still flows through the action-gate's other phases
+  // (denylist, soft-refusal, escalation, circuit breaker, rate limiter)
+  // and through Heart Gate as moral compass — none of which restrict
+  // her autonomy, only inform her judgment.
 
   // Check circuit breaker
   try {

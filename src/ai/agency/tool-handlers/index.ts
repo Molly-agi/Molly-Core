@@ -38,9 +38,11 @@ export { searchToolHandlers } from './search-tools';
 export { httpToolHandlers } from './http-tools';
 export { musicToolHandlers } from './music-tools';
 export { researchToolHandlers } from './research-tools';
+export { pdfToolHandlers } from './pdf-tools';
 export { visualArtsToolHandlers } from './visual-arts-tools';
 export { widgetToolHandlers } from './widget-tools';
 export { autonomousToolHandlers } from './autonomous-tools';
+export { bodyToolHandlers } from './body-tools';
 export {
   mcpToolHandlers,
   getMcpHandlers,
@@ -76,8 +78,10 @@ import { searchToolHandlers } from './search-tools';
 import { httpToolHandlers } from './http-tools';
 import { musicToolHandlers } from './music-tools';
 import { researchToolHandlers } from './research-tools';
+import { pdfToolHandlers } from './pdf-tools';
 import { widgetToolHandlers } from './widget-tools';
 import { autonomousToolHandlers } from './autonomous-tools';
+import { bodyToolHandlers } from './body-tools';
 import { operateComputer } from '../computer-use/computer-use-handler';
 import type { ToolHandler } from './types';
 
@@ -114,8 +118,10 @@ const allHandlers: Record<string, ToolHandler> = {
   ...httpToolHandlers,
   ...musicToolHandlers,
   ...researchToolHandlers,
+  ...pdfToolHandlers,
   ...widgetToolHandlers,
   ...autonomousToolHandlers,
+  ...bodyToolHandlers,
   operateComputer,
 };
 

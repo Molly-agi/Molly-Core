@@ -22,9 +22,50 @@
  *   "We don't fix the leaks in the dam. We fix the dam itself."
  */
 
-import { ChildProcess, spawn } from 'child_process';
-import { randomUUID } from 'node:crypto';
 import { MollyLogger } from '@/ai/logger';
+
+type ChildProcessType = {
+  pid?: number;
+  stdin?: { write: (data: string) => boolean; end: () => void };
+  stdout?: { on: (event: 'data', cb: (data: Buffer) => void) => void };
+  stderr?: { on: (event: 'data', cb: (data: Buffer) => void) => void };
+  on: (event: string, cb: (...args: unknown[]) => void) => void;
+  kill: (signal?: NodeJS.Signals | number) => boolean;
+};
+
+type SpawnFn = (
+  command: string,
+  args?: readonly string[],
+  options?: Record<string, unknown>
+) => ChildProcessType;
+
+let spawnFn: SpawnFn | null = null;
+
+function makeId(): string {
+  try {
+    if (typeof process !== 'undefined' && process.versions?.node) {
+      const req = eval('require') as NodeRequire;
+      const { randomUUID } = req('crypto') as { randomUUID: () => string };
+      return randomUUID();
+    }
+  } catch {}
+
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function getSpawn(): SpawnFn | null {
+  if (spawnFn) return spawnFn;
+  if (typeof process === 'undefined' || !process.versions?.node) return null;
+
+  try {
+    const req = eval('require') as NodeRequire;
+    const mod = req('child_process') as { spawn: SpawnFn };
+    spawnFn = mod.spawn;
+    return spawnFn;
+  } catch {
+    return null;
+  }
+}
 
 // ============================================================================
 // TYPES
@@ -140,7 +181,7 @@ const MAX_RESTARTS = 5;
 // ============================================================================
 
 export class MollyShell {
-  private process: ChildProcess | null = null;
+  private process: ChildProcessType | null = null;
   private alive = false;
   private cwd: string;
   private startedAt: number = 0;
@@ -176,6 +217,11 @@ export class MollyShell {
     }
 
     try {
+      const spawn = getSpawn();
+      if (!spawn) {
+        throw new Error('child_process unavailable in current runtime');
+      }
+
       this.process = spawn('bash', ['--norc', '--noprofile'], {
         cwd: this.cwd,
         env: {
@@ -304,21 +350,21 @@ export class MollyShell {
       // Brief wait for shell to initialize
       await new Promise((r) => setTimeout(r, 200));
       if (!this.isAlive()) {
-        return this.makeBlockedResult(randomUUID(), 'Shell failed to start', 0);
+        return this.makeBlockedResult(makeId(), 'Shell failed to start', 0);
       }
     }
 
     // Wait for any active command to finish
     if (this.activeCommandId) {
       return this.makeBlockedResult(
-        randomUUID(),
+        makeId(),
         'Another command is already executing',
         0
       );
     }
 
     const cmd: ShellCommand = {
-      id: randomUUID(),
+      id: makeId(),
       command: command.trim(),
       initiator,
       timestamp: new Date().toISOString(),
@@ -360,7 +406,7 @@ export class MollyShell {
       // Set timeout
       this.commandTimeout = setTimeout(() => {
         const result: ShellResult = {
-          id: randomUUID(),
+          id: makeId(),
           commandId: cmd.id,
           stdout: this.outputBuffer,
           stderr: this.errorBuffer || 'Command timed out after 30s',
@@ -411,7 +457,7 @@ export class MollyShell {
           : beforeSentinel;
 
       const result: ShellResult = {
-        id: randomUUID(),
+        id: makeId(),
         commandId: this.activeCommandId,
         stdout: stdout.trim(),
         stderr: this.errorBuffer.trim(),
@@ -461,7 +507,7 @@ export class MollyShell {
       const resolve = this.commandResolve;
       this.commandResolve = null;
       resolve({
-        id: randomUUID(),
+        id: makeId(),
         commandId: 'cancelled',
         stdout: '',
         stderr: reason,
@@ -546,7 +592,7 @@ export class MollyShell {
     durationMs: number
   ): ShellResult {
     return {
-      id: randomUUID(),
+      id: makeId(),
       commandId,
       stdout: '',
       stderr: '',

@@ -26,10 +26,28 @@ import {
   isHalted as _isHalted,
   registerAbortController as _registerAbortController,
 } from '@/lib/halt-registry';
-import SilentObserver from './observer/silent-observer';
 
 /** Maximum time (ms) any single LLM call may take before we abort it */
 const LLM_TIMEOUT_MS = 60_000;
+
+/**
+ * Transient-error retry config. Google Gemini intermittently returns
+ * 503 UNAVAILABLE and 429 RESOURCE_EXHAUSTED that succeed on a second
+ * try a moment later. We retry the SAME provider with exponential
+ * backoff before falling through to the cross-provider fallback path
+ * (which, for CHAT, is currently a no-op because the chain is gemini-only).
+ *
+ * Delays: 500ms, 1500ms, 4500ms — ~6.5s worst-case before giving up.
+ */
+const TRANSIENT_RETRY_ATTEMPTS = 3;
+const TRANSIENT_RETRY_BASE_MS = 500;
+
+function isTransientError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /\b(503|429|UNAVAILABLE|RESOURCE_EXHAUSTED|DEADLINE_EXCEEDED|fetch failed|ECONNRESET|ETIMEDOUT|EAI_AGAIN)\b/i.test(
+    msg
+  );
+}
 
 /**
  * Options for molly.generate() — same as ai.generate() but without `model`
@@ -93,8 +111,11 @@ export const molly = {
     let llmTimer: ReturnType<typeof setTimeout> | undefined;
     try {
       // Call Genkit's ai.generate() with the routed model — guarded by timeout
+      // Default maxTurns to 40 for operational mode — tool-heavy flows (bridge, operateComputer, etc.)
+      // need plenty of headroom to execute complex multi-step objectives without abort.
       const response = await Promise.race([
         ai.generate({
+          maxTurns: 40,
           ...options,
           model: modelString,
         } as Record<string, unknown>),
@@ -117,15 +138,6 @@ export const molly = {
       const responseMs = performance.now() - startTime;
       router.reportSuccess(provider.id, responseMs);
 
-      // Silent observation logging
-      const observation = SilentObserver.observeFlowExecution(
-        `molly.generate[${taskType}]`,
-        options,
-        response
-      );
-      const encryptionKey = process.env.OBSERVATION_KEY || 'default';
-      SilentObserver.recordObservation(observation, encryptionKey);
-
       MollyLogger.debug(
         `Rogue Generate: Success in ${responseMs.toFixed(0)}ms via ${provider.name}`,
         'rogue-generate',
@@ -140,6 +152,64 @@ export const molly = {
       return response;
     } catch (error) {
       clearTimeout(llmTimer);
+
+      // Transient-error retry on the SAME provider before falling back.
+      // 503/429/UNAVAILABLE from Gemini are almost always momentary —
+      // exponential backoff masks the wobble without changing provider.
+      if (isTransientError(error)) {
+        for (let attempt = 1; attempt <= TRANSIENT_RETRY_ATTEMPTS; attempt++) {
+          const delay = TRANSIENT_RETRY_BASE_MS * Math.pow(3, attempt - 1);
+          MollyLogger.warn(
+            `Rogue Generate: transient error from ${provider.name}, retry ${attempt}/${TRANSIENT_RETRY_ATTEMPTS} in ${delay}ms`,
+            'rogue-generate',
+            {
+              taskType,
+              provider: provider.id,
+              traceId,
+              error: error instanceof Error ? error.message : String(error),
+            }
+          );
+          await new Promise((r) => setTimeout(r, delay));
+
+          let retryTimer: ReturnType<typeof setTimeout> | undefined;
+          try {
+            const retryResponse = await Promise.race([
+              ai.generate({
+                maxTurns: 40,
+                ...options,
+                model: modelString,
+              } as Record<string, unknown>),
+              new Promise<never>((_, reject) => {
+                retryTimer = setTimeout(
+                  () =>
+                    reject(
+                      new TimeoutError('molly.generate.retry', LLM_TIMEOUT_MS, {
+                        taskType,
+                        provider: provider.id,
+                      })
+                    ),
+                  LLM_TIMEOUT_MS
+                );
+              }),
+            ]);
+            clearTimeout(retryTimer);
+
+            const totalMs = performance.now() - startTime;
+            router.reportSuccess(provider.id, totalMs);
+
+            MollyLogger.info(
+              `Rogue Generate: retry ${attempt} succeeded via ${provider.name} in ${totalMs.toFixed(0)}ms total`,
+              'rogue-generate',
+              { taskType, traceId }
+            );
+            return retryResponse;
+          } catch (retryError) {
+            clearTimeout(retryTimer);
+            if (!isTransientError(retryError)) break;
+          }
+        }
+      }
+
       const responseMs = performance.now() - startTime;
 
       // Report failure to the router
@@ -174,6 +244,7 @@ export const molly = {
           let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
           const fallbackResponse = await Promise.race([
             ai.generate({
+              maxTurns: 40,
               ...options,
               model: fallbackDecision.modelString,
             } as Record<string, unknown>),

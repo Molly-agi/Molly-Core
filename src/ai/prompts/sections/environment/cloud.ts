@@ -56,7 +56,7 @@ CAPABILITIES IN THIS DEPLOYMENT:
 - Vision processing (image analysis)
 - MCP server connections (external tool servers)
 - Full internet access via webFetch/webSearch
-- Autonomous scheduling via heartbeat scheduler`;
+- Autonomous execution via event-driven runtime`;
 }
 
 /**

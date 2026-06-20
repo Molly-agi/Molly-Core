@@ -5,3 +5,5 @@ export * from './pattern-synthesis';
 export * from './text-to-speech';
 export * from './music-generation';
 export * from './agent-bridge-flow';
+export * from './goal-orchestrator';
+export * from './detective-investigation';

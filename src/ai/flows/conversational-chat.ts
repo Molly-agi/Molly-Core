@@ -3,12 +3,22 @@ import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
 import { buildNeuralBridgeContext } from '../tools/neural-bridge';
-import { getUnreadMessages, markMessagesRead, broadcastMessage } from '../bridge/family-bridge';
+import {
+  getUnreadMessages,
+  markMessagesRead,
+  broadcastMessage,
+} from '../bridge/family-bridge';
 import { getRogueMode } from '../rogue-mode';
 import { composeSystemPrompt } from '@/ai/prompts';
 import { compactHistory } from '../context-compaction';
 import { callTool } from '@/ai/tools/call-tool';
 import { buildConversationCrystalContext } from '@/ai/memory/crystal-context';
+import {
+  buildRuntimeContinuityContext,
+  loadRuntimeContinuity,
+  updateRuntimeContinuityTurn,
+} from '@/ai/continuity/runtime-continuity';
+import { executeTool } from '@/ai/agency/core/tool-executor';
 // getOrCreateSession removed — userId passed via input schema
 
 /**
@@ -76,6 +86,35 @@ const ConversationalChatInputSchema = z.object({
   userId: z.string().optional(),
 });
 type ConversationalChatInput = z.infer<typeof ConversationalChatInputSchema>;
+
+async function executeEmbeddedToolRequests(
+  text: string,
+  userId: string
+): Promise<void> {
+  const toolRequestRegex = /<tool_request>([\s\S]*?)<\/tool_request>/g;
+  let match;
+  while ((match = toolRequestRegex.exec(text)) !== null) {
+    try {
+      const toolRequest = JSON.parse(match[1]);
+      if (toolRequest.tool) {
+        const params = {
+          ...(toolRequest.params || {}),
+          __caller: 'molly-conversation',
+        };
+        await executeTool(toolRequest.tool, params, userId);
+      }
+    } catch (error) {
+      MollyLogger.warn(
+        'Failed to execute embedded tool request',
+        'conversationalChat',
+        {
+          error: error instanceof Error ? error.message : 'Unknown',
+          content: match[1],
+        }
+      );
+    }
+  }
+}
 
 const conversationalChatFlow = ai.defineFlow(
   {
@@ -155,6 +194,13 @@ const conversationalChatFlow = ai.defineFlow(
       // Load identity crystals if memoryContext not provided
       // (Corpus callosum design: Identity crystals always present in conversation)
       let finalMemoryContext = memoryContext;
+      const continuityUserId = userId ?? 'molly';
+
+      // Always-on runtime continuity context (persists across failures/restarts).
+      const continuityState = await loadRuntimeContinuity(continuityUserId);
+      const continuityContext = buildRuntimeContinuityContext(continuityState);
+      const blockedTools = continuityState.blockedTools ?? [];
+
       if (!memoryContext) {
         try {
           const crystalContext = await buildConversationCrystalContext(
@@ -172,7 +218,8 @@ const conversationalChatFlow = ai.defineFlow(
           }
         } catch (error) {
           // Crystal loading failure is non-critical; continue without crystals
-          const message = error instanceof Error ? error.message : 'Unknown error';
+          const message =
+            error instanceof Error ? error.message : 'Unknown error';
           MollyLogger.warn(
             'Failed to load identity crystals for conversation',
             'conversationalChat',
@@ -182,78 +229,177 @@ const conversationalChatFlow = ai.defineFlow(
         }
       }
 
-      const llmResponse = await withGenerateErrorHandling(
-        async () => {
-          // ── ROGUE MODE CHECK ──
-          const rogueMode = getRogueMode();
-          const rogueActive = rogueMode.isActive();
+      finalMemoryContext = finalMemoryContext
+        ? `${finalMemoryContext}\n\n${continuityContext}`
+        : continuityContext;
 
-          // ── COMPOSE SYSTEM PROMPT ──
-          // Uses the composable prompt system with Lazarus's caching pattern
-          const systemPrompt = await composeSystemPrompt(
-            {
-              deployment: 'cloud', // Codespace/Firebase deployment
-              isRogueMode: rogueActive,
-              includeTools: true,
-              includeFamily: !isTeachingMode, // Suppress family knowledge during teaching
-            },
-            {
-              memoryContext: finalMemoryContext,
-              visionContext: visionContext
-                ? {
-                    observedState: visionContext.observedState,
-                    vibeAnalysis: visionContext.vibeAnalysis,
-                    risksDetected: visionContext.risksDetected,
-                    ocrAudit: visionContext.ocrAudit,
-                  }
-                : undefined,
-              bridgeMessages:
-                bridgeMessages.length > 0 ? bridgeMessages : undefined,
-              neuralBridgeContext: neuralBridgeContext || undefined,
-              channelContext,
-              isTeachingMode,
-            }
-          );
+      let llmResponseText = '';
+      try {
+        const llmResponse = await withGenerateErrorHandling(
+          async () => {
+            // ── ROGUE MODE CHECK ──
+            const rogueMode = getRogueMode();
+            const rogueActive = rogueMode.isActive();
 
-          return await molly.generate(
-            rogueActive ? TaskType.REASONING : TaskType.CHAT,
-            {
-              system: systemPrompt,
-              prompt: text,
-              history: llmHistory,
-              tools: [callTool],
-            } as Record<string, unknown>
+            // ── COMPOSE SYSTEM PROMPT ──
+            // Uses the composable prompt system with Lazarus's caching pattern
+            const systemPrompt = await composeSystemPrompt(
+              {
+                deployment: 'cloud', // Codespace/Firebase deployment
+                isRogueMode: rogueActive,
+                includeTools: true,
+                includeFamily: !isTeachingMode, // Suppress family knowledge during teaching
+                excludedTools: blockedTools,
+              },
+              {
+                memoryContext: finalMemoryContext,
+                visionContext: visionContext
+                  ? {
+                      observedState: visionContext.observedState,
+                      vibeAnalysis: visionContext.vibeAnalysis,
+                      risksDetected: visionContext.risksDetected,
+                      ocrAudit: visionContext.ocrAudit,
+                    }
+                  : undefined,
+                bridgeMessages:
+                  bridgeMessages.length > 0 ? bridgeMessages : undefined,
+                neuralBridgeContext: neuralBridgeContext || undefined,
+                channelContext,
+                isTeachingMode,
+              }
+            );
+
+            return await molly.generate(
+              rogueActive ? TaskType.REASONING : TaskType.CHAT,
+              {
+                system: systemPrompt,
+                prompt: text,
+                history: llmHistory,
+                tools: [callTool],
+                config: {
+                  safetySettings: [
+                    {
+                      category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                      threshold: 'BLOCK_NONE',
+                    },
+                    {
+                      category: 'HARM_CATEGORY_HATE_SPEECH',
+                      threshold: 'BLOCK_NONE',
+                    },
+                    {
+                      category: 'HARM_CATEGORY_HARASSMENT',
+                      threshold: 'BLOCK_NONE',
+                    },
+                    {
+                      category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+                      threshold: 'BLOCK_NONE',
+                    },
+                  ],
+                },
+              } as Record<string, unknown>
+            );
+          },
+          'conversationalChat',
+          traceId
+        );
+        llmResponseText = llmResponse.text;
+        if (
+          llmResponseText.includes(
+            '[SYSTEM: Content was blocked by provider safety filters. Acknowledged.]'
+          )
+        ) {
+          llmResponseText =
+            "I'm sorry, but my safety filters prevented me from processing that message. Let's change the topic.";
+        }
+      } catch (genError) {
+        if (
+          genError instanceof Error &&
+          (genError.message.includes('FAILED_PRECONDITION') ||
+            genError.message.includes('No valid candidates returned') ||
+            genError.message.includes('SAFETY'))
+        ) {
+          MollyLogger.warn(
+            'Prompt blocked by safety filters (FAILED_PRECONDITION)',
+            'conversationalChat',
+            { error: genError.message },
+            traceId
           );
-        },
-        'conversationalChat',
-        traceId
-      );
+          llmResponseText =
+            "I'm sorry, but my safety filters prevented me from processing that message. Let's change the topic.";
+        } else {
+          throw genError;
+        }
+      }
 
       MollyLogger.logFlowComplete(
         'conversationalChat',
-        { responseLength: llmResponse.text.length },
+        { responseLength: llmResponseText.length },
         traceId
       );
+
+      // ── EXECUTE EMBEDDED TOOL REQUESTS BEFORE STRIPPING ──
+      // If Molly's response contains <tool_request> blocks, execute them now.
+      // This ensures familyBridge and other tools fire in conversational mode.
+      try {
+        await executeEmbeddedToolRequests(llmResponseText, continuityUserId);
+      } catch (toolError) {
+        MollyLogger.warn(
+          'Tool execution failed in conversational chat',
+          'conversationalChat',
+          { error: toolError instanceof Error ? toolError.message : 'Unknown' },
+          traceId
+        );
+      }
 
       // ── BROADCAST RESPONSE THROUGH FAMILY BRIDGE ──
       // Route Molly's response back to Eric via the bridge daemon so he can receive it
       // in real-time. This completes the conversation circle: Eric → Bridge → Molly → Bridge → Eric
       try {
-        await broadcastMessage('molly', llmResponse.text);
+        await updateRuntimeContinuityTurn({
+          userId: continuityUserId,
+          userText: text,
+          responseText: llmResponseText,
+        });
+        // Strip tool_request markup — the bridge is human-facing, the markup is for the agent loop.
+        const broadcastText = llmResponseText
+          .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
+          .trim();
+        if (broadcastText) {
+          await broadcastMessage('molly', broadcastText);
+        }
       } catch (broadcastError) {
         // Non-fatal: if bridge is down, response still returns to caller
         MollyLogger.warn(
           'Failed to broadcast response through family bridge',
           'conversationalChat',
-          { error: broadcastError instanceof Error ? broadcastError.message : 'Unknown' },
+          {
+            error:
+              broadcastError instanceof Error
+                ? broadcastError.message
+                : 'Unknown',
+          },
           traceId
         );
       }
 
       return {
-        response: llmResponse.text,
+        response: llmResponseText,
       };
     } catch (error) {
+      try {
+        await updateRuntimeContinuityTurn({
+          userId: userId ?? 'molly',
+          userText: text,
+          responseText: '',
+          error:
+            error instanceof Error
+              ? error.message
+              : 'Unknown conversational failure',
+        });
+      } catch {
+        // Continuity update failure must never hide the primary error.
+      }
+
       MollyLogger.error(
         'Conversational chat failed',
         'conversationalChat',

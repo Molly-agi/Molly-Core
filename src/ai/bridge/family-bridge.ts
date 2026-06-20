@@ -9,6 +9,7 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import { createHash, createHmac } from 'crypto';
 
 export interface BridgeMessage {
   id: string;
@@ -28,7 +29,20 @@ export interface BridgeState {
 
 const BRIDGE_DIR = path.join(process.cwd(), 'src', 'ai', 'bridge');
 const BRIDGE_FILE = path.join(BRIDGE_DIR, 'conversation.json');
+const CONTEXT_DIR = path.join(process.cwd(), '.molly-context');
+const BRIDGE_AUDIT_FILE = path.join(CONTEXT_DIR, 'bridge-audit.jsonl');
 const MAX_MESSAGES = 500;
+const DUPLICATE_WINDOW_MS = 15000;
+const DUPLICATE_SCAN_DEPTH = 8;
+
+function normalizeForDedup(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
 
 // ---- Write serialization ----
 // Prevents TOCTOU race conditions on concurrent read→modify→write cycles
@@ -89,6 +103,73 @@ export async function readBridgeState(): Promise<BridgeState> {
 }
 
 const DAEMON_URL = process.env.BRIDGE_DAEMON_URL || 'http://localhost:9099';
+const BRIDGE_SERVICE_AUTH_KEY = process.env.BRIDGE_SERVICE_AUTH_KEY || '';
+
+export interface BridgeDeliveryReceipt {
+  success: boolean;
+  message: BridgeMessage;
+  deliveryPath: 'daemon' | 'local';
+  attempts: number;
+  ackId: string;
+  error?: string;
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function sha256Hex(input: string): string {
+  return createHash('sha256').update(input).digest('hex');
+}
+
+function signDaemonRequest(timestamp: string, body: string): string {
+  return createHmac('sha256', BRIDGE_SERVICE_AUTH_KEY)
+    .update(`${timestamp}.${body}`)
+    .digest('hex');
+}
+
+function buildDaemonHeaders(body: string): HeadersInit {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  // Optional service auth: when configured, every daemon request carries
+  // a timestamped HMAC signature for verification.
+  if (BRIDGE_SERVICE_AUTH_KEY) {
+    const timestamp = new Date().toISOString();
+    headers['x-bridge-ts'] = timestamp;
+    headers['x-bridge-sig'] = signDaemonRequest(timestamp, body);
+  }
+
+  return headers;
+}
+
+async function appendBridgeAuditRecord(entry: {
+  message: BridgeMessage;
+  deliveryPath: 'daemon' | 'local';
+  attempts: number;
+  ackId: string;
+}): Promise<void> {
+  const canonical = JSON.stringify({
+    id: entry.message.id,
+    from: entry.message.from,
+    timestamp: entry.message.timestamp,
+    content: entry.message.content,
+    read: entry.message.read,
+  });
+
+  const record = {
+    auditedAt: new Date().toISOString(),
+    deliveryPath: entry.deliveryPath,
+    attempts: entry.attempts,
+    ackId: entry.ackId,
+    messageDigest: sha256Hex(canonical),
+    message: entry.message,
+  };
+
+  await fs.mkdir(CONTEXT_DIR, { recursive: true });
+  await fs.appendFile(BRIDGE_AUDIT_FILE, `${JSON.stringify(record)}\n`, 'utf8');
+}
 
 /**
  * Route a message through the bridge daemon so it broadcasts on WS to all
@@ -100,21 +181,78 @@ export async function broadcastMessage(
   from: BridgeMessage['from'],
   content: string
 ): Promise<BridgeMessage> {
-  try {
-    const res = await fetch(`${DAEMON_URL}/api/bridge`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, content }),
-      signal: AbortSignal.timeout(2000),
-    });
-    if (res.ok) {
-      const data = (await res.json()) as { message: BridgeMessage };
-      return data.message;
+  const receipt = await broadcastMessageWithReceipt(from, content);
+  return receipt.message;
+}
+
+export async function broadcastMessageWithReceipt(
+  from: BridgeMessage['from'],
+  content: string,
+  options?: { maxAttempts?: number; baseDelayMs?: number }
+): Promise<BridgeDeliveryReceipt> {
+  const maxAttempts = options?.maxAttempts ?? 4;
+  const baseDelayMs = options?.baseDelayMs ?? 150;
+
+  let attempts = 0;
+  let lastError = '';
+
+  for (let i = 0; i < maxAttempts; i++) {
+    attempts++;
+    try {
+      const body = JSON.stringify({ from, content });
+      const res = await fetch(`${DAEMON_URL}/api/bridge`, {
+        method: 'POST',
+        headers: buildDaemonHeaders(body),
+        body,
+        signal: AbortSignal.timeout(2000),
+      });
+
+      if (res.ok) {
+        const data = (await res.json()) as { message: BridgeMessage };
+        const ackId = data.message?.id || `ack-${Date.now()}-${attempts}`;
+
+        try {
+          await appendBridgeAuditRecord({
+            message: data.message,
+            deliveryPath: 'daemon',
+            attempts,
+            ackId,
+          });
+        } catch {
+          // Non-blocking: audit logging must not prevent bridge delivery.
+        }
+
+        return {
+          success: true,
+          message: data.message,
+          deliveryPath: 'daemon',
+          attempts,
+          ackId,
+        };
+      }
+
+      lastError = `bridge daemon status ${res.status}`;
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
     }
-  } catch {
-    // daemon unreachable — fall through to local write
+
+    if (i < maxAttempts - 1) {
+      await wait(baseDelayMs * Math.pow(2, i));
+    }
   }
-  return sendMessage(from, content);
+
+  // Daemon path failed — durable local fallback.
+  const localMessage = await sendMessage(from, content);
+  const ackId = localMessage.id;
+
+  return {
+    success: true,
+    message: localMessage,
+    deliveryPath: 'local',
+    attempts,
+    ackId,
+    error: lastError || undefined,
+  };
 }
 
 export async function sendMessage(
@@ -123,6 +261,24 @@ export async function sendMessage(
 ): Promise<BridgeMessage> {
   return withLock(async () => {
     const state = await readFile();
+    const target = normalizeForDedup(content);
+
+    // Suppress duplicates from the same sender posted via multiple writers
+    // (flow auto-broadcast + tool-handler broadcast collapse to one entry).
+    if (target) {
+      const cutoff = Date.now() - DUPLICATE_WINDOW_MS;
+      const start = Math.max(0, state.messages.length - DUPLICATE_SCAN_DEPTH);
+      for (let i = state.messages.length - 1; i >= start; i--) {
+        const m = state.messages[i];
+        if (m.from !== from) continue;
+        const ts = new Date(m.timestamp).getTime();
+        if (Number.isFinite(ts) && ts < cutoff) break;
+        if (normalizeForDedup(m.content) === target) {
+          return m;
+        }
+      }
+    }
+
     const message: BridgeMessage = {
       id: generateId(),
       from,
@@ -141,6 +297,18 @@ export async function sendMessage(
       state.messages = state.messages.slice(-MAX_MESSAGES);
     }
     await writeFile(state);
+
+    try {
+      await appendBridgeAuditRecord({
+        message,
+        deliveryPath: 'local',
+        attempts: 1,
+        ackId: message.id,
+      });
+    } catch {
+      // Non-blocking: audit logging must not prevent local persistence.
+    }
+
     return message;
   });
 }
@@ -161,9 +329,7 @@ export async function getRecentMessages(
   return state.messages.slice(-limit);
 }
 
-export async function markMessagesRead(
-  recipient: string
-): Promise<number> {
+export async function markMessagesRead(recipient: string): Promise<number> {
   return withLock(async () => {
     const state = await readFile();
     let count = 0;

@@ -6,7 +6,8 @@ import { DEFAULT_PERSONALITY_MODULATION } from '@/ai/memory/neural-engram';
 import { evaluatePersonalityStability } from '@/ai/memory/personality-diagnostics';
 
 // Use the canonical baseline from neural-engram.ts
-const DEFAULT_PERSONALITY: PersonalityModulation = DEFAULT_PERSONALITY_MODULATION;
+const DEFAULT_PERSONALITY: PersonalityModulation =
+  DEFAULT_PERSONALITY_MODULATION;
 
 const PERSONALITY_SECTIONS = [
   {
@@ -146,6 +147,8 @@ export default function PersonalityAdminPage() {
     }
   });
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveDetail, setSaveDetail] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<PersonalityHistoryEntry[]>(() => {
     if (typeof window === 'undefined') return [];
@@ -174,8 +177,10 @@ export default function PersonalityAdminPage() {
 
   const handleSave = useCallback(async () => {
     setLoading(true);
+    setSaveError(null);
+    setSaveDetail(null);
     try {
-      // Save current state to history before overwriting
+      // 1. Save current state to local history for rollback
       const currentStored = localStorage.getItem('molly-personality');
       if (currentStored) {
         const newEntry: PersonalityHistoryEntry = {
@@ -183,7 +188,7 @@ export default function PersonalityAdminPage() {
           timestamp: new Date().toISOString(),
           label: `Backup ${new Date().toLocaleString()}`,
         };
-        const updatedHistory = [newEntry, ...history].slice(0, 10); // Keep last 10
+        const updatedHistory = [newEntry, ...history].slice(0, 10);
         setHistory(updatedHistory);
         localStorage.setItem(
           'molly-personality-history',
@@ -191,28 +196,58 @@ export default function PersonalityAdminPage() {
         );
       }
 
-      // Save to localStorage
+      // 2. Save to browser localStorage (form repopulation only — NOT what
+      // the server reads). The runtime reads from .molly/personality-state.json.
       localStorage.setItem('molly-personality', JSON.stringify(personality));
 
-      // Also save to .molly/memory as markdown
-      await fetch('/api/tools/execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tool: 'writeProjectFile',
-          params: {
-            path: '.molly/personality-state.json',
-            content: JSON.stringify(personality, null, 2),
-          },
-        }),
-      });
+      // 3. Persist to the local file the conversational flow actually reads.
+      // No silent failure: surface non-2xx responses and network errors.
+      let serverPersisted = false;
+      let serverMessage = '';
+      try {
+        const res = await fetch('/api/tools/execute', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tool: 'writeProjectFile',
+            params: {
+              path: '.molly/personality-state.json',
+              content: JSON.stringify(personality, null, 2),
+            },
+          }),
+        });
+        const body = (await res.json().catch(() => ({}))) as {
+          success?: boolean;
+          output?: string;
+        };
+        serverPersisted = res.ok && body.success === true;
+        serverMessage = body.output || res.statusText || `HTTP ${res.status}`;
+      } catch (netErr) {
+        serverPersisted = false;
+        serverMessage =
+          netErr instanceof Error ? netErr.message : 'Network error';
+      }
+
+      if (!serverPersisted) {
+        setSaveError(
+          `Could NOT persist to .molly/personality-state.json — your changes will not affect runtime behavior. Server said: ${serverMessage}`
+        );
+        return;
+      }
 
       setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      setSaveDetail(
+        'Saved to .molly/personality-state.json — the conversational flow will use these values on the next prompt. Note: this file is gitignored by default; commit it to persist across codespace rebuilds.'
+      );
+      setTimeout(() => setSaved(false), 3000);
     } catch (error) {
+      const msg =
+        error instanceof Error ? error.message : 'Unknown error during save';
+      setSaveError(msg);
       console.error('Failed to save personality:', error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [personality, history]);
 
   const handleRestore = useCallback((entry: PersonalityHistoryEntry) => {
@@ -279,6 +314,19 @@ export default function PersonalityAdminPage() {
             </button>
           </div>
         </div>
+
+        {/* Save feedback — surfaces real errors so silent-save bugs die. */}
+        {saveError && (
+          <div className="bg-red-900/40 border border-red-500/60 rounded-lg p-4 mb-4 text-red-200">
+            <div className="font-semibold mb-1">Save failed</div>
+            <div className="text-sm whitespace-pre-wrap">{saveError}</div>
+          </div>
+        )}
+        {saveDetail && !saveError && (
+          <div className="bg-emerald-900/30 border border-emerald-500/50 rounded-lg p-4 mb-4 text-emerald-200 text-sm whitespace-pre-wrap">
+            {saveDetail}
+          </div>
+        )}
 
         {/* History Panel (Rollback) */}
         {showHistory && (

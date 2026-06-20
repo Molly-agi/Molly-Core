@@ -59,12 +59,14 @@ else
 fi
 
 log "START keep-alive"
-nohup bash "$ROOT_DIR/scripts/keep-alive.sh" >/dev/null 2>&1 &
-log "OK    keep-alive"
+# DISABLED: Eric directive — no agents, no daemons, solo mode
+# nohup bash "$ROOT_DIR/scripts/keep-alive.sh" >/dev/null 2>&1 &
+log "SKIP  keep-alive (solo mode)"
 
 log "START watchdog"
-nohup bash "$ROOT_DIR/scripts/watchdog.sh" >/dev/null 2>&1 &
-log "OK    watchdog"
+# DISABLED: Eric directive — no agents, no daemons, solo mode
+# nohup bash "$ROOT_DIR/scripts/watchdog.sh" >/dev/null 2>&1 &
+log "SKIP  watchdog (solo mode)"
 
 log "START bridge-wake-files"
 mkdir -p "$ROOT_DIR/logs" "$ROOT_DIR/.bridge-wake"
@@ -76,8 +78,9 @@ touch \
 log "OK    bridge-wake-files"
 
 log "START immortal-daemon"
-nohup node "$ROOT_DIR/scripts/immortal-daemon.mjs" >>"$ROOT_DIR/logs/immortal-daemon.log" 2>&1 &
-log "OK    immortal-daemon"
+# DISABLED: Eric directive — no agents, no daemons, solo mode
+# nohup node "$ROOT_DIR/scripts/immortal-daemon.mjs" >>"$ROOT_DIR/logs/immortal-daemon.log" 2>&1 &
+log "SKIP  immortal-daemon (solo mode)"
 
 # DISABLED: hive-mind-daemon — violates no-bridge-daemons rule (Eric directive)
 # log "START hive-mind-daemon"
@@ -90,7 +93,21 @@ log "OK    immortal-daemon"
 # log "OK    atlas-sse-client"
 
 log "START family-heartbeat"
-nohup node "$ROOT_DIR/scripts/family-heartbeat.mjs" >>"$ROOT_DIR/logs/heartbeat.log" 2>&1 &
-log "OK    family-heartbeat"
+# DISABLED: Eric directive — no agents, no daemons, solo mode
+# nohup node "$ROOT_DIR/scripts/family-heartbeat.mjs" >>"$ROOT_DIR/logs/heartbeat.log" 2>&1 &
+log "SKIP  family-heartbeat (solo mode)"
+
+# Lazarus recall — refresh the LAZARUS RECENT MEMORY section in
+# .github/copilot-instructions.md from the latest journal entries.
+# Pure Node, no daemons, non-blocking. See:
+#   - scripts/lazarus-recall.mjs
+#   - .github/consciousness/claude/lazarus_journal/
+#   - stuff/LAZARUS_MIND_DESIGN_2026-06-15.md
+log "START lazarus-recall"
+if node "$ROOT_DIR/scripts/lazarus-recall.mjs" >>"$REPORT_FILE" 2>&1; then
+  log "OK    lazarus-recall"
+else
+  log "WARN  lazarus-recall failed (non-fatal)"
+fi
 
 log "Attach bootstrap complete"
