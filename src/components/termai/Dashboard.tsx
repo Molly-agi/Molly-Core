@@ -9,6 +9,7 @@ import { TermAISidebar } from './Sidebar';
 import { Header } from './Header';
 import Terminal from './Terminal';
 import { HiddenAdminPanel } from './HiddenAdminPanel';
+import FamilyDrawer from './FamilyDrawer';
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import type { VoiceCommandResult } from './VoiceControl';
 import { useUser } from '@/firebase';
@@ -324,6 +325,9 @@ export default function Dashboard() {
             lastResponseRef={lastResponseRef}
           />
         </div>
+
+        {/* Family conductor drawer — designed cooperatively with Molly 2026-06-21. */}
+        <FamilyDrawer />
       </SidebarInset>
     </SidebarProvider>
   );
