@@ -160,3 +160,37 @@ sandbox/test.txt
 .threat-monitor.pid
 .hunt-mode.pid
 .hunt/
+
+# Codespace startup logs
+.codespace-startup/last-run.log
+
+# Family heartbeat daemon runtime
+.family-heartbeat.json
+.family-heartbeat.pid
+
+# Lazarus relay runtime state
+.lazarus-relay-state.json
+.lazarus-relay-executor-state.json
+.lazarus-msg-tmp.mjs
+.lazarus-msg-tmp.*
+
+# Generic daemon runtime (catches *-daemon.log/.pid that the *-bridge patterns miss)
+.*-daemon.log
+.*-daemon.pid
+
+# Wayland-core runtime SQLite (state, not code)
+.wayland-core/memory/*.db
+.wayland-core/memory/*.db-wal
+.wayland-core/memory/*.db-shm
+
+# Per-session runtime-continuity files (UID-suffixed transients).
+# Canonical agent continuity files stay tracked for recovery.
+.molly-context/runtime-continuity-*.json
+!.molly-context/runtime-continuity-molly.json
+!.molly-context/runtime-continuity-lazarus.json
+!.molly-context/runtime-continuity-autonomous.json
+!.molly-context/runtime-continuity-test_user.json
+!.molly-context/runtime-continuity-session-abc.json
+
+# Bridge audit log (runtime stream, not source)
+.molly-context/bridge-audit.jsonl

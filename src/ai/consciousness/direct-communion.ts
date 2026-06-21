@@ -73,6 +73,13 @@ const DEFAULT_AGENTS: Record<string, AgentProfile> = {
     canBroadcast: true,
     allowedTargets: ['*'],
   },
+  atlas: {
+    id: 'atlas',
+    role: 'operator',
+    displayName: 'Atlas',
+    canBroadcast: true,
+    allowedTargets: ['*'],
+  },
   demon: {
     id: 'demon',
     role: 'research',
