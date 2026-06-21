@@ -253,6 +253,7 @@ const conversationalChatFlow = ai.defineFlow(
               },
               {
                 memoryContext: finalMemoryContext,
+                recallQuery: text,
                 visionContext: visionContext
                   ? {
                       observedState: visionContext.observedState,
