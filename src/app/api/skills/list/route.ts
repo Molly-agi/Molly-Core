@@ -2,9 +2,8 @@ import { NextRequest } from 'next/server';
 import path from 'path';
 import { loadRegistry } from '@/loader/skillAgentLoader';
 
-// Absolute paths to skills and agents directories (adjust if needed)
-const skillsDir = path.resolve(process.cwd(), 'src/skills/fixtures/skills');
-const agentsDir = path.resolve(process.cwd(), 'src/skills/fixtures/agents');
+const skillsDir = path.resolve(process.cwd(), 'src/skills/registry/skills');
+const agentsDir = path.resolve(process.cwd(), 'src/skills/registry/agents');
 
 export async function GET(_request: NextRequest) {
   try {
