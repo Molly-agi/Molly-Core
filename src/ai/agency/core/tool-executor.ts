@@ -210,8 +210,12 @@ export async function executeTool(
         importance: result.success ? 0.5 : 0.65,
       }
     );
-  } catch {
-    // Memory write must never break tool execution.
+  } catch (err) {
+    const { MollyLogger } = await import('@/ai/logger');
+    MollyLogger.warn(
+      `[TOOL-EXEC-INGEST] remember failed: ${err instanceof Error ? err.message : String(err)}`,
+      'tool-executor'
+    );
   }
 
   return result;

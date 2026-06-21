@@ -133,6 +133,7 @@ export async function runAutonomousCycle(force = false): Promise<{
   if (!force) lastCycleTime = now; // forced runs don't reset the scheduler's window
   const traceId = generateTraceId();
   const actions: string[] = [];
+  let errored = false;
 
   try {
     // Run self-observation cycle first (pattern analysis)
@@ -481,6 +482,7 @@ export async function runAutonomousCycle(force = false): Promise<{
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     MollyLogger.error(`[autonomous] Cycle failed: ${msg}`, traceId);
+    errored = true;
     return { acted: false, actions, error: msg };
   } finally {
     isRunning = false;
@@ -490,15 +492,24 @@ export async function runAutonomousCycle(force = false): Promise<{
       const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
       const preview = actions.slice(0, 3).join(', ');
       const more = actions.length > 3 ? `, +${actions.length - 3} more` : '';
+      const outcome = errored
+        ? 'errored'
+        : actions.length > 0
+          ? 'acted'
+          : 'idle';
+      const importance = errored ? 0.7 : actions.length > 0 ? 0.65 : 0.35;
       getNeuralBrain().remember(
-        `[Autonomous cycle] acted=${actions.length > 0}; actions=[${preview}${more}]`,
+        `[Autonomous cycle] outcome=${outcome}; actions=[${preview}${more}]`,
         {
-          tags: ['autonomous-cycle', actions.length > 0 ? 'acted' : 'idle'],
-          importance: actions.length > 0 ? 0.65 : 0.35,
+          tags: ['autonomous-cycle', outcome],
+          importance,
         }
       );
-    } catch {
-      // Memory write must never break the autonomous cycle finally.
+    } catch (err) {
+      MollyLogger.warn(
+        `[CYCLE-INGEST] remember failed: ${err instanceof Error ? err.message : String(err)}`,
+        'autonomous-cycle'
+      );
     }
 
     // Run synthesis after every autonomous cycle — whether it acted or not.
