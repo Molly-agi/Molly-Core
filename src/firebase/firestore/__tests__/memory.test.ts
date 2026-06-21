@@ -36,15 +36,16 @@ jest.mock('@/firebase/errors', () => ({
 
 import { saveLearnedCommand, getLearnedCommand } from '../memory';
 import { errorEmitter } from '@/firebase/error-emitter';
+import type { Firestore } from 'firebase/firestore';
 
 describe('memory', () => {
-  const mockDb = 'mock-firestore-instance';
+  const mockDb = 'mock-firestore-instance' as unknown as Firestore;
 
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date('2026-06-09T12:00:00.000Z'));
-    
+
     // Reset mocks for each test
     mockFirebaseObjects.mockCollection = jest.fn();
     mockFirebaseObjects.mockAddDoc = jest.fn();
@@ -66,7 +67,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
       saveLearnedCommand(
-        mockDb as any,
+        mockDb,
         'user-1',
         'list files in current directory',
         'ls -la'
@@ -94,7 +95,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
-      saveLearnedCommand(mockDb as any, 'user-1', 'test prompt', 'test command');
+      saveLearnedCommand(mockDb, 'user-1', 'test prompt', 'test command');
 
       expect(mockFirebaseObjects.mockServerTimestamp).toHaveBeenCalled();
       const call = mockFirebaseObjects.mockAddDoc.mock.calls[0];
@@ -104,16 +105,18 @@ describe('memory', () => {
 
     it('emits permission error on add failure', async () => {
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
-      mockFirebaseObjects.mockAddDoc.mockRejectedValue(new Error('Permission denied'));
+      mockFirebaseObjects.mockAddDoc.mockRejectedValue(
+        new Error('Permission denied')
+      );
 
-      saveLearnedCommand(mockDb as any, 'user-1', 'prompt', 'command');
+      saveLearnedCommand(mockDb, 'user-1', 'prompt', 'command');
 
       // Advance fake timers and flush microtasks so the rejected promise chain fires
       jest.advanceTimersByTime(10);
       await Promise.resolve();
       await Promise.resolve();
 
-      expect((errorEmitter.emit as jest.Mock)).toHaveBeenCalledWith(
+      expect(errorEmitter.emit as jest.Mock).toHaveBeenCalledWith(
         'permission-error',
         expect.any(Object)
       );
@@ -123,7 +126,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
-      const result = saveLearnedCommand(mockDb as any, 'user-1', 'prompt', 'command');
+      const result = saveLearnedCommand(mockDb, 'user-1', 'prompt', 'command');
 
       // Function should return undefined (not a Promise)
       expect(result).toBeUndefined();
@@ -133,10 +136,11 @@ describe('memory', () => {
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
-      const complexPrompt = 'Find all TypeScript files modified in last 24 hours';
+      const complexPrompt =
+        'Find all TypeScript files modified in last 24 hours';
       const complexCommand = 'find . -name "*.ts" -mtime -1 -type f';
 
-      saveLearnedCommand(mockDb as any, 'user-1', complexPrompt, complexCommand);
+      saveLearnedCommand(mockDb, 'user-1', complexPrompt, complexCommand);
 
       const call = mockFirebaseObjects.mockAddDoc.mock.calls[0];
       const payload = call[1] as Record<string, unknown>;
@@ -148,7 +152,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
-      saveLearnedCommand(mockDb as any, 'user-abc-123', 'prompt', 'command');
+      saveLearnedCommand(mockDb, 'user-abc-123', 'prompt', 'command');
 
       expect(mockFirebaseObjects.mockCollection).toHaveBeenCalledWith(
         mockDb,
@@ -164,7 +168,7 @@ describe('memory', () => {
 
       const command = 'grep -E "pattern" file.txt | sort | uniq -c';
 
-      saveLearnedCommand(mockDb as any, 'user-1', 'search and count', command);
+      saveLearnedCommand(mockDb, 'user-1', 'search and count', command);
 
       const call = mockFirebaseObjects.mockAddDoc.mock.calls[0];
       const payload = call[1] as Record<string, unknown>;
@@ -175,12 +179,12 @@ describe('memory', () => {
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
-      saveLearnedCommand(mockDb as any, 'user-1', 'prompt 1', 'command 1');
+      saveLearnedCommand(mockDb, 'user-1', 'prompt 1', 'command 1');
       jest.clearAllMocks();
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-2' });
 
-      saveLearnedCommand(mockDb as any, 'user-1', 'prompt 2', 'command 2');
+      saveLearnedCommand(mockDb, 'user-1', 'prompt 2', 'command 2');
 
       expect(mockFirebaseObjects.mockAddDoc).toHaveBeenCalled();
     });
@@ -188,7 +192,10 @@ describe('memory', () => {
 
   describe('getLearnedCommand', () => {
     it('queries for exact prompt match', async () => {
-      const mockQueryRef = { empty: false, docs: [{ data: () => ({ command: 'ls -la' }) }] };
+      const mockQueryRef = {
+        empty: false,
+        docs: [{ data: () => ({ command: 'ls -la' }) }],
+      };
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockQuery.mockReturnValue('mock-query-ref');
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
@@ -196,7 +203,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
       mockFirebaseObjects.mockGetDocs.mockResolvedValue(mockQueryRef);
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', 'list files');
+      await getLearnedCommand(mockDb, 'user-1', 'list files');
 
       expect(mockFirebaseObjects.mockCollection).toHaveBeenCalledWith(
         mockDb,
@@ -205,11 +212,18 @@ describe('memory', () => {
         'learnedCommands'
       );
 
-      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith('prompt', '==', 'list files');
+      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith(
+        'prompt',
+        '==',
+        'list files'
+      );
     });
 
     it('returns command string on match', async () => {
-      const mockQueryRef = { empty: false, docs: [{ data: () => ({ command: 'ls -la' }) }] };
+      const mockQueryRef = {
+        empty: false,
+        docs: [{ data: () => ({ command: 'ls -la' }) }],
+      };
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockQuery.mockReturnValue('mock-query-ref');
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
@@ -217,7 +231,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
       mockFirebaseObjects.mockGetDocs.mockResolvedValue(mockQueryRef);
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', 'list files');
+      const command = await getLearnedCommand(mockDb, 'user-1', 'list files');
 
       expect(command).toBe('ls -la');
     });
@@ -228,9 +242,16 @@ describe('memory', () => {
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
-      mockFirebaseObjects.mockGetDocs.mockResolvedValue({ empty: true, docs: [] });
+      mockFirebaseObjects.mockGetDocs.mockResolvedValue({
+        empty: true,
+        docs: [],
+      });
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', 'unknown prompt');
+      const command = await getLearnedCommand(
+        mockDb,
+        'user-1',
+        'unknown prompt'
+      );
 
       expect(command).toBeNull();
     });
@@ -241,9 +262,12 @@ describe('memory', () => {
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
-      mockFirebaseObjects.mockGetDocs.mockResolvedValue({ empty: false, docs: [] });
+      mockFirebaseObjects.mockGetDocs.mockResolvedValue({
+        empty: false,
+        docs: [],
+      });
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', 'prompt');
+      const command = await getLearnedCommand(mockDb, 'user-1', 'prompt');
 
       expect(command).toBeNull();
     });
@@ -254,11 +278,17 @@ describe('memory', () => {
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
-      mockFirebaseObjects.mockGetDocs.mockResolvedValue({ empty: false, docs: [{ data: () => ({ command: 'cmd' }) }] });
+      mockFirebaseObjects.mockGetDocs.mockResolvedValue({
+        empty: false,
+        docs: [{ data: () => ({ command: 'cmd' }) }],
+      });
 
-      await getLearnedCommand(mockDb as any, 'user-1', 'prompt');
+      await getLearnedCommand(mockDb, 'user-1', 'prompt');
 
-      expect(mockFirebaseObjects.mockOrderBy).toHaveBeenCalledWith('createdAt', 'desc');
+      expect(mockFirebaseObjects.mockOrderBy).toHaveBeenCalledWith(
+        'createdAt',
+        'desc'
+      );
     });
 
     it('limits to 1 result', async () => {
@@ -267,9 +297,12 @@ describe('memory', () => {
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
-      mockFirebaseObjects.mockGetDocs.mockResolvedValue({ empty: false, docs: [{ data: () => ({ command: 'cmd' }) }] });
+      mockFirebaseObjects.mockGetDocs.mockResolvedValue({
+        empty: false,
+        docs: [{ data: () => ({ command: 'cmd' }) }],
+      });
 
-      await getLearnedCommand(mockDb as any, 'user-1', 'prompt');
+      await getLearnedCommand(mockDb, 'user-1', 'prompt');
 
       expect(mockFirebaseObjects.mockLimit_).toHaveBeenCalledWith(1);
     });
@@ -280,9 +313,12 @@ describe('memory', () => {
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
       mockFirebaseObjects.mockQuery.mockReturnValue('mock-query-ref');
-      mockFirebaseObjects.mockGetDocs.mockResolvedValue({ empty: false, docs: [{ data: () => ({ command: 'cmd' }) }] });
+      mockFirebaseObjects.mockGetDocs.mockResolvedValue({
+        empty: false,
+        docs: [{ data: () => ({ command: 'cmd' }) }],
+      });
 
-      await getLearnedCommand(mockDb as any, 'user-1', 'prompt');
+      await getLearnedCommand(mockDb, 'user-1', 'prompt');
 
       expect(mockFirebaseObjects.mockQuery).toHaveBeenCalledWith(
         'mock-collection-ref',
@@ -298,9 +334,11 @@ describe('memory', () => {
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
-      mockFirebaseObjects.mockGetDocs.mockRejectedValue({ code: 'failed-precondition' });
+      mockFirebaseObjects.mockGetDocs.mockRejectedValue({
+        code: 'failed-precondition',
+      });
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', 'prompt');
+      const command = await getLearnedCommand(mockDb, 'user-1', 'prompt');
 
       // Should catch failed-precondition and return null
       expect(command).toBeNull();
@@ -312,13 +350,15 @@ describe('memory', () => {
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
-      mockFirebaseObjects.mockGetDocs.mockRejectedValue(new Error('Network error'));
+      mockFirebaseObjects.mockGetDocs.mockRejectedValue(
+        new Error('Network error')
+      );
 
       // getLearnedCommand catches all non-failed-precondition errors,
       // emits a permission-error event, and returns null (resilient design)
-      const result = await getLearnedCommand(mockDb as any, 'user-1', 'prompt');
+      const result = await getLearnedCommand(mockDb, 'user-1', 'prompt');
       expect(result).toBeNull();
-      expect((errorEmitter.emit as jest.Mock)).toHaveBeenCalledWith(
+      expect(errorEmitter.emit as jest.Mock).toHaveBeenCalledWith(
         'permission-error',
         expect.any(Object)
       );
@@ -330,9 +370,12 @@ describe('memory', () => {
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
       mockFirebaseObjects.mockOrderBy.mockReturnValue('order-ref');
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
-      mockFirebaseObjects.mockGetDocs.mockResolvedValue({ empty: false, docs: [{ data: () => ({ command: 'cmd' }) }] });
+      mockFirebaseObjects.mockGetDocs.mockResolvedValue({
+        empty: false,
+        docs: [{ data: () => ({ command: 'cmd' }) }],
+      });
 
-      await getLearnedCommand(mockDb as any, 'user-xyz', 'prompt');
+      await getLearnedCommand(mockDb, 'user-xyz', 'prompt');
 
       expect(mockFirebaseObjects.mockCollection).toHaveBeenCalledWith(
         mockDb,
@@ -343,7 +386,10 @@ describe('memory', () => {
     });
 
     it('finds command with exact prompt match only', async () => {
-      const mockQueryRef = { empty: false, docs: [{ data: () => ({ command: 'result' }) }] };
+      const mockQueryRef = {
+        empty: false,
+        docs: [{ data: () => ({ command: 'result' }) }],
+      };
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockQuery.mockReturnValue('mock-query-ref');
       mockFirebaseObjects.mockWhere.mockReturnValue('where-ref');
@@ -351,9 +397,13 @@ describe('memory', () => {
       mockFirebaseObjects.mockLimit_.mockReturnValue('limit-ref');
       mockFirebaseObjects.mockGetDocs.mockResolvedValue(mockQueryRef);
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', 'exact prompt');
+      const command = await getLearnedCommand(mockDb, 'user-1', 'exact prompt');
 
-      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith('prompt', '==', 'exact prompt');
+      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith(
+        'prompt',
+        '==',
+        'exact prompt'
+      );
       expect(command).toBe('result');
     });
   });
@@ -363,7 +413,7 @@ describe('memory', () => {
       // Save
       mockFirebaseObjects.mockCollection.mockReturnValue('save-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
-      saveLearnedCommand(mockDb as any, 'user-1', 'save prompt', 'save command');
+      saveLearnedCommand(mockDb, 'user-1', 'save prompt', 'save command');
 
       // Retrieve
       jest.clearAllMocks();
@@ -377,7 +427,7 @@ describe('memory', () => {
         docs: [{ data: () => ({ command: 'save command' }) }],
       });
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', 'save prompt');
+      const command = await getLearnedCommand(mockDb, 'user-1', 'save prompt');
 
       expect(command).toBe('save command');
     });
@@ -393,7 +443,7 @@ describe('memory', () => {
         docs: [{ data: () => ({ command: 'user-1-cmd' }) }],
       });
 
-      const cmd1 = await getLearnedCommand(mockDb as any, 'user-1', 'prompt');
+      const cmd1 = await getLearnedCommand(mockDb, 'user-1', 'prompt');
 
       jest.clearAllMocks();
       mockFirebaseObjects.mockCollection.mockReturnValue('collection-ref');
@@ -406,7 +456,7 @@ describe('memory', () => {
         docs: [{ data: () => ({ command: 'user-2-cmd' }) }],
       });
 
-      const cmd2 = await getLearnedCommand(mockDb as any, 'user-2', 'prompt');
+      const cmd2 = await getLearnedCommand(mockDb, 'user-2', 'prompt');
 
       expect(cmd1).toBe('user-1-cmd');
       expect(cmd2).toBe('user-2-cmd');
@@ -419,7 +469,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
       const longPrompt = 'x'.repeat(5000);
-      saveLearnedCommand(mockDb as any, 'user-1', longPrompt, 'command');
+      saveLearnedCommand(mockDb, 'user-1', longPrompt, 'command');
 
       const call = mockFirebaseObjects.mockAddDoc.mock.calls[0];
       const payload = call[1] as Record<string, unknown>;
@@ -431,7 +481,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
       const longCommand = 'echo "x"'.repeat(1000);
-      saveLearnedCommand(mockDb as any, 'user-1', 'prompt', longCommand);
+      saveLearnedCommand(mockDb, 'user-1', 'prompt', longCommand);
 
       const call = mockFirebaseObjects.mockAddDoc.mock.calls[0];
       const payload = call[1] as Record<string, unknown>;
@@ -450,9 +500,13 @@ describe('memory', () => {
       });
 
       const specialPrompt = 'Special: $@#% 你好 🚀';
-      const command = await getLearnedCommand(mockDb as any, 'user-1', specialPrompt);
+      const command = await getLearnedCommand(mockDb, 'user-1', specialPrompt);
 
-      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith('prompt', '==', specialPrompt);
+      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith(
+        'prompt',
+        '==',
+        specialPrompt
+      );
       expect(command).toBe('result');
     });
 
@@ -467,9 +521,13 @@ describe('memory', () => {
         docs: [{ data: () => ({ command: 'result' }) }],
       });
 
-      const command = await getLearnedCommand(mockDb as any, 'user-1', '');
+      const command = await getLearnedCommand(mockDb, 'user-1', '');
 
-      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith('prompt', '==', '');
+      expect(mockFirebaseObjects.mockWhere).toHaveBeenCalledWith(
+        'prompt',
+        '==',
+        ''
+      );
       expect(command).toBe('result');
     });
 
@@ -477,7 +535,7 @@ describe('memory', () => {
       mockFirebaseObjects.mockCollection.mockReturnValue('mock-collection-ref');
       mockFirebaseObjects.mockAddDoc.mockResolvedValue({ id: 'cmd-1' });
 
-      saveLearnedCommand(mockDb as any, 'user-1', 'prompt', '');
+      saveLearnedCommand(mockDb, 'user-1', 'prompt', '');
 
       const call = mockFirebaseObjects.mockAddDoc.mock.calls[0];
       const payload = call[1] as Record<string, unknown>;

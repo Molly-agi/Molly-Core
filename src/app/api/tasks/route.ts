@@ -4,12 +4,18 @@
  */
 
 import { NextResponse } from 'next/server';
-import { getTaskQueue, type TaskSource } from '@/ai/agency/task-queue/queue';
+import {
+  getTaskQueue,
+  type TaskSource,
+  type TaskStatus,
+} from '@/ai/agency/task-queue/queue';
 
 export async function GET(req: Request) {
   const queue = getTaskQueue();
   const url = new URL(req.url);
-  const status = url.searchParams.get('status') as any;
+  const status = (url.searchParams.get('status') ?? undefined) as
+    | TaskStatus
+    | undefined;
   const limit = Math.min(parseInt(url.searchParams.get('limit') ?? '100'), 500);
 
   const tasks = queue.listTasks(status, limit);
@@ -25,7 +31,10 @@ export async function GET(req: Request) {
       created: t.created,
       updated: t.updated,
       progress: t.progress,
-      context: { thoughts: t.context.thoughts, nextAction: t.context.nextAction },
+      context: {
+        thoughts: t.context.thoughts,
+        nextAction: t.context.nextAction,
+      },
     })),
   });
 }

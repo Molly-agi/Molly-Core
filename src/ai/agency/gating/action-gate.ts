@@ -17,18 +17,23 @@ import { MollyLogger } from '@/ai/logger';
  * Intent describing a proposed action
  */
 export interface ActionIntent {
-  type: string;                    // e.g. "tool_call", "reflection", "memory_write"
-  target: string;                  // what/who is affected
+  type: string; // e.g. "tool_call", "reflection", "memory_write"
+  target: string; // what/who is affected
   payload: Record<string, unknown>; // action parameters
-  confidence: number;              // 0-1, how sure Molly is
-  ambiguity: number;               // 0-1, how uncertain about interpretation
-  risk: number;                    // 0-1, potential harm if wrong
+  confidence: number; // 0-1, how sure Molly is
+  ambiguity: number; // 0-1, how uncertain about interpretation
+  risk: number; // 0-1, potential harm if wrong
 }
 
 /**
  * Gate decision modes
  */
-export type GateMode = 'allow' | 'block' | 'confirm' | 'guidance' | 'soft-refuse';
+export type GateMode =
+  | 'allow'
+  | 'block'
+  | 'confirm'
+  | 'guidance'
+  | 'soft-refuse';
 
 /**
  * Gate outcome with decision and reasoning
@@ -36,9 +41,9 @@ export type GateMode = 'allow' | 'block' | 'confirm' | 'guidance' | 'soft-refuse
 export interface GateOutcome {
   decision: GateMode;
   reason: string;
-  actionSpanId: string;            // for provenance tracing
-  suggestedConfidence?: number;    // if soft-refuse or guidance
-  recoveryPath?: string;           // how to reframe the intent
+  actionSpanId: string; // for provenance tracing
+  suggestedConfidence?: number; // if soft-refuse or guidance
+  recoveryPath?: string; // how to reframe the intent
 }
 
 /**
@@ -174,8 +179,8 @@ export function evaluateActionGate(
 
   // === PHASE 5: PROVENANCE SPAN MAPPING ===
 
-  let finalDecision = escalationDecision as GateMode;
-  let finalReason = `Gate approved: ${escalationDecision} mode. Confidence: ${intent.confidence.toFixed(2)}, Ambiguity: ${intent.ambiguity.toFixed(2)}, Risk: ${intent.risk.toFixed(2)}`;
+  const finalDecision = escalationDecision as GateMode;
+  const finalReason = `Gate approved: ${escalationDecision} mode. Confidence: ${intent.confidence.toFixed(2)}, Ambiguity: ${intent.ambiguity.toFixed(2)}, Risk: ${intent.risk.toFixed(2)}`;
 
   ctx.trace.decision(spanId, finalDecision, finalReason);
 
