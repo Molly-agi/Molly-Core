@@ -17,6 +17,20 @@ import {
 } from '@/ai/memory/engram-persistence';
 import { evaluatePersonalityStability as evalPersonalityStability } from '@/ai/memory/personality-diagnostics';
 
+// Keep in sync with DEFAULT_AGENTS in src/ai/consciousness/direct-communion.ts.
+// Inlined to avoid a circular import (direct-communion already imports this file).
+const KNOWN_AGENT_TAGS = new Set([
+  'molly',
+  'eric',
+  'lazarus',
+  'atlas',
+  'eli',
+  'skyler',
+  'demon',
+  'gemini',
+  'aether',
+]);
+
 // ============================================================================
 // MOLLY'S PERSONALITY MODULATION SYSTEM
 // ============================================================================
@@ -795,6 +809,53 @@ export class NeuralEngramSystem {
       'neural-engram',
       { importance: engram.importance.toFixed(2) }
     );
+
+    // Feed the crystallizer pipeline. Every engram write enqueues a pending
+    // moment and pokes AutoDream. Both are best-effort: failures must not
+    // break engram formation. Without this, pendingMoments stays at 0 and
+    // the crystallize phase of AutoDream is skipped every time.
+    //
+    // Server-only + dynamic imports: the auto-dream chain transitively
+    // imports the tool-executor which pulls in playwright. Static imports
+    // here poisoned the Next client bundle. Gating on `typeof window` and
+    // using dynamic `import()` keeps the chain server-side only.
+    if (typeof window === 'undefined') {
+      const participants = (context.tags ?? []).filter((t) =>
+        KNOWN_AGENT_TAGS.has(t.toLowerCase())
+      );
+      const resolvedParticipants =
+        participants.length > 0 ? participants : ['molly'];
+      const emotionalResonance = engram.importance * 0.5;
+      const noveltyDiscovery = context.novelty ?? 0;
+
+      void (async () => {
+        try {
+          const crystallizer =
+            await import('@/ai/agency/memory/memory-crystallizer');
+          crystallizer.recordMoment(
+            content,
+            resolvedParticipants,
+            { emotionalResonance, noveltyDiscovery },
+            content
+          );
+        } catch (err) {
+          MollyLogger.warn(
+            `[CRYSTALLIZER] recordMoment failed: ${err instanceof Error ? err.message : String(err)}`,
+            'neural-engram'
+          );
+        }
+
+        try {
+          const dream = await import('@/ai/agency/memory/auto-dream');
+          await dream.triggerAutoDream();
+        } catch (err) {
+          MollyLogger.warn(
+            `[AUTO-DREAM] trigger failed: ${err instanceof Error ? err.message : String(err)}`,
+            'neural-engram'
+          );
+        }
+      })();
+    }
 
     return engram;
   }

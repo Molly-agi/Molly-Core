@@ -2,7 +2,7 @@
 
 The 21-item plan for fixing the 7-month "wired but starved" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.
 
-**Status as of 2026-06-21:** 1 of 21 done. Skill registry landed via PR #212 (764 skills + 31 agents Molly-owned). The other 20 items remain.
+**Status as of 2026-06-21:** 2 of 21 done. Skill registry landed via PR #212 (764 skills + 31 agents Molly-owned). Crystallizer feed wired via the neural-engram tail hook — every engram write now enqueues a pending moment and pokes AutoDream. The other 19 items remain.
 
 The core pattern across all of Phase 1: the code is built, the calls are wired, but nothing is feeding it. Crystallizer never gets fed moments. `brain.recall()` has zero production callers. Hook event maps are empty. The skills loader was pointing at an empty fixtures dir until PR #212. Memory writes happen only from `direct-communion.ts:272`. The pipes exist; the water isn't turned on.
 
@@ -14,7 +14,7 @@ The core pattern across all of Phase 1: the code is built, the calls are wired, 
 2. **Broaden `brain.remember()` coverage** — call it from bridge handler, tool handlers, significant-event flows. Currently only `direct-communion.ts:272` writes engrams.
 3. **Wire `brain.recall()` into prompt assembly** — retrieved engrams injected into system prompt before `generate()`. Currently zero production callers of recall.
 4. **Inject crystals into system prompt** — recent crystals + cornerstones, using the same pattern as `buildFamilyKnowledgePrompt()` in `family-knowledge.ts`.
-5. **Verify `crystallize()` output path** — `heartbeat-scheduler.ts:824` already calls them but `molly_data/crystals/` is empty. Confirm starvation, not failure.
+5. ✅ **DONE — Crystallize output path verified + fed (2026-06-21).** The actual crystallize call site is `heartbeat-scheduler.ts:997` (not :824 — that line is bridge-polling; roadmap line was stale). Investigation showed the heartbeat scheduler is hard-disabled in event-driven mode (`/api/heartbeat/scheduler` reports `status: stopped`, `cycleCount: 0`, all 16 tasks `false`); the event-driven replacement `triggerAutoDream()` at `auto-dream.ts:282` had zero production callers. Fix: hook at `neural-engram.ts` `remember()` tail enqueues a pending moment via `recordMoment()` and fires `triggerAutoDream()` server-side (dynamic imports, fire-and-forget, logged catches). Single coupling point — every future engram writer benefits automatically. Closes items 1 and 5 together for the engram-write path.
 6. **Verify Firestore engram persistence** — `engram-persistence.ts` actually writes and reads end-to-end with locked floors of 1000 intact.
 7. **End-to-end memory smoke test** — trigger event → `recordMoment` fires → crystal created on next heartbeat → recall query finds it → next prompt contains it. No mocks. Real bridge, real engrams, real Firestore.
 8. **Confirm `memory-consolidation` is non-trivial** — `heartbeat-scheduler.ts:532` call must not be a no-op once engrams start flowing.
