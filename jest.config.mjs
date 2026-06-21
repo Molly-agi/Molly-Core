@@ -27,8 +27,13 @@ const config = {
     'src/ai/substrate/__tests__/fixtures/',
   ],
   transform: {
-    // Explicitly exclude .mjs from babel transform — they run as native ESM
-    '^.+\\.[jt]sx?$': 'babel-jest',
+    // Explicitly exclude .mjs from babel transform — they run as native ESM.
+    // configFile points at babel.jest.config.cjs so Next.js does NOT auto-detect
+    // a root babel config and downgrade its build pipeline from SWC to Babel.
+    '^.+\\.[jt]sx?$': [
+      'babel-jest',
+      { configFile: '<rootDir>/babel.jest.config.cjs' },
+    ],
   },
 };
 
