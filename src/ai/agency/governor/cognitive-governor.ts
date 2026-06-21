@@ -22,7 +22,11 @@
  * source exists.
  */
 
-import { ParameterRegistry, validators, type SubsystemId } from '../registry/parameter-registry';
+import {
+  ParameterRegistry,
+  validators,
+  type SubsystemId,
+} from '../registry/parameter-registry';
 
 export const GOVERNOR_ID: SubsystemId = 'cognitive-governor';
 
@@ -83,18 +87,57 @@ export class CognitiveGovernor {
 
   constructor(private readonly registry: ParameterRegistry) {
     // Governor registers + owns its own tunables. Defaults are conservative.
-    this.defineIfAbsent(KEYS.maxConcurrentFlows, 4, validators.intInRange(1, 64), {
-      control: 'int', min: 1, max: 64, step: 1, unit: 'flows',
-    }, 'Max flows allowed to run at once before admission control kicks in.');
-    this.defineIfAbsent(KEYS.maxConcurrentTools, 8, validators.intInRange(1, 128), {
-      control: 'int', min: 1, max: 128, step: 1, unit: 'tools',
-    }, 'Max concurrent tool invocations.');
-    this.defineIfAbsent(KEYS.maxConcurrentAgents, 3, validators.intInRange(1, 32), {
-      control: 'int', min: 1, max: 32, step: 1, unit: 'agents',
-    }, 'Max concurrent sub-agents.');
-    this.defineIfAbsent(KEYS.preemptionMargin, 2, validators.intInRange(0, 9), {
-      control: 'slider', min: 0, max: 9, step: 1,
-    }, 'How much higher a request must rank to preempt active lower-priority work.');
+    this.defineIfAbsent(
+      KEYS.maxConcurrentFlows,
+      8,
+      validators.intInRange(1, 64),
+      {
+        control: 'int',
+        min: 1,
+        max: 64,
+        step: 1,
+        unit: 'flows',
+      },
+      'Max flows allowed to run at once before admission control kicks in.'
+    );
+    this.defineIfAbsent(
+      KEYS.maxConcurrentTools,
+      16,
+      validators.intInRange(1, 128),
+      {
+        control: 'int',
+        min: 1,
+        max: 128,
+        step: 1,
+        unit: 'tools',
+      },
+      'Max concurrent tool invocations.'
+    );
+    this.defineIfAbsent(
+      KEYS.maxConcurrentAgents,
+      6,
+      validators.intInRange(1, 32),
+      {
+        control: 'int',
+        min: 1,
+        max: 32,
+        step: 1,
+        unit: 'agents',
+      },
+      'Max concurrent sub-agents.'
+    );
+    this.defineIfAbsent(
+      KEYS.preemptionMargin,
+      2,
+      validators.intInRange(0, 9),
+      {
+        control: 'slider',
+        min: 0,
+        max: 9,
+        step: 1,
+      },
+      'How much higher a request must rank to preempt active lower-priority work.'
+    );
   }
 
   /** Admission check. Pure decision — does not mutate active set. */
@@ -102,7 +145,10 @@ export class CognitiveGovernor {
     const limit = this.limitFor(req.kind);
     const current = this.countOf(req.kind);
     if (current < limit) {
-      return { admit: true, reason: `slot available (${current}/${limit} ${req.kind}s)` };
+      return {
+        admit: true,
+        reason: `slot available (${current}/${limit} ${req.kind}s)`,
+      };
     }
     // At capacity. Can this request preempt a lower-priority active one?
     const margin = this.registry.get<number>(KEYS.preemptionMargin);
@@ -132,7 +178,11 @@ export class CognitiveGovernor {
 
   /** Register that work actually started. Returns the assigned id. */
   registerStart(req: WorkRequest): ActiveWork {
-    const work: ActiveWork = { ...req, id: `${req.kind}_${++this.seq}`, startedAt: Date.now() };
+    const work: ActiveWork = {
+      ...req,
+      id: `${req.kind}_${++this.seq}`,
+      startedAt: Date.now(),
+    };
     this.active.set(work.id, work);
     this.emit({ kind: 'start', work });
     return work;
@@ -147,7 +197,11 @@ export class CognitiveGovernor {
 
   private emit(event: GovernorEvent): void {
     for (const l of this.listeners) {
-      try { l(event); } catch { /* listener errors must not crash the governor */ }
+      try {
+        l(event);
+      } catch {
+        /* listener errors must not crash the governor */
+      }
     }
   }
 
@@ -160,7 +214,9 @@ export class CognitiveGovernor {
     const toCancel: string[] = [];
     for (const kind of ['flow', 'tool', 'agent'] as WorkKind[]) {
       const limit = this.limitFor(kind);
-      const items = this.ofKind(kind).sort((a, b) => a.priority - b.priority || a.startedAt - b.startedAt);
+      const items = this.ofKind(kind).sort(
+        (a, b) => a.priority - b.priority || a.startedAt - b.startedAt
+      );
       const overBy = items.length - limit;
       for (let i = 0; i < overBy; i++) toCancel.push(items[i].id);
     }
@@ -173,7 +229,8 @@ export class CognitiveGovernor {
       this.registry.resolveProposals<number>(key, GOVERNOR_ID, (p, current) => {
         // Policy: accept proposals that pass bounds and don't slash capacity
         // by more than half in one step (avoid sudden starvation).
-        if (key !== KEYS.preemptionMargin && p.value < current / 2) return false;
+        if (key !== KEYS.preemptionMargin && p.value < current / 2)
+          return false;
         return true;
       });
     }
@@ -181,8 +238,16 @@ export class CognitiveGovernor {
 
   snapshot(): GovernorSnapshot {
     return {
-      active: { flow: this.countOf('flow'), tool: this.countOf('tool'), agent: this.countOf('agent') },
-      limits: { flow: this.limitFor('flow'), tool: this.limitFor('tool'), agent: this.limitFor('agent') },
+      active: {
+        flow: this.countOf('flow'),
+        tool: this.countOf('tool'),
+        agent: this.countOf('agent'),
+      },
+      limits: {
+        flow: this.limitFor('flow'),
+        tool: this.limitFor('tool'),
+        agent: this.limitFor('agent'),
+      },
       inFlight: [...this.active.values()],
     };
   }
@@ -224,12 +289,19 @@ export class CognitiveGovernor {
     def: number,
     validate: (v: number) => string | null,
     ui?: import('../registry/parameter-registry').ParameterUiMeta,
-    description?: string,
+    description?: string
   ): void {
     try {
       this.registry.get<number>(key);
     } catch {
-      this.registry.define<number>({ key, owner: GOVERNOR_ID, default: def, validate, ui, description });
+      this.registry.define<number>({
+        key,
+        owner: GOVERNOR_ID,
+        default: def,
+        validate,
+        ui,
+        description,
+      });
     }
   }
 }

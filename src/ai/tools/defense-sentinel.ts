@@ -31,7 +31,7 @@ import type {
   ThreatLevel,
   CodeLanguage,
   CodePurpose,
-} from '@/ai/agency/sentinel/types';
+} from '@/ai/agency/safety/sentinel/types';
 
 // ============================================================
 // SCHEMA
