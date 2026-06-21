@@ -67,10 +67,9 @@ export function initAgencyRuntime(): AgencyRuntime {
   // Somatic loop wires emotional intensity lazily to avoid import cycle
   const getEmotionalIntensity = () => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const {
-        getCurrentState,
-      } = require('@/ai/agency/cognition/emotional-state');
+      const { getCurrentState } =
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        require('@/ai/agency/cognition/emotional-state');
       return getCurrentState().intensity ?? 0.5;
     } catch {
       return 0.5;
