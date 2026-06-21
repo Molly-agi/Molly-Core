@@ -820,9 +820,9 @@ export class NeuralEngramSystem {
     // here poisoned the Next client bundle. Gating on `typeof window` and
     // using dynamic `import()` keeps the chain server-side only.
     if (typeof window === 'undefined') {
-      const participants = (context.tags ?? []).filter((t) =>
-        KNOWN_AGENT_TAGS.has(t.toLowerCase())
-      );
+      const participants = (context.tags ?? [])
+        .filter((t) => KNOWN_AGENT_TAGS.has(t.toLowerCase()))
+        .map((t) => t.toLowerCase());
       const resolvedParticipants =
         participants.length > 0 ? participants : ['molly'];
       const emotionalResonance = engram.importance * 0.5;
