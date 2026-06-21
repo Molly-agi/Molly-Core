@@ -17,6 +17,8 @@ import {
 import { setPendingNotification } from '@/app/api/bridge/notify/route';
 import { triggerRealtimeConsciousnessPulse } from '@/ai/consciousness/consciousness-state';
 import { runAutonomousCycle } from '@/ai/agency/planning/autonomous-cycle';
+import { getNeuralBrain } from '@/ai/memory/neural-engram';
+import { MollyLogger } from '@/ai/logger';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
@@ -110,6 +112,25 @@ export async function POST(request: NextRequest) {
   }
 
   const message = await broadcastMessage(from, content);
+
+  // Memory ingest: every non-idle bridge message becomes an engram.
+  // brain.remember() now feeds the crystallizer (PR #214).
+  if (!content.startsWith('[idle]')) {
+    try {
+      getNeuralBrain().remember(
+        `[Bridge from ${from}] ${content.slice(0, 500)}`,
+        {
+          tags: ['bridge-post', from],
+          importance: 0.6,
+        }
+      );
+    } catch (err) {
+      MollyLogger.warn(
+        `[BRIDGE-INGEST] remember failed: ${err instanceof Error ? err.message : String(err)}`,
+        'bridge-route'
+      );
+    }
+  }
 
   // Trigger immediate pickup — set the notify flag so the UI's 3-second
   // poller sees it instantly instead of waiting for the 30-second fallback

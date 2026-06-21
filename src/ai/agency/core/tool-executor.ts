@@ -199,6 +199,25 @@ export async function executeTool(
     // Continuity logging failure must never break tool execution.
   }
 
+  // Memory ingest: every tool execution is an experience worth remembering.
+  // Dynamic import avoids circular-dep risk with the broader memory graph.
+  try {
+    const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+    getNeuralBrain().remember(
+      `[Tool ${tool}] ${result.success ? 'success' : 'fail'}: ${result.output.slice(0, 500)}`,
+      {
+        tags: ['tool-execution', tool, result.success ? 'success' : 'failure'],
+        importance: result.success ? 0.5 : 0.65,
+      }
+    );
+  } catch (err) {
+    const { MollyLogger } = await import('@/ai/logger');
+    MollyLogger.warn(
+      `[TOOL-EXEC-INGEST] remember failed: ${err instanceof Error ? err.message : String(err)}`,
+      'tool-executor'
+    );
+  }
+
   return result;
 }
 
