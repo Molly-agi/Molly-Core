@@ -485,6 +485,22 @@ export async function runAutonomousCycle(force = false): Promise<{
   } finally {
     isRunning = false;
 
+    // Memory ingest: every cycle outcome (acted, idle, or errored) is an experience.
+    try {
+      const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+      const preview = actions.slice(0, 3).join(', ');
+      const more = actions.length > 3 ? `, +${actions.length - 3} more` : '';
+      getNeuralBrain().remember(
+        `[Autonomous cycle] acted=${actions.length > 0}; actions=[${preview}${more}]`,
+        {
+          tags: ['autonomous-cycle', actions.length > 0 ? 'acted' : 'idle'],
+          importance: actions.length > 0 ? 0.65 : 0.35,
+        }
+      );
+    } catch {
+      // Memory write must never break the autonomous cycle finally.
+    }
+
     // Run synthesis after every autonomous cycle — whether it acted or not.
     // This keeps the coherence state and intent readiness up to date
     // so Molly is always prepared when Father reconnects.
