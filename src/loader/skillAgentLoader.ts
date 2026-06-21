@@ -38,10 +38,40 @@ async function scanMarkdownFiles(dir: string): Promise<string[]> {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       files.push(...(await scanMarkdownFiles(fullPath)));
-    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+    } else if (
+      entry.isFile() &&
+      entry.name.endsWith('.md') &&
+      !entry.name.startsWith('_')
+    ) {
+      // Underscore-prefixed files (e.g. _scope-guard.md) are shared prompt
+      // fragments, not standalone skills/agents. Skip them.
       files.push(fullPath);
     }
   }
+  return files;
+}
+
+// Skill convention: real skills are SKILL.md inside their own folder. The
+// commands/ subtree uses bare .md filenames instead. Everything else under
+// the skills root (READMEs, mappings, contrib docs from upstream cybersec
+// repo) is supporting documentation and must not be parsed as a skill.
+async function scanSkillFiles(skillsDir: string): Promise<string[]> {
+  const files: string[] = [];
+  async function walk(dir: string, underCommands: boolean): Promise<void> {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        await walk(fullPath, underCommands || entry.name === 'commands');
+      } else if (entry.isFile() && entry.name.endsWith('.md')) {
+        if (entry.name.startsWith('_')) continue;
+        if (entry.name === 'SKILL.md' || underCommands) {
+          files.push(fullPath);
+        }
+      }
+    }
+  }
+  await walk(skillsDir, false);
   return files;
 }
 
@@ -59,7 +89,7 @@ export async function loadRegistry(
   }> = [];
 
   // Load skills
-  const skillFiles = await scanMarkdownFiles(skillsDir).catch(() => []);
+  const skillFiles = await scanSkillFiles(skillsDir).catch(() => []);
   for (const file of skillFiles) {
     let content = '';
     try {
