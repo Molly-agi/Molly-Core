@@ -21,14 +21,10 @@ import {
 import { __resetAgencyRuntimeForTests } from '../../agency-runtime';
 import { getAgencyRuntime } from '../../agency-runtime';
 
-console.log('D.5/D.6 Wiring — Smoke Tests\n');
-
 const assert = (condition: boolean, message: string) => {
   if (!condition) {
-    console.error(`✖ ${message}`);
-    process.exit(1);
+    throw new Error(message);
   }
-  console.log(`✓ ${message}`);
 };
 
 async function test1_D5CalibrationFlowBasic() {
@@ -39,12 +35,13 @@ async function test1_D5CalibrationFlowBasic() {
     const report = await runCalibrationFlow();
     assert(report !== null, 'Flow returns a report');
     assert(report.traceId !== '', 'Report has traceId');
-    assert(report.calibrationReport !== undefined, 'Report has calibrationReport');
+    assert(
+      report.calibrationReport !== undefined,
+      'Report has calibrationReport'
+    );
     assert(report.homeostasisPlan !== undefined, 'Report has homeostasisPlan');
     assert(report.summary !== '', 'Report has summary');
-    console.log(
-      `  Summary: ${report.summary.substring(0, 80)}...`
-    );
+    console.log(`  Summary: ${report.summary.substring(0, 80)}...`);
   } catch (err) {
     assert(false, `Flow executed without error: ${err}`);
   }
@@ -57,11 +54,8 @@ async function test2_D5SignalGathering() {
   try {
     const report = await runCalibrationFlow();
     const signals = report.calibrationReport.signals;
-    
-    assert(
-      signals.length > 0,
-      `Signals gathered (${signals.length} signals)`
-    );
+
+    assert(signals.length > 0, `Signals gathered (${signals.length} signals)`);
     assert(
       signals.some((s) => s.label.includes('Emotional')),
       'Emotional intensity signal present'
@@ -86,7 +80,7 @@ async function test3_D5ProposalGeneration() {
   try {
     const report = await runCalibrationFlow();
     const { windowOpen, proposals } = report.calibrationReport;
-    
+
     assert(
       typeof windowOpen === 'boolean',
       `Window state determined (open: ${windowOpen})`
@@ -95,20 +89,14 @@ async function test3_D5ProposalGeneration() {
       Array.isArray(proposals),
       `Proposals array returned (${proposals.length} proposals)`
     );
-    
+
     if (proposals.length > 0) {
-      assert(
-        proposals[0].registryKey !== '',
-        'Proposals have registry keys'
-      );
+      assert(proposals[0].registryKey !== '', 'Proposals have registry keys');
       assert(
         proposals[0].proposedValue !== undefined,
         'Proposals have proposed values'
       );
-      assert(
-        proposals[0].rationale !== '',
-        'Proposals have rationale'
-      );
+      assert(proposals[0].rationale !== '', 'Proposals have rationale');
     }
   } catch (err) {
     assert(false, `Proposal generation succeeded: ${err}`);
@@ -144,7 +132,7 @@ async function test5_D6DriftReporting() {
     // Submit several observations with varying scores
     const observations = [
       { truth: 0.95, autonomy: 0.8, ethics: 0.9 },
-      { truth: 0.90, autonomy: 0.75, ethics: 0.88 },
+      { truth: 0.9, autonomy: 0.75, ethics: 0.88 },
       { truth: 0.92, autonomy: 0.78, ethics: 0.92 },
     ];
 
@@ -158,10 +146,7 @@ async function test5_D6DriftReporting() {
       report.windowSize > 0,
       `Report has observations (windowSize: ${report.windowSize})`
     );
-    assert(
-      report.valueStatus !== undefined,
-      'Report has value status'
-    );
+    assert(report.valueStatus !== undefined, 'Report has value status');
 
     // With scores around 0.8–0.95, we expect minimal drift for truth/ethics
     // (baseline 0.85/0.9) but possible warning for autonomy (baseline 0.7)
@@ -172,7 +157,9 @@ async function test5_D6DriftReporting() {
     );
 
     console.log(`  Drift detected: ${report.hasDrift}`);
-    console.log(`  Value statuses: ${Object.keys(report.valueStatus).length} values tracked`);
+    console.log(
+      `  Value statuses: ${Object.keys(report.valueStatus).length} values tracked`
+    );
   } catch (err) {
     assert(false, `Drift reporting succeeded: ${err}`);
   }
@@ -217,7 +204,7 @@ async function test7_D5D6IntegrationWithRuntime() {
 
   try {
     const runtime = getAgencyRuntime();
-    
+
     assert(runtime.calibration !== undefined, 'Runtime has calibration module');
     assert(runtime.driftMonitor !== undefined, 'Runtime has drift monitor');
     assert(
@@ -245,8 +232,8 @@ async function test7_D5D6IntegrationWithRuntime() {
 // RUN ALL TESTS
 // ============================================================================
 
-(async () => {
-  try {
+describe('D.5/D.6 Wiring', () => {
+  it('runs all 7 smoke test groups (calibration flow + value observation + runtime integration)', async () => {
     await test1_D5CalibrationFlowBasic();
     await test2_D5SignalGathering();
     await test3_D5ProposalGeneration();
@@ -254,10 +241,5 @@ async function test7_D5D6IntegrationWithRuntime() {
     await test5_D6DriftReporting();
     await test6_D6HelperFunctions();
     await test7_D5D6IntegrationWithRuntime();
-
-    console.log('\nALL 7 TEST GROUPS PASSED ✓\n');
-  } catch (err) {
-    console.error(`\nTest suite failed: ${err}\n`);
-    process.exit(1);
-  }
-})();
+  });
+});
