@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * @fileOverview Tests for Neural Engram System - Brain-like Memory Architecture
  *
  * Tests memory system including:
@@ -7,6 +9,12 @@
  * - Memory consolidation (Hippocampus)
  * - System health (Hypothalamus)
  * - Personality modulation
+ * - Cross-hemisphere recall (recallEverything fanout + re-promote)
+ *
+ * Node env required: recallEverything()'s left-fanout block is gated on
+ * `typeof window === 'undefined'` to keep the KnowledgeStore chain out of
+ * the Next client bundle. jsdom installs a non-configurable `window` that
+ * would block the gate in tests.
  */
 
 // Mock logger
@@ -35,6 +43,17 @@ jest.mock('@/ai/memory/personality-diagnostics', () => ({
     extremes: 0,
     variance: 0.1,
   }),
+}));
+
+// Mock KnowledgeStore (left hemisphere) — recallEverything fanout target
+const mockKnowledgeStoreRecall = jest.fn();
+const mockKnowledgeStoreRecordSnapshot = jest.fn().mockResolvedValue(undefined);
+const mockGetKnowledgeStore = jest.fn().mockResolvedValue({
+  recall: mockKnowledgeStoreRecall,
+  recordSnapshot: mockKnowledgeStoreRecordSnapshot,
+});
+jest.mock('@/ai/memory/knowledge-store', () => ({
+  getKnowledgeStore: mockGetKnowledgeStore,
 }));
 
 import {
@@ -344,6 +363,123 @@ describe('NeuralEngramSystem', () => {
 
       brain.updateAppearanceConfidence(-0.5);
       expect(brain.getSelfImage()?.confidenceLevel).toBe(0);
+    });
+  });
+
+  describe('Cross-hemisphere Recall (D2)', () => {
+    // Fanout uses dynamic import + async store calls; real timers let microtasks flush.
+    beforeEach(() => {
+      brain.destroy();
+      jest.useRealTimers();
+      brain = new NeuralEngramSystem();
+      mockKnowledgeStoreRecall.mockReset();
+      mockKnowledgeStoreRecordSnapshot.mockReset();
+      mockKnowledgeStoreRecordSnapshot.mockResolvedValue(undefined);
+      mockGetKnowledgeStore.mockClear();
+    });
+
+    const makeLeftHit = (id: string, similarity: number, content = id) => ({
+      entry: {
+        id,
+        content,
+        timestamp: new Date(),
+        importance: 0.5,
+        contextTags: [],
+        source: 'remember' as const,
+        personalitySnapshot: undefined,
+      },
+      similarity,
+    });
+
+    it('returns right-only when persistence is unconfigured', async () => {
+      brain.remember('Local-only thought');
+
+      const result = await brain.recallEverything('thought');
+
+      expect(mockGetKnowledgeStore).not.toHaveBeenCalled();
+      expect(result.leftHits).toEqual([]);
+      expect(result.rePromoted).toEqual([]);
+      expect(result.rightHits.length).toBe(1);
+    });
+
+    it('fans out to KnowledgeStore when persistence configured', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+      mockKnowledgeStoreRecall.mockResolvedValueOnce([
+        makeLeftHit('left-1', 0.5),
+      ]);
+
+      const result = await brain.recallEverything('anything', { limit: 5 });
+
+      expect(mockGetKnowledgeStore).toHaveBeenCalledWith('eric');
+      expect(mockKnowledgeStoreRecall).toHaveBeenCalledWith('anything', 5);
+      expect(result.leftHits.length).toBe(1);
+    });
+
+    it('re-promotes left hits above promoteThreshold via hippocampus.stage', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+      mockKnowledgeStoreRecall.mockResolvedValueOnce([
+        makeLeftHit('hot-1', 0.9),
+        makeLeftHit('cold-1', 0.3),
+      ]);
+
+      const result = await brain.recallEverything('q');
+
+      expect(result.rePromoted).toEqual(['hot-1']);
+    });
+
+    it('caps re-promotes to promoteCap', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+      mockKnowledgeStoreRecall.mockResolvedValueOnce([
+        makeLeftHit('h1', 0.95),
+        makeLeftHit('h2', 0.9),
+        makeLeftHit('h3', 0.85),
+        makeLeftHit('h4', 0.8),
+      ]);
+
+      const result = await brain.recallEverything('q', { promoteCap: 2 });
+
+      expect(result.rePromoted.length).toBe(2);
+      expect(result.rePromoted).toEqual(['h1', 'h2']);
+    });
+
+    it('skips re-promote when entry already lives in right hits (dedupe)', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+      const rightMem = brain.remember('Find this specific dedupe content');
+      mockKnowledgeStoreRecall.mockResolvedValueOnce([
+        makeLeftHit(rightMem.id, 0.95, 'Find this specific dedupe content'),
+        makeLeftHit('new-left', 0.9),
+      ]);
+
+      const result = await brain.recallEverything('specific');
+
+      expect(result.rePromoted).toEqual(['new-left']);
+      expect(result.rePromoted).not.toContain(rightMem.id);
+    });
+
+    it('records snapshot via KnowledgeStore.recordSnapshot', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+      mockKnowledgeStoreRecall.mockResolvedValueOnce([makeLeftHit('s1', 0.9)]);
+
+      const result = await brain.recallEverything('q');
+
+      expect(mockKnowledgeStoreRecordSnapshot).toHaveBeenCalledTimes(1);
+      const snapshotArg = mockKnowledgeStoreRecordSnapshot.mock.calls[0][0];
+      expect(snapshotArg.id).toBe(result.snapshotId);
+      expect(snapshotArg.userId).toBe('eric');
+      expect(snapshotArg.query).toBe('q');
+      expect(snapshotArg.rePromoted).toEqual(['s1']);
+    });
+
+    it('isolates left fanout failures (returns right-only on store error)', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+      brain.remember('Right-side anchor');
+      mockKnowledgeStoreRecall.mockRejectedValueOnce(new Error('left down'));
+
+      const result = await brain.recallEverything('anchor');
+
+      expect(result.leftHits).toEqual([]);
+      expect(result.rePromoted).toEqual([]);
+      expect(result.rightHits.length).toBeGreaterThanOrEqual(1);
     });
   });
 
