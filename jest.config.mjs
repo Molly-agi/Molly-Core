@@ -17,9 +17,6 @@ const config = {
     '^@/(.*)$': '<rootDir>/src/$1',
     'lucide-react': '<rootDir>/__mocks__/lucide-react.js',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(yaml|dotprompt|@genkit-ai|@radix-ui|lucide-react|uuid)/)',
-  ],
   testPathIgnorePatterns: [
     '/node_modules/',
     '/helpers/',
@@ -37,5 +34,17 @@ const config = {
   },
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-export default createJestConfig(config);
+// next/jest prepends its own transformIgnorePatterns that catches uuid (and
+// other ESM packages) before any user-supplied entry can. The first pattern in
+// jest is consulted first, and a file matching ANY pattern is skipped — so we
+// must replace the merged list post-create, not append to it.
+const baseConfig = createJestConfig(config);
+
+export default async () => {
+  const final = await baseConfig();
+  final.transformIgnorePatterns = [
+    'node_modules/(?!(yaml|dotprompt|@genkit-ai|@radix-ui|lucide-react|uuid|jsonpath-plus|three|@react-three/fiber|@pixiv/three-vrm|geist)/)',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ];
+  return final;
+};
