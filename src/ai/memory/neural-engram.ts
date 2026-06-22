@@ -562,6 +562,26 @@ class Hippocampus {
     return this.consolidationQueue.length;
   }
 
+  /**
+   * Substring/tag search over the consolidation queue.
+   * Used by NeuralEngramSystem.recall() so engrams that have aged out of
+   * working memory (or were restored from cold storage) remain findable.
+   * Ordered by importance desc since hippocampus entries have no activation level.
+   */
+  search(query: string): MemoryEngram[] {
+    const q = query.toLowerCase();
+    const matches: MemoryEngram[] = [];
+    for (const engram of this.consolidationQueue) {
+      if (
+        engram.content.toLowerCase().includes(q) ||
+        engram.contextTags.some((tag) => tag.toLowerCase().includes(q))
+      ) {
+        matches.push(engram);
+      }
+    }
+    return matches.sort((a, b) => b.importance - a.importance);
+  }
+
   clear(): void {
     this.consolidationQueue = [];
   }
@@ -760,17 +780,30 @@ export class NeuralEngramSystem {
     );
 
     // Load restored engrams into working memory (high importance ones)
-    // and stage others for the hippocampus
+    // and stage others for the hippocampus.
+    //
+    // Sort by importance desc first so the top-N by importance fill the
+    // working-memory slots — otherwise Firestore's timestamp order interacts
+    // with FrontalCortex.evictWeakest() and arbitrarily-imported engrams get
+    // silently dropped on overflow. Overflow now lands in the hippocampus
+    // queue, where recall() can still find it.
+    const capacity = this.frontalCortex.getState().capacity;
+    const sorted = [...result.engrams].sort(
+      (a, b) => b.importance - a.importance
+    );
+
     let restoredToWorking = 0;
     let restoredToHippocampus = 0;
 
-    for (const engram of result.engrams) {
-      // High importance memories go straight to working memory
-      if (engram.importance >= 0.7) {
+    for (const engram of sorted) {
+      const fitsWorking =
+        engram.importance >= 0.7 && restoredToWorking < capacity;
+      if (fitsWorking) {
         this.frontalCortex.hold(engram, engram.importance * 0.8);
         restoredToWorking++;
       } else {
-        // Lower importance memories go to hippocampus (warm storage)
+        // Lower importance OR working-memory overflow — keep in hippocampus
+        // so recall() (which searches both stores) can still surface them.
         engram.consolidationState = 'consolidated';
         this.hippocampus.stage(engram);
         restoredToHippocampus++;
@@ -886,10 +919,27 @@ export class NeuralEngramSystem {
   }
 
   /**
-   * Recall memory from working memory
+   * Recall memory by substring/tag match.
+   * Searches BOTH working memory (frontal cortex) and the consolidation queue
+   * (hippocampus), so engrams that have decayed out of working memory — or
+   * were just restored from cold storage and didn't fit the 7 working slots —
+   * remain visible. Working memory results come first (hotter), consolidated
+   * results follow, de-duplicated by id.
    */
   recall(query: string): MemoryEngram[] {
-    return this.frontalCortex.search(query);
+    const fromWorking = this.frontalCortex.search(query);
+    const fromConsolidated = this.hippocampus.search(query);
+    if (fromConsolidated.length === 0) return fromWorking;
+
+    const seen = new Set<string>(fromWorking.map((e) => e.id));
+    const merged: MemoryEngram[] = [...fromWorking];
+    for (const engram of fromConsolidated) {
+      if (!seen.has(engram.id)) {
+        merged.push(engram);
+        seen.add(engram.id);
+      }
+    }
+    return merged;
   }
 
   /**

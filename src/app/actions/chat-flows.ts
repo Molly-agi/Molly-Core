@@ -42,7 +42,7 @@ export async function getConversationalChat(
   try {
     // Ensure memory persistence is configured for this user
     if (userId) {
-      ensureNeuralPersistence(userId);
+      await ensureNeuralPersistence(userId);
     }
 
     // Event-driven runtime: no heartbeat-cycle startup on chat ingress.

@@ -32,14 +32,25 @@ export const MAX_ORIGIN_PART_SIZE = 3500;
 
 // Track which users have had persistence configured this runtime
 const _persistenceConfiguredFor = new Set<string>();
+// In-flight restore promises so concurrent first-requests share a single restore.
+const _restorePromises = new Map<string, Promise<void>>();
 
 /**
- * Ensure neural persistence is configured for the given user.
- * Call this early in any flow that has user context.
- * Idempotent — safe to call multiple times.
+ * Ensure neural persistence is configured for the given user AND restore
+ * any consolidated engrams from cold storage into working memory.
+ *
+ * Idempotent — only the first call per userId per process triggers the
+ * Firestore round-trip; subsequent calls resolve immediately. Concurrent
+ * first-calls share the same in-flight promise so the restore runs once.
+ *
+ * MUST be awaited before composeSystemPrompt() runs, otherwise recall()
+ * returns empty on cold start regardless of what's in Firestore.
  */
-export function ensureNeuralPersistence(userId: string): void {
-  if (_persistenceConfiguredFor.has(userId)) return;
+export function ensureNeuralPersistence(userId: string): Promise<void> {
+  if (_persistenceConfiguredFor.has(userId)) return Promise.resolve();
+
+  const existing = _restorePromises.get(userId);
+  if (existing) return existing;
 
   const secret = process.env.ENGRAM_SECRET;
   if (!secret) {
@@ -47,19 +58,49 @@ export function ensureNeuralPersistence(userId: string): void {
       'ENGRAM_SECRET not set — memory persistence disabled',
       'ensureNeuralPersistence'
     );
-    return;
+    // Mark configured anyway so we don't re-check every request.
+    _persistenceConfiguredFor.add(userId);
+    return Promise.resolve();
   }
 
-  configureNeuralPersistence({
-    userId,
-    password: secret,
-    source: 'auto',
-  });
+  const p = (async () => {
+    configureNeuralPersistence({
+      userId,
+      password: secret,
+      source: 'auto',
+    });
 
-  _persistenceConfiguredFor.add(userId);
-  MollyLogger.info('Neural persistence configured', 'ensureNeuralPersistence', {
-    userId,
-  });
+    try {
+      const brain = _getNeuralBrain();
+      const result = await brain.restoreMemories();
+      MollyLogger.info(
+        'Neural persistence configured + memories restored',
+        'ensureNeuralPersistence',
+        {
+          userId,
+          restored: result.restored,
+          failed: result.failed,
+          errors: result.errors.length,
+        }
+      );
+    } catch (error) {
+      // Restore failure must not break the request — recall just stays cold.
+      MollyLogger.warn(
+        'Memory restoration failed at first-use; continuing without restore',
+        'ensureNeuralPersistence',
+        {
+          userId,
+          error: error instanceof Error ? error.message : String(error),
+        }
+      );
+    } finally {
+      _persistenceConfiguredFor.add(userId);
+      _restorePromises.delete(userId);
+    }
+  })();
+
+  _restorePromises.set(userId, p);
+  return p;
 }
 
 export function getAudioMimeType(dataUri: string): string {
