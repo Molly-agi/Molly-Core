@@ -58,9 +58,9 @@ describe('Somatic Loop', () => {
       const initialTools = registry.get<number>('governor.maxConcurrentTools');
 
       // Fill flows to 80%+ to trigger a proposal on the next start event
-      // Default maxConcurrentFlows = 4, so start 4 flows
+      // Default maxConcurrentFlows = 8, so start 7 flows (≥80%)
       const works = [];
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 7; i++) {
         works.push(
           governor.registerStart({
             kind: 'flow',
