@@ -836,6 +836,7 @@ export class NeuralEngramSystem {
       userFeedback?: 'positive' | 'negative' | 'neutral';
       novelty?: number;
       importance?: number;
+      source?: 'remember' | 'conversation' | 'tool-call' | 'bridge' | 'restore';
     } = {}
   ): MemoryEngram {
     // Create base engram
@@ -910,6 +911,31 @@ export class NeuralEngramSystem {
           MollyLogger.warn(
             `[AUTO-DREAM] trigger failed: ${err instanceof Error ? err.message : String(err)}`,
             'neural-engram'
+          );
+        }
+      })();
+    }
+
+    // Symmetric write: mirror to left hemisphere (KnowledgeStore — eidetic).
+    // Right (above) curates + decays; left is append-only. Both must receive
+    // every remember() to close the silent-loss + amnesia loops. Fire-and-
+    // forget with failure isolation — a broken left must NEVER poison the
+    // conversation hot path. Skipped when persistence is unconfigured (no
+    // userId means no per-user store to write into).
+    if (typeof window === 'undefined' && this.persistenceConfig?.userId) {
+      const userId = this.persistenceConfig.userId;
+      const source = context.source ?? 'remember';
+      const targetEngram = engram;
+      void (async () => {
+        try {
+          const ks = await import('@/ai/memory/knowledge-store');
+          const store = await ks.getKnowledgeStore(userId);
+          await store.write(targetEngram, source);
+        } catch (err) {
+          MollyLogger.warn(
+            `[KNOWLEDGE-STORE] symmetric write failed: ${err instanceof Error ? err.message : String(err)}`,
+            'neural-engram',
+            { id: targetEngram.id, userId }
           );
         }
       })();

@@ -1,4 +1,6 @@
 /**
+ * @jest-environment node
+ *
  * @fileOverview Tests for Neural Engram System - Brain-like Memory Architecture
  *
  * Tests memory system including:
@@ -7,6 +9,12 @@
  * - Memory consolidation (Hippocampus)
  * - System health (Hypothalamus)
  * - Personality modulation
+ * - Symmetric write to KnowledgeStore (left hemisphere)
+ *
+ * Node env required: the symmetric-write block in remember() is gated on
+ * `typeof window === 'undefined'` so it never poisons the Next.js client
+ * bundle. jsdom installs a non-configurable `window`, which would block
+ * the gate in tests.
  */
 
 // Mock logger
@@ -38,6 +46,15 @@ jest.mock('@/ai/memory/personality-diagnostics', () => ({
     extremes: 0,
     variance: 0.1,
   }),
+}));
+
+// Mock knowledge store (left hemisphere) — symmetric-write target
+const mockKnowledgeStoreWrite = jest.fn().mockResolvedValue(undefined);
+const mockGetKnowledgeStore = jest.fn().mockResolvedValue({
+  write: mockKnowledgeStoreWrite,
+});
+jest.mock('@/ai/memory/knowledge-store', () => ({
+  getKnowledgeStore: mockGetKnowledgeStore,
 }));
 
 import {
@@ -372,6 +389,68 @@ describe('NeuralEngramSystem', () => {
 
       brain.updateAppearanceConfidence(-0.5);
       expect(brain.getSelfImage()?.confidenceLevel).toBe(0);
+    });
+  });
+
+  describe('Symmetric Write (B1: right + left hemispheres)', () => {
+    // Mirror is fire-and-forget; switch to real timers so the async IIFE's
+    // microtask chain (dynamic import → getKnowledgeStore → write) can flush.
+    beforeEach(() => {
+      brain.destroy();
+      jest.useRealTimers();
+      brain = new NeuralEngramSystem();
+      mockKnowledgeStoreWrite.mockClear();
+      mockGetKnowledgeStore.mockClear();
+    });
+
+    const flushMirror = () =>
+      new Promise<void>((resolve) => setTimeout(resolve, 10));
+
+    it('mirrors every remember() to KnowledgeStore when persistence is configured', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+
+      brain.remember('Symmetric content', { tags: ['conversation'] });
+
+      await flushMirror();
+
+      expect(mockGetKnowledgeStore).toHaveBeenCalledWith('eric');
+      expect(mockKnowledgeStoreWrite).toHaveBeenCalledTimes(1);
+      const [engramArg, sourceArg] = mockKnowledgeStoreWrite.mock.calls[0];
+      expect(engramArg.content).toBe('Symmetric content');
+      expect(sourceArg).toBe('remember');
+    });
+
+    it('passes context.source to the left write', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+
+      brain.remember('Chat turn', { source: 'conversation' });
+
+      await flushMirror();
+
+      const [, sourceArg] = mockKnowledgeStoreWrite.mock.calls[0];
+      expect(sourceArg).toBe('conversation');
+    });
+
+    it('skips left write when persistence is unconfigured', async () => {
+      brain.remember('No mirror — no userId');
+
+      await flushMirror();
+
+      expect(mockGetKnowledgeStore).not.toHaveBeenCalled();
+      expect(mockKnowledgeStoreWrite).not.toHaveBeenCalled();
+    });
+
+    it('isolates left-write failures from the right write (hot path stays alive)', async () => {
+      brain.configurePersistence({ userId: 'eric', password: 'pw' });
+      mockKnowledgeStoreWrite.mockRejectedValueOnce(new Error('left down'));
+
+      const memory = brain.remember('Right must survive a broken left');
+
+      expect(memory.content).toBe('Right must survive a broken left');
+      expect(brain.frontalCortex.getState().size).toBe(1);
+
+      // Drain the rejected promise so jest does not flag it
+      await flushMirror();
     });
   });
 
