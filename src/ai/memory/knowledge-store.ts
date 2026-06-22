@@ -58,7 +58,13 @@ export interface KnowledgeEntry {
   contextTags: string[];
   importance: number;
   userId: string;
-  source: 'remember' | 'conversation' | 'tool-call' | 'bridge' | 'restore';
+  source:
+    | 'remember'
+    | 'conversation'
+    | 'tool-call'
+    | 'bridge'
+    | 'restore'
+    | 'consolidation';
   personalitySnapshot?: Record<string, number>;
 }
 
