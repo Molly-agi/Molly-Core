@@ -67,7 +67,7 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
         if (dir) fs.mkdirSync(dir, { recursive: true });
       }
     } catch {
-      /* tolerate ro-fs / browser bundling — async paths will retry */
+      /* tolerate ro-fs / browser bundling — writeShadowLog/writeToJsonl re-mkdir per write */
     }
     if (flushIntervalMs > 0) {
       this.timer = setInterval(() => {
@@ -103,16 +103,6 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
   /** Test/inspection helper. */
   getCloudReady(): boolean | null {
     return this.cloudReady;
-  }
-
-  private async ensureDirs(): Promise<void> {
-    const fs = await getFsModule();
-    for (const p of [this.shadowLogPath, this.jsonlPath]) {
-      const dir = p.split('/').slice(0, -1).join('/');
-      if (dir) {
-        await fs.promises.mkdir(dir, { recursive: true }).catch(() => {});
-      }
-    }
   }
 
   write(span: ProvenanceSpan): void {
