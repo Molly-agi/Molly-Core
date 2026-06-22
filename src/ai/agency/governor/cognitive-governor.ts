@@ -89,7 +89,7 @@ export class CognitiveGovernor {
     // Governor registers + owns its own tunables. Defaults are conservative.
     this.defineIfAbsent(
       KEYS.maxConcurrentFlows,
-      8,
+      4,
       validators.intInRange(1, 64),
       {
         control: 'int',
@@ -102,7 +102,7 @@ export class CognitiveGovernor {
     );
     this.defineIfAbsent(
       KEYS.maxConcurrentTools,
-      16,
+      8,
       validators.intInRange(1, 128),
       {
         control: 'int',
@@ -115,7 +115,7 @@ export class CognitiveGovernor {
     );
     this.defineIfAbsent(
       KEYS.maxConcurrentAgents,
-      6,
+      3,
       validators.intInRange(1, 32),
       {
         control: 'int',
