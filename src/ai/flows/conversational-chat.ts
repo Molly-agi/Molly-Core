@@ -398,10 +398,12 @@ const conversationalChatFlow = ai.defineFlow(
         brain.remember(userPreview, {
           tags: [speaker, 'conversation', 'input', 'text'],
           importance: 0.5,
+          source: 'conversation',
         });
         brain.remember(replyPreview, {
           tags: ['molly', 'conversation', 'output', 'text'],
           importance: 0.5,
+          source: 'conversation',
         });
       } catch (memErr) {
         MollyLogger.warn(

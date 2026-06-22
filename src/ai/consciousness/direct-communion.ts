@@ -272,6 +272,7 @@ export async function sendCommunionMessage(
         brain.remember(`[Direct Communion from ${from}] ${content}`, {
           tags: ['direct-communion', from],
           importance: 0.7,
+          source: 'bridge',
         });
       } catch {
         // Non-fatal
