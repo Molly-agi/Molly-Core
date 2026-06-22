@@ -260,8 +260,10 @@ class FrontalCortex {
   private readonly MAX_WORKING_MEMORY = 7; // Miller's Law: 7±2 items
   private readonly DECAY_INTERVAL_MS = 30000; // 30 seconds
   private decayTimer?: NodeJS.Timeout;
+  private onEvict?: (engram: MemoryEngram) => void;
 
-  constructor() {
+  constructor(onEvict?: (engram: MemoryEngram) => void) {
+    this.onEvict = onEvict;
     this.startDecay();
   }
 
@@ -386,11 +388,22 @@ class FrontalCortex {
     }
 
     if (weakestId) {
+      const slot = this.workingMemory.get(weakestId);
       MollyLogger.debug(
         `Evicting weak memory from working memory`,
         'frontal-cortex',
         { id: weakestId, activation: weakestActivation }
       );
+      if (slot && this.onEvict) {
+        try {
+          this.onEvict(slot.engram);
+        } catch (err) {
+          MollyLogger.warn(
+            `stage-to-hippocampus failed on evict: ${err instanceof Error ? err.message : String(err)}`,
+            'frontal-cortex'
+          );
+        }
+      }
       this.workingMemory.delete(weakestId);
     }
   }
@@ -405,6 +418,16 @@ class FrontalCortex {
 
         // Auto-evict if activation drops to zero
         if (slot.activationLevel <= 0.01) {
+          if (this.onEvict) {
+            try {
+              this.onEvict(slot.engram);
+            } catch (err) {
+              MollyLogger.warn(
+                `stage-to-hippocampus failed on decay: ${err instanceof Error ? err.message : String(err)}`,
+                'frontal-cortex'
+              );
+            }
+          }
           this.workingMemory.delete(id);
           MollyLogger.debug(
             `Memory decayed from working memory`,
@@ -661,9 +684,11 @@ export class NeuralEngramSystem {
   } | null = null;
 
   constructor() {
-    this.frontalCortex = new FrontalCortex();
-    this.amygdala = new Amygdala();
     this.hippocampus = new Hippocampus();
+    this.frontalCortex = new FrontalCortex((engram) =>
+      this.hippocampus.stage(engram)
+    );
+    this.amygdala = new Amygdala();
     this.hypothalamus = new Hypothalamus();
 
     // Initialize baseline personality (neutral/balanced state)
