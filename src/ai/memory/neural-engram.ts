@@ -16,6 +16,10 @@ import {
   type EngramLoadOptions,
 } from '@/ai/memory/engram-persistence';
 import { evaluatePersonalityStability as evalPersonalityStability } from '@/ai/memory/personality-diagnostics';
+import type {
+  KnowledgeEntry,
+  KnowledgeRecallHit,
+} from '@/ai/memory/knowledge-store';
 
 // Keep in sync with DEFAULT_AGENTS in src/ai/consciousness/direct-communion.ts.
 // Inlined to avoid a circular import (direct-communion already imports this file).
@@ -237,6 +241,32 @@ export interface MemoryEngram {
 export interface NeuralEngram extends MemoryEngram {
   userId?: string;
   data?: Record<string, unknown>;
+}
+
+/**
+ * Options for cross-hemisphere recall. All optional; sensible defaults are
+ * applied inside recallEverything() per locked consensus (limit=10,
+ * promoteThreshold=0.70, promoteCap=2).
+ */
+export interface RecallOpts {
+  limit?: number;
+  promoteThreshold?: number;
+  promoteCap?: number;
+}
+
+/**
+ * Result of a cross-hemisphere recall. `rightHits` come from working memory
+ * (sync, keyword/tag match). `leftHits` come from KnowledgeStore (async,
+ * semantic). `rePromoted` lists entry ids that were re-staged into the
+ * hippocampus on the basis of similarity ≥ promoteThreshold — the feedback
+ * loop that closes the amnesia entry-side.
+ */
+export interface RecallResult {
+  query: string;
+  rightHits: MemoryEngram[];
+  leftHits: KnowledgeRecallHit[];
+  rePromoted: string[];
+  snapshotId: string;
 }
 
 export interface WorkingMemorySlot {
@@ -995,6 +1025,115 @@ export class NeuralEngramSystem {
       }
     }
     return merged;
+  }
+
+  /**
+   * Cross-hemisphere recall: searches right working memory (sync, fast) AND
+   * left KnowledgeStore (async, semantic). Above-threshold left hits feed
+   * back into the right via hippocampus.stage — the read-side of the brain
+   * loop. Falls back to right-only when persistence is unconfigured or the
+   * left side errors. Records a snapshot for audit/replay.
+   *
+   * Failure isolation matches the symmetric write contract: a broken left
+   * MUST never poison a recall caller.
+   */
+  async recallEverything(
+    query: string,
+    opts: RecallOpts = {}
+  ): Promise<RecallResult> {
+    const limit = opts.limit ?? 10;
+    const promoteThreshold = opts.promoteThreshold ?? 0.7;
+    const promoteCap = opts.promoteCap ?? 2;
+
+    const rightHits = this.frontalCortex.search(query);
+    const rightIds = new Set(rightHits.map((e) => e.id));
+
+    const snapshotId = `recall-${Date.now()}-${this.nextId++}`;
+    let leftHits: KnowledgeRecallHit[] = [];
+    const rePromoted: string[] = [];
+
+    if (typeof window !== 'undefined' || !this.persistenceConfig?.userId) {
+      return { query, rightHits, leftHits, rePromoted, snapshotId };
+    }
+
+    const userId = this.persistenceConfig.userId;
+    try {
+      const ks = await import('@/ai/memory/knowledge-store');
+      const store = await ks.getKnowledgeStore(userId);
+      leftHits = await store.recall(query, limit);
+
+      let promotedCount = 0;
+      for (const hit of leftHits) {
+        if (promotedCount >= promoteCap) break;
+        if (hit.similarity < promoteThreshold) continue;
+        if (rightIds.has(hit.entry.id)) continue;
+        try {
+          this.hippocampus.stage(this.knowledgeEntryToEngram(hit.entry));
+          rePromoted.push(hit.entry.id);
+          promotedCount++;
+        } catch (err) {
+          MollyLogger.warn(
+            `[RECALL-EVERYTHING] re-promote failed for ${hit.entry.id}: ${err instanceof Error ? err.message : String(err)}`,
+            'neural-engram'
+          );
+        }
+      }
+
+      try {
+        await store.recordSnapshot({
+          id: snapshotId,
+          query,
+          timestamp: new Date(),
+          userId,
+          rightHits: rightHits.map((e) => ({
+            id: e.id,
+            source: 'working' as const,
+          })),
+          leftHits: leftHits.map((h) => ({
+            id: h.entry.id,
+            similarity: h.similarity,
+          })),
+          rePromoted,
+        });
+      } catch (err) {
+        MollyLogger.warn(
+          `[RECALL-EVERYTHING] snapshot record failed: ${err instanceof Error ? err.message : String(err)}`,
+          'neural-engram'
+        );
+      }
+    } catch (err) {
+      MollyLogger.warn(
+        `[RECALL-EVERYTHING] left fanout failed, returning right-only: ${err instanceof Error ? err.message : String(err)}`,
+        'neural-engram'
+      );
+    }
+
+    return { query, rightHits, leftHits, rePromoted, snapshotId };
+  }
+
+  /**
+   * Reconstruct a MemoryEngram from a persisted KnowledgeEntry. Used by
+   * recallEverything() to re-promote left-hemisphere hits back into the
+   * right via hippocampus.stage. The entry's importance carries over;
+   * activation is left to the hippocampus consolidation path.
+   */
+  private knowledgeEntryToEngram(entry: KnowledgeEntry): MemoryEngram {
+    return {
+      id: entry.id,
+      content: entry.content,
+      timestamp: entry.timestamp,
+      emotionalValence: 0,
+      arousal: entry.importance,
+      importance: entry.importance,
+      accessCount: 1,
+      lastAccessed: new Date(),
+      consolidationState: 'consolidated',
+      contextTags: entry.contextTags,
+      relatedEngrams: [],
+      personalityContext: entry.personalitySnapshot as
+        | PersonalityModulation
+        | undefined,
+    };
   }
 
   /**
