@@ -48,11 +48,13 @@ import {
   withResilienceSync,
   getResilienceStatus,
   getFailureFrequency,
+  __resetForTests,
 } from '../resilience-core';
 
 describe('Resilience Core — The Dam', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    __resetForTests();
   });
 
   describe('handleUnknownFailure', () => {

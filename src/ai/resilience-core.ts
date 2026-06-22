@@ -1044,3 +1044,16 @@ export function learnPatternWithSave(
   // Auto-save
   savePatterns();
 }
+
+// ── Test-only helpers ──────────────────────────────────────────
+
+/**
+ * Reset module-level state. Test-only — tests share the same
+ * `learnedPatterns` map across cases, so a key learned in one case
+ * (e.g. `"42"`) can substring-match an unrelated message in a later
+ * case (e.g. `"429 Too Many Requests"`) and shadow real diagnosis.
+ */
+export function __resetForTests(): void {
+  learnedPatterns.clear();
+  failureHistory.length = 0;
+}
