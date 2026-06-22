@@ -634,6 +634,36 @@ export async function processVoiceCommand(
       );
     }
 
+    // Memory ingest: distinct engrams for user voice input and Molly response.
+    try {
+      const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+      const brain = getNeuralBrain();
+      const userPreview =
+        transcription.length > 400
+          ? `${transcription.slice(0, 400)}…`
+          : transcription;
+      const replyPreview =
+        responseText.length > 400
+          ? `${responseText.slice(0, 400)}…`
+          : responseText;
+      const speaker = context.userId ?? 'eric';
+      brain.remember(userPreview, {
+        tags: [speaker, 'conversation', 'input', 'voice', intent.intent],
+        importance: 0.55,
+      });
+      brain.remember(replyPreview, {
+        tags: ['molly', 'conversation', 'output', 'voice', intent.intent],
+        importance: 0.55,
+      });
+    } catch (memErr) {
+      MollyLogger.warn(
+        'brain.remember() failed in voice-command-processor',
+        'voice-command-processor',
+        { error: memErr instanceof Error ? memErr.message : 'Unknown' },
+        traceId
+      );
+    }
+
     MollyLogger.logFlowComplete(
       'processVoiceCommand',
       {
