@@ -208,6 +208,7 @@ export async function executeTool(
       {
         tags: ['tool-execution', tool, result.success ? 'success' : 'failure'],
         importance: result.success ? 0.5 : 0.65,
+        source: 'tool-call',
       }
     );
   } catch (err) {

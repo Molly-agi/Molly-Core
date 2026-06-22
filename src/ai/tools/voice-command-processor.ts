@@ -650,10 +650,12 @@ export async function processVoiceCommand(
       brain.remember(userPreview, {
         tags: [speaker, 'conversation', 'input', 'voice', intent.intent],
         importance: 0.55,
+        source: 'conversation',
       });
       brain.remember(replyPreview, {
         tags: ['molly', 'conversation', 'output', 'voice', intent.intent],
         importance: 0.55,
+        source: 'conversation',
       });
     } catch (memErr) {
       MollyLogger.warn(
