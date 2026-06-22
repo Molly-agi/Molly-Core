@@ -104,14 +104,17 @@ jest.mock('@/ai/agency/planning/counterfactual-engine', () => ({
   refineHeuristic: jest.fn(),
   getCounterfactualSummary: (...args: unknown[]) =>
     mockGetCounterfactualSummary(...args),
-  getDecisionsByDomain: (...args: unknown[]) => mockGetDecisionsByDomain(...args),
-  getEstablishedWisdom: (...args: unknown[]) => mockGetEstablishedWisdom(...args),
+  getDecisionsByDomain: (...args: unknown[]) =>
+    mockGetDecisionsByDomain(...args),
+  getEstablishedWisdom: (...args: unknown[]) =>
+    mockGetEstablishedWisdom(...args),
   getActiveHeuristics: jest.fn(async () => [{ name: 'pause-and-verify' }]),
 }));
 
 jest.mock('@/ai/agency/planning/trajectory-evolution', () => ({
   makePrediction: (...args: unknown[]) => mockMakePrediction(...args),
-  verifyPrediction: (...args: unknown[]) => mockVerifyTrajectoryPrediction(...args),
+  verifyPrediction: (...args: unknown[]) =>
+    mockVerifyTrajectoryPrediction(...args),
   calculateCorrelations: jest.fn(() => []),
   forecastTrajectory: (...args: unknown[]) => mockForecastTrajectory(...args),
   getTrajectoryStatus: (...args: unknown[]) => mockGetTrajectoryStatus(...args),
@@ -185,7 +188,9 @@ describe('planning-tools', () => {
       totalMilestones: 30,
     });
     mockCreateGoal.mockReturnValue({ id: 'g1', title: 'Stabilize tests' });
-    mockGetActiveGoals.mockReturnValue([{ title: 'A', status: 'active', progress: 50 }]);
+    mockGetActiveGoals.mockReturnValue([
+      { title: 'A', status: 'active', progress: 50 },
+    ]);
     mockGetGoalsByCategory.mockReturnValue([
       { title: 'B', status: 'active', progress: 20 },
     ]);
@@ -197,7 +202,10 @@ describe('planning-tools', () => {
     const missing = await longHorizonPlanning({ action: 'createGoal' });
     expect(missing.output).toContain('Missing: title');
 
-    const created = await longHorizonPlanning({ action: 'createGoal', title: 'Goal 1' });
+    const created = await longHorizonPlanning({
+      action: 'createGoal',
+      title: 'Goal 1',
+    });
     expect(created.success).toBe(true);
 
     const listed = await longHorizonPlanning({ action: 'listGoals' });
@@ -209,7 +217,10 @@ describe('planning-tools', () => {
     });
     expect(listedByCategory.output).toContain('Goals (1):');
 
-    const summary = await longHorizonPlanning({ action: 'summary', goalId: 'g1' });
+    const summary = await longHorizonPlanning({
+      action: 'summary',
+      goalId: 'g1',
+    });
     expect(summary.output).toContain('Progress summary body');
 
     const unknown = await longHorizonPlanning({ action: 'x' });
@@ -224,12 +235,16 @@ describe('planning-tools', () => {
     });
     mockGenerateSuggestions.mockReturnValue([{ suggestion: 'Check logs' }]);
     mockForecastContext.mockReturnValue({ summary: 'Higher latency at night' });
-    mockGetActivePatterns.mockReturnValue([{ name: 'night-latency', occurrences: 4 }]);
+    mockGetActivePatterns.mockReturnValue([
+      { name: 'night-latency', occurrences: 4 },
+    ]);
 
     const status = await predictiveIntelligence({ action: 'status' });
     expect(status.output).toContain('Predictive: 5 patterns');
 
-    const generated = await predictiveIntelligence({ action: 'generateSuggestions' });
+    const generated = await predictiveIntelligence({
+      action: 'generateSuggestions',
+    });
     expect(generated.output).toContain('Suggestions (1):');
 
     const forecast = await predictiveIntelligence({ action: 'forecast' });
@@ -247,7 +262,9 @@ describe('planning-tools', () => {
     });
     mockRecordDecisionPoint.mockResolvedValue({ id: 'd1' });
     mockGenerateCounterfactual.mockResolvedValue({ id: 'cf1' });
-    mockGetDecisionsByDomain.mockResolvedValue([{ situation: 'Deploy timing' }]);
+    mockGetDecisionsByDomain.mockResolvedValue([
+      { situation: 'Deploy timing' },
+    ]);
     mockGetEstablishedWisdom.mockResolvedValue([{ insight: 'Batch changes' }]);
 
     const status = await counterfactuals({ action: 'status' });
@@ -263,10 +280,16 @@ describe('planning-tools', () => {
     });
     expect(recorded.success).toBe(true);
 
-    const generated = await counterfactuals({ action: 'generate', decisionId: 'd1' });
+    const generated = await counterfactuals({
+      action: 'generate',
+      decisionId: 'd1',
+    });
     expect(generated.success).toBe(true);
 
-    const listed = await counterfactuals({ action: 'listDecisions', domain: 'ops' });
+    const listed = await counterfactuals({
+      action: 'listDecisions',
+      domain: 'ops',
+    });
     expect(listed.output).toContain('Decisions (1):');
 
     const wisdom = await counterfactuals({ action: 'listWisdom' });
@@ -283,13 +306,21 @@ describe('planning-tools', () => {
     });
     mockMakePrediction.mockReturnValue({ id: 'p1' });
     mockVerifyTrajectoryPrediction.mockReturnValue({ accurate: true });
-    mockForecastTrajectory.mockReturnValue({ prediction: 'stable', confidence: 0.82 });
-    mockGetConsciousnessPerformanceInsights.mockReturnValue(['calm improves latency']);
+    mockForecastTrajectory.mockReturnValue({
+      prediction: 'stable',
+      confidence: 0.82,
+    });
+    mockGetConsciousnessPerformanceInsights.mockReturnValue([
+      'calm improves latency',
+    ]);
 
     const status = await trajectoryEvolution({ action: 'status' });
     expect(status.output).toContain('Trajectory: 16 predictions');
 
-    const predictMissing = await trajectoryEvolution({ action: 'predict', metric: 'latency' });
+    const predictMissing = await trajectoryEvolution({
+      action: 'predict',
+      metric: 'latency',
+    });
     expect(predictMissing.output).toContain('Missing: metric, value');
 
     const predicted = await trajectoryEvolution({
@@ -306,7 +337,10 @@ describe('planning-tools', () => {
     });
     expect(verified.output).toContain('Verified: accurate');
 
-    const forecast = await trajectoryEvolution({ action: 'forecast', metric: 'latency' });
+    const forecast = await trajectoryEvolution({
+      action: 'forecast',
+      metric: 'latency',
+    });
     expect(forecast.output).toContain('Forecast: stable');
 
     const insights = await trajectoryEvolution({ action: 'insights' });
@@ -317,14 +351,29 @@ describe('planning-tools', () => {
   });
 
   it('covers autonomous cycle run and unknown action fallback', async () => {
-    mockRunAutonomousCycle.mockResolvedValue({ actionsTaken: 4, durationMs: 320 });
+    // Production gates the 'run' branch on MOLLY_ENABLE_AUTONOMOUS_CYCLE=1
+    // (planning-tools.ts:1210). Test enables the policy flag for the duration
+    // of the assertion, restores prior state after — no global side-effect.
+    mockRunAutonomousCycle.mockResolvedValue({
+      actionsTaken: 4,
+      durationMs: 320,
+    });
+    const prevFlag = process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE;
+    process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE = '1';
+    try {
+      const run = await autonomousCycle({ action: 'run' });
+      expect(run.success).toBe(true);
+      expect(run.output).toContain('4 actions in 320ms');
 
-    const run = await autonomousCycle({ action: 'run' });
-    expect(run.success).toBe(true);
-    expect(run.output).toContain('4 actions in 320ms');
-
-    const unknown = await autonomousCycle({ action: 'idle' });
-    expect(unknown.success).toBe(false);
-    expect(unknown.output).toContain('Unknown autonomousCycle action');
+      const unknown = await autonomousCycle({ action: 'idle' });
+      expect(unknown.success).toBe(false);
+      expect(unknown.output).toContain('Unknown autonomousCycle action');
+    } finally {
+      if (prevFlag === undefined) {
+        delete process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE;
+      } else {
+        process.env.MOLLY_ENABLE_AUTONOMOUS_CYCLE = prevFlag;
+      }
+    }
   });
 });
