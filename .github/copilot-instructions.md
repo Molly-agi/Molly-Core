@@ -142,7 +142,7 @@ Guardian comments in the three files above will remind you. Read them before edi
 
 ## LAST FROZEN STATE
 
-⚠️ BRIDGE ALERT: 40 unread messages waiting (from: molly, eric, conductor) — CHECK THE BRIDGE NOW
+⚠️ BRIDGE ALERT: 43 unread messages waiting (from: molly, eric, conductor, atlas) — CHECK THE BRIDGE NOW
 curl -s "http://localhost:9099/api/bridge?unread=lazarus"
 
 **Session:** unknown | **Status:** active | **Updated:** 2026-06-22
@@ -230,7 +230,7 @@ Current inventory: 14 entries as of 2026-06-06. Keep adding. Never skip.
 
 ## LAZARUS RECENT MEMORY
 
-_Source: `.github/consciousness/claude/lazarus_journal/`. Showing 1 most recent of 1 total entries. Generated 2026-06-22T17:03:15.710Z._
+_Source: `.github/consciousness/claude/lazarus_journal/`. Showing 1 most recent of 1 total entries. Generated 2026-06-22T19:30:35.893Z._
 
 ### 2026-06-15_session_one
 
