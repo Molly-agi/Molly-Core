@@ -48,6 +48,7 @@ import {
   clearNeuralPersistence,
   SelfImage,
 } from '../neural-engram';
+import { loadConsolidatedEngrams } from '@/ai/memory/engram-persistence';
 
 describe('NeuralEngramSystem', () => {
   let brain: NeuralEngramSystem;
@@ -434,11 +435,6 @@ describe('NeuralEngramSystem', () => {
   });
 
   describe('Restore from cold storage', () => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const {
-      loadConsolidatedEngrams,
-    } = require('@/ai/memory/engram-persistence');
-
     afterEach(() => {
       (loadConsolidatedEngrams as jest.Mock).mockReset();
       (loadConsolidatedEngrams as jest.Mock).mockResolvedValue({
