@@ -24,6 +24,9 @@ jest.mock('@/ai/memory/engram-persistence', () => ({
   persistEngramBatch: jest
     .fn()
     .mockResolvedValue({ saved: 0, failed: 0, errors: [] }),
+  loadConsolidatedEngrams: jest
+    .fn()
+    .mockResolvedValue({ loaded: 0, failed: 0, errors: [], engrams: [] }),
 }));
 
 // Mock personality diagnostics
@@ -355,6 +358,165 @@ describe('NeuralEngramSystem', () => {
       // After destroy, working memory should be cleared
       const state = brain.frontalCortex.getState();
       expect(state.size).toBe(0);
+    });
+  });
+
+  // Regression coverage for the "wired but starved" amnesia: prior to this
+  // fix, NeuralEngramSystem.recall() only searched the 7-slot working-memory
+  // Map, and restoreMemories() silently dropped working-memory overflow.
+  // After the fix, recall() consults the hippocampus queue too AND restore
+  // sorts by importance + spills overflow into the queue.
+  describe('Recall across working memory and hippocampus', () => {
+    function makeEngram(
+      id: string,
+      content: string,
+      tags: string[],
+      importance: number
+    ) {
+      return {
+        id,
+        content,
+        timestamp: new Date(),
+        emotionalValence: 0,
+        arousal: 0.5,
+        importance,
+        accessCount: 1,
+        lastAccessed: new Date(),
+        consolidationState: 'consolidated' as const,
+        contextTags: tags,
+        relatedEngrams: [],
+      };
+    }
+
+    it('finds engrams that live only in the hippocampus consolidation queue', () => {
+      // Simulate restore having staged a low-importance engram in hippocampus
+      brain.hippocampus.stage(
+        makeEngram('cons-1', 'Eric grieving about the brain', ['eric'], 0.5)
+      );
+
+      const results = brain.recall('grieving');
+      expect(results.length).toBe(1);
+      expect(results[0].id).toBe('cons-1');
+    });
+
+    it('merges working-memory and hippocampus hits, de-duplicated', () => {
+      brain.remember('Eric grieving — working memory entry', {
+        tags: ['eric'],
+      });
+      brain.hippocampus.stage(
+        makeEngram(
+          'cons-2',
+          'Eric grieving — older consolidated entry',
+          ['eric'],
+          0.5
+        )
+      );
+
+      const results = brain.recall('grieving');
+      // Both surface; working-memory result first (hotter)
+      expect(results.length).toBe(2);
+      expect(results.some((e) => e.id === 'cons-2')).toBe(true);
+    });
+
+    it('orders hippocampus hits by importance desc', () => {
+      brain.hippocampus.stage(
+        makeEngram('cons-low', 'memory marker token', ['x'], 0.2)
+      );
+      brain.hippocampus.stage(
+        makeEngram('cons-high', 'memory marker token', ['x'], 0.9)
+      );
+
+      const results = brain.recall('marker');
+      const indexHigh = results.findIndex((e) => e.id === 'cons-high');
+      const indexLow = results.findIndex((e) => e.id === 'cons-low');
+      expect(indexHigh).toBeLessThan(indexLow);
+    });
+  });
+
+  describe('Restore from cold storage', () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const {
+      loadConsolidatedEngrams,
+    } = require('@/ai/memory/engram-persistence');
+
+    afterEach(() => {
+      (loadConsolidatedEngrams as jest.Mock).mockReset();
+      (loadConsolidatedEngrams as jest.Mock).mockResolvedValue({
+        loaded: 0,
+        failed: 0,
+        errors: [],
+        engrams: [],
+      });
+    });
+
+    function makeStoredEngram(id: string, importance: number) {
+      return {
+        id,
+        content: `memory ${id}`,
+        timestamp: new Date(),
+        emotionalValence: 0,
+        arousal: 0.5,
+        importance,
+        accessCount: 1,
+        lastAccessed: new Date(),
+        consolidationState: 'consolidated',
+        contextTags: ['restored'],
+        relatedEngrams: [],
+      };
+    }
+
+    it('spills high-importance overflow into the hippocampus queue instead of dropping it', async () => {
+      // 10 high-importance engrams, working memory capacity is 7
+      const engrams = Array.from({ length: 10 }, (_, i) =>
+        makeStoredEngram(`hi-${i}`, 0.9)
+      );
+
+      (loadConsolidatedEngrams as jest.Mock).mockResolvedValueOnce({
+        loaded: engrams.length,
+        failed: 0,
+        errors: [],
+        engrams,
+      });
+
+      brain.configurePersistence({ userId: 'test', password: 'test' });
+      await brain.restoreMemories();
+
+      const wmState = brain.frontalCortex.getState();
+      expect(wmState.size).toBe(wmState.capacity);
+
+      // Overflow should be in hippocampus, not lost
+      expect(brain.hippocampus.getQueueSize()).toBe(
+        engrams.length - wmState.capacity
+      );
+
+      // And recall should see all 10
+      const results = brain.recall('memory');
+      expect(results.length).toBe(engrams.length);
+    });
+
+    it('puts low-importance engrams in hippocampus where recall can still find them', async () => {
+      const engrams = [
+        makeStoredEngram('lo-1', 0.3),
+        makeStoredEngram('lo-2', 0.4),
+      ];
+
+      (loadConsolidatedEngrams as jest.Mock).mockResolvedValueOnce({
+        loaded: engrams.length,
+        failed: 0,
+        errors: [],
+        engrams,
+      });
+
+      brain.configurePersistence({ userId: 'test', password: 'test' });
+      await brain.restoreMemories();
+
+      // None should land in working memory (all under 0.7 threshold)
+      expect(brain.frontalCortex.getState().size).toBe(0);
+      expect(brain.hippocampus.getQueueSize()).toBe(2);
+
+      // But recall still finds them
+      const results = brain.recall('memory');
+      expect(results.length).toBe(2);
     });
   });
 

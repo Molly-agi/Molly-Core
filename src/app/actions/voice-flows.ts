@@ -19,7 +19,11 @@ import {
   isSleepSafeword,
   toggleSleepState,
 } from '@/ai/tools/safety-sleep';
-import { withTimeoutAndRetry, TIMEOUT_PRESETS, RETRY_PRESETS } from '@/ai/tools/timeout-retry';
+import {
+  withTimeoutAndRetry,
+  TIMEOUT_PRESETS,
+  RETRY_PRESETS,
+} from '@/ai/tools/timeout-retry';
 import { ensureApiKey, checkRateLimit } from './utils';
 import {
   getAudioMimeType,
@@ -78,7 +82,7 @@ export async function processVoiceInteraction(
 ) {
   try {
     // Ensure memory persistence is configured for this user
-    ensureNeuralPersistence(userId);
+    await ensureNeuralPersistence(userId);
 
     ensureApiKey();
     await checkRateLimit('voice-interaction', 500);
