@@ -382,6 +382,35 @@ const conversationalChatFlow = ai.defineFlow(
         );
       }
 
+      // Memory ingest: distinct engrams for user input and Molly response.
+      // Two engrams (not one combined) so recall can match either side
+      // independently and tags differentiate input vs output.
+      try {
+        const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+        const brain = getNeuralBrain();
+        const userPreview = text.length > 400 ? `${text.slice(0, 400)}…` : text;
+        const replyPreview =
+          llmResponseText.length > 400
+            ? `${llmResponseText.slice(0, 400)}…`
+            : llmResponseText;
+        const speaker = userId ?? 'eric';
+        brain.remember(userPreview, {
+          tags: [speaker, 'conversation', 'input', 'text'],
+          importance: 0.5,
+        });
+        brain.remember(replyPreview, {
+          tags: ['molly', 'conversation', 'output', 'text'],
+          importance: 0.5,
+        });
+      } catch (memErr) {
+        MollyLogger.warn(
+          'brain.remember() failed in conversationalChat',
+          'conversationalChat',
+          { error: memErr instanceof Error ? memErr.message : 'Unknown' },
+          traceId
+        );
+      }
+
       return {
         response: llmResponseText,
       };
