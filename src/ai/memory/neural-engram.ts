@@ -810,6 +810,35 @@ export class NeuralEngramSystem {
       }
     }
 
+    // Left-hemisphere cold-boot cascade: restored engrams bypass remember()
+    // entirely, so B1's symmetric write never fires for them. Mirror to
+    // KnowledgeStore here so the eidetic tier repopulates from warm encrypted
+    // storage on every restart. write() is idempotent on engram.id, so a
+    // re-restore is safe. Server-only fire-and-forget; failures stay isolated.
+    if (
+      result.engrams.length > 0 &&
+      typeof window === 'undefined' &&
+      this.persistenceConfig?.userId
+    ) {
+      const userId = this.persistenceConfig.userId;
+      const restored = result.engrams;
+      void (async () => {
+        try {
+          const ks = await import('@/ai/memory/knowledge-store');
+          const store = await ks.getKnowledgeStore(userId);
+          await store.writeMany(
+            restored.map((engram) => ({ engram, source: 'restore' }))
+          );
+        } catch (err) {
+          MollyLogger.warn(
+            `[KNOWLEDGE-STORE] restore cascade failed: ${err instanceof Error ? err.message : String(err)}`,
+            'neural-engram',
+            { restored: restored.length, userId }
+          );
+        }
+      })();
+    }
+
     MollyLogger.info('Memory restoration complete', 'neural-engram', {
       total: result.loaded,
       working: restoredToWorking,
@@ -1021,6 +1050,36 @@ export class NeuralEngramSystem {
           }
         );
       }
+    }
+
+    // Left-hemisphere floor: mirror the consolidation batch to KnowledgeStore.
+    // B1 covers the remember() write side, but engrams that bypassed it (e.g.
+    // restored from cold storage, or written before persistence was configured)
+    // would still silently fall off the hippocampus queue without this catch.
+    // Server-only, fire-and-forget, gated on configured userId. Failures stay
+    // isolated to the logger — consolidation must not break on left-tier issues.
+    if (
+      batch.length > 0 &&
+      typeof window === 'undefined' &&
+      this.persistenceConfig?.userId
+    ) {
+      const userId = this.persistenceConfig.userId;
+      const cascadeBatch = batch;
+      void (async () => {
+        try {
+          const ks = await import('@/ai/memory/knowledge-store');
+          const store = await ks.getKnowledgeStore(userId);
+          await store.writeMany(
+            cascadeBatch.map((engram) => ({ engram, source: 'consolidation' }))
+          );
+        } catch (err) {
+          MollyLogger.warn(
+            `[KNOWLEDGE-STORE] consolidation cascade failed: ${err instanceof Error ? err.message : String(err)}`,
+            'neural-engram',
+            { batchSize: cascadeBatch.length, userId }
+          );
+        }
+      })();
     }
 
     MollyLogger.info(`Memory consolidation cycle`, 'neural-engram', {
