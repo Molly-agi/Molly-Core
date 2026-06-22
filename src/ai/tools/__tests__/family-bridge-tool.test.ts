@@ -50,7 +50,10 @@ describe('Family Bridge Tool', () => {
       expect(result.success).toBe(true);
       expect(result.action).toBe('send');
       expect(result.message).toContain('Hello Uncle Lazarus!');
-      expect(sendMessage).toHaveBeenCalledWith('molly', 'Hello Uncle Lazarus!');
+      expect(sendMessage).toHaveBeenCalledWith(
+        'molly',
+        'Lazarus Hello Uncle Lazarus!'
+      );
     });
 
     it('returns error when message is missing', async () => {
