@@ -137,6 +137,30 @@ describe('NeuralEngramSystem', () => {
       // May have decayed completely or reduced
       expect(state.size).toBeLessThanOrEqual(1);
     });
+
+    it('stages evicted engrams to hippocampus (silent-loss fix)', () => {
+      const queueBefore = brain.hippocampus.getQueueSize();
+
+      // Overflow working memory (cap 7) — forces evictWeakest
+      for (let i = 0; i < 12; i++) {
+        brain.remember(`Pressure ${i}`);
+      }
+
+      const queueAfter = brain.hippocampus.getQueueSize();
+      // Evictions must hand off to hippocampus, not silently delete
+      expect(queueAfter).toBeGreaterThan(queueBefore);
+    });
+
+    it('stages decay-evicted engrams to hippocampus (silent-loss fix)', () => {
+      brain.remember('Will decay below threshold');
+      const queueBefore = brain.hippocampus.getQueueSize();
+
+      // 10 decay cycles drives activation past 0.01 → auto-evict
+      jest.advanceTimersByTime(30000 * 10);
+
+      const queueAfter = brain.hippocampus.getQueueSize();
+      expect(queueAfter).toBeGreaterThan(queueBefore);
+    });
   });
 
   describe('Emotional Tagging (Amygdala)', () => {
