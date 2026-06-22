@@ -8,15 +8,27 @@ import { AdminAuditSensor } from '../sensors/admin-audit.sensor';
 const AUDIT_PATH = resolve(process.cwd(), '.admin-audit.jsonl');
 
 describe('AdminAuditSensor', () => {
-  let originalAudit: string;
+  let originalAudit: string | null;
   let sensor: AdminAuditSensor;
 
   beforeAll(() => {
-    originalAudit = readFileSync(AUDIT_PATH, 'utf8');
+    // .admin-audit.jsonl may be missing OR may have grown beyond
+    // readFileSync's safe-read bounds (the local fixture grows past
+    // ~600MB after long-running sensor logging). If we cannot capture
+    // a string snapshot, we must NOT later overwrite the file with
+    // garbage in afterAll — leave it untouched. Null sentinel signals
+    // "no restore needed".
+    try {
+      originalAudit = readFileSync(AUDIT_PATH, 'utf8');
+    } catch {
+      originalAudit = null;
+    }
   });
 
   afterAll(() => {
-    writeFileSync(AUDIT_PATH, originalAudit);
+    if (originalAudit !== null) {
+      writeFileSync(AUDIT_PATH, originalAudit);
+    }
   });
 
   beforeEach(() => {
