@@ -2,7 +2,7 @@
 
 The 21-item plan for fixing the 7-month "wired but starved" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.
 
-**Status as of 2026-06-23 (Atlas, item-6 + item-8 dam-fixes):** 9 of 21 done (item 6 in-process leg closed; live-Firestore/emulator leg deferred — see 6b).
+**Status as of 2026-06-23 (Atlas, item-9 pipeline doc):** 10 of 21 done (item 6 in-process leg closed; live-Firestore/emulator leg deferred — see 6b).
 
 Phase 1 wiring is substantially complete (items 1–5 + 7 done; 6, 8, 9, 10 remain). The 2026-06-21 status was understated — code grep + an end-to-end smoke test (item 7) showed that items 1–4 had landed across PR #214, #218, #223 but were never reflected here. This rewrite cites file:line for every "DONE" claim so future agents can verify without re-deriving.
 
@@ -47,7 +47,7 @@ The original pattern across Phase 1 was: code built, calls wired, nothing feedin
 
    Also deleted `src/ai/flows/__tests__/memory-consolidation.test.ts` placeholder (27 `expect(true).toBe(true)` calls pretending to be coverage — same family of fake-DONE as the item-7 false claim corrected yesterday). Replaced with the real test in the same path.
 
-9. **OPEN — Document the memory pipeline.** `recordMoment → crystallize → recall → prompt injection` in one place so the next agent does not re-derive it from grep. With items 1–5 + 7 done, this is now a write-up task, not a discovery task. The item-7 test header is a starting point.
+9. ✅ **DONE — Memory pipeline documented in one place (2026-06-23).** `docs/MEMORY_PIPELINE.md` — 10-section reference with file:line citations covering: the write path (every `brain.remember()` caller + the tail hook + symmetric left write), recall (`brain.recallEverything()` + re-promotion + `loadConsolidatedEngrams` startup restoration), prompt injection (base-composer + crystal context), the consolidation flow + AutoDream gates, persistence write/read shapes, the locked 1000 floors, the four silent-no-op patterns killed in items 6/7/8 (so the next agent doesn't reintroduce them), the test inventory mapped to roadmap items, the known gaps mapped to roadmap items, and a "if you're about to touch the pipeline" checklist with the canonical test-pack command. Mermaid diagram for the end-to-end flow. Doc is canonical reference — discrepancies between doc and code are doc bugs, not code bugs. Per Eric's `INNOVATION_DOCUMENTATION` standing directive, no inventory entry needed (this is a reference doc, not a novel architecture).
 
 ## Phase 1 — Other
 
@@ -83,9 +83,9 @@ The original pattern across Phase 1 was: code built, calls wired, nothing feedin
 
 ## When picking up after restart
 
-Recommended entry order with items 6/7/8 closed: **9 → 10** to finish Phase 1, then Phase 2 (12 first — embeddings unlock 13/14/15/16). Do not jump to Phase 3 until Phase 1 is fully green and Phase 2 item 12 lands; the two-hemisphere architecture (item 17) depends on semantic recall to be useful.
+Recommended entry order with items 6/7/8/9 closed: **10** (Lazarus is on it as of 2026-06-23) to finish Phase 1, then Phase 2 (12 first — embeddings unlock 13/14/15/16). Do not jump to Phase 3 until Phase 1 is fully green and Phase 2 item 12 lands; the two-hemisphere architecture (item 17) depends on semantic recall to be useful.
 
-The "wired but starved" pattern is broken end-to-end for the in-process path. Three independent silent-no-op bugs were found and fixed in 24 hours by writing real tests for items 7, 8, and 6: the consolidation flow (`compress` typo + stripped-form read + schema-shape fallback) and the persistence load (`getStorageRouter()` missing-await). Item 6b (live-Firestore / emulator verification) remains an env-dependent follow-up.
+**Read `docs/MEMORY_PIPELINE.md` before touching the memory pipeline.** It cites every file:line involved, lists the four silent-no-op patterns that were killed in items 6/7/8, and ships a canonical test-pack command (currently 55/55).
 
 ## Audit log
 
@@ -94,3 +94,4 @@ The "wired but starved" pattern is broken end-to-end for the in-process path. Th
 - **2026-06-23 (Atlas)** — Authored the real item-7 e2e smoke test (`src/ai/__tests__/memory-pipeline.e2e.test.ts`, GREEN, 3/3 runs no flake, ~0.36s). Corrected the previous false-DONE claim in-place rather than silently re-asserting it. Status now genuinely 7/21.
 - **2026-06-23 (Atlas)** — Closed item 8 with real tests AND a dam fix. `src/ai/flows/__tests__/memory-consolidation.test.ts` rewritten from a 27-assertion `expect(true).toBe(true)` placeholder into 3 real tests (3/3 green, 3 runs, no flake). While landing the tests, found and fixed two silent-no-op bugs in `src/ai/flows/memory-consolidation.ts`: (i) `schemaStripper.compress(...)` → `.strip(...)` (the method that actually exists), (ii) embedding text source switched from the stripped form back to the original memories (the stripped shape has no `.suggestion`/`.context` keys). Also fixed a schema-shape mismatch in the embedding-provider-init fallback. Status now 8/21.
 - **2026-06-23 (Atlas)** — Closed item 6 in-process leg with real tests AND another dam fix. `src/ai/memory/__tests__/engram-persistence.roundtrip.test.ts` — 5 new tests (3/3 green, 3 runs). Real AES-256-GCM round-trip, wrong-password handling, missing-field handling, 1000-floor pin, Firestore-mode admin guard. While landing the tests, found and fixed a silent-no-op bug in `src/ai/memory/engram-persistence.ts:171`: `getStorageRouter()` was called without `await`, so `storage.getMode()` threw `TypeError`, the catch returned `{loaded: 0}`, and Molly's startup `restoreMemories()` path had been silently empty since this code was written. Split item 6 into 6 (DONE, in-process) and 6b (OPEN, env-dependent emulator/live-creds work). Status now 9/21.
+- **2026-06-23 (Atlas)** — Closed item 9. `docs/MEMORY_PIPELINE.md` (294 lines, mermaid diagram, file:line citations end-to-end). Documents: write callers + tail hook + symmetric left write; recall + re-promotion + startup restoration; prompt injection; consolidation flow + AutoDream gates; persistence shapes; the locked 1000 floors; the four silent-no-op patterns killed in items 6/7/8 with the "lesson" for each so they don't get reintroduced; test inventory; known gaps mapped to roadmap items; "if you're about to touch the pipeline" checklist with canonical 55/55 test-pack command. Status now 10/21.
