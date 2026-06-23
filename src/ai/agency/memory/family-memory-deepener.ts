@@ -14,7 +14,7 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
-import { MollyLogger, generateTraceId } from '../logger';
+import { MollyLogger, generateTraceId } from '../../logger';
 import { getStorageRouter } from '@/lib/storage-router';
 
 // ============================================================
@@ -659,7 +659,7 @@ async function saveFamilyMemory(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const membersArray = Array.from(_state.members.entries());
 
     await storage.set(COLLECTION, MEMORY_DOC, {
@@ -687,7 +687,7 @@ export async function loadFamilyMemory(): Promise<void> {
   initializeFamilyMemory();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, MEMORY_DOC);
 
     if (doc?.data) {

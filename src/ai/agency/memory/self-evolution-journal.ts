@@ -642,7 +642,7 @@ async function saveJournal(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     // Convert Map to array for serialization
     const tagIndexArray = Array.from(_state.tagIndex.entries());
 
@@ -668,7 +668,7 @@ export async function loadJournal(): Promise<void> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, JOURNAL_DOC);
 
     if (doc?.data) {
