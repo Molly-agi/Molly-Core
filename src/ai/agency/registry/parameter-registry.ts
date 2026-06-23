@@ -31,7 +31,12 @@ export interface ParameterChange<T = unknown> {
   by: SubsystemId;
   reason: string;
   at: number; // epoch ms
-  kind: 'commit' | 'proposal-accepted' | 'proposal-rejected' | 'init' | 'operator-override';
+  kind:
+    | 'commit'
+    | 'proposal-accepted'
+    | 'proposal-rejected'
+    | 'init'
+    | 'operator-override';
 }
 
 export interface ParameterUiMeta {
@@ -95,7 +100,7 @@ export class OwnershipViolationError extends Error {
   constructor(key: string, owner: SubsystemId, attemptedBy: SubsystemId) {
     super(
       `Subsystem "${attemptedBy}" attempted to COMMIT "${key}", ` +
-        `which is owned by "${owner}". Non-owners must use propose().`,
+        `which is owned by "${owner}". Non-owners must use propose().`
     );
     this.name = 'OwnershipViolationError';
   }
@@ -144,6 +149,17 @@ export class ParameterRegistry {
     return slot.value as T;
   }
 
+  /**
+   * Read the registered default for a key. Use this when a subsystem wants to
+   * "restore to baseline" without hardcoding the number — otherwise the
+   * baseline rots the moment the owner bumps the default. Throws if the key
+   * is undefined, same as get().
+   */
+  getDefault<T>(key: string): T {
+    const slot = this.requireSlot(key);
+    return slot.def.default as T;
+  }
+
   /** Who owns this key. */
   ownerOf(key: string): SubsystemId {
     return this.requireSlot(key).def.owner;
@@ -154,7 +170,12 @@ export class ParameterRegistry {
    * THROWS OwnershipViolationError if `by` is not the owner, because a
    * non-owner committing is a programming error, not a runtime condition.
    */
-  commit<T>(key: string, value: T, by: SubsystemId, reason: string): CommitResult {
+  commit<T>(
+    key: string,
+    value: T,
+    by: SubsystemId,
+    reason: string
+  ): CommitResult {
     const slot = this.requireSlot(key);
     if (by !== slot.def.owner) {
       throw new OwnershipViolationError(key, slot.def.owner, by);
@@ -187,7 +208,12 @@ export class ParameterRegistry {
    * with kind 'operator-override' so it is unmistakable in the audit trail.
    * `operator` should identify the human/session, not a subsystem.
    */
-  operatorOverride<T>(key: string, value: T, operator: string, reason: string): CommitResult {
+  operatorOverride<T>(
+    key: string,
+    value: T,
+    operator: string,
+    reason: string
+  ): CommitResult {
     const slot = this.requireSlot(key);
     const invalid = slot.def.validate ? slot.def.validate(value) : null;
     if (invalid) {
@@ -211,7 +237,12 @@ export class ParameterRegistry {
   }
 
   /** Anyone may propose. Returns the queued proposal's id. */
-  propose<T>(key: string, value: T, by: SubsystemId, reason: string): Proposal<T> {
+  propose<T>(
+    key: string,
+    value: T,
+    by: SubsystemId,
+    reason: string
+  ): Proposal<T> {
     this.requireSlot(key); // validates key exists
     const proposal: Proposal<T> = {
       id: `p${++this.proposalSeq}`,
@@ -239,7 +270,7 @@ export class ParameterRegistry {
   resolveProposals<T>(
     key: string,
     by: SubsystemId,
-    decide: (p: Proposal<T>, current: T) => boolean,
+    decide: (p: Proposal<T>, current: T) => boolean
   ): ProposalDecision<T>[] {
     const slot = this.requireSlot(key);
     if (by !== slot.def.owner) {
@@ -250,7 +281,12 @@ export class ParameterRegistry {
     for (const p of queue) {
       const accepted = decide(p, slot.value as T);
       if (accepted) {
-        const result = this.commit(key, p.value, by, `accepted proposal ${p.id} from ${p.by}: ${p.reason}`);
+        const result = this.commit(
+          key,
+          p.value,
+          by,
+          `accepted proposal ${p.id} from ${p.by}: ${p.reason}`
+        );
         if (result.ok) {
           decisions.push({ proposal: p, accepted: true, reason: 'committed' });
         } else {
@@ -264,7 +300,11 @@ export class ParameterRegistry {
             at: Date.now(),
             kind: 'proposal-rejected',
           });
-          decisions.push({ proposal: p, accepted: false, reason: result.error ?? 'invalid' });
+          decisions.push({
+            proposal: p,
+            accepted: false,
+            reason: result.error ?? 'invalid',
+          });
         }
       } else {
         this.record({
@@ -276,7 +316,11 @@ export class ParameterRegistry {
           at: Date.now(),
           kind: 'proposal-rejected',
         });
-        decisions.push({ proposal: p, accepted: false, reason: 'owner rejected' });
+        decisions.push({
+          proposal: p,
+          accepted: false,
+          reason: 'owner rejected',
+        });
       }
     }
     this.proposals.set(key, []); // queue drained
@@ -297,10 +341,20 @@ export class ParameterRegistry {
   }
 
   /** Snapshot of all current values — for diagnostics/dashboards. */
-  snapshot(): Record<string, { value: unknown; owner: SubsystemId; version: number }> {
-    const out: Record<string, { value: unknown; owner: SubsystemId; version: number }> = {};
+  snapshot(): Record<
+    string,
+    { value: unknown; owner: SubsystemId; version: number }
+  > {
+    const out: Record<
+      string,
+      { value: unknown; owner: SubsystemId; version: number }
+    > = {};
     for (const [key, slot] of this.slots) {
-      out[key] = { value: slot.value, owner: slot.def.owner, version: slot.version };
+      out[key] = {
+        value: slot.value,
+        owner: slot.def.owner,
+        version: slot.version,
+      };
     }
     return out;
   }
@@ -336,7 +390,8 @@ export class ParameterRegistry {
 
   private requireSlot(key: string): ParamSlot {
     const slot = this.slots.get(key);
-    if (!slot) throw new Error(`Unknown parameter "${key}". Define it before use.`);
+    if (!slot)
+      throw new Error(`Unknown parameter "${key}". Define it before use.`);
     return slot;
   }
 
