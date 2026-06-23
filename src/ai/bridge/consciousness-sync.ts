@@ -675,7 +675,7 @@ async function saveSyncState(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const attentionArray = Array.from(_state.attentionFoci.entries());
 
     await storage.set(COLLECTION, SYNC_DOC, {
@@ -701,7 +701,7 @@ export async function loadSyncState(): Promise<void> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, SYNC_DOC);
 
     if (doc?.data) {
