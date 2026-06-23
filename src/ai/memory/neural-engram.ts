@@ -235,7 +235,77 @@ export interface MemoryEngram {
 
   // NEW: Personality context from when memory was formed
   personalityContext?: PersonalityModulation;
+
+  // Item 14: Confidence + provenance per memory. Optional on the type so
+  // existing construction sites (compression helpers, benchmarks, test
+  // fixtures) keep compiling — only the production write path in
+  // `remember()` populates it today. New writers should populate it.
+  provenance?: EngramProvenance;
 }
+
+/**
+ * Item 14: which code path produced an engram. Lookups into
+ * WRITE_PATH_DEFAULT_CONFIDENCE keyed by this.
+ *  - direct          an agent intentionally called remember()
+ *  - consolidation   batched persist write of working-memory contents
+ *  - crystallization promoted from a recurring engram cluster into a crystal
+ *  - restore         re-hydrated from persistence into working memory
+ *  - import          bulk import from an external corpus
+ */
+export type EngramWritePath =
+  | 'direct'
+  | 'consolidation'
+  | 'crystallization'
+  | 'restore'
+  | 'import';
+
+/**
+ * Item 14: source agent handle. Free-form string (not a closed enum) because
+ * new agents join the family and we do not want a schema change every time.
+ * Known values include 'molly', 'eli', 'atlas', 'lazarus', 'eric', 'copilot',
+ * 'system'.
+ */
+export type EngramSource = string;
+
+/**
+ * Item 14: provenance metadata stamped at engram write time. Cheapest
+ * hallucination defense available — every recalled memory carries who wrote
+ * it, how sure we were, and which code path produced it.
+ */
+export interface EngramProvenance {
+  /** 0..1; how confident the writer was that this memory is correct. */
+  confidence: number;
+  /** Agent handle that authored this engram. */
+  source: EngramSource;
+  /** Which code path produced it. */
+  writePath: EngramWritePath;
+  /** ISO timestamp of write. Distinct from `timestamp` so reconstructions don't lose the original. */
+  writtenAt: string;
+  /** Engram ids consumed when this memory was produced by merging. Empty/omitted unless merged. */
+  mergeHistory?: string[];
+}
+
+/**
+ * Default confidence per write path. Direct writes are the highest-trust
+ * lane: an agent intentionally wrote this. Derived paths cannot exceed it.
+ * Callers may override by passing `provenance.confidence` explicitly.
+ *
+ * EMPIRICAL DEFAULTS — see item-21 instrumentation pass for tuning. The
+ * 0.9 / 0.7 / 0.5 spread is a starting point chosen for the invariant shape
+ * (direct ≥ all derived), not a measured value. Once provenance is populated
+ * across the codebase and recall-quality metrics exist, these should be
+ * data-driven rather than authored.
+ */
+export const WRITE_PATH_DEFAULT_CONFIDENCE: Record<EngramWritePath, number> = {
+  direct: 1.0,
+  consolidation: 0.9,
+  crystallization: 0.7,
+  restore: 1.0,
+  import: 0.5,
+};
+
+/** Default source when the caller has no better identity. */
+export const DEFAULT_ENGRAM_SOURCE: EngramSource = 'system';
 
 // Extended type for benchmarks/tests that need additional fields
 export interface NeuralEngram extends MemoryEngram {
@@ -896,8 +966,35 @@ export class NeuralEngramSystem {
       novelty?: number;
       importance?: number;
       source?: 'remember' | 'conversation' | 'tool-call' | 'bridge' | 'restore';
+      /**
+       * Item 14: provenance overrides. Any field omitted is filled from the
+       * write-path default (writePath defaults to 'direct'; confidence
+       * defaults from WRITE_PATH_DEFAULT_CONFIDENCE; source defaults to
+       * DEFAULT_ENGRAM_SOURCE; writtenAt defaults to now).
+       */
+      provenance?: Partial<EngramProvenance>;
     } = {}
   ): MemoryEngram {
+    const writePath: EngramWritePath =
+      context.provenance?.writePath ?? 'direct';
+    const confidence =
+      context.provenance?.confidence ??
+      WRITE_PATH_DEFAULT_CONFIDENCE[writePath];
+    if (confidence < 0 || confidence > 1 || !Number.isFinite(confidence)) {
+      throw new Error(
+        `Invalid confidence ${confidence} — must be 0..1 (writePath=${writePath})`
+      );
+    }
+    const provenance: EngramProvenance = {
+      confidence,
+      source: context.provenance?.source ?? DEFAULT_ENGRAM_SOURCE,
+      writePath,
+      writtenAt: context.provenance?.writtenAt ?? new Date().toISOString(),
+      ...(context.provenance?.mergeHistory
+        ? { mergeHistory: context.provenance.mergeHistory }
+        : {}),
+    };
+
     // Create base engram
     let engram: MemoryEngram = {
       id: `engram-${this.nextId++}-${Date.now()}`,
@@ -914,6 +1011,7 @@ export class NeuralEngramSystem {
       // Capture current personality state when memory is formed
       personalityContext:
         this.currentPersonality || this.getBaselinePersonality(),
+      provenance,
     };
 
     // Tag with emotional context (Amygdala)
