@@ -233,6 +233,12 @@ export interface MemoryEngram {
   contextTags: string[];
   relatedEngrams: string[]; // IDs of associated memories
 
+  // Item 13: optional embedding vector. Lazy-filled by mergeNearDuplicates on
+  // first need (and may be filled by other paths in the future). Kept optional
+  // so existing construction sites (compression helpers, restore, fixtures)
+  // keep compiling without change.
+  embedding?: number[];
+
   // NEW: Personality context from when memory was formed
   personalityContext?: PersonalityModulation;
 
@@ -376,6 +382,27 @@ export interface EngramPersistenceConfig {
 // FRONTAL CORTEX: Working Memory (Hot Storage)
 // ============================================================================
 
+/**
+ * Cosine similarity between two equal-length vectors. Module-local because
+ * `knowledge-store.ts` keeps its copy private and the item-13 cycle path is
+ * the only neural-engram consumer today. If a third call site appears,
+ * promote one copy to `@/lib/vector-math` rather than re-importing across
+ * layers.
+ */
+function cosineSimilarityVec(a: number[], b: number[]): number {
+  if (a.length === 0 || b.length === 0 || a.length !== b.length) return 0;
+  let dot = 0;
+  let normA = 0;
+  let normB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  if (normA === 0 || normB === 0) return 0;
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+
 class FrontalCortex {
   private workingMemory: Map<string, WorkingMemorySlot> = new Map();
   private readonly MAX_WORKING_MEMORY = 7; // Miller's Law: 7±2 items
@@ -430,13 +457,16 @@ class FrontalCortex {
   }
 
   /**
-   * Search working memory by context
+   * Search working memory by context. Archived engrams (item 13 soft-archive)
+   * are filtered out — they remain in the slot for audit/replay but no longer
+   * surface to recall callers.
    */
   search(query: string): MemoryEngram[] {
     const queryLower = query.toLowerCase();
     const matches: MemoryEngram[] = [];
 
     for (const slot of this.workingMemory.values()) {
+      if (slot.engram.consolidationState === 'archived') continue;
       if (
         slot.engram.content.toLowerCase().includes(queryLower) ||
         slot.engram.contextTags.some((tag) =>
@@ -453,6 +483,15 @@ class FrontalCortex {
       const slotB = this.workingMemory.get(b.id)!;
       return slotB.activationLevel - slotA.activationLevel;
     });
+  }
+
+  /**
+   * Iterate every working-memory slot. Used by item-13 helpers
+   * (strengthenByAccess, archiveStale) that need live references in order to
+   * mutate engram state in place.
+   */
+  getSlots(): WorkingMemorySlot[] {
+    return Array.from(this.workingMemory.values());
   }
 
   /**
@@ -711,11 +750,13 @@ class Hippocampus {
    * Used by NeuralEngramSystem.recall() so engrams that have aged out of
    * working memory (or were restored from cold storage) remain findable.
    * Ordered by importance desc since hippocampus entries have no activation level.
+   * Archived engrams (item 13 soft-archive) are filtered out.
    */
   search(query: string): MemoryEngram[] {
     const q = query.toLowerCase();
     const matches: MemoryEngram[] = [];
     for (const engram of this.consolidationQueue) {
+      if (engram.consolidationState === 'archived') continue;
       if (
         engram.content.toLowerCase().includes(q) ||
         engram.contextTags.some((tag) => tag.toLowerCase().includes(q))
@@ -724,6 +765,23 @@ class Hippocampus {
       }
     }
     return matches.sort((a, b) => b.importance - a.importance);
+  }
+
+  /**
+   * Live reference to the consolidation queue. Item-13 helpers
+   * (mergeNearDuplicates) need to read AND replace queue contents in place.
+   * Read-only consumers should treat the returned array as immutable.
+   */
+  getQueue(): MemoryEngram[] {
+    return this.consolidationQueue;
+  }
+
+  /**
+   * Replace the consolidation queue wholesale. Used by mergeNearDuplicates
+   * after the queue has been de-duplicated.
+   */
+  setQueue(engrams: MemoryEngram[]): void {
+    this.consolidationQueue = engrams;
   }
 
   clear(): void {
@@ -1196,6 +1254,154 @@ export class NeuralEngramSystem {
     }
 
     return merged;
+  }
+
+  // ============================================================================
+  // Item 13 — sleep/consolidation cycle (3 brain-side behaviors)
+  // ============================================================================
+
+  /**
+   * Roadmap item 13 (merge) — cross-cycle semantic dedup of the hippocampus
+   * queue. The intra-batch S1 dedup in `executeMemoryConsolidation` already
+   * removes near-duplicates within a single cycle, but engrams that
+   * accumulate in the queue across cycles can still pile up. This walks the
+   * live queue, embeds anything still missing a vector, and for each
+   * incoming engram picks the ARGMAX target above `threshold` cosine (NOT
+   * the first match — order-dependent first-match opens the door to
+   * cascading merges if the threshold is ever loosened). Absorbs the newer
+   * entry into the older one (bump accessCount, importance += 0.05 capped
+   * at 1, lastAccessed = now). Returns the merge count.
+   *
+   * No-op when no embedding provider is configured.
+   */
+  async mergeNearDuplicates(threshold = 0.92): Promise<{ merged: number }> {
+    const { isEmbeddingProviderReady, getEmbeddingProvider } =
+      await import('@/ai/tools/embedding-provider');
+    if (!isEmbeddingProviderReady()) return { merged: 0 };
+
+    const queue = this.hippocampus.getQueue();
+    if (queue.length < 2) return { merged: 0 };
+
+    const provider = getEmbeddingProvider();
+
+    for (const engram of queue) {
+      if (engram.embedding && engram.embedding.length > 0) continue;
+      try {
+        const res = await provider.embed(engram.content);
+        engram.embedding = res.vector;
+      } catch (err) {
+        MollyLogger.warn(
+          `mergeNearDuplicates embed failed (id=${engram.id}): ${err instanceof Error ? err.message : String(err)}`,
+          'neural-engram'
+        );
+      }
+    }
+
+    const kept: MemoryEngram[] = [];
+    let merged = 0;
+    const now = new Date();
+
+    for (const engram of queue) {
+      if (!engram.embedding || engram.embedding.length === 0) {
+        kept.push(engram);
+        continue;
+      }
+      // Argmax over all kept candidates above threshold. First-match would be
+      // order-dependent and (if threshold is loosened later) opens the door
+      // to cascading merges. Highest sim wins, ties broken by earlier
+      // insertion (natural from the strict `>` comparison).
+      let bestTarget: MemoryEngram | null = null;
+      let bestSim = -Infinity;
+      for (const existing of kept) {
+        if (!existing.embedding || existing.embedding.length === 0) continue;
+        if (existing.id === engram.id) continue;
+        const sim = cosineSimilarityVec(existing.embedding, engram.embedding);
+        if (sim >= threshold && sim > bestSim) {
+          bestSim = sim;
+          bestTarget = existing;
+        }
+      }
+      if (bestTarget) {
+        bestTarget.accessCount += 1;
+        bestTarget.importance = Math.min(1, bestTarget.importance + 0.05);
+        bestTarget.lastAccessed = now;
+        merged += 1;
+        MollyLogger.info(
+          `mergeNearDuplicates absorbed engram`,
+          'neural-engram',
+          { newId: engram.id, existingId: bestTarget.id, similarity: bestSim }
+        );
+      } else {
+        kept.push(engram);
+      }
+    }
+
+    if (merged > 0) {
+      this.hippocampus.setQueue(kept);
+    }
+
+    return { merged };
+  }
+
+  /**
+   * Roadmap item 13 (strengthen) — boost importance for frequently-accessed
+   * engrams. Walks working memory + hippocampus queue and applies
+   *   importance' = min(1, importance + log(1 + accessCount) * 0.05)
+   * so a 100× engram gains ~0.23 rather than 5.0. Archived engrams are
+   * skipped — they're no longer eligible for recall, so strengthening them
+   * is meaningless. Returns the number of engrams strengthened.
+   */
+  strengthenByAccess(): { strengthened: number } {
+    let strengthened = 0;
+    const apply = (engram: MemoryEngram): void => {
+      if (engram.consolidationState === 'archived') return;
+      if (engram.accessCount <= 0) return;
+      const boost = Math.log(1 + engram.accessCount) * 0.05;
+      if (boost <= 0) return;
+      const next = Math.min(1, engram.importance + boost);
+      if (next === engram.importance) return;
+      engram.importance = next;
+      strengthened += 1;
+    };
+    for (const slot of this.frontalCortex.getSlots()) apply(slot.engram);
+    for (const engram of this.hippocampus.getQueue()) apply(engram);
+    return { strengthened };
+  }
+
+  /**
+   * Roadmap item 13 (decay) — soft-archive stale engrams. An engram becomes
+   * `archived` when ALL of:
+   *   • lastAccessed older than 7 days from `now`
+   *   • importance < 0.2
+   *   • accessCount < 3
+   *   • NOT cornerstone-tier (item 15 — checks the typed
+   *     `MemoryEngram.cornerstone` field, NOT a contextTag).
+   * The engram stays in memory (no deletion — storage is unchanged) but the
+   * hemisphere search methods now filter it out, so recall callers stop
+   * seeing it. Returns the number of engrams archived this call.
+   */
+  archiveStale(now: Date = new Date()): { archived: number } {
+    const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+    const nowMs = now.getTime();
+    let archived = 0;
+    const apply = (engram: MemoryEngram): void => {
+      if (engram.consolidationState === 'archived') return;
+      if (engram.cornerstone) return;
+      const ageMs = nowMs - engram.lastAccessed.getTime();
+      if (ageMs < SEVEN_DAYS_MS) return;
+      if (engram.importance >= 0.2) return;
+      if (engram.accessCount >= 3) return;
+      engram.consolidationState = 'archived';
+      archived += 1;
+    };
+    for (const slot of this.frontalCortex.getSlots()) apply(slot.engram);
+    for (const engram of this.hippocampus.getQueue()) apply(engram);
+    if (archived > 0) {
+      MollyLogger.info(`archiveStale soft-archived engrams`, 'neural-engram', {
+        archived,
+      });
+    }
+    return { archived };
   }
 
   /**
