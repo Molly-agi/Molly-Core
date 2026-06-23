@@ -2,7 +2,7 @@
 
 The 21-item plan for fixing the 7-month "wired but starved" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.
 
-**Status as of 2026-06-23 (Lazarus, item-6b Firestore emulator round-trip):** 12 of 21 done. Phase 1 is closed end-to-end — both the in-process and live-Firestore (emulator) legs of engram persistence are now verified.
+**Status as of 2026-06-23 (item 12, right-hemisphere semantic recall):** 13 of 21 done. Phase 1 is closed end-to-end (items 1–11 + 6b). Phase 2 opens with item 12 closed — semantic recall via lazy-embedded engrams + crystals.
 
 Phase 1 wiring is closed. Items 1–11 done; item 6b closed via `firebase emulators:exec`-backed jest pack (3/3 green, 4 consecutive runs, no flake). Every "DONE" claim below cites file:line so future agents can verify without re-deriving.
 
