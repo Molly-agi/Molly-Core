@@ -52,9 +52,15 @@ describe('CipherStream', () => {
 
     it('throws on a tampered payload', () => {
       const packet = CipherStream.encryptPayload({ x: 99 }, KEY);
+      // XOR last hex byte with 0xff to guarantee mutation. Prior
+      // `…slice(0,-4) + 'dead'` was a 1/65536 flake whenever the real
+      // payload happened to end in those four hex chars. Same class
+      // as engram-crypto.test.ts (see PR #246).
+      const lastByte = parseInt(packet.payload.slice(-2), 16);
+      const flipped = (lastByte ^ 0xff).toString(16).padStart(2, '0');
       const tampered = {
         ...packet,
-        payload: packet.payload.slice(0, -4) + 'dead',
+        payload: packet.payload.slice(0, -2) + flipped,
       };
       expect(() => CipherStream.decryptPayload(tampered, KEY)).toThrow();
     });
