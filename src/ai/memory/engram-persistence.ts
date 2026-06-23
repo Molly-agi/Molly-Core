@@ -168,7 +168,7 @@ export async function loadConsolidatedEngrams(
   // 🔒 FLOOR: 1000. Do not lower. See guardian comment above EngramLoadOptions.
   const { minImportance = 0, limit = 1000, mostRecentFirst = true } = options;
 
-  const storage = getStorageRouter();
+  const storage = await getStorageRouter();
   if (storage.getMode() === 'firestore' && !isAdminConfigured()) {
     return {
       loaded: 0,
