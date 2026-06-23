@@ -123,6 +123,7 @@ export async function POST(request: NextRequest) {
           tags: ['bridge-post', from],
           importance: 0.6,
           source: 'bridge',
+          provenance: { source: from },
         }
       );
     } catch (err) {

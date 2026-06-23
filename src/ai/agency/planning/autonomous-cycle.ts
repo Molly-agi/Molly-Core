@@ -504,6 +504,7 @@ export async function runAutonomousCycle(force = false): Promise<{
           tags: ['autonomous-cycle', outcome],
           importance,
           source: 'tool-call',
+          provenance: { source: 'molly' },
         }
       );
     } catch (err) {
