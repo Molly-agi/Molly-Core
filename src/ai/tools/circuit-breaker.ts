@@ -292,6 +292,27 @@ class CircuitBreakerInstance {
           consecutiveFailures: this.stats.consecutiveFailures,
         }
       );
+
+      // Item-2: trip is the value-laden moment. Recall-worthy.
+      const opName = this.name;
+      const tripReason = reason;
+      const errorRate = this.stats.errorRate.toFixed(1);
+      void (async () => {
+        try {
+          const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+          getNeuralBrain().remember(
+            `[Circuit-breaker TRIP ${opName}] ${tripReason} (errorRate=${errorRate}%)`,
+            {
+              tags: ['circuit-breaker', 'trip', opName],
+              importance: 0.85,
+              source: 'tool-call',
+              provenance: { source: `tool:circuit-breaker:trip` },
+            }
+          );
+        } catch {
+          // Memory-ingest failure must never break the trip path.
+        }
+      })();
     }
   }
 

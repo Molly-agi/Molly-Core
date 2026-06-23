@@ -399,11 +399,13 @@ const conversationalChatFlow = ai.defineFlow(
           tags: [speaker, 'conversation', 'input', 'text'],
           importance: 0.5,
           source: 'conversation',
+          provenance: { source: speaker },
         });
         brain.remember(replyPreview, {
           tags: ['molly', 'conversation', 'output', 'text'],
           importance: 0.5,
           source: 'conversation',
+          provenance: { source: 'molly' },
         });
       } catch (memErr) {
         MollyLogger.warn(

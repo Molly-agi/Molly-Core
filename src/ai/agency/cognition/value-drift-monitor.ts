@@ -277,6 +277,32 @@ export class ValueDriftMonitor {
       traceId
     );
 
+    // Item-2: a drift crossing is Molly noticing she shifted. Recall-worthy.
+    // No-drift reports are noise — only fire on hasDrift.
+    if (hasDrift) {
+      const driftSummary = drifts
+        .map(
+          (d) =>
+            `${d.valueKey}=${d.observedAvg.toFixed(2)} (Δ${d.deviation.toFixed(2)}, ${d.severity})`
+        )
+        .join('; ');
+      void (async () => {
+        try {
+          const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+          getNeuralBrain().remember(`[Value drift] ${driftSummary}`, {
+            tags: ['value-drift', ...drifts.map((d) => d.valueKey)],
+            importance: drifts.some((d) => d.severity === 'critical')
+              ? 0.9
+              : 0.7,
+            source: 'tool-call',
+            provenance: { source: `molly:value-drift` },
+          });
+        } catch {
+          // Memory-ingest failure must never break drift reporting.
+        }
+      })();
+    }
+
     return report;
   }
 

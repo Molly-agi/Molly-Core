@@ -273,6 +273,7 @@ export async function sendCommunionMessage(
           tags: ['direct-communion', from],
           importance: 0.7,
           source: 'bridge',
+          provenance: { source: from },
         });
       } catch {
         // Non-fatal

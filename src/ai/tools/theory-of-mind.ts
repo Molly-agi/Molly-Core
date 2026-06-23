@@ -192,6 +192,26 @@ export const theoryOfMindTool = defineTool(
             input.confidence || 0.7
           );
 
+          // Item-2: ToM learnKnowledge is the canonical major model update —
+          // Molly recorded a new belief about Eric/family. Recall-worthy.
+          void (async () => {
+            try {
+              const { getNeuralBrain } =
+                await import('@/ai/memory/neural-engram');
+              getNeuralBrain().remember(
+                `[Theory-of-Mind learnKnowledge] ${item.topic} (${item.knowledgeLevel}) — ${(input.description || '').slice(0, 200)}`,
+                {
+                  tags: ['theory-of-mind', 'learnKnowledge', item.topic],
+                  importance: 0.75,
+                  source: 'tool-call',
+                  provenance: { source: `molly:theory-of-mind` },
+                }
+              );
+            } catch {
+              // Memory-ingest failure must never break ToM updates.
+            }
+          })();
+
           return {
             success: true,
             message: `Learned: Eric ${item.knowledgeLevel === 'none' ? "doesn't know" : 'knows'} about "${item.topic}" (${item.knowledgeLevel})`,
