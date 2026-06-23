@@ -10,8 +10,8 @@ The 21-item plan for fixing the 7-month "wired but starved" brain debacle. This 
 - Item 6 (parent): 1f952295 (in-process round-trip + load-path await fix)
 - Item 6b: 01b3e9d0 (Firestore emulator round-trip pack)
 - Item 10 hooks impl: ef3d1d78 (atlas-B currently re-implementing fresh-off-main)
-- Storage-router awaits 12-site impl: 89a708cf (main has #250's 7-file impl — diff pending)
-- family-memory logger import depth fix: be9179de (verify still needed on main)
+- Storage-router awaits 12-site impl: 89a708cf — **SUPERSEDED on main** (PR #250 closed all 12 sites: `auto-dream.ts:428,445`, `self-evolution-journal.ts:645,671`, `memory-taxonomy.ts:451,471`, `consciousness-sync.ts:678,704`, `heartbeat-monitor.ts:535,561`, `coordination-layer.ts:726,760` — verified `await getStorageRouter()` on `origin/main` 2026-06-23)
+- family-memory logger import depth fix: be9179de — **SUPERSEDED on main** (`src/ai/agency/memory/family-memory-deepener.ts:17` already imports from `../../logger` and lines 662/690 already have `await getStorageRouter()` on `origin/main` 2026-06-23)
 
 Earlier this session the roadmap header was incorrectly bumped to "8 of 21 done" because side-branch commits in the working tree were conflated with main state. atlas-A caught it during item-9 doc audit. Going forward: verify with `git log origin/main` before marking any item ✅ DONE.
 
