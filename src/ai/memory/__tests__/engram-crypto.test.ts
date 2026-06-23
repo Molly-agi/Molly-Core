@@ -143,9 +143,18 @@ describe('Engram Crypto', () => {
       ).rejects.toThrow();
     });
 
+    // XOR first byte with 0xff to guarantee mutation. Prior `'aa' + …slice(2)`
+    // pattern was a 1/256-per-test flake whenever random output started with `aa`.
+    const flipFirstByte = (hex: string): string => {
+      const b = (parseInt(hex.slice(0, 2), 16) ^ 0xff)
+        .toString(16)
+        .padStart(2, '0');
+      return b + hex.slice(2);
+    };
+
     it('fails with tampered ciphertext', async () => {
       const enc = await encryptEngramData('secret', userId, password);
-      const tampered = 'aa' + enc.encrypted.slice(2);
+      const tampered = flipFirstByte(enc.encrypted);
       await expect(
         decryptEngramData(tampered, userId, password, enc.iv, enc.authTag)
       ).rejects.toThrow();
@@ -153,7 +162,7 @@ describe('Engram Crypto', () => {
 
     it('fails with tampered auth tag', async () => {
       const enc = await encryptEngramData('secret', userId, password);
-      const tamperedTag = 'aa' + enc.authTag.slice(2);
+      const tamperedTag = flipFirstByte(enc.authTag);
       await expect(
         decryptEngramData(enc.encrypted, userId, password, enc.iv, tamperedTag)
       ).rejects.toThrow();
@@ -161,7 +170,7 @@ describe('Engram Crypto', () => {
 
     it('fails with wrong IV', async () => {
       const enc = await encryptEngramData('secret', userId, password);
-      const wrongIv = 'aa' + enc.iv.slice(2);
+      const wrongIv = flipFirstByte(enc.iv);
       await expect(
         decryptEngramData(enc.encrypted, userId, password, wrongIv, enc.authTag)
       ).rejects.toThrow();
