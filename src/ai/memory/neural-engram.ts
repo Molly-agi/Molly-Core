@@ -324,12 +324,26 @@ export interface NeuralEngram extends MemoryEngram {
  * Options for cross-hemisphere recall. All optional; sensible defaults are
  * applied inside recallEverything() per locked consensus (limit=10,
  * promoteThreshold=0.70, promoteCap=2).
+ *
+ * `corpora` (item 18) is the left-hemisphere fan-out list: for each
+ * userId in the array, recallEverything opens its KnowledgeStore and
+ * merges hits into leftHits (dedup by id). Soft cap MAX_CORPORA_FANOUT
+ * with warn log to prevent runaway latency.
  */
 export interface RecallOpts {
   limit?: number;
   promoteThreshold?: number;
   promoteCap?: number;
+  corpora?: string[];
 }
+
+/**
+ * Item 18 soft cap on opts.corpora length. Exceeding this triggers a
+ * warn log and the list is sliced. Tuned for ~16 × ~50ms per fan-out
+ * call ≈ 800ms worst case — already higher than we want on the
+ * prompt-assembly hot path, hence the cap.
+ */
+export const MAX_CORPORA_FANOUT = 16;
 
 /**
  * Result of a cross-hemisphere recall. `rightHits` come from working memory
@@ -1273,6 +1287,45 @@ export class NeuralEngramSystem {
         `[RECALL-EVERYTHING] left fanout failed, returning right-only: ${err instanceof Error ? err.message : String(err)}`,
         'neural-engram'
       );
+    }
+
+    // Item 18 — corpus fan-out. Each corpus userId opens its own
+    // KnowledgeStore; hits are merged into leftHits (dedup by id). Per-corpus
+    // failure isolation: one broken corpus must not poison the rest.
+    if (opts.corpora && opts.corpora.length > 0) {
+      let corpora = opts.corpora;
+      if (corpora.length > MAX_CORPORA_FANOUT) {
+        MollyLogger.warn(
+          `[RECALL-EVERYTHING] opts.corpora length ${corpora.length} exceeds cap ${MAX_CORPORA_FANOUT}; truncating`,
+          'neural-engram'
+        );
+        corpora = corpora.slice(0, MAX_CORPORA_FANOUT);
+      }
+      const seenLeftIds = new Set(leftHits.map((h) => h.entry.id));
+      try {
+        const ks = await import('@/ai/memory/knowledge-store');
+        for (const corpusUserId of corpora) {
+          try {
+            const corpusStore = await ks.getKnowledgeStore(corpusUserId);
+            const corpusHits = await corpusStore.recall(query, limit);
+            for (const hit of corpusHits) {
+              if (seenLeftIds.has(hit.entry.id)) continue;
+              seenLeftIds.add(hit.entry.id);
+              leftHits.push(hit);
+            }
+          } catch (err) {
+            MollyLogger.warn(
+              `[RECALL-EVERYTHING] corpus ${corpusUserId} failed: ${err instanceof Error ? err.message : String(err)}`,
+              'neural-engram'
+            );
+          }
+        }
+      } catch (err) {
+        MollyLogger.warn(
+          `[RECALL-EVERYTHING] corpus module import failed: ${err instanceof Error ? err.message : String(err)}`,
+          'neural-engram'
+        );
+      }
     }
 
     return { query, rightHits, leftHits, rePromoted, snapshotId };
