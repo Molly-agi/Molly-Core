@@ -103,7 +103,12 @@ describe('Resilience Core — The Dam', () => {
     });
 
     it('diagnoses rate limiting correctly', async () => {
-      const report = await handleUnknownFailure(
+      let isolatedHandleUnknownFailure: typeof handleUnknownFailure;
+      await jest.isolateModulesAsync(async () => {
+        const m = await import('../resilience-core');
+        isolatedHandleUnknownFailure = m.handleUnknownFailure;
+      });
+      const report = await isolatedHandleUnknownFailure!(
         new Error('429 Too Many Requests'),
         'api-test'
       );
