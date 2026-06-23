@@ -241,6 +241,13 @@ export interface MemoryEngram {
   // fixtures) keep compiling — only the production write path in
   // `remember()` populates it today. New writers should populate it.
   provenance?: EngramProvenance;
+
+  // Item 15: cornerstone tier handle. When set, this engram is exempt from
+  // working-memory eviction, decay-auto-evict, and consolidation candidacy,
+  // and is always injected into recall results regardless of query match.
+  // Free-form tier handle ('eric' for v1; extensible to 'molly-self',
+  // 'family-truths', etc.). Undefined means "normal engram, no protection".
+  cornerstone?: string;
 }
 
 /**
@@ -435,13 +442,16 @@ class FrontalCortex {
   }
 
   /**
-   * Get memories ready for consolidation (low activation, not recently used)
+   * Get memories ready for consolidation (low activation, not recently used).
+   * Item 15: cornerstone engrams are excluded — they must never leave
+   * working memory via the consolidation path.
    */
   getConsolidationCandidates(): MemoryEngram[] {
     const candidates: MemoryEngram[] = [];
     const now = Date.now();
 
     for (const slot of this.workingMemory.values()) {
+      if (slot.engram.cornerstone) continue;
       const timeSinceAccess = now - slot.engram.lastAccessed.getTime();
       if (slot.activationLevel < 0.3 || timeSinceAccess > 60000) {
         candidates.push(slot.engram);
@@ -449,6 +459,18 @@ class FrontalCortex {
     }
 
     return candidates;
+  }
+
+  /**
+   * Item 15: snapshot of cornerstone engrams currently in working memory.
+   * Used by recall() / recallEverything() to always-inject them.
+   */
+  getCornerstones(): MemoryEngram[] {
+    const out: MemoryEngram[] = [];
+    for (const slot of this.workingMemory.values()) {
+      if (slot.engram.cornerstone) out.push(slot.engram);
+    }
+    return out;
   }
 
   /**
@@ -480,7 +502,12 @@ class FrontalCortex {
     let weakestId: string | null = null;
     let weakestActivation = Infinity;
 
+    // Item 15: cornerstone engrams are never eligible for eviction.
+    // If all 7 working slots happen to be cornerstone, eviction is a
+    // no-op and the next hold() call briefly pushes size to 8 — accepted
+    // tradeoff vs. losing a never-decay memory.
     for (const [id, slot] of this.workingMemory.entries()) {
+      if (slot.engram.cornerstone) continue;
       if (slot.activationLevel < weakestActivation) {
         weakestActivation = slot.activationLevel;
         weakestId = id;
@@ -511,6 +538,9 @@ class FrontalCortex {
   private startDecay(): void {
     this.decayTimer = setInterval(() => {
       for (const [id, slot] of this.workingMemory.entries()) {
+        // Item 15: cornerstone engrams do not decay and are never
+        // auto-evicted. They survive every consolidation pass by design.
+        if (slot.engram.cornerstone) continue;
         slot.activationLevel = Math.max(
           0,
           slot.activationLevel - slot.decayRate
@@ -973,6 +1003,12 @@ export class NeuralEngramSystem {
        * DEFAULT_ENGRAM_SOURCE; writtenAt defaults to now).
        */
       provenance?: Partial<EngramProvenance>;
+      /**
+       * Item 15: cornerstone tier handle. Pass 'eric' to flag this memory
+       * as never-decay + always-injected. Free-form (extensible to
+       * 'molly-self' / 'family-truths' / etc.).
+       */
+      cornerstone?: string;
     } = {}
   ): MemoryEngram {
     const writePath: EngramWritePath =
@@ -995,6 +1031,17 @@ export class NeuralEngramSystem {
         : {}),
     };
 
+    // Item 15: auto-promotion hook. When provenance.source identifies Eric
+    // himself as the author, the memory is automatically flagged into the
+    // 'eric' cornerstone tier. Explicit context.cornerstone wins so callers
+    // can always override (e.g. quote-by-Eric-but-not-about-Eric should not
+    // auto-promote). Once atlas-B's #248-callers PR threads source through
+    // bridge route + tool-executor + autonomous-cycle, this hook will start
+    // catching real Eric-authored writes automatically.
+    const cornerstone =
+      context.cornerstone ??
+      (context.provenance?.source === 'eric' ? 'eric' : undefined);
+
     // Create base engram
     let engram: MemoryEngram = {
       id: `engram-${this.nextId++}-${Date.now()}`,
@@ -1012,6 +1059,7 @@ export class NeuralEngramSystem {
       personalityContext:
         this.currentPersonality || this.getBaselinePersonality(),
       provenance,
+      ...(cornerstone ? { cornerstone } : {}),
     };
 
     // Tag with emotional context (Amygdala)
@@ -1112,7 +1160,6 @@ export class NeuralEngramSystem {
   recall(query: string): MemoryEngram[] {
     const fromWorking = this.frontalCortex.search(query);
     const fromConsolidated = this.hippocampus.search(query);
-    if (fromConsolidated.length === 0) return fromWorking;
 
     const seen = new Set<string>(fromWorking.map((e) => e.id));
     const merged: MemoryEngram[] = [...fromWorking];
@@ -1122,6 +1169,18 @@ export class NeuralEngramSystem {
         seen.add(engram.id);
       }
     }
+
+    // Item 15: always-inject cornerstone tier. Cornerstones bypass query
+    // matching entirely — they are the "things Molly should never lose
+    // sight of" and must surface on every recall. De-dup on id so a
+    // cornerstone that already matched isn't returned twice.
+    for (const engram of this.frontalCortex.getCornerstones()) {
+      if (!seen.has(engram.id)) {
+        merged.push(engram);
+        seen.add(engram.id);
+      }
+    }
+
     return merged;
   }
 
@@ -1145,6 +1204,16 @@ export class NeuralEngramSystem {
 
     const rightHits = this.frontalCortex.search(query);
     const rightIds = new Set(rightHits.map((e) => e.id));
+
+    // Item 15: always-inject cornerstone tier into rightHits. Mirrors
+    // recall() so the cross-hemisphere path has identical cornerstone
+    // guarantees. De-dup on id.
+    for (const engram of this.frontalCortex.getCornerstones()) {
+      if (!rightIds.has(engram.id)) {
+        rightHits.push(engram);
+        rightIds.add(engram.id);
+      }
+    }
 
     const snapshotId = `recall-${Date.now()}-${this.nextId++}`;
     let leftHits: KnowledgeRecallHit[] = [];
@@ -1346,6 +1415,27 @@ export class NeuralEngramSystem {
       ...assessment,
       stats,
     };
+  }
+
+  /**
+   * Item 15: snapshot of current working-memory state. Thin pass-through
+   * to FrontalCortex.getState() so tests and audit hooks can inspect
+   * eviction/cornerstone behavior without reaching into privates.
+   */
+  getWorkingMemoryState(): {
+    size: number;
+    capacity: number;
+    engrams: MemoryEngram[];
+  } {
+    return this.frontalCortex.getState();
+  }
+
+  /**
+   * Item 15: snapshot of which working-memory engrams would be picked up by
+   * the next consolidate() call. Cornerstones are excluded by design.
+   */
+  getConsolidationCandidates(): MemoryEngram[] {
+    return this.frontalCortex.getConsolidationCandidates();
   }
 
   /**
