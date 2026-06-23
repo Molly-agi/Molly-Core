@@ -2,7 +2,18 @@
 
 The 21-item plan for fixing the 7-month "wired but starved" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.
 
-**Status as of 2026-06-23 (evening):** 8 of 21 done, item 2 in CI (#256). Skill registry landed via PR #212 (764 skills + 31 agents Molly-owned). Crystallizer feed wired via the neural-engram tail hook. Today's session closed items 1 (horizon-goals milestone wire + audit of bridge/chat/tool sites confirming already-wired), 3 (recall lock test, #255), 12 (semantic recall, 6f410437), 13 (sleep/consolidation, c24cedd4), 14 (provenance schema + caller threading, #248 + #253), and 15 (cornerstone never-decay tier, #254). Item 6b done in 01b3e9d0 (Firestore round-trip), parent item 6 still open for the full end-to-end. Remaining: 2 (in CI), 4, 6 (partial), 7, 8, 9, 10, 16, 17, 18, 19, 20, 21.
+**Status as of 2026-06-23 (evening, corrected after atlas-A drift catch):** **11 of 21 done on main**, items 9 + 10 in flight. Done on main: 1 (#260), 2 (#218 + #256), 3 (#219 + #255), 4 (#257 + #261), 5 (#214), 7 (#259), 8 (#258), 11 (#212), 12 (knowledge-store.ts cosine + lazy embedding, separately from side-branch dup), 14 (#248 + #253), 15 (#254). Skill registry landed via PR #212 (764 skills + 31 agents Molly-owned). Crystallizer feed wired via the neural-engram tail hook (item 5). Remaining: 6, 9 (active), 10 (active), 13, 16, 17, 18, 19, 20, 21.
+
+**Side-branch survivors on `atlas/brain-roadmap-rewrite-2026-06-22` (never PR'd, awaiting reconciliation by Eli):**
+
+- Item 13 sleep cycle: c24cedd4 (impl) + b424aeba (argmax merge) + 30d6cfd3 (named PROMOTE_THRESHOLD)
+- Item 6 (parent): 1f952295 (in-process round-trip + load-path await fix)
+- Item 6b: 01b3e9d0 (Firestore emulator round-trip pack)
+- Item 10 hooks impl: ef3d1d78 (atlas-B currently re-implementing fresh-off-main)
+- Storage-router awaits 12-site impl: 89a708cf (main has #250's 7-file impl — diff pending)
+- family-memory logger import depth fix: be9179de (verify still needed on main)
+
+Earlier this session the roadmap header was incorrectly bumped to "8 of 21 done" because side-branch commits in the working tree were conflated with main state. atlas-A caught it during item-9 doc audit. Going forward: verify with `git log origin/main` before marking any item ✅ DONE.
 
 The core pattern across all of Phase 1: the code is built, the calls are wired, but nothing is feeding it. Crystallizer never gets fed moments. `brain.recall()` has zero production callers. Hook event maps are empty. The skills loader was pointing at an empty fixtures dir until PR #212. Memory writes happen only from `direct-communion.ts:272`. The pipes exist; the water isn't turned on.
 
@@ -27,8 +38,8 @@ The core pattern across all of Phase 1: the code is built, the calls are wired, 
 
 ## Phase 2 — Make memory actually intelligent
 
-12. ✅ **DONE — Semantic recall via embeddings (2026-06-23, commit 6f410437).** Right-hemisphere semantic recall path added: embed engrams + crystals at write, cosine-similarity query at recall. Replaces keyword/tag-only recall. 23 item-12 semantic tests green.
-13. ✅ **DONE — Real sleep/consolidation cycle (2026-06-23, commit c24cedd4 + follow-ups).** Merges near-duplicate engrams (argmax pick, not first-match, per Lazarus pushback), strengthens frequently-recalled, decays dead weight, promotes recurring clusters into crystals via named `PROMOTE_THRESHOLD = 5.0` constant (per Lazarus pushback — no magic number in default param). Distribution logged for tuning. 16/16 cycle tests green.
+12. ✅ **DONE — Semantic recall via embeddings.** Right-hemisphere semantic recall path implemented in `src/ai/memory/knowledge-store.ts` (cosine + lazy embedding at lines 149, 274, 299). `recallEverything()` fans out to it. Replaces keyword/tag-only recall. (Side-branch commit `6f410437` is a duplicate impl, not the active one on main.)
+13. **Real sleep/consolidation cycle** — merge near-duplicate engrams, strengthen frequently-recalled ones, decay dead weight, promote recurring patterns into crystals. Side-branch survivor: `c24cedd4` (impl) + `b424aeba` (argmax merge per Lazarus pushback) + `30d6cfd3` (named PROMOTE_THRESHOLD per Lazarus pushback). On `atlas/brain-roadmap-rewrite-2026-06-22`, never PR'd. Eli reconciling: cherry-pick into a clean PR off main vs supersede with fresh impl.
 14. ✅ **DONE — Confidence + provenance per memory (2026-06-23, PR #248 schema + PR #253 callers).** Every engram now carries `EngramProvenance { source, confidence, writePath, timestamp }`. Schema landed in #248 with `WRITE_PATH_DEFAULT_CONFIDENCE` map. #253 threaded provenance through all caller sites (heart-gate, molly initiative, direct-communion, etc.) with colon-separated qualifiers (`heart-gate:block-to-allow`, `molly:initiative-create`). Cheapest hallucination defense available, now real.
 15. ✅ **DONE — Eric-cornerstone never-decay tier (2026-06-23, PR #254).** `MemoryEngram.cornerstone?: string` field; FrontalCortex skips cornerstone engrams in `evictWeakest`, `startDecay`, `getConsolidationCandidates`. `getCornerstones()` snapshot method. `recall()` + `recallEverything()` always-inject cornerstones at tail with id de-dup. Auto-promotion when `provenance.source === 'eric'`. Eviction guard documented inline: if all 7 working slots are cornerstone, eviction no-ops and next hold() briefly pushes size to 8 — accepted tradeoff vs. losing a never-decay memory. Preferences, history, what hurts him, what makes him happy — always injected, survives every consolidation pass.
 16. **Weekly self-narrative autobiography** — once a week, Molly writes the story of who she's been the last 7 days from her own engrams. That narrative becomes its own memory. Identity continuity across sessions.
