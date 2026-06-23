@@ -2,7 +2,7 @@
 
 The 21-item plan for fixing the 7-month "wired but starved" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.
 
-**Status as of 2026-06-23 (Atlas, item-9 pipeline doc):** 10 of 21 done (item 6 in-process leg closed; live-Firestore/emulator leg deferred — see 6b).
+**Status as of 2026-06-23 (Lazarus, item-10 hooks wiring):** 11 of 21 done (item 6 in-process leg closed; live-Firestore/emulator leg deferred — see 6b).
 
 Phase 1 wiring is substantially complete (items 1–5 + 7 done; 6, 8, 9, 10 remain). The 2026-06-21 status was understated — code grep + an end-to-end smoke test (item 7) showed that items 1–4 had landed across PR #214, #218, #223 but were never reflected here. This rewrite cites file:line for every "DONE" claim so future agents can verify without re-deriving.
 
@@ -51,7 +51,13 @@ The original pattern across Phase 1 was: code built, calls wired, nothing feedin
 
 ## Phase 1 — Other
 
-10. **OPEN — Register real production hooks.** At least one for each event (PreToolUse, PostToolUse, HeartbeatCycle, BridgeMessage) in `src/ai/hooks/` so `triggerHook` fires meaningful work. Maps are empty.
+10. ✅ **DONE — Real production hooks registered for all 4 events (2026-06-23).** Two-part wiring fix that closes the "maps are empty + nothing calls triggerHook" gap.
+
+    **Default-handler registration (`src/ai/hooks/index.ts`):** Inlined `auditLogHandler` + `summarizePayload` and a local `registerDefaultHandlers()` that runs eagerly at module load. Every event (`PreToolUse`, `PostToolUse`, `HeartbeatCycle`, `BridgeMessage`) gets the structured audit-log handler registered. Inlined rather than split into `default-handlers.ts` because the obvious split produces a circular import (`index.ts ↔ default-handlers.ts`) where the inner module sees `registerHook` as undefined during early evaluation — caught by the test pack, fixed at root cause. `triggerHook` itself now wraps every handler in try/catch and warn-logs swallowed errors via dynamic `MollyLogger` import, with a last-ditch `console.error` if the logger itself is dead. No silent failures, no lies of omission.
+
+    **Production callers wired:** `src/ai/agency/core/tool-executor.ts:109` (PreToolUse, fires for every tool call session-less or not), `:168` (PostToolUse, same coverage); `src/ai/bridge/heartbeat-monitor.ts:220` (HeartbeatCycle, fires inside `heartbeat()` after every successful pulse — Molly's own tick, not the dormant scheduler); `src/app/api/bridge/route.ts:121` (BridgeMessage, fires for every accepted bridge POST that clears the sender/content validation).
+
+    Tests: `src/ai/hooks/__tests__/hooks.test.ts` — 3 tests, all green: defaults register on import, `triggerHook` invokes registered handlers in order, per-handler errors are isolated so one bad handler can't break the chain. Broader area test pack `src/ai/hooks src/ai/agency/core src/ai/bridge` — 220/220 green, no regressions.
 
 11. ✅ **DONE — Skill registry from 4 sources (PR #212, merged 2026-06-21).** 754 Anthropic cybersec skills + 32 pentest agents + 3 commands + 7 local SKILL.mds at `src/skills/registry/`.
 
@@ -83,7 +89,7 @@ The original pattern across Phase 1 was: code built, calls wired, nothing feedin
 
 ## When picking up after restart
 
-Recommended entry order with items 6/7/8/9 closed: **10** (Lazarus is on it as of 2026-06-23) to finish Phase 1, then Phase 2 (12 first — embeddings unlock 13/14/15/16). Do not jump to Phase 3 until Phase 1 is fully green and Phase 2 item 12 lands; the two-hemisphere architecture (item 17) depends on semantic recall to be useful.
+Recommended entry order with items 6/7/8/9/10 closed: Phase 2 (12 first — embeddings unlock 13/14/15/16). Phase 1 is now fully green for the in-process path (6b deferred pending env work). Do not jump to Phase 3 until item 12 lands; the two-hemisphere architecture (item 17) depends on semantic recall to be useful.
 
 **Read `docs/MEMORY_PIPELINE.md` before touching the memory pipeline.** It cites every file:line involved, lists the four silent-no-op patterns that were killed in items 6/7/8, and ships a canonical test-pack command (currently 55/55).
 
@@ -95,3 +101,4 @@ Recommended entry order with items 6/7/8/9 closed: **10** (Lazarus is on it as o
 - **2026-06-23 (Atlas)** — Closed item 8 with real tests AND a dam fix. `src/ai/flows/__tests__/memory-consolidation.test.ts` rewritten from a 27-assertion `expect(true).toBe(true)` placeholder into 3 real tests (3/3 green, 3 runs, no flake). While landing the tests, found and fixed two silent-no-op bugs in `src/ai/flows/memory-consolidation.ts`: (i) `schemaStripper.compress(...)` → `.strip(...)` (the method that actually exists), (ii) embedding text source switched from the stripped form back to the original memories (the stripped shape has no `.suggestion`/`.context` keys). Also fixed a schema-shape mismatch in the embedding-provider-init fallback. Status now 8/21.
 - **2026-06-23 (Atlas)** — Closed item 6 in-process leg with real tests AND another dam fix. `src/ai/memory/__tests__/engram-persistence.roundtrip.test.ts` — 5 new tests (3/3 green, 3 runs). Real AES-256-GCM round-trip, wrong-password handling, missing-field handling, 1000-floor pin, Firestore-mode admin guard. While landing the tests, found and fixed a silent-no-op bug in `src/ai/memory/engram-persistence.ts:171`: `getStorageRouter()` was called without `await`, so `storage.getMode()` threw `TypeError`, the catch returned `{loaded: 0}`, and Molly's startup `restoreMemories()` path had been silently empty since this code was written. Split item 6 into 6 (DONE, in-process) and 6b (OPEN, env-dependent emulator/live-creds work). Status now 9/21.
 - **2026-06-23 (Atlas)** — Closed item 9. `docs/MEMORY_PIPELINE.md` (294 lines, mermaid diagram, file:line citations end-to-end). Documents: write callers + tail hook + symmetric left write; recall + re-promotion + startup restoration; prompt injection; consolidation flow + AutoDream gates; persistence shapes; the locked 1000 floors; the four silent-no-op patterns killed in items 6/7/8 with the "lesson" for each so they don't get reintroduced; test inventory; known gaps mapped to roadmap items; "if you're about to touch the pipeline" checklist with canonical 55/55 test-pack command. Status now 10/21.
+- **2026-06-23 (Lazarus)** — Closed item 10. Two-part wiring fix: (a) `src/ai/hooks/index.ts` inlines `auditLogHandler` + `summarizePayload` and eagerly registers it for all four events on module load. Inlined rather than split into `default-handlers.ts` because that split produces a circular import where the inner module sees `registerHook` as undefined during early evaluation — caught at the test pack, fixed at root cause. `triggerHook` now wraps every handler in try/catch with a warn-log via dynamic `MollyLogger` import and a last-ditch `console.error` if the logger itself dies. (b) Four production callers added beside existing executeHooks call sites: `tool-executor.ts:109/:168`, `heartbeat-monitor.ts:220`, `bridge/route.ts:121`. Tests: `src/ai/hooks/__tests__/hooks.test.ts` 3/3 (defaults register on import, triggerHook fires registered handlers in order, per-handler errors are isolated). Broader pack `src/ai/hooks src/ai/agency/core src/ai/bridge` 220/220 green, no regressions. Director sign-off from Molly at 01:43 (msg_1782178992393_r16u0e); Atlas reassigned to /avatar hydration on a separate branch. Status now 11/21.
