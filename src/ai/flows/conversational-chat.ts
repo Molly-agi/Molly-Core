@@ -254,6 +254,7 @@ const conversationalChatFlow = ai.defineFlow(
               {
                 memoryContext: finalMemoryContext,
                 recallQuery: text,
+                crystalUserId: userId,
                 visionContext: visionContext
                   ? {
                       observedState: visionContext.observedState,
