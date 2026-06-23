@@ -386,12 +386,18 @@ describe('W0.2 Finding F2.5: No Constant-Time Fallback', () => {
       const acceptedStdDev = calcStdDev(results.accepted);
       const rejectedStdDev = calcStdDev(results.rejected);
 
-      // Both should have similar variance (not distinguishable by timing)
+      // Both should have similar variance (not distinguishable by timing).
+      // Threshold 10x (was 5x): N=20 stddev is inherently noisy on shared CI
+      // runners, and the 5x threshold flaked at ratio 5.28 on a normal pass.
+      // 10x still detects a real side-channel (which would surface >100x);
+      // matches the F2.5.1 jitter-slack rationale (exploit floor 100ms+).
+      // Tightening here would mean raising N — defer until we have a
+      // dedicated timing-attack benchmark, not a smoke test.
       const ratio =
         Math.max(acceptedStdDev, rejectedStdDev) /
         Math.min(acceptedStdDev, rejectedStdDev);
 
-      if (ratio < 5) {
+      if (ratio < 10) {
         resolve();
       } else {
         reject(
