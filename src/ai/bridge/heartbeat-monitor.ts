@@ -532,7 +532,7 @@ async function saveHeartbeatState(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const memberActivityArray = Array.from(_state.memberActivity.entries());
 
     await storage.set(COLLECTION, HEARTBEAT_DOC, {
@@ -558,7 +558,7 @@ export async function loadHeartbeatState(): Promise<void> {
   const traceId = generateTraceId();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, HEARTBEAT_DOC);
 
     if (doc?.data) {

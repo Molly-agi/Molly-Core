@@ -448,7 +448,7 @@ export async function pruneStaleMemories(): Promise<number> {
 
 async function saveTaxonomyState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const memoriesArray = Array.from(state.memories.entries());
 
     await storage.set(STORAGE_COLLECTION, STORAGE_DOC_ID, {
@@ -468,7 +468,7 @@ async function saveTaxonomyState(): Promise<void> {
 
 async function loadTaxonomyState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(STORAGE_COLLECTION, STORAGE_DOC_ID);
 
     if (doc?.data?.memories) {

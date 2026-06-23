@@ -723,7 +723,7 @@ async function saveCoordinationState(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
 
     // Keep only recent completed tasks
     const tasksArray = Array.from(_state.tasks.entries());
@@ -757,7 +757,7 @@ export async function loadCoordinationState(): Promise<void> {
   initializeCapabilities();
 
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(COLLECTION, COORDINATION_DOC);
 
     if (doc?.data) {

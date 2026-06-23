@@ -425,7 +425,7 @@ export function getAutoDreamStatus(): AutoDreamState & {
 
 async function saveAutoDreamState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     await storage.set(STATE_COLLECTION, STATE_DOC_ID, {
       lastDreamAt: state.lastDreamAt,
       sessionsSinceDream: state.sessionsSinceDream,
@@ -442,7 +442,7 @@ async function saveAutoDreamState(): Promise<void> {
 
 export async function loadAutoDreamState(): Promise<void> {
   try {
-    const storage = getStorageRouter();
+    const storage = await getStorageRouter();
     const doc = await storage.get(STATE_COLLECTION, STATE_DOC_ID);
 
     if (doc?.data) {
