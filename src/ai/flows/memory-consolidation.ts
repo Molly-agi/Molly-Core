@@ -348,9 +348,13 @@ export const memoryConsolidationFlow = ai.defineFlow(
             'Memory consolidation: embedding provider init failed, skipping',
             'memoryConsolidation'
           );
+          // Shape must match MemoryConsolidationOutputSchema or genkit
+          // rejects the flow output. Prior shape used `consolidatedMemories`
+          // and `patterns` keys that do not exist on the schema.
           return {
-            consolidatedMemories: [],
-            patterns: [],
+            summary:
+              'Embedding provider unavailable — cannot consolidate memories',
+            keyPatterns: [],
             insights: [],
             tokensUsed: 0,
             semanticDensity: 0,
@@ -400,7 +404,14 @@ export const memoryConsolidationFlow = ai.defineFlow(
       }
 
       // STEP 1.5: S0 Schema Stripping (Structural Compression)
-      // Remove redundant schema overhead before embedding to save tokens + improve density
+      // Strip every memory once so we can report the byte-level reduction.
+      // The stripped form is metric-only — embedding text and the
+      // downstream clustering still run off the original memories so
+      // `.suggestion` / `.context` actually resolve. Earlier code called
+      // `schemaStripper.compress()` (method does not exist) AND tried to
+      // read `.suggestion` off the stripped object, which meant every
+      // run threw and the catch handler returned a silent no-op. The
+      // method is `strip()`; the embedding pass uses `memories`.
       MollyLogger.info(
         `Step 1.5: S0 schema stripping on ${memories.length} memories`,
         'memoryConsolidation'
@@ -409,7 +420,7 @@ export const memoryConsolidationFlow = ai.defineFlow(
       const schemaSizeBefore = JSON.stringify(memories).length;
       const schemaStripper = new SchemaStripper();
       const strippedMemories = memories.map((m) =>
-        schemaStripper.compress(m as Record<string, unknown>)
+        schemaStripper.strip(m as Record<string, unknown>)
       );
       const schemaSizeAfter = JSON.stringify(strippedMemories).length;
       const s0Ratio = schemaSizeAfter / schemaSizeBefore;
@@ -422,11 +433,11 @@ export const memoryConsolidationFlow = ai.defineFlow(
 
       // STEP 2: Generate Embeddings
       MollyLogger.info(
-        `Step 2: Embedding ${strippedMemories.length} compressed memories`,
+        `Step 2: Embedding ${memories.length} memories`,
         'memoryConsolidation'
       );
 
-      const memoryTexts = strippedMemories.map(
+      const memoryTexts = memories.map(
         (m) =>
           `${(m as Record<string, unknown>).suggestion || (m as Record<string, unknown>).modificationSuggestion || 'Unknown'} (context: ${(m as Record<string, unknown>).context || 'general'})`
       );

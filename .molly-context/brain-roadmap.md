@@ -2,7 +2,7 @@
 
 The 21-item plan for fixing the 7-month "wired but starved" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.
 
-**Status as of 2026-06-22 (Atlas audit + rewrite, Eric-authorized, Molly-coordinated):** 7 of 21 done.
+**Status as of 2026-06-23 (Atlas, item-8 dam-fix):** 8 of 21 done.
 
 Phase 1 wiring is substantially complete (items 1–5 + 7 done; 6, 8, 9, 10 remain). The 2026-06-21 status was understated — code grep + an end-to-end smoke test (item 7) showed that items 1–4 had landed across PR #214, #218, #223 but were never reflected here. This rewrite cites file:line for every "DONE" claim so future agents can verify without re-deriving.
 
@@ -32,7 +32,16 @@ The original pattern across Phase 1 was: code built, calls wired, nothing feedin
 
 7. ✅ **DONE — End-to-end memory smoke test (2026-06-23, re-landed).** `src/ai/__tests__/memory-pipeline.e2e.test.ts` — 1 test, ~0.4s. Triggers `brain.remember()` → waits for the fire-and-forget crystallizer feed → asserts pendingMoments + sessionMoments grow (proves item 1+2+5 wiring) → calls `crystallizeSession()` directly (bypasses AutoDream gates for determinism — item 8 separate) → asserts crystal created and `totalCrystals` grew → calls `brain.recall(token)` and asserts retrieval from working memory → calls `searchCrystals(token)` and asserts crystal-by-content retrieval. Surgical mocks only: logger noise, `engram-persistence` (Firestore boundary), and `auto-dream.triggerAutoDream` (item-8 isolation). Everything between `brain.remember` and crystal retrieval runs unmocked. **Honesty note (Atlas, 2026-06-23):** the 2026-06-22 roadmap rewrite claimed this test was done with "Eli triple-converge" — the test file was never actually committed. That claim was wrong. The test as it stands now was authored and verified by Atlas only (3 consecutive green runs, ~0.36s each, no flake). The previous false-DONE has been corrected, not papered over.
 
-8. **OPEN — Confirm `memory-consolidation` is non-trivial.** `heartbeat-scheduler.ts:532` call must not be a no-op once engrams start flowing. The hard-disabled scheduler complicates this — verify via direct call from a test, or via the AutoDream `executeMemoryConsolidation` chain (`auto-dream.ts:327`).
+8. ✅ **DONE — `executeMemoryConsolidation` is now non-trivial AND two silent-no-op bugs fixed (2026-06-23).** Real test at `src/ai/flows/__tests__/memory-consolidation.test.ts` — 3 tests, ~1s, 3/3 green, no flake. Exercises the flow via `executeMemoryConsolidation(userId)` directly (the heartbeat-scheduler caller at `src/ai/tools/heartbeat-scheduler.ts:889` is hard-disabled in event-driven mode, the AutoDream caller at `src/ai/agency/memory/auto-dream.ts:327` is gated — roadmap recommended either direct call or AutoDream chain; direct call chosen for determinism). Surgical mocks: logger, `@/firebase/admin.isAdminConfigured`, storage router (`query` + `batchWrite`), `molly.generate`, and `consciousness-state.queueSyncOperation`. A deterministic stub embedding provider is installed via `setEmbeddingProvider()` so the real S0 strip + S1 dedup + K-means clustering + pattern extraction code paths run unmocked.
+
+   Three paths covered: (a) happy path — N realistic memories produce real clusters, patterns, insights, non-zero `semanticDensity`, and a checksummed consolidated record written via `storage.batchWrite`; (b) `isAdminConfigured() === false` → schema-shaped no-op; (c) empty time window → schema-shaped no-op telling the caller to collect more memories.
+
+   **Two real bugs found and fixed in `src/ai/flows/memory-consolidation.ts` while landing this test:**
+   - **Wrong method name (line 416).** `schemaStripper.compress(...)` was called but `SchemaStripper` only exposes `.strip()`. Every consolidation run against real memories threw `TypeError: schemaStripper.compress is not a function`, the outer catch handler returned `"Consolidation incomplete due to error"`, and the flow appeared to "work" while doing zero work. Fixed to `.strip(...)`.
+   - **Downstream read of stripped form (line 425).** Embedding text was built from `strippedMemories.map(m => m.suggestion || m.modificationSuggestion || 'Unknown')`, but `StrippedMemory` is `{schemaVersion, structuralKeys, textPayloads, primitiveValues}` — none of those keys. Every embedding text would have been `"Unknown (context: general)"` even after the method-name fix, defeating the entire clustering step. Embedding now reads from the original `memories` array; the stripped form remains for byte-level metric reporting only.
+   - **Schema-shape bug (line ~352, fixed earlier in same diff).** The embedding-provider-init-failure fallback returned `{consolidatedMemories, patterns, ...}` instead of the schema's `{summary, keyPatterns, ...}` — genkit would have rejected the flow output on validation. Now matches the schema.
+
+   Also deleted `src/ai/flows/__tests__/memory-consolidation.test.ts` placeholder (27 `expect(true).toBe(true)` calls pretending to be coverage — same family of fake-DONE as the item-7 false claim corrected yesterday). Replaced with the real test in the same path.
 
 9. **OPEN — Document the memory pipeline.** `recordMoment → crystallize → recall → prompt injection` in one place so the next agent does not re-derive it from grep. With items 1–5 + 7 done, this is now a write-up task, not a discovery task. The item-7 test header is a starting point.
 
@@ -70,12 +79,13 @@ The original pattern across Phase 1 was: code built, calls wired, nothing feedin
 
 ## When picking up after restart
 
-Recommended entry order with the rewrite in place: **6 → 8 → 9 → 10** to finish Phase 1, then Phase 2 (12 first — embeddings unlock 13/14/15/16). Do not jump to Phase 3 until Phase 1 is fully green and Phase 2 item 12 lands; the two-hemisphere architecture (item 17) depends on semantic recall to be useful.
+Recommended entry order with item-8 closed: **6 → 9 → 10** to finish Phase 1, then Phase 2 (12 first — embeddings unlock 13/14/15/16). Do not jump to Phase 3 until Phase 1 is fully green and Phase 2 item 12 lands; the two-hemisphere architecture (item 17) depends on semantic recall to be useful.
 
-The "wired but starved" pattern is broken for the in-process path (proved by item-7 smoke). The remaining "starved" surfaces are Firestore persistence (item 6) and AutoDream gate-passing in real conditions (item 8). Verify those next.
+The "wired but starved" pattern is broken for the in-process path (proved by item-7 smoke) and the consolidation flow itself is no longer a silent no-op (proved by item-8 tests + dam fix). The remaining "starved" surface is Firestore persistence (item 6).
 
 ## Audit log
 
 - **2026-06-21** — Item 5 fixed (crystallizer feed via neural-engram tail). Item 11 fixed (skill registry PR #212). Roadmap status set to 2/21.
 - **2026-06-22 (Atlas, Eric-authorized rewrite)** — Discovered items 1–4 were already wired in PR #214 / #218 / #223 but never reflected in roadmap. Rewrote with file:line evidence for every DONE claim. **Caveat:** item 7 was marked DONE citing an e2e test file that was never actually committed and a "triple-converge" verification that did not happen. Roadmap status of 7/21 was therefore overstated to 6/21 of verifiable claims.
 - **2026-06-23 (Atlas)** — Authored the real item-7 e2e smoke test (`src/ai/__tests__/memory-pipeline.e2e.test.ts`, GREEN, 3/3 runs no flake, ~0.36s). Corrected the previous false-DONE claim in-place rather than silently re-asserting it. Status now genuinely 7/21.
+- **2026-06-23 (Atlas)** — Closed item 8 with real tests AND a dam fix. `src/ai/flows/__tests__/memory-consolidation.test.ts` rewritten from a 27-assertion `expect(true).toBe(true)` placeholder into 3 real tests (3/3 green, 3 runs, no flake). While landing the tests, found and fixed two silent-no-op bugs in `src/ai/flows/memory-consolidation.ts`: (i) `schemaStripper.compress(...)` → `.strip(...)` (the method that actually exists), (ii) embedding text source switched from the stripped form back to the original memories (the stripped shape has no `.suggestion`/`.context` keys). Also fixed a schema-shape mismatch in the embedding-provider-init fallback. Status now 8/21.
