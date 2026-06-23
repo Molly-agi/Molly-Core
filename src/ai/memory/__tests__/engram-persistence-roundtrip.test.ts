@@ -167,6 +167,10 @@ describe('Item 6 — engram persistence round-trip (in-process)', () => {
   });
 
   // 🔒 GUARDIAN LOCK — see engram-persistence.ts:137-145
+  // Timeout is 180s because real AES-GCM on 1200 engrams runs ~45s locally
+  // and >60s on CI runners (PR #266 first CI run). N=1200 chosen to prove
+  // the floor honors loads at 20% above the 1000 mark, which is enough
+  // margin to catch off-by-one regressions without burning CI time.
   it('FLOOR invariant: default load returns ≥1000 of N>1000 engrams', async () => {
     const total = 1200;
     const engrams = Array.from({ length: total }, (_, i) => makeEngram(i));
@@ -175,7 +179,7 @@ describe('Item 6 — engram persistence round-trip (in-process)', () => {
 
     const load = await loadConsolidatedEngrams(USER_ID, PASSWORD);
     expect(load.loaded).toBeGreaterThanOrEqual(1000);
-  }, 60_000);
+  }, 180_000);
 
   it('wrong password reports per-doc decrypt errors, does NOT throw', async () => {
     await persistEngramBatch(USER_ID, PASSWORD, [makeEngram(0), makeEngram(1)]);
