@@ -29,6 +29,13 @@ describe('Console Engine', () => {
     const rt = initAgencyRuntime();
     const govResolver = () => rt.governor.drainProposals();
 
+    // Read live defaults so the smoke tracks production tuning instead of
+    // hardcoding 8 — same drift-prevention pattern as the governor smoke
+    // (see PR #213 → #239 → #242 for the history this avoids).
+    const flowCap = rt.registry.get<number>(K.maxConcurrentFlows);
+    const proposalValue = Math.max(1, flowCap - 2);
+    const overrideValue = flowCap + 2;
+
     // 1. ls lists params with bounds.
     let r = run('ls');
     assert(text(r).includes('governor.maxConcurrentFlows'), 'ls shows a param');
@@ -36,8 +43,8 @@ describe('Console Engine', () => {
 
     // 2. get on a real key, error on a bad one.
     assert(
-      text(run('get ' + K.maxConcurrentFlows)).includes('= 8'),
-      'get shows value 8'
+      text(run('get ' + K.maxConcurrentFlows)).includes('= ' + flowCap),
+      `get shows value ${flowCap}`
     );
     assert(
       run('get nope.key').lines[0].stream === 'err',
@@ -45,14 +52,14 @@ describe('Console Engine', () => {
     );
 
     // 3. propose queues, owned by governor.
-    r = run(`propose ${K.maxConcurrentFlows} 6 trying it`);
+    r = run(`propose ${K.maxConcurrentFlows} ${proposalValue} trying it`);
     assert(text(r).includes('queued'), 'propose queued');
     assert(
       rt.registry.pendingProposals(K.maxConcurrentFlows).length === 1,
       'one proposal pending'
     );
     assert(
-      rt.registry.get<number>(K.maxConcurrentFlows) === 8,
+      rt.registry.get<number>(K.maxConcurrentFlows) === flowCap,
       'value unchanged until resolved'
     );
 
@@ -69,8 +76,8 @@ describe('Console Engine', () => {
       resolvers: { [GOVERNOR_ID]: govResolver },
     });
     assert(
-      rt.registry.get<number>(K.maxConcurrentFlows) === 6,
-      'resolved to 6'
+      rt.registry.get<number>(K.maxConcurrentFlows) === proposalValue,
+      `resolved to ${proposalValue}`
     );
 
     // 6. resolve without a registered resolver refuses (won't fake an owner decision).
@@ -81,14 +88,18 @@ describe('Console Engine', () => {
     );
 
     // 7. override blocked without auth, allowed with auth.
-    r = run(`override ${K.maxConcurrentFlows} 10`, { authed: false });
+    r = run(`override ${K.maxConcurrentFlows} ${overrideValue}`, {
+      authed: false,
+    });
     assert(
       r.lines[0].stream === 'err' && text(r).includes('not authorized'),
       'override needs auth'
     );
-    r = run(`override ${K.maxConcurrentFlows} 10 manual`, { authed: true });
+    r = run(`override ${K.maxConcurrentFlows} ${overrideValue} manual`, {
+      authed: true,
+    });
     assert(
-      rt.registry.get<number>(K.maxConcurrentFlows) === 10,
+      rt.registry.get<number>(K.maxConcurrentFlows) === overrideValue,
       'authed override applied'
     );
     assert(

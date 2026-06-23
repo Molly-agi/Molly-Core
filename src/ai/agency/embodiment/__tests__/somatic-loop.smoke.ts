@@ -21,9 +21,9 @@ describe('Somatic Loop', () => {
     {
       const { registry, governor } = makeRuntime();
       const loop = new SomaticLoop(registry, governor);
-      // Tick param must be registered and at default
+      // Tick param must be registered with a positive default
       const tickVal = registry.get<number>('somatic.tickSeconds');
-      assert(tickVal === 45, 'tick param defaults to 45s');
+      assert(tickVal > 0, `tick param has positive default, got ${tickVal}`);
       const snap = loop.snapshot();
       assert(snap.tickCount === 0, 'no ticks yet');
       assert(snap.eventsSinceLastTick === 0, 'no events yet');
@@ -56,11 +56,18 @@ describe('Somatic Loop', () => {
     {
       const { registry, governor } = makeRuntime();
       const initialTools = registry.get<number>('governor.maxConcurrentTools');
+      // Parameterize off the live flow cap so this stays correct as defaults
+      // drift (see PR #213 → #239 → #242 for the drift class). Pre-fill to
+      // flowCap-1 then add an extra event so utilisation crosses the 80%
+      // proposal threshold for any flowCap >= 2.
+      const flowCap = registry.get<number>('governor.maxConcurrentFlows');
+      assert(
+        flowCap >= 2,
+        `smoke needs flowCap >= 2 to cross the 80% trigger, got ${flowCap}`
+      );
 
-      // Fill flows to 80%+ to trigger a proposal on the next start event
-      // Default maxConcurrentFlows = 8, so start 7 flows (≥80%)
       const works = [];
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < flowCap - 1; i++) {
         works.push(
           governor.registerStart({
             kind: 'flow',
@@ -72,7 +79,7 @@ describe('Somatic Loop', () => {
 
       const loop = new SomaticLoop(registry, governor);
 
-      // Start one more flow — system is at 100% (≥80%), should trigger proposal
+      // Adding one more event takes us to 100% — always ≥80%, triggers proposal.
       const extra = governor.registerStart({
         kind: 'flow',
         type: 'extra-flow',

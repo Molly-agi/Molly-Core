@@ -19,21 +19,29 @@ describe('Cognitive Governor', () => {
       reg.ownerOf(K.maxConcurrentFlows) === GOVERNOR_ID,
       'governor owns maxConcurrentFlows'
     );
+    // Smoke parameterizes off live defaults rather than hardcoding 4/8/16 — see
+    // PR #213 → #239 → #242 history for the drift class this prevents.
+    const flowCap = reg.get<number>(K.maxConcurrentFlows);
+    const toolCap = reg.get<number>(K.maxConcurrentTools);
     assert(
-      reg.get<number>(K.maxConcurrentFlows) === 8,
-      'default flow cap is 8'
+      flowCap >= 4,
+      `smoke needs flowCap >= 4 for overage coverage, got ${flowCap}`
+    );
+    assert(
+      toolCap >= 4,
+      `smoke needs toolCap >= 4 for proposal coverage, got ${toolCap}`
     );
 
     // 1. Admit until capacity.
     const started = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < flowCap; i++) {
       const d = gov.shouldStart({ kind: 'flow', type: 'chat', priority: 5 });
       assert(d.admit, `flow ${i} admitted`);
       started.push(
         gov.registerStart({ kind: 'flow', type: 'chat', priority: 5 })
       );
     }
-    assert(gov.snapshot().active.flow === 8, 'eight flows active');
+    assert(gov.snapshot().active.flow === flowCap, `${flowCap} flows active`);
 
     // 2. At capacity, equal priority is refused with nothing to preempt.
     let d = gov.shouldStart({ kind: 'flow', type: 'chat', priority: 5 });
@@ -66,21 +74,35 @@ describe('Cognitive Governor', () => {
     );
 
     // 5. Live limit change → reconcileOverages reports who to cancel.
-    //    Owner lowers the cap to 6; two flows are now over budget.
-    const r = reg.commit(K.maxConcurrentFlows, 6, GOVERNOR_ID, 'load shedding');
+    //    Drop the cap by 2; two flows are now over budget.
+    const reducedFlowCap = flowCap - 2;
+    const r = reg.commit(
+      K.maxConcurrentFlows,
+      reducedFlowCap,
+      GOVERNOR_ID,
+      'load shedding'
+    );
     assert(r.ok, 'governor lowered its own cap');
     const overflow = gov.reconcileOverages();
     assert(overflow.length === 2, 'two flows flagged for cancellation');
     overflow.forEach((id) => gov.registerEnd(id));
     assert(
-      gov.snapshot().active.flow === 6,
+      gov.snapshot().active.flow === reducedFlowCap,
       'back within cap after enforcement'
     );
 
-    // 6. Proposal policy: a non-owner proposes; governor accepts reasonable, rejects a >50% cut.
+    // 6. Proposal policy: non-owner proposes; governor accepts reasonable,
+    //    rejects a >50% cut. Reasonable trim = floor(toolCap/4) (min 1) —
+    //    always clears the half-cut floor for toolCap >= 4.
+    const reasonableTrim = Math.max(1, Math.floor(toolCap / 4));
+    const reasonableTool = toolCap - reasonableTrim;
+    assert(
+      reasonableTool > toolCap / 2,
+      `test setup: reasonable proposal clears half-cut floor (${reasonableTool} > ${toolCap / 2})`
+    );
     reg.propose(
       K.maxConcurrentTools,
-      10,
+      reasonableTool,
       'self-calibration',
       'fewer tools, calmer system'
     );
@@ -89,11 +111,11 @@ describe('Cognitive Governor', () => {
       1,
       'predictive-homeostasis',
       'drastic cut'
-    ); // < current/2 (16/2=8) → rejected
+    ); // 1 < toolCap/2 for any toolCap >= 4 → rejected
     gov.drainProposals();
     assert(
-      reg.get<number>(K.maxConcurrentTools) === 10,
-      'reasonable proposal accepted (10)'
+      reg.get<number>(K.maxConcurrentTools) === reasonableTool,
+      `reasonable proposal accepted (${reasonableTool})`
     );
     const hist = reg.getHistory(K.maxConcurrentTools);
     assert(
