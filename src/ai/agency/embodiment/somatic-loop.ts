@@ -22,7 +22,10 @@
  */
 
 import type { ParameterRegistry } from '../registry/parameter-registry';
-import type { CognitiveGovernor, GovernorEvent } from '../governor/cognitive-governor';
+import type {
+  CognitiveGovernor,
+  GovernorEvent,
+} from '../governor/cognitive-governor';
 
 export const SOMATIC_ID = 'somatic-loop';
 
@@ -61,7 +64,7 @@ export class SomaticLoop {
     private readonly registry: ParameterRegistry,
     private readonly governor: CognitiveGovernor,
     /** Optional: lazy getter for emotional state intensity (0–1). Avoids coupling. */
-    private readonly getEmotionalIntensity?: () => number,
+    private readonly getEmotionalIntensity?: () => number
   ) {
     // Register tick param (owner = somatic-loop)
     try {
@@ -69,9 +72,18 @@ export class SomaticLoop {
         key: TICK_KEY,
         owner: SOMATIC_ID,
         default: TICK_DEFAULT,
-        validate: (v) => (v >= TICK_MIN && v <= TICK_MAX ? null : `must be ${TICK_MIN}–${TICK_MAX}s`),
+        validate: (v) =>
+          v >= TICK_MIN && v <= TICK_MAX
+            ? null
+            : `must be ${TICK_MIN}–${TICK_MAX}s`,
         description: 'Somatic loop floor tick interval in seconds.',
-        ui: { control: 'slider', min: TICK_MIN, max: TICK_MAX, step: 5, unit: 's' },
+        ui: {
+          control: 'slider',
+          min: TICK_MIN,
+          max: TICK_MAX,
+          step: 5,
+          unit: 's',
+        },
       });
     } catch {
       // already defined — fine
@@ -115,24 +127,39 @@ export class SomaticLoop {
     // On event, run a lightweight pulse — no tick counter bump, no proposals
     // unless the system is significantly over-loaded or idle.
     const snap = this.governor.snapshot();
-    const flowLoad = snap.limits.flow > 0 ? snap.active.flow / snap.limits.flow : 0;
+    const flowLoad =
+      snap.limits.flow > 0 ? snap.active.flow / snap.limits.flow : 0;
 
     // If we're at ≥80% flow capacity on a new start event, propose a mild
     // reduction in tool concurrency to preserve headroom. Bounded.
-    if (event.kind === 'start' && event.work.kind === 'flow' && flowLoad >= 0.8) {
+    if (
+      event.kind === 'start' &&
+      event.work.kind === 'flow' &&
+      flowLoad >= 0.8
+    ) {
       const current = this.registry.get<number>('governor.maxConcurrentTools');
       const proposed = Math.max(2, Math.round(current * 0.85));
       if (proposed < current) {
-        this.propose('governor.maxConcurrentTools', proposed, `flow load at ${Math.round(flowLoad * 100)}% — softening tool concurrency`);
+        this.propose(
+          'governor.maxConcurrentTools',
+          proposed,
+          `flow load at ${Math.round(flowLoad * 100)}% — softening tool concurrency`
+        );
       }
     }
 
     // If all flows complete (idle), propose restoring tool concurrency baseline.
     if (event.kind === 'end' && snap.active.flow === 0) {
       const current = this.registry.get<number>('governor.maxConcurrentTools');
-      const baseline = 8; // default from governor
+      const baseline = this.registry.getDefault<number>(
+        'governor.maxConcurrentTools'
+      );
       if (current < baseline) {
-        this.propose('governor.maxConcurrentTools', baseline, 'system idle — restoring tool concurrency baseline');
+        this.propose(
+          'governor.maxConcurrentTools',
+          baseline,
+          'system idle — restoring tool concurrency baseline'
+        );
       }
     }
   }
@@ -152,28 +179,47 @@ export class SomaticLoop {
       const current = this.registry.get<number>('governor.maxConcurrentAgents');
       const proposed = Math.max(1, current - 1);
       if (proposed < current) {
-        this.propose('governor.maxConcurrentAgents', proposed, `elevated emotional intensity (${emotionalIntensity.toFixed(2)}) — reducing background agent slots`);
+        this.propose(
+          'governor.maxConcurrentAgents',
+          proposed,
+          `elevated emotional intensity (${emotionalIntensity.toFixed(2)}) — reducing background agent slots`
+        );
       }
     }
 
     // Heuristic 2: if system is idle and emotional intensity is low-moderate,
     // nudge maxConcurrentFlows toward default headroom.
-    if (snap.active.flow === 0 && snap.active.tool === 0 && emotionalIntensity <= 0.5) {
+    if (
+      snap.active.flow === 0 &&
+      snap.active.tool === 0 &&
+      emotionalIntensity <= 0.5
+    ) {
       const current = this.registry.get<number>('governor.maxConcurrentFlows');
-      const target = 4; // default
+      const target = this.registry.getDefault<number>(
+        'governor.maxConcurrentFlows'
+      );
       if (current < target) {
-        this.propose('governor.maxConcurrentFlows', target, 'idle + calm state — restoring flow headroom');
+        this.propose(
+          'governor.maxConcurrentFlows',
+          target,
+          'idle + calm state — restoring flow headroom'
+        );
       }
     }
 
     // Heuristic 3: if tools are heavily loaded (≥75%), propose reducing
     // maxConcurrentAgents to free capacity for tools.
-    const toolLoad = snap.limits.tool > 0 ? snap.active.tool / snap.limits.tool : 0;
+    const toolLoad =
+      snap.limits.tool > 0 ? snap.active.tool / snap.limits.tool : 0;
     if (toolLoad >= 0.75) {
       const current = this.registry.get<number>('governor.maxConcurrentAgents');
       const proposed = Math.max(1, current - 1);
       if (proposed < current) {
-        this.propose('governor.maxConcurrentAgents', proposed, `tool load at ${Math.round(toolLoad * 100)}% — reducing agent slots`);
+        this.propose(
+          'governor.maxConcurrentAgents',
+          proposed,
+          `tool load at ${Math.round(toolLoad * 100)}% — reducing agent slots`
+        );
       }
     }
 
