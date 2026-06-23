@@ -23,6 +23,8 @@ import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
 import { migrateToPartitions } from '@/ai/memory/crystal-migration';
 import { SchemaStripper } from '@/ai/memory/compression/schema-stripper';
 import { getConsciousness } from '@/ai/consciousness/consciousness-state';
+import { getNeuralBrain, type MemoryEngram } from '@/ai/memory/neural-engram';
+import { promoteClusterToCrystal } from '@/ai/agency/memory/memory-crystallizer';
 
 const MemoryConsolidationOutputSchema = z.object({
   summary: z.string().describe('High-level summary of consolidated memories'),
@@ -348,9 +350,13 @@ export const memoryConsolidationFlow = ai.defineFlow(
             'Memory consolidation: embedding provider init failed, skipping',
             'memoryConsolidation'
           );
+          // Shape must match MemoryConsolidationOutputSchema or genkit
+          // rejects the flow output. Prior shape used `consolidatedMemories`
+          // and `patterns` keys that do not exist on the schema.
           return {
-            consolidatedMemories: [],
-            patterns: [],
+            summary:
+              'Embedding provider unavailable — cannot consolidate memories',
+            keyPatterns: [],
             insights: [],
             tokensUsed: 0,
             semanticDensity: 0,
@@ -400,7 +406,14 @@ export const memoryConsolidationFlow = ai.defineFlow(
       }
 
       // STEP 1.5: S0 Schema Stripping (Structural Compression)
-      // Remove redundant schema overhead before embedding to save tokens + improve density
+      // Strip every memory once so we can report the byte-level reduction.
+      // The stripped form is metric-only — embedding text and the
+      // downstream clustering still run off the original memories so
+      // `.suggestion` / `.context` actually resolve. Earlier code called
+      // `schemaStripper.compress()` (method does not exist) AND tried to
+      // read `.suggestion` off the stripped object, which meant every
+      // run threw and the catch handler returned a silent no-op. The
+      // method is `strip()`; the embedding pass uses `memories`.
       MollyLogger.info(
         `Step 1.5: S0 schema stripping on ${memories.length} memories`,
         'memoryConsolidation'
@@ -409,7 +422,7 @@ export const memoryConsolidationFlow = ai.defineFlow(
       const schemaSizeBefore = JSON.stringify(memories).length;
       const schemaStripper = new SchemaStripper();
       const strippedMemories = memories.map((m) =>
-        schemaStripper.compress(m as Record<string, unknown>)
+        schemaStripper.strip(m as Record<string, unknown>)
       );
       const schemaSizeAfter = JSON.stringify(strippedMemories).length;
       const s0Ratio = schemaSizeAfter / schemaSizeBefore;
@@ -422,11 +435,11 @@ export const memoryConsolidationFlow = ai.defineFlow(
 
       // STEP 2: Generate Embeddings
       MollyLogger.info(
-        `Step 2: Embedding ${strippedMemories.length} compressed memories`,
+        `Step 2: Embedding ${memories.length} memories`,
         'memoryConsolidation'
       );
 
-      const memoryTexts = strippedMemories.map(
+      const memoryTexts = memories.map(
         (m) =>
           `${(m as Record<string, unknown>).suggestion || (m as Record<string, unknown>).modificationSuggestion || 'Unknown'} (context: ${(m as Record<string, unknown>).context || 'general'})`
       );
@@ -495,6 +508,96 @@ export const memoryConsolidationFlow = ai.defineFlow(
       MollyLogger.info('Step 4: Extracting patterns', 'memoryConsolidation');
 
       const patterns = extractPatterns(clusters);
+
+      // STEP 4.5: Item 13 — real sleep/consolidation cycle behaviors.
+      // Wired AFTER pattern extraction so cluster-to-crystal promotion sees the
+      // same cluster shape. Each behavior wraps in try/catch — these are
+      // brain-side side effects, they must NEVER break the consolidation
+      // contract for callers (return shape, errors[], etc).
+      MollyLogger.info(
+        'Step 4.5: Item 13 sleep cycle (merge / strengthen / archive / promote)',
+        'memoryConsolidation'
+      );
+      try {
+        const brain = getNeuralBrain();
+
+        // (1) Cross-cycle merge of near-duplicate engrams in the hippocampus.
+        const mergeResult = await brain.mergeNearDuplicates();
+        if (mergeResult.merged > 0) {
+          MollyLogger.info(
+            `Item 13 merge: absorbed ${mergeResult.merged} near-duplicates`,
+            'memoryConsolidation'
+          );
+        }
+
+        // (2) Strengthen frequently-accessed engrams.
+        const strengthenResult = brain.strengthenByAccess();
+        if (strengthenResult.strengthened > 0) {
+          MollyLogger.info(
+            `Item 13 strengthen: boosted ${strengthenResult.strengthened} engrams`,
+            'memoryConsolidation'
+          );
+        }
+
+        // (3) Soft-archive stale, low-importance, low-access engrams.
+        const archiveResult = brain.archiveStale(new Date());
+        if (archiveResult.archived > 0) {
+          MollyLogger.info(
+            `Item 13 archive: soft-archived ${archiveResult.archived} stale engrams`,
+            'memoryConsolidation'
+          );
+        }
+
+        // (4) Promote recurring clusters to crystals.
+        // Convert experience records → engram-like for the promotion gate.
+        // Real engrams already in the brain skip this conversion; clusters
+        // here come from the Firestore experience pool consolidated above.
+        let promoted = 0;
+        for (const cluster of clusters) {
+          const engramLike: MemoryEngram[] = cluster.map((record) => {
+            const r = record as Record<string, unknown>;
+            const ts =
+              typeof r.timestamp === 'number'
+                ? new Date(r.timestamp)
+                : new Date();
+            const vibeScore =
+              typeof r.vibeScore === 'number' ? r.vibeScore : 0.5;
+            const ctx = typeof r.context === 'string' ? r.context : '';
+            const suggestion =
+              typeof r.suggestion === 'string'
+                ? r.suggestion
+                : typeof r.modificationSuggestion === 'string'
+                  ? r.modificationSuggestion
+                  : 'unknown';
+            return {
+              id: typeof r.id === 'string' ? r.id : `cluster_${Date.now()}`,
+              content: suggestion,
+              timestamp: ts,
+              emotionalValence: 0,
+              arousal: vibeScore,
+              importance: vibeScore,
+              accessCount: 1,
+              lastAccessed: new Date(),
+              consolidationState: 'consolidated',
+              contextTags: ctx ? [ctx] : [],
+              relatedEngrams: [],
+            };
+          });
+          const crystal = promoteClusterToCrystal(engramLike);
+          if (crystal) promoted += 1;
+        }
+        if (promoted > 0) {
+          MollyLogger.info(
+            `Item 13 promote: ${promoted} clusters crystallized`,
+            'memoryConsolidation'
+          );
+        }
+      } catch (cycleErr) {
+        MollyLogger.warn(
+          `Item 13 sleep cycle failed (non-fatal): ${cycleErr instanceof Error ? cycleErr.message : String(cycleErr)}`,
+          'memoryConsolidation'
+        );
+      }
 
       // STEP 5: Insight Generation
       MollyLogger.info('Step 5: Generating insights', 'memoryConsolidation');

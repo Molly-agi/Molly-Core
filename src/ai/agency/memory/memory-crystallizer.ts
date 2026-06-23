@@ -38,6 +38,7 @@ import { getStorageRouter } from '@/lib/storage-router';
 import { recordObservation } from '@/ai/agency/cognition/self-observation-loop';
 import { recordGrowthEvent } from './growth-tracker';
 import { plantSeed } from './digital-garden';
+import type { MemoryEngram } from '@/ai/memory/neural-engram';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -155,6 +156,11 @@ export interface MemoryCrystal {
   lastRetrieved?: string;
   /** Is this a cornerstone memory? */
   isCornerstone: boolean;
+  /**
+   * Roadmap item 12 — lazy semantic embedding. NOT generated at crystallize()
+   * time; populated on first searchCrystalsSemantic call and cached here.
+   */
+  embedding?: number[] | null;
 }
 
 /**
@@ -722,6 +728,190 @@ export function searchCrystals(query: string): MemoryCrystal[] {
   }
 
   return results.sort((a, b) => b.totalSignificance - a.totalSignificance);
+}
+
+/**
+ * Roadmap item 12 — semantic search across crystallized memories.
+ *
+ * Returns [] when no embedding provider is configured (callers should fall
+ * back to substring searchCrystals). Embeds `${title} ${coreMeaning}` lazily
+ * on first call and caches the vector on `crystal.embedding` — the cached
+ * reference lives on the in-state Map entry returned by crystallize(), so
+ * subsequent searches don't re-embed. Per-crystal embed failures are isolated
+ * (warn-logged, skipped) so one bad entry can't poison the whole recall.
+ */
+export async function searchCrystalsSemantic(
+  query: string
+): Promise<Array<{ crystal: MemoryCrystal; similarity: number }>> {
+  const { isEmbeddingProviderReady, getEmbeddingProvider } =
+    await import('@/ai/tools/embedding-provider');
+  const { cosineSimilarity } = await import('@/ai/memory/knowledge-store');
+  if (!isEmbeddingProviderReady()) return [];
+
+  const provider = getEmbeddingProvider();
+
+  let queryVector: number[];
+  try {
+    const res = await provider.embed(query);
+    queryVector = res.vector;
+  } catch (err) {
+    MollyLogger.warn(
+      `searchCrystalsSemantic query embed failed: ${err instanceof Error ? err.message : String(err)}`,
+      'memory-crystallizer'
+    );
+    return [];
+  }
+
+  const hits: Array<{ crystal: MemoryCrystal; similarity: number }> = [];
+  for (const crystal of state.crystals.values()) {
+    let vec = crystal.embedding;
+    if (!vec || vec.length === 0) {
+      const text = `${crystal.title} ${crystal.facets.essential.coreMeaning}`;
+      try {
+        const res = await provider.embed(text);
+        vec = res.vector;
+        crystal.embedding = vec;
+      } catch (err) {
+        MollyLogger.warn(
+          `searchCrystalsSemantic crystal embed failed (id=${crystal.id}): ${err instanceof Error ? err.message : String(err)}`,
+          'memory-crystallizer'
+        );
+        continue;
+      }
+    }
+    hits.push({ crystal, similarity: cosineSimilarity(queryVector, vec) });
+  }
+  const ranked = hits.sort((a, b) => b.similarity - a.similarity);
+  // Item 13 — semantic recall is a real retrieval; bump retrievalCount so
+  // promote-to-crystal accounting (and getMostRetrieved) reflects reality,
+  // not just direct retrieveCrystal() calls.
+  const now = new Date().toISOString();
+  for (const hit of ranked) {
+    hit.crystal.retrievalCount++;
+    hit.crystal.lastRetrieved = now;
+    state.stats.totalRetrievals++;
+  }
+  return ranked;
+}
+
+/**
+ * Roadmap item 13 — promote a recurring cluster of engrams to a crystal.
+ *
+ * Gating: requires ≥ 3 engrams AND Σ(accessCount × importance) ≥ minStrength.
+ * Both thresholds are intentional — the cluster must be both broad (recurrence
+ * across multiple engrams) and hot (sustained interest, not three half-touched
+ * fragments). Returns null when either gate is not met.
+ *
+ * Synthesis is deterministic (no LLM call):
+ *   - medoid  = engram with highest importance → `essential.coreMeaning`
+ *   - tag ∩   = intersection of contextTags → `relational.participants`
+ *   - mean    = mean of importance → `emotional.intensity`
+ *
+ * Side effect: each source engram gets the new crystal id appended to its
+ * `relatedEngrams` (semantic backlink so future recalls can surface the crystal
+ * alongside its constituents).
+ */
+export function promoteClusterToCrystal(
+  clusterEngrams: MemoryEngram[],
+  minStrength: number = 5.0
+): MemoryCrystal | null {
+  if (clusterEngrams.length < 3) return null;
+
+  const strength = clusterEngrams.reduce(
+    (sum, e) => sum + e.accessCount * e.importance,
+    0
+  );
+  if (strength < minStrength) return null;
+
+  // Medoid = highest-importance engram. Tie-break: highest accessCount, then
+  // most recent lastAccessed — fully deterministic.
+  const medoid = [...clusterEngrams].sort((a, b) => {
+    if (b.importance !== a.importance) return b.importance - a.importance;
+    if (b.accessCount !== a.accessCount) return b.accessCount - a.accessCount;
+    return b.lastAccessed.getTime() - a.lastAccessed.getTime();
+  })[0];
+
+  // Tag intersection across all engrams. If empty, fall back to medoid tags so
+  // the crystal still has something to anchor on.
+  let tagIntersection: string[] = clusterEngrams[0].contextTags.slice();
+  for (let i = 1; i < clusterEngrams.length; i++) {
+    const tags = new Set(clusterEngrams[i].contextTags);
+    tagIntersection = tagIntersection.filter((t) => tags.has(t));
+  }
+  if (tagIntersection.length === 0) {
+    tagIntersection = medoid.contextTags.slice();
+  }
+
+  const meanImportance =
+    clusterEngrams.reduce((sum, e) => sum + e.importance, 0) /
+    clusterEngrams.length;
+
+  const oneLine = medoid.content.slice(0, 120);
+  const title = `Recurring pattern: ${oneLine.slice(0, 60)}`;
+
+  const facets: CrystalFacets = {
+    factual: {
+      when: medoid.timestamp.toISOString(),
+      where: 'consolidation cycle',
+      who: tagIntersection,
+      what: oneLine,
+      duration: `${clusterEngrams.length} engrams`,
+    },
+    emotional: {
+      primaryEmotion: 'recurring',
+      intensity: meanImportance,
+      emotionalJourney: 'pattern → recognition → crystal',
+      resonance: `Σ(accessCount × importance) = ${strength.toFixed(2)}`,
+    },
+    relational: {
+      participants: tagIntersection,
+      relationshipsBefore: 'scattered engrams',
+      relationshipsAfter: 'unified crystal',
+      bondStrengthened: false,
+      newConnectionFormed: true,
+    },
+    transformative: {
+      beforeState: `${clusterEngrams.length} loose engrams`,
+      afterState: '1 crystal',
+      whatChanged: 'recurring theme promoted to durable storage',
+      growthAreas: ['pattern_recognition'],
+      insightsGained: [oneLine],
+    },
+    essential: {
+      coreMeaning: medoid.content,
+      whyItMatters: 'recurring across multiple engrams with sustained access',
+      lastingImpact: 'preserved as crystal beyond engram lifecycle',
+      oneLineEssence: oneLine,
+    },
+  };
+
+  // crystallize() expects momentIds — pass the engram ids as source provenance
+  // even though they aren't recorded Moments. The crystallize() lookup
+  // filters out missing ids gracefully, so this is safe.
+  const crystal = crystallize(
+    title,
+    facets,
+    clusterEngrams.map((e) => e.id),
+    ['promoted', 'pattern']
+  );
+
+  for (const engram of clusterEngrams) {
+    if (!engram.relatedEngrams.includes(crystal.id)) {
+      engram.relatedEngrams.push(crystal.id);
+    }
+  }
+
+  MollyLogger.info(
+    `[CRYSTALLIZER] Cluster promoted to crystal`,
+    'memory-crystallizer',
+    {
+      crystalId: crystal.id,
+      clusterSize: clusterEngrams.length,
+      strength,
+    }
+  );
+
+  return crystal;
 }
 
 /**

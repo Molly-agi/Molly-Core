@@ -55,7 +55,20 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
     private readonly shadowLogPath = './.molly/provenance-shadow.jsonl',
     private readonly jsonlPath = './.molly/provenance.jsonl'
   ) {
-    void this.ensureDirs().catch(() => {});
+    // Synchronously seed the parent dirs. Async ensureDirs() raced with
+    // callers (and tests) that inspect the filesystem right after `new`.
+    // mkdir is cheap, runs once per sink, and the contract is "the sink is
+    // ready to write the moment the constructor returns".
+    try {
+      const req = eval('require') as NodeRequire;
+      const fs = req('fs') as typeof import('fs');
+      for (const p of [this.shadowLogPath, this.jsonlPath]) {
+        const dir = p.split('/').slice(0, -1).join('/');
+        if (dir) fs.mkdirSync(dir, { recursive: true });
+      }
+    } catch {
+      /* tolerate ro-fs / browser bundling — writeShadowLog/writeToJsonl re-mkdir per write */
+    }
     if (flushIntervalMs > 0) {
       this.timer = setInterval(() => {
         this.flush().catch(() => {});
@@ -90,16 +103,6 @@ export class FirestoreProvenanceSink implements ProvenanceSink {
   /** Test/inspection helper. */
   getCloudReady(): boolean | null {
     return this.cloudReady;
-  }
-
-  private async ensureDirs(): Promise<void> {
-    const fs = await getFsModule();
-    for (const p of [this.shadowLogPath, this.jsonlPath]) {
-      const dir = p.split('/').slice(0, -1).join('/');
-      if (dir) {
-        await fs.promises.mkdir(dir, { recursive: true }).catch(() => {});
-      }
-    }
   }
 
   write(span: ProvenanceSpan): void {

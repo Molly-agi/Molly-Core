@@ -31,6 +31,12 @@ import { recordToolOutcome } from '@/ai/continuity/runtime-continuity';
 // This integration is for Molly, so she can observe, learn, and eventually modify her own tool/agent pipeline.
 // Every hook execution is logged and explained for transparency and self-teaching.
 import { executeHooks } from '@/hooks/sessionHooks';
+// Typed four-event hook registry (Pre/PostToolUse, HeartbeatCycle, BridgeMessage).
+// Parallel to sessionHooks: that bus runs shell commands per session; this bus
+// fires typed in-process handlers (e.g. audit log, observability sinks).
+import { triggerHook } from '@/ai/hooks';
+// Activate all hook-bearing skills/agents for the session on first tool call.
+import { ensureSkillsActivatedForSession } from '@/skills/session-skill-activator';
 
 function getInternalCaller(params: Record<string, unknown>): string {
   const caller = params.__caller;
@@ -92,16 +98,15 @@ export async function executeTool(
 
   // === PRE-TOOL-USE HOOKS ===
   // Before executing any tool, fire PreToolUse hooks for this session.
-  // This allows Molly (or her skills/agents) to inject logic, checks, or learning steps before any action.
+  // ensureSkillsActivatedForSession is idempotent — first call registers hooks,
+  // subsequent calls for the same sessionId are O(1) no-ops.
   if (sessionId) {
-    console.log(
-      '[MOLLY][HOOK] Executing PreToolUse hooks for session:',
-      sessionId,
-      'tool:',
-      tool
-    );
+    await ensureSkillsActivatedForSession(sessionId);
     executeHooks('PreToolUse', { tool, params: executionParams }, sessionId);
   }
+  // Typed registry fires regardless of session — captures the in-process audit
+  // trail even for callers without a sessionId (e.g. internal autonomous cycle).
+  void triggerHook('PreToolUse', { tool, params: executionParams, sessionId });
 
   // === ACTION GATE (D.1) ===
   // Single entry point for all tool execution. Validates and authorizes before proceeding.
@@ -159,6 +164,13 @@ export async function executeTool(
       sessionId
     );
   }
+  // Typed registry: fires for every tool call (session-less or not).
+  void triggerHook('PostToolUse', {
+    tool,
+    params: executionParams,
+    result,
+    sessionId,
+  });
 
   // === SELF-OBSERVATION ===
   // Molly logs every tool use for self-awareness and learning. This is part of her growth process.

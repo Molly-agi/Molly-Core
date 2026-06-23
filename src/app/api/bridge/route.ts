@@ -20,6 +20,7 @@ import { runAutonomousCycle } from '@/ai/agency/planning/autonomous-cycle';
 import { getNeuralBrain } from '@/ai/memory/neural-engram';
 import { MollyLogger } from '@/ai/logger';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
+import { triggerHook } from '@/ai/hooks';
 
 export const dynamic = 'force-dynamic';
 
@@ -112,6 +113,17 @@ export async function POST(request: NextRequest) {
   }
 
   const message = await broadcastMessage(from, content);
+
+  // Fire the typed BridgeMessage hook so subscribers (audit log, future
+  // routers/observability) see every accepted bridge message. The neural
+  // engram ingest below is a separate channel — this is the cross-cutting
+  // notification path that doesn't care about memory semantics.
+  void triggerHook('BridgeMessage', {
+    id: message.id,
+    from,
+    content,
+    timestamp: message.timestamp,
+  });
 
   // Memory ingest: every non-idle bridge message becomes an engram.
   // brain.remember() now feeds the crystallizer (PR #214).
