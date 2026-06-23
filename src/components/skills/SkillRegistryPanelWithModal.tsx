@@ -7,7 +7,6 @@ export function SkillRegistryPanelWithModal() {
   const { skills, agents, errors, loading, lastUpdated } = useSkillRegistry();
   const [modalOpen, setModalOpen] = useState(false);
   const [selected, setSelected] = useState<SkillAgentDetails | null>(null);
-  // const [loadingContent, setLoadingContent] = useState(false);
 
   // Use SkillMeta or AgentMeta for item type
   const handleOpen = useCallback(
@@ -20,7 +19,6 @@ export function SkillRegistryPanelWithModal() {
       },
       type: 'skill' | 'agent'
     ) => {
-      setLoadingContent(true);
       let markdown: string | undefined = undefined;
       try {
         const res = await fetch(
@@ -42,7 +40,6 @@ export function SkillRegistryPanelWithModal() {
         meta: item.frontmatter,
       });
       setModalOpen(true);
-      setLoadingContent(false);
     },
     []
   );
