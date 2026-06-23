@@ -289,6 +289,12 @@ export interface EngramProvenance {
  * Default confidence per write path. Direct writes are the highest-trust
  * lane: an agent intentionally wrote this. Derived paths cannot exceed it.
  * Callers may override by passing `provenance.confidence` explicitly.
+ *
+ * EMPIRICAL DEFAULTS — see item-21 instrumentation pass for tuning. The
+ * 0.9 / 0.7 / 0.5 spread is a starting point chosen for the invariant shape
+ * (direct ≥ all derived), not a measured value. Once provenance is populated
+ * across the codebase and recall-quality metrics exist, these should be
+ * data-driven rather than authored.
  */
 export const WRITE_PATH_DEFAULT_CONFIDENCE: Record<EngramWritePath, number> = {
   direct: 1.0,
