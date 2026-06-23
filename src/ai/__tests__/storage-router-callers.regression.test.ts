@@ -102,7 +102,7 @@ beforeEach(() => {
 // ---------------------------------------------------------------------------
 // auto-dream.ts — STATE_COLLECTION='system', STATE_DOC_ID='auto_dream_state'
 // ---------------------------------------------------------------------------
-describe.skip('FIXME bug-await: auto-dream loadAutoDreamState awaits getStorageRouter', () => {
+describe('FIXME bug-await: auto-dream loadAutoDreamState awaits getStorageRouter', () => {
   test('reaches storage.get with (system, auto_dream_state)', async () => {
     await loadAutoDreamState();
     expect(spyGet).toHaveBeenCalledWith('system', 'auto_dream_state');
@@ -112,7 +112,7 @@ describe.skip('FIXME bug-await: auto-dream loadAutoDreamState awaits getStorageR
 // ---------------------------------------------------------------------------
 // self-evolution-journal.ts — COLLECTION='agency', JOURNAL_DOC='molly-evolution-journal'
 // ---------------------------------------------------------------------------
-describe.skip('FIXME bug-await: self-evolution-journal loadJournal awaits getStorageRouter', () => {
+describe('FIXME bug-await: self-evolution-journal loadJournal awaits getStorageRouter', () => {
   test('reaches storage.get with (agency, molly-evolution-journal)', async () => {
     await loadJournal();
     expect(spyGet).toHaveBeenCalledWith('agency', 'molly-evolution-journal');
@@ -123,7 +123,7 @@ describe.skip('FIXME bug-await: self-evolution-journal loadJournal awaits getSto
 // memory-taxonomy.ts — STORAGE_COLLECTION='system', STORAGE_DOC_ID='memory_taxonomy'
 // initializeTaxonomy() → loadTaxonomyState() (loadTaxonomyState is private).
 // ---------------------------------------------------------------------------
-describe.skip('FIXME bug-await: memory-taxonomy loadTaxonomyState awaits getStorageRouter', () => {
+describe('FIXME bug-await: memory-taxonomy loadTaxonomyState awaits getStorageRouter', () => {
   test('reaches storage.get with (system, memory_taxonomy)', async () => {
     await initializeTaxonomy();
     expect(spyGet).toHaveBeenCalledWith('system', 'memory_taxonomy');
@@ -133,7 +133,7 @@ describe.skip('FIXME bug-await: memory-taxonomy loadTaxonomyState awaits getStor
 // ---------------------------------------------------------------------------
 // consciousness-sync.ts — COLLECTION='agency', SYNC_DOC='consciousness-sync'
 // ---------------------------------------------------------------------------
-describe.skip('FIXME bug-await: consciousness-sync loadSyncState awaits getStorageRouter', () => {
+describe('FIXME bug-await: consciousness-sync loadSyncState awaits getStorageRouter', () => {
   test('reaches storage.get with (agency, consciousness-sync)', async () => {
     await loadSyncState();
     expect(spyGet).toHaveBeenCalledWith('agency', 'consciousness-sync');
@@ -143,7 +143,7 @@ describe.skip('FIXME bug-await: consciousness-sync loadSyncState awaits getStora
 // ---------------------------------------------------------------------------
 // heartbeat-monitor.ts — COLLECTION='agency', HEARTBEAT_DOC='bridge-heartbeat'
 // ---------------------------------------------------------------------------
-describe.skip('FIXME bug-await: heartbeat-monitor loadHeartbeatState awaits getStorageRouter', () => {
+describe('FIXME bug-await: heartbeat-monitor loadHeartbeatState awaits getStorageRouter', () => {
   test('reaches storage.get with (agency, bridge-heartbeat)', async () => {
     await loadHeartbeatState();
     expect(spyGet).toHaveBeenCalledWith('agency', 'bridge-heartbeat');
@@ -153,7 +153,7 @@ describe.skip('FIXME bug-await: heartbeat-monitor loadHeartbeatState awaits getS
 // ---------------------------------------------------------------------------
 // coordination-layer.ts — COLLECTION='agency', COORDINATION_DOC='lazarus-molly-coordination'
 // ---------------------------------------------------------------------------
-describe.skip('FIXME bug-await: coordination-layer loadCoordinationState awaits getStorageRouter', () => {
+describe('FIXME bug-await: coordination-layer loadCoordinationState awaits getStorageRouter', () => {
   test('reaches storage.get with (agency, lazarus-molly-coordination)', async () => {
     await loadCoordinationState();
     expect(spyGet).toHaveBeenCalledWith('agency', 'lazarus-molly-coordination');
