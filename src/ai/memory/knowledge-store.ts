@@ -64,7 +64,8 @@ export interface KnowledgeEntry {
     | 'tool-call'
     | 'bridge'
     | 'restore'
-    | 'consolidation';
+    | 'consolidation'
+    | 'import';
   personalitySnapshot?: Record<string, number>;
 }
 
@@ -96,12 +97,49 @@ export interface KnowledgeStore {
   writeMany(
     engrams: Array<{ engram: MemoryEngram; source: KnowledgeEntry['source'] }>
   ): Promise<void>;
+  /**
+   * Item 17 — knowledge-only write path.
+   *
+   * Why this exists: every other writer (`brain.remember()`, `write()`,
+   * `writeMany()`) symmetric-writes into the right hemisphere
+   * (`FrontalCortex` 7-slot working memory + `Hippocampus` consolidation +
+   * `Crystallizer`). For ingested facts (Wikipedia, arXiv, public corpora —
+   * item 18), that would crater FrontalCortex on the first batch.
+   *
+   * `writeFact()` is the seam: persists into the left hemisphere only,
+   * tags the entry with `source: 'import'`, and never touches the right
+   * side. Item 18 is the first caller.
+   *
+   * Contract locked by
+   * `two-hemisphere-write-isolation.contract.test.ts`.
+   */
+  writeFact(
+    content: string,
+    options?: WriteFactOptions
+  ): Promise<KnowledgeEntry>;
   recall(query: string, limit?: number): Promise<KnowledgeRecallHit[]>;
   get(id: string): Promise<KnowledgeEntry | null>;
   count(): Promise<number>;
   recordSnapshot(snapshot: RecallSnapshot): Promise<void>;
   ensureEmbeddings(batchSize?: number): Promise<number>;
   forget(id: string, reason: string, confirm: boolean): Promise<void>;
+}
+
+/**
+ * Options for `KnowledgeStore.writeFact()`. All optional.
+ *   - `id` defaults to a generated `kf-<random>` so fact entries are
+ *     visibly distinguishable from engram ids in storage / dashboards.
+ *   - `source` defaults to `'import'`; only `'import'` is accepted today
+ *     (the seam exists specifically for ingested-fact provenance).
+ *   - `importance` defaults to 0.5 — mirrors the `'import'` write-path
+ *     default confidence in `engram-provenance`.
+ *   - `tags` defaults to `[]`.
+ */
+export interface WriteFactOptions {
+  id?: string;
+  source?: 'import';
+  importance?: number;
+  tags?: string[];
 }
 
 // ============================================================================
@@ -226,6 +264,31 @@ class KnowledgeStoreImpl implements KnowledgeStore {
         this.mirrorAsync(entry.id, stored);
       }
     }
+  }
+
+  async writeFact(
+    content: string,
+    options: WriteFactOptions = {}
+  ): Promise<KnowledgeEntry> {
+    const entry: KnowledgeEntry = {
+      id: options.id ?? `kf-${Math.random().toString(36).slice(2, 10)}`,
+      content,
+      timestamp: new Date(),
+      embedding: null,
+      contextTags: options.tags ?? [],
+      importance: options.importance ?? 0.5,
+      userId: this.userId,
+      source: options.source ?? 'import',
+    };
+
+    const stored = toStored(entry);
+    await this.storage.set(this.entriesCollection, entry.id, stored);
+
+    if (this.mirrorToFirestore) {
+      this.mirrorAsync(entry.id, stored);
+    }
+
+    return entry;
   }
 
   private mirrorAsync(id: string, stored: Record<string, unknown>): void {
