@@ -28,9 +28,22 @@ export function registerHook(event: HookEvent, handler: HookHandler) {
 }
 
 export async function triggerHook(event: HookEvent, payload: unknown) {
+  await ensureProductionHooks();
   const context: HookContext = { event, payload, timestamp: Date.now() };
   const eventHandlers = handlers[event] || [];
   for (const handler of eventHandlers) {
     await handler(context);
   }
+}
+
+// Lazy bootstrap: registers the production handlers on first triggerHook
+// call. Dynamic import avoids the circular-init TDZ that a top-level
+// side-effect import would cause (handlers const isn't initialized until
+// after the hoisted import runs). Idempotent via internal flag.
+let _bootstrapped = false;
+async function ensureProductionHooks(): Promise<void> {
+  if (_bootstrapped) return;
+  _bootstrapped = true;
+  const mod = await import('./production-handlers');
+  mod.registerProductionHooks();
 }
