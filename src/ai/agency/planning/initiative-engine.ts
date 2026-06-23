@@ -128,6 +128,38 @@ function generateId(): string {
   return `init_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
 }
 
+/**
+ * Item-2: initiative create and complete are both 3-weeks-from-now moments.
+ * Distinct provenance.source so future audits separate intent from outcome.
+ */
+function rememberInitiativeEvent(
+  phase: 'create' | 'complete',
+  initiative: Initiative,
+  result?: string
+): void {
+  const provenanceSource =
+    phase === 'create'
+      ? 'molly:initiative-create'
+      : 'molly:initiative-complete';
+  void (async () => {
+    try {
+      const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+      const summary =
+        phase === 'create'
+          ? `[Initiative create] ${initiative.name} (${initiative.category}) — ${initiative.description.slice(0, 200)}`
+          : `[Initiative complete] ${initiative.name} (exec #${initiative.executionCount}) — ${(result || '').slice(0, 200)}`;
+      getNeuralBrain().remember(summary, {
+        tags: ['initiative', phase, initiative.category, initiative.id],
+        importance: phase === 'complete' ? 0.7 : 0.6,
+        source: 'tool-call',
+        provenance: { source: provenanceSource },
+      });
+    } catch {
+      // Memory-ingest failure must never break initiative bookkeeping.
+    }
+  })();
+}
+
 export function getInitiatives(): Initiative[] {
   return [...initiatives];
 }
@@ -159,6 +191,7 @@ export function activateInitiative(templateIndex: number): Initiative | null {
   };
 
   initiatives.push(initiative);
+  rememberInitiativeEvent('create', initiative);
   return initiative;
 }
 
@@ -182,6 +215,7 @@ export function createCustomInitiative(
   };
 
   initiatives.push(initiative);
+  rememberInitiativeEvent('create', initiative);
   return initiative;
 }
 
@@ -195,6 +229,7 @@ export function recordInitiativeExecution(
   initiative.lastExecuted = new Date().toISOString();
   initiative.lastResult = result;
   initiative.executionCount++;
+  rememberInitiativeEvent('complete', initiative, result);
   return true;
 }
 

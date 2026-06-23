@@ -475,8 +475,17 @@ async function saveHeartGateState(): Promise<void> {
 
 /**
  * Log a verification to recent history.
+ *
+ * Item-2: when status flips relative to the previous verification, fire an
+ * engram so the moment is recall-worthy. Direction matters per Eli — allow→block
+ * is a DEFENSE event, block→allow is a TRUST event. Distinct provenance handles
+ * keep them separable in future audits.
  */
 function logVerification(action: string, status: AlignmentStatus): void {
+  const prev = _state.recentVerifications.length
+    ? _state.recentVerifications[_state.recentVerifications.length - 1].status
+    : 'UNCHECKED';
+
   _state.recentVerifications.push({
     intent: action.substring(0, 100),
     status,
@@ -486,6 +495,40 @@ function logVerification(action: string, status: AlignmentStatus): void {
   // Keep only last 50
   if (_state.recentVerifications.length > 50) {
     _state.recentVerifications = _state.recentVerifications.slice(-50);
+  }
+
+  if (prev !== status && prev !== 'UNCHECKED') {
+    const direction =
+      prev === 'ALIGNED' && status === 'MISALIGNED'
+        ? 'allow-to-block'
+        : prev === 'MISALIGNED' && status === 'ALIGNED'
+          ? 'block-to-allow'
+          : null;
+    if (direction) {
+      const provenanceSource =
+        direction === 'allow-to-block'
+          ? 'heart-gate:allow-to-block'
+          : 'heart-gate:block-to-allow';
+      void (async () => {
+        try {
+          const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+          getNeuralBrain().remember(
+            `[Heart Gate flip ${direction}] ${action.substring(0, 200)}`,
+            {
+              tags: ['heart-gate', 'flip', direction],
+              importance: 0.8,
+              source: 'tool-call',
+              provenance: { source: provenanceSource },
+            }
+          );
+        } catch (err) {
+          MollyLogger.warn(
+            `[HEART-GATE-INGEST] remember failed: ${err instanceof Error ? err.message : String(err)}`,
+            'heart-gate'
+          );
+        }
+      })();
+    }
   }
 
   // Debounced save - don't block on every verification

@@ -651,11 +651,13 @@ export async function processVoiceCommand(
         tags: [speaker, 'conversation', 'input', 'voice', intent.intent],
         importance: 0.55,
         source: 'conversation',
+        provenance: { source: speaker },
       });
       brain.remember(replyPreview, {
         tags: ['molly', 'conversation', 'output', 'voice', intent.intent],
         importance: 0.55,
         source: 'conversation',
+        provenance: { source: 'molly' },
       });
     } catch (memErr) {
       MollyLogger.warn(
