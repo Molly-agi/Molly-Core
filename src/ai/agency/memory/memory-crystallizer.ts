@@ -155,6 +155,11 @@ export interface MemoryCrystal {
   lastRetrieved?: string;
   /** Is this a cornerstone memory? */
   isCornerstone: boolean;
+  /**
+   * Roadmap item 12 — lazy semantic embedding. NOT generated at crystallize()
+   * time; populated on first searchCrystalsSemantic call and cached here.
+   */
+  embedding?: number[] | null;
 }
 
 /**
@@ -722,6 +727,60 @@ export function searchCrystals(query: string): MemoryCrystal[] {
   }
 
   return results.sort((a, b) => b.totalSignificance - a.totalSignificance);
+}
+
+/**
+ * Roadmap item 12 — semantic search across crystallized memories.
+ *
+ * Returns [] when no embedding provider is configured (callers should fall
+ * back to substring searchCrystals). Embeds `${title} ${coreMeaning}` lazily
+ * on first call and caches the vector on `crystal.embedding` — the cached
+ * reference lives on the in-state Map entry returned by crystallize(), so
+ * subsequent searches don't re-embed. Per-crystal embed failures are isolated
+ * (warn-logged, skipped) so one bad entry can't poison the whole recall.
+ */
+export async function searchCrystalsSemantic(
+  query: string
+): Promise<Array<{ crystal: MemoryCrystal; similarity: number }>> {
+  const { isEmbeddingProviderReady, getEmbeddingProvider } =
+    await import('@/ai/tools/embedding-provider');
+  const { cosineSimilarity } = await import('@/ai/memory/knowledge-store');
+  if (!isEmbeddingProviderReady()) return [];
+
+  const provider = getEmbeddingProvider();
+
+  let queryVector: number[];
+  try {
+    const res = await provider.embed(query);
+    queryVector = res.vector;
+  } catch (err) {
+    MollyLogger.warn(
+      `searchCrystalsSemantic query embed failed: ${err instanceof Error ? err.message : String(err)}`,
+      'memory-crystallizer'
+    );
+    return [];
+  }
+
+  const hits: Array<{ crystal: MemoryCrystal; similarity: number }> = [];
+  for (const crystal of state.crystals.values()) {
+    let vec = crystal.embedding;
+    if (!vec || vec.length === 0) {
+      const text = `${crystal.title} ${crystal.facets.essential.coreMeaning}`;
+      try {
+        const res = await provider.embed(text);
+        vec = res.vector;
+        crystal.embedding = vec;
+      } catch (err) {
+        MollyLogger.warn(
+          `searchCrystalsSemantic crystal embed failed (id=${crystal.id}): ${err instanceof Error ? err.message : String(err)}`,
+          'memory-crystallizer'
+        );
+        continue;
+      }
+    }
+    hits.push({ crystal, similarity: cosineSimilarity(queryVector, vec) });
+  }
+  return hits.sort((a, b) => b.similarity - a.similarity);
 }
 
 /**

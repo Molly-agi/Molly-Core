@@ -235,6 +235,11 @@ export interface MemoryEngram {
 
   // NEW: Personality context from when memory was formed
   personalityContext?: PersonalityModulation;
+
+  // Roadmap item 12 — lazy semantic embedding. NOT generated at write time.
+  // Populated on first searchSemantic call and cached on the engram object
+  // held in the working-memory slot / hippocampus queue.
+  embedding?: number[] | null;
 }
 
 // Extended type for benchmarks/tests that need additional fields
@@ -362,6 +367,60 @@ class FrontalCortex {
       const slotB = this.workingMemory.get(b.id)!;
       return slotB.activationLevel - slotA.activationLevel;
     });
+  }
+
+  /**
+   * Roadmap item 12 — semantic search over working memory.
+   * Returns [] if no embedding provider is configured (caller is expected
+   * to fall back to substring `search`). Embeddings are generated lazily on
+   * first call and cached on the slot's engram so subsequent calls don't
+   * re-embed. Per-engram embed failures are isolated and skipped — one bad
+   * engram cannot poison the whole recall.
+   */
+  async searchSemantic(
+    query: string
+  ): Promise<Array<{ engram: MemoryEngram; similarity: number }>> {
+    const { isEmbeddingProviderReady, getEmbeddingProvider } =
+      await import('@/ai/tools/embedding-provider');
+    const { cosineSimilarity } = await import('@/ai/memory/knowledge-store');
+    if (!isEmbeddingProviderReady()) return [];
+
+    const provider = getEmbeddingProvider();
+
+    let queryVector: number[];
+    try {
+      const res = await provider.embed(query);
+      queryVector = res.vector;
+    } catch (err) {
+      MollyLogger.warn(
+        `searchSemantic query embed failed: ${err instanceof Error ? err.message : String(err)}`,
+        'frontal-cortex'
+      );
+      return [];
+    }
+
+    const hits: Array<{ engram: MemoryEngram; similarity: number }> = [];
+    for (const slot of this.workingMemory.values()) {
+      let vec = slot.engram.embedding;
+      if (!vec || vec.length === 0) {
+        try {
+          const res = await provider.embed(slot.engram.content);
+          vec = res.vector;
+          slot.engram.embedding = vec;
+        } catch (err) {
+          MollyLogger.warn(
+            `searchSemantic engram embed failed (id=${slot.engram.id}): ${err instanceof Error ? err.message : String(err)}`,
+            'frontal-cortex'
+          );
+          continue;
+        }
+      }
+      hits.push({
+        engram: slot.engram,
+        similarity: cosineSimilarity(queryVector, vec),
+      });
+    }
+    return hits.sort((a, b) => b.similarity - a.similarity);
   }
 
   /**
@@ -610,6 +669,54 @@ class Hippocampus {
       }
     }
     return matches.sort((a, b) => b.importance - a.importance);
+  }
+
+  /**
+   * Roadmap item 12 — semantic search over the consolidation queue.
+   * Mirrors FrontalCortex.searchSemantic: lazy-embed, cache on engram,
+   * isolate per-engram failures, empty array when provider not ready.
+   */
+  async searchSemantic(
+    query: string
+  ): Promise<Array<{ engram: MemoryEngram; similarity: number }>> {
+    const { isEmbeddingProviderReady, getEmbeddingProvider } =
+      await import('@/ai/tools/embedding-provider');
+    const { cosineSimilarity } = await import('@/ai/memory/knowledge-store');
+    if (!isEmbeddingProviderReady()) return [];
+
+    const provider = getEmbeddingProvider();
+
+    let queryVector: number[];
+    try {
+      const res = await provider.embed(query);
+      queryVector = res.vector;
+    } catch (err) {
+      MollyLogger.warn(
+        `searchSemantic query embed failed: ${err instanceof Error ? err.message : String(err)}`,
+        'hippocampus'
+      );
+      return [];
+    }
+
+    const hits: Array<{ engram: MemoryEngram; similarity: number }> = [];
+    for (const engram of this.consolidationQueue) {
+      let vec = engram.embedding;
+      if (!vec || vec.length === 0) {
+        try {
+          const res = await provider.embed(engram.content);
+          vec = res.vector;
+          engram.embedding = vec;
+        } catch (err) {
+          MollyLogger.warn(
+            `searchSemantic engram embed failed (id=${engram.id}): ${err instanceof Error ? err.message : String(err)}`,
+            'hippocampus'
+          );
+          continue;
+        }
+      }
+      hits.push({ engram, similarity: cosineSimilarity(queryVector, vec) });
+    }
+    return hits.sort((a, b) => b.similarity - a.similarity);
   }
 
   clear(): void {
@@ -1023,6 +1130,36 @@ export class NeuralEngramSystem {
         merged.push(engram);
         seen.add(engram.id);
       }
+    }
+    return merged;
+  }
+
+  /**
+   * Roadmap item 12 — right-hemisphere semantic recall.
+   * Searches FrontalCortex.searchSemantic + Hippocampus.searchSemantic,
+   * merges the results, dedupes by id (working hits win on tie since they
+   * are "hotter"), and returns plain MemoryEngram[].
+   *
+   * Returns [] when no embedding provider is configured — callers should
+   * fall back to the substring-based recall() in that case.
+   */
+  async recallSemantic(query: string): Promise<MemoryEngram[]> {
+    const [workingHits, hippoHits] = await Promise.all([
+      this.frontalCortex.searchSemantic(query),
+      this.hippocampus.searchSemantic(query),
+    ]);
+
+    const seen = new Set<string>();
+    const merged: MemoryEngram[] = [];
+    for (const { engram } of workingHits) {
+      if (seen.has(engram.id)) continue;
+      seen.add(engram.id);
+      merged.push(engram);
+    }
+    for (const { engram } of hippoHits) {
+      if (seen.has(engram.id)) continue;
+      seen.add(engram.id);
+      merged.push(engram);
     }
     return merged;
   }
