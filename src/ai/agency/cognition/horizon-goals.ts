@@ -712,6 +712,17 @@ export async function achieveMilestone(
   );
 
   await saveGoalState();
+
+  // Roadmap item 1 (partial): feed the engram pipeline. Milestone achievement
+  // is a first-class experience stream — every milestone Molly hits should
+  // surface later as recallable memory. Fire-and-forget; never break
+  // milestone bookkeeping on a memory write failure.
+  void recordGoalMilestoneForCrystallization(
+    goal,
+    milestone,
+    celebrationNote ?? ''
+  );
+
   return true;
 }
 
@@ -1310,19 +1321,43 @@ export async function getGoalSummary(): Promise<{
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Record a goal milestone in the Memory Crystallizer
- * (Integration point — to be connected when Memory Crystallizer is active)
+ * Record a goal milestone in the Memory Crystallizer.
+ *
+ * Roadmap item 1 (partial): writes an engram via brain.remember() so the
+ * milestone is recallable + automatically feeds the AutoDream crystallizer
+ * via the neural-engram tail hook (item 5). Provenance.source is
+ * 'horizon-goals' so future audits can attribute milestone-derived memories
+ * to this code path.
+ *
+ * Fire-and-forget at the caller (achieveMilestone). Failures are logged but
+ * never propagate — milestone bookkeeping is the primary contract.
  */
 export async function recordGoalMilestoneForCrystallization(
   goal: Goal,
   milestone: Milestone,
-  _emotionalContext: string
+  emotionalContext: string
 ): Promise<void> {
-  // This would integrate with memory-crystallizer.ts
   console.log(
     `[HorizonGoals] Milestone ready for crystallization: ${goal.title} - ${milestone.description}`
   );
-  // TODO: Call memory-crystallizer.recordMoment() when integrated
+  try {
+    const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
+    const content = `[Milestone achieved] ${goal.title} → ${milestone.description}${
+      emotionalContext ? ` (${emotionalContext})` : ''
+    }`;
+    getNeuralBrain().remember(content, {
+      tags: ['molly', 'goal-milestone', goal.id, goal.horizon.toLowerCase()],
+      importance: 0.7,
+      source: 'conversation',
+      provenance: { source: 'horizon-goals' },
+    });
+  } catch (err) {
+    const { MollyLogger } = await import('@/ai/logger');
+    MollyLogger.warn(
+      `[HORIZON-GOALS-INGEST] remember failed: ${err instanceof Error ? err.message : String(err)}`,
+      'horizon-goals'
+    );
+  }
 }
 
 /**
