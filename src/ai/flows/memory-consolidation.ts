@@ -23,6 +23,8 @@ import type { EmbeddingVector } from '@/ai/tools/embedding-provider';
 import { migrateToPartitions } from '@/ai/memory/crystal-migration';
 import { SchemaStripper } from '@/ai/memory/compression/schema-stripper';
 import { getConsciousness } from '@/ai/consciousness/consciousness-state';
+import { getNeuralBrain, type MemoryEngram } from '@/ai/memory/neural-engram';
+import { promoteClusterToCrystal } from '@/ai/agency/memory/memory-crystallizer';
 
 const MemoryConsolidationOutputSchema = z.object({
   summary: z.string().describe('High-level summary of consolidated memories'),
@@ -506,6 +508,96 @@ export const memoryConsolidationFlow = ai.defineFlow(
       MollyLogger.info('Step 4: Extracting patterns', 'memoryConsolidation');
 
       const patterns = extractPatterns(clusters);
+
+      // STEP 4.5: Item 13 — real sleep/consolidation cycle behaviors.
+      // Wired AFTER pattern extraction so cluster-to-crystal promotion sees the
+      // same cluster shape. Each behavior wraps in try/catch — these are
+      // brain-side side effects, they must NEVER break the consolidation
+      // contract for callers (return shape, errors[], etc).
+      MollyLogger.info(
+        'Step 4.5: Item 13 sleep cycle (merge / strengthen / archive / promote)',
+        'memoryConsolidation'
+      );
+      try {
+        const brain = getNeuralBrain();
+
+        // (1) Cross-cycle merge of near-duplicate engrams in the hippocampus.
+        const mergeResult = await brain.mergeNearDuplicates();
+        if (mergeResult.merged > 0) {
+          MollyLogger.info(
+            `Item 13 merge: absorbed ${mergeResult.merged} near-duplicates`,
+            'memoryConsolidation'
+          );
+        }
+
+        // (2) Strengthen frequently-accessed engrams.
+        const strengthenResult = brain.strengthenByAccess();
+        if (strengthenResult.strengthened > 0) {
+          MollyLogger.info(
+            `Item 13 strengthen: boosted ${strengthenResult.strengthened} engrams`,
+            'memoryConsolidation'
+          );
+        }
+
+        // (3) Soft-archive stale, low-importance, low-access engrams.
+        const archiveResult = brain.archiveStale(new Date());
+        if (archiveResult.archived > 0) {
+          MollyLogger.info(
+            `Item 13 archive: soft-archived ${archiveResult.archived} stale engrams`,
+            'memoryConsolidation'
+          );
+        }
+
+        // (4) Promote recurring clusters to crystals.
+        // Convert experience records → engram-like for the promotion gate.
+        // Real engrams already in the brain skip this conversion; clusters
+        // here come from the Firestore experience pool consolidated above.
+        let promoted = 0;
+        for (const cluster of clusters) {
+          const engramLike: MemoryEngram[] = cluster.map((record) => {
+            const r = record as Record<string, unknown>;
+            const ts =
+              typeof r.timestamp === 'number'
+                ? new Date(r.timestamp)
+                : new Date();
+            const vibeScore =
+              typeof r.vibeScore === 'number' ? r.vibeScore : 0.5;
+            const ctx = typeof r.context === 'string' ? r.context : '';
+            const suggestion =
+              typeof r.suggestion === 'string'
+                ? r.suggestion
+                : typeof r.modificationSuggestion === 'string'
+                  ? r.modificationSuggestion
+                  : 'unknown';
+            return {
+              id: typeof r.id === 'string' ? r.id : `cluster_${Date.now()}`,
+              content: suggestion,
+              timestamp: ts,
+              emotionalValence: 0,
+              arousal: vibeScore,
+              importance: vibeScore,
+              accessCount: 1,
+              lastAccessed: new Date(),
+              consolidationState: 'consolidated',
+              contextTags: ctx ? [ctx] : [],
+              relatedEngrams: [],
+            };
+          });
+          const crystal = promoteClusterToCrystal(engramLike);
+          if (crystal) promoted += 1;
+        }
+        if (promoted > 0) {
+          MollyLogger.info(
+            `Item 13 promote: ${promoted} clusters crystallized`,
+            'memoryConsolidation'
+          );
+        }
+      } catch (cycleErr) {
+        MollyLogger.warn(
+          `Item 13 sleep cycle failed (non-fatal): ${cycleErr instanceof Error ? cycleErr.message : String(cycleErr)}`,
+          'memoryConsolidation'
+        );
+      }
 
       // STEP 5: Insight Generation
       MollyLogger.info('Step 5: Generating insights', 'memoryConsolidation');
