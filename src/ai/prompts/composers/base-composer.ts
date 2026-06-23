@@ -146,6 +146,22 @@ const MAX_RECALL_CONTENT_LEN = 240;
 const MAX_TAG_LEN = 40;
 const MAX_TAGS_PER_ENGRAM = 5;
 
+/**
+ * Item 18 — parse `MOLLY_CORPUS_NAMESPACES` env into a list of corpus
+ * userIds for recall fan-out. Trims whitespace + skips empty entries so
+ * `corpus:a, corpus:b, , corpus:c ` produces `['corpus:a','corpus:b','corpus:c']`.
+ * Returns [] for undefined / empty / whitespace-only inputs.
+ *
+ * Exported for the corpus-ingest-recall-fanout contract test.
+ */
+export function parseCorpusNamespacesEnv(raw: string | undefined): string[] {
+  if (!raw) return [];
+  return raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
+
 export function sanitizeRecallText(raw: string, maxLen: number): string {
   // Strip ASCII control chars except \t and \n; keep printable + non-ASCII.
   const stripped = raw.replace(/[\x00-\x08\x0B-\x1F\x7F]/g, '');
@@ -180,8 +196,12 @@ export async function buildRecallInjection(
   if (!query || !query.trim()) return null;
 
   try {
+    const corpora = parseCorpusNamespacesEnv(
+      process.env.MOLLY_CORPUS_NAMESPACES
+    );
     const result = await getNeuralBrain().recallEverything(query.trim(), {
       limit: MAX_RECALL_BLOCKS,
+      ...(corpora.length > 0 ? { corpora } : {}),
     });
 
     const items: RecallRenderable[] = [];
