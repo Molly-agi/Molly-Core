@@ -152,6 +152,9 @@ bridge-diagnostic-for-opus.md
 # Bridge authentication key - must never be committed
 data/.bridge-bootstrap-key
 
+# MarkItDown ingestion inbox — user-dropped files + processed/failed quarantine (item 19)
+data/markitdown-inbox/
+
 # Sensitive files and working dirs that must never be committed
 stuff/
 backups/

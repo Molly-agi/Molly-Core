@@ -425,4 +425,24 @@ export async function register() {
       );
     }
   }
+
+  // ── Item 19: MarkItDown Watched-Folder Ingestion ──
+  // Opt-in via MOLLY_MARKITDOWN_ENABLED=1. Requires a one-time `uv sync`
+  // inside markitdown_mcp_server/ to install the Python converter.
+  if (
+    process.env.MOLLY_MARKITDOWN_ENABLED === '1' &&
+    process.env.NEXT_RUNTIME === 'nodejs'
+  ) {
+    try {
+      const { ensureMarkitdownWatcherStarted } =
+        await import('@/ai/ingest/markitdown-watcher');
+      await ensureMarkitdownWatcherStarted();
+      console.log('[Startup] ✅ MarkItDown watcher started');
+    } catch (err) {
+      console.warn(
+        '[Startup] ⚠️  MarkItDown watcher failed to start:',
+        err instanceof Error ? err.message : String(err)
+      );
+    }
+  }
 }

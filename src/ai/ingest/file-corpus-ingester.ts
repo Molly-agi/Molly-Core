@@ -69,19 +69,20 @@ function chunkText(text: string, chunkChars: number): string[] {
   return chunks;
 }
 
-export async function ingestFileCorpus(
-  filePath: string,
-  options: IngestFileCorpusOptions
+async function writeChunks(
+  content: string,
+  options: IngestFileCorpusOptions,
+  sourceLabel: string
 ): Promise<IngestFileCorpusResult> {
   if (!options.namespace || !options.namespace.trim()) {
-    throw new Error('ingestFileCorpus: options.namespace is required');
+    throw new Error('ingest: options.namespace is required');
   }
-  const userId = `corpus:${options.namespace.trim()}`;
+  const namespace = options.namespace.trim();
+  const userId = `corpus:${namespace}`;
   const chunkChars = options.chunkChars ?? DEFAULT_CHUNK_CHARS;
   const tags = options.tags ?? [];
   const importance = options.importance ?? 0.5;
 
-  const content = await fs.readFile(filePath, 'utf8');
   const bytes = Buffer.byteLength(content, 'utf8');
   const pieces = chunkText(content, chunkChars);
 
@@ -90,27 +91,49 @@ export async function ingestFileCorpus(
   for (let i = 0; i < pieces.length; i++) {
     try {
       await store.writeFact(pieces[i], {
-        id: `kf-${options.namespace.trim()}-${i.toString().padStart(6, '0')}`,
+        id: `kf-${namespace}-${i.toString().padStart(6, '0')}`,
         tags,
         importance,
       });
       written++;
     } catch (err) {
       MollyLogger.warn(
-        'ingestFileCorpus: writeFact failed for chunk; continuing',
+        'ingest: writeFact failed for chunk; continuing',
         'file-corpus-ingester',
-        { namespace: userId, chunkIndex: i, filePath },
+        { namespace: userId, chunkIndex: i, source: sourceLabel },
         err
       );
     }
   }
 
-  MollyLogger.info('ingestFileCorpus: complete', 'file-corpus-ingester', {
+  MollyLogger.info('ingest: complete', 'file-corpus-ingester', {
     namespace: userId,
     chunks: written,
     bytes,
-    filePath,
+    source: sourceLabel,
   });
 
   return { namespace: userId, chunks: written, bytes };
+}
+
+export async function ingestFileCorpus(
+  filePath: string,
+  options: IngestFileCorpusOptions
+): Promise<IngestFileCorpusResult> {
+  const content = await fs.readFile(filePath, 'utf8');
+  return writeChunks(content, options, filePath);
+}
+
+/**
+ * String-entry variant of {@link ingestFileCorpus}. Used by callers that
+ * already hold the markdown content in memory (e.g. the MarkItDown watcher,
+ * item 19) and would otherwise need a wasteful temp-file dance.
+ *
+ * Same chunking + write contract; the result shape matches.
+ */
+export async function ingestStringCorpus(
+  content: string,
+  options: IngestFileCorpusOptions
+): Promise<IngestFileCorpusResult> {
+  return writeChunks(content, options, '<string>');
 }
