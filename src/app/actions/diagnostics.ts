@@ -95,18 +95,40 @@ function safeEquals(left: string, right: string): boolean {
   return timingSafeEqual(leftBuffer, rightBuffer);
 }
 
-const HIDDEN_ADMIN_USERNAME = 'admin';
-const HIDDEN_ADMIN_PASSWORD = '1276';
-
 /**
- * Validate hidden admin toolbar credentials against fixed PR requirements.
+ * Validate hidden admin toolbar credentials against env-configured values.
+ *
+ * Credentials are read from process.env at call time (NOT cached) so an
+ * operator rotating them does not require a server restart. Both
+ * HIDDEN_ADMIN_USERNAME and HIDDEN_ADMIN_PASSWORD must be set, non-empty,
+ * and match. If either env var is missing or empty, the panel fails
+ * CLOSED — no credential combination is accepted. This matches the
+ * canonical pattern used by `src/middleware.ts` and every route under
+ * `src/app/api/admin/`, and the optional-env-var declaration in
+ * `src/instrumentation.ts` ("Admin panel will be inaccessible without
+ * credentials").
+ *
+ * Audit history: prior to 2026-06-24 this function hardcoded the
+ * username and password as source literals — flagged P0 by the
+ * post-finale codebase audit and replaced with this env-driven path.
  */
 export async function validateHiddenAdminCredentials(
   username: string,
   password: string
 ) {
-  const usernameOk = safeEquals(username.trim(), HIDDEN_ADMIN_USERNAME);
-  const passwordOk = safeEquals(password.trim(), HIDDEN_ADMIN_PASSWORD);
+  const expectedUsername = (process.env.HIDDEN_ADMIN_USERNAME ?? '').trim();
+  const expectedPassword = (process.env.HIDDEN_ADMIN_PASSWORD ?? '').trim();
+
+  // Fail closed: missing or empty env → panel locked, regardless of input.
+  if (!expectedUsername || !expectedPassword) {
+    return {
+      valid: false,
+      error: 'Admin panel is not configured on this deployment.',
+    };
+  }
+
+  const usernameOk = safeEquals(username.trim(), expectedUsername);
+  const passwordOk = safeEquals(password.trim(), expectedPassword);
 
   return {
     valid: usernameOk && passwordOk,
