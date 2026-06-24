@@ -53,6 +53,6 @@ The core pattern across all of Phase 1: the code is built, the calls are wired, 
 
 Recommended entry order: **5 → 1 → 2 → 3 → 4 → 7**. Verify the output path is real first (item 5) so you know whether you're feeding a working pipe or a broken one. Then turn on the water (items 1-4). Then prove it end-to-end (item 7). Items 6, 8, 9, 10 can run alongside.
 
-As of 2026-06-24 post-midnight: 1 ✅, 3 ✅, 5 ✅, 6 ✅, 6b ✅ (via #266), 7 ✅, 8 ✅, 9 ✅ (via #263), 10a ✅ (via #264), 11 ✅, 12 ✅, 13 ✅ (via #269), 14 ✅, 15 ✅, 17 ✅ (via #267), 18 ✅ (via #268), 20 ✅ (via #273), 21 ✅ (via #272) done. Next Phase 1 frontier: items 10b (atlas-B). Phase 2 frontier: item 16. Phase 3 frontier: item 19 (MarkItDown PDF/doc ingestion — the only Phase-3 item left, unblocked by #268 + #272 durability floor).
+As of 2026-06-24 post-midnight: 1 ✅, 2 ✅, 3 ✅, 4 ✅, 5 ✅, 6 ✅, 6b ✅ (via #266), 7 ✅, 8 ✅, 9 ✅ (via #263), 10a ✅ (via #264), 11 ✅, 12 ✅, 13 ✅ (via #269), 14 ✅, 15 ✅, 17 ✅ (via #267), 18 ✅ (via #268), 20 ✅ (via #273), 21 ✅ (via #272) done. Next Phase 1 frontier: items 10b (atlas-B). Phase 2 frontier: item 16. Phase 3 frontier: item 19 (MarkItDown PDF/doc ingestion — the only Phase-3 item left, unblocked by #268 + #272 durability floor).
 
 Do not jump to Phase 2/3 until Phase 1 is green. The whole point of the audit was that we kept building higher floors on a basement with no foundation.
