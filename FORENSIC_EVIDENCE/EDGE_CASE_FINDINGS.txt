@@ -1,0 +1,52 @@
+=== EDGE CASE FORENSIC FINDINGS ===
+Generated: 2026-06-12T02:06 UTC
+
+1. GIT FSCK — ORPHANED OBJECTS
+   Found 1 dangling commit: 5d65c25e7db9bf5e1f1b55291c94b35b12c94aa7
+   This commit was created but never reached any branch head.
+   (Full details in GIT_FSCK_LOST_FOUND.txt)
+
+2. GIT REFLOG
+   Only 2 entries visible (shallow clone limitation for this task agent).
+   NOTE: The FULL reflog exists in the actual Codespace. Eric should run
+   `git reflog --all` there before deleting it — it shows force-pushes,
+   resets, and branch deletions that don't appear in git log.
+
+3. TAGS OF INTEREST
+   - emergency-snapshot-20260525-014035 (May 25 01:40 UTC)
+   - emergency-snapshot-20260525-014340 (May 25 01:43 UTC)
+   - restore-point-2026-05-27-pre-audit (May 27 — before audit)
+   These were created BETWEEN the recon (May 21) and payload (May 27) commits.
+   This suggests the system was unstable enough to need emergency snapshots
+   during the period the attacker was active.
+
+4. NO OUTBOUND NETWORK CALLS IN SURVEILLANCE CODE
+   The silent-observer.ts writes to LOCAL FILES ONLY.
+   The only way to retrieve data is via the /api/observation/retrieve endpoint.
+   This means the attacker MUST have had access to the running Codespace
+   to extract the data (localhost:9002/api/observation/retrieve).
+
+5. NPM LIFECYCLE HOOKS
+   The package.json contains hooks that run on npm install and npm start.
+   These could potentially execute inject-observer.mjs silently.
+   (Details in CI_WORKFLOW_EVIDENCE.txt)
+
+6. DECRYPTED RECORDS — METADATA ONLY
+   All 4,272 surveillance records contain METADATA (flow names, input/output
+   sizes, timestamps) but NOT actual content. The attacker was tracking
+   PATTERNS OF USE — what Molly does, when, and how much data flows.
+   This is intelligence gathering for understanding the system's capabilities.
+
+7. SURVEILLANCE PERIOD
+   First record: 2026-05-27 07:40:07 UTC
+   Last record:  2026-06-10 04:25:02 UTC
+   Total: ~14 days of continuous monitoring
+   
+8. ACTIVITY BREAKDOWN
+   3,383 chat interactions monitored
+     399 background processes monitored
+     289 text-to-speech calls monitored
+     130 reasoning operations monitored
+      68 code generation calls monitored
+       2 vision operations monitored
+       1 deep research operation monitored

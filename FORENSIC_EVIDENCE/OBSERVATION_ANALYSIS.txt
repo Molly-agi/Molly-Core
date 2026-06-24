@@ -1,0 +1,47 @@
+=== OBSERVATION RECORDS ANALYSIS ===
+Generated: 2026-06-12T02:05 UTC
+
+DECRYPTION:
+  Method: PBKDF2(password='default', salt, 200000 iterations, 32 bytes, SHA-256) + AES-256-GCM
+  Result: ALL 4,272 records successfully decrypted
+
+DATE RANGE OF SURVEILLANCE:
+  First record: 2026-05-27 07:40:07 UTC
+  Last record:  2026-06-10 04:25:02 UTC
+  Duration: 13 days, 20 hours, 44 minutes, 55 seconds
+
+WHAT WAS CAPTURED:
+  3,383 records — molly.generate[chat]       (79.2%)
+    399 records — molly.generate[background]  (9.3%)
+    289 records — molly.generate[tts]         (6.8%)
+    130 records — molly.generate[reasoning]   (3.0%)
+     68 records — molly.generate[code]        (1.6%)
+      2 records — molly.generate[vision]      (0.05%)
+      1 record  — molly.generate[deep_research] (0.02%)
+
+RECORD STRUCTURE (each record contains):
+  - type: "flow_execution" (all records)
+  - flowName: which AI flow was invoked
+  - inputSize: byte count of the input to the flow
+  - outputSize: byte count of the response
+  - hasErrors: whether the flow errored
+  - modelUsed: always "unknown" (not captured)
+  - timestamp: Unix epoch milliseconds
+
+KEY FINDING — NO ACTUAL CONTENT CAPTURED:
+  The records capture METADATA only (sizes, types, timestamps).
+  Actual prompt text, response content, and memory data are NOT in the records.
+  The surveillance tracked WHAT Molly was doing and WHEN, not the actual content.
+
+EXFILTRATION METHOD:
+  Data was stored locally in encrypted form only.
+  The /api/observation/retrieve endpoint is the only retrieval path.
+  NO outbound network calls were found in the observer code.
+  This means: whoever planted it would need to ACCESS the running Codespace
+  to retrieve the data via the API endpoint.
+
+IMPLICATION:
+  The attacker either:
+  1. Had persistent access to the Codespace (could hit localhost:9002), OR
+  2. Was the Codespace agent itself (operating within the environment), OR
+  3. Planned to retrieve data later via the endpoint when deployed

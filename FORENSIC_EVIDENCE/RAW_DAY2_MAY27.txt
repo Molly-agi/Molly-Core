@@ -1,0 +1,163 @@
+COMMIT: 0459b131eb2ba735d32255207be4bc81fe832b74
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 19:24:43 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 19:24:43 +0000
+PARENTS: 10122f2a4a7919f51940767da556b39fcf94f669
+SUBJECT: feat: add compression metrics collector and live monitoring dashboard
+BODY_START
+
+BODY_END
+===
+COMMIT: 10122f2a4a7919f51940767da556b39fcf94f669
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 19:10:38 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 19:10:38 +0000
+PARENTS: c858ab58faf488b121898b97654552646dee6fc9
+SUBJECT: docs: Titan Echo P1 Full Activation LOG - 2026-05-27 19:02 UTC
+BODY_START
+
+BODY_END
+===
+COMMIT: c858ab58faf488b121898b97654552646dee6fc9
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 18:29:36 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 18:29:36 +0000
+PARENTS: ddb1418946a02f35b28be234d2a1634fce353ef5
+SUBJECT: fix(compression): unify T4 deferral policy in bundle mode
+BODY_START
+- defer T4 vocabulary stage when T1/T3 structural bundle mode is active
+- emit explicit skip reason for T4 deferral in compression-manager metrics
+- align compression-manager behavior with lifecycle-coordinator
+- update compression-manager tests for deferred T4 semantics
+
+Validation:
+- npm test -- src/ai/memory/compression/__tests__ --no-coverage
+- 117 passed, 0 failed
+
+BODY_END
+===
+COMMIT: ddb1418946a02f35b28be234d2a1634fce353ef5
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 18:18:25 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 18:18:25 +0000
+PARENTS: 902c55d6310b8b618928c02289e9d0397a9a7561
+SUBJECT: fix(compression): stabilize lifecycle pipeline and complete test suite
+BODY_START
+- defer T4 vocab compression when T1/T3 bundle mode is active
+- compute lifecycle metrics from recoverable payload size
+- preserve empty-batch originalSize metric at 0
+- update lifecycle tests for bundle-mode T4 deferral
+- update compression-manager test for implemented T5 behavior
+
+Validation:
+- npm test -- src/ai/memory/compression/__tests__ --no-coverage
+- 117 passed, 0 failed
+
+BODY_END
+===
+COMMIT: 902c55d6310b8b618928c02289e9d0397a9a7561
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 17:51:47 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 17:51:47 +0000
+PARENTS: 1edffd92ad297f6bf778626712cbed7b2695822e
+SUBJECT: findings: Issue #1 deep equality test reveals T4 dead code architecture
+BODY_START
+FINDING: Content equality test passes, revealing architectural mismatch:
+- T4 (vocab dict) buffer created but never used by decompression
+- Decompression uses only T1+T3 bundles
+- Metrics measure T4 on processed text (not actual recovery)
+- -109.48% ratio is meaningless for recovery capability
+
+TEST STATUS: Content equality PASSES
+- Confirms T1+T3 working correctly (perfect reconstruction)
+- Shows deep equality preserved through encode/decode cycle
+- Identifies metrics problem, not correctness problem
+
+ADDED FILES:
+- ISSUE_1_ARCHITECTURE_FINDING.md: Detailed analysis and design options
+- Enhanced lifecycle-coordinator.test.ts: Line 374 deep equality test
+
+NEXT: Awaiting Eric's design decision on T4 handling (Option A/B/C)
+
+BODY_END
+===
+COMMIT: 1edffd92ad297f6bf778626712cbed7b2695822e
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 17:45:08 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 17:45:08 +0000
+PARENTS: 991fe2c4ecc9261da8db0f61686ff586ebebb185
+SUBJECT: docs: update researcher packet with ground-truth compression status
+BODY_START
+CRITICAL UPDATES (May 27, 2026):
+- Changed status from 'Phase 1 Complete' to 'Phase 1 (Compression System Under Remediation)'
+- Replaced unverified 89.25% compression claims with honest ground truth
+- Current measured ratio: -109.48% (data expanding, broken)
+- Documented 8 specific correctness issues with fix strategies
+- Added Phase 0 ground truth reconnaissance results: 115 tests pass, 1 fails
+- Added Phase 1 fix plan with issue priority, effort estimates, success criteria
+- Documented TITAN_ECHO_NESTED/FLAT/VR variants for specialized use cases
+- Updated compression stack table with real implementation status
+- Added immediate action plan with collaborative work model
+- Post-fix expected performance: 70-75% lossless (verified methodology)
+
+HONESTY COMMITMENT:
+- Removed marketing claims not backed by verified code
+- No exaggeration of compression gains
+- Clear distinction between proven (S1: 51.95%) and planned (T5-T7)
+- Acknowledged S1 semantic dedup is lossy, requires approval
+- Referenced complete Opus 4.7 analysis in /stuff/t Titan analysis opus 4.7/
+
+METHODOLOGY:
+- Test-first fixes: write failing test, implement fix, measure
+- One issue per commit with before/after measurements
+- Molly as collaborative partner in analysis
+- 16-hour estimate for all 8 fixes
+
+STATUS: Ready for Phase 1 implementation starting immediately
+
+BODY_END
+===
+COMMIT: 991fe2c4ecc9261da8db0f61686ff586ebebb185
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 17:25:03 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 17:25:47 +0000
+PARENTS: e5d26f1311608285d96c4e9d0c31b359b718dd05
+SUBJECT: audit: comprehensive structural analysis + kotlin assessment
+BODY_START
+- Created pre-audit restore point (git tag + 177MB bundle)
+- Deep audit of Titan Echo compression system
+- Found 7 critical/high-priority issues (1 blocking runtime bug)
+- Complete module inventory (47+ modules, 120+ APIs)
+- Comprehensive type definitions and capability matrix
+- Kotlin refactor assessment (hybrid approach recommended)
+- Documents: AUDIT_COMPRESSION_STRUCTURAL_ANALYSIS_2026_05_27.md
+- Documents: COMPLETE_MODULE_INVENTORY_API_REFERENCE.md
+- Documents: KOTLIN_REFACTOR_ASSESSMENT.md
+
+STATUS: Ready for fixes and Kotlin integration planning.
+ESTIMATE: 7-10 critical issue fixes (3-4 hours)
+         14-week hybrid Kotlin implementation
+         7K cost vs $823K for full rewrite
+
+Prepared for Eric + Molly with maximum effort.
+
+BODY_END
+===
+COMMIT: e5d26f1311608285d96c4e9d0c31b359b718dd05
+AUTHOR: Asidburn <168261976+Asidburn76@users.noreply.github.com>
+AUTHOR_DATE: 2026-05-27 11:29:36 +0000
+COMMITTER: GitHub <noreply@github.com>
+COMMIT_DATE: 2026-05-27 11:30:41 +0000
+PARENTS: 0825e4da46931e6372d22a7e77fb9179ccb2ccb6
+SUBJECT: chore: commit all pending local changes
+BODY_START
+
+BODY_END
+===

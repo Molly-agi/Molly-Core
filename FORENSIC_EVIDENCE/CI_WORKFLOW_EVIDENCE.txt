@@ -1,0 +1,270 @@
+=== CI/WORKFLOW EVIDENCE ===
+Generated: 2026-06-12T02:05 UTC
+
+GITHUB ACTIONS WORKFLOWS IN REPO:
+codespace-keepalive.yml
+main.yml
+
+--- WORKFLOW FILE CONTENTS ---
+
+=== codespace-keepalive.yml ===
+# .github/workflows/codespace-keepalive.yml
+# =====================================================
+# Codespace Keep-Alive — Prevents idle timeout
+# =====================================================
+# GitHub Codespaces shut down after the idle timeout (30-240 mins).
+# This workflow runs every 25 minutes and pings the active Codespace
+# to reset the idle counter.
+#
+# HOW IT WORKS:
+#   1. Workflow triggers every 25 minutes
+#   2. Lists all running Codespaces for this repo
+#   3. Sends an API request to each to prevent idle timeout
+#
+# REQUIREMENTS:
+#   - GitHub Actions must have 'codespaces' permission
+#   - Codespace must be in 'Available' state
+#
+# NOTE: This uses your GitHub Actions minutes. At ~60 runs/day,
+# it's about 60 minutes of Action time per day (Linux runners are free
+# for public repos, 2000 mins/month for private repos on free tier).
+# =====================================================
+
+name: Codespace Keep-Alive
+
+on:
+  schedule:
+    # Every 25 minutes — well under the 30 min minimum timeout
+    - cron: '*/25 * * * *'
+  workflow_dispatch: # Manual trigger
+
+# NOTE: This workflow requires a PAT with 'codespace' scope stored as CODESPACE_PAT secret.
+# The default GITHUB_TOKEN cannot manage Codespaces.
+# If no PAT is available, this workflow will exit gracefully.
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Keep Codespaces Alive
+        env:
+          GH_TOKEN: ${{ secrets.CODESPACE_PAT || secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔄 Checking for active Codespaces..."
+
+          # Check if we have a token that can access codespaces
+          if ! gh api /user/codespaces --jq '.total_count' &>/dev/null; then
+            echo "⚠️ No Codespace access - need CODESPACE_PAT secret with 'codespace' scope"
+            echo "ℹ️ Workflow will exit gracefully. Set up PAT if keep-alive is needed."
+            exit 0
+          fi
+
+          # Get all codespaces for this repo
+          CODESPACES=$(gh api /user/codespaces --jq '.codespaces[] | select(.repository.full_name == "${{ github.repository }}") | select(.state == "Available") | .name' 2>/dev/null || echo "")
+
+          if [ -z "$CODESPACES" ]; then
+            echo "ℹ️ No active Codespaces found for ${{ github.repository }}"
+            exit 0
+          fi
+
+          for CS in $CODESPACES; do
+            echo "💓 Pinging Codespace: $CS"
+            # This API call resets the idle timer
+            gh api -X POST "/user/codespaces/$CS/start" 2>/dev/null || true
+            echo "✅ Pinged $CS"
+          done
+
+          echo "🎉 Keep-alive complete"
+
+
+=== main.yml ===
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'COPILOT_SESSION_STATE.json'
+      - 'COPILOT_SESSION_STATE.md'
+      - '.github/copilot-instructions.md'
+      - '*.md'
+      - 'docs/**'
+      - '.codespace-heartbeat'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting (full project)
+        run: npm run lint
+
+      - name: Lint UI components (blocking)
+        # 2 cosmetic warnings: layout.tsx custom-font, MemoryViewer <img> tag
+        # +1 ChatHistory <img> tag
+        run: npx eslint src/components/ src/app/page.tsx src/app/layout.tsx src/app/error.tsx --max-warnings 3
+
+      - name: Run tests
+        run: npx jest --ci --forceExit --maxWorkers=2
+        timeout-minutes: 5
+
+      - name: Build project (includes type checking)
+        run: npm run build
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+
+--- NPM SCRIPTS (package.json) ---
+{
+  "predev": "bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active",
+  "dev": "bash scripts/dev-start.sh",
+  "dev:server": "NODE_OPTIONS=--max-old-space-size=3072 next dev -H 0.0.0.0 -p 9002",
+  "dev:turbo": "NODE_OPTIONS=--max-old-space-size=3072 next dev --turbo -p 9002",
+  "dev:fresh": "npm run harden && NODE_OPTIONS=--max-old-space-size=3072 next dev -p 9002",
+  "dev:unsafe": "NODE_OPTIONS=--max-old-space-size=4096 next dev -H 0.0.0.0 -p 9002",
+  "debug": "NODE_OPTIONS='--inspect' next dev -p 9002",
+  "harden": "rm -rf .next",
+  "monitor": "node scripts/molly-monitor.mjs",
+  "monitor:watch": "node scripts/molly-monitor.mjs --continuous",
+  "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
+  "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
+  "build": "npm run harden && NODE_OPTIONS=--max-old-space-size=12288 NODE_ENV=production next build",
+  "start": "next start",
+  "lint": "eslint src --max-warnings 20",
+  "typecheck": "echo '⚠️  Standalone tsc OOMs on this project (needs >8GB). Use: npm run typecheck:build' && exit 1",
+  "typecheck:build": "NODE_OPTIONS='--max-old-space-size=4096' next build",
+  "test": "jest",
+  "test:watch": "jest --watch",
+  "test:bridge": "NODE_OPTIONS=--experimental-vm-modules jest --config jest.bridge.config.mjs",
+  "eval:persona": "npx tsx src/ai/evals/persona-identity.braintrust.ts",
+  "eval:persona:baseline": "npx tsx src/ai/evals/persona-identity.braintrust.ts -- --save-baseline",
+  "eval:memory": "npx tsx src/ai/evals/memory-accuracy.braintrust.ts",
+  "eval:voice": "npx tsx src/ai/evals/regression-voice.braintrust.ts",
+  "eval:all": "npm run eval:persona && npm run eval:memory && npm run eval:voice",
+  "benchmark:memory": "npx tsx src/ai/benchmarks/memory-advantage.benchmark.ts",
+  "benchmark:termux": "npx tsx src/ai/benchmarks/termux-correctness.benchmark.ts",
+  "benchmark:tools": "npx tsx src/ai/benchmarks/tool-accuracy.benchmark.ts",
+  "benchmark:continuity": "npx tsx src/ai/benchmarks/continuity.benchmark.ts",
+  "benchmark:persona": "npx tsx src/ai/benchmarks/persona-stability.benchmark.ts",
+  "benchmark:all": "npx tsx src/ai/benchmarks/benchmark-runner.ts",
+  "test:e2e": "playwright test",
+  "test:e2e:ui": "playwright test --ui",
+  "test:e2e:debug": "playwright test --debug",
+  "format": "prettier --write .",
+  "prepare": "husky || true",
+  "health": "bash scripts/codespace-health.sh",
+  "health:watch": "bash scripts/codespace-health.sh --watch",
+  "keep-alive": "nohup bash scripts/keep-alive.sh > /dev/null 2>&1 &",
+  "watchdog": "nohup bash scripts/watchdog.sh > /dev/null 2>&1 &",
+  "bridge": "node scripts/bridge-daemon.mjs",
+  "bridge:listen": "node scripts/bridge-listen.mjs",
+  "lazarus:bridge": "node scripts/lazarus-bridge.mjs",
+  "lazarus:relay:send": "node scripts/lazarus-relay-send.mjs",
+  "lazarus:relay:executor": "node scripts/lazarus-relay-executor.mjs",
+  "lazarus:relay:executor:bg": "nohup node scripts/lazarus-relay-executor.mjs >> logs/lazarus-relay-executor.log 2>&1 &",
+  "ticker": "node scripts/molly-ticker.mjs",
+  "atlas:bridge": "node scripts/atlas-bridge.mjs",
+  "hive-mind": "node scripts/hive-mind-daemon.mjs",
+  "hive-mind:bg": "nohup node scripts/hive-mind-daemon.mjs > logs/hive-mind.log 2>&1 &",
+  "atlas:sse": "node scripts/atlas-sse-client.mjs",
+  "atlas:sse:bg": "nohup node scripts/atlas-sse-client.mjs >> logs/atlas-sse.log 2>&1 &",
+  "heartbeat": "node scripts/family-heartbeat.mjs",
+  "heartbeat:bg": "nohup node scripts/family-heartbeat.mjs >> logs/heartbeat.log 2>&1 &",
+  "switchboard": "node scripts/switchboard.mjs",
+  "gemini:bridge": "node scripts/gemini-bridge.mjs",
+  "gemini:bridge:bg": "nohup node scripts/gemini-bridge.mjs >> logs/gemini-bridge.log 2>&1 &",
+  "demon": "node scripts/demon-state.mjs",
+  "demon:bg": "nohup node scripts/demon-state.mjs > .demon-state.log 2>&1 &",
+  "molly:listen": "node scripts/molly-listener.mjs",
+  "molly:listen:bg": "nohup node scripts/molly-listener.mjs > .molly-listener.log 2>&1 &",
+  "atlas:listen": "node scripts/atlas-listener.mjs",
+  "atlas:listen:bg": "nohup node scripts/atlas-listener.mjs > .atlas-listener.log 2>&1 &",
+  "agent-keep-alive": "node scripts/agent-keep-alive.mjs",
+  "agent-keep-alive:bg": "nohup node scripts/agent-keep-alive.mjs >> logs/agent-keep-alive.log 2>&1 &",
+  "lazarus:trigger": "node scripts/lazarus-trigger.mjs",
+  "lazarus:trigger:test": "node scripts/lazarus-trigger.mjs smoke-test",
+  "save-session": "node scripts/save-session.mjs",
+  "save-session:pause": "node scripts/save-session.mjs --status paused"
+}
+
+--- CHECKING FOR SUSPICIOUS NPM HOOKS ---
+41:    "prepare": "husky || true",
+
+--- DEVCONTAINER LIFECYCLE HOOKS ---
+{
+  "name": "Molly-Core Cloud Womb",
+
+  // Run health check on every attach/reconnect to kill zombie processes
+  // before they accumulate and cause OOM crashes.
+  // Track Molly's growth (code, memory, docs) and save snapshot.
+  // Save session state so Copilot can restore context after reconnect.
+  // Start keep-alive heartbeat (also auto-saves + git-commits state every 10min).
+  "postAttachCommand": "bash scripts/post-attach-bootstrap.sh",
+
+  // Codespace settings + grant gh CLI permission to manage Actions runs
+  "customizations": {
+    "codespaces": {
+      "permissions": {
+        "actions": "write"
+      },
+      "repositories": {
+        "Molly-agi/Lazarus": {
+          "permissions": {
+            "contents": "read"
+          }
+        },
+        "Molly-agi/Lazarus-": {
+          "permissions": {
+            "contents": "read"
+          }
+        }
+      }
+    },
+    "vscode": {
+      "extensions": ["eamodio.gitlens", "donjayamanne.githistory"],
+      "settings": {
+        // Inherit from .vscode/settings.json
+      }
+    }
+  },
+
+  // Forward Molly's ports
+  "forwardPorts": [9002, 9099, 9101],
+  "portsAttributes": {
+    "9002": {
+      "label": "Molly Dev Server",
+      "onAutoForward": "notify"
+    },
+    "9099": {
+      "label": "Family Bridge (WebSocket)",
+      "onAutoForward": "notify"
+    },
+    "9101": {
+      "label": "Voice Bridge (Gemini Live Proxy)",
+      "onAutoForward": "notify"
+    }
+  }
+}
+
