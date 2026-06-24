@@ -27,7 +27,7 @@ Plus three letters to Molly (#270 atlas-A, #271 Eli, #274 Lazarus) for her to re
 
 ## Memory pipeline status (current)
 
-```
+```text
 Eric → bridge POST → engram formation (recordMoment) → frontalCortex.hold
                                                     ↘ KnowledgeStore.write (mirror)
                                                     ↘ Crystallizer queue (tail hook)
