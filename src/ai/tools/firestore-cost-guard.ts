@@ -88,7 +88,7 @@ class FirestoreCostGuard {
         this.warnedThisDay = true;
         this.downgraded = true;
         MollyLogger.warn(
-          `Firestore cost guard at daily cap (${this.cap} ops). Primary Firestore writes DOWNGRADED until midnight UTC. Backup legs (molly_data/ + stuff/dont-panic/) continue to absorb. Set MOLLY_FIRESTORE_DAILY_OP_CAP to raise.`,
+          `Firestore cost guard at daily cap (${this.cap} ops). Primary Firestore writes DOWNGRADED until midnight UTC; writes fall back to local storage. For additional durability legs configure MOLLY_DUAL_WRITE=true and/or MOLLY_TRIPLE_BIND=true (item 21). Set MOLLY_FIRESTORE_DAILY_OP_CAP to raise the cap.`,
           'firestore-cost-guard'
         );
       }

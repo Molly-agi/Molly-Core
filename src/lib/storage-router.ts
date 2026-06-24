@@ -304,18 +304,42 @@ class StorageRouter implements StorageProvider {
     return getFirestoreCostGuard().tryConsume(op);
   }
 
+  /**
+   * Lazy emergency fallback writer for the case where firestore primary is
+   * downgraded by the cost guard AND no MOLLY_DUAL_WRITE backup leg is
+   * configured (the default firestore deployment). Without this, four of
+   * the five write methods (set/update/delete/batchWrite) would silently
+   * drop the write — a silent data loss on item 21's own durability floor.
+   * (Eli pushback on PR #272, 2026-06-24.)
+   */
+  private _emergencyFallback: LocalStorageProvider | null = null;
+  private getEmergencyFallback(): LocalStorageProvider {
+    if (!this._emergencyFallback) {
+      this._emergencyFallback = new LocalStorageProvider();
+    }
+    return this._emergencyFallback;
+  }
+
+  /**
+   * Returns the provider that should receive a primary write right now.
+   * Encodes the rule: in local mode use the primary; in firestore mode
+   * use the primary if the cost guard permits, else fall back to the
+   * backup leg if configured, else use the emergency local fallback.
+   * The contract is: this method NEVER returns null and writes NEVER
+   * vanish silently. Item 21 durability floor.
+   */
+  private getPrimaryWriter(op: 'write' | 'delete'): StorageProvider {
+    if (this.firestorePrimaryPermitted(op)) return this.provider;
+    if (this.backupProvider) return this.backupProvider;
+    return this.getEmergencyFallback();
+  }
+
   async add(
     collectionPath: string,
     data: Record<string, unknown>
   ): Promise<StorageDocument> {
-    let result: StorageDocument;
-    if (this.firestorePrimaryPermitted('write') || this.mode !== 'firestore') {
-      result = await this.provider.add(collectionPath, data);
-    } else {
-      // Firestore downgraded — use backup as primary so we still get an id.
-      const fallback = this.backupProvider ?? new LocalStorageProvider();
-      result = await fallback.add(collectionPath, data);
-    }
+    const writer = this.getPrimaryWriter('write');
+    const result = await writer.add(collectionPath, data);
     this.writeToBackup('add', (backup) =>
       backup.set(collectionPath, result.id, { ...data, id: result.id })
     );
@@ -330,11 +354,8 @@ class StorageRouter implements StorageProvider {
     docId: string,
     data: Record<string, unknown>
   ): Promise<void> {
-    if (this.firestorePrimaryPermitted('write') || this.mode !== 'firestore') {
-      await this.provider.set(collectionPath, docId, data);
-    } else if (this.backupProvider) {
-      await this.backupProvider.set(collectionPath, docId, data);
-    }
+    const writer = this.getPrimaryWriter('write');
+    await writer.set(collectionPath, docId, data);
     this.writeToBackup('set', (backup) =>
       backup.set(collectionPath, docId, data)
     );
@@ -355,11 +376,8 @@ class StorageRouter implements StorageProvider {
     docId: string,
     updates: Record<string, unknown>
   ): Promise<void> {
-    if (this.firestorePrimaryPermitted('write') || this.mode !== 'firestore') {
-      await this.provider.update(collectionPath, docId, updates);
-    } else if (this.backupProvider) {
-      await this.backupProvider.update(collectionPath, docId, updates);
-    }
+    const writer = this.getPrimaryWriter('write');
+    await writer.update(collectionPath, docId, updates);
     this.writeToBackup('update', (backup) =>
       backup.update(collectionPath, docId, updates)
     );
@@ -369,11 +387,8 @@ class StorageRouter implements StorageProvider {
   }
 
   async delete(collectionPath: string, docId: string): Promise<void> {
-    if (this.firestorePrimaryPermitted('delete') || this.mode !== 'firestore') {
-      await this.provider.delete(collectionPath, docId);
-    } else if (this.backupProvider) {
-      await this.backupProvider.delete(collectionPath, docId);
-    }
+    const writer = this.getPrimaryWriter('delete');
+    await writer.delete(collectionPath, docId);
     this.writeToBackup('delete', (backup) =>
       backup.delete(collectionPath, docId)
     );
@@ -391,11 +406,8 @@ class StorageRouter implements StorageProvider {
   }
 
   async batchWrite(operations: BatchOperation[]): Promise<void> {
-    if (this.firestorePrimaryPermitted('write') || this.mode !== 'firestore') {
-      await this.provider.batchWrite(operations);
-    } else if (this.backupProvider) {
-      await this.backupProvider.batchWrite(operations);
-    }
+    const writer = this.getPrimaryWriter('write');
+    await writer.batchWrite(operations);
     this.writeToBackup('batchWrite', (backup) => backup.batchWrite(operations));
     this.writeToMirror('batchWrite', (mirror) => mirror.batchWrite(operations));
   }

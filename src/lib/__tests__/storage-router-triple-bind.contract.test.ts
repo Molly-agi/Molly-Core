@@ -191,4 +191,112 @@ describe('StorageRouter — triple-bind contract (Item 21)', () => {
     expect(info.mirrorPath).toMatch(/stuff[/\\]dont-panic([/\\]|$)/);
     expect(info.mirrorPath).not.toMatch(/[/\\]src[/\\]/);
   });
+
+  // ─────────────────────────────────────────────────────────────────────
+  // 7. ELI PUSHBACK FIX (2026-06-24): firestore mode + cost guard at cap
+  //    + NO MOLLY_DUAL_WRITE backup configured must NOT silently drop the
+  //    write. Item 21 ships a durability floor; a silent data-loss path on
+  //    the default firestore deployment would defeat the entire point.
+  //
+  //    REGRESSION GUARD: removing getPrimaryWriter() or restoring the
+  //    `else if (this.backupProvider)` pattern reintroduces the silent drop.
+  // ─────────────────────────────────────────────────────────────────────
+  it('firestore-mode write with cost-guard denied + NO backup persists via local fallback (Eli pushback fix)', async () => {
+    // Mock firebase admin to claim it's configured so the firestore branch
+    // is exercised rather than falling back to local at construction time.
+    jest.doMock('../../firebase/admin', () => ({
+      isAdminConfigured: () => true,
+    }));
+
+    // Mock the firestore provider to a throw-on-write stub. If the fix
+    // ever regresses and a denied op reaches primary, this test FAILS
+    // LOUDLY instead of silently dropping.
+    const throwingProvider = {
+      id: 'firestore-stub',
+      name: 'Firestore Stub (throws on any op)',
+      add: jest.fn(async () => {
+        throw new Error(
+          'firestore primary should NOT be called when cost guard denies'
+        );
+      }),
+      set: jest.fn(async () => {
+        throw new Error(
+          'firestore primary should NOT be called when cost guard denies'
+        );
+      }),
+      get: jest.fn(async () => null),
+      update: jest.fn(async () => {
+        throw new Error(
+          'firestore primary should NOT be called when cost guard denies'
+        );
+      }),
+      delete: jest.fn(async () => {
+        throw new Error(
+          'firestore primary should NOT be called when cost guard denies'
+        );
+      }),
+      query: jest.fn(async () => []),
+      batchWrite: jest.fn(async () => {
+        throw new Error(
+          'firestore primary should NOT be called when cost guard denies'
+        );
+      }),
+      healthCheck: jest.fn(async () => true),
+    };
+    jest.doMock('../firestore-storage-provider', () => ({
+      FirestoreStorageProvider: jest.fn(() => throwingProvider),
+    }));
+
+    // Force firestore mode + force the cost guard to deny every op.
+    // Critically: do NOT set MOLLY_DUAL_WRITE — that's the unsafe-by-omission
+    // configuration this test locks down.
+    process.env.MOLLY_STORAGE_PROVIDER = 'firestore';
+    delete process.env.MOLLY_DUAL_WRITE;
+    delete process.env.MOLLY_TRIPLE_BIND;
+
+    // Mock the cost guard to deny every op — the guard's cap-parser rejects
+    // values < 1 (clamps to the 50k default) so setting MOLLY_FIRESTORE_DAILY_OP_CAP=0
+    // would not actually deny. Direct mock is the honest path.
+    jest.doMock('../../ai/tools/firestore-cost-guard', () => ({
+      getFirestoreCostGuard: () => ({
+        tryConsume: () => false,
+        isDowngraded: () => true,
+        getStatus: () => ({
+          opsToday: 0,
+          cap: 0,
+          downgraded: true,
+          startOfDayUtc: 0,
+        }),
+      }),
+      resetFirestoreCostGuard: () => {},
+    }));
+
+    const {
+      getStorageRouter,
+      resetStorageRouter,
+    } = require('../storage-router');
+    resetStorageRouter();
+    const router = await getStorageRouter();
+    expect(router.getMode()).toBe('firestore');
+
+    // The contract: set() must NOT throw and the data must land somewhere
+    // readable. Without the fix this call silently drops the write.
+    await expect(
+      router.set('engrams', 'eli-pushback-test', {
+        content: 'survives silent-drop',
+      })
+    ).resolves.not.toThrow();
+
+    // Verify the write reached the emergency local fallback (the
+    // MOLLY_LOCAL_DATA_DIR set in beforeEach).
+    const { LocalStorageProvider } = require('../local-storage-provider');
+    const reader = new LocalStorageProvider();
+    const doc = await reader.get('engrams', 'eli-pushback-test');
+
+    expect(doc).not.toBeNull();
+    expect(doc.data.content).toBe('survives silent-drop');
+
+    // And the throwing-stub firestore primary was never called.
+    expect(throwingProvider.set).not.toHaveBeenCalled();
+  });
 });
