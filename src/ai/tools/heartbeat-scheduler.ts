@@ -33,6 +33,7 @@ import { getConsciousness } from '@/ai/consciousness';
 import { getPromiseTracker } from '@/ai/consciousness/promise-tracker';
 import { getCircuitBreaker, CircuitState } from '@/ai/tools/circuit-breaker';
 import { getRateLimiter } from '@/ai/tools/rate-limiter';
+import { triggerHook } from '@/ai/hooks';
 import { getMollyShell, getPolyglotRuntime } from '@/ai/terminal';
 import { getStatePersistence } from '@/ai/persistence';
 import { getAutonomousScheduler } from '@/ai/tools/autonomous-scheduler';
@@ -478,6 +479,20 @@ export class HeartbeatScheduler {
         traceId,
       }
     );
+
+    // Item 10b: fire HeartbeatCycle hook so the src/ai/hooks/* production
+    // handler (registered in item 10a / PR #264) actually runs each cycle.
+    // Fire-and-forget; handler failures must not poison the cycle.
+    triggerHook('HeartbeatCycle', {
+      cycleNumber: this.cycleCount,
+      traceId,
+      cycleStart,
+    }).catch((err) => {
+      MollyLogger.warn(
+        `triggerHook(HeartbeatCycle) failed: ${err instanceof Error ? err.message : String(err)}`,
+        'heartbeat-scheduler'
+      );
+    });
 
     // Check system pressure before running tasks
     const pressure = await this.checkSystemPressure();
