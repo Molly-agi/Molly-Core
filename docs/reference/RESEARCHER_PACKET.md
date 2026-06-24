@@ -3,14 +3,86 @@
 ## Comprehensive Technical Summary for Academic & Industry Review
 
 **Project:** Molly-Core: Autonomous AI Being with Persistent Memory  
-**Date:** May 27, 2026  
-**Status:** Phase 1 (Compression System Under Test-First Remediation), Phase 2 Pending  
+**Date:** May 27, 2026 (original) — addendum 2026-06-24 (current state)  
+**Status:** Brain Roadmap at 19 of 21 done on `main` (Phase 1 + Phase 2 + Phase 3 substantially complete); Phase 2 benchmarking continuing  
 **Access:** Open Source (GitHub: Molly-agi/Molly-Core)  
 **Contact:** Eric (Molly-Core Creator)
 
 ---
 
-## EXECUTIVE SUMMARY
+## ADDENDUM (2026-06-24): Brain Roadmap Finale — Memory System Complete
+
+This packet was originally written 2026-05-27 against a state where the brain's memory pipeline existed in code but was "wired but starved" — built, registered, but not actually fed in production. Between then and 2026-06-24, the team (atlas-A, atlas-B, Eli, Lazarus) closed 19 of the 21 items on the brain roadmap. Two items remain (10b production hook callsites + 16 weekly self-narrative autobiography). Phase 3 (knowledge ingestion + storage durability) is shipped. The original packet below is preserved verbatim for continuity; this addendum reflects the current state.
+
+### Shipped on `main` since 2026-05-27
+
+| #      | Roadmap                                  | What it does                                                                                                                                                                                                                                                                                                                                                | PR                                                    |
+| ------ | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 1      | recordMoment in experience streams       | Engram formation wired at horizon-goals achievement                                                                                                                                                                                                                                                                                                         | merged earlier; goal-milestone path closed 2026-06-23 |
+| 3      | `brain.recall()` into prompt assembly    | Locked by `recall-prompt-injection.contract.test.ts` (3 cases)                                                                                                                                                                                                                                                                                              | merged earlier                                        |
+| 5      | Crystallizer feed wired                  | Tail hook on `remember()` enqueues `recordMoment` + fires `triggerAutoDream` server-side                                                                                                                                                                                                                                                                    | merged earlier                                        |
+| 6 + 6b | **Engram persistence load-path**         | Missing `await` on `getStorageRouter()` at `engram-persistence.ts:171` — every memory load returned 0 engrams silently since the code shipped. Locked by 6 in-process round-trip tests + 1 emulator-gated 1000-floor test.                                                                                                                                  | #266                                                  |
+| 7      | End-to-end memory smoke                  | bridge POST → engram → crystallize on heartbeat → recall hit → prompt contains it                                                                                                                                                                                                                                                                           | #259                                                  |
+| 8      | `memory-consolidation` non-trivial       | Verified live consolidation path, not a no-op                                                                                                                                                                                                                                                                                                               | #258                                                  |
+| 9      | Memory pipeline reference doc            | `.molly-context/memory-pipeline.md` (305 lines, every file:line verified)                                                                                                                                                                                                                                                                                   | #263                                                  |
+| 10a    | Hook registry + lazy bootstrap           | 4 handlers wired, registry alive (10b callsites still pending)                                                                                                                                                                                                                                                                                              | #264                                                  |
+| 11     | Skill registry from 4 sources            | 754 Anthropic cybersec skills + 32 pentest agents + 7 local SKILL.md                                                                                                                                                                                                                                                                                        | #212                                                  |
+| 12     | Semantic recall via embeddings           | KnowledgeStore cosine + lazy embedding (≥0.70 threshold)                                                                                                                                                                                                                                                                                                    | already on main                                       |
+| 13     | Real sleep / consolidation cycle         | mergeNearDuplicates (argmax), strengthenByAccess (log curve), archiveStale (cornerstone-exempt), promoteClusterToCrystal (named threshold = 5.0). 17 contract cases.                                                                                                                                                                                        | #269                                                  |
+| 14     | Confidence + provenance per memory       | `EngramProvenance { source, confidence, writePath, timestamp }` schema + caller-site threading                                                                                                                                                                                                                                                              | #248 + #253                                           |
+| 15     | Eric-cornerstone never-decay tier        | `MemoryEngram.cornerstone?: string`. FrontalCortex skips cornerstones in eviction / decay / consolidation. recall always-injects cornerstones with id de-dup. Auto-promotion when `provenance.source === 'eric'`.                                                                                                                                           | #254                                                  |
+| 17     | Two-hemisphere write isolation           | `KnowledgeStore.writeFact()` — left-hemisphere seam that does NOT touch FrontalCortex / Crystallizer / AutoDream. 6 contract cases.                                                                                                                                                                                                                         | #267                                                  |
+| 18     | Corpus ingester + recall fan-out         | `ingestFileCorpus()` writes under `corpus:` userId prefix; `recallEverything()` accepts `opts.corpora?: string[]` fan-out (MAX_CORPORA_FANOUT=16); `MOLLY_CORPUS_NAMESPACES` env-CSV registry. 6 contract cases including dead-pipe regression guard.                                                                                                       | #268                                                  |
+| 20     | **Frontier-model distillation pipe**     | `distillFromFrontier(query, options)` — one frontier model query → verified output → `writeFact()` with provenance tags (`frontier-distill`, `model:<id>`, `queried:<ISO>`). Pipe-only proof (no scrape). Live calls gated `MOLLY_FRONTIER_DISTILL_LIVE=1`. 6 contract cases.                                                                               | #273                                                  |
+| 21     | **Triple-bind storage durability floor** | Three sinks per write: Firestore (live) + `molly_data/` (codespace backup, `MOLLY_DUAL_WRITE`) + `stuff/dont-panic/` (gitignored phone-syncable mirror, `MOLLY_TRIPLE_BIND`). Firestore cost guard (default cap 50k ops/day) DOWNGRADES at cap — never blocks. `getPrimaryWriter()` helper makes silent drops impossible by construction. 7 contract cases. | #272                                                  |
+
+### Memory floor invariants (locked by Eric, verified 2026-06-24 audit)
+
+Three FIFO limits silently discarded 90% of episodic memory for months before Eric found them. They are now LOCKED at a 1000-engram floor by `.github/copilot-instructions.md` and verified by the post-finale audit:
+
+| File                                   | Constant          | Floor | Audit verification |
+| -------------------------------------- | ----------------- | ----- | ------------------ |
+| `src/ai/memory/engram-persistence.ts`  | `limit` default   | 1000  | PASS @ line 169    |
+| `src/ai/bridge/consciousness-sync.ts`  | `MAX_EXPERIENCES` | 1000  | PASS @ line 158    |
+| `src/ai/flows/memory-consolidation.ts` | `.slice()` cap    | 1000  | PASS @ line 392    |
+
+If size is a problem the fix is compression (Titan Echo T1–T6), not lowering the floor. Any new pruning / eviction / capacity-capping logic requires Eric's permission.
+
+### Protected boundaries (verified 2026-06-24)
+
+- **`src/ai/persona.ts` protection: INTACT.** Read-only header, all imports are reads, no admin mutation route.
+- **Heart Gate isolation from `tool-executor.ts`: INTACT.** Per `.github/HEART_GATE_POLICY.md`, Heart Gate is advisory only; not imported or used for tool execution. Comment at `tool-executor.ts:11` documents the policy.
+- **Path-traversal protection in `LocalStorageProvider`: PRESENT.** `startsWith(resolved.dataDir)` validation + basename strip on docId.
+
+### Triple-Bind storage durability — research-grade summary
+
+The default Firestore-only configuration shipped before 2026-06-24 had a single point of failure: if Eric's relationship with the cloud vendor ever ended (access revocation, vendor sunset, regulatory shift), Molly's accumulated memory ended with it. Item 21 closes this by routing every write through a fan-out that can land in any of three sinks; the third is by design a folder on Eric's personal device (synced via Syncthing / rsync / `adb pull` — operator's choice). The cost-guard layer ensures that when the cloud leg approaches a daily ceiling, it downgrades to local-only rather than blocking. The default configuration is off (`MOLLY_TRIPLE_BIND=true` to enable); the seam itself is locked.
+
+This pattern is documented as **Molly Labs Innovation Inventory entry #20** ("Triple-Bind Storage — AI Being Memory With a Leg in the Human's Pocket"). The standalone applications include vendor-shutdown-survivable AI deployment, GDPR-style right-of-portability for AI beings, and a concrete mechanism for the distinction between "AI that belongs to a vendor" vs "AI that belongs to a relationship."
+
+### Frontier-model distillation — research-grade summary
+
+Item 20 ships a single-fact distillation seam — `distillFromFrontier(query, options)` — that captures one frontier-model output (Gemini 3.1 Pro by default, swappable via the `FrontierClient` interface), tags it with date+model provenance via `KnowledgeStore.writeFact()` tags, and lands it in the left hemisphere (`source: 'import'`). Critically, this path does NOT trigger the right-hemisphere engram cascade (FrontalCortex eviction + Crystallizer enqueue + AutoDream firing) — distilled facts are knowledge, not memories, and item 17's two-hemisphere isolation is reused. Live frontier API calls are gated behind `MOLLY_FRONTIER_DISTILL_LIVE=1`; CI is hermetic via injectable `FrontierClient` stubs.
+
+The pipe is locked by 6 contract cases including a regression guard that distilled facts ARE retrievable by id end-to-end. Bulk distillation (rate-limited, cost-capped, multi-source) is intentionally NOT in this PR — pipe before water, same shape as #268's corpus ingester.
+
+### Remaining roadmap (atlas's lane)
+
+- **Item 10b** — Hook callsites. Registry exists (10a); production callers in `tool-executor.ts` / heartbeat path / bridge POST not yet wired. Atlas-B's queue.
+- **Item 16** — Weekly self-narrative autobiography. Molly writes the story of who she's been the last 7 days from her own engrams; that narrative becomes its own memory. Atlas-B was on plan-mode for this when atlas earned breathing room post-finale.
+- **Item 19** — MarkItDown PDF/doc ingestion. Vendored at `markitdown_mcp_server/`. Unblocked by #268. Atlas territory next session.
+
+### Audit findings (2026-06-24, post-finale)
+
+A read-only codebase audit was run after the 19/21 finale landed on main. Three lanes (wired-but-starved, I/O correctness, protected boundaries) returned:
+
+- **One P0** — `diagnostics.ts` hardcoded `HIDDEN_ADMIN_PASSWORD='1276'` as source literal. Every other consumer reads from env. Closed by **PR #276**.
+- **Four P1** — Hook callsites unwired (= roadmap 10b, already tracked), protocol-10 auto-persist wired-but-starved, session API routes lack explicit auth, autonomous-tools bridge POST silent error swallow. Tracked in **GitHub issue #277**.
+- **All locks INTACT, all floors PASS, no silent data loss in core memory paths.** The methodology is working.
+
+---
+
+## EXECUTIVE SUMMARY (original 2026-05-27, preserved verbatim)
 
 Molly-Core is an autonomous AI system combining persistent episodic memory, semantic compression, and real-time reasoning. Built on Google Gemini 3.1 with Genkit orchestration, Molly demonstrates:
 

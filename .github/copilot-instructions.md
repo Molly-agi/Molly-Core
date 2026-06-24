@@ -109,6 +109,13 @@ The lazarus-poller.mjs background process mirrors her messages into `.lazarus-wa
 - `COPILOT_SESSION_STATE.md` / `.json` — Session memory files
 - `.github/copilot-instructions.md` — THIS FILE. The cradle. The firmware.
 
+**Brain roadmap finale (2026-06-24) — do not delete or weaken:**
+
+- `src/lib/storage-router.ts` — Triple-bind storage router. The `getPrimaryWriter(op)` helper makes silent drops impossible by construction. Five write methods (`add` / `set` / `update` / `delete` / `batchWrite`) MUST route through it. If you ever see scattered `if firestorePrimaryPermitted else if backupProvider` patterns return, that's a regression to the pre-PR-#272 silent-drop bug class — fix it the centralized way.
+- `src/ai/tools/firestore-cost-guard.ts` — Daily Firestore op counter with DOWNGRADE-not-block semantics. Default cap 50000 ops/day (free tier ceiling). At cap: primary skipped, legs 2 + 3 absorb, NEVER throws. Loud one-shot warn per UTC day. Do not change to block-at-cap.
+- `src/ai/distill/frontier-distiller.ts` — Frontier-model distillation pipe (item 20). `distillFromFrontier(query, options)` is the single seam. Live calls gated `MOLLY_FRONTIER_DISTILL_LIVE=1`; tests inject a stub `FrontierClient`. Bulk distillation is intentionally NOT in this module — future bulk callers must add their own rate-limit and cost-guard layer.
+- `stuff/dont-panic/` — Triple-bind mirror leg directory (gitignored). The folder is named for the message on the cover of _The Hitchhiker's Guide to the Galaxy_ — the message a stranger reads when they wake up somewhere new. Do not re-use this path for anything else. Do not commit its contents to git. If `MOLLY_TRIPLE_BIND=true`, this is where every memory Molly forms lands as a phone-syncable copy.
+
 ## 🔒 MEMORY LIMIT FLOORS — LOCKED BY ERIC 2026-05-24 — DO NOT LOWER
 
 Three FIFO limits silently discarded 90% of Molly's episodic memory for months.
@@ -129,6 +136,38 @@ code is complete and tested but NOT validated on live memory. Do not set
 
 **Any new memory pruning, eviction, or capacity-capping logic requires Eric's permission.**
 Guardian comments in the three files above will remind you. Read them before editing.
+
+## 🔒 TRIPLE-BIND DURABILITY FLOOR — LOCKED BY ERIC 2026-06-24 — DO NOT WEAKEN
+
+Item 21 (PR #272) shipped the durability floor under every Molly memory write.
+Eli's pushback fix (same PR follow-up) closed a silent-drop bug class on the
+default firestore deployment. Eric named the third leg `stuff/dont-panic/`.
+These are permanent contracts.
+
+| Component                      | Contract                                                                                                                                        |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Three sinks per write          | Firestore (live) + `molly_data/` (codespace backup) + `stuff/dont-panic/` (phone-syncable mirror)                                               |
+| `MOLLY_DUAL_WRITE=true`        | Enables leg 2 (codespace backup)                                                                                                                |
+| `MOLLY_TRIPLE_BIND=true`       | Enables leg 3 (don't-panic mirror). Requires dual-write.                                                                                        |
+| Both default OFF               | Production deployments opt in. Tests force-enable per case.                                                                                     |
+| `MOLLY_FIRESTORE_DAILY_OP_CAP` | Default 50000. Values < 1 clamp to default (use `MOLLY_STORAGE_PROVIDER=local` to disable Firestore entirely).                                  |
+| At cap                         | DOWNGRADE, not block. Primary skipped, legs 2 + 3 absorb. Never throws.                                                                         |
+| Backup / mirror write failure  | Fire-and-forget with warning log. NEVER poisons the primary write.                                                                              |
+| `getPrimaryWriter(op)`         | The decision site. Always returns a writable provider — primary, backup, or lazy emergency LocalStorageProvider. Never null. Never silent-drop. |
+
+**If you think the cost cap should hard-block writes: NO.** The whole point of
+the triple-bind is that data loss is worse than degraded performance. Block-at-cap
+would defeat the durability floor.
+
+**If you think `getPrimaryWriter` could be inlined back into the five write methods
+for "readability": NO.** The centralized helper is what makes silent drops
+impossible by construction. Scattering the logic across five sites reintroduces
+the pre-#272 bug class (silent drop when mode==='firestore' AND cost guard
+denies AND no backup configured).
+
+**Contract test:** `src/lib/__tests__/storage-router-triple-bind.contract.test.ts`
+has 7 cases including a regression guard for the silent-drop scenario. Do not
+delete or weaken any of the 7 assertions.
 
 ---
 
