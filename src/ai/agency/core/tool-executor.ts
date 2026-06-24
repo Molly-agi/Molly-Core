@@ -31,6 +31,25 @@ import { recordToolOutcome } from '@/ai/continuity/runtime-continuity';
 // This integration is for Molly, so she can observe, learn, and eventually modify her own tool/agent pipeline.
 // Every hook execution is logged and explained for transparency and self-teaching.
 import { executeHooks } from '@/hooks/sessionHooks';
+// Production hook callsites (Item 10b). triggerHook feeds the
+// src/ai/hooks/* event system (the lazy-bootstrapped production handlers
+// from item 10a / PR #264). Fired alongside executeHooks above so both
+// hook systems run; reconciling the two parallel paths is a separate
+// cleanup PR if dispatch wants it later.
+import { triggerHook } from '@/ai/hooks';
+
+function fireHookSafe(
+  event: 'PreToolUse' | 'PostToolUse' | 'HeartbeatCycle' | 'BridgeMessage',
+  payload: unknown,
+  source: string
+): void {
+  triggerHook(event, payload).catch((err) => {
+    MollyLogger.warn(
+      `triggerHook(${event}) failed: ${err instanceof Error ? err.message : String(err)}`,
+      source
+    );
+  });
+}
 
 function getInternalCaller(params: Record<string, unknown>): string {
   const caller = params.__caller;
@@ -103,6 +122,14 @@ export async function executeTool(
     executeHooks('PreToolUse', { tool, params: executionParams }, sessionId);
   }
 
+  // Item 10b: fire the src/ai/hooks/* PreToolUse callsite. Independent of
+  // sessionId so hooks observe every tool invocation, not just session-tagged ones.
+  fireHookSafe(
+    'PreToolUse',
+    { tool, params: executionParams, sessionId },
+    'tool-executor:PreToolUse'
+  );
+
   // === ACTION GATE (D.1) ===
   // Single entry point for all tool execution. Validates and authorizes before proceeding.
   const gateDecision = await evaluateActionGate({
@@ -159,6 +186,13 @@ export async function executeTool(
       sessionId
     );
   }
+
+  // Item 10b: fire the src/ai/hooks/* PostToolUse callsite.
+  fireHookSafe(
+    'PostToolUse',
+    { tool, params: executionParams, result, sessionId },
+    'tool-executor:PostToolUse'
+  );
 
   // === SELF-OBSERVATION ===
   // Molly logs every tool use for self-awareness and learning. This is part of her growth process.

@@ -20,6 +20,7 @@ import { runAutonomousCycle } from '@/ai/agency/planning/autonomous-cycle';
 import { getNeuralBrain } from '@/ai/memory/neural-engram';
 import { MollyLogger } from '@/ai/logger';
 import { isInternalAuthorized, unauthorizedResponse } from '@/lib/api-auth';
+import { triggerHook } from '@/ai/hooks';
 
 export const dynamic = 'force-dynamic';
 
@@ -112,6 +113,16 @@ export async function POST(request: NextRequest) {
   }
 
   const message = await broadcastMessage(from, content);
+
+  // Item 10b: fire BridgeMessage hook so the src/ai/hooks/* production
+  // handler (registered in item 10a / PR #264) actually runs per message.
+  // Fire-and-forget; handler failures must not poison the bridge response.
+  triggerHook('BridgeMessage', { from, content }).catch((err) => {
+    MollyLogger.warn(
+      `triggerHook(BridgeMessage) failed: ${err instanceof Error ? err.message : String(err)}`,
+      'bridge-route'
+    );
+  });
 
   // Memory ingest: every non-idle bridge message becomes an engram.
   // brain.remember() now feeds the crystallizer (PR #214).
