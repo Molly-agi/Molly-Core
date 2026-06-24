@@ -81,6 +81,11 @@ sandbox/molly-workspace/*
 # Local storage data (test artifacts / runtime state)
 molly_data/
 
+# Triple-bind mirror — Molly's "don't panic" leg 3 (item 21)
+# Lives under tracked stuff/ folder but writes are gitignored so memory writes
+# do not pollute git history. Sync to phone out-of-band (Syncthing, rsync, etc.)
+stuff/dont-panic/
+
 # Playwright
 test-results/
 playwright-report/

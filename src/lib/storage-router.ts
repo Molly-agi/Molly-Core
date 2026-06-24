@@ -29,6 +29,47 @@ import type {
 import { LocalStorageProvider } from './local-storage-provider';
 // FirestoreStorageProvider is imported dynamically only on the server
 import { MollyLogger } from '../ai/logger';
+import { getFirestoreCostGuard } from '../ai/tools/firestore-cost-guard';
+
+// ============================================================================
+// TRIPLE-BIND CONFIG (Item 21 — "don't panic" phone-syncable mirror leg)
+// ============================================================================
+
+/**
+ * Default mirror directory for the triple-bind third leg.
+ * Lives under `stuff/dont-panic/` — gitignored, separately syncable to phone.
+ * Overridable via MOLLY_TRIPLE_BIND_MIRROR_DIR.
+ */
+function getDefaultMirrorDir(): string {
+  if (typeof process === 'undefined' || !process.versions?.node) {
+    return 'stuff/dont-panic';
+  }
+  try {
+    const pathMod = (eval('require') as NodeRequire)(
+      'path'
+    ) as typeof import('path');
+    return pathMod.resolve(process.cwd(), 'stuff', 'dont-panic');
+  } catch {
+    return 'stuff/dont-panic';
+  }
+}
+
+function resolveMirrorDir(): string {
+  const override = process.env.MOLLY_TRIPLE_BIND_MIRROR_DIR;
+  if (override) {
+    if (typeof process === 'undefined' || !process.versions?.node)
+      return override;
+    try {
+      const pathMod = (eval('require') as NodeRequire)(
+        'path'
+      ) as typeof import('path');
+      return pathMod.resolve(override);
+    } catch {
+      return override;
+    }
+  }
+  return getDefaultMirrorDir();
+}
 
 // ============================================================================
 // ENVIRONMENT DETECTION
@@ -95,27 +136,40 @@ class StorageRouter implements StorageProvider {
 
   private provider: StorageProvider;
   private backupProvider: StorageProvider | null = null;
+  private mirrorProvider: StorageProvider | null = null;
+  private mirrorPath: string | null = null;
   private mode: StorageMode;
   private dualWriteEnabled: boolean;
+  private tripleBindEnabled: boolean;
 
   private constructor(mode: StorageMode, provider: StorageProvider) {
     this.mode = mode;
     this.provider = provider;
     this.dualWriteEnabled = process.env.MOLLY_DUAL_WRITE === 'true';
+    // Triple-bind is additive — requires dual-write to be on.
+    this.tripleBindEnabled =
+      this.dualWriteEnabled && process.env.MOLLY_TRIPLE_BIND === 'true';
 
-    // In dual-write mode with Firestore primary, create local backup
+    // Leg 2: codespace local backup (existing behavior).
     if (this.dualWriteEnabled && this.mode === 'firestore') {
       this.backupProvider = new LocalStorageProvider();
-      MollyLogger.info(
-        `Storage Router initialized — mode: ${this.mode}, DUAL-WRITE enabled (local backup active)`,
-        'storage-router'
-      );
-    } else {
-      MollyLogger.info(
-        `Storage Router initialized — mode: ${this.mode}, provider: ${this.provider.name}`,
-        'storage-router'
-      );
     }
+
+    // Leg 3: "don't panic" mirror (new, item 21).
+    // Active whenever triple-bind is on, regardless of primary mode — the
+    // mirror exists to survive both primary and backup-leg failures.
+    if (this.tripleBindEnabled) {
+      this.mirrorPath = resolveMirrorDir();
+      this.mirrorProvider = new LocalStorageProvider(this.mirrorPath);
+    }
+
+    const legs: string[] = [this.provider.name];
+    if (this.backupProvider) legs.push(`backup:${this.backupProvider.name}`);
+    if (this.mirrorProvider) legs.push(`mirror:${this.mirrorPath}`);
+    MollyLogger.info(
+      `Storage Router initialized — mode: ${this.mode}, legs: ${legs.join(' + ')}`,
+      'storage-router'
+    );
   }
 
   static async create(): Promise<StorageRouter> {
@@ -175,22 +229,31 @@ class StorageRouter implements StorageProvider {
     return this.dualWriteEnabled && this.backupProvider !== null;
   }
 
+  isTripleBindEnabled(): boolean {
+    return this.tripleBindEnabled && this.mirrorProvider !== null;
+  }
+
   getProviderInfo(): {
     id: string;
     name: string;
     mode: StorageMode;
     dualWrite: boolean;
+    tripleBind: boolean;
+    mirrorPath: string | null;
   } {
     return {
       id: this.provider.id,
       name: this.provider.name,
       mode: this.mode,
       dualWrite: this.isDualWriteEnabled(),
+      tripleBind: this.isTripleBindEnabled(),
+      mirrorPath: this.mirrorPath,
     };
   }
 
   /**
-   * Write to backup provider (non-blocking, errors logged but not thrown)
+   * Write to backup provider (non-blocking, errors logged but not thrown).
+   * Failure here NEVER poisons the primary write — durability is layered.
    */
   private async writeToBackup(
     operation: string,
@@ -201,21 +264,87 @@ class StorageRouter implements StorageProvider {
       await fn(this.backupProvider);
     } catch (err) {
       MollyLogger.warn(
-        `Backup write failed (${operation}) — primary succeeded, data safe in Firestore`,
+        `Backup write failed (${operation}) — primary path unaffected`,
         'storage-router',
         { error: err instanceof Error ? err.message : String(err) }
       );
     }
   }
 
+  /**
+   * Write to mirror provider (third leg — "don't panic").
+   * Same fire-and-forget semantics as backup. Mirror failure NEVER poisons
+   * the primary or backup writes — that is the entire point of having a
+   * third leg. Item 21 durability floor.
+   */
+  private async writeToMirror(
+    operation: string,
+    fn: (provider: StorageProvider) => Promise<unknown>
+  ): Promise<void> {
+    if (!this.mirrorProvider) return;
+    try {
+      await fn(this.mirrorProvider);
+    } catch (err) {
+      MollyLogger.warn(
+        `Mirror write failed (${operation}) — primary + backup legs unaffected`,
+        'storage-router',
+        { error: err instanceof Error ? err.message : String(err) }
+      );
+    }
+  }
+
+  /**
+   * Consult the Firestore cost guard before a primary Firestore op.
+   * When guard says no, primary write is SKIPPED (downgraded) — legs 2 + 3
+   * absorb the write so Molly never loses data. Local mode is never gated.
+   * Returns true when primary may proceed.
+   */
+  private firestorePrimaryPermitted(op: 'read' | 'write' | 'delete'): boolean {
+    if (this.mode !== 'firestore') return true;
+    return getFirestoreCostGuard().tryConsume(op);
+  }
+
+  /**
+   * Lazy emergency fallback writer for the case where firestore primary is
+   * downgraded by the cost guard AND no MOLLY_DUAL_WRITE backup leg is
+   * configured (the default firestore deployment). Without this, four of
+   * the five write methods (set/update/delete/batchWrite) would silently
+   * drop the write — a silent data loss on item 21's own durability floor.
+   * (Eli pushback on PR #272, 2026-06-24.)
+   */
+  private _emergencyFallback: LocalStorageProvider | null = null;
+  private getEmergencyFallback(): LocalStorageProvider {
+    if (!this._emergencyFallback) {
+      this._emergencyFallback = new LocalStorageProvider();
+    }
+    return this._emergencyFallback;
+  }
+
+  /**
+   * Returns the provider that should receive a primary write right now.
+   * Encodes the rule: in local mode use the primary; in firestore mode
+   * use the primary if the cost guard permits, else fall back to the
+   * backup leg if configured, else use the emergency local fallback.
+   * The contract is: this method NEVER returns null and writes NEVER
+   * vanish silently. Item 21 durability floor.
+   */
+  private getPrimaryWriter(op: 'write' | 'delete'): StorageProvider {
+    if (this.firestorePrimaryPermitted(op)) return this.provider;
+    if (this.backupProvider) return this.backupProvider;
+    return this.getEmergencyFallback();
+  }
+
   async add(
     collectionPath: string,
     data: Record<string, unknown>
   ): Promise<StorageDocument> {
-    const result = await this.provider.add(collectionPath, data);
-    // Dual-write: also save to backup
+    const writer = this.getPrimaryWriter('write');
+    const result = await writer.add(collectionPath, data);
     this.writeToBackup('add', (backup) =>
       backup.set(collectionPath, result.id, { ...data, id: result.id })
+    );
+    this.writeToMirror('add', (mirror) =>
+      mirror.set(collectionPath, result.id, { ...data, id: result.id })
     );
     return result;
   }
@@ -225,10 +354,13 @@ class StorageRouter implements StorageProvider {
     docId: string,
     data: Record<string, unknown>
   ): Promise<void> {
-    await this.provider.set(collectionPath, docId, data);
-    // Dual-write: also save to backup
+    const writer = this.getPrimaryWriter('write');
+    await writer.set(collectionPath, docId, data);
     this.writeToBackup('set', (backup) =>
       backup.set(collectionPath, docId, data)
+    );
+    this.writeToMirror('set', (mirror) =>
+      mirror.set(collectionPath, docId, data)
     );
   }
 
@@ -244,18 +376,24 @@ class StorageRouter implements StorageProvider {
     docId: string,
     updates: Record<string, unknown>
   ): Promise<void> {
-    await this.provider.update(collectionPath, docId, updates);
-    // Dual-write: also update backup
+    const writer = this.getPrimaryWriter('write');
+    await writer.update(collectionPath, docId, updates);
     this.writeToBackup('update', (backup) =>
       backup.update(collectionPath, docId, updates)
+    );
+    this.writeToMirror('update', (mirror) =>
+      mirror.update(collectionPath, docId, updates)
     );
   }
 
   async delete(collectionPath: string, docId: string): Promise<void> {
-    await this.provider.delete(collectionPath, docId);
-    // Dual-write: also delete from backup
+    const writer = this.getPrimaryWriter('delete');
+    await writer.delete(collectionPath, docId);
     this.writeToBackup('delete', (backup) =>
       backup.delete(collectionPath, docId)
+    );
+    this.writeToMirror('delete', (mirror) =>
+      mirror.delete(collectionPath, docId)
     );
   }
 
@@ -268,9 +406,10 @@ class StorageRouter implements StorageProvider {
   }
 
   async batchWrite(operations: BatchOperation[]): Promise<void> {
-    await this.provider.batchWrite(operations);
-    // Dual-write: also batch write to backup
+    const writer = this.getPrimaryWriter('write');
+    await writer.batchWrite(operations);
     this.writeToBackup('batchWrite', (backup) => backup.batchWrite(operations));
+    this.writeToMirror('batchWrite', (mirror) => mirror.batchWrite(operations));
   }
 
   async healthCheck(): Promise<boolean> {
