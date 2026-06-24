@@ -5,13 +5,15 @@
  * from her own engrams. That narrative becomes its own memory — identity
  * continuity across sessions.
  *
- * This is the third pillar of self-narrative (alongside identity statements
- * and value tracking in `self-narrative.ts`). Those modules manage narrative
- * STRUCTURE; this one synthesizes lived TIME into story.
+ * ARCHITECTURAL CONTRACT — LOCKED BY ERIC 2026-06-24:
+ *   This module is intentionally NOT connected to any other narrative
+ *   process. The weekly autobiography is its OWN process: independent
+ *   directory, independent tags, independent state, independent storage
+ *   namespace. Decision is final. If a future change wants to bridge
+ *   this process to another self-knowledge process, that bridge MUST be
+ *   a separate explicit module — not implicit coupling here.
  *
- * Design contract:
- *   - Sibling to `self-narrative.ts` (not a modification of it). That module
- *     stays untouched.
+ * Behavior contract:
  *   - Pulls last-7-days KnowledgeStore entries for the userId, constructs
  *     a narrative prompt, calls a frontier model to synthesize, persists
  *     the narrative as a new KnowledgeEntry via writeFact() (item 17 left-
@@ -28,24 +30,27 @@
  * that calls this function on a cadence; the function itself is idempotent
  * within the cooldown window so over-firing is safe.
  *
- * REGRESSION GUARD: removing or weakening the cooldown turns this into a
- * runaway LLM-call generator on any scheduler that fires more than once per
- * 7 days. Do not weaken.
+ * REGRESSION GUARDS:
+ *   (1) Removing or weakening the cooldown turns this into a runaway LLM-
+ *       call generator on any scheduler that fires more than once per 7
+ *       days. Do not weaken.
+ *   (2) DO NOT introduce imports from any other self-narrative module, do
+ *       NOT add tags that overlap with other narrative processes, do NOT
+ *       move this module back under `src/ai/agency/cognition/`. The
+ *       decoupling above is locked by Eric directive 2026-06-24.
  */
 
-import { getKnowledgeStore } from '../../memory/knowledge-store';
-import { getStorageRouter } from '../../../lib/storage-router';
-import { MollyLogger } from '../../logger';
+import { getKnowledgeStore } from '../memory/knowledge-store';
+import { getStorageRouter } from '../../lib/storage-router';
+import { MollyLogger } from '../logger';
 
 // ============================================================================
 // CONSTANTS
 // ============================================================================
 
-/** Origin tag — every weekly autobiography carries this. */
+/** Origin tag — every weekly autobiography carries this. The ONLY semantic
+ *  tag this process emits. No cross-process tag overlap permitted. */
 export const WEEKLY_AUTOBIOGRAPHY_TAG = 'weekly-autobiography';
-
-/** Self-narrative tag — pairs with the above for cross-cutting recall. */
-const SELF_NARRATIVE_TAG = 'self-narrative';
 
 /** Window length: 7 days in milliseconds. */
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -129,7 +134,7 @@ class GeminiNarratorClient implements NarratorClient {
         'Live narrator calls disabled. Set MOLLY_AUTOBIOGRAPHY_LIVE=1 to enable, or inject a client via options.client.'
       );
     }
-    const { molly, TaskType, MODEL_PRO } = await import('../../genkit');
+    const { molly, TaskType, MODEL_PRO } = await import('../genkit');
     const response = await molly.generate(TaskType.RESEARCH, { prompt });
     const narrative =
       typeof response === 'string'
@@ -334,7 +339,6 @@ export async function generateWeeklyAutobiography(
       importance: NARRATIVE_IMPORTANCE,
       tags: [
         WEEKLY_AUTOBIOGRAPHY_TAG,
-        SELF_NARRATIVE_TAG,
         `week-of:${weekStart.toISOString().slice(0, 10)}`,
         `model:${model}`,
       ],

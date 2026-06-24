@@ -19,17 +19,23 @@
  *     the engram store itself — no extra persistent state)
  *   • forceWrite: true bypasses cooldown for manual / test invocation
  *   • Narrator client failure → AutobiographyError, NO partial-write
- *   • Persisted narrative carries provenance source 'molly:weekly-autobiography'
- *     and tags ['weekly-autobiography', 'self-narrative', 'week-of:<ISO>']
+ *   • Persisted narrative carries the WEEKLY_AUTOBIOGRAPHY_TAG plus a
+ *     week-of:<ISO> date marker and a model:<id> provenance tag.
+ *     This module is decoupled by Eric directive 2026-06-24 — it does
+ *     NOT emit tags that overlap with any other self-knowledge process.
  *   • Default GeminiNarratorClient requires MOLLY_AUTOBIOGRAPHY_LIVE=1
  *
- * REGRESSION GUARD: removing any assertion below weakens identity continuity.
- * Item 16 is the only path Molly has to write the story of her own week.
+ * REGRESSION GUARDS:
+ *   (1) Removing any assertion below weakens identity continuity. Item 16
+ *       is the only path Molly has to write the story of her own week.
+ *   (2) Adding cross-process tags back to the persisted narrative violates
+ *       Eric's decoupling directive. Do not add 'self-narrative' or any
+ *       other narrative-module tag to the assertion in test 6.
  */
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 
-jest.mock('../../../logger', () => ({
+jest.mock('../../logger', () => ({
   MollyLogger: {
     info: jest.fn(),
     warn: jest.fn(),
@@ -54,10 +60,10 @@ describe('Weekly autobiography — contract (Item 16)', () => {
   });
 
   afterEach(async () => {
-    const { resetStorageRouter } = require('../../../../lib/storage-router');
+    const { resetStorageRouter } = require('../../../lib/storage-router');
     const {
       _resetKnowledgeStoreSingleton,
-    } = require('../../../memory/knowledge-store');
+    } = require('../../memory/knowledge-store');
     resetStorageRouter();
     _resetKnowledgeStoreSingleton();
     delete process.env.MOLLY_LOCAL_DATA_DIR;
@@ -82,7 +88,7 @@ describe('Weekly autobiography — contract (Item 16)', () => {
   }
 
   async function seedEngrams(count: number, timestampsBackDays: number[] = []) {
-    const { getKnowledgeStore } = require('../../../memory/knowledge-store');
+    const { getKnowledgeStore } = require('../../memory/knowledge-store');
     const store = await getKnowledgeStore(USER_ID);
     const now = Date.now();
     for (let i = 0; i < count; i++) {
@@ -96,7 +102,7 @@ describe('Weekly autobiography — contract (Item 16)', () => {
       });
       // Backdate the stored timestamp
       const router =
-        await require('../../../../lib/storage-router').getStorageRouter();
+        await require('../../../lib/storage-router').getStorageRouter();
       const doc = await router.get(
         `users/${USER_ID}/knowledge`,
         `kf-test-${i}`
@@ -212,7 +218,7 @@ describe('Weekly autobiography — contract (Item 16)', () => {
       AutobiographyError,
     } = require('../weekly-autobiography');
     const narrator = throwingNarrator();
-    const { getKnowledgeStore } = require('../../../memory/knowledge-store');
+    const { getKnowledgeStore } = require('../../memory/knowledge-store');
 
     const countBefore = await (await getKnowledgeStore(USER_ID)).count();
 
@@ -230,7 +236,7 @@ describe('Weekly autobiography — contract (Item 16)', () => {
   it('persisted narrative carries week-of:<ISO> tag + provenance source', async () => {
     await seedEngrams(3, [1, 2, 3]);
     const { generateWeeklyAutobiography } = require('../weekly-autobiography');
-    const { getKnowledgeStore } = require('../../../memory/knowledge-store');
+    const { getKnowledgeStore } = require('../../memory/knowledge-store');
     const narrator = stubNarrator('weekly story');
 
     const result = await generateWeeklyAutobiography({
@@ -244,10 +250,15 @@ describe('Weekly autobiography — contract (Item 16)', () => {
     expect(stored.contextTags).toEqual(
       expect.arrayContaining([
         'weekly-autobiography',
-        'self-narrative',
         expect.stringMatching(/^week-of:\d{4}-\d{2}-\d{2}/),
+        expect.stringMatching(/^model:/),
       ])
     );
+    // REGRESSION GUARD (Eric directive 2026-06-24): the persisted narrative
+    // must NOT carry the 'self-narrative' tag. The weekly autobiography is a
+    // separate process from any other self-knowledge module; cross-process
+    // tag overlap is forbidden.
+    expect(stored.contextTags).not.toContain('self-narrative');
     expect(stored.source).toBe('import'); // KnowledgeEntry.source enum
   });
 
