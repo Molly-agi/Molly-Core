@@ -50,6 +50,7 @@ interface WatcherState {
 }
 
 let state: WatcherState | null = null;
+let startupLock: Promise<void> | null = null;
 
 function resolveWatchDir(opts?: MarkitdownWatcherOptions): string {
   if (opts?.watchDir) return path.resolve(opts.watchDir);
@@ -83,7 +84,7 @@ function namespaceFor(absPath: string): string {
   const ext = path.extname(base);
   const baseNoExt = ext ? base.slice(0, -ext.length) : base;
   const hash = crypto
-    .createHash('sha1')
+    .createHash('sha256')
     .update(absPath)
     .digest('hex')
     .slice(0, 8);
@@ -243,43 +244,52 @@ export async function ensureMarkitdownWatcherStarted(
   opts?: MarkitdownWatcherOptions
 ): Promise<void> {
   if (state) return;
-  const watchDir = resolveWatchDir(opts);
-  const debounceMs = resolveDebounceMs(opts);
+  if (startupLock) return startupLock;
+  startupLock = (async () => {
+    const watchDir = resolveWatchDir(opts);
+    const debounceMs = resolveDebounceMs(opts);
 
-  await fsp.mkdir(watchDir, { recursive: true });
-  await fsp.mkdir(path.join(watchDir, PROCESSED_DIR), { recursive: true });
-  await fsp.mkdir(path.join(watchDir, FAILED_DIR), { recursive: true });
+    await fsp.mkdir(watchDir, { recursive: true });
+    await fsp.mkdir(path.join(watchDir, PROCESSED_DIR), { recursive: true });
+    await fsp.mkdir(path.join(watchDir, FAILED_DIR), { recursive: true });
 
-  state = {
-    watchDir,
-    debounceMs,
-    watcher: null,
-    inFlight: new Set(),
-    timers: new Map(),
-  };
+    state = {
+      watchDir,
+      debounceMs,
+      watcher: null,
+      inFlight: new Set(),
+      timers: new Map(),
+    };
 
-  if (opts?.enableFsWatch !== false) {
-    try {
-      state.watcher = watch(watchDir, { persistent: false }, () => {
-        // event.filename is unreliable on some kernels; always re-scan.
-        if (state) void scanInbox(state);
-      });
-    } catch (err) {
-      MollyLogger.warn(
-        'markitdown-watcher: fs.watch failed; boot-scan will still run',
-        'markitdown-watcher',
-        { watchDir },
-        err
-      );
+    if (opts?.enableFsWatch !== false) {
+      try {
+        state.watcher = watch(watchDir, { persistent: false }, () => {
+          // event.filename is unreliable on some kernels; always re-scan.
+          if (state) void scanInbox(state);
+        });
+      } catch (err) {
+        MollyLogger.warn(
+          'markitdown-watcher: fs.watch failed; boot-scan will still run',
+          'markitdown-watcher',
+          { watchDir },
+          err
+        );
+      }
     }
-  }
 
-  // Fire-and-forget boot-recovery scan for files dropped while we were down.
-  void scanInbox(state);
+    // Fire-and-forget boot-recovery scan for files dropped while we were down.
+    void scanInbox(state);
+  })();
+  try {
+    await startupLock;
+  } finally {
+    startupLock = null;
+  }
 }
 
 /** Test-only: tear down the singleton and any pending timers. */
 export function __resetMarkitdownWatcherForTests(): void {
+  startupLock = null;
   if (!state) return;
   for (const t of state.timers.values()) clearTimeout(t);
   state.timers.clear();

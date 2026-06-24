@@ -58,6 +58,20 @@ async function cleanup(dir: string): Promise<void> {
   await fs.rm(dir, { recursive: true, force: true });
 }
 
+async function waitFor(
+  predicate: () => boolean,
+  timeoutMs = 3000,
+  intervalMs = 25
+): Promise<void> {
+  const start = Date.now();
+  while (!predicate()) {
+    if (Date.now() - start > timeoutMs) {
+      throw new Error('waitFor: timed out');
+    }
+    await new Promise((r) => setTimeout(r, intervalMs));
+  }
+}
+
 describe('markitdown-watcher — pipeline contract', () => {
   let inbox: string;
 
@@ -161,8 +175,11 @@ describe('markitdown-watcher — pipeline contract', () => {
       enableFsWatch: false, // boot-scan only path; no live watch needed for this assertion
     });
 
-    // boot-scan is async; debounce (10ms) + stat-stability (500ms) + slack.
-    await new Promise((r) => setTimeout(r, 900));
+    // boot-scan is async; poll until pipeline reaches the adapter call.
+    await waitFor(
+      () => convertSpy.mock.calls.some((c) => c[0] === filePath),
+      3000
+    );
 
     expect(convertSpy).toHaveBeenCalledWith(filePath);
     expect(writeFactSpy).toHaveBeenCalled();
@@ -178,7 +195,9 @@ describe('markitdown-watcher — pipeline contract', () => {
       enableFsWatch: false,
     });
 
-    await new Promise((r) => setTimeout(r, 900));
+    // Short settle window — boot scan + debounce + stat-stability could
+    // fire here if the skip logic regressed; wait long enough to catch it.
+    await new Promise((r) => setTimeout(r, 700));
 
     expect(convertSpy).not.toHaveBeenCalled();
     expect(writeFactSpy).not.toHaveBeenCalled();
