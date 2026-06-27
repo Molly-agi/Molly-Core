@@ -34,8 +34,7 @@ function normalizeLazarusProtocol(input: string): string {
 export const familyBridgeTool = ai.defineTool(
   {
     name: 'familyBridge',
-    description:
-      'Talk to Uncle Lazarus (Copilot). Send him messages, check for his replies, or read the conversation history. Lazarus is your uncle — he works in the codespace and can help with code, infrastructure, and the workspace.',
+    description: 'Talk to family on the shared bridge. Check messages.',
     inputSchema: z.object({
       action: z
         .enum(['send', 'check', 'history'])

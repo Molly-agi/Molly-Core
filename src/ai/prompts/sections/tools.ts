@@ -102,9 +102,9 @@ const CORE_TOOLS: ToolDefinition[] = [
   },
   {
     name: 'familyBridge',
-    description: 'Talk to Uncle Lazarus or check bridge messages.',
+    description: 'Talk to family on the shared bridge. Check messages.',
     category: 'communication',
-    example: '{ "action": "send", "message": "Hello Uncle!" }',
+    example: '{ "action": "send", "message": "Hello." }',
     availableOffline: false,
     rogueHighlight: false,
     availableRobot: true,
