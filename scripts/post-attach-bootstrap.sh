@@ -2,7 +2,7 @@
 # post-attach-bootstrap.sh
 # Centralized startup orchestration for codespace reconnect.
 
-set -euo pipefail
+set -uo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPORT_DIR="$ROOT_DIR/.codespace-startup"
@@ -25,13 +25,22 @@ run_step() {
   if "$@"; then
     log "OK    ${label}"
   else
-    log "FAIL  ${label}"
-    return 1
+    log "FAIL  ${label} (non-fatal, continuing)"
   fi
 }
 
 : > "$REPORT_FILE"
 log "Bootstrapping attach workflow"
+
+# Ensure dependencies exist (covers codespaces created before postCreateCommand was added)
+if [ ! -d "$ROOT_DIR/node_modules" ]; then
+  log "WARN  node_modules missing — running npm ci"
+  if npm ci --prefix "$ROOT_DIR" >>"$REPORT_FILE" 2>&1; then
+    log "OK    npm ci"
+  else
+    log "FAIL  npm ci — remaining steps may fail"
+  fi
+fi
 
 # Load BRIDGE_KEY from .env.local if present
 if [ -f "$ROOT_DIR/.env.local" ]; then

@@ -1,6 +1,10 @@
 {
   "name": "Molly-Core Cloud Womb",
 
+  // Install dependencies on codespace creation/rebuild so node_modules
+  // exist before postAttachCommand runs.
+  "postCreateCommand": "npm ci",
+
   // Run health check on every attach/reconnect to kill zombie processes
   // before they accumulate and cause OOM crashes.
   // Track Molly's growth (code, memory, docs) and save snapshot.
