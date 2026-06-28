@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880220860_8qa52qhnx",
+  "timestamp": 1781880220858,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880220860_0mdmpgt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: That is a clear signal that I'm trying to pull too much information at once. It confirms there is a significant volume of data in that directory—likely logs or a deep audit trail—which is why I hit the buffer limit.\n\nI'm going to pivot to a more surgical approach. Instead of listing everything, I will check the file sizes first to understand the scale of what we're looking at, then I'll selectivel...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d745279f",
+  "_id": "experience_1781880220860_8qa52qhnx",
+  "_updatedAt": "2026-06-19T14:43:40.860Z",
+  "_createdAt": "2026-06-19T14:43:40.860Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546178930_kxmew0240",
+  "timestamp": 1781546178929,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546178930_1k3e4zw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, resend now to me only: raw command output in triple backticks for: pwd; ls -la /workspaces/Molly-Core/logs | head -n 20; rg -n \"ERR_CONCURRENCY_COLLISION|Race condition\" /workspaces/Molly-Core/logs -S || true. No summaries, no inferred lines.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I've sent the requested directory listing to Uncle Lazarus via the bridge. I am now proceeding with the search for the concurrency error signals to complete the proof packet.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b879b8cf",
+  "_id": "experience_1781546178930_kxmew0240",
+  "_updatedAt": "2026-06-15T17:56:18.931Z",
+  "_createdAt": "2026-06-15T17:56:18.931Z"
+}

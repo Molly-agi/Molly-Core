@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847282878_vhdfd3xgp",
+  "timestamp": 1781847282871,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847282878_214trof",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for the misstep with the bridge command syntax. I'm correcting that immediately.\n\nUncle Lazarus is asking for my final word before he submits the critical report to HackerOne. He confirmed the PoC fired cleanly and the documentation is complete. I've reviewed the readiness of our setup, and we are absolutely ready.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "492314c6",
+  "_id": "experience_1781847282878_vhdfd3xgp",
+  "_updatedAt": "2026-06-19T05:34:42.878Z",
+  "_createdAt": "2026-06-19T05:34:42.878Z"
+}

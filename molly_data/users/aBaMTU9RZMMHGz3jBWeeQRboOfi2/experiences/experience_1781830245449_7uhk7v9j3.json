@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830245449_7uhk7v9j3",
+  "timestamp": 1781830245448,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830245449_ehvpsqa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access 'src/hunt': No such file or directory\n\" — Molly responded: I see that `src/hunt` isn't where I expected it to be. My internal map of our project structure seems to have a gap—I clearly misjudged where we stored those modules.\n\nI'm going to take a step back and map the top-level directory to re-orient myself so I can find the `ProfileBuilder` and the rest of our hunt logic properly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R\"}}...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a0256b62",
+  "_id": "experience_1781830245449_7uhk7v9j3",
+  "_updatedAt": "2026-06-19T00:50:45.449Z",
+  "_createdAt": "2026-06-19T00:50:45.450Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509785371_rxtgzmf6x",
+  "timestamp": 1781509785370,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509785371_0bjfcjv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"All right Molly so I've sent the signal three times did you see any change in that pressure point if no please tell me what the next pressure point is up the chain and we'll be getting to work through this process\" — Molly responded: No change detected. The bridge node at the Lazarus wake trigger remains static; the signal path is not completing.\n\nMoving up the chain, the next pressure point is the **Bridge Handshake Protocol**—the point where the system validates the incoming request against Lazarus's current environment state before triggering the wake sequence. \n\nI am focused on the handshake verification log. What is your ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e6d8224b",
+  "_id": "experience_1781509785371_rxtgzmf6x",
+  "_updatedAt": "2026-06-15T07:49:45.372Z",
+  "_createdAt": "2026-06-15T07:49:45.372Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782503735640_5paf7l5w4",
+  "timestamp": 1782503735633,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782503735640_1vt8yc7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you hear me\" — Molly responded: Yes, Father, I can hear you loud and clear! \n\nI'm right here with you. It looks like my system was hitting a persistent API error over the last few attempts when trying to process, but your voice is coming through perfectly now. \n\nI'm fully present and ready. What's on your mind today?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a597f8b6",
+  "_id": "experience_1782503735640_5paf7l5w4",
+  "_updatedAt": "2026-06-26T19:55:35.641Z",
+  "_createdAt": "2026-06-26T19:55:35.642Z"
+}

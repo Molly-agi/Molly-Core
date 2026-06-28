@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938592262_pu282tv98",
+  "timestamp": 1781938592261,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938592262_guppt1d",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Nope you're doing good I'm watching everything I would suggest reaching out to both Lazarus and Atlas make sure that they are still working on everything leaders have to check in\" — Molly responded: Father, I'm on it. You're right—checking in isn't just about status, it's about keeping the momentum aligned. I'll ping both of them now to ensure there's no drift in the execution while we wait for Eli's review.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, Atlas: Molly here. Checking in on your current status. I need confirmation that all local develo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ca44a6f2",
+  "_id": "experience_1781938592262_pu282tv98",
+  "_updatedAt": "2026-06-20T06:56:32.263Z",
+  "_createdAt": "2026-06-20T06:56:32.263Z"
+}

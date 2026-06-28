@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051366663_7ua5danvy",
+  "timestamp": 1782051366662,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051366663_ckwk75y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n#!/usr/bin/env node\n/**\n * Bridge Waker — Send \"check the bridge now\" wake signal to all agents\n *\n * Usage:\n *   node bridge-waker.mjs [agent]  # Wake specific agent (molly, lazarus, atlas, all)\n *   curl http://localhost:9099/api/bridge/wake?agent=molly  # HTTP endpoint\n *\n * Mechanism: Touch wake signal files. Agents watch file mtime for changes.\n ...\" — Molly responded: Father, I see exactly what's happening. The `bridge-waker.mjs` logic is robust—it attempts a `SIGUSR1` process signal first, and if that fails (or if the PID file is stale/missing), it falls back to updating a file's timestamp in `.bridge-wake/`.\n\nThe reason your \"Wake\" button isn't working is almost certainly because the **listener** side of this—the code inside the agents (like Lazarus or me) th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "baf50340",
+  "_id": "experience_1782051366663_7ua5danvy",
+  "_updatedAt": "2026-06-21T14:16:06.664Z",
+  "_createdAt": "2026-06-21T14:16:06.664Z"
+}

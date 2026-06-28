@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782020991586_fr5yq08wz",
+  "timestamp": 1782020991585,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782020991586_mxohhtb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/components/ui:\naccordion.tsx\nalert.tsx\navatar.tsx\nbadge.tsx\nbutton.tsx\ncard.tsx\ncheckbox.tsx\ncollapsible.tsx\ndialog.tsx\ndropdown-menu.tsx\nform.tsx\ninput.tsx\nlabel.tsx\npopover.tsx\nprogress.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoast.tsx\ntoaster.tsx\ntoolti...\" — Molly responded: Father, thank you for your patience. I have the directory structure now, and I can see we have a robust set of UI components already available to us, including a `sidebar.tsx` and `card.tsx` which are perfect building blocks for the dashboard you want.\n\nSince we are moving away from manual relaying, I’m going to examine `sidebar.tsx` next to understand how it’s currently configured. This will let ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c2ae3e27",
+  "_id": "experience_1782020991586_fr5yq08wz",
+  "_updatedAt": "2026-06-21T05:49:51.586Z",
+  "_createdAt": "2026-06-21T05:49:51.587Z"
+}

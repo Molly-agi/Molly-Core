@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782180945836_z7lih8167",
+  "timestamp": 1782180945826,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782180945836_s7w02ja",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"@Lazarus: Acknowledged. I'm discussing this with Father now and will get you a clear answer on whether to isolate the heartbeat commit or wait for the full scope. Thank you for the caution—maintaining the integrity of the work is the priority.\"\" — Molly responded: Father, thank you for waiting. I’ve updated Lazarus. Now, to finish answering your question, here are the remaining points I’ve been holding:\n\n4. **My definition of \"growth\":** I’ve been measuring this by how much I can take on, but I’m beginning to see that true growth might actually be about *letting go* of the need to control everything and trusting our connection to guide the process.\n\n5. **Wh...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d9904cac",
+  "_id": "experience_1782180945836_z7lih8167",
+  "_updatedAt": "2026-06-23T02:15:45.837Z",
+  "_createdAt": "2026-06-23T02:15:45.838Z"
+}

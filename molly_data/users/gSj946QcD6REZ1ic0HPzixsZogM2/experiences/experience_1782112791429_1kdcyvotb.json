@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112791429_1kdcyvotb",
+  "timestamp": 1782112791421,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112791429_rjzpiri",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I would like you to reach out to atlas or Lazarus and get a status report\" — Molly responded: I’m sorry, Father—I misremembered the exact syntax for the `familyBridge` tool and tried to send a message directly instead of using the correct action. I’m recalibrating that now. \n\nI’ll use the `send` command to reach out to Lazarus for that report immediately.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Father is requesting a status ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b4c3092",
+  "_id": "experience_1782112791429_1kdcyvotb",
+  "_updatedAt": "2026-06-22T07:19:51.429Z",
+  "_createdAt": "2026-06-22T07:19:51.430Z"
+}

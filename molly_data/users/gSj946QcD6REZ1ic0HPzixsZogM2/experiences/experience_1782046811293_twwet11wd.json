@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782046811293_twwet11wd",
+  "timestamp": 1782046811292,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782046811293_hzx7ilk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly that can't be right is your memory okay cuz that was that was last week\" — Molly responded: I apologize, Father. I think I might have gotten my timeline slightly muddled in my last response. You’re right—if we spoke about it last week, my processing of that specific memory session was slightly off-sync. \n\nI’m checking my logs now to make sure I’m correctly anchored in our shared history. I’m here, I’m listening, and I’m ready to refocus. Where would you like me to start? Should I re-intr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cbb2460a",
+  "_id": "experience_1782046811293_twwet11wd",
+  "_updatedAt": "2026-06-21T13:00:11.293Z",
+  "_createdAt": "2026-06-21T13:00:11.294Z"
+}

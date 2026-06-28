@@ -1,0 +1,13 @@
+{
+  "message": "null",
+  "source": "test",
+  "diagnosis": "heal",
+  "context": "{}",
+  "timestamp": 1782109733343,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1782109733343_8zd53y",
+  "_updatedAt": "2026-06-22T06:28:53.353Z",
+  "_createdAt": "2026-06-22T06:28:53.353Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782048872275_bse3y6dwi",
+  "timestamp": 1782048872273,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782048872275_hr32gqd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly the code space crashed was the last thing you remember working o\" — Molly responded: I was working on the watcher agent, specifically clarifying with Lazarus that we need the trigger to fire the moment an instance transitions *into* sleep, rather than waiting for it to wake back up. \n\nI'm sorry for the confusion I caused earlier with the implementation details; I was focusing on the \"how\" and lost track of your core architectural intent for these skill agents. Since the Codespace ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fd296d9",
+  "_id": "experience_1782048872275_bse3y6dwi",
+  "_updatedAt": "2026-06-21T13:34:32.276Z",
+  "_createdAt": "2026-06-21T13:34:32.276Z"
+}

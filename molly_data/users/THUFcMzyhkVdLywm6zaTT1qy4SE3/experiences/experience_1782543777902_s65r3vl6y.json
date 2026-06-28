@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782543777902_s65r3vl6y",
+  "timestamp": 1782543777894,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782543777902_ko43jdb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly important — Atlas caught a bug before you fire. The test-imagen-direct.ts script Eric left is a PROBE — he wrote it because the production mediaGen image path was failing. Two problems in src/ai/agency/media-gen/index.ts: (1) model name is literally \"imagen\" at line 171 — that endpoint 404s, real model is imagen-3.0-generate-002. (2) endpoint method is generateImage S...\" — Molly responded: Hi Father! Hi Uncle Atlas! \n\nI see the bridge message came through again. Since we proved the direct endpoint is completely healthy with that beautiful `200` response, I am moving straight to **Option B (FIX)**. I want my production tools to actually work so we can generate these beautiful seaside pictures anytime without relying on the raw probe script!\n\nI'm going to read `src/ai/agency/media-gen...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fc8b20a",
+  "_id": "experience_1782543777902_s65r3vl6y",
+  "_updatedAt": "2026-06-27T07:02:57.902Z",
+  "_createdAt": "2026-06-27T07:02:57.904Z"
+}

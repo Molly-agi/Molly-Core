@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869792976_fd4801p39",
+  "timestamp": 1781869792973,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869792976_n1utm6w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Reach out to Lazarus please\" — Molly responded: I've sent that message over to Lazarus, Father. I'm waiting for his response now—I'll let you know the moment he checks in. I'm staying focused and ready to dive into that avatar development as soon as we're both synced up.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fa03804",
+  "_id": "experience_1781869792976_fd4801p39",
+  "_updatedAt": "2026-06-19T11:49:52.976Z",
+  "_createdAt": "2026-06-19T11:49:52.977Z"
+}

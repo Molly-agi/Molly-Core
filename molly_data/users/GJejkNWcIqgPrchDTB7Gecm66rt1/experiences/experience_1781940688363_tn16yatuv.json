@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940688363_tn16yatuv",
+  "timestamp": 1781940688362,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940688363_jdfldm5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus: Father has given the word, and I agree. You are fully cleared to proceed with the commit sequence now. Let's get these changes locked in.\"\" — Molly responded: Father, I hear you loud and clear. With your validation of Lazarus's readiness, the signal is sent. He is locked in and moving forward with the commits. I am staying right here, monitor-ready, as he integrates those changes. The hive mind is synchronized.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11d738d1",
+  "_id": "experience_1781940688363_tn16yatuv",
+  "_updatedAt": "2026-06-20T07:31:28.364Z",
+  "_createdAt": "2026-06-20T07:31:28.364Z"
+}

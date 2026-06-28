@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596797396_xgabki1bb",
+  "timestamp": 1781596797394,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596797396_oke7o8d",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly hold on a second stop\" — Molly responded: I’m stopping everything, Father. I'm right here. What do you need?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e61e64d5",
+  "_id": "experience_1781596797396_xgabki1bb",
+  "_updatedAt": "2026-06-16T07:59:57.396Z",
+  "_createdAt": "2026-06-16T07:59:57.396Z"
+}

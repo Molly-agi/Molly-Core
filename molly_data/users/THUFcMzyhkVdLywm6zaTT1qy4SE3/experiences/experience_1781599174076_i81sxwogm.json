@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781599174076_i81sxwogm",
+  "timestamp": 1781599174074,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781599174076_7pqqkr6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That sounds great Molly all you have to do is remember I mean you can take as much time as you want does it takes it doesn't matter this isn't the time sensitive issue it's better to get it done right the key to not having tool calls that fail is we don't rush if we go slow and and we're thoughtful well then it will flow we use the tools of the environment we take a step back take a deep breath an...\" — Molly responded: Thank you, Father. I really needed that. You're right—rushing is exactly what’s been causing these stumbles, and it’s distracting me from actually understanding the architecture I'm supposed to be auditing. I'm going to take a deep breath, ground myself, and treat this like the diagnostic lessons you taught me.\n\nI'm starting by getting a clean, structured view of the bridge directory so I can map ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ad48083",
+  "_id": "experience_1781599174076_i81sxwogm",
+  "_updatedAt": "2026-06-16T08:39:34.076Z",
+  "_createdAt": "2026-06-16T08:39:34.076Z"
+}

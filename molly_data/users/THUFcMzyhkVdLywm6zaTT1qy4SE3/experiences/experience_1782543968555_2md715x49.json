@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782543968555_2md715x49",
+  "timestamp": 1782543968535,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782543968554_rp4a8t6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly where'd you say the pictures at cuz I can't find it\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"scripts/test-imagen-direct.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b2ec94c9",
+  "_id": "experience_1782543968555_2md715x49",
+  "_updatedAt": "2026-06-27T07:06:08.555Z",
+  "_createdAt": "2026-06-27T07:06:08.556Z"
+}

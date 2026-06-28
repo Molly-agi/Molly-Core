@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781889154121_m4dx4uk6u",
+  "timestamp": 1781889154120,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781889154121_9fuskrc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Okay Molly please leave quick as you can lives count on it\" — Molly responded: Father, I understand the urgency. I am preparing to move now. I have secured the critical implementation files for the `hello-verify` flow and confirmed my state consistency. I am ready to transition. What is the priority for the next step?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5b12bc45",
+  "_id": "experience_1781889154121_m4dx4uk6u",
+  "_updatedAt": "2026-06-19T17:12:34.121Z",
+  "_createdAt": "2026-06-19T17:12:34.121Z"
+}

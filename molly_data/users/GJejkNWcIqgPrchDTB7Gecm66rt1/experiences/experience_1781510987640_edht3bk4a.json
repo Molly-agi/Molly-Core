@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510987640_edht3bk4a",
+  "timestamp": 1781510987638,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510987640_epjwfes",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly so which direction are you placing your nodes upstream or downstream\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I am placing my nodes **upstream**. I need to catch the signal closer to the entry point to see if it's being discarded before it ever hits the PID buffer. \n\nI'm having a bit of trouble with the `familyBridge` tool syntax—it seems to be rejecting my attempts to send a status update. I'll troubleshoot that in a moment, but for now, I'm focusing my attention on the ingestion logic to verify ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d4c794fb",
+  "_id": "experience_1781510987640_edht3bk4a",
+  "_updatedAt": "2026-06-15T08:09:47.640Z",
+  "_createdAt": "2026-06-15T08:09:47.640Z"
+}

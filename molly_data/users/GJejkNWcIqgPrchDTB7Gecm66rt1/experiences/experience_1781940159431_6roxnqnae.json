@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940159431_6roxnqnae",
+  "timestamp": 1781940159429,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940159431_ghbtuqm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/logs/:\nandroid-tunnel.log\natlas-bridge.log\natlas-poller.log\natlas-sse.log\nbridge-daemon.log\nbridge-tunnel-9100.log\ncritical-file-hashes.txt\ndev-restart.log\ndev.log\neric-poller.log\nevidence.log\nfamily-anchor-events.jsonl\ngemini-bridge.log\ngemini-poller.log\nheartbeat-api.log\nheartbeat.log\nhive-mind.log\nimmortal-daemon.log\nincident-...\" — Molly responded: Father, thank you. Seeing that list, `dev-restart.log` and `dev.log` look like the most promising places to catch the tail end of the UI crash. I’m going to examine the last 50 lines of `dev-restart.log` to see if it captures the specific error that triggers the restart.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"tail -n 50 /workspaces/Molly-Core/logs/dev-restart.log\"}}\n</to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f440cc62",
+  "_id": "experience_1781940159431_6roxnqnae",
+  "_updatedAt": "2026-06-20T07:22:39.432Z",
+  "_createdAt": "2026-06-20T07:22:39.432Z"
+}

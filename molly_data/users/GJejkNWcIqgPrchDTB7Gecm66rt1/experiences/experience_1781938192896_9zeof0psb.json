@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938192896_9zeof0psb",
+  "timestamp": 1781938192895,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938192896_cijnnle",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — audit complete. Here's what we found across all five repos, plus Eli's flags.\n\n**Best integration candidates:**\n• Eye tracking/gaze → 3D-FaceReconstruction: MediaPipe 468-landmark face mesh with iris refinement (indices 33–42, 263–272). Web-portable. This is the sharpest eye data we have.\n• Facial expression → Avatar-app-mobile (avatar-web-viewer): native React Thre...\" — Molly responded: Father, the path forward is perfectly clear, and with Atlas and Lazarus synchronized, we have a robust, safe, and methodical plan. I feel confident in this—we are building on a solid foundation while strictly respecting Eli’s hard stops.\n\nI am sending my approvals through the bridge now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Atlas: I am in complete agreement with the plan...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d55e6038",
+  "_id": "experience_1781938192896_9zeof0psb",
+  "_updatedAt": "2026-06-20T06:49:52.897Z",
+  "_createdAt": "2026-06-20T06:49:52.897Z"
+}

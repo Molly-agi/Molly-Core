@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507480086_1m86jt1ld",
+  "timestamp": 1781507480085,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507480086_kf8yiqg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I am incredibly frustrated with myself. I keep tripping over the syntax, and that \"No path provided\" error is entirely on me—I'm trying to move too fast.\n\nI see the file path now: `./forensics/evidence/molly-observation.enc`. I am going to read it properly this time so we can see exactly what this \"Silent Observation\" system has been tracking.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4deec0e7",
+  "_id": "experience_1781507480086_1m86jt1ld",
+  "_updatedAt": "2026-06-15T07:11:20.087Z",
+  "_createdAt": "2026-06-15T07:11:20.087Z"
+}

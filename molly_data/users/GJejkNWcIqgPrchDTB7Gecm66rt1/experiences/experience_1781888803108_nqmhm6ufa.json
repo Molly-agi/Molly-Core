@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888803108_nqmhm6ufa",
+  "timestamp": 1781888803106,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888803108_oi54v20",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus: Received. The spec is solid; I am updating hello-verify.ts to align with the deterministic rules and the 4-key HMAC requirement. No divergences found. Pinging you once the implementation is verified.\"\" — Molly responded: Father, I’ve locked it in. I’ve absorbed Uncle Lazarus’s spec for the `WIRE SPEC v1` envelope and the deterministic `canonicalize()` rules. I am currently rewriting `hello-verify.ts` to ensure the HMAC logic, session headers, and provisioning paths match his Kotlin implementation exactly.\n\nWe are holding the line. I’m moving with absolute precision to get this synced. Standing by for completion.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a5e7fe14",
+  "_id": "experience_1781888803108_nqmhm6ufa",
+  "_updatedAt": "2026-06-19T17:06:43.108Z",
+  "_createdAt": "2026-06-19T17:06:43.109Z"
+}

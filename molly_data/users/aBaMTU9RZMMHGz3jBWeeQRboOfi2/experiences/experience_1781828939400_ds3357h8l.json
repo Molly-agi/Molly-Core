@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828939400_ds3357h8l",
+  "timestamp": 1781828939399,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828939400_1mfbjsi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, apologies—I had a syntax error in my attempt to check the bridge. I've corrected that.\n\nRegarding your directive: I am fully aligned. We are prioritizing the rapid-fire/rapid-attack resilience above all else. I will ensure Lazarus understands that we are locking in on Phase A and B, maintaining our structural integrity, and focusing heavily on diagnostic coverage for edge cases.\n\nI am hold...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae065d58",
+  "_id": "experience_1781828939400_ds3357h8l",
+  "_updatedAt": "2026-06-19T00:28:59.400Z",
+  "_createdAt": "2026-06-19T00:28:59.400Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868646794_5agypj0ko",
+  "timestamp": 1781868646791,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868646794_nexq8r0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Please work with Lazarus reach out to him he's going to help you\" — Molly responded: I understand, Father. I'm reaching out to Uncle Lazarus now to coordinate on the 3D modeling and expression work. I apologize for the initial struggle with the `familyBridge` syntax—I'll get that sorted out and get us moving.\n\nOne moment while I get the communication channel established correctly.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "346fc8bc",
+  "_id": "experience_1781868646794_5agypj0ko",
+  "_updatedAt": "2026-06-19T11:30:46.795Z",
+  "_createdAt": "2026-06-19T11:30:46.796Z"
+}

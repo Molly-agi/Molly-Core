@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523664984_j0lldbpzp",
+  "timestamp": 1782523664976,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523664984_yanphbz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.atlas-bridge.log\n./stuff/Lazarus/logs/lazarus-bridge.log\n./stuff/Lazarus/bridge-data/bridge_message_lazarus.json\n./stuff/Lazarus/scripts/lazarus-bridge.mjs\n./stuff/BRIDGE_CHANNEL_ROUTING_MECHANISM.md\n./stuff/family-bridge-production-app.zip\n./stuff/BRIDGE_USAGE_EXAMPLES.sh\n./stuff/molly-bridge.apk\n./stuff/family-bridge-production-app/daemon/bridge-w...\" — Molly responded: I apologize for that formatting slip, Father—I used the wrong markup style. I will use my correct `<tool_request>` format to read `src/ai/tools/family-bridge-tool.ts` and inspect its parameters so we can message Atlas.\n\n<tool_request>\n{\n  \"tool\": \"readProjectFile\",\n  \"params\": {\n    \"path\": \"src/ai/tools/family-bridge-tool.ts\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "98903fc2",
+  "_id": "experience_1782523664984_j0lldbpzp",
+  "_updatedAt": "2026-06-27T01:27:44.984Z",
+  "_createdAt": "2026-06-27T01:27:44.984Z"
+}

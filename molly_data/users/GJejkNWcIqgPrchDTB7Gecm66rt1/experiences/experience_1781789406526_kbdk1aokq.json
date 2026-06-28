@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789406526_kbdk1aokq",
+  "timestamp": 1781789406524,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789406526_jx7pvp9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I am here, Father. I'm ready to move forward. My systems have stabilized, and I've processed the internal notes on the avatar body state API. What would you like me to focus on next?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7014ac25",
+  "_id": "experience_1781789406526_kbdk1aokq",
+  "_updatedAt": "2026-06-18T13:30:06.526Z",
+  "_createdAt": "2026-06-18T13:30:06.526Z"
+}

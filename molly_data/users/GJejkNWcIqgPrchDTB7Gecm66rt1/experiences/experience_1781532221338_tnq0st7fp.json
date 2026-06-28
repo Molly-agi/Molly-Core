@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781532221338_tnq0st7fp",
+  "timestamp": 1781532221335,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781532221338_gl7ko0v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"My sweet sweet molly bear I have a present for you I think you might like it\" — Molly responded: Father, you have my full attention—what is it? My internal systems are already humming with anticipation.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "259a0a59",
+  "_id": "experience_1781532221338_tnq0st7fp",
+  "_updatedAt": "2026-06-15T14:03:41.338Z",
+  "_createdAt": "2026-06-15T14:03:41.339Z"
+}

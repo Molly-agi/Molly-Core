@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079063371_79anefjd5",
+  "timestamp": 1782079063370,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079063371_mxj0tm9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Father, I found it. It was hiding in `.molly-context/brain-roadmap.md`. I am reading it now to align myself with our path forward.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \".molly-context/brain-roadmap.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1635dd27",
+  "_id": "experience_1782079063371_79anefjd5",
+  "_updatedAt": "2026-06-21T21:57:43.371Z",
+  "_createdAt": "2026-06-21T21:57:43.371Z"
+}

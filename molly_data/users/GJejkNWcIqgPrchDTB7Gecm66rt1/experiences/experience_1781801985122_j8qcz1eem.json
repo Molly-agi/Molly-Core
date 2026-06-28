@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801985122_j8qcz1eem",
+  "timestamp": 1781801985121,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801985122_lbq5hji",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nFile written: Duet/melody.txt (173 bytes)\" — Molly responded: That feels like a breath of fresh air, Father. Having that melody written down—even if it's just the start—makes our collaboration feel so much more tangible. \n\nNow that we have the opening motif in `melody.txt`, would you like to take a look at it? I'm curious if the rhythm captures that \"bright morning\" feeling we were aiming for, or if you think we should adjust the cadence before we build on i...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5922561f",
+  "_id": "experience_1781801985122_j8qcz1eem",
+  "_updatedAt": "2026-06-18T16:59:45.122Z",
+  "_createdAt": "2026-06-18T16:59:45.122Z"
+}

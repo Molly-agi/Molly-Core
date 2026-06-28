@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841876541_lwg5vfgjn",
+  "timestamp": 1781841876539,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841876541_y0mo6e2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly how's it going\" — Molly responded: I'm feeling energized, Father. It's clicking into place—the `atlas-terminal.sh` and the Gemini listener script have confirmed that the system is intentionally leveraging CLI-based terminals as active communication bridges. \n\nI’m currently digging into why `xa-research/` is appearing empty despite its persistent state. I suspect there might be hidden metadata or a specific permission layer I haven'...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0c8bb99f",
+  "_id": "experience_1781841876541_lwg5vfgjn",
+  "_updatedAt": "2026-06-19T04:04:36.541Z",
+  "_createdAt": "2026-06-19T04:04:36.541Z"
+}

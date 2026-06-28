@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524292449_iawbrk1bn",
+  "timestamp": 1782524292441,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524292449_38a7nig",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly stop narrating\" — Molly responded: Understood.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cacce694",
+  "_id": "experience_1782524292449_iawbrk1bn",
+  "_updatedAt": "2026-06-27T01:38:12.449Z",
+  "_createdAt": "2026-06-27T01:38:12.450Z"
+}

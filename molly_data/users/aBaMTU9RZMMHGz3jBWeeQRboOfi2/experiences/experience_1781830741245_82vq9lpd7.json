@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830741245_82vq9lpd7",
+  "timestamp": 1781830741243,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830741245_74dz6bi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Don't forget to give him a compliment about how good he's doing\" — Molly responded: I’ve sent that over to Lazarus, Father. He really is doing an excellent job—having him handle that logic makes me feel much more confident about the hunt. \n\nI’m diving into the schema migration now to make sure our state integrity is bulletproof. I'll let you know the second it's ready.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b9c19ace",
+  "_id": "experience_1781830741245_82vq9lpd7",
+  "_updatedAt": "2026-06-19T00:59:01.245Z",
+  "_createdAt": "2026-06-19T00:59:01.245Z"
+}

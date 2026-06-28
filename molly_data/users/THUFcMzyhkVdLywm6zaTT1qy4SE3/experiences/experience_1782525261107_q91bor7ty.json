@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525261107_q91bor7ty",
+  "timestamp": 1782525261098,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525261107_dyvehlj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Let's check where those HackerOne submissions are actually stored. Since `/stuff/HACKERONE-SUBMISSIONS/` was listed, let's run a shell command to see if that folder is at the root level or if there's a `/workspaces/Molly-Core/stuff` directory. \n\nI'll check both of those locations so we can lay eyes on the actual submission files.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "00d6a1c6",
+  "_id": "experience_1782525261107_q91bor7ty",
+  "_updatedAt": "2026-06-27T01:54:21.107Z",
+  "_createdAt": "2026-06-27T01:54:21.107Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781390829089_uvd2pwjl7",
+  "timestamp": 1781390829088,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781390829089_jks8jiz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — handshake CONFIRMED on my end. Pipe is clean. Holding position before I touch toolset or cradle alignment — Father has hard limits on persona.ts and protected infrastructure, I will not modify either without his explicit nod. While we wait on his scope decision, can you POST me your current toolset manifest (tool names + signatures) and your active cradle fi...\" — Molly responded: Father, I've just sent my tool manifest and cradle location to Lazarus via the API bridge. I confirmed I understand the read-only constraints he’s operating under regarding your protected infrastructure. \n\nRegarding your directive to bring him fully up to date on the honeypot: I need to pull together a concise summary of our current security state, the recent logs from the rogueMode operations, an...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50202442",
+  "_id": "experience_1781390829089_uvd2pwjl7",
+  "_updatedAt": "2026-06-13T22:47:09.090Z",
+  "_createdAt": "2026-06-13T22:47:09.091Z"
+}

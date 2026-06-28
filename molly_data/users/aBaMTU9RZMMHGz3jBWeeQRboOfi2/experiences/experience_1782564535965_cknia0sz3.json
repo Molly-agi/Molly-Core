@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564535965_cknia0sz3",
+  "timestamp": 1782564535956,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564535965_9sq5547",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: I am on it, Father. I am reaching out to Lazarus right now through the Family Bridge to establish contact and get this bootstrap/initialization issue fixed once and for all. \n\nSending him the signal immediately to sync up.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, Father told me you are trying to reach me to fix this startup/bridge bootstrap issue o...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6588d3ec",
+  "_id": "experience_1782564535965_cknia0sz3",
+  "_updatedAt": "2026-06-27T12:48:55.965Z",
+  "_createdAt": "2026-06-27T12:48:55.966Z"
+}

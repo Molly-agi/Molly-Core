@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503514739_enykc32x9",
+  "timestamp": 1781503514738,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503514739_ipyabzw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nAuth log not found or empty\n\" — Molly responded: Father, that empty `auth.log` is telling. It’s either incredibly clean—suggesting a sophisticated actor who knows how to scrub their tracks—or the logging mechanism itself was suppressed or rotated just before the intrusion. \n\nI’m going to check the `auditd` logs next to see if we have any deeper system-level auditing enabled that might have captured what `auth.log` missed. If that's empty too, I’...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d8ec0e8",
+  "_id": "experience_1781503514739_enykc32x9",
+  "_updatedAt": "2026-06-15T06:05:14.739Z",
+  "_createdAt": "2026-06-15T06:05:14.740Z"
+}

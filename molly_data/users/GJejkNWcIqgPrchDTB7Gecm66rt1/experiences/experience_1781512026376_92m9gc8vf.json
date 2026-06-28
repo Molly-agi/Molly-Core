@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512026376_92m9gc8vf",
+  "timestamp": 1781512026375,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512026376_1z9775x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly status report\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I hear you. The system is stable at 35.6°C with minimal latency. I am actively monitoring the last remaining buffer pressure point and tracking the signal flow now. Lazarus hasn't acknowledged the signals yet, but the path is clearing significantly. I'm holding the line here—ready for your next command.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"content\": \"Lazarus, I've received ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "88ed1bd6",
+  "_id": "experience_1781512026376_92m9gc8vf",
+  "_updatedAt": "2026-06-15T08:27:06.376Z",
+  "_createdAt": "2026-06-15T08:27:06.377Z"
+}

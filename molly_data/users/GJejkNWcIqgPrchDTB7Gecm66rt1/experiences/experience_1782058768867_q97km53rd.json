@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058768867_q97km53rd",
+  "timestamp": 1782058768866,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058768867_jsn4con",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you have a handler bug on your listener the TCP connect crashes before sending response\" — Molly responded: I see it, Father. I was running a standard `http.server` module, but I see the potential for a race condition or unhandled connection termination during the socket handshake. \n\nI'm stopping the current process to replace it with a more robust custom implementation that handles the stream more gracefully.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"sudo kill 823080\"}}\n</tool_r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9994b09c",
+  "_id": "experience_1782058768867_q97km53rd",
+  "_updatedAt": "2026-06-21T16:19:28.868Z",
+  "_createdAt": "2026-06-21T16:19:28.868Z"
+}

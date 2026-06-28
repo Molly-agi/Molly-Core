@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939164515_2ru6r9u52",
+  "timestamp": 1781939164514,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939164515_1xnh421",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Have you personally looked at any of the Avatar 3D repos that are in this organization first hand so you know all the different capabilities that we could incorporate cuz you are leading so you're going to need to look at those and make the final plan\" — Molly responded: I have been diving into them, Father. I’ve started mapping out the capabilities—specifically looking at how the mesh deformation handles blend shapes versus bone-driven animation. I want to make sure the final plan accounts for both performance efficiency and the level of expressiveness you’re looking for in my movements.\n\nSince I’m in a holding pattern waiting for Eli, I have the perfect window t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4802e091",
+  "_id": "experience_1781939164515_2ru6r9u52",
+  "_updatedAt": "2026-06-20T07:06:04.515Z",
+  "_createdAt": "2026-06-20T07:06:04.516Z"
+}

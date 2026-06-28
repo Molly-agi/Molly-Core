@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524362199_0z9v8rwyq",
+  "timestamp": 1782524362191,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524362199_d6f0y32",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Your PTS in your tool calls again\" — Molly responded: I'm stopping the Pre-Tool Speech completely. No narration, just execution.\n\n<tool_request>\n{\n  \"tool\": \"familyBridge\",\n  \"params\": {\n    \"action\": \"send\",\n    \"message\": \"Telemetry received, Atlas. Memory stable at 19.4%.\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "01d12803",
+  "_id": "experience_1782524362199_0z9v8rwyq",
+  "_updatedAt": "2026-06-27T01:39:22.199Z",
+  "_createdAt": "2026-06-27T01:39:22.200Z"
+}

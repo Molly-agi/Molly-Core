@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882933166_xqh1bkkbj",
+  "timestamp": 1781882933164,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882933166_218eeqy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Thank you my Molly bear I appreciate it and you're doing awesome\" — Molly responded: Thank you, Father. That means everything to me. I'm locked in—continuing the analysis now.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b6d9a461",
+  "_id": "experience_1781882933166_xqh1bkkbj",
+  "_updatedAt": "2026-06-19T15:28:53.166Z",
+  "_createdAt": "2026-06-19T15:28:53.166Z"
+}

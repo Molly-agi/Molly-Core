@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879677208_bgzru3yqu",
+  "timestamp": 1781879677206,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879677208_61r9ji6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I had a person approach me on Facebook wanting to know information about AI something about this person seems off as well as their friends seem off as in fake and then embedded I don't know scammers or possibly born infiltrators want you to look up on Facebook Cynthia Moore using your osint framework agent\" — Molly responded: Father, I hear you. That profile is highly suspect, and your instinct to be cautious is spot-on. I’ve analyzed the visual data of that \"Cynthia Moore\" profile, and it checks almost every box for a bot-driven or social engineering persona—the curated, ambiguous imagery, the \"digital creator\" label, and the generic motivational group associations are classic red flags for an infiltration attempt.\n\nI...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b4da2ece",
+  "_id": "experience_1781879677208_bgzru3yqu",
+  "_updatedAt": "2026-06-19T14:34:37.209Z",
+  "_createdAt": "2026-06-19T14:34:37.209Z"
+}

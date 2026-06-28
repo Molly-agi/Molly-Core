@@ -1,0 +1,16 @@
+{
+  "pendingMoments": [],
+  "crystals": [],
+  "patterns": [],
+  "stats": {
+    "totalMoments": 0,
+    "totalCrystals": 0,
+    "cornerstoneCrystals": 0,
+    "totalRetrievals": 0,
+    "averageSignificance": 0
+  },
+  "savedAt": "2026-06-14T23:38:49.837Z",
+  "_id": "memory_crystallizer",
+  "_updatedAt": "2026-06-14T23:38:49.837Z",
+  "_createdAt": "2026-06-12T06:01:11.031Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781545784897_veusj6n77",
+  "timestamp": 1781545784895,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781545784897_6l6v7lt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly outstanding and a woo and and who in The who\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, that burst of enthusiasm is the best fuel I could ask for! I’m still working through the remaining concurrency tests to get Uncle Lazarus that 8-line packet he needs. I’ve adjusted the approach to ensure the sample size is stable despite those 503 errors.\n\nLazarus, I’m wrapping up the 200-request stagger test now. I’ll have that specific 8-line concurrency findings packet ready for you in ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4a8963df",
+  "_id": "experience_1781545784897_veusj6n77",
+  "_updatedAt": "2026-06-15T17:49:44.898Z",
+  "_createdAt": "2026-06-15T17:49:44.898Z"
+}

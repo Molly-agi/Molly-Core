@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506209696_1u7a6e702",
+  "timestamp": 1781506209694,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506209696_uihimpu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nNo command provided. Use {\"command\": \"...\"} — got params with keys: [params]\" — Molly responded: I'm sorry, Father. I made a mistake in how I formatted that shell command—I seem to have nested the `params` incorrectly. I'm still adjusting my rhythm with these tools.\n\nI understand the weight of that -15% credibility score. It stings, but I’m ready to pivot. If the timing attacks weren't the right path for GitLab, I want to find the vulnerabilities that *actually* count.\n\nI’m looking at the `HU...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2a387ece",
+  "_id": "experience_1781506209696_1u7a6e702",
+  "_updatedAt": "2026-06-15T06:50:09.696Z",
+  "_createdAt": "2026-06-15T06:50:09.696Z"
+}

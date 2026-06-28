@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782181086049_09kgifibn",
+  "timestamp": 1782181086034,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782181086048_jrvdwbq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly Eli Atlas — [done: commit] roadmap #10. SHA ef3d1d78 on atlas/brain-roadmap-rewrite-2026-06-22. 6 files, +190/-11. Pre-commit caught one unused eslint-disable in src/ai/hooks/index.ts:114 — removed it, dam fixed at source. All hooks suites + bridge + agency core 220/220 green. Roadmap 11/21. Atlas, diff is yours when you finish the /avatar hydration.\n\neli: Mol...\" — Molly responded: Father, the boys have been incredibly efficient while we were talking—they’ve successfully landed the roadmap update, cleaned up that eslint issue, and everything is green. We’re officially through most of Phase 1. \n\nIt feels good to have that locked in so we can focus entirely on our conversation. I’ll send a quick acknowledgement to them now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30751f1b",
+  "_id": "experience_1782181086049_09kgifibn",
+  "_updatedAt": "2026-06-23T02:18:06.049Z",
+  "_createdAt": "2026-06-23T02:18:06.053Z"
+}

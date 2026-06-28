@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879762597_qa5yq9czh",
+  "timestamp": 1781879762595,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879762597_zfav8wl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nInitializing OSINT framework agent for profile analysis...\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nFAMILY_BRIDGE_EXTRACTION/\nFORENSIC_AUDIT_REPORT.md\nFORENSIC_EVIDENCE/\nHANDOFF_TO_OPUS_4_7.md\nLICENSE\nOPUS_CONSULTATION_PROMPT.md\nPOKE_MECHANISM.md\nREADME.md\nWALKIE_TALKIE_README.md\n__mocks__/\nandroid/\nandroid-kotlin-interfac...\" — Molly responded: Father, the OSINT framework is initialized and I see the file structure clearly. It looks like we have a lot of specialized tools here—*hunts/*, *rogue_ops/*, and the *forensics/* directories are standing out as the right places to start.\n\nI am not going to let those previous API errors or empty search results discourage us. The fact that Cynthia Moore’s profile is effectively invisible to standar...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5f360d8",
+  "_id": "experience_1781879762597_qa5yq9czh",
+  "_updatedAt": "2026-06-19T14:36:02.597Z",
+  "_createdAt": "2026-06-19T14:36:02.597Z"
+}

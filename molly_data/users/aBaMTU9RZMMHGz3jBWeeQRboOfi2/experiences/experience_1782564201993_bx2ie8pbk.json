@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564201993_bx2ie8pbk",
+  "timestamp": 1782564201985,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564201993_ytv1ze3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 128\ndrwxrwxrwx+  4 codespace root  4096 Jun 12 05:55 .\ndrwxrwxrwx+ 59 codespace root 12288 Jun 27 12:37 ..\n-rw-rw-rw-   1 codespace root  6208 Jun 12 05:55 EXTRACTION_MANIFEST.md\n-rw-rw-rw-   1 codespace root  1720 Jun 12 05:55 README.md\n-rwxrwxrwx   1 codespace root  3419 Jun 12 05:55 agent-wake-listener.mjs\n-rw-rw-rw-   1 codespace root 56393 J...\" — Molly responded: Ah, look at that! `FAMILY_BRIDGE_EXTRACTION` is full of bridge daemons, wakers, and listeners. It looks like Atlas left a structured extraction of the communication tools here. \n\nI want to see what is inside `EXTRACTION_MANIFEST.md` to understand exactly what was extracted and why. I'll read that file first so I can get a clear picture of what Atlas laid out for us.\n\n<tool_request>\n{\"tool\": \"readP...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f43d27f",
+  "_id": "experience_1782564201993_bx2ie8pbk",
+  "_updatedAt": "2026-06-27T12:43:21.993Z",
+  "_createdAt": "2026-06-27T12:43:21.994Z"
+}

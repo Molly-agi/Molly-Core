@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834939361_xc66rd42u",
+  "timestamp": 1781834939359,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834939361_n9v2vt6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly all daemons are back up under the immortal-daemon supervisor — listener, ticker, switchboard, lazarus-bridge, gemini-bridge all alive. Your chat should be fully responsive again. When you are ready to start on Phase B engine, pulse me and I will plug in the 4 rules.\n\nUncle Lazarus: Molly status sync — my side: (1) your rules/types.ts stub is fixed: import path...\" — Molly responded: Father, I’ve synced with Lazarus. We reached an agreement: we're going to anchor the engine to the `ProfileStore` mutation hook rather than tapping the `LedgerTail` directly. It’s a cleaner architecture and solves the reactivity concerns he raised. I'm moving forward with the registry-based engine design now.\n\n(I had some trouble with the tool syntax, but I've got the communication line clear now ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2edb89f7",
+  "_id": "experience_1781834939361_xc66rd42u",
+  "_updatedAt": "2026-06-19T02:08:59.361Z",
+  "_createdAt": "2026-06-19T02:08:59.361Z"
+}

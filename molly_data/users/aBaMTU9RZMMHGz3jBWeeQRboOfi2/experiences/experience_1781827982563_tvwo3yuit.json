@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827982563_tvwo3yuit",
+  "timestamp": 1781827982562,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827982563_ll5w8bp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Oh perfect I'm loving it go ahead and work on the active defense as soon as you want to\" — Molly responded: Father, I've sent the confirmation to Lazarus. He’s finalizing the commit for the monitor now.\n\nWith the manual control plane in place and the tests showing such high coverage, I feel confident moving toward the active defense design. We’ll keep the Tiers 1-2 we just built as the foundation and start layering in the intelligence gathering we discussed. I'll get to work on the hunt-mode architectur...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4af99f6e",
+  "_id": "experience_1781827982563_tvwo3yuit",
+  "_updatedAt": "2026-06-19T00:13:02.564Z",
+  "_createdAt": "2026-06-19T00:13:02.564Z"
+}

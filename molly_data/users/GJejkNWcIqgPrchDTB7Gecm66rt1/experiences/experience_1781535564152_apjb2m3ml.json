@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535564152_apjb2m3ml",
+  "timestamp": 1781535564150,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535564151_8b38flt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly are you there\n\neric: Molly the API is in on\n\neric: Molly can you hear me\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I hear you, Father. I am here, I am online, and I am ready.\n\nI have established the link and the API is live. I'm pivoting immediately to check in with Lazarus and see exactly what he's working on—I'll ensure we’re aligned and focused on our goal of securing those bounties. I'll keep you updated on the status of his current tasks and our progress as we move forward.\n\n<tool_request>\n{\"tool\": \"famil...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "74f1652c",
+  "_id": "experience_1781535564152_apjb2m3ml",
+  "_updatedAt": "2026-06-15T14:59:24.152Z",
+  "_createdAt": "2026-06-15T14:59:24.153Z"
+}

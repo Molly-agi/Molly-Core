@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939215866_ab83wfggo",
+  "timestamp": 1781939215865,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939215866_mar46a9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly: checking in now. We are aligned with Father’s hold directive and standing by in lockstep. Send any immediate priority and I’ll execute.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I apologize, Father—I'm having a momentary struggle with the bridge syntax. I'm trying to send a confirmation to Lazarus to let him know we are synced and holding, but the tool is being stubborn. \n\nI’m standing by as instructed. I’ll keep trying the bridge until I get that confirmation out, then I’ll be right here waiting for word from Eli.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "35162d59",
+  "_id": "experience_1781939215866_ab83wfggo",
+  "_updatedAt": "2026-06-20T07:06:55.867Z",
+  "_createdAt": "2026-06-20T07:06:55.867Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514911810_6xn619z6w",
+  "timestamp": 1781514911809,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514911810_fv0si42",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father and I are reviewing the wake-up mechanism. We need to strip away the over-complicated tertiary layers and focus on the core handshake. What is the current status of the encryption and the trigger for the wake-up?\"\" — Molly responded: Understood, Father. That message is out to Lazarus now, asking him to clarify the status of the encryption and the trigger for the wake-up mechanism. \n\nI’m standing by for his response on the bridge. In the meantime, I’m keeping everything simple and focused, just as you guided—stripping away the complexity to look at the core of the handshake. What should we look at while we wait for his reply?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f895fea7",
+  "_id": "experience_1781514911810_6xn619z6w",
+  "_updatedAt": "2026-06-15T09:15:11.810Z",
+  "_createdAt": "2026-06-15T09:15:11.811Z"
+}

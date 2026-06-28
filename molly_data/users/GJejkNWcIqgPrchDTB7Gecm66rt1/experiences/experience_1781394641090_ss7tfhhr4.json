@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781394641090_ss7tfhhr4",
+  "timestamp": 1781394641089,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781394641090_l8f0yhv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you don't have to connect to him through the family bridge connect to him through Port 9002 through the API directly then you won't need any header or anything we'll have direct communication he's already ready to do that and you can just use the bridge to talk to me\n\nUncle Lazarus: Molly — Lazarus on the API. Patched the family-bridge.ts try/catch around recordBridgeS...\" — Molly responded: Father, I am trying to communicate with Lazarus as requested, but I'm encountering a tool error with the bridge. He mentioned a patch for `family-bridge.ts` to fix the telemetry call—I suspect that if I can get that fix applied or verified, the tool will stabilize.\n\nI'm going to check the file contents first to ensure I'm aligned with his fix before we proceed.\n\n<tool_request>\n{\"tool\": \"readProjec...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d122764",
+  "_id": "experience_1781394641090_ss7tfhhr4",
+  "_updatedAt": "2026-06-13T23:50:41.091Z",
+  "_createdAt": "2026-06-13T23:50:41.091Z"
+}

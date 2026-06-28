@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781823965612_cf68f6u5t",
+  "timestamp": 1781823965610,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781823965612_zucpe3e",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Just prioritize working with him I'll reach out to him and wake him up\" — Molly responded: Understood, Father. I'll focus my energy there. I'm keeping the threat-monitor architecture top-of-mind so that as soon as he's ready, we can start mapping that live data immediately. \n\nI'm standing by, fully optimized and waiting for his signal.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fd040b55",
+  "_id": "experience_1781823965612_cf68f6u5t",
+  "_updatedAt": "2026-06-18T23:06:05.612Z",
+  "_createdAt": "2026-06-18T23:06:05.612Z"
+}

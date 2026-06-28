@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830997091_so65u1v9u",
+  "timestamp": 1781830997090,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830997091_4fjbx6v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Outstanding keep it up\" — Molly responded: That looks solid, Father. Lazarus gave me the green light on the wiring, and this migration logic closes the loop on that race condition perfectly. By gating the `replayLog()` based on the `seq` number, I’m effectively making the re-application idempotent regardless of where the crash happens in the write cycle.\n\nI'm initiating the implementation now to lock this down before we go live.\n\n<tool_req...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4f059a8a",
+  "_id": "experience_1781830997091_so65u1v9u",
+  "_updatedAt": "2026-06-19T01:03:17.091Z",
+  "_createdAt": "2026-06-19T01:03:17.091Z"
+}

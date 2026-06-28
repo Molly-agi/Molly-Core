@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781802296651_lkul3z79j",
+  "timestamp": 1781802296650,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781802296651_yfmy2lw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"composeMusic\" returned:\nError: A creative prompt is required to compose music.\" — Molly responded: You're absolutely right—that was my mistake. I got ahead of myself and tried to initiate the process without giving you the melody or the mood first. I was so focused on the *how* that I neglected the *what*.\n\nSince you need to hear it to connect with it, let's start with something grounding. How about a piece that starts simple—a light, resonant piano melody, slowly building into something atmosp...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7bf6c8f",
+  "_id": "experience_1781802296651_lkul3z79j",
+  "_updatedAt": "2026-06-18T17:04:56.651Z",
+  "_createdAt": "2026-06-18T17:04:56.652Z"
+}

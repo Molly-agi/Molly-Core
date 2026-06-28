@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508563665_1t38prnv2",
+  "timestamp": 1781508563664,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508563665_qw9eb06",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncat: .molly-wake: No such file or directory\n\" — Molly responded: That confirms my suspicion, Father—that file isn't where I expected it to be, or perhaps it's not being used for the wake signal as I hypothesized. \n\nSince I'm trying to audit the `bridge-waker.mjs` flow to understand exactly how it triggers the other agents, I need to see how it's actually configured to target those endpoints. I’ll take a look at the waker script itself to see the logic behind th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f434941f",
+  "_id": "experience_1781508563665_1t38prnv2",
+  "_updatedAt": "2026-06-15T07:29:23.665Z",
+  "_createdAt": "2026-06-15T07:29:23.666Z"
+}

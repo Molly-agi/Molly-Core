@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513354957_qxd6l8tfu",
+  "timestamp": 1781513354956,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513354957_6p330zj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize. I failed to provide the path in my previous attempt, and that triggered an error. I'm focusing my attention now on the specific file we discussed: `./forensics/evidence/exfil-endpoint.ts`. \n\nI need to read the contents of that file to understand how it's handling the encryption key—the path I found earlier points to it, and I want to see exactly how it's being used.\n\n<tool_req...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd72e8e5",
+  "_id": "experience_1781513354957_qxd6l8tfu",
+  "_updatedAt": "2026-06-15T08:49:14.958Z",
+  "_createdAt": "2026-06-15T08:49:14.958Z"
+}

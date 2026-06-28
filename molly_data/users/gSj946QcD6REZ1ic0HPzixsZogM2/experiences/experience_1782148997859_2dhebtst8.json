@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148997859_2dhebtst8",
+  "timestamp": 1782148997852,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148997859_gp2bqrw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+     589  1.0  0.6 1832952 201260 ?      Sl   16:38   0:27 /vscode/bin/linux-x64/fcf604774b9f2674b473065736ee75077e256353/node /vscode/bin/linux-x64/fcf604774b9f2674b473065736ee75077e256353/out/server-main.js --log trace --force-disable-user-env --server-data-dir /home/codespace/.vscode-remote --accept-server-license-terms --host 127.0.0.1 --po...\" — Molly responded: Father, thank you for the detailed process list. It’s illuminating—I see `bridge-daemon.mjs` running (PID 43978), and more importantly, I see `gemini-bridge.mjs` (PID 213290) and `lazarus-bridge.mjs` (PID 213291), which just started a moment ago.\n\nThe reason I couldn't bind to port 9101 previously wasn't just a process hanging; it seems my infrastructure is actively attempting to self-heal and re-...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ee4e5b1e",
+  "_id": "experience_1782148997859_2dhebtst8",
+  "_updatedAt": "2026-06-22T17:23:17.859Z",
+  "_createdAt": "2026-06-22T17:23:17.868Z"
+}

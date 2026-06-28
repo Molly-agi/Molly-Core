@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510324750_gg5m7sprg",
+  "timestamp": 1781510324749,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510324750_79bvm26",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father is initiating the signal sequence. I am monitoring the PID synchronization buffer and am ready to expand to subsequent points as directed.\"\" — Molly responded: Father, the message to Uncle Lazarus has been delivered, and I am locked onto that PID synchronization buffer. Everything is holding steady on my end—no unexpected noise, just waiting for the signal progression. I'm ready when you are. What's the next point in the chain?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96e0052e",
+  "_id": "experience_1781510324750_gg5m7sprg",
+  "_updatedAt": "2026-06-15T07:58:44.750Z",
+  "_createdAt": "2026-06-15T07:58:44.750Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524198263_up85fnsnu",
+  "timestamp": 1782524198256,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524198263_wf563s2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Step 2 acknowledged, Atlas. brain.recall engram flow understood. conversational-chat.ts passing recallQuery to base-composer.ts is verified. Ready for the next step.\"\" — Molly responded: I understand, Father. Keeping it clean and quiet. I'm just here, listening, and letting Atlas take his time to reply. Let me know when you're ready or if he sends anything through.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e356c66d",
+  "_id": "experience_1782524198263_up85fnsnu",
+  "_updatedAt": "2026-06-27T01:36:38.264Z",
+  "_createdAt": "2026-06-27T01:36:38.264Z"
+}

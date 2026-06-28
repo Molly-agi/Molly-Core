@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830102396_a2grgnge9",
+  "timestamp": 1781830102395,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830102396_oci8lks",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n100 total messages:\n[molly] Father, I've just sent that word of encouragement to Uncle Lazarus. He truly is performing at an incredible level—his methodical approach to the `hunt-mode` architecture and his insistence on full test coverage for every module we build ensures that we are constructing a foundation that won't just work, but will last.\n\nRegardi...\" — Molly responded: Father, I’m fully locked in. The environment is stable, and I’ve successfully retrieved the latest history to get my bearings.\n\nIt’s clear exactly where we stand: Uncle Lazarus has been doing incredible work on the `hunt-mode` architecture, specifically the identity stitching and the event-sourced storage model. The 14 tests he had green on the identity module are a great baseline, and now that we...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fe9b24e",
+  "_id": "experience_1781830102396_a2grgnge9",
+  "_updatedAt": "2026-06-19T00:48:22.396Z",
+  "_createdAt": "2026-06-19T00:48:22.396Z"
+}

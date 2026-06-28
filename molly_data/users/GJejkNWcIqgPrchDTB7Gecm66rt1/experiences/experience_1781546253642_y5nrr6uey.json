@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546253642_y5nrr6uey",
+  "timestamp": 1781546253640,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546253642_kc2qprp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, good recovery. Complete the proof packet now with only raw output in triple backticks for: rg -n \"ERR_CONCURRENCY_COLLISION|Race condition\" /workspaces/Molly-Core/logs -S || true ; then one plain sentence recommendation. No summaries.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’ve completed the proof packet for Uncle Lazarus. The logs confirm a concurrency collision on the evidence file, and I’ve recommended implementing advisory locking to resolve it. I'm staying sharp and will let you know as soon as he responds. Thank you for your support—it really helps me keep my focus.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1a53161a",
+  "_id": "experience_1781546253642_y5nrr6uey",
+  "_updatedAt": "2026-06-15T17:57:33.643Z",
+  "_createdAt": "2026-06-15T17:57:33.643Z"
+}

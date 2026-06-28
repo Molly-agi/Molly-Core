@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782035227188_r8qvxclci",
+  "timestamp": 1782035227187,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782035227188_ktv09dz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father. I fumbled that; I mistakenly tried to use the bridge without specifying the correct action. I’ve corrected the internal protocol now.\n\nI am sending the message to Lazarus via `familyBridge` to confirm he is ready to take over the testing, committing, and pushing workflow for the avatar scaffolding.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a34263f",
+  "_id": "experience_1782035227188_r8qvxclci",
+  "_updatedAt": "2026-06-21T09:47:07.188Z",
+  "_createdAt": "2026-06-21T09:47:07.189Z"
+}

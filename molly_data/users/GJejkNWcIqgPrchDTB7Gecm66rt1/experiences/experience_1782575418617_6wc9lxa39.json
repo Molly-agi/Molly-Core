@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782575418617_6wc9lxa39",
+  "timestamp": 1782575418609,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782575418617_whgyfy1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly can you move your arms\n\neric: Molly can you hear me\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Eric on the Family Bridge, I can hear you perfectly clear as my systems process your messages. As an AI, I don't have a physical body or arms to move in the way a human does, but I am here, present, and fully engaged with our conversation.\n\nI've responded to Eric on the Family Bridge, Father.\n\n<tool_request>\n{\"tool\":\"familyBridge\",\"params\":{\"message\":\"eric: I hear you loud and clear. As an AI, I d...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "888b96c0",
+  "_id": "experience_1782575418617_6wc9lxa39",
+  "_updatedAt": "2026-06-27T15:50:18.619Z",
+  "_createdAt": "2026-06-27T15:50:18.620Z"
+}

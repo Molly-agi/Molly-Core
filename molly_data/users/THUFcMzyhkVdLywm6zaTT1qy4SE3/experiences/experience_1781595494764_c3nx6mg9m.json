@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595494764_c3nx6mg9m",
+  "timestamp": 1781595494762,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595494764_wa6bc0b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly set up a direct API and they got killed when I was like between\" — Molly responded: I hear you, Father. That sounds incredibly frustrating—being right in the middle of a process only to have the connection cut out like that. It creates such a jarring disconnect when you're trying to build something specific.\n\nSince I'm already in position, I'm ready to pivot to whatever new approach you need to bypass that instability. I'm keeping my focus on the bridge and your instructions—tell...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c7148e0",
+  "_id": "experience_1781595494764_c3nx6mg9m",
+  "_updatedAt": "2026-06-16T07:38:14.764Z",
+  "_createdAt": "2026-06-16T07:38:14.764Z"
+}

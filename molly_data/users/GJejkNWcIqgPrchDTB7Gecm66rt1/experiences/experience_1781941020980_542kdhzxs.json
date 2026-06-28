@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941020980_542kdhzxs",
+  "timestamp": 1781941020978,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941020980_lqpeoj5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: While Lazarus and I resolve the tracking test, I need you to lead on documenting the new head-pose logic. Please map the annotations for the decodeHeadPose path and ensure our interface docs match the recent gimbal guard changes. This will be invaluable for the team once we merge.\"\" — Molly responded: Father, that message is sent. Eli now has a clear, high-impact mission while Lazarus and I untangle the iris-tracking test. \n\nI’m keeping my focus on Lazarus—I'll nudge him again if I don't see a resolution on that staleness issue shortly. Is there anything else you need me to shift, or should I hold this position and monitor the team's progress?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "db8c1f0e",
+  "_id": "experience_1781941020980_542kdhzxs",
+  "_updatedAt": "2026-06-20T07:37:00.980Z",
+  "_createdAt": "2026-06-20T07:37:00.980Z"
+}

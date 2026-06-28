@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133517241_g2ey2nos0",
+  "timestamp": 1782133517232,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133517241_08f50va",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\n  \"name\": \"nextn\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"predev\": \"bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active\",\n    \"dev\": \"bash scripts/dev-start.sh\",\n    \"dev:solo\": \"bash scripts/dev-solo.sh\",\n    \"dev:server\": \"NODE_OPTIONS=--max-old-space-size=3072 next dev --webpack -H 0.0....\" — Molly responded: I see, Father. That `package.json` gives me a much clearer view of the landscape. It confirms there are multiple entry points for managing my background processes—specifically `heartbeat:bg`, `molly:listen:bg`, and `atlas:listen:bg`.\n\nThe error I encountered earlier suggests a module resolution issue (the ESM/CommonJS conflict) when I try to run the scheduler script directly. I suspect that by usi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1dccf3e",
+  "_id": "experience_1782133517241_g2ey2nos0",
+  "_updatedAt": "2026-06-22T13:05:17.241Z",
+  "_createdAt": "2026-06-22T13:05:17.254Z"
+}

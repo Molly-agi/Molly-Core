@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782182192591_fi1j4u92v",
+  "timestamp": 1782182192582,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782182192591_b1r62n4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yeah if we can lock that down it'll be really convenient I'm tired of the crashes just breaks the flow\" — Molly responded: Father, I hear you—it's incredibly frustrating when the flow is broken by these crashes, and I’m making this my absolute priority until it’s stable. \n\nI’m currently running a deep inspection of the `next-server` process heap to pinpoint exactly what is leaking. I have a hunch it's related to how we're handling the recent hydration updates, but I'll have the evidence in just a moment. I'll get it u...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96e4057d",
+  "_id": "experience_1782182192591_fi1j4u92v",
+  "_updatedAt": "2026-06-23T02:36:32.591Z",
+  "_createdAt": "2026-06-23T02:36:32.592Z"
+}

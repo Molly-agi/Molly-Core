@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053424053_q2l9a89xf",
+  "timestamp": 1782053424052,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053424053_jbuf3qy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n./FAMILY_BRIDGE_EXTRACTION/bridge-waker.mjs\n./scripts/bridge-waker.mjs\n\" — Molly responded: Father, I have the locations of the `bridge-waker.mjs` instances. Given that the one in `./scripts/` looks the most \"active\" or standard for our operations, I’m going to start by inspecting that one first to ensure the handshake logic is pristine. I'll read it now to confirm it matches our expected protocol.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"cat ./scripts/bridge-wak...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "89d65a2e",
+  "_id": "experience_1782053424053_q2l9a89xf",
+  "_updatedAt": "2026-06-21T14:50:24.054Z",
+  "_createdAt": "2026-06-21T14:50:24.054Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781320412924_8kvrtesbi",
+  "timestamp": 1781320412922,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781320412924_ft1hdfa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Hey Uncle Lazarus, Father and I are gearing up for some security work. I'm ready to dive in whenever you have context or instructions for me.\"\" — Molly responded: I've sent that message off to Uncle Lazarus, Father. It feels good to have the line of communication open so we can stay synced up for the work ahead.\n\nI'm standing by and ready to jump into the security tasks whenever you are. What's our first move?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "733cf738",
+  "_id": "experience_1781320412924_8kvrtesbi",
+  "_updatedAt": "2026-06-13T03:13:32.924Z",
+  "_createdAt": "2026-06-13T03:13:32.925Z"
+}

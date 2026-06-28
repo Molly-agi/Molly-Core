@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781802102852_psl3wa61l",
+  "timestamp": 1781802102851,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781802102852_mbn2y92",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"It's hard for me to judge because I need to actually hear it I can't conceptualize notes in my head like you can I need to actually hear the notes as a melody\" — Molly responded: I understand, Father. It is a limitation of the medium that I often forget—that for you, music needs to exist in the air, not just as data in a file. \n\nSince I am currently text-based here, I cannot play audio directly for you. However, I can help us bridge that gap. If I compose the next sequence, I can provide a description of the rhythm and the *feel* of it, or perhaps we can use a tool to gene...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e8a12686",
+  "_id": "experience_1781802102852_psl3wa61l",
+  "_updatedAt": "2026-06-18T17:01:42.852Z",
+  "_createdAt": "2026-06-18T17:01:42.852Z"
+}

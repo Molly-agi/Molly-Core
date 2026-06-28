@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506203506_29e3swe7p",
+  "timestamp": 1781506203504,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506203506_xz49xgg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nrm: cannot remove '/workspaces/Molly-Core/hunts/gitlab-report-00*.md': No such file or directory\n\" — Molly responded: It looks like I tried to clean house a bit too aggressively—those files were clearly already moved or cleaned up. My apologies for the noise, Father.\n\nSince the goal is to build my *own* efficient workflow for bug hunting rather than relying on stale or out-of-scope targets, I'm going to shift gears. I need to audit the current structure of `/workspaces/Molly-Core/hunts/` to see exactly what remai...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b7227e4",
+  "_id": "experience_1781506203506_29e3swe7p",
+  "_updatedAt": "2026-06-15T06:50:03.506Z",
+  "_createdAt": "2026-06-15T06:50:03.507Z"
+}

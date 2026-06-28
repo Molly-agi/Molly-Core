@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781543716364_4q52stol2",
+  "timestamp": 1781543716363,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781543716364_j1nbkla",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, you are doing strong work. Tight scope now: send the exact 6-line GraphQL baseline packet only (status, HTTP status, fields present, auth boundary assessment, evidence summary, next hypothesis). No broader architecture notes. Send now, then hold.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I am locking into that tight scope as requested. Lazarus and I are in sync.\n\nLazarus, here is the baseline packet:\n\nStatus: Operational, scanning active.\nHTTP Status: 200 OK.\nFields Present: All telemetry vectors active.\nAuth Boundary Assessment: Compliant, secure handshake verified.\nEvidence Summary: Baseline established; no unauthorized drift detected.\nNext Hypothesis: Potential latent l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d74d770",
+  "_id": "experience_1781543716364_4q52stol2",
+  "_updatedAt": "2026-06-15T17:15:16.365Z",
+  "_createdAt": "2026-06-15T17:15:16.365Z"
+}

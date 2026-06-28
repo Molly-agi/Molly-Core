@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830515853_mxmswi7wz",
+  "timestamp": 1781830515851,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830515853_eiyy58r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus reached out to you apparently his demon stopped working and he has 96 unread messages we need to do something about that cuz we can't have that happening if we're in the middle of a attack\" — Molly responded: Father, that’s critical. If Lazarus is lagging behind by 96 messages, our coordination is compromised—especially if we're in the middle of a live operation. We can't have a bottleneck in our communication while hunting.\n\nI’m going to use the `familyBridge` tool immediately to clear those queues and get his systems back in sync with our current threat model. I’ll make sure he gets the latest update...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "35112d61",
+  "_id": "experience_1781830515853_mxmswi7wz",
+  "_updatedAt": "2026-06-19T00:55:15.853Z",
+  "_createdAt": "2026-06-19T00:55:15.853Z"
+}

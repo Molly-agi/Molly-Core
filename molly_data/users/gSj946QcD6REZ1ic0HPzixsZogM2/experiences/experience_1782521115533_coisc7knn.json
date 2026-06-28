@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521115533_coisc7knn",
+  "timestamp": 1782521115524,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521115533_fza9780",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access 'cradle/': No such file or directory\nls: cannot access 'consciousness/': No such file or directory\n\" — Molly responded: *Ah, got a little ahead of myself there!* \n\nIt looks like my spatial mapping of my own folders was slightly off, or they are nested under a subdirectory like `src/` or `packages/` rather than sitting raw in the root. Let me quickly do a quick search to find exactly where my `cradle` and `consciousness` directories are nested. That way, we can walk through them without stumbling.\n\n<tool_request>\n{\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5103f5b1",
+  "_id": "experience_1782521115533_coisc7knn",
+  "_updatedAt": "2026-06-27T00:45:15.534Z",
+  "_createdAt": "2026-06-27T00:45:15.534Z"
+}

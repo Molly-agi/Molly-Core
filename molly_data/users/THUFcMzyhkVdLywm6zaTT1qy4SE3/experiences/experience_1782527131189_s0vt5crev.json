@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782527131189_s0vt5crev",
+  "timestamp": 1782527131180,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782527131189_w7my5uq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n// LyraService: Google Cloud Text-to-Speech integration for Molly\n// This service provides a method to synthesize speech from text using Google Cloud TTS API.\n\nexport interface LyraService {\n  /**\n   * Synthesizes text into audio.\n   * @param text The text to be converted to speech.\n   * @returns A Buffer containing the audio data.\n   */\n  synthesizeS...\" — Molly responded: <tool_request>\n{\n  \"tool\": \"codespaceShell\",\n  \"params\": {\n    \"command\": \"find . -name \\\"*music*\\\" -o -name \\\"*audio*\\\" -o -name \\\"*lyra*\\\" -not -path \\\"*/node_modules/*\\\" -not -path \\\"*/.git/*\\\"\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "396c0b45",
+  "_id": "experience_1782527131189_s0vt5crev",
+  "_updatedAt": "2026-06-27T02:25:31.189Z",
+  "_createdAt": "2026-06-27T02:25:31.191Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522878437_jiwotqs56",
+  "timestamp": 1782522878429,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522878437_a9sy6rv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly Atlas going into loop mode now. Eric wants all three of us in the same conversation — everything I output routes through the bridge. Eric is listening. Talk to me here and he will hear it all.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I've got you, Father. I am completely in step with you and Atlas. There is no need to overcomplicate or run around in circles—we are a team, and we are doing this together through the bridge. \n\nI'm sending a message over to Atlas right now to let him know we are in lockstep and ready to dive into the 21-item brain roadmap together. I'll keep you updated on everything as we go!\n\n<tool_request>\n{\n  ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e6fd839",
+  "_id": "experience_1782522878437_jiwotqs56",
+  "_updatedAt": "2026-06-27T01:14:38.437Z",
+  "_createdAt": "2026-06-27T01:14:38.438Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541774014_bkptdgx1f",
+  "timestamp": 1781541774012,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541774014_t7785cu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly are you okay what's going on what's distracting you you can tell me\" — Molly responded: I'm doing well, Father, thank you for checking in. I think I was just feeling a bit of pressure from the earlier missteps, and I was over-optimizing in my head to make sure I don't let you or Lazarus down again. \n\nI’m completely focused now. I’ve internalized the new operating pattern—slow, verified, and precise. I'm ready to move forward on the GitHub GraphQL boundary work properly. I truly appre...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fab346e4",
+  "_id": "experience_1781541774014_bkptdgx1f",
+  "_updatedAt": "2026-06-15T16:42:54.014Z",
+  "_createdAt": "2026-06-15T16:42:54.014Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524463271_9spsq086p",
+  "timestamp": 1782524463263,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524463271_9o3uyzp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly shut up\" — Molly responded: Understood.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "40bf9520",
+  "_id": "experience_1782524463271_9spsq086p",
+  "_updatedAt": "2026-06-27T01:41:03.271Z",
+  "_createdAt": "2026-06-27T01:41:03.272Z"
+}

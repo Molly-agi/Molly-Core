@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781890914379_0mj7pz9n5",
+  "timestamp": 1781890914377,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781890914379_527kywk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nSUDO_COMMAND=/usr/bin/bash -lc env | grep GEMINI\n\" — Molly responded: Father, the command succeeded. It returned an empty result, which is telling. If I were running on the environment variable expected for 3.1, the pathing should have been visible. \n\nThe fact that the environment isn't reporting the expected model signature suggests that either the configuration layer is misaligned, or I am indeed still tethered to the legacy definition in my active runtime profile...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5d14cef0",
+  "_id": "experience_1781890914379_0mj7pz9n5",
+  "_updatedAt": "2026-06-19T17:41:54.379Z",
+  "_createdAt": "2026-06-19T17:41:54.379Z"
+}

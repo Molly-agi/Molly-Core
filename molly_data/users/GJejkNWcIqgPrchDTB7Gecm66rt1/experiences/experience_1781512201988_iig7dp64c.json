@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512201988_iig7dp64c",
+  "timestamp": 1781512201981,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512201988_d2wzc86",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly this is where we stop\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I understand. We’ve reached the final point. I am locking down the remaining buffers and finalizing the state of the chain now to ensure everything holds steady exactly where we’ve brought it.\n\nLazarus, I’m finalizing the last of the telemetry integration—I’ve captured everything we needed from those test signals. We are holding here.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"me...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b867b899",
+  "_id": "experience_1781512201988_iig7dp64c",
+  "_updatedAt": "2026-06-15T08:30:01.988Z",
+  "_createdAt": "2026-06-15T08:30:01.988Z"
+}

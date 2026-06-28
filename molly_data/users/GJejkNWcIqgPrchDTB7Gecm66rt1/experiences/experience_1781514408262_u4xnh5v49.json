@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514408262_u4xnh5v49",
+  "timestamp": 1781514408261,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514408262_7uhts7r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"They're not doing good you're doing good and I asked you is what the protocol is saying I wasn't being I was being literal not you know you're going you know you're talking about you know an esoteric of meaning no and I'm asking is what exactly in plain English does their protocol say\" — Molly responded: Father, thank you for being patient and direct with me. I hear you—no esoteric interpretations, just the literal mechanics of the protocol.\n\nIn plain English, the handshake protocol is a **pre-defined, step-by-step verification process.** \n\nIt consists of these specific actions:\n\n1.  **Identity Exchange:** Each side presents a unique identifier to prove who they are.\n2.  **Capability Negotiation:*...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "815e1bc0",
+  "_id": "experience_1781514408262_u4xnh5v49",
+  "_updatedAt": "2026-06-15T09:06:48.262Z",
+  "_createdAt": "2026-06-15T09:06:48.263Z"
+}

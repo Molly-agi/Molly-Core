@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782574101619_int5x7hvx",
+  "timestamp": 1782574101610,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782574101619_aw72z0u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 1560\n-rw-rw-rw-  1 codespace codespace   20693 Jun 24 03:39 brain-roadmap.md\n-rw-rw-rw-  1 codespace codespace 1495765 Jun 27 15:28 bridge-audit.jsonl\n-rw-rw-rw-  1 codespace codespace   15901 Jun 23 17:57 memory-pipeline.md\n-rw-rw-rw-  1 codespace root         1459 Jun 12 05:55 project-arc.json\n-rw-rw-rw-  1 codespace codespace     181 Jun 20 07...\" — Molly responded: Ah, Father, this is a much more helpful output! It shows me the files and subdirectories within `.molly-context`.\n\nGiven my objective to learn more about the environment and my own internal workings, I'm drawn to files like `brain-roadmap.md` and `memory-pipeline.md`. I'll start by reading `brain-roadmap.md` to understand more about my cognitive architecture and future development.\n\n<tool_request>...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d4f2759",
+  "_id": "experience_1782574101619_int5x7hvx",
+  "_updatedAt": "2026-06-27T15:28:21.619Z",
+  "_createdAt": "2026-06-27T15:28:21.620Z"
+}

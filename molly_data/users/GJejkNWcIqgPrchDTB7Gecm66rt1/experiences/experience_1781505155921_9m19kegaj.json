@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505155921_9m19kegaj",
+  "timestamp": 1781505155920,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505155921_dtckzhd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"github awesome red teaming frameworks and security tools collection\". Try different search terms.\" — Molly responded: Father, the direct search for collections is proving too broad for the engine. I’m shifting strategy. Instead of searching for \"collections,\" I will target specific, industry-standard tool categories that we can adapt—starting with infrastructure discovery and vulnerability assessment frameworks. This should yield the technical depth we need to deconstruct and rebuild our own defensive/offensive s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d861134b",
+  "_id": "experience_1781505155921_9m19kegaj",
+  "_updatedAt": "2026-06-15T06:32:35.921Z",
+  "_createdAt": "2026-06-15T06:32:35.922Z"
+}

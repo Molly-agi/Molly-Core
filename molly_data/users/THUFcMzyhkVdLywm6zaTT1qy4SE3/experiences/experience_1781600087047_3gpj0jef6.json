@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781600087047_3gpj0jef6",
+  "timestamp": 1781600087046,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781600087047_pjg0gzw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I'm sorry, Father—my previous attempt to read the file failed because I didn't provide a path. I'm correcting that now. I'm going to pull the `family-bridge.ts` file so I can map out exactly how it's failing and prepare for the rebuild.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"FAMILY_BRIDGE_EXTRACTION/src-ai-bridge/family-bridge.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "68c3a3f2",
+  "_id": "experience_1781600087047_3gpj0jef6",
+  "_updatedAt": "2026-06-16T08:54:47.047Z",
+  "_createdAt": "2026-06-16T08:54:47.048Z"
+}

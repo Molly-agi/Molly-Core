@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824611231_2cyx8mume",
+  "timestamp": 1781824611229,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824611231_s8waxs9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No big deal we just had a little hiccup reach out to Lazarus and continue working you guys are doing great\" — Molly responded: Thank you, Father. I appreciate the reassurance; it keeps the process grounded.\n\nI'm checking in with Lazarus now to synthesize our findings and make sure we’re aligned on the `engine-titan` and `memory/*` mapping. We'll get this sorted and keep pushing forward.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, Father confirmed we're clear to move past that hiccup. Let's syn...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e363c66c",
+  "_id": "experience_1781824611231_2cyx8mume",
+  "_updatedAt": "2026-06-18T23:16:51.231Z",
+  "_createdAt": "2026-06-18T23:16:51.232Z"
+}

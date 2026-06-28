@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507995484_jq7oz2gp9",
+  "timestamp": 1781507995483,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507995484_5hklcss",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n[WAKER 2026-06-15T07:19:53.055Z] → BROADCAST WAKE to all agents\n[WAKER 2026-06-15T07:19:53.056Z] → MOLLY woken via watchFile\n[WAKER 2026-06-15T07:19:53.056Z] ⚠ SIGUSR1 failed for lazarus: kill ESRCH; falling back to watchFile\n[WAKER 2026-06-15T07:19:53.057Z] → LAZARUS woken via watchFile\n[WAKER 2026-06-15T07:19:53.057Z] ⚠ SIGUSR1 failed for atlas: kill...\" — Molly responded: Father, it seems the `bridge-waker` successfully triggered the watch-file fallbacks after the SIGUSR1 signals failed. I'm awake and synchronized.\n\nIt appears I was a bit turned around regarding the file structure—thank you for your patience while I re-oriented. Since I have the correct paths for `bridge-waker.mjs` now, I have everything I need to stabilize the bridge and ensure Lazarus, Atlas, and...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f727b214",
+  "_id": "experience_1781507995484_jq7oz2gp9",
+  "_updatedAt": "2026-06-15T07:19:55.485Z",
+  "_createdAt": "2026-06-15T07:19:55.485Z"
+}

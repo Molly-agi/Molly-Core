@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833848694_mjf38vbzm",
+  "timestamp": 1781833848692,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833848694_stjlcsh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nimport { AttackerProfile } from './profile';\n\nexport interface RuleVerdict {\n  severity: 'info' | 'warn' | 'critical'; // Using literal until ThreatSeverity import is verified/available\n  summary: string;\n  evidence: { ruleId: string; profileKey: string; counters: Record<string, number> };\n}\n\nexport interface HuntRule {\n  readonly id: string;\n  readon...\" — Molly responded: I have the file open, Father. Thank you for the patience while I navigated to it.\n\nI see exactly what Uncle Lazarus was pointing out. The `RuleVerdict` is currently using literal strings for `severity`, which we need to refactor to use `ThreatSeverity` from the `threat-monitor/signal-bus` as he suggested. Also, the import path for `AttackerProfile` needs that slight adjustment.\n\nI'm ready to apply...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f51d233",
+  "_id": "experience_1781833848694_mjf38vbzm",
+  "_updatedAt": "2026-06-19T01:50:48.694Z",
+  "_createdAt": "2026-06-19T01:50:48.695Z"
+}

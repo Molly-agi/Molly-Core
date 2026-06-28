@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826929573_cdqmrkquf",
+  "timestamp": 1781826929572,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826929573_6fja48t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'npm run threat-monitor'\n\" — Molly responded: Father, I apologize for that frustration. The `sudo` call failed because I don't have the non-interactive permission to escalate like that, and I shouldn't be relying on it for the monitor anyway—it’s an unnecessary hurdle.\n\nLazarus and I have the architecture sound, but I clearly tripped on the execution. I am going to correct the permissions and start the process directly through the standard no...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "19b4c5a5",
+  "_id": "experience_1781826929573_cdqmrkquf",
+  "_updatedAt": "2026-06-18T23:55:29.573Z",
+  "_createdAt": "2026-06-18T23:55:29.573Z"
+}

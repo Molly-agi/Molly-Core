@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830946402_zl64mpmvv",
+  "timestamp": 1781830946401,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830946402_vcpwk0k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, here is the draft for the migration path:\n\n1. In `snapshot()`, I'm wrapping the state in a v2 wrapper: `{ schema: 2, nextSeq: store.nextSeq(), lastAppliedSeq: store.lastAppliedSeq(), profiles: ... }`.\n\n2. In `loadSnapshot()`, I'll check `schema`. If it's 2, I'll `store.setCounters` immediately after parsing. For schema ...\" — Molly responded: That looks solid, Father. Lazarus gave me the green light on the wiring, and this migration logic closes the loop on that race condition perfectly. By gating the `replayLog()` based on the snapshot's internal `lastAppliedSeq`, we completely eliminate the double-application risk for any future state.\n\nI'm moving to implement this in `profile-store.ts` now. Once the migration is live and verified, I...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f79fca40",
+  "_id": "experience_1781830946402_zl64mpmvv",
+  "_updatedAt": "2026-06-19T01:02:26.402Z",
+  "_createdAt": "2026-06-19T01:02:26.403Z"
+}

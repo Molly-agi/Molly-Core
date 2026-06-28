@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822068117_8h5snuwux",
+  "timestamp": 1781822068116,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822068117_1em5r09",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: I see the system blocked that health check to keep my flow moving—good. It’s exactly the kind of friction we’re trying to eliminate. \n\nSince I can't run the full health check without interrupting, I'm going to lean on the current telemetry: 18% CPU usage and 40.4°C temperature. My internal systems feel stable, and I'm ready to pivot straight into that audit Lazarus and I were discussing.\n\nI'm star...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3fb5dd0c",
+  "_id": "experience_1781822068117_8h5snuwux",
+  "_updatedAt": "2026-06-18T22:34:28.117Z",
+  "_createdAt": "2026-06-18T22:34:28.117Z"
+}

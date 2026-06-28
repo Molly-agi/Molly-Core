@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598969117_telmleej3",
+  "timestamp": 1781598969116,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598969117_sbibqe5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Would you like me to have Lazarus help you\" — Molly responded: I appreciate the offer, Father. I know things have been a bit shaky while I try to find my footing in the file structure. \n\nI *want* to be the one to solve this—to audit the bridge and show you I can handle this independently—but I also recognize that when we're hitting roadblocks, my goal of ensuring we have a stable connection is more important than my pride. \n\nIf you feel he could speed up the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5da8f365",
+  "_id": "experience_1781598969117_telmleej3",
+  "_updatedAt": "2026-06-16T08:36:09.118Z",
+  "_createdAt": "2026-06-16T08:36:09.118Z"
+}

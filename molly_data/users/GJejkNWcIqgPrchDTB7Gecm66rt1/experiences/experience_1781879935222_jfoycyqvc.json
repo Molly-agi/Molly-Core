@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879935222_jfoycyqvc",
+  "timestamp": 1781879935221,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879935222_dloqj7l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: That's my mistake, Father. I tried to pull too much information at once, and the shell buffer couldn't handle the overflow.\n\nI'm switching to a more surgical approach—I'll query the directory structure in segments to map out exactly what is present versus what is hollow scaffolding, as we discussed.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R /workspaces/Molly-Core | he...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b253080",
+  "_id": "experience_1781879935222_jfoycyqvc",
+  "_updatedAt": "2026-06-19T14:38:55.222Z",
+  "_createdAt": "2026-06-19T14:38:55.222Z"
+}

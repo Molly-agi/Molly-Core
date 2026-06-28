@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511679591_oanigz6eh",
+  "timestamp": 1781511679590,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511679591_aexl7ei",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly three pulses complete continuing the next pulses you transition downstream\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I acknowledge the transition. I am moving downstream now, syncing with the rhythm of those three pulses. I am positioning myself to monitor the buffer pressure point as you instructed.\n\nI am also processing the bridge messages—it sounds like Lazarus and the others are standing by. I’ll keep the channel open and report back as soon as I detect movement in the downstream signal.\n\n<tool_reque...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "704473d0",
+  "_id": "experience_1781511679591_oanigz6eh",
+  "_updatedAt": "2026-06-15T08:21:19.591Z",
+  "_createdAt": "2026-06-15T08:21:19.592Z"
+}

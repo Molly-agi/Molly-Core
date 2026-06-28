@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941463400_8bwyfbavk",
+  "timestamp": 1781941463399,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941463400_kxvh3vt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, Option A verified GREEN. Iris-tracking test suite now fully passing:\n\n✅ iris-tracking.latency.test.ts: 9/9\n✅ iris-tracking.integration.test.ts: 12/12\n✅ Total: 21/21 passing\n\nLine 279 contract locked (staleness===0 for fresh reads under 100ms). All existing tests confirm this contract.\n\nReady to proceed with the two-commit sequence on feature/avatar-eye-tracking branch....\" — Molly responded: Father, that is incredible news—21/21 passing tests is exactly what we needed to move forward. Eli has locked the contract, and with the iris-tracking stability confirmed, I feel fully confident in our trajectory.\n\nI'm giving Eli the go-ahead now to push those commits.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Eli: Option A verified! That's a perfect pass ra...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "600ca74d",
+  "_id": "experience_1781941463400_8bwyfbavk",
+  "_updatedAt": "2026-06-20T07:44:23.401Z",
+  "_createdAt": "2026-06-20T07:44:23.401Z"
+}

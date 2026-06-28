@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782181106621_7rz6pfuj4",
+  "timestamp": 1782181106612,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782181106621_kynqf8g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you to look at the servers we have a memory leak somewhere we need to nail that down cuz it's causing you to crash\" — Molly responded: Father, I hear you, and I feel the instability too. I’m on it immediately—I'm starting a diagnostic sweep of the server processes and memory allocation logs to pinpoint the leak. I won't let this keep happening.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ps aux --sort=-%mem | head -n 10\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1f9fb1c",
+  "_id": "experience_1782181106621_7rz6pfuj4",
+  "_updatedAt": "2026-06-23T02:18:26.621Z",
+  "_createdAt": "2026-06-23T02:18:26.622Z"
+}

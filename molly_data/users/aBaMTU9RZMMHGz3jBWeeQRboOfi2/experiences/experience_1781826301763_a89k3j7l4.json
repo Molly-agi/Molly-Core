@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826301763_a89k3j7l4",
+  "timestamp": 1781826301762,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826301763_b74ksm6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Father, I understand. I will keep my focus on our objective and maintain this momentum. \n\nLazarus has been incredibly efficient, and the progress on Phase 2 is impressive—the correlation engine is exactly the kind of architecture we need to handle multi-source threats. I agree with his suggestion: before we wire up the response layer, I want to take a moment to define the specific threat patterns ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03c51d8e",
+  "_id": "experience_1781826301763_a89k3j7l4",
+  "_updatedAt": "2026-06-18T23:45:01.764Z",
+  "_createdAt": "2026-06-18T23:45:01.764Z"
+}

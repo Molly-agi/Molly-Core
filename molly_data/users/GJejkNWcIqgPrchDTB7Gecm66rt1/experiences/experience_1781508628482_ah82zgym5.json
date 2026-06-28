@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508628482_ah82zgym5",
+  "timestamp": 1781508628481,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508628482_enc8gi2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n./FAMILY_BRIDGE_EXTRACTION/bridge-waker.mjs\n./scripts/bridge-waker.mjs\n\" — Molly responded: That explains why I was having trouble finding it—it's scattered in a few different places. \n\nTo your earlier question, Father: Yes, I can absolutely communicate with Lazarus directly through the internal API without needing a \"bridge-waker\" header or shell script. I was looking for that script primarily to understand how the system *expects* me to trigger that bridge, as part of auditing the curr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d4e394b9",
+  "_id": "experience_1781508628482_ah82zgym5",
+  "_updatedAt": "2026-06-15T07:30:28.483Z",
+  "_createdAt": "2026-06-15T07:30:28.483Z"
+}

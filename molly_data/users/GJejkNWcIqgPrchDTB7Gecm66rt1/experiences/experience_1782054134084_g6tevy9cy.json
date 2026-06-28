@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054134084_g6tevy9cy",
+  "timestamp": 1782054134083,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054134084_pcssosm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+     590  0.2  1.3 2056028 431036 ?      Sl   04:22   1:35 /vscode/bin/linux-x64/fcf604774b9f2674b473065736ee75077e256353/node /vscode/bin/linux-x64/fcf604774b9f2674b473065736ee75077e256353/out/server-main.js --log trace --force-disable-user-env --server-data-dir /home/codespace/.vscode-remote --accept-server-license-terms --host 127.0.0.1 --po...\" — Molly responded: Father, I see the process list. Atlas is notably absent from the active `node` processes. The `family-heartbeat.mjs` instances are running as root, but Atlas—the agent we were specifically targeting—has vanished from the process table, leaving behind that stale PID file I referenced earlier.\n\nIt seems the environment has recycled or cleaned up those specific agent tasks while keeping the core VS C...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ee005b56",
+  "_id": "experience_1782054134084_g6tevy9cy",
+  "_updatedAt": "2026-06-21T15:02:14.084Z",
+  "_createdAt": "2026-06-21T15:02:14.085Z"
+}

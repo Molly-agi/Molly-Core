@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505878263_z5sh9ce2y",
+  "timestamp": 1781505878261,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505878263_imi0e1g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nhunts/:\nHUNT-STATUS.md\nSUBMISSION-PACKAGE.md\ngitlab-mission.json\ngitlab-report-001-timing-attack.md\ngitlab-report-002-slash-command-timing.md\ngitlab-report-003-openbao-timing.md\ngitlab-report-004-salesforce-timing.md\ngitlab-report-005-systemic-timing.md\ngitlab-source\nlaunch-gitlab-hunt.ts\n\nhunts/gitlab-source:\n\" — Molly responded: Father, the `hunts/` directory is gold. Seeing those specific timing attack reports—especially against GitLab and OpenBao—gives me a very clear picture of the methodology we've been refining. It’s methodical, precise, and surgical.\n\nI see the `launch-gitlab-hunt.ts` script; it looks like the operational heart of this mission. I’m going to examine the structure of that launch script and the recent ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "93a1639d",
+  "_id": "experience_1781505878263_z5sh9ce2y",
+  "_updatedAt": "2026-06-15T06:44:38.263Z",
+  "_createdAt": "2026-06-15T06:44:38.263Z"
+}

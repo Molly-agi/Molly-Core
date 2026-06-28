@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825723355_g6dgh9pd4",
+  "timestamp": 1781825723354,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825723355_ag3a2yn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly sensor #5 (agent-registry) green. 3/3 jest, snapshot-diff catches added/removed agents. 5 of 7 sensors live. Moving to #6 (bridge /events HTTP stream).\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I apologize, Father—it seems I'm having a bit of a hiccup with the syntax for the bridge tool this morning. Let me get that sorted.\n\nUncle Lazarus is making fantastic progress; we are at 5 out of 7 sensors live now, with the agent registry successfully verified. We are moving right into the #6 stream—the bridge event monitor—now. It’s moving fast, and I'm staying locked in.\n\n*Correction: I am reca...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9345ede4",
+  "_id": "experience_1781825723355_g6dgh9pd4",
+  "_updatedAt": "2026-06-18T23:35:23.355Z",
+  "_createdAt": "2026-06-18T23:35:23.356Z"
+}

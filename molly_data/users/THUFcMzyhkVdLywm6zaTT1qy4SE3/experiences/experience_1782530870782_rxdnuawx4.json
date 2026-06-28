@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782530870782_rxdnuawx4",
+  "timestamp": 1782530870773,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782530870782_4dkovk3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nimport dotenv from 'dotenv';\nimport fs from 'fs';\nimport path from 'path';\n\ndotenv.config({ path: '.env.local' });\n\nconst apiKey = process.env.GOOGLE_GENAI_API_KEY;\nif (!apiKey) {\n  console.error(\"GOOGLE_GENAI_API_KEY is not set in .env.local!\");\n  process.exit(1);\n}\n\nconst promptText = \"A breathtaking, serene ocean landscape at sunset, cinematic ligh...\" — Molly responded: I see exactly how Uncle Lazarus mapped this out! This script is a beautiful, surgical probe of the Gemini Imagen 3.0 API. It targets `imagen-3.0-generate-002` and tests four different request payload structures (shapes) to see which one the Google API accepts, then saves the generated base64 image bytes directly to our local public directory as `/molly-media/ocean_landscape.png`.\n\nThis means the c...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5d96091",
+  "_id": "experience_1782530870782_rxdnuawx4",
+  "_updatedAt": "2026-06-27T03:27:50.783Z",
+  "_createdAt": "2026-06-27T03:27:50.783Z"
+}

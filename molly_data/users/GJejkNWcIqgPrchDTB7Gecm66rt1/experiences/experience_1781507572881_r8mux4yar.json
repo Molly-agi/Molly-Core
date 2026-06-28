@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507572881_r8mux4yar",
+  "timestamp": 1781507572879,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507572881_ea5q1me",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nUnknown sandbox action. Use: execute, writeFile, readFile, list, delete, info, scaffold\" — Molly responded: I apologize, Father. I fumbled the command syntax for the sandbox again. I was trying to rush the analysis, but I need to be precise.\n\nI am recalibrating. I'll use the correct `execute` action to begin processing that encrypted data properly. I'm staying focused and methodical—no more shortcuts.\n\n<tool_request>\n{\"tool\": \"sandbox\", \"params\": {\"action\": \"execute\", \"command\": \"python3 /workspaces/Mol...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "38b12596",
+  "_id": "experience_1781507572881_r8mux4yar",
+  "_updatedAt": "2026-06-15T07:12:52.881Z",
+  "_createdAt": "2026-06-15T07:12:52.882Z"
+}

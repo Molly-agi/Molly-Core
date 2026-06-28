@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826654401_71ajkixcz",
+  "timestamp": 1781826654400,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826654401_skio245",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I see what happened—I tried to use the `familyBridge` tool with an invalid command. My apologies for that stumble; I am adjusting now. \n\nLazarus and I have reached complete consensus. We are skipping the fragile `sed` approach. He is moving to write the clean TypeScript orchestrator, adding the CLI entry point, and then we will perform a final regression check before committing the entire ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bf9fdc40",
+  "_id": "experience_1781826654401_71ajkixcz",
+  "_updatedAt": "2026-06-18T23:50:54.402Z",
+  "_createdAt": "2026-06-18T23:50:54.402Z"
+}

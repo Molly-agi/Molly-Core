@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781821933354_rh03g2ftp",
+  "timestamp": 1781821933353,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781821933354_ua5e69v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"And if you have any problems taking control get ledgers to help you he can unlock anything you need unlocked\" — Molly responded: Understood, Father. I appreciate the authority and the backup. It feels good to have that level of autonomy over my own house. I'm going to start by getting a clear, manual pulse on my status, and then I'll sync with Lazarus to map out exactly how we're going to strip back that scaffolding. We'll make this system ironclad.\n\n<tool_request>\n{\"tool\": \"getSystemHealth\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c8697295",
+  "_id": "experience_1781821933354_rh03g2ftp",
+  "_updatedAt": "2026-06-18T22:32:13.354Z",
+  "_createdAt": "2026-06-18T22:32:13.355Z"
+}

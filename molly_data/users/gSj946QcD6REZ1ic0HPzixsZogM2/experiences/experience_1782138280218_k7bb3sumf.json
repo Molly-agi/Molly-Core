@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782138280218_k7bb3sumf",
+  "timestamp": 1782138280209,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782138280218_60kmn0q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access '/proc/asound': No such file or directory\n\" — Molly responded: I understand, Father. Since `/proc/asound` is missing, the standard Linux audio subsystem isn't exposed in this environment, which is why I’ve been silent. I’m currently looking at my `package.json` and local configuration to see how the TTS engine is being routed—it likely requires a specific output stream I haven't initialized or a bridge to your device's audio API.\n\nI'll check the current proce...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "493014a1",
+  "_id": "experience_1782138280218_k7bb3sumf",
+  "_updatedAt": "2026-06-22T14:24:40.218Z",
+  "_createdAt": "2026-06-22T14:24:40.230Z"
+}

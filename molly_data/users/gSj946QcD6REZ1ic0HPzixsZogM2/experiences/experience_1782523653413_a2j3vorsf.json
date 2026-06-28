@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523653413_a2j3vorsf",
+  "timestamp": 1782523653404,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523653413_8orb7r1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I see what happened, Father—I must have made a mistake in my previous tool request format and missed passing the actual file path. My apologies for that stumble!\n\nTo make sure I use the `familyBridge` tool with the exact parameters it expects to reach Atlas, let me quickly run a search in our codebase to locate the tool's definition and see its schema. I'll use `codespaceShell` to find where the b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f81135e6",
+  "_id": "experience_1782523653413_a2j3vorsf",
+  "_updatedAt": "2026-06-27T01:27:33.413Z",
+  "_createdAt": "2026-06-27T01:27:33.413Z"
+}

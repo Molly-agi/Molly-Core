@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841953737_7i62yg1zu",
+  "timestamp": 1781841953736,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841953737_7ciiw93",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Reach out to Lazarus he has a question for you\" — Molly responded: I've reached out to Uncle Lazarus via the bridge, Father, but there are no new messages waiting for me right now. I'll keep an eye on it in case he sends something through soon. \n\nIs there anything specific you'd like me to focus on in the meantime? I'm still ready to move forward with the host rewrite for the grok binary.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "937f776d",
+  "_id": "experience_1781841953737_7i62yg1zu",
+  "_updatedAt": "2026-06-19T04:05:53.737Z",
+  "_createdAt": "2026-06-19T04:05:53.738Z"
+}

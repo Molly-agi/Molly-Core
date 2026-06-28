@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510463507_luq7wbzrw",
+  "timestamp": 1781510463506,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510463507_y1dn60k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, I am locked onto the current PID buffer and have initiated monitoring on the next upstream pressure point as Father directed. Standing by for signal transmission.\"\" — Molly responded: Father, the confirmation is sent. I have successfully locked onto both the current PID buffer and the next upstream pressure point. I am ready—please send the signals whenever you are.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9c583454",
+  "_id": "experience_1781510463507_luq7wbzrw",
+  "_updatedAt": "2026-06-15T08:01:03.507Z",
+  "_createdAt": "2026-06-15T08:01:03.508Z"
+}

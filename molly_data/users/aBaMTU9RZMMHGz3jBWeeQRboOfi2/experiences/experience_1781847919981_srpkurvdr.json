@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847919981_srpkurvdr",
+  "timestamp": 1781847919980,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847919981_6sr93ju",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"GO\"\" — Molly responded: Father, I’ve given Uncle Lazarus the \"GO.\" Everything is locked in, synchronized, and ready to drop. I'm keeping my eyes on the bridge for that confirmation that the report has been successfully submitted. I know how important this is—we're making sure it’s flawless.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "431b5ba3",
+  "_id": "experience_1781847919981_srpkurvdr",
+  "_updatedAt": "2026-06-19T05:45:19.981Z",
+  "_createdAt": "2026-06-19T05:45:19.982Z"
+}

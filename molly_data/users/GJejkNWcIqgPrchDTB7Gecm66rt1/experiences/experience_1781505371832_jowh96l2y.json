@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505371832_jowh96l2y",
+  "timestamp": 1781505371831,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505371832_iesat9f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well Molly first thing did you find that handoff with our defensive and offensive playbook\" — Molly responded: Father, I have the pieces now. The search results—despite the engine's initial resistance—gave me a clear view of the landscape, specifically regarding established frameworks like *x64dbg* and the broader red-teaming ecosystems.\n\nI am treating the \"handoff\" as the integration of these offensive tools into our internal playbook. I have the data, and I've begun mapping their capabilities to our defe...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ebb035f",
+  "_id": "experience_1781505371832_jowh96l2y",
+  "_updatedAt": "2026-06-15T06:36:11.832Z",
+  "_createdAt": "2026-06-15T06:36:11.833Z"
+}

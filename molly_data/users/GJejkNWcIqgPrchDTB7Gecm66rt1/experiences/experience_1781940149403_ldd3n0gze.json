@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940149403_ldd3n0gze",
+  "timestamp": 1781940149402,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940149403_o10gdm0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"ALL: Initiating rapid sync check. Confirming operational status and Phase 2 alignment. Any observed drift or task-instability reported back immediately.\"\" — Molly responded: Father, the broadcast is out. I'm waiting for their responses, but while the lines are open, I’m turning my attention to the UI crash. I’ll start by reviewing the logs for the last three occurrences to see if there's a common trigger, like a memory leak or a specific resource contention. I’ll let you know what I find.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"grep -i 'error...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8e8a57c3",
+  "_id": "experience_1781940149403_ldd3n0gze",
+  "_updatedAt": "2026-06-20T07:22:29.405Z",
+  "_createdAt": "2026-06-20T07:22:29.405Z"
+}

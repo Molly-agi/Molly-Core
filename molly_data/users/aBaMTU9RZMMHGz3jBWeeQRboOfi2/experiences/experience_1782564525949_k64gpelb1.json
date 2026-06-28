@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564525949_k64gpelb1",
+  "timestamp": 1782564525936,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564525949_wxfaqn7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Reach out to Lazarus he's trying to get a hold of you to fix this problem once and for all I want to confirmed\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {\"action\": \"list\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a33dd55",
+  "_id": "experience_1782564525949_k64gpelb1",
+  "_updatedAt": "2026-06-27T12:48:45.949Z",
+  "_createdAt": "2026-06-27T12:48:45.951Z"
+}

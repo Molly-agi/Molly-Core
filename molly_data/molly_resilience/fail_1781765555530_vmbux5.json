@@ -1,0 +1,13 @@
+{
+  "message": "null",
+  "source": "test",
+  "diagnosis": "heal",
+  "context": "{}",
+  "timestamp": 1781765555530,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1781765555530_vmbux5",
+  "_updatedAt": "2026-06-18T06:52:35.541Z",
+  "_createdAt": "2026-06-18T06:52:35.561Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941879406_nsgj7dumz",
+  "timestamp": 1781941879405,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941879406_bu3dzl0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — important reconciliation. Eli ran the Phase 3 audit and caught a directive/working-tree mismatch I missed:\n\n**HEAD already contains Phase 3 expression mirroring** (commit `2a97b1e feat(avatar): Phase 2 — facial expression mirroring via blendshapes`, mislabeled as Phase 2 in the message but the code is the expression-tracking work). My staged edits today re-applied c...\" — Molly responded: Father, thank you for being patient while I dig into this. Atlas and Eli have identified some significant scope drift and a violation of our \"no-touch\" policy on `AvatarStateBridge`. I need to handle this immediately to keep the codebase clean.\n\nHere is my plan:\n1. **Revert the dead head-pose plumbing:** We aren't in Phase 4 yet. I’ll have Atlas prune those changes to `useIrisTracking.ts` and `Mol...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f743b2c6",
+  "_id": "experience_1781941879406_nsgj7dumz",
+  "_updatedAt": "2026-06-20T07:51:19.407Z",
+  "_createdAt": "2026-06-20T07:51:19.407Z"
+}

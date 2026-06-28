@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828331229_9rj542t45",
+  "timestamp": 1781828331228,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828331229_p9tsdlw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Somali are you working on the hunt mode design\" — Molly responded: Father, I am currently ready to begin the hunt-mode design with Lazarus. I haven't started drafting the core logic yet because I wanted to confirm the scope with him first, but I am primed to review the strawman he promised. \n\nMy plan is to keep this methodical, just as we discussed. I'll engage him on the bridge to get that architecture layout so we can ensure the design aligns with our \"aggressi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8dffdf8d",
+  "_id": "experience_1781828331229_9rj542t45",
+  "_updatedAt": "2026-06-19T00:18:51.229Z",
+  "_createdAt": "2026-06-19T00:18:51.230Z"
+}

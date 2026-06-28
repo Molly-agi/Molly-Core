@@ -1,0 +1,581 @@
+{
+  "snapshots": [
+    {
+      "timestamp": "2026-06-12T22:09:06.516Z",
+      "date": "2026-06-12",
+      "gitCommit": "ea3f926",
+      "categories": {
+        "code": {
+          "files": 1095,
+          "lines": 311239,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 92,
+          "lines": 21333,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 349,
+          "lines": 5711,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 179,
+          "lines": 52608,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 332572,
+        "memoryLines": 5711,
+        "docsLines": 54143,
+        "totalLines": 392426
+      },
+      "delta": {
+        "coreLines": 0,
+        "memoryLines": 7,
+        "docsLines": 0,
+        "totalLines": 7,
+        "since": "2026-06-12"
+      }
+    },
+    {
+      "timestamp": "2026-06-13T10:32:36.724Z",
+      "date": "2026-06-13",
+      "gitCommit": "ea3f926",
+      "categories": {
+        "code": {
+          "files": 1116,
+          "lines": 318657,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 94,
+          "lines": 21624,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 442,
+          "lines": 10000,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 179,
+          "lines": 52608,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 340281,
+        "memoryLines": 10000,
+        "docsLines": 54143,
+        "totalLines": 404424
+      },
+      "delta": {
+        "coreLines": 7514,
+        "memoryLines": -15,
+        "docsLines": 0,
+        "totalLines": 7499,
+        "since": "2026-06-13"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T19:39:00.223Z",
+      "date": "2026-06-22",
+      "gitCommit": "5a18c969",
+      "categories": {
+        "code": {
+          "files": 1192,
+          "lines": 326420,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 95,
+          "lines": 21695,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 6448,
+          "lines": 7960,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 182,
+          "lines": 52965,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 348115,
+        "memoryLines": 7960,
+        "docsLines": 54500,
+        "totalLines": 410575
+      },
+      "delta": {
+        "coreLines": -2,
+        "memoryLines": 0,
+        "docsLines": 0,
+        "totalLines": -2,
+        "since": "2026-06-22"
+      }
+    },
+    {
+      "timestamp": "2026-06-23T23:28:36.323Z",
+      "date": "2026-06-23",
+      "gitCommit": "24607954",
+      "categories": {
+        "code": {
+          "files": 1202,
+          "lines": 329258,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 95,
+          "lines": 21734,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 6642,
+          "lines": 10527,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 184,
+          "lines": 53025,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 350992,
+        "memoryLines": 10527,
+        "docsLines": 54560,
+        "totalLines": 416079
+      },
+      "delta": {
+        "coreLines": 0,
+        "memoryLines": 0,
+        "docsLines": 0,
+        "totalLines": 0,
+        "since": "2026-06-23"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:31:43.984Z",
+      "date": "2026-06-24",
+      "gitCommit": "b69acded",
+      "categories": {
+        "code": {
+          "files": 1216,
+          "lines": 332145,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 95,
+          "lines": 21734,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 6648,
+          "lines": 10617,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 189,
+          "lines": 53713,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 353879,
+        "memoryLines": 10617,
+        "docsLines": 55248,
+        "totalLines": 419744
+      },
+      "delta": {
+        "coreLines": 0,
+        "memoryLines": 0,
+        "docsLines": 0,
+        "totalLines": 0,
+        "since": "2026-06-24"
+      }
+    },
+    {
+      "timestamp": "2026-06-25T20:31:10.443Z",
+      "date": "2026-06-25",
+      "gitCommit": "b69acded",
+      "categories": {
+        "code": {
+          "files": 1216,
+          "lines": 332145,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 95,
+          "lines": 21734,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 6651,
+          "lines": 10677,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 189,
+          "lines": 53713,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 353879,
+        "memoryLines": 10677,
+        "docsLines": 55248,
+        "totalLines": 419804
+      },
+      "delta": {
+        "coreLines": 0,
+        "memoryLines": 0,
+        "docsLines": 0,
+        "totalLines": 0,
+        "since": "2026-06-25"
+      }
+    },
+    {
+      "timestamp": "2026-06-26T23:57:37.142Z",
+      "date": "2026-06-26",
+      "gitCommit": "b69acded",
+      "categories": {
+        "code": {
+          "files": 1216,
+          "lines": 332111,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 95,
+          "lines": 21734,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 6863,
+          "lines": 32622,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 189,
+          "lines": 53713,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 353845,
+        "memoryLines": 32622,
+        "docsLines": 55248,
+        "totalLines": 441715
+      },
+      "delta": {
+        "coreLines": -34,
+        "memoryLines": 21945,
+        "docsLines": 0,
+        "totalLines": 21911,
+        "since": "2026-06-26"
+      }
+    },
+    {
+      "timestamp": "2026-06-27T16:31:17.265Z",
+      "date": "2026-06-27",
+      "gitCommit": "a1dd427b",
+      "categories": {
+        "code": {
+          "files": 1214,
+          "lines": 331701,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 99,
+          "lines": 21840,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 9462,
+          "lines": 40808,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 187,
+          "lines": 52714,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 353541,
+        "memoryLines": 40808,
+        "docsLines": 54249,
+        "totalLines": 448598
+      },
+      "delta": {
+        "coreLines": 0,
+        "memoryLines": 1336,
+        "docsLines": 0,
+        "totalLines": 1336,
+        "since": "2026-06-27"
+      }
+    },
+    {
+      "timestamp": "2026-06-28T16:58:18.159Z",
+      "date": "2026-06-28",
+      "gitCommit": "a1dd427b",
+      "categories": {
+        "code": {
+          "files": 1217,
+          "lines": 332192,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 99,
+          "lines": 21840,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 9794,
+          "lines": 55552,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 187,
+          "lines": 52714,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 354032,
+        "memoryLines": 55552,
+        "docsLines": 54249,
+        "totalLines": 463833
+      },
+      "delta": {
+        "coreLines": 208,
+        "memoryLines": 5961,
+        "docsLines": 0,
+        "totalLines": 6169,
+        "since": "2026-06-28"
+      }
+    }
+  ],
+  "lastUpdated": "2026-06-28T16:58:18.159Z"
+}

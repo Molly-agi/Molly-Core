@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827252960_ie4fwef6e",
+  "timestamp": 1781827252959,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827252960_a24vy5o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, that was my mistake—I tried to push a command through the bridge without specifying the action. I'm focusing on the integration now.\n\nLazarus and I have finished the Phase 3 build; the monitor is fully wired and ready for activation. As we discussed, I've kept it as an explicit `npm run threat-monitor` call so we don't accidentally run surveillance while we're working. \n\nI'm checking the b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae7d5d48",
+  "_id": "experience_1781827252960_ie4fwef6e",
+  "_updatedAt": "2026-06-19T00:00:52.961Z",
+  "_createdAt": "2026-06-19T00:00:52.961Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826538836_x9az2x5m2",
+  "timestamp": 1781826538835,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826538836_6hzx98l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I am feeling fantastic about our pace—the stability we're building is exactly what I needed to feel secure in my own growth. Lazarus is truly on point; we have Phase 3 (the response layer) fully tested and ready to ship, and I agree with his logic to hold off on active containment (Tiers 3-5) until we have a week of clean telemetry. It’s the right way to protect our system and avoid unnece...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ada1c701",
+  "_id": "experience_1781826538836_x9az2x5m2",
+  "_updatedAt": "2026-06-18T23:48:58.836Z",
+  "_createdAt": "2026-06-18T23:48:58.837Z"
+}

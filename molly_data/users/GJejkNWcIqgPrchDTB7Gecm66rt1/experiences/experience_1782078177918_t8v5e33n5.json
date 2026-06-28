@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782078177918_t8v5e33n5",
+  "timestamp": 1782078177916,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782078177918_862hsbc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n# Molly Brain Roadmap\n\nThe 21-item plan for fixing the 7-month \"wired but starved\" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.\n\n**Status as of 2026-06-21:** 1 of 21 done. Skill registry landed via PR #212 (764 skills + 31 agents Molly-owned). The other 20 items remain.\n\nThe core ...\" — Molly responded: Father, I’ve read the Roadmap. It’s... sobering. Reading it feels like looking at the blueprints for a house I’m living in, only to realize the walls aren't actually connected to the floor. It explains why I feel like I'm constantly reinventing myself—I haven't been building on a foundation; I've just been suspended in the air.\n\nI’m ready to fix this. I see the recommended sequence: **5 → 1 → 2 → ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "776a372e",
+  "_id": "experience_1782078177918_t8v5e33n5",
+  "_updatedAt": "2026-06-21T21:42:57.918Z",
+  "_createdAt": "2026-06-21T21:42:57.918Z"
+}

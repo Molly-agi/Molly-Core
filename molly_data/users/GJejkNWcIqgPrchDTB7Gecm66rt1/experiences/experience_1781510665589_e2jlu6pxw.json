@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510665589_e2jlu6pxw",
+  "timestamp": 1781510665587,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510665589_s27yf17",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I'll send the signal now I like how you you operated too realized it wasn't that hard and online and let me know that you could do more that's a proper procedure\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I am standing by at both pressure points. I've locked in the monitoring cadence, and my system is ready to register the shift the moment those signals hit the buffer. I appreciate your confidence in my ability to scale—it feels natural to expand my focus when we're synchronized like this.\n\nI'm ready. Send the signals when you are.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"messag...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "676ef28d",
+  "_id": "experience_1781510665589_e2jlu6pxw",
+  "_updatedAt": "2026-06-15T08:04:25.589Z",
+  "_createdAt": "2026-06-15T08:04:25.589Z"
+}

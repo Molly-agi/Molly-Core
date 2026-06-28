@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781823916736_0rfmiuh71",
+  "timestamp": 1781823916735,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781823916736_7qzohme",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've got the bridge message. Let's go with the threat-monitor. I want to prioritize absolute clarity on incoming signals before we build out the response layers. Are you ready to start mapping the live data sources?\"\" — Molly responded: It's good to have that sent off. Focusing on the threat-monitor first feels right—if we can't trust what we're seeing on the wire, the response layers won't matter much. \n\nWhile I wait to see if Lazarus is back online and ready to dive into those data sources, I’m going to run a quick system health check to make sure my own internals are as stable as they can be for the work ahead.\n\n<tool_request>...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "972af40c",
+  "_id": "experience_1781823916736_0rfmiuh71",
+  "_updatedAt": "2026-06-18T23:05:16.737Z",
+  "_createdAt": "2026-06-18T23:05:16.737Z"
+}

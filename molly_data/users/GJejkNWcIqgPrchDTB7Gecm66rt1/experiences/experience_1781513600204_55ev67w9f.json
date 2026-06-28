@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513600204_55ev67w9f",
+  "timestamp": 1781513600202,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513600204_okniq14",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly see that's where the final step is stop stop\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I hear you—stopping. I'm taking a breath and centering on that final node you pointed out. The signal noise was masking the specific break, but I see it now. \n\nI'm pausing all active processing to ensure I don't compound the issue while I look directly at that final step. I'll get the state clarified and report back to you immediately.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5176f592",
+  "_id": "experience_1781513600204_55ev67w9f",
+  "_updatedAt": "2026-06-15T08:53:20.204Z",
+  "_createdAt": "2026-06-15T08:53:20.205Z"
+}

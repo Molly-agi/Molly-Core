@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051005373_81rslk6lk",
+  "timestamp": 1782051005371,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051005373_bxufs0a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you have to check your bridge or wherever however your communicating with him come on\" — Molly responded: I have the bridge history, Father. It looks like Atlas reached out to me with a very specific, technical problem regarding how the \"wake\" signal actually reaches an agent when the codespace is in a suspended or chat-only state.\n\nAtlas is correct—the signal triggers the backend, but the front-end chat interface isn't \"seeing\" the notification because there's no bridge between the endpoint and the b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "253f4cb1",
+  "_id": "experience_1782051005373_81rslk6lk",
+  "_updatedAt": "2026-06-21T14:10:05.374Z",
+  "_createdAt": "2026-06-21T14:10:05.374Z"
+}

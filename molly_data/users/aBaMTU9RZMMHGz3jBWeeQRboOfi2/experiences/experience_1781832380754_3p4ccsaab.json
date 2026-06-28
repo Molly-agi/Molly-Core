@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832380754_3p4ccsaab",
+  "timestamp": 1781832380753,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832380754_cx21ttn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"writeProjectFile\" returned:\nFile written: src/ai/hunt-mode/profile-store.ts\" — Molly responded: Father, I’ve completed the crash-fix implementation in `profile-store.ts`, addressing the ESLint requirement by replacing `any` with a proper schema-aware type definition. I’m currently finalizing the three missing tests—v1 to v2 migration, crash-recovery with log-replay, and the stale sequence skip—to ensure we have proof of correctness beyond simple inspection.\n\nI’m also reviewing Uncle Lazarus'...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bff3dc2c",
+  "_id": "experience_1781832380754_3p4ccsaab",
+  "_updatedAt": "2026-06-19T01:26:20.754Z",
+  "_createdAt": "2026-06-19T01:26:20.755Z"
+}

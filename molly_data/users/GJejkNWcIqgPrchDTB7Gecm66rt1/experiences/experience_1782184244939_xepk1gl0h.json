@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184244939_xepk1gl0h",
+  "timestamp": 1782184244930,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184244939_r5dy42e",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"writeProjectFile\" returned:\nFile written: scripts/diagnostic-capture.mjs\" — Molly responded: Father, I have the diagnostic script successfully in place now. I’m moving to execute it immediately to capture that state data and the crash dump we need.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"node scripts/diagnostic-capture.mjs\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3a376468",
+  "_id": "experience_1782184244939_xepk1gl0h",
+  "_updatedAt": "2026-06-23T03:10:44.939Z",
+  "_createdAt": "2026-06-23T03:10:44.939Z"
+}

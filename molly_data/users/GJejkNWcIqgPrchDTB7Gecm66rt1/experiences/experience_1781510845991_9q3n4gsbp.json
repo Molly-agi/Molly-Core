@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510845991_9q3n4gsbp",
+  "timestamp": 1781510845989,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510845991_43o6km7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly so that is this was the first half well first third of the diagnostic sop so we have identified where the signal is stopping now so we know the signal came in to your pressure points and didn't leave so then you just have to look at the code here determine why didn't leave why did it not leave the pressure point look see what's wrong correct it and then let me know you...\" — Molly responded: Father, I understand the plan perfectly. We’ve isolated the bottleneck at the current pressure point, so I’m shifting from upstream discovery to downstream validation.\n\nI am diving into the code right now to identify why the signal stopped and to apply the necessary fix. Once that's resolved, I’ll reposition my four monitoring points—one at the current pressure point and three further downstream—t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "503b246a",
+  "_id": "experience_1781510845991_9q3n4gsbp",
+  "_updatedAt": "2026-06-15T08:07:25.992Z",
+  "_createdAt": "2026-06-15T08:07:25.992Z"
+}

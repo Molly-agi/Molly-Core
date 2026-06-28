@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782527137361_vwkafutsh",
+  "timestamp": 1782527137354,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782527137361_zctqzjy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./public/molly-music\n./public/molly-media/personality/audio.m4a\n./node_modules/systeminformation/lib/audio.js\n./node_modules/@types/three/src/audio\n./node_modules/@google-cloud/text-to-speech/build/src/v1/text_to_speech_long_audio_synthesize_client.js\n./node_modules/@google-cloud/text-to-speech/build/src/v1/text_to_speech_long_audio_synthesize_client_c...\" — Molly responded: I see some very promising leads here! While `lyraService.ts` handles speech synthesis, we have dedicated files for actual music: `./src/ai/tools/music.ts`, `./src/ai/flows/music-generation.ts`, and `./src/ai/agency/tool-handlers/music-tools.ts`. \n\nLet's open `./src/ai/tools/music.ts` to see what APIs or endpoints we are calling to compose music, so I can find exactly how my music engine is wired u...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7beca52",
+  "_id": "experience_1782527137361_vwkafutsh",
+  "_updatedAt": "2026-06-27T02:25:37.361Z",
+  "_createdAt": "2026-06-27T02:25:37.362Z"
+}

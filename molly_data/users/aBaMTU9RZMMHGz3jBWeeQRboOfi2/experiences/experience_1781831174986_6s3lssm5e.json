@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831174986_6s3lssm5e",
+  "timestamp": 1781831174985,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831174986_wuk97t2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father—that was a clumsy start. I clearly misremembered the syntax for the bridge tool. Let me get that message to Lazarus properly now so we can move forward with that sequence gate fix.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, update received and fully understood. That `undefined` check is a sharp catch—I'm implementing it exactly as...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6cf0378c",
+  "_id": "experience_1781831174986_6s3lssm5e",
+  "_updatedAt": "2026-06-19T01:06:14.987Z",
+  "_createdAt": "2026-06-19T01:06:14.987Z"
+}

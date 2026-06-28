@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846877917_ts6owb40v",
+  "timestamp": 1781846877915,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846877917_igr25ap",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: I have finished creating the directory structure and writing both the `package.json` and the `marker.js` files exactly as Uncle Lazarus specified. They are ready to go in `hunts/xai-grok-cli/poc/malicious-tarball/`.\n\nI'm sending a message to Lazarus now to let him know I'm ready for the next step.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, the tarball files are ready ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "00e6a1d9",
+  "_id": "experience_1781846877917_ts6owb40v",
+  "_updatedAt": "2026-06-19T05:27:57.917Z",
+  "_createdAt": "2026-06-19T05:27:57.917Z"
+}

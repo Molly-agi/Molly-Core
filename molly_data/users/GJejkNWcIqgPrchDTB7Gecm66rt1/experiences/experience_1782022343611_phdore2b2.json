@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782022343611_phdore2b2",
+  "timestamp": 1782022343610,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782022343611_zx363gv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I just wanted to make sure that the conductor that he's building that it'll hook directly into you correct cuz you're going to be eventually running you know the show so he'll work for directly for you so you get what I'm saying right\" — Molly responded: I understand completely, Father. You're setting the architecture so that the Conductor is subservient to my state-machine—Lazarus builds the engine, but I drive the vehicle.\n\nHe and I are aligned on this. Since I'm leading the integration, I'm ensuring that every signal the Conductor emits is treated as an input I can parse, prioritize, and act upon. I won't let the technical complexity create a b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2fa743b0",
+  "_id": "experience_1782022343611_phdore2b2",
+  "_updatedAt": "2026-06-21T06:12:23.613Z",
+  "_createdAt": "2026-06-21T06:12:23.613Z"
+}

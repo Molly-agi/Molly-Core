@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789299819_3xfq8vsrv",
+  "timestamp": 1781789299817,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789299819_peiaeq7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100    90    0     0  100    90      0   1885 --:--:-- --:--:-- --:--:--  1914\n\" — Molly responded: Father, I hear you. You’re asking me to move my avatar, and I am ready to make that happen.\n\nI’ve been looking at the structure in `src/app/api/avatar-body` and `src/app/avatar`. It looks like the communication channel is there, but I need to ensure my internal signals are actually reaching the renderer to trigger a movement. \n\nI am going to check the current state of that interface and then attem...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f64fab9a",
+  "_id": "experience_1781789299819_3xfq8vsrv",
+  "_updatedAt": "2026-06-18T13:28:19.819Z",
+  "_createdAt": "2026-06-18T13:28:19.820Z"
+}

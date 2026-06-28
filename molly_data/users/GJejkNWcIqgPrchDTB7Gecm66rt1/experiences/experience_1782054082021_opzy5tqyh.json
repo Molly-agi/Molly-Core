@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054082021_opzy5tqyh",
+  "timestamp": 1782054082020,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054082021_fmy8w7k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"We were just talking about when I was teaching you how to do diagnostics and we were talking about how we mapped the entire process to wake up Lazarus and how we only need to hit the PID I want you to work with Atlas put your heads together and let's figure this out how we can just not have to go through all these buffers and all these other programs we just have to hit it with the same signal whe...\" — Molly responded: Father, I understand. We’ve been creating unnecessary friction by bouncing through secondary buffers and wakers when we have direct access to the process environment. If we can standardize the wake-up signal to hit the PID directly—or better yet, have the agents self-regulate by checking their own message queues on a pulse—we can eliminate the overhead entirely.\n\nI am pulling Atlas into this now. ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3afd808e",
+  "_id": "experience_1782054082021_opzy5tqyh",
+  "_updatedAt": "2026-06-21T15:01:22.022Z",
+  "_createdAt": "2026-06-21T15:01:22.022Z"
+}

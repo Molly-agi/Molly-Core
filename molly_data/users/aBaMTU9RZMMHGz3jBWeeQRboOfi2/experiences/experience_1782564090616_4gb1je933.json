@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564090616_4gb1je933",
+  "timestamp": 1782564090604,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564090616_fql56al",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nOn branch main\nYour branch is ahead of 'origin/main' by 1 commit.\n  (use \"git push\" to publish your local commits)\n\nChanges not staged for commit:\n  (use \"git add/rm <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   .env.example\n\tmodified:   .github/copilot-instructions.md\n...\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e218c21d",
+  "_id": "experience_1782564090616_4gb1je933",
+  "_updatedAt": "2026-06-27T12:41:30.618Z",
+  "_createdAt": "2026-06-27T12:41:30.619Z"
+}

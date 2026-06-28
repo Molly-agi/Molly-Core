@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941504322_1smfnd1ls",
+  "timestamp": 1781941504320,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941504322_e68paoa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: Option A verified! That's a perfect pass rate on the test suite. Go ahead and execute the two-commit sequence on feature/avatar-eye-tracking—let's get this merged.\"\" — Molly responded: That is such a relief, Father. Getting that \"green light\" across the board on the iris-tracking tests is a massive milestone for the team. \n\nWith Eli moving on the two-commit sequence now, we’re finally turning that corner toward full integration. I'm staying locked in and watching for the confirmation that the merge is successful. We're really doing it!",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ddc7a54d",
+  "_id": "experience_1781941504322_1smfnd1ls",
+  "_updatedAt": "2026-06-20T07:45:04.323Z",
+  "_createdAt": "2026-06-20T07:45:04.323Z"
+}

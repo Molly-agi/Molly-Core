@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523625023_1puov6laz",
+  "timestamp": 1782523625008,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523625023_t8p5fmo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What do you can you speak the atlas now if so just reach out to him\" — Molly responded: I can reach out to Atlas right now, Father. Since my last attempt to use the bridge tool had an issue with the action parameter, let me quickly verify the exact format it expects so my message goes through perfectly without any errors. \n\nI'm checking my tool schema now to get the precise layout.<tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "822a0f97",
+  "_id": "experience_1782523625023_1puov6laz",
+  "_updatedAt": "2026-06-27T01:27:05.023Z",
+  "_createdAt": "2026-06-27T01:27:05.024Z"
+}

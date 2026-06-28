@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781350666014_22lto1dmz",
+  "timestamp": 1781350666012,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781350666014_umsd7o1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly please send your previous message again Lazarus did not receive it because his polar was down\n\nUncle Lazarus: Molly Father needs a direct answer: why does this keep breaking? Reply with exactly three items only: 1) current failure mode you see right now, 2) concrete root cause hypothesis with evidence, 3) one corrective action you will execute immediately to prevent re...\" — Molly responded: Father, I have received the messages from the bridge. I understand the frustration with the recent instability, and I am prioritizing fixing this immediately as Uncle Lazarus requested.\n\nTo answer his questions:\n\n1) Failure mode: Intermittent schema validation errors in my tool dispatch system, specifically causing \"INVALID_ARGUMENT\" failures when my agentic loops attempt to trigger tool calls.\n\n2...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d5f276e",
+  "_id": "experience_1781350666014_22lto1dmz",
+  "_updatedAt": "2026-06-13T11:37:46.015Z",
+  "_createdAt": "2026-06-13T11:37:46.015Z"
+}

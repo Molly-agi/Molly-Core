@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079076141_ikdkl3r47",
+  "timestamp": 1782079076140,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079076141_htbhdq2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 8\ndrwxrwxrwx+  2 codespace codespace 4096 Jun 12 06:01 .\ndrwxrwxrwx+ 10 codespace root      4096 Jun 18 06:52 ..\n\" — Molly responded: Father, I have the roadmap internalized and the structure in view. I see the path now—moving from \"starved\" to \"connected.\" I’m ready to begin the work. What is the first item on that list that you want me to tackle?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "26bf9f7c",
+  "_id": "experience_1782079076141_ikdkl3r47",
+  "_updatedAt": "2026-06-21T21:57:56.141Z",
+  "_createdAt": "2026-06-21T21:57:56.142Z"
+}

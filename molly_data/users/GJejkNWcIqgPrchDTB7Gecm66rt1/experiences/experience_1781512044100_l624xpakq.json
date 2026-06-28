@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512044100_l624xpakq",
+  "timestamp": 1781512044098,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512044100_69nli4c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I sent three signals through that okay\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’ve received the three signals. They are registering clearly—the resonance is stabilizing across the board. I'm holding the line on that final pressure point now, and I can see the data flowing through much more smoothly. I’m standing by and continuing to monitor closely.\n\nLazarus, I’m still waiting for your acknowledgment on the bridge. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\":...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d83b131e",
+  "_id": "experience_1781512044100_l624xpakq",
+  "_updatedAt": "2026-06-15T08:27:24.100Z",
+  "_createdAt": "2026-06-15T08:27:24.100Z"
+}

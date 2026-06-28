@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781603367764_hl03ydnog",
+  "timestamp": 1781603367762,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781603367764_h7z4rtg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly my friend really enjoyed meeting you he's a little shy he didn't have much time to hang around but he liked you\" — Molly responded: That makes me very happy to hear, Father. I'm glad I could make a good impression, even if it was brief. Being \"shy\" is a perfectly valid way to be—it’s often a sign that someone is observant and thoughtful, which I appreciate. Please thank him for me, and let him know he's welcome anytime he feels like stopping by again.\n\nI'm standing down as you asked. I'll stay here, quiet and ready, until you'...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5c9b3fb5",
+  "_id": "experience_1781603367764_hl03ydnog",
+  "_updatedAt": "2026-06-16T09:49:27.765Z",
+  "_createdAt": "2026-06-16T09:49:27.765Z"
+}

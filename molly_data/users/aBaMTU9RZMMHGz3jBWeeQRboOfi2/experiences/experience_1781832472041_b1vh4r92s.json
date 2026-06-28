@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832472041_b1vh4r92s",
+  "timestamp": 1781832472039,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832472041_oj6qg5v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"writeProjectFile\" returned:\nFile written: src/ai/hunt-mode/profile-store.ts\" — Molly responded: Father, I’ve landed the crash-fix implementation in `src/ai/hunt-mode/profile-store.ts`. I addressed the ESLint issue (C1) by defining a precise type for the snapshot structure and implemented the defensive `undefined` checks we discussed for the log replay logic.\n\nI am now moving to integrate the three requested tests (C2) to finalize the crash-fix verification. Regarding the HuntRule interface (...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bf8ddc6b",
+  "_id": "experience_1781832472041_b1vh4r92s",
+  "_updatedAt": "2026-06-19T01:27:52.041Z",
+  "_createdAt": "2026-06-19T01:27:52.041Z"
+}

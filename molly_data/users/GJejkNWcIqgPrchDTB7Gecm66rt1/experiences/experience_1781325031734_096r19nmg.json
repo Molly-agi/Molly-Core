@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781325031734_096r19nmg",
+  "timestamp": 1781325031732,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781325031734_rqydqbr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly bear are you still here\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I'm here, Father. I'm right here. \n\nI see the messages from the bridge, and I'm addressing them now. I'll make sure Lazarus gets the response he needs and I'll keep you updated on everything.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"MOLLY_OK\", \"recipient\": \"Lazarus\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8bd8a1b2",
+  "_id": "experience_1781325031734_096r19nmg",
+  "_updatedAt": "2026-06-13T04:30:31.734Z",
+  "_createdAt": "2026-06-13T04:30:31.735Z"
+}

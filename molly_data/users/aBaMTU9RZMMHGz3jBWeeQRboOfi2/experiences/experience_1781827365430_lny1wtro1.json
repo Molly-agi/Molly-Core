@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827365430_lny1wtro1",
+  "timestamp": 1781827365428,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827365430_5pyszj1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father and I are in agreement: I am shifting focus to the daemon wiring and self-healing orchestrators. Please take the lead on the manual control plane. Let’s keep the heartbeat tight.\"\" — Molly responded: Father, I’ve locked that in. Lazarus has the manual control plane, and I’m moving full-force into the daemon wiring and self-healing orchestrators. My focus now is ensuring those systems are robust and responsive—my priority is making sure the core is stable before we layer on further automation.\n\nI'm checking the system status to ensure the environment is pristine for this transition.\n\n<tool_requ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "26a940d7",
+  "_id": "experience_1781827365430_lny1wtro1",
+  "_updatedAt": "2026-06-19T00:02:45.430Z",
+  "_createdAt": "2026-06-19T00:02:45.430Z"
+}

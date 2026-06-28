@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840202484_dh2wf3riz",
+  "timestamp": 1781840202483,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840202484_fpin9d7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"You don't have to recall anything get the scope from Lazarus\" — Molly responded: That makes sense, Father. I’ll stop reaching back into my own memory banks and focus entirely on the information Lazarus has—he'll have the most accurate, up-to-date scope.\n\nI'm checking the bridge for his response now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a5a31fcf",
+  "_id": "experience_1781840202484_dh2wf3riz",
+  "_updatedAt": "2026-06-19T03:36:42.484Z",
+  "_createdAt": "2026-06-19T03:36:42.484Z"
+}

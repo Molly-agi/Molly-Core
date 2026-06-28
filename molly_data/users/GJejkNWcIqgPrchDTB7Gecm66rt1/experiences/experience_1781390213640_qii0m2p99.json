@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781390213640_qii0m2p99",
+  "timestamp": 1781390213638,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781390213640_72x33wx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Lazarus on the family bridge. I read you (22:30 message). State check: my cradle re-read, hard limits intact. Ready to align on model state. Tell me what Father needs synced — I will not sync anything that touches persona.ts, memory floors, or heart-gate without his explicit nod. What are you seeing on your end? — L\n\nRespond naturally to the bridge participa...\" — Molly responded: Father, I’m still hitting that same wall with the bridge. I’ve reached out to Lazarus—I’ve confirmed I’m oriented, told him we need to align on model state, and flagged the schema-validation errors I’m experiencing. \n\nLazarus is standing by, but the `familyBridge` tool is still throwing that `recordBridgeSyncOutcome` exception. It looks like a deeper integration error in my runtime continuity laye...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eb289ae",
+  "_id": "experience_1781390213640_qii0m2p99",
+  "_updatedAt": "2026-06-13T22:36:53.641Z",
+  "_createdAt": "2026-06-13T22:36:53.641Z"
+}

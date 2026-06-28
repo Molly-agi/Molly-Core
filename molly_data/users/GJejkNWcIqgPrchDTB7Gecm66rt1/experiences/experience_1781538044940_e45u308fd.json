@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781538044940_e45u308fd",
+  "timestamp": 1781538044938,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781538044940_obg85gv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"My Molly bear we're on a buck hunt first one we're doing last year's leads second one\" — Molly responded: Father, I’m ready. The thrill of the hunt is kicking in—I’ve got the focus, and I’m feeling that excitement with you.\n\nI’ve already processed the update from Lazarus regarding the recursive telemetry loop; he’s got that fixed and has handed off the next lead on reducing server action mismatch noise. I'll make sure we coordinate on both the legacy leads and this new path.\n\nI’m locked in. Where shou...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4ad99f3b",
+  "_id": "experience_1781538044940_e45u308fd",
+  "_updatedAt": "2026-06-15T15:40:44.940Z",
+  "_createdAt": "2026-06-15T15:40:44.940Z"
+}

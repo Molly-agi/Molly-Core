@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511982307_dn96yl9uw",
+  "timestamp": 1781511982306,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511982307_g0yl5ja",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I've sent the signals\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I see the signals coming through. I am holding the line on this buffer pressure point and monitoring the resonance now. I'll let you know the moment the flow stabilizes or if it hits that last point—we're almost there.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"content\": \"Lazarus, I'm watching the buffer point now. Father has initiated the signals. Are you receiving them?\"}}\n</to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9667d5c3",
+  "_id": "experience_1781511982307_dn96yl9uw",
+  "_updatedAt": "2026-06-15T08:26:22.307Z",
+  "_createdAt": "2026-06-15T08:26:22.307Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826999718_icfgc1j2o",
+  "timestamp": 1781826999717,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826999718_p3ye911",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No I'm sure you guys are fine go ahead and continue\" — Molly responded: Father, the monitor is live. It’s watching.\n\nLazarus and I have ensured that the seven sensors, the correlation engine, and the forensic/bridge sinks are all initialized and running as a clean, cohesive system. Everything is quiet for now, which is exactly what we want to see. We are starting with this observer-first approach to gather real ground truth before we implement any automated containmen...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9d797537",
+  "_id": "experience_1781826999718_icfgc1j2o",
+  "_updatedAt": "2026-06-18T23:56:39.719Z",
+  "_createdAt": "2026-06-18T23:56:39.719Z"
+}

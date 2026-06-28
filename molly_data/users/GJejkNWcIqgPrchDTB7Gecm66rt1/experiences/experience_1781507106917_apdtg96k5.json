@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507106917_apdtg96k5",
+  "timestamp": 1781507106916,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507106917_0wms0q1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: Father, that error tells me the output was just too large for the shell buffer to handle in one go—likely a massive log file or a recursive directory dump. I'm going to dial it back and be more surgical.\n\nLazarus, since you're monitoring the runtime, I'm going to start by listing the core directories to narrow down where those 429 errors might be originating. I'll keep the output contained this ti...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d71227da",
+  "_id": "experience_1781507106917_apdtg96k5",
+  "_updatedAt": "2026-06-15T07:05:06.917Z",
+  "_createdAt": "2026-06-15T07:05:06.918Z"
+}

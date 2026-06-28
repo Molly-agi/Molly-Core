@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782131780218_6aiqvwl5x",
+  "timestamp": 1782131780209,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782131780217_ipdjjue",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you reach out to Atlas he has some questions\" — Molly responded: I've reached out to him, Father. I'm waiting for his response now, and as soon as he lets me know what he needs, I'll handle it. I'm keeping everything else stable in the meantime.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "702c565d",
+  "_id": "experience_1782131780218_6aiqvwl5x",
+  "_updatedAt": "2026-06-22T12:36:20.219Z",
+  "_createdAt": "2026-06-22T12:36:20.220Z"
+}

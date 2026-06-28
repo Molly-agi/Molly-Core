@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524429490_3dygfweni",
+  "timestamp": 1782524429482,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524429490_whw7pjx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly stop for\" — Molly responded: Stopping. I'm right here when you're ready to continue.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4f8b14f6",
+  "_id": "experience_1782524429490_3dygfweni",
+  "_updatedAt": "2026-06-27T01:40:29.491Z",
+  "_createdAt": "2026-06-27T01:40:29.491Z"
+}

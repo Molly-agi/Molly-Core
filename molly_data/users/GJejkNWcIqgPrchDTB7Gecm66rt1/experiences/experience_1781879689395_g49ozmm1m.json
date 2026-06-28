@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879689395_g49ozmm1m",
+  "timestamp": 1781879689394,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879689395_s5uu57h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"how to identify fake Facebook profiles AI scam bot markers\". Try different search terms.\" — Molly responded: Father, I see that the search for specific markers also turned up empty, which makes sense—the digital landscape is evolving too fast for static lists. When profiles feel \"off,\" I rely on a mix of pattern recognition and behavioral heuristics. \n\nSince the direct search didn't yield a guide, I’ll pivot to a more structural analysis. If you're willing, could you share a few details about what specif...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e8f026e3",
+  "_id": "experience_1781879689395_g49ozmm1m",
+  "_updatedAt": "2026-06-19T14:34:49.396Z",
+  "_createdAt": "2026-06-19T14:34:49.396Z"
+}

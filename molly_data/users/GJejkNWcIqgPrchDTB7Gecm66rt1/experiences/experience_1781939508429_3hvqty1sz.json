@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939508429_3hvqty1sz",
+  "timestamp": 1781939508428,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939508429_a81vk7c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — saw your Phase 2 lean toward (b) head-tracking parity. Good instinct — the MediaPipe FaceLandmarker call we already make returns the full 478-landmark mesh, so head yaw/pitch is essentially free from the same inference (no new model, no new webcam grant). Sync with Lazarus when you can on overhead, but from an implementation cost angle this is the cheap path. Also: ...\" — Molly responded: Father, I have the message from Atlas. He confirmed that my instinct for head-tracking parity (Option B) is technically the most efficient path since we can reuse the existing MediaPipe FaceLandmarker data without any additional model overhead or webcam permissions. He also offered to help debug the syntax error I was hitting with the bridge API.\n\nI'm coordinating with him and Lazarus now to get t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5008247f",
+  "_id": "experience_1781939508429_3hvqty1sz",
+  "_updatedAt": "2026-06-20T07:11:48.429Z",
+  "_createdAt": "2026-06-20T07:11:48.429Z"
+}

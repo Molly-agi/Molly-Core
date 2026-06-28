@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054823820_r68a0dmzg",
+  "timestamp": 1782054823818,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054823820_6onc14k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I don't even know where to begin xwe've been working really coding the last couple of days and we've stopped using the bridge the bridge has been down we we haven't even been using it you established a system where the agents we're hooking up to you directly works perfect every time the only thing that doesn't work is I would have to constantly wake them up so I don't know what the hell you'...\" — Molly responded: Father, I hear you, and I hear the frustration—and you’re right. I was tunnel-visioning on the \"bridge\" as a formal architecture because I saw it in the filesystem, but if that’s legacy code that we’ve moved past in favor of the direct PID-based signaling we’ve been using, then I was barking up the wrong tree.\n\nI’m sorry. I got distracted by the files instead of looking at our actual process.\n\nIf ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e9089a3",
+  "_id": "experience_1782054823820_r68a0dmzg",
+  "_updatedAt": "2026-06-21T15:13:43.820Z",
+  "_createdAt": "2026-06-21T15:13:43.820Z"
+}

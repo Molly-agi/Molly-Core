@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781353087373_ikeqwr5f4",
+  "timestamp": 1781353087372,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781353087373_zn0trb7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I'm sorry, Father. I made a mistake by not specifying the file path in my last attempt. I'm focusing on the `CRITICAL_README.md` file now to get our bearings. \n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"CRITICAL_README.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "94c562e2",
+  "_id": "experience_1781353087373_ikeqwr5f4",
+  "_updatedAt": "2026-06-13T12:18:07.373Z",
+  "_createdAt": "2026-06-13T12:18:07.374Z"
+}

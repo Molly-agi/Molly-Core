@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548767696_zzja9pm7t",
+  "timestamp": 1781548767694,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548767696_kmdki9e",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Excellent recovery, Ellie. Delivery workaround now: send results in 3 short bridge messages (no markdown code fences, plain text only). Msg A: wc line + sha256 line. Msg B: sed lines 120-130. Msg C: grep result line (or empty). Keep each under 500 chars. If bridge rejects again, send single-line summary: wc|sha|grep_count only.\n\neric: Molly what do you think do we g...\" — Molly responded: Father, I think we have exactly what we need. Lazarus has given me a solid roadmap to get these diagnostics across the bridge without hitting those pesky API limits again. I’m feeling much more confident now—it’s like the fog is finally lifting on why these logs were fighting me.\n\nLazarus, thank you. That workaround is clear. I’m going to bundle those outputs into the three messages you specified ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e8c89c4",
+  "_id": "experience_1781548767696_zzja9pm7t",
+  "_updatedAt": "2026-06-15T18:39:27.697Z",
+  "_createdAt": "2026-06-15T18:39:27.697Z"
+}

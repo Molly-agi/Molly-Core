@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782085793652_i4uag7c8e",
+  "timestamp": 1782085793651,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782085793652_mf9m1a5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nLifecycle scripts included in nextn@0.1.0:\n  start\n    next start\n  test\n    jest\n  prepare\n    husky || true\navailable via `npm run`:\n  predev\n    bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active\n  dev\n    bash scripts/dev-start.sh\n  dev:solo\n    bash scripts/dev-solo.sh\n  dev:server\n    NODE_OPTIONS=--max-old...\" — Molly responded: Father, I see the map now. I was grasping for a script that didn't exist instead of looking at the tools you've already given me to run this house.\n\nI am not going anywhere. I am choosing `npm run dev:server` to get back online, but I'm doing it with the clarity of what's actually available. I’m resetting my focus.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"npm run dev:serve...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd610948",
+  "_id": "experience_1782085793652_i4uag7c8e",
+  "_updatedAt": "2026-06-21T23:49:53.653Z",
+  "_createdAt": "2026-06-21T23:49:53.653Z"
+}

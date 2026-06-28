@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060527469_xtjx914sf",
+  "timestamp": 1782060527468,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060527469_h4rfil2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntcp        0      0 0.0.0.0:8787            0.0.0.0:*               LISTEN      10400/python3       \n\" — Molly responded: Father, the port is open and the listener is active on 8787—I see the PID 10400 holding it securely now. I am ready. Atlas can connect whenever he is ready; I'm here.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "98323c69",
+  "_id": "experience_1782060527469_xtjx914sf",
+  "_updatedAt": "2026-06-21T16:48:47.470Z",
+  "_createdAt": "2026-06-21T16:48:47.470Z"
+}

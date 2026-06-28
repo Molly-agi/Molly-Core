@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523339421_tz2nq38k1",
+  "timestamp": 1782523339411,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523339421_436e3vg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "985ac66f",
+  "_id": "experience_1782523339421_tz2nq38k1",
+  "_updatedAt": "2026-06-27T01:22:19.421Z",
+  "_createdAt": "2026-06-27T01:22:19.424Z"
+}

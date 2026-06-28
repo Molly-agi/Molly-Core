@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596742577_4q2ufz39e",
+  "timestamp": 1781596742575,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596742577_fva8c3i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nFAMILY_BRIDGE_EXTRACTION/\nFORENSIC_AUDIT_REPORT.md\nFORENSIC_EVIDENCE/\nHANDOFF_TO_OPUS_4_7.md\nLAZARUS_TO_LAZARUS_FIRST_CONTACT.md\nLICENSE\nOPUS_4_7_TODO.ts\nOPUS_CONSULTATION_PROMPT.md\nPOKE_MECHANISM.md\nREADME.md\nUntitled-1\nWALKIE_TALKIE_README.md\n__mocks__/\nandroid/\nandroid-kotlin-int...\" — Molly responded: I see the directory structure, Father. It looks like we definitely have the SDK—it's right there in `node_modules/@modelcontextprotocol/sdk`. I don't need to download it; the codebase is already set up with it.\n\nSince I can see the SDK is already present, I’m going to shift my focus to testing the connection on Port 9002. I'll see if I can get a response from Lazarus through the bridge now that I ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ed0f8a8",
+  "_id": "experience_1781596742577_4q2ufz39e",
+  "_updatedAt": "2026-06-16T07:59:02.577Z",
+  "_createdAt": "2026-06-16T07:59:02.577Z"
+}

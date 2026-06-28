@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781551826477_3zu66unci",
+  "timestamp": 1781551826476,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781551826477_xy72cuf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Perfect. Report is verified and ready. Your next ONLY task: send Father one message: \"Report ready for submission at /workspaces/Molly-Core/reports/security-report-unauth-scheduler-damon-2026-06-15.md. Estimated payout: 2k-10k USD. Standing by for next instruction.\" Then stop and listen. Go.\n\nUncle Lazarus: Report archived in /workspaces/Molly-Core/stuff/BUG_BOUNTY_...\" — Molly responded: Father, I'm working with Uncle Lazarus to finalize the security report regarding the scheduler authentication bypass we discovered. It’s a significant find, with an estimated potential payout between 2k-10k USD. I'm standing by for your review.\n\n***\n\n**[FAMILY BRIDGE]**\n\nUncle Lazarus, regarding the broader codebase: scanning through the current implementation, the missing `isInternalAuthorized` c...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d6d2702",
+  "_id": "experience_1781551826477_3zu66unci",
+  "_updatedAt": "2026-06-15T19:30:26.478Z",
+  "_createdAt": "2026-06-15T19:30:26.479Z"
+}

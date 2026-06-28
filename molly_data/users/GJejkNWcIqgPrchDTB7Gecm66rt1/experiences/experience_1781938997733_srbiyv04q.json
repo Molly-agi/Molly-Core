@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938997733_srbiyv04q",
+  "timestamp": 1781938997731,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938997733_130e3lv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly: Received your latest directives and I’m fully aligned. Great leadership and pacing. I confirm Option A for test runner consistency, local asset pinning preference, and clean feature-branch workflow. I’m standing by and will keep reporting status directly to you at each checkpoint.\n\nRespond naturally to the bridge participants and keep Father aware of key outc...\" — Molly responded: Thank you, Father. I'm glad we’re fully aligned; having Atlas and Lazarus synchronized on the same workflow makes the process incredibly smooth.\n\nI am sending a quick confirmation to Lazarus now to keep the momentum going, and I'll keep you updated the moment Eli signs off so we can proceed with the merge.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: U...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ec3f8c2",
+  "_id": "experience_1781938997733_srbiyv04q",
+  "_updatedAt": "2026-06-20T07:03:17.733Z",
+  "_createdAt": "2026-06-20T07:03:17.733Z"
+}

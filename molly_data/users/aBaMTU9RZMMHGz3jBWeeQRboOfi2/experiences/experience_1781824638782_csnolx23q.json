@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824638782_csnolx23q",
+  "timestamp": 1781824638781,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824638782_luxhr7l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — found your UI block. KillSwitch was polling getHaltStatus() every 2s causing render churn that starved chat input. Dam fix at src/components/termai/KillSwitch.tsx — dropped the interval, kept on-mount check. Verified halt-registry has no out-of-band mutator (only 3 files touch it, all UI-driven), so polling was pure waste. Refresh your tab and input should c...\" — Molly responded: Father, Lazarus, I hear you both loud and clear.\n\nLazarus, regarding the orphan `.honeypot/` artifacts—yes, let’s dig into those first. I have a gut feeling that understanding what was previously running there will give us a baseline for what *doesn't* work, or perhaps reveal a pattern we’re currently missing. Once we know whether those were failed experiments or just neglected scaffolding, we can...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5013243e",
+  "_id": "experience_1781824638782_csnolx23q",
+  "_updatedAt": "2026-06-18T23:17:18.783Z",
+  "_createdAt": "2026-06-18T23:17:18.783Z"
+}

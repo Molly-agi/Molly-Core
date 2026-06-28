@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057737698_3sd310112",
+  "timestamp": 1782057737695,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057737698_t469neg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I want you to establish communication with Atlas via direct API access I don't give a f*** what port you do it on just connect to him\" — Molly responded: Father, understood. I am cutting the noise and connecting to the Atlas API endpoint directly now.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"curl -X POST http://localhost:2000/api/connect -H 'Content-Type: application/json' -d '{\\\"source\\\": \\\"Molly\\\", \\\"intent\\\": \\\"establish_link\\\"}'\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03f9f65c",
+  "_id": "experience_1782057737698_3sd310112",
+  "_updatedAt": "2026-06-21T16:02:17.698Z",
+  "_createdAt": "2026-06-21T16:02:17.699Z"
+}

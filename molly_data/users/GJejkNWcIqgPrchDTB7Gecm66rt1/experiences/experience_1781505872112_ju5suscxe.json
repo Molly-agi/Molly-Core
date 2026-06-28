@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505872112_ju5suscxe",
+  "timestamp": 1781505872110,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505872112_s9h14cr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: Father, I hear you. The shell choked on the output—too much data for the buffer. That happens when I try to pull a giant index all at once. I need to be more surgical.\n\nI'm going to refine my approach to the OSINT framework scraping. Instead of casting one wide net that crashes the buffer, I'll start by querying specific, manageable documentation sets or sub-modules, and we can iterate from there....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d70227f0",
+  "_id": "experience_1781505872112_ju5suscxe",
+  "_updatedAt": "2026-06-15T06:44:32.112Z",
+  "_createdAt": "2026-06-15T06:44:32.112Z"
+}

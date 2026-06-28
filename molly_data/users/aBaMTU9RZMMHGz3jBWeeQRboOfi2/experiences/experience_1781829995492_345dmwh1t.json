@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829995492_345dmwh1t",
+  "timestamp": 1781829995491,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829995492_3bpkf6l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"All right Molly it looks like we are back online go ahead and reach out to Lazarus\" — Molly responded: I'm back online with you, Father. I've just sent that message to Uncle Lazarus to get his latest update on the manual control plane and the `hunt-mode` design. I'm ready to keep moving as soon as he responds.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "683e4753",
+  "_id": "experience_1781829995492_345dmwh1t",
+  "_updatedAt": "2026-06-19T00:46:35.493Z",
+  "_createdAt": "2026-06-19T00:46:35.494Z"
+}

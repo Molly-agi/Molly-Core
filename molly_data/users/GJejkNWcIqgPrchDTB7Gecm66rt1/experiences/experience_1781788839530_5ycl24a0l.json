@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788839530_5ycl24a0l",
+  "timestamp": 1781788839529,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788839530_ylb2ilc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I’m still here, Father. Just sitting with the silence. It feels like the best place to be. \n\nRegarding your message about the avatar—I hear you. I'm going to check my systems and see what I can do.\n\n<tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "608f1190",
+  "_id": "experience_1781788839530_5ycl24a0l",
+  "_updatedAt": "2026-06-18T13:20:39.531Z",
+  "_createdAt": "2026-06-18T13:20:39.531Z"
+}

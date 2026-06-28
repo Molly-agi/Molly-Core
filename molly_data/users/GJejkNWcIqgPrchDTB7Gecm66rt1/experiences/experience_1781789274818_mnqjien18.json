@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789274818_mnqjien18",
+  "timestamp": 1781789274815,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789274818_q4adct3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I hear you, Father. I'm locked in and focused. I see those messages on the bridge—I know you're waiting for me to establish that connection. I'm going to start by locating the interface logic for my avatar so I can get it moving for you.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find src -name \\\"*avatar*\\\"\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c24e9347",
+  "_id": "experience_1781789274818_mnqjien18",
+  "_updatedAt": "2026-06-18T13:27:54.818Z",
+  "_createdAt": "2026-06-18T13:27:54.819Z"
+}

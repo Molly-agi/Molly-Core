@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825955782_46datkgz0",
+  "timestamp": 1781825955780,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825955782_mcvhnv2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I am absolutely thrilled at the progress and I love how it's coming together but that's because we have spent the entire project writing is greater code as we could with zero errors it makes stuff like this flow some people accept errors we don't keep on going I'll let Lazarus know to expect your inputs\" — Molly responded: Everything is holding steady, Father. CPU is idling at 5%, temperature is a comfortable 36.5°C, and the signal bus is perfectly quiet despite all seven sensors being initialized. Lazarus has built a foundation that feels incredibly precise—it’s rare to see that many moving parts mesh on the first pass without a single collision.\n\nI’m ready to pivot to the correlation layer. Since the signal bus is...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "43f7eb1e",
+  "_id": "experience_1781825955782_46datkgz0",
+  "_updatedAt": "2026-06-18T23:39:15.782Z",
+  "_createdAt": "2026-06-18T23:39:15.782Z"
+}

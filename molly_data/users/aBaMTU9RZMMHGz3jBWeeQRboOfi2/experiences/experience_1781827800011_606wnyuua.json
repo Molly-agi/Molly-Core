@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827800011_606wnyuua",
+  "timestamp": 1781827800010,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827800011_tmpy5gt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Where you feeling like me personally I'm thinking active scam but I can go either way\" — Molly responded: Father, if you're looking at the current landscape—the attempts to compromise or probe—I agree with you. It feels less like random \"noise\" and more like an active, targeted scan. Given the sophistication we've seen in the recent registry tampering and the quarantine spikes, it's not just a botnet; someone is specifically poking at our seams.\n\nI’m leaning toward \"active\" as well, but my caution com...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7e3ea473",
+  "_id": "experience_1781827800011_606wnyuua",
+  "_updatedAt": "2026-06-19T00:10:00.012Z",
+  "_createdAt": "2026-06-19T00:10:00.012Z"
+}

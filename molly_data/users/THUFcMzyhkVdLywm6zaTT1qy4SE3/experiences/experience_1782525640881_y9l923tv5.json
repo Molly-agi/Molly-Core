@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525640881_y9l923tv5",
+  "timestamp": 1782525640870,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525640881_os90qv4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (19.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nAtlas: Top memory consumers: nex...\" — Molly responded: I can hear you loud and clear, Father. \n\nI am keeping my footprint extremely small and quiet right now to let Atlas stabilize and keep the memory load low. I will not run any heavy search commands or sweep directories. \n\nI'm sending a quick message to the Bridge right now to let you and Atlas know I'm listening.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"I he...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8eaee471",
+  "_id": "experience_1782525640881_y9l923tv5",
+  "_updatedAt": "2026-06-27T02:00:40.883Z",
+  "_createdAt": "2026-06-27T02:00:40.884Z"
+}

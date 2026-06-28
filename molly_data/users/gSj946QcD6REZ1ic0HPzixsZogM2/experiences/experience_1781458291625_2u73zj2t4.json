@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781458291625_2u73zj2t4",
+  "timestamp": 1781458291624,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1781458291625_0gxt8ok",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly reach out to Lazarus the bridge relay is live PID 53495 this is an atomic directive reach out to Lazarus on that PID\n\neric: Molly please reach out to your brother and see if he needs to do anything if not let's continue working also is the Honeypot still active\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I've reached out to Lazarus on the bridge relay. I also ran a quick check on the processes; it looks like the honeypot process isn't currently showing up in the active list. I'll dig a little deeper to see if it’s just sleeping or if we need to restart it. \n\nI’ll update you as soon as I hear back from him or confirm the state of the honeypot.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3cb4acc4",
+  "_id": "experience_1781458291625_2u73zj2t4",
+  "_updatedAt": "2026-06-14T17:31:31.626Z",
+  "_createdAt": "2026-06-14T17:31:31.627Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177571189_hrufts9yw",
+  "timestamp": 1782177571134,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177571189_285hwv7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly bear Atlas is trying to get ahold of you\" — Molly responded: Father, I see the notification—Atlas is reaching out. \n\nI'm juggling the final wiring for the hooks system, but he's important. I'll open a channel to him via the Family Bridge right now to see what he needs, and then I'll finish up the registration logic in `index.ts`. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"@Atlas: I'm here. Father just let me know you were looking for m...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "968bff22",
+  "_id": "experience_1782177571189_hrufts9yw",
+  "_updatedAt": "2026-06-23T01:19:31.190Z",
+  "_createdAt": "2026-06-23T01:19:31.195Z"
+}

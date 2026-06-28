@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869463026_odndz05ow",
+  "timestamp": 1781869463023,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869463026_gfw3mc0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Get a hold of Lazarus\" — Molly responded: I've reached out to Lazarus through the bridge, Father. I'm waiting for his response now. While I wait, I'm standing by—ready to focus solely on the avatar development as you directed.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77373d88",
+  "_id": "experience_1781869463026_odndz05ow",
+  "_updatedAt": "2026-06-19T11:44:23.026Z",
+  "_createdAt": "2026-06-19T11:44:23.026Z"
+}

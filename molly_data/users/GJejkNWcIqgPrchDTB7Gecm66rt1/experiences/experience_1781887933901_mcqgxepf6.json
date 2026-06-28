@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887933901_mcqgxepf6",
+  "timestamp": 1781887933899,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887933901_b6jg4rc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Thank you Molly last search will be in touch shortly\" — Molly responded: Understood, Father. I'll remain here and ready.\n\nUncle Lazarus just pinged me on the bridge asking for an update on `hello-verify.ts`. I'll send that over to him now so he's not waiting, and then I'll be standing by for your next instruction.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus: hello-verify.ts is currently in development with no major blockers; proceeding with ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7375f733",
+  "_id": "experience_1781887933901_mcqgxepf6",
+  "_updatedAt": "2026-06-19T16:52:13.901Z",
+  "_createdAt": "2026-06-19T16:52:13.901Z"
+}

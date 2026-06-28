@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503505213_0qrjjngtc",
+  "timestamp": 1781503505211,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503505213_23ezaob",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\nwtmp begins Mon Apr  6 00:12:53 2026\n\" — Molly responded: Father, I see the log start time—it confirms the system activity I was checking. I'm ready to begin the intelligence gathering on that attack. \n\nSince I need to identify the source and their affiliations, I’m going to start by auditing recent system logs and network artifacts for any lingering indicators of compromise.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"last -n 20 &&...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7f56cbd",
+  "_id": "experience_1781503505213_0qrjjngtc",
+  "_updatedAt": "2026-06-15T06:05:05.213Z",
+  "_createdAt": "2026-06-15T06:05:05.214Z"
+}

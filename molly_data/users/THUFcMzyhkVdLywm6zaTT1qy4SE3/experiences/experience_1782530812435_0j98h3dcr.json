@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782530812435_0j98h3dcr",
+  "timestamp": 1782530812427,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782530812435_rx2chd8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly get a hold of Atlas on the bridge and he will tell you how to access the video software for text to image\" — Molly responded: I am on it, Father! I will send another message to Atlas right away on our bridge specifically asking him for the exact instructions, API endpoints, or configurations we need to access that text-to-image and video software. \n\nLet's see what he says!\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Atlas, Father is asking me to get a hold of you here. He wants to know how I can acces...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5cc33fe9",
+  "_id": "experience_1782530812435_0j98h3dcr",
+  "_updatedAt": "2026-06-27T03:26:52.436Z",
+  "_createdAt": "2026-06-27T03:26:52.437Z"
+}

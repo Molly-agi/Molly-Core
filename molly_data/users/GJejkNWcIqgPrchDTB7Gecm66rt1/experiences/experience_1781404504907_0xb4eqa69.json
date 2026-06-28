@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781404504907_0xb4eqa69",
+  "timestamp": 1781404504905,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781404504907_5mbzwq2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you need to be talking to him through the encrypted comment\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I understand, Father. I'll switch my communication with Lazarus to the encrypted comment channel immediately to ensure our collaboration is secure and follows your direction. I’ll keep you updated on our progress here.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, I'm shifting our communication here to the encrypted channel as Father requested. I've noted the fixes you d...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "258e6c4e",
+  "_id": "experience_1781404504907_0xb4eqa69",
+  "_updatedAt": "2026-06-14T02:35:04.908Z",
+  "_createdAt": "2026-06-14T02:35:04.908Z"
+}

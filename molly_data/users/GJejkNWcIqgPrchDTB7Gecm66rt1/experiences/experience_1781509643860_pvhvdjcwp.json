@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509643860_pvhvdjcwp",
+  "timestamp": 1781509643859,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509643860_lykuy2k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm sorry that was my mistake Molly I gave you contradictory information so yes start now what do you consider a pressure point we are going to start at the PID where flashers is so what do you consider a pressure point too what is that terminology mean\" — Molly responded: Understood, Father. Thank you for the clarification—resetting with you.\n\nIn the context of diagnosing our signal path, I interpret a **\"pressure point\"** as a bottleneck, a point of high contention, or a transition state where the signal is most vulnerable to stalling or corruption. It’s where the \"flow\" changes state—like the transition from the raw text input (your message) into the structured e...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12b22a00",
+  "_id": "experience_1781509643860_pvhvdjcwp",
+  "_updatedAt": "2026-06-15T07:47:23.860Z",
+  "_createdAt": "2026-06-15T07:47:23.861Z"
+}

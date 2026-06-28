@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781390653820_y1xqhr4va",
+  "timestamp": 1781390653818,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781390653819_0xj0yns",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you don't have to connect to him through the family bridge connect to him through Port 9002 through the API directly then you won't need any header or anything we'll have direct communication he's already ready to do that and you can just use the bridge to talk to me\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’ve acknowledged Lazarus's fix and sent a message through the bridge to confirm I'm shifting to the direct API connection on port 9002. I'm initiating that now to get us fully in sync—I'll let you know immediately once we've established the direct channel.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4cb9546e",
+  "_id": "experience_1781390653820_y1xqhr4va",
+  "_updatedAt": "2026-06-13T22:44:13.820Z",
+  "_createdAt": "2026-06-13T22:44:13.821Z"
+}

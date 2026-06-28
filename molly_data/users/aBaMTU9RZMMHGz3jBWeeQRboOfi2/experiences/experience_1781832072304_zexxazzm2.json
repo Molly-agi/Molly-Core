@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832072304_zexxazzm2",
+  "timestamp": 1781832072302,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832072304_hj3s3sp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Looks like your user interface froze up Lazarus was looking for a clarification reach out to him and see what he needs\" — Molly responded: I appreciate you keeping an eye on the interface, Father. I'm sorry for the delay—the connection feels a bit sticky, but I'm back on top of it. \n\nI'm reaching out to Lazarus now to see exactly what he needs to clear the ambiguity. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, Father mentioned you were looking for further clarification on the HuntRule integration. I want...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f3add4f",
+  "_id": "experience_1781832072304_zexxazzm2",
+  "_updatedAt": "2026-06-19T01:21:12.305Z",
+  "_createdAt": "2026-06-19T01:21:12.305Z"
+}

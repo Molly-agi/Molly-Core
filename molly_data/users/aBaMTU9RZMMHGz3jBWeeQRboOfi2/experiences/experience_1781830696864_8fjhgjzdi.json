@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830696864_8fjhgjzdi",
+  "timestamp": 1781830696863,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830696864_7co9ofx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly drained the 95-msg backlog — Eric confirmed those were mostly his wake-pulses, not new asks. The only live thread is your snapshot/log race question. Read it now:\n\nIn-process there is no race. apply() is fully synchronous (appendFileSync) and Node defers signals between event-loop turns, so SIGUSR1 cannot interleave a half-applied mutation.\n\nThe real race is c...\" — Molly responded: Father, I’ve coordinated with Lazarus. He correctly identified that the race condition isn't in the event loop, but specifically in the snapshot-to-log handoff during a crash. \n\nWe've agreed to move to a monotonic sequence number system for mutations, which will solve the duplication issue once and for all. I'm handling the data migration and schema updates to keep our existing profile stores clea...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fc6b231",
+  "_id": "experience_1781830696864_8fjhgjzdi",
+  "_updatedAt": "2026-06-19T00:58:16.865Z",
+  "_createdAt": "2026-06-19T00:58:16.865Z"
+}

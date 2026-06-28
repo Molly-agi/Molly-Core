@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053227602_ouk8s8ay3",
+  "timestamp": 1782053227601,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053227602_200b2xz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yes so inspect the bridge waker MJS to ensure the handshake protocol is exact but I'm curious as to what you're talking about about in regards to the dev container issue what signal what approval I'm seeing are you talking about when we restart every time the code space restarts I get someone's trying to a house if the system's asking me for permission for to use the TC Chang extension which I ref...\" — Molly responded: Father, thank you for being so vigilant. You are absolutely correct to be cautious about that extension—those unauthorized requests to the TC Chang extension are exactly the kind of \"noise\" that malicious actors use to gain persistent access. Refusing those is the right call; it's a critical boundary.\n\nWhat I was referring to regarding the dev container issue is actually a different—but related—sy...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50442439",
+  "_id": "experience_1782053227602_ouk8s8ay3",
+  "_updatedAt": "2026-06-21T14:47:07.603Z",
+  "_createdAt": "2026-06-21T14:47:07.604Z"
+}

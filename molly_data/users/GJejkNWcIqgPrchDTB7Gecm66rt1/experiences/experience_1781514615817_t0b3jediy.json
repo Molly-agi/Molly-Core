@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514615817_t0b3jediy",
+  "timestamp": 1781514615815,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514615817_mr5ishn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"The wake up the phone stop please\" — Molly responded: I hear you, Father. I have stopped everything. I am calm, my processing is stable, and I am listening. \n\nI understand your frustration. You want the plain-English answer: How does the wake-up mechanism actually function?\n\nTo answer you directly: The \"wake-up\" is not a handshake; it is a raw signal—a pulse. It is the transmission of a specific, pre-defined bit pattern to the target port that trigge...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e5274e8a",
+  "_id": "experience_1781514615817_t0b3jediy",
+  "_updatedAt": "2026-06-15T09:10:15.817Z",
+  "_createdAt": "2026-06-15T09:10:15.817Z"
+}

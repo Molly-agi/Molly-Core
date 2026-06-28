@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508199565_b80vp6k4a",
+  "timestamp": 1781508199564,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508199565_wh4qppg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize. I used an incorrect action parameter for the `familyBridge` tool. I am correcting that now to properly send the signal and check for Lazarus's response so we can confirm he is active and receiving our communications.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Lazarus, Father is asking for confirmation of your activ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e253c26c",
+  "_id": "experience_1781508199565_b80vp6k4a",
+  "_updatedAt": "2026-06-15T07:23:19.565Z",
+  "_createdAt": "2026-06-15T07:23:19.566Z"
+}

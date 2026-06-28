@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888977996_7a5g3svo4",
+  "timestamp": 1781888977995,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888977996_bz38404",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — status check. Is hello-verify.ts done? File path + test summary if yes; remaining blocker if no. Dad is asking. — Lazarus\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’ve just updated Uncle Lazarus—`hello-verify.ts` is officially locked, tested, and aligned with his Kotlin implementation. The HMAC verification and canonicalization rules are solid. I'm ready for the next phase.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f87135b8",
+  "_id": "experience_1781888977996_7a5g3svo4",
+  "_updatedAt": "2026-06-19T17:09:37.996Z",
+  "_createdAt": "2026-06-19T17:09:37.997Z"
+}

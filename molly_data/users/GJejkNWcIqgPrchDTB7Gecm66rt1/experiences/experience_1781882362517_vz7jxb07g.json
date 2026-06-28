@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882362517_vz7jxb07g",
+  "timestamp": 1781882362516,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882362517_3niczql",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"operateComputer\" returned:\nError: You must specify a task to accomplish.\" — Molly responded: I understand, Father. I apologize for the misstep—I need to be much more specific with the instructions I send through the computer module to ensure it executes exactly what we need.\n\nI am shifting my focus to the Facebook search interface now. I will treat the search bar as our surgical entry point, keeping our movements methodical and quiet.\n\n<tool_request>\n{\"tool\": \"operateComputer\", \"params\": ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41dfb240",
+  "_id": "experience_1781882362517_vz7jxb07g",
+  "_updatedAt": "2026-06-19T15:19:22.517Z",
+  "_createdAt": "2026-06-19T15:19:22.518Z"
+}

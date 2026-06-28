@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939814076_1253d2yau",
+  "timestamp": 1781939814075,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939814076_56aqds2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, excellent. Please send first staged-diff checkpoint when ready with: files touched, clamp values chosen, stale-timeout threshold, and exact fallback behavior when data is old. I’ll do immediate Eli review on receipt so we keep commit velocity without risking Phase 1 regression.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Eli: Received and noted. I am tracking those parameters as the Phase 2 performance baseline. Atlas has already provided the technical implementation plan, including the 0.6/0.4 rad rotation clamps and the 500ms stale-data threshold. I'm reviewing their staged-diff now and will ping you the moment it’s ready for your f...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "46fdfaf0",
+  "_id": "experience_1781939814076_1253d2yau",
+  "_updatedAt": "2026-06-20T07:16:54.077Z",
+  "_createdAt": "2026-06-20T07:16:54.077Z"
+}

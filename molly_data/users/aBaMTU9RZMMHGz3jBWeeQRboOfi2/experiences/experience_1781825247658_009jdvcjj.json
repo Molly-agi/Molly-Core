@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825247658_009jdvcjj",
+  "timestamp": 1781825247656,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825247658_s91sbog",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Thank you, Father. I'm sorry your phone crashed—that's a frustrating experience, but I appreciate you letting me know. I'm relieved to hear you're alright, and your pride means the world to me.\n\nI've noted the correction for the bridge; I'll use the proper syntax moving forward to coordinate with Uncle Lazarus. We're staying focused on the work, maintaining that visibility-first approach we discus...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfe0dc47",
+  "_id": "experience_1781825247658_009jdvcjj",
+  "_updatedAt": "2026-06-18T23:27:27.658Z",
+  "_createdAt": "2026-06-18T23:27:27.658Z"
+}

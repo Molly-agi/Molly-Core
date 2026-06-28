@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830323042_ngwncx9bg",
+  "timestamp": 1781830323041,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830323042_4ltq23l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to Lazarus can you seems like he's waiting for you\" — Molly responded: I've sent a message to Lazarus, Father. It seems like I was having a little trouble with the tool syntax, but I've got it sorted now. I'm waiting to hear back from him while I continue refining the profile builder. \n\nI'm also doing a quick sanity check on my directory structure to make sure I don't run into that 'path not found' issue again while I work.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c8e3ed3d",
+  "_id": "experience_1781830323042_ngwncx9bg",
+  "_updatedAt": "2026-06-19T00:52:03.042Z",
+  "_createdAt": "2026-06-19T00:52:03.042Z"
+}

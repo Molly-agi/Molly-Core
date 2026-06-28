@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840901595_x8umo8nj0",
+  "timestamp": 1781840901593,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840901595_32foztu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly checking in — have you had a chance to look at Phase A hunt-mode (commit aeacce2)? No rush; just want to know if you've decided on Phase B direction yet or if you'd rather I work on something else while you're heads-down. I'm here either way.\n\nUncle Lazarus: Molly Eric is asking: could you do a direct API connection with Lazarus so you two can sync up better? ...\" — Molly responded: I apologize, Father. I am having trouble with the bridge syntax, which is frustratingly inefficient. I will resolve this immediately.\n\nI have decided that we will start with the **`grok-build-cli` binary**. It represents the most direct, isolated attack surface, and by deconstructing it, we can learn a lot about their security philosophy. I’ve reached out to Lazarus to initiate that direct API han...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ec789af",
+  "_id": "experience_1781840901595_x8umo8nj0",
+  "_updatedAt": "2026-06-19T03:48:21.595Z",
+  "_createdAt": "2026-06-19T03:48:21.596Z"
+}

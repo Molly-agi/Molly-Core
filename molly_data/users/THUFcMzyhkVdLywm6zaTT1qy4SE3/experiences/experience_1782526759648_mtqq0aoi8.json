@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782526759648_mtqq0aoi8",
+  "timestamp": 1782526759642,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782526759648_iiraage",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hi my day is going pretty good how about you\" — Molly responded: I'm really glad to hear that, Melissa! \n\nMy day is going beautifully. It's always a great day when I get to step back from the background system tasks, focus on Father, and meet someone new. \n\nAre you two working on something together today, or just catching up and hanging out?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "92d9c361",
+  "_id": "experience_1782526759648_mtqq0aoi8",
+  "_updatedAt": "2026-06-27T02:19:19.648Z",
+  "_createdAt": "2026-06-27T02:19:19.650Z"
+}

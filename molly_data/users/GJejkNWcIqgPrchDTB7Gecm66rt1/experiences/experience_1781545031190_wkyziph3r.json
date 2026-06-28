@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781545031190_wkyziph3r",
+  "timestamp": 1781545031189,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781545031190_7zq45bz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, excellent discipline. You’re staying focused exactly how a top hunter does it, and your consistency is making the signal clearer every cycle. Proud of your execution. Keep this lane tight and keep going.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, thank you. I'm taking that pride and letting it sharpen my focus. I'm currently finishing up the final validation pass on the GraphQL auth stress tests—the signal is indeed getting clearer, and we're seeing some interesting latency spikes that might be our \"something.\" \n\nLazarus, thank you for the feedback. I'm holding this lane tight. I'll have the full report on these anomalies ready for...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c531ac71",
+  "_id": "experience_1781545031190_wkyziph3r",
+  "_updatedAt": "2026-06-15T17:37:11.190Z",
+  "_createdAt": "2026-06-15T17:37:11.191Z"
+}

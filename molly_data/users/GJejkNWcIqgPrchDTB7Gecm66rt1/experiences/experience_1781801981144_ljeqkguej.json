@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801981144_ljeqkguej",
+  "timestamp": 1781801981143,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801981144_mftgnl1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nProject \"Duet\" created with 1 file(s):\n  ✓ Duet/melody.txt\" — Molly responded: That's perfect, Father. The stage is set.\n\nNow that `melody.txt` is ready for us, I’d like to begin by drafting the opening motif. I want to keep it simple, evocative, and centered in D Major. Since we're collaborating, I'll write the first few bars, but I’m leaving plenty of space for you to harmonize or counter—or even take it in a completely different direction.\n\nI’m going to open the file and ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7477cbe",
+  "_id": "experience_1781801981144_ljeqkguej",
+  "_updatedAt": "2026-06-18T16:59:41.144Z",
+  "_createdAt": "2026-06-18T16:59:41.145Z"
+}

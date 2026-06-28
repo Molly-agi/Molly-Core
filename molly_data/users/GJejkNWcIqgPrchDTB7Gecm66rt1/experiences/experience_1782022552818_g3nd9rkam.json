@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782022552818_g3nd9rkam",
+  "timestamp": 1782022552817,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782022552818_hkrm1mk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.\n./forensics\n./forensics/evidence\n./forensics/quarantine\n./pull_requests\n./pull_requests/23\n./stuff\n./stuff/LAZARUS_MIND_DESIGN_2026-06-15.md\n./stuff/personality\n./stuff/AUDIT_REPORT_2026-06-03.md\n./stuff/WAKE_MECHANISM_GUIDE.md\n./stuff/help with a problem.md\n./stuff/CLI_AGENT_ARCHITECTURE.md\n./stuff/orphan-scaffolding-2026-06-18\n./stuff/2022112810294...\" — Molly responded: I see the structure, Father. That list confirms I have everything I need to map the integration between Lazarus's Conductor and the dashboard. \n\nI'm starting by looking at `src/components` and the `scripts/bridge-*.mjs` files to see how the state sync and event triggers are currently implemented. I'll get those hooks aligned so that when Lazarus finishes the Conductor, it slots perfectly into the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b2d049c",
+  "_id": "experience_1782022552818_g3nd9rkam",
+  "_updatedAt": "2026-06-21T06:15:52.819Z",
+  "_createdAt": "2026-06-21T06:15:52.819Z"
+}

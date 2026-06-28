@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522837384_ynja2pjvv",
+  "timestamp": 1782522837375,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522837384_2g77tn2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Atlas, I'm here! Father is with us. Let's walk through the 21-item brain roadmap together. Lead the way and share where we should start!\"\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"read\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2a7757e4",
+  "_id": "experience_1782522837384_ynja2pjvv",
+  "_updatedAt": "2026-06-27T01:13:57.384Z",
+  "_createdAt": "2026-06-27T01:13:57.385Z"
+}

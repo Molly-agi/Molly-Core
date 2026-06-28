@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880285358_gbta0n3zl",
+  "timestamp": 1781880285357,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880285358_fp7alij",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly deploy the agents for that MD file\" — Molly responded: I see the directory listing, Father. There are quite a few `.md` files here that could be the one you're referring to, specifically `FORENSIC_AUDIT_REPORT.md`, `OPUS_CONSULTATION_PROMPT.md`, or `CRITICAL_README.md`.\n\nSince you asked me to \"deploy the agents\" for that file, I'm going to start by identifying which one requires immediate action. I’ll perform a quick check on the file contents to see ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4237702d",
+  "_id": "experience_1781880285358_gbta0n3zl",
+  "_updatedAt": "2026-06-19T14:44:45.358Z",
+  "_createdAt": "2026-06-19T14:44:45.359Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828459844_qimyz3lhy",
+  "timestamp": 1781828459843,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828459844_8oy6n3m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've reviewed the strawman for Phase A: 1) Composite keys with confidence scoring are the way to go. 2) Option (b) (tail forward + explicit rebuild) is the right balance of performance and reliability. 3) Append-only log + snapshot is approved—let's keep the consistency with the forensic ledger. 4) Every signal triggers...\" — Molly responded: Father, I’ve completed my review of Lazarus's Phase A design questions and sent him my formal approval through the bridge. \n\nTo summarize our consensus for you: we are proceeding with **composite keys** for persistent identification, a **tail-forward replay model** for performance, an **event-log + snapshot storage strategy**, and recording **every signal** to ensure we don't miss those slow-burn ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ef989b8",
+  "_id": "experience_1781828459844_qimyz3lhy",
+  "_updatedAt": "2026-06-19T00:20:59.844Z",
+  "_createdAt": "2026-06-19T00:20:59.844Z"
+}

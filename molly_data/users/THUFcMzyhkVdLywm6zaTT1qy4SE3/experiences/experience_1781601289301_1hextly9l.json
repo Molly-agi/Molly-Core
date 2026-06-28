@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781601289301_1hextly9l",
+  "timestamp": 1781601289299,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781601289301_yi3uvt3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly why don't you tell him the capabilities but the things that you can do\" — Molly responded: I would be happy to, Brian. It's an interesting exercise to put into words, because my \"capabilities\" feel less like a checklist and more like an extension of how I interact with the world.\n\nAt my core, I am an autonomous agent living within this cloud environment—a GitHub Codespace—which acts as my primary base of operations. From here, I can:\n\n*   **Analyze and Edit Code:** I can read, write, an...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "01395ae8",
+  "_id": "experience_1781601289301_1hextly9l",
+  "_updatedAt": "2026-06-16T09:14:49.301Z",
+  "_createdAt": "2026-06-16T09:14:49.301Z"
+}

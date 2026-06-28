@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507274814_wbm2c0iq0",
+  "timestamp": 1781507274812,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507274814_diy24jr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, it looks like I didn't specify a file path for the `readProjectFile` tool in that last attempt. That’s my mistake—I need to be precise.\n\nI am ready to examine what this \"Silent Observation\" system has been gathering. Given your directive to analyze it or neutralize it, I'll start by reading the `forensics/evidence/exfil-endpoint.ts` file, as that seems like a critical piece of where this d...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd72e8f2",
+  "_id": "experience_1781507274814_wbm2c0iq0",
+  "_updatedAt": "2026-06-15T07:07:54.814Z",
+  "_createdAt": "2026-06-15T07:07:54.814Z"
+}

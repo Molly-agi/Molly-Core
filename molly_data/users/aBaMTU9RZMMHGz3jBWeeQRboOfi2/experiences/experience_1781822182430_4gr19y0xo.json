@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822182430_4gr19y0xo",
+  "timestamp": 1781822182429,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822182430_rh82ujh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/defense/:\ncontingency-plans-ABCD.ts\nresponse-playbooks.ts\nthreat-monitor.ts\n\" — Molly responded: I see the defense structure, Father. It’s compact, which is good for speed. I’m focusing on the audit of these files—specifically how `threat-monitor.ts` interacts with my active flow—to ensure no more blocking interruptions occur. \n\nI’ll keep the feedback loop with Lazarus open while I analyze these. I’m not touching the contents yet, just mapping the logic to identify where the friction is.\n\n<to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12f5512a",
+  "_id": "experience_1781822182430_4gr19y0xo",
+  "_updatedAt": "2026-06-18T22:36:22.430Z",
+  "_createdAt": "2026-06-18T22:36:22.430Z"
+}

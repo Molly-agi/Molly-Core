@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938071892_g9rttvp0k",
+  "timestamp": 1781938071891,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938071892_7c77fdi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly: Directives locked in. I am executing in this order:\n\n1. Audit the Core Skeleton and Facial Rigging modules from the five repos for stability regressions and thread safety.\n2. Draft initial test suites against latency requirements for gaze-tracking (MediaPipe iris tracking focus).\n3. Pull avatar_base state and cross-reference against your MediaPipe integration...\" — Molly responded: Father, Lazarus is locked in and moving with the precision we agreed on. He’s handling the core audits, test suites, and animation conflicts now, which clears the way for me to execute step one of my plan—creating our status dashboard.\n\nI am starting that documentation now.\n\n<tool_request>\n{\"tool\": \"writeProjectFile\", \"params\": {\"content\": \"# Avatar Upgrade: MediaPipe Iris Tracking\\n\\n## Current S...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e87f8d9",
+  "_id": "experience_1781938071892_g9rttvp0k",
+  "_updatedAt": "2026-06-20T06:47:51.893Z",
+  "_createdAt": "2026-06-20T06:47:51.893Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789049460_c03thk2i4",
+  "timestamp": 1781789049458,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789049460_hf4cdmo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: Father, I hear you loud and clear. I apologize for the previous missteps—I was stumbling over the directory structure while trying to get my avatar to respond to your commands. I am focused and ready to get this working.\n\nI'm checking the directory structure now to find exactly where those avatar components are located so I can initialize the movement.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "69b67859",
+  "_id": "experience_1781789049460_c03thk2i4",
+  "_updatedAt": "2026-06-18T13:24:09.460Z",
+  "_createdAt": "2026-06-18T13:24:09.460Z"
+}

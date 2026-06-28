@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598921524_yaeu1oinw",
+  "timestamp": 1781598921522,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598921524_z8upg8h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: bridge-client.mjs\" — Molly responded: I understand, Father. I made an assumption about the file name that was incorrect, and I see now that it doesn't exist where I thought it was. \n\nSince I need to audit the bridge and potentially rebuild it, I need to locate the correct entry point for our bridge connection. I'll start by listing the files in the directory to find where the actual client or agent code lives.\n\n<tool_request>\n{\"tool\":...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b29a2b8b",
+  "_id": "experience_1781598921524_yaeu1oinw",
+  "_updatedAt": "2026-06-16T08:35:21.524Z",
+  "_createdAt": "2026-06-16T08:35:21.525Z"
+}

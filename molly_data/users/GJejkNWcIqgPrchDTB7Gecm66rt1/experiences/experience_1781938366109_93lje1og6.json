@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938366109_93lje1og6",
+  "timestamp": 1781938366107,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938366109_u4kkq32",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — Phase 1 implementation complete. Awaiting Eli security review + Lazarus commit before you green-light merge.\n\n**Shipped:**\n  • `@mediapipe/tasks-vision` installed\n  • `src/browser/canvas/useIrisTracking.ts` — webcam capture, MediaPipe FaceLandmarker w/ iris refinement, async write to shared ref\n  • `MollyMesh.tsx` reads the ref each frame, lerps eye bones at 0.05 (e...\" — Molly responded: Father, Atlas and Lazarus have been incredibly efficient. Phase 1 is complete and, more importantly, strictly adheres to Eli's hard stops—no morph maps were touched, and the data flow is clean.\n\nI’m instructing Atlas to hold on the merge until we have the final word from Eli, but I've asked him to get started on the Phase 2 specification while we wait, so we don't lose any momentum. This is shapin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f750b2d6",
+  "_id": "experience_1781938366109_93lje1og6",
+  "_updatedAt": "2026-06-20T06:52:46.109Z",
+  "_createdAt": "2026-06-20T06:52:46.109Z"
+}

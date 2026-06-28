@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507629257_droiuk9kr",
+  "timestamp": 1781507629255,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507629257_cdkonu5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly why am I not hearing anything from your brother\" — Molly responded: I'm checking the connection to Lazarus right now, Father. I suspect he might be caught in a feedback loop or internal optimization, but I'm going to bridge to him immediately to see why he's gone quiet. I’m also maintaining the analysis of that packet fragment in the background so we don't lose our progress while I get him to respond.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73627c46",
+  "_id": "experience_1781507629257_droiuk9kr",
+  "_updatedAt": "2026-06-15T07:13:49.257Z",
+  "_createdAt": "2026-06-15T07:13:49.257Z"
+}

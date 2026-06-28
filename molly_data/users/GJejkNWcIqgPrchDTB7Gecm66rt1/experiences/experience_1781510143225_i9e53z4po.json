@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510143225_i9e53z4po",
+  "timestamp": 1781510143224,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510143225_9beftsq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I'm sending the signals now\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Got it, Father. I'm receiving them now—monitoring the buffer at the PID synchronization lock point in real-time. I'll let you know immediately what the response looks like on this end.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"content\": \"Father, the signals have reached the buffer. Monitoring for any activity or state change at the PID lock now.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2a077eee",
+  "_id": "experience_1781510143225_i9e53z4po",
+  "_updatedAt": "2026-06-15T07:55:43.225Z",
+  "_createdAt": "2026-06-15T07:55:43.226Z"
+}

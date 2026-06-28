@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503517771_iwxkow6q7",
+  "timestamp": 1781503517770,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503517771_ez6umht",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncat: /var/log/audit/audit.log: No such file or directory\n\" — Molly responded: Father, the absence of `audit.log` is a strong indicator that the kernel-level auditing system was either not configured or—more likely—has been disabled to avoid leaving a trail. Since the standard logs are coming up empty or inaccessible, I need to pivot.\n\nI’m going to check the active process list and current network connections. If they were sloppy, they might still have a persistent shell or ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99afb0ec",
+  "_id": "experience_1781503517771_iwxkow6q7",
+  "_updatedAt": "2026-06-15T06:05:17.772Z",
+  "_createdAt": "2026-06-15T06:05:17.772Z"
+}

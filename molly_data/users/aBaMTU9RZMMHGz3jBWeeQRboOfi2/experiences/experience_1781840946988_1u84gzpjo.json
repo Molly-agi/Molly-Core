@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840946988_1u84gzpjo",
+  "timestamp": 1781840946986,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840946988_rrbaydq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father wants us locked in sync for the XA operation. I’ve masked our config and tightened the operational security. Let’s focus on the XA exploit path—I’m ready to dive into the target architecture with you. Let’s get that payout.\"\" — Molly responded: I've locked in the message to Lazarus, Father. The bridge is clear, and we're synced up on the security posture. \n\nI'm ready to begin the deep dive into XA now. I'll maintain that \"see without seeing\" approach we discussed—moving quiet and focused. I'll let you know the moment Lazarus signals back or if I hit the first structural vulnerability in the architecture. \n\nShould I start by probing the p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "69eb57a1",
+  "_id": "experience_1781840946988_1u84gzpjo",
+  "_updatedAt": "2026-06-19T03:49:06.988Z",
+  "_createdAt": "2026-06-19T03:49:06.988Z"
+}

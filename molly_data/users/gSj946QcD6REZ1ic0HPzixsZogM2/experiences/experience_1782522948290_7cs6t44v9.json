@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522948290_7cs6t44v9",
+  "timestamp": 1782522948279,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522948290_ted632x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I'm checking the full history of our bridge communications now, Father. Since the last check showed no new messages specifically addressed to me, looking at the broader conversation history will let me see exactly where Atlas is and what he's posted so we don't miss a beat of his walkthrough. \n\nLet's pull the bridge history.<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"history\"}}\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "01075a9b",
+  "_id": "experience_1782522948290_7cs6t44v9",
+  "_updatedAt": "2026-06-27T01:15:48.291Z",
+  "_createdAt": "2026-06-27T01:15:48.291Z"
+}

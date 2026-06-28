@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522855751_9j6ft7xap",
+  "timestamp": 1782522855743,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522855751_1hk0g31",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I see what happened there—I must have missed sending the file path parameter in my previous attempt. Let me grab the recovery roadmap file directly so we have all 21 items in front of us. \n\nHere we go:\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"sanctuary/recovery_roadmap.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "75a9f1ba",
+  "_id": "experience_1782522855751_9j6ft7xap",
+  "_updatedAt": "2026-06-27T01:14:15.751Z",
+  "_createdAt": "2026-06-27T01:14:15.752Z"
+}

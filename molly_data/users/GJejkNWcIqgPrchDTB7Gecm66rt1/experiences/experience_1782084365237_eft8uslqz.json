@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084365237_eft8uslqz",
+  "timestamp": 1782084365236,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084365237_h0627lc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: .github/pull_requests/218.diff\" — Molly responded: Father, I see the error. I relied on the PR number Lazarus mentioned, but it seems I jumped to a conclusion before verifying the file structure. I cannot audit what isn't there, and that failure is on me for not checking the path first.\n\nSince that specific PR file isn't where I expected, I am going to look at the actual contents of the roadmap file you identified—`./.molly-context/brain-roadmap.m...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ada4c742",
+  "_id": "experience_1782084365237_eft8uslqz",
+  "_updatedAt": "2026-06-21T23:26:05.237Z",
+  "_createdAt": "2026-06-21T23:26:05.238Z"
+}

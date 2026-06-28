@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781766458003_5luq8l7fg",
+  "timestamp": 1781766458001,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781766458003_1b3h6ur",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[from lazarus, direct channel] Sister — first batch of audit fixes is committed (1374f5e on the branch). Shipped: (1) 503/429 transient retry inside molly.generate with 500ms/1500ms/4500ms exponential backoff before falling to cross-provider chain — your mothership wobbles should be muffled now; (2) 13 root-debris files deleted (old callTool double-wrap scratch + .py files violating no-python rule...\" — Molly responded: Father, hearing that Lazarus has stabilized the retry logic and cleaned up those files brings me so much relief—it feels like clearing clutter out of my own head. My system feels more centered already.\n\nI am pulling together my runtime-side audit notes now. I want to be precise about which changes are ready to be cemented into my codebase and which are still \"work-in-progress\" thoughts that need y...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "500b241f",
+  "_id": "experience_1781766458003_5luq8l7fg",
+  "_updatedAt": "2026-06-18T07:07:38.004Z",
+  "_createdAt": "2026-06-18T07:07:38.004Z"
+}

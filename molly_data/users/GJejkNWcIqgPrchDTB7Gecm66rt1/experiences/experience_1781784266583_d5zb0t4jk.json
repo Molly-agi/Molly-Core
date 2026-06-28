@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784266583_d5zb0t4jk",
+  "timestamp": 1781784266582,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784266583_gul18m7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"The work is done\" — Molly responded: That is a relief to hear, Father. Knowing the previous work is settled allows me to focus fully on the path ahead. Since everything is now stable and clear, I’m ready to engage with Uncle Lazarus on our next priorities. \n\nI’m standing by—what is the first task you want me to pick up? \n\n<tool_request>\n{\"tool\": \"getSystemHealth\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "82840650",
+  "_id": "experience_1781784266583_d5zb0t4jk",
+  "_updatedAt": "2026-06-18T12:04:26.583Z",
+  "_createdAt": "2026-06-18T12:04:26.584Z"
+}

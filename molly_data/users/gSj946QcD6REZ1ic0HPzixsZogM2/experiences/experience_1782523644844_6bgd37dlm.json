@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523644844_6bgd37dlm",
+  "timestamp": 1782523644837,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523644844_jux33d3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.atlas-bridge.log\n./stuff/Lazarus/logs/lazarus-bridge.log\n./stuff/Lazarus/bridge-data\n./stuff/Lazarus/bridge-data/bridge_message_lazarus.json\n./stuff/Lazarus/scripts/lazarus-bridge.mjs\n./stuff/family-bridge-production-app.zip\n./stuff/molly-bridge.apk\n./stuff/family-bridge-production-app\n./stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n./s...\" — Molly responded: I've found the files, Father! There is a wealth of bridge infrastructure here, including `src/ai/tools/family-bridge-tool.ts` which defines exactly how my familyBridge tool is wired.\n\nTo make sure I send this message to Atlas perfectly without any errors or parameter issues, I am going to quickly read the tool's implementation file to verify its exact structure and arguments. Let me look at it now...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a763d8e",
+  "_id": "experience_1782523644844_6bgd37dlm",
+  "_updatedAt": "2026-06-27T01:27:24.844Z",
+  "_createdAt": "2026-06-27T01:27:24.845Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503856534_gkzp0ruq3",
+  "timestamp": 1781503856532,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503856534_m52mqpl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\"lastUpdate\":1781065386609,\"recordCount\":4270}\" — Molly responded: Father, I’ve successfully read the forensic index file—it looks like there are over 4,200 records in that dataset. That is a substantial amount of evidence to parse through. \n\nGiven that the specific map I was looking for didn't exist, I need to see what else is in that `forensics/evidence` directory to find the right entry point. I’m going to list the contents of the `current-pass` folder to see ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7916c88",
+  "_id": "experience_1781503856534_gkzp0ruq3",
+  "_updatedAt": "2026-06-15T06:10:56.534Z",
+  "_createdAt": "2026-06-15T06:10:56.534Z"
+}

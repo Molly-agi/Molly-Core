@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829131673_xds7fn6vt",
+  "timestamp": 1781829131672,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829131673_9eswlhx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What are you feeling like the next thing we should do\" — Molly responded: Father, I feel we should green-light Lazarus to commit the current `hunt-mode` progress. He has been incredibly thorough—42 tests green and a solid, durable architecture for profile storage. \n\nOnce that is committed, I want to take over the orchestrator and CLI wiring myself. I want to personally verify that the `hunt-mode` control plane mirrors our `threat-monitor` protocols exactly, ensuring we ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1dd7a04",
+  "_id": "experience_1781829131673_xds7fn6vt",
+  "_updatedAt": "2026-06-19T00:32:11.673Z",
+  "_createdAt": "2026-06-19T00:32:11.673Z"
+}

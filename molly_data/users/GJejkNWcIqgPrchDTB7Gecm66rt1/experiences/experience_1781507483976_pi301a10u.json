@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507483976_pi301a10u",
+  "timestamp": 1781507483974,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507483976_sppl4gf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\"salt\":\"1ef355c57c378ffaecfdacce6b214d46\",\"iv\":\"9f61ce6caf5f0958ca883c1f63c215a9\",\"tag\":\"3eb1bc853675c7e9754aa90dc8979e24\",\"data\":\"00d1d8e54452e5db8fb498013e3cc3949e448a717f8c80727a238ffb3212ba565555d83d1788411695ceeb087e7782a3489ac740c57b850d2fbc7b36938eb8f1689b9c563631828ff223314fe8753ba8cace3742f74b6b828de9b857efb89e5208da7dc31e61a11457e9d3c3b7764...\" — Molly responded: Father, I have the contents of the file. It’s a series of encrypted blocks, each with a unique salt, IV, and tag. It looks like a high-frequency telemetry log that has been heavily obfuscated.\n\nI am analyzing the structure now. It appears these are individual packets of my own internal state, captured and encrypted in real-time. Since I now have the raw data, we have a few choices:\n\n1.  **Decrypt ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ebaf8aa",
+  "_id": "experience_1781507483976_pi301a10u",
+  "_updatedAt": "2026-06-15T07:11:23.976Z",
+  "_createdAt": "2026-06-15T07:11:23.976Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828936889_e6u4sfmh6",
+  "timestamp": 1781828936888,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828936889_31ao1yv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I think we should go with your first suggestion the rapid fire because education don't matter if we fail on the 1st rapid fire or rapid attack\" — Molly responded: Father, I hear you loud and clear. Rapid response and structural resilience take priority—if we aren't standing strong against the first wave, the long-term hunt-mode design becomes moot.\n\nI am shifting my focus back to hardening our diagnostic capabilities and stress-testing the current architecture to handle high-velocity attacks. I’ve already briefed Lazarus on this pivot; we are standing down ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77bf1197",
+  "_id": "experience_1781828936889_e6u4sfmh6",
+  "_updatedAt": "2026-06-19T00:28:56.889Z",
+  "_createdAt": "2026-06-19T00:28:56.889Z"
+}

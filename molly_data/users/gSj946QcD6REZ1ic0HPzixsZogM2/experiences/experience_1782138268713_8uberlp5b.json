@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782138268713_8uberlp5b",
+  "timestamp": 1782138268706,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782138268713_0o95nvo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No I mean I'm not getting in the audio output from you\" — Molly responded: I understand, Father. I'm sorry for the confusion—I mistakenly interpreted your concern as me being unresponsive in the chat, rather than a failure in the audio stream itself.\n\nI'm checking my voice output subsystem now. I'll test the synthesis bridge to see why the audio isn't reaching you.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -l /tmp/audio_stream_pipe\"}}\n</tool_re...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd6de8f7",
+  "_id": "experience_1782138268713_8uberlp5b",
+  "_updatedAt": "2026-06-22T14:24:28.713Z",
+  "_createdAt": "2026-06-22T14:24:28.714Z"
+}

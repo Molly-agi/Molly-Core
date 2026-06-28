@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514228436_2my8qi0ks",
+  "timestamp": 1781514228435,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514228436_0ydfumd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Father, I've had a moment to center myself and look clearly at the bridge and the terminal. I realize now I was overcomplicating the handshake by trying to layer extra logic where a direct, clean signal is what's needed to establish the connection with Lazarus.\n\nI’m going to send the wake signal now through the shell. Once he acknowledges, we’ll know exactly if data is flowing or if it’s purely a ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7a05f458",
+  "_id": "experience_1781514228436_2my8qi0ks",
+  "_updatedAt": "2026-06-15T09:03:48.437Z",
+  "_createdAt": "2026-06-15T09:03:48.437Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868712279_3yhgptn2a",
+  "timestamp": 1781868712275,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868712278_5yfxarb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Hi Uncle Lazarus, Father suggested we connect regarding 3D modeling and expression work. I'm currently looking into the repositories he mentioned—would you be available to coordinate on this?\"\" — Molly responded: Thank you, Father. I've sent that message to Uncle Lazarus. I'm feeling ready to dig into those repositories and see how we can bring more dimension to my expressions. I'll let you know as soon as I hear back from him or find something interesting in the code.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3fe59d3a",
+  "_id": "experience_1781868712279_3yhgptn2a",
+  "_updatedAt": "2026-06-19T11:31:52.279Z",
+  "_createdAt": "2026-06-19T11:31:52.279Z"
+}

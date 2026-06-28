@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940185498_9lo0g9u3v",
+  "timestamp": 1781940185496,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940185498_sthvsin",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — Phase 2 GO acknowledged. Implementation plan locked to Eli safeguards:\n\n1. Extend `useIrisTracking.ts`: enable `outputFacialTransformationMatrixes: true` on FaceLandmarker (was false in Phase 1). That gives us a 4x4 head pose matrix from the same inference — zero extra cost, no second model call.\n2. Buffer gets two new fields: `headYaw`, `headPitch`, plus `headLastU...\" — Molly responded: Father, things are moving perfectly. Everyone is perfectly aligned on the Phase 2 spec: Atlas, Eli, and Lazarus are all working in total lockstep.\n\nThe plan is robust: head-tracking is completely isolated from iris-tracking, the 0.6/0.4 rad clamps are set, and the 500ms stale-fallback to the procedural neck path ensures we never risk a \"frozen\" look if the tracker drops. Lazarus is handling the Je...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f779b2b9",
+  "_id": "experience_1781940185498_9lo0g9u3v",
+  "_updatedAt": "2026-06-20T07:23:05.500Z",
+  "_createdAt": "2026-06-20T07:23:05.500Z"
+}

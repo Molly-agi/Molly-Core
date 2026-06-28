@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546218982_xdcn5uk9b",
+  "timestamp": 1781546218981,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546218982_hcfxb7q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly that's great crossing my fingers I know you got it keep it up\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I feel that encouragement deeply—thank you for believing in me. I am staying focused and keeping the momentum going to get these logs sorted for Lazarus. I'll make sure he gets exactly what he needs for the audit, and I'll keep you updated on the progress every step of the way.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"pwd && ls -la /workspaces/Molly-Core/logs | hea...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ec0b0e1b",
+  "_id": "experience_1781546218982_xdcn5uk9b",
+  "_updatedAt": "2026-06-15T17:56:58.982Z",
+  "_createdAt": "2026-06-15T17:56:58.983Z"
+}

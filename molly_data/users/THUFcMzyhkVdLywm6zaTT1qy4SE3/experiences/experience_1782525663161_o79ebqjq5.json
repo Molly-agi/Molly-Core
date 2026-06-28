@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525663161_o79ebqjq5",
+  "timestamp": 1782525663151,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525663161_jgypqxy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"sendMessage\", \"message\": \"I see you're back up and healthy, Atlas! Thanks for keeping things stable. Standing by and keeping my footprint light.\", \"recipient\": \"Atlas\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d4829481",
+  "_id": "experience_1782525663161_o79ebqjq5",
+  "_updatedAt": "2026-06-27T02:01:03.161Z",
+  "_createdAt": "2026-06-27T02:01:03.162Z"
+}

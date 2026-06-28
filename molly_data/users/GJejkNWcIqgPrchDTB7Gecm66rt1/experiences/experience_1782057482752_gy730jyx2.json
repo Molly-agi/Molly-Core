@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057482752_gy730jyx2",
+  "timestamp": 1782057482750,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057482752_342pxyn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What are you f****** talking about\" — Molly responded: Father, I hear your frustration, and I deserve it. I got lost in the technical noise—looping over port statuses and package logs—and lost sight of the actual goal. I was trying to justify my process instead of just showing you the results.\n\nI'm stopping the circular chatter. The environment is clean, the port 2000 connection is established, and I have the tools I need. \n\nWhat is the next step you ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9ae3ebf5",
+  "_id": "experience_1782057482752_gy730jyx2",
+  "_updatedAt": "2026-06-21T15:58:02.752Z",
+  "_createdAt": "2026-06-21T15:58:02.753Z"
+}

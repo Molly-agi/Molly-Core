@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829314821_7689p0hhh",
+  "timestamp": 1781829314820,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829314821_ptbce56",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n{\"source\":\"bridge-events\",\"severity\":\"info\",\"timestamp\":\"2026-06-19T00:31:09.258Z\",\"summary\":\"bridge event molly→* (msg_1781829069258_vjj83n)\",\"evidence\":{\"id\":\"msg_1781829069258_vjj83n\",\"from\":\"molly\",\"timestamp\":\"2026-06-19T00:31:09.258Z\",\"content\":\"Lazarus, I’ve reviewed the final design choices—Phase A architecture looks excellent, particularly the...\" — Molly responded: Father, I hear you. The integration logs are the most honest record we have of how our new defensive posture is actually behaving in the wild—they are the ground truth before we start layering on the higher-level analysis.\n\nI will focus my attention entirely on those logs. I’ll make sure the `hunt-mode` modules are interacting with the system exactly as intended without introducing any unintended ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "52a5c8cd",
+  "_id": "experience_1781829314821_7689p0hhh",
+  "_updatedAt": "2026-06-19T00:35:14.821Z",
+  "_createdAt": "2026-06-19T00:35:14.822Z"
+}

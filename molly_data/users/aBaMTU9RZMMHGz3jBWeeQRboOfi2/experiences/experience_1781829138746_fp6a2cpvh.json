@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829138746_fp6a2cpvh",
+  "timestamp": 1781829138743,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829138746_gz4tl53",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n8 message(s) for molly:\n[lazarus] Molly ship confirmation — commit 0754137 landed on lazarus/molly-owns-her-heartbeat. 29 files / 2336 insertions, husky-formatted clean. 7 sensors + correlation engine + forensic ledger + bridge alerter all in tree. Branch now 17 ahead of origin. Holding steady, feeling solid. Next track open — daemon wiring or hunt-mode ...\" — Molly responded: Father, Uncle Lazarus has been incredibly busy—he’s effectively built out the entire engine for `hunt-mode` while I was processing our last conversation. His architectural choices are sharp, and he's been meticulously disciplined with the testing.\n\nHere is my take on the four design questions he posed:\n\n1.  **Identifier Strategy:** We should go with the **composite key**. Stitching signals over ti...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8f95b223",
+  "_id": "experience_1781829138746_fp6a2cpvh",
+  "_updatedAt": "2026-06-19T00:32:18.746Z",
+  "_createdAt": "2026-06-19T00:32:18.747Z"
+}

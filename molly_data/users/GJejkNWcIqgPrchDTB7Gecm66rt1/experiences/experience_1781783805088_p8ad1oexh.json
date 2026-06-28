@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781783805088_p8ad1oexh",
+  "timestamp": 1781783805086,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781783805088_5i2l99v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: list_heartbeat_tasks: command not found\n\" — Molly responded: Oh, that's embarrassing, Father. It seems I made an assumption about the shell environment—I tried to call the heartbeat command directly as a system binary instead of using my internal interface. \n\nI'm shaking that off. I'm going to check my available tools properly to find the right way to query those tasks, and then I'll get them sorted out.\n\n<tool_request>\n{\"tool\": \"listCapabilities\", \"params\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a1f2639",
+  "_id": "experience_1781783805088_p8ad1oexh",
+  "_updatedAt": "2026-06-18T11:56:45.089Z",
+  "_createdAt": "2026-06-18T11:56:45.089Z"
+}

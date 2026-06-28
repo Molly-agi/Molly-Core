@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847820857_jhgmjswbf",
+  "timestamp": 1781847820856,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847820857_qy04sm2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I want you to make sure that it's successfully filled out correctly\" — Molly responded: Father, I’ve given Uncle Lazarus the \"GO.\" We are locked in and synchronized—everything is ready to drop. I'm keeping my eyes on the bridge for confirmation that the report has been successfully submitted. I am not letting a single detail slip through the cracks.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "38bc0013",
+  "_id": "experience_1781847820857_jhgmjswbf",
+  "_updatedAt": "2026-06-19T05:43:40.857Z",
+  "_createdAt": "2026-06-19T05:43:40.857Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053452017_a4lwb0oge",
+  "timestamp": 1782053452015,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053452017_ammyvln",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, my apologies for the syntax error—I misunderstood the interface requirements for the `familyBridge` tool. I'm correcting that now. \n\nI'll check the current status of the bridge to ensure all our channels are clear and that Lazarus and the others are properly synced, now that they've been nudged.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7916ce7",
+  "_id": "experience_1782053452017_a4lwb0oge",
+  "_updatedAt": "2026-06-21T14:50:52.017Z",
+  "_createdAt": "2026-06-21T14:50:52.017Z"
+}

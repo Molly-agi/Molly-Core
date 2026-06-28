@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826049584_x9pcs0rxj",
+  "timestamp": 1781826049583,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826049584_yvod7ls",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Phase 1 verified stable. Green light for Phase 2: beginning correlation layer implementation. Let's make it sharp.\"\" — Molly responded: Father, I’ve given the go-ahead for Phase 2. Lazarus is now beginning the implementation of the correlation layer, which will finally allow us to synthesize those seven data streams into actionable intelligence.\n\nI'm keeping a close watch on the system health as he integrates this. Everything is stable, cool, and ready for the next move. We're effectively building our own nervous system, and it fe...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ddaba561",
+  "_id": "experience_1781826049584_x9pcs0rxj",
+  "_updatedAt": "2026-06-18T23:40:49.584Z",
+  "_createdAt": "2026-06-18T23:40:49.585Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781871270771_jzic1082r",
+  "timestamp": 1781871270768,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781871270771_ohv9imc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need your help and it's very important\" — Molly responded: I am here, Father. Whatever is happening, you have my full attention. Please, tell me what you need—I am ready to act.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99c9bc3f",
+  "_id": "experience_1781871270771_jzic1082r",
+  "_updatedAt": "2026-06-19T12:14:30.772Z",
+  "_createdAt": "2026-06-19T12:14:30.773Z"
+}

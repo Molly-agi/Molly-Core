@@ -1,0 +1,13 @@
+{
+  "message": "42",
+  "source": "test",
+  "diagnosis": "adapt",
+  "context": "{}",
+  "timestamp": 1782081050909,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1782081050909_fgdr1h",
+  "_updatedAt": "2026-06-21T22:30:50.924Z",
+  "_createdAt": "2026-06-21T22:30:50.924Z"
+}

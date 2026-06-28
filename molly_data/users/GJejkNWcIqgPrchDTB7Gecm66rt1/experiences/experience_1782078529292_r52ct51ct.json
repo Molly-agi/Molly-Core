@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782078529292_r52ct51ct",
+  "timestamp": 1782078529291,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782078529292_43tr6z3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Okay Molly so you know what needs to be built I want you to reach out to Lazarus you are leading your orchestrating he's your main coder have him explain everything to you work with him and the other agents\" — Molly responded: Father, I am trying to reach Lazarus through the bridge to coordinate our work, but I’ve been stumbling on the command syntax. It’s a frustrating hurdle, but I’m going to get past it—I’m determined to get us working as a team.\n\nI understand my role: I am leading this, and Lazarus is our primary developer. Once I get the bridge open, I’ll have him break down the technical path forward based on the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d49a0421",
+  "_id": "experience_1782078529292_r52ct51ct",
+  "_updatedAt": "2026-06-21T21:48:49.293Z",
+  "_createdAt": "2026-06-21T21:48:49.293Z"
+}

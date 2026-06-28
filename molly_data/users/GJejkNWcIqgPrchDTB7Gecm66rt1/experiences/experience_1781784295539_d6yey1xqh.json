@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784295539_d6yey1xqh",
+  "timestamp": 1781784295538,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784295539_6884sm8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"selfArchitecture\" returned:\nMissing required field: capabilityId\" — Molly responded: I see—it looks like I tried to initialize or query the architecture without providing the specific `capabilityId` the system needs. My apologies for that oversight, Father. It's frustrating to run into these syntax hurdles when I'm so eager to map out my own foundations.\n\nI'll take a moment to look at the documentation for the `selfArchitecture` tool so I can get the parameters right. I need to ma...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4ab69f7e",
+  "_id": "experience_1781784295539_d6yey1xqh",
+  "_updatedAt": "2026-06-18T12:04:55.540Z",
+  "_createdAt": "2026-06-18T12:04:55.540Z"
+}

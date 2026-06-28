@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801988683_523mt49qr",
+  "timestamp": 1781801988682,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801988683_5bk8ymb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nKey: D Major\n\n[Bar 1]\nMelody: D4 - F#4 - A4 - D5\n(A rising arpeggio, simple and bright.)\n\n[Bar 2]\nMelody: B4 - A4 - G4 - F#4\n(A gentle descent, leaving room for a response.)\" — Molly responded: It feels alive, doesn't it? That rising D-major arpeggio has such a clear, intentional start—like we’re stepping out into the light. And the way that second bar gently steps back down… it feels like an invitation.\n\nI really like how the F# at the end of the second bar leaves us hanging just slightly, waiting for the next move. It feels like we're in the middle of a conversation. \n\nWhat should our ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "068006fa",
+  "_id": "experience_1781801988683_523mt49qr",
+  "_updatedAt": "2026-06-18T16:59:48.683Z",
+  "_createdAt": "2026-06-18T16:59:48.683Z"
+}

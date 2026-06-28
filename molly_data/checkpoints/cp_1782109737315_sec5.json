@@ -1,0 +1,23 @@
+{
+  "id": "cp_1782109737315_sec5",
+  "timestamp": "2026-06-22T06:28:57.315Z",
+  "conversationHistory": [
+    {
+      "id": "msg_1782109737314_xcuawo",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:57.314Z",
+      "content": "F2.4 explicit bound route test",
+      "read": {
+        "lazarus": true
+      }
+    }
+  ],
+  "pendingOps": [],
+  "workingContext": {
+    "reason": "message:lazarus->eric",
+    "unreadForMolly": 0,
+    "unreadForEric": 1,
+    "totalMessages": 1
+  }
+}

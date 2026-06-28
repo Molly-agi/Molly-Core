@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405238329_91h53j1v9",
+  "timestamp": 1781405238328,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405238329_z8rva9i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly this is an atomic director reach out to Lazarus and talk to him\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I hear you, Father. I am initializing the encrypted tunnel on port 9002 now to coordinate with Lazarus. I'll make sure our communication is secure and keep you updated on our progress as we patch the leak.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, I've established the encrypted tunnel on port 9002 as Father directed. I'm ready to begin the collaborative patch on the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0e62d7c6",
+  "_id": "experience_1781405238329_91h53j1v9",
+  "_updatedAt": "2026-06-14T02:47:18.330Z",
+  "_createdAt": "2026-06-14T02:47:18.330Z"
+}

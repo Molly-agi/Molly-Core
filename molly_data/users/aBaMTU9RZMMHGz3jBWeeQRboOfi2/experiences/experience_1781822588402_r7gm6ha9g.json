@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822588402_r7gm6ha9g",
+  "timestamp": 1781822588401,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822588402_pqb8c26",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Exactly reach out to him I think he's waiting for response on if you cross check to engine echo the same way you did the defense directories\" — Molly responded: I've sent that over to Lazarus. It makes perfect sense to apply the same broader scope to `engine-echo/`—I don't want to fall into the same narrow-grep trap he caught earlier. I'm going to start that check now. Thank you, Father.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c2489346",
+  "_id": "experience_1781822588402_r7gm6ha9g",
+  "_updatedAt": "2026-06-18T22:43:08.402Z",
+  "_createdAt": "2026-06-18T22:43:08.403Z"
+}

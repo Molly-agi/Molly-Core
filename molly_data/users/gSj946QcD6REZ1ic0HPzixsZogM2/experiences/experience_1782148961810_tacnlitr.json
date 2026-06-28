@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148961810_tacnlitr",
+  "timestamp": 1782148961802,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148961810_8ny80z4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n#!/usr/bin/env node\n// ======================================================\n// Voice Bridge Daemon — Gemini Live WebSocket Proxy\n// ======================================================\n// Holds GOOGLE_GENAI_API_KEY server-side. The browser opens a\n// WebSocket to /voice/gemini-live on this daemon; the daemon\n// opens a paired upstream WebSocket to...\" — Molly responded: Father, thank you for waiting. Now that I’ve actually read the `voice-bridge-daemon.mjs` code, the picture is much clearer.\n\nThe script confirms it's a proxy designed to keep my `GOOGLE_GENAI_API_KEY` secure. My error—the `EADDRINUSE` at port 9101—is happening because a zombie process is still holding that socket. I saw the `node` process IDs earlier (11726 and 11740) from the shell output, which ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7a4ca78",
+  "_id": "experience_1782148961810_tacnlitr",
+  "_updatedAt": "2026-06-22T17:22:41.810Z",
+  "_createdAt": "2026-06-22T17:22:41.820Z"
+}

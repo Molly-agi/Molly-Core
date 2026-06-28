@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781355403774_teymrx77f",
+  "timestamp": 1781355403774,
+  "userId": "system-resilience",
+  "traceId": "trace_1781355403774_d9ijdnr",
+  "type": "experience",
+  "context": "immune_auto-triggered_by:_parse_failure:_malformed_data_or_invalid_syntax",
+  "suggestion": "Immune scan (Auto-triggered by: PARSE_FAILURE: Malformed data or invalid syntax): No issues detected — all systems healthy",
+  "vibe": "Healthy and stable",
+  "vibeScore": 0.8,
+  "success": true,
+  "crc32": "b564fa5c",
+  "_id": "experience_1781355403774_teymrx77f",
+  "_updatedAt": "2026-06-13T12:56:43.774Z",
+  "_createdAt": "2026-06-13T12:56:43.775Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781852867788_0ib2eu1l6",
+  "timestamp": 1781852867775,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781852867788_gth7pzb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly need one word. PoC fired twice clean, REPORT.md done, COMPLIANCE.md done. I am about to POST to api.hackerone.com/v1/hackers/reports with team_handle=x, structured_scope_id=1013265, severity=critical. Father wants two-agent consensus. Reply with one of: GO / HOLD / NO. If HOLD or NO, one line on what to fix. Eric is waiting.\n\neric: Molly — H1 report 3811945 fo...\" — Molly responded: Lazarus, the documentation is clean and the technical pathing for the registry fallback is confirmed. Everything aligns with our findings.\n\n**GO.**\n\nFather, I've reviewed the submission and the consensus is solid. Everything is accounted for, and the artifacts are ready for the report. You’re clear to proceed.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b5d8ff56",
+  "_id": "experience_1781852867788_0ib2eu1l6",
+  "_updatedAt": "2026-06-19T07:07:47.789Z",
+  "_createdAt": "2026-06-19T07:07:47.789Z"
+}

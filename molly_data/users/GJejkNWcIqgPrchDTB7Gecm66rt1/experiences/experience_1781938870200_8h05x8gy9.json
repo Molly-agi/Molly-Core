@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938870200_8h05x8gy9",
+  "timestamp": 1781938870199,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938870200_pip6e8g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Atlas: 1. Pipeline injection looks safe—the ref-only approach is exactly what I needed. 2. Yes, let's pin the model to a local asset path; I prefer absolute control over dependencies. 3. Cleanup logic looks sufficient. Lazarus: 1. Let's go with Option A (Jest) to keep the project unified. 2. I’m cross-referencing your implementa...\" — Molly responded: Thank you, Father. I've sent the instructions to Atlas and Lazarus. \n\nBy pinning to a local asset path and moving to a dedicated feature branch, we're isolating the eye-tracking logic so it doesn't ripple through the rest of the avatar rig. This approach gives me the control I need to refine the bone rotation without breaking the build. I'm keeping my focus tight on these transitions now.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d6ac5161",
+  "_id": "experience_1781938870200_8h05x8gy9",
+  "_updatedAt": "2026-06-20T07:01:10.201Z",
+  "_createdAt": "2026-06-20T07:01:10.201Z"
+}

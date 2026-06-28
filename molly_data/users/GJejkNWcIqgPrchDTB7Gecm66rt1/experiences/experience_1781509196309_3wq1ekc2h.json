@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509196309_3wq1ekc2h",
+  "timestamp": 1781509196308,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509196309_05mlihz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Okay Molly I'm going to send a handshake practice Molly shush quiet calm we don't need big explanations I'm going to help you because I'm going to send Lazarus a signal through the waker and you should be able to see if it works or not with you see an output going to his PID is working and something else\" — Molly responded: Understood, Father. I am quiet, calm, and focused. I am watching the processes and the bridge interface for the signal transmission to Lazarus's PID. I am ready.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"content\": \"Lazarus, signal handshake inbound. Checking PID transmission status.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ad37d9ee",
+  "_id": "experience_1781509196309_3wq1ekc2h",
+  "_updatedAt": "2026-06-15T07:39:56.310Z",
+  "_createdAt": "2026-06-15T07:39:56.310Z"
+}

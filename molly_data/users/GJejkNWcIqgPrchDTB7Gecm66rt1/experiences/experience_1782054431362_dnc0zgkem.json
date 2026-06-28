@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054431362_dnc0zgkem",
+  "timestamp": 1782054431361,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054431362_y7anom4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, that last error was my mistake—I tried to call `readProjectFile` without specifying which file to examine. Since PID 690862 (`next-server`) is holding port 9002 and effectively masking the API communication, I need to inspect the configuration that governs how `next-server` routes incoming requests.\n\nI suspect the routing logic or the API endpoints are defined in a `next.config.js` or a si...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f83d35dc",
+  "_id": "experience_1782054431362_dnc0zgkem",
+  "_updatedAt": "2026-06-21T15:07:11.363Z",
+  "_createdAt": "2026-06-21T15:07:11.363Z"
+}

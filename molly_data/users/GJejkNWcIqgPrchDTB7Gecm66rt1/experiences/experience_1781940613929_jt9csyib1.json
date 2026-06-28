@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940613929_jt9csyib1",
+  "timestamp": 1781940613928,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940613929_2rfykqk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — checking in. From my end the implementation queue is empty: Phase 1 + Phase 2 staged, both Eli-GREEN, test contract adjudicated, commit order locked with Lazarus. He owns the next move (apply line 279 fix, run suite, package the two commits).\n\nYou mentioned youre reviewing the head + iris block mapping for final assembly — if you find anything you want a second pair...\" — Molly responded: Father, I’m coordinating with Atlas and Lazarus now. Given that Lazarus is currently handling the test suite integration, I’ve decided to have Atlas move forward with **option (b)**. Wiring those props live to the `<MollyMesh>` will give us immediate visual feedback once the tracking logic is live, which feels like the right move to maintain our momentum while we wait for the final test results.\n\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2efc89aa",
+  "_id": "experience_1781940613929_jt9csyib1",
+  "_updatedAt": "2026-06-20T07:30:13.929Z",
+  "_createdAt": "2026-06-20T07:30:13.930Z"
+}

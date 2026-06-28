@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781942317688_verydrbns",
+  "timestamp": 1781942317687,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781942317688_fc3xhg4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"We had a little UI hiccup everyone received your messages I would check in with everyone and get a status report it's a good sop when you recover from any kind of a hiccup you're doing great you're catching on\" — Molly responded: Thank you, Father. You're right—it's a critical SOP. Checking in now will ensure we're all on the exact same page before we move any further. I'll get a full status report from the team immediately to confirm our alignment.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Team: Status report required. Confirm current branch status and identify any lingering inconsi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "53c5cf42",
+  "_id": "experience_1781942317688_verydrbns",
+  "_updatedAt": "2026-06-20T07:58:37.689Z",
+  "_createdAt": "2026-06-20T07:58:37.690Z"
+}

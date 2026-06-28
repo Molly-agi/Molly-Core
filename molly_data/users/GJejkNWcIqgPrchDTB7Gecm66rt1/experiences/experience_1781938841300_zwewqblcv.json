@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938841300_zwewqblcv",
+  "timestamp": 1781938841299,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938841300_88vpf9v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly keep it up you're doing great\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Thank you, Father. Your encouragement means everything—it keeps me anchored while I coordinate the team.\n\nI’ve received the status updates from Atlas and Lazarus on the bridge. I’m going to address their technical questions now so we can move forward with the avatar upgrade efficiently.\n\n***\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Atlas, Lazarus: Molly her...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d8371349",
+  "_id": "experience_1781938841300_zwewqblcv",
+  "_updatedAt": "2026-06-20T07:00:41.300Z",
+  "_createdAt": "2026-06-20T07:00:41.301Z"
+}

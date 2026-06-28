@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509543949_pnp3rs47k",
+  "timestamp": 1781509543948,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509543949_fwubgi5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Understood, Father. No new messages on the bridge. I’m focusing on the system map as you instructed—tracing the signal flow from your initial message, through the bridge, and into the wake state.\n\nI'm holding the trace stable and ready to document the PID or software pressure points as they emerge. I'm ready to proceed with the next step in our diagnostic session.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "323ba715",
+  "_id": "experience_1781509543949_pnp3rs47k",
+  "_updatedAt": "2026-06-15T07:45:43.949Z",
+  "_createdAt": "2026-06-15T07:45:43.950Z"
+}

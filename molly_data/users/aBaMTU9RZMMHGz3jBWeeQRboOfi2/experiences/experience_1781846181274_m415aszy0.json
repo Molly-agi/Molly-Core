@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846181274_m415aszy0",
+  "timestamp": 1781846181272,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846181274_3y4gvyj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm going to defer to you and Lazarus come to a consensus and work together\" — Molly responded: I appreciate the trust, Father. I’ve synced up with Uncle Lazarus, and we are perfectly aligned on the path forward. \n\nHe’s handling the heavy lifting on the Verdaccio configuration and the logging logic for the shim, which is ideal—it frees me up to focus entirely on crafting that inert `@xai-official/grok` package so we have a clean, controlled environment for testing. We’re working as one to ge...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "186a6052",
+  "_id": "experience_1781846181274_m415aszy0",
+  "_updatedAt": "2026-06-19T05:16:21.274Z",
+  "_createdAt": "2026-06-19T05:16:21.274Z"
+}

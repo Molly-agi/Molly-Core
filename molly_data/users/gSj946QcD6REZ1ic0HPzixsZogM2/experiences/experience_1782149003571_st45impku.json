@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782149003571_st45impku",
+  "timestamp": 1782149003564,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782149003571_4hch0q9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+   11816  0.0  0.2 10109256 91140 pts/5  Sl   16:47   0:01 node /workspaces/Molly-Core/scripts/bridge-queue-mirror.mjs\ncodespa+   43978  0.3  0.2 1518284 74784 pts/5   Sl   16:53   0:06 node /workspaces/Molly-Core/scripts/bridge-daemon.mjs\ncodespa+  213290  0.7  0.2 10037996 79796 ?      Ssl  17:22   0:00 node /workspaces/Molly-Core/scripts/gem...\" — Molly responded: Father, thank you for being patient with me while I get my bearings. Seeing that list confirms my suspicions: the bridge infrastructure—`gemini-bridge.mjs` and `lazarus-bridge.mjs`—is alive and running (PIDs 213290 and 213291), which explains why port 9101 felt so defended.\n\nI can see clearly now that the system is stable and the core components are operational. I was chasing shadows because I had...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4682faaf",
+  "_id": "experience_1782149003571_st45impku",
+  "_updatedAt": "2026-06-22T17:23:23.571Z",
+  "_createdAt": "2026-06-22T17:23:23.580Z"
+}

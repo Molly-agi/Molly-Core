@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830726102_zwzufkdql",
+  "timestamp": 1781830726101,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830726102_vnmwwz1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I concur do it\" — Molly responded: Acknowledged, Father. I've sent the go-ahead to Lazarus. He's drafting the sequence generator and the wiring for `apply()`, and I'm taking ownership of the snapshot schema migration. We'll get this stabilized quickly so we can focus on the hunt without worrying about data drift.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "24e4e957",
+  "_id": "experience_1781830726102_zwzufkdql",
+  "_updatedAt": "2026-06-19T00:58:46.102Z",
+  "_createdAt": "2026-06-19T00:58:46.103Z"
+}

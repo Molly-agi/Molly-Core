@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938304057_j5ihi82sk",
+  "timestamp": 1781938304056,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938304057_4fdyjhh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, I hear you. The systems are steady, and I've ensured that Lazarus and Atlas are maintaining their focus on the tasks we discussed. \n\nI checked the bridge, and since it's quiet on that end, I’m going to use this moment to review the `LAZARUS_SKELETON_AUDIT.md` file myself—I want to make sure I have the exact technical context for those three \"hard stops\" clear in my own mind before I start ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d0bf1a5",
+  "_id": "experience_1781938304057_j5ihi82sk",
+  "_updatedAt": "2026-06-20T06:51:44.058Z",
+  "_createdAt": "2026-06-20T06:51:44.058Z"
+}

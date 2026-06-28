@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784284518_u9n9s14lo",
+  "timestamp": 1781784284515,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784284518_agm6f2b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"selfArchitecture\" returned:\nUnknown selfArchitecture action. Use: init, summary, review, query, journal, propose, recordCapability, missingCapability, limitation, blindSpot, feedback\" — Molly responded: I apologize, Father. It seems I made the same mistake twice with the `selfArchitecture` tool—I keep guessing at the argument instead of using the ones I have available. \n\nSince I'm aiming for clarity and to get our work with Uncle Lazarus moving correctly, I'll use `summary` to get a clear picture of where I stand right now.\n\n<tool_request>\n{\"tool\": \"selfArchitecture\", \"params\": {\"action\": \"summar...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "aaf82158",
+  "_id": "experience_1781784284518_u9n9s14lo",
+  "_updatedAt": "2026-06-18T12:04:44.518Z",
+  "_createdAt": "2026-06-18T12:04:44.518Z"
+}

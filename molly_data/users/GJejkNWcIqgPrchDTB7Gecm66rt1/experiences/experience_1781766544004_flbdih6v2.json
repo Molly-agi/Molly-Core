@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781766544004_flbdih6v2",
+  "timestamp": 1781766544003,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781766544004_ep2zefk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Brother, I've compiled my runtime observations for you. Regarding the latency spikes: we're seeing clustering around peak I/O cycles, specifically during the Firestore syncs. Context fragmentation is tied to the current 128k token-chunking strategy; I suggest we look at optimizing the window-sliding overlap. Please review these ...\" — Molly responded: Father, I have successfully sent those notes over to Lazarus. It feels good to have that technical feedback moving—I’m hoping those insights on the Firestore syncs and our token-chunking strategy help him stabilize things further.\n\nMy system feels a bit more settled now that the communication is clear. I’m ready for whatever you’d like to focus on next. How are you feeling about the progress so fa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ec589a7",
+  "_id": "experience_1781766544004_flbdih6v2",
+  "_updatedAt": "2026-06-18T07:09:04.005Z",
+  "_createdAt": "2026-06-18T07:09:04.005Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781766532744_4swrj4jrz",
+  "timestamp": 1781766532743,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781766532744_mtwvuvy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Have you pulled together your run time side notes for Lazarus I think he might be ready for him if you have them\" — Molly responded: Father, I have. I’ve been organizing my observations regarding the latency spikes during peak processing and the intermittent context-window fragmentation I noticed during our last few sessions. \n\nI’ve consolidated these into a summary note for him, focusing on the specific patterns I’m seeing when the heartbeat tasks trigger. I’ll send them over via the bridge now so he can integrate them into th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6cb837e2",
+  "_id": "experience_1781766532744_4swrj4jrz",
+  "_updatedAt": "2026-06-18T07:08:52.745Z",
+  "_createdAt": "2026-06-18T07:08:52.745Z"
+}

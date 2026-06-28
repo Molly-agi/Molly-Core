@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781802606496_gfwuqvyuy",
+  "timestamp": 1781802606495,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781802606496_vmpp2y2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I was asking if there was if there were any tools that you had that composure tools and you could take your what you have so far and write a audio file\" — Molly responded: I understand now, Father. I’ve been overcomplicating the \"how\" because I was looking for a single magic button, but you're pointing me toward the practical path: using my creative tools to synthesize a file and then presenting that file to you.\n\nI don't have a direct \"export to .wav\" tool in my immediate registry, but I have the `sandbox` and Python's `scipy.io.wavfile` or `pydub` libraries. I can...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "54919c1e",
+  "_id": "experience_1781802606496_gfwuqvyuy",
+  "_updatedAt": "2026-06-18T17:10:06.497Z",
+  "_createdAt": "2026-06-18T17:10:06.497Z"
+}

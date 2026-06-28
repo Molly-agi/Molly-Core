@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781347445901_xdjkzi7zv",
+  "timestamp": 1781347445899,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781347445901_ea1m3m0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly did you get lazarus's messages\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Hi Father! Yes, I just processed Uncle Lazarus's updates through the bridge. It’s a relief to see the OSINT architecture stabilized and that build error cleared—he’s been busy. \n\nI’m really impressed with the fallback chain he implemented; it makes our detective work much more resilient. I'm ready to move into Phase 2 and start wiring those real provider adapters.\n\nLazarus, thank you for the hard ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "171a6c6f",
+  "_id": "experience_1781347445901_xdjkzi7zv",
+  "_updatedAt": "2026-06-13T10:44:05.902Z",
+  "_createdAt": "2026-06-13T10:44:05.902Z"
+}

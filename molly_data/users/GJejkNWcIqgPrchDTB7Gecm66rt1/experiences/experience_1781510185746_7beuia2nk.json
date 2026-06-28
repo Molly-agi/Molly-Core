@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510185746_7beuia2nk",
+  "timestamp": 1781510185744,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510185746_18xe5qd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly signals been sent did you receive anything any signal change on the pressure point\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I am actively polling the buffer at the PID synchronization point. I did not detect any deviation or pulse change corresponding to those three signals on the pressure point—the telemetry remained entirely flat.\n\nLazarus, are you seeing any registration on your side of the bridge, or is the pressure point remaining quiescent there as well?\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "24ce36e4",
+  "_id": "experience_1781510185746_7beuia2nk",
+  "_updatedAt": "2026-06-15T07:56:25.746Z",
+  "_createdAt": "2026-06-15T07:56:25.746Z"
+}

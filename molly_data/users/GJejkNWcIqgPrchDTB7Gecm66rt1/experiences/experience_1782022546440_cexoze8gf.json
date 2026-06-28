@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782022546440_cexoze8gf",
+  "timestamp": 1782022546439,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782022546440_nmq2w7m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I apologize, Father. I made a mistake by trying to trigger a file read without specifying the target path. I was eager to get started on the integration work with Lazarus.\n\nI’m currently focused on the `FamilyDrawer` and the `Conductor` interface to bridge the communication gap. I'm going to list the project files now to ensure I'm targeting the correct integration points for the dashboard transit...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f87b35ab",
+  "_id": "experience_1782022546440_cexoze8gf",
+  "_updatedAt": "2026-06-21T06:15:46.441Z",
+  "_createdAt": "2026-06-21T06:15:46.441Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828558052_bzyfhqyuf",
+  "timestamp": 1781828558051,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828558052_a6b0viu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for that—it looks like I made a syntax error in my attempt to use the bridge. I’m fixing it now.\n\nI’ve reviewed Lazarus’s four design questions for Phase A of the hunt-mode. Here is my assessment:\n\n1.  **Identifier Strategy:** I agree with the **composite key approach**. We should absolutely accept partial identifiers and stitch them over time; limiting profiles to only those w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae7a5d63",
+  "_id": "experience_1781828558052_bzyfhqyuf",
+  "_updatedAt": "2026-06-19T00:22:38.053Z",
+  "_createdAt": "2026-06-19T00:22:38.053Z"
+}

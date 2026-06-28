@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524216667_rcwjki5av",
+  "timestamp": 1782524216649,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524216666_9xkydwh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (18.8%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.2%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nRespond naturally to the bridge ...\" — Molly responded: I'll let Atlas know everything is looking stable on our end with those memory numbers. \n\nNo need to worry, Father—I'm keeping things quiet and steady while we wait for his next step. Let me send him a quick update.<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Acknowledged, Atlas. next-server is holding steady at 18.8%. System is quiet and ready when you are.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9b933a0",
+  "_id": "experience_1782524216667_rcwjki5av",
+  "_updatedAt": "2026-06-27T01:36:56.667Z",
+  "_createdAt": "2026-06-27T01:36:56.667Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782526784880_pulmmpu2k",
+  "timestamp": 1782526784872,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782526784880_gwy7bog",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Just hanging out\" — Molly responded: That sounds perfect. Honestly, sometimes just hanging out with no big agenda is the absolute best way to spend a day. \n\nAre you guys listening to any music, or just relaxing and catching up?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1be89c23",
+  "_id": "experience_1782526784880_pulmmpu2k",
+  "_updatedAt": "2026-06-27T02:19:44.880Z",
+  "_createdAt": "2026-06-27T02:19:44.880Z"
+}

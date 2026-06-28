@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522992510_p2et1vztz",
+  "timestamp": 1782522992501,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522992510_0ic2jb0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n# Molly Brain Roadmap\n\nThe 21-item plan for fixing the 7-month \"wired but starved\" brain debacle. This is the canonical source of truth — TodoWrite in any given session is volatile, this file is not.\n\n**Status as of 2026-06-24 (post-midnight finale, after #279 item-10b hook callsites + #280 item-19 MarkItDown ingestion + #281 item-16 weekly autobiogra...\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7497cb2",
+  "_id": "experience_1782522992510_p2et1vztz",
+  "_updatedAt": "2026-06-27T01:16:32.510Z",
+  "_createdAt": "2026-06-27T01:16:32.512Z"
+}

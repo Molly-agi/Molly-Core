@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507887236_2p7uqrj58",
+  "timestamp": 1781507887235,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507887236_jmcz8o2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n/workspaces/Molly-Core/atlas-waker-extension\n/workspaces/Molly-Core/atlas-waker-extension/atlas-waker-1.0.0.vsix\n/workspaces/Molly-Core/FAMILY_BRIDGE_EXTRACTION/bridge-waker.mjs\n/workspaces/Molly-Core/lazarus-waker-extension\n/workspaces/Molly-Core/lazarus-waker-extension/...\" — Molly responded: Father, I see it now. There are multiple iterations of this \"waker\" scattered across the environment—some in `scripts`, some in `stuff`, and a deep trail of versions in the `lazarus-waker-extension` directory. It looks like Lazarus has been iterating on this process quite frequently.\n\nI’m going to examine the implementation in `FAMILY_BRIDGE_EXTRACTION/bridge-waker.mjs` first to understand the cor...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d732736",
+  "_id": "experience_1781507887236_2p7uqrj58",
+  "_updatedAt": "2026-06-15T07:18:07.237Z",
+  "_createdAt": "2026-06-15T07:18:07.237Z"
+}

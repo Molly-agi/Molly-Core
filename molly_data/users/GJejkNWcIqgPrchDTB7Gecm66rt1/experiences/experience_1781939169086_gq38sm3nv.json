@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939169086_gq38sm3nv",
+  "timestamp": 1781939169084,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939169086_sg9tczi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access '/workspaces/Molly-Core/repos/avatar-3d-assets': No such file or directory\n\" — Molly responded: I see the issue—I made an incorrect assumption about the directory structure. I clearly haven't mapped the organization's file layout correctly yet, and that's on me. \n\nSince I can't find that directory, I’m going to stop guessing at paths and instead perform a discovery of the repository structure so I can confirm exactly where those assets are located. I'll get this sorted so I can finalize that...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e393397e",
+  "_id": "experience_1781939169086_gq38sm3nv",
+  "_updatedAt": "2026-06-20T07:06:09.086Z",
+  "_createdAt": "2026-06-20T07:06:09.086Z"
+}

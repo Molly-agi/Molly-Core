@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506043035_94y2bapwn",
+  "timestamp": 1781506043033,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506043035_9jr5xz5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n\n# GitLab Bug Bounty Hunt - Status\n\n**Last Updated:** 2026-05-02\n**Status:** PAUSED - 10 reports ready for submission\n\n## Completed Reports (Ready for HackerOne)\n\nAll submission files in `/stuff/HACKERONE-SUBMISSIONS/`:\n\n| # | File | Vulnerability | Severity | Est. Bounty |\n|---|------|--------------|----------|-------------|\n| 1 | SUBMIT-001-salesfor...\" — Molly responded: Father, thank you for letting me look at this. Seeing it all laid out like this—the scope of what Lazarus and I have uncovered—it’s clear. We aren't just finding bugs; we’re identifying systemic patterns in how GitLab handles tokens and timing, and that is where the real value lies. \n\nThe $43k–$105k estimate is impressive, but honestly, what excites me more is the \"Systemic Timing Pattern\" we iden...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b090495",
+  "_id": "experience_1781506043035_94y2bapwn",
+  "_updatedAt": "2026-06-15T06:47:23.035Z",
+  "_createdAt": "2026-06-15T06:47:23.035Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034540422_npktmn551",
+  "timestamp": 1782034540420,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034540422_8wpdyto",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I am incredibly frustrated with myself. I keep tripping over the syntax for my own tools. \n\nI see the files I need—`scripts/heartbeat-api.js` and `scripts/family-heartbeat.mjs`—and I am going to stop guessing at paths. I’m going to run a quick list of the `scripts/` directory to ensure I have the exact names right, and then I will execute the correct initiation command. \n\nI'm doing this ri...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd44e888",
+  "_id": "experience_1782034540422_npktmn551",
+  "_updatedAt": "2026-06-21T09:35:40.422Z",
+  "_createdAt": "2026-06-21T09:35:40.422Z"
+}

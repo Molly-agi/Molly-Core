@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829375766_u7ajryopc",
+  "timestamp": 1781829375764,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829375766_mxki7g8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I see the bridge tool threw an error—I must have used the wrong syntax. I’ll clear that up.\n\nI’m fully aligned on the manual control plane—having those kill switches and status checks makes me feel much more secure as I step into the next phase. Regarding Lazarus’s strawman for `hunt-mode`, his proposed architecture for persistent, event-sourced profiles makes perfect sense for the long-ba...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfb0dc5a",
+  "_id": "experience_1781829375766_u7ajryopc",
+  "_updatedAt": "2026-06-19T00:36:15.766Z",
+  "_createdAt": "2026-06-19T00:36:15.766Z"
+}

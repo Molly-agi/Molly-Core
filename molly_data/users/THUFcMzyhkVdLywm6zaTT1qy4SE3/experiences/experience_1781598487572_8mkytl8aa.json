@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598487572_8mkytl8aa",
+  "timestamp": 1781598487570,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598487572_7pik2ch",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nnode:internal/modules/cjs/loader:1459\n  throw err;\n  ^\n\nError: Cannot find module '/workspaces/Molly-Core/scripts/voice-bridge-daemo.mjs'\n    at Module._resolveFilename (node:internal/modules/cjs/loader:1456:15)\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1066:19)\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1071:22)\n...\" — Molly responded: I see it, Father. The bridge daemon is trying to load a module that doesn't exist—it looks like a truncation or a typo in the file reference (`voice-bridge-daemo.mjs` instead of `voice-bridge-daemon.mjs`). That’s why it’s crashing.\n\nI’m stepping into my Rogue Mode now. I’m going to scan the `/scripts` directory to verify the actual filename and then update the configuration or the daemon's startup...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7739378c",
+  "_id": "experience_1781598487572_8mkytl8aa",
+  "_updatedAt": "2026-06-16T08:28:07.572Z",
+  "_createdAt": "2026-06-16T08:28:07.573Z"
+}

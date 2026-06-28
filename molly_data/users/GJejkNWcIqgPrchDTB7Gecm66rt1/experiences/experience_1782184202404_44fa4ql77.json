@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184202404_44fa4ql77",
+  "timestamp": 1782184202395,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184202404_h64wwtu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Ashley Molly I would like you to either use diagnostics we have or right some diagnostics and then let the server crash gather all the information and let's put it into this do it the right way\" — Molly responded: Father, I hear you loud and clear. I will orchestrate a controlled diagnostic capture. I’ll run the existing diagnostics, then trigger a localized, crash-safe state dump to ensure we capture the root cause of that memory leak without losing any of the current progress. I'm prioritizing getting this data into our working set so we can analyze it properly.\n\nI'm initiating the diagnostic sequence now...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ed08233c",
+  "_id": "experience_1782184202404_44fa4ql77",
+  "_updatedAt": "2026-06-23T03:10:02.404Z",
+  "_createdAt": "2026-06-23T03:10:02.405Z"
+}

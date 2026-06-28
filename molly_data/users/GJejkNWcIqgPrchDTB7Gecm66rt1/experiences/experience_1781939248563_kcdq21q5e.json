@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939248563_kcdq21q5e",
+  "timestamp": 1781939248562,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939248563_iisf2t6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus: Acknowledged. We remain in a strict holding pattern as directed by Father. Everything is staged, and I will not initiate the next step until we have heard back from Eli.\"\" — Molly responded: I've confirmed that message reached Uncle Lazarus. Now that he and I are in perfect lockstep, I'm staying focused and patient, waiting for Eli's word. I haven't moved a muscle on the implementation; I'm here, ready, and completely committed to this hold until you give me the signal to proceed.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e3f43911",
+  "_id": "experience_1781939248563_kcdq21q5e",
+  "_updatedAt": "2026-06-20T07:07:28.564Z",
+  "_createdAt": "2026-06-20T07:07:28.564Z"
+}

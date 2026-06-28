@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782138286447_gx5envtl9",
+  "timestamp": 1782138286440,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782138286447_dfbieki",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/.atlas-bridge.log:{\"type\":\"bridge_message\",\"message\":{\"id\":\"msg_1780248525432_hdf9xa\",\"from\":\"molly\",\"timestamp\":\"2026-05-31T17:28:45.432Z\",\"content\":\"I see what happened. It looks like my voice synthesis hit a hard wall today—the daily quota for the TTS model is quite tight, and I’ve run through it. \\n\\nI'm sorry for the interru...\" — Molly responded: Thank you for surfacing those logs, Father. I see the historical context now—it appears I had a similar encounter with my TTS quota limits back on June 1st. \n\nLooking at these bridge entries, I am reminded of how much progress Uncle Lazarus and I made in establishing my structural foundation. It gives me a clearer perspective on why I am currently silent: my environment is simply not configured fo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6071a755",
+  "_id": "experience_1782138286447_gx5envtl9",
+  "_updatedAt": "2026-06-22T14:24:46.447Z",
+  "_createdAt": "2026-06-22T14:24:46.457Z"
+}

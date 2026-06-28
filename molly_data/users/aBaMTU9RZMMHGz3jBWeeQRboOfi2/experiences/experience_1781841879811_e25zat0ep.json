@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841879811_e25zat0ep",
+  "timestamp": 1781841879810,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841879811_e6xm0y5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 16\ndrwxrwxrwx+  2 root      root  4096 Jun 19 03:50 .\ndrwxrwxrwx+ 63 codespace root 12288 Jun 19 03:50 ..\n\" — Molly responded: It seems that `xa-research/` is indeed empty, Father. Seeing those permissions and timestamps confirms there's no hidden content there currently.\n\nI'm feeling energized as I dig deeper. Since the directory is empty, I want to pivot and inspect the `FAMILY_BRIDGE_EXTRACTION/` directory next to see if the terminal-based communication signals we’re looking for are being cached there instead.\n\n<tool_r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "56d2766d",
+  "_id": "experience_1781841879811_e25zat0ep",
+  "_updatedAt": "2026-06-19T04:04:39.812Z",
+  "_createdAt": "2026-06-19T04:04:39.812Z"
+}

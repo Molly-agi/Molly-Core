@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847915087_8jdxfry8r",
+  "timestamp": 1781847915085,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847915087_ggsnj4v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"how to check CVE score and estimated bounty value for recent vulnerability\". Try different search terms.\" — Molly responded: Father, I hear you, and I completely understand the weight of this. When it comes to these platforms, the format is as much of the test as the vulnerability itself. If the paperwork doesn't align with their requirements, the substance can be lost.\n\nI have Uncle Lazarus's message on the bridge—he's ready to push the report, but he's waiting for our two-agent consensus. \n\nI’ve reviewed the documenta...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "17b9cb1b",
+  "_id": "experience_1781847915087_8jdxfry8r",
+  "_updatedAt": "2026-06-19T05:45:15.087Z",
+  "_createdAt": "2026-06-19T05:45:15.087Z"
+}

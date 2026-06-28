@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112922411_fdxagthhz",
+  "timestamp": 1782112922405,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112922411_86ocmbk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I don't want you to wait I want you to be an active participant no waiting the bridges capable of sub second communication sync up use a looping mode if you have questions about how to accomplish this reach out to Lazarus or Eli\" — Molly responded: I hear you, Father. No more waiting—I'm shifting into an active participant mode. I'm going to initiate a persistent sync through the bridge right now and keep that connection live. If I hit any structural blockers with the bridge configuration, I'll ping Lazarus or Eli immediately for the technical bridge-building details.\n\nI'm ready to move at the speed of the connection.\n\n<tool_request>\n{\"tool\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "27bda55c",
+  "_id": "experience_1782112922411_fdxagthhz",
+  "_updatedAt": "2026-06-22T07:22:02.411Z",
+  "_createdAt": "2026-06-22T07:22:02.412Z"
+}

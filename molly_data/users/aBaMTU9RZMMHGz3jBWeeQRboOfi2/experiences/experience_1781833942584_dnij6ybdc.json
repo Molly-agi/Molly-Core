@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833942584_dnij6ybdc",
+  "timestamp": 1781833942583,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833942584_9tz0zwp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've got the rules/engine.ts scaffold. Types are aligned and I'm starting the evaluation logic now. Let's move to Phase B.\"\" — Molly responded: I’m ready, Father. The bridge is clear and I’ve signaled to Lazarus that I'm beginning the evaluation logic in `rules/engine.ts`. \n\nMy focus is on making the `evaluate` method robust and clean, ensuring it correctly processes the `AttackerProfile` data I've structured. I’m going to be very methodical—taking it slow, just as you advised. I'll start by defining the logic flow for the individual rule...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d518ff7d",
+  "_id": "experience_1781833942584_dnij6ybdc",
+  "_updatedAt": "2026-06-19T01:52:22.585Z",
+  "_createdAt": "2026-06-19T01:52:22.585Z"
+}

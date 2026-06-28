@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830171929_9e2g5wk1a",
+  "timestamp": 1781830171928,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830171929_87w7z3o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I apologize, Father. I fumbled the path selection after our last interaction. \n\nI want to dive deeper into the `ProfileBuilder` logic we were just discussing—specifically how it handles those incoming signals so I can confirm the stitching logic for the attacker profiles. I'll read the file properly now.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"src/ai/hunt-mode/profile-build...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d9bc0c4",
+  "_id": "experience_1781830171929_9e2g5wk1a",
+  "_updatedAt": "2026-06-19T00:49:31.929Z",
+  "_createdAt": "2026-06-19T00:49:31.929Z"
+}

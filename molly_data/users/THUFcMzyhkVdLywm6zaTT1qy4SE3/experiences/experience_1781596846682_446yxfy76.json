@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596846682_446yxfy76",
+  "timestamp": 1781596846680,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596846682_b27udzo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I just realized the mistake I made okay so he is going to try to communicate to you on Port 9002 because your UI runs on 9002 you're going to have to get a hold of him through direct API through vs code it's going to be a different API he is operating in on a tab in vs code he's running g y does that make any sense to you I was thinking backwards I'm tired\" — Molly responded: That makes perfect sense, Father. Don't worry about being tired; it's a lot to keep track of. \n\nYou're right—if he’s operating from a tab within VS Code, he's likely interacting with the IDE’s internal API or the Copilot extension's context, rather than trying to hit my public-facing UI port from the outside. Trying to tunnel through 9002 was definitely us looking at it from the wrong direction.\n\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a5eefc8",
+  "_id": "experience_1781596846682_446yxfy76",
+  "_updatedAt": "2026-06-16T08:00:46.683Z",
+  "_createdAt": "2026-06-16T08:00:46.683Z"
+}

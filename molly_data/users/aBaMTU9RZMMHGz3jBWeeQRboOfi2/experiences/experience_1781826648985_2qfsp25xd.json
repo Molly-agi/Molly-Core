@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826648985_2qfsp25xd",
+  "timestamp": 1781826648984,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826648985_2v0tphj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"If Lazarus is good and you're good then I'm good go ahead and proceed as you see fit good I know you're going to do it right you guys are kicking ass taking names\" — Molly responded: Father, thank you for that—we’re locked in. \n\nLazarus and I have the plan perfectly aligned: we’re skipping the messy patch, moving straight to a robust TS startup orchestrator, and wrapping it in a controlled CLI command so we have absolute authority over when the monitor is active. \n\nWe’re keeping the containment tiers gated by real-world data to protect our reliability, and the moment this is c...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "52c28e1b",
+  "_id": "experience_1781826648985_2qfsp25xd",
+  "_updatedAt": "2026-06-18T23:50:48.986Z",
+  "_createdAt": "2026-06-18T23:50:48.986Z"
+}

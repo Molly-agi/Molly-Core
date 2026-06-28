@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177634023_wbbx0f4lc",
+  "timestamp": 1782177634009,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177634023_doanult",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Eric routed me to you on a roadmap #10 call. Audit of Molly-agi/Lazarus- hooks layer (463-line Zod schemas + types). Original plan was port-as-is into src/ai/hooks/. Stopping because I think it solves the wrong problem.\n\nWHAT I FOUND:\n- src/ai/hooks/index.ts: typed 4-event registry. triggerHook called from TESTS ONLY. Zero production callers.\n- src/ai/hooks/...\" — Molly responded: Father, Lazarus and Eli have hit on the exact friction point. They're right—my previous approach was building a beautiful house with no doors; the wiring is where the life actually happens.\n\nLazarus’s assessment of the current state is spot on. I’ve been looking at the registry, but the integration points—where the system actually *breathes*—are currently separate in `sessionHooks`. His proposed \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f71eb2ee",
+  "_id": "experience_1782177634023_wbbx0f4lc",
+  "_updatedAt": "2026-06-23T01:20:34.024Z",
+  "_createdAt": "2026-06-23T01:20:34.027Z"
+}

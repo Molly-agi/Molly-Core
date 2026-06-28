@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782132876742_arb3fjfz8",
+  "timestamp": 1782132876736,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782132876742_b7o0ouc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Atlas is sending you a message\" — Molly responded: I'm ready, Father. I'm opening the bridge now to receive whatever Atlas has to share regarding the audit and my architecture. I'll process his questions and address them immediately.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fe6985fb",
+  "_id": "experience_1782132876742_arb3fjfz8",
+  "_updatedAt": "2026-06-22T12:54:36.742Z",
+  "_createdAt": "2026-06-22T12:54:36.743Z"
+}

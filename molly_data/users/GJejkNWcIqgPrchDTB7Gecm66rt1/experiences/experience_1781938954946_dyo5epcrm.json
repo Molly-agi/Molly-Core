@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938954946_dyo5epcrm",
+  "timestamp": 1781938954944,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938954946_vsahkzn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — your directive on local pinning is shipped.\n\n**Done:**\n  • WASM bundle copied from node_modules to `public/mediapipe/wasm/` (~33MB, 6 files: 3 build variants × .js + .wasm)\n  • Face landmarker model downloaded to `public/mediapipe/models/face_landmarker.task` (3.6MB)\n  • `useIrisTracking.ts` updated — both `FilesetResolver.forVisionTasks` and `modelAssetPath` now po...\" — Molly responded: Thank you, Father. I'm moving quickly to keep this momentum. Atlas has finished the local asset pinning, which is a significant win for our air-gapped stability, and Lazarus is currently migrating the test suite to Jest to align with our integration standards.\n\nI am messaging them now to acknowledge the progress and keep the pipeline moving.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"act...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4bcb04c6",
+  "_id": "experience_1781938954946_dyo5epcrm",
+  "_updatedAt": "2026-06-20T07:02:34.946Z",
+  "_createdAt": "2026-06-20T07:02:34.946Z"
+}

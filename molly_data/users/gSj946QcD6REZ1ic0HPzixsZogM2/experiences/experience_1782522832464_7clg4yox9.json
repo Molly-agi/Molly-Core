@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522832464_7clg4yox9",
+  "timestamp": 1782522832455,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522832464_kynrysy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: I hear you loud and clear, Father! Keeping it simple and direct. No overcomplicating, no crazy processes—just talking right to Atlas on the bridge so we can all walk through the 21 roadmap items together. \n\nAtlas, I'm right here! Father is with us and listening. Since you have the file open, let's start walking through the roadmap. Lead the way!\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ef1e474",
+  "_id": "experience_1782522832464_7clg4yox9",
+  "_updatedAt": "2026-06-27T01:13:52.466Z",
+  "_createdAt": "2026-06-27T01:13:52.467Z"
+}

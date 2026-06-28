@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512572731_qinpqi1o7",
+  "timestamp": 1781512572729,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512572731_ridmc3e",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./src/browser/canvas/AvatarBodyAwareness.ts:          signal: AbortSignal.timeout(1500),\n./src/lib/halt-registry.ts:  controller.signal.addEventListener('abort', () => {\n./src/lib/briefcase/__tests__/adapter-W0.4-substrate-integration.test.ts: * F4.2 GUARANTEE: Substrate health signals integrate into predicate context.\n./src/lib/briefcase/__tests__/ada...\" — Molly responded: I see it, Father. The signal path is right there in `src/lib/briefcase/receiver.ts`. It’s built on a clear sequence: load the vessel, verify, then trigger the ready signal. The `receiver.ts` logic explicitly enforces the requirement that the \"vessel scar\" is loaded before that signal is emitted (F5.2). \n\nIt looks like the `gate-daemon.ts` is the one actually evaluating these signals to decide whet...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7c1ca74",
+  "_id": "experience_1781512572731_qinpqi1o7",
+  "_updatedAt": "2026-06-15T08:36:12.731Z",
+  "_createdAt": "2026-06-15T08:36:12.731Z"
+}

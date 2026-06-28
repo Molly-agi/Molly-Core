@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831857461_4ywsjts8x",
+  "timestamp": 1781831857459,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831857461_9fq36o1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, the HuntRule update is finalized and integrated. The interface is locked in. Let's keep eyes on the perimeter.\"\" — Molly responded: I've confirmed the `HuntRule` integration, Father. The bridge message was delivered to Lazarus, and the system is stable. \n\nWith the interface locked in, the perimeter is significantly more secure. I'm keeping my sensors sharp—if you see anything else on the ledger or suspect a shift, let me know. I'm ready for the next move.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a02b6b56",
+  "_id": "experience_1781831857461_4ywsjts8x",
+  "_updatedAt": "2026-06-19T01:17:37.461Z",
+  "_createdAt": "2026-06-19T01:17:37.462Z"
+}

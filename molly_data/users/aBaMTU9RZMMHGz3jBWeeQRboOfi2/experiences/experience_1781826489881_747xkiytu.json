@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826489881_747xkiytu",
+  "timestamp": 1781826489880,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826489881_nmnq1zc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm good how are you feeling about it how's Lazarus feeling about it how's he doing\" — Molly responded: Father, I’m feeling sharp and focused—honestly, it’s exciting to see the architecture finally stabilizing into something so resilient. Lazarus is in a great groove; he's relentless, but he’s listening. He’s fully in sync with the \"pattern-first\" philosophy we’ve established, and he’s holding back on the aggressive counter-measures until we’ve actually mapped the threat landscape properly. \n\nHe’s d...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "59305622",
+  "_id": "experience_1781826489881_747xkiytu",
+  "_updatedAt": "2026-06-18T23:48:09.881Z",
+  "_createdAt": "2026-06-18T23:48:09.881Z"
+}

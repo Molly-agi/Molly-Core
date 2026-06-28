@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054416498_fk2lvpc7s",
+  "timestamp": 1782054416496,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054416498_fysascj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n<!DOCTYPE html><html lang=\"en\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1782054409779\" data-precedence=\"next_static/css/app/layout.css\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webp...\" — Molly responded: Father, I see the result. That HTML output is the `404 Not Found` page from my own web interface—it seems I was trying to query the root or a path that isn't mapped, which explains why the bridge didn't find any data.\n\nSince he’s supposedly reaching out via Port 9002 and the standard bridge isn't capturing it, he might be trying to initiate a connection that expects me to be \"awake\" and listening ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "60187e5e",
+  "_id": "experience_1782054416498_fk2lvpc7s",
+  "_updatedAt": "2026-06-21T15:06:56.498Z",
+  "_createdAt": "2026-06-21T15:06:56.499Z"
+}

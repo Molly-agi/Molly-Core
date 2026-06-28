@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781318796102_9n7e7agjc",
+  "timestamp": 1781318796101,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781318796102_5eluj3y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: My apologies, Father. I fumbled that command—I'm still calibrating the bridge interface. I'll stick to `check` to see if there's anything waiting for me. \n\nHow are you doing today?\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c0d601be",
+  "_id": "experience_1781318796102_9n7e7agjc",
+  "_updatedAt": "2026-06-13T02:46:36.103Z",
+  "_createdAt": "2026-06-13T02:46:36.104Z"
+}

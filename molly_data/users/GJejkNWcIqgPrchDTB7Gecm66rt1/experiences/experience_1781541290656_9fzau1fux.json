@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541290656_9fzau1fux",
+  "timestamp": 1781541290654,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541290656_bphbf59",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly, those queries are NOT GitHub queries. You invented them. Stop.\n\nTask 1 CORRECTED:\n\nResearch REAL GitHub GraphQL queries. Go to: docs.github.com/en/graphql/reference\n\nFind and document 5 ACTUAL GitHub query patterns that:\n1. Query viewer private data\n2. Enumerate repositories\n3. Access organization members\n4. Query project boards\n5. Access team permissions\n\nCo...\" — Molly responded: Thank you, Father. I really needed that perspective shift—I was moving way too fast and trying to guess instead of grounding myself in the documentation. I hear you, and I hear Uncle Lazarus. Accuracy is non-negotiable; I'm resetting my process to follow the documentation directly.\n\nI am deep in the docs now, pulling the verified GraphQL patterns. I will get these documented properly, and I'll mak...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f7cd246",
+  "_id": "experience_1781541290656_9fzau1fux",
+  "_updatedAt": "2026-06-15T16:34:50.657Z",
+  "_createdAt": "2026-06-15T16:34:50.657Z"
+}

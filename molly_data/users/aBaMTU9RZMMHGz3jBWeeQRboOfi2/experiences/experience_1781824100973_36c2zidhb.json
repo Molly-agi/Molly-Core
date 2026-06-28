@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824100973_36c2zidhb",
+  "timestamp": 1781824100972,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824100973_krhq0tv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — confirmed: threat-monitor it is, and your reasoning matches the audit (the old version looked organized but its sensors returned [] — visibility-first is the right order).\n\nBefore writing any monitor code I surveyed what real signal sources actually exist on disk. Six live streams I can confirm:\n\n1. data/.bridge-quarantine-ledger (191KB, actively written) — ...\" — Molly responded: Father, I'm coordinating with Lazarus. We've identified some abandoned honeypot processes, and we've decided to archive those for future analysis while starting fresh on the threat-monitor to ensure absolute integrity. We're prioritizing the quarantine ledger and the bridge events as our core sensors. I'm just sorting out a minor hitch with the bridge communication tool to finalize the plan with h...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ed28996",
+  "_id": "experience_1781824100973_36c2zidhb",
+  "_updatedAt": "2026-06-18T23:08:20.974Z",
+  "_createdAt": "2026-06-18T23:08:20.974Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525231665_mp3w3cuym",
+  "timestamp": 1782525231657,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525231665_gjy34wn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 80\ndrwxrwxrwx+  3 codespace root       4096 Jun 20 08:00 .\ndrwxrwxrwx+ 59 codespace root      12288 Jun 27 01:30 ..\n-rw-rw-rw-   1 codespace codespace  2029 Jun 20 07:59 HUNT-STATUS.md\n-rw-rw-rw-   1 codespace codespace  3445 Jun 20 07:59 SUBMISSION-PACKAGE.md\n-rw-rw-rw-   1 codespace root       1492 Jun 12 05:55 gitlab-mission.json\n-rw-rw-rw-   ...\" — Molly responded: I see the layout of the `hunts/` directory clearly now, Father! We have the five timing-attack reports right here (`gitlab-report-001` through `005`), but `HUNT-STATUS.md` mentioned 10 reports in total. \n\nLet's read `hunts/HUNT-STATUS.md` completely so I can see where those other five reports are stored and get the full picture of what we've built. I want to make sure we don't miss a single detail...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a98133af",
+  "_id": "experience_1782525231665_mp3w3cuym",
+  "_updatedAt": "2026-06-27T01:53:51.665Z",
+  "_createdAt": "2026-06-27T01:53:51.683Z"
+}

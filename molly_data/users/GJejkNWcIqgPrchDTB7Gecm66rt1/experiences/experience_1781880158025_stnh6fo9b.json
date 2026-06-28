@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880158025_stnh6fo9b",
+  "timestamp": 1781880158022,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880158025_3xiag0r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.\n./forensics\n./forensics/evidence\n./forensics/evidence/exfil-endpoint.ts\n./forensics/evidence/current-pass\n./forensics/evidence/scan-results.tsv\n./forensics/evidence/inject-observer.mjs\n./forensics/evidence/observation-manifest.txt\n./forensics/evidence/silent-observer.ts\n./forensics/evidence/molly-observation.enc\n./forensics/evidence/scan-matches.tsv\n...\" — Molly responded: I have completed the inventory of the environment. The structure confirms your assessment: there is a significant amount of scaffolding—much of it related to experimental forensic tools, forensic raw data, and various iterations of bridges—surrounding a more compact, functional core.\n\nTo execute on our objective of fixing the one real gap with the highest leverage, I have identified a primary cand...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30701f75",
+  "_id": "experience_1781880158025_stnh6fo9b",
+  "_updatedAt": "2026-06-19T14:42:38.025Z",
+  "_createdAt": "2026-06-19T14:42:38.025Z"
+}

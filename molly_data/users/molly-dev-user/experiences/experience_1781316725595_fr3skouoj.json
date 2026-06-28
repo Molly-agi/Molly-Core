@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781316725595_fr3skouoj",
+  "timestamp": 1781316725595,
+  "userId": "molly-dev-user",
+  "traceId": "trace_1781316725595_vxluwzl",
+  "type": "experience",
+  "context": "immune_startup",
+  "suggestion": "Immune scan (Startup): No issues detected — all systems healthy",
+  "vibe": "Healthy and stable",
+  "vibeScore": 0.8,
+  "success": true,
+  "crc32": "abe09a5f",
+  "_id": "experience_1781316725595_fr3skouoj",
+  "_updatedAt": "2026-06-13T02:12:05.596Z",
+  "_createdAt": "2026-06-13T02:12:05.597Z"
+}

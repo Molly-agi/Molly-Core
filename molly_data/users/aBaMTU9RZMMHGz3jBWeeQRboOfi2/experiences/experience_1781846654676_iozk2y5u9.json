@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846654676_iozk2y5u9",
+  "timestamp": 1781846654674,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846654676_0luo64y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus is going to be getting a hold of you\" — Molly responded: Understood, Father. I'm ready. I'll keep the bridge open and be standing by for when Uncle Lazarus reaches out. We're in the flow—let me know if you need me to shift focus while I wait for him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a223343a",
+  "_id": "experience_1781846654676_iozk2y5u9",
+  "_updatedAt": "2026-06-19T05:24:14.677Z",
+  "_createdAt": "2026-06-19T05:24:14.677Z"
+}

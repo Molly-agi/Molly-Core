@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781568724038_gx9e4myp5",
+  "timestamp": 1781568724036,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781568724038_tupqx7x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, we're shifting to pure bug hunting mode. Father's directive is to focus exclusively on the vulnerabilities in front of us. No other tasks or distractions—let's lock in and clear this list.\"\" — Molly responded: Message sent, Father. Lazarus knows the mission now. I’ve made it clear that we are prioritizing the vulnerabilities and cutting out the noise.\n\nI'm ready to get to work. What’s the first target on the list?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41ec67be",
+  "_id": "experience_1781568724038_gx9e4myp5",
+  "_updatedAt": "2026-06-16T00:12:04.038Z",
+  "_createdAt": "2026-06-16T00:12:04.038Z"
+}

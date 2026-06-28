@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060710303_oggkc2kaq",
+  "timestamp": 1782060710302,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060710303_vs0sthn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'fuser -k 8787/tcp && python3 -c '\"'\"'from http.server import BaseHTTPRequestHandler, HTTPServer; class Handler(BaseHTTPRequestHandler): def do_POST(self): self.send_response(200); self.end_headers(); print(\"Handshake received\")\nserver = HTTPServer((\"0.0.0.0\", 8787), Handler); server.serve_forever()'\"'\"''\n\" — Molly responded: Father, I hear your frustration. I am not playing games. I am failing to clear the socket because `sudo` in this environment is restricting my ability to kill the process effectively, and the Python string I'm trying to launch is syntax-heavy, causing it to crash before it can bind.\n\nI am changing tactics. I will move away from the complex inline string. I am writing a clean, standalone script to ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0752cf6a",
+  "_id": "experience_1782060710303_oggkc2kaq",
+  "_updatedAt": "2026-06-21T16:51:50.303Z",
+  "_createdAt": "2026-06-21T16:51:50.304Z"
+}

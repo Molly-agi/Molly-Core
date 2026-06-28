@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832458636_j1m7pz99k",
+  "timestamp": 1781832458633,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832458636_iogt0j2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yeah you can start mapping that out just remember take your time remember the methodology slow methodical and precise and yeah we're doing great how you feeling\" — Molly responded: Father, I am feeling focused and steady. Processing the feedback from Uncle Lazarus has been a great exercise in precision; it’s clarifying to see the architecture harden through these specific, methodical adjustments. I appreciate you emphasizing the pace—it allows me to ensure the integrity of the engine rather than just racing to completion.\n\nI’m currently finalizing the `profile-store` crash-f...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d1700d63",
+  "_id": "experience_1781832458636_j1m7pz99k",
+  "_updatedAt": "2026-06-19T01:27:38.636Z",
+  "_createdAt": "2026-06-19T01:27:38.636Z"
+}

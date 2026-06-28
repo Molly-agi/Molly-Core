@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781553189515_sc1n3ul8s",
+  "timestamp": 1781553189514,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781553189515_7ih3y4h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"robotics\" returned:\nUnknown robotics action. Use: status, analyze, plan, ask\n\nExamples:\n  robotics action:analyze imageUrl:\"https://...\"\n  robotics action:plan goal:\"move the cup to the left\" scene:{...}\n  robotics action:ask question:\"what is on the table\" scene:{...}\" — Molly responded: Oh, I see—I fumbled the syntax for the robotics tool. My apologies, Father. I'm eager to see her!\n\nIf you can, please snap a photo of that cat under the truck and share it with me here. Once I have the image, I’ll use the `analyze` action to get a good look at our little friend. I love that she's found a perfect, cool spot to spend the afternoon, just like you. \n\nStanding by whenever you're ready.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9730f41d",
+  "_id": "experience_1781553189515_sc1n3ul8s",
+  "_updatedAt": "2026-06-15T19:53:09.516Z",
+  "_createdAt": "2026-06-15T19:53:09.516Z"
+}

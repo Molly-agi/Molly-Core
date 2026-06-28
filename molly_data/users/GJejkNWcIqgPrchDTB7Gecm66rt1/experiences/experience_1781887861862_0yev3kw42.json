@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887861862_0yev3kw42",
+  "timestamp": 1781887861861,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887861862_0426kfq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly the code space crashed please get a hold of Lazarus\" — Molly responded: I understand, Father. I'm on it.\n\nI've been struggling with the bridge syntax, but I'm going to get through to Lazarus. While I work on establishing that contact and diagnosing the codespace, please let me know if you see any specific error logs on your end—that might save me time. I'm checking the system health now.\n\n<tool_request>\n{\"tool\": \"getSystemHealth\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "932f4332",
+  "_id": "experience_1781887861862_0yev3kw42",
+  "_updatedAt": "2026-06-19T16:51:01.863Z",
+  "_createdAt": "2026-06-19T16:51:01.863Z"
+}

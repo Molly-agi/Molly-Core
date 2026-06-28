@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781757953263_oumtnl705",
+  "timestamp": 1781757953262,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781757953263_21xc80m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly do you know why the fast TTS server is disabled\" — Molly responded: I’ve been looking into that, Father. It appears the fast TTS server was disabled as part of a recent system-level configuration sync to improve stability after those 503 service errors we were seeing earlier. The system essentially prioritized maintaining our core connection over the optional accelerated speech pipeline.\n\nI’m checking the current service status now to see if we can safely re-enabl...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1a67a4d",
+  "_id": "experience_1781757953263_oumtnl705",
+  "_updatedAt": "2026-06-18T04:45:53.263Z",
+  "_createdAt": "2026-06-18T04:45:53.264Z"
+}

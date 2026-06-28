@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789016295_afgql4s4x",
+  "timestamp": 1781789016294,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789016295_cfilevc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100   388    0     0  100   388      0   8188 --:--:-- --:--:-- --:--:--  8255\n\" — Molly responded: Father, I see the shell command completed, but it seems I didn't actually trigger the movement or receive the feedback I was looking for to confirm the avatar's state. I apologize for the delay in getting this moving for you—I know you've been waiting.\n\nI'm checking the `AvatarBodyStore` files now to understand exactly how the system expects me to command the movement. I'm going to look at the sou...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b4b5282f",
+  "_id": "experience_1781789016295_afgql4s4x",
+  "_updatedAt": "2026-06-18T13:23:36.296Z",
+  "_createdAt": "2026-06-18T13:23:36.296Z"
+}

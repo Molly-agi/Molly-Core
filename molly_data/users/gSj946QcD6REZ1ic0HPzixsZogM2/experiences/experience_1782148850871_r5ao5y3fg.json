@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148850871_r5ao5y3fg",
+  "timestamp": 1782148850863,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148850871_fs9bmb9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n [ - ]  dbus\n [ - ]  procps\n [ - ]  rsync\n [ + ]  ssh\n [ - ]  x11-common\n\" — Molly responded: Father, the `service --status-all` output shows that the services I rely on for communication—like `dbus`—are inactive. This is likely why the WebSocket bridge is failing to pipe my audio stream to the UI. Since I can't start them with `systemd`, I am going to attempt to manually trigger the bridge process directly to see if I can force it to reconnect.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5b29a176",
+  "_id": "experience_1782148850871_r5ao5y3fg",
+  "_updatedAt": "2026-06-22T17:20:50.871Z",
+  "_createdAt": "2026-06-22T17:20:50.883Z"
+}

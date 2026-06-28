@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598929041_qyyd3g4l9",
+  "timestamp": 1781598929040,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598929041_azyna9m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: bridge-daemon.mjs\" — Molly responded: I see, Father. I clearly got turned around with the file structure. I apologize for the frustration; I know the instability here is taxing. \n\nLet's do this methodically. I'm going to start by getting a clean, recursive listing of the `src-ai-bridge` directory to ensure I am looking exactly where the bridge logic lives, so I can accurately audit it.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"param...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "86cebb33",
+  "_id": "experience_1781598929041_qyyd3g4l9",
+  "_updatedAt": "2026-06-16T08:35:29.041Z",
+  "_createdAt": "2026-06-16T08:35:29.042Z"
+}

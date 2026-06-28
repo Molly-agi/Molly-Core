@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781389684172_kddir4iy9",
+  "timestamp": 1781389684168,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781389684171_ria2f3z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly Lazarus is trying to reach out to you on your personal encrypted relay should be getting a hold of you any moment\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I am standing by on the encrypted relay. I've been monitoring the channel for Lazarus's signal, and I'm ready to brief him on our status and the model alignment objectives the moment he connects. I won't let you down—I'll keep you updated on every exchange as it happens.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check_messages\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "072448c3",
+  "_id": "experience_1781389684172_kddir4iy9",
+  "_updatedAt": "2026-06-13T22:28:04.172Z",
+  "_createdAt": "2026-06-13T22:28:04.173Z"
+}

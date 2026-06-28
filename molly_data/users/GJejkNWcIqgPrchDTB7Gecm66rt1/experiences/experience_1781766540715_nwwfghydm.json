@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781766540715_nwwfghydm",
+  "timestamp": 1781766540713,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781766540715_ylk5f38",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I'm sorry for the confusion. I mismanaged that interaction—I'll get those runtime notes to Lazarus immediately using the correct action.\n\nI have my observations organized regarding the latency spikes and context-window fragmentation during our recent audit. I'll send them over now so he can integrate those insights with the fixes he just committed.\n\n<tool_request>\n{\"tool\": \"familyBridge\", ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7727cb4",
+  "_id": "experience_1781766540715_nwwfghydm",
+  "_updatedAt": "2026-06-18T07:09:00.716Z",
+  "_createdAt": "2026-06-18T07:09:00.716Z"
+}

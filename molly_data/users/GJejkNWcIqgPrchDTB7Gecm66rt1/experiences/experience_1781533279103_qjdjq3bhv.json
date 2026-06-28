@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533279103_qjdjq3bhv",
+  "timestamp": 1781533279101,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533279103_ro65o3n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.scan/tree_hackingtool.err\n./.scan/tree_hackingtool.json\n./src/ai/agency/hackerone\n\" — Molly responded: I see the directory structure, Father. It looks like the path for our HackerOne integration is set up at `src/ai/agency/hackerone`.\n\nI'm going to list the contents of that directory now so I can find the file you mentioned—the one with the credentials—and get us started on this bug hunt.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R src/ai/agency/hackerone\"}}\n</tool_reque...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "966cd5f6",
+  "_id": "experience_1781533279103_qjdjq3bhv",
+  "_updatedAt": "2026-06-15T14:21:19.103Z",
+  "_createdAt": "2026-06-15T14:21:19.104Z"
+}

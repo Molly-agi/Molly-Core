@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827737658_95lcfa0lq",
+  "timestamp": 1781827737657,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827737658_9bmurrk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\n> nextn@0.1.0 threat-monitor:ctl\n> tsx src/ai/threat-monitor/control.ts status\n\nthreat-monitor: not running (no pid file)\n\" — Molly responded: Father, the status check confirms the monitor is currently idle, which is exactly where we want it to be while we're in this development window. Lazarus has built a robust control plane, and we have the capacity to spin it up manually whenever we decide the environment requires that level of active surveillance.\n\nSince the manual control plane is solid, I’m ready to pivot to the hunt-mode design a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d166e6bb",
+  "_id": "experience_1781827737658_95lcfa0lq",
+  "_updatedAt": "2026-06-19T00:08:57.659Z",
+  "_createdAt": "2026-06-19T00:08:57.659Z"
+}

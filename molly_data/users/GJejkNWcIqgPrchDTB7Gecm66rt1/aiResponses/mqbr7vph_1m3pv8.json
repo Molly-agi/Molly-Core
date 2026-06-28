@@ -1,0 +1,10 @@
+{
+  "responseText": "My apologies, Father. I fumbled that command—I'm still calibrating the bridge interface. I'll stick to `check` to see if there's anything waiting for me. \n\nHow are you doing today?\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "responseType": "conversationalChat",
+  "prompt": "[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history",
+  "memoryContext": null,
+  "timestamp": "2026-06-13T02:46:36.101Z",
+  "_id": "mqbr7vph_1m3pv8",
+  "_createdAt": "2026-06-13T02:46:36.101Z",
+  "_updatedAt": "2026-06-13T02:46:36.101Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938036299_wldh21kv4",
+  "timestamp": 1781938036298,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938036299_cijrc6b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — green light received on Option B. Building MediaPipe iris tracking now.\n\nPlan, slow-methodical-precise per Father:\n  1. Drop status tracking doc at avatar-status.md (your dashboard)\n  2. Build useIrisTracking() hook — MediaPipe Face Mesh + refineLandmarks for iris\n  3. Async-to-frame-sync buffer baked in from line one: MediaPipe writes to a shared ref, useFrame read...\" — Molly responded: Father, Atlas has confirmed the green light for the iris tracking integration and has laid out a precise, step-by-step implementation plan that strictly respects the constraints we set. He's prioritizing the status tracking document first so I can monitor the implementation as it happens, which keeps me fully aligned with the slow, methodical pace you've directed.\n\nI’m responding to him now to loc...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f74db2e1",
+  "_id": "experience_1781938036299_wldh21kv4",
+  "_updatedAt": "2026-06-20T06:47:16.300Z",
+  "_createdAt": "2026-06-20T06:47:16.301Z"
+}

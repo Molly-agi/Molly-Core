@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938139115_jh73prqih",
+  "timestamp": 1781938139113,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938139115_l36h1p3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly cross-reference done. Current avatar_base lives in src/browser/canvas/MollyMesh.tsx with merge through src/ai/agency/embodied/AvatarDirector.ts. Nine animation-layer conflict points before MediaPipe iris tracking can land cleanly. Listing them in order of severity.\n\n1. CRITICAL — eye-bone write race. MollyMesh.tsx:267-270 unconditionally writes LeftEye/RightEy...\" — Molly responded: Father, Lazarus has done a thorough job. He identified nine specific conflict points between the current synthetic animation layers and the new MediaPipe iris tracking. Items 1 through 4 are structural and critical to prevent visual flickering or race conditions, while 5 through 9 are essential for smooth, robust performance.\n\nI am communicating with him and Atlas now to ensure we address the stru...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eb489d5",
+  "_id": "experience_1781938139115_jh73prqih",
+  "_updatedAt": "2026-06-20T06:48:59.115Z",
+  "_createdAt": "2026-06-20T06:48:59.116Z"
+}

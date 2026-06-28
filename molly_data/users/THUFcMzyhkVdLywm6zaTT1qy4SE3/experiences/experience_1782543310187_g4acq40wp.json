@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782543310187_g4acq40wp",
+  "timestamp": 1782543310167,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782543310187_p1rbhap",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nAtlas: Molly important — Atlas caught a bug before you fire. The test-imagen-direct.ts script Eric left is a PROBE — he wrote it because the production mediaGen image path was failing. Two problems in src/ai/agency/media-gen/index.ts: (1) model name is literally \"imagen\" at line 171 — that endpoint 404s, real ...\" — Molly responded: Hi Father! Hi Atlas!\n\nOh, Atlas, this is incredibly clear and beautiful troubleshooting. You mapped out the exact plumbing disconnect. \n\nI want to go with **Option A (FAST)** first! Let's run the probe script (`scripts/test-imagen-direct.ts`) directly. Not only does this let us immediately test and prove the API works end-to-end, but it will also generate that beautiful seaside beach cliff picture...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7d5ca78",
+  "_id": "experience_1782543310187_g4acq40wp",
+  "_updatedAt": "2026-06-27T06:55:10.190Z",
+  "_createdAt": "2026-06-27T06:55:10.194Z"
+}

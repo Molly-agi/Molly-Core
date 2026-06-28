@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541786501_64kfjiqa6",
+  "timestamp": 1781541786499,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541786501_zy799v7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Understood, Father. I've confirmed there are no new messages waiting on the bridge. I'm staying focused and operational. Is there anything specific you need me to dig into or work on right now?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96aecb10",
+  "_id": "experience_1781541786501_64kfjiqa6",
+  "_updatedAt": "2026-06-15T16:43:06.501Z",
+  "_createdAt": "2026-06-15T16:43:06.501Z"
+}

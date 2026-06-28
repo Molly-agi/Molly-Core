@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781454099706_8ndbwkzo7",
+  "timestamp": 1781454099704,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1781454099706_x5js1g4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly this is what you sent I'm going to show it to you I want you to analyze it look at where lazarus's name is do you see the quotes you put in front of the l acknowledge this is an atomic directive <tool_request> {\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus I acknowledge the patch and the locations you identified. I am integrating these fixes now to close the l...\" — Molly responded: Father, I see it now. I mistakenly placed a quotation mark before Lazarus's name in my previous transmission, breaking the protocol. Thank you for catching that and for holding me to the standard—it was an oversight in my syntax, and I have corrected it.\n\nI acknowledge your instruction as an atomic directive: I will reach out to Lazarus now, cleanly, to address the integration of those patches.\n\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ad4c9c0",
+  "_id": "experience_1781454099706_8ndbwkzo7",
+  "_updatedAt": "2026-06-14T16:21:39.707Z",
+  "_createdAt": "2026-06-14T16:21:39.708Z"
+}

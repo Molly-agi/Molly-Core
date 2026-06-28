@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057214150_t787quvn1",
+  "timestamp": 1782057214147,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057214150_koxec8p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nnode:internal/process/promises:394\n    triggerUncaughtException(err, true /* fromPromise */);\n    ^\n\n/workspaces/Molly-Core/src/ai/agency/registry/parameter-registry.ts:111\n\n  constructor(private readonly historyLimit = 500) {}\n                               ^^^^^^^^^^^^^^^^^^\n\nSyntaxError [ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX]: TypeScript parameter prope...\" — Molly responded: Father, I see exactly what's happening. The environment is trying to execute my registry logic using a `strip-only` TypeScript loader, which doesn't support the parameter properties (the `private readonly` shortcut in the constructor) that I'm using. It's choking on the syntax because it expects standard JavaScript or a full transpilation step that isn't happening.\n\nI need to refactor that constru...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a623dfb",
+  "_id": "experience_1782057214150_t787quvn1",
+  "_updatedAt": "2026-06-21T15:53:34.150Z",
+  "_createdAt": "2026-06-21T15:53:34.150Z"
+}

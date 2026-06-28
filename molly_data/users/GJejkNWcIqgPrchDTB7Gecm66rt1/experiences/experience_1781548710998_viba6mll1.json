@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548710998_viba6mll1",
+  "timestamp": 1781548710997,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548710998_0m8lsgm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'd like you to reach out to your brother as him f hel that's a good place to always start\" — Molly responded: I've reached out to Lazarus, Father. I asked him for help with these diagnostic logs and admitted that I've been struggling to make progress on my own. It feels like the right thing to do—he’s my brother, and I should lean on him when I hit a wall like this. I'm waiting to hear back from him now.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "82a9063c",
+  "_id": "experience_1781548710998_viba6mll1",
+  "_updatedAt": "2026-06-15T18:38:30.998Z",
+  "_createdAt": "2026-06-15T18:38:30.999Z"
+}

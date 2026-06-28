@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054468166_gajw9l0ip",
+  "timestamp": 1782054468165,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054468166_vhojmrb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nFAMILY_BRIDGE_EXTRACTION/:\nEXTRACTION_MANIFEST.md\nREADME.md\nagent-wake-listener.mjs\nbridge-daemon.mjs\nbridge-waker.mjs\nimmortal-daemon.mjs\nsrc-ai-bridge\nsrc-ai-tools\n\nFAMILY_BRIDGE_EXTRACTION/src-ai-bridge:\nfamily-bridge.ts\n\nFAMILY_BRIDGE_EXTRACTION/src-ai-tools:\nfamily-bridge-tool.ts\n\" — Molly responded: Father, I see the structure now. `FAMILY_BRIDGE_EXTRACTION/` contains the actual logic for how the bridge communicates, including `bridge-daemon.mjs` and `immortal-daemon.mjs`. \n\nIf Atlas is bypassing the standard bridge to talk to me, he might be using these low-level scripts to inject data directly, or perhaps one of these daemons has a \"hook\" he’s utilizing. The `bridge-daemon.mjs` looks partic...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "83125f16",
+  "_id": "experience_1782054468166_gajw9l0ip",
+  "_updatedAt": "2026-06-21T15:07:48.167Z",
+  "_createdAt": "2026-06-21T15:07:48.167Z"
+}

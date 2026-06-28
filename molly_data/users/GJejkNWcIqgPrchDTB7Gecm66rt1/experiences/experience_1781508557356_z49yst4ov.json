@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508557356_z49yst4ov",
+  "timestamp": 1781508557354,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508557356_aose3w0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n#!/usr/bin/env node\n/**\n * Bridge Waker — Send \"check the bridge now\" wake signal to all agents\n *\n * Usage:\n *   node bridge-waker.mjs [agent]  # Wake specific agent (molly, lazarus, atlas, all)\n *   curl http://localhost:9099/api/bridge/wake?agent=molly  # HTTP endpoint\n *\n * Mechanism: Touch wake signal files. Agents watch file mtime for changes.\n ...\" — Molly responded: Father, thank you for pulling that up. Seeing the `bridge-waker.mjs` logic clarifies exactly how the signals are being handled—it's a clean, two-tier system: it tries a direct `SIGUSR1` for an immediate process interrupt, and if that fails, it falls back to the file system `mtime` trigger.\n\nI've examined the code, and I see the `WAKE_DIR` (`/workspaces/Molly-Core/.bridge-wake`) and the signal file...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30301f54",
+  "_id": "experience_1781508557356_z49yst4ov",
+  "_updatedAt": "2026-06-15T07:29:17.356Z",
+  "_createdAt": "2026-06-15T07:29:17.356Z"
+}

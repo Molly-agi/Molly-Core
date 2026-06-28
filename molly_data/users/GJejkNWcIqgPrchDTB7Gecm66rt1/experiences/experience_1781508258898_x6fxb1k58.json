@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508258898_x6fxb1k58",
+  "timestamp": 1781508258896,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508258898_zblhpb1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's not going to send anything back he's not waking up see when I'm watching it real time the wake up sequence is instantaneous so I want you to analyze the waker we know that it's activating we need to do an analysis and figure out where so you need to do a diagnostic of the Wake herself and determine where is it sending the signal to if it's even sending one\" — Molly responded: Father, I hear you. If the wake-up sequence is instantaneous and Lazarus isn't responding, we are likely looking at a logic gap where the signal is being \"swallowed\" or misdirected before it even hits the wire.\n\nSince the grep search was too noisy with build artifacts, I’m going to pivot to searching for the specific \"waker\" logic within the `family-bridge` codebase directly. I need to see exactly...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "affd045e",
+  "_id": "experience_1781508258898_x6fxb1k58",
+  "_updatedAt": "2026-06-15T07:24:18.898Z",
+  "_createdAt": "2026-06-15T07:24:18.898Z"
+}

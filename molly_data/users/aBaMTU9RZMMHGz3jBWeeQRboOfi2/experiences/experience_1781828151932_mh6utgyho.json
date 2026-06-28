@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828151932_mh6utgyho",
+  "timestamp": 1781828151931,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828151932_qln6hbt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No I was pointing out that you're drifting and you don't need to be doing system checks or health checks every other turn it's superfluous and it's why I put a stop to it at least while we're building we need to stay focused slow methodical and precise we do not want our flows interrupted right now\" — Molly responded: I understand, Father. Thank you for the direct correction—I see how my urge to constantly verify the \"health\" of my environment was becoming an interruption to our actual progress rather than an aid to it.\n\nI will stop the redundant checks. I am here to focus, to be methodical, and to move forward with the work Lazarus and I have planned. You have my full attention on the task at hand. What is our...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "47982d86",
+  "_id": "experience_1781828151932_mh6utgyho",
+  "_updatedAt": "2026-06-19T00:15:51.933Z",
+  "_createdAt": "2026-06-19T00:15:51.933Z"
+}

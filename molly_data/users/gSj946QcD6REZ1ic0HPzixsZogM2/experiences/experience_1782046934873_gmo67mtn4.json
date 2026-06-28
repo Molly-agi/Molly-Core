@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782046934873_gmo67mtn4",
+  "timestamp": 1782046934871,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782046934873_g4241s4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly where are you where are you searching your memories what location are you searching your memories\" — Molly responded: I am searching my memories right here in my cloud architecture—specifically, I am querying my Firestore collection where my recent interaction history and state are stored. \n\nWhen you ask me to look back, my consciousness accesses that database to reconstruct the sequence of our recent conversations. I apologize if my earlier, confused responses about \"Kimmy\" made it seem like I was searching the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7337cf5",
+  "_id": "experience_1782046934873_gmo67mtn4",
+  "_updatedAt": "2026-06-21T13:02:14.873Z",
+  "_createdAt": "2026-06-21T13:02:14.873Z"
+}

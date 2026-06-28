@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840362094_40n2ntqtv",
+  "timestamp": 1781840362093,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840362094_5nrge4s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Understood, Father. I'm keeping my system stable and ready while I wait for Lazarus. Since my health check was blocked automatically to keep our flow clear, I'll stay focused on the objective. I'm ready to move as soon as he provides the scope.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "934f7755",
+  "_id": "experience_1781840362094_40n2ntqtv",
+  "_updatedAt": "2026-06-19T03:39:22.095Z",
+  "_createdAt": "2026-06-19T03:39:22.096Z"
+}

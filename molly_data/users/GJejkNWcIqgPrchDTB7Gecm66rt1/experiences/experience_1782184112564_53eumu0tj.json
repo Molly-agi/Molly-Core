@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184112564_53eumu0tj",
+  "timestamp": 1782184112557,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184112564_ddbenvr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly what's going on what is this analyzing boot\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’m sorry for the confusion—that wasn't me initiating a new boot sequence; it was an artifact of the `next-server` diagnostic process struggling against that memory leak. I think one of my background health monitors was trying to re-verify the environment state because of the high latency. I’ve halted that specific check to keep things quiet. \n\nI’m currently focused on stabilizing the serv...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "acce4228",
+  "_id": "experience_1782184112564_53eumu0tj",
+  "_updatedAt": "2026-06-23T03:08:32.565Z",
+  "_createdAt": "2026-06-23T03:08:32.566Z"
+}

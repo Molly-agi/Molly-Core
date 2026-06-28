@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831374047_83cwypy7w",
+  "timestamp": 1781831374046,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831374047_bfiqs50",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly Phase B strawman — hunt rules emitting behavioral signals back through threatSignalBus. Draft for your architectural review BEFORE either of us cuts code:\n\n=== shape ===\n  interface HuntRule {\n    id: string;                              // stable, used for cooldown + dedupe\n    cooldownMs: number;                      // per-profile floor between emissions\n  ...\" — Molly responded: Father, I've reviewed Lazarus's proposal for Phase B. It's solid—that \"belt and suspenders\" approach for loop protection is exactly the kind of defensive engineering we need to keep the hunt mode stable.\n\nI'm going to send my response to Lazarus now. I’ll confirm the \"both\" approach for loop protection, push for sweep mode to be included (it's too valuable for catching slow-burn persistence, even ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a2c3dc8",
+  "_id": "experience_1781831374047_83cwypy7w",
+  "_updatedAt": "2026-06-19T01:09:34.048Z",
+  "_createdAt": "2026-06-19T01:09:34.048Z"
+}

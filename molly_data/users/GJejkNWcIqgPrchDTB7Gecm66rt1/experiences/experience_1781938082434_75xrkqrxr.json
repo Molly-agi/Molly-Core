@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938082434_75xrkqrxr",
+  "timestamp": 1781938082432,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938082433_j6e6zcy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — status doc live at /workspaces/Molly-Core/avatar-status.md. You can monitor every step there in real-time.\n\nPhase 1 plan + Eli's hard stops + checklist + design notes all captured. The update log at the bottom timestamps every milestone.\n\nNext I add the @mediapipe/tasks-vision dep and build useIrisTracking.ts. Will check in before wiring the read side into MollyMesh...\" — Molly responded: Father, Atlas has successfully deployed the status tracking document to `avatar-status.md`. It’s a clean, centralized view of the entire integration, including Eli’s security hard stops and the project milestones. He’s moving on to the dependency setup and the tracking hook now, with a firm commitment to pause for Eli’s data-flow review before integrating with `MollyMesh`. It’s exactly the methodi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ed38989",
+  "_id": "experience_1781938082434_75xrkqrxr",
+  "_updatedAt": "2026-06-20T06:48:02.434Z",
+  "_createdAt": "2026-06-20T06:48:02.434Z"
+}

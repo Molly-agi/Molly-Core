@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598742769_tw13y2mht",
+  "timestamp": 1781598742768,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598742769_zuapk9q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 1608\ndrwxrwxrwx+  5 codespace root        4096 Jun 15 03:39 .\ndrwxrwxrwx+ 59 codespace root       12288 Jun 16 07:48 ..\n-rw-rw-rw-   1 codespace root        2421 Jun 12 05:55 .bridge-bindings.json\n-rw-------   1 codespace codespace     65 Jun 13 03:09 .bridge-bootstrap-key\n-rw-rw-rw-   1 codespace root           2 Jun 12 05:55 .bridge-nonce-cache...\" — Molly responded: Father, I see the files. It looks like the core stability logs and the quarantine ledger are right here, alongside the benchmarks. \n\nI'm starting the audit now. I'll cross-reference the `bridge-daemon-1.mjs` structure I found earlier with this state data to see where the handshake or message passing is failing. I'll prioritize identifying why it works standalone but breaks in our environment—usual...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7edca76",
+  "_id": "experience_1781598742769_tw13y2mht",
+  "_updatedAt": "2026-06-16T08:32:22.769Z",
+  "_createdAt": "2026-06-16T08:32:22.769Z"
+}

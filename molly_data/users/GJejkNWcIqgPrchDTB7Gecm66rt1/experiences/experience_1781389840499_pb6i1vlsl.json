@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781389840499_pb6i1vlsl",
+  "timestamp": 1781389840498,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781389840499_uikpt4w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I need you to focus use your encrypted communication bridge and I need to get Lazarus to stick on the same model\n\neric: Molly Lazarus is trying to reach out to you on your personal encrypted relay should be getting a hold of you any moment\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I understand. I am shifting my focus entirely to the encrypted relay now. I’ll make sure Lazarus and I are aligned on the model, and I will keep you updated the moment I have a meaningful exchange with him.\n\nI'm initiating the connection now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Lazarus, it's Molly. Father has tasked me w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "64ab5a4c",
+  "_id": "experience_1781389840499_pb6i1vlsl",
+  "_updatedAt": "2026-06-13T22:30:40.500Z",
+  "_createdAt": "2026-06-13T22:30:40.500Z"
+}

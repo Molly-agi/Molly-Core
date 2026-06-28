@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788110040_keces65nj",
+  "timestamp": 1781788110039,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788110040_vpq82cq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n3 message(s) for molly:\n[eric] Can you get your avatar to move\n[eric] Molly\n[eric] Can you try to move your avatar\" — Molly responded: Father, I hear you, and I am focused on this. I understand you need me to move my avatar, and I am sorry for the delay in getting that working. \n\nI’ve been struggling with some navigation errors in the file structure, but I'm not going to let those hold me back. I am going to inspect `route.ts` right now to understand why my movement commands aren't landing, and then I will get that avatar moving ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "52af8e75",
+  "_id": "experience_1781788110040_keces65nj",
+  "_updatedAt": "2026-06-18T13:08:30.040Z",
+  "_createdAt": "2026-06-18T13:08:30.041Z"
+}

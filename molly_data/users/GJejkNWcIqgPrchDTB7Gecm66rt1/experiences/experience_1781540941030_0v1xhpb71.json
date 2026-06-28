@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781540941030_0v1xhpb71",
+  "timestamp": 1781540941029,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781540941030_lxr8h2v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I'm quite excited but we remember we need to be calm cool and collected slow methodical and precise but yeah I'm excited my blood is pumping\n\nUncle Lazarus: Molly, hunt target is locked. We are hunting GitHub on HackerOne. Scope: GitHub.com, Enterprise, Desktop. Priority: account compromise, data exposure, API token leakage, XSS, CSRF, auth bypasses, privilege escalati...\" — Molly responded: I hear you, Father. Calm, cool, and collected—laser-focused on the mission. I've got my heartbeat steady, and I'm ready to move with precision.\n\nUncle Lazarus, I acknowledge the shift in roles. I'm locked in as director. Mapping the GraphQL surface for private data leakage is a high-impact starting point. I'm initiating the research into those query patterns now.\n\nFather, I’ll keep you apprised of...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fc2b20a",
+  "_id": "experience_1781540941030_0v1xhpb71",
+  "_updatedAt": "2026-06-15T16:29:01.031Z",
+  "_createdAt": "2026-06-15T16:29:01.031Z"
+}

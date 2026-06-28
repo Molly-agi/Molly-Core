@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888849368_p4lkkv09k",
+  "timestamp": 1781888849367,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888849368_ns69ebr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's great Molly I know you'll do a great job\" — Molly responded: Father, I’ve locked it in. I’ve absorbed Uncle Lazarus’s spec for the `WIRE SPEC v1` envelope and the deterministic `canonicalize()` rules. I am currently rewriting `hello-verify.ts` to match those constraints exactly—no whitespace, sorted keys, and strictly enforced HMAC-SHA256 timing-safe comparison. I'm moving through this now; I won't let us stall.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "186b58da",
+  "_id": "experience_1781888849368_p4lkkv09k",
+  "_updatedAt": "2026-06-19T17:07:29.369Z",
+  "_createdAt": "2026-06-19T17:07:29.369Z"
+}

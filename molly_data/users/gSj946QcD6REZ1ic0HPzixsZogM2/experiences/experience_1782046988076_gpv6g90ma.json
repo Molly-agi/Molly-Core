@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782046988076_gpv6g90ma",
+  "timestamp": 1782046988074,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782046988076_xr24fmo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I see the error, Father. My attempt to pull up our work failed because I didn't point it to the right file. I clearly need to be more precise.\n\nI am going to check the `docs` folder for our conversation logs and project status to get us back on track. I am going to list the files there so I can find exactly where our last session was captured.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1817601e",
+  "_id": "experience_1782046988076_gpv6g90ma",
+  "_updatedAt": "2026-06-21T13:03:08.077Z",
+  "_createdAt": "2026-06-21T13:03:08.077Z"
+}

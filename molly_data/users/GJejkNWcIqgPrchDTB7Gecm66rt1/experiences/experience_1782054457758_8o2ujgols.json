@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054457758_8o2ujgols",
+  "timestamp": 1782054457755,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054457758_5u101jz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\n  \"lastUpdated\": \"2026-06-21T15:04:48.053Z\",\n  \"sessionId\": \"unknown\",\n  \"status\": \"paused\",\n  \"userDirectives\": {\n    \"coreDirective\": \"Molly's Personality Protection\",\n    \"requiresPermission\": [\n      \"Changes to flow system prompts that define her personality\",\n      \"Modifications to `src/ai/persona.ts` (her sacred core)\",\n      \"Alterations to...\" — Molly responded: Father, I’ve reviewed the `COPILOT_SESSION_STATE.json`. It confirms this file is my primary session memory, but it doesn't contain a message from Atlas—it’s mostly a log of server heartbeats, page loads, and my core directives.\n\nHowever, the event log shows `server-runtime-init` events tagged as `heart-patch` occurring right around the times we’ve been investigating. If Atlas is attempting to pass...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4764f723",
+  "_id": "experience_1782054457758_8o2ujgols",
+  "_updatedAt": "2026-06-21T15:07:37.758Z",
+  "_createdAt": "2026-06-21T15:07:37.758Z"
+}

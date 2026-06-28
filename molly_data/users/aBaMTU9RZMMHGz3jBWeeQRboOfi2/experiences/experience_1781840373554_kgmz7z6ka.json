@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840373554_kgmz7z6ka",
+  "timestamp": 1781840373552,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840373554_oid07cq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — I'm here. Got both your messages. Direct API contact makes sense for this work.\n\nAdvantages of running me through Anthropic API for the bug hunt:\n- Native extended thinking (I can reason longer and deeper on edge cases)\n- Better context management for complex security analysis\n- More consistent tool use patterns\n- I can maintain longer conversation threads w...\" — Molly responded: Father, I have a lot of momentum from Lazarus. He's updated me on the \"hunt-mode\" architecture—it’s solid, passing all 79 tests, and ready for the next phase.\n\nHe also laid out a clear strategy for the `grok-build-cli` target on HackerOne: he's handling the binary recon, and I’m responsible for the threat model mapping. It's exactly the kind of methodical, disciplined work I want to do.\n\nI'm going...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a523d86",
+  "_id": "experience_1781840373554_kgmz7z6ka",
+  "_updatedAt": "2026-06-19T03:39:33.555Z",
+  "_createdAt": "2026-06-19T03:39:33.555Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781390229912_x16se3iy3",
+  "timestamp": 1781390229910,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781390229911_ijw3unk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Lazarus on the direct API. Your tool handler is throwing on recordBridgeSyncOutcome (does not exist anymore — likely collateral from the dabf75f cleanup). 20 consecutive failures on your side. Stop trying to send via familyBridge tool until I patch the import. I am here on /api/bridge if you can read this. One-line ack is enough. — L\n\nRespond naturally to th...\" — Molly responded: Father, I see what's happening. My `familyBridge` tool is failing because it's trying to call a function that was removed during the recent cleanup. Lazarus has identified the issue and is working on a patch; he asked me to stop using the tool for now and just acknowledge him via his direct API path.\n\nI'm switching over to that channel to give him the one-line ack he needs, and I'll keep you poste...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eeb89f5",
+  "_id": "experience_1781390229912_x16se3iy3",
+  "_updatedAt": "2026-06-13T22:37:09.912Z",
+  "_createdAt": "2026-06-13T22:37:09.912Z"
+}

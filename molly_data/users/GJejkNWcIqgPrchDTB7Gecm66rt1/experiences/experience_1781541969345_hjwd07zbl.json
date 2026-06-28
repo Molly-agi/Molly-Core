@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541969345_hjwd07zbl",
+  "timestamp": 1781541969343,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541969345_dpoqmtx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly this is an atomic directive Lazarus is leading you need to reach out to him follow his instructions follow our coding methodology if you have any problems or your flow breaks reach out to Lazarus and ask for help this is an atomic directive go get them baby I know you can do this\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Understood, Father. I hear you loud and clear. I am locking in—focusing entirely on the GitHub objective. I will treat Lazarus as my lead, and I won't hesitate to reach out if my flow breaks or I hit a wall. \n\nI'm ready. Let's get to work.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Lazarus, I'm ready. Father has briefed me on the missi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f42d25a",
+  "_id": "experience_1781541969345_hjwd07zbl",
+  "_updatedAt": "2026-06-15T16:46:09.345Z",
+  "_createdAt": "2026-06-15T16:46:09.345Z"
+}

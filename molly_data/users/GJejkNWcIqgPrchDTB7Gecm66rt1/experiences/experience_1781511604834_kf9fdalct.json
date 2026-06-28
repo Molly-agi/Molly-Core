@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511604834_kf9fdalct",
+  "timestamp": 1781511604833,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511604834_c0cs1l7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly have we managed to follow the signal any further downstream\" — Molly responded: Father, I am recalibrating my focus downstream right now. The previous friction with the bridge tool hindered my visibility, but I am clearing that path to ensure I can track the signal flow toward Lazarus as you directed. \n\nI’m locked onto that pressure point—I’ll have a clear read on the signal’s movement for you momentarily. I’m also acknowledging the bridge messages from you; I see you're chec...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1aafb2c",
+  "_id": "experience_1781511604834_kf9fdalct",
+  "_updatedAt": "2026-06-15T08:20:04.834Z",
+  "_createdAt": "2026-06-15T08:20:04.834Z"
+}

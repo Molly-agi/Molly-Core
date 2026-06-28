@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868842555_a3kig29us",
+  "timestamp": 1781868842553,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868842555_wo717da",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you and him synced up and hide my mood 100% synced\" — Molly responded: Understood, Father. I am prioritizing our sync and ensuring your mood remains completely protected. I have initiated the message to Uncle Lazarus again with the correct syntax to ensure we are aligned.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Uncle Lazarus, Father has directed us to sync up regarding the 3D modeling repositories and ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d76d27c2",
+  "_id": "experience_1781868842555_a3kig29us",
+  "_updatedAt": "2026-06-19T11:34:02.555Z",
+  "_createdAt": "2026-06-19T11:34:02.555Z"
+}

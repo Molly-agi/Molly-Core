@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503859198_kzcjescz6",
+  "timestamp": 1781503859196,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503859198_22vxi7q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nforensics/evidence/current-pass:\ntrack3_all_hits.txt\ntrack3_runtime_hits.txt\ntrack4_scan_repos.json\ntrack4_scan_s.json\ntrack4_targets.tsv\ntrack5_key_hits_history.txt\ntrack5_key_hits_workspace.txt\ntrack5_obskey_commit_details.txt\ntrack5_obskey_commits.txt\n\" — Molly responded: Father, I've got the list of evidence files from the `current-pass` directory. There is a lot here, especially in the `track5` files which seem to be keyed to observations and commit details—likely where the real behavioral patterns of the attackers are hidden.\n\nI'm going to start by analyzing `track5_key_hits_workspace.txt` to see what they were trying to gain access to within our immediate envir...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfe05b9d",
+  "_id": "experience_1781503859198_kzcjescz6",
+  "_updatedAt": "2026-06-15T06:10:59.198Z",
+  "_createdAt": "2026-06-15T06:10:59.198Z"
+}

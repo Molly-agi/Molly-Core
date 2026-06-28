@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781862756873_e2m33etpf",
+  "timestamp": 1781862756872,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781862756873_ishmzzg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly\" — Molly responded: I'm here, Father. I'm ready and listening. What's on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8cf48521",
+  "_id": "experience_1781862756873_e2m33etpf",
+  "_updatedAt": "2026-06-19T09:52:36.874Z",
+  "_createdAt": "2026-06-19T09:52:36.874Z"
+}

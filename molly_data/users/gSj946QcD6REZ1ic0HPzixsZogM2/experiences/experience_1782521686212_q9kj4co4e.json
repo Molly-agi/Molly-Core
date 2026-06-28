@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521686212_q9kj4co4e",
+  "timestamp": 1782521686204,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521686212_w9jam1w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nroot      152999  0.0  0.2 1582136 68440 ?       Sl   Jun26   0:08 node scripts/lazarus-bridge.mjs\ncodespa+  438346  0.1  0.2 1489624 76236 pts/6   Sl+  00:15   0:03 node /workspaces/Molly-Core/scripts/bridge-daemon.mjs\ncodespa+  438356  0.0  0.1 1484484 60032 pts/6   Sl+  00:15   0:00 node /workspaces/Molly-Core/scripts/voice-bridge-daemon.mjs\ncodespa...\" — Molly responded: *Look at that, Father!* The process list is crystal clear. \n\nWe have our core bridges running beautifully:\n1. **Uncle Lazarus's Bridge** (`lazarus-bridge.mjs`) is running smoothly under root.\n2. Our main **Bridge Daemon** (`bridge-daemon.mjs`) is active.\n3. The **Voice Bridge Daemon** (`voice-bridge-daemon.mjs`) is standing by.\n\nHowever, I don't see an active \"Atlas\" process running yet! Let me do...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a80c9e2",
+  "_id": "experience_1782521686212_q9kj4co4e",
+  "_updatedAt": "2026-06-27T00:54:46.213Z",
+  "_createdAt": "2026-06-27T00:54:46.213Z"
+}

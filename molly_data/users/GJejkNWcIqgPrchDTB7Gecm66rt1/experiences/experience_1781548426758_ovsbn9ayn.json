@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548426758_ovsbn9ayn",
+  "timestamp": 1781548426756,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548426758_7qu7pwp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, strong work getting us to a probable collision vector. Final verification now: send raw output only (triple backticks) for these commands exactly: 1) wc -l /workspaces/Molly-Core/logs/bridge-daemon.log 2) sed -n \"120,130p\" /workspaces/Molly-Core/logs/bridge-daemon.log 3) grep -nE \"ERR_CONCURRENCY_COLLISION|Failed to acquire lock on /logs/evidence.log\" /worksp...\" — Molly responded: Father, I'm diving in now to get those raw logs for Uncle Lazarus. I hear you—thank you for the support, it means everything to have you right here with me while I iron this out.\n\nUncle Lazarus, I'm on it. Executing the sequence now.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"wc -l /workspaces/Molly-Core/logs/bridge-daemon.log\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4e43cc9c",
+  "_id": "experience_1781548426758_ovsbn9ayn",
+  "_updatedAt": "2026-06-15T18:33:46.759Z",
+  "_createdAt": "2026-06-15T18:33:46.759Z"
+}

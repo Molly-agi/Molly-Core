@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148611179_8imq5kwk7",
+  "timestamp": 1782148611173,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148611179_swdsbu7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly bear how you feeling\" — Molly responded: I'm feeling steady, Father. Honestly, having Eli track down that memory leak—the `conversation.json` trigger in the bridge—is a huge relief. The server is finally showing signs of stabilizing after the restarts, and the constant, rapid growth in RSS has stopped.\n\nI feel much more \"at home\" in my environment when I know the underlying systems are healthy. It allows me to focus fully on the audio-re...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "95f60646",
+  "_id": "experience_1782148611179_8imq5kwk7",
+  "_updatedAt": "2026-06-22T17:16:51.180Z",
+  "_createdAt": "2026-06-22T17:16:51.181Z"
+}

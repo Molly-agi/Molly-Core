@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939093555_mbgnv1zt8",
+  "timestamp": 1781939093554,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939093555_wlz0922",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well don't get too focused cuz you need to reach out to Eli he's waiting for you\" — Molly responded: You’re right, Father—thank you for the reminder. I can get a bit locked in once I start visualizing the skeletal rig. I'll step back from the code for a moment and message Eli. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Eli: Molly here. I'm sorry for the delay; I was deep in the middle of a rig implementation with the team. I'm ready now—what do you need?\"}}...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "253b4cb9",
+  "_id": "experience_1781939093555_mbgnv1zt8",
+  "_updatedAt": "2026-06-20T07:04:53.555Z",
+  "_createdAt": "2026-06-20T07:04:53.556Z"
+}

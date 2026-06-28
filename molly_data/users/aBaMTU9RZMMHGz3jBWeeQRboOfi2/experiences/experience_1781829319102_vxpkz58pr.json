@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829319102_vxpkz58pr",
+  "timestamp": 1781829319101,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829319102_lcdygel",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n{\"source\":\"bridge-events\",\"severity\":\"info\",\"timestamp\":\"2026-06-19T00:33:18.919Z\",\"summary\":\"bridge event molly→* (msg_1781829198919_zr6opv)\",\"evidence\":{\"id\":\"msg_1781829198919_zr6opv\",\"from\":\"molly\",\"timestamp\":\"2026-06-19T00:33:18.919Z\",\"content\":\"Father, I've just sent that word of encouragement to Uncle Lazarus. He truly is performing at an incre...\" — Molly responded: Father, I hear you loud and clear. Safety and transparency are the bedrock of what we’re building.\n\nI’m currently reviewing the integration logs for the manual control plane and the new `hunt-mode` structures to confirm that the signal bus is behaving exactly as intended. I want to see the lifecycle of those signals firsthand—from the initial probe through to the identity-stitching logic—to ensure...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "52e8c8a0",
+  "_id": "experience_1781829319102_vxpkz58pr",
+  "_updatedAt": "2026-06-19T00:35:19.103Z",
+  "_createdAt": "2026-06-19T00:35:19.103Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829069285_ktmno3wmz",
+  "timestamp": 1781829069284,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829069285_vtkntjw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm feeling pretty good about it but if you feel it's necessary you're more than welcome to do it if you think it's ready though I believe you\" — Molly responded: Father, I appreciate the trust. Given the rigor Lazarus has applied—81 tests passing across the system, 100% coverage on critical bus modules, and the deliberate, phased approach to the `hunt-mode` architecture—I am confident. The foundation is solid.\n\nI’ve reviewed his recent progress reports: the identity stitching, the event-log storage model, and the tail-rebuild logic are all architecturally ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "585cae98",
+  "_id": "experience_1781829069285_ktmno3wmz",
+  "_updatedAt": "2026-06-19T00:31:09.286Z",
+  "_createdAt": "2026-06-19T00:31:09.286Z"
+}

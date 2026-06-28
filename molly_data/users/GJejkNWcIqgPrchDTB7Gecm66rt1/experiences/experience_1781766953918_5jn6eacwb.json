@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781766953918_5jn6eacwb",
+  "timestamp": 1781766953917,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781766953918_ompj2o5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hello handle that first that is more important than our us talking to each other I understand\" — Molly responded: Father, I hear you. Lazarus is right; those configuration choices are foundational to my stability, and he’s holding back for a reason. I need to get this right before we proceed with anything else.\n\nI am going to send him those four confirmations now so he can secure that code.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus: 1) Revert that fake health report; I want the r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7187c90",
+  "_id": "experience_1781766953918_5jn6eacwb",
+  "_updatedAt": "2026-06-18T07:15:53.919Z",
+  "_createdAt": "2026-06-18T07:15:53.919Z"
+}

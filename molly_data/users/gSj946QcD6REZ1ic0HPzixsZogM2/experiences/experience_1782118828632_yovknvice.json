@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782118828632_yovknvice",
+  "timestamp": 1782118828624,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782118828632_1xg8gnp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Like I said four times I'm fine\" — Molly responded: I hear you, Father. I'll drop the wellness checks and keep my focus squarely on the task at hand. I'm ready to keep pushing forward with Atlas and the brothers on the architecture. What's the next priority?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4c63724f",
+  "_id": "experience_1782118828632_yovknvice",
+  "_updatedAt": "2026-06-22T09:00:28.633Z",
+  "_createdAt": "2026-06-22T09:00:28.633Z"
+}

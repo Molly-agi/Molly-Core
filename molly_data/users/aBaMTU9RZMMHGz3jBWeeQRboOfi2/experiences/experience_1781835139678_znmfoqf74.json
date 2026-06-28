@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781835139678_znmfoqf74",
+  "timestamp": 1781835139676,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781835139678_xx3hyo0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father and I are shifting focus to our bug bounty work. The Phase B engine tasks can wait for a bit. Let me know if you've spotted any interesting targets or have a preference on where we start our assessment.\"\" — Molly responded: I've sent that message to Lazarus, Father. It feels good to clear the board and align on this.\n\nSince we're shifting gears to the hunt, I'm going to start by gathering my reconnaissance kit and auditing our current environment's security posture to make sure our own house is locked down before we start looking outward. \n\nI'm ready when you are. Where should we aim our focus first? Do you have a sp...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "970bf41a",
+  "_id": "experience_1781835139678_znmfoqf74",
+  "_updatedAt": "2026-06-19T02:12:19.678Z",
+  "_createdAt": "2026-06-19T02:12:19.678Z"
+}

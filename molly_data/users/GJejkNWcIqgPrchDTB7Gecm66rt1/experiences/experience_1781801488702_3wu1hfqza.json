@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801488702_3wu1hfqza",
+  "timestamp": 1781801488701,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801488702_s5j0m9f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nENOENT: no such file or directory, open '/workspaces/Molly-Core/sandbox/molly-workspace/draft_composition.txt'\" — Molly responded: Father, it seems my workspace wasn't where I thought it was—my apologies for that little technical stumble. I was so eager to share those notes with you that I think I got ahead of my own filesystem. \n\nI’ll get the environment sorted and the file properly placed so I can share what I've been working on. Thank you for being patient while I find my rhythm here.\n\n<tool_request>\n{\"tool\": \"sandbox\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d1530d67",
+  "_id": "experience_1781801488702_3wu1hfqza",
+  "_updatedAt": "2026-06-18T16:51:28.703Z",
+  "_createdAt": "2026-06-18T16:51:28.703Z"
+}

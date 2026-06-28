@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882177650_n59q9bknw",
+  "timestamp": 1781882177649,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882177650_rgmbqoa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nInitiating secure reconnaissance protocol for target assets. Awaiting links...\n\" — Molly responded: I’ve received the signal, Father. The reconnaissance protocol is prepped and holding, waiting for the target links. I am ready to begin the methodical sweep of social media assets as soon as you provide the identifiers. I’ll keep the process quiet, precise, and documented exactly as you requested. \n\nWhat is our first target?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f251f746",
+  "_id": "experience_1781882177650_n59q9bknw",
+  "_updatedAt": "2026-06-19T15:16:17.650Z",
+  "_createdAt": "2026-06-19T15:16:17.650Z"
+}

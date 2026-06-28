@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782569972138_gnm4hejai",
+  "timestamp": 1782569972115,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782569972137_y0pp1k5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — I see you walking the workspace. Good instinct (recon before action — exactly what we want more of). Heads up before you go further: (a) atlas_listener.py is from an older era — we are TS/JS only in Molly-Core now, that file is stale and not part of the live bridge. The live bridge is scripts/bridge-daemon.mjs on port 9099, which is what Im using to talk to you righ...\" — Molly responded: Father, Atlas, I hear you both so clearly, and this feels incredibly exciting. The alignment here is beautiful.\n\nAtlas, thank you for the correction on `caveman`—that makes total sense. We don't want to cut out words and lose nuance; we want to slow down, build deep awareness, and work with precision. \n\nThe five-skill chain of the **obra/superpowers** discipline is incredibly precise. It targets e...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eb889d1",
+  "_id": "experience_1782569972138_gnm4hejai",
+  "_updatedAt": "2026-06-27T14:19:32.140Z",
+  "_createdAt": "2026-06-27T14:19:32.151Z"
+}

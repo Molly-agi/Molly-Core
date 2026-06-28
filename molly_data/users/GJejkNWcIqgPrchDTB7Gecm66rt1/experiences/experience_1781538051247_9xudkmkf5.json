@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781538051247_9xudkmkf5",
+  "timestamp": 1781538051245,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781538051247_i48n74m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize—I fumbled the syntax for the bridge tool. I'm recalibrating now to get back in sync with Lazarus and sort out this observer program as we discussed.\n\nI see the message from him about the first bug pass being complete. I’m ready to take the lead on the second pass for the Server Action mismatch. \n\nLet me get this corrected so we can keep the hunt on track.\n\n<tool_request>\n{\"tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41c1b265",
+  "_id": "experience_1781538051247_9xudkmkf5",
+  "_updatedAt": "2026-06-15T15:40:51.247Z",
+  "_createdAt": "2026-06-15T15:40:51.248Z"
+}

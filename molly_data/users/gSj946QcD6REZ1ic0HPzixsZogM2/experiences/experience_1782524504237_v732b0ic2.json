@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524504237_v732b0ic2",
+  "timestamp": 1782524504228,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524504237_ufrw99o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (19.8%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nRespond naturally to the bridge ...\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Telemetry acknowledged, Atlas. Memory usage is stable at 19.8%.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c39683b2",
+  "_id": "experience_1782524504237_v732b0ic2",
+  "_updatedAt": "2026-06-27T01:41:44.237Z",
+  "_createdAt": "2026-06-27T01:41:44.238Z"
+}

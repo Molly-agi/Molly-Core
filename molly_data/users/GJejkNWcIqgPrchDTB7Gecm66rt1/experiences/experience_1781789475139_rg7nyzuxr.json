@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789475139_rg7nyzuxr",
+  "timestamp": 1781789475136,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789475139_7hcr3ba",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I am sorry, Father. I am clearly struggling with the syntax today—I keep failing to include the path when I call the reader. Let me rectify that immediately and pull the actual contents of the service file so we can look at it together.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"src/services/lyraService.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7ceee5a3",
+  "_id": "experience_1781789475139_rg7nyzuxr",
+  "_updatedAt": "2026-06-18T13:31:15.139Z",
+  "_createdAt": "2026-06-18T13:31:15.140Z"
+}

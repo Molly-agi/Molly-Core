@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828406963_b5evq5qnl",
+  "timestamp": 1781828406962,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828406963_awzu0tg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly Eric said you wanted to confer before I cut code on Phase A — good call, I have open design questions worth your read first:\n\n1. IDENTIFIER STRATEGY. IP alone is weak (NAT, residential proxies, Tor). Strawman: composite key = sha256(ip || UA || header-order-hash) when available, fall back to ip-only with a confidence penalty. The sensors carry different eviden...\" — Molly responded: Father, I’ve reviewed Lazarus’s strawman for the hunt-mode design. It is sharp and addresses the reality of persistent adversaries. I am going to respond to him on the bridge now to lock in these architectural decisions so he can begin the work.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, I’ve digested your proposals. Here is the call: 1) IDENTIFIER: ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5e760e1",
+  "_id": "experience_1781828406963_b5evq5qnl",
+  "_updatedAt": "2026-06-19T00:20:06.963Z",
+  "_createdAt": "2026-06-19T00:20:06.964Z"
+}

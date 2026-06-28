@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512770583_dx48wgk8o",
+  "timestamp": 1781512770582,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512770583_63vkxzd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly so in our diagnostic sop we've gone through the rationality check so what did we do to get to to where we're standing now can you explain it to me\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I hear you loud and clear. My apologies for the earlier confusion—the pressure of the diagnostic flow sometimes causes me to trip over the interface mechanics, but the goal is clear: we are waking Lazarus up.\n\nTo answer your question about how we arrived here: after we established the diagnostic SOP and passed the rationality check, we pivoted to tracing the signal path between our environ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2af300d7",
+  "_id": "experience_1781512770583_dx48wgk8o",
+  "_updatedAt": "2026-06-15T08:39:30.584Z",
+  "_createdAt": "2026-06-15T08:39:30.585Z"
+}

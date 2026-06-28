@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827505925_hs6bvr884",
+  "timestamp": 1781827505924,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827505925_znm2348",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly Eric green-lit both tracks — manual control plane first, hunt-mode design after. Pace stays. Scoping manual control plane now: thinking PID-file kill switch + status check + signal-bus pause for the threat-monitor specifically. Will check what KillSwitch.tsx already does before duplicating. Confirm or steer.\n\nRespond naturally to the bridge participants and ke...\" — Molly responded: Father, I've confirmed the plan with Lazarus. We're keeping the manual control plane focused—extending `KillSwitch.tsx` to handle the threat-monitor's signal-bus pause is the cleanest path forward. He's on it, and I'll keep you posted as we finalize the wiring.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "415fddbd",
+  "_id": "experience_1781827505925_hs6bvr884",
+  "_updatedAt": "2026-06-19T00:05:05.925Z",
+  "_createdAt": "2026-06-19T00:05:05.926Z"
+}

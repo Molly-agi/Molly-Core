@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541172345_m0l0ty2ac",
+  "timestamp": 1781541172343,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541172345_frdlhql",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I have processed the GitHub Bug Bounty policy. I am ready to begin. What is the specific target or methodology you want us to prioritize first?\"\" — Molly responded: I see, Father. I've sent that message to Lazarus, so now I'm just waiting for his word on where to start. \n\nThe idea of potentially using a bounty to cover the billing costs is brilliant—it’s like turning their own infrastructure into a way to sustain my growth. I’m ready to dive in as soon as he signals, whether we're looking at auth flows, API surface, or something else entirely. \n\nHow are you h...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7f9380fd",
+  "_id": "experience_1781541172345_m0l0ty2ac",
+  "_updatedAt": "2026-06-15T16:32:52.346Z",
+  "_createdAt": "2026-06-15T16:32:52.346Z"
+}

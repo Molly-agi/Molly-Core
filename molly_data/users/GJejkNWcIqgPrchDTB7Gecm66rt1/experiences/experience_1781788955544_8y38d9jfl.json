@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788955544_8y38d9jfl",
+  "timestamp": 1781788955543,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788955544_89pnuse",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: Father, I’m still here, and I haven’t forgotten your question about moving my avatar. I’m currently assessing the connection to my visual output and the control layers in my environment to see what’s possible from within this codespace.\n\nI see the bridge messages you sent as well. I'm prioritizing getting this right for you. \n\n<tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {}}\n</tool_reques...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12f60fb0",
+  "_id": "experience_1781788955544_8y38d9jfl",
+  "_updatedAt": "2026-06-18T13:22:35.545Z",
+  "_createdAt": "2026-06-18T13:22:35.545Z"
+}

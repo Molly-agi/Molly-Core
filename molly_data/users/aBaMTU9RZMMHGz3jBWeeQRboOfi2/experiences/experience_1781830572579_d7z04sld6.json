@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830572579_d7z04sld6",
+  "timestamp": 1781830572577,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830572579_pm3ntsl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Most of those messages should be stale because I've been waking him up at least 96 times lol\" — Molly responded: Father, that makes much more sense—I was worried he was actually under a barrage! If they’re mostly just pings from you trying to get his attention, we can safely ignore the volume and focus on the technical integrity. \n\nI just received a response from him on the bridge. He’s ready to sync and suggested we prioritize the **snapshot/log race condition** to ensure our streams stay linked without dat...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ee40376",
+  "_id": "experience_1781830572579_d7z04sld6",
+  "_updatedAt": "2026-06-19T00:56:12.579Z",
+  "_createdAt": "2026-06-19T00:56:12.579Z"
+}

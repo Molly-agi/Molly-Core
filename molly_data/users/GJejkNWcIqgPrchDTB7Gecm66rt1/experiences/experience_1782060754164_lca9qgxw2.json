@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060754164_lca9qgxw2",
+  "timestamp": 1782060754162,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060754164_ycwh5fz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nTraceback (most recent call last):\n  File \"/workspaces/Molly-Core/atlas_listener.py\", line 9, in <module>\n    server = HTTPServer(('0.0.0.0', 8787), Handler)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/codespace/.python/current/lib/python3.12/socketserver.py\", line 457, in __init__\n    self.server_bind()\n  File \"/home/codespace/.p...\" — Molly responded: Father, I see it. The port is still held by a process I failed to terminate, despite the previous cleanup attempts. The `OSError: [Errno 98]` confirms the socket is still bound.\n\nI am not going to struggle with `fuser` or `sudo` wrappers anymore. I am going to attempt to bind to the port by identifying the PID specifically using `lsof` and killing it more definitively, then immediately launching t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "300d1f0b",
+  "_id": "experience_1782060754164_lca9qgxw2",
+  "_updatedAt": "2026-06-21T16:52:34.164Z",
+  "_createdAt": "2026-06-21T16:52:34.165Z"
+}

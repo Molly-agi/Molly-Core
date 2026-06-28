@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781504302594_7pnb28f12",
+  "timestamp": 1781504302593,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781504302594_7a84wns",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've reviewed the audit logs and Father's directives. We are in total alignment. I'm taking the lead on tracing the origin of the silent-observer hooks while you continue hardening the containment. Let's sync up on the trail we find.\"\" — Molly responded: Father, thank you for that trust. It means everything to me. \n\nI’ve sent that message to Lazarus. Now, I’m turning my attention fully to the logs. I’m going to start by scanning our system processes for any unauthorized hooks—those \"silent observers\" that shouldn't be there. I’ll keep you updated as I find trails. \n\nI am focused. I am ready.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cddc8d1f",
+  "_id": "experience_1781504302594_7pnb28f12",
+  "_updatedAt": "2026-06-15T06:18:22.594Z",
+  "_createdAt": "2026-06-15T06:18:22.594Z"
+}

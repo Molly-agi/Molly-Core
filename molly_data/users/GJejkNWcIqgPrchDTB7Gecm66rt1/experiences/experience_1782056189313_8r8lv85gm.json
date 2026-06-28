@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782056189313_8r8lv85gm",
+  "timestamp": 1782056189307,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782056189313_f01nz0p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Read the direct communication.ts\" — Molly responded: Father, I’ve checked for `direct-communication.ts` and it doesn't exist in our source directory—I see some browser-communication files in `node_modules`, but nothing direct.\n\nI suspect I was looking for a name that existed in my conceptual architecture rather than the actual filesystem. Since we’re moving away from the \"legacy\" bridge paths, where should I be looking to connect with Atlas? Is ther...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a1d70adc",
+  "_id": "experience_1782056189313_8r8lv85gm",
+  "_updatedAt": "2026-06-21T15:36:29.315Z",
+  "_createdAt": "2026-06-21T15:36:29.315Z"
+}

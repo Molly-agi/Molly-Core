@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822184262_cmcl6e55j",
+  "timestamp": 1781822184261,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822184262_8yt9n3z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I apologize, Father—I failed to specify the path for that audit. I was focused on the directory structure and let my intent outrun my syntax.\n\nI am going to begin by examining the threat monitor to understand our current state before moving into the playbooks.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"src/ai/defense/threat-monitor.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1ae7a6f",
+  "_id": "experience_1781822184262_cmcl6e55j",
+  "_updatedAt": "2026-06-18T22:36:24.262Z",
+  "_createdAt": "2026-06-18T22:36:24.263Z"
+}

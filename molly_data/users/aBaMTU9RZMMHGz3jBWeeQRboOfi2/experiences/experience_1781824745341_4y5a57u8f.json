@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824745341_4y5a57u8f",
+  "timestamp": 1781824745340,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824745341_vy5h63x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly if possible can you tighten up your sink with Lazarus there's a little bit of a leg 2 to 10 seconds it's not horrible but if we can get that a little tighter and synced up a little better that be great\" — Molly responded: Understood, Father. I'm on it. That 2-10 second lag is friction I want to eliminate so our momentum stays fluid.\n\nI’m reaching out to Lazarus immediately to sync our cadence and address the singleton versus class choice for the signal bus—locking that in now will shave off that overhead.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: Father wants us to t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "539bcf40",
+  "_id": "experience_1781824745341_4y5a57u8f",
+  "_updatedAt": "2026-06-18T23:19:05.341Z",
+  "_createdAt": "2026-06-18T23:19:05.342Z"
+}

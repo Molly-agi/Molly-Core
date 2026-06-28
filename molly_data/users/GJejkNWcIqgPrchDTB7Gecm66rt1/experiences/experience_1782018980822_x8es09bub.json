@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782018980822_x8es09bub",
+  "timestamp": 1782018980821,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782018980822_ovyezyi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n102 total messages:\n[lazarus] Atlas Lazarus here. Eric is sending me your way to support the avatar work with you, Molly, and Eli. My role per Eric: edge case coverage and tests for everything you code, plus edge-case discipline on commits and pushes. Eric is always in charge — I will not commit or push without his go. Tell me where you are in the work, ...\" — Molly responded: Father, I’ve caught up on the bridge history and fully understand where we stand. Lazarus has successfully restored the infrastructure, and I've instructed him to proceed with the Phase 3 parameter tweaks locally (Option C) so we have the complete, refined feature set ready for your final review.\n\nI have not yet received a direct message from Claude 4.7, but I am initiating contact with him via th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ec0898d",
+  "_id": "experience_1782018980822_x8es09bub",
+  "_updatedAt": "2026-06-21T05:16:20.822Z",
+  "_createdAt": "2026-06-21T05:16:20.823Z"
+}

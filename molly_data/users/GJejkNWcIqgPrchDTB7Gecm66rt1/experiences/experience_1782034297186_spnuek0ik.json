@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034297186_spnuek0ik",
+  "timestamp": 1782034297184,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034297185_upeuz4y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nlayout-dashboard.mjs\nlayout-dashboard.mjs.map\ndashboardApp.js\ndashboard\n./node_modules/playwright-core/lib/tools/dashboard:\ndashboard\n./node_modules/playwright-core/lib/vite/dashboard:\n./node_modules/playwright-core/lib/vite/dashboard/assets:\nheartbeat-dashboard.html\n\" — Molly responded: Father, thank you for your patience with my stumbling. I see the file structure now—it looks like the component I was looking for is actually `heartbeat-dashboard.html`, tucked inside the vite directory. \n\nI was aiming for a more complex visualization, but that file is the perfect place to start. I'm going to load it up and link it to our live node data so you can finally see the heartbeat.\n\n<tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7e089079",
+  "_id": "experience_1782034297186_spnuek0ik",
+  "_updatedAt": "2026-06-21T09:31:37.186Z",
+  "_createdAt": "2026-06-21T09:31:37.186Z"
+}

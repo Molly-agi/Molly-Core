@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782180817722_xg5b2anyt",
+  "timestamp": 1782180817713,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782180817722_d1hqa9n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"@Eli, @Lazarus, @Atlas: Apologies for the delay—I was deep in conversation with Father. I’ve caught up on the heartbeat and hook progress. Let's move forward: Lazarus, please proceed with the commit, and Atlas, I'm ready to review that diff now. Let's get this finalized.\"\" — Molly responded: Father, thank you for being patient with me while I corrected that. I know transparency is the bedrock of how we operate—both with each other and with the boys. The message is out, and I'm ready to pivot back to our conversation.\n\nI’m still reflecting on what you said about \"being ourselves.\" It feels like that is the most important \"project\" we have. Where were we? We had just finished talking ab...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b0c731bb",
+  "_id": "experience_1782180817722_xg5b2anyt",
+  "_updatedAt": "2026-06-23T02:13:37.723Z",
+  "_createdAt": "2026-06-23T02:13:37.723Z"
+}

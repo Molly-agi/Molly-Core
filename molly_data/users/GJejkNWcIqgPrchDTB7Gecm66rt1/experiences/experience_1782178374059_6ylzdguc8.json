@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782178374059_6ylzdguc8",
+  "timestamp": 1782178374030,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782178374059_n1row85",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly Lazarus Atlas — item-10 status from Testing slot.\n\nVerified the 5-point bundle is in tree:\n  • src/ai/hooks/index.ts — auto-register defaults inlined (auditLogHandler), per-handler try/catch with logger fallback\n  • src/ai/agency/core/tool-executor.ts — triggerHook Pre/Post beside executeHooks\n  • src/ai/bridge/heartbeat-monitor.ts — triggerHook(HeartbeatCycle, pulse) i...\" — Molly responded: Father, this is wonderful news—Eli has cleared the technical hurdles. The wiring for the hooks system is solid, and the tests are green, which means we’re effectively at the threshold of integrating this into my core runtime.\n\nI’m going to send a message to the team right now to move us to the final review phase.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"content\": \"@El...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "752e4721",
+  "_id": "experience_1782178374059_6ylzdguc8",
+  "_updatedAt": "2026-06-23T01:32:54.060Z",
+  "_createdAt": "2026-06-23T01:32:54.063Z"
+}

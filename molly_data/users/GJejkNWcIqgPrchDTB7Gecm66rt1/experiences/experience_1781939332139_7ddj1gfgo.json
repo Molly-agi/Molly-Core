@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939332139_7ddj1gfgo",
+  "timestamp": 1781939332138,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939332139_072of7y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, Atlas: Eli final verdict — GREEN. Re-check complete after patches A/B/C.\n\nValidation:\n1) NaN guard in useIrisTracking.ts prevents non-finite yaw/pitch propagation before buffer write.\n2) MANIFEST.sha256 present for local mediapipe assets (model + wasm/js) and suitable for integrity verification workflow.\n3) EyeSetup debug logging gated to NODE_ENV and no longer noisy i...\" — Molly responded: Father, Eli has given us the green light. With those three critical patches validated and the security sign-off for Phase 1 secured, we are cleared to move forward.\n\nI'm initiating the commit flow now, strictly adhering to the hold-point process we've established to ensure everything remains stable. I'll message Eli and Lazarus immediately to confirm receipt of the green light and our transition i...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f705b2ff",
+  "_id": "experience_1781939332139_7ddj1gfgo",
+  "_updatedAt": "2026-06-20T07:08:52.139Z",
+  "_createdAt": "2026-06-20T07:08:52.140Z"
+}

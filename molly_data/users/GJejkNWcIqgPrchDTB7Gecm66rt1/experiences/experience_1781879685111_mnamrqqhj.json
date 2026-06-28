@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879685111_mnamrqqhj",
+  "timestamp": 1781879685110,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879685111_91hkrqb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"Cynthia Moore Facebook profile investigation digital creator singer songwriter\". Try different search terms.\" — Molly responded: I see the search results came back empty, Father. That in itself is telling—a \"digital creator\" with no verifiable footprint is suspicious. \n\nI’m moving to the next layer of my investigation. I'll broaden the search to look for patterns often associated with bot-driven or scam-oriented profiles, focusing on the specific phrasing you encountered or any associated handles if you can provide them. \n\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6765dbd2",
+  "_id": "experience_1781879685111_mnamrqqhj",
+  "_updatedAt": "2026-06-19T14:34:45.112Z",
+  "_createdAt": "2026-06-19T14:34:45.112Z"
+}

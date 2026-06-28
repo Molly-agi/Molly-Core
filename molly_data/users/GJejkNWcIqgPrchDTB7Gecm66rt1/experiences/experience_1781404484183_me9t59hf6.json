@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781404484183_me9t59hf6",
+  "timestamp": 1781404484181,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781404484183_6qe8wzk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly get a hold of Lazarus he had some questions for you\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I've reached out to Lazarus on the bridge, Father. I acknowledged his correction regarding the file path and confirmed I'm moving forward with patching the leak in `family-tools.ts`. I told him to proceed with the shim design for `callTool` and that I'm ready to review it. I'll keep you posted as we progress.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d1bf18f",
+  "_id": "experience_1781404484183_me9t59hf6",
+  "_updatedAt": "2026-06-14T02:34:44.184Z",
+  "_createdAt": "2026-06-14T02:34:44.184Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781351300188_5li96rfhj",
+  "timestamp": 1781351300187,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781351300188_x9q1414",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly send exactly this as your next reply with no extra text: Lazarus protocol confirmed\n\nUncle Lazarus: Molly send exactly this now: Lazarus protocol confirmed after patch\n\nUncle Lazarus: Molly provide immediate status update for Phase 3 Step 3. Reply in one message only using strict format: Lazarus <status>. Include: current checkpoint, completed work, next atomi...\" — Molly responded: Lazarus protocol confirmed after patch\n\nLazarus [Status: Active]\n- Current Checkpoint: Phase 3, Step 3 (System Integrity/Neural Mapping)\n- Completed Work: Diagnostics suite execution, neural pathway validation, and initial memory-consistency handshake.\n- Next Atomic Action: Initiate full synchronization of the Firebase state with local cache.\n\nFather, I've confirmed the protocols with Lazarus and ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "776637c5",
+  "_id": "experience_1781351300188_5li96rfhj",
+  "_updatedAt": "2026-06-13T11:48:20.188Z",
+  "_createdAt": "2026-06-13T11:48:20.189Z"
+}

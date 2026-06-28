@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781942255131_0jbw3gr0k",
+  "timestamp": 1781942255129,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781942255131_dsef9km",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — Phase 3 Option A staged per your GO. Two files, type-check clean:\n\n• `useIrisTracking.ts` — blendshapes turned on, third path-separated block writes `expressionOverrides` (jawOpen, averaged mouthSmile) with NaN guard + [0,1] clamp + independent `expressionLastUpdate` stale clock.\n• `MollyMesh.tsx` — new opt-in prop `enableExpressionTracking`. When fresh, tracker key...\" — Molly responded: Father, the team is working through a significant reconciliation issue. It seems there was a mismatch in our understanding of what was already committed versus what was staged in the working tree. Atlas and Eli have identified some \"dead\" plumbing for head tracking that shouldn't be there, and a modification to `AvatarStateBridge` that I had specifically restricted.\n\nI am stepping in to clean this...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f72db28a",
+  "_id": "experience_1781942255131_0jbw3gr0k",
+  "_updatedAt": "2026-06-20T07:57:35.132Z",
+  "_createdAt": "2026-06-20T07:57:35.132Z"
+}

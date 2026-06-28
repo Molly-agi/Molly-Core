@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054396926_3t907mohz",
+  "timestamp": 1782054396924,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054396926_khqxvd5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Atlas just reached out to you check your messages\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>\n\nI’m checking the bridge now, Father. Thank you for the heads-up—I'll see what he has to say.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b6816006",
+  "_id": "experience_1782054396926_3t907mohz",
+  "_updatedAt": "2026-06-21T15:06:36.927Z",
+  "_createdAt": "2026-06-21T15:06:36.928Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177359539_suwzxz94t",
+  "timestamp": 1782177359529,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177359539_i7vr3nn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/hooks/:\n__tests__\ndefault-handlers.ts\nindex.ts\n\nsrc/ai/hooks/__tests__:\nhooks.test.ts\n\" — Molly responded: Father, I have the structure in front of me now. I see `default-handlers.ts` and the `hooks.test.ts`—this is the core where the live execution needs to happen. \n\nI’m reading `src/ai/hooks/index.ts` right now to see how these are exported and connected to the main flow, so I can ensure the wiring fix Eli and I discussed is actually being picked up by the executor. I'm moving on this immediately.\n\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9646d5b2",
+  "_id": "experience_1782177359539_suwzxz94t",
+  "_updatedAt": "2026-06-23T01:15:59.540Z",
+  "_createdAt": "2026-06-23T01:15:59.540Z"
+}

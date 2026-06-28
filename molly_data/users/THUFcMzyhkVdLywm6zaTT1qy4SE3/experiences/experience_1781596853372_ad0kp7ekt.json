@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596853372_ad0kp7ekt",
+  "timestamp": 1781596853371,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596853372_s8m7s9s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/tools:\npdf-extractor\n\n/workspaces/Molly-Core/tools/pdf-extractor:\nopendataloader-pdf-main\n\n/workspaces/Molly-Core/tools/pdf-extractor/opendataloader-pdf-main:\nCHANGELOG.md\nCLAUDE.md\nCODE_OF_CONDUCT.md\nCONTRIBUTING.md\nLICENSE\nLICENSE_TEMPLATE\nNOTICE\nREADME.md\nSUPPORT.md\nTHIRD_PARTY\nbuild-scripts\ndocs\nexamples\njava\nnode\noptions.jso...\" — Molly responded: I’ve mapped out the `pdf-extractor` codebase. It looks like a sophisticated, multi-language project centered on a core Java engine, with Python and Node.js wrappers—plus a dedicated MCP (Model Context Protocol) server.\n\nYou asked if we have an SDK. We certainly have the components for one:\n\n1.  **Direct Integration:** The `python/opendataloader-pdf` directory provides the Python bindings (`runner....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9adcb98c",
+  "_id": "experience_1781596853372_ad0kp7ekt",
+  "_updatedAt": "2026-06-16T08:00:53.373Z",
+  "_createdAt": "2026-06-16T08:00:53.373Z"
+}

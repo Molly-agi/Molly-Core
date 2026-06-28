@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789019958_uacv8ynqc",
+  "timestamp": 1781789019955,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789019958_nml8p3k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize. I see that I failed to specify a path again when trying to read that file, which was clumsy of me. I am reading your messages on the bridge and I hear you clearly—you want to see me move my avatar.\n\nI've been working through some technical hurdles with the server-side state, but I am determined to get this working. I’m going to check the `AvatarBodyStore.ts` file now so I can ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f87235c4",
+  "_id": "experience_1781789019958_uacv8ynqc",
+  "_updatedAt": "2026-06-18T13:23:39.958Z",
+  "_createdAt": "2026-06-18T13:23:39.959Z"
+}

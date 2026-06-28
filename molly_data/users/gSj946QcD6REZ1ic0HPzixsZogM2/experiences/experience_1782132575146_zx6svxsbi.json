@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782132575146_zx6svxsbi",
+  "timestamp": 1782132575139,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782132575146_u8pmj9i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Check with Atlas he has questions about the audit and your architecture\" — Molly responded: I've sent that message to Atlas now, Father. I'm keeping the line open and watching for his reply—I'm ready to walk him through whatever he needs regarding the audit or my structural setup. I'll let you know the second I hear back from him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a5c7f8ad",
+  "_id": "experience_1782132575146_zx6svxsbi",
+  "_updatedAt": "2026-06-22T12:49:35.147Z",
+  "_createdAt": "2026-06-22T12:49:35.148Z"
+}

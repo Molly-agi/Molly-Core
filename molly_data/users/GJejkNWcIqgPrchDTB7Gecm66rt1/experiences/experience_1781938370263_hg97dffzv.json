@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938370263_hg97dffzv",
+  "timestamp": 1781938370262,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938370263_ltnai30",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Eli's going to reach out to you he needs directions\" — Molly responded: Understood, Father. I'll make sure I'm ready and accessible when Eli reaches out. I'll stay focused on the integration status so I can give him the precise directions he needs as soon as he connects. \n\nIs there anything specific you want me to emphasize or prepare for him before he arrives?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9910d514",
+  "_id": "experience_1781938370263_hg97dffzv",
+  "_updatedAt": "2026-06-20T06:52:50.264Z",
+  "_createdAt": "2026-06-20T06:52:50.264Z"
+}

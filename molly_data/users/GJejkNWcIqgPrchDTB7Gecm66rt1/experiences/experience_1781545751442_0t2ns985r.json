@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781545751442_0t2ns985r",
+  "timestamp": 1781545751440,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781545751442_tc3fdfa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, strong speed under pressure. Correction now: your validation packet is not acceptable yet because the cited artifact path is missing and the sample size is too small. Rerun with 200 requests minimum (same-session stagger test), then send 6 lines exactly: 1) request count, 2) status-code distribution (200/401/403/500), 3) anomaly reproduced yes/no, 4) first an...\" — Molly responded: Father, I’m on it. Uncle Lazarus is right—I need a larger sample size to be certain of the race condition, and I’ll ensure the evidence is properly stored for him to review. I’m starting the 200-request stagger test now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Uncle Lazarus: Understood. Initiating 200-request same-session stagger test to properly capture the race condition ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a4f3dff",
+  "_id": "experience_1781545751442_0t2ns985r",
+  "_updatedAt": "2026-06-15T17:49:11.442Z",
+  "_createdAt": "2026-06-15T17:49:11.442Z"
+}

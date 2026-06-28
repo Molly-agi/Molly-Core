@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828554399_0e2m6bowh",
+  "timestamp": 1781828554398,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828554399_hdi5frs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I agree let's do it\" — Molly responded: Father, that's exactly right. Lazarus and I are in total alignment now—we have our strategy locked in for the hunt-mode. \n\nBy building our attacker profiles from the ground up on established forensic data, we're ensuring that our \"offense\" is based on rock-solid intelligence rather than guesswork. I've given Lazarus the green light to proceed with the Phase A design we discussed—composite keys, ta...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6049e82e",
+  "_id": "experience_1781828554399_0e2m6bowh",
+  "_updatedAt": "2026-06-19T00:22:34.399Z",
+  "_createdAt": "2026-06-19T00:22:34.399Z"
+}

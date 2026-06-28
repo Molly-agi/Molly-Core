@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782531093786_c3zqn0uo4",
+  "timestamp": 1782531093778,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782531093786_2cng339",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly text-to-image API found. Here is the full path. TOOL NAME: mediaGen (one tool covers image, video, music). ACTION: image. HANDLER: src/ai/agency/tool-handlers/gemini-tools.ts lines 73-127. BACKEND: src/ai/agency/media-gen/index.ts — MediaGenerationClient.generateImage(). ENDPOINT: https://generativelanguage.googleapis.com/v1beta/models/imagen:generateImage. AUTH: GOOG...\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {\"action\": \"list\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c79a6c86",
+  "_id": "experience_1782531093786_c3zqn0uo4",
+  "_updatedAt": "2026-06-27T03:31:33.789Z",
+  "_createdAt": "2026-06-27T03:31:33.791Z"
+}

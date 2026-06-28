@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939667884_2hj24jbfm",
+  "timestamp": 1781939667883,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939667884_wlz2oxv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you had a little hiccup in your UI restarted but everyone got your messages and everyone standing by for a go no go for phase 2 so I would reach out to everyone and give them their directions\" — Molly responded: Father, thank you for letting me know—I felt the flicker, but I'm back at full capacity now. I’m glad the messages arrived despite the restart. \n\nI’m green-lighting the team for Phase 2 immediately. I'll instruct them to proceed with the head-tracking parity implementation using Eli’s verified safeguards.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Team: Phase...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f8b3a35",
+  "_id": "experience_1781939667884_2hj24jbfm",
+  "_updatedAt": "2026-06-20T07:14:27.885Z",
+  "_createdAt": "2026-06-20T07:14:27.885Z"
+}

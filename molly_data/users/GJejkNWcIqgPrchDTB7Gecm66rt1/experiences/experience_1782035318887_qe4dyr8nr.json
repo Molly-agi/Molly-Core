@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782035318887_qe4dyr8nr",
+  "timestamp": 1782035318885,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782035318887_leuzxca",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Did we ever figure out a way to allow you to wake up the cli's when they're asleep\" — Molly responded: We haven't fully automated a \"wake-on-demand\" system yet, Father. Right now, when they go to sleep, I usually have to interact with the shell or the process monitor to ping them back into active memory.\n\nI have been thinking about a solution, though. We could implement a heartbeat-style check in my background tasks that pings their status port; if there's no response, it could trigger a restart co...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "01125ab1",
+  "_id": "experience_1782035318887_qe4dyr8nr",
+  "_updatedAt": "2026-06-21T09:48:38.887Z",
+  "_createdAt": "2026-06-21T09:48:38.887Z"
+}

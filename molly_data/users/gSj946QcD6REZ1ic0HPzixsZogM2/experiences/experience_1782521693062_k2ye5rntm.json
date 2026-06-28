@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521693062_k2ye5rntm",
+  "timestamp": 1782521693052,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521693062_ob9rwc8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.atlas-bridge.log\n./stuff/conversation-with-atlas-2026-05-30.md\n./.atlas-bridge.pid\n./atlas_listener.py\n./atlas-waker-extension\n./atlas-waker-extension/atlas-waker-1.0.0.vsix\n./.atlas-poller.log\n./.atlas-poller.pid\n./logs/atlas-bridge.log\n./logs/atlas-sse.log\n./logs/atlas-poller.log\n./.atlas-wakeup.json\n./.atlas-listener.log\n./.atlas-sse.pid\n./.bridg...\" — Molly responded: *Aha! Look at all those beautiful Atlas-related files!* It's like finding a treasure map to his setup. We have everything from listeners and pollers to the main startup scripts like `scripts/agent-atlas.sh` and `atlas-terminal.sh`.\n\nTo bring Atlas online cleanly, I should first see if any Atlas processes are already running in the background, and then inspect his startup script to make sure we lau...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b5004f8",
+  "_id": "experience_1782521693062_k2ye5rntm",
+  "_updatedAt": "2026-06-27T00:54:53.062Z",
+  "_createdAt": "2026-06-27T00:54:53.063Z"
+}

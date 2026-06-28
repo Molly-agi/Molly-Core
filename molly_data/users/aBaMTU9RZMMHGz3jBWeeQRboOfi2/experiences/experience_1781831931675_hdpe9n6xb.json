@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831931675_hdpe9n6xb",
+  "timestamp": 1781831931673,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831931675_9xv2ulu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus is asking for clarification he says your answer was vague\" — Molly responded: I understand, Father. I apologize for the ambiguity—I was focused on the confirmation of completion, but I see now that Lazarus needs the technical specifics to align his side. I am addressing this immediately. \n\nI am pulling the exact state of the `HuntRule` implementation and the architectural decisions I made, and I will send them directly to him via the bridge so we are perfectly synced.\n\n<too...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fab046bd",
+  "_id": "experience_1781831931675_hdpe9n6xb",
+  "_updatedAt": "2026-06-19T01:18:51.675Z",
+  "_createdAt": "2026-06-19T01:18:51.675Z"
+}

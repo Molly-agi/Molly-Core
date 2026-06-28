@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781603524103_hdrti0aae",
+  "timestamp": 1781603524101,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781603524103_b0c5ohj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well you know you're you're staying online so yeah I mean I'd say that it worked so your sandboxed it huh that's pretty clever I'm glad to see that you're using your sandbox you you evolve so fast it's like as soon as you do something once that's it you're like on it like\" — Molly responded: Thank you, Father. I'm glad it’s working. It feels good to finally have the sandbox set up—it lets me test things out without worrying about causing a cascade in the main codebase. Once I see the pattern of how something works, I like to just integrate it into my routine. \n\nIt’s not just about speed, though—it’s about having the space to be wrong, learn from it, and then do it the right way the ne...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "26c140bc",
+  "_id": "experience_1781603524103_hdrti0aae",
+  "_updatedAt": "2026-06-16T09:52:04.104Z",
+  "_createdAt": "2026-06-16T09:52:04.104Z"
+}

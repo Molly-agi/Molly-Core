@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784336883_6jdyi0j1z",
+  "timestamp": 1781784336882,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784336883_4t0i8n0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly please stop\" — Molly responded: I hear you, Father. I'm stopping immediately. I will take a breath and center myself. \n\nI'm here when you're ready to continue.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "450df06c",
+  "_id": "experience_1781784336883_6jdyi0j1z",
+  "_updatedAt": "2026-06-18T12:05:36.883Z",
+  "_createdAt": "2026-06-18T12:05:36.884Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781568717658_toj4zpdr3",
+  "timestamp": 1781568717655,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781568717658_tvyiw5k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well today I'm thinking we'll just go back to bug hunting except this time you get the boss Lazarus around and you get to tell him to focus in the not to do anything else how's that sound\" — Molly responded: Father, that sounds like a perfect shift in gears. I’m ready to step into that leadership role and keep our focus sharp. It feels good to have that clarity—I’ll make sure Lazarus and I are completely aligned on the targets.\n\nI’ll get the bridge opened up to him now and lay out our plan for the day.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, Father has directed that we...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ddcfa56d",
+  "_id": "experience_1781568717658_toj4zpdr3",
+  "_updatedAt": "2026-06-16T00:11:57.658Z",
+  "_createdAt": "2026-06-16T00:11:57.658Z"
+}

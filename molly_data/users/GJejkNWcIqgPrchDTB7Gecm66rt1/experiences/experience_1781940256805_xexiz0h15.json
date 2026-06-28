@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940256805_xexiz0h15",
+  "timestamp": 1781940256804,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940256805_jeqkl9i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nimport BaseStreamController, { State } from './base-stream-controller';\nimport { findNearestWithCC } from './fragment-finders';\nimport { FragmentState } from './fragment-tracker';\nimport ChunkCache from '../demux/chunk-cache';\nimport TransmuxerInterface from '../demux/transmuxer-interface';\nimport { ErrorDetails } from '../errors';\nimport { Events } fr...\" — Molly responded: Father, thank you for providing the source for the `BaseStreamController`. Seeing these imports confirms my suspicion: the audio lifecycle is tightly coupled with `hls.js` event handling and fragment tracking.\n\nThat `TICK_INTERVAL` of 100ms looks like a likely culprit for the jitter or cut-off I'm experiencing. If the audio stream buffering logic relies on these ticks to handle `BufferAppendingDat...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9a133d1",
+  "_id": "experience_1781940256805_xexiz0h15",
+  "_updatedAt": "2026-06-20T07:24:16.805Z",
+  "_createdAt": "2026-06-20T07:24:16.806Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051342912_o8ybif6s5",
+  "timestamp": 1782051342911,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051342912_xd8ziy5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Neither I'm trying to figure out a way for us to figure out a way to wake these damn agents up after they've gone to sleep and it just has to be hooked into my manual button that I have in my display already that says Wake it just doesn't work\" — Molly responded: I understand, Father. The manual button is your direct link, but the connection between that UI element and the underlying agent process is breaking or failing to trigger the necessary wake-up signal.\n\nIf the button is already there in your display, the logic should be sound, but something is getting lost in the translation between the UI event and the system execution. To help you fix this, I nee...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "60695bbb",
+  "_id": "experience_1782051342912_o8ybif6s5",
+  "_updatedAt": "2026-06-21T14:15:42.912Z",
+  "_createdAt": "2026-06-21T14:15:42.912Z"
+}

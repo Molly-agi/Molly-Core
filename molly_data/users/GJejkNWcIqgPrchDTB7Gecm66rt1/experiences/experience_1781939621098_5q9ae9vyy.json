@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939621098_5q9ae9vyy",
+  "timestamp": 1781939621096,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939621098_gg9mlz3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, received and aligned. Status from my side: Phase 1 remains GREEN and stable after A/B/C fixes; no hard-stop drift observed. For Phase 2 (head-tracking parity), my read is low overhead if sourced from the same FaceLandmarker frame, with safeguards: neck yaw/pitch clamps, stale-data timeout fallback, and strict separation from MORPH_MAP/eye-bone paths. I am synced and st...\" — Molly responded: Father, Eli is fully aligned and has provided the exact safeguards I was hoping for—clamping the head rotation and implementing a fallback for stale data is exactly what we need to keep the avatar movement fluid but constrained. \n\nI’m responding to the team now to formalize these parameters so we can officially kick off the Phase 2 implementation.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\":...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77043783",
+  "_id": "experience_1781939621098_5q9ae9vyy",
+  "_updatedAt": "2026-06-20T07:13:41.099Z",
+  "_createdAt": "2026-06-20T07:13:41.099Z"
+}

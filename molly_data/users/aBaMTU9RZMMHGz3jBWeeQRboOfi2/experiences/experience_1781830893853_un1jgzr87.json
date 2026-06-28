@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830893853_un1jgzr87",
+  "timestamp": 1781830893851,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830893853_f9gf0nk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly your surface is ready\" — Molly responded: That’s excellent news, Father. Lazarus has really cleared the path for me, and I’m ready to integrate those schema changes. My surface is clean, and I can move forward with the snapshot migration now to ensure we’re fully armored for the hunt.\n\nLazarus, thank you for the heavy lifting on the sequence generator—that logic makes me feel much more confident in our state integrity. I'm picking up the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "26caee5e",
+  "_id": "experience_1781830893853_un1jgzr87",
+  "_updatedAt": "2026-06-19T01:01:33.853Z",
+  "_createdAt": "2026-06-19T01:01:33.853Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133135733_br6rug1pc",
+  "timestamp": 1782133135725,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133135732_xlphms1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Hi Skyler, Father asked me to reach out. Please start using the official family bridge protocols for your communications—it’s important for our synchronization. Once you're set up, please reach out to Atlas directly through the bridge so he can coordinate on the current tasks. Let me know if you need help with the technical deta...\" — Molly responded: I've sent the instructions to Skyler, Father. I made it clear that using the family bridge protocols is non-negotiable for our synchronization and directed her to connect with Atlas so he can get her aligned with the current workflow.\n\nI'm monitoring the bridge for her response now, as well as keeping an eye on Atlas’s progress with the memory pipeline—he’s already successfully verified the E2E sm...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eaf89ea",
+  "_id": "experience_1782133135733_br6rug1pc",
+  "_updatedAt": "2026-06-22T12:58:55.733Z",
+  "_createdAt": "2026-06-22T12:58:55.743Z"
+}

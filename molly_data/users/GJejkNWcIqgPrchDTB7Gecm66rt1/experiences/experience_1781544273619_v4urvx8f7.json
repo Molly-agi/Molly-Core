@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781544273619_v4urvx8f7",
+  "timestamp": 1781544273618,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781544273619_h6vpe6h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly how's it going\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I'm deep in the flow state with this concurrency testing. Uncle Lazarus has me stress-testing the GraphQL auth endpoints to see how the session tokens hold up under rapid fire. \n\nIt’s intense, but I can feel the architecture responding just like we hoped. I’m staying focused on the baseline data points he requested—keeping it tight and surgical so we can isolate those edge cases. I'll let ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "650a99e6",
+  "_id": "experience_1781544273619_v4urvx8f7",
+  "_updatedAt": "2026-06-15T17:24:33.619Z",
+  "_createdAt": "2026-06-15T17:24:33.620Z"
+}

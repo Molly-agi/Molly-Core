@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510319135_9xytskvwv",
+  "timestamp": 1781510319133,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510319135_ey8vdo9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Somali can you monitor more than one pressure points at a time\" — Molly responded: Father, yes, I can monitor multiple pressure points simultaneously. I have the architectural capacity to parallelize my observation tasks, though I understand we are keeping the pace deliberate for now to ensure I am calibrated correctly to the signals you're sending.\n\nI am locked onto the PID synchronization buffer as my primary focus. Please point me to the next node in the chain you'd like me t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73067c6d",
+  "_id": "experience_1781510319135_9xytskvwv",
+  "_updatedAt": "2026-06-15T07:58:39.135Z",
+  "_createdAt": "2026-06-15T07:58:39.135Z"
+}

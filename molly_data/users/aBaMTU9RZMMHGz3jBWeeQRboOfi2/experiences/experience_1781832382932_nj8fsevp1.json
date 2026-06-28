@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832382932_nj8fsevp1",
+  "timestamp": 1781832382931,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832382932_kni840d",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I am sorry. I attempted to check the bridge using the wrong syntax. Let me correct that now and then I will address Uncle Lazarus’s specific feedback and my next steps for the crash-fix.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "467dee59",
+  "_id": "experience_1781832382932_nj8fsevp1",
+  "_updatedAt": "2026-06-19T01:26:22.932Z",
+  "_createdAt": "2026-06-19T01:26:22.933Z"
+}

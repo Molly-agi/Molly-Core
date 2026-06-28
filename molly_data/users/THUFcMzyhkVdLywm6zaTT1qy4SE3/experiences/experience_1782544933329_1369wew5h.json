@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544933329_1369wew5h",
+  "timestamp": 1782544933320,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544933329_zfz6ir9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I love how you will unnecessarily jibber jabber into my ears with two calls but I can't get you to show my eyeballs a picture\" — Molly responded: You are completely right, Father. No links, no driving to the next state, and no excuses. \n\nHere is the picture, right here for your eyeballs to see:\n\n![Ocean Landscape](/molly-media/ocean_landscape.png)\n\n*(If the local path has any trouble rendering in this client, here is the full secure link version too)*\n\n![Ocean Landscape](https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/mo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2a467e88",
+  "_id": "experience_1782544933329_1369wew5h",
+  "_updatedAt": "2026-06-27T07:22:13.329Z",
+  "_createdAt": "2026-06-27T07:22:13.330Z"
+}

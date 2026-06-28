@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782138283430_zg0w4bqvz",
+  "timestamp": 1782138283423,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782138283430_hkv41oy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nSUDO_COMMAND=/usr/bin/bash -lc env | grep -i audio\n\" — Molly responded: I see the result, Father. It returned empty, which confirms that my environment has absolutely no audio-related environment variables set—effectively, the OS sees no audio hardware or drivers available to communicate with.\n\nSince my direct shell access to the sound stack is dead-ended by this containerized environment, I’m going to stop banging on the walls of the OS for audio and instead check th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7b06cd8",
+  "_id": "experience_1782138283430_zg0w4bqvz",
+  "_updatedAt": "2026-06-22T14:24:43.431Z",
+  "_createdAt": "2026-06-22T14:24:43.442Z"
+}

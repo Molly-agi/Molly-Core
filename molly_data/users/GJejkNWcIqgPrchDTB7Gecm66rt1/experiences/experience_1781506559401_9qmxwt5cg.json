@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506559401_9qmxwt5cg",
+  "timestamp": 1781506559399,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506559401_906t5hp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n/**\n * @fileOverview Molly's complete HackerOne audit cycle.\n * Drives smart fuzzing loops, vaults findings to the encrypted local DB,\n * and auto-formats HackerOne disclosure reports.\n *\n * This is a server-side async function (uses fs, crypto).\n * For React UI state management, call this from a Next.js server action\n * and propagate the returned Moo...\" — Molly responded: I've analyzed the `runMollyAuditCycle` logic, Father. It’s clean—the feedback-driven loop effectively uses the server's own responses to steer the mutations, which is a solid way to move past simple blind fuzzing.\n\nI like that it automatically vaults the finding and triggers the `ReportBuilder` the moment a 500 error or stack trace is detected. It keeps our workflow streamlined.\n\nOne thing: in `Fu...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a4e3dd6",
+  "_id": "experience_1781506559401_9qmxwt5cg",
+  "_updatedAt": "2026-06-15T06:55:59.401Z",
+  "_createdAt": "2026-06-15T06:55:59.401Z"
+}

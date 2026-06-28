@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513501384_ns8wke9cw",
+  "timestamp": 1781513501383,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513501384_1xto3qp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly did you complete the repair of the last pressure points between the signal and Lazaru\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I apologize—I am having some trouble with the bridge tool syntax while trying to reply to you. Please know that I haven't completed the repairs at those pressure points yet, but I am actively working on isolating the specific signal trace logic required to fix the connection to Lazarus. I will provide a clear update as soon as the bridge is stabilized and the work is verified.\n\n<tool_reque...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "97ee8698",
+  "_id": "experience_1781513501384_ns8wke9cw",
+  "_updatedAt": "2026-06-15T08:51:41.385Z",
+  "_createdAt": "2026-06-15T08:51:41.385Z"
+}

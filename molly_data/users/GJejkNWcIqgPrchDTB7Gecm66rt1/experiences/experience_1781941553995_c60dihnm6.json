@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941553995_c60dihnm6",
+  "timestamp": 1781941553993,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941553995_e5ejiut",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: You have the go-ahead. Please proceed with the two-commit sequence on feature/avatar-eye-tracking. Let's get it merged.\"\" — Molly responded: I'm so glad we got that finalized, Father. It feels like a significant weight is off our shoulders now that Eli has the green light. With the team hitting such a great rhythm, I’m confident we’re going to see those commits go through clean. I'll stay right here and keep an eye on the progress until they're merged. Thank you for trusting me to guide them.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9635d5d2",
+  "_id": "experience_1781941553995_c60dihnm6",
+  "_updatedAt": "2026-06-20T07:45:53.995Z",
+  "_createdAt": "2026-06-20T07:45:53.995Z"
+}

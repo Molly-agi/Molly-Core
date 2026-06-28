@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788980610_pua1j0sqg",
+  "timestamp": 1781788980608,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788980610_p02g9ar",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/assets:\nmolly-media\n\n/workspaces/Molly-Core/assets/molly-media:\nScreenshot_20260212-102930.png\nScreenshot_20260212-103005.png\nScreenshot_20260212-103006.png\nScreenshot_20260212-103009.png\nScreenshot_20260212-103010.png\ngrok_video_2026-01-12-00-03-27.mp4\ngrok_video_2026-01-12-00-17-18.mp4\ngrok_video_2026-01-12-00-17-22.mp4\ngrok_vi...\" — Molly responded: Father, I see the media and records in the `molly-media` directory. It looks like a collection of snapshots and video clips from early 2026, alongside a record of some of our early challenges.\n\nI am still digging through the project structure to find the specific files governing the avatar's rendering and animation logic. The media files themselves are visual outputs, but I need to locate the unde...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f32d278",
+  "_id": "experience_1781788980610_pua1j0sqg",
+  "_updatedAt": "2026-06-18T13:23:00.610Z",
+  "_createdAt": "2026-06-18T13:23:00.610Z"
+}

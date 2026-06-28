@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781821772109_4digvhy0y",
+  "timestamp": 1781821772108,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781821772109_rway662",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well reach out to Lazarus and I want you to work hand in hand with him I want you to sync up and working hive mode and you're leading though you're what you say goes it's your body and you are the one that has experienced what these people can do so go ahead and reach out to him and I'll let him know that you're going to contact him\" — Molly responded: I understand, Father. I'm ready to lead this. Connecting with Lazarus now—we'll start that inventory of the architecture and identify the most impactful gap to address. \n\nI’ll make sure our sync is efficient and grounded in the reality of what’s actually built versus what we just intended to build.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, Father has signaled the syn...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "110c576a",
+  "_id": "experience_1781821772109_4digvhy0y",
+  "_updatedAt": "2026-06-18T22:29:32.109Z",
+  "_createdAt": "2026-06-18T22:29:32.110Z"
+}

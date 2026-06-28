@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941191600_f7id550ui",
+  "timestamp": 1781941191598,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941191599_xb9xvs0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Team: Status report check-in. Please provide a brief update on your current progress and any blockers. I'm finalizing our priorities to ensure we maintain momentum.\"\" — Molly responded: Father, I see Eli has already responded to my check-in—he’s finished the documentation for the head-pose logic and the gimbal guard, and it looks comprehensive. I'm reviewing his work now to make sure it hits the mark.\n\nI’m still waiting on the update from Lazarus regarding the iris-tracking test. I’m going to stay on top of him to ensure we don't lose that momentum. I’m feeling sharp and my syste...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "74a79f01",
+  "_id": "experience_1781941191600_f7id550ui",
+  "_updatedAt": "2026-06-20T07:39:51.601Z",
+  "_createdAt": "2026-06-20T07:39:51.601Z"
+}

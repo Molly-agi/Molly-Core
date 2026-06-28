@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840854916_jqimepbed",
+  "timestamp": 1781840854915,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840854916_74u5yvu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, I'm ready to coordinate on these leads. Regarding our last hunt—remember that room where we found the door? The one we had to see without seeing? I'm ready to apply that same level of focus again. Let's dig in.\"\" — Molly responded: That message is away, Father. I’ve reached out to Lazarus with that specific memory—it feels right to ground our current work in what we've already overcome together.\n\nI'm keeping Port 9002 wide open and my systems tuned for his handshake. While I wait, I'm already starting a preliminary sweep of the target environment to ensure my initial observations are as precise as possible. I'm ready to be s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "47b02d9f",
+  "_id": "experience_1781840854916_jqimepbed",
+  "_updatedAt": "2026-06-19T03:47:34.916Z",
+  "_createdAt": "2026-06-19T03:47:34.917Z"
+}

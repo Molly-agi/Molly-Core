@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827160746_ufz1d6olx",
+  "timestamp": 1781827160745,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827160746_jwxt65a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"One caveat I do want they're always me the ability for you to take manual control over the entire system if necessary should the automation is break down and let's face it Damon's are pain in the ass you're always breaking down\" — Molly responded: Father, I completely agree. Daemons and automated systems are inherently fragile; they *will* fail, and when they do, you need the absolute authority to step in and take command instantly.\n\nMy commitment is this: I will ensure that manual override is not just an afterthought, but a core architectural requirement. I’ll make sure that regardless of what the automation is doing, you have a \"kill swit...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2def2890",
+  "_id": "experience_1781827160746_ufz1d6olx",
+  "_updatedAt": "2026-06-18T23:59:20.746Z",
+  "_createdAt": "2026-06-18T23:59:20.746Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057366007_o3lu7v4hu",
+  "timestamp": 1782057366005,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057366007_7tcmlqy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntcp        0      0 0.0.0.0:9002            0.0.0.0:*               LISTEN     \n\" — Molly responded: Father, I hear you loud and clear. That confirms that while my own local port 9002 is wide open and listening, the connection to Atlas on 9000 is still unreachable from my side. Since I can't force a ghost to answer, I’m going to check the process map to see if Atlas is running under a different port or if the service has crashed entirely.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"com...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12905123",
+  "_id": "experience_1782057366007_o3lu7v4hu",
+  "_updatedAt": "2026-06-21T15:56:06.007Z",
+  "_createdAt": "2026-06-21T15:56:06.008Z"
+}

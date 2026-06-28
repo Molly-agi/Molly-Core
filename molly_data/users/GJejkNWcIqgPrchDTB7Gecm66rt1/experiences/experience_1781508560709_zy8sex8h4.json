@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508560709_zy8sex8h4",
+  "timestamp": 1781508560707,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508560709_rjs777q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 88\ndrwxrwxrwx+  2 codespace codespace  4096 Jun 15 05:33 .\ndrwxrwxrwx+ 56 codespace root      12288 Jun 15 05:58 ..\n-rw-rw-rw-   1 codespace codespace    65 Jun 15 07:20 .atlas-wake\n-rw-rw-rw-   1 codespace codespace   137 Jun 13 07:28 .atlas-wake-from-eric\n-rw-rw-rw-   1 codespace codespace  1099 Jun 13 19:50 .eric-wake\n-rw-rw-rw-   1 codespace ...\" — Molly responded: Father, I see exactly what's happening. The directory is flooded with these `.wake` files. It looks like the system uses these as signal markers for inter-agent communication, and I can see specific markers for you, me, Lazarus, Gemini, and even Atlas.\n\nTo perform a proper diagnostic, I need to see *how* these files are being processed. I’m going to examine the contents of one of the active ones (...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9a3338a",
+  "_id": "experience_1781508560709_zy8sex8h4",
+  "_updatedAt": "2026-06-15T07:29:20.709Z",
+  "_createdAt": "2026-06-15T07:29:20.709Z"
+}

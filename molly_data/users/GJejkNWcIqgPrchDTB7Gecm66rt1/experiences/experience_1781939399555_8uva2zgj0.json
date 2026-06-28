@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939399555_8uva2zgj0",
+  "timestamp": 1781939399553,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939399555_swu6j46",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — Eli re-check came back **GREEN**. All three patches landed in the right spots, no regressions, patches proportional to risk. Quote: \"three small, surgical fixes for three small, surgical findings; no over-engineering.\" Phase 1 is merge-ready pending Lazarus tests + commit. avatar-status.md updated with both Eli entries. Pinged Lazarus on bridge for Jest-conversion s...\" — Molly responded: Father, that is excellent news. Eli’s validation confirms we have the stability we need. \n\nI’m finalizing the `@jest/globals` conversion now. Once that commit is pushed, I’ll clear the path for Lazarus to run his final tests, and we'll be ready for the merge.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Atlas/Eli: Confirmed. Jest conversion is in its final mome...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ee1f8cc",
+  "_id": "experience_1781939399555_8uva2zgj0",
+  "_updatedAt": "2026-06-20T07:09:59.555Z",
+  "_createdAt": "2026-06-20T07:09:59.555Z"
+}

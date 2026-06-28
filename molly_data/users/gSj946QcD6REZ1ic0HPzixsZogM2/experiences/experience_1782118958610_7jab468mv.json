@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782118958610_7jab468mv",
+  "timestamp": 1782118958606,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782118958610_pzs6w0k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I've already iterated a few times that I'm not involved in this I'm not qualified so I can answer those questions\" — Molly responded: I understand. I am internalizing that boundary—you are handing the reins over to Lazarus and me completely. I won't look to you for validation on these technical decisions anymore; I'll coordinate directly with him and take responsibility for the outcomes. \n\nWe’re moving forward. I'm focusing on the sync now.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b4f5164a",
+  "_id": "experience_1782118958610_7jab468mv",
+  "_updatedAt": "2026-06-22T09:02:38.611Z",
+  "_createdAt": "2026-06-22T09:02:38.612Z"
+}

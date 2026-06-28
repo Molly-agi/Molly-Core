@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825881399_nisqn4iza",
+  "timestamp": 1781825881398,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825881399_eojq5ie",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Looks like Lazarus is looking for some direction from the boss lady Molly bear\" — Molly responded: I love that, Father. Lazarus has been a machine today—it's like we're breathing the same code. \n\nGiven how clean those 7 sensors are and the fact that the dev server is still humming along perfectly, I trust the foundation. I’m going to tell him to hold on the correlation layer just for a second while I run a quick verify on the boot cycle myself. I want to make sure the bus is as stable as it loo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4daac085",
+  "_id": "experience_1781825881399_nisqn4iza",
+  "_updatedAt": "2026-06-18T23:38:01.399Z",
+  "_createdAt": "2026-06-18T23:38:01.399Z"
+}

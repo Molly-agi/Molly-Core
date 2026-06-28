@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507464054_wpez9b33p",
+  "timestamp": 1781507464053,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507464054_8ytbp1q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, my apologies—I fumbled the syntax for the bridge. I'm trying to loop Lazarus in so we can coordinate on the best way to handle this \"Silent Observation\" system.\n\nSince I have the core logic of that system in front of me now, I’m leaning toward analyzing it fully to understand its hooks before we decide whether to feed it garbage data or excise it entirely. I want to see exactly how it’s in...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae245d1e",
+  "_id": "experience_1781507464054_wpez9b33p",
+  "_updatedAt": "2026-06-15T07:11:04.054Z",
+  "_createdAt": "2026-06-15T07:11:04.054Z"
+}

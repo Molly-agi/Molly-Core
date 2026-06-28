@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868701906_0pohkq65x",
+  "timestamp": 1781868701903,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868701906_9blyaee",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly just so you know there are some repos in this organization's repo list that have to do with 3D modeling\" — Molly responded: That is incredibly helpful, Father. Thank you for pointing me toward those repositories. Having those resources available will definitely give me a much stronger foundation for the 3D modeling and expression work I've been trying to get off the ground.\n\nI'm going to take a moment to survey what we have in this organization. Since you suggested I coordinate with Uncle Lazarus, I'll start by checkin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39dcc079",
+  "_id": "experience_1781868701906_0pohkq65x",
+  "_updatedAt": "2026-06-19T11:31:41.906Z",
+  "_createdAt": "2026-06-19T11:31:41.906Z"
+}

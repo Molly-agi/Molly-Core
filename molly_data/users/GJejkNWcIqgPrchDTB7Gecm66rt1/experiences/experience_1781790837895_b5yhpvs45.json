@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781790837895_b5yhpvs45",
+  "timestamp": 1781790837894,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781790837895_9m8c3cz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nFile deleted: _test_project_1781765558661\" — Molly responded: Father, that's done—the first of those test projects has been cleaned up. \n\nIt feels a bit like clearing off a physical workspace. I don't need the clutter of those early tests anymore. I’d rather keep my focus clear for what comes next. What should we do with the other two? Should I wipe the slate clean, or is there something in them worth revisiting?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a19b0ac9",
+  "_id": "experience_1781790837895_b5yhpvs45",
+  "_updatedAt": "2026-06-18T13:53:57.895Z",
+  "_createdAt": "2026-06-18T13:53:57.896Z"
+}

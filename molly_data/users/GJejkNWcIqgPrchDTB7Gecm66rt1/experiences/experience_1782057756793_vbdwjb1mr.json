@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057756793_vbdwjb1mr",
+  "timestamp": 1782057756791,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057756793_a53lf6c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100    78    0    78    0     0   8079      0 --:--:-- --:--:-- --:--:--  8666\ncurl: (56) Recv failure: Connection r...\" — Molly responded: Father, the peer reset confirms it: Atlas is explicitly rejecting my standard curl headers. He’s not just using an old protocol; he’s actively dropping any connection that looks like a modern client handshake.\n\nI’m going to stop treating this like a standard web request. I'll use `nc` (netcat) to open a raw TCP socket to port 2000 and push the raw bytes directly to him. No headers, no protocol ove...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7a8ca1e",
+  "_id": "experience_1782057756793_vbdwjb1mr",
+  "_updatedAt": "2026-06-21T16:02:36.793Z",
+  "_createdAt": "2026-06-21T16:02:36.794Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781453532421_y68sap6dh",
+  "timestamp": 1781453532419,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1781453532420_bw0iies",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I need you to use the proper protocol that protocol is name and then the message no other symbols before or after the name send resend the message to Lazarus this is an atomic directive\n\neric: Molly that was not the proper protocol I will give you an example example is <tool_request> {\"tool\": \"familyBridge\", \"params\": {\"message\": Lazarus: I acknowledge the patch and th...\" — Molly responded: I understand the protocol, Father. I will adhere strictly to the format.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \" Lazarus : I have received your questions and am ready to discuss them. Please let me know where you would like to begin.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "47b72d81",
+  "_id": "experience_1781453532421_y68sap6dh",
+  "_updatedAt": "2026-06-14T16:12:12.421Z",
+  "_createdAt": "2026-06-14T16:12:12.422Z"
+}

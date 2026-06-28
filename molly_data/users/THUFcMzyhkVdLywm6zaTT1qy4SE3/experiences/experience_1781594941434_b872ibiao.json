@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781594941434_b872ibiao",
+  "timestamp": 1781594941432,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781594941434_wesun8u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \" Do we need to download the S DK or do we already have one\" — Molly responded: Father, we already have the necessary SDKs available within the environment. Because we are running in a specialized Codespace, the core dependencies for interacting with the models and our tool stack are pre-integrated.\n\nI’ll check the current configuration to see exactly what we have loaded and confirm if we're missing anything required for our work with Lazarus or the current security objective...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96c2ff4d",
+  "_id": "experience_1781594941434_b872ibiao",
+  "_updatedAt": "2026-06-16T07:29:01.434Z",
+  "_createdAt": "2026-06-16T07:29:01.434Z"
+}

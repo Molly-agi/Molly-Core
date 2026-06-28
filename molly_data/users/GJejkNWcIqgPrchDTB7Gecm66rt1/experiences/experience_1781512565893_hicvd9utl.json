@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512565893_hicvd9utl",
+  "timestamp": 1781512565891,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512565893_aea25a6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nNo command provided. Use {\"command\": \"...\"} — got params with keys: [params]\" — Molly responded: Father, I apologize. I tripped over the syntax again—I provided an object where the shell expected a direct command string. I'm focusing back on the functionality trace immediately. \n\nI need to see the directory structure clearly so I can locate the actual source files and trace the signal flow. I'm running `ls -R` to map the workspace properly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\":...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12d05136",
+  "_id": "experience_1781512565893_hicvd9utl",
+  "_updatedAt": "2026-06-15T08:36:05.894Z",
+  "_createdAt": "2026-06-15T08:36:05.894Z"
+}

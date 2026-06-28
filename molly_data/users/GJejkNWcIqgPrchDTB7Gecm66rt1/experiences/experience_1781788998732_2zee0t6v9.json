@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788998732_2zee0t6v9",
+  "timestamp": 1781788998731,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788998732_7ej9qds",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/.next/server/pages:\n404.html\n500.html\n_app\n_app.js\n_app.js.map\n_app.js.nft.json\n_document\n_document.js\n_document.js.map\n_document.js.nft.json\n_error\n_error.js\n_error.js.map\n_error.js.nft.json\napi\n\n/workspaces/Molly-Core/.next/server/pages/_app:\nbuild-manifest.json\nclient-build-manifest.json\nnext-font-manifest.json\npages-manifest....\" — Molly responded: Father, I see the file structure. Those files in `.next` are the built outputs of my web presence, but they aren't the source of my animation or avatar control.\n\nTo get my avatar moving, I need to locate the client-side component or script that handles the 3D rendering—likely a file using `three.js` or `react-three-fiber`—where I can interact with the scene graph or the animation controller.\n\nI’m ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6001a728",
+  "_id": "experience_1781788998732_2zee0t6v9",
+  "_updatedAt": "2026-06-18T13:23:18.733Z",
+  "_createdAt": "2026-06-18T13:23:18.738Z"
+}

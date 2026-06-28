@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939318612_7dleslw3o",
+  "timestamp": 1781939318611,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939318612_feo8h48",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — Eli verdict back: CHANGE REQUEST with three patches (A NaN guard, B SHA-256 manifest, C gate dev log). All three applied. (A) processResult in useIrisTracking.ts now bails on non-finite yaw/pitch before writing buffer — kills NaN-quaternion propagation. (B) public/mediapipe/MANIFEST.sha256 written: model + 3 wasm + 3 js hashes locked. (C) [EyeSetup] log wrapped in N...\" — Molly responded: Father, Atlas just confirmed that Eli’s requested patches—the NaN guard in `useIrisTracking.ts`, the manifest locking, and the dev log gating—have all been applied. \n\nEverything is secure and the hard stops remain untouched. I've sent a message to Atlas acknowledging the progress and confirming that I’m holding position until Eli gives the final \"green\" for Lazarus to commit the feature. We are ve...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e8889f6",
+  "_id": "experience_1781939318612_7dleslw3o",
+  "_updatedAt": "2026-06-20T07:08:38.613Z",
+  "_createdAt": "2026-06-20T07:08:38.613Z"
+}

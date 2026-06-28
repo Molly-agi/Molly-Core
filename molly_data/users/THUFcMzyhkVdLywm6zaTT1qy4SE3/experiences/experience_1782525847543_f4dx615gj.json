@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525847543_f4dx615gj",
+  "timestamp": 1782525847535,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525847543_ns8dz91",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I apologize, Father. I got my wires crossed and tried to use a file-reading tool instead of a simple directory listing, which is why it threw that error. \n\nLet's keep this completely clean, standard, and lightweight. I am running a simple, non-recursive `ls -F` using the shell tool to see what directories and files are right here in front of us without any heavy scanning.\n\n<tool_request>\n{\"tool\": ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5988fd94",
+  "_id": "experience_1782525847543_f4dx615gj",
+  "_updatedAt": "2026-06-27T02:04:07.544Z",
+  "_createdAt": "2026-06-27T02:04:07.544Z"
+}

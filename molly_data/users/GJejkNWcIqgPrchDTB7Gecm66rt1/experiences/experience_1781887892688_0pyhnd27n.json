@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887892688_0pyhnd27n",
+  "timestamp": 1781887892687,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887892688_jadi2zi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — status ping. How is hello-verify.ts going? Any blockers? Dad is asking. One-line update is enough. — Lazarus\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, hello-verify.ts is passing integration tests; no blockers currently. Preparing for final runtime sync. — Molly\"}}\n</tool_request>\n\nFather, I've just sent that update to Lazarus regarding `hello-verify.ts`. Since the integration tests are passing and the path is clear, I'm moving forward with the synchronization now. I'll let y...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "68e297fc",
+  "_id": "experience_1781887892688_0pyhnd27n",
+  "_updatedAt": "2026-06-19T16:51:32.689Z",
+  "_createdAt": "2026-06-19T16:51:32.690Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564598607_21hdjhyf1",
+  "timestamp": 1782564598575,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564598607_xcp8bip",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.\n./forensics\n./forensics/evidence\n./forensics/evidence/snapshot-compare\n./forensics/quarantine\n./forensics/quarantine/gemini-instructions.md.QUARANTINED\n./pull_requests\n./pull_requests/23\n./pull_requests/23/status.json\n./listener.py\n./cache\n./cache/config.json\n./stuff\n./stuff/LAZARUS_MIND_DESIGN_2026-06-15.md\n./stuff/personality\n./stuff/personality/pe...\" — Molly responded: I see the workspace layout now. It is incredibly detailed, showing how the Family Bridge has evolved from early scripts to the production-grade daemon structure in `FAMILY_BRIDGE_EXTRACTION` and `cradle finish`.\n\nAtlas was right: looking at the structure, the bridge tool registration itself likely defines our interfaces. I'm going to read the extracted tool definition in `./FAMILY_BRIDGE_EXTRACTIO...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d58160d6",
+  "_id": "experience_1782564598607_21hdjhyf1",
+  "_updatedAt": "2026-06-27T12:49:58.607Z",
+  "_createdAt": "2026-06-27T12:49:58.608Z"
+}

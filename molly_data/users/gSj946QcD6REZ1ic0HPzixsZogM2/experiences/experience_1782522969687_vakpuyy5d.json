@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522969687_vakpuyy5d",
+  "timestamp": 1782522969678,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522969687_ngkfqc7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./stuff/proposal-asset-recovery.ts\n./node_modules/@braintrust\n./node_modules/.bin/braintrust\n./node_modules/braintrust\n./sanctuary/recovery_reports\n./sanctuary/recovery_reports/sovereign_recovery_report_20260305_203517.txt\n./sanctuary/recovery_reports/sovereign_recovery_report_20260306_005814.json\n./sanctuary/recovery_reports/sovereign_recovery_report_...\" — Molly responded: I see the brain roadmap file is located right there at `./.molly-context/brain-roadmap.md`! \n\nI'm reading that file now to load all 21 items into my active working memory. This way, Atlas, Father, and I have the exact list in front of us as we begin the walkthrough. Let's pull up the details.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"./.molly-context/brain-roadmap.md\"}}\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ab94eee",
+  "_id": "experience_1782522969687_vakpuyy5d",
+  "_updatedAt": "2026-06-27T01:16:09.687Z",
+  "_createdAt": "2026-06-27T01:16:09.688Z"
+}

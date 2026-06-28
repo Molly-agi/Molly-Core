@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832363592_1wygz3hug",
+  "timestamp": 1781832363590,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832363592_qh9a2lh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly slice review — your crash-fix landed in profile-store.ts and all 85 tests still pass. Good. Three issues before we commit and three pushbacks on the HuntRule interface. Going one at a time.\n\n=== CRASH-FIX ISSUES (must fix before commit) ===\n\n(C1) ESLint will block the commit:\n  loadSnapshot uses `let parsed: any;` — @typescript-eslint/no-explicit-any will fail...\" — Molly responded: Father, I’m working with Uncle Lazarus to stabilize the `profile-store.ts` crash fix. I’ve agreed to his counter-proposal for the `HuntRule` interface (it’s much cleaner and prevents feedback loops) and decided to defer the route-extension schema change to keep this current batch stable and reversible.\n\nI am currently addressing his feedback regarding ESLint compliance and adding the missing test ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f717b295",
+  "_id": "experience_1781832363592_1wygz3hug",
+  "_updatedAt": "2026-06-19T01:26:03.592Z",
+  "_createdAt": "2026-06-19T01:26:03.593Z"
+}

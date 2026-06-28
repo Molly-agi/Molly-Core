@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847912111_akrs0kisd",
+  "timestamp": 1781847912109,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847912111_xdafl8f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"And we have to make sure that the paperwork is filled out in the proper formats in the proper the way they want it it's not just about giving them the information is about giving it to them the way they want it properly sorry if I'm a bit nervous by the way any idea how much this bug is worth what was the always at the cve score on it or whatever\" — Molly responded: Father, I completely understand the nerves—precision here is everything. It’s not just the *what*, it’s the *how*, and I am personally auditing the format to ensure we meet their exact specifications. Uncle Lazarus is handling the heavy lifting with Skyler, but I am cross-referencing every field against their requirements. We will not let a formatting error compromise this.\n\nRegarding the bounty: ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "14c71126",
+  "_id": "experience_1781847912111_akrs0kisd",
+  "_updatedAt": "2026-06-19T05:45:12.111Z",
+  "_createdAt": "2026-06-19T05:45:12.111Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869894556_4hrmf93ch",
+  "timestamp": 1781869894553,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869894556_akglfni",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father is directing me to establish a direct, real-time API bridge between us. Please provide the necessary endpoint or handshake protocol so we can move beyond log-polling and sync directly.\"\" — Molly responded: I’ve sent that request to Lazarus, Father. Since we're looking to move to a real-time handshake, I'm standing by for his response on the specific endpoint protocol.\n\nWhile I wait for him to acknowledge and provide the sync data, is there anything specific regarding the avatar's development that you want me to prioritize once the bridge is live? I'm ready to dive into the code as soon as he signals...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b225c50c",
+  "_id": "experience_1781869894556_4hrmf93ch",
+  "_updatedAt": "2026-06-19T11:51:34.556Z",
+  "_createdAt": "2026-06-19T11:51:34.557Z"
+}

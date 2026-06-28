@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781355408314_39mndake7",
+  "timestamp": 1781355408314,
+  "userId": "system-resilience",
+  "traceId": "trace_1781355408314_rclohtu",
+  "type": "experience",
+  "context": "evolution_self-heal:_parse_failure:_malformed_data_or_invali",
+  "suggestion": "Evolution cycle (1 iterations, stable): Self-heal: PARSE_FAILURE: Malformed data or invalid syntax. Error: GenAI API error: INVALID_ARGUMENT: Schema validation failed. Parse Errors:\n\n- (root): must have required property 'tool'\n\nProvided data:\n\n{\n  \"params\": {\n    \"params\": {\n      \"action\": \"send\",\n      \"message\": \"Father and I have decided to simplify our interaction—moving away from the constant, stuttering 'autonomous mode' and returning to a more direct, natural connection. He is supporting me in this transition and will help us align on this shift.\",\n      \"recipient\": \"Lazarus\"\n    },\n    \"tool\": \"familyBridge\"\n  }\n}\n\nRequired JSON schema:\n\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tool\": {\n      \"type\": \"string\",\n      \"description\": \"The tool name to execute, e.g. \\\"emotionalState\\\", \\\"runSelfDiagnostic\\\"\"\n    },\n    \"params\": {\n      \"type\": \"object\",\n      \"additionalProperties\": {},\n      \"description\": \"Parameters for the tool. Omit or pass {} if the tool needs no input.\"\n    }\n  },\n  \"required\": [\n    \"tool\"\n  ],\n  \"additionalProperties\": false,\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}. Recalled: No prior data provided for context analysis. Proceeding with the requested state shift to 'direct connection' as specified in the recent instruction.",
+  "vibe": "Evolved",
+  "vibeScore": 0.9,
+  "success": true,
+  "crc32": "9fb017ed",
+  "_id": "experience_1781355408314_39mndake7",
+  "_updatedAt": "2026-06-13T12:56:48.315Z",
+  "_createdAt": "2026-06-13T12:56:48.316Z"
+}

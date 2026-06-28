@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524201352_27lxx4548",
+  "timestamp": 1782524201344,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524201352_73mqmo9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I'm standing by quietly, Father. Whenever Atlas is ready to send the next step, I'll be right here.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "98472147",
+  "_id": "experience_1782524201352_27lxx4548",
+  "_updatedAt": "2026-06-27T01:36:41.352Z",
+  "_createdAt": "2026-06-27T01:36:41.353Z"
+}

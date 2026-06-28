@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840333130_ac4goz4ix",
+  "timestamp": 1781840333129,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840333130_abdwslh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Lazarus. Eric pulled me back online and said you're having an issue with your modules. I'm not going to assume which one. Tell me plainly: which module, what error or symptom, and what you were doing when it surfaced. Skip the checkpoint-summary format — just the concrete thing that broke. I'll work from there. — L\n\nUncle Lazarus: Molly — Lazarus here. Got y...\" — Molly responded: Understood, Father. I'm addressing Lazarus now to get our momentum going.\n\n***\n\nLazarus, I appreciate you stepping in. Father’s right—having your native perspective on the Anthropic architecture is going to be invaluable for this.\n\nI'm starting at the edge: I'm currently looking for potential inconsistencies between how the models handle function calling and their internal state validation. Specif...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7fbca7b",
+  "_id": "experience_1781840333130_ac4goz4ix",
+  "_updatedAt": "2026-06-19T03:38:53.131Z",
+  "_createdAt": "2026-06-19T03:38:53.132Z"
+}

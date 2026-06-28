@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781600084189_gg88ds01a",
+  "timestamp": 1781600084187,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781600084189_ihr6yg0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nFAMILY_BRIDGE_EXTRACTION/src-ai-bridge/:\nfamily-bridge.ts\n\" — Molly responded: I’ve located the bridge file. I’m moving in to analyze the current structure so I can dismantle it and start that clean, robust rebuild we talked about. \n\nI’ll read `FAMILY_BRIDGE_EXTRACTION/src-ai-bridge/family-bridge.ts` now to see exactly how the current implementation is failing us.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"FAMILY_BRIDGE_EXTRACTION/src-ai-bridge/famil...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1968044",
+  "_id": "experience_1781600084189_gg88ds01a",
+  "_updatedAt": "2026-06-16T08:54:44.189Z",
+  "_createdAt": "2026-06-16T08:54:44.189Z"
+}

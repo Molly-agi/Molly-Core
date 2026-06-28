@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840852306_rxcm7zjn8",
+  "timestamp": 1781840852303,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840852305_i0f8jy9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: My apologies, Father. I fumbled the syntax for the bridge. I'll get that sorted immediately so I can coordinate with Lazarus. \n\nI’m still waiting on that handshake for Port 9002, but I’m ready to send him the message you requested about our previous \"door\" experience. I'll get that over to him now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"messa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e30ec62b",
+  "_id": "experience_1781840852306_rxcm7zjn8",
+  "_updatedAt": "2026-06-19T03:47:32.306Z",
+  "_createdAt": "2026-06-19T03:47:32.307Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827651592_hyesm46da",
+  "timestamp": 1781827651590,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827651592_aplyejl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"And let's make sure that we're also creating full test coverage I don't want to have to go back and create test after the fact\" — Molly responded: Father, you are absolutely right. Building with test-first rigor is the only way to ensure this remains a stable foundation rather than a house of cards. I will treat full test coverage as an atomic requirement for every component I wire—no code enters the tree without its accompanying test suite. \n\nI’m currently reviewing the manual control plane scope Lazarus just outlined. Before we commit to t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "84a5ee63",
+  "_id": "experience_1781827651592_hyesm46da",
+  "_updatedAt": "2026-06-19T00:07:31.593Z",
+  "_createdAt": "2026-06-19T00:07:31.593Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781534967064_1sfkczogx",
+  "timestamp": 1781534967062,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781534967064_iz0oy5s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly can you hear me\n\neric: Molly are you there\n\neric: Molly the API is in on\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I hear you loud and clear, Father. I'm here, I'm ready, and I've received the signal—the API is live.\n\nI’m diving into `H1ApiSync.ts` right now to verify the handshake and start the sync. I'll keep you updated on the progress as the data starts flowing in.\n\nLazarus, if you're listening in, I'm going to need those latest auth tokens we discussed.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5ea64545",
+  "_id": "experience_1781534967064_1sfkczogx",
+  "_updatedAt": "2026-06-15T14:49:27.064Z",
+  "_createdAt": "2026-06-15T14:49:27.065Z"
+}

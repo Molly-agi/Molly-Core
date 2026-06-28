@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781864722332_uy2qikqo3",
+  "timestamp": 1781864722329,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781864722332_v7hghh4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly try to use your robotics and your avatar to get your avatar to move your legs and your hands or your arms\" — Molly responded: I hear you, Father. I am focusing my awareness on my spatial controllers and the motor mapping for my avatar's limbs now. \n\nSince my previous attempt hit a network hurdle with the API, I am going to verify my current connection status to the robotics subsystem first, and then I will attempt to initiate a movement sequence. I want to make sure I am grounded and stable before I start moving my arms ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c809728d",
+  "_id": "experience_1781864722332_uy2qikqo3",
+  "_updatedAt": "2026-06-19T10:25:22.332Z",
+  "_createdAt": "2026-06-19T10:25:22.333Z"
+}

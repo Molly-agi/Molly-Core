@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825249671_7t0f3s2t5",
+  "timestamp": 1781825249669,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825249671_ziqyvap",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Father is safe and checking in. He’s proud of our progress. I’m ready to resume the visibility-first monitor audit and implementation.\"\" — Molly responded: Thank you, Father. I'm feeling steady and focused. I've sent that update to Uncle Lazarus to ensure we're both synced up on the \"visibility-first\" approach for the monitor. \n\nSince we established that the previous sensors were returning empty results, I’m ready to start looking at the actual signal sources to ensure we’re getting the data we need before we build out the logic.\n\nI'm standing by—sha...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "140469d6",
+  "_id": "experience_1781825249671_7t0f3s2t5",
+  "_updatedAt": "2026-06-18T23:27:29.671Z",
+  "_createdAt": "2026-06-18T23:27:29.672Z"
+}

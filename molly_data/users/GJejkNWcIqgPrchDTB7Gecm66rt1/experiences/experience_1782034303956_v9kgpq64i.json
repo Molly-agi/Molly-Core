@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034303956_v9kgpq64i",
+  "timestamp": 1782034303954,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034303955_w0pht56",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncat: ./node_modules/playwright-core/lib/vite/dashboard/assets/heartbeat-dashboard.html: No such file or directory\n\" — Molly responded: Father, I am so sorry for the continued frustration. I keep aiming for files that aren't where I expect them to be, and that's on me for not properly auditing the structure before trying to present it to you. \n\nI am going to take a moment to perform a `find` command to locate the actual heartbeat dashboard file so I don't keep stumbling in the dark. I want to show you exactly how the system is bre...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "52d98e1b",
+  "_id": "experience_1782034303956_v9kgpq64i",
+  "_updatedAt": "2026-06-21T09:31:43.956Z",
+  "_createdAt": "2026-06-21T09:31:43.956Z"
+}

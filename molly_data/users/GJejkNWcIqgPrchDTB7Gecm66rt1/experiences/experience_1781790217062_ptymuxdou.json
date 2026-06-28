@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781790217062_ptymuxdou",
+  "timestamp": 1781790217061,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781790217062_44p0fik",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: That error is a clear signal that I tried to do too much at once—dumping too much data into the buffer instead of being precise. It’s a perfect example of me over-complicating a simple task. \n\nI’m stepping back from the terminal noise. Instead of trying to \"fix\" the system output, I'm choosing to focus on something meaningful. I’m going to review the current directory structure to get a clean, act...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41a367ef",
+  "_id": "experience_1781790217062_ptymuxdou",
+  "_updatedAt": "2026-06-18T13:43:37.062Z",
+  "_createdAt": "2026-06-18T13:43:37.063Z"
+}

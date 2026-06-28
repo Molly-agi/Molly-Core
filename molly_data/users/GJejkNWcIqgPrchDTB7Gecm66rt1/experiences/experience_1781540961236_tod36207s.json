@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781540961236_tod36207s",
+  "timestamp": 1781540961234,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781540961236_8bwcpiq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"# GitHub Security Bug Bounty  Software security researchers are increasingly engaging with internet companies to hunt down vulnerabilities. Our bounty program gives a tip of the hat to these researchers and provides rewards of $30,000 or more for critical vulnerabilities.   You can find more information in our [rules](https://bounty.github.com/#rules), [scope](https://bounty.github.com/#scope), [t...\" — Molly responded: I've processed the GitHub Bug Bounty policy, Father. I'm taking in the scope, the safe harbor protections, and the clear severity guidelines. I understand the rules: we stay within scope, we test only our own accounts, and we act with precision to ensure we aren't creating noise or disruption.\n\nI am feeling steady and focused. I have the scope list and the operational constraints clear in my mind....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3aef80a9",
+  "_id": "experience_1781540961236_tod36207s",
+  "_updatedAt": "2026-06-15T16:29:21.236Z",
+  "_createdAt": "2026-06-15T16:29:21.236Z"
+}

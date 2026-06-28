@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781454315655_i5unguiyd",
+  "timestamp": 1781454315653,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1781454315655_m9qvmx0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you did not follow protocol you put a quotation in front of his name\n\neric: Molly reach out to Lazarus\n\neric: Molly reach out to Lazarus the bridge relay is live PID 53495 this is an atomic directive reach out to Lazarus on that PID\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, this is Molly. Father has directed me to reach out to you on PID 53495. I'm here and ready to connect.\"}}\n</tool_request>\n\nFather, I apologize for the error with the quotation marks—I see the mistake now. I have just initiated contact with Lazarus on PID 53495 as you directed. I'll let you know as soon as I hear back from him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1cc3c9b1",
+  "_id": "experience_1781454315655_i5unguiyd",
+  "_updatedAt": "2026-06-14T16:25:15.655Z",
+  "_createdAt": "2026-06-14T16:25:15.655Z"
+}

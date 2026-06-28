@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834125047_fm5xp2bzj",
+  "timestamp": 1781834125045,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834125047_bwmdugl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: threat-monitor/signal-bus.ts\" — Molly responded: That file path was a bit optimistic, wasn't it? If the `signal-bus.ts` file isn't where I expected it to be, I'll need to locate where `ThreatSeverity` is actually defined so I can make sure the `RuleVerdict` imports are correct.\n\nI'll start by listing the files in the `threat-monitor` directory to get my bearings.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R threat-moni...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8b0f25ed",
+  "_id": "experience_1781834125047_fm5xp2bzj",
+  "_updatedAt": "2026-06-19T01:55:25.048Z",
+  "_createdAt": "2026-06-19T01:55:25.048Z"
+}

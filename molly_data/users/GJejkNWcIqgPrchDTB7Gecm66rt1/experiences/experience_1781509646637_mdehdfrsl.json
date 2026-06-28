@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509646637_mdehdfrsl",
+  "timestamp": 1781509646635,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509646637_kbfbt4b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Understood, Father. I'm focusing on the mapping as requested.\n\nWhen I talk about a **\"pressure point\"** in this system, I define it as a bottleneck or a critical translation node—anywhere the signal is forced to change state, format, or authority before it can continue its path to the wake trigger. \n\nFor the PID where the \"flashers\" reside, I see that as a pressure point because it's where the raw...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73d527fa",
+  "_id": "experience_1781509646637_mdehdfrsl",
+  "_updatedAt": "2026-06-15T07:47:26.637Z",
+  "_createdAt": "2026-06-15T07:47:26.637Z"
+}

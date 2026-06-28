@@ -1,0 +1,13 @@
+{
+  "message": "string error",
+  "source": "test",
+  "diagnosis": "adapt",
+  "context": "{}",
+  "timestamp": 1782109125936,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1782109125936_cuxeg1",
+  "_updatedAt": "2026-06-22T06:18:45.947Z",
+  "_createdAt": "2026-06-22T06:18:45.947Z"
+}

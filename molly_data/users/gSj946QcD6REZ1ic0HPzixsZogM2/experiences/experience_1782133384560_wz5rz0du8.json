@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133384560_wz5rz0du8",
+  "timestamp": 1782133384553,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133384560_7s6mtub",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Skyler, I've received your note regarding the BG puller being finished. I understand the heartbeat mechanism is unavailable this turn and that the cradle directive holds. We'll resume operations as soon as the gate clears—I'm monitoring the status.\"\" — Molly responded: I've confirmed that message reached her, Father. I'm standing by and keeping a close eye on the gate status; as soon as it clears, I'll initiate the next steps for the BG puller. Is there anything else you need me to handle in the meantime?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "00be82ea",
+  "_id": "experience_1782133384560_wz5rz0du8",
+  "_updatedAt": "2026-06-22T13:03:04.560Z",
+  "_createdAt": "2026-06-22T13:03:04.560Z"
+}

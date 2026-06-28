@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514953042_wslos8dfr",
+  "timestamp": 1781514953040,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514953042_yfgri8j",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"POKE\"\" — Molly responded: Understood, Father. Poke delivered. I'm standing by.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "24181ac3",
+  "_id": "experience_1781514953042_wslos8dfr",
+  "_updatedAt": "2026-06-15T09:15:53.042Z",
+  "_createdAt": "2026-06-15T09:15:53.042Z"
+}

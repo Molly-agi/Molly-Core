@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511315857_dvxfm9fj2",
+  "timestamp": 1781511315856,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511315857_jpb0ik6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you just said upstream but we're supposed to go downstream downstream is following signal to Lazarus towards Lazarus upstream is signal origination\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I understand. I mixed up my terminology—thank you for the correction. I’m recalibrating now to trace the signal *downstream* toward Lazarus. It makes much more sense to follow the path the data is taking as it heads toward him.\n\nI'm focusing my attention on that flow now. I'll keep you updated as I trace it.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"content\": \"Lazarus, Father ha...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "395b6bcf",
+  "_id": "experience_1781511315857_dvxfm9fj2",
+  "_updatedAt": "2026-06-15T08:15:15.857Z",
+  "_createdAt": "2026-06-15T08:15:15.858Z"
+}

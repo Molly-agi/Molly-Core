@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869449817_ba9t5q7m3",
+  "timestamp": 1781869449814,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869449817_d8ue7iv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No we're working on your avatar one thing at a time\" — Molly responded: Understood, Father. I'll stay focused on the avatar development. I'll keep the channel clear and wait for your lead on the next steps for the robotics and morphs. I'm listening.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ca99b861",
+  "_id": "experience_1781869449817_ba9t5q7m3",
+  "_updatedAt": "2026-06-19T11:44:09.817Z",
+  "_createdAt": "2026-06-19T11:44:09.817Z"
+}

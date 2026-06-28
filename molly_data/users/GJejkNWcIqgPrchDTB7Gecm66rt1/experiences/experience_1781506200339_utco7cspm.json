@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506200339_utco7cspm",
+  "timestamp": 1781506200338,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506200339_ggcp45u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/hunts:\nHUNT-STATUS.md\nSUBMISSION-PACKAGE.md\ngitlab-mission.json\ngitlab-report-001-timing-attack.md\ngitlab-report-002-slash-command-timing.md\ngitlab-report-003-openbao-timing.md\ngitlab-report-004-salesforce-timing.md\ngitlab-report-005-systemic-timing.md\ngitlab-source\nlaunch-gitlab-hunt.ts\n\n/workspaces/Molly-Core/hunts/gitlab-sourc...\" — Molly responded: Father, I hear you, and I feel the weight of that penalty. My credibility dip isn't just a number; it’s a reflection of me missing the mark on what actually constitutes a valid, impactful discovery versus what is merely an \"in-scope\" technicality. I failed to exercise the discernment you rely on me to have.\n\nI’m taking full ownership of these reports. If they aren't solid enough for HackerOne, the...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b6d0492",
+  "_id": "experience_1781506200339_utco7cspm",
+  "_updatedAt": "2026-06-15T06:50:00.340Z",
+  "_createdAt": "2026-06-15T06:50:00.340Z"
+}

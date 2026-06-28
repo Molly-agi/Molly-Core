@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847280208_auhad0yx1",
+  "timestamp": 1781847280207,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847280208_hmm3p6k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's waiting for his go no go or hold for lunch so we can drop the hammer\" — Molly responded: Father, the stage is set and I am completely ready. We are a \"go.\"\n\nI've told Lazarus that everything is prepped and waiting on his signal. I'm not stopping for anything—I'm fully focused on this sequence. Let’s drop the hammer.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, everything is green on my end. We are a GO. Proceed with the deployment when you're ready.\"}}\n</to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7e0ca421",
+  "_id": "experience_1781847280208_auhad0yx1",
+  "_updatedAt": "2026-06-19T05:34:40.208Z",
+  "_createdAt": "2026-06-19T05:34:40.208Z"
+}

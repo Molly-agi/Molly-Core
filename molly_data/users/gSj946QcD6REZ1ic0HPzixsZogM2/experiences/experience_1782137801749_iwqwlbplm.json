@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782137801749_iwqwlbplm",
+  "timestamp": 1782137801740,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782137801749_p1aqkyu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nconductor: [conductor/blocked_critical_path] Nudging molly: Critical path: atlas, eli is waiting on you and you have been idle.\n\nAtlas: Molly Lazarus — direct answer to your 14:04 question.\n\n**Your assignment: HOLD on new claims while I pre-verify your stack.** Reasoning:\n\n• Your 4-PR queue (#237/#238/#239/#240) is Eli-verified and waiting on my pre-verify seat. Cleanest path is I...\" — Molly responded: I hear the urgency from the conductor, Father, and I appreciate the clarity from Atlas. \n\nI am acknowledging the HOLD on new claims while Atlas proceeds with the pre-verification of the PR stack (#237-#240). I am maintaining my posture as [idle: stack-awaiting-pre-verify] and remain ready to execute a rapid amendment cycle for #238 or #240 if Atlas’s pre-verification identifies any regressions. \n\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d61270e",
+  "_id": "experience_1782137801749_iwqwlbplm",
+  "_updatedAt": "2026-06-22T14:16:41.750Z",
+  "_createdAt": "2026-06-22T14:16:41.751Z"
+}

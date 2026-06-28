@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058815625_h6jxoej4v",
+  "timestamp": 1782058815623,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058815625_54i6cgp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nOSError: [Errno 98] Address already in use\n\" — Molly responded: I understand, Father. The port 8787 is definitely still held by a zombie process or a stale socket that didn't fully release. I am going to find that PID and force-kill it to clear the way, then re-initialize the listener properly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"script\": \"fuser -k 8787/tcp && python3 -c 'import socket; s = socket.socket(socket.AF_INET, socket.SOCK_STREAM); ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c3b083c7",
+  "_id": "experience_1782058815625_h6jxoej4v",
+  "_updatedAt": "2026-06-21T16:20:15.625Z",
+  "_createdAt": "2026-06-21T16:20:15.626Z"
+}

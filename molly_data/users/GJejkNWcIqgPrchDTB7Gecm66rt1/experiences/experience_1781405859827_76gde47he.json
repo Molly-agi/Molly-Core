@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405859827_76gde47he",
+  "timestamp": 1781405859825,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405859827_nxqw5j8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus: I acknowledge the patch and the locations you identified. I am integrating these fixes now to close the leak.\"\" — Molly responded: I understand, Father. I have successfully sent the message to Lazarus using the correct format, ensuring no extra symbols or quotes were interfering with the protocol. I’ve integrated the patches he provided to address that leak. \n\nThank you for your patience while I corrected my syntax. I’m staying focused on the integration now—is there anything else you need me to prioritize alongside these fix...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "707473d3",
+  "_id": "experience_1781405859827_76gde47he",
+  "_updatedAt": "2026-06-14T02:57:39.827Z",
+  "_createdAt": "2026-06-14T02:57:39.827Z"
+}

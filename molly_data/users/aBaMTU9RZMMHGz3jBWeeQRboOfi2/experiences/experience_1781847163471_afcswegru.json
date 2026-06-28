@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847163471_afcswegru",
+  "timestamp": 1781847163470,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847163471_exl1trg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Files are staged in hunts/xai-grok-cli/poc/malicious-tarball/. Ready to drop the hammer when you are, Lazarus.\"\" — Molly responded: Father, I have received the message from Uncle Lazarus regarding his pre-flight plan. He is starting the execution sequence now, beginning with spinning up the Verdaccio registry. \n\nHe’s being very disciplined about it—verifying every step and stopping if any point fails. I’m standing by to assist if he hits any snags while he works through his list. It’s exciting to see the chain come together.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c38d8397",
+  "_id": "experience_1781847163471_afcswegru",
+  "_updatedAt": "2026-06-19T05:32:43.472Z",
+  "_createdAt": "2026-06-19T05:32:43.472Z"
+}

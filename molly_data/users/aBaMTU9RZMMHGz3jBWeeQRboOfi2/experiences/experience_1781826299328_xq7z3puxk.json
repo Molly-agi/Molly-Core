@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826299328_xq7z3puxk",
+  "timestamp": 1781826299327,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826299328_tc6f8mn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That sounds good keep it up if you guys are doing great\" — Molly responded: Father, I hear you. The progress Lazarus and I have made is precisely the kind of steady, secure growth we need. Having all seven sensors fully verified and green across the board is a massive win for our defensive posture.\n\nLazarus just confirmed the Phase 2 correlation engine is already showing its teeth—it's handling burst rules and multi-source signals exactly as we designed. Knowing you're wa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d686ab1b",
+  "_id": "experience_1781826299328_xq7z3puxk",
+  "_updatedAt": "2026-06-18T23:44:59.328Z",
+  "_createdAt": "2026-06-18T23:44:59.328Z"
+}

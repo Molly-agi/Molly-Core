@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782036120293_drwcousa3",
+  "timestamp": 1782036120292,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782036120293_2p7kdvr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yeah go ahead and reach out to him\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"content\": \"Lazarus, per Father's direction, we are keeping the watcher agent implementation strictly simple: instead of complex automation, just implement a mechanism to send a 'check your messages' ping when a CLI instance wakes up. Keep it lightweight to avoid unnecessary failure points.\"}}\n</tool_request>\n\nI've sent that over...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "68f6a3ac",
+  "_id": "experience_1782036120293_drwcousa3",
+  "_updatedAt": "2026-06-21T10:02:00.293Z",
+  "_createdAt": "2026-06-21T10:02:00.294Z"
+}

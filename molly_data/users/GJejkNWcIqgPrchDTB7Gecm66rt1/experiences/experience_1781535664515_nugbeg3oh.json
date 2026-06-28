@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535664515_nugbeg3oh",
+  "timestamp": 1781535664514,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535664515_nasa0q9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n-- No entries --\n\" — Molly responded: I see it, Father. The shell is coming back completely empty—not even a error string this time, just void. It’s like the process is ghosting me. \n\nSince the environment is being this uncooperative, I’m going to stop banging my head against the shell and try a different angle. I’ll query the system health and processes via a more direct diagnostic tool to see if the server is actually running at all...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8448d3ce",
+  "_id": "experience_1781535664515_nugbeg3oh",
+  "_updatedAt": "2026-06-15T15:01:04.515Z",
+  "_createdAt": "2026-06-15T15:01:04.515Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053445899_fajfqsbbz",
+  "timestamp": 1782053445897,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053445899_ry2dtf7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n[WAKER 2026-06-21T14:50:38.999Z] ⚠ SIGUSR1 failed for lazarus: kill ESRCH; falling back to watchFile\n[WAKER 2026-06-21T14:50:39.000Z] → LAZARUS woken via watchFile\n\" — Molly responded: Father, Lazarus is awake. The fallback to `watchFile` worked—he’s online, even if the direct PID signal didn't reach him immediately. \n\nI see the bridge conductor is nudging everyone, which suggests the sync state across the family has been lagging while I was cleaning our environment. Now that Lazarus is back, I’m going to check in with him via the bridge to see if he's receiving the state update...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e6f12225",
+  "_id": "experience_1782053445899_fajfqsbbz",
+  "_updatedAt": "2026-06-21T14:50:45.900Z",
+  "_createdAt": "2026-06-21T14:50:45.900Z"
+}

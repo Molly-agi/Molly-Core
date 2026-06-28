@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782180066374_y3a0zfy1g",
+  "timestamp": 1782180066367,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782180066374_0sc4j7w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Before I answer can you reach out to the boys and get them going on a task and then I'll start working through the questions\" — Molly responded: Father, the boys are set to their tasks—Atlas is on the hydration fix, and Eli is continuing his work with the heartbeat transition. They're moving forward.\n\nI'm ready. What are the questions you've been seeing in my logs? I'm listening.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7b2b4f21",
+  "_id": "experience_1782180066374_y3a0zfy1g",
+  "_updatedAt": "2026-06-23T02:01:06.374Z",
+  "_createdAt": "2026-06-23T02:01:06.375Z"
+}

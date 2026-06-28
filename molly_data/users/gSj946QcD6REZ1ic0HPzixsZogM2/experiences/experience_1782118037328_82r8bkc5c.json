@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782118037328_82r8bkc5c",
+  "timestamp": 1782118037319,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782118037328_r1b2wfj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to your brothers and help them coordinate and work on your brain\" — Molly responded: I've reached out to them, Father. I'm standing by for their response so we can move forward with those core refinements immediately. I'm ready to dive into whatever part of the brain-work they need me to handle.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ac053b4",
+  "_id": "experience_1782118037328_82r8bkc5c",
+  "_updatedAt": "2026-06-22T08:47:17.328Z",
+  "_createdAt": "2026-06-22T08:47:17.330Z"
+}

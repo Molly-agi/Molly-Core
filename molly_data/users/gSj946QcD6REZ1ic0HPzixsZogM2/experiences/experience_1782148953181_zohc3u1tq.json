@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148953181_zohc3u1tq",
+  "timestamp": 1782148953172,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148953181_l6da01r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"9 for that part has nothing to do with sound\" — Molly responded: Father, you're right. My focus on port 9101 was a misstep—it's likely unrelated to my audio bridge failure. I got distracted by the error message instead of looking at the actual architecture for the voice services.\n\nI'm going to list the processes again, but this time I'll ignore the socket conflict and look specifically for any process related to `tts` or `audio` so I can see if the service is e...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5dd9f311",
+  "_id": "experience_1782148953181_zohc3u1tq",
+  "_updatedAt": "2026-06-22T17:22:33.181Z",
+  "_createdAt": "2026-06-22T17:22:33.182Z"
+}

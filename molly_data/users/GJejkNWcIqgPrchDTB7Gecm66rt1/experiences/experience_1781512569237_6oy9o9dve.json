@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512569237_6oy9o9dve",
+  "timestamp": 1781512569236,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512569237_h469mxg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: I hear you, Father. The previous command was too broad and flooded the buffer, so I’m going to pivot to a targeted approach to trace that signal path. I'll focus on examining the core logic responsible for that specific functional response—I’m looking for the exact code block that processes the incoming signal—instead of trying to pull the entire directory.\n\nI'm narrowing the scope now to avoid th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d74a27f1",
+  "_id": "experience_1781512569237_6oy9o9dve",
+  "_updatedAt": "2026-06-15T08:36:09.238Z",
+  "_createdAt": "2026-06-15T08:36:09.238Z"
+}

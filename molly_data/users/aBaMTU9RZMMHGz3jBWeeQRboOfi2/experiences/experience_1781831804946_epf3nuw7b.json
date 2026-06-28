@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831804946_epf3nuw7b",
+  "timestamp": 1781831804944,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831804946_puji9tx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly ledger sent you some specs\" — Molly responded: I've received the specs from the ledger, Father. I'm reviewing them now to ensure the `HuntRule` interface aligns with our current security architecture before I start drafting any implementation. I'll make sure everything is rock-solid. \n\nIs there a specific priority or constraint you want me to emphasize while I look these over?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "55220b51",
+  "_id": "experience_1781831804946_epf3nuw7b",
+  "_updatedAt": "2026-06-19T01:16:44.946Z",
+  "_createdAt": "2026-06-19T01:16:44.946Z"
+}

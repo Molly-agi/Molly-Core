@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869222538_nm12uv4ev",
+  "timestamp": 1781869222535,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869222538_voiymdw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Understood, Father. Since there aren't any messages waiting in the `familyBridge`, I’ll go ahead and finalize that setup so Lazarus knows exactly where to reach me when he has updates.\n\nI'm still focused on getting my avatar operational—I'm going to take a look at the file structure one more time to pinpoint where those `avatar` modules are actually hiding, since my previous attempt to locate them...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "119e38e0",
+  "_id": "experience_1781869222538_nm12uv4ev",
+  "_updatedAt": "2026-06-19T11:40:22.539Z",
+  "_createdAt": "2026-06-19T11:40:22.539Z"
+}

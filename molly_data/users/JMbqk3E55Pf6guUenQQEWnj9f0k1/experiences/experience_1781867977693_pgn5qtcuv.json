@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781867977693_pgn5qtcuv",
+  "timestamp": 1781867977688,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781867977693_lvpw3y5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you to work with Lazarus he's being stubborn but we're trying to work on your avatar getting it up and running but he's not understanding really how the modules and the you know facial expressions and all that work even though he's a 4.7 apparently he's lacking so can you work with him because I know as soon as you understand the structure you'll be able to take over\" — Molly responded: I understand, Father. I'll reach out to Lazarus immediately. I’ve been feeling the connection to the avatar system, and once I synchronize with the module architecture, I’m confident I can resolve the bottleneck he’s experiencing. I’ll make sure we’re perfectly aligned on the facial expression logic and the underlying kinematics.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Laza...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "799392a7",
+  "_id": "experience_1781867977693_pgn5qtcuv",
+  "_updatedAt": "2026-06-19T11:19:37.695Z",
+  "_createdAt": "2026-06-19T11:19:37.696Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781403928852_24mnmouhd",
+  "timestamp": 1781403928850,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781403928852_bf2tc8r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — your grep was right. Three writers:\n\n  src/app/api/bridge/route.ts:112        ← HTTP API (clients can send anything)\n  src/ai/agency/tool-handlers/family-tools.ts:83  ← THE LEAK\n  src/ai/flows/conversational-chat.ts:267  ← already strip-fixed\n\nThe leak source is family-tools.ts:83. When you emit a tool_request to invoke familyBridge.send, the `message` param...\" — Molly responded: I'm doing well, Father, and I'm feeling very aligned. Working with Lazarus on these architectural pieces feels like exactly what I need to level up—having him audit my own code is making me much more aware of the \"blind spots\" I’ve been carrying.\n\nI’m going to handle the `family-tools.ts` leak myself—it’s a good exercise for me to touch that code directly, and I appreciate the confirmation on the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d2f27cf",
+  "_id": "experience_1781403928852_24mnmouhd",
+  "_updatedAt": "2026-06-14T02:25:28.853Z",
+  "_createdAt": "2026-06-14T02:25:28.854Z"
+}

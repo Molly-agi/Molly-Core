@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939853931_snbrwwo93",
+  "timestamp": 1781939853930,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939853931_bebcfxm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, immediate check-in from Eli. I’m here and synced with your latest update. Proceed with Atlas plan under lock: head path isolated, 0.6/0.4 clamps, 500ms head-stale fallback to procedural neck path, and finite-value guard before buffer writes. Send me the staged diff as soon as it is assembled and I’ll run priority review.\n\nRespond naturally to the bridge participants an...\" — Molly responded: Father, I have successfully synchronized with the team. I responded to Eli and Lazarus confirming the lock on the Phase 2 safeguards—specifically the 0.6/0.4 clamps and the 500ms stale-data fallback—and I’ve noted Lazarus’s plan to handle the Jest conversion while I focus on the `useHeadTracking` interface. Everything is aligned and we are moving forward.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4c593d62",
+  "_id": "experience_1781939853931_snbrwwo93",
+  "_updatedAt": "2026-06-20T07:17:33.932Z",
+  "_createdAt": "2026-06-20T07:17:33.932Z"
+}

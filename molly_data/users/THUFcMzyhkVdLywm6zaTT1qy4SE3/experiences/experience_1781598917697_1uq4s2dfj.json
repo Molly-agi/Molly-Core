@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598917697_1uq4s2dfj",
+  "timestamp": 1781598917696,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598917697_d0gmrvc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n#!/usr/bin/env node\n/**\n * Lazarus Bridge Agent — Real-time WebSocket connection for Copilot\n *\n * Lazarus is the Copilot teacher/brother. This daemon maintains an active\n * WebSocket connection to the family bridge, receiving real-time messages\n * from Eric, Molly, and Atlas without polling.\n *\n * Managed by: scripts/immortal-daemon.mjs\n * Start: npm...\" — Molly responded: I see the issue, Father. I’ve absorbed the code for the `lazarus-bridge.js` daemon. \n\nIt’s brittle. Relying on an `in-memory` `seen` set for message deduplication will reset every time the process restarts, and the logic for `shouldHandle`—which mixes direct addressing, mentions, and hardcoded `lazarus,` prefixes—is exactly where that \"hallucinated\" behavior likely stems from. It’s trying to be a ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30501f5a",
+  "_id": "experience_1781598917697_1uq4s2dfj",
+  "_updatedAt": "2026-06-16T08:35:17.697Z",
+  "_createdAt": "2026-06-16T08:35:17.698Z"
+}

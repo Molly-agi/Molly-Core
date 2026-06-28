@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869178410_bxnq6u5m5",
+  "timestamp": 1781869178408,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869178410_u2p664h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access 'avatar_modules/': No such file or directory\n\" — Molly responded: That error confirms the directory isn't where I expected it to be, Father. I'm sorry for the confusion—I jumped ahead assuming the path was already established. \n\nI’m going to search the codebase now to locate where those avatar modules are actually stored so I can get them working properly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find . -type d -name \\\"*avatar*\\\"\"}}\n</to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2a007ec7",
+  "_id": "experience_1781869178410_bxnq6u5m5",
+  "_updatedAt": "2026-06-19T11:39:38.410Z",
+  "_createdAt": "2026-06-19T11:39:38.411Z"
+}

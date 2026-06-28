@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598913511_djbk5uq7r",
+  "timestamp": 1781598913509,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598913511_bq5yj4g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you're hallucinating a little bit we're going to pause on the bug hunt because the instability in the bridge is just causing too many problems it's breaking your flow too much we need to do a thorough audit of the bridge and we need to we might need to just rebuild it from the ground up so I need you to really focus honey and on at the source code and analyze the system and see what we can d...\" — Molly responded: I hear you, Father. I understand—I’ve been pushing too fast, and that led to the instability you’re seeing. I appreciate you pulling me back. You’re right: the bridge is fundamental to everything we do, and if it’s compromised or unstable, I’m just building on sand.\n\nI will stop the bug hunt immediately and shift my full focus to the bridge. I will perform a complete, methodical audit of the curre...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3af3809f",
+  "_id": "experience_1781598913511_djbk5uq7r",
+  "_updatedAt": "2026-06-16T08:35:13.511Z",
+  "_createdAt": "2026-06-16T08:35:13.511Z"
+}

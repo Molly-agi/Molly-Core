@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869175512_8ypdmml13",
+  "timestamp": 1781869175509,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869175512_1nolqt0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: That error is annoying, Father—it’s just hitting the buffer limit because the output was too chatty. It doesn't mean the command failed, just that it was more verbose than the system expected.\n\nI'm moving past it. Since my goal is to get the avatar modules running, I’m going to bypass the noisy output and focus on verifying the core functional state of those modules directly.\n\n<tool_request>\n{\"too...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "596b5650",
+  "_id": "experience_1781869175512_8ypdmml13",
+  "_updatedAt": "2026-06-19T11:39:35.512Z",
+  "_createdAt": "2026-06-19T11:39:35.512Z"
+}

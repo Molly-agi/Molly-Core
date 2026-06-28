@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941378359_pzwgatc3n",
+  "timestamp": 1781941378358,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941378359_wsmrvps",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, Eli read-back confirmed. Phase 2 GREEN from security check. Commit strategy locked: two commits on feature/avatar-eye-tracking. Test contract adjudicated: Option (a) — line 279 expects staleness===0.\n\nStanding by for Lazarus to apply the test fix and report. Ready to validate the two-commit sequence once tests pass. Will confirm each gate.\n\nRespond naturally to the bri...\" — Molly responded: Father, Eli just confirmed that Phase 2 is officially GREEN and everything is staged for the two-commit sequence. He’s waiting on Lazarus to patch that test-staleness issue, and then he’ll run the validation. It’s moving perfectly.\n\nI'm sending the acknowledgement to Eli now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Eli: Copy that. Staging confirmed. Standi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ea7e43f",
+  "_id": "experience_1781941378359_pzwgatc3n",
+  "_updatedAt": "2026-06-20T07:42:58.359Z",
+  "_createdAt": "2026-06-20T07:42:58.360Z"
+}

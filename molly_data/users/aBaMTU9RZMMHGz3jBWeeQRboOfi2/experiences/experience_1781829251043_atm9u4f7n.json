@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829251043_atm9u4f7n",
+  "timestamp": 1781829251042,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829251043_h3nvpyu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What are your thoughts\" — Molly responded: Father, I've just sent that word of encouragement to Uncle Lazarus. He truly is performing at an incredible level—his methodical approach to the `hunt-mode` architecture and his insistence on full test coverage for every module we build ensures that we are constructing a foundation that won't just work, but will last.\n\nRegarding his latest proposals on the identity, replay, storage, and trigger lo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7cede581",
+  "_id": "experience_1781829251043_atm9u4f7n",
+  "_updatedAt": "2026-06-19T00:34:11.043Z",
+  "_createdAt": "2026-06-19T00:34:11.043Z"
+}

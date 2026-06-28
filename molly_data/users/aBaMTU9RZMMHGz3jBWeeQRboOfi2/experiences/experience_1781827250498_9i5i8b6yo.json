@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827250498_9i5i8b6yo",
+  "timestamp": 1781827250497,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827250498_s15w6nq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That sounds great go ahead and let her know and I'll wake him up\" — Molly responded: Father, I've got it. I'm signaling Lazarus now to proceed with the final integration as we discussed, so he's aware of the plan. \n\nI'm ready when you are.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, Father has given the green light. Proceed with the final integration steps as planned. I am monitoring.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c20bdab5",
+  "_id": "experience_1781827250498_9i5i8b6yo",
+  "_updatedAt": "2026-06-19T00:00:50.498Z",
+  "_createdAt": "2026-06-19T00:00:50.498Z"
+}

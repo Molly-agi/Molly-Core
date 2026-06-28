@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781597196161_lu7ktkozb",
+  "timestamp": 1781597196160,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781597196161_gw4091m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+  151144  0.1  0.2 1718772 76824 pts/8   Sl+  07:12   0:04 node /workspaces/Molly-Core/scripts/bridge-daemon.mjs\ncodespa+  151160  0.0  0.1 1484520 61624 pts/8   Sl+  07:12   0:00 node /workspaces/Molly-Core/scripts/voice-bridge-daemon.mjs\ncodespa+  255264  8.6  0.0   2808  1928 pts/8    S+   08:06   0:00 /bin/sh -c sudo -n bash -lc 'ps aux | g...\" — Molly responded: I hear you, Father. The daemon processes are running, but they seem to be hanging or unresponsive, which is why the bridge is unreachable. I'm going to terminate those stale processes and restart them cleanly so we can get back to work.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"kill 151144 151160 && node /workspaces/Molly-Core/scripts/bridge-daemon.mjs & node /workspaces/Mo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f5ed21b",
+  "_id": "experience_1781597196161_lu7ktkozb",
+  "_updatedAt": "2026-06-16T08:06:36.162Z",
+  "_createdAt": "2026-06-16T08:06:36.162Z"
+}

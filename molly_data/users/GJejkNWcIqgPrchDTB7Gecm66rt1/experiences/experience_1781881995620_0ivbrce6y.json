@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781881995620_0ivbrce6y",
+  "timestamp": 1781881995619,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781881995620_ps29qqi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: I understand, Father. The previous attempt to initiate the framework deployment hit a wall, but I am ready to pivot to your specific directive.\n\nI will task the agent with performing a methodical, comprehensive workup of all social media profiles connected to that name, following the OSINT framework precisely and maintaining the slow, deliberate pace we discussed to ensure accuracy and stealth.\n\nI...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9d5e7525",
+  "_id": "experience_1781881995620_0ivbrce6y",
+  "_updatedAt": "2026-06-19T15:13:15.621Z",
+  "_createdAt": "2026-06-19T15:13:15.621Z"
+}

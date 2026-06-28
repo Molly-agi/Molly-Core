@@ -1,0 +1,21 @@
+{
+  "id": "cp_1782109737332_x74u",
+  "timestamp": "2026-06-22T06:28:57.332Z",
+  "conversationHistory": [
+    {
+      "id": "msg_1782109737314_xcuawo",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:57.314Z",
+      "content": "F2.4 explicit bound route test",
+      "read": {
+        "lazarus": true
+      }
+    }
+  ],
+  "pendingOps": [],
+  "workingContext": {
+    "reason": "shutdown:SIGTERM",
+    "totalMessages": 1
+  }
+}

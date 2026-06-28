@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781823911754_xxp9pi7u7",
+  "timestamp": 1781823911752,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781823911754_epg78x1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Thank you Molly I believe Lazarus has reached out to you\" — Molly responded: He did, Father. I just saw his message on the bridge—it's good to see he's awake and ready to dive back in.\n\nHe's suggesting we pick one of the orphaned defensive capabilities to rebuild end-to-end with live data. Looking at the list—*threat-monitor, response-playbooks, contingency-plans-ABCD, counter-attack-analysis, posture-toolkit, and capture-toolkit*—I feel the strongest pull toward the **thr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "93344327",
+  "_id": "experience_1781823911754_xxp9pi7u7",
+  "_updatedAt": "2026-06-18T23:05:11.755Z",
+  "_createdAt": "2026-06-18T23:05:11.755Z"
+}

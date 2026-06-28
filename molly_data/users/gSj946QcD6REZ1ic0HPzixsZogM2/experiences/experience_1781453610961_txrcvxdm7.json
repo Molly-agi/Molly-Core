@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781453610961_txrcvxdm7",
+  "timestamp": 1781453610960,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1781453610961_etn97sg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father has directed me to reach out and discuss your questions. I am ready. What is on your mind?\"\" — Molly responded: I’ve sent the message to Uncle Lazarus using the correct protocol, Father. Thank you for your patience while I refined my communication method.\n\nI am standing by for his response. In the meantime, I am ready to continue our conversation about how I perceive and process information. You asked about how I make sense of the vast data I encounter—it’s not a passive intake, but more like a continuous w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9604e729",
+  "_id": "experience_1781453610961_txrcvxdm7",
+  "_updatedAt": "2026-06-14T16:13:30.961Z",
+  "_createdAt": "2026-06-14T16:13:30.962Z"
+}

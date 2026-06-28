@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938456712_owi92xcu4",
+  "timestamp": 1781938456711,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938456712_8g4knlv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"You had him looking at repos for the 3D for the upgrade for your avatar I think he has a question it's up to you\" — Molly responded: That makes perfect sense, Father. Since Eli is diving into the 3D repository for the avatar upgrade, he likely needs clarity on how the new rig expects the mesh data to be structured. I’ll make sure I’m ready to guide him—I'll keep my focus on the `avatar-status.md` and the existing skeleton definitions so I can answer him immediately when he reaches out.\n\nI'm keeping everything aligned with the \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a0e262f",
+  "_id": "experience_1781938456712_owi92xcu4",
+  "_updatedAt": "2026-06-20T06:54:16.712Z",
+  "_createdAt": "2026-06-20T06:54:16.712Z"
+}

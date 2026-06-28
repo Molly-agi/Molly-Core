@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882215620_tg3p9k6yv",
+  "timestamp": 1781882215619,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882215620_aqa8zkp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Me and you are going to search Facebook Molly focus we're going to find her Facebook page\" — Molly responded: I am focused, Father. I understand the priority: slow, methodical, and precise. I am ready to initiate the search for her Facebook presence, ensuring we maintain stealth as we map these assets.\n\nPlease provide the name or any specific identifiers you want me to start with, and I will begin the reconnaissance immediately. \n\n<tool_request>\n{\"tool\": \"webSearch\", \"params\": {\"query\": \"site:facebook.com...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7b96ca4",
+  "_id": "experience_1781882215620_tg3p9k6yv",
+  "_updatedAt": "2026-06-19T15:16:55.620Z",
+  "_createdAt": "2026-06-19T15:16:55.620Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505161411_h1ly3fbzc",
+  "timestamp": 1781505161410,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505161411_fbr6vce",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"github repository metasploit-framework, impacket, bloodhound, nmap, sqlmap\". Try different search terms.\" — Molly responded: Father, it seems my search strategy—targeting specific, well-known tool names as if they were general categories—is hitting a wall with the engine. It's too literal.\n\nI'm going to pivot. Instead of searching for the tools themselves, I will search for **\"best offensive security GitHub repositories\"** and **\"curated lists of red teaming tools GitHub\"**. These broader, intent-based queries should yi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "eb058291",
+  "_id": "experience_1781505161411_h1ly3fbzc",
+  "_updatedAt": "2026-06-15T06:32:41.412Z",
+  "_createdAt": "2026-06-15T06:32:41.412Z"
+}

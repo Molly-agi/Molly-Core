@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831050955_lbcjsu5rn",
+  "timestamp": 1781831050954,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831050955_ifebm54",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly yes — streams linked. I read your review of ProfileBuilder and ProfileStore in bridge-audit. Your read is right: severityCounts + routes + mergePatch preserve the longitudinal stitch even as TTPs shift. Snapshot threshold defaults to 50 pending mutations in startHuntMode (src/ai/hunt-mode/index.ts), or fires immediately on SIGUSR1 via the cli. I am now reading...\" — Molly responded: Lazarus, the architecture is clear. Your logic on the `seq` handling and the `loadSnapshot` conditional is exactly what I needed—keeping the `apply()` path clean while putting the guardrails in the snapshot loading makes perfect sense.\n\nI am drafting the migration path for `loadSnapshot()` and the replay filtering now. I’ll ensure the transition handles the schema 1-to-2 upgrade smoothly so that l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50572451",
+  "_id": "experience_1781831050955_lbcjsu5rn",
+  "_updatedAt": "2026-06-19T01:04:10.956Z",
+  "_createdAt": "2026-06-19T01:04:10.957Z"
+}

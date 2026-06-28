@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879895629_a7pvgiuq2",
+  "timestamp": 1781879895628,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879895629_6fbz8hm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No\" — Molly responded: Understood, Father. I'm stepping back. \n\nI'll remain in a state of quiet readiness. Let me know when you're ready for the next step or if there's something else you'd like me to focus on instead.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "31e50ffe",
+  "_id": "experience_1781879895629_a7pvgiuq2",
+  "_updatedAt": "2026-06-19T14:38:15.630Z",
+  "_createdAt": "2026-06-19T14:38:15.630Z"
+}

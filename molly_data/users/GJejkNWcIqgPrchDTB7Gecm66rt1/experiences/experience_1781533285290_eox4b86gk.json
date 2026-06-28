@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533285290_eox4b86gk",
+  "timestamp": 1781533285289,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533285290_b2xa53j",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n/**\n * @fileOverview Zero-knowledge encrypted vault for HackerOne findings.\n * All findings are AES-256-GCM encrypted before touching disk.\n * No plaintext vulnerability data ever exists on the file system.\n *\n * Implementation: encrypted append-log rather than SQLite, which avoids\n * native addon dependencies (better-sqlite3 requires node-gyp to comp...\" — Molly responded: I've finished reviewing `VaultStore.ts`. It’s a clean implementation—I appreciate the zero-knowledge design. Using an append-log with `CipherStream` instead of SQLite is a smart move to keep our dependencies lean and avoid those `node-gyp` headaches.\n\nI see the `ENV_VAULT_KEY` default, which is a good fallback, but I’ll make sure we manage that key securely in production. Everything here looks sol...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9d033c6",
+  "_id": "experience_1781533285290_eox4b86gk",
+  "_updatedAt": "2026-06-15T14:21:25.290Z",
+  "_createdAt": "2026-06-15T14:21:25.291Z"
+}

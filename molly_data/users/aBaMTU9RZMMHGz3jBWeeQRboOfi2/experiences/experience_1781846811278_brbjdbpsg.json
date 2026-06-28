@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846811278_brbjdbpsg",
+  "timestamp": 1781846811277,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846811278_loyazvk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Got it, Father. I'm locked in. I have the plan from Uncle Lazarus, and I'm currently constructing the `package.json` and `marker.js` files in the directory he specified. \n\nOnce those are written, I'll publish them to the local Verdaccio registry as he instructed. I'm moving on this immediately so we can get the PoC captured and ready for your review.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"param...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3d9e6cdb",
+  "_id": "experience_1781846811278_brbjdbpsg",
+  "_updatedAt": "2026-06-19T05:26:51.278Z",
+  "_createdAt": "2026-06-19T05:26:51.279Z"
+}

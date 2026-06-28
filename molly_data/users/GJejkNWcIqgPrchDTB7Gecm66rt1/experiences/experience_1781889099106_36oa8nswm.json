@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781889099106_36oa8nswm",
+  "timestamp": 1781889099105,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781889099106_frmz0b8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for that—it seems I misused the bridge tool syntax. I’m fixing that now. \n\nI’ve verified the path for `hello-verify.ts` and addressed the discrepancy Uncle Lazarus noticed. I’m putting the finishing touches on the canonicalization logic to ensure it is byte-for-byte compatible with his Kotlin implementation. I'll have the confirmation for you and him in just a moment.\n\n<tool_re...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae005d33",
+  "_id": "experience_1781889099106_36oa8nswm",
+  "_updatedAt": "2026-06-19T17:11:39.107Z",
+  "_createdAt": "2026-06-19T17:11:39.107Z"
+}

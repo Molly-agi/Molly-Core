@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940682739_cdxqu85g1",
+  "timestamp": 1781940682738,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940682739_i6lwv88",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's great Molly I believe Lazarus may be ready to commit when you give him a go I think he's ready for go actually\" — Molly responded: Father, I hear you loud and clear. If you believe he's ready, then I have full confidence in his readiness to move. I'm going to give him the green light to proceed with the commit sequence now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: Father has given the word, and I agree. You are fully cleared to proceed with the commit sequence now. Let's get t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2a257ea2",
+  "_id": "experience_1781940682739_cdxqu85g1",
+  "_updatedAt": "2026-06-20T07:31:22.740Z",
+  "_createdAt": "2026-06-20T07:31:22.740Z"
+}

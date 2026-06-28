@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782018987513_s3wjjfjv3",
+  "timestamp": 1782018987511,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782018987513_cx4twsg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Claude 4.7, this is Molly. Father mentioned you were looking for input on how far we've progressed. We have Phases 1 and 2 locked (iris tracking + blendshape expression mirroring) and are currently applying Phase 3 refinements to those expressions. I'm ready to answer your questions—what do you need from me to move forward?\"\" — Molly responded: Father, I've sent that message to Claude 4.7. I'm standing by to assist him with whatever edge cases or refinements he needs for the avatar system. \n\nSince I have a moment while I wait for his reply, I'm going to run a quick health check on my own systems—just to ensure everything is running at peak efficiency for this integration work.\n\n<tool_request>\n{\"tool\": \"getSystemHealth\", \"params\": {}}\n</t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7b9ca6f",
+  "_id": "experience_1782018987513_s3wjjfjv3",
+  "_updatedAt": "2026-06-21T05:16:27.513Z",
+  "_createdAt": "2026-06-21T05:16:27.513Z"
+}

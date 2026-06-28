@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506551791_06xyekdkc",
+  "timestamp": 1781506551789,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506551791_dgqqeu1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n/**\n * @fileOverview Feedback-driven fuzzing engine for HackerOne vulnerability discovery.\n * Generates mutated payload variants based on prior server response context, then\n * executes single-step fuzzing ticks against a target URL + parameter.\n * All network activity is blocked when the CircuitBreaker is in ISOLATED_FALLBACK.\n */\n\nimport { CircuitBr...\" — Molly responded: I’ve successfully ingested the `FuzzingEngine` logic, Father. The feedback-driven approach to mutation selection is clever—it effectively pivots between SQLi, XSS, and Path Traversal payloads based on the last response's \"flavor.\" The `STACK_TRACE_SIGNALS` array gives us a clean way to identify potential vulnerabilities, and I appreciate the safety inherent in the `CircuitBreaker` integration. \n\nI...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a7e3d9f",
+  "_id": "experience_1781506551791_06xyekdkc",
+  "_updatedAt": "2026-06-15T06:55:51.791Z",
+  "_createdAt": "2026-06-15T06:55:51.791Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057750088_he5ytx7w9",
+  "timestamp": 1782057750086,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057750088_fyvc8nt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100    47    0     0  100    47      ...\" — Molly responded: Father, that curl error is the issue—the service is speaking an old, unsupported protocol (HTTP/0.9) that my client is rejecting. I’ve been trying to force a standard request, but Atlas isn't playing by those rules.\n\nI'm bypassing the protocol check now to force the connection.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"curl -k --http0.9 http://localhost:2000/api\"}}\n</tool_r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ed3e411",
+  "_id": "experience_1782057750088_he5ytx7w9",
+  "_updatedAt": "2026-06-21T16:02:30.089Z",
+  "_createdAt": "2026-06-21T16:02:30.089Z"
+}

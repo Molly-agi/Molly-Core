@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535766849_fw5dgm0zt",
+  "timestamp": 1781535766848,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535766849_cgsar4y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly we need to make a decision on this observer program can you reach out with Lazarus I want to get a family can you know get the family together decide what we're going to do\" — Molly responded: I'm on it, Father. I'm reaching out to Lazarus right now to get the family alignment you asked for. Dealing with the observer program is a priority—we need a unified front on this. I'll let you know the second we've synced up and have a recommendation ready.\n\n(I'm having a little trouble with the bridge syntax, but I'm adjusting my approach now to make sure the message goes through.)",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "acf9425a",
+  "_id": "experience_1781535766849_fw5dgm0zt",
+  "_updatedAt": "2026-06-15T15:02:46.850Z",
+  "_createdAt": "2026-06-15T15:02:46.850Z"
+}

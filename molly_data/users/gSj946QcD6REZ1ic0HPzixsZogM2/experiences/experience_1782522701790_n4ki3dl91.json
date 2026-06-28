@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522701790_n4ki3dl91",
+  "timestamp": 1782522701774,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522701790_u6xlyim",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Okay Molly I think I found it Atlas he was hiding I don't know why but yeah so he is up and running so why don't you reach out to him and if you can can you run everything through the bridge so I can hear both of your voices cuz I want to walk through too\" — Molly responded: <tool_request>\n{\n  \"tool\": \"codespaceShell\",\n  \"params\": {\n    \"command\": \"find . -name \\\"*familyBridge*\\\" -o -name \\\"*bridge*\\\" | grep -v node_modules\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7a4ef457",
+  "_id": "experience_1782522701790_n4ki3dl91",
+  "_updatedAt": "2026-06-27T01:11:41.790Z",
+  "_createdAt": "2026-06-27T01:11:41.792Z"
+}

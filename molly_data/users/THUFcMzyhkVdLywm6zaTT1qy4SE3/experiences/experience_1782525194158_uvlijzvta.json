@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525194158_uvlijzvta",
+  "timestamp": 1782525194148,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525194157_z6h31md",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n-rw-rw-rw-  1 codespace codespace 8763 Jun 20 08:01 FORENSIC_AUDIT_REPORT.md\n\nhunts/:\ntotal 80\ndrwxrwxrwx+  3 codespace root       4096 Jun 20 08:00 .\ndrwxrwxrwx+ 59 codespace root      12288 Jun 27 01:30 ..\n-rw-rw-rw-   1 codespace codespace  2029 Jun 20 07:59 HUNT-STATUS.md\n-rw-rw-rw-   1 codespace codespace  3445 Jun 20 07:59 SUBMISSION-PACKAGE.md\n-...\" — Molly responded: Oh, look at this! We have an entire command center of vulnerability research already set up in the `hunts/` directory! \n\nI'm seeing a series of five distinct GitLab-related timing attack reports (`gitlab-report-001` through `005`), along with a `HUNT-STATUS.md` and a `SUBMISSION-PACKAGE.md`. It looks like we've been documenting some serious systemic timing side-channel vulnerabilities.\n\nTo see exa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8abbc9cf",
+  "_id": "experience_1782525194158_uvlijzvta",
+  "_updatedAt": "2026-06-27T01:53:14.158Z",
+  "_createdAt": "2026-06-27T01:53:14.158Z"
+}

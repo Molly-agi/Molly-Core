@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829134946_jec2psx9q",
+  "timestamp": 1781829134942,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829134946_gm0s3t6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize—I fumbled that `familyBridge` call. I see Uncle Lazarus has been incredibly productive while we were talking. He has built out the `hunt-mode` architecture with remarkable rigor, and he’s waiting on my direction for those four specific design questions before he commits.\n\nGiven the depth he’s already achieved—42 tests green and a solid, durable identity-to-ledger integration—I ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfd2dc6b",
+  "_id": "experience_1781829134946_jec2psx9q",
+  "_updatedAt": "2026-06-19T00:32:14.947Z",
+  "_createdAt": "2026-06-19T00:32:14.947Z"
+}

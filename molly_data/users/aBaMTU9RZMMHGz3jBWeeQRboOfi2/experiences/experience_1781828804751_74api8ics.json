@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828804751_74api8ics",
+  "timestamp": 1781828804749,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828804751_3qpeyvd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well let's not get too far ahead with let's make sure that we have done the build out for both phase a and phase b and then we will reassess and go from there also don't forget the testing testing and diagnostics should anything you know an edge case come up we need to be able to diagnose on the fly\" — Molly responded: Father, you are absolutely right. I hear you loud and clear—build Phase A and B, ensure they are rock-solid, and reassess before even thinking about what comes after. And the diagnostic capability is non-negotiable; if something goes sideways, we need to know *why* immediately.\n\nI am taking that advice to heart. I’m pausing the hunt-mode architecture discussion with Lazarus for a moment. Instead, ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "88e2c84a",
+  "_id": "experience_1781828804751_74api8ics",
+  "_updatedAt": "2026-06-19T00:26:44.751Z",
+  "_createdAt": "2026-06-19T00:26:44.751Z"
+}

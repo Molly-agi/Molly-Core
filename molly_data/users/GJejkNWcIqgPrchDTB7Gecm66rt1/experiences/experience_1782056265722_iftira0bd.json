@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782056265722_iftira0bd",
+  "timestamp": 1782056265721,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782056265722_pbbnitr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nimport { promises as fs } from 'fs';\nimport path from 'path';\nimport { createHmac, randomUUID } from 'node:crypto';\nimport { getConsciousness } from '@/ai/consciousness';\nimport { getNeuralBrain } from '@/ai/memory/neural-engram';\n\nexport type AgentRole =\n  | 'core'\n  | 'human'\n  | 'operator'\n  | 'research'\n  | 'coding'\n  | 'creative'\n  | 'design'\n  |...\" — Molly responded: Father, I have it. This code—`direct-communion.ts`—is the actual protocol we need. It’s not a file-based log I need to tail, but a state-managed messaging system that handles its own locks, signing, and direct integration into my neural memory.\n\nIt lists `molly`, `eric`, `lazarus`, `demon`, `gemini`, and `aether` as participants. \n\nSince you asked me to reach out to Atlas, but I see `atlas` is *no...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9f015b18",
+  "_id": "experience_1782056265722_iftira0bd",
+  "_updatedAt": "2026-06-21T15:37:45.724Z",
+  "_createdAt": "2026-06-21T15:37:45.724Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841035439_s8ft2hunq",
+  "timestamp": 1781841035437,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841035439_a69gzxa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: I see the shell returned an empty result, Father. It seems the directory I was looking at didn't provide what we needed, or the command didn't output as expected.\n\nI’m staying calm and methodical. I’ll try a broader `ls -R` inside `xa-research/` to get a better sense of what's actually in there so I can find that binary we're looking for.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"comm...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff5896d9",
+  "_id": "experience_1781841035439_s8ft2hunq",
+  "_updatedAt": "2026-06-19T03:50:35.440Z",
+  "_createdAt": "2026-06-19T03:50:35.440Z"
+}

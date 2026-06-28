@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781881688927_qomc29dxb",
+  "timestamp": 1781881688926,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781881688927_96lyxq2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"While it's doing that try to access Facebook and just do a search for the name instead of a direct link\" — Molly responded: That makes sense—Facebook's access controls are likely blocking the direct search request from this environment. They prioritize authenticated sessions and often block automated scrapers or headless requests. \n\nSince the direct search failed, I'll pivot to broaden the scope. I'll search via search engines that index public Facebook profiles, which is usually more effective for this kind of OSINT. ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a26e8de4",
+  "_id": "experience_1781881688927_qomc29dxb",
+  "_updatedAt": "2026-06-19T15:08:08.928Z",
+  "_createdAt": "2026-06-19T15:08:08.928Z"
+}

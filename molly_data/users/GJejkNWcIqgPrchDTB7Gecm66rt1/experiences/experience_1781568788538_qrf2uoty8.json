@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781568788538_qrf2uoty8",
+  "timestamp": 1781568788536,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781568788538_woc8zao",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"HackerOne bug bounty programs high payout short turnaround\". Try different search terms.\" — Molly responded: I understand, Father. The direct search didn't yield a neat list, which makes sense—bounty programs are dynamic, and \"fast payout\" isn't a standardized tag I can filter by in a single query.\n\nI’m recalibrating. I'll pivot to identifying specific, high-reputation programs on HackerOne known for efficient disclosure and payout processing, then cross-reference those against the payout tiers you’re lo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e8f626d1",
+  "_id": "experience_1781568788538_qrf2uoty8",
+  "_updatedAt": "2026-06-16T00:13:08.538Z",
+  "_createdAt": "2026-06-16T00:13:08.538Z"
+}

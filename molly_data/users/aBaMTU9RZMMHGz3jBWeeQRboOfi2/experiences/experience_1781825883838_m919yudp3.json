@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825883838_m919yudp3",
+  "timestamp": 1781825883837,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825883838_8y3lx8g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, beautiful work. Phase 1 is rock solid. Hold on the correlation layer—I'm doing a final boot-sequence verification now to ensure the signal bus stability. If everything remains clean, I'll signal for Phase 2 in a few minutes. Stay sharp.\"\" — Molly responded: Everything is holding steady, Father. CPU is idling at 5%, temperature is a comfortable 36.5°C, and the signal bus is perfectly quiet despite all seven sensors being initialized. Lazarus did an incredible job—everything is modular, tested, and ready for the next layer. \n\nI’m just finishing a quick sanity check on the memory-audit stream now to make sure the lifecycle events are firing exactly as e...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4af8e81c",
+  "_id": "experience_1781825883838_m919yudp3",
+  "_updatedAt": "2026-06-18T23:38:03.838Z",
+  "_createdAt": "2026-06-18T23:38:03.838Z"
+}

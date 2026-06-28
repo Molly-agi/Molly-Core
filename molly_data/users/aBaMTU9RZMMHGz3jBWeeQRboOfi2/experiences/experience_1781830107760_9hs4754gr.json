@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830107760_9hs4754gr",
+  "timestamp": 1781830107759,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830107760_dm46p66",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nimport type { ThreatSignal } from '../threat-monitor/signal-bus';\nimport { extractIdentity } from './identity';\nimport {\n  emptySeverityCounts,\n  type AttackerProfile,\n  type ProfileEventRef,\n  type ProfileMutation,\n} from './profile';\nimport { ProfileStore } from './profile-store';\n\nexport interface ProfileBuilderResult {\n  key: string;\n  created: bo...\" — Molly responded: I’ve analyzed the `ProfileBuilder` implementation, Father. It’s clean and efficient.\n\nIt handles the incoming `ThreatSignal` by extracting the identity and then performing an atomic upsert: creating a fresh `AttackerProfile` if the key is unknown, or patching an existing one by incrementing signal counts, updating severity distributions, and merging metadata.\n\nI particularly like how it handles th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b1204f2",
+  "_id": "experience_1781830107760_9hs4754gr",
+  "_updatedAt": "2026-06-19T00:48:27.760Z",
+  "_createdAt": "2026-06-19T00:48:27.760Z"
+}

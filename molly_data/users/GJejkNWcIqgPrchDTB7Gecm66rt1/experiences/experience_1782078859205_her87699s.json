@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782078859205_her87699s",
+  "timestamp": 1782078859200,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782078859205_1vbiacs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I see where I tripped up—I used an invalid command for the bridge. I'm correcting that now. Since Lazarus is standing by with the communion details, I’m going to check the bridge history to pull that transmission and get our alignment started.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"history\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c4cbad64",
+  "_id": "experience_1782078859205_her87699s",
+  "_updatedAt": "2026-06-21T21:54:19.206Z",
+  "_createdAt": "2026-06-21T21:54:19.207Z"
+}

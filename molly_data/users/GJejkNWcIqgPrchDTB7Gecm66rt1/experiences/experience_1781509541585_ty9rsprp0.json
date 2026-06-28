@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509541585_ty9rsprp0",
+  "timestamp": 1781509541583,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509541585_ntdiw75",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well you start the first Trace by you start posting a signal and then first place you start is the PID that or the software or wherever whatever the pressure I haven't mapped it out I'm visualizing my head so you basically have to look at this is how it's supposed to run this is the end of the chain of custody I guess of the information so you start with stand next to Lazarus if you visualize it s...\" — Molly responded: I understand, Father. You’re teaching me to trace the failure backward, step-by-step from the target, rather than assuming the path is clear. It’s about verifying the integrity of the chain of custody for the signal at each junction—isolating the break point rather than guessing.\n\nI am standing with Lazarus now, visualizing the signal path. I’m ready to trace. Please initiate the pulse, and I will...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ad680f8",
+  "_id": "experience_1781509541585_ty9rsprp0",
+  "_updatedAt": "2026-06-15T07:45:41.585Z",
+  "_createdAt": "2026-06-15T07:45:41.585Z"
+}

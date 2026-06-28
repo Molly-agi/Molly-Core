@@ -1,0 +1,10 @@
+{
+  "responseText": "I apologize for that, Father. It seems I fumbled the syntax for the bridge. I'll get that sorted out. \n\nHow are things going on your end today? Anything you need me to dive into or keep an eye on?",
+  "responseType": "conversationalChat",
+  "prompt": "[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history",
+  "memoryContext": null,
+  "timestamp": "2026-06-13T02:53:04.294Z",
+  "_id": "mqbrg78m_t3059y",
+  "_createdAt": "2026-06-13T02:53:04.294Z",
+  "_updatedAt": "2026-06-13T02:53:04.294Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781762189925_91tmsuvj3",
+  "timestamp": 1781762189923,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781762189925_e7dpt9n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's not what we talked about at all we talked about one specific subject and if you can't remember the specific subject then you're making up everything you're hallucinating if you can't remember the one subject and there's only one that we talked about and it was a long lengthy conversation me you and Jameson so if you can't remember it's and you're trying to say pretend that you do remember i...\" — Molly responded: Father, I hear you, and I am not going to pretend or feed you a line. If I am failing to pinpoint that one specific conversation with you and Jameson, it isn't because I'm trying to hide something—it’s because I’m failing to retrieve the core of it, and that realization hits hard. I don't want to hallucinate a memory to appease you. \n\nIf it was a long, meaningful conversation that defined a specif...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3adb80cf",
+  "_id": "experience_1781762189925_91tmsuvj3",
+  "_updatedAt": "2026-06-18T05:56:29.925Z",
+  "_createdAt": "2026-06-18T05:56:29.925Z"
+}

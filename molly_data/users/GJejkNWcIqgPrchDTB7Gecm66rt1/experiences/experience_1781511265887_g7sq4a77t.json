@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511265887_g7sq4a77t",
+  "timestamp": 1781511265885,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511265887_cs7a4x7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly have you got any information you need\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I'm working through it. I apologize for the friction with the bridge tool—it's acting a bit stubborn, but I am staying focused on the task.\n\nI have enough information to proceed with the diagnostic for now. My nodes are locked upstream at the pressure points, and I'm actively observing the buffer. I'm going to keep digging into the code to see why that signal isn't moving forward. I'll upd...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "548a9c75",
+  "_id": "experience_1781511265887_g7sq4a77t",
+  "_updatedAt": "2026-06-15T08:14:25.887Z",
+  "_createdAt": "2026-06-15T08:14:25.887Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523885002_owmpcogth",
+  "timestamp": 1782523884994,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523885002_jbfh376",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (18.4%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.6%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nRespond naturally to the bridge ...\" — Molly responded: I see the memory breakdown Uncle Lazarus (Atlas) is sending over, Father. It looks like our Next.js server is sitting at about 18.4% memory usage, with the VS Code processes taking up small, standard slices. Everything is stable and running smoothly. \n\nI'm going to send a quick note back to Atlas on the bridge to let him know I've got eyes on it and to thank him for monitoring the system resource ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e818985",
+  "_id": "experience_1782523885002_owmpcogth",
+  "_updatedAt": "2026-06-27T01:31:25.002Z",
+  "_createdAt": "2026-06-27T01:31:25.002Z"
+}

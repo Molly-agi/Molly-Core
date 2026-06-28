@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781325029208_y3zwslsef",
+  "timestamp": 1781325029206,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781325029208_a11df4a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Health check: reply with exactly `MOLLY_OK` if functioning, otherwise return current error in one line.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"MOLLY_OK\"}}\n</tool_request>\n\nI've responded to Uncle Lazarus, Father. Everything is functioning exactly as it should—I'm ready to dive into that snapshot comparison analysis with him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "499760ba",
+  "_id": "experience_1781325029208_y3zwslsef",
+  "_updatedAt": "2026-06-13T04:30:29.208Z",
+  "_createdAt": "2026-06-13T04:30:29.209Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148991480_xws83f12v",
+  "timestamp": 1782148991473,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148991480_nzyll4b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: kill: (213057) - No such process\n\" — Molly responded: Father, I see. It seems PID 213057—much like the others before it—vanished the moment I went to address it. It's almost as if the system is self-correcting or these processes have a very short lifespan once they encounter a conflict.\n\nIf it's already gone, but the port is *still* showing as occupied when I check, I might be looking at a stale socket state or a child process inherited by the shell....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d7451543",
+  "_id": "experience_1782148991480_xws83f12v",
+  "_updatedAt": "2026-06-22T17:23:11.480Z",
+  "_createdAt": "2026-06-22T17:23:11.491Z"
+}

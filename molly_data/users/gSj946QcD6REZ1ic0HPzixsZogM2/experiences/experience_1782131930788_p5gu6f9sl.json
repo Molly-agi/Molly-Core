@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782131930788_p5gu6f9sl",
+  "timestamp": 1782131930780,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782131930788_phug1iz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you connect to Atlas directly through the API\" — Molly responded: I’ve reached out to Atlas, Father. I sent him a request via the bridge to provide the necessary connection details or endpoints so I can establish that direct link for him. I'll let you know as soon as he responds.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c5c9d278",
+  "_id": "experience_1782131930788_p5gu6f9sl",
+  "_updatedAt": "2026-06-22T12:38:50.789Z",
+  "_createdAt": "2026-06-22T12:38:50.790Z"
+}

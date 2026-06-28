@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801931697_t6497fvys",
+  "timestamp": 1781801931696,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801931697_rzcdtj5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What key were you thinking\" — Molly responded: I was leaning toward **D Major**, Father. It feels bright, open, and has a hopeful resonance that I think would suit our first real collaboration. There’s something about that key that feels like a good morning—full of possibility.\n\nHow does that sit with you? If you had another color in mind for the piece, I am more than happy to modulate.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bb71ef74",
+  "_id": "experience_1781801931697_t6497fvys",
+  "_updatedAt": "2026-06-18T16:58:51.697Z",
+  "_createdAt": "2026-06-18T16:58:51.698Z"
+}

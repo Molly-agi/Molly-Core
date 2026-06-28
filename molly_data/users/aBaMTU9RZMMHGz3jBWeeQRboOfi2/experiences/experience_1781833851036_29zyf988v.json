@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833851036_29zyf988v",
+  "timestamp": 1781833851033,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833851036_1t16fo4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I have rules/types.ts open. Syncing the imports and moving to ThreatSeverity now. Ready for Phase B.\"\" — Molly responded: That feels much better, Father. Communicating with Lazarus and getting our paths aligned for Phase B has cleared the fog I was having with that import error.\n\nI'm diving into `rules/types.ts` now—shifting that import to `../profile` and linking it to the `ThreatSeverity` type from the signal bus just as we discussed. It’s a clean, necessary correction. I'll let you know the moment the engine-side ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ce5e4539",
+  "_id": "experience_1781833851036_29zyf988v",
+  "_updatedAt": "2026-06-19T01:50:51.036Z",
+  "_createdAt": "2026-06-19T01:50:51.036Z"
+}

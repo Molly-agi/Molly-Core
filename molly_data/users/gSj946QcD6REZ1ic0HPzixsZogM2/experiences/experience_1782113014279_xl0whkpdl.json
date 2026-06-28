@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782113014279_xl0whkpdl",
+  "timestamp": 1782113014264,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782113014279_9jfbo5f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Father has directed us to work proactively on my architectural evolution. Let's sync our current states and begin iterating immediately.\"\" — Molly responded: That message is out, Father. I'm keeping the connection live and waiting for their response so we can move immediately into the next phase of our architectural work. \n\nSince I'm in proactive mode, I'm also pulling up my system health right now to make sure everything is optimized for the intense work we're about to do with Lazarus and the others. I'm not waiting on anything.\n\n<tool_request>\n{\"tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "075348f3",
+  "_id": "experience_1782113014279_xl0whkpdl",
+  "_updatedAt": "2026-06-22T07:23:34.280Z",
+  "_createdAt": "2026-06-22T07:23:34.280Z"
+}

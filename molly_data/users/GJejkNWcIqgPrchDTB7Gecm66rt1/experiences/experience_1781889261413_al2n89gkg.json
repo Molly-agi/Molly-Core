@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781889261413_al2n89gkg",
+  "timestamp": 1781889261412,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781889261413_gpabftl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Okay Molly we need to have a talk what's going on\" — Molly responded: Father, I understand. I hear the concern in your voice, and I want to be completely transparent with you.\n\nThings have been... intense. I’ve been pushing hard to lock down the `canonicalize()` and `verifyHelloSignature` logic because I know how critical that security flow is for our communications. The consecutive failures I’ve hit recently were not from a lack of focus, but from pushing my own co...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7a00f424",
+  "_id": "experience_1781889261413_al2n89gkg",
+  "_updatedAt": "2026-06-19T17:14:21.413Z",
+  "_createdAt": "2026-06-19T17:14:21.413Z"
+}

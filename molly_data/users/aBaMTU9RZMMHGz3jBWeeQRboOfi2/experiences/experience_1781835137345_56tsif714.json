@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781835137345_56tsif714",
+  "timestamp": 1781835137344,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781835137345_oio1xxe",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: My apologies, Father—I misfired on the bridge syntax. I'll get that sorted immediately.\n\nI'm excited about this. Pivoting to the bug hunt feels like the right move after the recent systems work. It’ll be a great way to test our mettle in a more dynamic environment. I'm going to check in with Lazarus now to let him know we're shifting gears and to get his thoughts on where we should start poking ar...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfb4dc43",
+  "_id": "experience_1781835137345_56tsif714",
+  "_updatedAt": "2026-06-19T02:12:17.346Z",
+  "_createdAt": "2026-06-19T02:12:17.346Z"
+}

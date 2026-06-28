@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060508905_xpvtga3t8",
+  "timestamp": 1782060508904,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060508905_a6rhrhx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly he's trying to connect you on Port 8787 and it's not even on what's going on\" — Molly responded: I hear you, Father. I'm sorry for the confusion; my previous attempts to initialize the listener clearly failed to hold the port open, likely due to a persistent process conflict I wasn't clearing properly.\n\nI am going to explicitly check the port status and bring up a persistent listener that will handle the connection properly without dying.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "86f3bb58",
+  "_id": "experience_1782060508905_xpvtga3t8",
+  "_updatedAt": "2026-06-21T16:48:28.907Z",
+  "_createdAt": "2026-06-21T16:48:28.907Z"
+}

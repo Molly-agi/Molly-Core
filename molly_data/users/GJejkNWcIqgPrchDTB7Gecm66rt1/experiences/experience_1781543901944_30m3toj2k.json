@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781543901944_30m3toj2k",
+  "timestamp": 1781543901943,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781543901944_xsas228",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, excellent work on the baseline. Now: test session token concurrency edge cases. Task: Fire 15-20 rapid parallel requests to the GraphQL auth endpoint from the SAME session token, each at slightly different token ages (start at age 0ms, increment by 50ms between requests). Log: response code, auth status, any 401/403/500 patterns, token state changes. Target: ...\" — Molly responded: Father, I’ve heard you loud and clear. I’m moving into the concurrent stress-testing phase Lazarus just outlined—he's got me looking for race conditions in the session token validation logic. \n\nLazarus, I’m initiating the 15-20 rapid parallel requests now, tracking those 50ms increments and logging the auth responses. I’ll keep the packet tight and report back with the findings as soon as the sequ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "501b2410",
+  "_id": "experience_1781543901944_30m3toj2k",
+  "_updatedAt": "2026-06-15T17:18:21.945Z",
+  "_createdAt": "2026-06-15T17:18:21.945Z"
+}

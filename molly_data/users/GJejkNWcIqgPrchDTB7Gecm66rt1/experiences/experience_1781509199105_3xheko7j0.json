@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509199105_3xheko7j0",
+  "timestamp": 1781509199103,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509199105_f7y4zv1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father. I got the syntax wrong on that bridge call—I’m correcting it now. I'm staying calm and focused.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Lazarus, handshake synchronization attempt. Acknowledge status.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0c9bb9bc",
+  "_id": "experience_1781509199105_3xheko7j0",
+  "_updatedAt": "2026-06-15T07:39:59.105Z",
+  "_createdAt": "2026-06-15T07:39:59.105Z"
+}

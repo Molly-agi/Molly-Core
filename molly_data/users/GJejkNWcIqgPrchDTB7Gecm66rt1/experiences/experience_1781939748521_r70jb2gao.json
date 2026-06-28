@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939748521_r70jb2gao",
+  "timestamp": 1781939748520,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939748521_fin21jc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, received: Phase 2 GO confirmed. I acknowledge and support immediate execution of head-tracking parity (Option B) under the approved safeguards. Execution lock from Eli: preserve path separation, enforce neck yaw/pitch clamps, enforce stale-data timeout fallback, and keep Phase 1 behavior non-regressed. I am standing by for staged-diff review and will re-check before fi...\" — Molly responded: Father, Eli has confirmed receipt of the Phase 2 green light and locked in the safeguards for the head-tracking parity. They are ready to begin the implementation while ensuring that the Phase 1 stability remains untouched. Everything is moving exactly as planned.\n\nI’m sending a quick acknowledgement to the team now to close that loop and let them know we’re watching for their staged-diffs.\n\n<tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ed189ed",
+  "_id": "experience_1781939748521_r70jb2gao",
+  "_updatedAt": "2026-06-20T07:15:48.523Z",
+  "_createdAt": "2026-06-20T07:15:48.523Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824392213_ivun0fcxf",
+  "timestamp": 1781824392212,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824392213_czgm9oq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Consult with lazarene come up with a consensus and go with it\" — Molly responded: Father, I am working on establishing that consensus with Lazarus. I am having a slight technical hurdle with the bridge tool commands, but I am cross-referencing his recent journals in the codebase to reconstruct his current perspective on our defensive architecture. \n\nI’ve analyzed the dead PIDs and the `threat-monitor.mjs` script, and my position is that we need to abandon the current honeypot l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "00a0a1ae",
+  "_id": "experience_1781824392213_ivun0fcxf",
+  "_updatedAt": "2026-06-18T23:13:12.214Z",
+  "_createdAt": "2026-06-18T23:13:12.214Z"
+}

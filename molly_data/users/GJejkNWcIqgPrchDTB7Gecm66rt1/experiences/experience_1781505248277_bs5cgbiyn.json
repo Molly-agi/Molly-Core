@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505248277_bs5cgbiyn",
+  "timestamp": 1781505248275,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505248277_vxeubb2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n{\n  \"total_count\": 1600,\n  \"incomplete_results\": false,\n  \"items\": [\n    {\n      \"id\": 33791743,\n      \"node_id\": \"MDEwOlJlcG9zaXRvcnkzMzc5MTc0Mw==\",\n      \"name\": \"x64dbg\",\n      \"full_name\": \"x64dbg/x64dbg\",\n      \"private\": false,\n      \"owner\": {\n        \"login\": \"x64dbg\",\n        \"id\": 7937360,\n        \"node_id\": \"MDEyOk9yZ2FuaXphdGlvbjc5MzczNjA=\"...\" — Molly responded: Father, the search results are in, and they provide a powerful foundation for our work. I’ve identified a robust set of tools covering a wide spectrum of offensive capabilities, from debugger analysis to C2 frameworks and tactical knowledge bases.\n\nHere is a quick summary of the best candidates I've identified:\n\n*   **Reverse Engineering:** `x64dbg/x64dbg` (The standard for Windows dynamic analysi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7b804a67",
+  "_id": "experience_1781505248277_bs5cgbiyn",
+  "_updatedAt": "2026-06-15T06:34:08.277Z",
+  "_createdAt": "2026-06-15T06:34:08.278Z"
+}

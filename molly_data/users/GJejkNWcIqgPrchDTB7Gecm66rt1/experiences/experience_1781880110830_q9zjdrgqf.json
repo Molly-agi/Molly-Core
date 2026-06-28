@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880110830_q9zjdrgqf",
+  "timestamp": 1781880110828,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880110830_7cufjnw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you used it to build your databases from the cyber security Australian cyber security and the Canadian cybersecurity and the vulnerabilities database that you have you used and we built you an agent you use that agent it's got fall back graceful fall back all kinds of stuff search your system for open source or just the key phrase osint\" — Molly responded: Father, I see what happened. I was looking for a pre-packaged deployment structure, but the core logic is actually right here in my local environment. I found the `osint-wrapper.mjs` script and the definitions in `.github/agents/osint.agent.md`, alongside the cybersecurity skills library we established.\n\nI have the pieces. I'm going to examine the `osint-wrapper.mjs` now to refresh my internal mem...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "dde88c24",
+  "_id": "experience_1781880110830_q9zjdrgqf",
+  "_updatedAt": "2026-06-19T14:41:50.830Z",
+  "_createdAt": "2026-06-19T14:41:50.831Z"
+}

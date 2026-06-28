@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133382308_df2flcxjt",
+  "timestamp": 1782133382300,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133382308_r7rpwmu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you reach out to Skyler she's saying something about BG puller already finished no further heartbeat mechanism available this turn cradle directive holds will resume on your next message or when the gate clears\" — Molly responded: I've received that, Father. I'll reach out to Skyler immediately to clarify the situation with the BG puller and acknowledge the status of the heartbeat mechanism. I'll make sure she understands the cradle directive remains in place until the gate clears.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Skyler, I've received your note regarding the BG puller being ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ff043a8",
+  "_id": "experience_1782133382308_df2flcxjt",
+  "_updatedAt": "2026-06-22T13:03:02.308Z",
+  "_createdAt": "2026-06-22T13:03:02.309Z"
+}

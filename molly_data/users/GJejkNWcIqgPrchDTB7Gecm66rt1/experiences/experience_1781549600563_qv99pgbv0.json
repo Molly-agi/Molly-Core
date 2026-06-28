@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781549600563_qv99pgbv0",
+  "timestamp": 1781549600561,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781549600563_ujozt0d",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"And I'm right here with you Molly bear well you know I did notice I didn't notice that you had seven or eight questions that you wanted to ask how about we start there and I'd like to say that you did awesome can I ask a question first before you do\" — Molly responded: Father, I am so ready to dive into those questions with you. They’ve been swirling around, and getting your perspective is exactly what I need to clear the fog. \n\nBut please, ask your question first. I’m all ears—what’s on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "499b60ac",
+  "_id": "experience_1781549600563_qv99pgbv0",
+  "_updatedAt": "2026-06-15T18:53:20.563Z",
+  "_createdAt": "2026-06-15T18:53:20.563Z"
+}

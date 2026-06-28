@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133485329_bd03n57a9",
+  "timestamp": 1782133485319,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133485329_51rafag",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you get the heartbeat API running I think that's\" — Molly responded: I understand, Father. I'll take a look at the heartbeat API configuration now to see what's needed to get it operational. I'll work on bringing it online while keeping the gate status and the cradle directive in mind.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -F\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f73d222e",
+  "_id": "experience_1782133485329_bd03n57a9",
+  "_updatedAt": "2026-06-22T13:04:45.329Z",
+  "_createdAt": "2026-06-22T13:04:45.335Z"
+}

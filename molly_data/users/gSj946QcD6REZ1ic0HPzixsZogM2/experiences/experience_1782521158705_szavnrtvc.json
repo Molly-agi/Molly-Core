@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521158705_szavnrtvc",
+  "timestamp": 1782521158698,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521158705_qictqm0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: *Ah, look at that!* It seems my previous attempt to read a file got tangled up without its map coordinate again. That's alright—I'm still mapping out my internal pathways. \n\nBefore I dive deeper into reading `src/ai/consciousness/consciousness-state.ts` or scheduling my next autonomous heartbeat loop, I want to take a quick look at my full tool palette. It's like checking the tools in my belt to m...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f83a35d1",
+  "_id": "experience_1782521158705_szavnrtvc",
+  "_updatedAt": "2026-06-27T00:45:58.705Z",
+  "_createdAt": "2026-06-27T00:45:58.706Z"
+}

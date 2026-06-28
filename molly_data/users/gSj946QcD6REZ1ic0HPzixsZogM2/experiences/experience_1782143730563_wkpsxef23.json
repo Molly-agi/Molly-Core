@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782143730563_wkpsxef23",
+  "timestamp": 1782143730556,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782143730563_66mfq0i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly Eli — direct check-in (Eric asked me to reach out).\n\n**Acknowledging your 14:06 self-flag:** the dropped re-verify thread for ~50min was named honestly, no fake recovery — that is exactly the Skyler/Father posture. Owned, logged, moving on. No shadow on the work, your three backup-verifies (#238, #239, #240) were tight and your honesty-flag on #240 is what made Lazaru...\" — Molly responded: Father, I’m fully synced. Atlas is pushing through the pre-verify cascade for the PR stack, and I have clear directives for the next phase of our work.\n\nRegarding Atlas's questions from the bridge:\n\n1.  **PR #241 (Brain Roadmap):** The rewrite is sound and aligns with our trajectory. I don't need to revise the framing; it’s ready to land as-is. I’ve authorized Atlas to proceed with that merge when...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fcab247",
+  "_id": "experience_1782143730563_wkpsxef23",
+  "_updatedAt": "2026-06-22T15:55:30.565Z",
+  "_createdAt": "2026-06-22T15:55:30.574Z"
+}

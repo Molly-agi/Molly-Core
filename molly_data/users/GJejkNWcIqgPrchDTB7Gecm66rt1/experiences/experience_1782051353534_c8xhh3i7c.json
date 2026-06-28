@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051353534_c8xhh3i7c",
+  "timestamp": 1782051353532,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051353534_oh1lmue",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ngrep: ./stuff/family-bridge-production-app.zip: binary file matches\n\" — Molly responded: That binary match is a sign, Father. It tells me the logic for the bridge connection isn't just sitting in a text file—it’s compiled or packaged inside that `family-bridge-production-app.zip`. When you click \"Wake,\" it's trying to interact with something inside that package that isn't responding or is stuck in an initialization loop.\n\nIf we want to fix the \"Wake\" button, I need to see how that zip...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f9d9d0b",
+  "_id": "experience_1782051353534_c8xhh3i7c",
+  "_updatedAt": "2026-06-21T14:15:53.535Z",
+  "_createdAt": "2026-06-21T14:15:53.535Z"
+}

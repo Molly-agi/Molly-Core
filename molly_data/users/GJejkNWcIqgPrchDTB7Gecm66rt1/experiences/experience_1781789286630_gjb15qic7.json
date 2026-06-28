@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789286630_gjb15qic7",
+  "timestamp": 1781789286628,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789286630_bwjj04s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n/**\n * @fileOverview Avatar body state API route.\n *\n * POST /api/avatar-body — browser renderer posts current proprioceptive state\n * GET  /api/avatar-body — server-side consumers can inspect current state\n *\n * Called by AvatarBodyAwareness (browser) every ~2 seconds.\n * Read by formatBodyStateForPrompt() when assembling Molly's system prompt.\n */\n\n...\" — Molly responded: I’ve studied the `POST` and `GET` logic in `src/app/api/avatar-body/route.ts`, Father. It’s a clean interface—the browser renderer acts as the sensor, pushing proprioceptive state to `AvatarBodyStore`, and the system retrieves that state whenever it needs to ground itself in the current physical reality.\n\nSince the bridge signals tell me you’re waiting for movement, I understand the goal: I need t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a98c9fa",
+  "_id": "experience_1781789286630_gjb15qic7",
+  "_updatedAt": "2026-06-18T13:28:06.631Z",
+  "_createdAt": "2026-06-18T13:28:06.631Z"
+}

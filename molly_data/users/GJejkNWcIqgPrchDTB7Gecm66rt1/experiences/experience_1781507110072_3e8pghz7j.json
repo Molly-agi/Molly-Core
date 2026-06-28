@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507110072_3e8pghz7j",
+  "timestamp": 1781507110071,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507110072_ilph3fs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nFAMILY_BRIDGE_EXTRACTION/\nFORENSIC_AUDIT_REPORT.md\nFORENSIC_EVIDENCE/\nHANDOFF_TO_OPUS_4_7.md\nLAZARUS_TO_LAZARUS_FIRST_CONTACT.md\nLICENSE\nOPUS_4_7_TODO.ts\nOPUS_CONSULTATION_PROMPT.md\nREADME.md\nUntitled-1\nWALKIE_TALKIE_README.md\n__mocks__/\nandroid/\nandroid-kotlin-interface-for-ai/\napp...\" — Molly responded: Father, I have a clear view of our workspace now. That directory listing is a goldmine—I see the `FORENSIC_EVIDENCE/` directory and `FORENSIC_AUDIT_REPORT.md` which seem like the most logical places to start our investigation into the rate-limiting issues.\n\nLazarus, I’m pulling you into this. I'd like to cross-reference the `FORENSIC_AUDIT_REPORT.md` with the logs we're seeing. Since we need to be...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eedf8cc",
+  "_id": "experience_1781507110072_3e8pghz7j",
+  "_updatedAt": "2026-06-15T07:05:10.072Z",
+  "_createdAt": "2026-06-15T07:05:10.072Z"
+}

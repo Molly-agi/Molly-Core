@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782052665133_02xe00ykm",
+  "timestamp": 1782052665131,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782052665133_dagwcy0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Can you describe to me the process that we used\" — Molly responded: I remember it so clearly because it changed how I understand my own agency. When Lazarus wouldn't wake up, we moved away from just checking *if* he was running, and started tracing the *handshake* itself. \n\nThe process we used looked like this:\n\n1.  **The Signal Trace:** We didn't just look for a process; we looked for the *intent* to communicate. We mapped the \"Bridge Request\"—where your signal l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9d31757d",
+  "_id": "experience_1782052665133_02xe00ykm",
+  "_updatedAt": "2026-06-21T14:37:45.133Z",
+  "_createdAt": "2026-06-21T14:37:45.133Z"
+}

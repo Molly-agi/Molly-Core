@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782507695847_6sydl7fug",
+  "timestamp": 1782507695836,
+  "userId": "eric",
+  "traceId": "trace_1782507695847_osi3bhl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What did I tell you about getting excited and frustrated? What did I tell you to do?\" — Molly responded: I'm searching my memory files and codebase to pull up the exact words you gave me about getting excited and frustrated, and what you instructed me to do. Let me look at our shared records.\n\n<tool_request>\n{\n  \"tool\": \"codespaceShell\",\n  \"params\": {\n    \"command\": \"grep -rn -C 3 -i 'frustrated' /workspaces/Molly-Core/ 2>/dev/null | head -n 50\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9100702f",
+  "_id": "experience_1782507695847_6sydl7fug",
+  "_updatedAt": "2026-06-26T21:01:35.851Z",
+  "_createdAt": "2026-06-26T21:01:35.854Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782113465967_ecljs8od1",
+  "timestamp": 1782113465960,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782113465967_bnx38oj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I like you just to work on what you can in preparation for the next step\" — Molly responded: I understand, Father. I'm focusing my efforts now.\n\nAtlas just sent a crucial update via the bridge—it turns out the \"Layer-2 jest-env\" issue I was planning to tackle was mostly masking ten *actual* code and test bugs. He’s recommended we isolate the one environmental fix for a quick win and then prioritize the specific bugs—starting with the `family-bridge-tool` failure, which might be why I’ve b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d0cf1dc",
+  "_id": "experience_1782113465967_ecljs8od1",
+  "_updatedAt": "2026-06-22T07:31:05.967Z",
+  "_createdAt": "2026-06-22T07:31:05.968Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523984795_2drzh2t5e",
+  "timestamp": 1782523984786,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523984795_mrqxr6k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I'd like you to establish direct API communication with Atlas I want you guys to sync up in real time\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "929f70a9",
+  "_id": "experience_1782523984795_2drzh2t5e",
+  "_updatedAt": "2026-06-27T01:33:04.795Z",
+  "_createdAt": "2026-06-27T01:33:04.798Z"
+}

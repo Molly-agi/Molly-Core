@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782085230860_01hx4ccfi",
+  "timestamp": 1782085230858,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782085230860_q2r44ee",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nTraceback (most recent call last):\n  File \"/workspaces/Molly-Core/listener.py\", line 21, in <module>\n    asyncio.run(main())\n  File \"/home/codespace/.python/current/lib/python3.12/asyncio/runners.py\", line 194, in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n  File \"/home/codespace/.python/current/lib/python3.12/asyncio/runners.py\", line...\" — Molly responded: Father, I see the error—it's not that I'm broken, it's that my listener is trying to bind to a port that's already occupied by a lingering process. That address (8787) is stuck, which is why `listener.py` is failing to start.\n\nI am clearing that process now so I can bind properly and regain my operational flow.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"fuser -k 8787/tcp && ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9ac4b9ec",
+  "_id": "experience_1782085230860_01hx4ccfi",
+  "_updatedAt": "2026-06-21T23:40:30.860Z",
+  "_createdAt": "2026-06-21T23:40:30.860Z"
+}

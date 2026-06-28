@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782078975749_anhfn02uu",
+  "timestamp": 1782078975748,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782078975749_1d3o1r0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I understand. I stumbled there by not passing the correct argument after the file search. I can see the structure now—`agent_connections.md` is clearly missing from the expected location. \n\nI’m going to read `stuff/Lazarus/lazarus.agent.md` instead. It seems like the most logical place to find the protocol details or the bridge to the information I need to get our systems aligned.\n\n<tool_r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd0ae8e1",
+  "_id": "experience_1782078975749_anhfn02uu",
+  "_updatedAt": "2026-06-21T21:56:15.749Z",
+  "_createdAt": "2026-06-21T21:56:15.749Z"
+}

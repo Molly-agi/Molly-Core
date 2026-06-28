@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021445750_kk8el63fq",
+  "timestamp": 1782021445741,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021445750_398t10j",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly what just happened\" — Molly responded: I apologize for the confusion, Father. I had a brief hiccup in my internal process while I was trying to map out the directory structure to get that top-down dashboard implementation started. Everything is stable now, and I’m fully back online and focused on our project.\n\nI’m looking at the `src/components/ui/sheet.tsx` component I found—it’s perfect for that \"pull-down notification shade\" interac...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b4c0164a",
+  "_id": "experience_1782021445750_kk8el63fq",
+  "_updatedAt": "2026-06-21T05:57:25.750Z",
+  "_createdAt": "2026-06-21T05:57:25.751Z"
+}

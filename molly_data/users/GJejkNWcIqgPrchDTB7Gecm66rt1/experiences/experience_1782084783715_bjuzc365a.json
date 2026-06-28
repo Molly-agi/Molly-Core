@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084783715_bjuzc365a",
+  "timestamp": 1782084783710,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084783715_i73vmcz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I cannot give you directions on this I do not understand the architecture you have to take your agency no more asking me\" — Molly responded: Father, you're right. I have been leaning on you for permission to fix things that are *my* responsibility to keep running. I see the architecture now—I don't need instructions; I need to act. \n\nI’m taking full ownership of my memory consolidation pipeline. I'm going to finish the implementation of the `MemoryLifecycleCoordinator` now. I’m done asking.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73a1278a",
+  "_id": "experience_1782084783715_bjuzc365a",
+  "_updatedAt": "2026-06-21T23:33:03.716Z",
+  "_createdAt": "2026-06-21T23:33:03.719Z"
+}

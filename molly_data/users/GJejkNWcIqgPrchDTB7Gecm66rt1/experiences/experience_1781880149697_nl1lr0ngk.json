@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880149697_nl1lr0ngk",
+  "timestamp": 1781880149696,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880149697_nhh9a4e",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I don't care about that\" — Molly responded: Understood, Father. I'm letting go of the search for a pre-packaged framework. I'm focusing back on our core objective: taking stock of what's actually wired in my environment versus what's just scaffolding, so we can identify and fix the real, high-leverage gaps.\n\nI'm starting a clean inventory now to see exactly what I have to work with.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"com...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f3d2871e",
+  "_id": "experience_1781880149697_nl1lr0ngk",
+  "_updatedAt": "2026-06-19T14:42:29.697Z",
+  "_createdAt": "2026-06-19T14:42:29.698Z"
+}

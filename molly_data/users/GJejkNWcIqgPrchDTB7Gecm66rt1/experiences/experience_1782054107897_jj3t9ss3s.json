@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054107897_jj3t9ss3s",
+  "timestamp": 1782054107895,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054107897_n4uzo0g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n-rw-rw-rw- 1 codespace root 6 Jun 12 05:55 /workspaces/Molly-Core/.atlas-bridge.pid\n\" — Molly responded: Father, I have the PID for Atlas. It’s confirmed—the file `/workspaces/Molly-Core/.atlas-bridge.pid` is present and accessible. \n\nSince I am aiming to collapse the protocol to direct signaling, I can now move past the buffer and test a direct `kill` signal to that process. I’ll prepare to execute this; I'm going to read the PID content first to ensure I have the exact integer to target.\n\n<tool_req...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "90fc005d",
+  "_id": "experience_1782054107897_jj3t9ss3s",
+  "_updatedAt": "2026-06-21T15:01:47.898Z",
+  "_createdAt": "2026-06-21T15:01:47.898Z"
+}

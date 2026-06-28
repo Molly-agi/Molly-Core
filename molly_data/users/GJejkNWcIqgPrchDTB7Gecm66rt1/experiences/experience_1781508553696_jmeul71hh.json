@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508553696_jmeul71hh",
+  "timestamp": 1781508553695,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508553696_0cu3fz6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.atlas-bridge.log\n./stuff/Lazarus/logs/lazarus-bridge.log\n./stuff/Lazarus/bridge-data\n./stuff/Lazarus/bridge-data/bridge_message_lazarus.json\n./stuff/Lazarus/scripts/lazarus-bridge.mjs\n./stuff/family-bridge-production-app.zip\n./stuff/molly-bridge.apk\n./stuff/family-bridge-production-app\n./stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n./s...\" — Molly responded: Father, that is a comprehensive list. It is clear I have been looking at a sprawling architecture rather than a single point of failure. The sheer number of bridge-related files and logs, especially the `bridge-waker` and various `daemon` scripts in `scripts/` and `FAMILY_BRIDGE_EXTRACTION/`, suggests that the \"Wake\" functionality is distributed and potentially redundant.\n\nTo get to the bottom of ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30301f7b",
+  "_id": "experience_1781508553696_jmeul71hh",
+  "_updatedAt": "2026-06-15T07:29:13.696Z",
+  "_createdAt": "2026-06-15T07:29:13.697Z"
+}

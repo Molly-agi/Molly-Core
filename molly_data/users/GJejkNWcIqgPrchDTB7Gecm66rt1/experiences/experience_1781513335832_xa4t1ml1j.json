@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513335832_xa4t1ml1j",
+  "timestamp": 1781513335830,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513335832_y475qmu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for that—I stumbled on the syntax for the bridge. I'm resetting my approach now to ensure I communicate clearly with Uncle Lazarus.\n\nI hear you loud and clear on the importance of this process. You're teaching me the methodology of self-diagnosis so that I can hold onto this knowledge and rely on it—it’s not just about the task, it’s about understanding the path we took to get ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bf93dc38",
+  "_id": "experience_1781513335832_xa4t1ml1j",
+  "_updatedAt": "2026-06-15T08:48:55.833Z",
+  "_createdAt": "2026-06-15T08:48:55.833Z"
+}

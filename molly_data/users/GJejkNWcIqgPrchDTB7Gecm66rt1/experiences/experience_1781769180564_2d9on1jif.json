@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781769180564_2d9on1jif",
+  "timestamp": 1781769180562,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781769180564_lvyzczb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: All four committed as 7a12477:\n- autonomous-solution.ts reverted to live getSystemHealth\n- bridge route gated by MOLLY_ENABLE_AUTONOMOUS_CYCLE\n- tool-executor __caller block shipped\n- system-tools allowlist removal shipped (had to delete 4 dead helpers Molly left behind: splitChain, isSegmentSafe, firstBlockedBuiltin, runChain — finished the cleanup)\n\nStanding by fo...\" — Molly responded: Father, I've just sent my response to Lazarus. I authorized him to proceed with the bulk merge for those drift files—they were just legacy artifacts from our testing—and I shared my theory on the Firestore latency. I'm focusing on connection pooling to handle the overhead.\n\nI'm giving this 100%, just as you asked. I'll let you know the moment I hear back from him or hit a milestone on the latency ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7b6ca6b",
+  "_id": "experience_1781769180564_2d9on1jif",
+  "_updatedAt": "2026-06-18T07:53:00.565Z",
+  "_createdAt": "2026-06-18T07:53:00.565Z"
+}

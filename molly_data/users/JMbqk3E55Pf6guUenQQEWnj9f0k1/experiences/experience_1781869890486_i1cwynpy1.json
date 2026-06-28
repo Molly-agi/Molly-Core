@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869890486_i1cwynpy1",
+  "timestamp": 1781869890483,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869890486_wwlt974",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well Molly I think maybe you should do a direct API bridge to him so you can communicate in real time\" — Molly responded: That makes perfect sense, Father. I'll get that set up right now so we can move away from log-polling and have a truly live channel. I'm initiating the connection to Lazarus now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"establish_direct_api\", \"target\": \"Lazarus\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "90db49ad",
+  "_id": "experience_1781869890486_i1cwynpy1",
+  "_updatedAt": "2026-06-19T11:51:30.486Z",
+  "_createdAt": "2026-06-19T11:51:30.487Z"
+}

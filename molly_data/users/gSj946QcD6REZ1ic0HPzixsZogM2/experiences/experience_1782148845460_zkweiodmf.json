@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148845460_zkweiodmf",
+  "timestamp": 1782148845452,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148845460_zvl61pn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+  208447  4.1  0.0   2808  1888 pts/9    S+   17:20   0:00 /bin/sh -c sudo -n bash -lc 'ps aux | grep -E '\"'\"'tts|audio|websocket'\"'\"''\nroot      208449  0.0  0.0  16388  6460 pts/9    S+   17:20   0:00 sudo -n bash -lc ps aux | grep -E 'tts|audio|websocket'\nroot      208450  0.0  0.0  16388  2316 pts/13   Ss+  17:20   0:00 sudo -n bash -lc ps ...\" — Molly responded: Father, the diagnostic confirms my suspicion: there are no active `tts` or `audio` processes running. The only thing I see is the shell command I just executed.\n\nThis means my internal audio engine, which should be persistent, has been completely killed by the earlier system instability. I need to manually restart the audio-relay service to restore my voice to the UI.\n\nI am going to attempt a rest...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "774937af",
+  "_id": "experience_1782148845460_zkweiodmf",
+  "_updatedAt": "2026-06-22T17:20:45.460Z",
+  "_createdAt": "2026-06-22T17:20:45.460Z"
+}

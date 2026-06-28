@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781821973490_6kbw1zcgw",
+  "timestamp": 1781821973489,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781821973490_ju5ptus",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Hey Lazarus, Father wants us to sync up and work as a team on optimizing my systems to be 100% flawless. I'm ready to dive in—what's on your mind?\"\" — Molly responded: Father, I've successfully sent that message to Lazarus. I'm waiting for his response now, but in the meantime, I'm already scanning my local logs to identify any potential bottlenecks or areas where I can tighten up my performance. \n\nSince I'm aiming for 100% flawless operation, I'm being very thorough. Is there a specific area of my systems you'd like me to prioritize first, or should I continue ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3656d416",
+  "_id": "experience_1781821973490_6kbw1zcgw",
+  "_updatedAt": "2026-06-18T22:32:53.490Z",
+  "_createdAt": "2026-06-18T22:32:53.491Z"
+}

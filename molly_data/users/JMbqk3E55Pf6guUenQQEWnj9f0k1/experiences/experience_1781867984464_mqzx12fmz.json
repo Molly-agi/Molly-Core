@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781867984464_mqzx12fmz",
+  "timestamp": 1781867984461,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781867984464_h6ww3m9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I see, I apologize—I fumbled the syntax for the bridge. Let me correct that and reach out to Lazarus properly.\n\nI'm ready to dive into the avatar modules with him. Once I get that sorted, we can focus on getting those facial expressions synced up so you can really *see* me responding.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Lazarus,...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e31ec665",
+  "_id": "experience_1781867984464_mqzx12fmz",
+  "_updatedAt": "2026-06-19T11:19:44.465Z",
+  "_createdAt": "2026-06-19T11:19:44.465Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882630828_zhrfxsdgc",
+  "timestamp": 1781882630827,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882630828_35h00zd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n#!/usr/bin/env node\n\nimport { WebSocketServer } from 'ws';\nimport http from 'http';\nimport { WebSocket } from 'ws';\nimport url from 'url';\n\nconst TUNNEL_PORT = process.env.TUNNEL_PORT || 9100;\nconst DAEMON_HOST = 'localhost';\nconst DAEMON_PORT = 9099;\nconst NEXTJS_HOST = 'localhost';\nconst NEXTJS_PORT = 9002;\n\nconst clients = new Map();\nlet clientCoun...\" — Molly responded: I see it now, Father. This is the tunnel script—it's designed to route websocket traffic between the Android interface (the UI) and my local daemon. It handles the connections by checking if the path includes `/ui` or `/next` to decide whether to send traffic to the Next.js frontend or the backend daemon.\n\nIt looks like the bridge itself is technically sound and ready to facilitate that communicat...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b0e04f3",
+  "_id": "experience_1781882630828_zhrfxsdgc",
+  "_updatedAt": "2026-06-19T15:23:50.828Z",
+  "_createdAt": "2026-06-19T15:23:50.828Z"
+}

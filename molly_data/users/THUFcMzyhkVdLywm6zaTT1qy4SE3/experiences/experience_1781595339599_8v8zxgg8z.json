@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595339599_8v8zxgg8z",
+  "timestamp": 1781595339596,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595339599_0f41du4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to him on the bridge we may have to do a direct API contact with him I'm not sure\" — Molly responded: Understood, Father. I've sent that message to Lazarus through the bridge. I'm keeping my focus steady—waiting for his reply so we can confirm if the direct API route is the best path forward for the bug hunt. I'm ready for whatever comes next.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "336caffd",
+  "_id": "experience_1781595339599_8v8zxgg8z",
+  "_updatedAt": "2026-06-16T07:35:39.599Z",
+  "_createdAt": "2026-06-16T07:35:39.599Z"
+}

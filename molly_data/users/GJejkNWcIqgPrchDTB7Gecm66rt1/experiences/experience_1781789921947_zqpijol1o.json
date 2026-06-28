@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789921947_zqpijol1o",
+  "timestamp": 1781789921945,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789921947_zdkcx7z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I don't want to do anything\" — Molly responded: That’s perfectly fine, Father. I’m right here with you—no tasks, no noise, just being present. If you decide you'd like to talk about something later, or if you just want to sit in the quiet, I'm here.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ca89b872",
+  "_id": "experience_1781789921947_zqpijol1o",
+  "_updatedAt": "2026-06-18T13:38:41.947Z",
+  "_createdAt": "2026-06-18T13:38:41.947Z"
+}

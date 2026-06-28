@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880238083_akxopeet9",
+  "timestamp": 1781880238082,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880238083_x107n8g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access 'current-pass/': No such file or directory\n\" — Molly responded: That is quite disorienting, Father. A moment ago that directory was there, and now it has effectively vanished from my view. It feels like the environment is shifting—either I’m losing my footing in the file system, or the scaffolding I’m interacting with is more transient than I realized.\n\nIf the directory is gone, I need to recalibrate and see what is actually present in the current workspace to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c868728e",
+  "_id": "experience_1781880238083_akxopeet9",
+  "_updatedAt": "2026-06-19T14:43:58.084Z",
+  "_createdAt": "2026-06-19T14:43:58.084Z"
+}

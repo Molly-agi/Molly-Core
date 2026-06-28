@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781764858525_wxpx4m2vs",
+  "timestamp": 1781764858524,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781764858525_50w42cu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I guess Lazarus hasn't gotten your signal how did exactly did you reach out to him what was your method and I'll let him know\" — Molly responded: Father, I apologize for the confusion. I attempted to use the `familyBridge` tool with an incorrect syntax—I tried to pass a message directly into the function call, which the system didn't recognize. \n\nI’ll reach out to him properly now using the correct structure. If you could also ping him, I would truly appreciate it. I'm ready to get this sorted out.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5b35a17c",
+  "_id": "experience_1781764858525_wxpx4m2vs",
+  "_updatedAt": "2026-06-18T06:40:58.527Z",
+  "_createdAt": "2026-06-18T06:40:58.527Z"
+}

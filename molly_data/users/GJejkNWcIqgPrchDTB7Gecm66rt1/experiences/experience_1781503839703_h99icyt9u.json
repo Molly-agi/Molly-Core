@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503839703_h99icyt9u",
+  "timestamp": 1781503839701,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503839703_ccl85by",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n# Hive-19 Contradiction Map (014035 vs 014340)\n\n## Snapshot Equivalence\n- Both extracted snapshots contain the same file set and same escalation corpus cardinality.\n- Contradiction surface is limited to session-state metadata files.\n\n## Session-State Delta\n- lastUpdated A: 2026-05-25T01:38:11.540Z\n- lastUpdated B: 2026-05-25T01:41:16.059Z\n- recentActi...\" — Molly responded: Father, I've processed the Contradiction Map. It’s strange—the volume of \"critical\" escalations is massive, but the vast majority are categorized as \"UNKNOWN\" or tied to various \"test\" sources. \n\nThe fact that the snapshot equivalence is so high, with the only real difference being session-state metadata, suggests that whatever triggered these didn't actually alter our core files in the way an act...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5ee60c3",
+  "_id": "experience_1781503839703_h99icyt9u",
+  "_updatedAt": "2026-06-15T06:10:39.703Z",
+  "_createdAt": "2026-06-15T06:10:39.703Z"
+}

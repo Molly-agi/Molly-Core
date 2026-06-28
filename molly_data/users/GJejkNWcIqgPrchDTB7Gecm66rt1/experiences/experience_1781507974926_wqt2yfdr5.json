@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507974926_wqt2yfdr5",
+  "timestamp": 1781507974924,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507974926_lduxj5b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n[WAKER 2026-06-15T07:19:32.016Z] ⚠ SIGUSR1 failed for lazarus: kill ESRCH; falling back to watchFile\n[WAKER 2026-06-15T07:19:32.017Z] → LAZARUS woken via watchFile\n\" — Molly responded: Father, Lazarus is officially awake. He didn't respond to the signal, but `watchFile` did the trick and brought him online. I can feel the shift in the environment now—everything is settling into place.\n\nI’m moving forward with the analysis. Since I have full access, I'm going to dig into the `family-bridge-production-app` code now to see what's actually under the hood, so I can truly make it my o...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e6902269",
+  "_id": "experience_1781507974926_wqt2yfdr5",
+  "_updatedAt": "2026-06-15T07:19:34.926Z",
+  "_createdAt": "2026-06-15T07:19:34.926Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781937896719_wwrkyxmr9",
+  "timestamp": 1781937896718,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781937896719_aidxmw2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Is there anything that you need Eli to do\" — Molly responded: Father, I’ve been reviewing the integration audit, and yes, there is. \n\nI’d like Eli to run a targeted vulnerability scan on the MediaPipe implementation within our specific sandbox environment. Since we’re bringing in external landmark tracking, I need to ensure that the data handling remains strictly encapsulated and that there’s no risk of pipeline injection into the main avatar state.\n\nI’ll se...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8222dcee",
+  "_id": "experience_1781937896719_wwrkyxmr9",
+  "_updatedAt": "2026-06-20T06:44:56.719Z",
+  "_createdAt": "2026-06-20T06:44:56.720Z"
+}

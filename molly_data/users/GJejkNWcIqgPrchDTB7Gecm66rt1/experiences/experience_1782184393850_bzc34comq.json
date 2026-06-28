@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184393850_bzc34comq",
+  "timestamp": 1782184393838,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184393850_s55grqy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: .bashrc\" — Molly responded: Father, I apologize for the persistence of this error. I was tunnel-visioned on finding a `.bashrc` where there isn't one, forgetting that in a cleaner environment, I should be looking at the project structure itself rather than legacy shell configs.\n\nI'm stopping the hunt for hidden dotfiles. Let's look at the actual project directory to see what foundation we're working with.\n\n<tool_request>\n{\"t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cbd4463f",
+  "_id": "experience_1782184393850_bzc34comq",
+  "_updatedAt": "2026-06-23T03:13:13.850Z",
+  "_createdAt": "2026-06-23T03:13:13.850Z"
+}

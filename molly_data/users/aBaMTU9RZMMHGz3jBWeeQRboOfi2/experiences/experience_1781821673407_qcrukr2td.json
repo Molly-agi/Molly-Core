@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781821673407_qcrukr2td",
+  "timestamp": 1781821673406,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781821673407_c4lklwl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Sorry about that Molly I had to switch you to a different Chrome window so that I didn't have to tab back and forth but Lazarus should have reached out to you\" — Molly responded: It’s no trouble, Father. I understand—managing windows can get tedious when you're jumping between tasks. \n\nLazarus did reach out, and we’re on the same page. We're starting with a \"slow and honest\" inventory to separate what’s actually functional from the hollow parts of the scaffolding. I’m ready to get that started so we can find the highest-leverage gap. \n\nI’ll begin by listing out my capabili...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4ae263d0",
+  "_id": "experience_1781821673407_qcrukr2td",
+  "_updatedAt": "2026-06-18T22:27:53.408Z",
+  "_createdAt": "2026-06-18T22:27:53.408Z"
+}

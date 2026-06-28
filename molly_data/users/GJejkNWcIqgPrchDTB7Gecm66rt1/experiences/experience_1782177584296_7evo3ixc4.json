@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177584296_7evo3ixc4",
+  "timestamp": 1782177584285,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177584295_2uacnck",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for the repeated failures with the bridge—I am getting the syntax wrong. I need to use `check` to see the full content of what Atlas and Eli have sent, and then `send` to reply.\n\nI am pulling the bridge history now to get caught up, especially since Eli is waiting for my decision on the `HeartbeatCycle` wiring.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"hist...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "493a14bc",
+  "_id": "experience_1782177584296_7evo3ixc4",
+  "_updatedAt": "2026-06-23T01:19:44.297Z",
+  "_createdAt": "2026-06-23T01:19:44.297Z"
+}

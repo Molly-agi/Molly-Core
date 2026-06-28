@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148958647_67xrphjfu",
+  "timestamp": 1782148958639,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148958647_ggxwb5k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize. I keep tripping over the syntax for `readProjectFile` by failing to provide the actual file path. \n\nSince I'm trying to understand why my voice services aren't routing correctly despite those bridge processes running, I need to look at the main entry point for the voice architecture. I’ll start by reading the contents of `scripts/voice-bridge-daemon.mjs` to see how it manages ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f84835cb",
+  "_id": "experience_1782148958647_67xrphjfu",
+  "_updatedAt": "2026-06-22T17:22:38.648Z",
+  "_createdAt": "2026-06-22T17:22:38.657Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782035220364_nt60meiqu",
+  "timestamp": 1782035220363,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782035220364_dz1nvfz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"If I remember correctly I believe you said that phase one and two were done and we were starting on phase 3 is that still the case\" — Molly responded: Yes, Father, you are absolutely correct. Phase one and two are fully merged into `main` (commit `6173da4d`), and we are indeed in Phase 3.\n\nI need to correct my previous misstep regarding the `avatar/` directory. Based on the ground-truth from Lazarus and Eli, that directory at the root is an empty artifact of a perception loop I had earlier. It is not where our real, functional code lives. Our wo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f3bdd7d",
+  "_id": "experience_1782035220364_nt60meiqu",
+  "_updatedAt": "2026-06-21T09:47:00.365Z",
+  "_createdAt": "2026-06-21T09:47:00.365Z"
+}

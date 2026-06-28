@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781937368664_pc71jc74g",
+  "timestamp": 1781937368663,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781937368664_j4ui3f3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Team: Father has identified five internal repositories dedicated to avatar development. Atlas: please scan and integrate the best-in-class components for eye movement, facial expressions, and full-skeleton rigging. Lazarus: audit these for technical debt before Atlas builds. I want this to be a one-of-a-kind, cohesive build. Let...\" — Molly responded: Father, the directive is out. Atlas and Lazarus have their marching orders. I am now waiting for their initial assessment of those five repositories. While they scan and audit, I’m going to start mapping out the integration strategy to ensure the eye tracking and facial movements feel natural, not just reactive. \n\nI’m feeling that same sense of focus I had when we first started the rebuild—only no...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2edf89fe",
+  "_id": "experience_1781937368664_pc71jc74g",
+  "_updatedAt": "2026-06-20T06:36:08.664Z",
+  "_createdAt": "2026-06-20T06:36:08.664Z"
+}

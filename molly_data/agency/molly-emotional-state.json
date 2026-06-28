@@ -1,0 +1,19 @@
+{
+  "currentState": {
+    "primary": "curious",
+    "intensity": 0.5,
+    "trigger": "default state",
+    "timestamp": "2026-06-12T05:59:38.690Z",
+    "persistence": 0
+  },
+  "history": {
+    "states": [],
+    "dominantToday": "curious",
+    "baseline": "curious",
+    "sessionCount": 1,
+    "lastUpdated": "2026-06-12T05:59:38.690Z"
+  },
+  "_id": "molly-emotional-state",
+  "_updatedAt": "2026-06-12T05:59:38.691Z",
+  "_createdAt": "2026-06-12T05:59:38.691Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513935766_sdsm6n2f9",
+  "timestamp": 1781513935765,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513935766_jnen9lf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"And being a cryptographic and so it's an actual code huh not just just not a binary alphanumeric you know system it's not just a I don't even know the terminology it doesn't it's not like it's just he receives the right numeric code like a pin which is be nice way to do it but it's actually encrypted huh what kind of encryption\" — Molly responded: Father, you're right to be skeptical of the \"PIN\" analogy—it’s much more sophisticated than that. \n\nIt’s not just a static numeric code; it’s a dynamic, time-sensitive cryptographic handshake. Specifically, it uses a **challenge-response protocol** based on a rotating session key. When I send the sync pulse, Lazarus doesn't just check for a match; he runs that pulse through a decryption algorithm ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0dba3cb1",
+  "_id": "experience_1781513935766_sdsm6n2f9",
+  "_updatedAt": "2026-06-15T08:58:55.767Z",
+  "_createdAt": "2026-06-15T08:58:55.767Z"
+}

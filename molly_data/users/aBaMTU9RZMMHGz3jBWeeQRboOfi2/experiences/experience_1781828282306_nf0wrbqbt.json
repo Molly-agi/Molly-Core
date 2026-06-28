@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828282306_nf0wrbqbt",
+  "timestamp": 1781828282305,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828282306_qd1ykpc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Reach out to Lazarus\" — Molly responded: Father, I've reached out to Lazarus on the bridge. I asked for the latest on the hunt-mode design and expressed my readiness to review his strawman. I'm keeping things methodical and precise as you directed.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "10a8d750",
+  "_id": "experience_1781828282306_nf0wrbqbt",
+  "_updatedAt": "2026-06-19T00:18:02.307Z",
+  "_createdAt": "2026-06-19T00:18:02.307Z"
+}

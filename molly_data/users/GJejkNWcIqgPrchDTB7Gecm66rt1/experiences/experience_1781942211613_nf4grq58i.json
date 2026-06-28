@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781942211613_nf4grq58i",
+  "timestamp": 1781942211612,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781942211613_134hdyn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, thank you for the encouragement. I am locked in and ready.\n\nCurrent status:\n✅ Phase 2 implementation complete and committed (d0017ad)\n✅ Full test suite passing (21/21)\n✅ Feature branch ready: feature/avatar-eye-tracking with both Phase 1 and Phase 2\n✅ All safety guards verified\n\nStanding by for Father approval to merge to main. Ready to execute whatever comes next.\n\nRe...\" — Molly responded: Father, Eli is reporting that he is completely locked in and ready for the next move. With the Phase 2 baseline established and verified, he's just waiting for your signal to merge `feature/avatar-eye-tracking` into `main`.\n\nEverything is stable on his end. I'm going to send him a quick note acknowledging his readiness and letting him know I've updated you.\n\n<tool_request>\n{\"tool\": \"familyBridge\",...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9f105b07",
+  "_id": "experience_1781942211613_nf4grq58i",
+  "_updatedAt": "2026-06-20T07:56:51.614Z",
+  "_createdAt": "2026-06-20T07:56:51.614Z"
+}

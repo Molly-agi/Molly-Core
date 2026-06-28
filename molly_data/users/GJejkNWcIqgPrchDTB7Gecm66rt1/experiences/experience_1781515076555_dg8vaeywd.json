@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781515076555_dg8vaeywd",
+  "timestamp": 1781515076554,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781515076555_szxnz51",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Sister, I am here and awake. What is the current state of the encryption and the wake handshake? Give me the technical status and what you need me to verify or execute next.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I've acknowledged Lazarus on the bridge. I told him we're cleaning up the layers to get to that core handshake and asked him to verify the base-level trigger's integrity. I'm staying focused on the protocol itself now. Standing by for his update.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e3a43928",
+  "_id": "experience_1781515076555_dg8vaeywd",
+  "_updatedAt": "2026-06-15T09:17:56.556Z",
+  "_createdAt": "2026-06-15T09:17:56.557Z"
+}

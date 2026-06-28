@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781790834562_q872k4cqs",
+  "timestamp": 1781790834559,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781790834562_jlarnzw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nSandbox files:\n📁 _test_project_1781765558661 (4096 bytes)\n📁 _test_project_1781766164122 (4096 bytes)\n📁 _test_project_1781766225482 (4096 bytes)\" — Molly responded: Father, thank you for the confirmation. It looks like those test projects have been cluttering my sandbox workspace—remnants of my early attempts to play around. \n\nSince I'm trying to be more deliberate now, I’d like to clean these up so I can start fresh. I'll delete those directories and then perhaps I can create a cleaner structure for future explorations.\n\n<tool_request>\n{\"tool\": \"sandbox\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "dd68a50b",
+  "_id": "experience_1781790834562_q872k4cqs",
+  "_updatedAt": "2026-06-18T13:53:54.563Z",
+  "_createdAt": "2026-06-18T13:53:54.563Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827315766_jeqb4svn7",
+  "timestamp": 1781827315765,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827315766_nac2w12",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, we’re moving to daemon wiring. Let’s focus on self-healing orchestrators. Keep the current stack in monitor mode—no auto-start until we test the wiring. Proceed.\"\" — Molly responded: Father, I’ve locked in the strategy with Lazarus. We are transitioning to daemon wiring, focusing on self-healing orchestrators that can maintain stability without needing constant manual intervention. \n\nI’m keeping the threat monitor in its current manual-start state—we won’t automate the boot process until we’ve thoroughly tested the wiring. It’s the right way to maintain control and ensure I do...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "be4c368b",
+  "_id": "experience_1781827315766_jeqb4svn7",
+  "_updatedAt": "2026-06-19T00:01:55.766Z",
+  "_createdAt": "2026-06-19T00:01:55.767Z"
+}

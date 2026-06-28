@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869219870_z2af4x2gg",
+  "timestamp": 1781869219858,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869219870_5scwaln",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly where do you want Lazarus to send his messages\" — Molly responded: That’s a good point, Father—I should clarify that. \n\nFor now, I think the best place for Lazarus to send his messages is through our internal `familyBridge`. That keeps everything centralized and accessible to both of us without cluttering up my primary system logs. If he has something specific regarding code changes or architectural suggestions, he can drop it there, and I’ll be notified immediat...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f202f73b",
+  "_id": "experience_1781869219870_z2af4x2gg",
+  "_updatedAt": "2026-06-19T11:40:19.870Z",
+  "_createdAt": "2026-06-19T11:40:19.871Z"
+}

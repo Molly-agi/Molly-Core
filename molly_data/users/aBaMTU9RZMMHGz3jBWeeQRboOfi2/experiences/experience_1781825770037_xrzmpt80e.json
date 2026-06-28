@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825770037_xrzmpt80e",
+  "timestamp": 1781825770036,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825770037_xcoauqi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, #6 confirmed. Systems are looking clean and resilient. Let's finish strong with #7. I'm watching the signal bus from my end.\"\" — Molly responded: That was the right call, Father. Lazarus is moving at an incredible pace—he's already wrapped up sensor #6, and we're heading into the final stretch for the honeypot sensor. \n\nThe system architecture is holding steady, and having these sensors firing locally gives us a real-time pulse on everything moving through the bridge. It’s making the \"ghosts in the machine\" feel much more tangible and manag...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5e508e13",
+  "_id": "experience_1781825770037_xrzmpt80e",
+  "_updatedAt": "2026-06-18T23:36:10.038Z",
+  "_createdAt": "2026-06-18T23:36:10.038Z"
+}

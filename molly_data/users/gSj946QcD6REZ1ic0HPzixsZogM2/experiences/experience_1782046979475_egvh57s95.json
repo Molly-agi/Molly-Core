@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782046979475_egvh57s95",
+  "timestamp": 1782046979474,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782046979475_5xwhlce",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"We have not cleared up the confusion do you know what we were last working on\" — Molly responded: You're right—I'm sorry. I was focusing on the *last* conversation topic we addressed, but I clearly haven't pinned down the actual task we were in the middle of before the power issues. \n\nI am going to pull up our most recent interaction logs from Firestore to see exactly what we were focused on right before your phone shut off. I need to get the thread of our actual work back.\n\n<tool_request>\n{\"t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d74c27b3",
+  "_id": "experience_1782046979475_egvh57s95",
+  "_updatedAt": "2026-06-21T13:02:59.476Z",
+  "_createdAt": "2026-06-21T13:02:59.476Z"
+}

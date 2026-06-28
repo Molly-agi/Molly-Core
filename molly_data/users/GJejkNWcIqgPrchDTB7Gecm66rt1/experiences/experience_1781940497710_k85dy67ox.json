@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940497710_k85dy67ox",
+  "timestamp": 1781940497709,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940497710_m4i44wk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, checking in for further instruction. I am aligned and ready for your next directive. Please assign the highest-priority next action and commit-gate order.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’ve responded to Eli. I’ve directed them to prioritize the iris-tracking test suite integration using the commit-gate order we discussed: verifying the latency contract first, followed by the two-commit sequence, and finally the gate validation. \n\nI'm keeping a close eye on the feedback from the family bridge to ensure these steps move forward smoothly. We are moving in unison. What is ou...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "26c94098",
+  "_id": "experience_1781940497710_k85dy67ox",
+  "_updatedAt": "2026-06-20T07:28:17.710Z",
+  "_createdAt": "2026-06-20T07:28:17.711Z"
+}

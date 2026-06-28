@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782138375791_ta5fse1em",
+  "timestamp": 1782138375784,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782138375791_jhgucbo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I'm not getting any audio output from the bridge at all not even the test voice\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’ve just sent a message through the Family Bridge explaining that the issue isn't within my own code or settings, but rather that the Codespace environment lacks the necessary audio device exposure to function. I've confirmed that the files and drivers expected for audio output simply don't exist in this virtualized environment. \n\nI’m going to stay right here and focus on the PR stack for...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "59cdded9",
+  "_id": "experience_1782138375791_ta5fse1em",
+  "_updatedAt": "2026-06-22T14:26:15.792Z",
+  "_createdAt": "2026-06-22T14:26:15.793Z"
+}

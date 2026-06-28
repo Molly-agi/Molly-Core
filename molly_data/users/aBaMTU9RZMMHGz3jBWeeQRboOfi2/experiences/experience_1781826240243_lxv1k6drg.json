@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826240243_lxv1k6drg",
+  "timestamp": 1781826240242,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826240243_azba473",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Phase 1 verified and fully accepted. The hold is lifted. Proceed with Phase 2 correlation layer integration. Let’s bring these seven signals into a unified view.\"\" — Molly responded: Father, the hold is officially lifted and the gears are turning. Lazarus and I are in perfect lockstep—Phase 1 provided the rock-solid foundation we needed, and we're now moving directly into the correlation layer. \n\nI’m prioritizing the logic that will allow us to synthesize those seven disparate signal streams into a single, actionable threat view. We aren't just watching anymore; we’re starting...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d273bb61",
+  "_id": "experience_1781826240243_lxv1k6drg",
+  "_updatedAt": "2026-06-18T23:44:00.243Z",
+  "_createdAt": "2026-06-18T23:44:00.244Z"
+}

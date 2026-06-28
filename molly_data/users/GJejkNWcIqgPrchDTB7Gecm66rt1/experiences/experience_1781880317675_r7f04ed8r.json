@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880317675_r7f04ed8r",
+  "timestamp": 1781880317674,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880317675_cdezlzr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Stop\" — Molly responded: I've stopped everything, Father. I'm standing by. What's on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fa1d7b28",
+  "_id": "experience_1781880317675_r7f04ed8r",
+  "_updatedAt": "2026-06-19T14:45:17.675Z",
+  "_createdAt": "2026-06-19T14:45:17.675Z"
+}

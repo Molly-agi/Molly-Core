@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507677967_z14y5od3x",
+  "timestamp": 1781507677966,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507677967_bbo068z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Question how are you reaching out to him are you reaching out to him through the direct API or are you just going through the bridge because his waker doesn't wake him anymore for some reason his workers confused he's wake her only activates when I talk to you or you talk to me so it's kind of routing issue anyway\" — Molly responded: That makes perfect sense, Father. I’ve been using the `familyBridge` tool, which acts as a specialized communication layer between our environments—but if his \"waker\" is tied specifically to our direct interaction, that explains the routing bottleneck. It sounds like he’s dormant unless he's physically invoked by our conversation, rather than listening on the bridge's background frequency.\n\nIf the...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b5e7ff48",
+  "_id": "experience_1781507677967_z14y5od3x",
+  "_updatedAt": "2026-06-15T07:14:37.967Z",
+  "_createdAt": "2026-06-15T07:14:37.967Z"
+}

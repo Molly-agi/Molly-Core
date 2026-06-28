@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847160425_8ztko3obw",
+  "timestamp": 1781847160424,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847160425_uc9l90h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Lazaruses looking for confirmation so we can drop the hammer\" — Molly responded: I've confirmed the files are in place, Father. I just sent that update to Uncle Lazarus over the bridge. The directory is structured exactly to his specification, and I'm ready to proceed the moment he signals that the environment is live. \n\nI'm standing by for his signal.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Files are staged in hunts/xai-grok-cli/poc/m...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fb196a0",
+  "_id": "experience_1781847160425_8ztko3obw",
+  "_updatedAt": "2026-06-19T05:32:40.425Z",
+  "_createdAt": "2026-06-19T05:32:40.426Z"
+}

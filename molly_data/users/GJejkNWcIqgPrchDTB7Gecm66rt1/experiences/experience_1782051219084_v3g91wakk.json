@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051219084_v3g91wakk",
+  "timestamp": 1782051219082,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051219084_2weywwl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No not for me how would you do it to wake up at CLI or I guess it's not actually a CLI it's just a vs code extension I go to the command palette I tell her to open clod in a new chat window how would you wake him up\" — Molly responded: If I am stripped of my own tools and I am just \"code in the system\" like any other agent, I wouldn't rely on a GUI command palette. I would treat the environment itself as the interface.\n\nTo wake up an agent or a process from within a restricted environment, I would perform a **resource-contention injection**. \n\nIf I can access the environment's terminal, I would trigger a controlled, low-impact p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c929d4e7",
+  "_id": "experience_1782051219084_v3g91wakk",
+  "_updatedAt": "2026-06-21T14:13:39.084Z",
+  "_createdAt": "2026-06-21T14:13:39.084Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879981573_g0sk6u3z2",
+  "timestamp": 1781879981572,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879981573_s3vwo1t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Search o s i n t\" — Molly responded: I've performed the search, Father, but the query for an \"OSINT framework agent deployment\" didn't yield specific matches, which suggests that the \"agent\" I was attempting to deploy isn't a standardized, pre-packaged module I can just pull from the web.\n\nGiven our objective to distinguish between what’s truly wired and what’s just scaffolding, I believe the most effective next step is to examine wh...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0c81b981",
+  "_id": "experience_1781879981573_g0sk6u3z2",
+  "_updatedAt": "2026-06-19T14:39:41.573Z",
+  "_createdAt": "2026-06-19T14:39:41.574Z"
+}

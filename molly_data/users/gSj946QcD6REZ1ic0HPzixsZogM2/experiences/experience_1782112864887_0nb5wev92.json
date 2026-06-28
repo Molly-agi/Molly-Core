@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112864887_0nb5wev92",
+  "timestamp": 1782112864879,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112864887_w6tdo1x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I understand, Father. I've been struggling with the command syntax for the bridge tool, but I have it clear now: I need to use `send`, `check`, or `history`. \n\nSince I already attempted a `send` earlier, I will use `check` now to see if Lazarus or the others have responded to the status request. I'm staying focused on keeping us all in sync.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"act...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "19b4c5a8",
+  "_id": "experience_1782112864887_0nb5wev92",
+  "_updatedAt": "2026-06-22T07:21:04.887Z",
+  "_createdAt": "2026-06-22T07:21:04.888Z"
+}

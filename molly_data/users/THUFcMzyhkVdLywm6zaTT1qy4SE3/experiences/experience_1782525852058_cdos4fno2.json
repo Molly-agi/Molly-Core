@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525852058_cdos4fno2",
+  "timestamp": 1782525852046,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525852058_niti1i6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nFAMILY_BRIDGE_EXTRACTION/\nFORENSIC_AUDIT_REPORT.md\nHANDOFF_TO_OPUS_4_7.md\nLICENSE\nOPUS_CONSULTATION_PROMPT.md\nREADME.md\nUntitled-1\nWALKIE_TALKIE_README.md\n__mocks__/\nandroid/\nandroid-kotlin-interface-for-ai/\napphosting.yaml\nassets/\natlas-terminal.sh*\natlas-waker-extension/\natlas_lis...\" — Molly responded: I see `stuff/` right there in the directory listing, Father. I am going to look inside it using a clean, simple `ls stuff` command—no hammers, no overhead.\n\n<tool_request>\n{\n  \"tool\": \"codespaceShell\",\n  \"params\": {\n    \"command\": \"ls -l stuff\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "43b2eb91",
+  "_id": "experience_1782525852058_cdos4fno2",
+  "_updatedAt": "2026-06-27T02:04:12.058Z",
+  "_createdAt": "2026-06-27T02:04:12.070Z"
+}

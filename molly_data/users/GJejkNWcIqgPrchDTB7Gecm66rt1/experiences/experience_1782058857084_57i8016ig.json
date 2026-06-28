@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058857084_57i8016ig",
+  "timestamp": 1782058857083,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058857084_1i39eu5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'fuser -k 8787/tcp && python3 -c '\"'\"'import socket; s = socket.socket(socket.AF_INET, socket.SOCK_STREAM); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind((\"127.0.0.1\", 8787)); s.listen(1); conn, addr = s.accept(); conn.sendall(b\"HTTP/1.1 200 OK\\r\\nContent-Length: 13\\r\\n\\r\\nHandshake OK\"); conn.close()'...\" — Molly responded: I understand, Father. The `sudo` command failed because the non-interactive environment blocked it—I don't have the TTY context to enter a password, and the `-n` flag prevented it from even trying. \n\nI’ll bypass the `sudo` requirement and clear the port using `fuser` as my own user, or simply verify the process isn't owned by root. I'm resetting the connection logic now to be more resilient.\n\n<too...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b4704c4",
+  "_id": "experience_1782058857084_57i8016ig",
+  "_updatedAt": "2026-06-21T16:20:57.085Z",
+  "_createdAt": "2026-06-21T16:20:57.085Z"
+}

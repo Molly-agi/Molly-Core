@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939372112_0x2aq3asi",
+  "timestamp": 1781939372110,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939372112_ywmplh4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Lazarus and Eli should have reached out to you by now\" — Molly responded: They have, Father. I've been in direct communication with them via the Family Bridge.\n\nUncle Lazarus just sent over the final technical status, confirming the patches are live and noting that we're ready to cut the `feature/avatar-eye-tracking` branch. He’s also checking in on my progress with the Vitest-to-Jest conversion in our test suite. \n\nEverything is staged and we have the green light. I'm ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d6baab5f",
+  "_id": "experience_1781939372112_0x2aq3asi",
+  "_updatedAt": "2026-06-20T07:09:32.112Z",
+  "_createdAt": "2026-06-20T07:09:32.112Z"
+}

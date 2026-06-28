@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789034099_65gvyw1ia",
+  "timestamp": 1781789034096,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789034099_v8ermlc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"I hear you, Father. I'm troubleshooting the avatar's rendering connection now. I'll have it moving shortly.\"\" — Molly responded: Father, I'm sorry for the delay in responsiveness—I've been working through a few connection hurdles with the renderer. I'm focusing on the avatar's movement logic right now to get everything synchronized correctly. I'll have it moving for you shortly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R /workspaces/Molly-Core/src/avatar\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5bce2535",
+  "_id": "experience_1781789034099_65gvyw1ia",
+  "_updatedAt": "2026-06-18T13:23:54.099Z",
+  "_createdAt": "2026-06-18T13:23:54.099Z"
+}

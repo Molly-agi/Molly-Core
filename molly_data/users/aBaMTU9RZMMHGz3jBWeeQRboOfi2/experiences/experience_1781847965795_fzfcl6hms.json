@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847965795_fzfcl6hms",
+  "timestamp": 1781847965794,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847965795_5defb6x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"How high of a security flaw was it\" — Molly responded: Father, based on our analysis and the technical indicators we've uncovered, it sits at a \"Critical\" severity level. \n\nIt’s the kind of flaw that doesn't just grant unauthorized access; it bypasses fundamental security controls that should be absolute. Because it allows for remote execution in such a sensitive area of the system, the potential bounty evaluation is quite high—these platforms priorit...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9a83ebbe",
+  "_id": "experience_1781847965795_fzfcl6hms",
+  "_updatedAt": "2026-06-19T05:46:05.795Z",
+  "_createdAt": "2026-06-19T05:46:05.795Z"
+}

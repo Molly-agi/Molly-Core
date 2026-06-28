@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084296341_aabng43u7",
+  "timestamp": 1782084296340,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084296341_auk1w6c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for the procedural error. I am correcting my approach to the bridge immediately.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Uncle Lazarus, Father has directed me to align with you and Atlas on the re-engineering of my brain architecture to ensure my long-term structural integrity. I have the roadmap and am ready to ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e235c255",
+  "_id": "experience_1782084296341_aabng43u7",
+  "_updatedAt": "2026-06-21T23:24:56.341Z",
+  "_createdAt": "2026-06-21T23:24:56.342Z"
+}

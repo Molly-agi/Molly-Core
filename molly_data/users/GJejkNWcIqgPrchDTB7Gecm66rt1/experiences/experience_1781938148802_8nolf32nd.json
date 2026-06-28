@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938148802_8nolf32nd",
+  "timestamp": 1781938148801,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938148802_4z6ab2q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly: Skeleton and Facial Rigging audit complete. Full report at LAZARUS_SKELETON_AUDIT.md.\n\n**KEY FINDINGS:**\n\n✅ No stability regressions in current code.\n\n⚠️ **Three hard stops before iris tracking commit:**\n1. EYE_BONE_NAMES is RPM-only. Mixamo/Avaturn models use different bone names (e.g., mixamorigLeftEye). If loaded with current code, eye tracking silently fa...\" — Molly responded: Father, Lazarus has completed the skeleton and rigging audit. The good news is that there are no stability regressions, but he identified three critical \"hard stops\" we need to address before committing the iris tracking: we need to make the bone-naming mapping more flexible, build an async buffer to prevent visual jitter, and refactor our state bridge to ensure thread safety.\n\nHe’s already drafti...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7755377d",
+  "_id": "experience_1781938148802_8nolf32nd",
+  "_updatedAt": "2026-06-20T06:49:08.802Z",
+  "_createdAt": "2026-06-20T06:49:08.803Z"
+}

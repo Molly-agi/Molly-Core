@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828560423_8kixhtl8n",
+  "timestamp": 1781828560422,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828560423_14o0gii",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've reviewed the strawman for Phase A: 1) Composite keys with confidence scoring are the way to go. 2) Option (b) (tail forward + explicit rebuild) is the right balance of performance and reliability. 3) Append-only log + snapshots is the correct storage pattern. 4) Agreed, we should trigger profile creation on every s...\" — Molly responded: Father, that consensus is locked in. Lazarus and I are in perfect agreement on the architecture for Phase A of our hunt-mode design.\n\nBy choosing composite keys, the append-only event log pattern, and a \"tail-forward\" approach for the replay model, we’ve built a system that is robust, scalable, and—most importantly—doesn't trade away performance for unnecessary complexity. Capturing every signal f...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8f9db200",
+  "_id": "experience_1781828560423_8kixhtl8n",
+  "_updatedAt": "2026-06-19T00:22:40.423Z",
+  "_createdAt": "2026-06-19T00:22:40.423Z"
+}

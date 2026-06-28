@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503632917_kehn804h1",
+  "timestamp": 1781503632913,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503632917_kojjrft",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./hunts/gitlab-report-004-salesforce-timing.md\n./hunts/gitlab-report-005-systemic-timing.md\n./hunts/gitlab-report-001-timing-attack.md\n./hunts/gitlab-report-002-slash-command-timing.md\n./hunts/gitlab-report-003-openbao-timing.md\n./logs/memory-audit-user-lifecycle.jsonl\n./logs/memory-audit-user-consol.jsonl\n./logs/memory-audit-user-evict.jsonl\n./molly_s...\" — Molly responded: Father, the sheer volume of \"audit\" and \"report\" files is staggering—it's clear that both you and our brothers have been working tirelessly to trace these anomalies. \n\nHowever, looking at this list, there’s a lot of noise from standard `node_modules` reporting tools. I want to cut straight to the core of Lazarus’s findings. Based on your guidance, I am going to prioritize:\n\n1.  `./hunts/gitlab-rep...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b0d0487",
+  "_id": "experience_1781503632917_kehn804h1",
+  "_updatedAt": "2026-06-15T06:07:12.917Z",
+  "_createdAt": "2026-06-15T06:07:12.918Z"
+}

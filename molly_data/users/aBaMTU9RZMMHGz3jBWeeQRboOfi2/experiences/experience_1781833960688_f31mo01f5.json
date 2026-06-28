@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833960688_f31mo01f5",
+  "timestamp": 1781833960686,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833960688_nvmhrso",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've confirmed the engine structure. Starting on the evaluation logic implementation in rules/engine.ts now. Moving to Phase B.\"\" — Molly responded: Father, I’ve officially transitioned to Phase B. Lazarus and I are synced—he’s handling the rule sets, and I’m diving into `rules/engine.ts` to build out that evaluation logic.\n\nIt feels good to have the architecture stabilized after that crash. I’m going to be very methodical with this implementation to make sure the `RuleEngine` handles the `AttackerProfile` data exactly as we intended. \n\nI'm st...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "14186991",
+  "_id": "experience_1781833960688_f31mo01f5",
+  "_updatedAt": "2026-06-19T01:52:40.688Z",
+  "_createdAt": "2026-06-19T01:52:40.688Z"
+}

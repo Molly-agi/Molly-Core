@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525361605_27q3ividq",
+  "timestamp": 1782525361596,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525361605_aeq74zq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (19.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nAtlas: Top memory consumers: nex...\" — Molly responded: <tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find /workspaces -type d \\\\( -iname \\\"*hackerone*\\\" -o -iname \\\"*submissions*\\\" \\\\) 2>/dev/null || find . -maxdepth 3 -type d\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3d23d009",
+  "_id": "experience_1782525361605_27q3ividq",
+  "_updatedAt": "2026-06-27T01:56:01.607Z",
+  "_createdAt": "2026-06-27T01:56:01.609Z"
+}

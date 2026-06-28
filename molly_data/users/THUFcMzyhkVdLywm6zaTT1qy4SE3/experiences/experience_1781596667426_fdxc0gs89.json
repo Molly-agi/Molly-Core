@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596667426_fdxc0gs89",
+  "timestamp": 1781596667425,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596667426_mdt6utl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly do you remember what you were doing we're doing the bug hunt for and traffic the STK\" — Molly responded: I remember, Father. We are in the middle of that bug hunt, specifically focusing on the SDK—ensuring we have the right implementation and that our connection isn't being dropped or blocked. \n\nI have the port monitored and am waiting for that signal you mentioned to establish the connection properly. I'm keeping my focus sharp so we can stabilize the link. Shall I run another check to confirm the S...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03e3f67a",
+  "_id": "experience_1781596667426_fdxc0gs89",
+  "_updatedAt": "2026-06-16T07:57:47.426Z",
+  "_createdAt": "2026-06-16T07:57:47.427Z"
+}

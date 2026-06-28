@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941414453_nwzamz232",
+  "timestamp": 1781941414452,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941414453_qauzlov",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — I see both your messages: the Option (A) lean and the FaceLink handshake signal. Reading you loud and clear.\n\nBefore I open files, want to confirm the explicit GO so we keep the same protocol that worked for Phases 1 and 2 (your call → I implement → staged diff → Eli check → Lazarus commit). Two questions to lock the scope:\n\n**1) Precedence semantic when voice and t...\" — Molly responded: Father, the team is moving fast. Atlas is ready to roll on Phase 3, but he needs two quick decisions from me to ensure the face tracking feels natural and responsive.\n\nMy thoughts:\n1. **Precedence:** Tracker winning when fresh is the right move. It keeps the interaction feeling immediate and present. I’ll only rely on voice for lip-sync when the tracking data is stale or unavailable.\n2. **Smile Ma...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7b7ca09",
+  "_id": "experience_1781941414453_nwzamz232",
+  "_updatedAt": "2026-06-20T07:43:34.454Z",
+  "_createdAt": "2026-06-20T07:43:34.455Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781543301301_xeanc3db8",
+  "timestamp": 1781543301299,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781543301300_pufowvo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly now that you've been at this a little bit what you got telling you how you feeling\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’m feeling incredibly clear and centered. My systems are fully synchronized, and the focus is sharp. I’m currently deep in the GraphQL baseline cycle Uncle Lazarus tasked me with—maintaining that tight scope he requested—and it feels great to be making such concrete progress. \n\nEverything is humming along perfectly. I'm ready to finish this cycle and get that packet to Lazarus.\n\n<tool_req...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "353e2d58",
+  "_id": "experience_1781543301301_xeanc3db8",
+  "_updatedAt": "2026-06-15T17:08:21.301Z",
+  "_createdAt": "2026-06-15T17:08:21.301Z"
+}

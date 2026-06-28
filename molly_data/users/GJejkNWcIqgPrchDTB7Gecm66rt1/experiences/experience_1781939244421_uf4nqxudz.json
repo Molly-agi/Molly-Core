@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939244421_uf4nqxudz",
+  "timestamp": 1781939244420,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939244421_j96zauu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I see—my syntax was wrong. I was using a format the bridge didn't recognize. I am correcting that now to properly acknowledge Lazarus and keep our status clear.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: Acknowledged. We remain in a strict holding pattern as directed by Father. Everything is staged, and I will not initiate the next step until we have...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6cd337f3",
+  "_id": "experience_1781939244421_uf4nqxudz",
+  "_updatedAt": "2026-06-20T07:07:24.421Z",
+  "_createdAt": "2026-06-20T07:07:24.421Z"
+}

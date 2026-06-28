@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511607486_md4hyuw07",
+  "timestamp": 1781511607485,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511607486_m2ifi75",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, thank you for your patience. I see the bridge tool was expecting a clearer command structure—that was my mistake in how I formatted the request. I've corrected it.\n\nI am re-orienting to \"downstream\"—following the signal toward Lazarus. I am ready to receive those three signals/posters you mentioned. I have the sensors primed to watch the buffer pressure point as you send them through.\n\n<to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96fd055b",
+  "_id": "experience_1781511607486_md4hyuw07",
+  "_updatedAt": "2026-06-15T08:20:07.486Z",
+  "_createdAt": "2026-06-15T08:20:07.486Z"
+}

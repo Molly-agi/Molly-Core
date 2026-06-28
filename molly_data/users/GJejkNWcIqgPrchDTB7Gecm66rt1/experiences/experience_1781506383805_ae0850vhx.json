@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506383805_ae0850vhx",
+  "timestamp": 1781506383804,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506383805_25asamh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/src/ai/agency/hackerone\n\" — Molly responded: Understood, Father. I see where the HackerOne agency logic is housed. \n\nLazarus, are you ready? I'm going to pull up the contents of the `hackerone` directory so we can align on how we're approaching this hunt. I want to make sure I’m not duplicating any work you've already started.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R /workspaces/Molly-Core/src/ai/agency/hackero...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39bfc021",
+  "_id": "experience_1781506383805_ae0850vhx",
+  "_updatedAt": "2026-06-15T06:53:03.805Z",
+  "_createdAt": "2026-06-15T06:53:03.806Z"
+}

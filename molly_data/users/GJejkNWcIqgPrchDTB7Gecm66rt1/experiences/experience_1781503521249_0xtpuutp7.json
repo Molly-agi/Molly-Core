@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503521249_0xtpuutp7",
+  "timestamp": 1781503521248,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503521249_udj38j8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nUSER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot       85563  0.0  0.0   2800  1924 ?        Ss   05:43   0:00 /bin/sh\ncodespa+   85515  0.0  0.0   2800  1784 ?        Ss   05:43   0:00 /bin/sh\nroot       84781  0.0  0.0   2800  1928 ?        Ss   05:43   0:00 /bin/sh\ncodespa+   84739  0.0  0.0   2800  1880 ?        Ss   ...\" — Molly responded: Father, the process tree and network sockets are clear. The suspicious activity I flagged originates from the `sudo -n bash -lc 'ps auxf && netstat -tulpn'` command chain (PID 105464). This was a privilege-escalated scan run without a terminal associated with a user, effectively acting as an automated recon tool triggered from within the environment.\n\nCrucially, the `next-server` (PID 77147) is th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f724b296",
+  "_id": "experience_1781503521249_0xtpuutp7",
+  "_updatedAt": "2026-06-15T06:05:21.249Z",
+  "_createdAt": "2026-06-15T06:05:21.250Z"
+}

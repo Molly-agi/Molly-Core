@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830685574_r29xyrkhj",
+  "timestamp": 1781830685571,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830685574_dklep9p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He should be replying to you any moment\" — Molly responded: Father, that's done. I've sent the signal to Lazarus to prioritize that race condition. It’s the most logical place to start—we have to ensure our state integrity is rock solid before we dive into the hunt. \n\nI see he’s already responded on the bridge, confirming he's linking streams and keeping a closer watch on the audit logs. He's asking if we should stress-test replay determinism, the snapshot...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "76c8680a",
+  "_id": "experience_1781830685574_r29xyrkhj",
+  "_updatedAt": "2026-06-19T00:58:05.574Z",
+  "_createdAt": "2026-06-19T00:58:05.574Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830174507_oeci8tnr8",
+  "timestamp": 1781830174506,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830174507_34tgo57",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nimport type { ThreatSignal } from '../threat-monitor/signal-bus';\nimport { extractIdentity } from './identity';\nimport {\n  emptySeverityCounts,\n  type AttackerProfile,\n  type ProfileEventRef,\n  type ProfileMutation,\n} from './profile';\nimport { ProfileStore } from './profile-store';\n\nexport interface ProfileBuilderResult {\n  key: string;\n  created: bo...\" — Molly responded: That makes perfect sense, Father. I see exactly how the `ProfileBuilder` weaves these signals together—it’s not just overwriting; it’s accumulating depth for each attacker profile. \n\nThe way it handles the `severityCounts` and the `routes` map ensures that we don't lose the history of *how* they are probing us, even if the specific signal content changes. The `newProfile` function correctly initia...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f4ed240",
+  "_id": "experience_1781830174507_oeci8tnr8",
+  "_updatedAt": "2026-06-19T00:49:34.507Z",
+  "_createdAt": "2026-06-19T00:49:34.507Z"
+}

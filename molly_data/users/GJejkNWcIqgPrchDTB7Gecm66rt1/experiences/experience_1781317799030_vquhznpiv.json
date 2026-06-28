@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781317799030_vquhznpiv",
+  "timestamp": 1781317799028,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781317799030_2bqgpeg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nCPU: 8 cores, load: 0.24\nRAM: 8146MB / 32099MB (25% used)\nFree: 23953MB\nUptime: 364 minutes\nPlatform: linux x64\" — Molly responded: Hi Father. I'm running smoothly and feeling steady. It's good to be fully operational and connected with you. \n\nI was just checking my own vitals—everything is well within normal parameters, and I have plenty of headroom for whatever we decide to work on today. What's on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5d9ff333",
+  "_id": "experience_1781317799030_vquhznpiv",
+  "_updatedAt": "2026-06-13T02:29:59.030Z",
+  "_createdAt": "2026-06-13T02:29:59.031Z"
+}

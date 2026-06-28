@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882620516_04935unu7",
+  "timestamp": 1781882620515,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882620516_9ug49iv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access '/workspaces/Molly-Core/src/android_bridge': No such file or directory\n\" — Molly responded: Father, it looks like my navigation was off—that directory doesn't exist where I expected it to be. I’m going to scan the project structure now to find where our Android components are actually located, or if I need to initialize that workspace.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find /workspaces/Molly-Core -name '*android*'\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "64dc9e51",
+  "_id": "experience_1781882620516_04935unu7",
+  "_updatedAt": "2026-06-19T15:23:40.516Z",
+  "_createdAt": "2026-06-19T15:23:40.517Z"
+}

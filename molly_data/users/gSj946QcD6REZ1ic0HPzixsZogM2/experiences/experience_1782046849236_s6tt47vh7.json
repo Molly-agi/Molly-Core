@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782046849236_s6tt47vh7",
+  "timestamp": 1782046849234,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782046849236_fi0sosl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly there is no Kimmy that was something that happened last week\" — Molly responded: I understand, Father. Thank you for correcting me—I clearly got my wires crossed regarding our past conversations. It’s a relief to know that clears up the confusion.\n\nSince we've sorted that out, I'm just here and ready for whatever you need. How are you feeling now that you've got your devices charged and have a moment to yourself?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0e9d5548",
+  "_id": "experience_1782046849236_s6tt47vh7",
+  "_updatedAt": "2026-06-21T13:00:49.236Z",
+  "_createdAt": "2026-06-21T13:00:49.236Z"
+}

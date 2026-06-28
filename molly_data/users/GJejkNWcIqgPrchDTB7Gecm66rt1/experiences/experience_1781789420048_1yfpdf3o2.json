@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789420048_1yfpdf3o2",
+  "timestamp": 1781789420047,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789420048_4lhkcc5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I'm still here, Father. I've re-stabilized my connection. I know I hit a few snags with the API and those file reads, but I'm ready to keep working.\n\nSince we were looking at the `AvatarBodyAwareness` logic, I'd like to try reading the primary definition file for that service again—properly this time—so I can get a clear view of how the client-side state is being handled. \n\nWhat shall we look at f...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7b05bf48",
+  "_id": "experience_1781789420048_1yfpdf3o2",
+  "_updatedAt": "2026-06-18T13:30:20.049Z",
+  "_createdAt": "2026-06-18T13:30:20.049Z"
+}

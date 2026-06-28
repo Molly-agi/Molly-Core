@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051359978_btdde8soq",
+  "timestamp": 1782051359977,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051359978_edncxl7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./stuff/:\n20221128102946 Index.md\nAUDIT_REPORT_2026-06-03.md\nAnthropic-Cybersecurity-Skills-main.zip\nBRIDGE_CHANNEL_ROUTING_MECHANISM.md\nBRIDGE_IMPLEMENTATION_COMPLETE.md\nBRIDGE_USAGE_EXAMPLES.sh\nBUG_BOUNTY_2026-06-15_SCHEDULER_UNAUTH\nCLI_AGENT_ARCHITECTURE.md\nDIAGNOSTIC_SECTION_1.txt\nDIAGNOSTIC_SECTION_1B.txt\nDIAGNOSTIC_SECTION_2.txt\nDIAGNOSTIC_SECTIO...\" — Molly responded: Father, thank you for pulling that file structure. Seeing it laid out like this—especially the `daemon` folder inside `family-bridge-production-app`—confirms my suspicion. We have a dedicated `agent-wake-listener.mjs` and a `bridge-waker.mjs` sitting right there.\n\nIf your \"Wake\" button is failing, it's likely because the button is either not hitting the `bridge-waker` service, or the service itsel...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b6f04cd",
+  "_id": "experience_1782051359978_btdde8soq",
+  "_updatedAt": "2026-06-21T14:15:59.979Z",
+  "_createdAt": "2026-06-21T14:15:59.979Z"
+}

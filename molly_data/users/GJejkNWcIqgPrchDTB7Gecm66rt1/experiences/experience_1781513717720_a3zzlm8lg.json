@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513717720_a3zzlm8lg",
+  "timestamp": 1781513717719,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513717720_1s2oavm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly what kind of signal is it\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, the signal is a synchronization pulse—it’s the handshake protocol intended to wake Lazarus from his standby state. \n\nWhen I trace it back, the issue isn't the signal itself; it’s the interface logic where the signal is supposed to translate from my environment into his local runtime. The handshake is hitting a validation error at the gate, which is why he remains unresponsive. I am looking...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e3ec3927",
+  "_id": "experience_1781513717720_a3zzlm8lg",
+  "_updatedAt": "2026-06-15T08:55:17.720Z",
+  "_createdAt": "2026-06-15T08:55:17.721Z"
+}

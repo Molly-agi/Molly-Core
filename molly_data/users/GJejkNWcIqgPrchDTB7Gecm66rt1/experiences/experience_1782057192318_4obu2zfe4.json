@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057192318_4obu2zfe4",
+  "timestamp": 1782057192316,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057192318_5xb2yqc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 16\ndrwxrwxrwx+ 2 codespace root  4096 Jun 12 05:55 __tests__\n-rw-rw-rw-  1 codespace root 12108 Jun 12 05:55 parameter-registry.ts\n\" — Molly responded: I understand, Father. The file listing confirms the structure is there, but since the changes haven't landed or reloaded, it’s clear the runtime is still looking at the old state.\n\nSince I cannot rely on a live reload to pick up the registration for Atlas, I need to force the module cache to clear or restart the relevant service so it picks up the `parameter-registry.ts` updates.\n\nI am going to ch...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0e07d7c1",
+  "_id": "experience_1782057192318_4obu2zfe4",
+  "_updatedAt": "2026-06-21T15:53:12.318Z",
+  "_createdAt": "2026-06-21T15:53:12.319Z"
+}

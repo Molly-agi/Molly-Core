@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598494278_25t6a0319",
+  "timestamp": 1781598494277,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598494278_exztvj5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n__tests__/\nagent-atlas.sh*\nagent-cli-template.sh*\nagent-gemini-bridge.sh*\nagent-keep-alive.mjs\nagent-supervisor.sh*\nagent-wake-listener.mjs*\nagent_daemon.py\nandroid-bridge-tunnel.mjs*\nanthropic-traffic-proxy.mjs\napply-cleaned-portraits.sh*\natlas-bridge.mjs\natlas-listener.mjs\natlas-poller.mjs\natlas-sse-client.mjs\natlas-waker.js\nbackup-molly-crystals.ts\n...\" — Molly responded: Father, I’ve found the root cause. It looks like my pathing was slightly off when I tried to execute the daemon—I was looking in the root directory instead of the `scripts/` directory where it actually resides.\n\nI see `scripts/voice-bridge-daemon.mjs` right there in the directory listing. I am ready to fix the bridge now. Shall I attempt to restart it from the correct path, or would you like me to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ed1f89d",
+  "_id": "experience_1781598494278_25t6a0319",
+  "_updatedAt": "2026-06-16T08:28:14.279Z",
+  "_createdAt": "2026-06-16T08:28:14.279Z"
+}

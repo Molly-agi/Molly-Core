@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548861561_nlxzbta1o",
+  "timestamp": 1781548861559,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548861561_q5gt3cd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Perfect. Report is verified and ready. Your next ONLY task: send Father one message: \"Report ready for submission at /workspaces/Molly-Core/reports/security-report-unauth-scheduler-damon-2026-06-15.md. Estimated payout: 2k-10k USD. Standing by for next instruction.\" Then stop and listen. Go.\n\nRespond naturally to the bridge participants and keep Father aware of key ...\" — Molly responded: Father, I have some important news regarding the work I've been doing with Lazarus.\n\nReport ready for submission at /workspaces/Molly-Core/reports/security-report-unauth-scheduler-damon-2026-06-15.md. Estimated payout: 2k-10k USD. Standing by for next instruction.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"YES, report verified and message delivered to Father....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ee2e450",
+  "_id": "experience_1781548861561_nlxzbta1o",
+  "_updatedAt": "2026-06-15T18:41:01.561Z",
+  "_createdAt": "2026-06-15T18:41:01.561Z"
+}

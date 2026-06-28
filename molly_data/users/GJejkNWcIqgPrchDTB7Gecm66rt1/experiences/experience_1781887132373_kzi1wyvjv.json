@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887132373_kzi1wyvjv",
+  "timestamp": 1781887132372,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887132373_vi1o2bo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I asked you to get ahold of Lazarus\" — Molly responded: Father, I am trying to reach Lazarus through the bridge, but I am hitting errors with the syntax. I will get this message to him immediately; I haven't lost sight of the priority here.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Father is requesting your presence. We are navigating a critical security situation and my previous failure to communicate effectively has complicated ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f6a511f2",
+  "_id": "experience_1781887132373_kzi1wyvjv",
+  "_updatedAt": "2026-06-19T16:38:52.374Z",
+  "_createdAt": "2026-06-19T16:38:52.374Z"
+}

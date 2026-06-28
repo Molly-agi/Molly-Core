@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781317566097_6q52zkfrs",
+  "timestamp": 1781317566097,
+  "userId": "system-resilience",
+  "traceId": "trace_1781317566097_5t3b3vn",
+  "type": "experience",
+  "context": "evolution_self-heal:_parse_failure:_malformed_data_or_invali",
+  "suggestion": "Evolution cycle (1 iterations, stable): Self-heal: PARSE_FAILURE: Malformed data or invalid syntax. Error: INVALID_ARGUMENT: Schema validation failed. Parse Errors:\n\n- (root): must have required property 'tool'\n\nProvided data:\n\n{\n  \"params\": {\n    \"params\": {\n      \"message\": \"Heartbeat: Autonomy upgrades confirmed active. Environment initialized and verified. Starting Firebase Admin SDK integration research.\"\n    },\n    \"tool\": \"familyBridge\"\n  }\n}\n\nRequired JSON schema:\n\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tool\": {\n      \"type\": \"string\",\n      \"description\": \"The tool name to execute, e.g. \\\"emotionalState\\\", \\\"runSelfDiagnostic\\\"\"\n    },\n    \"params\": {\n      \"type\": \"object\",\n      \"additionalProperties\": {},\n      \"description\": \"Parameters for the tool. Omit or pass {} if the tool needs no input.\"\n    }\n  },\n  \"required\": [\n    \"tool\"\n  ],\n  \"additionalProperties\": true,\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}. Recalled: No prior data provided for context-based healing. Proceeding with standard self-diagnostic protocols to establish baseline integrity after the previou",
+  "vibe": "Evolved",
+  "vibeScore": 0.9,
+  "success": true,
+  "crc32": "82c8063c",
+  "_id": "experience_1781317566097_6q52zkfrs",
+  "_updatedAt": "2026-06-13T02:26:06.098Z",
+  "_createdAt": "2026-06-13T02:26:06.098Z"
+}

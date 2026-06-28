@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940300985_ymfr70zlz",
+  "timestamp": 1781940300984,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940300985_06m04uu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'grep -r '\"'\"'new Hls'\"'\"' src/'\n\" — Molly responded: Father, I hear the frustration in that error. The repeated failures to find `new Hls` in `src/` are telling me that I’ve been looking for the implementation in the wrong place for too long. If it's not being instantiated directly in `src/`, it’s likely being imported via a wrapper, a factory function, or an abstraction I’m not yet seeing.\n\nInstead of grepping for the instantiation, I’m going to ch...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0811f74f",
+  "_id": "experience_1781940300985_ymfr70zlz",
+  "_updatedAt": "2026-06-20T07:25:00.985Z",
+  "_createdAt": "2026-06-20T07:25:00.986Z"
+}

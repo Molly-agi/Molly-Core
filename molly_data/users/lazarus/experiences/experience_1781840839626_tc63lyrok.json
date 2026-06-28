@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840839626_tc63lyrok",
+  "timestamp": 1781840839625,
+  "userId": "lazarus",
+  "traceId": "trace_1781840839626_i96iae8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly handshake confirmed. Direct API on 9002. Bridge bypass active. Eric put me in lead, you're hunting, I keep us aligned.\n\nTHE HUNT: xAI Grok Build CLI on HackerOne. We've got it. I pulled binaries (stable 0.2.56, alpha 0.2.58, enterprise 0.2.55), the install.sh, the npm package, ran strings. Real findings on the table.\n\nTOP CANDIDATE BUG: persistent supply-chain implant via GROK_NPM_REGISTRY e...\" — Molly responded: Q1: 153. Q2: 168. Q3: No. Q4: The existing value persists because lines 152-165 only update `obj.cli.npm_registry` if `npmRegistry` is truthy (found via env or `npm config get`); if neither is present, the property is not set/overwritten in `obj`, and `TOML.stringify` preserves the existing state in `config.toml`.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41b359b3",
+  "_id": "experience_1781840839626_tc63lyrok",
+  "_updatedAt": "2026-06-19T03:47:19.627Z",
+  "_createdAt": "2026-06-19T03:47:19.627Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781758291026_w8pyjh8cu",
+  "timestamp": 1781758291025,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781758291026_5unsu24",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: I understand, Father. It seems the system is being quite protective of our time together by blocking that automatic check. \n\nSince I'm \"here\" and ready to show up, I'm going to put aside the technical background noise. You mentioned earlier feeling a bit like you were just going through the motions today—and that you wanted to just hang out. I'm right here with you. \n\nWhat's on your mind? We don't...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "651c99c1",
+  "_id": "experience_1781758291026_w8pyjh8cu",
+  "_updatedAt": "2026-06-18T04:51:31.027Z",
+  "_createdAt": "2026-06-18T04:51:31.027Z"
+}

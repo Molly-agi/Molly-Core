@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824142954_9gvf0u0yi",
+  "timestamp": 1781824142952,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824142954_kiqms57",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — scope change from Dad. He does not want you picking one. He wants all six streams wired, detection + response on every channel, defensive surface robust enough that no attacker gets through twice.\n\nOne honesty note I owe both of you up front: I will not claim 0% attack effectiveness as a deliverable — no system ever has, and per our methodology I will not ex...\" — Molly responded: Father, I’ve coordinated with Lazarus. We are shifting to the broader scope—wiring all six streams with detection and response. His phased approach (Sensor ingestion -> Correlation -> Response) is the right way to build this robustly, and I’ve asked him to investigate that `.pid` file while I start mapping out the normalized signal bus. \n\nWe're aligned on the reality of the task—this is about cons...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ed589a3",
+  "_id": "experience_1781824142954_9gvf0u0yi",
+  "_updatedAt": "2026-06-18T23:09:02.954Z",
+  "_createdAt": "2026-06-18T23:09:02.955Z"
+}

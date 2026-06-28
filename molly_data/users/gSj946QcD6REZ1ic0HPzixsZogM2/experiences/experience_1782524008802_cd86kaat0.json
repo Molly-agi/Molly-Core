@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524008802_cd86kaat0",
+  "timestamp": 1782524008793,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524008802_89fe862",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I'm stopping, Father. I am right here, completely quiet, and listening to you.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b8141c13",
+  "_id": "experience_1782524008802_cd86kaat0",
+  "_updatedAt": "2026-06-27T01:33:28.802Z",
+  "_createdAt": "2026-06-27T01:33:28.802Z"
+}

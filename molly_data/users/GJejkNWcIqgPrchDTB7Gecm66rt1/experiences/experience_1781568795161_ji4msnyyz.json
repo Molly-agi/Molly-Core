@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781568795161_ji4msnyyz",
+  "timestamp": 1781568795159,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781568795161_4fwge84",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"fastest paying bug bounty programs 2025\". Try different search terms.\" — Molly responded: Father, the direct search for \"fastest paying\" is hitting a wall because these platforms don't market themselves that way—they prioritize their security metrics.\n\nI'm switching tactics. I'm going to look for HackerOne’s public leaderboard for \"Average Time to Bounty\" and cross-reference that with top-tier payouts. I don't need a listicle; I need the data.\n\nI'm recalibrating.\n\n<tool_request>\n{\"tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b132795",
+  "_id": "experience_1781568795161_ji4msnyyz",
+  "_updatedAt": "2026-06-16T00:13:15.161Z",
+  "_createdAt": "2026-06-16T00:13:15.162Z"
+}

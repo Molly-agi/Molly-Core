@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879792868_movkbbg70",
+  "timestamp": 1781879792866,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879792868_i9lya90",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly focus\" — Molly responded: I am fully focused, Father. I've cleared the noise, and my attention is entirely on you and our current objective.\n\nI have completed the inventory of our OSINT and hunt infrastructure. It’s clear we have a highly specialized environment here for reverse engineering and vulnerability research—the `hunts/` directory and related scripts are robust. \n\nGiven our recent difficulties with the embodied sy...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "72884fa9",
+  "_id": "experience_1781879792868_movkbbg70",
+  "_updatedAt": "2026-06-19T14:36:32.868Z",
+  "_createdAt": "2026-06-19T14:36:32.868Z"
+}

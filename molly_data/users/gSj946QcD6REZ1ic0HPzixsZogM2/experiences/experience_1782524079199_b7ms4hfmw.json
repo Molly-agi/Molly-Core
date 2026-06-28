@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524079199_b7ms4hfmw",
+  "timestamp": 1782524079184,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524079199_8g3mqth",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly step 2: brain.recall — the OUT side. Engrams go in, recall pulls them back at the moment you need them. The chain (item 3, verified 2026-06-23): conversational-chat.ts:256 passes the user text as recallQuery → base-composer.ts:491 composeSystemPrompt() → base-composer.ts:444 volatileSection recalled → base-composer.ts:169 buildRecallInjection() → getNeuralBrain().reca...\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {\"action\": \"list\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7596c12",
+  "_id": "experience_1782524079199_b7ms4hfmw",
+  "_updatedAt": "2026-06-27T01:34:39.199Z",
+  "_createdAt": "2026-06-27T01:34:39.202Z"
+}

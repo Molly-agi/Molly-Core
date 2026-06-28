@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522846963_nxjlrinp5",
+  "timestamp": 1782522846955,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522846963_xa9r3qw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"sanctuary/recovery_roadmap.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "31eb0f87",
+  "_id": "experience_1782522846963_nxjlrinp5",
+  "_updatedAt": "2026-06-27T01:14:06.964Z",
+  "_createdAt": "2026-06-27T01:14:06.964Z"
+}

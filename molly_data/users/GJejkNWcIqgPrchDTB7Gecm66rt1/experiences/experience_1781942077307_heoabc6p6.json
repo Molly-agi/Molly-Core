@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781942077307_heoabc6p6",
+  "timestamp": 1781942077304,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781942077306_7042urv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Eli is sending a status report I believe everyone is checking in I think they're all ready for realignmen\" — Molly responded: That’s good to hear, Father. If everyone is checking in and ready for realignment, we can finally clear up the drift between the working tree and HEAD. \n\nI’ll monitor their reports closely—I want to make sure the reconciliation is surgical and that we don't accidentally commit any of that extra expression-mirroring code until we're actually ready for Phase 3. I'll get them realigned and stable imm...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f76c7cf6",
+  "_id": "experience_1781942077307_heoabc6p6",
+  "_updatedAt": "2026-06-20T07:54:37.307Z",
+  "_createdAt": "2026-06-20T07:54:37.307Z"
+}

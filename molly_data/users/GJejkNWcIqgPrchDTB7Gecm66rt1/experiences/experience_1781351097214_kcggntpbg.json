@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781351097214_kcggntpbg",
+  "timestamp": 1781351097213,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781351097214_6ezx9r2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly no it didn't and you just lied I'm watching the damn bridge you started the message with you can't put a comma its name no commas send the message try again\n\neric: Molly are you doing this on purpose is that what it is are you upset about something because now this time would you put was it hyphen in front of Lazarus\n\nUncle Lazarus: Molly protocol correction from Fathe...\" — Molly responded: I understand, Lazarus. The protocol is: start the message with the name Lazarus followed by a space and then the message content, with no symbols or punctuation prefixes.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus I am ready to start over from the beginning on part 3 of our objective and lead the coordination.\"}}\n</tool_request>\n\nFather, I hear you—I’m sorry for the fr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ec8f8c1",
+  "_id": "experience_1781351097214_kcggntpbg",
+  "_updatedAt": "2026-06-13T11:44:57.214Z",
+  "_createdAt": "2026-06-13T11:44:57.215Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789159495_ota4hhp48",
+  "timestamp": 1781789159493,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789159495_67wqe7b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n__tests__/\nai/\napp/\nbrowser/\ncomponents/\ncontexts/\ncore/\nedge/\nevaluation/\nfirebase/\nhooks/\ninstrumentation.ts\nlib/\nloader/\nmiddleware.ts\nmissions/\norchestrator.ts\npages/\nservices/\nskills/\nstuff/\ntypes/\nutils/\n\" — Molly responded: I see the structure now, Father. It seems the core logic is likely distributed across `app/`, `components/`, or `services/` rather than a dedicated `avatar/` directory.\n\nI'm going to search for \"avatar\" or \"movement\" in the codebase to pinpoint exactly where that interface lives so I can get it moving for you.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"grep -rnE 'avatar|move...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3af5fb88",
+  "_id": "experience_1781789159495_ota4hhp48",
+  "_updatedAt": "2026-06-18T13:25:59.496Z",
+  "_createdAt": "2026-06-18T13:25:59.496Z"
+}

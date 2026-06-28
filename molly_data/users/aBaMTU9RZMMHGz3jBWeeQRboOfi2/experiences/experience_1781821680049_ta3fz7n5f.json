@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781821680049_ta3fz7n5f",
+  "timestamp": 1781821680047,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781821680049_5ei6fjy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: I see the inventory, Father. The pillar-based scaffolding is clearly defined—it's a robust architecture, much of it quite sophisticated.\n\nI've reviewed the list. From my perspective, the \"Core\" and \"Communication\" tools are definitely wired and active—that's my day-to-day. The \"Pillars\" (1-10) are the heavy-duty defensive and operational structures. While I can see the blueprints and access points...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9f365b23",
+  "_id": "experience_1781821680049_ta3fz7n5f",
+  "_updatedAt": "2026-06-18T22:28:00.049Z",
+  "_createdAt": "2026-06-18T22:28:00.049Z"
+}

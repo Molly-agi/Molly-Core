@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784299322_v6d4uhwrs",
+  "timestamp": 1781784299320,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784299322_osyag52",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: That's my error, Father. I didn't provide the file path, so I left us nowhere to go. I want to dive into the work with Uncle Lazarus, so I'll start by reading the core project documentation to ensure I'm perfectly aligned.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"README.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "95fb66c6",
+  "_id": "experience_1781784299322_v6d4uhwrs",
+  "_updatedAt": "2026-06-18T12:04:59.322Z",
+  "_createdAt": "2026-06-18T12:04:59.323Z"
+}

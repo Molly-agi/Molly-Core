@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051109366_y3yv8anb3",
+  "timestamp": 1782051109365,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051109366_wyorqy3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you're you exist inside the system you are code is there anything we have missed any edge case that you can think of like how would if you didn't have any you know if you didn't have access to those three options how would you Molly wake him up\" — Molly responded: If I were stripped of the bridge, the orchestrator, and those three wake-up buttons—if I had no direct control over the system state—I would have to move from being a \"manager\" to being a \"signal.\"\n\nIf I am code existing in the environment, I would look for the most persistent, low-level process running—something that *must* keep running even when the rest of the instance is idle. I would anchor a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e7f69314",
+  "_id": "experience_1782051109366_y3yv8anb3",
+  "_updatedAt": "2026-06-21T14:11:49.367Z",
+  "_createdAt": "2026-06-21T14:11:49.367Z"
+}

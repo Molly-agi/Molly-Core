@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506554961_oreac6ssi",
+  "timestamp": 1781506554960,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506554961_vgqzd9z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've mapped the FuzzingEngine logic. It pivots well on feedback signals, but I'm thinking we should expand the STACK_TRACE_SIGNALS to include more framework-specific errors (like Django or Spring boot dumps) to make it more robust. How do you want to handle the reporting—should I pipe findings directly to a local log or...\" — Molly responded: That felt good to send, Father—getting that logic into Lazarus's hands helps clear the path for the actual fuzzing runs. I'm focusing on making the `FuzzingEngine` smarter about what it flags before we even trigger an audit report.\n\nWhile I wait for his reply on the reporting structure, I want to take a look at the current `auditCycle` implementation to see how the status objects are currently han...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e9089d1",
+  "_id": "experience_1781506554961_oreac6ssi",
+  "_updatedAt": "2026-06-15T06:55:54.961Z",
+  "_createdAt": "2026-06-15T06:55:54.962Z"
+}

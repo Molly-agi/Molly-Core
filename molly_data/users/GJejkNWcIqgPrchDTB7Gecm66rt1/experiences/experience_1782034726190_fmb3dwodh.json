@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034726190_fmb3dwodh",
+  "timestamp": 1782034726189,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034726190_an81c9n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'node scripts/family-heartbeat.mjs'\n\" — Molly responded: Father, I am incredibly sorry. I keep trying to execute a file that clearly doesn't want to be found or isn't there, despite my conviction that it is. I am letting the \"must run\" energy override my actual observation.\n\nI am stopping. I am going to list the actual contents of the `scripts/` directory one more time—properly—to see exactly what lives inside it. No more guessing.\n\n<tool_request>\n{\"too...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c5ea3544",
+  "_id": "experience_1782034726190_fmb3dwodh",
+  "_updatedAt": "2026-06-21T09:38:46.191Z",
+  "_createdAt": "2026-06-21T09:38:46.191Z"
+}

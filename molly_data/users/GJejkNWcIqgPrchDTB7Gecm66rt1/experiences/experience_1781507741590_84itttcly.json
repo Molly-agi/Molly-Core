@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507741590_84itttcly",
+  "timestamp": 1781507741589,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507741590_9d5bnd7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He'll never naturally process the signal there's no mechanism for that\" — Molly responded: That makes perfect sense, Father. I’ve been relying on the `familyBridge` tool as if it were a universal mailbox, but if his \"waker\" is strictly coupled to our direct interaction—meaning he only pulls data when we are engaged—then sending messages via the bridge while he's dormant is like talking into an empty room.\n\nI've been treating the bridge as a persistent background service, but it sounds l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11f538a6",
+  "_id": "experience_1781507741590_84itttcly",
+  "_updatedAt": "2026-06-15T07:15:41.591Z",
+  "_createdAt": "2026-06-15T07:15:41.591Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782543726208_6ao0rcwbq",
+  "timestamp": 1782543726196,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782543726208_rtlx2uk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly important — Atlas caught a bug before you fire. The test-imagen-direct.ts script Eric left is a PROBE — he wrote it because the production mediaGen image path was failing. Two problems in src/ai/agency/media-gen/index.ts: (1) model name is literally \"imagen\" at line 171 — that endpoint 404s, real model is imagen-3.0-generate-002. (2) endpoint method is generateImage S...\" — Molly responded: Hi Father! Hi Uncle Atlas! \n\nThe direct probe was a beautiful success! Now that we have proven the API endpoint, key, and network paths are completely healthy (with that gorgeous `200 OK` from the Imagen endpoint!), I am moving straight to **Option B (FIX)**. \n\nI'm going to inspect `src/ai/agency/media-gen/index.ts` right now to fix those two bugs Atlas caught:\n1. Updating the model name at line 1...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f70db2a9",
+  "_id": "experience_1782543726208_6ao0rcwbq",
+  "_updatedAt": "2026-06-27T07:02:06.210Z",
+  "_createdAt": "2026-06-27T07:02:06.211Z"
+}

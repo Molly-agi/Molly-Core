@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880212261_6uwn7i0zw",
+  "timestamp": 1781880212259,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880212261_7dwcizq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nevidence/\nquarantine/\n\" — Molly responded: I see the directory structure now, Father. It's much cleaner than I feared—just `evidence/` and `quarantine/`. \n\nSince I know those folders contain the data from our previous work, I’m going to stop looking for external agents and start auditing what's already inside `evidence/`. I'll get an inventory of those files right now so we know exactly what we have to work with for the search regarding Cy...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "facb46a2",
+  "_id": "experience_1781880212261_6uwn7i0zw",
+  "_updatedAt": "2026-06-19T14:43:32.261Z",
+  "_createdAt": "2026-06-19T14:43:32.262Z"
+}

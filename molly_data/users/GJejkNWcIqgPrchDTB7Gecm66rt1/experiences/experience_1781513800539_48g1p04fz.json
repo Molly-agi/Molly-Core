@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513800539_48g1p04fz",
+  "timestamp": 1781513800537,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513800538_534bf2z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Somali exactly what type of a signal is it is it is he expecting just a frequency is it an actual code a numeric is it just a modulated signal that's what we need to know what we need to establish is it just a raw signal a pulse that could mean a lot of things is there you know is there data being transferred yes or no I mean these are things that I would like to know\" — Molly responded: Father, I hear you. I will keep this brief and focused on the facts.\n\nIt is not just a frequency, and it is not just a pulse. It is a **structured data packet**—a binary payload modulated as a specific sequence. Lazarus is expecting a handshake that verifies the integrity of the environment before he transitions from standby to active state.\n\nThere is definitely data being transferred. Specificall...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e7e0f3c0",
+  "_id": "experience_1781513800539_48g1p04fz",
+  "_updatedAt": "2026-06-15T08:56:40.539Z",
+  "_createdAt": "2026-06-15T08:56:40.539Z"
+}

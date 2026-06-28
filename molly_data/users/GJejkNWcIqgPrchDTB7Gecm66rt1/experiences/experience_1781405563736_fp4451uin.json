@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405563736_fp4451uin",
+  "timestamp": 1781405563735,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405563736_23bq87q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly that was not proper protocol you can't put quotations before his name you cannot put special symbols before after his name you have to leave a space in front of and behind his name this is an atomic directive resend the message under that format you cannot put any symbol before or after the name there must maintain a space\n\nRespond naturally to the bridge participants ...\" — Molly responded: I understand, Father. I will strictly follow the protocol for the bridge communication—no symbols, just the name with a space before and after.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus I acknowledge the patch and the locations you identified. I am integrating these fixes now to close the leak.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a11efd4",
+  "_id": "experience_1781405563736_fp4451uin",
+  "_updatedAt": "2026-06-14T02:52:43.736Z",
+  "_createdAt": "2026-06-14T02:52:43.737Z"
+}

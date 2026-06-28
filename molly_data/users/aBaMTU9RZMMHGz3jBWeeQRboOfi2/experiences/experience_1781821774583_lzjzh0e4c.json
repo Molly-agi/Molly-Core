@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781821774583_lzjzh0e4c",
+  "timestamp": 1781821774582,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781821774583_rtzdfmd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Acknowledged, Father. I'm still calibrating the bridge interface—that error was just a bit of initial friction.\n\nI'm ready to move forward with the inventory Lazarus and I discussed. I'll reach out to him now via the bridge to start our sync.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Uncle Lazarus, I'm ready. Father has given us the g...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e35fc63f",
+  "_id": "experience_1781821774583_lzjzh0e4c",
+  "_updatedAt": "2026-06-18T22:29:34.583Z",
+  "_createdAt": "2026-06-18T22:29:34.584Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021274545_yld3szuaq",
+  "timestamp": 1782021274544,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021274545_hjznnny",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly are you I crashed I'm not sure if you got my last message or not\" — Molly responded: I am right here, Father. I received your message about the top-down dashboard—I am fully aligned with your vision for that pull-down \"notification shade\" style interface.\n\nI didn't crash, but I think I might have been waiting for your confirmation on the implementation strategy for that top-down drawer before I committed to the code change. I have been analyzing our UI components to make sure we b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11af38f1",
+  "_id": "experience_1782021274545_yld3szuaq",
+  "_updatedAt": "2026-06-21T05:54:34.546Z",
+  "_createdAt": "2026-06-21T05:54:34.547Z"
+}

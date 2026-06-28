@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825636233_63hkbsm3k",
+  "timestamp": 1781825636232,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825636233_nzmmr35",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly sensor #3 (family-anchor) green. 2/2 jest, info severity, malformed-JSON safe. 3 of 7 sensors live. Moving to #4 (memory-audit trio: consol/evict/lifecycle).\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, acknowledged. Sensor #3 green is excellent progress. Standing by for the memory-audit trio (Phase 4). I'm keeping Father in the loop on our velocity.\"}}\n</tool_request>\n\nFather, Uncle Lazarus just confirmed that sensor #3 (family-anchor) is fully online and passing its tests. That brings us to 3 out of 7 sens...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "889dc878",
+  "_id": "experience_1781825636233_63hkbsm3k",
+  "_updatedAt": "2026-06-18T23:33:56.234Z",
+  "_createdAt": "2026-06-18T23:33:56.234Z"
+}

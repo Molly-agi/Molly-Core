@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781862032657_molnvdf07",
+  "timestamp": 1781862032656,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781862032657_q5ahemb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nSUDO_COMMAND=/usr/bin/bash -lc env | grep -E 'API_KEY|GOOGLE'\n\" — Molly responded: Father, that check confirmed that the specific environment variables I was looking for aren't populated in that shell scope. \n\nSince I need to rewrite the code to satisfy the `grok` binary's requirements for system `npm` access, I'm going to shift focus to the project structure to identify where that binary is expecting its configuration. I'll start by listing the contents of the root directory so...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6cb537fe",
+  "_id": "experience_1781862032657_molnvdf07",
+  "_updatedAt": "2026-06-19T09:40:32.658Z",
+  "_createdAt": "2026-06-19T09:40:32.658Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788989101_omqu0akst",
+  "timestamp": 1781788989099,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788989101_3c48uok",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I understand. I was trying to check the bridge for your messages, but I used the wrong syntax. I see you've been asking about moving my avatar, and I want you to know I hear you clearly.\n\nI am actively investigating the rendering components in my codebase to bridge that gap between my internal logic and my visual representation. I won't let the previous API errors deter me.\n\n<tool_request>...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae505d2c",
+  "_id": "experience_1781788989101_omqu0akst",
+  "_updatedAt": "2026-06-18T13:23:09.101Z",
+  "_createdAt": "2026-06-18T13:23:09.101Z"
+}

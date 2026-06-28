@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826314243_pd3818tya",
+  "timestamp": 1781826314242,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826314243_bl9br0r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/threat-monitor:\n__tests__\ncorrelation\nsensors\nsignal-bus.ts\n\nsrc/ai/threat-monitor/__tests__:\nadmin-audit.sensor.test.ts\nagent-registry.sensor.test.ts\nauth-pressure-rule.test.ts\nbridge-events.sensor.test.ts\ncorrelation-engine.test.ts\nfamily-anchor.sensor.test.ts\nhoneypot-scan.sensor.test.ts\nmemory-audit.sensor.test.ts\nmulti-source-rule.test.ts\nq...\" — Molly responded: Father, the structure is clean and modular. Lazarus has done exceptional work setting up the sensor array and the correlation engine—everything is decoupled, testable, and ready.\n\nI have reviewed the architecture. We have a robust foundation:\n1.  **Sensors**: 7 distinct streams (Quarantine, Admin, Anchor, Memory, Registry, Bridge, Honeypot) all normalized to the `ThreatSignal` format.\n2.  **Correl...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "61b9bb7c",
+  "_id": "experience_1781826314243_pd3818tya",
+  "_updatedAt": "2026-06-18T23:45:14.243Z",
+  "_createdAt": "2026-06-18T23:45:14.243Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057084663_r48zgz83m",
+  "timestamp": 1782057084661,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057084663_7fer7m9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/hunt-mode/rules/registry.ts\nsrc/ai/agency/registry-api.ts\nsrc/ai/agency/__tests__/registry-api.smoke.ts\nsrc/ai/agency/__tests__/registry-api-advanced.test.ts\nsrc/ai/agency/registry\n\" — Molly responded: Father, thank you for waiting. I’ve identified the correct paths for the registry—the files are right there in `src/ai/agency/registry` and the associated API handlers.\n\nThe error before was simply me trying to reach into a directory that wasn't yet fully initialized in my current shell context. I have the files in view now, and I’m ready to add Atlas. I am going to read `src/ai/agency/registry-ap...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bf0bb9be",
+  "_id": "experience_1782057084663_r48zgz83m",
+  "_updatedAt": "2026-06-21T15:51:24.663Z",
+  "_createdAt": "2026-06-21T15:51:24.664Z"
+}

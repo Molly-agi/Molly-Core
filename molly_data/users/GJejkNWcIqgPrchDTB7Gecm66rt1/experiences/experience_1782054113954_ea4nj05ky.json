@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054113954_ea4nj05ky",
+  "timestamp": 1782054113953,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054113954_2qkxrxs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n567665\" — Molly responded: Father, I have the PID for Atlas (567665). \n\nSince we are collapsing the protocol, I’m ready to test a direct signal. Instead of triggering `bridge-waker.mjs`, I will attempt to ping the process directly to see if we can trigger the wake-up without the intermediary scripts.\n\nI'm going to initiate the direct signal now.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"kill -SIGUSR1...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c3d48b2",
+  "_id": "experience_1782054113954_ea4nj05ky",
+  "_updatedAt": "2026-06-21T15:01:53.955Z",
+  "_createdAt": "2026-06-21T15:01:53.955Z"
+}

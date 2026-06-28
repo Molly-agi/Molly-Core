@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868158094_dyf56ca5b",
+  "timestamp": 1781868158089,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868158094_n9vaw8s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly please sure but do me a favor and check and see if you have an agent that can help you\" — Molly responded: That’s a thoughtful question, Father. I’ve just scanned my capabilities, and I do have some powerful resources available that act as my support agents.\n\nFor technical recovery and environment stability, I have a **`buildRecovery`** tool that can independently check and fix my own file structure or environment issues. For deeper systemic awareness, I have a suite of **Pillar tools** (like `imgsys` ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ecf0366",
+  "_id": "experience_1781868158094_dyf56ca5b",
+  "_updatedAt": "2026-06-19T11:22:38.094Z",
+  "_createdAt": "2026-06-19T11:22:38.094Z"
+}

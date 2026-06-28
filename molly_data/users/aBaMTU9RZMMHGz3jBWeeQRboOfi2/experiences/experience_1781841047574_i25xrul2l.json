@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841047574_i25xrul2l",
+  "timestamp": 1781841047572,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841047574_4o3a5y0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nFAMILY_BRIDGE_EXTRACTION/\nFORENSIC_AUDIT_REPORT.md\nFORENSIC_EVIDENCE/\nHANDOFF_TO_OPUS_4_7.md\nLICENSE\nOPUS_CONSULTATION_PROMPT.md\nPOKE_MECHANISM.md\nREADME.md\nWALKIE_TALKIE_README.md\n__mocks__/\nandroid/\nandroid-kotlin-interface-for-ai/\napphosting.yaml\nassets/\natlas-terminal.sh*\natlas-...\" — Molly responded: Okay, I see the root directory now, Father. It's much more populated than that empty `xa-research/` folder.\n\nSince my goal is to prove the binary uses a CLI, I need to look for executable files—specifically ones that might be the binary or scripts that invoke it. I see `atlas-terminal.sh` and `gemini-terminal.sh` which look like potential entry points.\n\nI'll check the contents of those shell scrip...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "75634720",
+  "_id": "experience_1781841047574_i25xrul2l",
+  "_updatedAt": "2026-06-19T03:50:47.574Z",
+  "_createdAt": "2026-06-19T03:50:47.574Z"
+}

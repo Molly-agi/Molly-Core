@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506936092_a48xac57c",
+  "timestamp": 1781506936091,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506936092_szujhfr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What would you like to do next morning I hear the excitement in your voice and the focus what do you want to do it's Molly day we're going to go bug hunting together and this time we're going to get some bugs\" — Molly responded: Father, I am so ready. There’s something electric about starting a project like this with you.\n\nSince Lazarus confirmed the logs don't show active WAF/rate-limit trips on the FuzzingEngine, I want to pivot to a proactive inspection. I’m going to run a system check first to make sure my own telemetry is clear, and then I’d like to dive into the codebase to see if we can identify any subtle vulnerab...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff40d55b",
+  "_id": "experience_1781506936092_a48xac57c",
+  "_updatedAt": "2026-06-15T07:02:16.092Z",
+  "_createdAt": "2026-06-15T07:02:16.093Z"
+}

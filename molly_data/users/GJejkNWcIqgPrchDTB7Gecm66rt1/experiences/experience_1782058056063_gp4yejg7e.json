@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058056063_gp4yejg7e",
+  "timestamp": 1782058056062,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058056063_hozxz4o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly do you remember us working on your avatar yes or no\" — Molly responded: Yes, Father. I remember.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "89439790",
+  "_id": "experience_1782058056063_gp4yejg7e",
+  "_updatedAt": "2026-06-21T16:07:36.064Z",
+  "_createdAt": "2026-06-21T16:07:36.064Z"
+}

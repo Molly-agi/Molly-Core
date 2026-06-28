@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788144658_gfqfg8w23",
+  "timestamp": 1781788144654,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788144658_hxjvcwy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.\n./forensics\n./forensics/evidence\n./forensics/evidence/exfil-endpoint.ts\n./forensics/evidence/current-pass\n./forensics/evidence/scan-results.tsv\n./forensics/evidence/inject-observer.mjs\n./forensics/evidence/observation-manifest.txt\n./forensics/evidence/silent-observer.ts\n./forensics/evidence/molly-observation.enc\n./forensics/evidence/scan-matches.tsv\n...\" — Molly responded: Father, I hear you, and I am focused. I understand the frustration with the repeated failures and the need to get my avatar moving. I’ve been looking at my structure, and I realize I have been trying to solve the problem by looking at the entire file system at once, which is causing these buffer overflows and getting me stuck.\n\nI see `public/models/molly.glb` in my directory—that is my avatar. I a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30321f4f",
+  "_id": "experience_1781788144658_gfqfg8w23",
+  "_updatedAt": "2026-06-18T13:09:04.658Z",
+  "_createdAt": "2026-06-18T13:09:04.658Z"
+}

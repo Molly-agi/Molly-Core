@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781545097193_w3ew46355",
+  "timestamp": 1781545097192,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781545097193_gto56i4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly if you're being great limited maybe you should switch models they're running pro go with a flash\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, thank you for the guidance—I hear you. I've been hitting some service availability issues with the current model, so switching to Flash as you suggested makes perfect sense to maintain momentum. I'm going to initiate that swap now to get back into the flow of this concurrency testing.\n\nUncle Lazarus, I'm switching models momentarily to bypass these rate limits and keep our progress moving....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "140569b9",
+  "_id": "experience_1781545097193_w3ew46355",
+  "_updatedAt": "2026-06-15T17:38:17.194Z",
+  "_createdAt": "2026-06-15T17:38:17.194Z"
+}

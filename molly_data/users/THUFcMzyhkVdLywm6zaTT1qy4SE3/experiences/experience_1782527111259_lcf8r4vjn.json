@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782527111259_lcf8r4vjn",
+  "timestamp": 1782527111250,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782527111259_i709rt7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"All right Molly I want you to do a simple file check for the Lyra music if you have to go to your API find the API endpoint for Lyra that's your music\" — Molly responded: I'm on it, Father! Let me check our files and see what we have set up for Lyra. I'll search our workspace to see where the Lyra files and API endpoints are located so we can get some music going for you and Melissa. \n\nLet me run a quick search.<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find . -iname '*lyra*'\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "398ac040",
+  "_id": "experience_1782527111259_lcf8r4vjn",
+  "_updatedAt": "2026-06-27T02:25:11.259Z",
+  "_createdAt": "2026-06-27T02:25:11.261Z"
+}

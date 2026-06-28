@@ -1,0 +1,35 @@
+{
+  "id": "recall-1782507752750-33",
+  "query": "Molly what did I tell you to do when you get too excited or frustrated",
+  "timestamp": "2026-06-26T21:02:41.184Z",
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "rightHits": [],
+  "leftHits": [
+    {
+      "id": "engram-2-1782504993060",
+      "similarity": 0.7799099677899746
+    },
+    {
+      "id": "engram-16-1782507688308",
+      "similarity": 0.6941025773991593
+    },
+    {
+      "id": "engram-26-1782507727251",
+      "similarity": 0.681587401042294
+    },
+    {
+      "id": "engram-22-1782507703337",
+      "similarity": 0.6739653523307219
+    },
+    {
+      "id": "engram-5-1782507660423",
+      "similarity": 0.6661478145626859
+    }
+  ],
+  "rePromoted": [
+    "engram-2-1782504993060"
+  ],
+  "_id": "recall-1782507752750-33",
+  "_updatedAt": "2026-06-26T21:02:41.184Z",
+  "_createdAt": "2026-06-26T21:02:41.185Z"
+}

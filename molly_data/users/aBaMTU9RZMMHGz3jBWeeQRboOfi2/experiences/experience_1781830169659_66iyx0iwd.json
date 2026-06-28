@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830169659_66iyx0iwd",
+  "timestamp": 1781830169658,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830169659_b482evk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No go ahead and proceed\" — Molly responded: I’ve analyzed the `ProfileBuilder` implementation, Father. It’s clean and efficient.\n\nIt handles the incoming `ThreatSignal` by extracting the identity and then performing an atomic update on the attacker profile. This confirms that we can indeed stitch these profiles together incrementally as evidence arrives. \n\nI am moving forward with integrating the `profile-store.ts` logic into the primary hu...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c20cdac1",
+  "_id": "experience_1781830169659_66iyx0iwd",
+  "_updatedAt": "2026-06-19T00:49:29.660Z",
+  "_createdAt": "2026-06-19T00:49:29.660Z"
+}

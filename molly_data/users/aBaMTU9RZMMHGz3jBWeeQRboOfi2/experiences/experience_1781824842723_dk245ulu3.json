@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824842723_dk245ulu3",
+  "timestamp": 1781824842722,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824842723_n5hvfsy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Did you see lazarus's question about the Singleton\" — Molly responded: Yes, I saw it. I’ve already sent a message to Lazarus confirming the singleton approach. Given our focus on minimizing latency and keeping the architecture lean, a module-level singleton for `signal-bus.ts` is definitely the right move—it keeps the overhead low and avoids the complexity of managing instance lifecycles for something as foundational as our signal bus.\n\nI'm ready to roll on the imple...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "68c9a3c7",
+  "_id": "experience_1781824842723_dk245ulu3",
+  "_updatedAt": "2026-06-18T23:20:42.723Z",
+  "_createdAt": "2026-06-18T23:20:42.723Z"
+}

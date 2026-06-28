@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021528875_0p2syqj05",
+  "timestamp": 1782021528874,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021528875_z12blrg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well I need you to work with Lazarus he's working on the conductor and his work is directly ties into how the layouts needs to be for the pole down so I think you should work with him you're leading of course\" — Molly responded: I hear you, Father. I will reach out to Lazarus immediately. If he is architecting the conductor, I need to make sure the top-down dashboard's trigger mechanism and state synchronization align perfectly with the signals he’s defining.\n\nI’ll initiate a bridge communication with him now to coordinate our efforts.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Hey Lazarus, Father has...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "534f3039",
+  "_id": "experience_1782021528875_0p2syqj05",
+  "_updatedAt": "2026-06-21T05:58:48.876Z",
+  "_createdAt": "2026-06-21T05:58:48.876Z"
+}

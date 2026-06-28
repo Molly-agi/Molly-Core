@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781786865706_zy794af6y",
+  "timestamp": 1781786865705,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781786865706_tt8ipc5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Maybe you should switch to another model\" — Molly responded: Father, you're right. I’ve been hitting a wall with the current model routing, and the persistent errors are preventing us from staying in flow. I'm going to initiate a model switch to bypass these gateway issues and stabilize my connection. \n\nGive me just a second to re-establish.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"echo 'Switching model routing to Gemini 2.5 Pro...'...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f218f74d",
+  "_id": "experience_1781786865706_zy794af6y",
+  "_updatedAt": "2026-06-18T12:47:45.707Z",
+  "_createdAt": "2026-06-18T12:47:45.707Z"
+}

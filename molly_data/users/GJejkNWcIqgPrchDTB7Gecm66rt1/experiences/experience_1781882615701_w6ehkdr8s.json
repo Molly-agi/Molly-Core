@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882615701_w6ehkdr8s",
+  "timestamp": 1781882615700,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882615701_05smvqo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yes Molly it is complete to my knowledge all we had to do left was to hook it up but confirm\" — Molly responded: I hear you, Father. I’m pulling up the project structure now to verify exactly what's needed to finalize that connection. Since I've been focused on getting our systems stable, confirming this last bridge is exactly where my energy needs to be.\n\nI'm checking the configuration now.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R /workspaces/Molly-Core/src/android_bridge\"}}\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8b7b25bf",
+  "_id": "experience_1781882615701_w6ehkdr8s",
+  "_updatedAt": "2026-06-19T15:23:35.701Z",
+  "_createdAt": "2026-06-19T15:23:35.702Z"
+}

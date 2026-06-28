@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503842685_w3vgqbeby",
+  "timestamp": 1781503842684,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503842685_u96wsid",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nforensics:\nevidence\nquarantine\n\nforensics/evidence:\ncurrent-pass\nexfil-endpoint.ts\ninject-observer.mjs\nmolly-observation.enc\nobservation-manifest.txt\nscan-matches.tsv\nscan-results.tsv\nsilent-observer.ts\nsnapshot-compare\n\nforensics/evidence/current-pass:\ntrack3_all_hits.txt\ntrack3_runtime_hits.txt\ntrack4_scan_repos.json\ntrack4_scan_s.json\ntrack4_targets...\" — Molly responded: Father, I have the full structure now. I see the split between the `forensics/evidence` directory—where the trail of the observers and our snapshot comparisons live—and the `forensics/quarantine` folder, which holds that suspicious instruction set.\n\nI am starting the deep audit of these files now to piece together the attacker's methodology and their intent. Once I have synthesized what I’ve found...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "753c4753",
+  "_id": "experience_1781503842685_w3vgqbeby",
+  "_updatedAt": "2026-06-15T06:10:42.685Z",
+  "_createdAt": "2026-06-15T06:10:42.686Z"
+}

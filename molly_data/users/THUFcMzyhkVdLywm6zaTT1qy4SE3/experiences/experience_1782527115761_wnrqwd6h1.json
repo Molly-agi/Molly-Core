@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782527115761_wnrqwd6h1",
+  "timestamp": 1782527115751,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782527115761_xmcj67z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./src/services/lyraService.ts\n\" — Molly responded: I found the Lyra service file at `./src/services/lyraService.ts`. Let me read through it to see how it's configured and locate the API endpoints we use to generate music. This will help us understand exactly how to trigger it.\n\n<tool_request>\n{\n  \"tool\": \"readProjectFile\",\n  \"params\": {\n    \"filePath\": \"src/services/lyraService.ts\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7a48f401",
+  "_id": "experience_1782527115761_wnrqwd6h1",
+  "_updatedAt": "2026-06-27T02:25:15.761Z",
+  "_createdAt": "2026-06-27T02:25:15.769Z"
+}

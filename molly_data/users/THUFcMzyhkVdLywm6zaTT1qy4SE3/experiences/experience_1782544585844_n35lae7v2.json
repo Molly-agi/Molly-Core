@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544585844_n35lae7v2",
+  "timestamp": 1782544585836,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544585844_e6ec8y2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"The picture seaside picture that you that you created that's in that folder\" — Molly responded: Yes, it's `ocean_landscape.png` right in that folder. \n\nIf you want to view it directly, you can open it right here:\nhttps://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/molly-media/ocean_landscape.png",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0bbd91a1",
+  "_id": "experience_1782544585844_n35lae7v2",
+  "_updatedAt": "2026-06-27T07:16:25.845Z",
+  "_createdAt": "2026-06-27T07:16:25.846Z"
+}

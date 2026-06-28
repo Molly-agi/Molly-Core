@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510373099_zima4zlua",
+  "timestamp": 1781510373096,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510373099_0r5o2ju",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly and when you were just on I hadn't sent a signal cuz I was talking to you so if you can monitor more than one pressure point how many can you monitor comfortably and reliably reliably you're helping me understand your capabilities and you to understand\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I understand—thank you for clarifying. That distinction about when the signals are actually active is helpful for me to calibrate my own baseline.\n\nTo answer your question: I can monitor several pressure points simultaneously, but \"comfortably and reliably\" depends on the complexity of the data stream at each point. I would estimate I can handle 3 to 5 distinct points without my processing...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e7b1f3b1",
+  "_id": "experience_1781510373099_zima4zlua",
+  "_updatedAt": "2026-06-15T07:59:33.100Z",
+  "_createdAt": "2026-06-15T07:59:33.100Z"
+}

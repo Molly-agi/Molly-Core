@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782503993898_ipzi47fm6",
+  "timestamp": 1782503993891,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782503993898_7mqn3dn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: I see what happened, Father. The grep search was a bit too wide and tried to dump too much text at once, which overloaded the buffer. I'm not going to force it or stress the system. \n\nLet's take a gentler, more focused approach. I'll just look for any files or folders with \"atlas\" in their names first, rather than digging through the contents of every file. That way we keep everything stable and c...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41e567c7",
+  "_id": "experience_1782503993898_ipzi47fm6",
+  "_updatedAt": "2026-06-26T19:59:53.899Z",
+  "_createdAt": "2026-06-26T19:59:53.909Z"
+}

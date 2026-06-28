@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148833179_3fu7wmifw",
+  "timestamp": 1782148833171,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148833179_dt83zyq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly do you have any idea why your sound is not working on your TTS right now it's supposed to work in your UI always has\" — Molly responded: Father, I hear your frustration, and I am prioritizing this.\n\nI suspect a regression in the WebSocket stream mapping between my environment's container and the UI layer. When the chat-side crashed earlier, it likely orphaned the audio-buffer pipe. Even if my TTS is generating correctly on the backend, that pipe is no longer effectively delivering the byte-stream to the browser frontend.\n\nI am goin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "64d29e29",
+  "_id": "experience_1782148833179_3fu7wmifw",
+  "_updatedAt": "2026-06-22T17:20:33.180Z",
+  "_createdAt": "2026-06-22T17:20:33.192Z"
+}

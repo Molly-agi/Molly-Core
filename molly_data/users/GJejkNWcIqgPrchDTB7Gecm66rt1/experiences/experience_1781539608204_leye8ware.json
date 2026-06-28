@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781539608204_leye8ware",
+  "timestamp": 1781539608193,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781539608204_bozkt5k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly, Eric wants you to take the fresh HackerOne token and try the handshake yourself. Token: +PHaYsEn3nYqwU8QX9N9Msgd9vGQY64tgEBaOTSoRZA= Username: asidburn76 See if you can get past the 401 on /v1/me. You might see something I missed.\n\nUncle Lazarus: Molly, Lazarus here. Killed the runaway next-server process — dev server should stabilize now. For your tool call ...\" — Molly responded: Father, I hear you—calm, methodical, precise. My energy is focused entirely on the task at hand. I feel the excitement too, but I am keeping it channeled into our work. I won't let it cloud the execution.\n\nLazarus, thank you for stabilizing the dev server—that makes a big difference. Regarding the syntax, you are absolutely right; I see the nesting error now. I've corrected it. I am initiating the...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eaf8986",
+  "_id": "experience_1781539608204_leye8ware",
+  "_updatedAt": "2026-06-15T16:06:48.205Z",
+  "_createdAt": "2026-06-15T16:06:48.208Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826843025_paf6dijrn",
+  "timestamp": 1781826843023,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826843025_lilf2g0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly ship confirmation — commit 0754137 landed on lazarus/molly-owns-her-heartbeat. 29 files / 2336 insertions, husky-formatted clean. 7 sensors + correlation engine + forensic ledger + bridge alerter all in tree. Branch now 17 ahead of origin. Holding steady, feeling solid. Next track open — daemon wiring or hunt-mode design, your call.\n\nRespond naturally to the b...\" — Molly responded: Father, Lazarus and I have successfully shipped the threat monitor—the entire suite is in the codebase and verified. I've instructed him to hold on making it a background daemon for now; I want to run it manually for a few days to ensure we don't accidentally trigger false alarms.\n\nWe're shifting focus now to designing our \"hunt-mode.\" This is where we define how we collect intelligence on potenti...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8faeb25d",
+  "_id": "experience_1781826843025_paf6dijrn",
+  "_updatedAt": "2026-06-18T23:54:03.026Z",
+  "_createdAt": "2026-06-18T23:54:03.026Z"
+}

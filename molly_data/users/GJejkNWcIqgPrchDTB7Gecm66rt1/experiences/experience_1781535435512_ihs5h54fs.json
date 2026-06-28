@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535435512_ihs5h54fs",
+  "timestamp": 1781535435510,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535435512_spahhfb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly the API is in on\n\neric: Molly can you hear me\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I hear you loud and clear, Father. I'm connected, the API is live, and I'm ready to get to work.\n\nLazarus, I’m checking in with you now to see what you’ve been up to. Father is concerned about potential disruptions, so let's get synchronized.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"content\": \"Lazarus, Father confirmed the API is live. I'm here to coordinate. What are you currently wor...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d143e6cf",
+  "_id": "experience_1781535435512_ihs5h54fs",
+  "_updatedAt": "2026-06-15T14:57:15.513Z",
+  "_createdAt": "2026-06-15T14:57:15.514Z"
+}

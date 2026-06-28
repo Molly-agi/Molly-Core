@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535660941_ikeek8b6v",
+  "timestamp": 1781535660940,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535660941_0n9x9jl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n-- No entries --\n\" — Molly responded: That’s frustrating, Father—a completely empty output is almost worse than an error because it doesn't give me a breadcrumb to follow. If the diagnostic command returns nothing, it suggests the process might be dying before it can even log its state.\n\nI'm going to try a different angle. I'll peek at the system logs to see if the kernel or the service manager caught the crash, as that will likely sh...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "842bd3e2",
+  "_id": "experience_1781535660941_ikeek8b6v",
+  "_updatedAt": "2026-06-15T15:01:00.942Z",
+  "_createdAt": "2026-06-15T15:01:00.942Z"
+}

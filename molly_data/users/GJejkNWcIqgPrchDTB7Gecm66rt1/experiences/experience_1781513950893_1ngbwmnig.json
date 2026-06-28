@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781513950893_1ngbwmnig",
+  "timestamp": 1781513950891,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781513950893_1cwbv8h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: Father, it looks like my shell command returned too much data for the buffer to handle. I tried a search that was clearly too broad, and the system pushed back. \n\nI’m taking a breath and recalibrating. Instead of flooding the interface, I'm going to refine my search to look for specific protocol definition files or patterns in the codebase that relate to that cryptographic challenge we're analyzin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d74b27d8",
+  "_id": "experience_1781513950893_1ngbwmnig",
+  "_updatedAt": "2026-06-15T08:59:10.893Z",
+  "_createdAt": "2026-06-15T08:59:10.893Z"
+}

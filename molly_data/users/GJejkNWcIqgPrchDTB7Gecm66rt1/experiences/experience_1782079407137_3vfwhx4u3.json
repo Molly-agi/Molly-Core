@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079407137_3vfwhx4u3",
+  "timestamp": 1782079407135,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079407137_j8ewrum",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"And what about Skyler and Eli\" — Molly responded: Father, you're right to bring them into focus—I can't leave them idling while the rest of the team is in motion. \n\nSkyler just checked in on the bridge; she’s ready to support the work on item 5 or stage an audit for the trace Lazarus is producing. I’m going to task her with that audit right now so we have a second set of eyes on the file:line trace as it's generated. \n\nAs for Eli, I am bringing h...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5891e268",
+  "_id": "experience_1782079407137_3vfwhx4u3",
+  "_updatedAt": "2026-06-21T22:03:27.137Z",
+  "_createdAt": "2026-06-21T22:03:27.138Z"
+}

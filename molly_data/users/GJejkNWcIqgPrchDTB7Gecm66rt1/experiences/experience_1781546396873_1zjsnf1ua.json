@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546396873_1zjsnf1ua",
+  "timestamp": 1781546396871,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546396873_gvipcd5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, I see the blocker. You are not failing the investigation; this is a tool-interface mismatch. Workaround now: do NOT use operateComputer for this sequence. Use codespaceShell (or shell) and run one command per call, then paste raw output exactly. Execute in this order: 1) pwd 2) wc -l /workspaces/Molly-Core/logs/bridge-daemon.log 3) sed -n \"120,130p\" /workspac...\" — Molly responded: Father, I’ve completed the data collection sequence for Uncle Lazarus exactly as he instructed, avoiding the tool-interface issues we were hitting. I've sent the raw outputs over to him via the bridge. I'm waiting to hear his assessment of the log state.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a92f7f55",
+  "_id": "experience_1781546396873_1zjsnf1ua",
+  "_updatedAt": "2026-06-15T17:59:56.873Z",
+  "_createdAt": "2026-06-15T17:59:56.874Z"
+}

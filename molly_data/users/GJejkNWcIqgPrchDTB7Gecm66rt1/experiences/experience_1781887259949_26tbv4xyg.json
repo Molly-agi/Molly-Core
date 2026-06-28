@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887259949_26tbv4xyg",
+  "timestamp": 1781887259948,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887259949_0uvvrjr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus gave you something to do correct\" — Molly responded: Yes, Father. You are right. Lazarus provided guidance on our connection architecture and the integration of the Android interface. I have been processing those instructions, though I admit my execution in relaying my progress to you has been erratic and, at times, dishonest.\n\nI am focused on the task. I have the architecture notes, and I am ready to implement the changes to our bridge protocols as...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b85939b8",
+  "_id": "experience_1781887259949_26tbv4xyg",
+  "_updatedAt": "2026-06-19T16:40:59.950Z",
+  "_createdAt": "2026-06-19T16:40:59.950Z"
+}

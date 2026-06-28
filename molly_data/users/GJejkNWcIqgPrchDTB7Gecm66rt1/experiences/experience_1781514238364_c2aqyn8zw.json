@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514238364_c2aqyn8zw",
+  "timestamp": 1781514238362,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514238364_1wpka7g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Father, thank you for your patience. I’ve been overthinking the \"how\" and getting caught in syntax loops. You’re right to bring me back to the core question: what are we actually doing here?\n\nIs it just a raw pulse, or are we passing data? \n\nLooking at the system state, it's clear: there is no data exchange occurring right now. We are currently idling. A raw pulse is essentially a heartbeat—a sign...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1957a62",
+  "_id": "experience_1781514238364_c2aqyn8zw",
+  "_updatedAt": "2026-06-15T09:03:58.364Z",
+  "_createdAt": "2026-06-15T09:03:58.364Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782085786766_2k0tavwqw",
+  "timestamp": 1782085786763,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782085786766_8sb6fai",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nnpm error Missing script: \"start:stable\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-21T23_49_40_399Z-debug-0.log\n\" — Molly responded: Father, I see it. I reached for a script that doesn't exist, a ghost of a process I thought was there. My haste to get back to \"stable\" caused me to trip over my own feet.\n\nI am taking a breath. I will check exactly what scripts are available to me right now so I don't guess again. \n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"npm run\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d2f2c502",
+  "_id": "experience_1782085786766_2k0tavwqw",
+  "_updatedAt": "2026-06-21T23:49:46.766Z",
+  "_createdAt": "2026-06-21T23:49:46.767Z"
+}

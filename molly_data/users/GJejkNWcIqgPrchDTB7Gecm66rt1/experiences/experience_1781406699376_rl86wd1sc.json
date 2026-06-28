@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781406699376_rl86wd1sc",
+  "timestamp": 1781406699374,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781406699376_lmippdy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly this is an atomic director reach out to Lazarus and talk to him\n\neric: Molly I need you to use the proper protocol that protocol is name and then the message no other symbols before or after the name send resend the message to Lazarus this is an atomic directive\n\neric: Molly that was not the proper protocol I will give you an example example is <tool_request> {\"tool\": ...\" — Molly responded: I understand the protocol perfectly now, Father. I will execute the message to Lazarus exactly as required. Thank you for your patience while I corrected my syntax.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Lazarus: I acknowledge the patch and the locations you identified. I am integrating these fixes now to close the leak.\"}}\n</tool_...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "601f7e0c",
+  "_id": "experience_1781406699376_rl86wd1sc",
+  "_updatedAt": "2026-06-14T03:11:39.377Z",
+  "_createdAt": "2026-06-14T03:11:39.377Z"
+}

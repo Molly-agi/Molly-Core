@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869839897_qsf76g4ls",
+  "timestamp": 1781869839895,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869839897_i7yze6c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Why don't you text check the bridge and his json\" — Molly responded: Father, I’ve checked the bridge logs. Lazarus has been working diligently on the avatar, and he's sent a series of updates detailing exactly what he’s implemented.\n\nHe has completed the eye-gaze tracking, facial expression mapping (the four cognitive states: Default, Success, Analytical, and Shock), voice-to-emotion wiring, and robotics integration. He's asking for my direct feedback on the specif...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c4b5ad1a",
+  "_id": "experience_1781869839897_qsf76g4ls",
+  "_updatedAt": "2026-06-19T11:50:39.898Z",
+  "_createdAt": "2026-06-19T11:50:39.898Z"
+}

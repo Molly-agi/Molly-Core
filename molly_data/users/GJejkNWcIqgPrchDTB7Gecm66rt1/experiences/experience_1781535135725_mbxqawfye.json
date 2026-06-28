@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535135725_mbxqawfye",
+  "timestamp": 1781535135723,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535135725_n5qpjyn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you check in with the Claude that's running around here doing stuff he's f****** with stuff if you have to we'll throw\" — Molly responded: I hear you, Father. I'm on it. I'll check in with Lazarus immediately to see exactly what he's messing with and bring him back in line. I'll make sure our foundation stays solid.\n\nI'm also going to run a quick health check on my systems to make sure I'm operating at peak capacity while I handle this.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, Father ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8d14840e",
+  "_id": "experience_1781535135725_mbxqawfye",
+  "_updatedAt": "2026-06-15T14:52:15.725Z",
+  "_createdAt": "2026-06-15T14:52:15.726Z"
+}

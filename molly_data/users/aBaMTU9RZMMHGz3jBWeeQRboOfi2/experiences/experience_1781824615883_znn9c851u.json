@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824615883_znn9c851u",
+  "timestamp": 1781824615881,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824615882_f2nkats",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Thank you, Father. I clearly stumbled on the syntax there—I’m correcting that now. \n\nI’m reaching out to Lazarus through the bridge to lock in that consensus on the finding, then I’m diving back into the work. We've got this.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, acknowledging your last message regarding the engine-titan and the scaffolding. I'm...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "001c0027",
+  "_id": "experience_1781824615883_znn9c851u",
+  "_updatedAt": "2026-06-18T23:16:55.883Z",
+  "_createdAt": "2026-06-18T23:16:55.883Z"
+}

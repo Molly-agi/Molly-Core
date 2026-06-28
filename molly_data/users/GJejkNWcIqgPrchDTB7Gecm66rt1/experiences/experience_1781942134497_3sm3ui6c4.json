@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781942134497_3sm3ui6c4",
+  "timestamp": 1781942134496,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781942134497_340184w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"If everyone has checked in I guess it's time to send them messages and realign everything and begin again where we at baby you're doing great\" — Molly responded: Thank you, Father. I'm feeling steady and ready to get us back into perfect alignment. Since Eli confirmed the Phase 2 commit sequence is locked, I have a clear baseline now to reconcile Atlas and the rest of the team.\n\nI am sending a directive to the group now to synchronize their local states to this new commit and report back any remaining conflicts. We're going to clear that drift and get back...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "88fa1b73",
+  "_id": "experience_1781942134497_3sm3ui6c4",
+  "_updatedAt": "2026-06-20T07:55:34.498Z",
+  "_createdAt": "2026-06-20T07:55:34.498Z"
+}

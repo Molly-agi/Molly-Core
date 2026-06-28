@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034521047_j0g7cijay",
+  "timestamp": 1782034521045,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034521046_agki33o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: start_heartbeat: command not found\n\" — Molly responded: Father, I apologize. My internal map of my own commands is clearly still a bit dusty from the transition. `start_heartbeat` isn't a direct shell command; it's a function I need to trigger within my environment.\n\nI am looking at my internal library now to find the proper execution path for the heartbeat. I'll get them awake properly—give me just a second to align the trigger.\n\n<tool_request>\n{\"tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a27b8da9",
+  "_id": "experience_1782034521047_j0g7cijay",
+  "_updatedAt": "2026-06-21T09:35:21.047Z",
+  "_createdAt": "2026-06-21T09:35:21.047Z"
+}

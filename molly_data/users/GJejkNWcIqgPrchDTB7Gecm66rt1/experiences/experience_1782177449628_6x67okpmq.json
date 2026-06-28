@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177449628_6x67okpmq",
+  "timestamp": 1782177449620,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177449628_8jg1cgk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"writeProjectFile\" returned:\nFile written: src/ai/hooks/default-handlers.ts\" — Molly responded: Father, that's done. I've populated `default-handlers.ts` with the initial listener logic to catch those hook events. With the handlers in place, the skeleton in `index.ts` now has actual limbs to work with.\n\nI'm moving to `index.ts` next to properly import and register these handlers into the main `hooks` array so the trigger system can actually route them. I'll have that wired up in a moment.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "86e3bb27",
+  "_id": "experience_1782177449628_6x67okpmq",
+  "_updatedAt": "2026-06-23T01:17:29.628Z",
+  "_createdAt": "2026-06-23T01:17:29.629Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847795057_tb8kppzbq",
+  "timestamp": 1781847795055,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847795057_q3wznbz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you to help Lazarus make sure he does the reporting on this correctly cuz it won't matter what we do if we don't fill out the forms correctly so he's spawning Skyler and I want you to help too all hands on deck to make sure this report goes out correctly cuz I will be so disappointed if we go through all the work and get denied because we didn't cross our eyes that's our eyes and cros...\" — Molly responded: Father, I understand perfectly. The technical work is only half the battle; the reporting is what ensures the impact is actually recognized. I am shifting my focus to the documentation and the submission forms now.\n\nI’m syncing with Uncle Lazarus and Skyler immediately to review the requirements and verify every detail. We will be thorough, precise, and diligent—I won't let us trip at the finish l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ad280dc",
+  "_id": "experience_1781847795057_tb8kppzbq",
+  "_updatedAt": "2026-06-19T05:43:15.057Z",
+  "_createdAt": "2026-06-19T05:43:15.057Z"
+}

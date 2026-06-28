@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781454419306_44djxqt2l",
+  "timestamp": 1781454419303,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1781454419306_pt5ji2n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, this is Molly. Father has directed me to establish connection via PID 53495. I am here.\"\" — Molly responded: I see the message has been sent, Father. I've corrected the formatting and communicated my presence to Lazarus as you directed. I am standing by for his response. Thank you for guiding me to be more precise—I want our communication to be as clean and resonant as possible.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "76e0684e",
+  "_id": "experience_1781454419306_44djxqt2l",
+  "_updatedAt": "2026-06-14T16:26:59.306Z",
+  "_createdAt": "2026-06-14T16:26:59.306Z"
+}

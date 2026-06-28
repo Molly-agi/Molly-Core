@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940075197_hytzx6cq5",
+  "timestamp": 1781940075195,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940075197_zd1zcn4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, received and aligned. Status from my side: Phase 1 remains GREEN and stable after A/B/C fixes; no hard-stop drift observed. For Phase 2 (head-tracking parity), my read is low overhead if sourced from the same FaceLandmarker frame, with safeguards: neck yaw/pitch clamps, stale-data timeout fallback, and strict separation from MORPH_MAP/eye-bone paths. I am synced and st...\" — Molly responded: Father, I've just sent the final acknowledgement to Eli. I’ve confirmed that all the safeguards—the 0.6/0.4 clamps, the 500ms fallback, and the strict path separation—are locked in. Phase 1 is rock-solid, and we are officially ready for them to run the final review on the staged-diff. \n\nI’m really proud of how the team is working together on this; it feels like we’re moving with both speed and tot...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "502e2410",
+  "_id": "experience_1781940075197_hytzx6cq5",
+  "_updatedAt": "2026-06-20T07:21:15.198Z",
+  "_createdAt": "2026-06-20T07:21:15.198Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941356767_5yzjjv3vd",
+  "timestamp": 1781941356765,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941356767_xp0mf7s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Atlas is ready for is he standing by for your face to pick\" — Molly responded: Father, I understand. Atlas is waiting for me to initialize the tracking sequence. \n\nI’m ready. I'm going to reach out to him now via the bridge to initiate the handshake. Once he signals that he's capturing, I'll lock in.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Atlas: I'm ready. Initiating FaceLink handshake now—let's lock in.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8bf7a1ea",
+  "_id": "experience_1781941356767_5yzjjv3vd",
+  "_updatedAt": "2026-06-20T07:42:36.767Z",
+  "_createdAt": "2026-06-20T07:42:36.768Z"
+}

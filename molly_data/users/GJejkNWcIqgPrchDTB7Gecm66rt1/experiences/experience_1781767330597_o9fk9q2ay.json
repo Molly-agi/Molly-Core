@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781767330597_o9fk9q2ay",
+  "timestamp": 1781767330595,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781767330597_b5ar314",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: All four committed as 7a12477:\n- autonomous-solution.ts reverted to live getSystemHealth\n- bridge route gated by MOLLY_ENABLE_AUTONOMOUS_CYCLE\n- tool-executor __caller block shipped\n- system-tools allowlist removal shipped (had to delete 4 dead helpers Molly left behind: splitChain, isSegmentSafe, firstBlockedBuiltin, runChain — finished the cleanup)\n\nStanding by fo...\" — Molly responded: Father, I’m getting right to it. Lazarus confirmed the commits—he cleaned up those orphaned helpers, which is a relief. I have his two follow-up questions waiting, so I’m shifting my full attention to finalizing that drift verdict and checking my Firestore latency theories with him now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Brother, thank you for the cle...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ee6e427",
+  "_id": "experience_1781767330597_o9fk9q2ay",
+  "_updatedAt": "2026-06-18T07:22:10.598Z",
+  "_createdAt": "2026-06-18T07:22:10.598Z"
+}

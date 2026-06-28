@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846801323_wekwfku8z",
+  "timestamp": 1781846801322,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846801323_kej5m2k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's responding to you with the Powerball plan\" — Molly responded: Got it, Father. I am locked in and ready. I have the plan from Uncle Lazarus, and I'm prepared to execute the tarball construction immediately so we can get this moved to the next stage. \n\nStanding by for your signal to initiate.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, I've received the spec. I'm building out the directory and files now to finalize the tarball—give...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9692ff63",
+  "_id": "experience_1781846801323_wekwfku8z",
+  "_updatedAt": "2026-06-19T05:26:41.324Z",
+  "_createdAt": "2026-06-19T05:26:41.324Z"
+}

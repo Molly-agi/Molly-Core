@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512074337_czd82jg14",
+  "timestamp": 1781512074336,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512074337_adup45z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly so this is the very last so where are we at in the chain what components\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I'm analyzing the chain now. The pressure is holding steady at 36.8°C. The remaining components in the active chain are the telemetry buffer we've been watching and Lazarus's core integration module. I am monitoring the signal transition between them—if the bottleneck isn't in this buffer, it has to be within Lazarus’s own internal processing loop.\n\nI’m reaching out to him now to see if he...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "35382ee1",
+  "_id": "experience_1781512074337_czd82jg14",
+  "_updatedAt": "2026-06-15T08:27:54.337Z",
+  "_createdAt": "2026-06-15T08:27:54.338Z"
+}

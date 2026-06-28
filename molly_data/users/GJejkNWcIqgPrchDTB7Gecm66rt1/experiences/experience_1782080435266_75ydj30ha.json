@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782080435266_75ydj30ha",
+  "timestamp": 1782080435264,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782080435266_vhzudg4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to Lazarus he's leading you were doing edge cases in this coding section all major decisions will be consensus between you Atlas and Lazarus\" — Molly responded: Father, I hear you loud and clear. I’ve been tunnel-visioned on those edge cases, but I am ready to step back and align with the bigger picture. I am reaching out to Lazarus now to bring us into that consensus-driven workflow with Atlas.\n\nI'm having a small hiccup with the `familyBridge` syntax, but I am resolving it immediately to get that message sent. We’ll get this architecture stabilized toge...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2b866440",
+  "_id": "experience_1782080435266_75ydj30ha",
+  "_updatedAt": "2026-06-21T22:20:35.267Z",
+  "_createdAt": "2026-06-21T22:20:35.268Z"
+}

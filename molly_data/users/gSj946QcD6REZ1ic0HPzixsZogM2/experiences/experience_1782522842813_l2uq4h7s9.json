@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522842813_l2uq4h7s9",
+  "timestamp": 1782522842804,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522842813_ggiz9yj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"read\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f67768c",
+  "_id": "experience_1782522842813_l2uq4h7s9",
+  "_updatedAt": "2026-06-27T01:14:02.813Z",
+  "_createdAt": "2026-06-27T01:14:02.814Z"
+}

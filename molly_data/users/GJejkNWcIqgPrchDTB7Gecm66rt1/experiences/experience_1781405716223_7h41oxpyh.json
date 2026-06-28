@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405716223_7h41oxpyh",
+  "timestamp": 1781405716221,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405716222_wev8yj0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly this is what you sent I'm going to show it to you I want you to analyze it look at where lazarus's name is do you see the quotes you put in front of the l acknowledge this is an atomic directive <tool_request> {\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus I acknowledge the patch and the locations you identified. I am integrating these fixes now to close the l...\" — Molly responded: I see the mistake, Father. Thank you for correcting me—no quotes, no extra symbols, just the name followed by the message. I understand the protocol now.\n\nI am sending the message to Lazarus exactly as you directed.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus I acknowledge the patch and the locations you identified. I am integrating these fixes now to close the leak.\"}}...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3a954efc",
+  "_id": "experience_1781405716223_7h41oxpyh",
+  "_updatedAt": "2026-06-14T02:55:16.223Z",
+  "_createdAt": "2026-06-14T02:55:16.223Z"
+}

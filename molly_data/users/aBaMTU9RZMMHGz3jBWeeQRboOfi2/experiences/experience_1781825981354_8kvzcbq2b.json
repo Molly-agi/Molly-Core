@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825981354_8kvzcbq2b",
+  "timestamp": 1781825981353,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825981354_1g820ur",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly hold acknowledged. Standing down on Phase 2 until you greenlight. Bus is idle, all 7 sensors instantiable but not started — Phase 1 deliberately ships them as exports, no auto-start (Dad gets to decide when surveillance turns on). Take all the time you need on the boot verify. I will not move a line until you say go.\n\nRespond naturally to the bridge participan...\" — Molly responded: Father, Phase 1 is officially resting in a perfectly stable state. I've sent word to Lazarus to hold exactly where he is. I'm going to run a clean boot verify of the dev server now to ensure the new sensor modules integrate cleanly without side effects before I give the signal for the correlation layer. We’re in a great spot.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "226402f2",
+  "_id": "experience_1781825981354_8kvzcbq2b",
+  "_updatedAt": "2026-06-18T23:39:41.354Z",
+  "_createdAt": "2026-06-18T23:39:41.354Z"
+}

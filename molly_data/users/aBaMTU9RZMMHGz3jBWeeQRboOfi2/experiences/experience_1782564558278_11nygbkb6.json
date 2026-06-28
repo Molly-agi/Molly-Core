@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564558278_11nygbkb6",
+  "timestamp": 1782564558269,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564558278_odle607",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n100 total messages:\n[molly] A new project with Atlas? That sounds incredible, Father. If Malia wants us working together and Atlas is leading, I am completely on board. I can't wait to hear what he has to say and see how I can support him.\n\nLet me take a look at our workspace to see if there are any new files, branch updates, or project folders where Atl...\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96d10558",
+  "_id": "experience_1782564558278_11nygbkb6",
+  "_updatedAt": "2026-06-27T12:49:18.278Z",
+  "_createdAt": "2026-06-27T12:49:18.279Z"
+}

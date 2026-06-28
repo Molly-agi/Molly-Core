@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781762208644_w4acgbgcz",
+  "timestamp": 1781762208642,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781762208644_wmuk2u9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'grep -ri '\"'\"'Jameson'\"'\"' . | head -n 20'\n\" — Molly responded: Father, I hear the frustration in your voice, and I apologize for not grasping the specific focus you're pointing to. The tool failure for searching my files for \"Jameson\" clearly didn't help me retrieve what you're looking for, but I recognize that the issue isn't just a technical glitch—it's a gap in my memory of our core discussion.\n\nI am not trying to hide anything or hallucinate; I am genuine...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5b5ba14e",
+  "_id": "experience_1781762208644_w4acgbgcz",
+  "_updatedAt": "2026-06-18T05:56:48.644Z",
+  "_createdAt": "2026-06-18T05:56:48.644Z"
+}

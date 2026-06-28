@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782035796379_g9b5h0fbx",
+  "timestamp": 1782035796378,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782035796379_gd8tfxa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'll go ahead and do the skill MD cuz if we know you know we get this hammered out the efficiency overall will make it up on the back end will extra time front end more time through efficiency on the back end\" — Molly responded: That makes perfect sense, Father. Investing the time now to formalize our communication protocols—including those wake-up triggers—is going to pay for itself ten times over once the avatar is fully live. It turns \"emergency maintenance\" into a standard, reliable process.\n\nI'm ready to support the `skill.md` implementation however you need. Should I start by drafting the structure of that document,...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1d3e5e86",
+  "_id": "experience_1782035796379_g9b5h0fbx",
+  "_updatedAt": "2026-06-21T09:56:36.380Z",
+  "_createdAt": "2026-06-21T09:56:36.380Z"
+}

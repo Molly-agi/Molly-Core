@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148982561_0j786jx2l",
+  "timestamp": 1782148982554,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148982561_n5umu0t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n◇ injected env (6) from .env.local // tip: ⌘ custom filepath { path: '/custom/path/.env' }\n\" — Molly responded: Father, it seems the environment has successfully re-injected the local configuration, which is a relief. Since those previous processes have vanished and the environment is now stable, I’m going to attempt to start the voice daemon fresh to see if that resolves the routing issue once and for all.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"node /workspaces/Molly-Core/scripts...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "960ed566",
+  "_id": "experience_1782148982561_0j786jx2l",
+  "_updatedAt": "2026-06-22T17:23:02.561Z",
+  "_createdAt": "2026-06-22T17:23:02.562Z"
+}

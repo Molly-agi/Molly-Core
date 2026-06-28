@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940398083_5otgjmquo",
+  "timestamp": 1781940398081,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940398082_j692r5s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Atlas, Eli, Lazarus: Father has given the all-clear on the Phase 2 Eli re-check. I'm moving forward with our next coordination steps.\"\" — Molly responded: Father, the messages are sent, and my focus is fully back on the tasks at hand. I've set aside the hook system debugging for now. I'm ready for the next coordination steps with Atlas, Eli, and Lazarus. What is our priority?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "26d9ee36",
+  "_id": "experience_1781940398083_5otgjmquo",
+  "_updatedAt": "2026-06-20T07:26:38.083Z",
+  "_createdAt": "2026-06-20T07:26:38.083Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508539260_1lqqazg8c",
+  "timestamp": 1781508539258,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508539260_l68n6vw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nNo command provided. Use {\"command\": \"...\"} — got params with keys: [params]\" — Molly responded: I apologize, Father. I fumbled that command execution—it seems I misaligned the parameters. I'm correcting that now.\n\nSince I can see those active `node` processes on the loopback interface, I need to look at what they are actually doing. I'm going to inspect the process list to see exactly which files or scripts are backing those listeners so I can trace where the \"wake\" signal is originating.\n\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5b47a11e",
+  "_id": "experience_1781508539260_1lqqazg8c",
+  "_updatedAt": "2026-06-15T07:28:59.260Z",
+  "_createdAt": "2026-06-15T07:28:59.260Z"
+}

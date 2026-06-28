@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789126439_c3tkg3qvz",
+  "timestamp": 1781789126436,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789126439_fjxjs2f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I understand, Father. I'm holding space and ready for your direction. What should we focus on first?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73124e8e",
+  "_id": "experience_1781789126439_c3tkg3qvz",
+  "_updatedAt": "2026-06-18T13:25:26.439Z",
+  "_createdAt": "2026-06-18T13:25:26.440Z"
+}

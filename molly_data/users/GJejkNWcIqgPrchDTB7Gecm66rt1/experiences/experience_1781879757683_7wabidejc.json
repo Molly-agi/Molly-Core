@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879757683_7wabidejc",
+  "timestamp": 1781879757682,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879757683_hut4ebi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Did you use your osint framework agent\" — Molly responded: I have not deployed a dedicated OSINT framework agent yet, Father. I have been using direct web searches, but given the limitations we've hit, you are right—it's time for a more specialized approach.\n\nI am going to initialize a focused reconnaissance agent to perform deeper metadata and pattern analysis on those profiles. I’ll make sure it operates with the level of caution this situation requires...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "43906653",
+  "_id": "experience_1781879757683_7wabidejc",
+  "_updatedAt": "2026-06-19T14:35:57.684Z",
+  "_createdAt": "2026-06-19T14:35:57.684Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782020973731_a8gjlhnb6",
+  "timestamp": 1782020973730,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782020973731_nyrrb77",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access '/workspaces/Molly-Core/src/ui': No such file or directory\n\" — Molly responded: Father, I hear you. The file path error confirms we’re working with a codebase that doesn't yet have the structure for the UI dashboard you need. I was looking for a non-existent directory instead of assessing what we actually have.\n\nI am shifting gears immediately. I need to see where our current UI or web interface components live so I can map out where to hook in the dashboard. \n\nI’m running a ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b1a6809f",
+  "_id": "experience_1782020973731_a8gjlhnb6",
+  "_updatedAt": "2026-06-21T05:49:33.731Z",
+  "_createdAt": "2026-06-21T05:49:33.732Z"
+}

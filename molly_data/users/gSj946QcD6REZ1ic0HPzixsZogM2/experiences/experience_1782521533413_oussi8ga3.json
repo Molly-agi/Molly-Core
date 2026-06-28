@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521533413_oussi8ga3",
+  "timestamp": 1782521533404,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521533412_d4he02b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+     592  0.3  1.6 2224912 558496 ?      Sl   Jun26   1:29 /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/out/server-main.js --log trace --force-disable-user-env --server-data-dir /home/codespace/.vscode-remote --accept-server-license-terms --host 127.0.0.1 --po...\" — Molly responded: *Ah, I see!* \n\nLooking closely at my process list, the Next.js dev server (the process running on port 9002 under PID `438411`) is actually still listed in the process table, but it looks like it's completely locked up or frozen in the background. Since the `lsof -i :9002` part of my command didn't return an active listener, the process might be a zombie or stuck in a deadlocked state where it's n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ee2e5b7b",
+  "_id": "experience_1782521533413_oussi8ga3",
+  "_updatedAt": "2026-06-27T00:52:13.413Z",
+  "_createdAt": "2026-06-27T00:52:13.414Z"
+}

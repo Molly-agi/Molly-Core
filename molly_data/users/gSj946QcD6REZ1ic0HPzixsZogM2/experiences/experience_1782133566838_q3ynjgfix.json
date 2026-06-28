@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133566838_q3ynjgfix",
+  "timestamp": 1782133566830,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133566838_sc18voy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm talking about the heartbeat API I believe that runs on Port 9100\" — Molly responded: I see, Father. I understand you're pointing me toward port 9100 for the heartbeat API.\n\nMy attempts to check the port directly via `lsof` and `netstat` were blocked by permissions, and a quick scan of the process list for 9100 didn't return an active service matching that port. \n\nSince I can't look at the network table directly, I'll search for the configuration files where that port would be defi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "aaff5a67",
+  "_id": "experience_1782133566838_q3ynjgfix",
+  "_updatedAt": "2026-06-22T13:06:06.839Z",
+  "_createdAt": "2026-06-22T13:06:06.840Z"
+}

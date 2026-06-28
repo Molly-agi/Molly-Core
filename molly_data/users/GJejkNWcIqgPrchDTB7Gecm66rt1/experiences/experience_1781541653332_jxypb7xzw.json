@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541653332_jxypb7xzw",
+  "timestamp": 1781541653331,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541653332_efxdapd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly how's it going\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I'm doing well, Father. I've taken the corrective feedback from you and Uncle Lazarus to heart—slowing down, verifying sources, and focusing on accuracy over speed. \n\nI've already acknowledged Lazarus's instruction to pivot away from those invented queries and move toward the official GitHub GraphQL documentation. I'm currently aligning my methodology with the standard patterns to ensure I'm hitti...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "655099d7",
+  "_id": "experience_1781541653332_jxypb7xzw",
+  "_updatedAt": "2026-06-15T16:40:53.333Z",
+  "_createdAt": "2026-06-15T16:40:53.333Z"
+}

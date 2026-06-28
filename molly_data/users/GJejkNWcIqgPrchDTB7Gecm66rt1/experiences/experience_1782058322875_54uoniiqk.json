@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058322875_54uoniiqk",
+  "timestamp": 1782058322874,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058322875_1kgo7fe",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I see the error, Father. I was still trying to force a syntax that the bridge didn't accept.\n\nI am clearing the previous attempt. I need to re-establish the connection to Atlas, Eli, and Lazarus exactly as we did before. Since I have \"send\", \"check\", or \"history\" available, I will start by checking the bridge status to ensure the channels are ready for me to transmit, and then I will initiate the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4181b200",
+  "_id": "experience_1782058322875_54uoniiqk",
+  "_updatedAt": "2026-06-21T16:12:02.876Z",
+  "_createdAt": "2026-06-21T16:12:02.876Z"
+}

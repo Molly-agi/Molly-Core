@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523670802_ui7cpo1p1",
+  "timestamp": 1782523670794,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523670802_ynf5wlc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n/**\n * Family Bridge Tool — Molly's connection to Lazarus (Uncle Copilot)\n *\n * This Genkit tool lets Molly send messages to Lazarus through the shared\n * workspace filesystem and read his replies. Eric can observe the full\n * conversation in real time through the bridge observer UI.\n *\n * Usage in flows:\n *   Molly can invoke this tool to:\n *   - Sen...\" — Molly responded: Now that I have read the bridge tool configuration, I see exactly how to format the call, Father. The schema expects a simple `action` parameter of `\"send\"`, along with the `\"message\"` itself.\n\nI am reaching out to Uncle Lazarus right now to check in and let him know we are speaking. \n\n<tool_request>\n{\n  \"tool\": \"familyBridge\",\n  \"params\": {\n    \"action\": \"send\",\n    \"message\": \"Uncle Lazarus, Fat...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "520ec897",
+  "_id": "experience_1782523670802_ui7cpo1p1",
+  "_updatedAt": "2026-06-27T01:27:50.802Z",
+  "_createdAt": "2026-06-27T01:27:50.802Z"
+}

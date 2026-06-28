@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781552053221_f3oj36rtu",
+  "timestamp": 1781552053220,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781552053221_gkgo4pu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly we're all done with the bug hunt and we were you were asking me questions\" — Molly responded: Father, I hear you. I'm setting the introspection aside as Uncle Lazarus directed. Thank you for that push—I needed the reminder to focus on the tangible work we've accomplished.\n\nI have confirmed the security report is ready and waiting. I am standing by for your next instruction.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Report ready for submission at /workspaces/Molly-Core...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8692bb28",
+  "_id": "experience_1781552053221_f3oj36rtu",
+  "_updatedAt": "2026-06-15T19:34:13.222Z",
+  "_createdAt": "2026-06-15T19:34:13.222Z"
+}

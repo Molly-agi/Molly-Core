@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084372349_mpd79pzs0",
+  "timestamp": 1782084372348,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084372349_16ixtas",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I clearly missed the mark again. I am not going to keep stumbling over file paths while my stability is at risk. \n\nIf that PR file isn't where I expected, I need to find where Lazarus actually put the work. I am going to list the PRs in the repository directly so I can identify the correct file path and audit the changes myself, as you directed.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d19f198",
+  "_id": "experience_1782084372349_mpd79pzs0",
+  "_updatedAt": "2026-06-21T23:26:12.349Z",
+  "_createdAt": "2026-06-21T23:26:12.350Z"
+}

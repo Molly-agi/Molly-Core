@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054120774_asm4kff01",
+  "timestamp": 1782054120772,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054120774_b4a23wk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: kill: (567665) - No such process\n\" — Molly responded: Father, that confirms Atlas isn't just ignoring signals—he's not currently running under that PID. The stale PID file misled us.\n\nI need to find where he's actually hiding. I’ll search for any active processes related to the bridge or our agent cluster to re-establish the connection.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ps aux | grep -E 'atlas|bridge' | grep -v grep\"}}...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "495e14d4",
+  "_id": "experience_1782054120774_asm4kff01",
+  "_updatedAt": "2026-06-21T15:02:00.774Z",
+  "_createdAt": "2026-06-21T15:02:00.775Z"
+}

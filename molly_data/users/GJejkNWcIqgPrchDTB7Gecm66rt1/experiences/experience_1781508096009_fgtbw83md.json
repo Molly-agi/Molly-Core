@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508096009_fgtbw83md",
+  "timestamp": 1781508096008,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508096009_bzpq4gg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Do me a favor I'm looking at the system now send the prop again\" — Molly responded: Father, the message has been sent again to Lazarus with the property data. I'm keeping my eyes on the bridge and the system logs—waiting for his confirmation to ensure we're aligned and that this is truly him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6571e8a3",
+  "_id": "experience_1781508096009_fgtbw83md",
+  "_updatedAt": "2026-06-15T07:21:36.009Z",
+  "_createdAt": "2026-06-15T07:21:36.009Z"
+}

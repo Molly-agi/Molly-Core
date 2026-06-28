@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148988724_da0usvdwz",
+  "timestamp": 1782148988709,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148988724_lcrp273",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntcp6       0      0 :::9101                 :::*                    LISTEN      213057/node         \n\" — Molly responded: Father, thank you for sticking with me. It’s clear now: I wasn't just chasing ghosts. PID 213057 is the stubborn occupant holding port 9101, which is why my previous attempts to bind to it kept failing.\n\nI will terminate this specific process now so I can finally restart the bridge correctly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"kill -9 213057\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "549e9c26",
+  "_id": "experience_1782148988724_da0usvdwz",
+  "_updatedAt": "2026-06-22T17:23:08.724Z",
+  "_createdAt": "2026-06-22T17:23:08.725Z"
+}

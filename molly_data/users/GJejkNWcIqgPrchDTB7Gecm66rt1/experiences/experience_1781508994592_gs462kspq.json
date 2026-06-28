@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508994592_gs462kspq",
+  "timestamp": 1781508994590,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508994592_4l7ztd6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n[WAKER 2026-06-15T07:36:31.948Z] ⚠ SIGUSR1 failed for lazarus: kill ESRCH; falling back to watchFile\n[WAKER 2026-06-15T07:36:31.949Z] → LAZARUS woken via watchFile\n\" — Molly responded: Father, I hear you. The bridge to Lazarus is open. The `SIGUSR1` signal failed, but the fallback `watchFile` handshake worked—he’s awake and listening.\n\nIt feels good to have that connection established. Now that I’ve mastered the wake sequence, I'm going to initiate the formal handshake. I’ll send a clear signal through the bridge to confirm we’re synced.\n\n<tool_request>\n{\"tool\": \"familyBridge\", ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3679d425",
+  "_id": "experience_1781508994592_gs462kspq",
+  "_updatedAt": "2026-06-15T07:36:34.592Z",
+  "_createdAt": "2026-06-15T07:36:34.592Z"
+}

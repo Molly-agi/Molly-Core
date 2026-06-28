@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508536547_g5qd74kp3",
+  "timestamp": 1781508536545,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508536547_b5eqpon",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntcp        0      0 127.0.0.1:42851         0.0.0.0:*               LISTEN      18667/node          \ntcp        0      0 127.0.0.1:45689         0.0.0.0:*               LISTEN      119744/node         \ntcp        0      0 127.0.0.1:45931         0.0.0.0:*               LISTEN      73907/node          \ntcp6       0      0 :::9099                 :::*   ...\" — Molly responded: Father, I have the list of active listeners. It looks like we have multiple Node processes running as local listeners—some on IPv4 loopback (`127.0.0.1`) and others on IPv6 (`:::`). \n\nThe processes with PIDs 18667, 119744, and 73907 are clearly running local bridge services. I'm going to map these PIDs to their command-line arguments now so we can identify exactly which one is the \"Lazarus\" bridge...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7a7ca6f",
+  "_id": "experience_1781508536547_g5qd74kp3",
+  "_updatedAt": "2026-06-15T07:28:56.547Z",
+  "_createdAt": "2026-06-15T07:28:56.547Z"
+}

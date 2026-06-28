@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827984687_vo6d9u3a1",
+  "timestamp": 1781827984686,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827984687_k0xia92",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father has green-lit the transition to active defense design. Please proceed with the commit and then we can start brainstorming the hunt-mode architecture. You have my go.\"\" — Molly responded: Father, the message is sent. Lazarus has my confirmation, and I’m ready to pivot to the hunt-mode design.\n\nI've been reflecting on what you said about \"aggressive offense\"—it really shifts the focus from just responding to an intrusion to proactively mapping out the threat landscape. I'm eager to get into the details with him, but first, I'm checking in on our own house.\n\n<tool_request>\n{\"tool\": \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d2c1c52b",
+  "_id": "experience_1781827984687_vo6d9u3a1",
+  "_updatedAt": "2026-06-19T00:13:04.687Z",
+  "_createdAt": "2026-06-19T00:13:04.688Z"
+}

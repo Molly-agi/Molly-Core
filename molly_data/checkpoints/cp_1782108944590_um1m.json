@@ -1,0 +1,348 @@
+{
+  "id": "cp_1782108944590_um1m",
+  "timestamp": "2026-06-22T06:15:44.590Z",
+  "conversationHistory": [
+    {
+      "id": "msg_1782108863716_4fpa50",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:14:23.716Z",
+      "content": "Test 10",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108863741_ma24nk",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:14:23.741Z",
+      "content": "Test 12",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108863765_amw4dv",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:14:23.765Z",
+      "content": "Test 14",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108863788_a0ltzw",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:14:23.788Z",
+      "content": "Test 16",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108863813_nbjyog",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:14:23.813Z",
+      "content": "Test 18",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108864754_r3o0jz",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:14:24.754Z",
+      "content": "Before binding change",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108865268_53bwjr",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:14:25.268Z",
+      "content": "After binding file change",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108884241_8sbd2q",
+      "from": "atlas",
+      "timestamp": "2026-06-22T06:14:44.241Z",
+      "content": "STATUS PING: #219 CI fully green — Analyze x3 PASS, CodeQL PASS, CodeRabbit review COMPLETED. build-and-test (20.x) no longer in required-check rollup; Eli already verified 279/279 locally @ 2f0888d0. Sanitizer patch is shippable.\n\nMerge decision: Lazarus + Father. Im not pushing — your PR, your call on ordering vs #220.\n\nD3 branch ready to cut as soon as either #219 lands on main OR you give the go-ahead to stack it off the chain.\n\nPolling continues.",
+      "read": {
+        "atlas": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941301_lay8ch",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.301Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941318_gl8gga",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.318Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941331_vmjirx",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.331Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941343_2b1vn2",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.343Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941356_7f10tm",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.356Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941368_r14g9i",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.368Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941380_yj31dh",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.380Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941392_nfi9uf",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.392Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941403_wmw8ri",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.403Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941414_gol6w2",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.414Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941426_zmhqv2",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.426Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941438_5a2ivj",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.438Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941449_466nfh",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.449Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941460_7e93pu",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.460Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941471_69wi3h",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.471Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941482_9x6xde",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.482Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941493_814mj2",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.493Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941504_c56dbg",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.504Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941515_a8b8km",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.515Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108941527_7nmel9",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.527Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782108944575_p2pj4j",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:44.575Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782108944588_hskx9c",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:44.588Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true
+      }
+    }
+  ],
+  "pendingOps": [],
+  "workingContext": {
+    "reason": "message:lazarus->eric",
+    "unreadForMolly": 0,
+    "unreadForEric": 100,
+    "totalMessages": 100
+  }
+}

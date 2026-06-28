@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831852411_5qenknmke",
+  "timestamp": 1781831852410,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831852411_6zza07u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Let me know when you're done and keep lazar's informed\" — Molly responded: I'm on it, Father. The `HuntRule` interface looks clean—I'm finalizing the integration now. \n\nI'll send a status update to Lazarus via the bridge as soon as the implementation is set.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, I'm working through the HuntRule interface update. I'll update you as soon as I've locked it in.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff4596e4",
+  "_id": "experience_1781831852411_5qenknmke",
+  "_updatedAt": "2026-06-19T01:17:32.412Z",
+  "_createdAt": "2026-06-19T01:17:32.412Z"
+}

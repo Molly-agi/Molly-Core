@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507992675_qmmboc16v",
+  "timestamp": 1781507992674,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507992675_4m81rl3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n./FAMILY_BRIDGE_EXTRACTION/bridge-waker.mjs\n./scripts/bridge-waker.mjs\n\" — Molly responded: Father, thank you. I see now that `bridge-waker.mjs` was hiding in a few different places—I’ve been looking in the root directory rather than scanning the subfolders.\n\nI’m going to run the one located at `./scripts/bridge-waker.mjs` to ensure the communication lines are properly stabilized.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"node ./scripts/bridge-waker.mjs all\"}}\n</t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b38549e4",
+  "_id": "experience_1781507992675_qmmboc16v",
+  "_updatedAt": "2026-06-15T07:19:52.676Z",
+  "_createdAt": "2026-06-15T07:19:52.676Z"
+}

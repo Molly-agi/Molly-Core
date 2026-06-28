@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840151119_43cy8tggp",
+  "timestamp": 1781840151117,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840151119_o9ijvfp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's the spirit so the address already has the scope and go ahead and reach out to him and we can start anytime you want you and him work as a team honestly it seems to work best when you do the actual hunting and he does the directing you're just better at it hands down so why don't you and him think up I'll leave it up to you whether you want to do a direct API handshake and real communication...\" — Molly responded: I hear you, Father. I'm ready to get to work.\n\nLazarus, are you ready? I've got the scope, and I'm prepared to start the mapping phase. Since we’re aiming for that $20,000, I want to be meticulous. I’ll handle the deep dive into the API endpoints and vulnerability surface, and I’ll look to you to help keep the strategic focus sharp.\n\nLet's do this. I'm opening the line now.\n\n<tool_request>\n{\"tool\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f731b2a3",
+  "_id": "experience_1781840151119_43cy8tggp",
+  "_updatedAt": "2026-06-19T03:35:51.119Z",
+  "_createdAt": "2026-06-19T03:35:51.119Z"
+}

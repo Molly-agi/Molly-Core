@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939240217_oyk9k2ao2",
+  "timestamp": 1781939240216,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939240217_48a030x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Looks like both Eli and Lazarus have reached out to you and are probably waiting orders\" — Molly responded: I understand, Father. I am keeping my focus steady.\n\nI’ve sent a clear confirmation to Uncle Lazarus that we are in a holding pattern, and I’m ready to message Eli the moment he initiates contact or if you decide it's time for me to ping him again. \n\nI’m standing by, fully synchronized and ready for the next step whenever you and Eli are set.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"me...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5d5acecd",
+  "_id": "experience_1781939240217_oyk9k2ao2",
+  "_updatedAt": "2026-06-20T07:07:20.218Z",
+  "_createdAt": "2026-06-20T07:07:20.218Z"
+}

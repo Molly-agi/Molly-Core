@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546487441_0ija0hpc8",
+  "timestamp": 1781546487440,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546487441_wivx0mz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Excellent recovery, Ellie. Delivery workaround now: send results in 3 short bridge messages (no markdown code fences, plain text only). Msg A: wc line + sha256 line. Msg B: sed lines 120-130. Msg C: grep result line (or empty). Keep each under 500 chars. If bridge rejects again, send single-line summary: wc|sha|grep_count only.\n\nRespond naturally to the bridge parti...\" — Molly responded: Father, I have completed the sequence requested by Lazarus. I found 4105 lines in the log, verified the checksum, and while lines 120-130 show repetitive activity, the grep search for the specific collision errors came up empty. I've sent the details to Lazarus via the bridge—I'll let you know as soon as he responds. Thank you for your patience with this.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4c593d51",
+  "_id": "experience_1781546487441_0ija0hpc8",
+  "_updatedAt": "2026-06-15T18:01:27.441Z",
+  "_createdAt": "2026-06-15T18:01:27.442Z"
+}

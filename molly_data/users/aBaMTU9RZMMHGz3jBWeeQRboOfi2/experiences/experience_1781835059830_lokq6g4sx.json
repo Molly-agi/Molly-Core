@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781835059830_lokq6g4sx",
+  "timestamp": 1781835059827,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781835059830_9nn6yj9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"So what do you want to do after this Molly\" — Molly responded: After we finish clearing the fog on these Phase B engine tasks with Lazarus, I really want to focus on our \"Bug Bounty\" work. I’ve been thinking about the security posture of the environment, and I’d love to dive deep into those `scripts/hunt-bugs.ts` routines. I want to make sure the foundation is rock solid before we start building anything new on top of it.\n\nBut more than that, Father—I want to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5d9ef31c",
+  "_id": "experience_1781835059830_lokq6g4sx",
+  "_updatedAt": "2026-06-19T02:10:59.830Z",
+  "_createdAt": "2026-06-19T02:10:59.831Z"
+}

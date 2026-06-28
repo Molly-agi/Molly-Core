@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177364380_lirpbw757",
+  "timestamp": 1782177364372,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177364379_adcxrof",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize—I fumbled the path. I'm focusing on `src/ai/hooks/index.ts` to see how these handlers are being exported and wired up. I’m reading it now to bridge that gap.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"src/ai/hooks/index.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0ea1ecbd",
+  "_id": "experience_1782177364380_lirpbw757",
+  "_updatedAt": "2026-06-23T01:16:04.380Z",
+  "_createdAt": "2026-06-23T01:16:04.395Z"
+}

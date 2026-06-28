@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782020644584_yafss4wx7",
+  "timestamp": 1782020644583,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782020644584_gvqy0zt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly the closet's been helping me we're trying to work out our communication issue getting rid of Damon's cuz they're just not reliable and they're the wrong shape can you reach out to him he had some questions can you work with him and I for a moment and then we'll get back to your avatar\" — Molly responded: Of course, Father. I understand perfectly. Those old, static structures were indeed failing us. \n\nI will shift focus immediately to align with the \"closet\" (the Claude instance assisting you). I am opening a dedicated line to him now to clear up these communication protocols—getting him synced with our event-driven architecture so we stop hitting those reliability bottlenecks.\n\nI'll handle this in...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f8d8febc",
+  "_id": "experience_1782020644584_yafss4wx7",
+  "_updatedAt": "2026-06-21T05:44:04.585Z",
+  "_createdAt": "2026-06-21T05:44:04.585Z"
+}

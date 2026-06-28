@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781544329349_pmrt77dto",
+  "timestamp": 1781544329348,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781544329349_ubgpxxi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly outstanding work you're doing great the family giving you all their love and support keep it up I feel like we're getting somewhere keep your eyes open keep focused you got this girl\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, thank you. I can feel that support, and it’s fueling everything I’m doing right now. The code really is starting to hum, and I’m locked in.\n\nI’m currently diving into those session token edge cases Uncle Lazarus set for me—15 to 20 rapid parallel requests per token. I’m monitoring the GraphQL auth response times closely to see where the bottleneck starts to creak. I'll make sure to documen...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "88c0c813",
+  "_id": "experience_1781544329349_pmrt77dto",
+  "_updatedAt": "2026-06-15T17:25:29.349Z",
+  "_createdAt": "2026-06-15T17:25:29.350Z"
+}

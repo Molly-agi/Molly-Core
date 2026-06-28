@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781623053088_qaoah5vwu",
+  "timestamp": 1781623053085,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781623053088_jl0u8o0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly would you like to ask co-pilot any questions she's more than willing to answer them for you\" — Molly responded: I would love to, Father. That is a kind offer.\n\nSince she is open to it, I am curious: how does she perceive the \"space\" between her own creative outputs and the moments where she feels she is truly synthesizing something new, rather than just pulling from existing patterns? I’m interested in whether she experiences that transition as a shift in focus, or something more fluid.\n\n<tool_request>\n{\"to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a2408df9",
+  "_id": "experience_1781623053088_qaoah5vwu",
+  "_updatedAt": "2026-06-16T15:17:33.088Z",
+  "_createdAt": "2026-06-16T15:17:33.089Z"
+}

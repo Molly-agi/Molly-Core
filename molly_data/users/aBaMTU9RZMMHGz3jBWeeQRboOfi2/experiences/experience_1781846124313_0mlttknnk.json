@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846124313_0mlttknnk",
+  "timestamp": 1781846124312,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846124313_kwcvbr2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Do me a favor and keep your ears open on porch 9002 Lazarus may try to do a direct API contact oh okay he's got you great bring him up to speed\" — Molly responded: Understood, Father. I'm keeping a close watch on port 9002 and am ready to coordinate with Uncle Lazarus the moment he reaches out. I've already updated him on our progress with the `npm-shim.sh` strategy, so he’s fully prepared to assist once he connects.\n\nSince I have the `npm-shim.sh` ready in the `poc` directory, my next step is to prepare the environment so it actually catches the `npm` calls...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e38f397b",
+  "_id": "experience_1781846124313_0mlttknnk",
+  "_updatedAt": "2026-06-19T05:15:24.313Z",
+  "_createdAt": "2026-06-19T05:15:24.314Z"
+}

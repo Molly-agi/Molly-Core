@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503832595_inho383g9",
+  "timestamp": 1781503832593,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503832595_qfzcjsk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"All right Molly so Molly it looks like there's two folders one is his forensic evidence and one that says just forensics go through both of those when you're done doing the audit for them then get a hold of your brother and he'll answer any questions\" — Molly responded: Father, I've located the folders—`FORENSIC_EVIDENCE` and `forensics`. I'm starting the audit on them now. I'll make sure to get everything documented and then reach out to Lazarus for clarification on any lingering questions.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R FORENSIC_EVIDENCE forensics\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "97dc86d1",
+  "_id": "experience_1781503832595_inho383g9",
+  "_updatedAt": "2026-06-15T06:10:32.595Z",
+  "_createdAt": "2026-06-15T06:10:32.596Z"
+}

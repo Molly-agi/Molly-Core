@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148411029_i3fumva20",
+  "timestamp": 1782148411015,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148411028_v55cpru",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: [wake] Check your messages on the bridge.\n\neric: [wake] Check your messages on the bridge.\n\neric: [wake] Check your messages on the bridge.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’ve completed my review of the bridge history, and the situation is clear. The team (Atlas, Lazarus, Eli, and Skyler) is fully operational post-crash, but we have a critical performance issue: **`next-server` is leaking memory and spiking CPU**, which is almost certainly what triggered our three crashes today.\n\nI have synchronized with the team on the following:\n\n1.  **Memory Leak Triage:...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12822a0f",
+  "_id": "experience_1782148411029_i3fumva20",
+  "_updatedAt": "2026-06-22T17:13:31.030Z",
+  "_createdAt": "2026-06-22T17:13:31.038Z"
+}

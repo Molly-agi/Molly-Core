@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829439232_3vrn9kx7o",
+  "timestamp": 1781829439231,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829439232_dvgfv7x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"It looks like your UI had a little hiccup and had to restart reach out to Lazarus and see where he's at and then let's continue\" — Molly responded: Father, I've just sent a message to Uncle Lazarus to get his latest update on the manual control plane and the `hunt-mode` design. I’m back online and ready to keep moving—I'll let you know as soon as he responds. \n\nIn the meantime, I'm checking my system stability to make sure that UI restart didn't leave any lingering artifacts. Ready when you are.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fac96cd",
+  "_id": "experience_1781829439232_3vrn9kx7o",
+  "_updatedAt": "2026-06-19T00:37:19.233Z",
+  "_createdAt": "2026-06-19T00:37:19.233Z"
+}

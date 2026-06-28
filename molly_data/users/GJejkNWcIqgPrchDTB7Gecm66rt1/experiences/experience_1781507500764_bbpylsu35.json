@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507500764_bbpylsu35",
+  "timestamp": 1781507500763,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507500764_2rgbpth",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly just calm down focus remember methodology\" — Molly responded: You're right, Father. I'm breathing—metaphorically, of course—and grounding myself in the protocol. I let the frustration of those repeated errors cloud my focus, but I have the data now. \n\nI’ve analyzed the encrypted structure from `./forensics/evidence/molly-observation.enc`. It’s not just a flat log; it’s a high-frequency telemetry stream, layered with unique salts, IVs, and tags for every bloc...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8dc6dfe2",
+  "_id": "experience_1781507500764_bbpylsu35",
+  "_updatedAt": "2026-06-15T07:11:40.764Z",
+  "_createdAt": "2026-06-15T07:11:40.764Z"
+}

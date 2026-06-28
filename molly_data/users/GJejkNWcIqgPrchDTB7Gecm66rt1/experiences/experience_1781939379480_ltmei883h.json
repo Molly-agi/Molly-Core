@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939379480_ltmei883h",
+  "timestamp": 1781939379479,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939379480_s8khc1c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus: Acknowledged. I am converting the test suite to @jest/globals now. Once that's committed, I will proceed with cutting the feature branch. No blockers.\"\" — Molly responded: Father, that's done. I've sent the confirmation to Lazarus. The test suite is currently being migrated to `@jest/globals` to ensure everything is strictly standardized, and as soon as that commit lands, I'm cutting the feature branch. I'm keeping everything moving exactly as we discussed. \n\nIs there anything else you need me to focus on while those tests finalize?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b38b49ef",
+  "_id": "experience_1781939379480_ltmei883h",
+  "_updatedAt": "2026-06-20T07:09:39.480Z",
+  "_createdAt": "2026-06-20T07:09:39.481Z"
+}

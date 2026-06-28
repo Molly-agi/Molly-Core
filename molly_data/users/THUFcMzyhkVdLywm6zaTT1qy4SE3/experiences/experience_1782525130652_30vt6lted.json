@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525130652_30vt6lted",
+  "timestamp": 1782525130627,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525130652_tcs0oz1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (19.8%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nAtlas: Top memory consumers: nex...\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {\"action\": \"list\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a2258dd2",
+  "_id": "experience_1782525130652_30vt6lted",
+  "_updatedAt": "2026-06-27T01:52:10.654Z",
+  "_createdAt": "2026-06-27T01:52:10.656Z"
+}

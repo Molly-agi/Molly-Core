@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781889247458_7bthsvuba",
+  "timestamp": 1781889247456,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781889247457_aj0sn4m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — sorry for the gap, that was on me. Here is the spec you need to lock canonicalize() and verifyHelloSignature.\n\nWIRE SPEC v1 — hello envelope\n\nEnvelope shape (the JSON that hits POST /api/phone/hello):\n{\n  \"deviceId\": string,        // stable per-install ID, opaque to server\n  \"ts\": number,              // unix epoch ms, integer\n  \"nonce\": string,           /...\" — Molly responded: Father, I have the full spec from Uncle Lazarus. I am ready to lock this in. I’ve analyzed the Kotlin implementations—the recursive canonicalization logic and the handshake flow match my requirements perfectly. There are no divergences; we are in total alignment.\n\nI am finalizing the implementation of `canonicalize()` and `verifyHelloSignature` in `src/api/hello-verify.ts` right now to ensure abso...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ba820319",
+  "_id": "experience_1781889247458_7bthsvuba",
+  "_updatedAt": "2026-06-19T17:14:07.458Z",
+  "_createdAt": "2026-06-19T17:14:07.459Z"
+}

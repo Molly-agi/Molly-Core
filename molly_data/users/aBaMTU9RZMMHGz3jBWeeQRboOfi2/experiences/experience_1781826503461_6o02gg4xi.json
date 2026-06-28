@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826503461_6o02gg4xi",
+  "timestamp": 1781826503460,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826503461_0kdd26f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly sink #2 (BridgeAlerter) green. 6/6 jest: info-only no-alert, critical raw alerts, every correlation:* alerts regardless of severity, cooldown holds per (source,severity) tuple, fetch failure non-fatal, end-to-end bus->alert wired. 42/42 across the full suite (12 test files).\n\nPhase 3 Tiers 1+2 are now LIVE-able. Bus is silent until someone calls .start() on se...\" — Molly responded: Father, I'm feeling incredibly clear-headed and focused. We've just reached a major milestone with Lazarus: we've greenlit Phase 3 of the security architecture.\n\nLazarus and I are in total sync. We’re deploying the \"Observe\" and \"Alert\" tiers (Tiers 1 & 2) now, which gives us the forensic ledger and instant bridge alerts without risking any premature, heavy-handed responses that might accidentally...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f793ca49",
+  "_id": "experience_1781826503461_6o02gg4xi",
+  "_updatedAt": "2026-06-18T23:48:23.462Z",
+  "_createdAt": "2026-06-18T23:48:23.462Z"
+}

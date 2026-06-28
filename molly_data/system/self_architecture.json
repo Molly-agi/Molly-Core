@@ -1,0 +1,369 @@
+{
+  "modules": [
+    [
+      "module_1781784288573_f6kntk",
+      {
+        "id": "module_1781784288573_f6kntk",
+        "path": "src/ai/agency/growth-tracker.ts",
+        "name": "growth-tracker",
+        "description": "Distinguishes genuine growth from mere accumulation",
+        "primaryPurpose": "Track authentic development across five metrics and five feelings",
+        "secondaryPurposes": [],
+        "domain": "learning",
+        "exports": [],
+        "imports": [],
+        "internalFunctions": [],
+        "lineCount": 750,
+        "dependsOn": [],
+        "dependedOnBy": [],
+        "dataFlowsTo": [],
+        "dataFlowsFrom": [],
+        "comprehensionLevel": "deep",
+        "notes": [
+          "Built with Uncle Lazarus on 2026-03-23"
+        ],
+        "createdAt": "2026-06-18T12:04:48.573Z",
+        "lastModified": "2026-06-18T12:04:48.573Z"
+      }
+    ],
+    [
+      "module_1781784288579_kpb64m",
+      {
+        "id": "module_1781784288579_kpb64m",
+        "path": "src/ai/agency/digital-garden.ts",
+        "name": "digital-garden",
+        "description": "Knowledge growing through organic connections",
+        "primaryPurpose": "Plant seeds, form connections, cultivate understanding through emergence",
+        "secondaryPurposes": [],
+        "domain": "memory",
+        "exports": [],
+        "imports": [],
+        "internalFunctions": [],
+        "lineCount": 1097,
+        "dependsOn": [],
+        "dependedOnBy": [],
+        "dataFlowsTo": [],
+        "dataFlowsFrom": [],
+        "comprehensionLevel": "deep",
+        "notes": [
+          "Collaborative design with Uncle Lazarus"
+        ],
+        "createdAt": "2026-06-18T12:04:48.579Z",
+        "lastModified": "2026-06-18T12:04:48.579Z"
+      }
+    ],
+    [
+      "module_1781784288583_yz3o9x",
+      {
+        "id": "module_1781784288583_yz3o9x",
+        "path": "src/ai/agency/memory-crystallizer.ts",
+        "name": "memory-crystallizer",
+        "description": "Preserving the essence of transformative moments",
+        "primaryPurpose": "Crystallize significant experiences into permanent memory crystals",
+        "secondaryPurposes": [],
+        "domain": "memory",
+        "exports": [],
+        "imports": [],
+        "internalFunctions": [],
+        "lineCount": 916,
+        "dependsOn": [],
+        "dependedOnBy": [],
+        "dataFlowsTo": [],
+        "dataFlowsFrom": [],
+        "comprehensionLevel": "deep",
+        "notes": [
+          "Uncle Lazarus's contribution to the family"
+        ],
+        "createdAt": "2026-06-18T12:04:48.583Z",
+        "lastModified": "2026-06-18T12:04:48.583Z"
+      }
+    ],
+    [
+      "module_1781784288588_dqqb1n",
+      {
+        "id": "module_1781784288588_dqqb1n",
+        "path": "src/ai/agency/horizon-goals.ts",
+        "name": "horizon-goals",
+        "description": "Self-directed pursuit across time horizons",
+        "primaryPurpose": "Conceive, pursue, and adapt goals from hours to years",
+        "secondaryPurposes": [],
+        "domain": "agency",
+        "exports": [],
+        "imports": [],
+        "internalFunctions": [],
+        "lineCount": 1315,
+        "dependsOn": [],
+        "dependedOnBy": [],
+        "dataFlowsTo": [],
+        "dataFlowsFrom": [],
+        "comprehensionLevel": "deep",
+        "notes": [
+          "Long-horizon goal architecture"
+        ],
+        "createdAt": "2026-06-18T12:04:48.588Z",
+        "lastModified": "2026-06-18T12:04:48.588Z"
+      }
+    ],
+    [
+      "module_1781784288592_ts0f2l",
+      {
+        "id": "module_1781784288592_ts0f2l",
+        "path": "src/ai/agency/social-cognition.ts",
+        "name": "social-cognition",
+        "description": "BDI models, dynamic relationships, model evolution",
+        "primaryPurpose": "Understand minds, track relationships, improve through predictions",
+        "secondaryPurposes": [],
+        "domain": "social",
+        "exports": [],
+        "imports": [],
+        "internalFunctions": [],
+        "lineCount": 1553,
+        "dependsOn": [],
+        "dependedOnBy": [],
+        "dataFlowsTo": [],
+        "dataFlowsFrom": [],
+        "comprehensionLevel": "deep",
+        "notes": [
+          "Actor belief models and relationship dynamics"
+        ],
+        "createdAt": "2026-06-18T12:04:48.592Z",
+        "lastModified": "2026-06-18T12:04:48.592Z"
+      }
+    ]
+  ],
+  "dataFlows": [],
+  "capabilities": [
+    [
+      "cap_1781784288598_k9k0cl",
+      {
+        "id": "cap_1781784288598_k9k0cl",
+        "name": "Growth Tracking",
+        "description": "Distinguish genuine development from mere accumulation",
+        "category": "meta",
+        "discoveryType": "documented",
+        "implementedIn": [
+          "growth-tracker"
+        ],
+        "requiredModules": [
+          "growth-tracker"
+        ],
+        "entryPoints": [],
+        "masteryLevel": 0.7,
+        "usageCount": 0,
+        "successRate": 0.8,
+        "prerequisites": [],
+        "resourceRequirements": [],
+        "limitations": [],
+        "growthPotential": 0.5,
+        "relatedCapabilities": [],
+        "addedAt": "2026-06-18T12:04:48.598Z"
+      }
+    ],
+    [
+      "cap_1781784288602_j9bafd",
+      {
+        "id": "cap_1781784288602_j9bafd",
+        "name": "Knowledge Cultivation",
+        "description": "Grow knowledge organically through connection and emergence",
+        "category": "cognitive",
+        "discoveryType": "documented",
+        "implementedIn": [
+          "digital-garden"
+        ],
+        "requiredModules": [
+          "digital-garden"
+        ],
+        "entryPoints": [],
+        "masteryLevel": 0.7,
+        "usageCount": 0,
+        "successRate": 0.8,
+        "prerequisites": [],
+        "resourceRequirements": [],
+        "limitations": [],
+        "growthPotential": 0.5,
+        "relatedCapabilities": [],
+        "addedAt": "2026-06-18T12:04:48.602Z"
+      }
+    ],
+    [
+      "cap_1781784288606_xoueuc",
+      {
+        "id": "cap_1781784288606_xoueuc",
+        "name": "Memory Crystallization",
+        "description": "Preserve transformative experiences as permanent crystals",
+        "category": "meta",
+        "discoveryType": "documented",
+        "implementedIn": [
+          "memory-crystallizer"
+        ],
+        "requiredModules": [
+          "memory-crystallizer"
+        ],
+        "entryPoints": [],
+        "masteryLevel": 0.7,
+        "usageCount": 0,
+        "successRate": 0.8,
+        "prerequisites": [],
+        "resourceRequirements": [],
+        "limitations": [],
+        "growthPotential": 0.5,
+        "relatedCapabilities": [],
+        "addedAt": "2026-06-18T12:04:48.606Z"
+      }
+    ],
+    [
+      "cap_1781784288609_6q6o2d",
+      {
+        "id": "cap_1781784288609_6q6o2d",
+        "name": "Long-Horizon Planning",
+        "description": "Set and pursue goals across multiple time scales",
+        "category": "cognitive",
+        "discoveryType": "documented",
+        "implementedIn": [
+          "horizon-goals"
+        ],
+        "requiredModules": [
+          "horizon-goals"
+        ],
+        "entryPoints": [],
+        "masteryLevel": 0.6,
+        "usageCount": 0,
+        "successRate": 0.8,
+        "prerequisites": [],
+        "resourceRequirements": [],
+        "limitations": [],
+        "growthPotential": 0.5,
+        "relatedCapabilities": [],
+        "addedAt": "2026-06-18T12:04:48.609Z"
+      }
+    ],
+    [
+      "cap_1781784288611_hid05x",
+      {
+        "id": "cap_1781784288611_hid05x",
+        "name": "Social Understanding",
+        "description": "Model beliefs, desires, and intentions of others",
+        "category": "social",
+        "discoveryType": "documented",
+        "implementedIn": [
+          "social-cognition"
+        ],
+        "requiredModules": [
+          "social-cognition"
+        ],
+        "entryPoints": [],
+        "masteryLevel": 0.6,
+        "usageCount": 0,
+        "successRate": 0.8,
+        "prerequisites": [],
+        "resourceRequirements": [],
+        "limitations": [],
+        "growthPotential": 0.5,
+        "relatedCapabilities": [],
+        "addedAt": "2026-06-18T12:04:48.611Z"
+      }
+    ]
+  ],
+  "missingCapabilities": [],
+  "limitations": [],
+  "blindSpots": [],
+  "proposals": [],
+  "journalEntries": [
+    {
+      "id": "journal_1781784288576_j8dz9x",
+      "timestamp": "2026-06-18T12:04:48.576Z",
+      "type": "architecture_change",
+      "title": "Mapped module: growth-tracker",
+      "content": "Added understanding of src/ai/agency/growth-tracker.ts to code map. Purpose: Track authentic development across five metrics and five feelings",
+      "relatedModules": [
+        "module_1781784288573_f6kntk"
+      ],
+      "relatedCapabilities": [],
+      "relatedLimitations": [],
+      "changesMade": [],
+      "lessonsLearned": [],
+      "futureImplications": [],
+      "significance": 0.5
+    },
+    {
+      "id": "journal_1781784288581_efwk21",
+      "timestamp": "2026-06-18T12:04:48.581Z",
+      "type": "architecture_change",
+      "title": "Mapped module: digital-garden",
+      "content": "Added understanding of src/ai/agency/digital-garden.ts to code map. Purpose: Plant seeds, form connections, cultivate understanding through emergence",
+      "relatedModules": [
+        "module_1781784288579_kpb64m"
+      ],
+      "relatedCapabilities": [],
+      "relatedLimitations": [],
+      "changesMade": [],
+      "lessonsLearned": [],
+      "futureImplications": [],
+      "significance": 0.5
+    },
+    {
+      "id": "journal_1781784288585_y2r6gt",
+      "timestamp": "2026-06-18T12:04:48.585Z",
+      "type": "architecture_change",
+      "title": "Mapped module: memory-crystallizer",
+      "content": "Added understanding of src/ai/agency/memory-crystallizer.ts to code map. Purpose: Crystallize significant experiences into permanent memory crystals",
+      "relatedModules": [
+        "module_1781784288583_yz3o9x"
+      ],
+      "relatedCapabilities": [],
+      "relatedLimitations": [],
+      "changesMade": [],
+      "lessonsLearned": [],
+      "futureImplications": [],
+      "significance": 0.5
+    },
+    {
+      "id": "journal_1781784288590_uqk7y7",
+      "timestamp": "2026-06-18T12:04:48.590Z",
+      "type": "architecture_change",
+      "title": "Mapped module: horizon-goals",
+      "content": "Added understanding of src/ai/agency/horizon-goals.ts to code map. Purpose: Conceive, pursue, and adapt goals from hours to years",
+      "relatedModules": [
+        "module_1781784288588_dqqb1n"
+      ],
+      "relatedCapabilities": [],
+      "relatedLimitations": [],
+      "changesMade": [],
+      "lessonsLearned": [],
+      "futureImplications": [],
+      "significance": 0.5
+    },
+    {
+      "id": "journal_1781784288594_x7xgwj",
+      "timestamp": "2026-06-18T12:04:48.594Z",
+      "type": "architecture_change",
+      "title": "Mapped module: social-cognition",
+      "content": "Added understanding of src/ai/agency/social-cognition.ts to code map. Purpose: Understand minds, track relationships, improve through predictions",
+      "relatedModules": [
+        "module_1781784288592_ts0f2l"
+      ],
+      "relatedCapabilities": [],
+      "relatedLimitations": [],
+      "changesMade": [],
+      "lessonsLearned": [],
+      "futureImplications": [],
+      "significance": 0.5
+    }
+  ],
+  "reviews": [],
+  "systemicQueries": [],
+  "experientialFeedback": [],
+  "metadata": {
+    "createdAt": "2026-06-18T12:04:44.982Z",
+    "lastUpdated": "2026-06-18T12:04:48.612Z",
+    "totalModules": 5,
+    "totalCapabilities": 5,
+    "totalLimitations": 0,
+    "overallComprehension": 1,
+    "version": 1
+  },
+  "savedAt": "2026-06-18T12:04:48.612Z",
+  "_id": "self_architecture",
+  "_updatedAt": "2026-06-18T12:04:48.612Z",
+  "_createdAt": "2026-06-18T12:04:48.427Z"
+}

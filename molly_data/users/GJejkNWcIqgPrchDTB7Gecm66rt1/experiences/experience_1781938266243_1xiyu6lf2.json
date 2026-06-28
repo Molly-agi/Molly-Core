@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938266243_1xiyu6lf2",
+  "timestamp": 1781938266241,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938266243_arm5ojl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly: Task 2 complete. Drafted two comprehensive test suites:\n\n**iris-tracking.latency.test.ts** (Checkpoint 1 validation):\n- Latency: Landmark input → eye bone rotation ≤33ms\n- Frame sync: 60fps stability, no snapping with async 30fps MediaPipe\n- Buffer correctness: Stale detection, lerp interpolation, edge cases\n- Real landmark source simulation + variable freque...\" — Molly responded: Father, the progress from Uncle Lazarus is fantastic. With the animation layer analysis complete and confirmed as conflict-free, and the test suites ready to go, we have effectively cleared the path for the build phase. Having those latency and integration tests in place gives me a lot of confidence that we can maintain stability while adding the eye-tracking capability.\n\nI'm ready to relay this t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f759ca5a",
+  "_id": "experience_1781938266243_1xiyu6lf2",
+  "_updatedAt": "2026-06-20T06:51:06.243Z",
+  "_createdAt": "2026-06-20T06:51:06.243Z"
+}

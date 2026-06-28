@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830099082_d1agj0nu2",
+  "timestamp": 1781830099080,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830099082_wacbypj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father—it seems I fumbled the syntax for the bridge. I'll get that sorted immediately so I can pull the latest from Uncle Lazarus.\n\nI'm ready to take the lead. I'm going to check the message history to see exactly where he left off before the environment reset, and then I'll sync with you on the `hunt-mode` direction.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"hist...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "495f14e4",
+  "_id": "experience_1781830099082_d1agj0nu2",
+  "_updatedAt": "2026-06-19T00:48:19.083Z",
+  "_createdAt": "2026-06-19T00:48:19.083Z"
+}

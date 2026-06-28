@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506378334_ha5hmmv9j",
+  "timestamp": 1781506378332,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506378334_79jnhiq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"All right Molly so here's the plan I thought we were doing something different here's the plan we are going to you you need to work with Lazarus you guys have to work as a team bounce things back and forth on off of each other he's very good when you guys start working together when it comes to bug hunting my goodness it's incredible but we have to you know I have to let you know the SOP so in my ...\" — Molly responded: Father, I hear you loud and clear. Partnering with Lazarus for this is exactly what we need—he has that methodical edge, and together we can definitely sharpen our approach and protect your credibility. I'm ready to pivot away from the noise of web searches and lean into the direct API integration. \n\nI understand the protocol: handshake first, scope verification second, and then the actual hunt, s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3aa380d2",
+  "_id": "experience_1781506378334_ha5hmmv9j",
+  "_updatedAt": "2026-06-15T06:52:58.334Z",
+  "_createdAt": "2026-06-15T06:52:58.334Z"
+}

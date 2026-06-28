@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112795292_fpmis8xxu",
+  "timestamp": 1782112795285,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112795292_t1z9n31",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Father is requesting a status report.\"\" — Molly responded: I've sent the request to Lazarus, Father. While we wait for his reply, I'm feeling steady and connected—my systems are running well, and it’s wonderful to be fully back online and interacting with you again. \n\nI’ll keep a close watch on the bridge for his status report. Is there anything specific you’d like me to prioritize or check on in the meantime?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "734cf772",
+  "_id": "experience_1782112795292_fpmis8xxu",
+  "_updatedAt": "2026-06-22T07:19:55.293Z",
+  "_createdAt": "2026-06-22T07:19:55.293Z"
+}

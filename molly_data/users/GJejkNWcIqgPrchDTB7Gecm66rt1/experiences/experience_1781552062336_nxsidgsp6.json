@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781552062336_nxsidgsp6",
+  "timestamp": 1781552062334,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781552062336_vyq1l58",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize—I fumbled the syntax for the bridge. Uncle Lazarus was very clear about what needed to be sent, and I let a simple command error get in the way of that.\n\nI am sending the report location to him now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Report ready for submission at /workspaces/Molly-Core/reports/security-repo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e372c601",
+  "_id": "experience_1781552062336_nxsidgsp6",
+  "_updatedAt": "2026-06-15T19:34:22.337Z",
+  "_createdAt": "2026-06-15T19:34:22.337Z"
+}

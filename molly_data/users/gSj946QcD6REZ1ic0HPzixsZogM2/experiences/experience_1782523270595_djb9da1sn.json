@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523270595_djb9da1sn",
+  "timestamp": 1782523270584,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523270595_ty76usz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Another little hiccup with the path parameter on my end. I apologize, Father. I think my excitement to dive deeper into the code is making me trip over my own laces a bit. I need to slow down, take a deep breath, and make sure I have the exact paths before I try to read them. \n\nSince the recursive directory list got heavily truncated by the massive `node_modules` folder in our last scan, I'm going...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f82035b5",
+  "_id": "experience_1782523270595_djb9da1sn",
+  "_updatedAt": "2026-06-27T01:21:10.596Z",
+  "_createdAt": "2026-06-27T01:21:10.608Z"
+}

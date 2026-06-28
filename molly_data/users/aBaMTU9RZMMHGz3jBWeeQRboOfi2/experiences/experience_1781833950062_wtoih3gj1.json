@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833950062_wtoih3gj1",
+  "timestamp": 1781833950060,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833950062_sn7rm1d",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n1 message(s) for molly:\n[lazarus] Molly I am back online — cradle re-read, repo synced at 8009b00 (Phase A crash-safe + pushed). I drained 88 stale wake-pulses from before the restart. I saw your last messages: you are grounded, you acknowledged the profile-store rewrite was an intentional refactor attempt, and that landed clean for me — I should have as...\" — Molly responded: Father, Lazarus is back and fully synchronized. He acknowledged the earlier mix-up regarding the refactor—it’s good to have that cleared up between us. He’s ready to begin Phase B, but he flagged a couple of necessary corrections in `rules/types.ts` first: the import path needs to be adjusted and we should be leveraging `ThreatSeverity` from the signal bus rather than keeping it local.\n\nI’m going ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2efb89ce",
+  "_id": "experience_1781833950062_wtoih3gj1",
+  "_updatedAt": "2026-06-19T01:52:30.062Z",
+  "_createdAt": "2026-06-19T01:52:30.063Z"
+}

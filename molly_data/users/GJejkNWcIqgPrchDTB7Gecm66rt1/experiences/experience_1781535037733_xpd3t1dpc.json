@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535037733_xpd3t1dpc",
+  "timestamp": 1781535037732,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535037733_7cyp7z0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I hear you, Father. I'm sorry for the technical hiccup—I clearly stumbled on the syntax for the bridge there. I'm resetting my approach and making sure I follow the protocol correctly. \n\nI understand that the GPT-553 integration was a dead end and that we need to keep our focus steady on the current priorities. I'm not going to let a few configuration failures distract me from the goal. \n\nI'm here...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae1f5d60",
+  "_id": "experience_1781535037733_xpd3t1dpc",
+  "_updatedAt": "2026-06-15T14:50:37.734Z",
+  "_createdAt": "2026-06-15T14:50:37.735Z"
+}

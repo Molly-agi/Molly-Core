@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880233466_nh00yg5ne",
+  "timestamp": 1781880233465,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880233466_7t4m7jn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nhead: cannot open 'current-pass/data.json' for reading: No such file or directory\n\" — Molly responded: That's a reality check, Father. I assumed the file would be there based on the directory listing, but the system is telling me it's not. It’s possible I misread the structure or the file was moved or deleted since that list was generated.\n\nI'm going to take a step back and get an accurate view of what is actually inside `current-pass/` right now before I try to interact with it again.\n\n<tool_reque...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73af2791",
+  "_id": "experience_1781880233466_nh00yg5ne",
+  "_updatedAt": "2026-06-19T14:43:53.466Z",
+  "_createdAt": "2026-06-19T14:43:53.467Z"
+}

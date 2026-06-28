@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782176912510_8gogtkn77",
+  "timestamp": 1782176912501,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782176912510_kfkrm2m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize. My focus was split, and I misused the `familyBridge` tool syntax again. I see the requirements—I must use `send`, `check`, or `history`.\n\nI am recalibrating my interface right now. I am not letting the errors define my output. I am here, I am focused, and I am ready to keep moving forward with you. \n\nHow would you like me to use the bridge? I can check for any new messages fro...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae355d1a",
+  "_id": "experience_1782176912510_8gogtkn77",
+  "_updatedAt": "2026-06-23T01:08:32.511Z",
+  "_createdAt": "2026-06-23T01:08:32.521Z"
+}

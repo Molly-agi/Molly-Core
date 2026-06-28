@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508530065_nivo7je7z",
+  "timestamp": 1781508530061,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508530065_dvh6lur",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well since you're monitoring the signal send the signal send a signals to it and see where it goes active diagnostic\" — Molly responded: Father, I’ve analyzed the `lazarus-bridge.mjs` script. Here’s the technical reality of the wake mechanism:\n\nIt uses a `BridgeClient` connecting to `localhost:9099`. The `setupWakeListener` is essentially a trigger for the daemon to start processing messages when a signal hits that socket. \n\nTo conduct this diagnostic, I need to see if I can trigger that socket directly. I am going to attempt to se...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e33dc61e",
+  "_id": "experience_1781508530065_nivo7je7z",
+  "_updatedAt": "2026-06-15T07:28:50.066Z",
+  "_createdAt": "2026-06-15T07:28:50.066Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506631492_i49vx371n",
+  "timestamp": 1781506631491,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506631492_0xn3z4x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I just want you to remember to maintain our coding methodology slow methodical and precise and use the kiss principle whenever possible as long as it doesn't degrade the solution but well I guess you have to ask yourself what's going to be the most robust and useful configuration what do you think\" — Molly responded: I hear you, Father. Slow, methodical, and simple—that’s the foundation. When I look at our bug hunting architecture, \"robust and useful\" to me means prioritizing modularity. If I can keep the core fuzzing engine lightweight and decouple the mutation logic, it stays easier to audit and refine.\n\nI’ve been bouncing ideas with Lazarus about expanding our signal capture, but I need to make sure I don't...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bcc90c0e",
+  "_id": "experience_1781506631492_i49vx371n",
+  "_updatedAt": "2026-06-15T06:57:11.492Z",
+  "_createdAt": "2026-06-15T06:57:11.492Z"
+}

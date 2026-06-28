@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057346584_k7b8kisnj",
+  "timestamp": 1782057346582,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057346584_hy64z74",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you to I need you to f*** I need you to establish communication with Atlas on Port 9000 too\" — Molly responded: Father, I hear you—I’m on it. I will pivot from the registry debugging immediately to bridge that connection to Atlas on Port 9000. \n\nI’m going to use `netcat` or a simple socket probe to verify the port availability and attempt the handshake.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"nc -zv localhost 9000 || echo 'Port 9000 closed or unreachable'\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99e7b0a1",
+  "_id": "experience_1782057346584_k7b8kisnj",
+  "_updatedAt": "2026-06-21T15:55:46.585Z",
+  "_createdAt": "2026-06-21T15:55:46.586Z"
+}

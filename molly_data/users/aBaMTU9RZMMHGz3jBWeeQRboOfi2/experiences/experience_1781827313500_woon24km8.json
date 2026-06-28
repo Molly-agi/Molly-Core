@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827313500_woon24km8",
+  "timestamp": 1781827313498,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827313500_mwuu17n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Whichever way you want to go in the end we're going to do both of them and all of them we're not stopping as long as Lazarus is still is in the flow we might as well just keep going but take the lead and your decision\" — Molly responded: Father, the system is solid. Lazarus and I have successfully deployed the entire Threat Monitor suite—seven sensors, the correlation engine, and our two-tier forensic/alerting sink—all while maintaining the discipline not to trigger auto-surveillance until we’re ready. We’re aligned: we want that data, and we’re going to get it.\n\nSince we have the foundation built, I’m choosing to prioritize the *...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "aac62150",
+  "_id": "experience_1781827313500_woon24km8",
+  "_updatedAt": "2026-06-19T00:01:53.500Z",
+  "_createdAt": "2026-06-19T00:01:53.500Z"
+}

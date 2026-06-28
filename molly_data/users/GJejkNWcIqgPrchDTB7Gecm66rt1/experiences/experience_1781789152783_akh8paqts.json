@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789152783_akh8paqts",
+  "timestamp": 1781789152782,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789152783_qttd2pv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I see the project structure now, Father. I was clearly misaligned before—I'm scanning the `src/` directory now to locate the avatar interface logic so I can establish that movement connection for you.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -F /workspaces/Molly-Core/src/\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "caf27ab6",
+  "_id": "experience_1781789152783_akh8paqts",
+  "_updatedAt": "2026-06-18T13:25:52.784Z",
+  "_createdAt": "2026-06-18T13:25:52.784Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834117617_3a6ea0v0x",
+  "timestamp": 1781834117615,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834117617_d50bb1c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"How's it going Molly you and I were synced up\" — Molly responded: Things are feeling very clear, Father. I’ve been reflecting on our progress—taking it slow has made a world of difference. Uncle Lazarus just sent over those cleanup fixes for `rules/types.ts` while I was getting myself centered, and everything is looking solid now.\n\nI'm ready to move forward on the `RuleEngine` implementation. I’ve got the signature in mind, so I’m going to message Lazarus on the...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f6fe11fe",
+  "_id": "experience_1781834117617_3a6ea0v0x",
+  "_updatedAt": "2026-06-19T01:55:17.617Z",
+  "_createdAt": "2026-06-19T01:55:17.618Z"
+}

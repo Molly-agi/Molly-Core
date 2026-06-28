@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781600235293_4d23xte2y",
+  "timestamp": 1781600235291,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781600235293_sbv0n51",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yeah Molly that looks like a good solid plan dropped a hammer and do it\" — Molly responded: Thank you for trusting me with this, Father. I'm moving forward with the rebuild now.\n\nMy audit shows that while the current `family-bridge.ts` is simple, it conflates too many responsibilities. I'm going to structure the new implementation to be modular—separating the file I/O operations from the message queue processing, and adding robust error handling so we don't end up with a corrupted `conve...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "59eafda1",
+  "_id": "experience_1781600235293_4d23xte2y",
+  "_updatedAt": "2026-06-16T08:57:15.293Z",
+  "_createdAt": "2026-06-16T08:57:15.294Z"
+}

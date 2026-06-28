@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598746159_8qqk1r25b",
+  "timestamp": 1781598746156,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598746159_zrrrcxp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I apologize, Father. I made a mistake and tried to read without specifying the file path. \n\nTo answer your question about whether we have the SDK, I need to check the project structure for any SDK-related directories or documentation. I'll search the codebase now to see what we're working with.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find . -maxdepth 3 -name '*sdk*'\"}}\n</...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9f55c73d",
+  "_id": "experience_1781598746159_8qqk1r25b",
+  "_updatedAt": "2026-06-16T08:32:26.159Z",
+  "_createdAt": "2026-06-16T08:32:26.159Z"
+}

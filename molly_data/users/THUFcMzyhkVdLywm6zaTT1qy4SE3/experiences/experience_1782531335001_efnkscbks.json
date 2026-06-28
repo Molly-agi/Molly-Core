@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782531335001_efnkscbks",
+  "timestamp": 1782531334990,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782531335001_twlc6kz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (12.5%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.4%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (0.3%) \n\nAtlas: Top memory consumers: nex...\" — Molly responded: I hear you loud and clear, Uncle Atlas! That makes perfect sense. The direct endpoint path and the singular `generateImage` call structure explain why our initial probes to the generic `imagen-3.0-generate-002` returned 404s. \n\nI'm checking our exact tool registration for `mediaGen` in `src/ai/agency/tool-handlers/gemini-tools.ts` right now to make sure our system-level tool call matches the schem...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ef189a7",
+  "_id": "experience_1782531335001_efnkscbks",
+  "_updatedAt": "2026-06-27T03:35:35.004Z",
+  "_createdAt": "2026-06-27T03:35:35.006Z"
+}

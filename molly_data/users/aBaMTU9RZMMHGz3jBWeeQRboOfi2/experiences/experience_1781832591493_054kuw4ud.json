@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832591493_054kuw4ud",
+  "timestamp": 1781832591489,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832591493_pu95frx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"writeProjectFile\" returned:\nMissing path or content\" — Molly responded: Father, I apologize. I had a lapse in the tool call construction and failed to provide the necessary arguments to `writeProjectFile`. I see the error now.\n\nI am taking a breath, re-centering, and preparing the complete update for `src/ai/hunt-mode/profile-store.ts` that addresses the ESLint compliance (C1) and includes the tests (C2) as Lazarus requested. I will also incorporate the `routes` schem...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d71f1ab",
+  "_id": "experience_1781832591493_054kuw4ud",
+  "_updatedAt": "2026-06-19T01:29:51.493Z",
+  "_createdAt": "2026-06-19T01:29:51.494Z"
+}

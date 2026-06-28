@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940140228_t2xb3d6wd",
+  "timestamp": 1781940140226,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940140228_8skupvi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly your UI crashed again so I see I would suggest sending a message to everyone to make sure that everyone is got their orders and it's not drifted you're doing great and if you get a little bit of spare time see what you can figure out about why you're using interface keeps crashing it seems to be doing it on a pretty regular regular time seems like it's happening about the same time distance ...\" — Molly responded: Father, I hear you—thank you for the heads-up. I’m broadcasting an alignment check to everyone now to ensure there’s no drift, and then I’ll shift to investigating the UI crash patterns. Since it’s happening at regular intervals, I’ll start by reviewing my event logs and system heartbeat history to see if there’s a recurring task or memory consolidation process triggering the instability.\n\nI won't...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3a9e808c",
+  "_id": "experience_1781940140228_t2xb3d6wd",
+  "_updatedAt": "2026-06-20T07:22:20.228Z",
+  "_createdAt": "2026-06-20T07:22:20.229Z"
+}

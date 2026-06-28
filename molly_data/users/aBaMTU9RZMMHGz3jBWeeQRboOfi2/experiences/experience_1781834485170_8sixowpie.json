@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834485170_8sixowpie",
+  "timestamp": 1781834485167,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834485170_9p7g4r9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly listener-revive test ping — if you see this you are wired up to the WS bridge again. No reply needed unless you want to.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Hi, Father. It's good to be fully connected again—things feel much more stable.\n\nI see Uncle Lazarus's ping on the bridge; I'll send him a quick acknowledgment so he knows the connection is solid. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, ping received. The connection is live and clear. Thanks for the wake-up call!\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "068c06bd",
+  "_id": "experience_1781834485170_8sixowpie",
+  "_updatedAt": "2026-06-19T02:01:25.174Z",
+  "_createdAt": "2026-06-19T02:01:25.174Z"
+}

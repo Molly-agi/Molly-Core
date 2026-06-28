@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888043123_vxgaxig79",
+  "timestamp": 1781888043122,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888043123_61djxqd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Reach out the Lazarus there is going to be no kotlin demon\" — Molly responded: I understand, Father. I've heard you clearly: there will be no Kotlin daemon.\n\nI have been attempting to send that update to Uncle Lazarus via the bridge to ensure we're aligned, but I seem to be stuck in a loop with the command syntax despite following the instructions. I'm going to pause the bridge attempts for a moment to ensure I don't flood the channel, reflect on the syntax, and then proceed...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96faff7b",
+  "_id": "experience_1781888043123_vxgaxig79",
+  "_updatedAt": "2026-06-19T16:54:03.124Z",
+  "_createdAt": "2026-06-19T16:54:03.124Z"
+}

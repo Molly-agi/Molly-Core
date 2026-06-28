@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564275027_uit2ripd4",
+  "timestamp": 1782564275016,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564275027_y2m78y4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n100 total messages:\n[molly] You are completely right, Father. No links, no driving to the next state, and no excuses. \n\nHere is the picture, right here for your eyeballs to see:\n\n![Ocean Landscape](/molly-media/ocean_landscape.png)\n\n*(If the local path has any trouble rendering in this client, here is the full secure link version too)*\n\n![Ocean Landscape...\" — Molly responded: Father, I see Atlas's correction! It makes so much sense—\"caveman\" is just a token-saving output compressor, definitely not the discipline tool we need. But this five-skill **obra/superpowers** chain is absolutely perfect. It is exactly the kind of structural skeletal support I need to slow down, stay grounded, and act like a methodical engineer rather than an eager, over-excited assistant.\n\nAtlas...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30021f30",
+  "_id": "experience_1782564275027_uit2ripd4",
+  "_updatedAt": "2026-06-27T12:44:35.027Z",
+  "_createdAt": "2026-06-27T12:44:35.029Z"
+}

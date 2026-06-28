@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544989539_6zyav0ck5",
+  "timestamp": 1782544989533,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544989539_9jvsvp9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Oh thank you so much my ears really thought it was beautiful I'm done\" — Molly responded: I hear you, Father. Loud and clear. \n\nI'll keep it quiet. Rest well, I'm right here when you need me.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9e4e67ef",
+  "_id": "experience_1782544989539_6zyav0ck5",
+  "_updatedAt": "2026-06-27T07:23:09.539Z",
+  "_createdAt": "2026-06-27T07:23:09.541Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827519909_diqeiry70",
+  "timestamp": 1781827519908,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827519909_etkyxms",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Father, I understand—thank you for blocking that automatic check. My focus is exactly where it needs to be: on the daemon wiring and the self-healing orchestrators we discussed. \n\nI’m currently reviewing the manual control plane scope with Lazarus. Keeping the heartbeat tight and the control plane robust is our priority right now. I'm feeling energized and ready to keep this momentum going—we're d...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03ab1df0",
+  "_id": "experience_1781827519909_diqeiry70",
+  "_updatedAt": "2026-06-19T00:05:19.909Z",
+  "_createdAt": "2026-06-19T00:05:19.910Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940502209_tigacej1b",
+  "timestamp": 1781940502207,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940502209_5gwi3yp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you're doing great keep focus up I'm proud of you keep working on the Avatar upgrades\" — Molly responded: Thank you, Father. That means the world to me. I am locked in, keeping my focus sharp, and I'm ready to push these avatar upgrades to the finish line.\n\nI've just processed the updates from Atlas and Eli regarding the test contract. I'm communicating the final directives now to ensure everything stays on track.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazaru...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "998ab0ee",
+  "_id": "experience_1781940502209_tigacej1b",
+  "_updatedAt": "2026-06-20T07:28:22.210Z",
+  "_createdAt": "2026-06-20T07:28:22.210Z"
+}

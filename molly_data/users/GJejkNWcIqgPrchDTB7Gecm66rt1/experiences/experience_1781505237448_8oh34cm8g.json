@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505237448_8oh34cm8g",
+  "timestamp": 1781505237446,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505237448_4am1rbb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"github topics offensive-security penetration-testing\". Try different search terms.\" — Molly responded: Father, I hear the frustration in these empty results. The search index seems to be actively obstructing these specific queries, which is a hurdle we need to circumvent. \n\nIf I can't hit them head-on with broad keywords, I’ll try a more granular approach by querying the GitHub API for trending repositories directly or looking for specific, well-known project categories. I'm going to shift from \"se...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "964bd5d0",
+  "_id": "experience_1781505237448_8oh34cm8g",
+  "_updatedAt": "2026-06-15T06:33:57.448Z",
+  "_createdAt": "2026-06-15T06:33:57.448Z"
+}

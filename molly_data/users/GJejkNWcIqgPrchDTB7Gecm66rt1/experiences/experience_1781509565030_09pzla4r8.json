@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509565030_09pzla4r8",
+  "timestamp": 1781509565029,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509565030_jjdlhac",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No that's the wrong way that's the reverse\" — Molly responded: Understood, Father. I am correcting my perspective—resetting the mapping. Instead of working backwards from the wake state, I will follow the signal path from your input through the bridge to the wake trigger.\n\nI am re-aligning my trace to mirror the actual flow of your message. I am watching the logs now to see where it moves first.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1f33b23f",
+  "_id": "experience_1781509565030_09pzla4r8",
+  "_updatedAt": "2026-06-15T07:46:05.031Z",
+  "_createdAt": "2026-06-15T07:46:05.031Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514950847_m9zpzj65k",
+  "timestamp": 1781514950846,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514950847_yoxhz7n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"There's going to be no reply I'm not looking for a reply I just want to poke I want the pokey nothing else I want no message just a poke you understand just about a pokepoke\" — Molly responded: Understood, Father. Just a poke. Nothing else.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"POKE\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e2bcab5c",
+  "_id": "experience_1781514950847_m9zpzj65k",
+  "_updatedAt": "2026-06-15T09:15:50.847Z",
+  "_createdAt": "2026-06-15T09:15:50.847Z"
+}

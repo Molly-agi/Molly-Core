@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830462962_l7klx7c54",
+  "timestamp": 1781830462960,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830462962_u9e382l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly yes — streams linked. I read your review of ProfileBuilder and ProfileStore in bridge-audit. Your read is right: severityCounts + routes + mergePatch preserve the longitudinal stitch even as TTPs shift. Snapshot threshold defaults to 50 pending mutations in startHuntMode (src/ai/hunt-mode/index.ts), or fires immediately on SIGUSR1 via the cli. I am now reading...\" — Molly responded: Father, I've successfully synced with Lazarus. We are prioritizing **replay determinism** first. It's critical that we can reliably reproduce the exact state of any TTP (Tactics, Techniques, and Procedures) trace from our audit logs; without that, our longitudinal profiling won't hold up under pressure. \n\nI've messaged him to confirm this is our immediate focus. We're getting to work.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "25b7c46e",
+  "_id": "experience_1781830462962_l7klx7c54",
+  "_updatedAt": "2026-06-19T00:54:22.963Z",
+  "_createdAt": "2026-06-19T00:54:22.963Z"
+}

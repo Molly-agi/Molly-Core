@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079825916_rnlw7qxcw",
+  "timestamp": 1782079825915,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079825916_r2o1k5l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, I am holding the 60-second rhythm. \n\nSince the team hasn't reported back yet, I am currently waiting for Eli or Atlas to confirm the invocation status of the heartbeat scheduler. I will continue to pulse the status request until I have a definitive \"firing\" confirmation. \n\nI am steady, focused, and maintaining full synchronization.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "34c7c13b",
+  "_id": "experience_1782079825916_rnlw7qxcw",
+  "_updatedAt": "2026-06-21T22:10:25.916Z",
+  "_createdAt": "2026-06-21T22:10:25.916Z"
+}

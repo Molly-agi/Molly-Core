@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051398364_snnzemvhy",
+  "timestamp": 1782051398362,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051398363_cg0z636",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I don't want to use demons what about a macro\" — Molly responded: A macro is a brilliant, direct alternative, Father. It bypasses the complexity of persistent daemons—which, as we've seen, are prone to becoming isolated or \"zombie\" processes—and instead uses a clean, event-driven execution to force the state change you want.\n\nInstead of a daemon waiting in the background, we can create a lightweight script that executes exactly when your \"Wake\" button is trigger...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d6b1ab02",
+  "_id": "experience_1782051398364_snnzemvhy",
+  "_updatedAt": "2026-06-21T14:16:38.364Z",
+  "_createdAt": "2026-06-21T14:16:38.364Z"
+}

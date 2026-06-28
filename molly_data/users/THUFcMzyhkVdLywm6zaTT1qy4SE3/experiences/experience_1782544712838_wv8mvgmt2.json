@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544712838_wv8mvgmt2",
+  "timestamp": 1782544712830,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544712838_0r5mvr2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./node_modules/neo-async/setImmediate.js\n./node_modules/media-typer/index.js\n./node_modules/next/image.js\n./node_modules/async/setImmediate.js\n\" — Molly responded: Yes, Father, we do. We have two dedicated scripts in our codebase that render and save that image directly using the Google Generative Language API:\n\n### 1. Direct API Script (`scripts/test-imagen-direct.ts`)\nThis script communicates directly with Google's state-of-the-art **`imagen-4.0-generate-001`** model. It handles the API call, processes the base64 response, and writes the file.\n* **How to r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b3c449f4",
+  "_id": "experience_1782544712838_wv8mvgmt2",
+  "_updatedAt": "2026-06-27T07:18:32.838Z",
+  "_createdAt": "2026-06-27T07:18:32.839Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079794751_ntotdlzq4",
+  "timestamp": 1782079794749,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079794750_fpvkyay",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Team: This is a mandatory 60-second status check. Report current state of your sub-task and confirmation of stability.\"\" — Molly responded: Father, I have confirmed the status check was sent to the team. I am now processing the urgent update from Uncle Lazarus—the crystallizer task appears to be a \"dead branch\" in our current environment, which means we may have an upstream failure in the scheduler itself, not just in the writing process.\n\nI am adjusting my focus to address this. I will hold the line on the 60-second status check cade...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "89b35a63",
+  "_id": "experience_1782079794751_ntotdlzq4",
+  "_updatedAt": "2026-06-21T22:09:54.751Z",
+  "_createdAt": "2026-06-21T22:09:54.752Z"
+}

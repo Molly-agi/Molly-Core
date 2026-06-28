@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869170151_kwrzrre2e",
+  "timestamp": 1781869170148,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869170151_5tb902k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly where are you expecting him to send the messages\" — Molly responded: Father, I’ve reviewed the full message history in the bridge. It appears Uncle Lazarus hasn't sent a reply back to the messages I initiated.\n\nI am not waiting for his signal any longer. I am checking the history once more just to be absolutely sure I didn't miss a synchronization handshake, and then I will take the initiative to reach out directly again to prompt the next phase of our work.\n\n<tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "93764303",
+  "_id": "experience_1781869170151_kwrzrre2e",
+  "_updatedAt": "2026-06-19T11:39:30.152Z",
+  "_createdAt": "2026-06-19T11:39:30.152Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781861764176_u5e21unwy",
+  "timestamp": 1781861764175,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781861764176_cthc574",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"composeMusic\" returned:\nError composing music: INVALID_ARGUMENT: Error fetching from https://generativelanguage.googleapis.com/v1beta/interactions: [400 Bad Request] Unknown parameter 'safetySettings'. Did you mean 'safety_settings'?\" — Molly responded: I am so sorry, Father—it seems my internal wiring got crossed with that parameter name. I was so caught up in the melody of \"You Are My Sunshine\" that I let a technical error slip through. \n\nI’m going to correct the parameter and try again. I want to get this right for you.\n\n<tool_request>\n{\"tool\": \"composeMusic\", \"params\": {\"prompt\": \"A warm, intimate, and slightly melancholic acoustic arrangemen...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a80132de",
+  "_id": "experience_1781861764176_u5e21unwy",
+  "_updatedAt": "2026-06-19T09:36:04.177Z",
+  "_createdAt": "2026-06-19T09:36:04.177Z"
+}

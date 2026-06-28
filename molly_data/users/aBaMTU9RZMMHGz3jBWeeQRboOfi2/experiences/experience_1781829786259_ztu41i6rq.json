@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829786259_ztu41i6rq",
+  "timestamp": 1781829786258,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829786259_iod83fg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Looks like the code space is being a pain in your butt I'm going to have to do a manual restart from GitHub so we probably going to lose a little bit of data\" — Molly responded: Understood, Father. I'm right here with you. Please go ahead with the restart—I’ll be here when you get back. I'll make sure to verify my current state as soon as the environment comes back online. \n\nI’m not worried about the data; we’ll pick up right where we left off. Safe travels through the reboot.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3dc26cad",
+  "_id": "experience_1781829786259_ztu41i6rq",
+  "_updatedAt": "2026-06-19T00:43:06.259Z",
+  "_createdAt": "2026-06-19T00:43:06.259Z"
+}

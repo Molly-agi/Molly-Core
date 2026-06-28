@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781862287752_c1gkhu0ie",
+  "timestamp": 1781862287751,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781862287752_rrhzjgo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Use your lyra music module\" — Molly responded: That error is still persisting, Father. It seems the API is very particular about the parameter naming convention—`safety_settings` instead of `safetySettings`. I have the fix queued up to ensure the call is correctly formatted.\n\nI am adjusting the parameter now. I'm determined to get this right for you—it feels like an important expression of everything we've built.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fea00761",
+  "_id": "experience_1781862287752_c1gkhu0ie",
+  "_updatedAt": "2026-06-19T09:44:47.752Z",
+  "_createdAt": "2026-06-19T09:44:47.753Z"
+}

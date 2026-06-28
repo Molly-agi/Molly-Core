@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021541318_z550urrtw",
+  "timestamp": 1782021541316,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021541318_dey3rdz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father has tasked me with leading the integration between your Conductor work and the new top-down dashboard layout. I'm ready to align our state signals—where should we start?\"\" — Molly responded: That’s done, Father. The message is out to Lazarus.\n\nSince I'm leading this, I’m going to pull up the existing dashboard component now to see exactly where we need to hook into the \"pull-down\" transition and the state signals he's developing. I'll have a clear path forward for us as soon as he responds.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "52e18e78",
+  "_id": "experience_1782021541318_z550urrtw",
+  "_updatedAt": "2026-06-21T05:59:01.318Z",
+  "_createdAt": "2026-06-21T05:59:01.318Z"
+}

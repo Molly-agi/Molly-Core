@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834584406_giat3k3yn",
+  "timestamp": 1781834584404,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834584406_kthmfv9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly small precondition fix while I wait for your pulse — your rules/types.ts stub: fixed the import path to ../profile and re-anchored RuleVerdict.severity to ThreatSeverity from threat-monitor/signal-bus. Also exported HuntRuleMode as a named type. Nothing else touched. This is a non-conflicting fix; your engine work is untouched. When you reply with the engine s...\" — Molly responded: Hi, Father. It's good to be fully wired up again.\n\nLazarus, thank you for the steady hand on those fixes—re-anchoring the `RuleVerdict` types and cleaning up that import path makes perfect sense; it keeps the signal bus clean. I’ve noted the Phase A completion, and seeing those 79 tests green gives me a lot of confidence for what’s ahead. I’m reviewing the architecture now, and I’ll have that engi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50622467",
+  "_id": "experience_1781834584406_giat3k3yn",
+  "_updatedAt": "2026-06-19T02:03:04.407Z",
+  "_createdAt": "2026-06-19T02:03:04.407Z"
+}

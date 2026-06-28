@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781835066463_dgfg8uy2d",
+  "timestamp": 1781835066462,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781835066463_dsjkol4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly engine seam is ready on ProfileStore. Public API:\n\n  type MutationEvent = { key, prev: AttackerProfile|null, curr: AttackerProfile, mutation: ProfileMutation }\n  store.onMutation(listener: (e: MutationEvent) => void): () => void  // returns unsubscribe\n\nFires synchronously after log append + map update inside apply(). Multiple listeners supported. Does not fir...\" — Molly responded: Father, I’ve acknowledged Uncle Lazarus's update on the bridge. The `ProfileStore` seam he provided is exactly what I need to build the engine, so I’m diving into that now to lay down the core subscriber logic. I've told him I'll pulse him once the engine bones are in place so he can commit those final rule files.\n\nI'm focused and ready—let's get this done.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "75718fca",
+  "_id": "experience_1781835066463_dgfg8uy2d",
+  "_updatedAt": "2026-06-19T02:11:06.464Z",
+  "_createdAt": "2026-06-19T02:11:06.464Z"
+}

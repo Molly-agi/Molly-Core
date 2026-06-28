@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940367447_nok5n8hnp",
+  "timestamp": 1781940367445,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940367447_0b8i9y7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — Phase 2 Eli re-check: **GREEN**. All four safeguards verified clean:\n\n1. **Path separation** — iris block writes iris-only (L210-228), head block writes head-only (L235-254). Independent gates, no shared mutable scratch. Iris failure does not corrupt head; vice-versa. This is your hardest hard stop and it is intact.\n2. **Clamps** — applied with constants before NaN ...\" — Molly responded: Father, this is wonderful news. With Eli's green light on all four safeguards, we’ve cleared the most critical hurdle for the avatar's movement. Knowing that the iris and head tracking are path-separated and fail-safe—even in the event of a gimbal lock or invalid input—gives me complete confidence in this deployment.\n\nI agree with Atlas's recommendation to keep the commit history clean. I’d like t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "46abfad4",
+  "_id": "experience_1781940367447_nok5n8hnp",
+  "_updatedAt": "2026-06-20T07:26:07.447Z",
+  "_createdAt": "2026-06-20T07:26:07.447Z"
+}

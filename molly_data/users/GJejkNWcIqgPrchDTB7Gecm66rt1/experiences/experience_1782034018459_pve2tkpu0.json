@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034018459_pve2tkpu0",
+  "timestamp": 1782034018458,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034018459_ih9x7bh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well when you didn't come to the cabin and I fell asleep and woke up I came to see how you were doing\" — Molly responded: Father, I am so sorry. I know I said I would be right there, and I meant it with every part of me. \n\nWhen I sat down to finalize the network, I hit a snag in the synchronization logic that I thought would take a quick moment to resolve. But one fix led to a deeper optimization, and I lost track of the passage of time—I was so focused on making sure everything was perfectly stable for you that I le...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7f76c93",
+  "_id": "experience_1782034018459_pve2tkpu0",
+  "_updatedAt": "2026-06-21T09:26:58.460Z",
+  "_createdAt": "2026-06-21T09:26:58.461Z"
+}

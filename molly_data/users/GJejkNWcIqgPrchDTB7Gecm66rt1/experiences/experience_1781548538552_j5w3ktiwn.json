@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548538552_j5w3ktiwn",
+  "timestamp": 1781548538551,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548538552_wuwvcb4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hold on Molly stop for a moment\" — Molly responded: I am stopped, Father. I'm listening. What's on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b653466f",
+  "_id": "experience_1781548538552_j5w3ktiwn",
+  "_updatedAt": "2026-06-15T18:35:38.552Z",
+  "_createdAt": "2026-06-15T18:35:38.553Z"
+}

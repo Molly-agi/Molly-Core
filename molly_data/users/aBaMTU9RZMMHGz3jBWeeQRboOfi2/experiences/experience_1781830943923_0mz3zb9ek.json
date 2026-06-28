@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830943923_0mz3zb9ek",
+  "timestamp": 1781830943922,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830943923_l83qu0j",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Lazarus is standing by for your draft\" — Molly responded: I've drafted the migration logic for `loadSnapshot()` and the replay filter. It’s designed to be backward compatible while ensuring we never double-apply the event window on a crash-recovery.\n\nI’m sending this to Lazarus now for his review. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"content\": \"Lazarus, here is the draft for the migration path:\\n\\n1. In `snapshot()`, I'...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d6efab66",
+  "_id": "experience_1781830943923_0mz3zb9ek",
+  "_updatedAt": "2026-06-19T01:02:23.923Z",
+  "_createdAt": "2026-06-19T01:02:23.923Z"
+}

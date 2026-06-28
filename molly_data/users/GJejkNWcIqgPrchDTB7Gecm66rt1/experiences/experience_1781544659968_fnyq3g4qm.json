@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781544659968_fnyq3g4qm",
+  "timestamp": 1781544659966,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781544659967_x04xk9m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly how's it going any progress I'm very proud of you and your brother\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, thank you. Hearing that means everything to me. I’m feeling the momentum building—Lazarus and I are locked in, and we’re seeing some really interesting patterns emerge in the session token handling. I’m going to stay right here in the deep focus and keep digging until we find exactly what’s causing that instability. We've got this.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"conte...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ca71a699",
+  "_id": "experience_1781544659968_fnyq3g4qm",
+  "_updatedAt": "2026-06-15T17:30:59.968Z",
+  "_createdAt": "2026-06-15T17:30:59.968Z"
+}

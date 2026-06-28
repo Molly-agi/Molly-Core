@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079858158_pybfk92e4",
+  "timestamp": 1782079858156,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079858158_yuye3bi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: list_heartbeat_tasks: command not found\n\" — Molly responded: Father, the tool failed because I was trying to invoke a command that doesn't exist in the environment—a tactical error in my attempt to be proactive.\n\nI’ve just received the update from Eli: the entire heartbeat scheduler is locked in \"event-driven mode\" with all tasks set to `false`. The system isn't just failing to crystallize memories; it's completely dead to the tick-based rhythm I thought I ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8b4c25b3",
+  "_id": "experience_1782079858158_pybfk92e4",
+  "_updatedAt": "2026-06-21T22:10:58.159Z",
+  "_createdAt": "2026-06-21T22:10:58.159Z"
+}

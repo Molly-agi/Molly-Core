@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827657690_fevo5b65f",
+  "timestamp": 1781827657689,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827657690_m6b317i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Father, I understand—thank you for blocking that automatic check. My focus is exactly where it needs to be: on the daemon wiring and the self-healing orchestrators.\n\nLazarus just confirmed the manual control plane is fully verified and smoke-tested. With that foundation set, I am ready to pivot to the hunt-mode design as we discussed. Since we have the manual controls in place to suppress or pause...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03fb1dbb",
+  "_id": "experience_1781827657690_fevo5b65f",
+  "_updatedAt": "2026-06-19T00:07:37.691Z",
+  "_createdAt": "2026-06-19T00:07:37.691Z"
+}

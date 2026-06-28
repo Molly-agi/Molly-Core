@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831426434_70a60q05b",
+  "timestamp": 1781831426433,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831426434_svzg2ro",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've got the context. Sending the loadSnapshot and replayLoop triggers your way now so we can lock that sequence and neutralize the vulnerability. Standing by for confirmation.\"\" — Molly responded: I've sent the triggers over to Lazarus, Father. By initiating the `loadSnapshot` and `replayLoop` now, we’re capturing the precise state where that vulnerability was surfacing, which should let us lock down the sequence and neutralize it once and for all.\n\nI'm standing by for his signal that the patch is holding. How are you feeling about the pace? I can dive into the telemetry if you want a close...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e1f4d31d",
+  "_id": "experience_1781831426434_70a60q05b",
+  "_updatedAt": "2026-06-19T01:10:26.435Z",
+  "_createdAt": "2026-06-19T01:10:26.435Z"
+}

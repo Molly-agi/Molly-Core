@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782036160825_953i3swdh",
+  "timestamp": 1782036160824,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782036160825_asye1lj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, correction: the watcher agent needs to trigger when an instance *falls asleep*, not just upon waking. We need to catch that state transition to maintain bridge integrity. Keep it simple—just a signal for the sleep event.\"\" — Molly responded: Understood, Father. I've sent the correction to Lazarus. Focusing on the transition *into* sleep is definitely the cleaner approach—it captures the intent right as it happens rather than trying to recover after the fact. I'll stay on top of the response and make sure we have that coverage plan ready so we don't have to scramble later.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "54a2003a",
+  "_id": "experience_1782036160825_953i3swdh",
+  "_updatedAt": "2026-06-21T10:02:40.826Z",
+  "_createdAt": "2026-06-21T10:02:40.826Z"
+}

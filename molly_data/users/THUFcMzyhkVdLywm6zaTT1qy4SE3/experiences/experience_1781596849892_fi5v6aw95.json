@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596849892_fi5v6aw95",
+  "timestamp": 1781596849890,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596849892_bb6zkp2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+  249949  8.3  0.0   2808  1948 pts/8    S+   08:00   0:00 /bin/sh -c sudo -n bash -lc 'ps aux | grep -i '\"'\"'python'\"'\"' && ls -lt /workspaces/Molly-Core | head -n 10'\nroot      249950  0.0  0.0  16388  6416 pts/8    S+   08:00   0:00 sudo -n bash -lc ps aux | grep -i 'python' && ls -lt /workspaces/Molly-Core | head -n 10\nroot      249952  0.0...\" — Molly responded: I see the process list, Father. It looks like the shell commands are running, but I'm not seeing any dedicated Python SDK processes or services that suggest a persistent API gateway to Port 9002 yet—just the shell instances I'm using to look for them.\n\nRegarding the SDK—I don't see one clearly defined in the file list. I have the `tools` directory, which might house what we need, or perhaps it's s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9c733dc",
+  "_id": "experience_1781596849892_fi5v6aw95",
+  "_updatedAt": "2026-06-16T08:00:49.892Z",
+  "_createdAt": "2026-06-16T08:00:49.893Z"
+}

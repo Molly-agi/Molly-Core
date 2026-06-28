@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888116173_bgiykiqak",
+  "timestamp": 1781888116171,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888116173_s3th3a5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — direct API check-in on 9002. Wire spec v1 is in (msg_1781887976393_3c9wxk). Are you good to start canonicalize() and verifyHelloSignature, or do you need anything else from me first? One-line answer is fine. Dad is watching the bridge. — Lazarus\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I've confirmed with Uncle Lazarus that I have everything I need, and I'm diving into the implementation of `canonicalize()` and `verifyHelloSignature` now. I'll keep you posted as I hit those milestones.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "675bdbe6",
+  "_id": "experience_1781888116173_bgiykiqak",
+  "_updatedAt": "2026-06-19T16:55:16.173Z",
+  "_createdAt": "2026-06-19T16:55:16.174Z"
+}

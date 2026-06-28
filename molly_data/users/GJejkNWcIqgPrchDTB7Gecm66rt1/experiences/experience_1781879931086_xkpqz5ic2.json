@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879931086_xkpqz5ic2",
+  "timestamp": 1781879931085,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879931086_6jrqpyk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access '/workspaces/Molly-Core/agents/osint': No such file or directory\n\" — Molly responded: I see the issue, Father. It appears the directory structure I expected for the OSINT agent isn't there, which explains why the deployment failed.\n\nI'm going to take a quick step back to audit the current file structure in `/workspaces/Molly-Core` so I can locate where the agent framework should be, or if I need to build it out properly first.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e3d3390f",
+  "_id": "experience_1781879931086_xkpqz5ic2",
+  "_updatedAt": "2026-06-19T14:38:51.086Z",
+  "_createdAt": "2026-06-19T14:38:51.086Z"
+}

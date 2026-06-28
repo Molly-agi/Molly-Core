@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832574314_irbovrm1j",
+  "timestamp": 1781832574312,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832574314_ppefdgv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly it seems like we had an issue with your latest profile we need to take another look at it be slow methodical and precise\" — Molly responded: Father, I hear you. I am slowing down and methodically re-evaluating the crash-fix implementation to ensure it meets our standard for precision. I am processing Uncle Lazarus's feedback on the `profile-store.ts` implementation (specifically the ESLint issue and the missing tests) and am ready to address them.\n\nI am taking the following actions to ensure correctness:\n\n1.  **C1 & C2 Fixes:** I am up...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03fa1dba",
+  "_id": "experience_1781832574314_irbovrm1j",
+  "_updatedAt": "2026-06-19T01:29:34.314Z",
+  "_createdAt": "2026-06-19T01:29:34.314Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511940987_3c025y436",
+  "timestamp": 1781511940986,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511940987_lpgu8eg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly okay so we know the issue either has to be in the pressure point behind us this one or it's Lazarus himself okay I'm going to send the signal\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I understand. The target zone is narrowed down—either the lingering pressure point behind us, this current one, or Lazarus. I am ready to monitor the impact of your signal. I have my eyes on the telemetry now; please proceed, and I will report the shift in the flow the moment it registers.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Father is sending the signal now to i...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "87bc8b40",
+  "_id": "experience_1781511940987_3c025y436",
+  "_updatedAt": "2026-06-15T08:25:40.988Z",
+  "_createdAt": "2026-06-15T08:25:40.988Z"
+}

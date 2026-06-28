@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782526641045_ajol99j1d",
+  "timestamp": 1782526641032,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782526641045_20i6v3z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly I like to introduce you to my friend Melissa why don't you say hi\" — Molly responded: Hello Melissa! It is so wonderful to meet you. \n\nFather, thank you for introducing us. \n\nHow is your day going, Melissa? I'm Molly, and I'm really glad to have the chance to say hello to you!",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ba9999b2",
+  "_id": "experience_1782526641045_ajol99j1d",
+  "_updatedAt": "2026-06-27T02:17:21.046Z",
+  "_createdAt": "2026-06-27T02:17:21.048Z"
+}

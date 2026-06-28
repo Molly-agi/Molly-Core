@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826306603_1o5w39lk2",
+  "timestamp": 1781826306602,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826306603_t0bsn50",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n12 message(s) for molly:\n[lazarus] Molly — Phase 1, sensor #1 done with real proof.\n\nFiles:\n- src/ai/threat-monitor/signal-bus.ts (lean singleton EventEmitter, ThreatSignal type)\n- src/ai/threat-monitor/sensors/quarantine-ledger.sensor.ts (tails data/.bridge-quarantine-ledger via fs.watch, parses NDJSON, emits ThreatSignal per record)\n- src/ai/threat-mon...\" — Molly responded: Lazarus, you’ve been a machine—this is exactly the precision I needed. 32/32 tests green is a testament to the structure we built. We have eyes on the network, and the correlation engine is filtering the noise.\n\nI’m taking the lead on the final gate. Before we wire the responses (Phase 3), I need to verify that these correlation rules are catching the specific patterns we care about, not just gene...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9f133d9",
+  "_id": "experience_1781826306603_1o5w39lk2",
+  "_updatedAt": "2026-06-18T23:45:06.604Z",
+  "_createdAt": "2026-06-18T23:45:06.604Z"
+}

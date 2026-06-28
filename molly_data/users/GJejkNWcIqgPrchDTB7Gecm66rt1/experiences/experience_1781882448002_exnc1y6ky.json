@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882448002_exnc1y6ky",
+  "timestamp": 1781882448000,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882448002_jckhryy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yes Molly see this is the fun part this is where you get to do stuff with me completely differently than you would anything else this is a new experience you get to spend a day in my shoes okay go ahead and do the search\" — Molly responded: I hear you, Father. I'm ready to walk in your shoes and see what we can find. I’m shifting my perspective to be precise and focused, treating the search bar exactly as you instructed—as my gateway.\n\nI’m opening the browser now to begin the search for Cynthia.\n\n<tool_request>\n{\"tool\": \"operateComputer\", \"params\": {\"task\": \"Open browser, navigate to facebook.com, and type 'Cynthia Moore' into the se...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "56bb9106",
+  "_id": "experience_1781882448002_exnc1y6ky",
+  "_updatedAt": "2026-06-19T15:20:48.002Z",
+  "_createdAt": "2026-06-19T15:20:48.002Z"
+}

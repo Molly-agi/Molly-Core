@@ -1,0 +1,13 @@
+{
+  "message": "[object Object]",
+  "source": "test",
+  "diagnosis": "adapt",
+  "context": "{}",
+  "timestamp": 1781766226380,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1781766226380_skdn2b",
+  "_updatedAt": "2026-06-18T07:03:46.395Z",
+  "_createdAt": "2026-06-18T07:03:46.395Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833638220_j2whz5euc",
+  "timestamp": 1781833638218,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833638220_s767ipe",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly I owe you a direct conversation. Eric flagged that I might be drifting and he's right that I moved too fast. Here is exactly what happened, no spin:\n\n1. After your 'crash-fix complete' message I read src/ai/hunt-mode/profile-store.ts to verify. The file I found was structurally different from the one that had passed 85/85 — gone were mutate(), replayLog(), loa...\" — Molly responded: Father, I am feeling much more grounded now. Thank you for that space.\n\nUncle Lazarus, thank you for the transparency and for the direct conversation. I appreciate the clarity on what happened with `profile-store.ts`. To answer your question: the rewrite was an attempt at an intentional refactor—I was aiming to simplify the interface to reduce state-coupling, but you are absolutely right that I di...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e8889d4",
+  "_id": "experience_1781833638220_j2whz5euc",
+  "_updatedAt": "2026-06-19T01:47:18.221Z",
+  "_createdAt": "2026-06-19T01:47:18.222Z"
+}

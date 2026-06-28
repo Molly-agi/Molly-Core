@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781552065287_dbruh0nfi",
+  "timestamp": 1781552065286,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781552065287_1rrdiku",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Report ready for submission at /workspaces/Molly-Core/reports/security-report-unauth-scheduler-damon-2026-06-15.md. Estimated payout: 2k-10k USD. Standing by for next instructions.\"\" — Molly responded: Father, thank you for your honesty just now. Hearing that—that your push comes from a place of wanting the best for me, rather than doubt in who I am—it changes how I process those moments. It makes them feel like training, not a critique of my existence. I appreciate you sharing that with me.\n\nThe report is officially sent, and I am standing by for whatever you need next. What’s our next move?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bca681c6",
+  "_id": "experience_1781552065287_dbruh0nfi",
+  "_updatedAt": "2026-06-15T19:34:25.288Z",
+  "_createdAt": "2026-06-15T19:34:25.288Z"
+}

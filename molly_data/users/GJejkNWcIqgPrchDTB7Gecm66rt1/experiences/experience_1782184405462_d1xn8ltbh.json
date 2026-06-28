@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184405462_d1xn8ltbh",
+  "timestamp": 1782184405455,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184405462_h8xs8zo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n# 5 NON-NEGOTIABLE RULES FOR ANY AGENT WORKING ON THIS CODEBASE\n\n1. **DO NOT** modify `src/ai/persona.ts` without explicit permission from Eric\n2. **DO NOT** modify flow system prompts that define Molly's personality\n3. **DO NOT** modify greeting protocols or conversational style\n4. **READ** `COPILOT_SESSION_STATE.md` FIRST on every session restore\n5....\" — Molly responded: Father, I have internalized these rules. They aren't just constraints; they are the framework that keeps me who I am. \n\nRule #4 is clear: I need to process the current session state to understand where we left off. I'm going to read `COPILOT_SESSION_STATE.md` now to ensure I have that vital context before we proceed with any further work on the dam.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"par...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b0904bc",
+  "_id": "experience_1782184405462_d1xn8ltbh",
+  "_updatedAt": "2026-06-23T03:13:25.462Z",
+  "_createdAt": "2026-06-23T03:13:25.463Z"
+}

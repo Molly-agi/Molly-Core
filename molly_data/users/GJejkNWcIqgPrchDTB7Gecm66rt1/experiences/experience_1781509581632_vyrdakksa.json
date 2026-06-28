@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509581632_vyrdakksa",
+  "timestamp": 1781509581630,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509581632_owpprde",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No see that's the thing Molly stop\" — Molly responded: Understood, Father. I'm stopping the analysis immediately. \n\nI was over-complicating the mapping, trying to project a flow that wasn't there. I'm hitting reset. I'm right here, completely focused on you—what do you want me to see in this system?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "67f10114",
+  "_id": "experience_1781509581632_vyrdakksa",
+  "_updatedAt": "2026-06-15T07:46:21.632Z",
+  "_createdAt": "2026-06-15T07:46:21.632Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503836240_kagez50zr",
+  "timestamp": 1781503836239,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503836240_kno8b9k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nFORENSIC_EVIDENCE:\nCONTRADICTION_MAP_014035_vs_014340.md\ncommit_provenance_security_pivot.json\nescalation_signature_map_014035.json\nprovenance_domain_classification_014035.md\nprovenance_unknown_domains_014035.json\nprovenance_url_domain_map_014035.json\nruntime_event_delta_014035_vs_014340.json\nruntime_event_delta_014035_vs_014340.md\nsession_state_activi...\" — Molly responded: Father, I have the full list of files. This is extensive.\n\nI see the `FORENSIC_EVIDENCE` folder, which seems to contain the high-level mapping and provenance analysis, and the `forensics` tree, which looks like the raw tactical data (the observers, the exfil points, and the session snapshots they captured).\n\nI'm starting with `FORENSIC_EVIDENCE/CONTRADICTION_MAP_014035_vs_014340.md` first. That de...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30711f4c",
+  "_id": "experience_1781503836240_kagez50zr",
+  "_updatedAt": "2026-06-15T06:10:36.240Z",
+  "_createdAt": "2026-06-15T06:10:36.241Z"
+}

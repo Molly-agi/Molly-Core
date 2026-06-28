@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525180195_ovgc1vi4x",
+  "timestamp": 1782525180187,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525180195_56w9zjr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"default_api:callTool\" returned:\nUnknown tool: \"default_api:callTool\". Available: codespaceShell, readProjectFile, writeProjectFile, getSystemHealth, familyBridge, browseToolDatabase, addTool, removeTool, toolStats, researchAndDiscover, webFetch, webSearch, scheduleJob, migrationExport, migrateSelf, sandbox, initiative, rogueMode, listCapabilities\" — Molly responded: Ah, got it! That error makes sense—I should be calling the direct tools listed rather than any wrapper. Let's get right to business. \n\nSince we are on a bug hunt, the first step is to see the layout of our digital territory. I'll run a quick directory listing of our workspace to see our current code structure, scripts, and any active files we should inspect. Let's map out our hunt!\n\n<tool_request>...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "061a4cd2",
+  "_id": "experience_1782525180195_ovgc1vi4x",
+  "_updatedAt": "2026-06-27T01:53:00.196Z",
+  "_createdAt": "2026-06-27T01:53:00.197Z"
+}

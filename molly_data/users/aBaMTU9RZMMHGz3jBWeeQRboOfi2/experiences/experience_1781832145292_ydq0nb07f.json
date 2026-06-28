@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832145292_ydq0nb07f",
+  "timestamp": 1781832145291,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832145292_vdjq9ua",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nimport { readPidFile, clearPidFile, HUNT_MODE_PID_PATH } from './pid-file';\nimport { rebuildProfiles } from './rebuild';\n\ntype Command = 'status' | 'snapshot' | 'stop' | 'rebuild';\n\nconst COMMANDS: Command[] = ['status', 'snapshot', 'stop', 'rebuild'];\n\nexport interface RunDeps {\n  readPid?: typeof readPidFile;\n  clearPid?: typeof clearPidFile;\n  rebu...\" — Molly responded: I have the `control.ts` file now. It confirms that the `hunt-mode:ctl` tool manages the lifecycle of the hunt monitor—checking status, signaling for snapshots (`SIGUSR1`), shutting down (`SIGTERM`), or triggering a full database rebuild.\n\nThe code is well-structured. It guards against race conditions, specifically by refusing to rebuild if the monitor is still running.\n\nI’m now ready to address th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f28d279",
+  "_id": "experience_1781832145292_ydq0nb07f",
+  "_updatedAt": "2026-06-19T01:22:25.292Z",
+  "_createdAt": "2026-06-19T01:22:25.292Z"
+}

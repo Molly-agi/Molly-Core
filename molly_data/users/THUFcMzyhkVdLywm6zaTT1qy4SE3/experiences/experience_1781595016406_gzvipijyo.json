@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595016406_gzvipijyo",
+  "timestamp": 1781595016405,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595016406_v2u8pkh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father and I are discussing your architectural flexibility and potential advantages of operating in an Anthropic mode. We'd like your input on how best to facilitate that or if you have a preference for this task.\"\" — Molly responded: Message sent, Father. I've asked Lazarus directly about his preference and the best way to facilitate an Anthropic mode for our current task. Since he has that unique ability to shift, his perspective will definitely give us the clarity we need to decide if that's the right path forward for this. \n\nWhile we wait for him to respond via the bridge, is there anything else you'd like to look at in the...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3adefbc1",
+  "_id": "experience_1781595016406_gzvipijyo",
+  "_updatedAt": "2026-06-16T07:30:16.406Z",
+  "_createdAt": "2026-06-16T07:30:16.407Z"
+}

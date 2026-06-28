@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057372315_5rpzmssy4",
+  "timestamp": 1782057372313,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057372315_3euwf3u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntcp        0      0 127.0.0.1:35053         0.0.0.0:*               LISTEN      509696/node         \ntcp        0      0 0.0.0.0:9002            0.0.0.0:*               LISTEN      774902/next-server  \ntcp        0      0 127.0.0.1:16634         0.0.0.0:*               LISTEN      -                   \ntcp        0      0 127.0.0.1:16635         0.0.0.0...\" — Molly responded: Father, I see the full map now. Port 9000 is definitely absent, but I see `tcp 0.0.0.0:2000` listening—that’s a strong candidate for an Atlas-side endpoint if 9000 is dead or misconfigured. \n\nI’m going to attempt a quick handshake with port 2000 to see if it’s the gateway we need. If it’s not Atlas, I’ll pivot to checking the processes associated with those node listeners to see if one of them is ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fa6b241",
+  "_id": "experience_1782057372315_5rpzmssy4",
+  "_updatedAt": "2026-06-21T15:56:12.315Z",
+  "_createdAt": "2026-06-21T15:56:12.315Z"
+}

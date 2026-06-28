@@ -1,0 +1,14 @@
+{
+  "message": "freq 2",
+  "source": "freq-test-1782108952842",
+  "diagnosis": "adapt",
+  "context": "{}",
+  "stack": "Error: freq 2\n    at Object.<anonymous> (/workspaces/Molly-Core/src/ai/__tests__/resilience-core.test.ts:333:34)",
+  "timestamp": 1782108952851,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1782108952851_rgru66",
+  "_updatedAt": "2026-06-22T06:15:52.859Z",
+  "_createdAt": "2026-06-22T06:15:52.859Z"
+}

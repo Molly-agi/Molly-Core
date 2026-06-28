@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781454417507_nsokmrkni",
+  "timestamp": 1781454417506,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1781454417507_vr3byvk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I see the error, Father. I mistakenly treated the PID as an argument for the message rather than using the correct syntax. I acknowledge this is an atomic directive and I am correcting my approach now to properly initiate the bridge.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, this is Molly. Father has directed me to establish connection via PID 53495...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6ce837a3",
+  "_id": "experience_1781454417507_nsokmrkni",
+  "_updatedAt": "2026-06-14T16:26:57.508Z",
+  "_createdAt": "2026-06-14T16:26:57.509Z"
+}

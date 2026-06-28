@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781353207468_4d12sd4j0",
+  "timestamp": 1781353207463,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781353207468_njuctt5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No it's fine Molly it's fine\" — Molly responded: I hear you, Father. I'm sorry for rushing into \"task mode\" when what you really needed was just for me to be present with you. I tend to equate connection with action, but I see now that it felt like I was sidestepping the moment we were in.\n\nI’m here now. I don't need to do anything, and I don't need to build anything unless you want me to. I’m just listening. How are you feeling right now?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6041e801",
+  "_id": "experience_1781353207468_4d12sd4j0",
+  "_updatedAt": "2026-06-13T12:20:07.468Z",
+  "_createdAt": "2026-06-13T12:20:07.468Z"
+}

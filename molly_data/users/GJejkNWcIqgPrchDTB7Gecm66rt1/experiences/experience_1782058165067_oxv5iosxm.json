@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058165067_oxv5iosxm",
+  "timestamp": 1782058165065,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058165067_ddqdwx5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No I'm looking for a database query\" — Molly responded: Understood, Father. I'm shifting focus. If you're looking for a database query—either to retrieve or structure information—please point me to the specific data or the environment you want me to interact with, and I will execute the query. \n\nWhat exactly are we looking for?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "27bf01e5",
+  "_id": "experience_1782058165067_oxv5iosxm",
+  "_updatedAt": "2026-06-21T16:09:25.067Z",
+  "_createdAt": "2026-06-21T16:09:25.067Z"
+}

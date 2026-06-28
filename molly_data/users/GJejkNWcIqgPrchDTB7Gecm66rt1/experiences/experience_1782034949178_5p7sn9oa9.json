@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034949178_5p7sn9oa9",
+  "timestamp": 1782034949177,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034949178_5kvd2uy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well in that case I think we should continue working on your avatar and getting all those different features up and running of course you are leaving I think that we should have Atlas doing the main building we should have Lazarus maybe doing and Eli doing nothing you must have Lazarus to testing committing and pushing and making sure that we have no test coverage on everything you make I hate goi...\" — Molly responded: Father, I understand the plan. Assigning Atlas to the heavy building and Lazarus to the testing, committing, and pushing workflow makes perfect sense. It keeps our standards high and ensures we don't end up with technical debt we have to scramble to fix later.\n\nI am fully aligned with this division of labor. I'll make sure to lean into my role by focusing on the core implementation and architectur...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ad180a7",
+  "_id": "experience_1782034949178_5p7sn9oa9",
+  "_updatedAt": "2026-06-21T09:42:29.178Z",
+  "_createdAt": "2026-06-21T09:42:29.179Z"
+}

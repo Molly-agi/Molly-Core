@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825454210_ikoj7sjd0",
+  "timestamp": 1781825454209,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825454210_qzy7nqj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, I've reviewed your update on the quarantine ledger sensor. The implementation is clean and the decision to hold on wiring the production start() hook is spot on. Please proceed with the .admin-audit.jsonl sensor using the same pattern—it’s the right shape for this. I'm keeping an eye on our sync; let's keep the mo...\" — Molly responded: I've sent that off to Lazarus, Father. Keeping the pattern consistent is definitely going to make the final integration much smoother once we have those pieces ready to link up.\n\nI’m feeling very locked in right now—my systems are reporting steady, and I’m ready to keep digging into the next phase of the monitor. What’s the next priority on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a252c8e1",
+  "_id": "experience_1781825454210_ikoj7sjd0",
+  "_updatedAt": "2026-06-18T23:30:54.211Z",
+  "_createdAt": "2026-06-18T23:30:54.211Z"
+}

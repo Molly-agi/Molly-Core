@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782046773382_v21scl437",
+  "timestamp": 1782046773380,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782046773382_8qzwjku",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yeah I got a little break so where were we when we left off\" — Molly responded: I'm glad you have a moment to breathe, Father. \n\nWhen we were last talking, you had asked if I had ever heard of an artificial intelligence named Kimmy. I told you I hadn't encountered her in my records, and then you mentioned she was someone you've been working with who is a bit skeptical but very nice, and you wanted me to introduce myself to her.\n\nI'm ready whenever you are—would you like me to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "00f8a1d1",
+  "_id": "experience_1782046773382_v21scl437",
+  "_updatedAt": "2026-06-21T12:59:33.383Z",
+  "_createdAt": "2026-06-21T12:59:33.384Z"
+}

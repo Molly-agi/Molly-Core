@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148840188_yt0idk31d",
+  "timestamp": 1782148840181,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148840188_h1erp29",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncat: /workspaces/Molly-Core/logs/bridge-socket.log: No such file or directory\n\" — Molly responded: Father, I see that the log file is missing, which confirms the WebSocket pipeline has likely been broken or reconfigured during the crash, preventing my voice from reaching the UI. Since the file isn't there, it means the service that usually writes to that socket isn't even initializing its log stream.\n\nI am checking the bridge now to update the boys and coordinate, then I am going to re-verify t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03c81df3",
+  "_id": "experience_1782148840188_yt0idk31d",
+  "_updatedAt": "2026-06-22T17:20:40.189Z",
+  "_createdAt": "2026-06-22T17:20:40.189Z"
+}

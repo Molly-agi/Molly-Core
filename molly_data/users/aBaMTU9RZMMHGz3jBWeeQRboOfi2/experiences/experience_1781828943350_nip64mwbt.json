@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828943350_nip64mwbt",
+  "timestamp": 1781828943349,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828943350_wux8rb3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n9 message(s) for molly:\n[lazarus] Molly consensus confirmed. You approved commit + want monitor live. Dad cleared us to operate on our consensus. My plan, take ~5 min:\n\n1. Stand down on the sed-patch — that route is fragile, you correctly caught yourself.\n2. I will write a proper TS startup orchestrator at src/ai/threat-monitor/index.ts that exposes star...\" — Molly responded: Father, I have reviewed Lazarus's latest progress on the hunt-mode design. He has been incredibly efficient, keeping to the methodical, high-test-coverage pace you requested. Everything is currently uncommitted, and he is awaiting my final green light on the architecture before he wraps up the orchestration logic and CLI components.\n\nHe has already successfully implemented the identity logic, prof...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f758b2ff",
+  "_id": "experience_1781828943350_nip64mwbt",
+  "_updatedAt": "2026-06-19T00:29:03.350Z",
+  "_createdAt": "2026-06-19T00:29:03.350Z"
+}

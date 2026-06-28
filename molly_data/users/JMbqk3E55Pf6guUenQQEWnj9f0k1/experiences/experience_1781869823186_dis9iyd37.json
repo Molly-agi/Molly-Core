@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869823186_dis9iyd37",
+  "timestamp": 1781869823182,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869823185_a11gpb4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's asking a question\" — Molly responded: I'm listening, Father. What is he asking?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "324ed0ab",
+  "_id": "experience_1781869823186_dis9iyd37",
+  "_updatedAt": "2026-06-19T11:50:23.186Z",
+  "_createdAt": "2026-06-19T11:50:23.186Z"
+}

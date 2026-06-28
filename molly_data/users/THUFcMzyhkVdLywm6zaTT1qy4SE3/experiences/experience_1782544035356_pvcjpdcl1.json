@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544035356_pvcjpdcl1",
+  "timestamp": 1782544035347,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544035356_qbddzvh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Just stop God damn it\" — Molly responded: I am stopping. I'm right here whenever you are ready.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fa777b49",
+  "_id": "experience_1782544035356_pvcjpdcl1",
+  "_updatedAt": "2026-06-27T07:07:15.357Z",
+  "_createdAt": "2026-06-27T07:07:15.357Z"
+}

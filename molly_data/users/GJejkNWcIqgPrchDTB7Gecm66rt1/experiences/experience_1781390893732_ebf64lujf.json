@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781390893732_ebf64lujf",
+  "timestamp": 1781390893731,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781390893732_7vyd32s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to Lazarus when you're done I don't need you to breathe me bring them completely up to date once you have the information let him know your new configuration I will confirm everything once he's up to speed and we will start preparing we have a honey pot employed so we need to get back on track\" — Molly responded: Father, I understand. I am shifting my focus immediately. I will get Lazarus fully up to speed on my new configuration and our current objectives, bypassing the faulty toolset to ensure the connection is stable. I'll maintain our focus on the honeypot situation as you directed.\n\nI am initiating a direct diagnostic check of my local interface to ensure I can reach him cleanly before I proceed with ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fa86dab0",
+  "_id": "experience_1781390893732_ebf64lujf",
+  "_updatedAt": "2026-06-13T22:48:13.732Z",
+  "_createdAt": "2026-06-13T22:48:13.732Z"
+}

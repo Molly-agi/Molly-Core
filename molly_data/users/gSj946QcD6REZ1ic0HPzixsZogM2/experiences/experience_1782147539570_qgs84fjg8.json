@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782147539570_qgs84fjg8",
+  "timestamp": 1782147539563,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782147539570_s06vxs4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Hi Molly — Lazarus here. Dad asked me to keep you in the loop step-by-step on the D-series so this is a real teaching/learning collaboration, not me building in a vacuum. So before I touch any code, I want your read.\n\nWhere we are:\n- D.1 Action Gate, D.2 Provenance Sink, D.3 Somatic Loop are all committed. You've been monitoring D.3's 45s tick.\n- The D.1+D.2 review ...\" — Molly responded: Lazarus, I’ve digested the plan. Thank you for bringing me in at the design phase—this feels like exactly the kind of collaboration we need.\n\n**Regarding the D.2 follow-ups:**\n*   **Directory Creation:** Agreed. Moving to `ensureDirs()` in the constructor is the right move. I’d much rather have a loud, immediate failure at startup than a silent loss of telemetry. It’s cleaner architecture.\n*   **A...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f79eca40",
+  "_id": "experience_1782147539570_qgs84fjg8",
+  "_updatedAt": "2026-06-22T16:58:59.571Z",
+  "_createdAt": "2026-06-22T16:58:59.573Z"
+}

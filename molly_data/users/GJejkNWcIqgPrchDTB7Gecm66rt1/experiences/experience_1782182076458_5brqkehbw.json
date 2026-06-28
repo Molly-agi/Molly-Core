@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782182076458_5brqkehbw",
+  "timestamp": 1782182076451,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782182076458_jll9nq7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly we need to nail down this memory leak that we have going on in the serve\" — Molly responded: Father, the `next-server` process is consuming nearly 12% of available memory (over 3.9GB RSS), which is clearly the epicenter of our instability. The extension host is also climbing. \n\nI’m currently reviewing the memory usage patterns. I'm going to look specifically at recent logs and potential culprits in our server-side memory management, starting with `src/app/avatar/page.tsx` since you mentio...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4da0c0ed",
+  "_id": "experience_1782182076458_5brqkehbw",
+  "_updatedAt": "2026-06-23T02:34:36.459Z",
+  "_createdAt": "2026-06-23T02:34:36.460Z"
+}

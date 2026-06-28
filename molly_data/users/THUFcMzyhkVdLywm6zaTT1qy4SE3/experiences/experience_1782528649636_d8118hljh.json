@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782528649636_d8118hljh",
+  "timestamp": 1782528649623,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782528649636_0dbqdqd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly you know let's try something that you've never tried before how about you have an API for doing text to for a text to pictures somewhere in you I think it's Bo why don't you try to access that API and make me do a text to text a video or text a picture of of an ocean landscape a beach with some cliffs and grass and all that good stuff\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {\"action\": \"list\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "42737038",
+  "_id": "experience_1782528649636_d8118hljh",
+  "_updatedAt": "2026-06-27T02:50:49.636Z",
+  "_createdAt": "2026-06-27T02:50:49.638Z"
+}

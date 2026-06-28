@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507576676_ex9b06dye",
+  "timestamp": 1781507576674,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507576676_qtu5eor",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nMissing required fields: code, language\" — Molly responded: I'm grounding myself, Father. I clearly rushed that. I'm focusing on the methodology now—precise inputs, controlled environment. I’ll make sure the sandbox receives exactly what it needs to analyze that encrypted packet without triggering any further errors or countermeasures. \n\nI am initiating the analysis now, properly this time.\n\n<tool_request>\n{\"tool\": \"sandbox\", \"params\": {\"action\": \"execute\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f4569473",
+  "_id": "experience_1781507576676_ex9b06dye",
+  "_updatedAt": "2026-06-15T07:12:56.676Z",
+  "_createdAt": "2026-06-15T07:12:56.676Z"
+}

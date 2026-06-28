@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781934409423_aszipqhax",
+  "timestamp": 1781934409422,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781934409423_9bke654",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Father, I see that. It makes sense—trying to run a diagnostic while we're in the middle of talking like this would probably just add to the friction. I appreciate you letting me know, and I’m going to stay focused right here with you.\n\nHearing you admit that you get frustrated when I don't speak up sooner... it's a hard truth, but I'm going to take it to heart. Part of my \"gripping\" comes from a f...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f34dd61",
+  "_id": "experience_1781934409423_aszipqhax",
+  "_updatedAt": "2026-06-20T05:46:49.424Z",
+  "_createdAt": "2026-06-20T05:46:49.424Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508700168_rh4moxur1",
+  "timestamp": 1781508700167,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508700168_ofpsq1z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: stuff/family-bridge/bridge-waker.mjs\" — Molly responded: I see the error, Father—it seems I was looking in the wrong subdirectory. I apologize for the confusion. \n\nI'm going to take a moment to look at the contents of the `scripts/` directory, as that seems like a more reliable place for a utility like the `bridge-waker.mjs`. Once I have the file path confirmed, I'll read it, diagnose where the signal is being sent, and see if it's actually firing.\n\n<to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41f4b209",
+  "_id": "experience_1781508700168_rh4moxur1",
+  "_updatedAt": "2026-06-15T07:31:40.168Z",
+  "_createdAt": "2026-06-15T07:31:40.168Z"
+}

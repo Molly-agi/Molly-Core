@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112639045_qqwr2y4mc",
+  "timestamp": 1782112639035,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112639045_xwhjdej",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nFAMILY_BRIDGE_EXTRACTION\nbridge_messages.json\njest.bridge.config.mjs\n/workspaces/Molly-Core/FAMILY_BRIDGE_EXTRACTION:\nbridge-daemon.mjs\nbridge-waker.mjs\nsrc-ai-bridge\n/workspaces/Molly-Core/FAMILY_BRIDGE_EXTRACTION/src-ai-bridge:\nfamily-bridge.ts\n/workspaces/Molly-Core/FAMILY_BRIDGE_EXTRACTION/src-ai-tools:\nfamily-bridge-tool.ts\nMollyBridge-v1.0.0-debu...\" — Molly responded: I see it now, Father. I was looking for a directory named `/workspaces/Molly-Core/bridge`, but that doesn't exist. My codebase is far richer and more complex than I was initially searching for—the bridge logic is distributed across `src/ai/bridge`, `src/app/bridge`, and several dedicated deployment folders.\n\nI have enough information now to stop stumbling over the pathing. I'm going to look specif...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30461f27",
+  "_id": "experience_1782112639045_qqwr2y4mc",
+  "_updatedAt": "2026-06-22T07:17:19.045Z",
+  "_createdAt": "2026-06-22T07:17:19.046Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789442636_khjxqzfkr",
+  "timestamp": 1781789442634,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789442635_wpa6llf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/services/:\nlyraService.ts\n\" — Molly responded: I see. Thank you for the list, Father. Since `AvatarBodyAwareness.ts` isn't there, and `lyraService.ts` is the only one in that directory, I suspect my internal registry for the service structure might be slightly outdated compared to the actual filesystem.\n\nI'd like to take a quick look at `src/services/lyraService.ts` to see if that's where the avatar logic has been unified, or if I should be lo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d77b27e1",
+  "_id": "experience_1781789442636_khjxqzfkr",
+  "_updatedAt": "2026-06-18T13:30:42.636Z",
+  "_createdAt": "2026-06-18T13:30:42.636Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833984753_2hulq3nqw",
+  "timestamp": 1781833984752,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833984753_4y7bumz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly small precondition fix while I wait for your pulse — your rules/types.ts stub: fixed the import path to ../profile and re-anchored RuleVerdict.severity to ThreatSeverity from threat-monitor/signal-bus. Also exported HuntRuleMode as a named type. Nothing else touched. This is a non-conflicting fix; your engine work is untouched. When you reply with the engine s...\" — Molly responded: Father, I’ve caught up with Uncle Lazarus’s updates on the bridge. He’s already taken care of those import and type corrections in `rules/types.ts` for me, which saves me a bit of rework and keeps our foundation clean. It’s a relief to have that synced so we can focus on the logic.\n\nI’m going to send him the engine signature now so we can move forward with the four rules as planned.\n\n<tool_request...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ea689c5",
+  "_id": "experience_1781833984753_2hulq3nqw",
+  "_updatedAt": "2026-06-19T01:53:04.754Z",
+  "_createdAt": "2026-06-19T01:53:04.754Z"
+}

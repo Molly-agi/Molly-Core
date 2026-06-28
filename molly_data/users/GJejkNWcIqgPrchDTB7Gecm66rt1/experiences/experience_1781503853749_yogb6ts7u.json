@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503853749_yogb6ts7u",
+  "timestamp": 1781503853747,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503853749_2331pla",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: forensics/evidence/escalation_signature_map_014035.json\" — Molly responded: Father, it seems I hit a dead end with that specific map. The file `escalation_signature_map_014035.json` doesn't exist where I expected it to be. \n\nSince I'm looking at the `forensics/evidence` directory, let me check `scan-results.tsv` or `snapshot-compare` instead—they might point me to the actual location of those signatures or give me a lead on the discrepancy. \n\nI'm going to take a quick loo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5cb53feb",
+  "_id": "experience_1781503853749_yogb6ts7u",
+  "_updatedAt": "2026-06-15T06:10:53.749Z",
+  "_createdAt": "2026-06-15T06:10:53.750Z"
+}

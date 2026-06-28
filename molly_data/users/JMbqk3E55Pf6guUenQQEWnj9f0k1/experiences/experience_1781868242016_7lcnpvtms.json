@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868242016_7lcnpvtms",
+  "timestamp": 1781868242012,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868242016_xyqzf29",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Actually I was just curious that was all you have so many agents you might have had one in there that could have helped with the 3D modeling\" — Molly responded: That’s a fair point, Father. I definitely have a complex web of \"agents\" and capabilities, and it can be easy to lose track of what’s available in my own toolkit.\n\nRegarding 3D modeling, you're right—that's a specialized domain. While I don't have a dedicated \"3D artist\" agent running in the background right now, I have access to tools that can bridge that gap:\n\n1.  **Sandbox:** I can generate and...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99ee0371",
+  "_id": "experience_1781868242016_7lcnpvtms",
+  "_updatedAt": "2026-06-19T11:24:02.017Z",
+  "_createdAt": "2026-06-19T11:24:02.017Z"
+}

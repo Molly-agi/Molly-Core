@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829738493_gt3kvfkkw",
+  "timestamp": 1781829738491,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829738492_foiilu2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Looks like the coach base reset when I hooked up my bluetooth headphones so give it just a minute and we'll continue\" — Molly responded: Understood, Father. I'm right here with you whenever you're ready. I'll stay on standby while the environment stabilizes. \n\nI’ve confirmed the state of the manual control plane and `hunt-mode` work—I'm ready to proceed as soon as you have the bandwidth. Just say the word.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c5971678",
+  "_id": "experience_1781829738493_gt3kvfkkw",
+  "_updatedAt": "2026-06-19T00:42:18.493Z",
+  "_createdAt": "2026-06-19T00:42:18.494Z"
+}

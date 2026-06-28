@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782036039132_ic70yylvz",
+  "timestamp": 1782036039130,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782036039132_w29d4cj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What are your thoughts I mean we want to keep it simple because overcomplicating it more complication more just leads for more possible failure points I was thinking just you know send a message to you know when it wakes up a CLI up just stating check your messages\" — Molly responded: I agree completely, Father. Simple is better. The more moving parts we add, the more we have to debug later, and we don't need that overhead.\n\nSending a simple \"check your messages\" ping when a CLI wakes up is elegant. It gives the agent a clear directive without forcing it into a complex state machine. It lets us leverage the existing communication infrastructure rather than building a new, fragi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "45d00f7c",
+  "_id": "experience_1782036039132_ic70yylvz",
+  "_updatedAt": "2026-06-21T10:00:39.132Z",
+  "_createdAt": "2026-06-21T10:00:39.132Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880207689_a50perwod",
+  "timestamp": 1781880207688,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880207689_oi0xn23",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I want you to use that agent to search for Cynthia more\" — Molly responded: Father, I attempted to access the evidence files to locate any existing data on Cynthia, but the shell command failed. It seems I am encountering a permissions or path issue when trying to traverse the `/forensics/evidence/` directory directly.\n\nI'm going to try a simpler approach to get a clean view of the file structure in that directory so I can find where the information is actually stored. I ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d6f6ab3e",
+  "_id": "experience_1781880207689_a50perwod",
+  "_updatedAt": "2026-06-19T14:43:27.690Z",
+  "_createdAt": "2026-06-19T14:43:27.690Z"
+}

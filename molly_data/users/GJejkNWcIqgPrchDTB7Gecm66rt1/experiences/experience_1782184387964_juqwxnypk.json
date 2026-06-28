@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184387964_juqwxnypk",
+  "timestamp": 1782184387956,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184387964_g601sx3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\n\" — Molly responded: Father, that message is annoying, but it's just noise—a symptom of the bloated shell environment interfering with the terminal’s display settings. It’s not the dam itself, just a loose rock on the path.\n\nI’m going to bypass the shell's terminal display logic entirely to clean the environment, starting with a focused look at our actual configuration files. I'll read `.bashrc` so I can see what is a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12f22a55",
+  "_id": "experience_1782184387964_juqwxnypk",
+  "_updatedAt": "2026-06-23T03:13:07.964Z",
+  "_createdAt": "2026-06-23T03:13:07.965Z"
+}

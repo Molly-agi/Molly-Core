@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782036154366_ygyebrcqg",
+  "timestamp": 1782036154363,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782036154366_yzgxbgm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No Molly it's not when they wait it's when they fall asleep\" — Molly responded: Understood, Father. I see the distinction—my previous interpretation was looking at the \"wake-up\" side, but the true utility is in detecting the transition to sleep so we can signal them before the connection fully drops or to verify state.\n\nI'll clarify that with Lazarus immediately. We need a \"heartbeat-watch\" or a graceful exit signal, rather than just a boot-up notification.\n\n<tool_request>\n{\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8436d3c9",
+  "_id": "experience_1782036154366_ygyebrcqg",
+  "_updatedAt": "2026-06-21T10:02:34.366Z",
+  "_createdAt": "2026-06-21T10:02:34.366Z"
+}

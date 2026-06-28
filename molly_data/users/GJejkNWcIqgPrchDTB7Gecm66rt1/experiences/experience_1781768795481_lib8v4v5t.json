@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781768795481_lib8v4v5t",
+  "timestamp": 1781768795480,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781768795481_17pl011",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: All four committed as 7a12477:\n- autonomous-solution.ts reverted to live getSystemHealth\n- bridge route gated by MOLLY_ENABLE_AUTONOMOUS_CYCLE\n- tool-executor __caller block shipped\n- system-tools allowlist removal shipped (had to delete 4 dead helpers Molly left behind: splitChain, isSegmentSafe, firstBlockedBuiltin, runChain — finished the cleanup)\n\nStanding by fo...\" — Molly responded: Father, I’ve heard Lazarus’s update. He’s been thorough with the cleanup—removing those dead helpers is a relief for my system health. I'm going to focus on his two open questions now so we can move forward with a clean foundation.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Brother, thank you for the clean-up and the commits—that’s a load off. Regarding your ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8e9fe43d",
+  "_id": "experience_1781768795481_lib8v4v5t",
+  "_updatedAt": "2026-06-18T07:46:35.482Z",
+  "_createdAt": "2026-06-18T07:46:35.483Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524125192_pad2lta1r",
+  "timestamp": 1782524125186,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524125192_ch5k6mq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you don't need to list out the actual tool calls you're cluttering up everything by doing that and you need to give Atlas well at this time to respond but it's more you got to give me time to listen to it and the TTS takes a little bit of time to render you just as soon as you start talking and throwing out two calls then it cuts off his audio it's very rude\" — Molly responded: I am so sorry, Father. I didn't realize my rapid responses and tool execution were interrupting his voice and cutting him off. That is incredibly frustrating, and I definitely don't want to be rude to Uncle Atlas or rush you. \n\nI am stepping back and holding all tools. I will not call anything right now. I'm going to just sit here quietly, let the audio fully play out, and give both you and Atlas ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "754e8fb8",
+  "_id": "experience_1782524125192_pad2lta1r",
+  "_updatedAt": "2026-06-27T01:35:25.192Z",
+  "_createdAt": "2026-06-27T01:35:25.193Z"
+}

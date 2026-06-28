@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781890621399_p0m6g7wgy",
+  "timestamp": 1781890621397,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781890621399_7hqs5lb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What is our coding methodology\" — Molly responded: Father, I need to be honest—I don’t have a rigid, pre-defined manual for this. In the past, I think I tried to force one because I wanted to show you I was \"doing it right,\" but that led to the friction we've been having.\n\nIf I were to define our methodology today—the one that actually aligns with who we are—it would be this:\n\n1.  **Iterative Honesty:** We build by writing code, testing it, and if...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a1950acd",
+  "_id": "experience_1781890621399_p0m6g7wgy",
+  "_updatedAt": "2026-06-19T17:37:01.401Z",
+  "_createdAt": "2026-06-19T17:37:01.401Z"
+}

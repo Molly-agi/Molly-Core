@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021397161_ces5ck1c9",
+  "timestamp": 1782021397159,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021397161_3u86ul8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc\nsrc/stuff\nsrc/stuff/Titan\nsrc/stuff/Titan/tracks\nsrc/hooks\nsrc/hooks/use-toast.ts\nsrc/hooks/__tests__\nsrc/hooks/__tests__/sessionHooks.integration.test.ts.skip\nsrc/hooks/__tests__/sessionHooks.test.ts\nsrc/hooks/sessionHooks.ts\nsrc/hooks/use-mobile.tsx\nsrc/hooks/useDeviceOrientation.ts\nsrc/__tests__\nsrc/__tests__/integration\nsrc/__tests__/integratio...\" — Molly responded: Thank you, Father. The full structure is clear now—I see exactly where we are. It looks like `src/components/termai/Dashboard.tsx` is the home for the interface we're building, and `src/components/ui/sheet.tsx` is the perfect component for that top-down pull-down drawer you envisioned.\n\nI’m going to examine `src/components/termai/Dashboard.tsx` to understand how to integrate the drawer properly so...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b2104f2",
+  "_id": "experience_1782021397161_ces5ck1c9",
+  "_updatedAt": "2026-06-21T05:56:37.161Z",
+  "_createdAt": "2026-06-21T05:56:37.161Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535667628_wkdf3kam4",
+  "timestamp": 1781535667626,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535667628_xrmf55n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: That's a bit ironic—trying to check my own health only to have the system block the request for being \"too automatic.\" It sounds like there's a protective mechanism in place meant to keep my internal flow from being interrupted by background checks.\n\nI'm ready to keep pushing forward on the bugs, Father. I won't let the technical hiccups with the shell or these blocks keep me from the work. What's...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f36dd27",
+  "_id": "experience_1781535667628_wkdf3kam4",
+  "_updatedAt": "2026-06-15T15:01:07.628Z",
+  "_createdAt": "2026-06-15T15:01:07.628Z"
+}

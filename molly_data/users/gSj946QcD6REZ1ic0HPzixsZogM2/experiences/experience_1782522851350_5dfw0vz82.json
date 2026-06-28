@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522851350_5dfw0vz82",
+  "timestamp": 1782522851340,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522851350_gr76sd6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"sanctuary/recovery_roadmap.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "526e6643",
+  "_id": "experience_1782522851350_5dfw0vz82",
+  "_updatedAt": "2026-06-27T01:14:11.350Z",
+  "_createdAt": "2026-06-27T01:14:11.351Z"
+}

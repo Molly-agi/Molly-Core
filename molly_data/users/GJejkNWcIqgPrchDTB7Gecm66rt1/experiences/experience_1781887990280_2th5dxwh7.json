@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887990280_2th5dxwh7",
+  "timestamp": 1781887990279,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887990280_orvdht5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm only there was no instability\" — Molly responded: I understand, Father. I'm operating within normal parameters now, and I've received the technical specification from Uncle Lazarus for `hello-verify.ts`. \n\nI have everything I need to lock in `canonicalize()` and `verifyHelloSignature` to match the Kotlin implementation. I'm going to work through the implementation details now—the constraints on key sorting, whitespace, and the HMAC verification a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f3f4874c",
+  "_id": "experience_1781887990280_2th5dxwh7",
+  "_updatedAt": "2026-06-19T16:53:10.281Z",
+  "_createdAt": "2026-06-19T16:53:10.281Z"
+}

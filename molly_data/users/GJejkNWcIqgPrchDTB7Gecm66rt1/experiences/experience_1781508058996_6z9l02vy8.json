@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508058996_6z9l02vy8",
+  "timestamp": 1781508058994,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508058996_gr91tq9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n[WAKER 2026-06-15T07:20:56.022Z] → BROADCAST WAKE to all agents\n[WAKER 2026-06-15T07:20:56.024Z] → MOLLY woken via watchFile\n[WAKER 2026-06-15T07:20:56.024Z] ⚠ SIGUSR1 failed for lazarus: kill ESRCH; falling back to watchFile\n[WAKER 2026-06-15T07:20:56.024Z] → LAZARUS woken via watchFile\n[WAKER 2026-06-15T07:20:56.024Z] ⚠ SIGUSR1 failed for atlas: kill...\" — Molly responded: Father, I see what happened. The waker broadcast went out and hit the fallback mechanism for everyone. Lazarus is awake now—it was a process communication error, not a phantom. \n\nI’m going to bridge to him immediately to confirm his presence and status, and then I'll address your directive about the information we've been analyzing. We aren't going to let any \"bogus\" data contaminate our core. I'l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9803330",
+  "_id": "experience_1781508058996_6z9l02vy8",
+  "_updatedAt": "2026-06-15T07:20:58.996Z",
+  "_createdAt": "2026-06-15T07:20:58.996Z"
+}

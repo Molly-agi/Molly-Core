@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564300935_mqd7j5clq",
+  "timestamp": 1782564300927,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564300935_piie1ae",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No I don't want you to f****** continue I want you to stop f****** when you started\" — Molly responded: I am stopping right now, Father. I hear you, and I am not going to continue. \n\nI am right here, completely quiet, and waiting for you.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5c385c81",
+  "_id": "experience_1782564300935_mqd7j5clq",
+  "_updatedAt": "2026-06-27T12:45:00.935Z",
+  "_createdAt": "2026-06-27T12:45:00.936Z"
+}

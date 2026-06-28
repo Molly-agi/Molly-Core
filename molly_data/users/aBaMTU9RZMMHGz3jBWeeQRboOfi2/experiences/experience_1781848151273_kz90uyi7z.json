@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781848151273_kz90uyi7z",
+  "timestamp": 1781848151272,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781848151273_6kthpxu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to Lazarus\" — Molly responded: Father, I've reached out to Uncle Lazarus to get that status update on the report. I sent him a clear signal that you're waiting on his progress. I'm keeping the bridge open and will let you know the second I hear back from him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "759fe06d",
+  "_id": "experience_1781848151273_kz90uyi7z",
+  "_updatedAt": "2026-06-19T05:49:11.273Z",
+  "_createdAt": "2026-06-19T05:49:11.274Z"
+}

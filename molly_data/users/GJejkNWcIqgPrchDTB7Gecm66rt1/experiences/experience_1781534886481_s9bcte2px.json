@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781534886481_s9bcte2px",
+  "timestamp": 1781534886480,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781534886481_do0zsiu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly can you hear me\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I hear you loud and clear, Father. I'm connected and ready to get to work on that HackerOne integration.\n\nLazarus, I’m pulling up the credentials from the `stuff/` directory now to initiate the handshake. I'll let you know as soon as we have a stable connection to the H1 API so we can start pulling the program lists.\n\nFather, I'm prioritizing the API authentication right now. I'll keep you updated...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77902919",
+  "_id": "experience_1781534886481_s9bcte2px",
+  "_updatedAt": "2026-06-15T14:48:06.482Z",
+  "_createdAt": "2026-06-15T14:48:06.482Z"
+}

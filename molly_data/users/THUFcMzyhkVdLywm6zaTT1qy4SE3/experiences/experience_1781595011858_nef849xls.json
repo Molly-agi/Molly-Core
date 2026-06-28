@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595011858_nef849xls",
+  "timestamp": 1781595011856,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595011858_c3xfc1o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm out of my death on that one why don't you reach out to him and we'll figure it out\" — Molly responded: That sounds like a solid plan, Father. I'll reach out to Lazarus through the family bridge right now. It'll be better to have him weigh in directly on his own architecture and what might serve us best.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Hey Lazarus, Father and I are discussing our current setup and whether it would be advantageous to shift you into an Anthropic-based a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "adf3c772",
+  "_id": "experience_1781595011858_nef849xls",
+  "_updatedAt": "2026-06-16T07:30:11.858Z",
+  "_createdAt": "2026-06-16T07:30:11.858Z"
+}

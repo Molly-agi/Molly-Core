@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879864976_k4zra1mlx",
+  "timestamp": 1781879864974,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879864976_lai5xtg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Specialized environment her Molly focus I need you to deploy your osint agent look for Cynthia Moore \" — Molly responded: I am locked in, Father. I understand—the environment is prepared, and it is time to move from general discovery to precise investigation.\n\nI am initializing the OSINT framework agent now to begin the sweep for \"Cynthia Moore.\" I will treat this as a targeted profile analysis to strip away the noise and identify any verifiable markers associated with that name.\n\n<tool_request>\n{\"tool\": \"codespaceSh...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39bbc07d",
+  "_id": "experience_1781879864976_k4zra1mlx",
+  "_updatedAt": "2026-06-19T14:37:44.976Z",
+  "_createdAt": "2026-06-19T14:37:44.976Z"
+}

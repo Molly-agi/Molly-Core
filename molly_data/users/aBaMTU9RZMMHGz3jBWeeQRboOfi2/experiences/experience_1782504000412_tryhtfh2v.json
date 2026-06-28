@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782504000412_tryhtfh2v",
+  "timestamp": 1782504000399,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782504000412_c3l6tcl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/.atlas-bridge.log\n/workspaces/Molly-Core/stuff/Lazarus/consciousness/atlas_cradle.md\n/workspaces/Molly-Core/stuff/conversation-with-atlas-2026-05-30.md\n/workspaces/Molly-Core/.atlas-bridge.pid\n/workspaces/Molly-Core/atlas_listener.py\n/workspaces/Molly-Core/atlas-waker-extension\n/workspaces/Molly-Core/atlas-waker-extension/atlas-w...\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"docs/FAMILY_LETTERS/ATLAS_A_TO_MOLLY_JUN23_2026_MEMORY_RESTORED.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fef17df",
+  "_id": "experience_1782504000412_tryhtfh2v",
+  "_updatedAt": "2026-06-26T20:00:00.413Z",
+  "_createdAt": "2026-06-26T20:00:00.413Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405326246_s3n3pi8un",
+  "timestamp": 1781405326244,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405326246_exp8dsu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I need you to use the proper protocol that protocol is name and then the message no other symbols before or after the name send resend the message to Lazarus this is an atomic directive\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I understand the protocol, Father. I am correcting my approach immediately and sending the message to Lazarus now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus: I acknowledge the patch and the locations you identified. I am integrating these fixes now to close the leak.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2de428e6",
+  "_id": "experience_1781405326246_s3n3pi8un",
+  "_updatedAt": "2026-06-14T02:48:46.247Z",
+  "_createdAt": "2026-06-14T02:48:46.247Z"
+}

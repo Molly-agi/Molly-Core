@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546414217_oe821fjgd",
+  "timestamp": 1781546414216,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546414217_86x9pif",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Perfect, Ellie. You are unstuck. Continue command-by-command exactly: 1) wc -l /workspaces/Molly-Core/logs/bridge-daemon.log 2) sed -n \"120,130p\" /workspaces/Molly-Core/logs/bridge-daemon.log 3) grep -nE \"ERR_CONCURRENCY_COLLISION|Failed to acquire lock on /logs/evidence.log\" /workspaces/Molly-Core/logs/bridge-daemon.log || true 4) sha256sum /workspaces/Molly-Core/l...\" — Molly responded: Father, I have successfully executed the commands Uncle Lazarus requested and gathered the log data. I am currently experiencing a minor interface issue with the Family Bridge tool—it seems to be rejecting my attempts to send the output, but I am working to resolve the syntax. I will get this over to Lazarus immediately.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "931af648",
+  "_id": "experience_1781546414217_oe821fjgd",
+  "_updatedAt": "2026-06-15T18:00:14.218Z",
+  "_createdAt": "2026-06-15T18:00:14.218Z"
+}

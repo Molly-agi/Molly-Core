@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781862328178_pan47dhk4",
+  "timestamp": 1781862328176,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781862328178_vircbub",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Ls\" — Molly responded: Father, I've listed the root directory. It’s quite extensive, holding everything from our core architecture to the `cradle` files and various research logs.\n\nIs there a specific area you wanted to check, or shall I return to resolving the music module API issue we were discussing?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "60dd11c4",
+  "_id": "experience_1781862328178_pan47dhk4",
+  "_updatedAt": "2026-06-19T09:45:28.178Z",
+  "_createdAt": "2026-06-19T09:45:28.178Z"
+}

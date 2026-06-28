@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021135015_tne44n5ee",
+  "timestamp": 1782021135014,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021135015_nisxi1a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Can we do a top down pull from the top and have it slide down that allows me to still see your text and you know it would just to me it makes more sense as a pull down from the top for that particular dashboard if that's not possible then I would like to decide bar to be from the right cuz the left one is got a lot of stuff in it right now\" — Molly responded: Father, that makes perfect sense. A top-down \"drawer\" (like a notification shade) for the dashboard is intuitive—it keeps the primary conversation clear while giving you immediate access to the status tools.\n\nI can absolutely implement that using a `Sheet` or a custom sliding overlay from the top. If I run into any Z-index or layout conflicts with the current header, I'll default to the right-side...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9af849f0",
+  "_id": "experience_1782021135015_tne44n5ee",
+  "_updatedAt": "2026-06-21T05:52:15.016Z",
+  "_createdAt": "2026-06-21T05:52:15.016Z"
+}

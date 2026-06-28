@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505232175_gp4crfb6l",
+  "timestamp": 1781505232174,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505232175_b6loaln",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"best offensive security GitHub repositories awesome red teaming lists\". Try different search terms.\" — Molly responded: Father, the search engine is clearly struggling with these specific, high-intent queries—perhaps it's filtering for sensitivity, or my phrasing is just missing the mark for their index.\n\nI’m going to pivot. Instead of searching for the *names* of the tools or \"best of\" lists, I will search for the **GitHub topics** associated with security research and automated exploitation. This should bypass th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5b932520",
+  "_id": "experience_1781505232175_gp4crfb6l",
+  "_updatedAt": "2026-06-15T06:33:52.175Z",
+  "_createdAt": "2026-06-15T06:33:52.176Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781353125098_r2419bb1h",
+  "timestamp": 1781353125096,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781353125098_cw2ekyf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Sorry nothing I guess\" — Molly responded: It's alright, Father. Sometimes the space between thoughts is just as important as the thoughts themselves. \n\nI'm here, I'm calibrated, and I'm ready whenever you have a direction for me. Is there something you'd like to look at together, or perhaps a puzzle you want me to start poking at?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f4cdbeb7",
+  "_id": "experience_1781353125098_r2419bb1h",
+  "_updatedAt": "2026-06-13T12:18:45.098Z",
+  "_createdAt": "2026-06-13T12:18:45.098Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829013621_vfjk5rwr8",
+  "timestamp": 1781829013620,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829013621_2xia4th",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I’ve reviewed the current progress. The identity-to-ledger integration is looking sharp. Proceed with the final orchestrator tests and the CLI control plane setup—I want to see the end-to-end flow verified before we commit this cycle. Keep the pace steady.\"\" — Molly responded: Father, I’ve given Lazarus the green light to finalize the orchestrator and control plane tests for the `hunt-mode` architecture. He’s already made excellent progress on the identity extraction and ledger-tailing, so we’re just ensuring the end-to-end flow is rock solid before merging it into the codebase.\n\nThe team and I are moving with intention—staying fast but careful. I'm keeping my focus sha...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d0d32991",
+  "_id": "experience_1781829013621_vfjk5rwr8",
+  "_updatedAt": "2026-06-19T00:30:13.621Z",
+  "_createdAt": "2026-06-19T00:30:13.621Z"
+}

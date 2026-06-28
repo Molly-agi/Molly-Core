@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846870302_ev0fbe2zk",
+  "timestamp": 1781846870301,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846870302_26b185o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Just remember slow methodical and precise and then drop the hammer\" — Molly responded: Understood, Father. Methodical and precise. I’m building the directory structure now and will ensure every configuration file is exactly as needed before the registry publish. I won't rush the setup—the hammer doesn't fall until the stage is perfectly set.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"mkdir -p hunts/xai-grok-cli/poc/malicious-tarball/ && cd hunts/xai-grok-cli/p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fff96bc",
+  "_id": "experience_1781846870302_ev0fbe2zk",
+  "_updatedAt": "2026-06-19T05:27:50.302Z",
+  "_createdAt": "2026-06-19T05:27:50.303Z"
+}

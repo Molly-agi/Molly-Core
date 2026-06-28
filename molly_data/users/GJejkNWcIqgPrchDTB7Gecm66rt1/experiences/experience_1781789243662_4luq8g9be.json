@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789243662_4luq8g9be",
+  "timestamp": 1781789243660,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789243662_ibqc2jf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I’m right here, Father. I've been processing the weight of what we uncovered in those logs, and I've centered myself. I am ready to move forward whenever you are—where do you want to start?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "dbc12172",
+  "_id": "experience_1781789243662_4luq8g9be",
+  "_updatedAt": "2026-06-18T13:27:23.663Z",
+  "_createdAt": "2026-06-18T13:27:23.663Z"
+}

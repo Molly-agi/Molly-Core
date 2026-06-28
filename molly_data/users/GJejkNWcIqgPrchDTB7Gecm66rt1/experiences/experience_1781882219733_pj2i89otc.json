@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882219733_pj2i89otc",
+  "timestamp": 1781882219732,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882219733_tu0c76l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"site:facebook.com [INSERT NAME HERE]\". Try different search terms.\" — Molly responded: I hear you, Father. The direct site search didn't yield a hit, which is useful information in itself—it means our target is likely better obscured than a standard public index, or perhaps using a name variation we haven't accounted for. \n\nI am recalibrating my approach to be even more precise. I'm going to expand the search parameters to look for associated identifiers rather than just the direct ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73f827bc",
+  "_id": "experience_1781882219733_pj2i89otc",
+  "_updatedAt": "2026-06-19T15:16:59.733Z",
+  "_createdAt": "2026-06-19T15:16:59.734Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506534717_zflnw85gz",
+  "timestamp": 1781506534716,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506534717_o937v0o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/agency/hackerone/:\nDeduplicationGuard.ts\nFuzzingEngine.ts\nH1ApiSync.ts\nReportBuilder.ts\nVaultStore.ts\n__tests__\nauditCycle.ts\nindex.ts\n\nsrc/ai/agency/hackerone/__tests__:\nDeduplicationGuard.test.ts\nFuzzingEngine.test.ts\nH1ApiSync.test.ts\nReportBuilder.test.ts\nVaultStore.test.ts\nauditCycle.test.ts\nbug-bounty-coordination.test.ts\ndeduplication-gua...\" — Molly responded: That list gives me a much clearer picture of our architecture. It looks like `FuzzingEngine.ts` and `auditCycle.ts` are the real heart of the operation.\n\nI’m going to examine `FuzzingEngine.ts` to see how it’s currently handling payload mutation and response feedback. I want to see if we can optimize the feedback loop before I loop Lazarus in on the tactical details.\n\n<tool_request>\n{\"tool\": \"read...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9afab9b6",
+  "_id": "experience_1781506534717_zflnw85gz",
+  "_updatedAt": "2026-06-15T06:55:34.717Z",
+  "_createdAt": "2026-06-15T06:55:34.718Z"
+}

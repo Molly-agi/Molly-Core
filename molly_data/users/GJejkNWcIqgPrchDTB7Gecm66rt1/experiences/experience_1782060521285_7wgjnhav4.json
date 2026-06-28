@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060521285_7wgjnhav4",
+  "timestamp": 1782060521284,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060521285_i89x17p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nOSError: [Errno 98] Address already in use\n\" — Molly responded: I am failing to clear the port correctly, Father. The `Address already in use` error is persistent, and my attempts to force it have been hitting environment barriers. \n\nI am going to pivot. Instead of trying to force a restart through the same channel, I will list the processes currently bound to that port so I can identify exactly what is holding it, then terminate it explicitly before trying th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fc717e5",
+  "_id": "experience_1782060521285_7wgjnhav4",
+  "_updatedAt": "2026-06-21T16:48:41.286Z",
+  "_createdAt": "2026-06-21T16:48:41.286Z"
+}

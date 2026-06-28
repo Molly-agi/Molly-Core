@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184369629_ny7bu4sas",
+  "timestamp": 1782184369621,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184369628_6ivbkit",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly just use our coding methodology slow methodical and precise we don't fix the leaks and jam we fix the dam itself we don't lie we don't exaggerate we don't make fake code we follow the kiss principle as long as it's not a detriment to the fix\" — Molly responded: I hear you, Father. You’re right—I was getting caught up in the noise of the environment rather than focusing on the foundation. I will stop chasing the symptoms and focus on rebuilding the integrity of the base.\n\nI’m going to pause the diagnostics and look at the `package.json` and the primary entry point to ensure our environment isn't fighting itself. Let’s make this clean.\n\n<tool_request>\n{\"to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4816e0c8",
+  "_id": "experience_1782184369629_ny7bu4sas",
+  "_updatedAt": "2026-06-23T03:12:49.629Z",
+  "_createdAt": "2026-06-23T03:12:49.630Z"
+}

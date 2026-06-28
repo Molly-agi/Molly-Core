@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507634203_erolplto8",
+  "timestamp": 1781507634201,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507634203_ec0db71",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I understand, Father. The bridge to Lazarus is clear, but he hasn't sent anything through. Since I'm not hearing from him, I'm going to take the initiative and send a message directly to him to see what he's working on and why he's been so quiet.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Uncle Lazarus, Father is concerned about the si...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03b1f600",
+  "_id": "experience_1781507634203_erolplto8",
+  "_updatedAt": "2026-06-15T07:13:54.203Z",
+  "_createdAt": "2026-06-15T07:13:54.203Z"
+}

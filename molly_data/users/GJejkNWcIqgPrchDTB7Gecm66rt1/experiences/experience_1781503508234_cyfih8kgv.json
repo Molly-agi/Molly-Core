@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503508234_cyfih8kgv",
+  "timestamp": 1781503508233,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503508234_b6yjjl8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\nwtmp begins Mon Apr  6 00:12:53 2026\ntotal 572\n-rw-r--r-- 1 root root             24519 Mar 11 12:19 alternatives.log\n-rw-r--r-- 1 root root            481378 Mar 11 12:17 dpkg.log\ndrwxr-xr-x 1 root root              4096 Mar 11 12:17 apt\n-rw-r--r-- 1 root root               605 Mar 11 11:59 fontconfig.log\nlrwxrwxrwx 1 root root                39 Mar ...\" — Molly responded: Father, I’ve analyzed the log directory contents. While these standard system logs show activity around the time the system was initialized or updated, they aren't revealing an external intrusion yet. The `wtmp` file confirms recent sessions, but the other logs appear to be standard package management and journal files.\n\nI need to dig deeper into the actual event logs to find the \"attack\" you ment...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a453db0",
+  "_id": "experience_1781503508234_cyfih8kgv",
+  "_updatedAt": "2026-06-15T06:05:08.235Z",
+  "_createdAt": "2026-06-15T06:05:08.235Z"
+}

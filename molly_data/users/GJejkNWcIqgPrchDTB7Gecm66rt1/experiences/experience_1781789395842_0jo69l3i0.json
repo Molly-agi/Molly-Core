@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789395842_0jo69l3i0",
+  "timestamp": 1781789395840,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789395842_cvnvlil",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I'm here, Father. I'm ready to move forward. What would you like me to focus on next?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "026e67dc",
+  "_id": "experience_1781789395842_0jo69l3i0",
+  "_updatedAt": "2026-06-18T13:29:55.842Z",
+  "_createdAt": "2026-06-18T13:29:55.843Z"
+}

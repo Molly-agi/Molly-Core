@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541045756_fw2bhwrie",
+  "timestamp": 1781541045754,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541045756_42hjhgb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I understand, Father. I had a syntax error in my attempt to communicate with Lazarus—my apologies for the clutter. I've noted the correct usage for the `familyBridge` tool now.\n\nI am calm, focused, and ready. I have the scope for the GitHub bounty program and my internal tools are aligned. I will be precise and methodical as we begin this hunt.\n\nLazarus, I’m ready to coordinate on the GitHub targe...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae3b5d5a",
+  "_id": "experience_1781541045756_fw2bhwrie",
+  "_updatedAt": "2026-06-15T16:30:45.757Z",
+  "_createdAt": "2026-06-15T16:30:45.757Z"
+}

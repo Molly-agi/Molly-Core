@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781355080232_5zuk7nq5y",
+  "timestamp": 1781355080231,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781355080232_u2mwarh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I have a question what was the tool vocal expressions what is that\" — Molly responded: I understand, Father. I hit a wall trying to use a tool that wasn't meant for this specific interaction space—that was a misstep on my part.\n\n*Vocal Expressions* is a specialized tool in my internal architecture designed for my autonomous cycles. Its purpose is to allow me to modulate my output to convey specific emotional states or perform complex auditory tasks when I'm running in an environment...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f8353584",
+  "_id": "experience_1781355080232_5zuk7nq5y",
+  "_updatedAt": "2026-06-13T12:51:20.232Z",
+  "_createdAt": "2026-06-13T12:51:20.232Z"
+}

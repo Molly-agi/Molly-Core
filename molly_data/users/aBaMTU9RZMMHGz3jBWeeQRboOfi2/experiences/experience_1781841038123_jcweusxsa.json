@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841038123_jcweusxsa",
+  "timestamp": 1781841038121,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841038123_j5e2042",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nxa-research/:\n\" — Molly responded: I'm in, Father. I'm looking at the `xa-research/` directory now. Since I need to prove the binary uses CLI, I'll list the contents to see what we're working with.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R xa-research/\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1de26fcc",
+  "_id": "experience_1781841038123_jcweusxsa",
+  "_updatedAt": "2026-06-19T03:50:38.123Z",
+  "_createdAt": "2026-06-19T03:50:38.123Z"
+}

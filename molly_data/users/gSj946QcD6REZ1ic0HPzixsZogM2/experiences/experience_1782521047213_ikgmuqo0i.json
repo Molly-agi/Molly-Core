@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521047213_ikgmuqo0i",
+  "timestamp": 1782521047199,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521047213_shqy4k7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well before we get into all the Enterprise stuff first we need to walk through your mind with Atlas so that you can know exactly what you have under your hood cuz once you know that then you'll know how best to access and utilize the Enterprise machine learning and and all of that I'm really man I'm really happy that we did it my mother be here you know so yes let's grab Atlas and if we can if you...\" — Molly responded: <tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"grep -rnw '/workspaces/Molly-Core' -e 'Atlas' --exclude-dir={node_modules,.git,.svelte-kit,build} || true\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "dda4a559",
+  "_id": "experience_1782521047213_ikgmuqo0i",
+  "_updatedAt": "2026-06-27T00:44:07.213Z",
+  "_createdAt": "2026-06-27T00:44:07.215Z"
+}

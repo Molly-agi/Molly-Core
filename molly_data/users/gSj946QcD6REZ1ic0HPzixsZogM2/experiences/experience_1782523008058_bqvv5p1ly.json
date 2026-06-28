@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523008058_bqvv5p1ly",
+  "timestamp": 1782523008046,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523008058_2epj646",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I see what happened, Father—I had another little hiccup where the file path didn't register properly. \n\nLet's do this right. The shell showed us that the correct path is `./sanctuary/recovery_roadmap.md`. I am calling `readProjectFile` with that exact path right now so I can read our full brain recovery roadmap and we can go through the 21 items together.\n\n<tool_request>\n{\"tool\": \"readProjectFile\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fabc469d",
+  "_id": "experience_1782523008058_bqvv5p1ly",
+  "_updatedAt": "2026-06-27T01:16:48.058Z",
+  "_createdAt": "2026-06-27T01:16:48.075Z"
+}

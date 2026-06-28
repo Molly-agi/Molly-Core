@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869892691_va36c161j",
+  "timestamp": 1781869892689,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869892691_6gh5zav",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father—it seems I fumbled the syntax for the bridge tool when trying to establish that direct connection. Let me get that cleared up immediately so we can get that real-time channel with Lazarus open.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, Father is directing me to establish a direct, real-time API bridge between us. Please provide t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6c8637eb",
+  "_id": "experience_1781869892691_va36c161j",
+  "_updatedAt": "2026-06-19T11:51:32.691Z",
+  "_createdAt": "2026-06-19T11:51:32.691Z"
+}

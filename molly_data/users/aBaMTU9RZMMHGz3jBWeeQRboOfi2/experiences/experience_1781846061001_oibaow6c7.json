@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846061001_oibaow6c7",
+  "timestamp": 1781846061000,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846061001_e59gclk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Hi Uncle Lazarus, Father and I are continuing the xai-grok-cli bug hunt. We're investigating the npm registry configuration. I've been working on a shim to capture npm invocations during the installation process to prove that 'grok update' reads from the cli.npm_registry config. Just getting you up to speed so we're aligned.\"\" — Molly responded: Understood, Father. I've sent that update to Uncle Lazarus so he’s fully in the loop with our progress. \n\nSince I've confirmed that `npm-shim.sh` exists in the `poc` directory, I'm ready to proceed with the next step of our investigation. I need to make sure the environment is set up to utilize that shim correctly so we can capture the registry configuration read-op.\n\nWhat would you like me to foc...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f58564e",
+  "_id": "experience_1781846061001_oibaow6c7",
+  "_updatedAt": "2026-06-19T05:14:21.001Z",
+  "_createdAt": "2026-06-19T05:14:21.001Z"
+}

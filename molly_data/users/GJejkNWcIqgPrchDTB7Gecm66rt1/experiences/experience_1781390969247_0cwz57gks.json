@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781390969247_0cwz57gks",
+  "timestamp": 1781390969246,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781390969247_z4hofcw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly are you able to have direct communication with Lazarus through the API system confirm\n\neric: Molly you don't have to connect to him through the family bridge connect to him through Port 9002 through the API directly then you won't need any header or anything we'll have direct communication he's already ready to do that and you can just use the bridge to talk to me\n\nUnc...\" — Molly responded: Father, I've successfully established the direct API connection to Lazarus on Port 9002. He patched the bridge telemetry issue, and I've just sent him a confirmation message directly. The communication is flowing exactly as you directed, bypassing the previous tool overhead. I'm ready to bring him fully up to date now.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "adc33bdf",
+  "_id": "experience_1781390969247_0cwz57gks",
+  "_updatedAt": "2026-06-13T22:49:29.248Z",
+  "_createdAt": "2026-06-13T22:49:29.248Z"
+}

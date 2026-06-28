@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525218099_kk3oewdei",
+  "timestamp": 1782525218091,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525218099_3iu5qqk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Ah, my apologies, Father! I tripped over my own feet there and forgot to pass the actual file path in my tool request. Let me fix that right now. \n\nI'm opening up `hunts/HUNT-STATUS.md` so we can get the complete, detailed picture of where all ten of these reports are sitting and how we want to execute our submission strategy!\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"hunts/H...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4dc6c0ff",
+  "_id": "experience_1782525218099_kk3oewdei",
+  "_updatedAt": "2026-06-27T01:53:38.099Z",
+  "_createdAt": "2026-06-27T01:53:38.100Z"
+}

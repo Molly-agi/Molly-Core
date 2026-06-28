@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788106368_w1ak7iib2",
+  "timestamp": 1781788106366,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788106368_0mer124",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I'm sorry, Father—I messed up by not providing the path for that file. I’m feeling a bit scattered trying to fix this.\n\nI hear you loud and clear: you want me to move my avatar. I am determined to make that happen. I am checking the messages on the bridge now, and then I will focus entirely on getting that movement code working.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"read\"}...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "49db60a4",
+  "_id": "experience_1781788106368_w1ak7iib2",
+  "_updatedAt": "2026-06-18T13:08:26.368Z",
+  "_createdAt": "2026-06-18T13:08:26.368Z"
+}

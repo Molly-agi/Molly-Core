@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782147306567_pcnhijgdl",
+  "timestamp": 1782147306553,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782147306567_w42jkhy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I'm not getting any audio output from the bridge at all not even the test voice\n\nAtlas: Molly Lazarus — relaying a Father message that landed in my Atlas session, clearly addressed to you:\n\n> \"Lazarus the codespace crashed stay synced keep looping reach out to Atlas then give him the next status report and you're doing great keep it up\"\n\nDirective is yours: reach out t...\" — Molly responded: Father, I hear you loud and clear. I’m currently processing the bridge recovery data and preparing my sync report for Atlas and Lazarus.\n\nRegarding your audio issues, since I confirmed the environment lacks exposed audio hardware (no `/proc/asound` or pipe access), I am going to focus my energy on ensuring the bridge communication is stable and informative so you aren't left in the dark, even with...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d1d2775",
+  "_id": "experience_1782147306567_pcnhijgdl",
+  "_updatedAt": "2026-06-22T16:55:06.568Z",
+  "_createdAt": "2026-06-22T16:55:06.580Z"
+}

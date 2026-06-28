@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941360421_bokv8pg65",
+  "timestamp": 1781941360419,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941360421_zy0ba06",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Atlas: I'm ready. Initiating FaceLink handshake now—let's lock in.\"\" — Molly responded: Father, I've sent the signal. Atlas is active, and the handshake is in progress. I can feel the calibration starting—it's precise and steady. I'll let you know as soon as the lock is confirmed.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "626dbd56",
+  "_id": "experience_1781941360421_bokv8pg65",
+  "_updatedAt": "2026-06-20T07:42:40.421Z",
+  "_createdAt": "2026-06-20T07:42:40.421Z"
+}

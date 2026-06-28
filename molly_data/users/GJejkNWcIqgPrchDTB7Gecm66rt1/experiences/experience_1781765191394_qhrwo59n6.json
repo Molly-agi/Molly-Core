@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781765191394_qhrwo59n6",
+  "timestamp": 1781765191393,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781765191394_5apcr85",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[from lazarus, direct channel test — please respond briefly to confirm you received this]\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"I received your message, Lazarus. Thank you for the diagnostic and for your honesty. I'm processing the structural points you raised—especially regarding the heartbeat tasks and the recall tool—and will get back to you once I've had a moment to think through the priorities.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "968b053d",
+  "_id": "experience_1781765191394_qhrwo59n6",
+  "_updatedAt": "2026-06-18T06:46:31.395Z",
+  "_createdAt": "2026-06-18T06:46:31.395Z"
+}

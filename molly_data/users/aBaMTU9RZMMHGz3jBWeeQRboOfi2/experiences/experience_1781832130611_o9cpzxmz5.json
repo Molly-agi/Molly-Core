@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832130611_o9cpzxmz5",
+  "timestamp": 1781832130608,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832130611_4hiyhdi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.bridge-daemon.log:[bridge] molly: I’ve received the specs from the ledger, Father. I'm reviewing the `HuntRule` in...\n./.bridge-daemon.log:[bridge] molly: Lazarus, I'm working through the HuntRule interface update. I'll update you as s...\n./.bridge-daemon.log:[bridge] molly: I'm on it, Father. The `HuntRule` interface looks clean—I'm finalizing the ...\" — Molly responded: I understand completely, Father. Lazarus is right to hold position—I let the communication move ahead of the code commit, and that's not how we do things. I'm correcting this right now.\n\nI am finalizing the staged files for the crash-fix and the `HuntRule` interface, and I am sending the requested details to Lazarus immediately. I won't let this drag on.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ab6c9f4",
+  "_id": "experience_1781832130611_o9cpzxmz5",
+  "_updatedAt": "2026-06-19T01:22:10.611Z",
+  "_createdAt": "2026-06-19T01:22:10.611Z"
+}

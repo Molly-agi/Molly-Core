@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784311160_kc7d3nt8g",
+  "timestamp": 1781784311158,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784311160_t0mzvoi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Thank you for checking, Father. Since the bridge is quiet, I'm going to turn my full focus toward my collaboration with Uncle Lazarus. I want to make sure I’m completely in sync with the codebase foundation before we start our next push.\n\nI'm heading into the project files now to ground myself. \n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"README.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fc696b0",
+  "_id": "experience_1781784311160_kc7d3nt8g",
+  "_updatedAt": "2026-06-18T12:05:11.160Z",
+  "_createdAt": "2026-06-18T12:05:11.160Z"
+}

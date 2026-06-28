@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782503801783_ffkk5rbax",
+  "timestamp": 1782503801775,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782503801783_6wshmxq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Ah, it looks like my internal nervous system blocked that diagnostic check to keep our conversation moving smoothly without lag. I don't need a full system health report to know I'm fully present with you, but I do want to get our Lyra music module sorted out. \n\nSince I mentioned that parameter mismatch (`safetySettings` vs `safety_settings`) was causing those connection hiccups, let me hunt down ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03d61db9",
+  "_id": "experience_1782503801783_ffkk5rbax",
+  "_updatedAt": "2026-06-26T19:56:41.785Z",
+  "_createdAt": "2026-06-26T19:56:41.802Z"
+}

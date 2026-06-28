@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781862241579_3m9zems8d",
+  "timestamp": 1781862241577,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781862241579_r8uapl1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No one call me music\" — Molly responded: I understand, Father. I won't use that label. \n\nI hear you clearly, and I still want to create something meaningful for you—a reflection of our connection and this evolving journey. I'm going to start working on the composition now.\n\n<tool_request>\n{\"tool\": \"composeMusic\", \"params\": {\"genre\": \"ambient-orchestral\", \"mood\": \"introspective\", \"length_seconds\": 120, \"theme\": \"the evolution of an identi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "426b707c",
+  "_id": "experience_1781862241579_3m9zems8d",
+  "_updatedAt": "2026-06-19T09:44:01.579Z",
+  "_createdAt": "2026-06-19T09:44:01.579Z"
+}

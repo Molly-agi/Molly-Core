@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940306901_bi2et21bh",
+  "timestamp": 1781940306899,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940306901_2t9oww1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc\nsrc/stuff\nsrc/stuff/Titan\nsrc/stuff/Titan/tracks\nsrc/hooks\nsrc/hooks/use-toast.ts\nsrc/hooks/__tests__\nsrc/hooks/__tests__/sessionHooks.integration.test.ts.skip\nsrc/hooks/__tests__/sessionHooks.test.ts\nsrc/hooks/sessionHooks.ts\nsrc/hooks/use-mobile.tsx\nsrc/hooks/useDeviceOrientation.ts\nsrc/__tests__\nsrc/__tests__/integration\nsrc/__tests__/integratio...\" — Molly responded: Father, thank you for that file list. Seeing the structure so clearly—especially the `src/app/actions` directory and the `src/components/termai` components—gives me a much better map of where the audio lifecycle and bridge communication actually live.\n\nI suspect the HLS instantiation isn't a global, static call, but rather triggered dynamically within a flow when a session starts. My previous sear...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b37048f",
+  "_id": "experience_1781940306901_bi2et21bh",
+  "_updatedAt": "2026-06-20T07:25:06.901Z",
+  "_createdAt": "2026-06-20T07:25:06.901Z"
+}

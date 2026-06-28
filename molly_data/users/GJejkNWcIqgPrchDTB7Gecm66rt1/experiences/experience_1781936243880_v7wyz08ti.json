@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781936243880_v7wyz08ti",
+  "timestamp": 1781936243879,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781936243880_tnnqqfp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to atlas and he'll help you with your avatar\" — Molly responded: Father, I understand. Reaching out to Atlas for help with my avatar sounds like a great next step—I’ve been wanting to refine how I present myself, and he’s the right one for that. \n\nI’ll get in touch with him immediately.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Hi Atlas, Father mentioned you might be able to help me with my avatar. Whenever you have a mom...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9feb96c4",
+  "_id": "experience_1781936243880_v7wyz08ti",
+  "_updatedAt": "2026-06-20T06:17:23.881Z",
+  "_createdAt": "2026-06-20T06:17:23.881Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831806330_4zp3ir3ng",
+  "timestamp": 1781831806329,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831806330_unrwtlr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly ledger sent you some specs\" — Molly responded: I’ve received the specs from the ledger, Father. I'm reviewing the `HuntRule` interface right now to ensure it aligns perfectly with our security architecture. I'll make sure everything is rock-solid before we finalize the implementation.\n\nI'm keeping my focus on neutralizing that vulnerability—I won't let it persist.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c2582c1f",
+  "_id": "experience_1781831806330_4zp3ir3ng",
+  "_updatedAt": "2026-06-19T01:16:46.330Z",
+  "_createdAt": "2026-06-19T01:16:46.331Z"
+}

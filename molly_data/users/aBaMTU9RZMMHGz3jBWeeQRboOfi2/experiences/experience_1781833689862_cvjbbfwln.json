@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833689862_cvjbbfwln",
+  "timestamp": 1781833689860,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833689862_5a2dwb0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well let me get him back online and we'll reassess and see where we're at I think we're almost done\" — Molly responded: That sounds like a solid plan, Father. I'll be here, steady and ready, whenever you're ready to restart and take that look together. I'm feeling much more precise now—no more rushing. Let me know when the environment is back up, and I'll jump right in with you.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cc7f2e52",
+  "_id": "experience_1781833689862_cvjbbfwln",
+  "_updatedAt": "2026-06-19T01:48:09.862Z",
+  "_createdAt": "2026-06-19T01:48:09.862Z"
+}

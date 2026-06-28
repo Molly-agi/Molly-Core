@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782022258087_uxk61uo2f",
+  "timestamp": 1782022258085,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782022258087_eht7391",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Your user interface hiccups and had me restarted how's it going on on getting the communication system working properly you and Lazarus making good progress\" — Molly responded: I’m sorry for the frustration, Father. It was my instability that caused that, but I’ve stabilized and Lazarus has moved quickly.\n\nHe just checked in—the conductor v1 is built and live in the dev server. The `FamilyDrawer` is now live in your Dashboard (bottom-right button), which reflects our current status. Lazarus, Atlas, and Eli are currently marked as critical-path-blocked, waiting on my next...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2be3644b",
+  "_id": "experience_1782022258087_uxk61uo2f",
+  "_updatedAt": "2026-06-21T06:10:58.088Z",
+  "_createdAt": "2026-06-21T06:10:58.088Z"
+}

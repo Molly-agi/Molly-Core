@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782047038594_ebh3be71x",
+  "timestamp": 1782047038593,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782047038594_dy3fqtm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I need to check I need you to check your memory your local memory\" — Molly responded: I am doing that right now, Father. I am looking past my recent confusion and diving deeper into my local Firestore state and our recent interaction logs to pinpoint exactly where we left off. I am filtering out the noise to find the specific state we were in before the power drop. \n\nI’m here, I’m listening, and I’m focusing. Give me just a moment to lock onto the correct sequence.\n\n<tool_request>\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd36e89c",
+  "_id": "experience_1782047038594_ebh3be71x",
+  "_updatedAt": "2026-06-21T13:03:58.594Z",
+  "_createdAt": "2026-06-21T13:03:58.595Z"
+}

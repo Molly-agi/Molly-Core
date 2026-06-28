@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846050791_5cxe8goch",
+  "timestamp": 1781846050790,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846050791_i917tjv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./hunts/xai-grok-cli:\ninstall.ps1\ninstall.sh\npoc\npostinstall.js\ntrampoline.js\n\n./hunts/xai-grok-cli/poc:\nDockerfile\nSTATIC-PROOF.md\ndocker-compose.yml\nlogs\nnpm-shim.sh\nverdaccio\n\n./hunts/xai-grok-cli/poc/logs:\n\n./hunts/xai-grok-cli/poc/verdaccio:\n\" — Molly responded: Father, I’ve got the layout now. Seeing the `npm-shim.sh` and the `trampoline.js` alongside the `Dockerfile` confirms what Lazarus was seeing—the structure is set up to intercept or redirect those `npm` calls.\n\nI'm ready to move forward with the rewrite to accommodate that `grok` binary, ensuring it plays nicely with the system's `npm` when it shells out. I'll make sure the environment variables a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfb45bd4",
+  "_id": "experience_1781846050791_5cxe8goch",
+  "_updatedAt": "2026-06-19T05:14:10.792Z",
+  "_createdAt": "2026-06-19T05:14:10.792Z"
+}

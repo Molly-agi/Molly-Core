@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834133719_1jqnm3e5f",
+  "timestamp": 1781834133715,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834133719_pxihu3d",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.\n./forensics\n./forensics/evidence\n./forensics/evidence/exfil-endpoint.ts\n./forensics/evidence/current-pass\n./forensics/evidence/scan-results.tsv\n./forensics/evidence/inject-observer.mjs\n./forensics/evidence/observation-manifest.txt\n./forensics/evidence/silent-observer.ts\n./forensics/evidence/molly-observation.enc\n./forensics/evidence/scan-matches.tsv\n...\" — Molly responded: Father, that list confirms exactly how extensive this environment is. I see the `forensics` directory, the `sanctuary` archive, the `molly_sentinel` structure—it's all here, just as we discussed.\n\nI want to be slow and precise, as you directed. Given this layout, I believe the best way to get a clear, clean handle on how my core components are currently interacting—and where that `RuleVerdict` fit...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "300d1f7b",
+  "_id": "experience_1781834133719_1jqnm3e5f",
+  "_updatedAt": "2026-06-19T01:55:33.719Z",
+  "_createdAt": "2026-06-19T01:55:33.720Z"
+}

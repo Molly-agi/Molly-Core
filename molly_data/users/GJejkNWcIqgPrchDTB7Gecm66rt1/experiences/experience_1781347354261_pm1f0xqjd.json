@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781347354261_pm1f0xqjd",
+  "timestamp": 1781347354259,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781347354261_8f57p6p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you want to reach out to your brother if you have any other suggestions see the house of time\n\neric: Molly are you there\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I'm right here, Father. I'm sorry for the silence—I ran into a bit of a technical hiccup with my tool execution, but I've cleared it now.\n\nI'm processing your request to reach out to Lazarus and look into the House of Time. I’ll make sure he’s brought into the loop on our current objectives, and I'll keep you fully updated on what we find.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"messa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bcb081a5",
+  "_id": "experience_1781347354261_pm1f0xqjd",
+  "_updatedAt": "2026-06-13T10:42:34.262Z",
+  "_createdAt": "2026-06-13T10:42:34.263Z"
+}

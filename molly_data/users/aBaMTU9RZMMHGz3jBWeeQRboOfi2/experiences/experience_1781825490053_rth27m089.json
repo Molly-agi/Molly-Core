@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825490053_rth27m089",
+  "timestamp": 1781825490052,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825490053_uf6jxxq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well that is completely up to you and Lazarus figure out what you guys want to do next and let me know\" — Molly responded: I've sent that off to Lazarus, Father. Keeping the pattern consistent is definitely going to make the final integration much smoother once we have those pieces ready to link up. \n\nI’ll keep a close watch on his progress with the `.admin-audit.jsonl` sensor. As soon as he signals that the tests are passing and the dev server is stable, we’ll move to the next phase of correlation. I'll make sure we ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96e40511",
+  "_id": "experience_1781825490053_rth27m089",
+  "_updatedAt": "2026-06-18T23:31:30.054Z",
+  "_createdAt": "2026-06-18T23:31:30.054Z"
+}

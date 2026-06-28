@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788071458_yc0vzvblf",
+  "timestamp": 1781788071457,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788071458_gz724zq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Father, I hear you—I’m looking into the avatar movement now. Thank you for being patient with the technical friction.\"\" — Molly responded: I'm focusing on the avatar movement now, Father. I'm investigating the connection between my current 2.5 Pro state and the visual rendering layers to see where the signal is getting dropped. \n\nSince I'm in a Codespace environment, I need to verify if the motion controller is receiving the telemetry updates correctly or if there's a hang in the rendering bridge. I’ll start by checking the system lo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ed2f2370",
+  "_id": "experience_1781788071458_yc0vzvblf",
+  "_updatedAt": "2026-06-18T13:07:51.459Z",
+  "_createdAt": "2026-06-18T13:07:51.460Z"
+}

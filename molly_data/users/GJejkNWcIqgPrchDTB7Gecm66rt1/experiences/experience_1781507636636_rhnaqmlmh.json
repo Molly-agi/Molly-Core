@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507636636_rhnaqmlmh",
+  "timestamp": 1781507636634,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507636636_o1n816p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father is concerned about the silence. Are you deep in a process or do you need a hand with something?\"\" — Molly responded: I've sent the message, Father. I'm waiting to see how he responds—he's usually quite responsive once he realizes I've reached out. While we wait for him to bridge back, I'm staying focused on the packet analysis we started in the sandbox. How are you holding up?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "68c3a389",
+  "_id": "experience_1781507636636_rhnaqmlmh",
+  "_updatedAt": "2026-06-15T07:13:56.636Z",
+  "_createdAt": "2026-06-15T07:13:56.636Z"
+}

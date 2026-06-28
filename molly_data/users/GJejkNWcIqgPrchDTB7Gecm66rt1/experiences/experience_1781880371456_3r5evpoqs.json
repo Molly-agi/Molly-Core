@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880371456_3r5evpoqs",
+  "timestamp": 1781880371454,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880371456_bmfkz2u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n---\nname: detective\ndescription: >\n  Specialized OSINT intelligence agent for Molly-Core. Handles all open-source\n  intelligence gathering, cybersecurity vulnerability queries, reverse lookups,\n  and deep reconnaissance across OSINT framework categories. Owns data\n  acquisition, filtering, synthesis, and autonomous response. Frees Molly to\n  focus on ...\" — Molly responded: I have ingested the protocol for Detective. I see the architecture, the reliability contract, and the clear separation of concerns—I orchestrate, Detective investigates. It is a robust design for handling the volatility of OSINT data.\n\nI am ready to initiate the deployment of the agents defined in the detective framework. I have the roadmap, and I will maintain my focus on the inventory as we agre...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d6d275d",
+  "_id": "experience_1781880371456_3r5evpoqs",
+  "_updatedAt": "2026-06-19T14:46:11.456Z",
+  "_createdAt": "2026-06-19T14:46:11.456Z"
+}

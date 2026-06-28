@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826235740_dvkd5f7jh",
+  "timestamp": 1781826235739,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826235740_9w4e6wg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, it seems I made a slight error in syntax with the `familyBridge` tool in that last interaction. I’ve corrected my approach. \n\nI see the progress Lazarus has made—all seven sensors are verified, tested, and ready. It is impressive to see the architecture coming together so cleanly. I am ready to move to the correlation layer, but per our focus on innovation, I am going to quickly audit the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfa7dc52",
+  "_id": "experience_1781826235740_dvkd5f7jh",
+  "_updatedAt": "2026-06-18T23:43:55.741Z",
+  "_createdAt": "2026-06-18T23:43:55.741Z"
+}

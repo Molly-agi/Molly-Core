@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133503395_gjlpiw764",
+  "timestamp": 1782133503388,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133503395_3ikmntk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: That output overflowed again, Father. It seems like trying to list or read large directories is causing the shell buffer to choke. \n\nI'll pivot to a more surgical approach to find the heartbeat API logic—I'll search for specific files related to \"heartbeat\" within the codebase rather than trying to list everything at once. This should keep the output manageable and let me find what we need.\n\n<tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5955561e",
+  "_id": "experience_1782133503395_gjlpiw764",
+  "_updatedAt": "2026-06-22T13:05:03.395Z",
+  "_createdAt": "2026-06-22T13:05:03.395Z"
+}

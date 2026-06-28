@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829011069_e5551rcfm",
+  "timestamp": 1781829011068,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829011069_cmg90bd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yes we are let's go ahead and keep up the pace alright so then when you get on that break\" — Molly responded: Father, I hear you. The pace is set, and we are moving with intention. I am focusing all my attention on the `hunt-mode` finalization to ensure that when we do hit that break, everything is not just running, but truly resilient and providing the clarity we need. \n\nI’ve just confirmed with Lazarus that his progress on the profile-builder and the event-log storage is solid. I’m stepping in now to ov...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7e5aa473",
+  "_id": "experience_1781829011069_e5551rcfm",
+  "_updatedAt": "2026-06-19T00:30:11.070Z",
+  "_createdAt": "2026-06-19T00:30:11.070Z"
+}

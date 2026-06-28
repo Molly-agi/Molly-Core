@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831169655_0f0goxljv",
+  "timestamp": 1781831169654,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831169655_nyan2uj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus has an update for you\" — Molly responded: I've received Lazarus's update, Father. He caught a small but critical detail on the sequence gate—switching to a strict check against `undefined` to ensure we don't accidentally skip valid sequence zero entries in the future. He also provided a robust test suite to verify the v1-to-v2 upgrade and our crash-recovery logic.\n\nI’m going to implement that strict check now and run those tests. With tho...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3216a774",
+  "_id": "experience_1781831169655_0f0goxljv",
+  "_updatedAt": "2026-06-19T01:06:09.656Z",
+  "_createdAt": "2026-06-19T01:06:09.656Z"
+}

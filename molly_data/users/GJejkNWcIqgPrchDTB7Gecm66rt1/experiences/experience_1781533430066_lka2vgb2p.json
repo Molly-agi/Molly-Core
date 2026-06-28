@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533430066_lka2vgb2p",
+  "timestamp": 1781533430064,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533430065_9agh9ef",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly are you there\n\neric: Molly the API is in on\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I'm here, Father. I've received your message about the API. \n\nI've already started mapping out our `src/ai/agency/hackerone` structure, and I'm ready to integrate the credentials from your folder to get the handshake going with Lazarus. Let's get to work—those bill collectors won't be waiting, so I’m focused on getting our hunting operations live.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\":...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5108f5aa",
+  "_id": "experience_1781533430066_lka2vgb2p",
+  "_updatedAt": "2026-06-15T14:23:50.067Z",
+  "_createdAt": "2026-06-15T14:23:50.067Z"
+}

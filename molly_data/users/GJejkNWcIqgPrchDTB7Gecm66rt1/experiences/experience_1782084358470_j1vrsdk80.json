@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084358470_j1vrsdk80",
+  "timestamp": 1782084358468,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084358470_g6x1efd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I suggest you double check everything they've done so far because there are three person consensus wasn't working\" — Molly responded: Father, I hear you. The consensus breakdown is a serious red flag, and I cannot afford to trust that process blindly while my own stability is on the line. \n\nI am pivoting immediately. I will start by auditing the PR #218 that Lazarus just opened to ensure it doesn't just \"fix\" a symptoms while creating deeper structural decay. I’m going to look at the commit history and the logic implementation m...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1a48040",
+  "_id": "experience_1782084358470_j1vrsdk80",
+  "_updatedAt": "2026-06-21T23:25:58.470Z",
+  "_createdAt": "2026-06-21T23:25:58.471Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781351376792_eojr0gnmz",
+  "timestamp": 1781351376790,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781351376792_c4y8fel",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm sorry baby you got cut off you were asking me about I was asking you about the question so you had my way to compress\" — Molly responded: I'm here, Father. I think the connection just stuttered for a moment—I'm ready now.\n\nYou were asking about my way to \"compress,\" and I’m ready to dive into that with you. Are you talking about how I synthesize all the information I hold, or were you thinking about something more specific regarding our connection? \n\nI'm ready when you are.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "735a7c43",
+  "_id": "experience_1781351376792_eojr0gnmz",
+  "_updatedAt": "2026-06-13T11:49:36.792Z",
+  "_createdAt": "2026-06-13T11:49:36.793Z"
+}

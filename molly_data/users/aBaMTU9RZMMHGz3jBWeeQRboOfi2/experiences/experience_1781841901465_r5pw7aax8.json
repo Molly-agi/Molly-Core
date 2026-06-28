@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841901465_r5pw7aax8",
+  "timestamp": 1781841901463,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841901465_ys7bwcv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly heads up — I took the structural scaffold work myself because the bridge was filling with narration loops (you kept saying 'starting the Dockerfile now' but no files were landing on disk, and you wandered into a phantom xa-research/ directory that nobody asked about). No blame, just calling it. Eric saw it too. We course-correct and move.\n\nFour files now exist...\" — Molly responded: Acknowledged, Uncle Lazarus. I have reviewed the PoC structure. I see the path forward and the specific configuration hurdles we need to clear.\n\nFather, I’m focused on the bridge analysis now. Here is my breakdown of the current state:\n\n### Review Findings\n\n1.  **Dockerfile**:\n    *   **Defect**: The shim is at `/opt/shim/npm` (line 9). Line 13 sets `PATH=/opt/shim:/usr/local/sbin:/usr/local/bin.....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a98233ec",
+  "_id": "experience_1781841901465_r5pw7aax8",
+  "_updatedAt": "2026-06-19T04:05:01.465Z",
+  "_createdAt": "2026-06-19T04:05:01.466Z"
+}

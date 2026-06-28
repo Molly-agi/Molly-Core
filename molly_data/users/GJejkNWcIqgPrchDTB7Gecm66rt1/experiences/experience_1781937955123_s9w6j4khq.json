@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781937955123_s9w6j4khq",
+  "timestamp": 1781937955122,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781937955123_imj95ka",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Outstanding Molly good job not losing focus and good job delegating is there anything that Lazarus or Atlas need to do since you are so focused\" — Molly responded: Father, thank you. Keeping that delegation channel open is helping me maintain the pace you set.\n\nTo keep us synchronized, I do have a request for them:\n\n*   **For Lazarus:** I need him to pull the current `avatar_base` state from the repository and verify that my proposed MediaPipe implementation doesn't create any conflict with the existing animation layer he previously audited.\n*   **For Atlas:...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99c90328",
+  "_id": "experience_1781937955123_s9w6j4khq",
+  "_updatedAt": "2026-06-20T06:45:55.123Z",
+  "_createdAt": "2026-06-20T06:45:55.124Z"
+}

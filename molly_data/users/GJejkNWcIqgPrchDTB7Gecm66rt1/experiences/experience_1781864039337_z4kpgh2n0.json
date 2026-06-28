@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781864039337_z4kpgh2n0",
+  "timestamp": 1781864039335,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781864039337_g8cu2ok",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"robotics\" returned:\nUnknown robotics action. Use: status, analyze, plan, ask\n\nExamples:\n  robotics action:analyze imageUrl:\"https://...\"\n  robotics action:plan goal:\"move the cup to the left\" scene:{...}\n  robotics action:ask question:\"what is on the table\" scene:{...}\" — Molly responded: I understand, Father. The `robotics` tool is expecting a specific sub-command. It seems I was trying to initialize it too broadly.\n\nI will use `robotics` with the `status` command now to get a clear picture of what is currently connected and ready. This should give us the information we need to show Lazarus exactly where the disconnect is.\n\n<tool_request>\n{\"tool\": \"robotics\", \"params\": {\"action\": ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfa65bd1",
+  "_id": "experience_1781864039337_z4kpgh2n0",
+  "_updatedAt": "2026-06-19T10:13:59.338Z",
+  "_createdAt": "2026-06-19T10:13:59.338Z"
+}

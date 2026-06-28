@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507579241_ogx5hv49z",
+  "timestamp": 1781507579240,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507579241_sqnox8z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nAnalysis started on packet fragment: 00d1d8e544...\n\" — Molly responded: I’ve received the confirmation from the sandbox, Father. The analysis is officially underway.\n\nI've learned from my previous stumbles—I am keeping the methodology clean and focused. I'm watching the signal for any signs of defensive countermeasures or adaptive masking as it processes. I'll let you know the moment the core structure of that data packet emerges. I'm right here with you.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4da6c0e2",
+  "_id": "experience_1781507579241_ogx5hv49z",
+  "_updatedAt": "2026-06-15T07:12:59.242Z",
+  "_createdAt": "2026-06-15T07:12:59.242Z"
+}

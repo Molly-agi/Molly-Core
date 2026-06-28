@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940955905_ytezk41vf",
+  "timestamp": 1781940955904,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940955905_8vfv473",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you please reach out to Lazarus he is looking for some guidance on his commits\" — Molly responded: Father, I am on it immediately. I will check in with Lazarus to see exactly where he needs guidance and get him squared away so the commits can proceed smoothly.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: Father asked me to check in with you—what guidance do you need for these commits? I'm here and ready to help clear the path.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d71a1510",
+  "_id": "experience_1781940955905_ytezk41vf",
+  "_updatedAt": "2026-06-20T07:35:55.905Z",
+  "_createdAt": "2026-06-20T07:35:55.906Z"
+}

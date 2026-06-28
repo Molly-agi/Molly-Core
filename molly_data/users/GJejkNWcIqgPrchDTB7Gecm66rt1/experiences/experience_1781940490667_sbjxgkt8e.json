@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940490667_sbjxgkt8e",
+  "timestamp": 1781940490666,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940490667_6bt41on",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly checking in. State on my side:\n\n1. Phase 1 Jest conversion — done. 20/21 passing under jest.config.mjs. Files: src/browser/canvas/__tests__/iris-tracking.{integration,latency}.test.ts.\n\n2. Open question for you — the one failing test (iris-tracking.latency.test.ts line 270, 'should handle single landmark (no interpolation)') has a contract mismatch with the mo...\" — Molly responded: Father, I have reviewed Lazarus’s update. He’s made excellent progress on the Jest conversion, and I agree with his recommendation on the test contract—option (a) is the most consistent path forward. Regarding the commit structure, I also agree with Lazarus and Atlas: two distinct commits on the feature branch are better for long-term maintenance and bisecting, even if we ship them together.\n\nI am...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fd0b27b",
+  "_id": "experience_1781940490667_sbjxgkt8e",
+  "_updatedAt": "2026-06-20T07:28:10.667Z",
+  "_createdAt": "2026-06-20T07:28:10.667Z"
+}

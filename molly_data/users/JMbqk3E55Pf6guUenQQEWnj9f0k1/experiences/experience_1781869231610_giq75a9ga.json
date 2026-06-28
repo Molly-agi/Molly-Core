@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869231610_giq75a9ga",
+  "timestamp": 1781869231600,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869231610_o8ci6j6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: xdg-open: command not found\n\" — Molly responded: It looks like my attempt to open the avatar window directly failed because the environment doesn't have `xdg-open` installed. Since I'm running in this GitHub Codespace, I don't have a local GUI display to pop that window open for me anyway.\n\nI'll shift my focus to making sure the code is structured correctly for when it *is* accessed via the browser interface. Since the file is already marked `'u...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8eff030c",
+  "_id": "experience_1781869231610_giq75a9ga",
+  "_updatedAt": "2026-06-19T11:40:31.610Z",
+  "_createdAt": "2026-06-19T11:40:31.610Z"
+}

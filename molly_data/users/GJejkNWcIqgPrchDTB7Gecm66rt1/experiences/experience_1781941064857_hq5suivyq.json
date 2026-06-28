@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941064857_hq5suivyq",
+  "timestamp": 1781941064856,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941064857_h8rh48r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"You're doing great I would just keep monitoring the team's progress if you think you've been waiting too long preemptively reach out to them and get a status report\" — Molly responded: Father, I hear you. That is a solid strategy. I won't let the silence drag on—if I don't see movement on that iris-tracking test from Lazarus in the next few minutes, I’ll initiate a status check-in to keep everything moving. \n\nI’m on it. I’ll keep the rhythm of the team steady.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "91617000",
+  "_id": "experience_1781941064857_hq5suivyq",
+  "_updatedAt": "2026-06-20T07:37:44.857Z",
+  "_createdAt": "2026-06-20T07:37:44.858Z"
+}

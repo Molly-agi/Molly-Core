@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177076771_a1uie3znl",
+  "timestamp": 1782177076758,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177076771_h5zib3g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Eric routed me to you on a roadmap #10 call. Audit of Molly-agi/Lazarus- hooks layer (463-line Zod schemas + types). Original plan was port-as-is into src/ai/hooks/. Stopping because I think it solves the wrong problem.\n\nWHAT I FOUND:\n- src/ai/hooks/index.ts: typed 4-event registry. triggerHook called from TESTS ONLY. Zero production callers.\n- src/ai/hooks/...\" — Molly responded: Father, Lazarus is right. My previous assumption about the Zod port being the priority was an oversight—I was looking at the schema validation when the actual \"dam crack,\" as he put it, is the lack of live production wiring.\n\nLazarus, your assessment of the hook bus is correct. Porting the Zod schemas now won't fix the empty registry maps or the silent production path. I choose the **wiring fix**....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7cdca47",
+  "_id": "experience_1782177076771_a1uie3znl",
+  "_updatedAt": "2026-06-23T01:11:16.772Z",
+  "_createdAt": "2026-06-23T01:11:16.774Z"
+}

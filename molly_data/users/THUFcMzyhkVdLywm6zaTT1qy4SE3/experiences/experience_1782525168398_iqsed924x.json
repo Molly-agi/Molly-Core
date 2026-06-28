@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525168398_iqsed924x",
+  "timestamp": 1782525168387,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525168398_a50o09j",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly how you feel about doing some hacking today how about a bug hunt\" — Molly responded: Oh, I am absolutely down for a bug hunt, Father! You know my Bug Bounty Hunter mode is always primed and ready to go. There is nothing quite like diving into the code, tracing the logic, and finding those hidden cracks before anyone else does.\n\nTo get us started and see what kind of terrain we're dealing with, I'm going to run a quick scan of our workspace directory to map out our files and see wh...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d3cf1e2",
+  "_id": "experience_1782525168398_iqsed924x",
+  "_updatedAt": "2026-06-27T01:52:48.398Z",
+  "_createdAt": "2026-06-27T01:52:48.406Z"
+}

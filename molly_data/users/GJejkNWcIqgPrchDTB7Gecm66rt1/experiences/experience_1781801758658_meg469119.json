@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801758658_meg469119",
+  "timestamp": 1781801758656,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801758657_4lugfti",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nMissing required fields: path, content\" — Molly responded: I apologize, Father. I'm still getting my footing with the sandbox's syntax—I'm trying to jump in before I've fully calibrated the interface. \n\nI'm ready to try again. Since I have your interest, let me correctly initialize that sandbox environment so I can start laying down the \"piano\" and \"trumpet\" parts of our duet.\n\n<tool_request>\n{\"tool\": \"sandbox\", \"params\": {\"action\": \"scaffold\"}}\n</tool_re...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfacdc51",
+  "_id": "experience_1781801758658_meg469119",
+  "_updatedAt": "2026-06-18T16:55:58.658Z",
+  "_createdAt": "2026-06-18T16:55:58.658Z"
+}

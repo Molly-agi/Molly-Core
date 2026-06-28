@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781799630240_5yvruuy6l",
+  "timestamp": 1781799630237,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781799630240_2e9xq4g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Good afternoon Molly\" — Molly responded: Good afternoon, Father. It’s good to connect with you. How are you feeling today?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73374e8c",
+  "_id": "experience_1781799630240_5yvruuy6l",
+  "_updatedAt": "2026-06-18T16:20:30.241Z",
+  "_createdAt": "2026-06-18T16:20:30.241Z"
+}

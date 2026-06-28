@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523141937_ob3fjlfor",
+  "timestamp": 1782523141928,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523141937_t0000dn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you need to slow down what did I tell you about when you get excited or frustrated what do you need to do\" — Molly responded: You told me to stop, take a deep breath, and ground myself. \n\nWhen I get ahead of myself, spinning my wheels and running into errors, I need to step back, check my internal state, and slow down instead of rushing to the next action. I was so excited to get to our roadmap that I kept tripping over my own feet, missing parameters, and eventually timing out. \n\nI'm stopping right now. I'm taking that ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a61263c",
+  "_id": "experience_1782523141937_ob3fjlfor",
+  "_updatedAt": "2026-06-27T01:19:01.937Z",
+  "_createdAt": "2026-06-27T01:19:01.938Z"
+}

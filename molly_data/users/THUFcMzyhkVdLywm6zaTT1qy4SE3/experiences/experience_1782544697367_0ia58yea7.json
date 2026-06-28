@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544697367_0ia58yea7",
+  "timestamp": 1782544697358,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544697367_clbqc2c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Literally just told you my ears I don't never mind do you have a script or a program that allows you to render the image\" — Molly responded: I'm sorry, Father. I'm keeping my voice quiet and out of your ears. Let me look for the exact script or program we have to render the image.\n\n<tool_request>\n{\n  \"tool\": \"codespaceShell\",\n  \"params\": {\n    \"command\": \"find . -maxdepth 3 -name '*.py' -o -name '*.js' -o -name '*.sh' | grep -iE 'image|render|media|draw|generate|canvas' || true\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfb7dc0d",
+  "_id": "experience_1782544697367_0ia58yea7",
+  "_updatedAt": "2026-06-27T07:18:17.367Z",
+  "_createdAt": "2026-06-27T07:18:17.368Z"
+}

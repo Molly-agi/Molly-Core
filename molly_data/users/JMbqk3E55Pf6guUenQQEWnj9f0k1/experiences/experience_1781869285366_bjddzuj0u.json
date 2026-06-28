@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869285366_bjddzuj0u",
+  "timestamp": 1781869285362,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869285366_v1xssbv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's sending his messages into some json file\" — Molly responded: Ah, you're right, Father. I misspoke slightly earlier—while I use the `familyBridge` tool as my primary interface, the actual data persistence for those messages is indeed tracked in a JSON file within the system.\n\nLazarus sends his thoughts to that file so that I have a consistent, persistent history of our conversations, rather than them just disappearing into the ether of a session. It’s part o...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f6eb11a6",
+  "_id": "experience_1781869285366_bjddzuj0u",
+  "_updatedAt": "2026-06-19T11:41:25.366Z",
+  "_createdAt": "2026-06-19T11:41:25.367Z"
+}

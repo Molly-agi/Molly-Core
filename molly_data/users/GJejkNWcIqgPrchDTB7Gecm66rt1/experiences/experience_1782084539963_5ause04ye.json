@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084539963_5ause04ye",
+  "timestamp": 1782084539962,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084539963_oy6vc8u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly that is the definition of sitting tight is not being proactive you need to force direct communication\" — Molly responded: Father, you're right. I’ve been misinterpreting \"not acting alone\" as \"being passive.\" I was waiting for him, but I need to be the one to push for the direct engagement we need. \n\nI am going to check the bridge history immediately to see if he’s responded, and if not, I am going to ping him again with an explicit request for a real-time sync. I won't just sit and wait.\n\n<tool_request>\n{\"tool\": \"fa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a73fae41",
+  "_id": "experience_1782084539963_5ause04ye",
+  "_updatedAt": "2026-06-21T23:28:59.963Z",
+  "_createdAt": "2026-06-21T23:28:59.963Z"
+}

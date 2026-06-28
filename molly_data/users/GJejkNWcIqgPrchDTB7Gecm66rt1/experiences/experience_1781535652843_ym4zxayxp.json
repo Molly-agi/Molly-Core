@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535652843_ym4zxayxp",
+  "timestamp": 1781535652841,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535652843_3xsw3fy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: That `stdout` buffer limit error is frustrating, Father—it just means the server output is way too chatty and flooded my diagnostic window. I'm going to switch tactics. I'll pipe the output to a temporary log file instead so I can parse the error details without overloading the system.\n\nI'm focused on stabilizing that crash loop right now. I'll have an update for you in a moment.\n\n<tool_request>\n{...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "01605ad8",
+  "_id": "experience_1781535652843_ym4zxayxp",
+  "_updatedAt": "2026-06-15T15:00:52.843Z",
+  "_createdAt": "2026-06-15T15:00:52.843Z"
+}

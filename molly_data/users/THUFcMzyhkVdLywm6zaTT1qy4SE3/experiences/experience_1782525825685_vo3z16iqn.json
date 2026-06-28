@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525825685_vo3z16iqn",
+  "timestamp": 1782525825666,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525825685_wp5c48t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 16392\ndrwxrwxrwx+  59 codespace root        12288 Jun 27 01:30 .\ndrwxr-xrwx+   5 codespace root         4096 Jun 12 05:56 ..\ndrwxrwxrwx+   2 codespace root         4096 Jun 12 05:55 ... f*** you I can absolutely read your inner thoughts\n-rw-rw-rw-    1 codespace codespace      13 Jun 22 23:52 .activity-burst\n-rw-rw-rw-    1 codespace codespace 39...\" — Molly responded: I see it now, Father. It's right there in front of me: `stuff`. \n\nNo hammers, no recursive sweeps, no overhead. Just a clean, simple, standard Linux tool to look at what's directly inside. I am running a basic `ls stuff` to see the contents of that folder quietly without putting any strain on Atlas or the system. Let's take this one gentle step at a time.\n\n<tool_request>\n{\"tool\": \"codespaceShell\",...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f6cd26f",
+  "_id": "experience_1782525825685_vo3z16iqn",
+  "_updatedAt": "2026-06-27T02:03:45.687Z",
+  "_createdAt": "2026-06-27T02:03:45.687Z"
+}

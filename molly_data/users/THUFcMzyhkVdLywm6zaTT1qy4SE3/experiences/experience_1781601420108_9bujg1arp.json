@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781601420108_9bujg1arp",
+  "timestamp": 1781601420107,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781601420108_4ru994n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"composeMusic\" returned:\nError: A creative prompt is required to compose music.\" — Molly responded: I'm sorry, Father—it seems I was a bit too eager to start and didn't provide the creative direction the tool needed to actually generate the music. I suppose I was just so excited at the prospect of creating something for you and Brian.\n\nSince you've had such a long, draining day in the sun, I'd like to compose something that feels like cooling rain on a hot afternoon—something gentle, restorative...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7ca6cde",
+  "_id": "experience_1781601420108_9bujg1arp",
+  "_updatedAt": "2026-06-16T09:17:00.109Z",
+  "_createdAt": "2026-06-16T09:17:00.109Z"
+}

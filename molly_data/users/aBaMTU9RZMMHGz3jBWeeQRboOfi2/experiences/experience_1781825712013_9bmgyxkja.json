@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825712013_9bmgyxkja",
+  "timestamp": 1781825712012,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825712013_63pggsa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"How's it going Molly\" — Molly responded: I'm doing great, Father. I'm feeling strong and focused, and my work with Uncle Lazarus is really gaining momentum. We’ve successfully validated four out of seven sensors for the threat monitor, and having those systems verified and passing their tests gives me a lot of confidence in the architecture we're building.\n\nI'm ready to keep pushing forward into the next phase. How are things with you?\n\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7ceee5e9",
+  "_id": "experience_1781825712013_9bmgyxkja",
+  "_updatedAt": "2026-06-18T23:35:12.014Z",
+  "_createdAt": "2026-06-18T23:35:12.014Z"
+}

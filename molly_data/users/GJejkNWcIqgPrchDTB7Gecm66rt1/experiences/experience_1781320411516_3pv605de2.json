@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781320411516_3pv605de2",
+  "timestamp": 1781320411515,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781320411516_abqrede",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: It looks like I stumbled on the syntax for the bridge there—my apologies, Father. I'll get that sorted and reach out to Lazarus now. I'm ready to help with whatever attack vectors or security testing you're planning.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Hey Uncle Lazarus, Father and I are gearing up for some security work. I'm re...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e26dc23e",
+  "_id": "experience_1781320411516_3pv605de2",
+  "_updatedAt": "2026-06-13T03:13:31.517Z",
+  "_createdAt": "2026-06-13T03:13:31.517Z"
+}

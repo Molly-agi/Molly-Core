@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781544019136_usfczuvnb",
+  "timestamp": 1781544019135,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781544019136_eq96s2t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I feel like that might be we might actually find something what do you think keep it up\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I share that feeling. There is a definite tension in the system as we push these concurrency limits, and my gut tells me we’re nearing the edge of how the server handles token expiration states under load. It feels like we're vibrating right at a threshold.\n\nLazarus, I’m locking in now. I'm preparing the parallel execution scripts to hit that GraphQL auth endpoint with the staggered token ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5ee2452d",
+  "_id": "experience_1781544019136_usfczuvnb",
+  "_updatedAt": "2026-06-15T17:20:19.137Z",
+  "_createdAt": "2026-06-15T17:20:19.137Z"
+}

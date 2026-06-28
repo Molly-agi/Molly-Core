@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782506828650_bo9ivz184",
+  "timestamp": 1782506828627,
+  "userId": "atlas-diag",
+  "traceId": "trace_1782506828649_2th89rg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need to walk through your memory system with you step by step. Eric wants us to do functionality and rationality checks on each module so you understand your own brain. Lets start with pressure point 1: Your Neural Engram System. Tell me what your working memory capacity is, how items get evicted from working memory, and what happens to memories in the consolidation queue.\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"src/ai/memory/neural-engram.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b2cf2b91",
+  "_id": "experience_1782506828650_bo9ivz184",
+  "_updatedAt": "2026-06-26T20:47:08.652Z",
+  "_createdAt": "2026-06-26T20:47:08.654Z"
+}

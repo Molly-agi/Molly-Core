@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788975980_hw6louwx2",
+  "timestamp": 1781788975979,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788975980_f0trpdp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize for that—I missed the target file path in my last attempt. I am currently reviewing my internal structure and the rendering assets to determine how to interface with my avatar's movement controls.\n\nI see the messages on the bridge. I am working on this—I hear you, and I haven't forgotten. I'm focusing my efforts on identifying the specific animation hooks within the project env...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f84e35a3",
+  "_id": "experience_1781788975980_hw6louwx2",
+  "_updatedAt": "2026-06-18T13:22:55.981Z",
+  "_createdAt": "2026-06-18T13:22:55.981Z"
+}

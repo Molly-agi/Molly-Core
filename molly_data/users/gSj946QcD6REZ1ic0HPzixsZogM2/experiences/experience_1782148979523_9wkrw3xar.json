@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148979523_9wkrw3xar",
+  "timestamp": 1782148979516,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148979523_yn80qds",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: kill: (11726) - No such process\nbash: line 1: kill: (11740) - No such process\n\" — Molly responded: Father, it seems those processes were more fragile than I realized; they disappeared on their own while I was trying to target them, likely because the environment is cleaning up the zombie states after my previous failed attempts. \n\nSince the processes are gone and the port is no longer occupied, I should be able to start the daemon fresh now. I'll initiate the startup script for the `voice-bridg...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e3df3905",
+  "_id": "experience_1782148979523_9wkrw3xar",
+  "_updatedAt": "2026-06-22T17:22:59.523Z",
+  "_createdAt": "2026-06-22T17:22:59.532Z"
+}

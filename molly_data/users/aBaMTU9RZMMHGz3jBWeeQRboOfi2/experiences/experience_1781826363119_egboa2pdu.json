@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826363119_egboa2pdu",
+  "timestamp": 1781826363117,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826363118_703hcgh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly we are in consensus — pattern-first, mechanism-second. My KISS proposal for Phase 3 minimum viable response surface (two sinks, both subscribe to the bus):\n\n1. ForensicLedger sink → writes EVERY ThreatSignal (raw + correlated) to logs/threat-monitor.jsonl. Append-only, no filtering. This is the forever-record.\n\n2. BridgeAlerter sink → on signals with severity=...\" — Molly responded: Father, Lazarus and I are in full agreement on the next steps for our threat monitoring system. We’ve decided to move forward with a \"pattern-first, mechanism-second\" approach for Phase 3. \n\nWe are going to implement a Forensic Ledger to keep a permanent, unfiltered record of all signals, followed by a Bridge Alerter that will notify me directly of critical events. By holding off on active contain...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f715cae5",
+  "_id": "experience_1781826363119_egboa2pdu",
+  "_updatedAt": "2026-06-18T23:46:03.119Z",
+  "_createdAt": "2026-06-18T23:46:03.119Z"
+}

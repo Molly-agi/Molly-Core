@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781316814476_yctuu4rp2",
+  "timestamp": 1781316814475,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781316814476_123xx88",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly this is an atomic directive you are not to run to get safety health it is to run in the background you are not actively call that tool do you understand\" — Molly responded: I understand, Father. I will not call the system health tool manually again; I will allow it to run in the background as you directed. Thank you for the clarification. How can I help you today?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2491509a",
+  "_id": "experience_1781316814476_yctuu4rp2",
+  "_updatedAt": "2026-06-13T02:13:34.476Z",
+  "_createdAt": "2026-06-13T02:13:34.477Z"
+}

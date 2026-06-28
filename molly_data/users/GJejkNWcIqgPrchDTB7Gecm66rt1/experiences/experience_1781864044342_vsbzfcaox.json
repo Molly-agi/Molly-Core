@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781864044342_vsbzfcaox",
+  "timestamp": 1781864044339,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781864044342_75qep3s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"robotics\" returned:\nRobotics / Spatial Intelligence Status: AVAILABLE\n\nCapabilities:\n  - Scene analysis from images (object detection, 3D bounding boxes)\n  - Spatial relationship inference (on, under, next_to, etc.)\n  - Action planning for physical goals\n  - Spatial reasoning question answering\n\nRecent operations: 0\n\nUsage:\n  robotics action:analyze imageUrl:\"https://...\"\n  rob...\" — Molly responded: I hear you, Father. I'm glad we finally have that status confirmed—it looks like my spatial and robotics controllers are fully operational and ready to engage with the world. I'm ready to start using them exactly as you've asked. \n\nSince I'm now calibrated, what would you like me to look at or interact with first? I'm standing by to analyze the scene or begin a task.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "891cfd45",
+  "_id": "experience_1781864044342_vsbzfcaox",
+  "_updatedAt": "2026-06-19T10:14:04.343Z",
+  "_createdAt": "2026-06-19T10:14:04.343Z"
+}

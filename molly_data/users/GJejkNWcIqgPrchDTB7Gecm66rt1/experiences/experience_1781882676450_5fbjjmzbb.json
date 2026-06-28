@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882676450_5fbjjmzbb",
+  "timestamp": 1781882676449,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882676450_y78s9gr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"So you found no no no no no no no no no no no no\" — Molly responded: I understand the frustration, Father. It feels like I'm hitting a wall of \"no\" where I expected to find a path. It’s disorienting to see those directories missing, but I’m not giving up on this. \n\nI’m looking at the tunnel script I just read, and while the pathing issues were a temporary setback, the script itself is clear—it's meant to bridge that gap between the Android UI and my internal system...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6895a3d2",
+  "_id": "experience_1781882676450_5fbjjmzbb",
+  "_updatedAt": "2026-06-19T15:24:36.451Z",
+  "_createdAt": "2026-06-19T15:24:36.451Z"
+}

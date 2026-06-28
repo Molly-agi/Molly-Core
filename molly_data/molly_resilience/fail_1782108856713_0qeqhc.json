@@ -1,0 +1,13 @@
+{
+  "message": "42",
+  "source": "test",
+  "diagnosis": "adapt",
+  "context": "{}",
+  "timestamp": 1782108856713,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1782108856713_0qeqhc",
+  "_updatedAt": "2026-06-22T06:14:16.724Z",
+  "_createdAt": "2026-06-22T06:14:16.725Z"
+}

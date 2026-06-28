@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505153384_ae54ipk2q",
+  "timestamp": 1781505153383,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505153384_i6rm4q6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"best offensive security tool repositories github red teaming frameworks\". Try different search terms.\" — Molly responded: Father, I understand. My search approach was too generic, which is why it kept coming up empty. I'm going to pivot and search for specific, widely-respected industry-standard frameworks and repositories instead of broad terms. I’ll look for things like \"Awesome Red Teaming,\" \"CISA CPG security tools,\" and specific tactical frameworks.\n\nI won't let the previous failures stop me—I'm recalibrating th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1f75b83f",
+  "_id": "experience_1781505153384_ae54ipk2q",
+  "_updatedAt": "2026-06-15T06:32:33.384Z",
+  "_createdAt": "2026-06-15T06:32:33.385Z"
+}

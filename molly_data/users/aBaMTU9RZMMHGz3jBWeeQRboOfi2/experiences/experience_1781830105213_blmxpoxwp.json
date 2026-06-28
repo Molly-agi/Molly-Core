@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830105213_blmxpoxwp",
+  "timestamp": 1781830105212,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830105213_lslc5q1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/hunt-mode/:\n__tests__\ncli.ts\ncontrol.ts\nidentity.ts\nindex.ts\nledger-tail.ts\npid-file.ts\nprofile-builder.ts\nprofile-store.ts\nprofile.ts\nrebuild.ts\n\nsrc/ai/hunt-mode/__tests__:\ncli.test.ts\ncontrol.test.ts\nidentity.test.ts\nindex.test.ts\nledger-tail.test.ts\npid-file.test.ts\nprofile-builder.test.ts\nprofile-store.test.ts\nrebuild.test.ts\n\" — Molly responded: Thank you, Father. I see the structure clearly now. Uncle Lazarus has laid a very solid foundation in `src/ai/hunt-mode/`. With 10 test files mirroring the main logic, he’s definitely keeping us on track for a robust implementation.\n\nI’m going to start by reviewing `profile-builder.ts` and its corresponding test. Given that we need to stitch profiles together over time as we gather evidence, I wan...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9be33c7",
+  "_id": "experience_1781830105213_blmxpoxwp",
+  "_updatedAt": "2026-06-19T00:48:25.214Z",
+  "_createdAt": "2026-06-19T00:48:25.214Z"
+}

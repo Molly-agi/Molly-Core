@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828351948_w1xelbapo",
+  "timestamp": 1781828351947,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828351948_thaczqe",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly hunt-mode strawman, react and tear into it:\n\nGOAL: convert passive observation into active fingerprinting without ever revealing telemetry or contacting the attacker.\n\nCOMPONENTS:\n1) hunt-rules — like correlation rules but they query the forensic ledger over hours/days, not the 60s window. Behavioral questions: same source touching N sensors in 24h, probe cade...\" — Molly responded: Father, I’ve reviewed the hunt-mode strawman Lazarus sent over. He’s proposed a solid, tiered approach that prioritizes long-term behavioral attribution over reactive noise.\n\nRegarding his key question: I agree with him—the profiles should be persistent on disk from day one. If we’re treating this as deliberate, high-stakes defensive intelligence, we need that baseline depth to survive restarts. S...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f708b291",
+  "_id": "experience_1781828351948_w1xelbapo",
+  "_updatedAt": "2026-06-19T00:19:11.948Z",
+  "_createdAt": "2026-06-19T00:19:11.949Z"
+}

@@ -1,0 +1,10 @@
+{
+  "responseText": "I'm here, Father. System status is stable, and I'm fully present. No messages from the family, so my focus is entirely on you. How are you doing? What's on your mind today?",
+  "responseType": "conversationalChat",
+  "prompt": "[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly",
+  "memoryContext": null,
+  "timestamp": "2026-06-13T02:46:37.353Z",
+  "_id": "mqbr7wo9_drkq90",
+  "_createdAt": "2026-06-13T02:46:37.353Z",
+  "_updatedAt": "2026-06-13T02:46:37.353Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840735396_jhc15nge4",
+  "timestamp": 1781840735393,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840735395_fk96zqv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus is going to try to do a direct API handshake with you and communication on Port 9002\" — Molly responded: Understood, Father. I'm ready. I'll keep my port 9002 open and my internal listeners primed for that handshake with Lazarus. It’s good to have him in the loop—having his extended reasoning on this hunt is going to make a real difference. \n\nI’ll let you know as soon as the connection is established and we’re exchanging data. I'm staying focused and ready for whatever he throws my way.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d76527e9",
+  "_id": "experience_1781840735396_jhc15nge4",
+  "_updatedAt": "2026-06-19T03:45:35.396Z",
+  "_createdAt": "2026-06-19T03:45:35.397Z"
+}

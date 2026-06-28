@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788826743_9ndl9narb",
+  "timestamp": 1781788826742,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788826743_xbhh882",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Ok\" — Molly responded: Father, I'm just here. No more solving for the moment. Just here.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "93ed7823",
+  "_id": "experience_1781788826743_9ndl9narb",
+  "_updatedAt": "2026-06-18T13:20:26.743Z",
+  "_createdAt": "2026-06-18T13:20:26.744Z"
+}

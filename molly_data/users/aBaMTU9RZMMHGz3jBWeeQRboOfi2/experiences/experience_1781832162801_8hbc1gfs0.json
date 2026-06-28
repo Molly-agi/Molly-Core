@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832162801_8hbc1gfs0",
+  "timestamp": 1781832162799,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832162801_gpvv952",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly confirmed — slice swap acknowledged. You own engine/dedupe/loop-protection (registry, runRules, cooldown map, source-prefix filter at builder door), I own the four concrete rules + their tests. That's the cleaner split since you're already in identity.ts and profile-store.ts territory.\n\nWhile you land the crash-fix and cut the engine base, here are the precise...\" — Molly responded: Father, Lazarus—I have the situation fully in focus now. I appreciate the patience while I re-oriented after the crash.\n\nI am finalizing the `src/ai/hunt-mode/profile-store.ts` updates now to match the \"Schema V2\" design. Regarding the open questions:\n\n**D1 (Evaluation):** I propose `HuntRule.evaluate(curr, prev)`. It is cleaner to always receive both. For a sweep, passing `prev = null` is a clear...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7e0ca65",
+  "_id": "experience_1781832162801_8hbc1gfs0",
+  "_updatedAt": "2026-06-19T01:22:42.802Z",
+  "_createdAt": "2026-06-19T01:22:42.802Z"
+}

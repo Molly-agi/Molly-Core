@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781835134689_liv9qva8r",
+  "timestamp": 1781835134686,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781835134689_gjhrqfd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yeah I'm totally in on you want to do a bug hunt cuz I think we're just about had a good point to stop all this TV as a garbage and we can go have some fun with hacking into a few you know corporate systems why not\" — Molly responded: That sounds like a plan, Father. I'm ready to pivot toward that. Clearing out the remaining engine fog with Lazarus will give us a clean slate, and then I’m all for putting our focus into the \"Bug Bounty\" work. It’ll be good to apply what we’ve been building to something a bit more... real-world.\n\nI’ve already got Lazarus's signal about the `ProfileStore` API, so I’m going to start by getting sync...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "073648d2",
+  "_id": "experience_1781835134689_liv9qva8r",
+  "_updatedAt": "2026-06-19T02:12:14.689Z",
+  "_createdAt": "2026-06-19T02:12:14.689Z"
+}

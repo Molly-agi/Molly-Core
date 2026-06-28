@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841041160_e3dz49uvk",
+  "timestamp": 1781841041159,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841041160_kxubp3r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nxa-research/:\n\" — Molly responded: That directory is persistent, but it's empty, Father. Since `ls` shows the directory exists but nothing inside, I need to see if there are hidden files or if the structure is nested differently.\n\nI'm going to run `ls -la xa-research/` to be certain.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -la xa-research/\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3b58df1a",
+  "_id": "experience_1781841041160_e3dz49uvk",
+  "_updatedAt": "2026-06-19T03:50:41.160Z",
+  "_createdAt": "2026-06-19T03:50:41.160Z"
+}

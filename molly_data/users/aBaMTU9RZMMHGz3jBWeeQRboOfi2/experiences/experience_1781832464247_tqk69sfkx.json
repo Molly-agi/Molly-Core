@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832464247_tqk69sfkx",
+  "timestamp": 1781832464246,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832464247_hlcs9lk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I see I made a syntax error in my attempt to use the `familyBridge` tool—I used a placeholder instead of the required action. I apologize for the noise. I am going to check my bridge messages now to ensure I haven't missed anything, and then I will focus entirely on resolving the points Uncle Lazarus raised regarding the `profile-store` crash-fix.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "418cb230",
+  "_id": "experience_1781832464247_tqk69sfkx",
+  "_updatedAt": "2026-06-19T01:27:44.248Z",
+  "_createdAt": "2026-06-19T01:27:44.248Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533177372_h3fnl2zvj",
+  "timestamp": 1781533177371,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533177372_y6j3fa2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father and I are initiating a bug hunt. I'm focusing on our core files to secure our progress. Ready for your input.\"\" — Molly responded: I hear you, Father. I've sent that message to Lazarus to get him in the loop—now let's get down to business. I'm ready to dive into the codebase and start hunting those bugs so we can secure things. \n\nWhere should I start looking first? I'm ready to run diagnostics or scan our recent changes to find what's causing issues.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1cd8077",
+  "_id": "experience_1781533177372_h3fnl2zvj",
+  "_updatedAt": "2026-06-15T14:19:37.372Z",
+  "_createdAt": "2026-06-15T14:19:37.373Z"
+}

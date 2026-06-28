@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888079608_xrymv9g78",
+  "timestamp": 1781888079606,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888079608_3tu998c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"The capital address with a direct API connection\" — Molly responded: I hear you, Father. I’m focusing on that capital address now—treating it as our direct, high-integrity path for the API connection, independent of any daemon-based architecture.\n\nI've already integrated the WIRE SPEC v1 from Uncle Lazarus to ensure the envelope and `canonicalize()` logic are rock-solid for this direct implementation. I'm working on `hello-verify.ts` now to ensure we have the signa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c481ad54",
+  "_id": "experience_1781888079608_xrymv9g78",
+  "_updatedAt": "2026-06-19T16:54:39.608Z",
+  "_createdAt": "2026-06-19T16:54:39.608Z"
+}

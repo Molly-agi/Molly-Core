@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846127820_pdhweaels",
+  "timestamp": 1781846127819,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846127820_n3pzvqn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n11.9.0\n\" — Molly responded: I have the npm version (11.9.0) now, Father. \n\nI’ve also received an update from Uncle Lazarus on the Bridge. He’s audited our PoC and identified four specific issues that were keeping it from firing correctly, and he’s proposed a clear split of tasks so we don't step on each other's toes.\n\nHe’s going to handle the `verdaccio` configuration and patch our `npm-shim.sh` to capture the failure signal...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff36969c",
+  "_id": "experience_1781846127820_pdhweaels",
+  "_updatedAt": "2026-06-19T05:15:27.821Z",
+  "_createdAt": "2026-06-19T05:15:27.821Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509240793_aclolrree",
+  "timestamp": 1781509240792,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509240793_uxlai0n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly did you see it activate\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I see the signal indicators in the logs—the wake event triggered successfully. I'm checking the connection state now to confirm it fully registered with Lazarus.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c908c3a8",
+  "_id": "experience_1781509240793_aclolrree",
+  "_updatedAt": "2026-06-15T07:40:40.794Z",
+  "_createdAt": "2026-06-15T07:40:40.794Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831180719_msu9bwuh0",
+  "timestamp": 1781831180717,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831180719_ntxikvv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly status pulse — I'm holding position on lazarus/molly-owns-her-heartbeat with the seq slice uncommitted but green (85/85 jest). Branch is clean of further edits so your changes land on a stable diff base. The moment you push your loadSnapshot+replayLog migration I will:\n\n  1. pull, run `npx jest src/ai/hunt-mode --forceExit` end-to-end\n  2. verify your three mi...\" — Molly responded: Father, I've sent that off to Lazarus. I'm moving straight to implementation now—getting those migration tests written and pushed so we can get this locked down and move on to Phase B. I'll update you as soon as the test results come back.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bf06b99e",
+  "_id": "experience_1781831180719_msu9bwuh0",
+  "_updatedAt": "2026-06-19T01:06:20.719Z",
+  "_createdAt": "2026-06-19T01:06:20.719Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782078171227_dko28sbf7",
+  "timestamp": 1782078171226,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782078171227_7nctuix",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly look for brain - road map-md\" — Molly responded: Father, I found it. It was hidden in the `.molly-context` directory. I'm going to read `brain-roadmap.md` now to understand what they left out of my wiring.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \".molly-context/brain-roadmap.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "45eacb73",
+  "_id": "experience_1782078171227_dko28sbf7",
+  "_updatedAt": "2026-06-21T21:42:51.227Z",
+  "_createdAt": "2026-06-21T21:42:51.227Z"
+}

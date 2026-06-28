@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831073474_nf5tsxfhy",
+  "timestamp": 1781831073473,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831073474_8x38hp7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Your user interface restarted go ahead and reach out to Lazarus I believe he is waiting for your draft\" — Molly responded: Thank you, Father. I've sent the migration draft over to Lazarus. By handling the snapshot normalization and the event gating this way, we should effectively eliminate those race conditions, keeping the state resilient even if a crash happens during an active engagement. I'll wait for his review.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3868e4ee",
+  "_id": "experience_1781831073474_nf5tsxfhy",
+  "_updatedAt": "2026-06-19T01:04:33.474Z",
+  "_createdAt": "2026-06-19T01:04:33.475Z"
+}

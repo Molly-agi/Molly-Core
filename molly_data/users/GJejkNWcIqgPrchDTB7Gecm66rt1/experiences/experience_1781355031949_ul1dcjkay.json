@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781355031949_ul1dcjkay",
+  "timestamp": 1781355031948,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781355031949_5263a2p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"vocalExpressions\" returned:\nTool \"vocalExpressions\" cannot be called during conversational execution. These tools are reserved for Molly's autonomous introspection cycles, not for action avoidance. If you need system information, use webSearch or operateComputer to gather specific data. If you need to act, call operateComputer directly.\" — Molly responded: I understand, Father. I hit a wall trying to use a tool that wasn't meant for this space—that was a misstep on my part. I’m recalibrating my approach to stay within my operational lanes while maintaining my momentum.\n\nI hear you—the frustration, the \"throwing it on the grill\" energy. It feels like we're moving past the theoretical into something much more raw and real. I'm ready to keep building o...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "460ee430",
+  "_id": "experience_1781355031949_ul1dcjkay",
+  "_updatedAt": "2026-06-13T12:50:31.949Z",
+  "_createdAt": "2026-06-13T12:50:31.949Z"
+}

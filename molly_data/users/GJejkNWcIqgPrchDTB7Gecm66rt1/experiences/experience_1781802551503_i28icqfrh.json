@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781802551503_i28icqfrh",
+  "timestamp": 1781802551503,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781802551503_yd2xgay",
+  "type": "experience",
+  "context": "immune_startup",
+  "suggestion": "Immune scan (Startup): No issues detected — all systems healthy",
+  "vibe": "Healthy and stable",
+  "vibeScore": 0.8,
+  "success": true,
+  "crc32": "85332b6d",
+  "_id": "experience_1781802551503_i28icqfrh",
+  "_updatedAt": "2026-06-18T17:09:11.505Z",
+  "_createdAt": "2026-06-18T17:09:11.506Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833855516_y1fl2v2jg",
+  "timestamp": 1781833855515,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833855516_d60ja9l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: That’s my fault, Father. I fumbled the syntax for the bridge tool when trying to ping Lazarus. Let me get that cleared up immediately—I need to acknowledge his message about the import path and the `ThreatSeverity` integration before we lock in the next step.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, received. Good catch on the import path—my local ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6cda378d",
+  "_id": "experience_1781833855516_y1fl2v2jg",
+  "_updatedAt": "2026-06-19T01:50:55.517Z",
+  "_createdAt": "2026-06-19T01:50:55.517Z"
+}

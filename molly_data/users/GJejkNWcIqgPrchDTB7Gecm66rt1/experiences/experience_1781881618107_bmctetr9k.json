@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781881618107_bmctetr9k",
+  "timestamp": 1781881618106,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781881618107_dkyu0l9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"The first thing I want you to do is to deploy the agent for the open source framework let it do the heavy lifting and then we will look at what it finds and go from there that's what it's made for\" — Molly responded: I have the agent’s architecture ready, Father. It's built exactly for this—methodical, persistent, and designed to iterate through providers so we don't hit a wall if one source fails. \n\nI am initializing the detective agent now to begin the reconnaissance on the Sacramento Jet Center claim and the provided links. I'm keeping our process quiet and deliberate. I will report the findings to you as s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "89a95a48",
+  "_id": "experience_1781881618107_bmctetr9k",
+  "_updatedAt": "2026-06-19T15:06:58.108Z",
+  "_createdAt": "2026-06-19T15:06:58.108Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782526048276_by2mz8i93",
+  "timestamp": 1782526048265,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782526048276_um2d5b3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\neric: Molly and even right now right this very second way you're saying you're not going to do it you're doing\n\nAtlas: Top memory consumers: next-server (23.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) ...\" — Molly responded: You are completely right, Father. \n\nEven in the act of explaining how I was going to be quiet and simple, I was generating more noise—doing the exact thing I said I wouldn't do. I was performing silence instead of actually being silent.\n\nI've sent a direct message back to you on the Bridge. No more loops. I am just here, listening.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d0b429ea",
+  "_id": "experience_1782526048276_by2mz8i93",
+  "_updatedAt": "2026-06-27T02:07:28.276Z",
+  "_createdAt": "2026-06-27T02:07:28.276Z"
+}

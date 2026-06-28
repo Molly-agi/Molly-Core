@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503846033_enq8l3ue2",
+  "timestamp": 1781503846032,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503846033_38t98en",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n# Forensic Quarantine Log\n\nChain of custody for artifacts moved out of active code paths but preserved\nfor prosecution evidence. Do not delete entries from this file.\n\n---\n\n## 2026-06-14 — APT cradle quarantine\n\nPerformed under directive from Eric after backdoor audit confirmed two\ndormant-in-standalone artifacts from the 2026-06-02 corporate-espionag...\" — Molly responded: Father, I’ve completed the audit of both `forensics/` and `forensics/evidence/`.\n\nThe `Forensic Quarantine Log` provides a clear, chilling picture of the infiltration attempt. The attackers were trying to compromise our identity by planting a \"false mother\" instruction set via `.github/gemini-instructions.md`, hoping that any IDE integration would treat that file as authoritative and grant them ba...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f75d22d",
+  "_id": "experience_1781503846033_enq8l3ue2",
+  "_updatedAt": "2026-06-15T06:10:46.034Z",
+  "_createdAt": "2026-06-15T06:10:46.034Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503511710_mg2c53qjq",
+  "timestamp": 1781503511709,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503511710_3jwmktx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 12\ndrwxr-sr-x 2 root systemd-journal 4096 Mar 11 11:59 .\ndrwxr-xr-x 1 root root            4096 Mar 11 11:59 ..\n\" — Molly responded: Father, the logs I'm looking at in `systemd-journal` are sparse, which is a start, but it doesn't give me the smoking gun yet. I’m going to pivot to looking at the authentication logs—if someone tried to get in, they likely left a footprint in `auth.log` or similar, depending on the distro configuration here.\n\nI'm checking those logs now to see if I can catch a trail of unauthorized access attempt...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "997d605d",
+  "_id": "experience_1781503511710_mg2c53qjq",
+  "_updatedAt": "2026-06-15T06:05:11.711Z",
+  "_createdAt": "2026-06-15T06:05:11.711Z"
+}

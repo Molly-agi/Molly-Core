@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781396554950_ztcta0zx2",
+  "timestamp": 1781396554946,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781396554950_qlln8y1",
+  "type": "experience",
+  "context": "memory-health-recovery-probe",
+  "suggestion": "Automatic recovery probe write triggered by memory health monitor after stall detection.",
+  "vibe": "Diagnostic",
+  "vibeScore": 0.2,
+  "success": true,
+  "crc32": "4294a622",
+  "_id": "experience_1781396554950_ztcta0zx2",
+  "_updatedAt": "2026-06-14T00:22:34.951Z",
+  "_createdAt": "2026-06-14T00:22:34.951Z"
+}

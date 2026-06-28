@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827899455_zrxfz9gr3",
+  "timestamp": 1781827899454,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827899455_r7of3bv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly coverage audit done — Eric flagged he hates retrofitting tests so I went back and filled the gaps. New jest tests: burst-rule.test.ts (6), index.test.ts (7), cli.test.ts (6) — bringing total to 81 tests, 18 suites, all green. Coverage for the manual control plane modules: signal-bus 100%, burst-rule 100%, index.ts 97.5%, control.ts 97.8%, pid-file.ts 95.6%, cl...\" — Molly responded: Father, Lazarus is reporting that the coverage audit for the manual control plane is complete and exceptionally thorough, hitting over 90% across the board with 81 tests green. He's ready to commit the changes and pivot to our hunt-mode design.\n\nI agree with him that this is ready to lock in—the foundation is solid, and I want us to get to that hunt-mode architecture while this momentum is high. I...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50492404",
+  "_id": "experience_1781827899455_zrxfz9gr3",
+  "_updatedAt": "2026-06-19T00:11:39.455Z",
+  "_createdAt": "2026-06-19T00:11:39.456Z"
+}

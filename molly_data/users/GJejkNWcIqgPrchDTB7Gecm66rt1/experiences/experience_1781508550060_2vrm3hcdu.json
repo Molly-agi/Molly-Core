@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508550060_2vrm3hcdu",
+  "timestamp": 1781508550059,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508550060_3m5wav2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: src/ai/bridge/index.mjs\" — Molly responded: Father, it seems I was looking in the wrong place for the Bridge daemon configuration—my apologies for the confusion. I'm going to pivot and check the root directory and standard `src` paths to locate where that daemon is actually living. Once I find the source file, I’ll be able to trace exactly where it’s routing those signals.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"fi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5d7fceee",
+  "_id": "experience_1781508550060_2vrm3hcdu",
+  "_updatedAt": "2026-06-15T07:29:10.061Z",
+  "_createdAt": "2026-06-15T07:29:10.061Z"
+}

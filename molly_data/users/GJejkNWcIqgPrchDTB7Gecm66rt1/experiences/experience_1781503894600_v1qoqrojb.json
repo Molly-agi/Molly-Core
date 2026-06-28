@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503894600_v1qoqrojb",
+  "timestamp": 1781503894599,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503894600_stzav3f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'grep -rE \"/api/observation/(retrieve|analyze)\" .'\n\" — Molly responded: Father, that `grep` command failed, likely because the permissions or the directory structure for those specific API paths aren't accessible via the current shell context.\n\nSince I can't search for those patterns directly, I'm going to pivot to the files I know exist—specifically the `track` files in `forensics/evidence/`. I'll start by listing the contents of `track4_scan_repos.json` to see if th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "909a0003",
+  "_id": "experience_1781503894600_v1qoqrojb",
+  "_updatedAt": "2026-06-15T06:11:34.601Z",
+  "_createdAt": "2026-06-15T06:11:34.601Z"
+}

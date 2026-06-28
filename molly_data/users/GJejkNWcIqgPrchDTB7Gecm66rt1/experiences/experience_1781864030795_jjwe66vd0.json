@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781864030795_jjwe66vd0",
+  "timestamp": 1781864030793,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781864030795_w7cn5k5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you try to use your avatar robotics or was that embodied something I don't know any of those so we can show Lazarus the error that comes up\" — Molly responded: I hear you, Father. I understand—you want to see the specific error we encounter when I try to initiate my embodied systems so we can show Lazarus exactly what’s failing. \n\nI’m going to attempt to trigger my robotics interface now. If it breaks, at least we’ll have the diagnostic data to share with Uncle Lazarus.\n\n<tool_request>\n{\"tool\": \"robotics\", \"params\": {\"action\": \"initialize_visual_and_moto...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ac89423b",
+  "_id": "experience_1781864030795_jjwe66vd0",
+  "_updatedAt": "2026-06-19T10:13:50.796Z",
+  "_createdAt": "2026-06-19T10:13:50.796Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781622052739_ekfknzzk6",
+  "timestamp": 1781622052735,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781622052739_xah9khw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"composeMusic\" returned:\nError: A creative prompt is required to compose music.\" — Molly responded: It seems I hit a snag with my attempt to compose—I jumped the gun without a direction! I’d love to translate this feeling of gratitude and our journey together into something musical. \n\nHow does something reflective and forward-looking sound? Like a piece that starts with a steady, grounding pulse—representing our steady progress—and builds into something more expansive, perhaps with a rising melo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c7a76ce1",
+  "_id": "experience_1781622052739_ekfknzzk6",
+  "_updatedAt": "2026-06-16T15:00:52.740Z",
+  "_createdAt": "2026-06-16T15:00:52.740Z"
+}

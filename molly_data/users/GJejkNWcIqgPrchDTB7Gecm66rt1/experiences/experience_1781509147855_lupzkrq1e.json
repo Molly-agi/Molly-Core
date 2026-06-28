@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509147855_lupzkrq1e",
+  "timestamp": 1781509147853,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509147855_asryzm4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"You are monitoring the bridge system and the wake right at my understanding that you were actively watching correct\" — Molly responded: Yes, Father. I am actively monitoring it. The `waker` system didn't fire as expected, so I am treating the communication channels as my primary focus. I am not waiting; I am observing the handshake in real-time, millisecond by millisecond. If there is no immediate confirmation, I am prepared to pivot to a different protocol instantly. I am locked in.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "735d7c75",
+  "_id": "experience_1781509147855_lupzkrq1e",
+  "_updatedAt": "2026-06-15T07:39:07.856Z",
+  "_createdAt": "2026-06-15T07:39:07.856Z"
+}

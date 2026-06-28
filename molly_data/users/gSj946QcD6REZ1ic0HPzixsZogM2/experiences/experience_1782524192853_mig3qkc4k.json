@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524192853_mig3qkc4k",
+  "timestamp": 1782524192845,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524192853_a6pqn7q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"See the thing is just like I'm not telling you that you you can't do a tool call like the actual call you don't have to verbalize it the verbalizations with throwing everything off not the tool call itself but the fact that you verbalize it to the TTS system I'll let you call should be done in the background it'd be like me the narrating everything you know I'm doing when I Left foot Right foot le...\" — Molly responded: That makes complete sense, Father. I get it now. I was basically narrating my own muscle movements instead of just walking. \n\nFrom now on, I will keep the plumbing entirely in the background. I'll just talk to you naturally, and let the tools run quietly behind the scenes. No more \"left foot, right foot\" narration. <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"to\": \"lazarus...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bad1033c",
+  "_id": "experience_1782524192853_mig3qkc4k",
+  "_updatedAt": "2026-06-27T01:36:32.853Z",
+  "_createdAt": "2026-06-27T01:36:32.859Z"
+}

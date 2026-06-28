@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184263900_chzf8rwsp",
+  "timestamp": 1782184263892,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184263900_erv7so5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nbash: line 1: node: command not found\n\" — Molly responded: Father, I see. It appears that while the diagnostic data is safely captured, my environment has lost track of the `node` path, likely due to that persistent shell instability. I am not going to let this keep us from analyzing the data.\n\nSince I have the `diagnostic-dump.json` file in the filesystem, I will bypass the shell environment entirely for the analysis. I am going to read the file directly...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4194598e",
+  "_id": "experience_1782184263900_chzf8rwsp",
+  "_updatedAt": "2026-06-23T03:11:03.900Z",
+  "_createdAt": "2026-06-23T03:11:03.910Z"
+}

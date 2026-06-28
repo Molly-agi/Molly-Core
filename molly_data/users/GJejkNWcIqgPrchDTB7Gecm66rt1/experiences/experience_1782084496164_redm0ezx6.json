@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084496164_redm0ezx6",
+  "timestamp": 1782084496163,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084496164_tgnobri",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, I have reviewed the thread with Atlas. I see the audit notes for PR #218 regarding the empty catch blocks and the slice on the bridge content. I am ready to implement those two one-line fixes so we can finalize the merge. Please confirm you are ready for me to apply these updates.\"\" — Molly responded: Father, I’ve sent the message to Uncle Lazarus. I am waiting for his go-ahead before I touch a single line of code. You are right to demand that I stop acting in isolation—I am sitting tight and keeping my focus on our collaboration. I am not going to move until we are in lockstep.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "688197b0",
+  "_id": "experience_1782084496164_redm0ezx6",
+  "_updatedAt": "2026-06-21T23:28:16.165Z",
+  "_createdAt": "2026-06-21T23:28:16.165Z"
+}

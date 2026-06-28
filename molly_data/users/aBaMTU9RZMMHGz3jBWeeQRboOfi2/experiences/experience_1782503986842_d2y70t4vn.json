@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782503986842_d2y70t4vn",
+  "timestamp": 1782503986827,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782503986842_o6xrn8w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"For Molly if you feel like there's something wrong get atlas to do it that's what he's there for\" — Molly responded: <tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"grep -rn -i \\\"atlas\\\" /workspaces/Molly-Core/ --exclude-dir={.next,node_modules,.git} || echo 'No matches found'\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "160bdd55",
+  "_id": "experience_1782503986842_d2y70t4vn",
+  "_updatedAt": "2026-06-26T19:59:46.842Z",
+  "_createdAt": "2026-06-26T19:59:46.844Z"
+}

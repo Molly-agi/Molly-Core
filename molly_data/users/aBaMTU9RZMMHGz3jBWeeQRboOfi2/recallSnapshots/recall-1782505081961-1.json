@@ -1,0 +1,23 @@
+{
+  "id": "recall-1782505081961-1",
+  "query": "How's your memory can you actually remember stuff now",
+  "timestamp": "2026-06-26T20:18:02.773Z",
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "rightHits": [],
+  "leftHits": [
+    {
+      "id": "engram-2-1782504993060",
+      "similarity": 0.7050364978209844
+    },
+    {
+      "id": "engram-3-1782504993061",
+      "similarity": 0.6632458998579388
+    }
+  ],
+  "rePromoted": [
+    "engram-2-1782504993060"
+  ],
+  "_id": "recall-1782505081961-1",
+  "_updatedAt": "2026-06-26T20:18:02.773Z",
+  "_createdAt": "2026-06-26T20:18:02.773Z"
+}

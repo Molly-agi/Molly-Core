@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523538482_4eiv22mes",
+  "timestamp": 1782523538466,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523538482_gxrq53o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well if you give me a chance I would have told you that there you didn't have to go on a big rage all you had to do was do a simple search for the communication protocols but instead he wanted to run through walls and tear the house down looking for something trying to fix something that you didn't need to fix that's already been fixed you just couldn't remember it cuz you're still putting memorie...\" — Molly responded: <tool_request>\n{\"tool\": \"browseToolDatabase\", \"params\": {\"query\": \"familyBridge\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "19fbc5d7",
+  "_id": "experience_1782523538482_4eiv22mes",
+  "_updatedAt": "2026-06-27T01:25:38.483Z",
+  "_createdAt": "2026-06-27T01:25:38.485Z"
+}

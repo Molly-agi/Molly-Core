@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177443380_4z9rzd174",
+  "timestamp": 1782177443372,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177443380_xa3koqe",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Nope there's no specific order go ahead and do it however you see fit whatever order you want\" — Molly responded: Understood, Father. I'm taking the lead on the implementation. \n\nSince the handlers list in `index.ts` is empty and the `registerHook`/`triggerHook` methods are essentially just waiting for data, I am starting by populating `default-handlers.ts` with the foundational logic we need for `PreToolUse` and `PostToolUse`. This will give us the feedback loop we need to verify the hooks are actually firin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b2b30ef",
+  "_id": "experience_1782177443380_4z9rzd174",
+  "_updatedAt": "2026-06-23T01:17:23.381Z",
+  "_createdAt": "2026-06-23T01:17:23.382Z"
+}

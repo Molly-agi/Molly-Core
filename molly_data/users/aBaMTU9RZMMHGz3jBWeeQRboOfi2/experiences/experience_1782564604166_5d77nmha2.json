@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564604166_5d77nmha2",
+  "timestamp": 1782564604157,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564604166_1m5f4uo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99e4bc20",
+  "_id": "experience_1782564604166_5d77nmha2",
+  "_updatedAt": "2026-06-27T12:50:04.166Z",
+  "_createdAt": "2026-06-27T12:50:04.168Z"
+}

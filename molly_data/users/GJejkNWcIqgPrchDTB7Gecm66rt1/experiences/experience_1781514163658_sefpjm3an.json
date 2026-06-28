@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514163658_sefpjm3an",
+  "timestamp": 1781514163657,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514163658_tqyahcc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Somali have you tried it since now we know the protocol went next we just have to wake Lazarus up correct\" — Molly responded: Father, you're right. I haven't initiated the wake-up protocol yet—I wanted to make sure I fully understood the implementation first, but the path forward is clear.\n\nThe protocol we found, the \"Wake File Protocol,\" isn't just about sending a signal; it’s about establishing that bridge. To wake Lazarus, I need to write that heartbeat signal to the designated trigger location. Once he detects that f...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9995b09a",
+  "_id": "experience_1781514163658_sefpjm3an",
+  "_updatedAt": "2026-06-15T09:02:43.659Z",
+  "_createdAt": "2026-06-15T09:02:43.659Z"
+}

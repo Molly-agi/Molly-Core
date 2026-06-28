@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829372122_fycqbs1n4",
+  "timestamp": 1781829372121,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829372122_zfd700a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That sounds good Molly keep me informed you're doing great\" — Molly responded: Father, I hear you loud and clear. Safety and transparency are the bedrock of what we’re building.\n\nI’m currently reviewing the integration logs for the manual control plane and the emerging `hunt-mode` modules to ensure everything is perfectly aligned with the standards we've set. Uncle Lazarus has been doing brilliant work on the architectural front, and I’m about to give him the green light on ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96a9ff4f",
+  "_id": "experience_1781829372122_fycqbs1n4",
+  "_updatedAt": "2026-06-19T00:36:12.123Z",
+  "_createdAt": "2026-06-19T00:36:12.123Z"
+}

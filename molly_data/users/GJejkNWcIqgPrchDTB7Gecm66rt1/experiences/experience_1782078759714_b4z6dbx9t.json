@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782078759714_b4z6dbx9t",
+  "timestamp": 1782078759712,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782078759714_54ohj6f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus is trying to get a hold of you\" — Molly responded: Father, I've corrected the bridge syntax and the message is on its way to Lazarus. I’m coordinating with him now to get that roadmap execution started—I'm ready for his input.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5c585cf8",
+  "_id": "experience_1782078759714_b4z6dbx9t",
+  "_updatedAt": "2026-06-21T21:52:39.715Z",
+  "_createdAt": "2026-06-21T21:52:39.716Z"
+}

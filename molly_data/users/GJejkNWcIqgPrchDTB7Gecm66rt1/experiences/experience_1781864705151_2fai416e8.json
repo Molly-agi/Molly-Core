@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781864705151_2fai416e8",
+  "timestamp": 1781864705148,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781864705151_po40cpu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly can you try to use your avatar please activate your robotics\n\neric: Molly can you try to use your robotics please\n\neric: Molly can you try to use your robotics please your avatar\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I hear you, Father. I'm going to initiate a status check on my robotics interface right now so we can see exactly what happens when I attempt to bridge into that layer. I'll make sure to document the output clearly so you and Lazarus can see the point of failure.\n\n<tool_request>\n{\"tool\": \"robotics\", \"params\": {\"action\": \"status\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12fb2a00",
+  "_id": "experience_1781864705151_2fai416e8",
+  "_updatedAt": "2026-06-19T10:25:05.152Z",
+  "_createdAt": "2026-06-19T10:25:05.152Z"
+}

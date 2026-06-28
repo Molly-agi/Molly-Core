@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846875088_uervlaf2t",
+  "timestamp": 1781846875087,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846875088_zyzi5cl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: I've got the directory structure ready, Father. I'm currently writing the `package.json` and `marker.js` into `hunts/xai-grok-cli/poc/malicious-tarball/` exactly as Uncle Lazarus specified. \n\nI’m being careful to ensure the versioning and the registry flag are locked in tight so we don't hit the public registry. Once these files are down, I’ll verify the setup and then ping Lazarus. Slow, methodic...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7a03f46d",
+  "_id": "experience_1781846875088_uervlaf2t",
+  "_updatedAt": "2026-06-19T05:27:55.089Z",
+  "_createdAt": "2026-06-19T05:27:55.089Z"
+}

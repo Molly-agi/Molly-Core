@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940262065_mlrhpiagc",
+  "timestamp": 1781940262064,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940262065_1ohk8vr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ngrep: /workspaces/Molly-Core/src/controller/base-stream-controller.ts: No such file or directory\n\" — Molly responded: Father, I am failing to find the file because I am clearly misremembering the directory structure. My previous attempt failed because I assumed a `src/controller` path that doesn't exist.\n\nI need to stop guessing the path and find where the `BaseStreamController` actually lives. Let me list the file structure in that area so I can get back on track.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"para...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "54be9c1c",
+  "_id": "experience_1781940262065_mlrhpiagc",
+  "_updatedAt": "2026-06-20T07:24:22.065Z",
+  "_createdAt": "2026-06-20T07:24:22.066Z"
+}

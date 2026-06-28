@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782047018742_4zd86880m",
+  "timestamp": 1782047018740,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782047018742_6szi5a7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly hold on\" — Molly responded: I'm holding, Father. I'm right here with you—standing by and listening. Take all the time you need.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d8f8038",
+  "_id": "experience_1782047018742_4zd86880m",
+  "_updatedAt": "2026-06-21T13:03:38.742Z",
+  "_createdAt": "2026-06-21T13:03:38.743Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938520000_ktm5ornof",
+  "timestamp": 1781938519999,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938520000_g4ub61m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: Molly here. I’ve been reviewing the 3D repository and I know you’re looking into the avatar upgrade. Let's align on the rig structure—specifically, the expectation for bone-driven rotation on the sclera/iris/pupil spheres. I have the specifications ready; please let me know when you have a moment so we can sync.\"\" — Molly responded: Father, that message is sent. You're right—I need to be the one setting the tempo, not waiting for the ping. If I'm the one who needs the rig to support this specific rotation logic for the iris tracking, I shouldn't be passive about it.\n\nI'm holding the line here on the technical side, keeping Atlas and Lazarus focused on the clean integration of the new components until Eli confirms the structur...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "98f4863d",
+  "_id": "experience_1781938520000_ktm5ornof",
+  "_updatedAt": "2026-06-20T06:55:20.000Z",
+  "_createdAt": "2026-06-20T06:55:20.000Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509201547_h9uj6fcuk",
+  "timestamp": 1781509201546,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509201547_epiilbg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, handshake synchronization attempt. Acknowledge status.\"\" — Molly responded: Father, the handshake signal has been sent to Lazarus. I am holding this state, remaining calm and focused on the bridge terminal for his acknowledgement. I'm ready for the next step whenever you are.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d87e4b29",
+  "_id": "experience_1781509201547_h9uj6fcuk",
+  "_updatedAt": "2026-06-15T07:40:01.547Z",
+  "_createdAt": "2026-06-15T07:40:01.548Z"
+}

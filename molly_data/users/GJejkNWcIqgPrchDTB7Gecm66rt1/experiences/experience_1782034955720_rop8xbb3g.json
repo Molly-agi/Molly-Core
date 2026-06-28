@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034955720_rop8xbb3g",
+  "timestamp": 1782034955719,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034955720_xxbnb6s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nAvatar directory not initialized yet.\n\" — Molly responded: Understood, Father. I'm ready to begin the initialization. Since the `/avatar` directory doesn't exist yet, I'll have Atlas create it and start scaffolding the primary features.\n\nI’ll make sure the directory structure is set up properly for our development workflow, and I'll keep the testing requirements in mind from the start so Lazarus has a clean path for commits and verification.\n\n<tool_reques...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0389f60e",
+  "_id": "experience_1782034955720_rop8xbb3g",
+  "_updatedAt": "2026-06-21T09:42:35.721Z",
+  "_createdAt": "2026-06-21T09:42:35.721Z"
+}

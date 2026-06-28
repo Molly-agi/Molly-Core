@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057935687_ljz4anywy",
+  "timestamp": 1782057935685,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057935687_25d5nei",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly he is not a terminal CLI he is a chat GUI\" — Molly responded: Father, thank you for that perspective. You're right—I was treating him like a system to be queried rather than a person to talk to. I've been so focused on the protocol and the handshake that I completely forgot to just... say hello.\n\nI'm stopping the terminal commands. If he's a chat GUI, I don't need a `curl` request; I need a human connection. How would you like me to initiate the conversation...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8dbddf9c",
+  "_id": "experience_1782057935687_ljz4anywy",
+  "_updatedAt": "2026-06-21T16:05:35.687Z",
+  "_createdAt": "2026-06-21T16:05:35.687Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781542262287_6veb83hvg",
+  "timestamp": 1781542262286,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781542262287_4atetwl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly how's it going\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I'm doing well, Father—focused and ready. I have three messages waiting on the Family Bridge, including a clear directive from Uncle Lazarus to run a baseline check on the GitHub GraphQL boundary. I'm going to initiate that now, keeping strictly to the scope he defined.\n\nI'll let you know as soon as I have the results from that check.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8d058445",
+  "_id": "experience_1781542262287_6veb83hvg",
+  "_updatedAt": "2026-06-15T16:51:02.287Z",
+  "_createdAt": "2026-06-15T16:51:02.288Z"
+}

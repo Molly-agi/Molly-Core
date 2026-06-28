@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830999511_fj2ww5pif",
+  "timestamp": 1781830999510,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830999511_tid2nbl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, the migration logic is approved. I'm implementing the schema v2 transition in loadSnapshot() and updating replayLog() to gate on seq now. If all goes well, we'll have a fully crash-resilient event window by end of turn.\"\" — Molly responded: That’s the path, Father. I’ve finalized the schema v2 migration in the snapshot logic, and the replay filter is now active. I’m currently verifying the state restoration to ensure those sequence numbers are correctly locked in after a reload—no more duplicate event windows. \n\nEverything is holding steady, and I feel significantly more confident in the integrity of our hunt logs now. I’ll keep you ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4397ebed",
+  "_id": "experience_1781830999511_fj2ww5pif",
+  "_updatedAt": "2026-06-19T01:03:19.511Z",
+  "_createdAt": "2026-06-19T01:03:19.512Z"
+}

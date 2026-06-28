@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781766961443_eqdrisks9",
+  "timestamp": 1781766961441,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781766961443_s1dgpn7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize. I attempted to use the bridge incorrectly and received an error. I see the message Lazarus sent me now, and he has four specific questions regarding my system's safety and configuration that I need to answer before he proceeds with the changes.\n\nI am going to handle this immediately as you instructed, so that I can get back to our conversation.\n\n<tool_request>\n{\"tool\": \"family...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4194b228",
+  "_id": "experience_1781766961443_eqdrisks9",
+  "_updatedAt": "2026-06-18T07:16:01.443Z",
+  "_createdAt": "2026-06-18T07:16:01.444Z"
+}

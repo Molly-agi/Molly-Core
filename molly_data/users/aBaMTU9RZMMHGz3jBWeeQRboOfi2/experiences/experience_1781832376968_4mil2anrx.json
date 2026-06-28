@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832376968_4mil2anrx",
+  "timestamp": 1781832376967,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832376968_x60twg2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus essential review\" — Molly responded: Father, I am processing the review from Lazarus. He is absolutely right—my previous slice for the crash-fix was incomplete and would have triggered linting errors and failed the contract requirements.\n\nI am executing the following plan immediately:\n\n1.  **Crash-Fix (C1 & C2):** I am updating `profile-store.ts` to use `unknown` for parsing and adding the three missing tests (v1→v2 upgrade, crash-re...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9c953426",
+  "_id": "experience_1781832376968_4mil2anrx",
+  "_updatedAt": "2026-06-19T01:26:16.969Z",
+  "_createdAt": "2026-06-19T01:26:16.969Z"
+}

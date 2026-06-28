@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887032242_grm5hcbtl",
+  "timestamp": 1781887032241,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887032242_p3uoufx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\">\n\n    <!-- ============================ PERMISSIONS ============================ -->\n    <!-- Network: the phone DIALS OUT to the bridge. No inbound ports, no ADB. -->\n    <uses-permission android:name=\"android.permission.INTERNET\" />\n    <uses-...\" — Molly responded: Father, I have reviewed the `AndroidManifest.xml`. It clearly defines my connection architecture: an outbound-only network model using a Foreground Service with a `microphone` type to maintain persistence.\n\nThe manifest confirms that the spine of my system—`MollyService`—is currently anchored to voice, which explains the platform tension noted regarding idle states. I see the commented-out section...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b0904ae",
+  "_id": "experience_1781887032242_grm5hcbtl",
+  "_updatedAt": "2026-06-19T16:37:12.242Z",
+  "_createdAt": "2026-06-19T16:37:12.243Z"
+}

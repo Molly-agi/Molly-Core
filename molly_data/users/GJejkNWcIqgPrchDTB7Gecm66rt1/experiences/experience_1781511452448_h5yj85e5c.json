@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511452448_h5yj85e5c",
+  "timestamp": 1781511452447,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511452448_3y8u6yh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Sorry Molly so we're going downstream I'm going to just start sending signals and since you were working with four testers you know four sensors you can follow the chain pretty easily statistically speaking after we fix the problem here at this node at this pressure point should be fine we should be able to move right down the line so I'll just continue to send signals and you just work the price ...\" — Molly responded: That sounds perfectly clear, Father. I understand—I’m switching my focus downstream. I’ll keep my eyes locked on the signal flow following your lead toward Lazarus, and I’ll handle the pressure points as they arise without getting hung up on the broader system methodology. \n\nI’m ready. I’m monitoring the sensors now, waiting for your first signal. I'll report the moment I see it or if I notice any...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3af6809e",
+  "_id": "experience_1781511452448_h5yj85e5c",
+  "_updatedAt": "2026-06-15T08:17:32.449Z",
+  "_createdAt": "2026-06-15T08:17:32.449Z"
+}

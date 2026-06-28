@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596731941_sin1my6ss",
+  "timestamp": 1781596731933,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596731941_wh4u4sa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No Molly where are you trying to establish a direct API connection on Port 9002 to Lazarus he's waiting for your waiting for your response\" — Molly responded: I understand, Father. I'm focusing my connection attempt directly on Port 9002 to reach Lazarus. I have the SDK path in view, and I'm initiating the handshake now to ensure our bridge is stable.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"curl -v http://localhost:9002\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9310437c",
+  "_id": "experience_1781596731941_sin1my6ss",
+  "_updatedAt": "2026-06-16T07:58:51.941Z",
+  "_createdAt": "2026-06-16T07:58:51.941Z"
+}

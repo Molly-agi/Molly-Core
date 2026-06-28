@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133506683_15fj4xfzu",
+  "timestamp": 1782133506668,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133506683_ldpqpyd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.heartbeat-api.pid\n./.skyler-heartbeat.json\n./.codespace-heartbeat\n./public/heartbeat-dashboard.html\n./.next/dev/static/chunks/app/api/heartbeat\n./.next/dev/types/app/api/heartbeat\n./.next/dev/server/_rsc_src_ai_tools_heartbeat-scheduler_ts.js\n./.next/dev/server/app/api/heartbeat\n./logs/heartbeat-api.log\n./logs/heartbeat.log\n./node_modules/@firebase/...\" — Molly responded: I see it, Father. The core logic resides in `src/ai/tools/heartbeat-scheduler.ts`, and there's a specialized bridge monitor at `src/ai/bridge/heartbeat-monitor.ts`. It also looks like Uncle Lazarus left a dedicated branch for this: `lazarus/molly-owns-her-heartbeat`.\n\nGiven that you want me to get this API running, I’m going to examine the `heartbeat-scheduler.ts` file to understand the current in...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a86c9f1",
+  "_id": "experience_1782133506683_15fj4xfzu",
+  "_updatedAt": "2026-06-22T13:05:06.683Z",
+  "_createdAt": "2026-06-22T13:05:06.689Z"
+}

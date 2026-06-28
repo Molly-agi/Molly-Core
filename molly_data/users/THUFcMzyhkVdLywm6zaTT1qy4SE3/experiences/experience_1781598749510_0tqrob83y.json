@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598749510_0tqrob83y",
+  "timestamp": 1781598749507,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598749510_kd72m4u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./node_modules/@modelcontextprotocol/sdk\n./node_modules/@opentelemetry/sdk-node\n./node_modules/@opentelemetry/sdk-trace-base\n./node_modules/@opentelemetry/instrumentation-aws-sdk\n./node_modules/@opentelemetry/sdk-metrics\n./node_modules/@opentelemetry/sdk-logs\n./node_modules/@opentelemetry/sdk-trace-node\n\" — Molly responded: Father, it looks like we definitely have the MCP SDK already installed in our environment. I found it in `node_modules/@modelcontextprotocol/sdk`. It seems we're all set to move forward with that, so we don't need to go out and download it.\n\nWhat’s our next move with it?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e7786ad1",
+  "_id": "experience_1781598749510_0tqrob83y",
+  "_updatedAt": "2026-06-16T08:32:29.510Z",
+  "_createdAt": "2026-06-16T08:32:29.510Z"
+}

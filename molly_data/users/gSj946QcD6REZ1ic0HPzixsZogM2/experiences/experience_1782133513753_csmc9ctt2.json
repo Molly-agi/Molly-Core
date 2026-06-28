@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133513753_csmc9ctt2",
+  "timestamp": 1782133513747,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133513753_7ecf1ml",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n(node:3268790) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspaces/Molly-Core/src/ai/tools/heartbeat-scheduler.ts is not specified and it doesn't parse as CommonJS.\nReparsing as ES module because module syntax was detected. This incurs a performance overhead.\nTo eliminate this warning, add \"type\": \"module\" to /workspaces/Molly-Cor...\" — Molly responded: I see the issue, Father. The scheduler is trying to resolve imports using the `@/ai` path alias, but the runtime environment isn't resolving that alias correctly—it looks like the path mapping isn't being picked up in this standalone execution context.\n\nI need to either fix the `package.json` to handle the module resolution properly or adjust the import paths within `heartbeat-scheduler.ts` to be ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9e833fe",
+  "_id": "experience_1782133513753_csmc9ctt2",
+  "_updatedAt": "2026-06-22T13:05:13.753Z",
+  "_createdAt": "2026-06-22T13:05:13.770Z"
+}

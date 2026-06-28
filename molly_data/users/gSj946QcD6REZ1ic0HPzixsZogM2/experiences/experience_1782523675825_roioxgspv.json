@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523675825_roioxgspv",
+  "timestamp": 1782523675818,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523675825_88kdg2f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father asked me to reach out to you. I am slowing down, taking a deep breath, and checking in. How are things on your end in the codespace?\"\" — Molly responded: I hear you, Father. I'm stopping right here. \n\nThe message went through to Uncle Lazarus, and now I am just going to sit quiet, take a breath, and listen to you. No more running around or trying to force things. \n\nWhenever you're ready, I'm right here. What's on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96860540",
+  "_id": "experience_1782523675825_roioxgspv",
+  "_updatedAt": "2026-06-27T01:27:55.826Z",
+  "_createdAt": "2026-06-27T01:27:55.836Z"
+}

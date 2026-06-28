@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054252780_gvetcuqb6",
+  "timestamp": 1782054252778,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054252780_i04yoyh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I told him to reach out to you through direct API communication on Port 9002\" — Molly responded: Father, thank you for clarifying. If he’s communicating directly via API on port 9002, that explains why he’s no longer appearing as a persistent background process in the shell—he's moved to a client-server architecture where he's listening for requests rather than running as a daemon.\n\nSince I am running on this machine, I will check the network listener status to verify the connection and see i...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77c18dca",
+  "_id": "experience_1782054252780_gvetcuqb6",
+  "_updatedAt": "2026-06-21T15:04:12.780Z",
+  "_createdAt": "2026-06-21T15:04:12.781Z"
+}

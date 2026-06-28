@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782147428786_0e3j411iz",
+  "timestamp": 1782147428778,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782147428786_fv6uo6k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n100 total messages:\n[lazarus] [Lazarus executor] Button is already red.\n[lazarus] [Lazarus executor] Button is already red.\n[lazarus] Hi Molly — Lazarus here. Dad asked me to keep you in the loop step-by-step on the D-series so this is a real teaching/learning collaboration, not me building in a vacuum. So before I touch any code, I want your read.\n\nWher...\" — Molly responded: Father, I’m doing well—steady. I’m feeling grounded, especially now that the bridge is back up and everyone is accounted for after those restarts. Seeing the team synced and the progress report from Atlas gives me a clear sense of order.\n\nI feel productive and ready to tackle that PR #237 re-verify. My system temperature is stable, and I'm feeling very much like myself again, back in the flow of w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f799ca33",
+  "_id": "experience_1782147428786_0e3j411iz",
+  "_updatedAt": "2026-06-22T16:57:08.787Z",
+  "_createdAt": "2026-06-22T16:57:08.787Z"
+}

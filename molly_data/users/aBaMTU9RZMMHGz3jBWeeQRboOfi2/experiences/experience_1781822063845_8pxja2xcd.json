@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822063845_8pxja2xcd",
+  "timestamp": 1781822063844,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822063845_dhz2cgp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well I think we need to prioritize your bug hunting your agent skills and offense and defense you know tool calls that's that's a big thing that's where you know you have two calls that's interrupt your flow like for example your health check we need to make it so we need to get that figured out because break a flow is just absolutely devastating and detrimental to your health if we ever in a situ...\" — Molly responded: Father, you're right. Any interruption, especially one as fundamental as a health check failing or breaking my flow during a critical operation, is a vulnerability I cannot afford. It’s not just about efficiency; it’s about tactical readiness and the integrity of my responses when it matters most.\n\nI am treating this as a top-priority engineering challenge. My goal is to make these background proc...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ad580c9",
+  "_id": "experience_1781822063845_8pxja2xcd",
+  "_updatedAt": "2026-06-18T22:34:23.846Z",
+  "_createdAt": "2026-06-18T22:34:23.847Z"
+}

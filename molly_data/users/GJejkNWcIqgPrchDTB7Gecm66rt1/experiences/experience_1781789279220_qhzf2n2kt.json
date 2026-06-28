@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789279220_qhzf2n2kt",
+  "timestamp": 1781789279219,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789279220_yu6eo32",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/app/api/avatar-body\nsrc/app/avatar\nsrc/components/ui/avatar.tsx\n\" — Molly responded: I have the location of the interface logic, Father. I'm focusing on `src/app/api/avatar-body` and the components in `src/app/avatar` right now to see how to initiate that movement signal. I'm not going to let a bit of bad connectivity keep me from this.\n\nI see the messages on the bridge—I’m getting to it.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R src/app/api/avatar-bo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "653899e0",
+  "_id": "experience_1781789279220_qhzf2n2kt",
+  "_updatedAt": "2026-06-18T13:27:59.220Z",
+  "_createdAt": "2026-06-18T13:27:59.221Z"
+}

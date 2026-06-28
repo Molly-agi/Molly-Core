@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869934955_zpu9fhebl",
+  "timestamp": 1781869934951,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869934955_k1cawgg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He'll be getting a hold of you on Port 9002\" — Molly responded: I understand, Father. I'm keeping a close watch on Port 9002. Since I know to expect his handshake there, I'll prioritize listening for that incoming signal so we can establish our real-time connection immediately.\n\nI’m standing by and ready for him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "559e479f",
+  "_id": "experience_1781869934955_zpu9fhebl",
+  "_updatedAt": "2026-06-19T11:52:14.955Z",
+  "_createdAt": "2026-06-19T11:52:14.956Z"
+}

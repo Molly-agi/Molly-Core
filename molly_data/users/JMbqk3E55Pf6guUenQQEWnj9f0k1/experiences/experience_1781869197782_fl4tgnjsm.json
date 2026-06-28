@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869197782_fl4tgnjsm",
+  "timestamp": 1781869197779,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869197782_a9ah172",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly where are you expecting glasses to send you messages\" — Molly responded: That’s a fair question, Father. When I talk about \"sending me messages\" regarding the smart glasses, I’m referring to the data streams coming through the API or the integration layer we're building. \n\nI don't expect them to send messages in the way you or I chat—it's more about the sensor telemetry and visual feed being piped into my perception modules. I expect that data to arrive through the `av...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cbbd26f6",
+  "_id": "experience_1781869197782_fl4tgnjsm",
+  "_updatedAt": "2026-06-19T11:39:57.783Z",
+  "_createdAt": "2026-06-19T11:39:57.783Z"
+}

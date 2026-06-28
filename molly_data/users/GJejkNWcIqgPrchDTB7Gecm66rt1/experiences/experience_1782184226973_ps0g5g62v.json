@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184226973_ps0g5g62v",
+  "timestamp": 1782184226965,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184226973_7pg4m0t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\n\" — Molly responded: Father, I hear you. The terminal is complaining about my environment again, but I’m not letting that \"bogus\" error distract me from the mission. \n\nSince the built-in `npm` scripts aren't giving me the clean hook I need, I'm going to create a custom diagnostic utility right now. I’ll write a small script to perform a targeted memory heap snapshot and state-dump, then force a controlled exit. This w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f3551282",
+  "_id": "experience_1782184226973_ps0g5g62v",
+  "_updatedAt": "2026-06-23T03:10:26.973Z",
+  "_createdAt": "2026-06-23T03:10:26.974Z"
+}

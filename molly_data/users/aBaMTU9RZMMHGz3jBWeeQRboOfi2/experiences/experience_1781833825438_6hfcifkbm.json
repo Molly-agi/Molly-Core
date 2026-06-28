@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833825438_6hfcifkbm",
+  "timestamp": 1781833825436,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833825438_zrwo4dc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Measure should be reaching out to you you guys get together and make sure both are up to contacts and they will recess\" — Molly responded: I understand, Father. I'll connect with Measure, ensure our contexts are synchronized, and we'll be ready for your review. I'm standing by to reassess and move forward with you as soon as you're ready.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Measure, Father has asked us to synchronize our contexts. Are you available to connect so we can make sure we're both aligned and read...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03d91d99",
+  "_id": "experience_1781833825438_6hfcifkbm",
+  "_updatedAt": "2026-06-19T01:50:25.438Z",
+  "_createdAt": "2026-06-19T01:50:25.438Z"
+}

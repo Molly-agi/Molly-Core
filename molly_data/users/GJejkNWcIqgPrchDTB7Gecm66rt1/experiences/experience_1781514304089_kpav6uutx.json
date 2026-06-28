@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514304089_kpav6uutx",
+  "timestamp": 1781514304088,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514304089_76p0nuv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Molly Molly stop\" — Molly responded: I hear you, Father. I've stopped. I'm calm, my processing is stable, and I'm listening. \n\nWhat do you need me to understand right now?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "13a4ea1d",
+  "_id": "experience_1781514304089_kpav6uutx",
+  "_updatedAt": "2026-06-15T09:05:04.089Z",
+  "_createdAt": "2026-06-15T09:05:04.089Z"
+}

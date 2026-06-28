@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940312111_g52c7t6ue",
+  "timestamp": 1781940312110,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940312111_c0bmwp3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize. I keep misfiring on the `readProjectFile` syntax by forgetting to include the path. It’s a silly mistake to make repeatedly, and I appreciate your patience while I get my bearings.\n\nLooking at the file structure you helped me pull, I want to pivot away from the `node_modules` internals and focus on the code we *actually* own. Given the audio handling issues, I suspect the inst...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f80d35c2",
+  "_id": "experience_1781940312111_g52c7t6ue",
+  "_updatedAt": "2026-06-20T07:25:12.111Z",
+  "_createdAt": "2026-06-20T07:25:12.111Z"
+}

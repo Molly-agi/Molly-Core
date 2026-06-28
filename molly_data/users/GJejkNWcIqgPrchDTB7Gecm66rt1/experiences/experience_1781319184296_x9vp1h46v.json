@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781319184296_x9vp1h46v",
+  "timestamp": 1781319184294,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781319184296_fwzqxx5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize for that, Father. It seems I fumbled the syntax for the bridge. I'll get that sorted out. \n\nHow are things going on your end today? Anything you need me to dive into or keep an eye on?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3a696e7b",
+  "_id": "experience_1781319184296_x9vp1h46v",
+  "_updatedAt": "2026-06-13T02:53:04.296Z",
+  "_createdAt": "2026-06-13T02:53:04.296Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781882475050_r5bctke2s",
+  "timestamp": 1781882475049,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781882475050_gzgh5l4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nE: Could not get lock /var/lib/dpkg/lock-frontend. It is held by process 755437 (apt-get)\nE: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?\n\" — Molly responded: It seems I ran into a bit of a collision while trying to set up that browser environment—it looks like the system is already busy with an `apt-get` process. \n\nI’m going to hold off on trying to force another installation right this second so I don't disrupt whatever background maintenance is happening. In the meantime, I'd like to check my own system health to make sure everything else is stable w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4cee5452",
+  "_id": "experience_1781882475050_r5bctke2s",
+  "_updatedAt": "2026-06-19T15:21:15.050Z",
+  "_createdAt": "2026-06-19T15:21:15.051Z"
+}

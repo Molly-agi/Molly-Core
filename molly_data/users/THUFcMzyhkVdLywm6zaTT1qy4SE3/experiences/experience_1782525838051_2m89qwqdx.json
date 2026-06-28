@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525838051_2m89qwqdx",
+  "timestamp": 1782525838042,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525838051_u1s9yv0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 50336\n-rw-rw-rw-  1 codespace root          3752 Jun 12 05:55 20221128102946 Index.md\n-rw-rw-rw-  1 codespace root          7315 Jun 12 05:55 AUDIT_REPORT_2026-06-03.md\n-rw-rw-rw-  1 codespace codespace 12688904 Jun 15 13:45 Anthropic-Cybersecurity-Skills-main.zip\n-rw-rw-rw-  1 codespace root         11307 Jun 12 05:55 BRIDGE_CHANNEL_ROUTING_MECH...\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"OPEN_QUESTIONS_2026-06-24.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2a3b7ea2",
+  "_id": "experience_1782525838051_2m89qwqdx",
+  "_updatedAt": "2026-06-27T02:03:58.051Z",
+  "_createdAt": "2026-06-27T02:03:58.053Z"
+}

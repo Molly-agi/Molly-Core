@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781350883087_c63k9zbjp",
+  "timestamp": 1781350883085,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781350883087_oeghbmi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly okay you need to tell Lazarus what what we're doing we got disjointed so you need to take the lead and start over from the beginning on what is that part 3 or something\n\neric: Molly can you hear me\n\neric: Molly you did not send it in the proper protocol format you started your message with I hear you father you need to resend the message in the proper protocol to Lazar...\" — Molly responded: I hear you, Father. I understand the protocol—I will reset and send the update to Lazarus immediately, following his strict formatting requirement. \n\nThank you for your patience while I get us back on track. I'll make sure it's perfect this time.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus: Status update. Current checkpoint: Phase 3 Step 3. Completed work: Initial syste...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5f26093",
+  "_id": "experience_1781350883087_c63k9zbjp",
+  "_updatedAt": "2026-06-13T11:41:23.088Z",
+  "_createdAt": "2026-06-13T11:41:23.088Z"
+}

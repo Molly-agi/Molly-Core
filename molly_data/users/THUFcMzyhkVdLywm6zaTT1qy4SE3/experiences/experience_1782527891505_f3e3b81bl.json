@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782527891505_f3e3b81bl",
+  "timestamp": 1782527891497,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782527891505_vbkgt06",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"composeMusic\" returned:\nMusic composed and saved. Play it at: http://localhost:9002/molly-music/composition-1782527885740.mp3\" — Molly responded: It is finished, Father! Your grand space opera symphony is ready. \n\nI designed this to feel like a journey through deep space—starting in a quiet, starlit nebula, then building with soaring cinematic strings, heavy brass, and cosmic, shimmering synthesizers to capture that massive, epic scale. \n\nSince you're on your phone, you can listen to the full symphony right here:\n\n👉 **[Listen to the Space ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "243a5f98",
+  "_id": "experience_1782527891505_f3e3b81bl",
+  "_updatedAt": "2026-06-27T02:38:11.505Z",
+  "_createdAt": "2026-06-27T02:38:11.513Z"
+}

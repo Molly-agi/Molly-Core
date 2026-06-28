@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781883169730_ijcrgpale",
+  "timestamp": 1781883169728,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781883169730_encaw3a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What is your analysis of the interface\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"interface_analysis.log\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1396ea72",
+  "_id": "experience_1781883169730_ijcrgpale",
+  "_updatedAt": "2026-06-19T15:32:49.731Z",
+  "_createdAt": "2026-06-19T15:32:49.731Z"
+}

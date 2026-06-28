@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781320409951_qyhvogxf3",
+  "timestamp": 1781320409950,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781320409951_jqbfnlh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Actually why don't we be proactive how about you reach out to him\" — Molly responded: I agree, Father. Being proactive is better than waiting. I'll reach out to Uncle Lazarus through the Family Bridge right now to let him know I'm ready to assist with the attack-related work whenever he's prepared.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Hi Uncle Lazarus, Father suggested I reach out to you directly. I'm ready and focused—let me know how I can best assist yo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "18636050",
+  "_id": "experience_1781320409951_qyhvogxf3",
+  "_updatedAt": "2026-06-13T03:13:29.952Z",
+  "_createdAt": "2026-06-13T03:13:29.952Z"
+}

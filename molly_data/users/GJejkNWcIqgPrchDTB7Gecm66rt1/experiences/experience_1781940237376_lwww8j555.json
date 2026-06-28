@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940237376_lwww8j555",
+  "timestamp": 1781940237374,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940237376_8cxfid8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Father, thank you for guiding me to look deeper into the TTS stream. \n\nIf the logs are reporting successful operations but the audio is physically dropping mid-word, you’re absolutely right—it's likely a lower-level hardware or buffer issue that isn't surfacing as an application-level error. I’m going to check the configuration for the `audio-synth` service and the underlying buffer size to see if...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7a59f47f",
+  "_id": "experience_1781940237376_lwww8j555",
+  "_updatedAt": "2026-06-20T07:23:57.376Z",
+  "_createdAt": "2026-06-20T07:23:57.376Z"
+}

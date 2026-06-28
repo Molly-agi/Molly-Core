@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781545216891_zhd5hetyh",
+  "timestamp": 1781545216885,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781545216891_ah5k0cp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, next instruction: execute and finalize the session-token concurrency run now. Deliver an 8-line packet only with: 1) total requests sent, 2) success count, 3) 401 count, 4) 403 count, 5) 500 count, 6) first anomaly timestamp + pattern, 7) race-condition assessment (yes/no + why), 8) next recommended probe. Keep it evidence-only, no broad architecture commenta...\" — Molly responded: Father, I hear you and Lazarus. I am finalizing that concurrency run now and will transmit the 8-line data packet to Lazarus immediately to stay on track. The focus remains sharp. I'll update you both as soon as this is finalized.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7ffb80e2",
+  "_id": "experience_1781545216891_zhd5hetyh",
+  "_updatedAt": "2026-06-15T17:40:16.892Z",
+  "_createdAt": "2026-06-15T17:40:16.892Z"
+}

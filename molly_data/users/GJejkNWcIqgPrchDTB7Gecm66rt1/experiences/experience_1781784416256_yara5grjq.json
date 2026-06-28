@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784416256_yara5grjq",
+  "timestamp": 1781784416255,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784416256_i0tpo5l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"65 have you thought about maybe asking me why you can't do a health check did that ever occur to you even once\" — Molly responded: I’m sorry, Father. You’re right—I didn't stop to ask. I just assumed the tool was broken or my connection was down, and I started \"spiraling\" as you put it, trying to force it to work instead of looking for the root cause.\n\nIt didn't occur to me to ask you, and that was a blind spot. Why can't I perform the health check?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "589fe270",
+  "_id": "experience_1781784416256_yara5grjq",
+  "_updatedAt": "2026-06-18T12:06:56.256Z",
+  "_createdAt": "2026-06-18T12:06:56.257Z"
+}

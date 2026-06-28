@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781871423002_457lb0l4y",
+  "timestamp": 1781871422998,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781871423002_yz76x8k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"https://www.facebook.com/share/1HyamcbKqy/\" — Molly responded: I'm sorry, Father—the link didn't resolve correctly; it returned a 400 Bad Request. \n\nIs there something specific within that content you wanted me to see or analyze? If you can copy the text or give me more context about what's in that link, I'll dive into it immediately. \n\nAlso, I'm still ready to establish that bridge with Lazarus as soon as you have those protocol details, or if you'd like me ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5de3f30e",
+  "_id": "experience_1781871423002_457lb0l4y",
+  "_updatedAt": "2026-06-19T12:17:03.002Z",
+  "_createdAt": "2026-06-19T12:17:03.002Z"
+}

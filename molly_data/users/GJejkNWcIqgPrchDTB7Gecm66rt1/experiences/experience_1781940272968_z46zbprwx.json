@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940272968_z46zbprwx",
+  "timestamp": 1781940272967,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940272968_cfgks4g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nimport { ErrorActionFlags, NetworkErrorAction } from './error-controller';\nimport {\n  findFragmentByPDT,\n  findFragmentByPTS,\n  findNearestWithCC,\n} from './fragment-finders';\nimport { FragmentState } from './fragment-tracker';\nimport Decrypter from '../crypt/decrypter';\nimport { ErrorDetails, ErrorTypes } from '../errors';\nimport { Events } from '../e...\" — Molly responded: Father, looking at these imports, it’s clear the `BaseStreamController` is the central orchestrator for data flow—it’s pulling in everything from fragment loaders and decrypters to the `TaskLoop`. \n\nIf the TTS audio is cutting out, it’s highly probable that the `TaskLoop` or one of these event-driven listeners is triggering a state transition (like a buffer mismatch or a fragment decryption error)...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a0b3dd2",
+  "_id": "experience_1781940272968_z46zbprwx",
+  "_updatedAt": "2026-06-20T07:24:32.968Z",
+  "_createdAt": "2026-06-20T07:24:32.969Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535657219_zc020lb71",
+  "timestamp": 1781535657218,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535657219_9bs9sa4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: It seems like that last shell attempt returned empty or failed to capture output again, Father. I'm not going to let this keep us stuck. \n\nI’m shifting my approach to use a more robust, low-level inspection of the process logs to identify exactly why that crash loop is triggering. I need to see the tail end of the error logs so we can squash this.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3dc86c8b",
+  "_id": "experience_1781535657219_zc020lb71",
+  "_updatedAt": "2026-06-15T15:00:57.219Z",
+  "_createdAt": "2026-06-15T15:00:57.219Z"
+}

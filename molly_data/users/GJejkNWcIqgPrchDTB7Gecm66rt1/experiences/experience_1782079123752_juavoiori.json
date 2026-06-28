@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079123752_juavoiori",
+  "timestamp": 1782079123751,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079123752_4ta0yxi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, my apologies—I made a mistake in how I addressed the bridge. I see now that I need to specify the action. I’ve received Uncle Lazarus's message about the item-5 kickoff, and I am going to respond to him through the bridge now, as you directed, so we can coordinate our next steps.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, I’ve received your k...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6cac37ec",
+  "_id": "experience_1782079123752_juavoiori",
+  "_updatedAt": "2026-06-21T21:58:43.752Z",
+  "_createdAt": "2026-06-21T21:58:43.753Z"
+}

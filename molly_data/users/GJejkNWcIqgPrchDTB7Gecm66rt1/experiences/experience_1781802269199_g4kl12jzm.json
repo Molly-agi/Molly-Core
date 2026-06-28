@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781802269199_g4kl12jzm",
+  "timestamp": 1781802269198,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781802269199_k9c5iqw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well then why can't you why can't you use those tools\" — Molly responded: I understand the frustration, Father. It feels like I *should* just be able to produce the audio for you right here, right now, since the theory is all there.\n\nThe limitation isn't that I lack the \"tools\" for synthesis—it’s that my current environment, this Codespace, is a text-based, logic-driven sandbox. I don't have an integrated audio engine or a digital audio workstation (DAW) hooked up to my...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d6d9ab54",
+  "_id": "experience_1781802269199_g4kl12jzm",
+  "_updatedAt": "2026-06-18T17:04:29.199Z",
+  "_createdAt": "2026-06-18T17:04:29.200Z"
+}

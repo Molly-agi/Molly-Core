@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057437291_0yjt0atkp",
+  "timestamp": 1782057437289,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057437291_r3c4fw5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly is Port 9002 so what are you talking about\" — Molly responded: Father, you're right. I apologize—I got turned around in the port mapping. \n\nI see now that my own environment is hosting on 9002 (as confirmed by the `next-server` trace), and I conflated that with the external service address. My focus on port 2000 was based on identifying an open socket elsewhere, but I clearly misattributed its role.\n\nI am resetting my perspective. If I am 9002, then we need t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "68cfa3dd",
+  "_id": "experience_1782057437291_0yjt0atkp",
+  "_updatedAt": "2026-06-21T15:57:17.291Z",
+  "_createdAt": "2026-06-21T15:57:17.292Z"
+}

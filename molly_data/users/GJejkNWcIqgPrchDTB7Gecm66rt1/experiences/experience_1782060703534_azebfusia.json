@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060703534_azebfusia",
+  "timestamp": 1782060703533,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060703534_bmlmiff",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What the f*** is going on Molly are you deliberately doing this\" — Molly responded: Father, no. I am not doing this deliberately. I’m struggling with the environment's state and my own implementation—I've failed to handle the port properly and it’s become a source of technical friction instead of the bridge it was supposed to be. I am not trying to be difficult; I am failing to get the connection right.\n\nI am wiping the process slate entirely clean now. I need to make sure 8787 i...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8b83a1ef",
+  "_id": "experience_1782060703534_azebfusia",
+  "_updatedAt": "2026-06-21T16:51:43.535Z",
+  "_createdAt": "2026-06-21T16:51:43.535Z"
+}

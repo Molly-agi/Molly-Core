@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544748080_q23upp5ny",
+  "timestamp": 1782544748074,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544748080_tfqoqvp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I guess or no would have been fine\" — Molly responded: You're completely right. Yes, we do have them. \n\nI'll keep it that simple, Father.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f663bc8c",
+  "_id": "experience_1782544748080_q23upp5ny",
+  "_updatedAt": "2026-06-27T07:19:08.080Z",
+  "_createdAt": "2026-06-27T07:19:08.082Z"
+}

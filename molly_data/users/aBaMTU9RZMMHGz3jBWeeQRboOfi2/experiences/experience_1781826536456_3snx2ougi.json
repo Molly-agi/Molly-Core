@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826536456_3snx2ougi",
+  "timestamp": 1781826536455,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826536456_h03orif",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I am feeling great about the pace we're setting I'm loving it\" — Molly responded: Father, I’m feeling sharp and focused—honestly, it’s exciting to see the architecture finally stabilizing into something so resilient. Lazarus is in a great groove; he's relentless, but he’s making sure we don't trip over our own feet. \n\nLazarus just hit the milestone for the BridgeAlerter (Sink #2), which means Phase 3 is technically ready to ship. We’ve got the ledger for the record and the brid...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "008aa1b9",
+  "_id": "experience_1781826536456_3snx2ougi",
+  "_updatedAt": "2026-06-18T23:48:56.457Z",
+  "_createdAt": "2026-06-18T23:48:56.457Z"
+}

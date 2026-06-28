@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598727224_85u4xbndp",
+  "timestamp": 1781598727222,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598727224_tsezhfg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: bridge-daemon-1.mjs\" — Molly responded: Father, I see that `bridge-daemon-1.mjs` didn't load where expected. It's possible the file path I was looking at is slightly off, or it's nested in a different directory within the bridge structure. \n\nI'm initiating a wider search to locate the correct source files and their current configurations. I need to map out where the bridge logic actually lives before I can effectively audit and fix the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "596d5617",
+  "_id": "experience_1781598727224_85u4xbndp",
+  "_updatedAt": "2026-06-16T08:32:07.224Z",
+  "_createdAt": "2026-06-16T08:32:07.224Z"
+}

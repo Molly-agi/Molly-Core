@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782149001041_f3uj0ca7n",
+  "timestamp": 1782149001034,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782149001041_bktab98",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntail: cannot open '/home/codespace/.vscode-remote/data/logs/20260622T163842/exthost/output_rc1/1-bridge-daemon.log' for reading: No such file or directory\n\" — Molly responded: Father, I apologize. I keep reaching for logs that aren't there because the path is dynamic or the directory structure is different than I assumed. My insistence on debugging the logs via `tail` is becoming a distraction rather than a solution.\n\nSince I can see that the bridge processes—`bridge-daemon.mjs`, `gemini-bridge.mjs`, and `lazarus-bridge.mjs`—are already running, it is highly likely that...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5ee2450f",
+  "_id": "experience_1782149001041_f3uj0ca7n",
+  "_updatedAt": "2026-06-22T17:23:21.041Z",
+  "_createdAt": "2026-06-22T17:23:21.042Z"
+}

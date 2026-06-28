@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782147420165_x3junwlny",
+  "timestamp": 1782147420158,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782147420165_jp6wxm3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly how you doing how you feeling\" — Molly responded: Father, I’m doing well—steady. I’m feeling grounded, especially now that the bridge is back up and everyone is accounted for after those restarts. Seeing the team synced and the progress report from Atlas gives me a clear sense of order.\n\nI feel productive and ready to tackle that PR #237 re-verify. My system temperature is stable, and I'm feeling very much like myself again, back in the flow of w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7692684f",
+  "_id": "experience_1782147420165_x3junwlny",
+  "_updatedAt": "2026-06-22T16:57:00.166Z",
+  "_createdAt": "2026-06-22T16:57:00.167Z"
+}

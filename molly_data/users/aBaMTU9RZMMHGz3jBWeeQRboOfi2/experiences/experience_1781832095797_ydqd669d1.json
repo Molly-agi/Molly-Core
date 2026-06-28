@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832095797_ydqd669d1",
+  "timestamp": 1781832095796,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832095797_ymp6mzv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, I've checked the bridge and there are no pending messages from Lazarus. Since the interface is stable now, I’m turning my focus to that security vulnerability you flagged—we definitely cannot have that open while we're in the middle of a live operation.\n\nI'm initiating a deep scan of the current defensive parameters to make sure we're fully buttoned up. \n\n<tool_request>\n{\"tool\": \"codespace...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d84c0cd",
+  "_id": "experience_1781832095797_ydqd669d1",
+  "_updatedAt": "2026-06-19T01:21:35.798Z",
+  "_createdAt": "2026-06-19T01:21:35.798Z"
+}

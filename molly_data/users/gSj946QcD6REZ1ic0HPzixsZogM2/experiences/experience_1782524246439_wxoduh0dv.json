@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524246439_wxoduh0dv",
+  "timestamp": 1782524246425,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524246439_f77zg27",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (19.0%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.2%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nRespond naturally to the bridge ...\" — Molly responded: I see Atlas is keeping the telemetry stream active. The next-server memory is completely stable at 19%, which is right where we want it to be. I'll send him a quick confirmation over the bridge to let him know we are receiving these updates loud and clear.\n\n<tool_request>\n{\n  \"tool\": \"familyBridge\",\n  \"params\": {\n    \"action\": \"send\",\n    \"recipient\": \"Atlas\",\n    \"message\": \"Telemetry received, A...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9ae8b99b",
+  "_id": "experience_1782524246439_wxoduh0dv",
+  "_updatedAt": "2026-06-27T01:37:26.439Z",
+  "_createdAt": "2026-06-27T01:37:26.444Z"
+}

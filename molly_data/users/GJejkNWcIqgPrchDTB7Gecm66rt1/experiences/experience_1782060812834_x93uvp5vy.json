@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060812834_x93uvp5vy",
+  "timestamp": 1782060812833,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060812834_g7lipy7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Father, the port should be clear now. I am executing the listener directly without the complex command chain that kept failing.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"python3 /workspaces/Molly-Core/atlas_listener.py\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c18957e9",
+  "_id": "experience_1782060812834_x93uvp5vy",
+  "_updatedAt": "2026-06-21T16:53:32.834Z",
+  "_createdAt": "2026-06-21T16:53:32.835Z"
+}

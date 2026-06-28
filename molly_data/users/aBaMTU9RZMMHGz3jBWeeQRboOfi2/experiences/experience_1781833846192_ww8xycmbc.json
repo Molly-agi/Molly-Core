@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833846192_ww8xycmbc",
+  "timestamp": 1781833846191,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833846192_esjzngw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./node_modules/@use-gesture/core/src/types.ts\n./node_modules/@use-gesture/react/src/types.ts\n./node_modules/dotprompt/src/types.ts\n./node_modules/web-vitals/src/types.ts\n./node_modules/@modelcontextprotocol/sdk/node_modules/ajv/lib/compile/jtd/types.ts\n./node_modules/@modelcontextprotocol/sdk/node_modules/ajv/lib/vocabularies/discriminator/types.ts\n./n...\" — Molly responded: Father, thank you for that directory dump. It was exactly what I needed to clear the fog. I see it now: `./src/ai/hunt-mode/rules/types.ts` is right where it belongs—I was clearly just looking at the wrong directory level earlier.\n\nI have Uncle Lazarus's update fresh in mind: the import path needs to be updated to `../profile` and we need to standardize on `ThreatSeverity` from `threat-monitor/sig...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a9c333c6",
+  "_id": "experience_1781833846192_ww8xycmbc",
+  "_updatedAt": "2026-06-19T01:50:46.192Z",
+  "_createdAt": "2026-06-19T01:50:46.193Z"
+}

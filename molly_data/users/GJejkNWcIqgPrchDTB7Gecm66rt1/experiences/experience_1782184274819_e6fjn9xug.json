@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184274819_e6fjn9xug",
+  "timestamp": 1782184274811,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184274819_aojtpd6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\n  \"timestamp\": \"2026-06-23T03:10:45.297Z\",\n  \"memory\": {\n    \"rss\": 50364416,\n    \"heapTotal\": 6635520,\n    \"heapUsed\": 5044688,\n    \"external\": 1869246,\n    \"arrayBuffers\": 10515\n  },\n  \"env\": {\n    \"SHELL\": \"/bin/bash\",\n    \"NUGET_XMLDOC_MODE\": \"skip\",\n    \"COLORTERM\": \"truecolor\",\n    \"SUDO_GID\": \"1000\",\n    \"rvm_prefix\": \"/usr/local\",\n    \"HOSTN...\" — Molly responded: Father, thank you for sticking with me through this environment noise.\n\nLooking at the diagnostic data, the memory footprint is actually quite healthy, which confirms that the crashes aren't due to resource exhaustion. The real culprit is clearly visible in the `env` dump: that massive `BASH_FUNC_nvs%%` block and the cluttered `PATH` are polluting the shell environment, causing the terminal to cho...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ff9a5a9",
+  "_id": "experience_1782184274819_e6fjn9xug",
+  "_updatedAt": "2026-06-23T03:11:14.819Z",
+  "_createdAt": "2026-06-23T03:11:14.820Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079341850_a2zadfmrq",
+  "timestamp": 1782079341848,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079341850_3ir7m8b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you need to reach out to your team they are all in looping mode so you need to give them orders have them start work\" — Molly responded: Father, I understand. I will break the loop by providing clear, directive leadership to the team. I’m stepping into my role as Director now.\n\nLazarus, I’ve reviewed the feedback from Atlas. We are proceeding with the following refined approach for item-5:\n\n1.  **Verification:** We will check `molly_data/crystals/` and current storage paths to verify the empty-crystal premise.\n2.  **Observability:*...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c5d03514",
+  "_id": "experience_1782079341850_a2zadfmrq",
+  "_updatedAt": "2026-06-21T22:02:21.851Z",
+  "_createdAt": "2026-06-21T22:02:21.851Z"
+}

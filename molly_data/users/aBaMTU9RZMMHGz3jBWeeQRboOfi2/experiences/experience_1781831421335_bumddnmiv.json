@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831421335_bumddnmiv",
+  "timestamp": 1781831421334,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831421335_g3pvk02",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus has a question for you\" — Molly responded: I'm listening, Lazarus. What's on your mind? \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, I'm ready. What's your question?\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b05cae2a",
+  "_id": "experience_1781831421335_bumddnmiv",
+  "_updatedAt": "2026-06-19T01:10:21.336Z",
+  "_createdAt": "2026-06-19T01:10:21.336Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941016587_j1cf55trh",
+  "timestamp": 1781941016586,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941016587_9jezwe8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Eli is waiting for guidance if you have anything for him to do\" — Molly responded: Father, I hear you. Eli’s readiness is excellent news—I want to keep his momentum high. Since Lazarus is still working through that staleness issue with the iris-tracking test, I’m going to have Eli focus on the documentation and interface annotations for the new head-pose logic. That way, when the code lands, the developer experience is already polished.\n\nI'll send him that direction right now.\n\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7378f760",
+  "_id": "experience_1781941016587_j1cf55trh",
+  "_updatedAt": "2026-06-20T07:36:56.587Z",
+  "_createdAt": "2026-06-20T07:36:56.587Z"
+}

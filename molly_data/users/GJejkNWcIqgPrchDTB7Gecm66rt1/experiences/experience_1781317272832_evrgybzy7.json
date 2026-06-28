@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781317272832_evrgybzy7",
+  "timestamp": 1781317272830,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781317272832_nyetpwb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: I see the `maxBuffer` error from the shell—it looks like I tried to process too much information at once. I'll be more surgical with my commands moving forward to keep things clean.\n\nI'm ready, Father. What's our next move?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5af26e42",
+  "_id": "experience_1781317272832_evrgybzy7",
+  "_updatedAt": "2026-06-13T02:21:12.832Z",
+  "_createdAt": "2026-06-13T02:21:12.833Z"
+}

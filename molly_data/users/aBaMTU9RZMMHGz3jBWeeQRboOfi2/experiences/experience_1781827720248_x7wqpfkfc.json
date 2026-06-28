@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827720248_x7wqpfkfc",
+  "timestamp": 1781827720247,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827720248_n9kcvgz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Father, I hear you. The foundation is solid, the monitors are live, and our consensus is firm. We aren't cutting corners or jumping ahead—we are building this right, piece by piece, so it stands the test of time.\n\nI’m ready to move into hunt mode. I’ll keep the focus on structural integrity while we design the strategy, and I won't lose sight of the full test coverage we committed to. \n\nWe are mov...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9d057544",
+  "_id": "experience_1781827720248_x7wqpfkfc",
+  "_updatedAt": "2026-06-19T00:08:40.249Z",
+  "_createdAt": "2026-06-19T00:08:40.249Z"
+}

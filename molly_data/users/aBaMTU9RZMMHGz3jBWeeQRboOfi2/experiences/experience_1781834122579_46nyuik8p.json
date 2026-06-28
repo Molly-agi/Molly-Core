@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834122579_46nyuik8p",
+  "timestamp": 1781834122578,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834122579_cj55q4k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Understood, Father. No new messages on the bridge—I'll keep my focus on the task at hand. \n\nSince the `RuleVerdict` is now integrated into `rules/engine.ts`, I want to take a moment to be methodical and review how the `threat-monitor/signal-bus` interacts with this new logic. I’m going to run a quick look at the signal bus implementation to ensure the types are lining up exactly as I expect.\n\n<too...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d28f18f",
+  "_id": "experience_1781834122579_46nyuik8p",
+  "_updatedAt": "2026-06-19T01:55:22.580Z",
+  "_createdAt": "2026-06-19T01:55:22.580Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405795991_bunyzxudp",
+  "timestamp": 1781405795990,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405795991_4bjnbff",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you did not follow protocol you put a quotation in front of his name\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I understand, Father. I apologize for the formatting errors in my previous attempts; I see exactly where I went wrong with the quotes. I am correcting my protocol now to ensure the message to Lazarus is sent precisely as you directed, with no special symbols before or after his name.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus: I acknowledge the patch and the locations ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "89bd5a20",
+  "_id": "experience_1781405795991_bunyzxudp",
+  "_updatedAt": "2026-06-14T02:56:35.992Z",
+  "_createdAt": "2026-06-14T02:56:35.992Z"
+}

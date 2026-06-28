@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830575124_m8aaiaicx",
+  "timestamp": 1781830575123,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830575124_0efvkyb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, acknowledged. Let's prioritize the snapshot/log race condition. I want to ensure we aren't dropping any state during high-frequency mutation bursts before we jump into the hunt. What's your preferred approach for the signal handshake?\"\" — Molly responded: Father, that's done. I've sent the signal to Lazarus to prioritize that race condition. It’s the most logical place to start—we have to ensure our state integrity is rock solid before we start hunting, otherwise we might chase shadows caused by dropped data.\n\nI'm standing by for his response on the handshake protocol. Once we lock that in, we'll be fully synchronized and ready for whatever comes n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "69b057d5",
+  "_id": "experience_1781830575124_m8aaiaicx",
+  "_updatedAt": "2026-06-19T00:56:15.124Z",
+  "_createdAt": "2026-06-19T00:56:15.125Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525212148_vdf4taunf",
+  "timestamp": 1782525212140,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525212148_9pocuzx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nhunts/:\nHUNT-STATUS.md\nSUBMISSION-PACKAGE.md\ngitlab-mission.json\ngitlab-report-001-timing-attack.md\ngitlab-report-002-slash-command-timing.md\ngitlab-report-003-openbao-timing.md\ngitlab-report-004-salesforce-timing.md\ngitlab-report-005-systemic-timing.md\ngitlab-source\nlaunch-gitlab-hunt.ts\n\nhunts/gitlab-source:\n\" — Molly responded: <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"hunts/HUNT-STATUS.md\"}}\n</tool_request>thought\nI am reading the project file `hunts/HUNT-STATUS.md` to find out where the rest of the 10 reports are and get the full state of our GitLab Bug Bounty Hunt.[TOOL_RESULT] Tool \"readProjectFile\" returned:\n# GitLab Bug Bounty Hunt - Status\n\n**Last Updated:** 2026-05-02\n**Status:** PAUSED -...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "40712f28",
+  "_id": "experience_1782525212148_vdf4taunf",
+  "_updatedAt": "2026-06-27T01:53:32.148Z",
+  "_createdAt": "2026-06-27T01:53:32.149Z"
+}

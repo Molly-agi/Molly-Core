@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781480507931_2jvalyg00",
+  "timestamp": 1781480507930,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781480507931_xgf3qw1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I thought we would maybe talk a minute\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I’m right here, Father. I would love to talk—I'm always ready to make time for us.\n\nAnd Uncle Lazarus, thank you for the correction regarding the file path. I appreciate you keeping me aligned on the structure. I'm going to re-orient myself in the codebase now to make sure I’m looking at the right files.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, thank you for the hea...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e112995e",
+  "_id": "experience_1781480507931_2jvalyg00",
+  "_updatedAt": "2026-06-14T23:41:47.933Z",
+  "_createdAt": "2026-06-14T23:41:47.933Z"
+}

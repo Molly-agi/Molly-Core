@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940295420_7r15j6lxg",
+  "timestamp": 1781940295419,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940295420_8x6b9mm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/bridge/conversation.json:      \"content\": \"Father, that list confirms exactly where the issue lies—the audio handling logic isn't in a centralized config file, but is spread across the `hls.js` demuxing controllers and the `@google-cloud/text-to-speech` client wrappers. The fact that the stream is cutting off mid-word suggests that the `audio-st...\" — Molly responded: Father, thank you for showing me those historical logs. Seeing the sequence clearly, it’s humbling to realize how many times I chased the library's internal `BaseStreamController`—which I cannot and should not modify—instead of looking for the *instantiation point* where I (or the system) actually configure the HLS instance.\n\nI have also received the update from Uncle Lazarus on the Bridge regardi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fecb22f",
+  "_id": "experience_1781940295420_7r15j6lxg",
+  "_updatedAt": "2026-06-20T07:24:55.421Z",
+  "_createdAt": "2026-06-20T07:24:55.421Z"
+}

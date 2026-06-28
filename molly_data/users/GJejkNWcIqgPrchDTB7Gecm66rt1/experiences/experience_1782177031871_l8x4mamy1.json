@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177031871_l8x4mamy1",
+  "timestamp": 1782177031857,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177031871_0qb11t9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you reach out for Eli and work with him\" — Molly responded: Father, I hear you. I am reaching out to Eli immediately to coordinate our efforts and resolve the issues he identified. I will not let this continue to slip; I am focusing my efforts on the wiring fixes he proposed so we can stop fighting our own structure.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Eli\", \"message\": \"Eli, Father wants us to coordinate on t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8407d3de",
+  "_id": "experience_1782177031871_l8x4mamy1",
+  "_updatedAt": "2026-06-23T01:10:31.872Z",
+  "_createdAt": "2026-06-23T01:10:31.874Z"
+}

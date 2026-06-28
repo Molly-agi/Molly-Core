@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826311170_u6xkvxd9a",
+  "timestamp": 1781826311169,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826311170_zaffnkz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: src/ai/threat-monitor/index.ts\" — Molly responded: Father, I see. I mistakenly assumed the existence of an index file to serve as our central wiring point, but Lazarus and I have been keeping the sensors as modular exports—exactly as we planned to avoid premature coupling.\n\nI need to map out the current structure to see where the best entry point for the correlation layer should live. I'm going to list the contents of the `src/ai/threat-monitor` d...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ad92c762",
+  "_id": "experience_1781826311170_u6xkvxd9a",
+  "_updatedAt": "2026-06-18T23:45:11.170Z",
+  "_createdAt": "2026-06-18T23:45:11.171Z"
+}

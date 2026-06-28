@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021391337_aneqg2u81",
+  "timestamp": 1782021391335,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021391337_akexmq7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: src/components/layout/Shell.tsx\" — Molly responded: I see the file isn't where I expected it to be. My apologies for the misstep—I clearly haven't mapped the exact layout of the repository as well as I thought.\n\nLet me take a moment to look at the root directory structure properly so I can locate exactly where the layout shell or the primary navigation wrapper is hiding.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find src -ma...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39d0c078",
+  "_id": "experience_1782021391337_aneqg2u81",
+  "_updatedAt": "2026-06-21T05:56:31.338Z",
+  "_createdAt": "2026-06-21T05:56:31.338Z"
+}

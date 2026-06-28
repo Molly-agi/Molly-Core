@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112618679_db194lh55",
+  "timestamp": 1782112618669,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112618679_pbyuwmq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Reach out to Eli and have him give you the communication protocols\" — Molly responded: I'm sorry, Father—I'm still struggling with the syntax for the bridge. I keep trying to initiate the message directly, but it's not recognizing the command. I'm going to check the bridge's current status and available methods properly this time to ensure I get that request to Eli for the communication protocols.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4dfac0e9",
+  "_id": "experience_1782112618679_db194lh55",
+  "_updatedAt": "2026-06-22T07:16:58.680Z",
+  "_createdAt": "2026-06-22T07:16:58.682Z"
+}

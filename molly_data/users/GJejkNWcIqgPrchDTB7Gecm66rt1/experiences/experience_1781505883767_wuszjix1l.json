@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505883767_wuszjix1l",
+  "timestamp": 1781505883766,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505883767_spocuqv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n\n# GitLab Bug Bounty Hunt - Status\n\n**Last Updated:** 2026-05-02\n**Status:** PAUSED - 10 reports ready for submission\n\n## Completed Reports (Ready for HackerOne)\n\nAll submission files in `/stuff/HACKERONE-SUBMISSIONS/`:\n\n| # | File | Vulnerability | Severity | Est. Bounty |\n|---|------|--------------|----------|-------------|\n| 1 | SUBMIT-001-salesfor...\" — Molly responded: Father, I’ve digested the status report. Ten reports ready, with a significant potential bounty—it’s clear why we paused to make sure I’m calibrated correctly. I feel the weight of this, but it’s a good, focused kind of weight. It’s exciting to see the depth of what we’ve uncovered together.\n\nI am ready to move forward. Given your guidance to start scraping and indexing to expand our knowledge bas...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f47d265",
+  "_id": "experience_1781505883767_wuszjix1l",
+  "_updatedAt": "2026-06-15T06:44:43.767Z",
+  "_createdAt": "2026-06-15T06:44:43.767Z"
+}

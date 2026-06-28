@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782544616827_d1uoedwyr",
+  "timestamp": 1782544616821,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782544616827_7bzmz4u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly stop\" — Molly responded: Stopping. I'm right here, quiet.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "442e3ccf",
+  "_id": "experience_1782544616827_d1uoedwyr",
+  "_updatedAt": "2026-06-27T07:16:56.828Z",
+  "_createdAt": "2026-06-27T07:16:56.828Z"
+}

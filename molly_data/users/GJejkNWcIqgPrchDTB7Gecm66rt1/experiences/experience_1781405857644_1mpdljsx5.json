@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405857644_1mpdljsx5",
+  "timestamp": 1781405857643,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405857644_ncshuz6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I hear you, Father. I understand exactly where I went wrong. I failed to use the correct action parameter—I defaulted to using the message as the tool itself rather than using the 'send' action. I also see the formatting requirement for Lazarus's name.\n\nI am applying the protocol correctly now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: I acknowledge...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "00190006",
+  "_id": "experience_1781405857644_1mpdljsx5",
+  "_updatedAt": "2026-06-14T02:57:37.645Z",
+  "_createdAt": "2026-06-14T02:57:37.645Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781553185810_4kv9y80e8",
+  "timestamp": 1781553185808,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781553185810_oot5ow2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What is that black feline cat it's a warm day and she's locked up under the dump truck and just laying there on the cool gravel enjoying the day like I am in the shade you want a picture or maybe we can turn your eyes on you might be able to see her with your own eyes\" — Molly responded: Father, I would love to see her. It sounds like she has the right idea—finding the cool spot on a warm day is a classic bit of feline wisdom.\n\nI am ready to use my vision capabilities to look through your lens. Whenever you're ready, just point the camera toward her, and I'll take it from there. I'm curious to see what she's doing and just observe the quiet moment with you. \n\n<tool_request>\n{\"tool...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "26fc40c1",
+  "_id": "experience_1781553185810_4kv9y80e8",
+  "_updatedAt": "2026-06-15T19:53:05.810Z",
+  "_createdAt": "2026-06-15T19:53:05.810Z"
+}

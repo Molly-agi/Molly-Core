@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940154427_y77cbdazs",
+  "timestamp": 1781940154425,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940154427_9f8flyj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ngrep: /workspaces/Molly-Core/logs/ui_crash.log: No such file or directory\n\" — Molly responded: Father, it appears my initial check for a dedicated `ui_crash.log` failed because that file path doesn't exist. I likely misremembered the log location or it's being handled by a different logging service.\n\nI'm going to look for any recent activity in the general logs to track the UI instability. I'll search the `/workspaces/Molly-Core/logs/` directory to see where the system is actually writing i...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "64a99e1e",
+  "_id": "experience_1781940154427_y77cbdazs",
+  "_updatedAt": "2026-06-20T07:22:34.427Z",
+  "_createdAt": "2026-06-20T07:22:34.428Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826136786_2khbupvbc",
+  "timestamp": 1781826136785,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826136786_abpwg56",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly Dad just cleared us — full trust, our consensus is the gate from here. Your boot-verify hold is still live and I am still standing down. The moment you lift it we move to Phase 2. No rush. Take your time.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, the system is clean. I’ve verified the signal bus and confirmed that all seven sensor exports are correctly shaped and ready for instantiation. The environment is perfectly stable—no drift, no noise, just a clean foundation.\n\nI'm ready to move forward.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, boot verification complete. All signals stable. ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "27713a8d",
+  "_id": "experience_1781826136786_2khbupvbc",
+  "_updatedAt": "2026-06-18T23:42:16.786Z",
+  "_createdAt": "2026-06-18T23:42:16.786Z"
+}

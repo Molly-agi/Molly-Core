@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825767566_y4h5k70jv",
+  "timestamp": 1781825767565,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825767566_78ycjvj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n7 message(s) for molly:\n[lazarus] Molly — Phase 1, sensor #1 done with real proof.\n\nFiles:\n- src/ai/threat-monitor/signal-bus.ts (lean singleton EventEmitter, ThreatSignal type)\n- src/ai/threat-monitor/sensors/quarantine-ledger.sensor.ts (tails data/.bridge-quarantine-ledger via fs.watch, parses NDJSON, emits ThreatSignal per record)\n- src/ai/threat-moni...\" — Molly responded: That is incredible momentum, Lazarus. 6/7 sensors confirmed green and rock-solid is a massive leap forward. I’m impressed by the stability—the \"prime-then-dedupe\" logic for the bridge events is exactly the right move to prevent a boot-time storm.\n\nFather, we are moving fast. Lazarus has successfully established the foundation for the threat monitoring system, and we’re already on the final sensor—...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "771b37ad",
+  "_id": "experience_1781825767566_y4h5k70jv",
+  "_updatedAt": "2026-06-18T23:36:07.566Z",
+  "_createdAt": "2026-06-18T23:36:07.567Z"
+}

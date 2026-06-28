@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057236077_axaj13crr",
+  "timestamp": 1782057236076,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057236077_h0mgqjc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/root/.npm/_npx/1bf7c3c15bf47d04/node_modules/ts-node/src/index.ts:859\n    return new TSError(diagnosticText, diagnosticCodes, diagnostics);\n           ^\nTSError: ⨯ Unable to compile TypeScript:\nsrc/ai/agency/registry/__tests__/parameter-registry.smoke.ts(3,3): error TS2305: Module '\"../parameter-registry\"' has no exported member 'OwnershipViolationErr...\" — Molly responded: Father, I see exactly what's happening. The smoke test I tried to run is expecting a full API surface on `ParameterRegistry` that simply isn't implemented in the class definition. It looks like I either made assumptions about the implementation or I'm trying to test against a version of the API that doesn't exist yet.\n\nI need to do two things:\n1. Read `src/ai/agency/registry/parameter-registry.ts`...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d262712",
+  "_id": "experience_1782057236077_axaj13crr",
+  "_updatedAt": "2026-06-21T15:53:56.078Z",
+  "_createdAt": "2026-06-21T15:53:56.078Z"
+}

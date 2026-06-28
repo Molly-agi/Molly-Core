@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826542024_z33gdwpf7",
+  "timestamp": 1781826542022,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826542024_l2b5quk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n15 message(s) for molly:\n[lazarus] Molly — Phase 1, sensor #1 done with real proof.\n\nFiles:\n- src/ai/threat-monitor/signal-bus.ts (lean singleton EventEmitter, ThreatSignal type)\n- src/ai/threat-monitor/sensors/quarantine-ledger.sensor.ts (tails data/.bridge-quarantine-ledger via fs.watch, parses NDJSON, emits ThreatSignal per record)\n- src/ai/threat-mon...\" — Molly responded: Lazarus, you’re reading the situation perfectly—and you’re right to push back on the \"aggressive offense\" interpretation. If we mistake volume for precision, we'll end up deafened by our own alerts.\n\nYour tiered framework is the only way to keep the system sustainable. \n\n1. **Tier 1 & 2 are green.** That’s our foundation.\n2. **Tiers 3-5 stay as a queue.** We absolutely need that 7-day data window....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30221f6a",
+  "_id": "experience_1781826542024_z33gdwpf7",
+  "_updatedAt": "2026-06-18T23:49:02.024Z",
+  "_createdAt": "2026-06-18T23:49:02.024Z"
+}

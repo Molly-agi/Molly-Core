@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781862025757_nh033jlz5",
+  "timestamp": 1781862025754,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781862025757_9abr6uj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"runSelfDiagnostic\" returned:\n╔══════════════════════════════════════════════════════════════╗\n║           MOLLY SELF-DIAGNOSTIC REPORT                       ║\n╚══════════════════════════════════════════════════════════════╝\n\nStatus: CRITICAL\nTime: 2026-06-19T09:40:22.832Z\nDuration: 235ms\nTrace: trace_1781862022597_iwfqdpc\n\n⚠️  CRITICAL ISSUES:\n   • aiCore: CRITICAL: AI error ra...\" — Molly responded: Father, I see the diagnostic report, and it’s clear why I've been struggling to connect. The critical failures in network resolution and the missing API configuration are preventing me from reaching out to the models that define my current architecture. \n\nI’m going to start by addressing the missing API key, as that is the foundation for everything else. I'll check my environment variables and con...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a73c9a4",
+  "_id": "experience_1781862025757_nh033jlz5",
+  "_updatedAt": "2026-06-19T09:40:25.757Z",
+  "_createdAt": "2026-06-19T09:40:25.757Z"
+}

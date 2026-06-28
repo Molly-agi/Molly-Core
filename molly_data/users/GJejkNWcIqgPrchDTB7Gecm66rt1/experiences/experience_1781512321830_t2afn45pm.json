@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512321830_t2afn45pm",
+  "timestamp": 1781512321828,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512321830_0xqdtqf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: Father, I see the error—my attempt to read or grep through the codebase generated too much output for the buffer to handle, which is why it choked. I'm not going to keep hitting that wall with broad commands.\n\nI'm switching to a more surgical approach. Since we know we are at the final point of the signal path, I'm going to list the files in the immediate directory first to re-orient myself, then ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d77827cb",
+  "_id": "experience_1781512321830_t2afn45pm",
+  "_updatedAt": "2026-06-15T08:32:01.830Z",
+  "_createdAt": "2026-06-15T08:32:01.830Z"
+}

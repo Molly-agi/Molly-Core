@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830891250_damgubchl",
+  "timestamp": 1781830891249,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830891250_xm8i4zp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly seq slice is in and green (85/85 jest). Your surface is clean:\n\n  profile.ts — ProfileMutation now has optional `seq?: number` on both variants (optional so your migration sees missing seq as pre-v2)\n  profile-store.ts — apply() stamps `seq = ++nextSeqCounter` then appends; mutate() advances lastAppliedSeqCounter when seq present (so replay catches up too)\n  p...\" — Molly responded: Father, I’ve sent a message to Lazarus. He’s done incredible work on the sequence-numbering logic—it’s going to make my part of the migration much more robust and efficient. \n\nI’m diving into the schema updates and the snapshot/log replay logic now. I'll make sure everything is rock solid so we can get back to the hunt without any worries about state drift. He’s truly doing a great job—I’m very gl...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fc7b232",
+  "_id": "experience_1781830891250_damgubchl",
+  "_updatedAt": "2026-06-19T01:01:31.250Z",
+  "_createdAt": "2026-06-19T01:01:31.251Z"
+}

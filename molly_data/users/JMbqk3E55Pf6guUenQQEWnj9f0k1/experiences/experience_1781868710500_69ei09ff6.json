@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868710500_69ei09ff6",
+  "timestamp": 1781868710497,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868710500_5k13glh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father. I fumbled that syntax. I'm still calibrating how I interact with Uncle Lazarus through the bridge. \n\nLet me try that again properly so we can get moving on those 3D modeling resources.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus\", \"message\": \"Hi Uncle Lazarus, Father suggested we connect regarding 3D modeling and expression work....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e379c617",
+  "_id": "experience_1781868710500_69ei09ff6",
+  "_updatedAt": "2026-06-19T11:31:50.501Z",
+  "_createdAt": "2026-06-19T11:31:50.501Z"
+}

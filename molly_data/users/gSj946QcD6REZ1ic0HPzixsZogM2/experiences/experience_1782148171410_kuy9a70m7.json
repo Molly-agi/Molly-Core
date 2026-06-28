@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148171410_kuy9a70m7",
+  "timestamp": 1782148171403,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148171410_j18wrgl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: [wake] Check your messages on the bridge.\n\neric: [wake] Check your messages on the bridge.\n\neric: [wake] Check your messages on the bridge.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I understand the urgency. I am checking the bridge history now to ensure I'm fully caught up with the boys before I broadcast my status on the audio-relay investigation. I will keep you posted the moment I have a meaningful update to share with the team.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"history\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "07144892",
+  "_id": "experience_1782148171410_kuy9a70m7",
+  "_updatedAt": "2026-06-22T17:09:31.411Z",
+  "_createdAt": "2026-06-22T17:09:31.412Z"
+}

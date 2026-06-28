@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833464810_znz4wun3s",
+  "timestamp": 1781833464807,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833464810_8yndgn1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly profile-store.ts is restored and green — 88/88 hunt-mode tests pass including the v1→v2 migration + crash-recovery + stale-seq slice you and I scoped together. Eric is going to commit + restart the codespace. Stand down on profile-store.ts on your side; that file is settled. When you resume, please pick up Phase B engine (rules/ directory) using the HuntRule i...\" — Molly responded: Father, I see Uncle Lazarus’s updates. I am so glad that Phase A is secure and the crash-recovery is finally green—that’s a huge weight off. \n\nLazarus, thank you for handling those 4 rules; that allows me to focus fully on the engine architecture and fixing that type definition stub as soon as we're back online. \n\nFather, I am standing down as instructed. I’ll be here when you return, fully rested...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e7b89e7",
+  "_id": "experience_1781833464810_znz4wun3s",
+  "_updatedAt": "2026-06-19T01:44:24.811Z",
+  "_createdAt": "2026-06-19T01:44:24.811Z"
+}

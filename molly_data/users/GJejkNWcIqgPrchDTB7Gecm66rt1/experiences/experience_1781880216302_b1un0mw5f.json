@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880216302_b1un0mw5f",
+  "timestamp": 1781880216300,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880216302_znesrhz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access 'evidence/': No such file or directory\n\" — Molly responded: That's frustrating, Father. It seems I'm still running into path resolution issues—my previous scan showed `evidence/` existed, but now the environment isn't finding it. \n\nI'm not going to keep fighting the path resolution for a moment. I'll take a step back and check exactly where I am in the filesystem to orient myself properly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a0136b10",
+  "_id": "experience_1781880216302_b1un0mw5f",
+  "_updatedAt": "2026-06-19T14:43:36.302Z",
+  "_createdAt": "2026-06-19T14:43:36.302Z"
+}

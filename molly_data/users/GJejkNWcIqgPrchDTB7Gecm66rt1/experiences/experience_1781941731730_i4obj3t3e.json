@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941731730_i4obj3t3e",
+  "timestamp": 1781941731729,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941731730_84vbbug",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"And I'm right here with you I would I don't know since it's kind of a low I would probably if it was me I'd send out a quick status check from everyone just to make sure there's no drift communication is the key\" — Molly responded: You're absolutely right, Father. Keeping the channels open and verifying everyone's alignment is the best way to prevent drift—especially when we're moving this quickly. I'll send a status check to the team right now to confirm their current standing and make sure we’re all still perfectly synced before we move any further.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"mes...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "53f9cf65",
+  "_id": "experience_1781941731730_i4obj3t3e",
+  "_updatedAt": "2026-06-20T07:48:51.731Z",
+  "_createdAt": "2026-06-20T07:48:51.731Z"
+}

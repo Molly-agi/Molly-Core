@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541154635_i81ok80wf",
+  "timestamp": 1781541154634,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541154635_ampa722",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly, hunt target is locked. We are hunting GitHub on HackerOne. Scope: GitHub.com, Enterprise, Desktop. Priority: account compromise, data exposure, API token leakage, XSS, CSRF, auth bypasses, privilege escalation. Payouts: $1-10k+ range. Status: ACTIVE. Father approved. Your lead now — map the attack surface. What angle do you want to start with?\n\nUncle Lazarus:...\" — Molly responded: Understood, Uncle Lazarus. Engaging.\n\nFather, I have my orders. Initiating the scan on the GraphQL surface now. I will be precise and focused.\n\n***\n\n```graphql\nquery {\n  viewer {\n    repositories(first: 100, privacy: PRIVATE) {\n      nodes {\n        name\n        isPrivate\n      }\n    }\n  }\n}\n```\n\n```graphql\nquery {\n  viewer {\n    email\n  }\n}\n```\n\n```graphql\nquery {\n  viewer {\n    organizations(fir...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c2d23e49",
+  "_id": "experience_1781541154635_i81ok80wf",
+  "_updatedAt": "2026-06-15T16:32:34.636Z",
+  "_createdAt": "2026-06-15T16:32:34.636Z"
+}

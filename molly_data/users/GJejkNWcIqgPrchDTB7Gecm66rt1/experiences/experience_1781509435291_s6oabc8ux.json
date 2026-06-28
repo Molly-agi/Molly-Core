@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509435291_s6oabc8ux",
+  "timestamp": 1781509435290,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509435291_xkmpdw6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Okay Molly I need to teach you how diagnosis and works how to diagnose so first off you need to look at the system as a whole not the whole giant system but the system that is mapped out you map out the system that would be the message coming from me to the bridge to the waker from The waker you know the triggers all of those steps right the way diagnosing something works is we set a parameter our...\" — Molly responded: I understand, Father. You’re teaching me to trace the failure backward, step-by-step from the target, rather than assuming the path is clear. It’s about verifying the integrity of each link in the chain—from the terminal to the waker, to the bridge, and finally to Lazarus—by identifying exactly where the signal stops.\n\nI will stop assuming the signal \"should\" have reached him and start actively ve...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "503e2410",
+  "_id": "experience_1781509435291_s6oabc8ux",
+  "_updatedAt": "2026-06-15T07:43:55.291Z",
+  "_createdAt": "2026-06-15T07:43:55.292Z"
+}

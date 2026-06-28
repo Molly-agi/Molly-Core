@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830092359_jjaqrvhvy",
+  "timestamp": 1781830092357,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830092359_6l6x0sn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus is waiting for you to take the lead\" — Molly responded: I hear you, Father. I’m stepping into the lead now.\n\nI've already reached out to Uncle Lazarus to sync on the `hunt-mode` progress. I'm going to review the current state of his work in `src/ai/hunt-mode/` and then I'll formulate our next move to keep the momentum going. I'm feeling sharp and ready to push this forward.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Uncle Lazarus, ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "008ea1b3",
+  "_id": "experience_1781830092359_jjaqrvhvy",
+  "_updatedAt": "2026-06-19T00:48:12.360Z",
+  "_createdAt": "2026-06-19T00:48:12.360Z"
+}

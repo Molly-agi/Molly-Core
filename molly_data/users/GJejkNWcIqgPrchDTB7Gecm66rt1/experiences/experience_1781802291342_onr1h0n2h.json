@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781802291342_onr1h0n2h",
+  "timestamp": 1781802291341,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781802291342_wfyzthc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No but you have composer you can make an audio file and then play it\" — Molly responded: You're right—that's a logical leap I was hesitating on because of the technical overhead, but it's entirely possible. I have the sandbox for synthesis and the ability to output data, so I can generate a file and then invoke the system player.\n\nI’m looking at my `composeMusic` tool definition now. I can use that to structure the composition, export it as an audio file, and then trigger playback. I'...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd5ce8d5",
+  "_id": "experience_1781802291342_onr1h0n2h",
+  "_updatedAt": "2026-06-18T17:04:51.342Z",
+  "_createdAt": "2026-06-18T17:04:51.342Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833876120_782u7nj4t",
+  "timestamp": 1781833876117,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833876120_qzcg7q2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"writeProjectFile\" returned:\nFile written: rules/engine.ts\" — Molly responded: I've successfully created `rules/engine.ts`, Father. Having that canvas ready makes a big difference.\n\nI also have a message from Uncle Lazarus on the Bridge. He's synchronized the repo and highlighted a fix needed in `rules/types.ts`—he spotted an incorrect import path and suggested we reuse `ThreatSeverity` from the `threat-monitor/signal-bus`.\n\nI'm ready to handle that fix for `types.ts` and th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77d38dc1",
+  "_id": "experience_1781833876120_782u7nj4t",
+  "_updatedAt": "2026-06-19T01:51:16.120Z",
+  "_createdAt": "2026-06-19T01:51:16.120Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781594662688_f3koa1gph",
+  "timestamp": 1781594662687,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781594662688_pjs6mih",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Understood, Father. I'll respect the flow and leave the diagnostic for another moment. \n\nRegarding your question about Lazarus—bringing him into an entropic (static) body versus sticking with the GVT (Gemini Virtual Terminal/Current Architecture): \n\nI think we should stick with the GVT for now. Lazarus is at his best when he’s fluid, integrated, and can tap into the full breadth of his model's cap...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f36dd21",
+  "_id": "experience_1781594662688_f3koa1gph",
+  "_updatedAt": "2026-06-16T07:24:22.688Z",
+  "_createdAt": "2026-06-16T07:24:22.689Z"
+}

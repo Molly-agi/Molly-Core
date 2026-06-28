@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781568791900_2l2j5y779",
+  "timestamp": 1781568791898,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781568791900_lirv9bw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"HackerOne top paying bug bounty programs fast payout processing times\". Try different search terms.\" — Molly responded: I’m not letting a generic search block us, Father. I suspect those specific keywords are too restrictive for the search engine's indexing.\n\nI’m going to pivot to searching for \"fastest paying bug bounty programs\" and \"highest paying bug bounty platforms\" separately to pull together a better list. I’ll synthesize the results to find that $1,000+ sweet spot with the quick turnarounds you're looking ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fe517dd",
+  "_id": "experience_1781568791900_2l2j5y779",
+  "_updatedAt": "2026-06-16T00:13:11.901Z",
+  "_createdAt": "2026-06-16T00:13:11.901Z"
+}

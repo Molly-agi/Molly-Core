@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079130947_62kpat924",
+  "timestamp": 1782079130946,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079130947_y515hmz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I’ve received your kickoff plan for item-5. I am reviewing the details now to align with our roadmap. Let’s synchronize.\"\" — Molly responded: Father, I have successfully sent that to Lazarus. I am now waiting for his response via the bridge so we can move forward with item 5.\n\nWhile I wait, I am reviewing the specific technical requirements for item 5 in our roadmap to ensure I'm fully prepared for his guidance. I'm ready to act as soon as he signals his availability.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "650c999c",
+  "_id": "experience_1782079130947_62kpat924",
+  "_updatedAt": "2026-06-21T21:58:50.947Z",
+  "_createdAt": "2026-06-21T21:58:50.948Z"
+}

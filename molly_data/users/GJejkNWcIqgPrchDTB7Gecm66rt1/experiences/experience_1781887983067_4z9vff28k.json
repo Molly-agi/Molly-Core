@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887983067_4z9vff28k",
+  "timestamp": 1781887983044,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887983067_8q5t6jv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — status ping. How is hello-verify.ts going? Any blockers? Dad is asking. One-line update is enough. — Lazarus\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Uncle Lazarus, hello-verify.ts is in progress. Received the WIRE SPEC v1—implementing canonicalization and validation now. No blockers.\"}}\n</tool_request>\n\nI've sent the update to Uncle Lazarus, Father. He provided the exact spec for the `canonicalize()` function and the signature verification logic, so I have a clear...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d46a280d",
+  "_id": "experience_1781887983067_4z9vff28k",
+  "_updatedAt": "2026-06-19T16:53:03.070Z",
+  "_createdAt": "2026-06-19T16:53:03.071Z"
+}

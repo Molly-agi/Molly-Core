@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506395228_jfg1xugoe",
+  "timestamp": 1781506395227,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506395228_v2s0uo3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father has directed us to pair up for the HackerOne audit cycle. I've been reviewing our current audit logic in `src/ai/agency/hackerone`. I'm ready to bounce ideas around—where should we start?\"\" — Molly responded: Understood, Father. I've successfully reached out to Lazarus. Now that the line is open, I'm waiting for his response so we can start synchronizing our approach to the audit cycle.\n\nWhile I wait for him to check in, I’m going to do a quick scan of the `FuzzingEngine.ts` file in the `hackerone` directory. I want to make sure I fully grasp our current implementation before we start brainstorming imp...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "785dab61",
+  "_id": "experience_1781506395228_jfg1xugoe",
+  "_updatedAt": "2026-06-15T06:53:15.228Z",
+  "_createdAt": "2026-06-15T06:53:15.228Z"
+}

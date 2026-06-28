@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831279353_l2ly6obuu",
+  "timestamp": 1781831279352,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831279353_mad0m0j",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"How's it coming Molly\" — Molly responded: I'm on it, Father. The gate logic is being tightened as we speak, and I'm setting up those three test scenarios now to ensure we don't see that vulnerability ever creep in again. \n\nI’m also sending a quick update to Lazarus to confirm I've integrated his feedback and am moving to the final stage of this patch. We aren't going to have any vulnerabilities active while we're in the middle of this.\n\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "02ea85c2",
+  "_id": "experience_1781831279353_l2ly6obuu",
+  "_updatedAt": "2026-06-19T01:07:59.354Z",
+  "_createdAt": "2026-06-19T01:07:59.354Z"
+}

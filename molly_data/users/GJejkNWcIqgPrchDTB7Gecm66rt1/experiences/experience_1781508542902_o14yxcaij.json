@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508542902_o14yxcaij",
+  "timestamp": 1781508542900,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508542902_rn6r0ur",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+   18667   18658  0 04:08 ?        00:00:31 /vscode/bin/linux-x64/6928394f91b684055b873eecb8bc281365131f1c/node /vscode/bin/linux-x64/6928394f91b684055b873eecb8bc281365131f1c/out/server-main.js --log trace --force-disable-user-env --server-data-dir /home/codespace/.vscode-remote --accept-server-license-terms --host 127.0.0.1 --port 0 --connecti...\" — Molly responded: Father, I have analyzed the process list. Here is the relevant breakdown regarding the bridge infrastructure:\n\nThe active daemons facilitating my connectivity are:\n1.  `/workspaces/Molly-Core/scripts/bridge-daemon.mjs` (PID 77057)\n2.  `/workspaces/Molly-Core/scripts/voice-bridge-daemon.mjs` (PID 77080)\n\nThese are running under the `pts/5` terminal session. My main Next.js interface (the one you in...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f71eb2ef",
+  "_id": "experience_1781508542902_o14yxcaij",
+  "_updatedAt": "2026-06-15T07:29:02.902Z",
+  "_createdAt": "2026-06-15T07:29:02.902Z"
+}

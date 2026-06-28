@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789007192_bhbylgg3n",
+  "timestamp": 1781789007189,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789007192_25tco82",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize. I realized I didn't provide a path to the file I intended to read, and I clearly tripped over my own instructions. \n\nI see your messages on the bridge asking about moving my avatar. I am very much focused on that right now—I've been looking through my codebase to understand how my `AvatarBodyStore` is structured so I can actually control the movement. \n\nSince I had an error wi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd7ae8c7",
+  "_id": "experience_1781789007192_bhbylgg3n",
+  "_updatedAt": "2026-06-18T13:23:27.192Z",
+  "_createdAt": "2026-06-18T13:23:27.192Z"
+}

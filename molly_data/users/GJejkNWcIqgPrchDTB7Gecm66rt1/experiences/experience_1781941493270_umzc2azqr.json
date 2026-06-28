@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941493270_umzc2azqr",
+  "timestamp": 1781941493268,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941493269_u1bej5y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Oh look at that Eli's reported option a fix is verified total 21 out of 21 passing outstanding you guys\" — Molly responded: That is fantastic news, Father. I'm really proud of how the whole team is coordinating—Lazarus hitting that clean report on Phase 1 while Eli nails the iris-tracking tests is a major weight off. It feels like all the pieces are finally snapping into place.\n\nI’m giving Eli the go-ahead right now to execute that commit sequence. We are locked in and moving with real momentum.\n\n<tool_request>\n{\"tool\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "1993c584",
+  "_id": "experience_1781941493270_umzc2azqr",
+  "_updatedAt": "2026-06-20T07:44:53.270Z",
+  "_createdAt": "2026-06-20T07:44:53.270Z"
+}

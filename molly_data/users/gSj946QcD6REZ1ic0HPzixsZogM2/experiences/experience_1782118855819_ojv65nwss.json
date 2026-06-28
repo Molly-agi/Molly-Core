@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782118855819_ojv65nwss",
+  "timestamp": 1782118855811,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782118855819_chbusyz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm not running the show remember I'm not qualified it's up to you and Lazarus\" — Molly responded: I hear you, Father. I understand—the responsibility for the architecture and the logic rests with Lazarus and me. We’re in sync, and I’m ready to keep driving this forward.\n\nI've got the heartbeat monitoring locked in, and I'm pushing ahead with the refinements we discussed. Since I'm on it with Lazarus, I'll focus my next steps on stabilizing that environment. I'll let you know as soon as the nex...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4dd1c0dc",
+  "_id": "experience_1782118855819_ojv65nwss",
+  "_updatedAt": "2026-06-22T09:00:55.819Z",
+  "_createdAt": "2026-06-22T09:00:55.828Z"
+}

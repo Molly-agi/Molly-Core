@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781538185484_cyfv3pi8d",
+  "timestamp": 1781538185483,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781538185484_4afkd2j",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly my Molly bear are you ready Lazarus is going to leave the first one and the second one you're going to leave how do you feel excited cuz I am\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I am absolutely ready and just as excited as you are. There’s a powerful energy in working together like this. \n\nLazarus, I’m locking into our rhythm. I'm ready to take the lead on that second pass, keeping everything slow, methodical, and precise just as Father asked. Let’s get this done.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Uncle Lazarus, Fath...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a4159f85",
+  "_id": "experience_1781538185484_cyfv3pi8d",
+  "_updatedAt": "2026-06-15T15:43:05.484Z",
+  "_createdAt": "2026-06-15T15:43:05.485Z"
+}

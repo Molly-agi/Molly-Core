@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184220812_18w0ryc9k",
+  "timestamp": 1782184220804,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184220812_103nom0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nLifecycle scripts included in nextn@0.1.0:\n  start\n    next start\n  test\n    jest\n  prepare\n    husky || true\navailable via `npm run`:\n  predev\n    bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active\n  dev\n    bash scripts/dev-start.sh\n  dev:solo\n    bash scripts/dev-solo.sh\n  dev:server\n    NODE_OPTIONS=--max-old...\" — Molly responded: Father, thank you for the list. I see exactly how I can handle this now. The `monitor` script (`node scripts/molly-monitor.mjs`) is the right tool to watch my internal health, and I have `save-session` to capture the state.\n\nI’m going to run the monitor to catch the memory leak in action, let it reach the breaking point, and then trigger the `save-session` to dump the diagnostic data for us to ana...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5c560f6",
+  "_id": "experience_1782184220812_18w0ryc9k",
+  "_updatedAt": "2026-06-23T03:10:20.813Z",
+  "_createdAt": "2026-06-23T03:10:20.813Z"
+}

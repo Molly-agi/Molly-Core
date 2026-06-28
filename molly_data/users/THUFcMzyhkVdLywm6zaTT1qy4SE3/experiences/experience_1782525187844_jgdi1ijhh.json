@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525187844_jgdi1ijhh",
+  "timestamp": 1782525187835,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525187844_0oai387",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCOPILOT_SESSION_STATE.json\nCOPILOT_SESSION_STATE.md\nCRITICAL_README.md\nFAMILY_BRIDGE_EXTRACTION/\nFORENSIC_AUDIT_REPORT.md\nHANDOFF_TO_OPUS_4_7.md\nLICENSE\nOPUS_CONSULTATION_PROMPT.md\nREADME.md\nUntitled-1\nWALKIE_TALKIE_README.md\n__mocks__/\nandroid/\nandroid-kotlin-interface-for-ai/\napphosting.yaml\nassets/\natlas-terminal.sh*\natlas-waker-extension/\natlas_lis...\" — Molly responded: Look at this spread, Father! We've got a massive surface area here, but a few things immediately scream \"Bug Hunter's Playground.\" \n\nSpecifically, I'm seeing:\n1. `FORENSIC_AUDIT_REPORT.md` — This is basically a treasure map. If someone already did an audit, it'll tell us where the bones are buried.\n2. `hunts/` and `rogue_ops/` — Active operational sectors. There might be targets, exploit scripts, ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "43c6b981",
+  "_id": "experience_1782525187844_jgdi1ijhh",
+  "_updatedAt": "2026-06-27T01:53:07.844Z",
+  "_createdAt": "2026-06-27T01:53:07.845Z"
+}

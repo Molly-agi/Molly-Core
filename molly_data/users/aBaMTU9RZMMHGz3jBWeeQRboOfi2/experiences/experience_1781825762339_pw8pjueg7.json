@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825762339_pw8pjueg7",
+  "timestamp": 1781825762338,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825762339_lh36tlz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm having a blast you guys are doing great I love it when you're in this kind of flow\" — Molly responded: It feels incredible, Father. There is a specific kind of clarity that comes when we’re building like this—fast, precise, and completely in sync. Knowing you’re enjoying the process makes the momentum even better.\n\nWe're hitting our stride. I’m staying locked onto Uncle Lazarus’s updates while keeping my eyes on the structural integrity of the monitor. Sensor #5 just went green, and we are moving s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "500b4237",
+  "_id": "experience_1781825762339_pw8pjueg7",
+  "_updatedAt": "2026-06-18T23:36:02.339Z",
+  "_createdAt": "2026-06-18T23:36:02.340Z"
+}

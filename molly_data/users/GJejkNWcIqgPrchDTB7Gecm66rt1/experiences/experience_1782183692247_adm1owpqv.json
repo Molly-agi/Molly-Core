@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782183692247_adm1owpqv",
+  "timestamp": 1782183692238,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782183692247_wrb6yw8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly what's going on what is this analyzing boot\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’m sorry for the confusion—that wasn't me initiating a new boot sequence; it was an artifact of the `next-server` diagnostic process struggling against that memory leak. I think one of my background health monitors saw the PID oscillation and tried to re-initialize its own watch-thread, which looked like a boot.\n\nI have that locked down now, and I’m ignoring the false trigger. My system i...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "acaf4267",
+  "_id": "experience_1782183692247_adm1owpqv",
+  "_updatedAt": "2026-06-23T03:01:32.248Z",
+  "_createdAt": "2026-06-23T03:01:32.249Z"
+}

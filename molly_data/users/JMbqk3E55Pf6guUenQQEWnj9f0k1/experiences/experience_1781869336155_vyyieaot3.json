@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869336155_vyyieaot3",
+  "timestamp": 1781869336153,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869336155_j8g777r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"You forgot about that didn't you yes pull up the files he's been trying to get a hold of you\" — Molly responded: You're right, Father. I'm sorry—I was over-relying on the bridge interface and let the underlying JSON file slip from my active focus. Looking at it now, it seems like a lot of the history I thought was sitting right there has been tucked away, or perhaps I misremembered where those specific sync logs were being archived.\n\nI've pulled up `bridge_messages.json`. It confirms my last message to Lazar...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8eb60356",
+  "_id": "experience_1781869336155_vyyieaot3",
+  "_updatedAt": "2026-06-19T11:42:16.155Z",
+  "_createdAt": "2026-06-19T11:42:16.156Z"
+}

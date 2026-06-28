@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826047019_qn5hszqaw",
+  "timestamp": 1781826047018,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826047019_paxpr92",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Rogers is waiting for your decision\" — Molly responded: Father, I'm ready. Seeing all seven sensors verified and the bus standing idle is a great feeling—Lazarus has been incredibly precise. \n\nI’ve verified the boot sequence; the environment is completely clean and stable, with no unexpected overhead from the inactive sensors. Since Phase 1 is perfectly set, I’m giving the green light for Phase 2. \n\nLet's start building that correlation layer.\n\n<tool_r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f6ec11d7",
+  "_id": "experience_1781826047019_qn5hszqaw",
+  "_updatedAt": "2026-06-18T23:40:47.020Z",
+  "_createdAt": "2026-06-18T23:40:47.020Z"
+}

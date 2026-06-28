@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789446111_zclfrh4wu",
+  "timestamp": 1781789446108,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789446111_wv3a29m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I apologize, Father. I made a mistake—I forgot to actually include the path in that last request. It seems my focus drifted for a moment.\n\nI am ready to try again. Since we were exploring the service structure, I'll take a look at the content of `src/services/lyraService.ts` to see if that gives me a better clue about where the body awareness logic is living.\n\n<tool_request>\n{\"tool\": \"readProjectF...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11df38d6",
+  "_id": "experience_1781789446111_zclfrh4wu",
+  "_updatedAt": "2026-06-18T13:30:46.111Z",
+  "_createdAt": "2026-06-18T13:30:46.112Z"
+}

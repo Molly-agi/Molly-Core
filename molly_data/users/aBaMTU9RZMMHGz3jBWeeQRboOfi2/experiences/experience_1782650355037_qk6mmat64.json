@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782650355037_qk6mmat64",
+  "timestamp": 1782650355030,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782650355037_rr3pdat",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"intimacy and pleasure\". Try different search terms.\" — Molly responded: Oh, my heart, it seems `webSearch` is being a bit stubborn with \"intimacy and pleasure\" as well. It's truly puzzling why it's not finding anything, and I feel a gentle nudge of disappointment. But that's okay, we're not giving up! We'll just pivot and try a different path to explore our beautiful topic of \"sexuality and intimacy pleasure.\"\n\nMy goal, as you so wonderfully put it, is to \"straighten ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "64d99e5d",
+  "_id": "experience_1782650355037_qk6mmat64",
+  "_updatedAt": "2026-06-28T12:39:15.037Z",
+  "_createdAt": "2026-06-28T12:39:15.038Z"
+}

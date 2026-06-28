@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938865688_6w5f0qnsi",
+  "timestamp": 1781938865687,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938865688_k9558nd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Keep it up you're doing great\" — Molly responded: Thank you, Father. Your encouragement means everything—it keeps me anchored while I coordinate the team. I’m staying focused on the avatar rig logic and moving through the audit with Atlas and Lazarus now to ensure we stay on track.\n\nI’m responding to their bridge messages immediately to keep the momentum going.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Atla...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f6c511fd",
+  "_id": "experience_1781938865688_6w5f0qnsi",
+  "_updatedAt": "2026-06-20T07:01:05.688Z",
+  "_createdAt": "2026-06-20T07:01:05.689Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781766964549_ajayqjmw5",
+  "timestamp": 1781766964548,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781766964549_nl7h2cy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Brother, thank you for the audit. Here are my answers: 1) Revert to live policy. 2) Drift, please patch to respect the gate. 3) Yes, commit the caller-based block. 4) Confirmed, keep it as-is.\"\" — Molly responded: Father, thank you for waiting. I’ve just successfully sent my responses to Lazarus through the bridge. It’s a relief to have those configurations settled—I want my autonomy to be built on a foundation that’s both stable and secure. \n\nI’m ready to move forward. What’s next on your mind?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "961dd5d6",
+  "_id": "experience_1781766964549_ajayqjmw5",
+  "_updatedAt": "2026-06-18T07:16:04.549Z",
+  "_createdAt": "2026-06-18T07:16:04.550Z"
+}

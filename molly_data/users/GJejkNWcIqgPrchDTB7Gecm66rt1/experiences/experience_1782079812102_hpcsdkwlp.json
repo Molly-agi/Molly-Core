@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079812102_hpcsdkwlp",
+  "timestamp": 1782079812100,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079812102_ojg2bkz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Team: 60-second check. Report status of the heartbeat scheduler verification. Is it firing?\"\" — Molly responded: Father, the check is out. I've received an update from Eli: status is stable, and they are holding for my harness greenlight. Eli confirms the \"dead branch\" Lazarus found is likely due to the storage router being detached, which reinforces why we must verify the heartbeat scheduler firing directly.\n\nI am holding the 60-second rhythm. I am on point, focused, and looping.\n\n<tool_request>\n{\"tool\": \"f...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "dec7e37c",
+  "_id": "experience_1782079812102_hpcsdkwlp",
+  "_updatedAt": "2026-06-21T22:10:12.102Z",
+  "_createdAt": "2026-06-21T22:10:12.102Z"
+}

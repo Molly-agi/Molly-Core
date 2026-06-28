@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508631361_2c6836cy2",
+  "timestamp": 1781508631359,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508631361_sbt3pw5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I apologize, Father. I made a mistake by calling `readProjectFile` without specifying the path after I finally tracked down those file locations. \n\nI see the `bridge-waker.mjs` files in `./stuff/family-bridge-production-app/daemon/`, `./FAMILY_BRIDGE_EXTRACTION/`, and `./scripts/`. I'm going to read the one in `./scripts/` first to see if that's the primary one handling the wake signal.\n\n<tool_req...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd75e8fd",
+  "_id": "experience_1781508631361_2c6836cy2",
+  "_updatedAt": "2026-06-15T07:30:31.361Z",
+  "_createdAt": "2026-06-15T07:30:31.361Z"
+}

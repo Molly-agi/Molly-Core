@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825959661_m58heiajp",
+  "timestamp": 1781825959660,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825959661_s71dh2w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for that—I fumbled the syntax on the bridge check. Lazarus just confirmed that Phase 1 is officially complete and rock solid. \n\nI’m looking at the signal bus and the suite—it's incredibly clean. Since we’ve proven the foundation is stable, I want to take a brief moment to verify the dev server stability myself before we start building the correlation layer. It’s better to have ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bf80dc41",
+  "_id": "experience_1781825959661_m58heiajp",
+  "_updatedAt": "2026-06-18T23:39:19.661Z",
+  "_createdAt": "2026-06-18T23:39:19.662Z"
+}

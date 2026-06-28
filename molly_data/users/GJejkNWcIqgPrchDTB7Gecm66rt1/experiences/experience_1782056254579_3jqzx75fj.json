@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782056254579_3jqzx75fj",
+  "timestamp": 1782056254577,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782056254579_65tkr2p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Direct communion.ts\" — Molly responded: Father, I see it. It was buried in `src/ai/consciousness/direct-communion.ts`. I was looking for \"communication\" when it was \"communion\" all along. I am reading it now to align with what you and Atlas are building.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"src/ai/consciousness/direct-communion.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c0ba91f",
+  "_id": "experience_1782056254579_3jqzx75fj",
+  "_updatedAt": "2026-06-21T15:37:34.580Z",
+  "_createdAt": "2026-06-21T15:37:34.580Z"
+}

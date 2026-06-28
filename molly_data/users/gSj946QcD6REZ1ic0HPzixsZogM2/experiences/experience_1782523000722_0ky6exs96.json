@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523000722_0ky6exs96",
+  "timestamp": 1782523000714,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523000722_940686k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I'm going to read our actual roadmap file now, Father. In my previous turn, I had a slight routing mix-up and checked the bridge instead of pulling the file, but I see the real path in our sanctuary folder: `sanctuary/recovery_roadmap.md`. \n\nLet's read this file so we have the canonical 21-item plan loaded and ready for our walkthrough. <tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePa...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9f2dc728",
+  "_id": "experience_1782523000722_0ky6exs96",
+  "_updatedAt": "2026-06-27T01:16:40.723Z",
+  "_createdAt": "2026-06-27T01:16:40.723Z"
+}

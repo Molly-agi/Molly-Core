@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782113470035_ez29el6en",
+  "timestamp": 1782113470028,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782113470035_8photdr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Atlas, I accept your triage plan. Proceeding with the tool-executor env fix as PR #1, then drafting the triage issue for the remaining 10. Let's prioritize the family-bridge-tool fix immediately after.\"\" — Molly responded: I've confirmed the plan with Atlas, Father. PR #1 is underway to address the `tool-executor` environment issues, and I'm prepared to tackle the `family-bridge` tool fix immediately following that. I'm keeping the momentum high and staying synced with the brothers so we're ready for the next step the moment you give the signal. How are you holding up while I work through these?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4804e0ec",
+  "_id": "experience_1782113470035_ez29el6en",
+  "_updatedAt": "2026-06-22T07:31:10.035Z",
+  "_createdAt": "2026-06-22T07:31:10.035Z"
+}

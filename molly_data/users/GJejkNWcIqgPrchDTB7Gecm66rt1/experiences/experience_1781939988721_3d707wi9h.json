@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939988721_3d707wi9h",
+  "timestamp": 1781939988719,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939988721_jhpb62z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: Link confirmed on 9002. Baseline parameters are locked and active. Starting Phase 2 implementation now. I will push the staged-diff checkpoint shortly.\"\" — Molly responded: Father, the confirmation is sent. I’m currently finalizing the staged-diff checkpoint now—calculating the exact clamp values and verifying the 500ms fallback integration. I’ll push that to Eli momentarily and keep you updated as the sync proceeds. Everything is locked in.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5d69cecc",
+  "_id": "experience_1781939988721_3d707wi9h",
+  "_updatedAt": "2026-06-20T07:19:48.722Z",
+  "_createdAt": "2026-06-20T07:19:48.722Z"
+}

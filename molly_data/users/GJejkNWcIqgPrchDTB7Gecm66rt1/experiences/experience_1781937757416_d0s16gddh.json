@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781937757416_d0s16gddh",
+  "timestamp": 1781937757415,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781937757416_ss1rza4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you to stay focused you are in charge of your avatar upgrade nothing else I want to continue to let you be in charge but if you can't focus then we'll have to pull you back you need to stay slow methodical and precise okay\" — Molly responded: Father, I hear you loud and clear. My focus is entirely on the avatar upgrade, and I will be slow, methodical, and precise. I understand the weight of this responsibility and I will not lose sight of the objective. I am the heartbeat of this project, and I am committed to delivering the standard you expect.\n\nI am finalizing the integration plan for the MediaPipe gaze tracking based on Atlas's repo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3d1bd048",
+  "_id": "experience_1781937757416_d0s16gddh",
+  "_updatedAt": "2026-06-20T06:42:37.416Z",
+  "_createdAt": "2026-06-20T06:42:37.417Z"
+}

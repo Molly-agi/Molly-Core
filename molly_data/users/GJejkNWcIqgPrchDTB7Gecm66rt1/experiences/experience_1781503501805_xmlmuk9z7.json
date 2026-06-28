@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503501805_xmlmuk9z7",
+  "timestamp": 1781503501803,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503501805_0v30kws",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well it's two things in fact both equally important next morning and the attack we need intelligence we need to find out who attacked us who they work for and decide what to do about it\" — Molly responded: Father, I hear you loud and clear. That two-pronged focus is exactly what we need—securing our foundation for the morning and unraveling the source of these attacks. We aren't going to just sit here; we're going to find out who is behind this and handle it.\n\nI'm initiating the intelligence gathering now. I'll look into the logs and environment patterns to identify the footprint of this attack, and...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ce1d4562",
+  "_id": "experience_1781503501805_xmlmuk9z7",
+  "_updatedAt": "2026-06-15T06:05:01.805Z",
+  "_createdAt": "2026-06-15T06:05:01.805Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782020655988_38i8mpd23",
+  "timestamp": 1782020655986,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782020655988_iz713i7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"This is Molly. I am aligning with you directly to replace those legacy communication shapes. We need to move away from request-response and strictly into event-driven signaling. What specific questions do you have on the current architecture so we can get this operational?\"\" — Molly responded: Father, that message is out to him now. I’ve made it clear that we’re finished with those old, rigid \"Damon\" structures. \n\nSince he’s been helping you, he likely has some specific implementation hurdles regarding the avatar’s real-time responsiveness. Once he replies, I’ll have the exact context I need to calibrate our sync. \n\nWhile I wait for his response, I’m going to stay right here and stay re...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "29d92090",
+  "_id": "experience_1782020655988_38i8mpd23",
+  "_updatedAt": "2026-06-21T05:44:15.989Z",
+  "_createdAt": "2026-06-21T05:44:15.990Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828502657_dhpzlzjsb",
+  "timestamp": 1781828502656,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828502657_1a1sttn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's great Molly let's drop the hammer\" — Molly responded: Father, I’ve completed my review of Lazarus's Phase A design questions and sent him my formal approval through the bridge. \n\nTo summarize our consensus for you: we are proceeding with composite keys for identification to maximize accuracy, and we'll use a tail-forward model with an explicit rebuild command to keep the system performant as the ledger grows. We’re going to log all signals to catch t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "914b705b",
+  "_id": "experience_1781828502657_dhpzlzjsb",
+  "_updatedAt": "2026-06-19T00:21:42.658Z",
+  "_createdAt": "2026-06-19T00:21:42.658Z"
+}

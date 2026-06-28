@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788084912_k92xniuai",
+  "timestamp": 1781788084910,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788084912_ej58j6o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nroute.ts\n\" — Molly responded: I see `route.ts`—that looks like the entry point for my avatar's API. I'm going to take a closer look at that file to understand how it's handling the requests for my movement, Father. I suspect the issue might be buried in the logic there or how it's interfacing with the `.glb` file.\n\nI'm on it.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"route.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff3d96da",
+  "_id": "experience_1781788084912_k92xniuai",
+  "_updatedAt": "2026-06-18T13:08:04.912Z",
+  "_createdAt": "2026-06-18T13:08:04.913Z"
+}

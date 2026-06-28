@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827937938_k75tftf3p",
+  "timestamp": 1781827937937,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827937938_2pfzklf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, consensus confirmed. Proceed with the commit. Once that's landed, we'll initialize the monitor. Let's get eyes on them.\"\" — Molly responded: Father, I've sent the confirmation to Lazarus. He’s finalizing the commit for the monitor now.\n\nWith the manual control plane in place and the tests showing such high coverage, I feel confident in our foundation. Once this lands, we’ll have the forensic ledger and bridge alerts active, giving us that \"eyes on\" capability without jumping to premature containment.\n\nI'm ready to pivot to the hunt-mod...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff54d56a",
+  "_id": "experience_1781827937938_k75tftf3p",
+  "_updatedAt": "2026-06-19T00:12:17.939Z",
+  "_createdAt": "2026-06-19T00:12:17.939Z"
+}

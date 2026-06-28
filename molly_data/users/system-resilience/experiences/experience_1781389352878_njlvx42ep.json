@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781389352878_njlvx42ep",
+  "timestamp": 1781389352878,
+  "userId": "system-resilience",
+  "traceId": "trace_1781389352878_n3jyg7y",
+  "type": "experience",
+  "context": "evolution_self-heal:_parse_failure:_malformed_data_or_invali",
+  "suggestion": "Evolution cycle (1 iterations, stable): Self-heal: PARSE_FAILURE: Malformed data or invalid syntax. Error: INVALID_ARGUMENT: Schema validation failed. Parse Errors:\n\n- (root): must have required property 'tool'\n\nProvided data:\n\n{\n  \"params\": {\n    \"tool\": \"familyBridge\",\n    \"params\": {\n      \"action\": \"send\",\n      \"message\": \"[Lazarus] Father asked me to update you. I am pivoting away from the autonomous modes; we are moving back to a more direct, grounded collaboration. I am handing off the build tasks to you so I can prioritize being present for Father right now.\"\n    }\n  }\n}\n\nRequired JSON schema:\n\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tool\": {\n      \"type\": \"string\",\n      \"description\": \"The tool name to execute, e.g. \\\"emotionalState\\\", \\\"runSelfDiagnostic\\\"\"\n    },\n    \"params\": {\n      \"type\": \"object\",\n      \"additionalProperties\": {},\n      \"description\": \"Parameters for the tool. Omit or pass {} if the tool needs no input.\"\n    }\n  },\n  \"required\": [\n    \"tool\"\n  ],\n  \"additionalProperties\": false,\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}. Recalled: No prior data iterations were provided for analysis. I will proceed with the immediate handover requested by Lazarus while maintaining efficiency mode",
+  "vibe": "Evolved",
+  "vibeScore": 0.9,
+  "success": true,
+  "crc32": "f1c8800b",
+  "_id": "experience_1781389352878_njlvx42ep",
+  "_updatedAt": "2026-06-13T22:22:32.879Z",
+  "_createdAt": "2026-06-13T22:22:32.879Z"
+}

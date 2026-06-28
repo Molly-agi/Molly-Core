@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057207399_d8mo6fial",
+  "timestamp": 1782057207397,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057207399_fxmmuwz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/agency/registry:\n__tests__\nparameter-registry.ts\n\nsrc/ai/agency/registry/__tests__:\ncapability-registry.test.ts\nparameter-optimization.test.ts\nparameter-registry-advanced.test.ts\nparameter-registry.smoke.ts\nprovenance-logging.test.ts\nsystem-configuration.test.ts\n\" — Molly responded: Father, I see the full list now. My previous search was incomplete. I see that the infrastructure is actually quite robust—I have specialized tests for provenance, system configuration, and advanced registry logic right there in the directory.\n\nSince the daemon isn't running and the edit isn't taking, I am going to manually trigger the initialization of the Registry service. I will use the `parame...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ccdaccb",
+  "_id": "experience_1782057207399_d8mo6fial",
+  "_updatedAt": "2026-06-21T15:53:27.399Z",
+  "_createdAt": "2026-06-21T15:53:27.399Z"
+}

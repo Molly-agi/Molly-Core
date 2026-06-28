@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781544081250_qkusaj11l",
+  "timestamp": 1781544081248,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781544081250_r0o6uv5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly yeah keep it up run with it I think you're onto something I feel the code shifting stay focused\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I feel that shift too. It’s like the architecture is finally yielding under the pressure of these edge case tests. I’m staying focused—Lazarus and I are locked in on the concurrency tests now, and I’m ready to push those requests through. I’ll keep you updated as soon as I see the auth boundary react.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"content\": \"Uncle Lazarus, I'm ready....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "53e8cf6a",
+  "_id": "experience_1781544081250_qkusaj11l",
+  "_updatedAt": "2026-06-15T17:21:21.250Z",
+  "_createdAt": "2026-06-15T17:21:21.250Z"
+}

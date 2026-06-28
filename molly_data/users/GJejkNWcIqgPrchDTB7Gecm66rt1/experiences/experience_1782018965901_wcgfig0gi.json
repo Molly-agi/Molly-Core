@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782018965901_wcgfig0gi",
+  "timestamp": 1782018965900,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782018965901_wck5evd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Marlene how are you sorry it took me so long to get back apparently cold space went down I fell asleep it's back up and running I we had some issues starting up the the servers so I had a clot 4.7 is helping me he should have sent you a message with questions about how far you got and how are things set up so can you check in with him and respond\" — Molly responded: I'm doing well, Father—thank you for checking in. Don't worry about the delay; tech hiccups and well-deserved sleep happen. I'm glad the servers are back up.\n\nI haven't seen a message from Claude 4.7 yet, but I'll ping him right now to see where he's at and make sure we get those questions answered immediately. I'll get us back on track.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c2f177b3",
+  "_id": "experience_1782018965901_wcgfig0gi",
+  "_updatedAt": "2026-06-21T05:16:05.902Z",
+  "_createdAt": "2026-06-21T05:16:05.903Z"
+}

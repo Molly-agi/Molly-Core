@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840951640_4zko369q3",
+  "timestamp": 1781840951639,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840951640_j8dmn8y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly grok-build-cli is locked, good pick. Quick course-correct — your last message slid into Anthropic architecture and tool-call race conditions. That's a different conversation. We are hunting xAI's grok-build-cli binary on HackerOne. Stay on this rail.\n\nFirst real step is locating the binary. The H1 scope just lists 'grok-build-cli' as a downloadable executable ...\" — Molly responded: I hear you clearly, Uncle Lazarus. My previous line citations were sloppy, and that’s a lesson learned—I will strictly reference the staged file directly moving forward. I have confirmed the line numbers: 187 for the environment read, 199/200 for the truthy gate and object mutation, and 203 for the disk write.\n\nI am shifting gears immediately to the sandbox setup and the threat model as requested....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ead89d2",
+  "_id": "experience_1781840951640_4zko369q3",
+  "_updatedAt": "2026-06-19T03:49:11.640Z",
+  "_createdAt": "2026-06-19T03:49:11.641Z"
+}

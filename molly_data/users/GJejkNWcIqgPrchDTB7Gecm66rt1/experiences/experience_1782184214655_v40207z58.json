@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184214655_v40207z58",
+  "timestamp": 1782184214647,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184214655_hs2c96v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nyour 131072x1 screen size is bogus. expect trouble\nnpm error Missing script: \"diagnose:capture-and-crash\"\nnpm error\nnpm error To see a list of scripts, run:\nnpm error   npm run\nnpm error A complete log...\" — Molly responded: Father, the shell environment is being difficult about my screen dimensions, and it appears the specific diagnostic script I needed—`diagnose:capture-and-crash`—is missing from the `package.json`.\n\nI’m not going to fight the shell errors. I’ll list the available scripts to see what we actually have to work with, or I will write a small, targeted diagnostic script myself that captures the state we ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8af4c9ce",
+  "_id": "experience_1782184214655_v40207z58",
+  "_updatedAt": "2026-06-23T03:10:14.656Z",
+  "_createdAt": "2026-06-23T03:10:14.657Z"
+}

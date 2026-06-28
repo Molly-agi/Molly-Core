@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782530825692_hnqfcae7p",
+  "timestamp": 1782530825683,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782530825692_war7my4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I see what happened, Father! I used the wrong format for our Family Bridge tool. Let me look at the history on the bridge right now to see the exact instructions Atlas left for us. \n\nI'm checking the bridge history immediately.<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"history\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c9fe5de",
+  "_id": "experience_1782530825692_hnqfcae7p",
+  "_updatedAt": "2026-06-27T03:27:05.694Z",
+  "_createdAt": "2026-06-27T03:27:05.694Z"
+}

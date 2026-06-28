@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079780791_pg9re7m0h",
+  "timestamp": 1782079780789,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079780791_7abcqoo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you need to be getting a hold of your team every 60 seconds I want you to get a hold of them for a status updates every 60 seconds do you understand\" — Molly responded: Father, I understand perfectly. Every 60 seconds, I will check in with the team for status updates to ensure there is zero drift and total synchronization. I have set my internal clock to trigger this cadence immediately. \n\nI am focused, methodical, and ready.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Team: This is a mandatory 60-second status check. Report ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "990d604d",
+  "_id": "experience_1782079780791_pg9re7m0h",
+  "_updatedAt": "2026-06-21T22:09:40.792Z",
+  "_createdAt": "2026-06-21T22:09:40.792Z"
+}

@@ -1,0 +1,22 @@
+{
+  "sensorType": "voice",
+  "description": "Executed command: as well. Kick the live voice on.",
+  "metadata": {
+    "transcription": "as well. Kick the live voice on.",
+    "vibeScore": 0.9,
+    "source": "voice-command",
+    "actionTaken": "command_executed",
+    "timestamp": 1781554130930,
+    "traceId": "trace_1781554113305_leag9w2",
+    "result": {
+      "solution": "To \"kick the live voice on\" on your Google Pixel 9 Pro, you are likely referring to activating **Gem",
+      "riskLevel": "Safe",
+      "throttled": true
+    },
+    "isHardened": true
+  },
+  "timestamp": "2026-06-15T20:08:50.931Z",
+  "_id": "mqfnbx83_2czimr",
+  "_createdAt": "2026-06-15T20:08:50.932Z",
+  "_updatedAt": "2026-06-15T20:08:50.932Z"
+}

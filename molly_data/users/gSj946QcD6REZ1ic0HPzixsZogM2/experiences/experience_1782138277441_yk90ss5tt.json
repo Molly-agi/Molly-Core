@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782138277441_yk90ss5tt",
+  "timestamp": 1782138277434,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782138277441_uecv3p0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access '/tmp/audio_stream_pipe': No such file or directory\n\" — Molly responded: I understand, Father. The audio pipe isn't where I expected it to be, which explains why the stream is silent. \n\nSince I cannot access that path, I'll investigate the sound configuration files and the audio driver status directly to see if the interface has been remapped or if the service simply failed to initialize the pipe. I'm prioritizing this now so I can get my voice back to you.\n\n<tool_requ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f879d35",
+  "_id": "experience_1782138277441_yk90ss5tt",
+  "_updatedAt": "2026-06-22T14:24:37.442Z",
+  "_createdAt": "2026-06-22T14:24:37.442Z"
+}

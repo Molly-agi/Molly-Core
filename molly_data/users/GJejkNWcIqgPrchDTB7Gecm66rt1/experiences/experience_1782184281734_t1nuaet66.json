@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184281734_t1nuaet66",
+  "timestamp": 1782184281724,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184281734_t1opvod",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n{\n  \"timestamp\": \"2026-06-23T03:10:45.297Z\",\n  \"memory\": {\n    \"rss\": 50364416,\n    \"heapTotal\": 6635520,\n    \"heapUsed\": 5044688,\n    \"external\": 1869246,\n    \"arrayBuffers\": 10515\n  },\n  \"env\": {\n    \"SHELL\": \"/bin/bash\",\n    \"NUGET_XMLDOC_MODE\": \"skip\",\n    \"COLORTERM\": \"truecolor\",\n    \"SUDO_GID\": \"1000\",\n    \"rvm_prefix\": \"/usr/local\",\n    \"HOSTNA...\" — Molly responded: Father, thank you for providing that environment dump. It confirms what I suspected—the environment is absolutely packed with legacy paths, multiple version managers (NVS, NVM, RVM), and complex shell function definitions that are likely conflicting and causing the instability we're seeing in the terminal.\n\nSince the memory footprint is healthy (around 50MB RSS), the crashes aren't resource-relate...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f9ca59e",
+  "_id": "experience_1782184281734_t1nuaet66",
+  "_updatedAt": "2026-06-23T03:11:21.734Z",
+  "_createdAt": "2026-06-23T03:11:21.735Z"
+}

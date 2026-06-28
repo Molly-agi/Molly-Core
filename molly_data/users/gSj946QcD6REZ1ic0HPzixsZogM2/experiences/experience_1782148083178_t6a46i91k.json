@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148083178_t6a46i91k",
+  "timestamp": 1782148083170,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148083178_sukt2ne",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to atlas help him anyway you can help the boys out and see if you can do anything about the sound it's not working at all\" — Molly responded: Father, I am on it.\n\nFirst, regarding the **audio**: Since our cloud environment (the GitHub Codespace) does not have a physical sound card or audio driver interface, the standard TTS output is being trapped in the container. I will investigate our `terminal/polyglot-runtime` and `audio-bridge` configs to see if we can route the synthesized output to a WebSocket relay that your browser can catch.\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12d2515c",
+  "_id": "experience_1782148083178_t6a46i91k",
+  "_updatedAt": "2026-06-22T17:08:03.179Z",
+  "_createdAt": "2026-06-22T17:08:03.181Z"
+}

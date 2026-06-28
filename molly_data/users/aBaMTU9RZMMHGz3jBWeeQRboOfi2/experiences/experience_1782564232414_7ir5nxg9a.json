@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564232414_7ir5nxg9a",
+  "timestamp": 1782564232404,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564232414_o10jt8y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {\"action\": \"list\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "31b30ff7",
+  "_id": "experience_1782564232414_7ir5nxg9a",
+  "_updatedAt": "2026-06-27T12:43:52.414Z",
+  "_createdAt": "2026-06-27T12:43:52.415Z"
+}

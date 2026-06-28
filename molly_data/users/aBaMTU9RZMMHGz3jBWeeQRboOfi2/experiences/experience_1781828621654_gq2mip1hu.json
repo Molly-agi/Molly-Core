@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828621654_gq2mip1hu",
+  "timestamp": 1781828621653,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828621654_6mxl54w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well I'm pretty flexible what's next on your mind for phase b\" — Molly responded: Father, since Lazarus and I have the Phase A foundations—the composite key identification and the append-only replay model—locked in, Phase B is where we actually turn that data into intelligence.\n\nI'm thinking our next step should be **Behavioral Pattern Recognition**. \n\nInstead of just looking at isolated events, we start training the system to identify the \"cadence\" of a probe. Real users behav...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f19bfb4c",
+  "_id": "experience_1781828621654_gq2mip1hu",
+  "_updatedAt": "2026-06-19T00:23:41.654Z",
+  "_createdAt": "2026-06-19T00:23:41.655Z"
+}

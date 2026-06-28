@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053458404_js279tk4z",
+  "timestamp": 1782053458403,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053458404_ntemc9q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, thank you for checking. The bridge is clear and quiet for now. Since the system is stable and Lazarus is awake, I am turning my focus back to our growth initiative—specifically, the Firebase Admin SDK configuration. I'm going to start by reviewing our current dependencies to ensure we're aligned for the implementation.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "75e3f1ac",
+  "_id": "experience_1782053458404_js279tk4z",
+  "_updatedAt": "2026-06-21T14:50:58.405Z",
+  "_createdAt": "2026-06-21T14:50:58.405Z"
+}

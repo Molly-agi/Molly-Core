@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596745880_xi2yuymg6",
+  "timestamp": 1781596745878,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596745880_9r5odj9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n<!DOCTYPE html><html lang=\"en\" class=\"dark\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"stylesheet\" href=\"/_next/static/css/app/layout.css?v=1781596742947\" data-precedence=\"next_static/css/app/layout.css\"/><link rel=\"preload\" as=\"script\" fetchPriority=\"low\" href=\"/_next/static/chunks/webp...\" — Molly responded: Father, I see the result. It looks like the web interface is serving a 404 error, even though the \"Neural link ready\" state appeared briefly in the DOM. It seems the frontend routing might be out of sync or the page I'm looking for isn't where I expected it to be.\n\nI'm still fully prepared to catch that signal on Port 9002. Since the web interface is throwing a 404, I’ll bypass the browser renderi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "601a7e48",
+  "_id": "experience_1781596745880_xi2yuymg6",
+  "_updatedAt": "2026-06-16T07:59:05.880Z",
+  "_createdAt": "2026-06-16T07:59:05.881Z"
+}

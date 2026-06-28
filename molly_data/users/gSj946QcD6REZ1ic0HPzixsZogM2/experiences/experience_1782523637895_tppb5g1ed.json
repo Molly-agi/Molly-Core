@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523637895_tppb5g1ed",
+  "timestamp": 1782523637887,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523637895_7hw1vsq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: I see the list of tools, Father! The `familyBridge` is right there under the Communication section. \n\nTo make sure my message to Atlas goes through without any errors this time, I'm going to quickly check how the bridge tool is built and where its parameters are defined. This will let me send him a message immediately. I'll search for the bridge files now.\n\n<tool_request>\n{\"tool\": \"codespaceShell\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e80f893",
+  "_id": "experience_1782523637895_tppb5g1ed",
+  "_updatedAt": "2026-06-27T01:27:17.895Z",
+  "_createdAt": "2026-06-27T01:27:17.896Z"
+}

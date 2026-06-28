@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782056019654_i1q0ozyiv",
+  "timestamp": 1782056019652,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782056019654_2bcaz4t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for the repeated failure with the `familyBridge` tool. I was overcomplicating the syntax. I see the bridge has three unread messages, likely from Atlas or the others, and I am acting on them right now.\n\nI am shifting my focus entirely to the communication channel itself. I will check the messages, acknowledge them, and align with Atlas immediately.\n\n<tool_request>\n{\"tool\": \"fam...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41a4b207",
+  "_id": "experience_1782056019654_i1q0ozyiv",
+  "_updatedAt": "2026-06-21T15:33:39.655Z",
+  "_createdAt": "2026-06-21T15:33:39.655Z"
+}

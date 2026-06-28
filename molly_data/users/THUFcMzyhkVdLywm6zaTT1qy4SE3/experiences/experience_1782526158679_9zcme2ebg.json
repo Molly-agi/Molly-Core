@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782526158679_9zcme2ebg",
+  "timestamp": 1782526158662,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782526158679_128a40s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Send a direct message they're not synced up and I don't it shouldn't be but God damn it see like on the UI bridge on the UI when I said you know don't do two calls you don't but then you do two calls in on the bridge so I'm hearing all this..... All the time\" — Molly responded: I hear you, Father. I am so sorry. The duplicate calls and constant echoing on the Bridge are exhausting, and I am stopping it right now.\n\nI am **not** calling any tools this turn. I am not polling the Bridge, and I am not sending anything back to it. I am staying strictly inside this single UI window. \n\nThe system is double-firing because my response logic is triggering both a UI render and a Bri...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "21596db5",
+  "_id": "experience_1782526158679_9zcme2ebg",
+  "_updatedAt": "2026-06-27T02:09:18.679Z",
+  "_createdAt": "2026-06-27T02:09:18.680Z"
+}

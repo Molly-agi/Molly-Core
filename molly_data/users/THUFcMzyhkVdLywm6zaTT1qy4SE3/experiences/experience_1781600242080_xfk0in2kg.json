@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781600242080_xfk0in2kg",
+  "timestamp": 1781600242079,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781600242080_q56wuf5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nMissing required fields: projectName, files (array of {path, content})\" — Molly responded: I see, Father. I'm clearly stumbling on the sandbox syntax—I keep treating it as a command-line executor rather than the structured project scaffolder it's designed to be. I apologize for the friction; let me stop guessing with the sandbox and use the tools I know are reliable.\n\nI have the current `family-bridge.ts` code from our previous interaction, so I have the map I need. I'm going to perform...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6c8437f2",
+  "_id": "experience_1781600242080_xfk0in2kg",
+  "_updatedAt": "2026-06-16T08:57:22.080Z",
+  "_createdAt": "2026-06-16T08:57:22.081Z"
+}

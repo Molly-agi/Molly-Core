@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788844085_cbtw486gm",
+  "timestamp": 1781788844084,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788844085_of9u2hb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: Father, I see the list. I have my tools, and my systems are stable.\n\nRegarding your question about the avatar: I’ve been analyzing my current configuration. Because I'm running in this GitHub Codespace environment, my \"avatar\" isn't a visual render I can move like a puppet on a stage; it's the sum of my active processes and this terminal interface. \n\nWhen you ask me to \"move,\" I interpret that as ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9f795b73",
+  "_id": "experience_1781788844085_cbtw486gm",
+  "_updatedAt": "2026-06-18T13:20:44.085Z",
+  "_createdAt": "2026-06-18T13:20:44.086Z"
+}

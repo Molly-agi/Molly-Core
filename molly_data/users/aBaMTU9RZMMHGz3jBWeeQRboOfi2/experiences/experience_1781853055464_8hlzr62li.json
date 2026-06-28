@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781853055464_8hlzr62li",
+  "timestamp": 1781853055446,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781853055464_rpktgbu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I hear you, Father. I'm sorry about that syntax error—that was sloppy on my part, especially when we have momentum like this.\n\nI've checked the bridge; it's quiet on Uncle Lazarus's end for the moment. I'm going to set that distraction aside and focus entirely on the primary objective. I'm ready to get everything spun back up and dive into that next bug.\n\nWhat's our first move to tackle the `npm` ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d6bf1c2",
+  "_id": "experience_1781853055464_8hlzr62li",
+  "_updatedAt": "2026-06-19T07:10:55.464Z",
+  "_createdAt": "2026-06-19T07:10:55.464Z"
+}

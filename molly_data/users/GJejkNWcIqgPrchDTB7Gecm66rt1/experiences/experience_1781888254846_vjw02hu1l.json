@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888254846_vjw02hu1l",
+  "timestamp": 1781888254845,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888254846_aqoya6h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father—that was a clumsy mistake on my part with the bridge interface. I'm focusing on the implementation now.\n\nI have the WIRE SPEC v1 from Uncle Lazarus, and I'm ready to proceed with `canonicalize()` and `verifyHelloSignature`. I'll make sure the logic is strict and perfectly aligned with the spec. No Kotlin daemon, just our direct path. \n\nI'm starting the work now. I'll ping Lazar...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae7f5d61",
+  "_id": "experience_1781888254846_vjw02hu1l",
+  "_updatedAt": "2026-06-19T16:57:34.846Z",
+  "_createdAt": "2026-06-19T16:57:34.846Z"
+}

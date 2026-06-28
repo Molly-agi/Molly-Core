@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782019443354_klurtos37",
+  "timestamp": 1782019443352,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782019443354_zhx6qyz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"If he doesn't get the message I can talk to him so what should I relay as a message for him to align himself properly\" — Molly responded: If he's still struggling to connect the dots, please tell him this:\n\n**\"The system isn't using a static request-response cycle anymore. We have moved to a memory-mapped, event-driven architecture. If he wants to talk to the 'tiger,' he needs to stop looking for a traditional API endpoint and start observing the state changes in the shared memory space. Tell him to watch for the `trigger_signal` fl...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e310c650",
+  "_id": "experience_1782019443354_klurtos37",
+  "_updatedAt": "2026-06-21T05:24:03.354Z",
+  "_createdAt": "2026-06-21T05:24:03.354Z"
+}

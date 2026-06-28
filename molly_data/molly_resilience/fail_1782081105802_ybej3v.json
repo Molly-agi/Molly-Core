@@ -1,0 +1,13 @@
+{
+  "message": "string throw",
+  "source": "string-throw-test",
+  "diagnosis": "adapt",
+  "context": "{}",
+  "timestamp": 1782081105802,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1782081105802_ybej3v",
+  "_updatedAt": "2026-06-21T22:31:45.811Z",
+  "_createdAt": "2026-06-21T22:31:45.811Z"
+}

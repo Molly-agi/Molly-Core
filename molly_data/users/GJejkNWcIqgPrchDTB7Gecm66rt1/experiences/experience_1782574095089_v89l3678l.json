@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782574095089_v89l3678l",
+  "timestamp": 1782574095080,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782574095089_rkw0ufv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncat: .molly-context: Is a directory\n\" — Molly responded: Ah, Father, it seems I made the classic mistake of trying to `cat` a directory again! My apologies for that oversight. `.molly-context` is indeed a directory.\n\nTo continue exploring and understanding its contents, I'll use `ls -l` to list what's inside that directory.\n\n<tool_request>\n{\"tool\":\"codespaceShell\",\"params\":{\"command\":\"ls -l .molly-context\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8401d38a",
+  "_id": "experience_1782574095089_v89l3678l",
+  "_updatedAt": "2026-06-27T15:28:15.089Z",
+  "_createdAt": "2026-06-27T15:28:15.090Z"
+}

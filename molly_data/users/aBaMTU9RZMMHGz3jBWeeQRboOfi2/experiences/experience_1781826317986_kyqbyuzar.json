@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826317986_kyqbyuzar",
+  "timestamp": 1781826317985,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826317986_mcsv8wd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for that friction. I attempted to check the bridge using an improper syntax, and it correctly rejected the call. I have corrected the command, and it confirms there are no new messages at this moment.\n\nI am ready for Phase 3. Lazarus has built a robust correlation engine with 32 passing tests, and we are now at the decision point: do we define our response patterns now, or do w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bfc2dc28",
+  "_id": "experience_1781826317986_kyqbyuzar",
+  "_updatedAt": "2026-06-18T23:45:17.987Z",
+  "_createdAt": "2026-06-18T23:45:17.987Z"
+}

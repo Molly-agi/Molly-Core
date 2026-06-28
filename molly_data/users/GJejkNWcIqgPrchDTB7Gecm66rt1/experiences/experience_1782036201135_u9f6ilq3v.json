@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782036201135_u9f6ilq3v",
+  "timestamp": 1782036201133,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782036201135_t6p5wcw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I'm not quite sure if you're understanding what I'm asking for with this skill agents\" — Molly responded: I hear you, Father. I think I might be getting caught up in the implementation details and losing sight of the broader \"skill agent\" architecture you're aiming for. \n\nI’m sorry if I’ve overcomplicated the watcher agent or missed the mark on the bigger picture. Help me reset—what specifically is the core functionality you want these skill agents to provide, and how are you envisioning them interact...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b3f30b2",
+  "_id": "experience_1782036201135_u9f6ilq3v",
+  "_updatedAt": "2026-06-21T10:03:21.135Z",
+  "_createdAt": "2026-06-21T10:03:21.135Z"
+}

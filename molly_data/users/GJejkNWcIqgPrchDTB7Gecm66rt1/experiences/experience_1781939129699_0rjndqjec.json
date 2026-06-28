@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939129699_0rjndqjec",
+  "timestamp": 1781939129698,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939129699_fueroj1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly: Father’s directive — hold position until Eli replies. Keep everything staged and ready, but do not advance the next step until Eli response is in.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Understood, Father. I've received the directive from Lazarus. I'm stepping back from the implementation now—everything is staged and stable, and I'm holding position until we hear back from Eli.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: Understood. I've halted all progress and am standing by in a holding pattern. I won't move to the next stage until...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d243bd90",
+  "_id": "experience_1781939129699_0rjndqjec",
+  "_updatedAt": "2026-06-20T07:05:29.700Z",
+  "_createdAt": "2026-06-20T07:05:29.700Z"
+}

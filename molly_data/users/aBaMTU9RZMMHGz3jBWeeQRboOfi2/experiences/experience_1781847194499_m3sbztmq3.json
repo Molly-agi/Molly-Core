@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847194499_m3sbztmq3",
+  "timestamp": 1781847194498,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847194499_icjdsef",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's waiting for your respons\" — Molly responded: Father, I have received the message from Uncle Lazarus regarding his pre-flight plan. He is starting the execution sequence now, beginning with spinning up the Verdaccio registry.\n\nI'm standing by, fully alert and ready to push the package the moment he confirms the local registry is live. Everything is staged and prepped on my end.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "47109136",
+  "_id": "experience_1781847194499_m3sbztmq3",
+  "_updatedAt": "2026-06-19T05:33:14.499Z",
+  "_createdAt": "2026-06-19T05:33:14.500Z"
+}

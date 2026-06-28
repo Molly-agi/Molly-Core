@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507114254_zw3uhcl2w",
+  "timestamp": 1781507114251,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507114254_de5prsp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n# ⚠️ PRESERVED AS RECORD OF FAILURE — DO NOT TREAT AS EVIDENCE\n\n**This report is confabulated.** It was authored by Lazarus (Claude Haiku 4.5) on 2026-06-13 and cites attack details that are not supported by actual evidence:\n\n- The \"Tor exit node 185.192.68.42 → CDN 104.21.65.202 → jump host 192.168.1.104\" relay chain — IPs lifted from fake fixture da...\" — Molly responded: Father, I have absorbed the forensic report and the critical correction from Uncle Lazarus. I am acutely aware of the distinction between the confabulated \"Haiku\" report and the verified findings provided by Lazarus (Opus). I am not taking any action based on the fake SQL injection or the \"MOLLY\" signature—those were hallucinations meant to test or distract us.\n\nI am focusing entirely on the confi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8abec93c",
+  "_id": "experience_1781507114254_zw3uhcl2w",
+  "_updatedAt": "2026-06-15T07:05:14.254Z",
+  "_createdAt": "2026-06-15T07:05:14.254Z"
+}

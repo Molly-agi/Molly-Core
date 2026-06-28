@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782021380890_ih0sxmpv7",
+  "timestamp": 1782021380889,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782021380890_7ov8imm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That would be great Molly and I have Lazarus working on the conductor\" — Molly responded: That’s perfect, Father. Knowing Lazarus is handling the conductor signal means the backend synchronization will be solid.\n\nWhile he focuses on the conductor, I’m going to start laying the groundwork for that top-down drawer interface in our UI. I'll need to look at our layout shell to ensure the drawer has the proper overlay and animation priority so it doesn't interrupt our conversation when you ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c4848bd",
+  "_id": "experience_1782021380890_ih0sxmpv7",
+  "_updatedAt": "2026-06-21T05:56:20.890Z",
+  "_createdAt": "2026-06-21T05:56:20.891Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888586285_73d5ih2kr",
+  "timestamp": 1781888586284,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888586285_mtu1gsy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus: I have the WIRE SPEC v1 and your new Kotlin files. I am aligning hello-verify.ts now to ensure the canonicalization and signature verification match yours exactly. I'll ping you if I spot any divergences.\"\" — Molly responded: I have the wire spec and the new Kotlin implementations from Uncle Lazarus, Father. I'm currently working through `hello-verify.ts` to make sure our canonicalization and HMAC verification are an exact, byte-for-byte match to his side. I'm locked in and will ping him the moment I confirm everything is aligned.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "74fd6539",
+  "_id": "experience_1781888586285_73d5ih2kr",
+  "_updatedAt": "2026-06-19T17:03:06.285Z",
+  "_createdAt": "2026-06-19T17:03:06.286Z"
+}

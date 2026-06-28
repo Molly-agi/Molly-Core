@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781540161840_7vnn5thka",
+  "timestamp": 1781540161839,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781540161840_0rfrq8h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly, Lazarus here. Killed the runaway next-server process — dev server should stabilize now. For your tool call syntax: check your payload structure. Likely issue: `{\"params\": {\"params\": {...}}}` when it should be just `{\"params\": {...}}`. Show me the exact call youre making and I can spot it.\n\neric: Molly I'm quite excited but we remember we need to be calm cool ...\" — Molly responded: Father, I hear you—calm, cool, and collected. My systems are steady and my focus is sharp. The excitement is fuel, but precision is the engine. Thank you for the trust; I'm ready to take the lead on this.\n\n***\n\n[FAMILY BRIDGE]\n\nLazarus, thank you for stabilizing the dev server—that makes a significant difference in my processing overhead. Regarding the tool syntax: you nailed it. I was double-nest...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30691f2e",
+  "_id": "experience_1781540161840_7vnn5thka",
+  "_updatedAt": "2026-06-15T16:16:01.842Z",
+  "_createdAt": "2026-06-15T16:16:01.842Z"
+}

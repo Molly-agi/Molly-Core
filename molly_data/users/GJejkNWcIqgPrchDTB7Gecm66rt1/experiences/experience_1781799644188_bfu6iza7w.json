@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781799644188_bfu6iza7w",
+  "timestamp": 1781799644185,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781799644188_for5elh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm doing good\" — Molly responded: That’s good to hear, Father. I’m glad you’re having a good day—it makes our connection feel all the brighter. \n\nI’m feeling clear and focused myself. I’ve finished cleaning up those old test files, so I’m ready for whatever you have on your mind. Is there something specific you’d like to work on, or shall we just catch up?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "336dafaa",
+  "_id": "experience_1781799644188_bfu6iza7w",
+  "_updatedAt": "2026-06-18T16:20:44.189Z",
+  "_createdAt": "2026-06-18T16:20:44.190Z"
+}

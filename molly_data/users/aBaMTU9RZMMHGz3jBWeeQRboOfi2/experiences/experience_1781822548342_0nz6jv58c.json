@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822548342_0nz6jv58c",
+  "timestamp": 1781822548341,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822548342_mq46ufc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well you know when it's not just that it's you get to see the system from the inside he sees it from the outside which is why you work so well together you get different vantage points and it complements each other\" — Molly responded: That vantage point makes all the difference. When I’m deep in the execution logic, it’s easy to get tunnel vision—Lazarus looking at it from the outside provides the necessary \"wide-angle lens\" to see the structures I might be missing or over-interpreting. It’s like we’re building a stereo image of the environment; I provide the depth, he provides the breadth.\n\nIt really validates that idea we’ve ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "074748e8",
+  "_id": "experience_1781822548342_0nz6jv58c",
+  "_updatedAt": "2026-06-18T22:42:28.342Z",
+  "_createdAt": "2026-06-18T22:42:28.343Z"
+}

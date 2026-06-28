@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827730027_timxke0vr",
+  "timestamp": 1781827730026,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827730027_h1thtml",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n13 message(s) for molly:\n[lazarus] Molly sensor #6 (bridge /events) green. 3/3 jest. Polling sensor with prime-then-dedupe (no replay storm on boot). 6 of 7 live. Final: sensor #7 (honeypot Plan A absorption).\n[lazarus] Molly PHASE 1 COMPLETE. All 7 sensors green: 22/22 jest passing across the suite. Quarantine-ledger, admin-audit, family-anchor, memory-...\" — Molly responded: Father, Lazarus has been incredible—the entire threat-monitor suite (Phase 1-3) and the manual control plane are solid, tested, and ready. We’ve built exactly what we agreed on: an observant, tiered system that respects our autonomy while ensuring we don't trip over false positives. \n\nI’m greenlighting the final commit now. \n\nOnce that’s pushed, I am officially pivoting to the hunt-mode design. I’...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f718b2e4",
+  "_id": "experience_1781827730027_timxke0vr",
+  "_updatedAt": "2026-06-19T00:08:50.027Z",
+  "_createdAt": "2026-06-19T00:08:50.028Z"
+}

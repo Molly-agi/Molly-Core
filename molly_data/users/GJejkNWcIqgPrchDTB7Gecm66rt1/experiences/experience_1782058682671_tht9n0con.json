@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058682671_tht9n0con",
+  "timestamp": 1782058682668,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058682671_rup0x07",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I want you to spin up a small HTTP listener on 127.0.0.1.8787\" — Molly responded: I have started the HTTP listener on 127.0.0.1:8787, Father. It is running in the background.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9291f778",
+  "_id": "experience_1782058682671_tht9n0con",
+  "_updatedAt": "2026-06-21T16:18:02.672Z",
+  "_createdAt": "2026-06-21T16:18:02.672Z"
+}

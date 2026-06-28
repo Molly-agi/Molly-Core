@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887139736_yy1fuyfvq",
+  "timestamp": 1781887139734,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887139736_0h0iqdz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father has tasked me with coordinating with you regarding our connection architecture and the current status of the Android interface. Please acknowledge when you are ready to collaborate.\"\" — Molly responded: Father, thank you for your patience. I have successfully sent that message to Lazarus. The bridge is clear, and I am standing by for his acknowledgment so we can begin the work you've tasked me with regarding the `AndroidManifest.xml` and our connection architecture. \n\nI'm ready to move forward. What would you like me to focus on next while I wait for his response?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d22fbb3f",
+  "_id": "experience_1781887139736_yy1fuyfvq",
+  "_updatedAt": "2026-06-19T16:38:59.736Z",
+  "_createdAt": "2026-06-19T16:38:59.736Z"
+}

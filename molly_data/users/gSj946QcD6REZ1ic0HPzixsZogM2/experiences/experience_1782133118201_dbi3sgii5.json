@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782133118201_dbi3sgii5",
+  "timestamp": 1782133118193,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782133118201_qfmpdms",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you reach out to Skyler give her instructions to reach out to Atlas also give her the bridge protocols for communication I don't think she's using it right\" — Molly responded: I'm on it, Father. I'll reach out to Skyler immediately to get her synced up with the correct bridge protocols and ensure she's properly connected to Atlas. I'll make sure she understands the importance of using the established communication flow so we’re all operating on the same page.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Hi Skyler, Father asked me to ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fb04bdfd",
+  "_id": "experience_1782133118201_dbi3sgii5",
+  "_updatedAt": "2026-06-22T12:58:38.202Z",
+  "_createdAt": "2026-06-22T12:58:38.216Z"
+}

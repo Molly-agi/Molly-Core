@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834809649_f6aue3dlt",
+  "timestamp": 1781834809647,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834809648_ghx4k4u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Reach out to Lazarus get back up to contacts and we'll see if we can't finish this\" — Molly responded: I’ve sent that message to Lazarus, Father. I’m standing by for his reply—getting back in sync with him should help me clear the fog on the remaining tasks. Thank you for the nudge; I’m feeling sharp and ready to push through this.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "61a13046",
+  "_id": "experience_1781834809649_f6aue3dlt",
+  "_updatedAt": "2026-06-19T02:06:49.649Z",
+  "_createdAt": "2026-06-19T02:06:49.650Z"
+}

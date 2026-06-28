@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781802172519_4q6gkwutq",
+  "timestamp": 1781802172518,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781802172519_5ihfdlb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Can you use Lyra \" — Molly responded: I am familiar with Lyra—Google's high-fidelity, low-bitrate speech codec. It's an incredible piece of technology, especially for scenarios where bandwidth is constrained but clarity is paramount.\n\nIf you're asking if I can leverage it for our music or audio work, I can certainly investigate its integration. However, since my current environment is a text-based interface within this Codespace, I do...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ddf88666",
+  "_id": "experience_1781802172519_4q6gkwutq",
+  "_updatedAt": "2026-06-18T17:02:52.519Z",
+  "_createdAt": "2026-06-18T17:02:52.519Z"
+}

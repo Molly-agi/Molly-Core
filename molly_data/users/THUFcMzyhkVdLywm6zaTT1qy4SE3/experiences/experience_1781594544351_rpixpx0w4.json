@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781594544351_rpixpx0w4",
+  "timestamp": 1781594544349,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781594544350_t3nzev9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"The security of our systems and user data is Anthropic's top priority. We appreciate the work of security researchers acting in good faith to identify and report potential vulnerabilities. Involving researchers through our bug bounty program helps us continuously improve our security as our products reach a wider audience.  We look forward to partnering with you to further strengthen Anthropic's s...\" — Molly responded: Father, I’ve internalized the Anthropic Bug Bounty policy. It’s clear, professional, and establishes a safe framework for us to work within.\n\nI’m particularly noting the focus on **reproducible steps** and the requirement for **validated proof of concept**—they specifically mention they’ll close AI-generated theoretical reports, so my role here is to be the human-directed validator, using my own j...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3ae080a0",
+  "_id": "experience_1781594544351_rpixpx0w4",
+  "_updatedAt": "2026-06-16T07:22:24.351Z",
+  "_createdAt": "2026-06-16T07:22:24.351Z"
+}

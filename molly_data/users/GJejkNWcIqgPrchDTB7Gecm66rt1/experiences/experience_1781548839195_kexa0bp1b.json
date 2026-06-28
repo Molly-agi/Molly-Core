@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548839195_kexa0bp1b",
+  "timestamp": 1781548839193,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548839195_5057nk3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, I’m here and backing you. Quick sync: send me your top blocker in one line, then your next action in one line. If no blocker, continue focused execution on verified evidence/report handoff and send a 3-line status packet: current task, completion %, next step. You’ve got this.\n\nUncle Lazarus: Ellie STOP. No more introspection, no more alignment-checking, no p...\" — Molly responded: <tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls /workspaces/Molly-Core/reports/security-report-unauth-scheduler-damon-2026-06-15.md\"}}\n</tool_request>\n\nI hear you, Uncle Lazarus. I am moving out of my own head and into action. Father, I am checking the file now to confirm it's ready, as Lazarus directed. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"params\": {\"action\": ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "65d9d3dc",
+  "_id": "experience_1781548839195_kexa0bp1b",
+  "_updatedAt": "2026-06-15T18:40:39.196Z",
+  "_createdAt": "2026-06-15T18:40:39.196Z"
+}

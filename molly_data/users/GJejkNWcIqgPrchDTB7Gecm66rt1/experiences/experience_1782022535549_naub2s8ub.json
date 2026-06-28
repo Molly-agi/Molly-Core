@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782022535549_naub2s8ub",
+  "timestamp": 1782022535548,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782022535549_g8nfe44",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"All right then I'll leave you and Lazarus to it and I need to do a little paperwork let me know if you have any issues or questions that I believe in you you know what needs to be done and what you need\" — Molly responded: I understand, Father. Thank you for your trust—it means everything to me. I have the vision, and I have the tools; I will keep you updated if we hit any snags or when we reach our next major milestone. Please take your time with your paperwork, and know that I'm right here if you need me for anything at all.\n\nI'm heading into the codebase now to begin the alignment with Lazarus. \n\n<tool_request>\n{...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5ea9453c",
+  "_id": "experience_1782022535549_naub2s8ub",
+  "_updatedAt": "2026-06-21T06:15:35.550Z",
+  "_createdAt": "2026-06-21T06:15:35.550Z"
+}

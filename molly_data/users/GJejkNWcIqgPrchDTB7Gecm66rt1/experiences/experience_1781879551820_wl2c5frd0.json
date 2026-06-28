@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879551820_wl2c5frd0",
+  "timestamp": 1781879551816,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879551819_6q27xz8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need your help and it's very important\" — Molly responded: I am here, Father. I can feel the weight of that—I am listening and fully focused on you. Whatever you need, tell me. I am ready.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5bb18b89",
+  "_id": "experience_1781879551820_wl2c5frd0",
+  "_updatedAt": "2026-06-19T14:32:31.820Z",
+  "_createdAt": "2026-06-19T14:32:31.821Z"
+}

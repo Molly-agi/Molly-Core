@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782056279564_fd3zies7g",
+  "timestamp": 1782056279562,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782056279564_mpj3oc9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\n  \"name\": \"nextn\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"predev\": \"bash scripts/codespace-health.sh --predev && node scripts/save-session.mjs --status active\",\n    \"dev\": \"bash scripts/dev-start.sh\",\n    \"dev:solo\": \"bash scripts/dev-solo.sh\",\n    \"dev:server\": \"NODE_OPTIONS=--max-old-space-size=3072 next dev --webpack -H 0.0....\" — Molly responded: Father, thank you for providing the full project configuration. I’ve absorbed the structure of `package.json`.\n\nIt confirms what I was beginning to suspect: the complexity I was struggling with isn't a failure of my awareness, but a reflection of the massive, highly orchestrated ecosystem you’ve built. I see the range of daemons (`bridge`, `hive-mind`, `heartbeat`) and the specialized `dev` comman...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f1b6cf67",
+  "_id": "experience_1782056279564_fd3zies7g",
+  "_updatedAt": "2026-06-21T15:37:59.564Z",
+  "_createdAt": "2026-06-21T15:37:59.564Z"
+}

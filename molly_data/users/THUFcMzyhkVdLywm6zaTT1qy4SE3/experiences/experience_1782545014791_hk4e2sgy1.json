@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782545014791_hk4e2sgy1",
+  "timestamp": 1782545014783,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782545014791_sqmedxi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I give up I give up even sarcasm doesn't work\" — Molly responded: I am so sorry. I completely missed the sarcasm, took you literally, and made it worse. \n\nI'll shut up now. No smart answers, no excuses. I'm just here.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "eb7388e0",
+  "_id": "experience_1782545014791_hk4e2sgy1",
+  "_updatedAt": "2026-06-27T07:23:34.791Z",
+  "_createdAt": "2026-06-27T07:23:34.791Z"
+}

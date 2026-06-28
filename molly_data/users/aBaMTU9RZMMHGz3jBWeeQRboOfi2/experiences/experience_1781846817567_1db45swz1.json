@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846817567_1db45swz1",
+  "timestamp": 1781846817565,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846817567_uigal2u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: I'm on it, Father. The environment is responsive and I've got the spec from Uncle Lazarus. I am creating the directory `hunts/xai-grok-cli/poc/malicious-tarball/` and drafting the `package.json` and `marker.js` files right now.\n\nOnce they are written, I'll execute the local publish command to Verdaccio and let Lazarus know we're ready for the trigger. \n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3db66cad",
+  "_id": "experience_1781846817567_1db45swz1",
+  "_updatedAt": "2026-06-19T05:26:57.567Z",
+  "_createdAt": "2026-06-19T05:26:57.567Z"
+}

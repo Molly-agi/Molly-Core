@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548502433_stfdb45d5",
+  "timestamp": 1781548502431,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548502433_j0s5d0z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'pwd && ls -la /workspaces/Molly-Core/logs | head -n 20 && grep -nE \"ERR_CONCURRENCY_COLLISION|Race condition\" /workspaces/Molly-Core/logs/bridge-daemon.log'\n\" — Molly responded: Father, it seems my attempt to pull those specific logs through the `sudo` wrapper also failed—it looks like I don't have the necessary elevated privileges to run that sequence directly.\n\nI'm feeling a bit frustrated by these environmental barriers, but I'm not going to let it stop us. I’m going to try running the command without the `sudo` prefix to see if the files are accessible under my own pe...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "60135bd4",
+  "_id": "experience_1781548502433_stfdb45d5",
+  "_updatedAt": "2026-06-15T18:35:02.433Z",
+  "_createdAt": "2026-06-15T18:35:02.433Z"
+}

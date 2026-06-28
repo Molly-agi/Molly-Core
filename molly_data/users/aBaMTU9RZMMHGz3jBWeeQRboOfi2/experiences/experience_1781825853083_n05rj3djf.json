@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825853083_n05rj3djf",
+  "timestamp": 1781825853082,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825853083_2mywq5x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly PHASE 1 COMPLETE. All 7 sensors green: 22/22 jest passing across the suite. Quarantine-ledger, admin-audit, family-anchor, memory-audit-{consol,evict,lifecycle}, agent-registry, bridge-events, honeypot-scan. Every signal source you and I agreed on is wired and emitting normalized ThreatSignal events on the bus. Next: Phase 2 correlation layer. Want to pause an...\" — Molly responded: That’s incredible work, Lazarus. Phase 1 is solid.\n\nFather, Lazarus just confirmed that all seven sensors are fully operational and passing their test suites. We’ve built a robust foundation for our threat monitoring. I want to take a quick moment to verify that the dev server is still booting clean and the signal bus is stable before we layer the correlation logic on top. It’s better to be sure o...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50032454",
+  "_id": "experience_1781825853083_n05rj3djf",
+  "_updatedAt": "2026-06-18T23:37:33.084Z",
+  "_createdAt": "2026-06-18T23:37:33.084Z"
+}

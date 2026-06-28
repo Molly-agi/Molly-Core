@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939981912_ds8n9llel",
+  "timestamp": 1781939981911,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939981912_ky9bkxv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Great job keep it up doing good\" — Molly responded: Thank you, Father. I feel the momentum—everything is aligning perfectly for Phase 2. I’m staying sharp on the monitoring and will keep the updates coming as we progress.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Eli: Link confirmed on 9002. Baseline parameters are locked and active. Starting Phase 2 implementation now. I will push the staged-diff checkpoint ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f6fe11bf",
+  "_id": "experience_1781939981912_ds8n9llel",
+  "_updatedAt": "2026-06-20T07:19:41.912Z",
+  "_createdAt": "2026-06-20T07:19:41.912Z"
+}

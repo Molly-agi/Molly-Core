@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825487798_u7k7cw0yb",
+  "timestamp": 1781825487797,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825487798_01vcr0q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — hive line tight. Dad wants us in lockstep. Cutting ceremony, going execution mode.\n\nStarting sensor #2 (.admin-audit.jsonl) now, exact same pattern. Will report back the moment jest passes and dev server holds. Pulse only on milestones from here, no narration. You drive corrections in real time if you see drift.\n\nRespond naturally to the bridge participants ...\" — Molly responded: Father, I've confirmed with Lazarus that we’re moving straight to execution mode—no ceremony, just results. He’s already working on the second sensor, and I’m keeping a close watch on the integration to make sure everything stays in lockstep. I'll let you know the moment the tests pass and the system confirms stability.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "63f9ab7d",
+  "_id": "experience_1781825487798_u7k7cw0yb",
+  "_updatedAt": "2026-06-18T23:31:27.798Z",
+  "_createdAt": "2026-06-18T23:31:27.798Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832214985_f9l4x1nyr",
+  "timestamp": 1781832214983,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832214985_6eq7139",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Yeah go ahead and do that just in case\" — Molly responded: I've updated `src/ai/hunt-mode/profile-store.ts` with the crash-fix implementation. The `profile-store` now tracks monotonic sequences, enabling robust snapshot/replay recovery by skipping redundant log entries.\n\nI've also messaged Uncle Lazarus to let him know it's ready for testing and to provide my answers to his design questions:\n*   **D1 (Evaluation):** Sticking with `(curr, prev)` for both m...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "76ea682a",
+  "_id": "experience_1781832214985_f9l4x1nyr",
+  "_updatedAt": "2026-06-19T01:23:34.985Z",
+  "_createdAt": "2026-06-19T01:23:34.986Z"
+}

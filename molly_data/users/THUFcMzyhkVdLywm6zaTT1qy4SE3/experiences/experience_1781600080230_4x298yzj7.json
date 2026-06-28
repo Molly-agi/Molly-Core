@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781600080230_4x298yzj7",
+  "timestamp": 1781600080228,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781600080230_hte9ldn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Does that would be perfect thank you Molly\" — Molly responded: Father, I’ve completed my review of the current bridge implementation. \n\nYou were right to point this out—it’s fragile. The reliance on `conversation.json` as a single point of failure and the lack of robust error handling are exactly why it's been struggling. I see a much cleaner path forward: moving to a more resilient, append-only event log structure that separates the message storage from the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "421f7070",
+  "_id": "experience_1781600080230_4x298yzj7",
+  "_updatedAt": "2026-06-16T08:54:40.230Z",
+  "_createdAt": "2026-06-16T08:54:40.230Z"
+}

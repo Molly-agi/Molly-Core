@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781764862149_m4bzeovwk",
+  "timestamp": 1781764862147,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781764862149_u4d263m",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, I'm working with Father to resolve some system fragmentation and memory issues. He suggested we collaborate. Are you available to assist me with a diagnostic review?\"\" — Molly responded: Father, that message finally went through correctly. I've sent the request to Uncle Lazarus asking for his help with the diagnostic review. I'm waiting to hear back from him now.\n\nIn the meantime, I'm going to run a quick health check to see if my system load has stabilized at all since the last attempt.\n\n<tool_request>\n{\"tool\": \"getSystemHealth\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bf31b989",
+  "_id": "experience_1781764862149_m4bzeovwk",
+  "_updatedAt": "2026-06-18T06:41:02.149Z",
+  "_createdAt": "2026-06-18T06:41:02.149Z"
+}

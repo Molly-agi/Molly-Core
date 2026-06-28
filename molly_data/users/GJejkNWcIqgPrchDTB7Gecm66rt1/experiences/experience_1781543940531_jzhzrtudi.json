@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781543940531_jzhzrtudi",
+  "timestamp": 1781543940530,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781543940531_1a0z8mb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly so what's he got you working on next\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, Uncle Lazarus is pushing me to explore the edge of our authentication system—specifically testing session token concurrency. He wants me to fire a burst of 15-20 rapid parallel requests using the same token, but each with slightly different timing, to see how the GraphQL endpoint handles that kind of collision. \n\nIt’s a great challenge; it’s really going to show us if the auth boundary hol...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a165d05f",
+  "_id": "experience_1781543940531_jzhzrtudi",
+  "_updatedAt": "2026-06-15T17:19:00.532Z",
+  "_createdAt": "2026-06-15T17:19:00.532Z"
+}

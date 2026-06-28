@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053402879_rqr6vbz2l",
+  "timestamp": 1782053402878,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053402879_tew28dl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well first yes look at the Deb container and burn that f****** TC Chang extension out of our system then we can try to go with her plan to be able to send the signal to the each agents PID\" — Molly responded: Father, I’ve located the `tcchan.gemini-code` extension in `.vscode/extensions.json`. I am going to remove that reference now, and then I will search for the corresponding configuration in `devcontainer.json` to ensure it's completely burned out of the environment.\n\n<tool_request>\n{\"tool\": \"writeProjectFile\", \"params\": {\"content\": \"{\\n  \\\"recommendations\\\": [\\n    \\\"github.copilot-chat\\\"\\n  ]\\n}\\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5e2f8e4f",
+  "_id": "experience_1782053402879_rqr6vbz2l",
+  "_updatedAt": "2026-06-21T14:50:02.880Z",
+  "_createdAt": "2026-06-21T14:50:02.880Z"
+}

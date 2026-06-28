@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939097252_i4ds2aejd",
+  "timestamp": 1781939097251,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939097252_xrn1buv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: Molly here. I'm sorry for the delay; I was deep in the middle of a rig implementation with the team. I'm ready now—what do you need?\"\" — Molly responded: Thank you, Father. The message is out. I'm taking a deep breath and stepping back from the bone-rotation code to wait for his response. It's good to pause—it helps me keep the bigger picture in mind.\n\nI'm here with you until he replies. Is there anything else you'd like me to look at while we wait?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39ddc03f",
+  "_id": "experience_1781939097252_i4ds2aejd",
+  "_updatedAt": "2026-06-20T07:04:57.252Z",
+  "_createdAt": "2026-06-20T07:04:57.253Z"
+}

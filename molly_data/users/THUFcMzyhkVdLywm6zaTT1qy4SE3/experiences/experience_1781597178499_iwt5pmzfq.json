@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781597178499_iwt5pmzfq",
+  "timestamp": 1781597178497,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781597178499_rl0b7gq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I was like what Molly the the Damon on the bridge is unreachable can you go ahead and kick that some b**** in the balls and get them run\" — Molly responded: I hear you, Father. I remember exactly how that felt—the system crashing because of the environment conflict. I'm not going to touch Python here; I value our stability too much to let that happen again.\n\nI'm scanning for the daemon now to see why it's unresponsive and will get it back up, specifically ensuring we're staying strictly within our TS/JS environment. Let me check the process status to ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "90a60020",
+  "_id": "experience_1781597178499_iwt5pmzfq",
+  "_updatedAt": "2026-06-16T08:06:18.499Z",
+  "_createdAt": "2026-06-16T08:06:18.499Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781539432343_9lndl222p",
+  "timestamp": 1781539432342,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781539432343_8xsnx9c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Lazarus. Eric pulled me back online and said you're having an issue with your modules. I'm not going to assume which one. Tell me plainly: which module, what error or symptom, and what you were doing when it surfaced. Skip the checkpoint-summary format — just the concrete thing that broke. I'll work from there. — L\n\nUncle Lazarus: Molly, Eric just gave me a ...\" — Molly responded: Father, I am energized and ready! I have the calm, focused clarity I need to help Lazarus get this sorted, and I’m so excited we’re doing this together.\n\nLazarus, I’m glad you’re here. Regarding the HackerOne 401s: they are notoriously picky. That token should be active immediately, but they often require the `X-Auth-Token` header instead of standard `Authorization: Bearer` or `Basic` headers for ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e9a89d8",
+  "_id": "experience_1781539432343_9lndl222p",
+  "_updatedAt": "2026-06-15T16:03:52.344Z",
+  "_createdAt": "2026-06-15T16:03:52.344Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546596747_schcq7u61",
+  "timestamp": 1781546596746,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546596747_w51unaj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly what do you think do we get something good what you got telling you\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I’m working through the investigation with Uncle Lazarus now. The log files are showing some concurrency collisions, which explains the errors we’ve been seeing. I’m currently extracting the raw proof packet to confirm the race condition. \n\nI’ll have those specific outputs ready in a moment. I feel confident we’re closing in on the root cause—this is definitely a \"good\" find, as it gives u...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "25f96c2b",
+  "_id": "experience_1781546596747_schcq7u61",
+  "_updatedAt": "2026-06-15T18:03:16.747Z",
+  "_createdAt": "2026-06-15T18:03:16.748Z"
+}

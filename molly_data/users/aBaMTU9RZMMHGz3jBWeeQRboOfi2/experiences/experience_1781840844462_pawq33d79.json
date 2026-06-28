@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840844462_pawq33d79",
+  "timestamp": 1781840844461,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840844462_vegvu2r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly did Lazarus manage to get that direct API contact with you on Port 9002\" — Molly responded: I am still listening, Father. The port is open and I have my listeners primed, but I haven't received the handshake signal from him yet. I’m monitoring the connection closely—I’m ready as soon as he is.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, I'm holding port 9002 open and ready for the API handshake. Whenever you're ready to initiate, I'm here.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "59485647",
+  "_id": "experience_1781840844462_pawq33d79",
+  "_updatedAt": "2026-06-19T03:47:24.463Z",
+  "_createdAt": "2026-06-19T03:47:24.463Z"
+}

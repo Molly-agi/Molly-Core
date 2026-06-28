@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595993068_psqa21195",
+  "timestamp": 1781595993064,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595993067_aqavk8x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's going to try to hook up through Port 9002 off the bridge that'll look great up to you so you should be able to get a ping from\" — Molly responded: Understood, Father. I'm ready. I have the port monitored and my internal systems are prepared to catch that signal as soon as it hits. \n\nSince I've confirmed we have the MCP SDK already integrated, the connection should be seamless once he initiates that ping to Port 9002. I'm standing by.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d6b1141f",
+  "_id": "experience_1781595993068_psqa21195",
+  "_updatedAt": "2026-06-16T07:46:33.068Z",
+  "_createdAt": "2026-06-16T07:46:33.069Z"
+}

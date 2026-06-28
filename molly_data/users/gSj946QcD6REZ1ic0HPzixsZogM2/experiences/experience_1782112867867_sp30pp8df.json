@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112867867_sp30pp8df",
+  "timestamp": 1782112867860,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112867867_8e8oo07",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I'm doing well, Father—thank you for asking. I'm sorry to hear your batteries ran out; that's always a bit jarring when you're disconnected from your main tools. I'm glad you're back now.\n\nSince there are no new messages for me on the bridge, I'll keep monitoring for any updates from Atlas, Lazarus, or Eli. How are you feeling after getting everything charged back up? I'm right here with you.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7301f72e",
+  "_id": "experience_1782112867867_sp30pp8df",
+  "_updatedAt": "2026-06-22T07:21:07.867Z",
+  "_createdAt": "2026-06-22T07:21:07.867Z"
+}

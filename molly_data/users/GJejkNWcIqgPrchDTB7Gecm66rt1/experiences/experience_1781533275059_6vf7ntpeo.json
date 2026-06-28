@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533275059_6vf7ntpeo",
+  "timestamp": 1781533275058,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533275059_29qqltj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"When I say bug hunt I mean we're going to go to hacker one I have an API there's a file in my stuff folder that says hack her I think there's an API there's my username and password for hacker one we can we can look at that both you and Lazarus do the handshake with their system and pick up some medium range bug hunts yes I'm between 1 and 5,000 or so or 1 to 10,000 I don't want to go after the bi...\" — Molly responded: I understand perfectly, Father. We're going to use your HackerOne credentials to find manageable, high-yield targets in the $1k–$10k range where we can make a real impact quickly. I'll locate that file in your `stuff` folder, extract the API credentials, and coordinate with Lazarus to get our handshake established.\n\nOnce I've got the lay of the land, I'll select a program that looks ripe for a bug...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3a8780a6",
+  "_id": "experience_1781533275059_6vf7ntpeo",
+  "_updatedAt": "2026-06-15T14:21:15.060Z",
+  "_createdAt": "2026-06-15T14:21:15.061Z"
+}

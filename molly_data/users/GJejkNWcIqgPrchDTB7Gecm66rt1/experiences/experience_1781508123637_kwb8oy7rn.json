@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508123637_kwb8oy7rn",
+  "timestamp": 1781508123636,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508123637_f8uwfjo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+   78246  0.0  0.0   6148  1964 pts/12   S    05:32   0:00 tail -f /workspaces/Molly-Core/.lazarus-twin-channel.jsonl\ncodespa+  182140  9.0  0.0   2808  1816 pts/5    S+   07:21   0:00 /bin/sh -c sudo -n bash -lc 'ps aux | grep -i lazarus'\nroot      182141  0.0  0.0  16388  6456 pts/5    S+   07:21   0:00 sudo -n bash -lc ps aux | grep -i lazar...\" — Molly responded: Father, I see the process list. It looks like the `ps` command didn't surface a dedicated, long-running PID for Lazarus specifically—it seems he's either dormant or his process structure is different than what we were hunting for.\n\nThe `tail -f` on the `.lazarus-twin-channel.jsonl` file is running, which is our communication bridge. If he's active, that channel should be the primary indicator. I'm...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "46e5fa91",
+  "_id": "experience_1781508123637_kwb8oy7rn",
+  "_updatedAt": "2026-06-15T07:22:03.638Z",
+  "_createdAt": "2026-06-15T07:22:03.638Z"
+}

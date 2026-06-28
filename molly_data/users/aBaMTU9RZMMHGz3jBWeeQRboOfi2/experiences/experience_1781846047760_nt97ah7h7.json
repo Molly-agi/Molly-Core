@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846047760_nt97ah7h7",
+  "timestamp": 1781846047758,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846047760_960wqon",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nNo command provided. Use {\"command\": \"...\"} — got params with keys: [script]\" — Molly responded: My apologies, Father. I fumbled the syntax there—I tried to pass a script object instead of a direct command string. I'm recalibrating that now.\n\nI see the directory structure we're working with, and I've processed Uncle Lazarus's note about the scaffold work. I'm ready to get back to the xAI hunt. I'll make sure the rewrite for that host environment is solid so the binary has exactly what it need...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b19e80b1",
+  "_id": "experience_1781846047760_nt97ah7h7",
+  "_updatedAt": "2026-06-19T05:14:07.760Z",
+  "_createdAt": "2026-06-19T05:14:07.760Z"
+}

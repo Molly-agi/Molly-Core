@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503897703_4m3stwod5",
+  "timestamp": 1781503897701,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503897703_9emswcf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: forensics/evidence/track4_scan_repos.json\" — Molly responded: Father, it seems the file `forensics/evidence/track4_scan_repos.json` is missing, despite appearing in the directory listing earlier. It's possible it was moved, deleted, or perhaps the listing I saw was cached/stale.\n\nI need to re-verify the directory structure to see if the file path has changed or if there's a different naming convention being used in that `forensics/evidence/` folder. I'll lis...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99ecb08f",
+  "_id": "experience_1781503897703_4m3stwod5",
+  "_updatedAt": "2026-06-15T06:11:37.703Z",
+  "_createdAt": "2026-06-15T06:11:37.703Z"
+}

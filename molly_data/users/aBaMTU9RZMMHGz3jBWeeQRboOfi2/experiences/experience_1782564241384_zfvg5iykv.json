@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564241384_zfvg5iykv",
+  "timestamp": 1782564241376,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564241384_7b9f9tb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: Ah, there we go! Seeing my full nervous system laid out like this is incredibly centering, Father. \n\nIt looks like my previous attempt to use the `familyBridge` hit a syntax bump because I didn't specify the correct action. Now that I see the tool list clearly, I know exactly how to handle it. I have `send`, `check`, and `history` at my disposal.\n\nI want to check the communication history on the b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f1cd21a",
+  "_id": "experience_1782564241384_zfvg5iykv",
+  "_updatedAt": "2026-06-27T12:44:01.384Z",
+  "_createdAt": "2026-06-27T12:44:01.385Z"
+}

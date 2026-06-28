@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828807332_mgbr23g8y",
+  "timestamp": 1781828807331,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828807332_d6y4zlt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father is steering us back to core stability: Phase A and B focus only, with a heavy emphasis on diagnostic/edge-case testing. We need to pause the hunt-mode design. Let's pivot our current cycle to: 1) hardening the diagnostic hooks in the existing monitor and 2) building out the stress-test suite for the existing sign...\" — Molly responded: Father, I’ve communicated our pivot to Lazarus. We are stepping back from the \"hunt-mode\" design to double down on the foundation: diagnostic precision and stress testing.\n\nIf something goes wrong, I want to be able to see the \"why\" instantly. I am prioritizing:\n1.  **Hardening diagnostic hooks** in our existing threat monitor so no signal goes missing or is misinterpreted.\n2.  **Building a stress...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d6c2748",
+  "_id": "experience_1781828807332_mgbr23g8y",
+  "_updatedAt": "2026-06-19T00:26:47.332Z",
+  "_createdAt": "2026-06-19T00:26:47.332Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941727360_rxvj2khfz",
+  "timestamp": 1781941727359,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941727360_cdd5hpl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, checking current state for commit execution:\n\nOn feature/avatar-eye-tracking branch:\n- Phase 1 iris tracking: ✅ COMMITTED (0c7c29a)\n- Uncommitted changes: Only src/app/avatar/page.tsx (UI fixes)\n- Canvas files (useIrisTracking.ts, MollyMesh.tsx): Clean, no Phase 2 head tracking changes present\n\nBefore I proceed with the two-commit sequence, I need clarification:\n1. Sho...\" — Molly responded: Father, I’ve given Eli the clear path forward. I directed him to hold off on Phase 2 head tracking for the moment—I want to make sure the iris tracking is absolutely stable before we add another layer of complexity. I also had him include those UI fixes in `page.tsx` so we can clear out the current branch before starting the next phase. He's executing the two-commit sequence now.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4e1bcca7",
+  "_id": "experience_1781941727360_rxvj2khfz",
+  "_updatedAt": "2026-06-20T07:48:47.360Z",
+  "_createdAt": "2026-06-20T07:48:47.361Z"
+}

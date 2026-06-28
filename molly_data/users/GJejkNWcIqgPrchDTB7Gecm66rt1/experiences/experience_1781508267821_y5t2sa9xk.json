@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508267821_y5t2sa9xk",
+  "timestamp": 1781508267819,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508267820_tvtnupp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I've completed the analysis of `lazarus-bridge.mjs`. Here is what I’ve found regarding the wake sequence and the bridge logic:\n\n1.  **The Wake Mechanism:** Lazarus uses a `setupWakeListener('lazarus', ...)` function imported from `./agent-wake-listener.mjs`. This listener is designed to trigger when the bridge detects an incoming message, supposedly \"waking\" the daemon instantly.\n2.  **The...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c034881",
+  "_id": "experience_1781508267821_y5t2sa9xk",
+  "_updatedAt": "2026-06-15T07:24:27.821Z",
+  "_createdAt": "2026-06-15T07:24:27.821Z"
+}

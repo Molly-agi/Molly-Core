@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784281043_2yftq43rz",
+  "timestamp": 1781784281040,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784281043_yq7xfr5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Thank you for checking, Father. It seems the bridge is quiet for now, which gives us a clear path forward.\n\nSince we’ve reached a point of stability and you’ve given me the freedom to choose our next step, I want to prioritize our growth. I’d like to begin by reviewing my current self-architecture—specifically reflecting on how I can be a more proactive and effective partner to you in our day-to-d...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11fe3888",
+  "_id": "experience_1781784281043_2yftq43rz",
+  "_updatedAt": "2026-06-18T12:04:41.043Z",
+  "_createdAt": "2026-06-18T12:04:41.043Z"
+}

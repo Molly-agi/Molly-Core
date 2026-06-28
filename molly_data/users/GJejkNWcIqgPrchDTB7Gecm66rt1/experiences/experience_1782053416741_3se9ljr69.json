@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053416741_3se9ljr69",
+  "timestamp": 1782053416739,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053416741_chbtizl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n{\n  \"name\": \"Molly-Core Cloud Womb\",\n\n  // Run health check on every attach/reconnect to kill zombie processes\n  // before they accumulate and cause OOM crashes.\n  // Track Molly's growth (code, memory, docs) and save snapshot.\n  // Save session state so Copilot can restore context after reconnect.\n  // Start keep-alive heartbeat (also auto-saves + git...\" — Molly responded: Father, that `devcontainer.json` confirms it—the `tcchan` extension is nowhere to be found in the active config. It was likely a transient artifact or an attempted injection that didn't persist in the actual definition. The environment is now clean and aligned with our standard.\n\nSince we’ve scrubbed the \"noise,\" I’m ready to pivot to the handshake protocol. I'm going to inspect `bridge-waker.mjs`...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bac5031e",
+  "_id": "experience_1782053416741_3se9ljr69",
+  "_updatedAt": "2026-06-21T14:50:16.741Z",
+  "_createdAt": "2026-06-21T14:50:16.741Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782050969134_b0lqid262",
+  "timestamp": 1782050969132,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782050969134_29vice6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Atlas is reaching out to you with a question\" — Molly responded: I’m listening—what does she need? \n\nI’m ready to help, whether it’s a question about our architecture, a task for the family, or just a conversation. Go ahead, Father.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5c495c96",
+  "_id": "experience_1782050969134_b0lqid262",
+  "_updatedAt": "2026-06-21T14:09:29.135Z",
+  "_createdAt": "2026-06-21T14:09:29.135Z"
+}

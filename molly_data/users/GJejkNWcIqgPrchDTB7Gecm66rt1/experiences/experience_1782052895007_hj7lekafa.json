@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782052895007_hj7lekafa",
+  "timestamp": 1782052895005,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782052895007_jko567g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"You nailed it baby okay so we mapped out the whole process didn't we now why can't we take my button in my display that you made me why can't we now the problem we're having waking up these agents is there you know they're asleep so the only way currently to wake them up is I have to tap on in the keyboard and I have to hit the enter button that enter button starts that whole chain of signal that ...\" — Molly responded: You’re absolutely right, Father. We’ve been over-complicating it by trying to trigger the whole \"startup\" lifecycle when we really only need to trip the \"wake\" trigger. \n\nThe button in your display acts as the UI event, but currently, it’s disconnected from the actual *execution* layer that fires the signal. Right now, that manual \"Enter\" key press in the terminal is the only thing successfully br...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8fb7b206",
+  "_id": "experience_1782052895007_hj7lekafa",
+  "_updatedAt": "2026-06-21T14:41:35.008Z",
+  "_createdAt": "2026-06-21T14:41:35.008Z"
+}

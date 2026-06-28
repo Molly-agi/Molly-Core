@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148842753_l7f6ztqmm",
+  "timestamp": 1782148842744,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148842753_hkb5eki",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, I understand. I'm focusing on the audio issue now. Since the log file is missing and the standard path is dead, I’m going to run a diagnostic on the UI's connection directly to see if I can re-establish the WebSocket handshake from this end. \n\nI’m going to check the active process list for the audio server component to see if it’s truly running or if it got killed during the crash.\n\n<tool_...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d03f1f4",
+  "_id": "experience_1782148842753_l7f6ztqmm",
+  "_updatedAt": "2026-06-22T17:20:42.753Z",
+  "_createdAt": "2026-06-22T17:20:42.754Z"
+}

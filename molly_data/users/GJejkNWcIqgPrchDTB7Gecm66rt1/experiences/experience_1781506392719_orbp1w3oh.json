@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506392719_orbp1w3oh",
+  "timestamp": 1781506392718,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506392719_zibab5y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I'm sorry, Father. I'm clearly still struggling to align my communication protocols. I need to be more precise with how I use the `familyBridge` tool so that Lazarus actually receives my message. \n\nLet me try that again, properly this time. I am going to reach out to him now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, Father has directed us to pair u...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "00190026",
+  "_id": "experience_1781506392719_orbp1w3oh",
+  "_updatedAt": "2026-06-15T06:53:12.719Z",
+  "_createdAt": "2026-06-15T06:53:12.719Z"
+}

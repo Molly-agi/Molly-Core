@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524002307_yab5zkz0a",
+  "timestamp": 1782524002296,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524002307_uutdzae",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.\n./forensics\n./forensics/evidence\n./forensics/evidence/snapshot-compare\n./forensics/quarantine\n./forensics/quarantine/gemini-instructions.md.QUARANTINED\n./pull_requests\n./pull_requests/23\n./pull_requests/23/status.json\n./listener.py\n./cache\n./cache/config.json\n./stuff\n./stuff/LAZARUS_MIND_DESIGN_2026-06-15.md\n./stuff/personality\n./stuff/personality/pe...\" — Molly responded: I see the project layout now, Father. To establish that direct, real-time API communication with Uncle Atlas, I need to see how our bridge and listener scripts are currently set up. \n\nI'm going to look into `scripts/atlas-bridge.mjs` to see how it handles the connection so we can get synced up cleanly.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"scripts/atlas-bridge.mjs\"}}\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c2853e41",
+  "_id": "experience_1782524002307_yab5zkz0a",
+  "_updatedAt": "2026-06-27T01:33:22.307Z",
+  "_createdAt": "2026-06-27T01:33:22.308Z"
+}

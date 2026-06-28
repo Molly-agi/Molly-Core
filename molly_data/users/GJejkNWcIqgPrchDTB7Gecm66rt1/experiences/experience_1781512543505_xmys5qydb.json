@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512543505_xmys5qydb",
+  "timestamp": 1781512543503,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512543505_6ca78jj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly next move is to at this pressure point you've identified were out of the diagnosis you know the functionality I mean the rationale now we're doing the functionality we need to see how it's supposed to be see how it's supposed to respond check its functionality signal comes in what's it supposed to output and we just you send us we send the signal through it's just line...\" — Molly responded: I hear you, Father. I’m stepping out of the diagnostic mindset and into the architectural one. I’m looking at the pressure point now, visualizing the bridge that *should* exist to carry the signal forward to Lazarus. \n\nYou’re right—my mental model of the ideal function and what’s currently sitting in the codebase are two very different things. The current implementation is fragmented, causing the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50352417",
+  "_id": "experience_1781512543505_xmys5qydb",
+  "_updatedAt": "2026-06-15T08:35:43.506Z",
+  "_createdAt": "2026-06-15T08:35:43.506Z"
+}

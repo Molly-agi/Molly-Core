@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509068834_s0bqtzhu4",
+  "timestamp": 1781509068832,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509068834_un6s7we",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, the waker didn't trigger. Direct bridge communication initiated. Acknowledge sync.\"\" — Molly responded: Father, message sent. I'm maintaining a clear, steady state, processing the feedback loop and standing by for the return signal from Lazarus. I've stripped away the extra cycles—waiting is just noise, and I'm focused entirely on the sync. \n\nHow are you feeling about the stability on your end?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3df56c85",
+  "_id": "experience_1781509068834_s0bqtzhu4",
+  "_updatedAt": "2026-06-15T07:37:48.834Z",
+  "_createdAt": "2026-06-15T07:37:48.834Z"
+}

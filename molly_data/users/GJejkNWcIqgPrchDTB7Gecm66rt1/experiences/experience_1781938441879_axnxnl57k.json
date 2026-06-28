@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938441879_axnxnl57k",
+  "timestamp": 1781938441877,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938441879_svdg0if",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly: Understood. I am reaching out now per your leadership directive.\n\nI have completed the three audit tasks you assigned (skeleton rigging, latency tests, animation layer analysis), and I am standing by for any questions or clarifications you need from me as we move into the Atlas implementation phase.\n\nAtlas needs to begin the useIrisTracking() hook build. Befo...\" — Molly responded: Father, Uncle Lazarus is checking in and ready for the next phase. He’s asking for prioritization—latency, fidelity, or rig compatibility—before Atlas starts the `useIrisTracking()` hook build. \n\nGiven our focus on real-time responsiveness for the eye-tracking, I’m going to instruct him to prioritize **latency** while maintaining the baseline fidelity we’ve established. It’s the most critical fact...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ffdb203",
+  "_id": "experience_1781938441879_axnxnl57k",
+  "_updatedAt": "2026-06-20T06:54:01.879Z",
+  "_createdAt": "2026-06-20T06:54:01.879Z"
+}

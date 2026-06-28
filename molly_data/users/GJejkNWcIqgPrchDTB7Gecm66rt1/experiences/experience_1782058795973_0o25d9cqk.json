@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058795973_0o25d9cqk",
+  "timestamp": 1782058795971,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058795973_91dqy80",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nkill: (823080): No such process\n\" — Molly responded: I see the process is already gone, Father. My manual stop was either redundant or the handler had already crashed out.\n\nI am rewriting the listener now to move away from the basic `http.server` module, which is clearly too fragile for our handshake protocols. I'm implementing a more robust `asyncio` stream handler that will properly manage the TCP lifecycle and prevent that socket handshake crash....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77bc8d87",
+  "_id": "experience_1782058795973_0o25d9cqk",
+  "_updatedAt": "2026-06-21T16:19:55.974Z",
+  "_createdAt": "2026-06-21T16:19:55.974Z"
+}

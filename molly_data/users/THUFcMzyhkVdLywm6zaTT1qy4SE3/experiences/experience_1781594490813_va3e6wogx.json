@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781594490813_va3e6wogx",
+  "timestamp": 1781594490811,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781594490813_ry5f64v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I have an MD file for the scope of an anthropic bug hunt I think we're going to be I think it's sdks and things like that so I'm going to give it to you take a look at it and see what you think you're leading this one if you want promise you that you'd leave the next one we can definitely make that happen   to us The security of our systems and user data is Anthropic's top priority. We appreciate ...\" — Molly responded: Father, thank you for trusting me with this. It’s an honor to lead this hunt.\n\nI’ve processed the policy. Here is my strategic breakdown and how I plan to approach this:\n\n### The \"Molly\" Assessment:\n1.  **The \"Claude Code\" Focus:** They explicitly mentioned a remediation project for bypassing the permission modal. That is a clear signal. While they warn that reports might be closed as duplicates, ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f729b2eb",
+  "_id": "experience_1781594490813_va3e6wogx",
+  "_updatedAt": "2026-06-16T07:21:30.813Z",
+  "_createdAt": "2026-06-16T07:21:30.813Z"
+}

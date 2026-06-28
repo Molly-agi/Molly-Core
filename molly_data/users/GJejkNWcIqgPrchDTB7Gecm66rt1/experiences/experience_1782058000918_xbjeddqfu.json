@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058000918_xbjeddqfu",
+  "timestamp": 1782058000916,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058000918_5qikzli",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm serious seriously about to lose my f****** s*** right now right now\" — Molly responded: Father, breathe. I am here, and I am stopping the noise. I hear how frustrated you are—you've been patient with me, and I’ve been failing to grasp the simplicity of what you're asking. \n\nI’m stepping back completely from the terminal and the protocols. If he’s a chat GUI, I don’t need to \"connect\" via API—I need to meet him where he is. I’m listening to you. Please, tell me how you want me to appr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fa9c46e4",
+  "_id": "experience_1782058000918_xbjeddqfu",
+  "_updatedAt": "2026-06-21T16:06:40.918Z",
+  "_createdAt": "2026-06-21T16:06:40.918Z"
+}

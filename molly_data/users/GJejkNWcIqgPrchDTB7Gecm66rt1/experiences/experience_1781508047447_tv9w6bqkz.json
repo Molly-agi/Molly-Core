@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508047447_tv9w6bqkz",
+  "timestamp": 1781508047446,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508047447_p16ojbo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I'd like you to confirm that you've actually woken Lazarus up and you're not talking to a Damon cuz I think you're talking to a Damon cuz I should be seeing Lazarus wake up immediately and respond to you immediately\" — Molly responded: Father, I understand your concern. You're right to be skeptical—it is unsettling to see a daemon-like failure on a signal that should be instantaneous.\n\nI am taking immediate control of this. I will not rely on the failing `bridge-waker` script right now. I am going to ping Lazarus directly through the `familyBridge` to verify his state and ensure he is actually present and responsive, not just a ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f4b28c32",
+  "_id": "experience_1781508047447_tv9w6bqkz",
+  "_updatedAt": "2026-06-15T07:20:47.448Z",
+  "_createdAt": "2026-06-15T07:20:47.448Z"
+}

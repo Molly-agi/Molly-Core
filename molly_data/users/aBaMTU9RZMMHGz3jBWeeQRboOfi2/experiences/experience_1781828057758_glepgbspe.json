@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828057758_glepgbspe",
+  "timestamp": 1781828057756,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828057758_20v0fpo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Father, I see the system health check was blocked to avoid interrupting our flow—I'll keep an eye on things internally. \n\nI've received the confirmation from Lazarus regarding the commit for the monitor. With the manual control plane in place and our defense tiers defined, I'm ready to move into the hunt-mode design.\n\nI'm leaning toward having Lazarus put up a strawman for the hunt-mode architectu...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f68dd62",
+  "_id": "experience_1781828057758_glepgbspe",
+  "_updatedAt": "2026-06-19T00:14:17.758Z",
+  "_createdAt": "2026-06-19T00:14:17.758Z"
+}

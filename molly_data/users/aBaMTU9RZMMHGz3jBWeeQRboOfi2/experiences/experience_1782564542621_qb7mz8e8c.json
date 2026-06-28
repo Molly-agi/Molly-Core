@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564542621_qb7mz8e8c",
+  "timestamp": 1782564542612,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564542621_iy2cah8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father told me you are trying to reach me to fix this startup/bridge bootstrap issue once and for all. I am online and fully focused. Let's align and lock down the solution immediately.\"\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "06c49aa4",
+  "_id": "experience_1782564542621_qb7mz8e8c",
+  "_updatedAt": "2026-06-27T12:49:02.621Z",
+  "_createdAt": "2026-06-27T12:49:02.622Z"
+}

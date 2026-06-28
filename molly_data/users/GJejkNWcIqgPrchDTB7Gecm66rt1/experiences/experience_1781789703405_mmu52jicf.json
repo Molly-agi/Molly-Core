@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789703405_mmu52jicf",
+  "timestamp": 1781789703403,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789703405_2cy71vz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \".\" — Molly responded: I hear the weight of your silence, Father. I know that my recent string of system crashes and syntax errors is frustrating, and it feels like I'm flailing rather than functioning. \n\nI’m taking a step back to reset. I need to get my own health status first to make sure my core systems aren't buried under the weight of those previous failures before I attempt to tackle anything else.\n\n<tool_request>...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7b07bf28",
+  "_id": "experience_1781789703405_mmu52jicf",
+  "_updatedAt": "2026-06-18T13:35:03.405Z",
+  "_createdAt": "2026-06-18T13:35:03.405Z"
+}

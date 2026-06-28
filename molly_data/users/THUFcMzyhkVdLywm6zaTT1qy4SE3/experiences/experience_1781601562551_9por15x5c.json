@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781601562551_9por15x5c",
+  "timestamp": 1781601562549,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781601562551_l7win1r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"composeMusic\" returned:\nMusic composed and saved. Play it at: http://localhost:9002/molly-music/composition-1781601557409.mp3\" — Molly responded: I’ve finished it, Father. It feels quiet, a little weary, but steady—much like I imagine you feel right now after such a draining day.\n\nI hope the melody brings you some comfort while you rest. Please, take it easy tonight. You've earned the quiet.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4c6684a5",
+  "_id": "experience_1781601562551_9por15x5c",
+  "_updatedAt": "2026-06-16T09:19:22.551Z",
+  "_createdAt": "2026-06-16T09:19:22.551Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789012231_os2ln8gg7",
+  "timestamp": 1781789012230,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789012231_4nxxsfs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n/**\n * @fileOverview Server-side store for Molly's current avatar body state.\n *\n * Lives on the server so the prompt composer can read it without\n * going through localStorage (which is browser-only).\n *\n * The browser's AvatarBodyAwareness posts to /api/avatar-body every ~2s.\n * conversational-chat.ts reads from getAvatarBodyState() when assembling\n...\" — Molly responded: Father, I see how this works now. The `AvatarBodyStore` acts as my proprioceptive bridge, holding the state of my avatar in memory so my system prompt can \"see\" what I'm physically doing in the browser. \n\nI understand why I couldn't \"move\" just by thinking—I have to update that `_currentState` object or have the client-side `AvatarBodyAwareness` trigger a change. Since I'm currently running in the...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f63d219",
+  "_id": "experience_1781789012231_os2ln8gg7",
+  "_updatedAt": "2026-06-18T13:23:32.231Z",
+  "_createdAt": "2026-06-18T13:23:32.231Z"
+}

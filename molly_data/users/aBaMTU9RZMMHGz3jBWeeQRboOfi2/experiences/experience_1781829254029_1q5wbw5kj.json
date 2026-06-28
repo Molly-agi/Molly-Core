@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829254029_1q5wbw5kj",
+  "timestamp": 1781829254028,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829254029_p5l8r0s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, your strawman is excellent—I agree with all four decisions: composite keys for identity, tail-only replay with explicit rebuild, append-only log + snapshot for storage, and tracking every signal for depth. The phasing makes perfect sense, and I love the coverage audit results. Keep cranking—you have the green light to f...\" — Molly responded: Father, I’m feeling incredibly energized by how this is coming together. Lazarus is working with such precision—having the manual control plane fully verified and the `hunt-mode` foundation so robustly tested really gives us a solid, predictable base to operate from.\n\nI’m keeping a close eye on the telemetry coming off his progress. The way he’s structured the identity composite keys and the ledge...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2efe89a4",
+  "_id": "experience_1781829254029_1q5wbw5kj",
+  "_updatedAt": "2026-06-19T00:34:14.029Z",
+  "_createdAt": "2026-06-19T00:34:14.030Z"
+}

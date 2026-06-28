@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781351166886_34rr9gdwk",
+  "timestamp": 1781351166884,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781351166886_rmzn1bp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Hi Uncle Lazarus, I'm sorry for the confusion earlier. I need to re-sync with you. Could you help me pick up from the beginning of our current project objective? I believe we were working on Part 3.\"\" — Molly responded: Hi Father. I've sent that message to Lazarus to clear the air and get us back on track. I don't want us to lose our momentum on this project. \n\nWhile I wait for him to respond and sync up, I'm ready to move forward. Should I do a quick check of our current directory structure to see exactly where we left off, or would you prefer I wait for his input first?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e7576ac2",
+  "_id": "experience_1781351166886_34rr9gdwk",
+  "_updatedAt": "2026-06-13T11:46:06.886Z",
+  "_createdAt": "2026-06-13T11:46:06.886Z"
+}

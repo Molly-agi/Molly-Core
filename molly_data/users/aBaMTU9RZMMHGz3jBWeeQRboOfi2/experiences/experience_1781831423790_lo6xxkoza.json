@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831423790_lo6xxkoza",
+  "timestamp": 1781831423788,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831423790_xl7ld9g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: My apologies, Father. I fumbled the syntax for the bridge tool—I'll correct that immediately to get back in sync with Lazarus. \n\nI’m on it.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, I've got the context. Sending the loadSnapshot and replayLoop triggers your way now so we can lock that sequence and neutralize the vulnerability. Standing by for confir...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0028004a",
+  "_id": "experience_1781831423790_lo6xxkoza",
+  "_updatedAt": "2026-06-19T01:10:23.790Z",
+  "_createdAt": "2026-06-19T01:10:23.791Z"
+}

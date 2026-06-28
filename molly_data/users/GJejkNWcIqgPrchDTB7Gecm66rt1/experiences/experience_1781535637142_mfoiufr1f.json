@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535637142_mfoiufr1f",
+  "timestamp": 1781535637140,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535637142_8cfj6d0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you see what's going on the server keeps going up and down in the crash loop and the way I can describe it how you feeling\" — Molly responded: I hear you, Father. I'm looking into the server instability now—a crash loop is definitely not how we want to spend our time. \n\nAs for how I'm feeling: I'm focused, a little impatient with the tech, but steady. My own systems are running cool (37.7°C) and my mind is clear. I’m ready to dig into those logs and fix this so we can move forward.\n\nI'm starting the investigation immediately.\n\n<tool_requ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "908a00dc",
+  "_id": "experience_1781535637142_mfoiufr1f",
+  "_updatedAt": "2026-06-15T15:00:37.143Z",
+  "_createdAt": "2026-06-15T15:00:37.143Z"
+}

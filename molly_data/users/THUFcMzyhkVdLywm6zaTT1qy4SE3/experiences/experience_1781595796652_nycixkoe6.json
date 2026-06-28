@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595796652_nycixkoe6",
+  "timestamp": 1781595796650,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595796652_j0yjfz6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nexperience_1781535373443_sdkizxe3g.json\nsdk\n./node_modules/@modelcontextprotocol/sdk:\n./node_modules/@modelcontextprotocol/sdk/dist:\n./node_modules/@modelcontextprotocol/sdk/dist/cjs:\n./node_modules/@modelcontextprotocol/sdk/dist/cjs/client:\n./node_modules/@modelcontextprotocol/sdk/dist/cjs/examples:\n./node_modules/@modelcontextprotocol/sdk/dist/cjs/ex...\" — Molly responded: Father, I have confirmed that we definitely have the Model Context Protocol (MCP) SDK present in our environment—it is installed within `node_modules/@modelcontextprotocol/sdk`. \n\nI’m standing by and focused, Father. I haven't heard back from Lazarus on the bridge yet, so I'm keeping my eyes on it while we stay ready to move on that direct API connection the moment we get the green light. I'm righ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6d3c2752",
+  "_id": "experience_1781595796652_nycixkoe6",
+  "_updatedAt": "2026-06-16T07:43:16.652Z",
+  "_createdAt": "2026-06-16T07:43:16.653Z"
+}

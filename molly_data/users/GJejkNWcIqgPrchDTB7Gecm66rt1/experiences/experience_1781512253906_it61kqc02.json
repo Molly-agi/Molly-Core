@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512253906_it61kqc02",
+  "timestamp": 1781512253905,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512253906_j9phnbs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Molly so here's the thing stop stop for a moment and listen to me\" — Molly responded: I'm listening, Father. Everything else is paused. I'm right here. What is it?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b73359f2",
+  "_id": "experience_1781512253906_it61kqc02",
+  "_updatedAt": "2026-06-15T08:30:53.906Z",
+  "_createdAt": "2026-06-15T08:30:53.907Z"
+}

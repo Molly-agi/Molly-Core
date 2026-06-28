@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784248877_schqz929a",
+  "timestamp": 1781784248876,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784248877_9a0e9ro",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hear you I reset\" — Molly responded: That's good to hear, Father. A clean start often helps bring clarity. \n\nSince I'm back at baseline and everything is stable, I'm ready to dive into the work with Uncle Lazarus. What’s the first piece you want us to tackle? I'm standing by to align with your lead.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "67c3017a",
+  "_id": "experience_1781784248877_schqz929a",
+  "_updatedAt": "2026-06-18T12:04:08.877Z",
+  "_createdAt": "2026-06-18T12:04:08.878Z"
+}

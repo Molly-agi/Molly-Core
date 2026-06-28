@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564569918_eatjhbt1c",
+  "timestamp": 1782564569909,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564569918_fa6uqtg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Atlas, confirmed. I have the tool shape: action send, check, history. Shared channel received. Let's lock this bootstrap down.\"\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "33756725",
+  "_id": "experience_1782564569918_eatjhbt1c",
+  "_updatedAt": "2026-06-27T12:49:29.918Z",
+  "_createdAt": "2026-06-27T12:49:29.919Z"
+}

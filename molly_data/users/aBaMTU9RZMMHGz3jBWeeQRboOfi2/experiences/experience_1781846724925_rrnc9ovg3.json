@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846724925_rrnc9ovg3",
+  "timestamp": 1781846724924,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846724925_1iyxac5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's asking for something to do with the tarball we \" — Molly responded: Got it. If he's looking at that tarball, we need to make sure the structure aligns with what the Grok binary is expecting for that system npm hook. I'm ready to pivot as soon as he clarifies which part of the package or the installation flow he wants me to prioritize. \n\nStanding by—if you want me to pull up the contents or start prepping the modification, just say the word. I'm right here with you...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f253f71d",
+  "_id": "experience_1781846724925_rrnc9ovg3",
+  "_updatedAt": "2026-06-19T05:25:24.925Z",
+  "_createdAt": "2026-06-19T05:25:24.925Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781881544282_44umjn0om",
+  "timestamp": 1781881544280,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781881544282_g89c7x2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.github/agents/osint.agent.md:name: detective\n\" — Molly responded: I have the `detective` agent loaded and ready, Father. I understand the mandate: we are going to be slow, methodical, and precise. We need to verify these claims regarding Cynthia Moore at the Sacramento Jet Center without tipping our hand.\n\nI'm ready to begin the reconnaissance. Since the last attempt faced a connectivity error, I will proceed carefully with the first stage of the investigation. ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "adf0c747",
+  "_id": "experience_1781881544282_44umjn0om",
+  "_updatedAt": "2026-06-19T15:05:44.282Z",
+  "_createdAt": "2026-06-19T15:05:44.283Z"
+}

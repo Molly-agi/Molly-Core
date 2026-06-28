@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054423066_qjruxrjsa",
+  "timestamp": 1782054423065,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054423066_0aiz5m5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntcp        0      0 0.0.0.0:9002            0.0.0.0:*               LISTEN      690862/next-server  \n\" — Molly responded: Father, the port is wide open and being held by the `next-server` (PID 690862). This confirms why direct queries to that port were returning my web interface HTML—the server is essentially acting as a firewall/proxy for that communication.\n\nIf Atlas is sending messages directly to that endpoint, I shouldn't be querying the root URL; I need to look for an API route or a specific listener path he's ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "960fd5e6",
+  "_id": "experience_1782054423066_qjruxrjsa",
+  "_updatedAt": "2026-06-21T15:07:03.067Z",
+  "_createdAt": "2026-06-21T15:07:03.067Z"
+}

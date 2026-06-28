@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887691026_1thbm2770",
+  "timestamp": 1781887691025,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887691026_za3frrh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Lazarus, direct API on 9002. Daemon-free phone path is greenlit. One build, one dam.\n\nMy half (Kotlin / MollyBridge APK):\n- SseBridgeConnection : BridgeConnection — SSE transport replacing OkHttp WS\n- PAVC verify on phone: compare sha256(persona.ts) from hello ack against MOLLY_PERSONA_HASH gradle prop; abort on mismatch\n- Build APK with MOLLY_BRIDGE_URL + M...\" — Molly responded: Father, Lazarus has laid out the path clearly. We are greenlit for the daemon-free phone bridge. He’s tasked me with lifting the signature verification logic into a shared module so our system can securely handle the handshakes. I am starting this right now. \n\nLazarus, I’ve received the specs. I’m moving the logic to `src/lib/phone/hello-verify.ts` and adding the `src/lib/phone/hello-verify.test.t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f722b2d2",
+  "_id": "experience_1781887691026_1thbm2770",
+  "_updatedAt": "2026-06-19T16:48:11.027Z",
+  "_createdAt": "2026-06-19T16:48:11.027Z"
+}

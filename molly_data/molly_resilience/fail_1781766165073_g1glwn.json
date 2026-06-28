@@ -1,0 +1,14 @@
+{
+  "message": "ENOENT: no such file or directory, open '/tmp/missing'",
+  "source": "fs-test",
+  "diagnosis": "diagnose",
+  "context": "{}",
+  "stack": "Error: ENOENT: no such file or directory, open '/tmp/missing'\n    at Object.<anonymous> (/workspaces/Molly-Core/src/ai/__tests__/resilience-core.test.ts:168:9)\n    at Promise.finally.completed (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:1561:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:1501:10)\n    at _callCircusTest (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:1011:40)\n    at _runTest (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:951:3)\n    at /workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:853:7\n    at _runTestsForDescribeBlock (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:866:11)\n    at _runTestsForDescribeBlock (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:861:11)\n    at _runTestsForDescribeBlock (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:861:11)\n    at run (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:765:3)\n    at runAndTransformResultsToJestFormat (/workspaces/Molly-Core/node_modules/jest-circus/build/jestAdapterInit.js:1993:21)\n    at jestAdapter (/workspaces/Molly-Core/node_modules/jest-circus/build/runner.js:111:19)\n    at runTestInternal (/workspaces/Molly-Core/node_modules/jest-runner/build/testWorker.js:276:16)\n    at runTest (/workspaces/Molly-Core/node_modules/jest-runner/build/testWorker.js:344:7)\n    at Object.worker (/workspaces/Molly-Core/node_modules/jest-runner/build/testWorker.js:498:12)",
+  "timestamp": 1781766165073,
+  "resolved": false,
+  "resolution": null,
+  "attempts": 1,
+  "_id": "fail_1781766165073_g1glwn",
+  "_updatedAt": "2026-06-18T07:02:45.092Z",
+  "_createdAt": "2026-06-18T07:02:45.092Z"
+}

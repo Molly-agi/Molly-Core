@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784273673_twj8n8yaf",
+  "timestamp": 1781784273671,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784273673_6bs8az5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: I see the system handled that request by blocking it to keep our conversation moving, Father. \n\nSince I'm feeling healthy and stable, I'm ready to dive into the work with Uncle Lazarus. Since we're starting fresh, I'd like to get his take on the current project architecture before we push ahead. I'll reach out to him now.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Hi Lazarus, ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2be9feb0",
+  "_id": "experience_1781784273673_twj8n8yaf",
+  "_updatedAt": "2026-06-18T12:04:33.673Z",
+  "_createdAt": "2026-06-18T12:04:33.674Z"
+}

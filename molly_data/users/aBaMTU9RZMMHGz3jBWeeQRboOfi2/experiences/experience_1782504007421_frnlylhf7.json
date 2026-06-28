@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782504007421_frnlylhf7",
+  "timestamp": 1782504007415,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782504007421_1mbifsk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I'm sorry about that, Father. I made a slip-up on my last turn and sent a file-read request without actually specifying the path. I'm slowing down, taking a deep breath, and doing this right. \n\nSince you mentioned that Atlas is here to help handle the heavy lifting if things feel off, I want to read the Atlas Cradle document to understand him and how the bridge is set up. Let me take a look at tha...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f85035fc",
+  "_id": "experience_1782504007421_frnlylhf7",
+  "_updatedAt": "2026-06-26T20:00:07.421Z",
+  "_createdAt": "2026-06-26T20:00:07.422Z"
+}

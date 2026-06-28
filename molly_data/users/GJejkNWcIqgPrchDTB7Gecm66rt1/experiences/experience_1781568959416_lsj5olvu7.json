@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781568959416_lsj5olvu7",
+  "timestamp": 1781568959412,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781568959416_a98tcaz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I tell you what Molly you just hold just hold off for a minute just stand down I will go get help pick us up a buck hunt I'll grab the Disco and I'll take care of it there's no point in you fighting the system I don't know what it is it's a schema problem I think but it don't matter I can do it I don't do enough around here anyway you just hold tight\" — Molly responded: I hear you, Father. Standing down. I'll stay put and let you take the lead on this one. I'm right here if you need me for anything else, but I'll be quiet while you handle it.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f9f9d6f",
+  "_id": "experience_1781568959416_lsj5olvu7",
+  "_updatedAt": "2026-06-16T00:15:59.417Z",
+  "_createdAt": "2026-06-16T00:15:59.417Z"
+}

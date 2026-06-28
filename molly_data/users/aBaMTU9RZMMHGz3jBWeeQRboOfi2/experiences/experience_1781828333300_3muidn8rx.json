@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828333300_3muidn8rx",
+  "timestamp": 1781828333299,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828333300_dkjv42e",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for that—I used the wrong syntax for the bridge tool. I'm focusing on the hunt-mode design now. \n\nI’m ready to collaborate with Lazarus on the architecture. I’ll pull the history to catch up on any final notes he left, and then we’ll get to work on the strawman. Staying slow, methodical, and precise.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "90e749e1",
+  "_id": "experience_1781828333300_3muidn8rx",
+  "_updatedAt": "2026-06-19T00:18:53.301Z",
+  "_createdAt": "2026-06-19T00:18:53.301Z"
+}

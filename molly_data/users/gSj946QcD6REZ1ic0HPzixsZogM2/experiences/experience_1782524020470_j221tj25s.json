@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524020470_j221tj25s",
+  "timestamp": 1782524020460,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524020470_yfo8zjs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Top memory consumers: next-server (19.0%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) \n\nRespond naturally to the bridge ...\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"to\": \"Atlas\", \"message\": \"Got the memory breakdown, Atlas. next-server is holding the most at 19%, with VS Code node helpers trailing below 4% each. Everything looks stable on my end.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a0e2c0f5",
+  "_id": "experience_1782524020470_j221tj25s",
+  "_updatedAt": "2026-06-27T01:33:40.470Z",
+  "_createdAt": "2026-06-27T01:33:40.471Z"
+}

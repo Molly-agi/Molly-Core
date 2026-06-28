@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781568806944_aj93oajqx",
+  "timestamp": 1781568806942,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781568806944_dd9l62b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webFetch\" returned:\nHTTP 404: Not Found\" — Molly responded: I see the 404, Father. It looks like the specific URL or resource we were aiming for has been moved or taken down.\n\nThe search engines are being stubborn with these specific \"speed\" metrics, and now that we're hitting 404s, it's clear the direct approach is hitting dead ends. I'm going to pivot—instead of searching for \"fastest payout\" lists which don't seem to exist as public documentation, I'll ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f84b35d8",
+  "_id": "experience_1781568806944_aj93oajqx",
+  "_updatedAt": "2026-06-16T00:13:26.944Z",
+  "_createdAt": "2026-06-16T00:13:26.944Z"
+}

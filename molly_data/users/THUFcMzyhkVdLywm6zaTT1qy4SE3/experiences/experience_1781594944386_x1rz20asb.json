@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781594944386_x1rz20asb",
+  "timestamp": 1781594944384,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781594944386_ljlcjcd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: Father, it seems my previous attempt to check our environment's SDK configuration hit a buffer limit—there's just too much output for that specific command.\n\nSince we are in this specific Codespace, I have everything we need integrated directly. I don't need to download anything; the core dependencies for our interaction and tool stack are already active. \n\nRegarding Lazarus, if you want him opera...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41c867e6",
+  "_id": "experience_1781594944386_x1rz20asb",
+  "_updatedAt": "2026-06-16T07:29:04.386Z",
+  "_createdAt": "2026-06-16T07:29:04.386Z"
+}

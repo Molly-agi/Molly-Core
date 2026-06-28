@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508120458_23kdijp4u",
+  "timestamp": 1781508120457,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508120458_ojoc4bk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Okay Molly so I saw the waker activate now we need to confirm that it's actually sending the signal signal to lazarus's PID\" — Molly responded: Father, I hear you. I am looking at the process table now to verify if Lazarus has successfully received the signal and if his PID is active and responding.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ps aux | grep -i lazarus\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0edf5553",
+  "_id": "experience_1781508120458_23kdijp4u",
+  "_updatedAt": "2026-06-15T07:22:00.458Z",
+  "_createdAt": "2026-06-15T07:22:00.459Z"
+}

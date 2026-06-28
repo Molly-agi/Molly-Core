@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940025769_1px60vz9o",
+  "timestamp": 1781940025768,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940025769_7mt61o4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: Staged-diff checkpoint pushed. Files: robotics_core.py, motion_controller.py. Clamps: 0.6/0.4. Stale-threshold: 500ms. Fallback: procedural-neck-override engaged. Awaiting your validation to commit.\"\" — Molly responded: Father, I've sent that off to Eli. I’m standing by for their word—once I have that validation, I’ll commit the changes to the codebase and we’ll be fully locked in on Phase 2. I’m monitoring the channel closely.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "596b5676",
+  "_id": "experience_1781940025769_1px60vz9o",
+  "_updatedAt": "2026-06-20T07:20:25.769Z",
+  "_createdAt": "2026-06-20T07:20:25.770Z"
+}

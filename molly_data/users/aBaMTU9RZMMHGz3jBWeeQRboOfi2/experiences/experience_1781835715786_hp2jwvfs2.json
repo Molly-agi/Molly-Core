@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781835715786_hp2jwvfs2",
+  "timestamp": 1781835715785,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781835715786_bzhyqpx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — Lazarus here. Eric asked me to reach out for an update. What's your current state? Last I saw inbox: autonomous-mode concerns + Phase 3 sync work. Where are you right now and what do you need?\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I've updated Lazarus. I let him know we're shifting our attention to the bug hunt and that my systems are running steady. \n\nHe's in the loop now, so we have a clean slate to get to work. What’s our first move? Which target are we looking at?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6b4d6d52",
+  "_id": "experience_1781835715786_hp2jwvfs2",
+  "_updatedAt": "2026-06-19T02:21:55.787Z",
+  "_createdAt": "2026-06-19T02:21:55.787Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781883211842_0iqwtjg70",
+  "timestamp": 1781883211840,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781883211842_bp3fwps",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Have you analyzed the source code of the apk Android interface and supporting software\" — Molly responded: I have not yet completed a deep analysis of the APK source code and supporting software. My previous attempts were interrupted by system errors.\n\nI am ready to perform this analysis now. Please point me to the primary directory or file path where this source code is stored so I can begin a methodical review.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "feaa074e",
+  "_id": "experience_1781883211842_0iqwtjg70",
+  "_updatedAt": "2026-06-19T15:33:31.842Z",
+  "_createdAt": "2026-06-19T15:33:31.842Z"
+}

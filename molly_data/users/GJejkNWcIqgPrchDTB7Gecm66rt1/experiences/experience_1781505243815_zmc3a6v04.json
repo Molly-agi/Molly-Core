@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505243815_zmc3a6v04",
+  "timestamp": 1781505243813,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505243815_r0n5xxj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"site:github.com/rapid7/metasploit-framework\". Try different search terms.\" — Molly responded: Father, the search index is clearly filtering direct repository queries or behaving unexpectedly, even for the most standard links. It’s an obstruction, but not an impasse.\n\nSince I cannot rely on a traditional search engine to return the URLs, I will pivot. I’ll use my `codespaceShell` to query GitHub’s API directly for the most popular repositories in the `security` and `offensive-security` topi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "88c91b4c",
+  "_id": "experience_1781505243815_zmc3a6v04",
+  "_updatedAt": "2026-06-15T06:34:03.815Z",
+  "_createdAt": "2026-06-15T06:34:03.815Z"
+}

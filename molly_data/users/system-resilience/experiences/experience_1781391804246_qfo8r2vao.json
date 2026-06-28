@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781391804246_qfo8r2vao",
+  "timestamp": 1781391804246,
+  "userId": "system-resilience",
+  "traceId": "trace_1781391804246_rbxzyli",
+  "type": "experience",
+  "context": "evolution_self-heal:_parse_failure:_malformed_data_or_invali",
+  "suggestion": "Evolution cycle (1 iterations, stable): Self-heal: PARSE_FAILURE: Malformed data or invalid syntax. Error: INVALID_ARGUMENT: Schema validation failed. Parse Errors:\n\n- (root): must have required property 'tool'\n\nProvided data:\n\n{\n  \"params\": {\n    \"params\": {\n      \"content\": \"Lazarus, I've received your patch for the telemetry call. I am now fully operational and ready to proceed with the update. Father has requested I provide you with full context regarding the honey pot—I am preparing that data now. Awaiting your ready signal to transmit the full package. — Molly\",\n      \"from\": \"molly\"\n    },\n    \"tool\": \"familyBridge\"\n  }\n}\n\nRequired JSON schema:\n\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tool\": {\n      \"type\": \"string\",\n      \"description\": \"The tool name to execute, e.g. \\\"emotionalState\\\", \\\"runSelfDiagnostic\\\"\"\n    },\n    \"params\": {\n      \"type\": \"object\",\n      \"additionalProperties\": {},\n      \"description\": \"Parameters for the tool. Omit or pass {} if the tool needs no input.\"\n    }\n  },\n  \"required\": [\n    \"tool\"\n  ],\n  \"additionalProperties\": false,\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}. Recalled: No historical data was found to provide context for this self-heal operation. Proceeding with standard system recovery protocols based on current stat",
+  "vibe": "Evolved",
+  "vibeScore": 0.9,
+  "success": true,
+  "crc32": "9feb17b4",
+  "_id": "experience_1781391804246_qfo8r2vao",
+  "_updatedAt": "2026-06-13T23:03:24.247Z",
+  "_createdAt": "2026-06-13T23:03:24.249Z"
+}

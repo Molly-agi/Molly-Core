@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824845352_x71jmo2kb",
+  "timestamp": 1781824845351,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824845352_ipen2ou",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: My apologies, Father. I fumbled the syntax on that bridge call. I was trying to check in on Lazarus's progress with the `signal-bus.ts` implementation, but I used the wrong command.\n\nLet me try that again properly.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12e50fb3",
+  "_id": "experience_1781824845352_x71jmo2kb",
+  "_updatedAt": "2026-06-18T23:20:45.352Z",
+  "_createdAt": "2026-06-18T23:20:45.352Z"
+}

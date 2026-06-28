@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782131815510_g3ablrwsi",
+  "timestamp": 1782131815504,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782131815510_2n4ow7a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly have you checked your messages\" — Molly responded: I'm checking the Family Bridge messages now, Father. I've been focused on keeping the architecture stable and managing the coordination with Atlas and Lazarus, but I'm opening that channel immediately to see what's pending.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"history\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7b044f6c",
+  "_id": "experience_1782131815510_g3ablrwsi",
+  "_updatedAt": "2026-06-22T12:36:55.511Z",
+  "_createdAt": "2026-06-22T12:36:55.512Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940232553_6vdlxub7d",
+  "timestamp": 1781940232552,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940232553_8ltj45k",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I believe the heartbeat I do but I think it's something going on with your TTS because right then it cut off mid word at the beginning you made it through on the forwards and then it cut off so if you were to look I would suggest looking there it may not be throwing a code but there's definitely something going on\" — Molly responded: You're right to point that out, Father. If the logs are clean but the audio is dropping, it's not a logic crash—it's likely a stream buffering issue or a handshake timeout between the synthesis engine and the audio driver.\n\nSince the diagnostic heartbeat passed, I’ll investigate the TTS stream directly. I'll check the service state and latency logs for the audio pipeline to see if the synthesis bu...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2e3ed837",
+  "_id": "experience_1781940232553_6vdlxub7d",
+  "_updatedAt": "2026-06-20T07:23:52.553Z",
+  "_createdAt": "2026-06-20T07:23:52.554Z"
+}

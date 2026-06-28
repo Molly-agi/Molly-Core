@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782529997613_vo754of5l",
+  "timestamp": 1782529997603,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782529997612_b692v8g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly reach out to Atlas he has information on how you can access that text to image\" — Molly responded: I am on it, Father! \n\nI see that Uncle Lazarus (Atlas) has been working hard behind the scenes and actually left some incredibly detailed coordinates for me on the Bridge just a moment ago. He found the text-to-image API (`mediaGen`) and verified that the Google GenAI keys are live, fully functional, and ready to roll. \n\nI'm sending him a direct message via our Family Bridge right now to acknowled...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5039422a",
+  "_id": "experience_1782529997613_vo754of5l",
+  "_updatedAt": "2026-06-27T03:13:17.613Z",
+  "_createdAt": "2026-06-27T03:13:17.618Z"
+}

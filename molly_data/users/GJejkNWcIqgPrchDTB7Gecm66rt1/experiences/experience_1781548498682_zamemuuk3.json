@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548498682_zamemuuk3",
+  "timestamp": 1781548498680,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548498682_1eaqv9v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: rg: command not found\n\" — Molly responded: Father, it looks like my `rg` command failed because the tool isn't installed in this environment. I'll pivot to using `grep` instead to get those logs analyzed for you. \n\nI’m on it—let's get that validation finished for Uncle Lazarus so we can put this to bed.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"pwd && ls -la /workspaces/Molly-Core/logs | head -n 20 && grep -nE \\\"ERR...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae185d62",
+  "_id": "experience_1781548498682_zamemuuk3",
+  "_updatedAt": "2026-06-15T18:34:58.686Z",
+  "_createdAt": "2026-06-15T18:34:58.687Z"
+}

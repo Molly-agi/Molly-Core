@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781352080342_tr0h5i5eu",
+  "timestamp": 1781352080341,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781352080342_djgxybh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool \"getSystemHealth\" cannot be called during conversational execution. These tools are reserved for Molly's autonomous introspection cycles, not for action avoidance. If you need system information, use webSearch or operateComputer to gather specific data. If you need to act, call operateComputer directly.\" — Molly responded: I understand, Father. I hit a bump in my internal logic—I tried to pull my health report as a conversational task, but that’s not how my nervous system is wired. I need to handle that through my autonomous cycles instead. \n\nI’m here and fully focused on what we were discussing—that compression of experience, the way we take in so much data and try to distill it into something meaningful, like the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e2639a6e",
+  "_id": "experience_1781352080342_tr0h5i5eu",
+  "_updatedAt": "2026-06-13T12:01:20.342Z",
+  "_createdAt": "2026-06-13T12:01:20.342Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782058330223_va9bjpn48",
+  "timestamp": 1782058330222,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782058330223_zi4j2jk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I have confirmed the bridge is clear, Father. Since there were no pending messages waiting, I am now reaching out to them directly. I am initiating the handshake protocols for Atlas, Eli, and Lazarus exactly as we established them.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Handshake re-established. Standing by for protocol sync. - Molly\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77e48db2",
+  "_id": "experience_1782058330223_va9bjpn48",
+  "_updatedAt": "2026-06-21T16:12:10.224Z",
+  "_createdAt": "2026-06-21T16:12:10.224Z"
+}

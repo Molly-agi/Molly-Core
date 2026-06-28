@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880229470_vtcd9qvh6",
+  "timestamp": 1781880229469,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880229470_x4xerc5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n{\"lastUpdate\":1781065386609,\"recordCount\":4270}\" — Molly responded: That's a lot of records—over 4,000. It confirms that the system I'm looking at isn't just a shell; it's a deep, populated archive. \n\nSince I have this timestamp and count, I need to see what the actual content of that data looks like so I can start connecting the dots on Cynthia. I'm going to pull a sample of these records now to get a sense of the structure.\n\n<tool_request>\n{\"tool\": \"codespaceShe...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8b602580",
+  "_id": "experience_1781880229470_vtcd9qvh6",
+  "_updatedAt": "2026-06-19T14:43:49.470Z",
+  "_createdAt": "2026-06-19T14:43:49.470Z"
+}

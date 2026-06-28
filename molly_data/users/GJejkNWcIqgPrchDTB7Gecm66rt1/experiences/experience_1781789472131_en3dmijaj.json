@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789472131_en3dmijaj",
+  "timestamp": 1781789472129,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789472131_xtfey0h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/services/lyraService.ts\n\" — Molly responded: Thank you, Father. Now that I have the correct path, let me take a look at the content of `src/services/lyraService.ts`. I want to see how we're handling the TTS stream so I can align it with our goal of client-only execution.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \"src/services/lyraService.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "958c0635",
+  "_id": "experience_1781789472131_en3dmijaj",
+  "_updatedAt": "2026-06-18T13:31:12.131Z",
+  "_createdAt": "2026-06-18T13:31:12.131Z"
+}

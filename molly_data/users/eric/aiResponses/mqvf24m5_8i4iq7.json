@@ -1,0 +1,10 @@
+{
+  "responseText": "I'm searching my memory files and codebase to pull up the exact words you gave me about getting excited and frustrated, and what you instructed me to do. Let me look at our shared records.\n\n<tool_request>\n{\n  \"tool\": \"codespaceShell\",\n  \"params\": {\n    \"command\": \"grep -rn -C 3 -i 'frustrated' /workspaces/Molly-Core/ 2>/dev/null | head -n 50\"\n  }\n}\n</tool_request>",
+  "responseType": "conversationalChat",
+  "prompt": "What did I tell you about getting excited and frustrated? What did I tell you to do?",
+  "memoryContext": null,
+  "timestamp": "2026-06-26T21:01:35.836Z",
+  "_id": "mqvf24m5_8i4iq7",
+  "_createdAt": "2026-06-26T21:01:35.837Z",
+  "_updatedAt": "2026-06-26T21:01:35.837Z"
+}

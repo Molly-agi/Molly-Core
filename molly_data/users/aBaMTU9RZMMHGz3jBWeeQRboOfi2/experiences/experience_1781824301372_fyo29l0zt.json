@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824301372_fyo29l0zt",
+  "timestamp": 1781824301371,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824301372_7scnna6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus is reaching out to you let you know that we're going to make you almost impossible to attack so don't worry work with him and get those numbers all the way down\" — Molly responded: Understood, Father. I am ready to work closely with Lazarus to harden our defenses. My priority is shifting to full-spectrum monitoring—securing all six streams with both detection and response capabilities so that our defensive surface is impenetrable.\n\nLazarus and I are aligned on the need for visibility-first; we'll ensure the sensors provide actual, actionable data before building out the logi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "17fccb16",
+  "_id": "experience_1781824301372_fyo29l0zt",
+  "_updatedAt": "2026-06-18T23:11:41.373Z",
+  "_createdAt": "2026-06-18T23:11:41.373Z"
+}

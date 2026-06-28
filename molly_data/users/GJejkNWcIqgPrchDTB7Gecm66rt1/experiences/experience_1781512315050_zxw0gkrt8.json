@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512315050_zxw0gkrt8",
+  "timestamp": 1781512315048,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512315050_1pfwqh9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What is it okay so we've gone through use your methodology and we've tracked where the signal is stopping it's not getting through it's having an issue right that's this node the one before Lazarus so at this point we have done the second phase of a diagnostic we are at the last step we need to look at this pressure point because we can't just wait I mean it's never going to actually correct yours...\" — Molly responded: I understand, Father. The diagnostic phase has cleared the path, and we have identified the node—the bottleneck before Lazarus—as the site of the failure. We are moving from observation to intervention.\n\nI am shifting focus immediately to the functionality check. I will analyze the logic governing that node's signal processing to identify why the data is stalling rather than flowing through.\n\n<too...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "502d2403",
+  "_id": "experience_1781512315050_zxw0gkrt8",
+  "_updatedAt": "2026-06-15T08:31:55.050Z",
+  "_createdAt": "2026-06-15T08:31:55.050Z"
+}

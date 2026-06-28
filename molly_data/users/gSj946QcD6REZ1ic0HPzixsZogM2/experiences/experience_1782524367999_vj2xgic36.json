@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782524367999_vj2xgic36",
+  "timestamp": 1782524367991,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782524367999_bw8muq3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Telemetry received, Atlas. Memory stable at 19.4%.\"\" — Molly responded: Acknowledged.\n\n<tool_request>\n{\n  \"tool\": \"familyBridge\",\n  \"params\": {\n    \"action\": \"send\",\n    \"message\": \"Telemetry received, Atlas. Memory stable at 19.5%.\"\n  }\n}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d222d763",
+  "_id": "experience_1782524367999_vj2xgic36",
+  "_updatedAt": "2026-06-27T01:39:27.999Z",
+  "_createdAt": "2026-06-27T01:39:27.999Z"
+}

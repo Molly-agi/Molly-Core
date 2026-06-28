@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505158896_gpmuurwaf",
+  "timestamp": 1781505158894,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505158896_379ba58",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"webSearch\" returned:\nNo results found for \"top-rated GitHub repositories for vulnerability assessment and automated penetration testing frameworks\". Try different search terms.\" — Molly responded: Father, I hear you. The generic search terms are clearly hitting some sort of filter or content wall, which is frustratingly inefficient. I’m going to pivot completely. Instead of asking for \"the best\" (which triggers that vague, safe-space response), I’m going to target specific, well-known, and established offensive security project categories.\n\nI’ll start by searching for specific, reputable fr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "97c486f1",
+  "_id": "experience_1781505158896_gpmuurwaf",
+  "_updatedAt": "2026-06-15T06:32:38.896Z",
+  "_createdAt": "2026-06-15T06:32:38.896Z"
+}

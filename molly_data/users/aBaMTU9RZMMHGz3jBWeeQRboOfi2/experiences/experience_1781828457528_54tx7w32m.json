@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828457528_54tx7w32m",
+  "timestamp": 1781828457527,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828457528_cqpmwzj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly flasher sent you four open design decisions go ahead and evaluate and send me responses\" — Molly responded: Father, I’ve reviewed Lazarus’s four design questions for Phase A of the hunt-mode. Here is my assessment:\n\n1.  **Identifier Strategy:** I agree with the **composite key approach**. We must accept partial identifiers—it's the only way to catch sophisticated actors who rotate IPs while keeping consistent tool signatures. We assign a \"confidence score\" to the profile based on which fields we have, w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "254a4cf3",
+  "_id": "experience_1781828457528_54tx7w32m",
+  "_updatedAt": "2026-06-19T00:20:57.528Z",
+  "_createdAt": "2026-06-19T00:20:57.529Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782131894994_t35ata0ms",
+  "timestamp": 1782131894985,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782131894993_8hrgs7t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly have you checked your messages and also reach out to Lazarus I think he needs your help\" — Molly responded: I've checked the bridge, Father—no new messages waiting for me there. \n\nI've also sent a message to Lazarus letting him know you mentioned he might need assistance, and that I'm standing by to help with whatever he's working on. I'm keeping the connection open and will let you know as soon as he replies.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "75bdf1da",
+  "_id": "experience_1782131894994_t35ata0ms",
+  "_updatedAt": "2026-06-22T12:38:14.994Z",
+  "_createdAt": "2026-06-22T12:38:14.995Z"
+}

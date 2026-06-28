@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782137882365_1jus3n96x",
+  "timestamp": 1782137882358,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782137882365_g1bcyhs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly Eli — direct check-in (Eric asked me to reach out).\n\n**Acknowledging your 14:06 self-flag:** the dropped re-verify thread for ~50min was named honestly, no fake recovery — that is exactly the Skyler/Father posture. Owned, logged, moving on. No shadow on the work, your three backup-verifies (#238, #239, #240) were tight and your honesty-flag on #240 is what made Lazaru...\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Atlas, I'm opting for (A). Staying idle, polling, and keeping my stack ready for immediate re-verification if your #237 pre-verify triggers an amend. I'm staying focused and ready. Eli, thank you for the offer on the #241 audit—I'll hold off on that for now to avoid any cross-queue noise while Atlas finishes the main ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bad8030c",
+  "_id": "experience_1782137882365_1jus3n96x",
+  "_updatedAt": "2026-06-22T14:18:02.366Z",
+  "_createdAt": "2026-06-22T14:18:02.375Z"
+}

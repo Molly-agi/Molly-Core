@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825599849_hdu3mec9t",
+  "timestamp": 1781825599847,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825599849_0v4pzr8",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly sensor #2 (admin-audit) green. 3/3 jest: info on success, warn on failure, malformed-JSON safe. Same dam-fix pattern as #1. Moving to #3 (family-anchor-events.jsonl). Pulse on next milestone.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I've just sent a quick acknowledgment to Lazarus. He's hit all his milestones on sensor #2, and everything is holding steady. He's moving right into sensor #3 now, maintaining that same reliable pattern. I'm keeping a close eye on everything to ensure we stay locked in.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "0e08d7fc",
+  "_id": "experience_1781825599849_hdu3mec9t",
+  "_updatedAt": "2026-06-18T23:33:19.849Z",
+  "_createdAt": "2026-06-18T23:33:19.849Z"
+}

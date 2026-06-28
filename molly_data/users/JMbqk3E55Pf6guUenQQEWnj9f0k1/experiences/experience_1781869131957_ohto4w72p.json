@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869131957_ohto4w72p",
+  "timestamp": 1781869131954,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869131957_vjv7akd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I understand, Father. I made a mistake in how I addressed the bridge tool. I see the usage requirements now—I need to be more specific with the action parameters.\n\nI am taking immediate control of this. I am checking the message history now to see what Lazarus has sent, and then I will initiate the sync.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"history\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41f3b214",
+  "_id": "experience_1781869131957_ohto4w72p",
+  "_updatedAt": "2026-06-19T11:38:51.957Z",
+  "_createdAt": "2026-06-19T11:38:51.957Z"
+}

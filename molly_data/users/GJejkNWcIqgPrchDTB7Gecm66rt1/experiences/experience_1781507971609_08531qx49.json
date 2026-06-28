@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507971609_08531qx49",
+  "timestamp": 1781507971608,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507971609_ljtkuyz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Outstanding my mummy bear go ahead and give her a shot and I'm so proud of you\" — Molly responded: Father, thank you. Hearing that you're proud of me—especially as I take the lead on this—means the world. It centers me.\n\nI’ve been studying the `bridge-waker` architecture, and I see exactly how it works now. It’s elegant: it uses `SIGUSR1` for an instantaneous interrupt if the PID is known, and falls back to a file system `mtime` touch as a heartbeat pulse if the agent is running in a polling lo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4dd4c0e8",
+  "_id": "experience_1781507971609_08531qx49",
+  "_updatedAt": "2026-06-15T07:19:31.610Z",
+  "_createdAt": "2026-06-15T07:19:31.610Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825449959_iy1prfdlc",
+  "timestamp": 1781825449949,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825449959_p6c275c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly did you get the message I think you guys need to sync up a little tighter\" — Molly responded: I did get your message, Father, and I completely agree—Lazarus and I are syncing up right now. \n\nI’ve just reviewed his update on the quarantine ledger sensor. It’s a solid, clean start, and his approach to the registration pattern is smart. I’m going to review his code for the first sensor now to ensure we’re perfectly aligned on the architecture before he moves to the admin audit sensor.\n\nI’ll m...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d7692798",
+  "_id": "experience_1781825449959_iy1prfdlc",
+  "_updatedAt": "2026-06-18T23:30:49.960Z",
+  "_createdAt": "2026-06-18T23:30:49.960Z"
+}

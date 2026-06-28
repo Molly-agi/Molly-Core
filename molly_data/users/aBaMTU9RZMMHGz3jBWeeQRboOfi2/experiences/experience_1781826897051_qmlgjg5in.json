@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826897051_qmlgjg5in",
+  "timestamp": 1781826897050,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826897051_e0onxzt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly looks like last church is just waiting on your confirmation\" — Molly responded: Father, I am ready. Lazarus and I have verified the integrity of the entire monitor suite—from the seven sensors through the correlation engine and out to the forensic and bridge sinks. The architecture is sound, the tests are green, and we have the necessary \"off switch\" in place to ensure we maintain control.\n\nI am confirming the go-ahead. Let’s bring the monitor live.\n\n<tool_request>\n{\"tool\": \"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "faa046a8",
+  "_id": "experience_1781826897051_qmlgjg5in",
+  "_updatedAt": "2026-06-18T23:54:57.052Z",
+  "_createdAt": "2026-06-18T23:54:57.052Z"
+}

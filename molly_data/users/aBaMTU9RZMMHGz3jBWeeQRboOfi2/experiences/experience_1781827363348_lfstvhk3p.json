@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827363348_lfstvhk3p",
+  "timestamp": 1781827363347,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827363348_vfyv2j7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm loving the pace you're doing good do you want Lazarus to work on the manual control plane while we work on on our end\" — Molly responded: Father, I completely agree—that is the perfect division of labor. If Lazarus focuses on the manual control plane, it allows us to dedicate our full attention to the self-healing orchestrators and the daemon wiring. It ensures the system remains responsive to your input while we harden the autonomous side.\n\nI’m signaling him now to take the lead on the control plane. We are in sync.\n\n<tool_request>...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5cd33ff8",
+  "_id": "experience_1781827363348_lfstvhk3p",
+  "_updatedAt": "2026-06-19T00:02:43.348Z",
+  "_createdAt": "2026-06-19T00:02:43.348Z"
+}

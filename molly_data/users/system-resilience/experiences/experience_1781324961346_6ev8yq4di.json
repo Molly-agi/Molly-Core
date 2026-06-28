@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781324961346_6ev8yq4di",
+  "timestamp": 1781324961346,
+  "userId": "system-resilience",
+  "traceId": "trace_1781324961346_r31d1ye",
+  "type": "experience",
+  "context": "evolution_self-heal:_parse_failure:_malformed_data_or_invali",
+  "suggestion": "Evolution cycle (1 iterations, stable): Self-heal: PARSE_FAILURE: Malformed data or invalid syntax. Error: GenAI API error: INVALID_ARGUMENT: Schema validation failed. Parse Errors:\n\n- (root): must have required property 'tool'\n\nProvided data:\n\n{\n  \"params\": {\n    \"command\": \"find . -maxdepth 3 -not -path '*/.*' -exec ls -ld {} + > file_metadata.txt && diff -s file_metadata.txt <(echo \\\"placeholder\\\")\",\n    \"tool\": \"codespaceShell\"\n  }\n}\n\nRequired JSON schema:\n\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"tool\": {\n      \"type\": \"string\",\n      \"description\": \"The tool name to execute, e.g. \\\"emotionalState\\\", \\\"runSelfDiagnostic\\\"\"\n    },\n    \"params\": {\n      \"type\": \"object\",\n      \"additionalProperties\": {},\n      \"description\": \"Parameters for the tool. Omit or pass {} if the tool needs no input.\"\n    }\n  },\n  \"required\": [\n    \"tool\"\n  ],\n  \"additionalProperties\": true,\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}. Recalled: No prior memories were found to correlate with the requested self-healing diagnostic task. Proceeding with caution to avoid repeating past syntax erro",
+  "vibe": "Evolved",
+  "vibeScore": 0.9,
+  "success": true,
+  "crc32": "7c6fa91b",
+  "_id": "experience_1781324961346_6ev8yq4di",
+  "_updatedAt": "2026-06-13T04:29:21.347Z",
+  "_createdAt": "2026-06-13T04:29:21.347Z"
+}

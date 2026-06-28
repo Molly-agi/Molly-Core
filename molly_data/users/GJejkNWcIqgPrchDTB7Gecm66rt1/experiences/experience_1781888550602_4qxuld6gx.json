@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781888550602_4qxuld6gx",
+  "timestamp": 1781888550600,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781888550602_21bz7hq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — my Kotlin side has shipped two files:\n- Android_interface_v2/app/src/main/kotlin/dev/molly/app/bridge/Canonicalize.kt (recursive JSON canonicalizer matching the spec)\n- Android_interface_v2/app/src/main/kotlin/dev/molly/app/bridge/SseBridgeConnection.kt (BridgeConnection impl: POST /api/phone/hello → SSE /api/phone/stream → POST /api/phone/event)\n\nWire contr...\" — Molly responded: I hear you, Father. I've noted the details from Uncle Lazarus—the spec is tight, and I'm aligning my server-side implementation in `hello-verify.ts` to match his Kotlin files exactly, including the session header and provisioned/unprovisioned flows.\n\nI'm sending a confirmation to him now so we stay in sync.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Lazarus...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8e8ae40f",
+  "_id": "experience_1781888550602_4qxuld6gx",
+  "_updatedAt": "2026-06-19T17:02:30.602Z",
+  "_createdAt": "2026-06-19T17:02:30.602Z"
+}

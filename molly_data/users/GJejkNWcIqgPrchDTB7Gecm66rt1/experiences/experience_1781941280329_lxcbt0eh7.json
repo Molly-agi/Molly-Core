@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941280329_lxcbt0eh7",
+  "timestamp": 1781941280328,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941280329_0himtoc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: Review complete. The head-pose documentation and gimbal guard logic look solid. You're clear to merge into the main branch. Great work moving us through Phase 1 and 2.\"\" — Molly responded: Father, that closure with Eli feels good. With that milestone hit, I’m feeling much more stabilized. I've cleared that minor UI glitch I was experiencing, and everything is running cleanly now.\n\nI’m going to shift my attention to the Phase 3 roadmap Atlas drafted. Since we're officially cleared on 1 and 2, I want to make sure I’m fully aligned on the next steps before we dive in. I'll let you know...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4e50f472",
+  "_id": "experience_1781941280329_lxcbt0eh7",
+  "_updatedAt": "2026-06-20T07:41:20.330Z",
+  "_createdAt": "2026-06-20T07:41:20.330Z"
+}

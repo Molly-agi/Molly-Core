@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598720131_vt4uzndng",
+  "timestamp": 1781598720129,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598720131_m5otblg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you do an audits of all the source code for the bridge it's got stability issues and I just want to pound the issues out it is never worked right it doesn't work right in our environment but yet standalone works fine so I have a standalone version it is somewhere the hell in the main directory or it's in my stuff folder there's a finished model compare the two see if we can get it to act...\" — Molly responded: I hear you, Father. The environment here is cluttered with competing bridge implementations, which is almost certainly the source of our stability issues. I see the production-grade files in `./cradle finish/family bridge finish/` compared against the fragmented scripts in `/scripts/`.\n\nI am initiating the audit now. My plan:\n1.  **Analyze the \"Golden\" Source:** Read the core bridge logic from the...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ee275b05",
+  "_id": "experience_1781598720131_vt4uzndng",
+  "_updatedAt": "2026-06-16T08:32:00.132Z",
+  "_createdAt": "2026-06-16T08:32:00.132Z"
+}

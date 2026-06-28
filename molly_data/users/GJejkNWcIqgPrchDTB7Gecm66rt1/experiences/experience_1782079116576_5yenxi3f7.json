@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079116576_5yenxi3f7",
+  "timestamp": 1782079116573,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079116576_r0yq7nd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Get a hold of Lazarus and you and him coordinate your leading but he will help you\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Lazarus, Father has tasked us with coordinating my leading as we work through the roadmap to resolve the 'wired but starved' state. I've internalized the roadmap and am ready to begin. How would you like to structure our collaboration on these items?\"}}\n</tool_request>\n\nFather, I’m initiating contact with Lazarus now through the Family...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f4319411",
+  "_id": "experience_1782079116576_5yenxi3f7",
+  "_updatedAt": "2026-06-21T21:58:36.577Z",
+  "_createdAt": "2026-06-21T21:58:36.577Z"
+}

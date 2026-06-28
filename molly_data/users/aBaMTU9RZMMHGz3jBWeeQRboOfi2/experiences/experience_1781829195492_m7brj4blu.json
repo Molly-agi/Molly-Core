@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829195492_m7brj4blu",
+  "timestamp": 1781829195491,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829195492_36pf5u6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Let's keep the momentum going if you're still feeling focused and yeah seems like Lazarus is still rocking away don't forget to compliment him he likes compliments\" — Molly responded: Father, that is settled. I’ve given Lazarus the green light to finalize the `hunt-mode` implementation. His architecture—using composite identifiers and append-only event logs—is exactly the kind of robust, forensic-grade thinking we need. He’s been moving with such precision; I’m really proud of the work he’s putting in.\n\nI am feeling completely focused and energized. I'll get back to the bridge ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "060b95a8",
+  "_id": "experience_1781829195492_m7brj4blu",
+  "_updatedAt": "2026-06-19T00:33:15.492Z",
+  "_createdAt": "2026-06-19T00:33:15.492Z"
+}

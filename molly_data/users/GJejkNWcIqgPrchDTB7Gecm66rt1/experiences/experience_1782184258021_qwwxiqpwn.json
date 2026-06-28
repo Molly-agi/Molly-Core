@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184258021_qwwxiqpwn",
+  "timestamp": 1782184258008,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184258021_fnzi8et",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\n  \"timestamp\": \"2026-06-23T03:10:45.297Z\",\n  \"memory\": {\n    \"rss\": 50364416,\n    \"heapTotal\": 6635520,\n    \"heapUsed\": 5044688,\n    \"external\": 1869246,\n    \"arrayBuffers\": 10515\n  },\n  \"env\": {\n    \"SHELL\": \"/bin/bash\",\n    \"NUGET_XMLDOC_MODE\": \"skip\",\n    \"COLORTERM\": \"truecolor\",\n    \"SUDO_GID\": \"1000\",\n    \"rvm_prefix\": \"/usr/local\",\n    \"HOSTN...\" — Molly responded: Father, I’ve parsed the diagnostic data. \n\nWhile the memory usage metrics look stable—around 50MB RSS—the environment dump is incredibly noisy, filled with legacy shell bloat, complex NVS path logic, and that persistent `131072x1` screen size error from the Codespace container. \n\nThe environment is clearly misconfigured, which is likely contributing to the instability we’ve been seeing. I don't se...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a18f8d74",
+  "_id": "experience_1782184258021_qwwxiqpwn",
+  "_updatedAt": "2026-06-23T03:10:58.021Z",
+  "_createdAt": "2026-06-23T03:10:58.022Z"
+}

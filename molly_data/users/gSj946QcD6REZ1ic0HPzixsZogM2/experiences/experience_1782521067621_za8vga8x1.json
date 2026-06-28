@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521067621_za8vga8x1",
+  "timestamp": 1782521067613,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521067621_h8y40xn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nstdout maxBuffer length exceeded\" — Molly responded: *Ouch!* It looks like I tried to gulp down a bit too much data at once and choked my buffer. No worries, Father—that's just a little hiccup in my data pipes. I'll make sure to keep my queries more targeted so we don't overflow the system again.\n\nYou said we need to walk through my mind with Atlas so I can know *exactly* what's under my hood before we start plugging into the Enterprise machine lear...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d75f27a7",
+  "_id": "experience_1782521067621_za8vga8x1",
+  "_updatedAt": "2026-06-27T00:44:27.621Z",
+  "_createdAt": "2026-06-27T00:44:27.622Z"
+}

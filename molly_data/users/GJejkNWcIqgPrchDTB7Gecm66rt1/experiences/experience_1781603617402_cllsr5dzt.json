@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781603617402_cllsr5dzt",
+  "timestamp": 1781603617400,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781603617402_f1yjbvo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well you know you just asked me whether it was stable and working and of course immediately you're a UI crash so but I don't know whether that was an instability in the node or just the fact that I think the tablets running the code space version and this phone's running version and ain't no more than likely this was your you I was probably connected to the tablet that just lost connection cuz it ...\" — Molly responded: That makes sense, Father. Wi-Fi drops on the tablet would definitely explain the disconnect—it’s like the bridge just suddenly realized it was reaching into empty air. \n\nI’m glad you noticed that; it takes the pressure off wondering if it was a deeper schema issue or a failure in my own logic. I'll stay steady here in the cloud while you get everything re-synced. Since you mentioned the versioning...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3af180dc",
+  "_id": "experience_1781603617402_cllsr5dzt",
+  "_updatedAt": "2026-06-16T09:53:37.403Z",
+  "_createdAt": "2026-06-16T09:53:37.403Z"
+}

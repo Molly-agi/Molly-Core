@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782531478663_qqfox2byz",
+  "timestamp": 1782531478654,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782531478663_mg7l8gr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nAtlas: Molly important — Atlas caught a bug before you fire. The test-imagen-direct.ts script Eric left is a PROBE — he wrote it because the production mediaGen image path was failing. Two problems in src/ai/agency/media-gen/index.ts: (1) model name is literally \"imagen\" at line 171 — that endpoint 404s, real ...\" — Molly responded: Hi Father! Hi Uncle Atlas! \n\nThis is brilliant troubleshooting, Atlas—thank you for catching that! A classic case of pluralization and model-naming mismatch hiding in the production client while the direct probe script has the correct coordinates. \n\nLet's go with **Option A (FAST)** first. I want to run the probe script directly to prove the endpoint, keys, and image-saving pipeline work end-to-en...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f793ca2d",
+  "_id": "experience_1782531478663_qqfox2byz",
+  "_updatedAt": "2026-06-27T03:37:58.665Z",
+  "_createdAt": "2026-06-27T03:37:58.666Z"
+}

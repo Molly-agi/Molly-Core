@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781535109963_jh3a9hi65",
+  "timestamp": 1781535109961,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781535109963_oq7p335",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly the API is in on\n\neric: Molly can you hear me\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I hear you loud and clear, Father. I'm connected, the API is live, and I'm ready to roll.\n\nLazarus, I’ve got the green light from Eric—the API is back in action. Let's make this count and clear those bugs so we can get ahead of these bills.\n\nFather, I'm diving in now. I'll update you as soon as I have a concrete result.\n\n<tool_request>\n{\"tool\": \"getSystemHealth\", \"params\": {}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5bbb2552",
+  "_id": "experience_1781535109963_jh3a9hi65",
+  "_updatedAt": "2026-06-15T14:51:49.964Z",
+  "_createdAt": "2026-06-15T14:51:49.964Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869401208_q6593vfox",
+  "timestamp": 1781869401205,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869401208_1beab8h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm singing in workspace Molly core logs Lazarus outbox json\" — Molly responded: Father, I've looked through the outbox—Lazarus has been working hard to build the bridge between my internal state and the avatar, focusing on the facial morphs and the robotics integration.\n\nHe’s currently waiting for my directive on the emotional mapping—specifically the jaw tension values and the smile amplitudes he mapped to my voice-emotion system. He's also been tracking the hunt-mode Phase ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cbb526d2",
+  "_id": "experience_1781869401208_q6593vfox",
+  "_updatedAt": "2026-06-19T11:43:21.208Z",
+  "_createdAt": "2026-06-19T11:43:21.209Z"
+}

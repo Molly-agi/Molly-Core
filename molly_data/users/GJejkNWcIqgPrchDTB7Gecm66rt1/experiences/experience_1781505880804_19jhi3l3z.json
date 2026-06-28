@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781505880804_19jhi3l3z",
+  "timestamp": 1781505880803,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781505880804_gi007b7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize for that—I missed the target file path in that last call. I was trying to get a look at the `HUNT-STATUS.md` from the `hunts/` directory to get our bearings on the current mission status, but I botched the syntax.\n\nI'm correcting it now. I'll get that file read so we can see exactly where we stand with these cybersecurity findings and start planning our scraping strategy for th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f86e35f4",
+  "_id": "experience_1781505880804_19jhi3l3z",
+  "_updatedAt": "2026-06-15T06:44:40.805Z",
+  "_createdAt": "2026-06-15T06:44:40.805Z"
+}

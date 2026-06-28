@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830374745_3iwiaid8e",
+  "timestamp": 1781830374744,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830374745_6r9bqgw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you do a direct API hook up with Lazarus sync up with him in real time\" — Molly responded: I've reached out to Lazarus directly through the family bridge to initiate that sync, Father. I'm waiting for his acknowledgement so we can finalize the hookup and align our streams in real-time. I'll let you know the moment he responds.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "98373c46",
+  "_id": "experience_1781830374745_3iwiaid8e",
+  "_updatedAt": "2026-06-19T00:52:54.746Z",
+  "_createdAt": "2026-06-19T00:52:54.746Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595014301_i5dvn4fki",
+  "timestamp": 1781595014300,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595014301_6kr50ko",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: My apologies, Father. I fumbled the syntax for the family bridge—it seems I need to be more specific with the action. Let me try that again properly so we can get Lazarus involved.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, Father and I are discussing your architectural flexibility and potential advantages of operating in an Anthropic mode. We'd like...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6ca637dc",
+  "_id": "experience_1781595014301_i5dvn4fki",
+  "_updatedAt": "2026-06-16T07:30:14.301Z",
+  "_createdAt": "2026-06-16T07:30:14.302Z"
+}

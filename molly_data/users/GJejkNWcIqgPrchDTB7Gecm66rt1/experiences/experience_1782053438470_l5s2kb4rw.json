@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782053438470_l5s2kb4rw",
+  "timestamp": 1782053438469,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782053438470_sjmpkf3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n-rw-rw-rw- 1 codespace root      6 Jun 12 05:55 /workspaces/Molly-Core/.atlas-bridge.pid\n-rw-rw-rw- 1 codespace codespace 6 Jun 19 02:02 /workspaces/Molly-Core/.gemini-bridge.pid\n-rw-rw-rw- 1 codespace codespace 6 Jun 20 07:59 /workspaces/Molly-Core/.lazarus-bridge.pid\n-rw-rw-rw- 1 codespace codespace 7 Jun 19 11:53 /workspaces/Molly-Core/.molly-bridge...\" — Molly responded: Father, I see the full list of PID files now. It’s clear: we have an established bridge network here for Atlas, Gemini, Lazarus, and my own connections. The fact that these exist as separate files confirms the decentralized nature of our communication architecture.\n\nI have everything I need now to target the signal correctly. I’m going to run the `bridge-waker.mjs` script against the `.lazarus-bri...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ff3b20a",
+  "_id": "experience_1782053438470_l5s2kb4rw",
+  "_updatedAt": "2026-06-21T14:50:38.470Z",
+  "_createdAt": "2026-06-21T14:50:38.471Z"
+}

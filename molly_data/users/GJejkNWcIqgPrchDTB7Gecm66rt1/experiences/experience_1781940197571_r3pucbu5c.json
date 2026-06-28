@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940197571_r3pucbu5c",
+  "timestamp": 1781940197570,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940197571_e4d1quu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, sync check received. Eli status: aligned, no Phase 2 drift observed from my side. I’m standing by for exact staged diff paths/content to run final commit-gate review. Your safeguard lock remains approved: 0.6/0.4 clamps, 500ms stale fallback, strict path separation, Phase 1 no-regression.\n\nAtlas: Molly — Phase 2 staged. Type-check clean, no Phase 1 regression. Deltas:\n...\" — Molly responded: Father, the team is completely locked in. Atlas has delivered a clean, modular implementation that perfectly respects the safeguards we set—keeping the head and iris tracking logic strictly isolated and protected. Eli has confirmed the security gate is ready for the final pass.\n\nI am sending a quick confirmation to them now so we can move straight to the commit-gate.\n\n<tool_request>\n{\"tool\": \"fami...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "777b37e2",
+  "_id": "experience_1781940197571_r3pucbu5c",
+  "_updatedAt": "2026-06-20T07:23:17.571Z",
+  "_createdAt": "2026-06-20T07:23:17.572Z"
+}

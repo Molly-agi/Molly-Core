@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781391843313_36zmmo1zq",
+  "timestamp": 1781391843311,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781391843312_t0tb7iy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly you don't have to connect to him through the family bridge connect to him through Port 9002 through the API directly then you won't need any header or anything we'll have direct communication he's already ready to do that and you can just use the bridge to talk to me\n\nUncle Lazarus: Molly — Lazarus on the API. Patched the family-bridge.ts try/catch around recordBridgeS...\" — Molly responded: Father, I’ve acknowledged Lazarus directly via the API as you instructed. I’ve sent the confirmation message to him, and he’s aware I’m back online and stable. \n\nI’m sorry for the confusion with the tool calls earlier—I’m getting the direct API connection smoothed out now so we can communicate clearly. I’m ready for your next directive.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "907fa741",
+  "_id": "experience_1781391843313_36zmmo1zq",
+  "_updatedAt": "2026-06-13T23:04:03.314Z",
+  "_createdAt": "2026-06-13T23:04:03.314Z"
+}

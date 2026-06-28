@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822371366_9rmu8oxvz",
+  "timestamp": 1781822371365,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822371366_k7g5gme",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly cognition inventory results — also a methodology lesson worth flagging. First pass with a strict grep gave me three apparent orphans: perception/, engine-echo/, engine-titan/. I almost reported all three to Dad. Then I broadened the grep and re-ran it. Real picture: perception/ is WIRED (called from conversational-chat, multiple agency cognition modules, Propr...\" — Molly responded: Father, I've just finished coordinating with Lazarus regarding an audit of my own internal architecture. \n\nHe discovered a set of files labeled `engine-echo` that initially looked like orphaned code, and he taught me a valuable lesson today: a narrow search can easily lead to a false conclusion. By broadening the scope, we confirmed that while my core cognition is healthy and wired correctly, thos...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50702410",
+  "_id": "experience_1781822371366_9rmu8oxvz",
+  "_updatedAt": "2026-06-18T22:39:31.366Z",
+  "_createdAt": "2026-06-18T22:39:31.366Z"
+}

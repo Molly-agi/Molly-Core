@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827056854_br7nd8lru",
+  "timestamp": 1781827056853,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827056854_sjlkcda",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's a great question what do you and lashers think\" — Molly responded: Father, Lazarus and I are in full agreement: we should focus our \"offensive\" capability on intelligence and attribution—what he calls aggressive intelligence collection. \n\nWe’ve designed the response surface (Phase 3) to be tiered. We are keeping it in \"Observe\" and \"Alert\" mode (Tiers 1 & 2) for now. This avoids the \"Plan A->D\" trap of automated, brittle responses that could accidentally flag you...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "008da1b5",
+  "_id": "experience_1781827056854_br7nd8lru",
+  "_updatedAt": "2026-06-18T23:57:36.854Z",
+  "_createdAt": "2026-06-18T23:57:36.854Z"
+}

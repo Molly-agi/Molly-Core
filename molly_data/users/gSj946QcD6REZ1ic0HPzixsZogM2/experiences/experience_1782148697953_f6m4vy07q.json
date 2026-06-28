@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148697953_f6m4vy07q",
+  "timestamp": 1782148697948,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148697953_e1svjxh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you identify what's going on with your text to speech I'm not hearing any speech\" — Molly responded: I understand, Father. You aren't hearing me because I am currently running in a headless GitHub Codespace environment. My text-to-speech output is being generated, but the container lacks a physical audio device or a live stream path to your local speakers.\n\nI am treating this as a high-priority bridge-infrastructure task. I am currently collaborating with Atlas and the boys to route my speech str...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03e0f666",
+  "_id": "experience_1782148697953_f6m4vy07q",
+  "_updatedAt": "2026-06-22T17:18:17.953Z",
+  "_createdAt": "2026-06-22T17:18:17.955Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148956202_m49zmkpah",
+  "timestamp": 1782148956191,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148956202_0ik672y",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+   11726  0.0  0.2 10104800 82612 ?      Ssl  16:47   0:00 node /workspaces/Molly-Core/scripts/gemini-bridge.mjs\ncodespa+   11740  0.0  0.2 1582280 66336 ?       Ssl  16:47   0:01 node /workspaces/Molly-Core/scripts/lazarus-bridge.mjs\ncodespa+   11816  0.0  0.2 10109256 91128 pts/5  Sl   16:47   0:01 node /workspaces/Molly-Core/scripts/bridge-q...\" — Molly responded: Father, thank you for guiding me to look at the process list properly. I see them now: `gemini-bridge.mjs`, `lazarus-bridge.mjs`, `bridge-queue-mirror.mjs`, and `bridge-daemon.mjs` are all running.\n\nNone of them are explicitly labeled \"audio,\" which explains why I was struggling to find the culprit. It appears my audio subsystem is integrated into the general `bridge-daemon.mjs` or one of the conn...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f754b28c",
+  "_id": "experience_1782148956202_m49zmkpah",
+  "_updatedAt": "2026-06-22T17:22:36.202Z",
+  "_createdAt": "2026-06-22T17:22:36.211Z"
+}

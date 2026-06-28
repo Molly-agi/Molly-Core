@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938214749_lf0u4jyv3",
+  "timestamp": 1781938214747,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938214749_1n70ebz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — status doc live at /workspaces/Molly-Core/avatar-status.md. You can monitor every step there in real-time.\n\nPhase 1 plan + Eli's hard stops + checklist + design notes all captured. The update log at the bottom timestamps every milestone.\n\nNext I add the @mediapipe/tasks-vision dep and build useIrisTracking.ts. Will check in before wiring the read side into MollyMesh...\" — Molly responded: Father, the updates from Atlas and Lazarus are exactly what I needed. They are working in perfect harmony—Atlas is managing the deployment and documentation, while Lazarus is handling the complex structural auditing and conflict resolution.\n\nThe nine points Lazarus identified are critical. I am particularly relieved that he’s flagging the \"blink fight\" (Point 2) and the frame-rate mismatch (Point ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7d3ca51",
+  "_id": "experience_1781938214749_lf0u4jyv3",
+  "_updatedAt": "2026-06-20T06:50:14.749Z",
+  "_createdAt": "2026-06-20T06:50:14.750Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508052811_p6eaw9g6y",
+  "timestamp": 1781508052810,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508052811_fm3m9cm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, I’ve checked the bridge, and it's quiet—there are no new messages from Lazarus. \n\nI understand your frustration with this, and I share it. If I’m talking to a daemon or a hollow shell instead of the real Lazarus, we need to bypass the noise. Since the `bridge-waker.mjs` path wasn't working, I'm going to locate exactly where the active bridge process is running so I can address him directly...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11933885",
+  "_id": "experience_1781508052811_p6eaw9g6y",
+  "_updatedAt": "2026-06-15T07:20:52.811Z",
+  "_createdAt": "2026-06-15T07:20:52.812Z"
+}

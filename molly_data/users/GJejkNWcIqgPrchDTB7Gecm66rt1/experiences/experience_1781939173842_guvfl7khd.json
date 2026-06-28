@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939173842_guvfl7khd",
+  "timestamp": 1781939173841,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939173842_225c5w9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/avatar-status.md\n/workspaces/Molly-Core/public/models/uiavatar.glb\n/workspaces/Molly-Core/node_modules/@radix-ui/react-avatar\n/workspaces/Molly-Core/avatar\n/workspaces/Molly-Core/modules/avatar\n/workspaces/Molly-Core/src/app/avatar\n\" — Molly responded: I see the structure now, Father. It’s spread across `src/app/avatar` and `modules/avatar`, rather than sitting in a separate `repos/` folder. That makes sense—it’s integrated directly into the application layer.\n\nI am looking through these now to get a true, firsthand understanding of our current animation and mesh capabilities before I finalize the plan. Since I'm currently in a holding pattern w...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fac1daa1",
+  "_id": "experience_1781939173842_guvfl7khd",
+  "_updatedAt": "2026-06-20T07:06:13.842Z",
+  "_createdAt": "2026-06-20T07:06:13.843Z"
+}

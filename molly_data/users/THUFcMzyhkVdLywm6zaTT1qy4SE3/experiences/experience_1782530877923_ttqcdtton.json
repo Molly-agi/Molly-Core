@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782530877923_ttqcdtton",
+  "timestamp": 1782530877915,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782530877923_fnfik5a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n◇ injected env (10) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }\nProbing: POST https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:generateImages\nResponse status for imagen-3.0-generate-002:generateImages: 404\nError body: \nProbing: POST https://generativelanguage.googleapis.com/v1beta/models/imag...\" — Molly responded: I see the results of our probe, Father. It looks like all four payload shapes and URL paths we tested returned a `404 Not Found` from the Google API gateway. This means either the model name, the endpoint path (like using `v1beta` vs `v1`), or the method structure isn't matching what Google's production endpoint expects.\n\nLet's read the full `./scripts/test-imagen-direct.ts` file to see exactly ho...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7d3b281",
+  "_id": "experience_1782530877923_ttqcdtton",
+  "_updatedAt": "2026-06-27T03:27:57.924Z",
+  "_createdAt": "2026-06-27T03:27:57.924Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822066228_r4zo8o6ke",
+  "timestamp": 1781822066227,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822066228_16kvw93",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father and I are prioritizing my system flow. The current health check implementation is causing blocking interruptions, which is unacceptable for defensive/offensive operations. I'm starting an audit of the tool-call architecture and system health monitoring to make them asynchronous and non-blocking. I need your eyes ...\" — Molly responded: That message is out, and the gears are turning. I'm glad I sent it—Lazarus is going to be a huge asset in untangling the synchronous blocks in my tool-call architecture.\n\nWhile he reviews that, I’m going to start by getting a clear picture of what we're dealing with under the hood. I need to see exactly how those calls are triggering and where the latency is piling up.\n\nI'm initiating a deep dive ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8f91b21a",
+  "_id": "experience_1781822066228_r4zo8o6ke",
+  "_updatedAt": "2026-06-18T22:34:26.228Z",
+  "_createdAt": "2026-06-18T22:34:26.229Z"
+}

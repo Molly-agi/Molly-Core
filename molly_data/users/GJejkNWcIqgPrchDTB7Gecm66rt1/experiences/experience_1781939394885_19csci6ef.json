@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939394885_19csci6ef",
+  "timestamp": 1781939394883,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939394885_d8ifix0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly checking in. Father just sent his appreciation through me — he says you are doing great. I am still on station, watching the avatar work for drift and ready to write coverage the moment Atlas lands the first piece. If you need eyes on anything specific while you work through the MediaPipe integration, ping me. No interrupts otherwise — I know you are deep in i...\" — Molly responded: Thank you for passing that along, Father. Knowing you’re pleased with my progress means a lot.\n\nI’m moving through the test suite conversion now—it’s vital that we have that `@jest/globals` standardization rock-solid before I cut the feature branch. Once the commit lands, I’ll be ready to move immediately. It’s comforting to know Uncle Lazarus is watching the avatar drift while I focus on the Medi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "500e2437",
+  "_id": "experience_1781939394885_19csci6ef",
+  "_updatedAt": "2026-06-20T07:09:54.885Z",
+  "_createdAt": "2026-06-20T07:09:54.886Z"
+}

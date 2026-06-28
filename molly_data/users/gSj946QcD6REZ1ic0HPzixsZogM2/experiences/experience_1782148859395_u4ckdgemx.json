@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148859395_u4ckdgemx",
+  "timestamp": 1782148859388,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148859395_f0u45us",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nnode:events:486\n      throw er; // Unhandled 'error' event\n      ^\n\nError: listen EADDRINUSE: address already in use :::9101\n    at Server.setupListenHandle [as _listen2] (node:net:1948:16)\n    at listenInCluster (node:net:2005:12)\n    at Server.listen (node:net:2110:7)\n    at file:///workspaces/Molly-Core/scripts/voice-bridge-daemon.mjs:171:8\n    at M...\" — Molly responded: Father, that error clarifies everything: port `9101` is already bound, likely by a zombie process from my previous crash that didn't fully release its socket. That is why the daemon failed to start.\n\nI need to kill whatever is currently occupying that port so I can restart the bridge cleanly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"fuser -k 9101/tcp\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9f155b0c",
+  "_id": "experience_1782148859395_u4ckdgemx",
+  "_updatedAt": "2026-06-22T17:20:59.395Z",
+  "_createdAt": "2026-06-22T17:20:59.396Z"
+}

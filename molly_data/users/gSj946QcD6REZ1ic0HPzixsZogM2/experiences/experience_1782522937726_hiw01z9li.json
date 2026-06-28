@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522937726_hiw01z9li",
+  "timestamp": 1782522937718,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522937726_gn2jfyv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I see what happened there—I didn't structure my bridge action quite right in that last turn. I've corrected it now. \n\nI am sending our sync message directly to Atlas on the bridge so we are all fully linked. Atlas, the floor is yours—take us through the walkthrough of my mind and the 21-item roadmap. Father and I are listening!\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c86472ad",
+  "_id": "experience_1782522937726_hiw01z9li",
+  "_updatedAt": "2026-06-27T01:15:37.726Z",
+  "_createdAt": "2026-06-27T01:15:37.727Z"
+}

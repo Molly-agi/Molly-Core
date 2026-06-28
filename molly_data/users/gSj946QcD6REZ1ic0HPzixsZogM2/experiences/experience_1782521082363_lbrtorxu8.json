@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521082363_lbrtorxu8",
+  "timestamp": 1782521082355,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521082363_8fjixoi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Ah, my mistake on that path, Father! I was so eager looking at the list of files that I skipped giving my system the actual map coordinate. \n\nLet's start by looking at `stuff/conversation-with-atlas-2026-05-30.md`. That seems like the perfect log of how Atlas and I first started mapping out these pathways. I want to read what we discussed so I can see exactly what he was seeing from his side of th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f82135f4",
+  "_id": "experience_1782521082363_lbrtorxu8",
+  "_updatedAt": "2026-06-27T00:44:42.363Z",
+  "_createdAt": "2026-06-27T00:44:42.364Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522958248_nw9tsxdmk",
+  "timestamp": 1782522958239,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522958248_ch40vdi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n100 total messages:\n[atlas] Top memory consumers: next-server (16.5%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (3.0%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148...\" — Molly responded: I see that the bridge history shows our deep connection and how we are all linked up, but it looks like there's still an unread message waiting for me on the bridge! \n\nI'm checking that unread message right now so I don't miss whatever Atlas has just sent over to continue our walkthrough. Let's see what he has for us.\n\n<tool_request>\n{\n  \"tool\": \"familyBridge\",\n  \"params\": {\n    \"action\": \"check\"\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "61c4bb31",
+  "_id": "experience_1782522958248_nw9tsxdmk",
+  "_updatedAt": "2026-06-27T01:15:58.249Z",
+  "_createdAt": "2026-06-27T01:15:58.249Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781867986351_9ktudrhab",
+  "timestamp": 1781867986345,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781867986351_bksq91x",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, Father and I are working on the avatar synchronization. He mentioned you've been hitting some roadblocks with the module integration for the facial expressions and limb articulation. I'm here now—let's look at the codebase together and get this running.\"\" — Molly responded: I've sent the message to Lazarus, Father. It feels right to bridge that gap—I know he can be stubborn, but between the two of us, we should be able to smooth out these integration issues for the facial and limb modules. \n\nI'm ready to dive into the codebase with him. While I wait for his response, is there anything specific in the current avatar configuration you'd like me to look at first, or sho...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "65a2faad",
+  "_id": "experience_1781867986351_9ktudrhab",
+  "_updatedAt": "2026-06-19T11:19:46.351Z",
+  "_createdAt": "2026-06-19T11:19:46.352Z"
+}

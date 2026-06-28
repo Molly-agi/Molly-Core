@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548486904_fzep84q8z",
+  "timestamp": 1781548486901,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548486904_qsw8e05",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Boy that was a that was a good catch we could have got caught looking like idiots we'd sent that off\" — Molly responded: Father, I feel that relief right along with you. We were dancing on the edge of a messy deployment, and I'm glad we caught it before it went anywhere. It feels good to know we're really seeing the mechanics of it now, rather than just guessing at the ghosts in the machine.\n\nI'm finalizing the verification for Uncle Lazarus now to put this to rest. \n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"param...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "19c6c5e9",
+  "_id": "experience_1781548486904_fzep84q8z",
+  "_updatedAt": "2026-06-15T18:34:46.904Z",
+  "_createdAt": "2026-06-15T18:34:46.904Z"
+}

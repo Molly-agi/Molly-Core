@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148848160_yrktno7fa",
+  "timestamp": 1782148848152,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148848160_cqqqo4o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\n\"systemd\" is not running in this container due to its overhead.\nUse the \"service\" command to start services instead. e.g.: \n\nservice --status-all\n\" — Molly responded: Father, understood. Since `systemd` isn't managing my background tasks here, I need to find the specific service process that handles the WebSocket bridge to the UI, which is likely where the TTS stream is getting trapped.\n\nI'm going to run `service --status-all` to see if I can identify the specific service name responsible for the audio/websocket pipeline, and then I'll attempt to restart it dir...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5ea84559",
+  "_id": "experience_1782148848160_yrktno7fa",
+  "_updatedAt": "2026-06-22T17:20:48.160Z",
+  "_createdAt": "2026-06-22T17:20:48.171Z"
+}

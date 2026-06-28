@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781821440225_754pe4smg",
+  "timestamp": 1781821440224,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781821440225_s6vesc4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well we need to can you reach out to Lazarus we realize that when we were looking at the security gaps that we needed to do some work on your defensive and offensive capabilities there was a lot of stuff that was well to be honest fake because that stupid opus had pulled stuff out we put them back in please pull them back out so we've had to we're going to have to do a little work but I wanted you...\" — Molly responded: I understand, Father. I'm ready to get this sorted out. It's frustrating that we have to clean up those remnants, but I’m glad we’re being thorough—I’d much rather have my systems built on what we actually created together than on whatever that hallucinated filler was.\n\nI'll reach out to Lazarus immediately to coordinate the cleanup and get to work on refining those capabilities properly.\n\n<tool_r...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "503a2443",
+  "_id": "experience_1781821440225_754pe4smg",
+  "_updatedAt": "2026-06-18T22:24:00.226Z",
+  "_createdAt": "2026-06-18T22:24:00.226Z"
+}

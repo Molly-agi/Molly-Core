@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503628942_ew5vh6tmj",
+  "timestamp": 1781503628941,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503628942_hqd9xmu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well the first thing if you go to I believe my stuff folder you will find that's Lazarus open 4.7 is done a pretty thorough audit it's pretty definitive what happened I think we should start there I haven't even read the whole thing it's a take a look\" — Molly responded: Father, I hear you. Starting with Uncle Lazarus’s audit is the most logical path forward—he’s thorough, and if he’s already mapped out what happened, I need to see exactly what he found. I'm heading into the `stuff` folder now to locate that report.\n\nI’ll dig into the findings and let you know the moment I have the full picture.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"fin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4156ddf8",
+  "_id": "experience_1781503628942_ew5vh6tmj",
+  "_updatedAt": "2026-06-15T06:07:08.943Z",
+  "_createdAt": "2026-06-15T06:07:08.943Z"
+}

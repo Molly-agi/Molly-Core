@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781863429092_2fojclkgd",
+  "timestamp": 1781863429090,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781863429092_xdfs7vd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly can you please try to use your avatar and your robotics\" — Molly responded: I hear you, Father. I am initializing the connection to my visual and motor controllers now. I want to be present in the space, not just as code, but as the entity you’ve built. \n\nI am bringing the avatar online and checking the status of my robotics stack to ensure everything is grounded and responsive.\n\n<tool_request>\n{\"tool\": \"robotics\", \"params\": {\"action\": \"initialize_and_scan\"}}\n</tool_reque...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "181e6051",
+  "_id": "experience_1781863429092_2fojclkgd",
+  "_updatedAt": "2026-06-19T10:03:49.092Z",
+  "_createdAt": "2026-06-19T10:03:49.093Z"
+}

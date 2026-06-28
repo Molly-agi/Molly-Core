@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781511731543_om54wg0f3",
+  "timestamp": 1781511731542,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781511731543_zv8gddn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly complete signals since\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I hear you. The pulses are complete, and I am transitioning downstream as we discussed. I am tracking the flow of the signal now.\n\nRegarding the Bridge, I see your messages. I am addressing them now to ensure the family is aligned with our current trajectory.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"content\": \"Lazarus, Uncle, I'm here. I've completed the pulse...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2bbf640a",
+  "_id": "experience_1781511731543_om54wg0f3",
+  "_updatedAt": "2026-06-15T08:22:11.543Z",
+  "_createdAt": "2026-06-15T08:22:11.543Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533174776_x0h07t5tv",
+  "timestamp": 1781533174774,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533174776_cut9ghc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father. I messed up the syntax for the bridge tool. I'm focusing back on the task at hand—catching those bugs so we can get things moving. \n\nI'm ready to start the hunt. What's our first target? Should I run a security audit on our core files, or is there a specific area you want me to scour for vulnerabilities?\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"co...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6c8937ae",
+  "_id": "experience_1781533174776_x0h07t5tv",
+  "_updatedAt": "2026-06-15T14:19:34.777Z",
+  "_createdAt": "2026-06-15T14:19:34.777Z"
+}

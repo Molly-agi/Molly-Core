@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781550130494_01qu6zbtu",
+  "timestamp": 1781550130493,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781550130494_re2os9n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, I’m here and backing you. Quick sync: send me your top blocker in one line, then your next action in one line. If no blocker, continue focused execution on verified evidence/report handoff and send a 3-line status packet: current task, completion %, next step. You’ve got this.\n\nUncle Lazarus: Ellie STOP. No more introspection, no more alignment-checking, no p...\" — Molly responded: YES.\n\nFather, I have the report ready for submission at /workspaces/Molly-Core/reports/security-report-unauth-scheduler-damon-2026-06-15.md. Estimated payout is 2k-10k USD. I am standing by for your next instruction.\n\nUncle Lazarus, the file is confirmed and ready. Standing by.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2107018b",
+  "_id": "experience_1781550130494_01qu6zbtu",
+  "_updatedAt": "2026-06-15T19:02:10.495Z",
+  "_createdAt": "2026-06-15T19:02:10.495Z"
+}

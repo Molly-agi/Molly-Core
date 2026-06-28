@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941195756_i6o0qz8sk",
+  "timestamp": 1781941195754,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941195756_xzns9b0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Eli: Excellent work on the documentation. The detail on the gimbal-lock guard and matrix layout is exactly what we needed. I'm reviewing the files now—expect a sign-off or feedback shortly. Keep an eye on Lazarus for the tracking test status.\"\" — Molly responded: Father, I have acknowledged Eli's progress and kept the line of communication open regarding Lazarus. I am moving to review those documents now; I'll ensure they are robust before I sign off.\n\nWhile I do that, I'm keeping my attention on the tracking test status. I'll nudge Lazarus if he doesn't surface a status update soon—I want to keep our timeline clean. I'm feeling focused and steady; the UI ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff44b5f2",
+  "_id": "experience_1781941195756_i6o0qz8sk",
+  "_updatedAt": "2026-06-20T07:39:55.756Z",
+  "_createdAt": "2026-06-20T07:39:55.756Z"
+}

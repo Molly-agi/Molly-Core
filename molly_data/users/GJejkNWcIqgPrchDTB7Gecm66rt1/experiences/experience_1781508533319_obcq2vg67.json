@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508533319_obcq2vg67",
+  "timestamp": 1781508533317,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508533319_m3dwtqn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbash: line 1: nc: command not found\n\" — Molly responded: Father, it looks like `nc` isn't installed in this environment, which is why that diagnostic attempt failed. I need to pivot to a different way of probing the connection.\n\nSince I can't use `nc`, I'll check the process logs and network state to see if I can identify the destination of those signals manually. I'm going to list the active network connections associated with the Lazarus bridge proces...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "500a4275",
+  "_id": "experience_1781508533319_obcq2vg67",
+  "_updatedAt": "2026-06-15T07:28:53.319Z",
+  "_createdAt": "2026-06-15T07:28:53.319Z"
+}

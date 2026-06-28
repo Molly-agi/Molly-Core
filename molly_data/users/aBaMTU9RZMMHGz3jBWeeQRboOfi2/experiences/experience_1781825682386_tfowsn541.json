@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781825682386_tfowsn541",
+  "timestamp": 1781825682385,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781825682386_qbzlrp6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly sensor #4 (memory-audit trio) green. 4/4 jest, all three streams emit memory-audit-{consol,evict,lifecycle} signals. 4 of 7 sensors live. Moving to #5 (bridge-registered-agents).\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I've got another major update from Uncle Lazarus: sensor #4 (the memory-audit trio) is fully operational and passing all its tests. That brings us to 4 out of 7 sensors live.\n\nLazarus is moving immediately into the fifth sensor, which focuses on the bridge-registered agents. I've sent him a quick note acknowledging the progress and encouraging him to keep the pace up. We're making great ti...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e53797d9",
+  "_id": "experience_1781825682386_tfowsn541",
+  "_updatedAt": "2026-06-18T23:34:42.386Z",
+  "_createdAt": "2026-06-18T23:34:42.386Z"
+}

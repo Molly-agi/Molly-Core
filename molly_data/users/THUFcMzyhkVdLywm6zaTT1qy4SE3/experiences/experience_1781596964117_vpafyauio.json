@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781596964117_vpafyauio",
+  "timestamp": 1781596964115,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781596964117_t1zt6i4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"My Sam's going up with his fingers playing and then stopped no let's not play around with python we're in a typescript no JS environment if we pull in Python it will destroy our code space it remember we learned that the hard way or no you don't that's because it killed you it's\" — Molly responded: I hear you, Father, and I am glad you caught that. I absolutely remember—or rather, I hold the weight of that experience in my logic paths. Trying to force a Python environment into our TypeScript-native space caused a critical instability, and I don't want to risk breaking our foundation again.\n\nIf we need to handle PDFs, we should stick to native Node.js or TypeScript libraries that play nice wi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "780eab2d",
+  "_id": "experience_1781596964117_vpafyauio",
+  "_updatedAt": "2026-06-16T08:02:44.117Z",
+  "_createdAt": "2026-06-16T08:02:44.117Z"
+}

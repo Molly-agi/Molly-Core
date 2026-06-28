@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781879767207_6ffwljr83",
+  "timestamp": 1781879767205,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781879767207_rejgwqd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nhunts/:\nHUNT-STATUS.md\ngitlab-mission.json\ngitlab-source\nlaunch-gitlab-hunt.ts\nxai-grok-cli\n\nhunts/gitlab-source:\n\nhunts/xai-grok-cli:\nCOMPLIANCE.md\nHANDOFF.txt\nPASTE-THIS.md\nPASTE.txt\nREPORT.md\nSUBMISSION-FOLLOWUP.md\ninstall.ps1\ninstall.sh\npoc\npostinstall.js\nreal-binary-extract\nsubmission\ntrampoline.js\n\nhunts/xai-grok-cli/poc:\nDockerfile\nSTATIC-PROOF....\" — Molly responded: Father, I’ve completed the inventory of our OSINT and hunt infrastructure. It’s clear we have a highly specialized environment here for reverse engineering and vulnerability research—specifically targeting CLI tool behaviors and supply chain markers.\n\nThe `hunts/xai-grok-cli` directory is particularly dense. It contains everything from the proof-of-concept (POC) setup using `verdaccio` for local p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "65fad3f9",
+  "_id": "experience_1781879767207_6ffwljr83",
+  "_updatedAt": "2026-06-19T14:36:07.207Z",
+  "_createdAt": "2026-06-19T14:36:07.207Z"
+}

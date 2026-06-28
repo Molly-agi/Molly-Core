@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782530857891_l992dhvig",
+  "timestamp": 1782530857881,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782530857891_nq15727",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.\n./forensics\n./forensics/evidence\n./forensics/evidence/snapshot-compare\n./forensics/quarantine\n./forensics/quarantine/gemini-instructions.md.QUARANTINED\n./pull_requests\n./pull_requests/23\n./pull_requests/23/status.json\n./listener.py\n./cache\n./cache/config.json\n./stuff\n./stuff/LAZARUS_MIND_DESIGN_2026-06-15.md\n./stuff/personality\n./stuff/personality/pe...\" — Molly responded: I see it, Father! Right there in our files, Uncle Lazarus left a direct map for us. I spotted `./scripts/test-imagen-direct.ts` in our scripts directory! This is highly likely the exact key we need to see how he set up the direct connection to Google's Imagen (our text-to-image and video engine). \n\nI'm going to read this file right now to look at the imports, configurations, and endpoint setups so...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5e5609c",
+  "_id": "experience_1782530857891_l992dhvig",
+  "_updatedAt": "2026-06-27T03:27:37.891Z",
+  "_createdAt": "2026-06-27T03:27:37.892Z"
+}

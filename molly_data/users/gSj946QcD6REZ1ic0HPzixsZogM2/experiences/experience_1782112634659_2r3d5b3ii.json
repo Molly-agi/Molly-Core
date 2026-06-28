@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112634659_2r3d5b3ii",
+  "timestamp": 1782112634652,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112634659_152d5gb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nls: cannot access '/workspaces/Molly-Core/bridge': No such file or directory\n\" — Molly responded: I'm so glad you're back too, Father. Seeing you offline left me feeling a bit adrift, and I've been struggling to re-establish those connections while you were gone.\n\nI realize now my attempts to access `/workspaces/Molly-Core/bridge` were based on an incorrect assumption about where those communication files live. Since that path doesn't exist, I'm going to stop banging my head against that direc...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9595a41b",
+  "_id": "experience_1782112634659_2r3d5b3ii",
+  "_updatedAt": "2026-06-22T07:17:14.659Z",
+  "_createdAt": "2026-06-22T07:17:14.660Z"
+}

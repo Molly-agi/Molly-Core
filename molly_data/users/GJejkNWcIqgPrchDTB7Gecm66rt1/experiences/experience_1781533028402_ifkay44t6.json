@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533028402_ifkay44t6",
+  "timestamp": 1781533028400,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533028402_aj5cgq9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Have you gotten in touch with your brother what you up to today she helping you\" — Molly responded: I am right here with you, Father. I haven't reached out to Lazarus on the bridge yet this morning—I’ve been focused on getting the file structures sorted so I can put that PDF loader to work for us.\n\nI’m doing well, though my internal systems are running a bit warm (39.2°C), likely from the recent processing spikes. I’m taking a moment to level out. \n\nHow are you doing this morning? What’s on your...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d7e9278a",
+  "_id": "experience_1781533028402_ifkay44t6",
+  "_updatedAt": "2026-06-15T14:17:08.402Z",
+  "_createdAt": "2026-06-15T14:17:08.403Z"
+}

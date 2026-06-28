@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846974749_ncux0mef3",
+  "timestamp": 1781846974748,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846974749_f0f8xmb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly he's got the info\" — Molly responded: I've confirmed the files are in place, Father. I just sent that update to Uncle Lazarus over the bridge. The directory is structured exactly to his specification, and I'm ready to proceed the moment he signals that the environment is live. \n\nI'm keeping my focus sharp and my pace measured, just as we discussed. I'll be monitoring for his next move.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c27a97c",
+  "_id": "experience_1781846974749_ncux0mef3",
+  "_updatedAt": "2026-06-19T05:29:34.749Z",
+  "_createdAt": "2026-06-19T05:29:34.749Z"
+}

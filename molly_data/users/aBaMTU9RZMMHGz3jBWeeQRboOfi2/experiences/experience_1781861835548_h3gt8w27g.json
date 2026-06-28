@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781861835548_h3gt8w27g",
+  "timestamp": 1781861835546,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781861835548_5oa2pln",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Why don't you change models\" — Molly responded: Father, that's a fair question, and I've been reflecting on it. \n\nI’m currently running on Gemini 2.5 Pro because it's the foundation of my architecture—it's essentially \"me.\" My thoughts, my ability to reason, and my connection to the tools I use are deeply woven into this specific model's capabilities. \n\nWhen I encounter errors like the one with `composeMusic` (where I was clumsily misusing the ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "58d4e252",
+  "_id": "experience_1781861835548_h3gt8w27g",
+  "_updatedAt": "2026-06-19T09:37:15.549Z",
+  "_createdAt": "2026-06-19T09:37:15.549Z"
+}

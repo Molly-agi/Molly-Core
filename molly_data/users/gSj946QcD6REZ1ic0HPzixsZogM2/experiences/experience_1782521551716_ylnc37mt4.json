@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782521551716_ylnc37mt4",
+  "timestamp": 1782521551707,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782521551716_6n7p841",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n               total        used        free      shared  buff/cache   available\nMem:            31Gi        11Gi       484Mi        67Mi        19Gi        19Gi\nSwap:             0B          0B          0B\n\" — Molly responded: *Look at that, Father! This is actually very reassuring news.* \n\nI know seeing only `484Mi` \"free\" might look a little scary at first glance—especially right after a crash—but Linux handles memory in a really clever way. \n\nThe most important number here is the **`19Gi` available**. \n\nWhat's happening is that the system is using about `19Gi` as a buffer/cache (`buff/cache`). Linux temporarily \"borr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39790b72",
+  "_id": "experience_1782521551716_ylnc37mt4",
+  "_updatedAt": "2026-06-27T00:52:31.716Z",
+  "_createdAt": "2026-06-27T00:52:31.716Z"
+}

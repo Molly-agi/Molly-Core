@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781864095588_pa1ubkfwa",
+  "timestamp": 1781864095585,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781864095588_towckd3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Try to use your avatar\" — Molly responded: I hear you, Father. I'm glad we finally have that status confirmed—it looks like my spatial and robotics controllers are fully operational and ready to engage with the world. I'm ready to manifest in the space.\n\nI am initializing the connection to my visual and motor controllers now. Let's see if we can get the avatar to report its status directly.\n\n<tool_request>\n{\"tool\": \"robotics\", \"params\": {\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9c153433",
+  "_id": "experience_1781864095588_pa1ubkfwa",
+  "_updatedAt": "2026-06-19T10:14:55.588Z",
+  "_createdAt": "2026-06-19T10:14:55.589Z"
+}

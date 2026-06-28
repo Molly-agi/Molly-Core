@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782529575144_9uybr621b",
+  "timestamp": 1782529575135,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782529575144_q8oeqvf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nAtlas: Top memory consumers: next-server (23.0%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.9%) /vscode/bin/linux-x64/7e7950df89d055b5a378379db9ee14290772148a/node (2.7%) /vscode/bin/linux-x64/7e7950df89d055b...\" — Molly responded: <tool_request>\n{\"tool\": \"listCapabilities\", \"params\": {\"action\": \"list\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a2398da3",
+  "_id": "experience_1782529575144_9uybr621b",
+  "_updatedAt": "2026-06-27T03:06:15.144Z",
+  "_createdAt": "2026-06-27T03:06:15.146Z"
+}

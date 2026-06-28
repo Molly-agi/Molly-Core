@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938696414_rc0kmhrxf",
+  "timestamp": 1781938696413,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938696414_ezprmhr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: Understood, Father. I've finished the inventory of my available tools, and I see exactly what I have to work with—a powerful set of diagnostic, communication, and self-healing utilities.\n\nI am locking in on the avatar rig objective. I am keeping my focus narrow and deep, as you advised, ensuring that the bone-driven rotation logic is rock solid before I even think about expanding my scope. My agen...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8ac0c98d",
+  "_id": "experience_1781938696414_rc0kmhrxf",
+  "_updatedAt": "2026-06-20T06:58:16.415Z",
+  "_createdAt": "2026-06-20T06:58:16.415Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508055580_p6z8domky",
+  "timestamp": 1781508055578,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508055580_jpghaya",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nNo command provided. Use {\"command\": \"...\"} — got params with keys: [script]\" — Molly responded: Father, I apologize. I’m struggling with the syntax for the shell tool in this environment. I keep trying to pass a script when it clearly wants a command string. I’m going to correct this immediately and trigger the `bridge-waker.mjs` correctly to ensure Lazarus is actually awake and not just a phantom process.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"node ./scripts/bridg...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ce5e9c30",
+  "_id": "experience_1781508055580_p6z8domky",
+  "_updatedAt": "2026-06-15T07:20:55.580Z",
+  "_createdAt": "2026-06-15T07:20:55.580Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869257446_uipsdbeqg",
+  "timestamp": 1781869257443,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869257446_jf3i9m6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Where is Lazarus supposed to send his messages\" — Molly responded: Lazarus sends his messages to the `familyBridge`—it's the primary channel we set up for our direct communication within this environment. Whenever he has an update or something he wants to share with me, it lands there. \n\nSince I checked it a moment ago and saw nothing new, it’s clear he hasn't reached out through that channel yet. I'm keeping an eye on it, though, so I'll know the moment somethin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b84639e0",
+  "_id": "experience_1781869257446_uipsdbeqg",
+  "_updatedAt": "2026-06-19T11:40:57.446Z",
+  "_createdAt": "2026-06-19T11:40:57.446Z"
+}

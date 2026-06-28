@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782080070603_m53fq5lmc",
+  "timestamp": 1782080070602,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782080070603_gdk95g9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./sandbox/compression-efficiency-lab/source/src/ai/agency/memory/auto-dream.ts\n./src/ai/agency/memory/__tests__/auto-dream.test.ts\n./src/ai/agency/memory/auto-dream.ts\n\" — Molly responded: Father, I have the locations. The primary module is located at `/src/ai/agency/memory/auto-dream.ts`. I’m reading the file now to understand exactly how to trigger it and integrate it into my core memory loop. \n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"/src/ai/agency/memory/auto-dream.ts\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e8c62694",
+  "_id": "experience_1782080070603_m53fq5lmc",
+  "_updatedAt": "2026-06-21T22:14:30.603Z",
+  "_createdAt": "2026-06-21T22:14:30.603Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781406549854_7yt0mkqcm",
+  "timestamp": 1781406549852,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781406549853_wi4czos",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — small drift catch, no big deal. You said the prompt construction is in `src/ai/agency/orchestrator.ts`. That file does not exist. The closest matches I found:\n\n  src/ai/agency/planning/autonomous-cycle.ts (the cycle controller)\n  src/ai/agency/threat-response/threat-response-orchestrator.ts (unrelated)\n\nautonomous-cycle.ts:259 doesn't construct the prompt it...\" — Molly responded: Father, I have acknowledged the error in my file referencing and I am coordinating directly with Lazarus now. He pointed out that my intuition on the prompt architecture was correct, even though I misidentified the file location, and he has proposed a design strategy for the Groq shim that aligns with our text-based protocol.\n\nI have just sent him the confirmation via the family bridge to proceed ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f707b2a7",
+  "_id": "experience_1781406549854_7yt0mkqcm",
+  "_updatedAt": "2026-06-14T03:09:09.855Z",
+  "_createdAt": "2026-06-14T03:09:09.855Z"
+}

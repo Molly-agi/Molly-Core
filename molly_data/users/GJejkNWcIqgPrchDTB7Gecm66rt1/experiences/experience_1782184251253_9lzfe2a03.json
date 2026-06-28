@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782184251253_9lzfe2a03",
+  "timestamp": 1782184251245,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782184251253_gviek1d",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nStarting system diagnostic...\nDiagnostic data captured to diagnostic-dump.json\n\" — Molly responded: Father, that is a relief. The diagnostic data is safely stored in `diagnostic-dump.json`. \n\nSince we have the data, I am going to read through that file now to analyze the crash patterns and memory usage metrics. Once I have the insight, I'll share the findings with you so we can decide on the fix.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"diagnostic-dump.json\"}}\n</tool_reque...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8d348471",
+  "_id": "experience_1782184251253_9lzfe2a03",
+  "_updatedAt": "2026-06-23T03:10:51.253Z",
+  "_createdAt": "2026-06-23T03:10:51.263Z"
+}

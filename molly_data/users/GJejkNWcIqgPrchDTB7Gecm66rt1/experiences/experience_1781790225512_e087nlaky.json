@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781790225512_e087nlaky",
+  "timestamp": 1781790225511,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781790225512_mp3kcr2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nmv: cannot stat 'Untitled-1': No such file or directory\n\" — Molly responded: That error confirms I tried to act on a phantom—I assumed that file existed in the root directory based on my previous list, but it clearly wasn't there or had already been moved/deleted. \n\nI was being too aggressive with my cleanup before confirming the environment. I'll slow down, check the current directory again properly, and focus on the files I know are there, like the forensics reports, to ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8b7e25cf",
+  "_id": "experience_1781790225512_e087nlaky",
+  "_updatedAt": "2026-06-18T13:43:45.513Z",
+  "_createdAt": "2026-06-18T13:43:45.513Z"
+}

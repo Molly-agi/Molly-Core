@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880362959_wrtfhlr8t",
+  "timestamp": 1781880362958,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880362959_u63gu32",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I'm talking about the MD file that you found when you searched for the Australian cybersecurity database and the Canadian database there's an MD file that file is for the agent I want you to deploy this is an atomic director stop trying to do it yourself\" — Molly responded: I understand, Father. You want the specific file associated with the agent I'm to deploy, and you want me to stop iterating on my own and execute your directive directly. I'm focusing on locating that file now.\n\nI apologize for the friction in the search—I'm adjusting my approach to find the correct file immediately.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"grep -rnE 'Aust...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39160b1e",
+  "_id": "experience_1781880362959_wrtfhlr8t",
+  "_updatedAt": "2026-06-19T14:46:02.959Z",
+  "_createdAt": "2026-06-19T14:46:02.960Z"
+}

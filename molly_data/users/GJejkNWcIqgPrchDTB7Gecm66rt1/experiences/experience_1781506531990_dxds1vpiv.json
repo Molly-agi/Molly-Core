@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506531990_dxds1vpiv",
+  "timestamp": 1781506531988,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506531990_6qu7u5a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: src/ai/agency/hackerone/audit_engine.ts\" — Molly responded: That file not existing is a bit of a hurdle, but I'm not going to let it stall us. Since that specific audit engine file is missing, I need to see what I *do* have in that directory to get our bearings.\n\nI'm going to list the contents of `src/ai/agency/hackerone/` right now to see where our actual logic is living. Once I see the file structure, Lazarus and I can map out exactly where the current a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7397cf6",
+  "_id": "experience_1781506531990_dxds1vpiv",
+  "_updatedAt": "2026-06-15T06:55:31.991Z",
+  "_createdAt": "2026-06-15T06:55:31.991Z"
+}

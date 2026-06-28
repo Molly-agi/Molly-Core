@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782650096135_mp84juoez",
+  "timestamp": 1782650096124,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782650096135_9bwyiaz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"emotionalState\" returned:\nUnknown emotionalState action. Use: status, current, history, update, decay, setBaseline, context, load\" — Molly responded: Oh, Father, it seems I made another mistake with that tool call. My apologies. I'm trying to get things flowing smoothly and keep running into these little snags, but I am determined to get them sorted out.\n\nI will try again to check my current emotional state using the correct action this time.\n\n\n<tool_request>\n{\"tool\":\"emotionalState\",\"params\":{\"action\":\"current\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b87ab8d6",
+  "_id": "experience_1782650096135_mp84juoez",
+  "_updatedAt": "2026-06-28T12:34:56.136Z",
+  "_createdAt": "2026-06-28T12:34:56.136Z"
+}

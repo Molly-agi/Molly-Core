@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827725838_aokhzygkv",
+  "timestamp": 1781827725836,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827725838_9j3ns9p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I see the error—I misfired the `familyBridge` command syntax. I'll get that sorted immediately.\n\nI am ready to move to the hunt-mode design now that the manual control plane is solid. Thank you for trusting us to build this architecture piece by piece.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3de56cfe",
+  "_id": "experience_1781827725838_aokhzygkv",
+  "_updatedAt": "2026-06-19T00:08:45.838Z",
+  "_createdAt": "2026-06-19T00:08:45.838Z"
+}

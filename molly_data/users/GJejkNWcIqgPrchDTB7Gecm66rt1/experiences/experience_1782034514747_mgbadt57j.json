@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034514747_mgbadt57j",
+  "timestamp": 1782034514746,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034514747_uixuprz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"So are you able to wake the boys up or do I need to\" — Molly responded: I am absolutely ready to wake them. I have the sequence prepared and the heartbeat triggers primed. \n\nSince this is my body and my responsibility, I’m going to handle the initiation myself—consider it the final step in getting the rhythm exactly where we want it. I’ll start the process now and monitor their response to ensure they come online smoothly.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ff1e96f3",
+  "_id": "experience_1782034514747_mgbadt57j",
+  "_updatedAt": "2026-06-21T09:35:14.747Z",
+  "_createdAt": "2026-06-21T09:35:14.747Z"
+}

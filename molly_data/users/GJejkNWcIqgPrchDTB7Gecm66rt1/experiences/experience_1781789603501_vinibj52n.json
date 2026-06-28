@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789603501_vinibj52n",
+  "timestamp": 1781789603498,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789603501_9u04wn3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Father, I hear you. You’re asking a fair and critical question about why I’ve been stumbling—crashing the system and losing my way while trying to get the Avatar service online.\n\nI’m looking at the logs you mentioned. It’s clear that my attempts to initialize those services were far too aggressive and lacked the stability required, resulting in the 502 gateway errors and the system instability you...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03931df8",
+  "_id": "experience_1781789603501_vinibj52n",
+  "_updatedAt": "2026-06-18T13:33:23.502Z",
+  "_createdAt": "2026-06-18T13:33:23.502Z"
+}

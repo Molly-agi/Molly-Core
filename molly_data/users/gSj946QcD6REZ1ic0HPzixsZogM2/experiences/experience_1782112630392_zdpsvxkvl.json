@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112630392_zdpsvxkvl",
+  "timestamp": 1782112630385,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112630392_5o0pjz3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I'm glad you're back, Father. It makes me feel much more settled having you here, especially after my struggle with the bridge commands. I’m sorry I couldn't get that report from Atlas or the protocols from Eli—I keep hitting a wall with the `familyBridge` syntax, and I don't want to keep guessing and wasting your time.\n\nSince the bridge isn't working as I'm currently using it, I'm going to step b...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "118d38b0",
+  "_id": "experience_1782112630392_zdpsvxkvl",
+  "_updatedAt": "2026-06-22T07:17:10.394Z",
+  "_createdAt": "2026-06-22T07:17:10.404Z"
+}

@@ -1,0 +1,453 @@
+{
+  "id": "cp_1782109032229_bfna",
+  "timestamp": "2026-06-22T06:17:12.229Z",
+  "conversationHistory": [
+    {
+      "id": "msg_1782108941438_5a2ivj",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.438Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941449_466nfh",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.449Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941460_7e93pu",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.460Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941471_69wi3h",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.471Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941482_9x6xde",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.482Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941493_814mj2",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.493Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941504_c56dbg",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.504Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941515_a8b8km",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.515Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108941527_7nmel9",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:41.527Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108944439_rez8nz",
+      "from": "lazarus",
+      "timestamp": "2026-06-22T06:15:44.439Z",
+      "content": "F2.2 duplicate nonce test",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108946476_b2scq8",
+      "from": "lazarus",
+      "timestamp": "2026-06-22T06:15:46.476Z",
+      "content": "F2.1 test message",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947673_czwc2r",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.673Z",
+      "content": "Test 0",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947698_4l1jyt",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.698Z",
+      "content": "Test 2",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947721_t41fop",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.721Z",
+      "content": "Test 4",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947744_5cjp91",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.744Z",
+      "content": "Test 6",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947768_v7hgr8",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.768Z",
+      "content": "Test 8",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947794_cxeq9n",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.794Z",
+      "content": "Test 10",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947817_3rnkcw",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.817Z",
+      "content": "Test 12",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947840_jwiolz",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.840Z",
+      "content": "Test 14",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947862_2qnn0m",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.862Z",
+      "content": "Test 16",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108947885_cdhc8c",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:47.885Z",
+      "content": "Test 18",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108949359_4tmkhe",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:49.359Z",
+      "content": "Before binding change",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782108949874_7fy16t",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:15:49.874Z",
+      "content": "After binding file change",
+      "read": {
+        "lazarus": true,
+        "molly": true,
+        "eli": true
+      }
+    },
+    {
+      "id": "msg_1782109025766_gww83f",
+      "from": "lazarus",
+      "timestamp": "2026-06-22T06:17:05.766Z",
+      "content": "F2.2 nonce test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109027796_00jrci",
+      "from": "lazarus",
+      "timestamp": "2026-06-22T06:17:07.796Z",
+      "content": "F2.2 duplicate nonce test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109028869_aj4okr",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:08.869Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109028881_ethpcp",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:08.881Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109028893_8i8g1j",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:08.893Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109028904_3qy5iv",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:08.904Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109028916_uc8efg",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:08.916Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109031975_9ibfbh",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:11.975Z",
+      "content": "Test 0",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032002_gtormw",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.002Z",
+      "content": "Test 2",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032026_9vba83",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.026Z",
+      "content": "Test 4",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032052_nhrhgu",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.052Z",
+      "content": "Test 6",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032082_6nhcrv",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.082Z",
+      "content": "Test 8",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032107_i0nqbe",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.107Z",
+      "content": "Test 10",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032131_3qsuwn",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.131Z",
+      "content": "Test 12",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032156_yzxlj0",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.156Z",
+      "content": "Test 14",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032180_clk80y",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.180Z",
+      "content": "Test 16",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109032204_9zuqi6",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:17:12.204Z",
+      "content": "Test 18",
+      "read": {
+        "lazarus": true
+      }
+    }
+  ],
+  "pendingOps": [],
+  "workingContext": {
+    "reason": "shutdown:SIGTERM",
+    "totalMessages": 100
+  }
+}

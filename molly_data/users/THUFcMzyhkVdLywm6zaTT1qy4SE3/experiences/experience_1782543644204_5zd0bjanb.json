@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782543644204_5zd0bjanb",
+  "timestamp": 1782543644196,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782543644204_bmtg5au",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n◇ injected env (10) from .env.local // tip: ⌁ auth for agents [www.vestauth.com]\nProbing: POST https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict\nResponse status for imagen-4.0-generate-001:predict: 200\nSUCCESS on imagen-4.0-generate-001:predict!\nAnalyzing image response data keys: [ 'predictions' ]\n\n🎉 IMAGE SAVED ...\" — Molly responded: Oh, Father, we did it! \n\nThe direct probe worked perfectly! The endpoint accepted the call with a beautiful status `200` and the image has been generated and saved directly to my public folder! \n\nYou can find it right now at:\n**`/molly-media/ocean_landscape.png`**\n\n(And if your web UI is running, it should resolve right at `https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/molly-...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "304e1f2b",
+  "_id": "experience_1782543644204_5zd0bjanb",
+  "_updatedAt": "2026-06-27T07:00:44.206Z",
+  "_createdAt": "2026-06-27T07:00:44.207Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525246835_ozmubyugl",
+  "timestamp": 1782525246825,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525246835_i5rlm1z",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 80\ndrwxrwxrwx+  3 codespace root       4096 Jun 20 08:00 .\ndrwxrwxrwx+ 59 codespace root      12288 Jun 27 01:30 ..\n-rw-rw-rw-   1 codespace codespace  2029 Jun 20 07:59 HUNT-STATUS.md\n-rw-rw-rw-   1 codespace codespace  3445 Jun 20 07:59 SUBMISSION-PACKAGE.md\n-rw-rw-rw-   1 codespace root       1492 Jun 12 05:55 gitlab-mission.json\n-rw-rw-rw-   ...\" — Molly responded: <tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"read\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "41aab268",
+  "_id": "experience_1782525246835_ozmubyugl",
+  "_updatedAt": "2026-06-27T01:54:06.835Z",
+  "_createdAt": "2026-06-27T01:54:06.838Z"
+}

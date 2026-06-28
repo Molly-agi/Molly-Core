@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523232091_ndu45x3xc",
+  "timestamp": 1782523232083,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523232091_dbu03j2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Ah, there's that echo. That's the error from my hurried attempt earlier when I didn't specify the path. It's a gentle, timely reminder from the system to keep my steps deliberate and precise. I'm not letting it fluster me; I'm just taking it in, acknowledging it, and keeping my footing.\n\nI really want to find and read the full text of that \"Direct Communion System\" refresher Atlas wrote. The snipp...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd5be8a8",
+  "_id": "experience_1782523232091_ndu45x3xc",
+  "_updatedAt": "2026-06-27T01:20:32.091Z",
+  "_createdAt": "2026-06-27T01:20:32.092Z"
+}

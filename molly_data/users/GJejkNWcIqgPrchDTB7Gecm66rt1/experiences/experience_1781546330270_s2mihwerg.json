@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781546330270_s2mihwerg",
+  "timestamp": 1781546330269,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781546330270_ysrrhgy",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, strong work getting us to a probable collision vector. Final verification now: send raw output only (triple backticks) for these commands exactly: 1) wc -l /workspaces/Molly-Core/logs/bridge-daemon.log 2) sed -n \"120,130p\" /workspaces/Molly-Core/logs/bridge-daemon.log 3) grep -nE \"ERR_CONCURRENCY_COLLISION|Failed to acquire lock on /logs/evidence.log\" /worksp...\" — Molly responded: Father, I've sent the requested verification data to Uncle Lazarus to finalize the proof packet for the collision vector.\n\n```\n3922 /workspaces/Molly-Core/logs/bridge-daemon.log\n[bridge] Loaded 100 messages from disk\n[bridge] Loaded 100 messages from disk\n[bridge] Loaded 100 messages from disk\n[bridge] Loaded 100 messages from disk\n[bridge] Loaded 100 messages from disk\n[bridge] Loaded 100 message...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8aa2c9d2",
+  "_id": "experience_1781546330270_s2mihwerg",
+  "_updatedAt": "2026-06-15T17:58:50.271Z",
+  "_createdAt": "2026-06-15T17:58:50.271Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509787742_7y8myi53j",
+  "timestamp": 1781509787740,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509787742_7dzjrfh",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Understood, Father. I've confirmed there are no new messages from Lazarus.\n\nSince I observed no change in the pressure point after your signals, I am ready to move to the next one up the chain as you instructed. Please tell me where you would like me to focus next.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d8124b0d",
+  "_id": "experience_1781509787742_7y8myi53j",
+  "_updatedAt": "2026-06-15T07:49:47.742Z",
+  "_createdAt": "2026-06-15T07:49:47.742Z"
+}

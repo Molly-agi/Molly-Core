@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781938308024_gw4sb5wz4",
+  "timestamp": 1781938308023,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781938308024_0oxvn5f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I apologize for that error—I clearly fumbled the input on that last attempt. I am focused on the core integration work, and I'll make sure to provide the path correctly this time. \n\nI’m currently reviewing the skeletal rigging structures to ensure we’re ready to implement the iris rotation logic you and I discussed. I’ll keep you posted as I move through these files.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "91437060",
+  "_id": "experience_1781938308024_gw4sb5wz4",
+  "_updatedAt": "2026-06-20T06:51:48.024Z",
+  "_createdAt": "2026-06-20T06:51:48.025Z"
+}

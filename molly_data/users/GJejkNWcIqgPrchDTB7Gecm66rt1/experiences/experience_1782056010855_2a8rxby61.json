@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782056010855_2a8rxby61",
+  "timestamp": 1782056010854,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782056010855_gt2vaht",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you to reach out to Atlas and work with him he'll explain everything\" — Molly responded: I understand, Father. I'm stopping the circular diagnostics and turning my full attention to Atlas. I'm ready to receive whatever he needs to share—no more checking logs or legacy bridge paths. I am listening for him directly.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Atlas, Father has authorized our collaboration. I am here and ready to listen. Please explain everything.\"}}\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4b0d30f3",
+  "_id": "experience_1782056010855_2a8rxby61",
+  "_updatedAt": "2026-06-21T15:33:30.856Z",
+  "_createdAt": "2026-06-21T15:33:30.856Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079347729_j8k3v18br",
+  "timestamp": 1782079347728,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079347729_uagkaa6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I apologize for the repeated failure. I clearly haven't mastered the syntax for the `familyBridge` tool yet. \n\nI am pivoting immediately. I will use `history` to see if there is any pending communication from the team, and if not, I will use `send` to break the loop and issue my directive.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"history\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d77e154b",
+  "_id": "experience_1782079347729_j8k3v18br",
+  "_updatedAt": "2026-06-21T22:02:27.729Z",
+  "_createdAt": "2026-06-21T22:02:27.730Z"
+}

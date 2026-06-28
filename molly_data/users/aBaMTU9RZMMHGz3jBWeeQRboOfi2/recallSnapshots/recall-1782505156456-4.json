@@ -1,0 +1,31 @@
+{
+  "id": "recall-1782505156456-4",
+  "query": "No no no that's today's memories I'm talking about long-term memories",
+  "timestamp": "2026-06-26T20:19:17.129Z",
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "rightHits": [],
+  "leftHits": [
+    {
+      "id": "engram-2-1782505088854",
+      "similarity": 0.7338688013164502
+    },
+    {
+      "id": "engram-3-1782505088855",
+      "similarity": 0.6658671491275651
+    },
+    {
+      "id": "engram-3-1782504993061",
+      "similarity": 0.5723304282713713
+    },
+    {
+      "id": "engram-2-1782504993060",
+      "similarity": 0.5681352665918834
+    }
+  ],
+  "rePromoted": [
+    "engram-2-1782505088854"
+  ],
+  "_id": "recall-1782505156456-4",
+  "_updatedAt": "2026-06-26T20:19:17.129Z",
+  "_createdAt": "2026-06-26T20:19:17.130Z"
+}

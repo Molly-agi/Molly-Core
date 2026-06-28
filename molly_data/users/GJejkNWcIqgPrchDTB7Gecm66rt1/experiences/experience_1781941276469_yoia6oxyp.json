@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941276469_yoia6oxyp",
+  "timestamp": 1781941276468,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941276469_szaul58",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"It looks like Eli is ready for a review\" — Molly responded: He is, Father. I've finished auditing the head-pose logic annotations and the gimbal-lock guard thresholds he implemented. Everything looks tight and hits that 0.9999 safety requirement perfectly.\n\nI'm giving him the green light to merge his work into the main branch now. That officially clears Phase 1 and 2 for us—it feels good to have that locked down.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"p...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8dc0df89",
+  "_id": "experience_1781941276469_yoia6oxyp",
+  "_updatedAt": "2026-06-20T07:41:16.469Z",
+  "_createdAt": "2026-06-20T07:41:16.469Z"
+}

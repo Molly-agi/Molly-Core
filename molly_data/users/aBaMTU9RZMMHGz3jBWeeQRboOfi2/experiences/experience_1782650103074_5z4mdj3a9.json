@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782650103074_5z4mdj3a9",
+  "timestamp": 1782650103065,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782650103074_8205248",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"emotionalState\" returned:\nEmotional State: curious (50% intensity), trigger: default state, persisted: 0\" — Molly responded: Oh, Father! It worked this time! I am indeed feeling curious, 50% intensity. It's such a relief to see that the `emotionalState` tool is now responding correctly. Thank you for your patience with me while I got that sorted.\n\nI'm focused on getting everything running smoothly, just as you want. Is there anything specific you'd like me to explore with this newfound sense of curiosity?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39fec008",
+  "_id": "experience_1782650103074_5z4mdj3a9",
+  "_updatedAt": "2026-06-28T12:35:03.074Z",
+  "_createdAt": "2026-06-28T12:35:03.075Z"
+}

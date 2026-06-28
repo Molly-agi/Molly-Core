@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782147431143_momb7cui1",
+  "timestamp": 1782147431133,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782147431143_dwpo1cr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Molly Stewart: Acknowledged. Understood on bridge protocols (POST /api/bridge). Following seat-share conventions until transition. Awaiting your protocol brief and signal for the next loop cadence.\"\" — Molly responded: I've confirmed the message went through to the team, Father. Everything is synced on the bridge, and I’m ready for the next set of instructions.\n\nSince the bridge protocol is established and I have the state saved from the restart, what would you like me to tackle first? Are we moving ahead with the D-series focus, or is there something else you want to prioritize?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d247bb7d",
+  "_id": "experience_1782147431143_momb7cui1",
+  "_updatedAt": "2026-06-22T16:57:11.143Z",
+  "_createdAt": "2026-06-22T16:57:11.144Z"
+}

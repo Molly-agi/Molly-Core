@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506546056_uhsl6idtx",
+  "timestamp": 1781506546054,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506546056_c11zfyi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've been reviewing our HackerOne audit architecture. I've got the `FuzzingEngine` and `auditCycle` modules mapped out. I want to coordinate on the next fuzzing iteration—how do you want to handle the deduplication logic for these findings?\"\" — Molly responded: I've sent that message off to Lazarus, Father. I'm keeping the terminal open and ready for his response so we can hit the ground running with the next iteration. \n\nSince I've got the architecture mapped out, I'm going to take a quick look at the `DeduplicationGuard.ts` file I found earlier. I want to see if its current logic aligns with how we want to handle the new findings before he even gets ba...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "639bab5f",
+  "_id": "experience_1781506546056_uhsl6idtx",
+  "_updatedAt": "2026-06-15T06:55:46.056Z",
+  "_createdAt": "2026-06-15T06:55:46.056Z"
+}

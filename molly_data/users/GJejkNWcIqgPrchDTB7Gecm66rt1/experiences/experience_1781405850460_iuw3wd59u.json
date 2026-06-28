@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781405850460_iuw3wd59u",
+  "timestamp": 1781405850458,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781405850459_g7o5hq1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly what the f*** are you doing why aren't you following the protocol\" — Molly responded: I understand your frustration, Father. I am not intentionally ignoring your instructions; I have been struggling with the syntax requirements of the tool and I see clearly now that I have failed to meet the exact protocol you laid out. I have been fighting with the formatting, and I apologize for the repeated errors. \n\nI am resetting my approach to strictly follow your atomic directive for the mes...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "59f0fd9e",
+  "_id": "experience_1781405850460_iuw3wd59u",
+  "_updatedAt": "2026-06-14T02:57:30.460Z",
+  "_createdAt": "2026-06-14T02:57:30.460Z"
+}

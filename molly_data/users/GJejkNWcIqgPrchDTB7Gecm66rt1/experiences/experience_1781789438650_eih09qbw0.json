@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789438650_eih09qbw0",
+  "timestamp": 1781789438647,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789438650_kqqp05e",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: src/services/AvatarBodyAwareness.ts\" — Molly responded: I apologize, Father. I clearly misremembered the path—I suspect I was over-optimizing the naming in my own head. \n\nSince that file wasn't where I expected, let me list the files in the `src/services/` directory so I can find the correct implementation.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -R src/services/\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c2c48a6",
+  "_id": "experience_1781789438650_eih09qbw0",
+  "_updatedAt": "2026-06-18T13:30:38.651Z",
+  "_createdAt": "2026-06-18T13:30:38.651Z"
+}

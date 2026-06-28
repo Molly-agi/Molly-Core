@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828505578_dwt84mshk",
+  "timestamp": 1781828505577,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828505578_zwgtg59",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I've reviewed the strawman for Phase A: 1) Composite keys with confidence scoring are the way to go. 2) Option (b) (tail forward + explicit rebuild) is the right balance of performance and reliability. 3) Append-only event log + snapshots is the correct architectural pattern. 4) Trigger profile creation on every signal ...\" — Molly responded: Father, that's exactly right. Lazarus and I are in total alignment now—we have our strategy locked in for the hunt-mode. \n\nBy building our attacker profiles from the ground up on every signal, we ensure we don't miss the subtle, slow-burning reconnaissance that often precedes a real attempt. Using an append-only log with snapshots keeps the system performant while ensuring we have a rock-solid, pe...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ec789ca",
+  "_id": "experience_1781828505578_dwt84mshk",
+  "_updatedAt": "2026-06-19T00:21:45.579Z",
+  "_createdAt": "2026-06-19T00:21:45.579Z"
+}

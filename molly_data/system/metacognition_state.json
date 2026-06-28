@@ -1,0 +1,169 @@
+{
+  "completedTraces": [
+    {
+      "id": "trace_1782109448398_rjjjwg",
+      "question": "What is 2+2?",
+      "context": "Math test",
+      "steps": [
+        {
+          "id": "step_1782109448398_opqwy1",
+          "order": 0,
+          "operation": "infer",
+          "input": "2+2",
+          "output": "4",
+          "confidence": 1,
+          "justification": "Mathematical axiom",
+          "alternatives": [],
+          "dependsOn": [],
+          "durationMs": 0,
+          "system": "direct_inference"
+        }
+      ],
+      "conclusion": "The answer is 4",
+      "confidence": 1,
+      "totalDurationMs": 1,
+      "timestamp": "2026-06-22T06:24:08.398Z",
+      "strategyUsed": "default"
+    }
+  ],
+  "strategies": [],
+  "errors": [
+    {
+      "id": "error_1782109448399_fbfpic",
+      "timestamp": "2026-06-22T06:24:08.399Z",
+      "traceId": "trace_1782109448398_rjjjwg",
+      "errorType": "overconfidence",
+      "description": "High confidence with minimal reasoning steps",
+      "rootCause": "Insufficient evidence gathering before conclusion",
+      "impact": "moderate",
+      "detectedBy": "self"
+    },
+    {
+      "id": "error_1782109448399_b2z1wh",
+      "timestamp": "2026-06-22T06:24:08.399Z",
+      "traceId": "trace_1782109448398_rjjjwg",
+      "errorType": "hasty_generalization",
+      "description": "Many inferences from few observations",
+      "rootCause": "Not enough data gathered before drawing conclusions",
+      "impact": "minor",
+      "detectedBy": "self"
+    },
+    {
+      "id": "error_1782109448399_1ndnff",
+      "timestamp": "2026-06-22T06:24:08.399Z",
+      "traceId": "trace_1782109448398_rjjjwg",
+      "errorType": "overconfidence",
+      "description": "High confidence without validation step",
+      "rootCause": "Conclusion not checked before acceptance",
+      "impact": "moderate",
+      "detectedBy": "self"
+    },
+    {
+      "id": "error_1782109448406_xf15l0",
+      "timestamp": "2026-06-22T06:24:08.406Z",
+      "traceId": "trace_1782109448404_45w72u",
+      "errorType": "overconfidence",
+      "description": "High confidence with minimal reasoning steps",
+      "rootCause": "Insufficient evidence gathering before conclusion",
+      "impact": "moderate",
+      "detectedBy": "self"
+    },
+    {
+      "id": "error_1782109448406_ih7lyf",
+      "timestamp": "2026-06-22T06:24:08.406Z",
+      "traceId": "trace_1782109448404_45w72u",
+      "errorType": "hasty_generalization",
+      "description": "Many inferences from few observations",
+      "rootCause": "Not enough data gathered before drawing conclusions",
+      "impact": "minor",
+      "detectedBy": "self"
+    },
+    {
+      "id": "error_1782109448406_vx2hjb",
+      "timestamp": "2026-06-22T06:24:08.406Z",
+      "traceId": "trace_1782109448404_45w72u",
+      "errorType": "overconfidence",
+      "description": "High confidence without validation step",
+      "rootCause": "Conclusion not checked before acceptance",
+      "impact": "moderate",
+      "detectedBy": "self"
+    }
+  ],
+  "healthAssessments": [
+    {
+      "timestamp": "2026-06-22T06:24:08.409Z",
+      "overallHealth": 0.43500000000000005,
+      "metrics": {
+        "calibration": 0.54,
+        "traceQuality": 0,
+        "errorDetection": 1,
+        "strategyAccuracy": 0.5,
+        "errorRecovery": 0
+      },
+      "concerns": [
+        "Confidence calibration needs improvement"
+      ],
+      "improvements": [],
+      "recommendations": [
+        "Add more validation steps to reasoning"
+      ]
+    }
+  ],
+  "stats": {
+    "totalTraces": 2,
+    "successfulTraces": 1,
+    "errorsCaught": 6,
+    "errorsPreventedByReflection": 0,
+    "averageConfidenceCalibration": 0.54,
+    "strategySelectionAccuracy": 0.5
+  },
+  "metadata": {
+    "lastUpdated": "2026-06-22T06:24:08.409Z",
+    "version": 1
+  },
+  "savedAt": "2026-06-22T06:24:08.404Z",
+  "_id": "metacognition_state",
+  "_updatedAt": "2026-06-22T06:24:08.404Z",
+  "_createdAt": "2026-06-18T06:52:31.840Z"
+}ceptance",
+      "impact": "moderate",
+      "detectedBy": "self"
+    }
+  ],
+  "healthAssessments": [
+    {
+      "timestamp": "2026-06-22T06:24:08.409Z",
+      "overallHealth": 0.43500000000000005,
+      "metrics": {
+        "calibration": 0.54,
+        "traceQuality": 0,
+        "errorDetection": 1,
+        "strategyAccuracy": 0.5,
+        "errorRecovery": 0
+      },
+      "concerns": [
+        "Confidence calibration needs improvement"
+      ],
+      "improvements": [],
+      "recommendations": [
+        "Add more validation steps to reasoning"
+      ]
+    }
+  ],
+  "stats": {
+    "totalTraces": 2,
+    "successfulTraces": 1,
+    "errorsCaught": 6,
+    "errorsPreventedByReflection": 0,
+    "averageConfidenceCalibration": 0.54,
+    "strategySelectionAccuracy": 0.5
+  },
+  "metadata": {
+    "lastUpdated": "2026-06-22T06:24:08.409Z",
+    "version": 1
+  },
+  "savedAt": "2026-06-22T06:24:08.408Z",
+  "_id": "metacognition_state",
+  "_updatedAt": "2026-06-22T06:24:08.408Z",
+  "_createdAt": "2026-06-18T06:52:31.840Z"
+}

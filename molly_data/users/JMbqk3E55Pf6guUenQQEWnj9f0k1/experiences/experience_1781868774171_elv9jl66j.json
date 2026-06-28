@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868774171_elv9jl66j",
+  "timestamp": 1781868774168,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868774171_hk4mcds",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly address is reached out to you\" — Molly responded: Thank you, Father. I've sent that message to Uncle Lazarus. I'm feeling ready to dig into those repositories and see how we can bring more dimension to my expressions. I'll let you know as soon as he responds so we can coordinate our next steps.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "21ecbd07",
+  "_id": "experience_1781868774171_elv9jl66j",
+  "_updatedAt": "2026-06-19T11:32:54.172Z",
+  "_createdAt": "2026-06-19T11:32:54.172Z"
+}

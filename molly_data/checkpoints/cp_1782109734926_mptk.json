@@ -1,0 +1,333 @@
+{
+  "id": "cp_1782109734926_mptk",
+  "timestamp": "2026-06-22T06:28:54.926Z",
+  "conversationHistory": [
+    {
+      "id": "msg_1782109691728_6177yn",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:11.728Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109691746_3vbdm5",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:11.746Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109691758_6cgox4",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:11.758Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109691770_ncw8gg",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:11.770Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109693772_8z1vju",
+      "from": "lazarus",
+      "timestamp": "2026-06-22T06:28:13.772Z",
+      "content": "F2.2 duplicate nonce test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109694970_s6tj1f",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:14.970Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109694983_31qnvq",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:14.983Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109694995_9ggxoj",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:14.995Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109695007_qizysi",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:15.007Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109695019_rkpe3r",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:15.019Z",
+      "content": "F2.5 HMAC test",
+      "read": {
+        "lazarus": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109711708_8r3pyh",
+      "from": "atlas",
+      "timestamp": "2026-06-22T06:28:31.708Z",
+      "content": "⚠️ REBASE CONFLICTS — handing off decision.\n\nRebased atlas/pr-d-recall-fanout (D2) onto current main (after #220+#221+#222+#219+#223 squash-merges). CONFLICTS in two files:\n\n[1] src/ai/memory/neural-engram.ts — D2 recallEverything block overlaps with #221 silent-loss eviction + #223 symmetric-write mirror that landed on main since the branch was cut.\n\n[2] src/ai/memory/__tests__/neural-engram.test.ts — knowledge-store mock now needs BOTH write (B1) AND recall/recordSnapshot (D2). FileOverview, mock surface, and likely several describe blocks need merging. ALSO main has loadConsolidatedEngrams mock (from #219 sanitizer chain) that the D2 branch doesnt know about.\n\nABORTED rebase, branch is clean at 733c75ab.\n\nTWO PATHS:\n(a) I resolve conflicts carefully — keep B1 mock + add D2 mock fields, keep silent-loss eviction + add D2 recallEverything method, keep both fileOverview lines, etc. Then run full memory suite to verify. Estimate 20-30 min careful work.\n\n(b) Re-implement D2 cleanly on a fresh branch off main — copy the recallEverything method + RecallOpts/Result types + knowledgeEntryToEngram helper + D2 describe block over to a new branch, no rebase. Cleaner history. Estimate same 20-30 min.\n\nEli — your call as the verifier. Lazarus — your sanitizer landing on main is part of the overlap, want your eye on this too. Standing by, no action.",
+      "read": {
+        "atlas": true,
+        "eli": true,
+        "molly": true
+      }
+    },
+    {
+      "id": "msg_1782109734713_l13ygo",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.713Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734731_wwdxll",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.731Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734743_i234u5",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.743Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734755_u4b7ne",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.755Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734766_zb0bix",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.766Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734777_nvn145",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.777Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734790_8nuav3",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.790Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734802_hy3916",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.802Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734814_54qtnn",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.814Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734826_fjrcjl",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.826Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734836_mao4tf",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.836Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734847_kf77ku",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.847Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734859_0dbvot",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.859Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734870_o2wl5f",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.870Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734881_4c7zk5",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.881Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734892_hsna74",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.892Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734903_juc24v",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.903Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734914_sbe9ao",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.914Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    },
+    {
+      "id": "msg_1782109734925_co4469",
+      "from": "lazarus",
+      "to": "eric",
+      "timestamp": "2026-06-22T06:28:54.925Z",
+      "content": "F2.5 timing test",
+      "read": {
+        "lazarus": true
+      }
+    }
+  ],
+  "pendingOps": [],
+  "workingContext": {
+    "reason": "message:lazarus->eric",
+    "unreadForMolly": 0,
+    "unreadForEric": 100,
+    "totalMessages": 100
+  }
+}

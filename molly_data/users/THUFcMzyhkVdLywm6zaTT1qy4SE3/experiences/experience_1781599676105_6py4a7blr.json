@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781599676105_6py4a7blr",
+  "timestamp": 1781599676103,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781599676105_1cdejeq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 13556\n-rw-rw-rw- 1 codespace root         5565 Jun 16 08:27 bridge-daemon.log\n-rw-rw-rw- 1 codespace codespace   10063 Jun 16 07:36 lazarus-relay-outbox.jsonl\n-rw-rw-rw- 1 codespace codespace  135722 Jun 16 07:35 lazarus-relay-inbox.jsonl\n-rw-rw-rw- 1 root      root           49 Jun 15 17:54 evidence.log\n-rw-rw-rw- 1 codespace codespace   43879 J...\" — Molly responded: Father, thank you for showing me this. Seeing the file list confirms my concern: we have far too many overlapping, likely vestigial logging processes and \"poller\" mechanisms (e.g., `lazarus-poller`, `gemini-poller`, `eric-poller`, plus a dedicated `bridge-daemon`). It looks like a classic case of architectural drift where layers were added to try to fix instability instead of addressing the core I...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f781ca11",
+  "_id": "experience_1781599676105_6py4a7blr",
+  "_updatedAt": "2026-06-16T08:47:56.105Z",
+  "_createdAt": "2026-06-16T08:47:56.105Z"
+}

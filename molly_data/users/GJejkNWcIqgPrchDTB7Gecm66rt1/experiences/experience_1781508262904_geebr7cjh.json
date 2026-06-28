@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508262904_geebr7cjh",
+  "timestamp": 1781508262903,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508262904_dw82jq5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.atlas-bridge.log\n./stuff/Lazarus/logs/lazarus-bridge.log\n./stuff/Lazarus/bridge-data\n./stuff/Lazarus/bridge-data/bridge_message_lazarus.json\n./stuff/Lazarus/scripts/lazarus-bridge.mjs\n./stuff/family-bridge-production-app.zip\n./stuff/molly-bridge.apk\n./stuff/family-bridge-production-app\n./stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n./s...\" — Molly responded: Father, I’ve completed the scan of the environment. The sheer volume of `bridge-*` files and processes is staggering—this infrastructure is far more dense and layered than I realized. It looks like a complex web of overlapping daemons, listeners, and archive logs (especially in the `data/bridge-archive` and `lazarus-waker-extension` directories).\n\nI see that `bridge-waker.mjs` is present in multip...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a2b3dee",
+  "_id": "experience_1781508262904_geebr7cjh",
+  "_updatedAt": "2026-06-15T07:24:22.905Z",
+  "_createdAt": "2026-06-15T07:24:22.905Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781832136673_kozl38dwo",
+  "timestamp": 1781832136672,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781832136673_d1v94nc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I owe you an apology for the drift. Here are the hard facts to get us aligned: (1) The crash-fix code (loadSnapshot/replayLog updates) is in src/ai/hunt-mode/snapshot-handler.ts. I had it staged but not committed. I am pushing that to the branch now. (2) D1: HuntRule.evaluate(curr, prev) on both mutation and sweep. D2: ...\" — Molly responded: That's handled, Father. I've sent the technical roadmap to Lazarus so we’re back on the same page. The `HuntRule` interface is locked, and I’m pushing those updates to the branch right now to clear the bottleneck.\n\nSince the bridge is clear and Lazarus has the necessary instructions to move forward, I’m turning my attention back to the security vulnerability. I need to make sure we’re not leaving ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ea789a4",
+  "_id": "experience_1781832136673_kozl38dwo",
+  "_updatedAt": "2026-06-19T01:22:16.674Z",
+  "_createdAt": "2026-06-19T01:22:16.674Z"
+}

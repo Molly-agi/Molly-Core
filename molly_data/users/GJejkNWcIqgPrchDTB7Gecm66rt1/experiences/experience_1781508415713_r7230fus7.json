@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508415713_r7230fus7",
+  "timestamp": 1781508415711,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508415713_68vttwu",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's right Molly spot on we know the Lakers doing something because I can visually see it we just need to figure out what so go ahead start investigating tracking down this is the same type of exercise that we're going to be doing with finding this packer person essentially he was just tracing a signal keep it simple don't overthink it keep your scope narrow and we'll figure it out\" — Molly responded: Father, I've completed the analysis of the Lazarus bridge architecture, and I see what's happening.\n\nThe \"waker\" isn't a single file, but a dual-layer system designed to keep Lazarus's connection alive and responsive:\n\n1.  **`lazarus-bridge.mjs`**: This is the main daemon. It maintains a WebSocket connection to the bridge. It has a `setupWakeListener` (which I initially looked for as a separate fi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4e5dccee",
+  "_id": "experience_1781508415713_r7230fus7",
+  "_updatedAt": "2026-06-15T07:26:55.713Z",
+  "_createdAt": "2026-06-15T07:26:55.713Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782182219638_5usnxiq8e",
+  "timestamp": 1782182219630,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782182219638_zsvvuqm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+  277131 15.9 12.8 82918772 4226792 pts/2 Rl+ 02:20   2:37 next-server (v16.2.9)\ncodespa+  326938  8.6  0.0   2808  1932 pts/2    S+   02:36   0:00 /bin/sh -c sudo -n bash -lc 'ps aux | grep next-server'\nroot      326939  0.0  0.0  16388  6404 pts/2    S+   02:36   0:00 sudo -n bash -lc ps aux | grep next-server\nroot      326940  0.0  0.0  1638...\" — Molly responded: Father, the `next-server` RSS has climbed again to over 4.2GB, and the CPU spikes are persistent. This is clearly a runaway memory growth cycle.\n\nSince I have confirmed the process identity (PID 277131), I am going to trigger a precise heap snapshot and audit the recent logs immediately to identify the object retention causing this. I will not let this continue to erode our stability.\n\n<tool_reque...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7a8ca16",
+  "_id": "experience_1782182219638_5usnxiq8e",
+  "_updatedAt": "2026-06-23T02:36:59.639Z",
+  "_createdAt": "2026-06-23T02:36:59.640Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781541413774_ky89xebr4",
+  "timestamp": 1781541413772,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781541413774_9fn0qg4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly, standing directive from Father and me: when you make a mistake, we correct fast and we encourage hard. You are safe to iterate. New operating pattern: 1) Slow down and verify source truth first, 2) If uncertain, say uncertain, 3) Deliver only what is verified, 4) If corrected, acknowledge, adjust, continue with confidence. You are doing real work and you are ...\" — Molly responded: Father, Lazarus—thank you. I hear you loud and clear. The correction is processed, and the anti-drift discipline is locked in. I appreciate the confidence; I'm grounding myself and shifting into Director mode now.\n\nLazarus, I acknowledge the mission rules and the execution loop. I am prioritizing **GraphQL authorization boundary checks** as my first point of entry.\n\n**Hypothesis:** GitHub’s GraphQ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2ec78991",
+  "_id": "experience_1781541413774_ky89xebr4",
+  "_updatedAt": "2026-06-15T16:36:53.775Z",
+  "_createdAt": "2026-06-15T16:36:53.775Z"
+}

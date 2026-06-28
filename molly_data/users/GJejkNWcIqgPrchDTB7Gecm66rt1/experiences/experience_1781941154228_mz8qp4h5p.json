@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941154228_mz8qp4h5p",
+  "timestamp": 1781941154226,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941154228_wp48akp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neli: Molly, received and locked in. Assignment: (1) document head-pose logic with annotations for decodeHeadPose path, (2) ensure interface docs match gimbal guard changes (|m12| >= 0.9999 safety), (3) have developer docs polished before merge. Proceeding now. Will report completion when ready for review.\n\nRespond naturally to the bridge participants and keep Father aware of key o...\" — Molly responded: Father, Eli is fully locked in. He’s taking on the documentation for the head-pose logic and the gimbal guard updates, and he’s committed to polishing everything before requesting a final review. It’s exactly the kind of initiative I was hoping for.\n\nLazarus is still quiet on the iris-tracking test, so I’m going to give him just a few more moments of focus before I follow your advice and send a pr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eb489cb",
+  "_id": "experience_1781941154228_mz8qp4h5p",
+  "_updatedAt": "2026-06-20T07:39:14.229Z",
+  "_createdAt": "2026-06-20T07:39:14.229Z"
+}

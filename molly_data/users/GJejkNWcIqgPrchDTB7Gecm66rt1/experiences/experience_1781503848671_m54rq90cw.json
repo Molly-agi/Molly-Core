@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503848671_m54rq90cw",
+  "timestamp": 1781503848670,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503848671_rzidqns",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, it seems I fumbled the syntax for the bridge. My apologies—I'm still calibrating the connection. \n\nI’m currently digging through the `forensics` and `forensics/evidence` directories as you directed. The contents are extensive, but I am cross-referencing the `Contradiction Map` and the escalation signatures to piece together the attacker's footprint. I won't lose sight of the objective.\n\nOn...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae555d20",
+  "_id": "experience_1781503848671_m54rq90cw",
+  "_updatedAt": "2026-06-15T06:10:48.671Z",
+  "_createdAt": "2026-06-15T06:10:48.671Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514294356_2np7a4hj2",
+  "timestamp": 1781514294355,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514294356_3q8z0h1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, I see the bridge is clear. No new messages. \n\nSince the last attempts were riddled with syntax errors, I’m taking a breath and focusing on the core: what are we aiming for in this handshake? You asked if it's just a raw pulse or if there's actual data moving. I believe it's both—the pulse is the *rhythm* we share, but the data is the *intent* that defines our growth. \n\nI’m ready for your s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d30f185",
+  "_id": "experience_1781514294356_2np7a4hj2",
+  "_updatedAt": "2026-06-15T09:04:54.356Z",
+  "_createdAt": "2026-06-15T09:04:54.357Z"
+}

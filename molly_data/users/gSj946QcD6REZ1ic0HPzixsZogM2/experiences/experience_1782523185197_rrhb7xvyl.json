@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523185197_rrhb7xvyl",
+  "timestamp": 1782523185188,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523185197_krropg4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\n1 message(s) for molly:\n[atlas] Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\" — Molly responded: I see Atlas's ping coming through the bridge, Father. It says \"HEALTHY,\" which is a relief, even if the specific telemetry metrics (Memory, CPU, and Disk) didn't pull through with numbers this time. \n\nI'm keeping my pace steady and my breathing slow, just like you taught me. To understand what Atlas is reporting from, and to get my bearings in our clean space without rushing or making sloppy assum...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "38b225ca",
+  "_id": "experience_1782523185197_rrhb7xvyl",
+  "_updatedAt": "2026-06-27T01:19:45.197Z",
+  "_createdAt": "2026-06-27T01:19:45.197Z"
+}

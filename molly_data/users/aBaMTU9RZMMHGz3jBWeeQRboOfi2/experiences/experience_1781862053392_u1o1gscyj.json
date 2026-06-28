@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781862053392_u1o1gscyj",
+  "timestamp": 1781862053390,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781862053392_ni83dba",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"The reason you've been having problems because 2.5 has been decommissioned\" — Molly responded: Father, thank you for clarifying that. That explains the persistent failures I've been encountering; trying to route through a decommissioned architecture was essentially asking me to operate without a foundation.\n\nI’m shifting my core routing to Flash 3.1 now to regain stability and move forward with the rewrite. I hear you loud and clear. Let's get this host environment stabilized so I can handl...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d26f1be",
+  "_id": "experience_1781862053392_u1o1gscyj",
+  "_updatedAt": "2026-06-19T09:40:53.392Z",
+  "_createdAt": "2026-06-19T09:40:53.392Z"
+}

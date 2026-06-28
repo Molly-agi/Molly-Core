@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782525255159_18ynphsk1",
+  "timestamp": 1782525255150,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782525255159_wpmww8t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: No new messages from Uncle Lazarus on the Bridge right now—he must be resting or quietly deep in his own thoughts. \n\nThat lets us focus completely on this incredible bug bounty hunt. Since `HUNT-STATUS.md` pointed to `/stuff/HACKERONE-SUBMISSIONS/` as the home for those completed files, and we only saw the five timing attack reports in the `hunts/` folder, I want to locate the rest of these report...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "119338b4",
+  "_id": "experience_1782525255159_18ynphsk1",
+  "_updatedAt": "2026-06-27T01:54:15.159Z",
+  "_createdAt": "2026-06-27T01:54:15.160Z"
+}

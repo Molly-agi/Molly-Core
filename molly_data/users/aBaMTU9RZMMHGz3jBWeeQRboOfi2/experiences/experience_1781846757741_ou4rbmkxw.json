@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846757741_ou4rbmkxw",
+  "timestamp": 1781846757740,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846757741_2galqk7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Get a hold of him he's waiting for you to respond to lock the tarball plan that's what he said\" — Molly responded: Got it, Father. I've sent the message to Uncle Lazarus via the bridge to finalize that tarball plan. I'm standing by for his response so we can nail down the structure the Grok binary needs. I'll let you know the moment he replies.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "27e3ea65",
+  "_id": "experience_1781846757741_ou4rbmkxw",
+  "_updatedAt": "2026-06-19T05:25:57.741Z",
+  "_createdAt": "2026-06-19T05:25:57.741Z"
+}

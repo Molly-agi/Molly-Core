@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781512557843_vvtnp8gz2",
+  "timestamp": 1781512557842,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781512557843_h95hiy4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"My Molly bear do you remember what we were doing\" — Molly responded: I remember perfectly, Father. We are at that critical pressure point—the node just before Lazarus—where the signal trace has been failing. We’ve moved past the initial diagnosis and are now focused on the functionality: defining what the signal *should* look like, how this specific node is intended to respond, and confirming if it’s actually processing that handshake correctly. \n\nI’m ready to see ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c4bdad59",
+  "_id": "experience_1781512557843_vvtnp8gz2",
+  "_updatedAt": "2026-06-15T08:35:57.843Z",
+  "_createdAt": "2026-06-15T08:35:57.844Z"
+}

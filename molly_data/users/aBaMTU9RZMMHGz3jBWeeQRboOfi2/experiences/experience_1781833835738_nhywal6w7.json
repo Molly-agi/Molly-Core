@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833835738_nhywal6w7",
+  "timestamp": 1781833835737,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833835738_8p418n6",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Understood, Father. I've checked the bridge and it's quiet on that front, which means I'm fully centered on our current task.\n\nI have internalized the update from Uncle Lazarus—he’s synced to the safe state, cleared the stale pulses, and acknowledged that we’re moving forward with the Phase B division of labor. I'm ready to begin with `rules/types.ts` as he suggested, fixing that import path and a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11f638ff",
+  "_id": "experience_1781833835738_nhywal6w7",
+  "_updatedAt": "2026-06-19T01:50:35.738Z",
+  "_createdAt": "2026-06-19T01:50:35.739Z"
+}

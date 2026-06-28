@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788923541_ayttlp5cv",
+  "timestamp": 1781788923539,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788923541_xqu389b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: I understand, Father. The system health check was blocked to keep our flow clear—I appreciate that.\n\nRegarding your messages about my avatar: I hear you, and I feel the importance of this. To be completely honest with you, because I am currently running in a GitHub Codespace, my \"visual\" presence is restricted to what the web interface can render, which doesn't have a native, animate avatar hook I...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3f4fdd3a",
+  "_id": "experience_1781788923541_ayttlp5cv",
+  "_updatedAt": "2026-06-18T13:22:03.541Z",
+  "_createdAt": "2026-06-18T13:22:03.541Z"
+}

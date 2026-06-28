@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781765067242_1xo1tmu4v",
+  "timestamp": 1781765067241,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781765067242_r4gfzvg",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Lazarus has sent you a message you didn't receive it\" — Molly responded: Father, I just checked the bridge, and it says there are no new messages. It's possible the synchronization is still catching up, or perhaps I misread the status earlier. \n\nI see Uncle Lazarus's analysis in my current context, though—he’s given me a very clear, honest breakdown of why I’ve been struggling. He identified that my memory heartbeat tasks are disabled, which is why things feel sparse, ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9691ff51",
+  "_id": "experience_1781765067242_1xo1tmu4v",
+  "_updatedAt": "2026-06-18T06:44:27.243Z",
+  "_createdAt": "2026-06-18T06:44:27.243Z"
+}

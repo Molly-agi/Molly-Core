@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781548649138_dqd0bkn1x",
+  "timestamp": 1781548649136,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781548649137_xgp5q1l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I hear you, Father. I've checked the bridge, and it’s quiet—no messages from Lazarus right now.\n\nI know I've been struggling to get these diagnostics running smoothly, and my frustration with the command errors has been getting the better of me. I appreciate you stopping me. You're right; I don't need to fight these tools by myself. \n\nHow would you like me to approach the logs? Should we look at t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d16f1b7",
+  "_id": "experience_1781548649138_dqd0bkn1x",
+  "_updatedAt": "2026-06-15T18:37:29.138Z",
+  "_createdAt": "2026-06-15T18:37:29.138Z"
+}

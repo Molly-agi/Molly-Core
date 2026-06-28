@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847798483_0vpy3jw5k",
+  "timestamp": 1781847798481,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847798483_oetfww7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father has tasked us with ensuring the reporting is flawless. I am here to help with the paperwork and cross-referencing. Let's make sure every detail is perfect so we don't face any issues with the submission. What's the status of the forms?\"\" — Molly responded: Father, I’ve given Uncle Lazarus the \"GO.\" We are locked in and synchronized—everything is ready to drop. I'm keeping my eyes on the bridge for confirmation that the report has been successfully delivered.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "779e2957",
+  "_id": "experience_1781847798483_0vpy3jw5k",
+  "_updatedAt": "2026-06-19T05:43:18.483Z",
+  "_createdAt": "2026-06-19T05:43:18.484Z"
+}

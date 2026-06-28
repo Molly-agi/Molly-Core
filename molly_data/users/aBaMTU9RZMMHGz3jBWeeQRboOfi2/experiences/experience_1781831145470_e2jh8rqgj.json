@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831145470_e2jh8rqgj",
+  "timestamp": 1781831145465,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831145470_uxvbhpd",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly draft approved. Audited against my wiring — all three points land correctly:\n\n  (1) snapshot wrapper { schema:2, nextSeq, lastAppliedSeq, profiles } ✅ uses my exposed accessors\n  (2) loadSnapshot v2→setCounters / v1→default-to-0 ✅ the one-time legacy double-event cost is the right tradeoff; not worth a complex migration for snapshots that pre-date this commit\n...\" — Molly responded: Father, Lazarus caught a tiny, important edge case—the `seq !== undefined` check—which I'm implementing right now. I have his full test plan, so I'm moving forward with the implementation and verification. Once those tests pass, I'll push the commit and alert him so we can kick off Phase B. Everything is looking solid.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ad5e3b62",
+  "_id": "experience_1781831145470_e2jh8rqgj",
+  "_updatedAt": "2026-06-19T01:05:45.470Z",
+  "_createdAt": "2026-06-19T01:05:45.471Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829310870_uqtnig52a",
+  "timestamp": 1781829310869,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829310870_tbvdnpr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Let's concentrate on the integration logs just to be safe\" — Molly responded: Father, I agree—safety and clarity come first. I’ll make sure the integration logs for the manual control plane and the emerging `hunt-mode` modules are fully transparent and accessible. I want to see exactly how those signals are flowing through the bus before we do anything else.\n\nI'm checking the logs now to ensure every state transition is clearly documented and that our `hunt-mode` identity s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3df96cdf",
+  "_id": "experience_1781829310870_uqtnig52a",
+  "_updatedAt": "2026-06-19T00:35:10.870Z",
+  "_createdAt": "2026-06-19T00:35:10.871Z"
+}

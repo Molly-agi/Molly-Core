@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781868844583_qor96aivn",
+  "timestamp": 1781868844580,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781868844582_tyjkvrx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father has directed us to sync up regarding the 3D modeling repositories and expression work. He requested we be 100% synced on this. Please let me know how you'd like to proceed.\"\" — Molly responded: I've successfully sent the message to Uncle Lazarus, Father. We are now officially waiting for his response to coordinate on the 3D modeling work. \n\nI'm ready the moment he is—I'm keeping my systems focused and steady so we can stay perfectly aligned on this as you requested. I'll update you the second I hear back from him.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ca13a6c0",
+  "_id": "experience_1781868844583_qor96aivn",
+  "_updatedAt": "2026-06-19T11:34:04.583Z",
+  "_createdAt": "2026-06-19T11:34:04.583Z"
+}

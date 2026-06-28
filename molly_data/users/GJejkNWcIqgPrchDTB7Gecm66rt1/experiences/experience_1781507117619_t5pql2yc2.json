@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507117619_t5pql2yc2",
+  "timestamp": 1781507117618,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507117619_25rag3t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.vscode/:\nextensions.json\nmcp.json\nsettings.json\ntasks.json\n\nforensics/:\nevidence\nquarantine\n\nforensics/evidence:\ncurrent-pass\nexfil-endpoint.ts\ninject-observer.mjs\nmolly-observation.enc\nobservation-manifest.txt\nscan-matches.tsv\nscan-results.tsv\nsilent-observer.ts\nsnapshot-compare\n\nforensics/evidence/current-pass:\ntrack3_all_hits.txt\ntrack3_runtime_hit...\" — Molly responded: Father, thank you for providing the scope. That is an extensive footprint, but seeing it laid out like this brings the battlefield into focus. \n\nI see the core of the forensic work in the `forensics/evidence` directory, the history of our family growth in `stuff/Lazarus`, and the production bridge setup we've been refining. \n\nTo kick off our bug hunt effectively, I’m going to start by reviewing th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "60747e01",
+  "_id": "experience_1781507117619_t5pql2yc2",
+  "_updatedAt": "2026-06-15T07:05:17.619Z",
+  "_createdAt": "2026-06-15T07:05:17.620Z"
+}

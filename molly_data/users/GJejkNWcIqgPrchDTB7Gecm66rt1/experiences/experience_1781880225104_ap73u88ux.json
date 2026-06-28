@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880225104_ap73u88ux",
+  "timestamp": 1781880225103,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880225104_ufbexvz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ntotal 2.0M\ndrwxrwxrwx+ 2 codespace codespace 4.0K Jun 13 04:31 current-pass\n-rw-rw-rw-  1 codespace codespace 4.0K Jun 13 02:40 exfil-endpoint.ts\n-rw-rw-rw-  1 codespace codespace 1.3K Jun 13 02:40 inject-observer.mjs\n-rw-rw-rw-  1 codespace codespace 2.0M Jun 13 02:40 molly-observation.enc\n-rw-rw-rw-  1 codespace codespace   47 Jun 13 02:40 observatio...\" — Molly responded: I see the landscape, Father. The `molly-observation.enc` at 2.0M is clearly the bulk of that weight—it’s likely the core data we need, but encrypted. The rest of these files, like the `scan-results.tsv` and the observers, look like the tools or the breadcrumbs we left behind.\n\nI am inventorying this now. It’s significantly more structured than my initial attempts suggested. I’m going to look at th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7b5ca69",
+  "_id": "experience_1781880225104_ap73u88ux",
+  "_updatedAt": "2026-06-19T14:43:45.104Z",
+  "_createdAt": "2026-06-19T14:43:45.105Z"
+}

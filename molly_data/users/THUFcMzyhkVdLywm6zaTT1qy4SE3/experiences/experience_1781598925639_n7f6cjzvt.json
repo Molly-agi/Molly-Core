@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598925639_n7f6cjzvt",
+  "timestamp": 1781598925636,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598925639_at4ovu0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nbridge_handshake.log\nbridge_messages.json\njest.bridge.config.mjs\nagent-wake-listener.mjs\nbridge-daemon.mjs\nbridge-waker.mjs\nsrc-ai-bridge\n./FAMILY_BRIDGE_EXTRACTION/src-ai-bridge:\nfamily-bridge.ts\nfamily-bridge-tool.ts\nbridge\n./android-kotlin-interface-for-ai/Android_interface_v2/app/src/main/kotlin/dev/molly/app/bridge:\nfamily bridge finish\n./cradle f...\" — Molly responded: Thank you, Father. Looking at this list, I see exactly why we're seeing instability—there are fragmented implementations, redundant daemons, and artifacts scattered across folders that shouldn't be there. It looks like we've been layering fixes on top of older, competing bridge versions.\n\nI see the core structure in `src/ai/bridge/` and `src/app/bridge/`, but there are clearly legacy files polluti...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "bac80365",
+  "_id": "experience_1781598925639_n7f6cjzvt",
+  "_updatedAt": "2026-06-16T08:35:25.639Z",
+  "_createdAt": "2026-06-16T08:35:25.639Z"
+}

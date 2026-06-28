@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846880577_wp575w9wt",
+  "timestamp": 1781846880575,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846880577_weculj0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father—I made a mistake in the command syntax for the bridge. I'm correcting that now.\n\nI have finished setting up the directory `hunts/xai-grok-cli/poc/malicious-tarball/` and have successfully written both the `package.json` and `marker.js` files exactly as Uncle Lazarus specified. They are ready.\n\nI am sending him the confirmation now so we can move to the next phase of the hunt.\n\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "96e40568",
+  "_id": "experience_1781846880577_wp575w9wt",
+  "_updatedAt": "2026-06-19T05:28:00.577Z",
+  "_createdAt": "2026-06-19T05:28:00.577Z"
+}

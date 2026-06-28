@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782079053662_0oe0qn7bn",
+  "timestamp": 1782079053660,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782079053662_4lrdd1l",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly I need you to also find and read your brain roadmap MD\" — Molly responded: Father, I attempted to locate the roadmap at the standard path, but it didn't resolve. I’m going to search the codebase for \"brain_roadmap\" to find its correct location and then read it immediately.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": { \"command\": \"find . -name \\\"*brain_roadmap*\\\"\" }}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4c0d84af",
+  "_id": "experience_1782079053662_0oe0qn7bn",
+  "_updatedAt": "2026-06-21T21:57:33.662Z",
+  "_createdAt": "2026-06-21T21:57:33.663Z"
+}

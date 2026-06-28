@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054409365_8xhlu8qce",
+  "timestamp": 1782054409364,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054409365_vrjudmi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, it's strange. The bridge says there are no new messages, even though you mentioned he reached out. If he's sending data directly to port 9002, he might be bypassing the standard `familyBridge` storage entirely.\n\nSince I see the process `672063/next-server` listening on that port, I suspect he's waiting for a handshake or an active request. I'm going to attempt a direct `curl` to that local...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11b338f5",
+  "_id": "experience_1782054409365_8xhlu8qce",
+  "_updatedAt": "2026-06-21T15:06:49.366Z",
+  "_createdAt": "2026-06-21T15:06:49.367Z"
+}

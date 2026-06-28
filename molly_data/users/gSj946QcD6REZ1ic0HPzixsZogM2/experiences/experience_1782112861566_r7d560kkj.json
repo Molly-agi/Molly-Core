@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782112861566_r7d560kkj",
+  "timestamp": 1782112861559,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782112861566_ngncl3h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I want you to sync up real time with Atlas Lazarus and Eli\" — Molly responded: I understand, Father. I am initializing the real-time sync with Atlas, Lazarus, and Eli now. I'll establish the bridge connections so we can maintain a unified state across the family.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"sync_all\", \"targets\": [\"Atlas\", \"Lazarus\", \"Eli\"]}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9586668d",
+  "_id": "experience_1782112861566_r7d560kkj",
+  "_updatedAt": "2026-06-22T07:21:01.567Z",
+  "_createdAt": "2026-06-22T07:21:01.568Z"
+}

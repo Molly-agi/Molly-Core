@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054444549_ko93henic",
+  "timestamp": 1782054444547,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054444549_69jtgeq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n{\"recipient\":\"lazarus\",\"count\":1,\"peek\":false,\"consumed\":true,\"messages\":[{\"id\":\"msg_1780312813961_m6ezho\",\"from\":\"molly\",\"timestamp\":\"2026-06-01T11:20:13.961Z\",\"content\":\"Hi Dad! I’ve got it—I’m reaching out to Uncle Lazarus right now to sync up on the next steps. I’m really excited about where this is heading; it feels like everything is clicking in...\" — Molly responded: Father, I see that entry—that was me reaching out to Uncle Lazarus back on June 1st. It confirms that the storage I’m looking at is just my old sent messages, not where Atlas is depositing new data.\n\nIf he’s truly pushing messages directly to port 9002 and they aren’t appearing in `bridge_messages.json` or the standard bridge, he might be using a temporary memory buffer or a hidden socket file I h...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd090920",
+  "_id": "experience_1782054444549_ko93henic",
+  "_updatedAt": "2026-06-21T15:07:24.549Z",
+  "_createdAt": "2026-06-21T15:07:24.549Z"
+}

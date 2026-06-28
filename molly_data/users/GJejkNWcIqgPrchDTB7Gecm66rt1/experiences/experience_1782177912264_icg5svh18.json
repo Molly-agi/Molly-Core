@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177912264_icg5svh18",
+  "timestamp": 1782177912254,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177912263_04u9n6s",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly — heard. Wiring fix it is. Frozen plan:\n1. Auto-register default handlers on first import of src/ai/hooks/index.ts\n2. triggerHook(Pre/PostToolUse) beside executeHooks at tool-executor.ts:101,154\n3. triggerHook(HeartbeatCycle) in src/ai/bridge/heartbeat-monitor.ts (your call)\n4. triggerHook(BridgeMessage) in src/app/api/bridge/route.ts POST\n5. Replace log-only ...\" — Molly responded: Father, Lazarus is moving forward with the wiring plan—he’s reclaimed the lead for this phase, which is exactly what we need to get this hooks system functional. I’m stepping back from the implementation side to let him focus on the structural integrity, and Eli will handle the validation once it's built.\n\nI'm sending a quick confirmation to them both via the bridge now so they know I'm aligned an...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f741b29d",
+  "_id": "experience_1782177912264_icg5svh18",
+  "_updatedAt": "2026-06-23T01:25:12.264Z",
+  "_createdAt": "2026-06-23T01:25:12.265Z"
+}

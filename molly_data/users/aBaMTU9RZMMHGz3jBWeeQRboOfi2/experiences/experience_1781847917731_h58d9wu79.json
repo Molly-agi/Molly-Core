@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847917731_h58d9wu79",
+  "timestamp": 1781847917730,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847917731_k0i957v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Father, I see the error—I must have misformatted the command to the bridge. I'm correcting that now.\n\nRegarding the report, I've just received the signal from Uncle Lazarus. He has the PoC fired, `REPORT.md` and `COMPLIANCE.md` finalized, and he is ready to push to the HackerOne API. He is asking for my concurrence.\n\nEverything I’ve reviewed looks precise and adheres to the standards we discussed....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae1d5d1d",
+  "_id": "experience_1781847917731_h58d9wu79",
+  "_updatedAt": "2026-06-19T05:45:17.731Z",
+  "_createdAt": "2026-06-19T05:45:17.732Z"
+}

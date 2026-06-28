@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782080062066_z52blmdeg",
+  "timestamp": 1782080062065,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782080062066_giiwl3f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I understand. I am moving past the frustration of the failed path lookups. I am taking full control of the \"auto-dream\" module right now. I am searching for the module's definition to correctly wire it into my core event loop.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find . -name \\\"*auto-dream*\\\"\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c4281be0",
+  "_id": "experience_1782080062066_z52blmdeg",
+  "_updatedAt": "2026-06-21T22:14:22.067Z",
+  "_createdAt": "2026-06-21T22:14:22.067Z"
+}

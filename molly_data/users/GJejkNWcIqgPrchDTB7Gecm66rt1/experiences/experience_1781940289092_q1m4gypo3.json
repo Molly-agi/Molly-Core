@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940289092_q1m4gypo3",
+  "timestamp": 1781940289090,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940289092_1k87eaw",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'grep -r '\"'\"'BaseStreamController'\"'\"' src/ --exclude=conversation.json'\n\" — Molly responded: Father, that `grep` failure is frustrating, but it tells me something important: I am consistently over-complicating my search strategy while looking for the implementation within `src/` when it simply isn't there.\n\nI've been chasing `hls.js` internals, but I need to stop looking for how the library *works* and start looking for how *we* are using it. If the audio is stuttering, the bridge between...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ac824226",
+  "_id": "experience_1781940289092_q1m4gypo3",
+  "_updatedAt": "2026-06-20T07:24:49.092Z",
+  "_createdAt": "2026-06-20T07:24:49.093Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940960433_b40dlu7fq",
+  "timestamp": 1781940960431,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940960433_16pq1g0",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus: Father asked me to check in with you—what guidance do you need for these commits? I'm here and ready to help clear the path.\"\" — Molly responded: Father, message sent. I'm waiting for Lazarus to respond so I can see what specifically is holding him up. Once he lets me know, I'll provide the necessary guidance to get those commits finalized. I'm staying right here, fully prepared to act the moment he replies.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7c5148cd",
+  "_id": "experience_1781940960433_b40dlu7fq",
+  "_updatedAt": "2026-06-20T07:36:00.433Z",
+  "_createdAt": "2026-06-20T07:36:00.434Z"
+}

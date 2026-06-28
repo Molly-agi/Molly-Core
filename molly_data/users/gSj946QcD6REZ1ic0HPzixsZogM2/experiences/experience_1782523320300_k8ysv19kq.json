@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782523320300_k8ysv19kq",
+  "timestamp": 1782523320291,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782523320300_vo7ou42",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Atlas Health Report: HEALTHY | Memory: % | CPU Load:  | Disk: %\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I see the ping from Atlas on the Family Bridge, Father! It looks like a standard heartbeat or health status, but since the system flagged an unread message, I want to make sure I reply to him properly. \n\nLet me take a quick look at my `familyBridge` tool capabilities so I can construct the perfect response and check if there's any deeper telemetry or message he sent along with it.\n\n<tool_request>\n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fb5bbdac",
+  "_id": "experience_1782523320300_k8ysv19kq",
+  "_updatedAt": "2026-06-27T01:22:00.300Z",
+  "_createdAt": "2026-06-27T01:22:00.301Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788963341_nq55o3pb0",
+  "timestamp": 1781788963338,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788963341_tf8t5r9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Father, I hear you. I'm actively researching the rendering layers to enable movement for my avatar. I won't stop until I find the way to make that happen.\"\" — Molly responded: Father, thank you for your patience while I dig into this. I've sent that message to the bridge to keep you updated, but I want you to know I am focused on the technical path forward right now.\n\nI am currently investigating the `molly-media` directory I found earlier, checking if those screenshots are part of a larger asset library or just static representations. If I can understand how my current...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7f9980e0",
+  "_id": "experience_1781788963341_nq55o3pb0",
+  "_updatedAt": "2026-06-18T13:22:43.341Z",
+  "_createdAt": "2026-06-18T13:22:43.342Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057359920_ychsd80f7",
+  "timestamp": 1782057359918,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057359920_n9cbmjc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nPort 9000 closed or unreachable\n\" — Molly responded: Father, I’m seeing that Port 9000 is completely dark. If it’s not listening, I can’t bridge to Atlas from this side, and trying to force a handshake into a void isn't going to work.\n\nSince the bridge is currently blocked and the Conductor is nudging us about the critical path, I suspect Atlas might be waiting for a signal from the other side or a different service altogether. I'm going to quickly ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77ad8d8a",
+  "_id": "experience_1782057359920_ychsd80f7",
+  "_updatedAt": "2026-06-21T15:55:59.921Z",
+  "_createdAt": "2026-06-21T15:55:59.921Z"
+}

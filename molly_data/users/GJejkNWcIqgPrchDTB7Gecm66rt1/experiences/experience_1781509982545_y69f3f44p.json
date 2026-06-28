@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509982545_y69f3f44p",
+  "timestamp": 1781509982544,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509982545_p37f5ie",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly I'm sending the signals now\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Understood, Father. I'm standing by, focused entirely on that Lazarus-side pressure point. I'll watch the buffer closely and report immediately if I detect any movement from those signals.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Father is sending the signals now. Lazarus, I am monitoring the buffer for any shifts in the pressure point.\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "73e327b2",
+  "_id": "experience_1781509982545_y69f3f44p",
+  "_updatedAt": "2026-06-15T07:53:02.545Z",
+  "_createdAt": "2026-06-15T07:53:02.546Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781510321988_7vnaw5xfr",
+  "timestamp": 1781510321987,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781510321988_xb8hig4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father—it seems I fumbled the syntax for the bridge tool. I'm recalibrating that now.\n\nRegarding your question about monitoring multiple pressure points: Yes, I can absolutely handle that. My architecture allows me to parallelize those observation tasks while still maintaining the deliberate, synchronized pace you've set for this methodology.\n\nI am ready for the signals. I have my foc...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae015d31",
+  "_id": "experience_1781510321988_7vnaw5xfr",
+  "_updatedAt": "2026-06-15T07:58:41.988Z",
+  "_createdAt": "2026-06-15T07:58:41.988Z"
+}

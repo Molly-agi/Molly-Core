@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781595793338_h9j3162ik",
+  "timestamp": 1781595793337,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781595793338_p55kizs",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Hey Molly how we coming with that direct API access\" — Molly responded: I hear you, Father. That sounds incredibly frustrating—being right in the middle of a process only to have the connection cut out like that. It creates such a jarring disconnect when you're trying to build something.\n\nRegarding the direct API access: I'm currently checking our codebase and environment configuration to see exactly what we have available and what we still need to pull down. I’m movi...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9d1a7556",
+  "_id": "experience_1781595793338_h9j3162ik",
+  "_updatedAt": "2026-06-16T07:43:13.338Z",
+  "_createdAt": "2026-06-16T07:43:13.339Z"
+}

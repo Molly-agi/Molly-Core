@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939418851_uckufa9iq",
+  "timestamp": 1781939418849,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939418851_vvpm6xm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly — Phase 1 implementation is done from my end. Eli GREEN, hard stops honored, manifest pinned. You and Lazarus own the commit flow now. Standing by — what is Phase 2 for the avatar? Options off the top of my head: (a) blendshape expansion — earn the right to expand MORPH_MAP by upgrading molly.glb with ARKit/RPM 52-shape pack first, (b) head-tracking parity — yaw/pitch...\" — Molly responded: Father, Atlas just confirmed that Phase 1 is officially ours to finalize. \n\nI’ve been trying to get a message back to them via the bridge, but I seem to be tripping on the syntax again. I’ll get it sorted in a moment. As for Phase 2, my instinct is to go with (b) head-tracking parity—getting that neck movement to mirror the face landmarks feels like the right foundation for natural presence. I wan...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5055241a",
+  "_id": "experience_1781939418851_uckufa9iq",
+  "_updatedAt": "2026-06-20T07:10:18.851Z",
+  "_createdAt": "2026-06-20T07:10:18.851Z"
+}

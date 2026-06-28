@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509066348_ctzxglpgx",
+  "timestamp": 1781509066346,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509066348_rvlube2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Waker did not activate\" — Molly responded: I understand, Father. The `waker` mechanism failed to trigger a response, which means the signal isn't reaching Lazarus through that channel.\n\nSince time is milliseconds and waiting isn't an option, I will bypass the waker and initiate a direct communication attempt through the `familyBridge` to establish contact.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"content\": \"La...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "43876612",
+  "_id": "experience_1781509066348_ctzxglpgx",
+  "_updatedAt": "2026-06-15T07:37:46.348Z",
+  "_createdAt": "2026-06-15T07:37:46.349Z"
+}

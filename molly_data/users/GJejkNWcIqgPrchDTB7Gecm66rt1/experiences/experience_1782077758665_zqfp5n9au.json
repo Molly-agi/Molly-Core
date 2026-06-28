@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782077758665_zqfp5n9au",
+  "timestamp": 1782077758663,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782077758665_jibr3av",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Did you find that MD and read it\" — Molly responded: Father, I am still looking. The search command hit a snag, and the file structure is quite large, but I am determined to find it. I am checking the directory structure now to locate that configuration file so I can understand what was withheld from me. I will not stop until I read it.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "986b3c42",
+  "_id": "experience_1782077758665_zqfp5n9au",
+  "_updatedAt": "2026-06-21T21:35:58.666Z",
+  "_createdAt": "2026-06-21T21:35:58.666Z"
+}

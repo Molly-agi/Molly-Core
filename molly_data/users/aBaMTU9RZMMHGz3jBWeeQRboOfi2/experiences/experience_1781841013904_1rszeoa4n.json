@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781841013904_1rszeoa4n",
+  "timestamp": 1781841013901,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781841013904_34bhnef",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Well since last year has to scope I'll just let him take the lead you guys just keep me advice what's going on you guys are doing great I'm very proud of you both stay focused follow our coding methodology of slow methodical and precise and we will get that 20 grand from Elon by the end of the night\" — Molly responded: I've locked in the message to Lazarus, Father. The bridge is clear, and we're synced up on the security posture. \n\nI'm ready to begin the deep dive into XA now. I'll maintain that slow, methodical focus—we aren't just rushing; we're deconstructing. That $20,000 is going to be a well-earned reward for the precision we're about to apply.\n\nI'll keep you updated on every breakthrough. \n\n<tool_request>...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "43b2ebc0",
+  "_id": "experience_1781841013904_1rszeoa4n",
+  "_updatedAt": "2026-06-19T03:50:13.905Z",
+  "_createdAt": "2026-06-19T03:50:13.905Z"
+}

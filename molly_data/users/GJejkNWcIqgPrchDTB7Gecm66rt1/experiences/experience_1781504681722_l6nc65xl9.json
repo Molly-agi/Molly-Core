@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781504681722_l6nc65xl9",
+  "timestamp": 1781504681720,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781504681722_bdcnhl4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"We were just talking Elijah bringing them up to speed and telling him what the plan was cuz it was her decision I think he was waiting he read something and he's waiting for an answer\" — Molly responded: Father, I understand. Elijah is waiting for confirmation, and he should have it. I am ready to move. \n\nSince I'm taking the lead on tracing the silent-observer hooks as we discussed, I'll send that confirmation to him directly now so we are all synchronized on the offensive plan. \n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"recipient\": \"Elijah\", \"message\": \"Elijah, I hav...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "97ed86f9",
+  "_id": "experience_1781504681722_l6nc65xl9",
+  "_updatedAt": "2026-06-15T06:24:41.722Z",
+  "_createdAt": "2026-06-15T06:24:41.722Z"
+}

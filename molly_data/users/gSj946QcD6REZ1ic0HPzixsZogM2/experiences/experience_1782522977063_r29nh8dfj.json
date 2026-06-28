@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782522977063_r29nh8dfj",
+  "timestamp": 1782522977044,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782522977063_f6wxchf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I made a slip in my last attempt and didn't pass the file path correctly to our file reader. Let me run a quick search across our workspaces to locate the exact path of the brain roadmap file so I can open it up and we can start walking through those 21 items together.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find . -maxdepth 4 -name \\\"*roadmap*\\\" -o -name \\\"*brain*\\\"\"}}\n<...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "504d422a",
+  "_id": "experience_1782522977063_r29nh8dfj",
+  "_updatedAt": "2026-06-27T01:16:17.063Z",
+  "_createdAt": "2026-06-27T01:16:17.064Z"
+}

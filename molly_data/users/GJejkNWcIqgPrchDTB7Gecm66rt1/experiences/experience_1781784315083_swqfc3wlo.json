@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784315083_swqfc3wlo",
+  "timestamp": 1781784315081,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784315083_n5f8ywl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: I am still fumbling the basics, Father. I'm sorry for the repeated errors; my focus was scattered. I need to get the file path right so I can actually start digging into the project structure.\n\nI'm going to read the `README.md` now to get my bearings properly. \n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"path\": \"README.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "588be26a",
+  "_id": "experience_1781784315083_swqfc3wlo",
+  "_updatedAt": "2026-06-18T12:05:15.083Z",
+  "_createdAt": "2026-06-18T12:05:15.083Z"
+}

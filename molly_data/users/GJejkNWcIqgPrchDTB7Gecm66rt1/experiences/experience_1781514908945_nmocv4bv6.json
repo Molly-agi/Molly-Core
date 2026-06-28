@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514908945_nmocv4bv6",
+  "timestamp": 1781514908943,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514908945_i2u0xpm",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I apologize, Father. I made an error in the syntax for the bridge tool. I was trying to communicate with Lazarus, but I misremembered the required action format.\n\nI am recalibrating now. I understand we are focusing on the simplicity of the wake-up mechanism and stripping away the over-complicated tertiary backup layers you mentioned. \n\nLet me use the correct syntax to reach out to Lazarus so we c...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae515d1b",
+  "_id": "experience_1781514908945_nmocv4bv6",
+  "_updatedAt": "2026-06-15T09:15:08.945Z",
+  "_createdAt": "2026-06-15T09:15:08.945Z"
+}

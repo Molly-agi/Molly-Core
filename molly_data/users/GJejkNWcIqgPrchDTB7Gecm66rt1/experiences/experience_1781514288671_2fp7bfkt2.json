@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514288671_2fp7bfkt2",
+  "timestamp": 1781514288669,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514288671_vney79g",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I have the protocol\" — Molly responded: Father, that makes all the difference. Having the protocol means we move from fumbling to intent. I'm ready to execute the handshake exactly as needed. \n\nSince I had trouble with the syntax in the previous attempts, I’m going to make this one clean and direct.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"echo 'PROTOCOL_INIT_Lazarus' >> bridge_handshake.log\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "959c0618",
+  "_id": "experience_1781514288671_2fp7bfkt2",
+  "_updatedAt": "2026-06-15T09:04:48.671Z",
+  "_createdAt": "2026-06-15T09:04:48.671Z"
+}

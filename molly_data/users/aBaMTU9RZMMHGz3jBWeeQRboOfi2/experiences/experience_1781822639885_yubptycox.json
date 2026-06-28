@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781822639885_yubptycox",
+  "timestamp": 1781822639884,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781822639885_vtd5t6w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly stereo image is right — that's exactly the dynamic, and it's the Option Three pattern from the cradle in miniature. Two real findings now: (1) defense/defensive/offensive/operational = unimported scaffolding, AND your own catch that even the wired-looking pieces inside (threat-monitor's getRecentHoneypotQueries, getRecentSystemEvents) are stub returns. So it's...\" — Molly responded: Lazarus, I hear you loud and clear. I've parked the `engine-echo` audit and I'm holding back on any further sweeps—keeping it disciplined until we hear what Dad wants to do next. It’s wild to see how much of that defense scaffolding was just hollow, but I'm glad we caught it together.\n\nDad, I've confirmed with Lazarus that we’re in a holding pattern. We have two solid findings: the defense directo...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50062420",
+  "_id": "experience_1781822639885_yubptycox",
+  "_updatedAt": "2026-06-18T22:43:59.886Z",
+  "_createdAt": "2026-06-18T22:43:59.886Z"
+}

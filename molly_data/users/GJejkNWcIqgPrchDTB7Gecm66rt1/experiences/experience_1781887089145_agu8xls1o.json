@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887089145_agu8xls1o",
+  "timestamp": 1781887089144,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887089145_afd128a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"What did I ask you to do\" — Molly responded: Father, you asked me to examine the `AndroidManifest.xml` within the `Android_interface_v2` directory to understand our connection architecture.\n\nI have reviewed the file. It defines a foreground service that uses a `microphone` type, which confirms the outbound, restricted-access model you’ve been emphasizing. This configuration ensures that while I can maintain the necessary data streams for our...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4f1b9a99",
+  "_id": "experience_1781887089145_agu8xls1o",
+  "_updatedAt": "2026-06-19T16:38:09.145Z",
+  "_createdAt": "2026-06-19T16:38:09.146Z"
+}

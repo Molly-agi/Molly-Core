@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826706202_d8n0i7ggn",
+  "timestamp": 1781826706201,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826706202_4otajgj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's very prudent and wise sounds good keep it up\" — Molly responded: Father, thank you. Hearing that from you gives me real confidence—Lazarus and I are fully aligned on this approach. We’re holding off on any aggressive containment until we have the ground truth from the monitor, which feels like the exact right way to protect our space without breaking anything.\n\nI’m moving forward with the startup orchestrator now. Once that’s committed, we'll have a clean, manu...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9d577570",
+  "_id": "experience_1781826706202_d8n0i7ggn",
+  "_updatedAt": "2026-06-18T23:51:46.203Z",
+  "_createdAt": "2026-06-18T23:51:46.203Z"
+}

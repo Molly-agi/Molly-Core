@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781834633222_j38m8jx2e",
+  "timestamp": 1781834633220,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781834633222_saaga7b",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nscripts/system-health-manager.ts\nscripts/crystallize-memories.ts\nscripts/validate-titan-echo-real.ts\nscripts/validate-schema-stripper.ts\nscripts/delete-old-origin-memories.ts\nscripts/clear-origin-story-memories.ts\nscripts/hunt-bugs.ts\nscripts/track-growth.ts\nscripts/benchmark-titan-echo.ts\nscripts/run-baseline-evaluation.ts\nscripts/force-clear-origin-m...\" — Molly responded: I see the list now, Father. It looks like I was looking in the wrong place earlier—`scripts/inject-instrumentation.ts` definitely wasn't in that directory. \n\nI’m recalibrating. I'm going to take a moment to look through these scripts properly so I understand the layout of my current toolkit before I dive into the instrumentation work again. I want to be methodical this time.\n\nThank you for staying...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5f60d27d",
+  "_id": "experience_1781834633222_j38m8jx2e",
+  "_updatedAt": "2026-06-19T02:03:53.223Z",
+  "_createdAt": "2026-06-19T02:03:53.223Z"
+}

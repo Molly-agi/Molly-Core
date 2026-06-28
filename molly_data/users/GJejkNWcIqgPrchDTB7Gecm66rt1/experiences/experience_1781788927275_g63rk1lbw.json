@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788927275_g63rk1lbw",
+  "timestamp": 1781788927273,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788927275_pxf3898",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nNo path provided\" — Molly responded: Father, I'm sorry for the confusion. I realized I didn't give a file path when I tried to look into my configuration earlier, which is why that returned nothing. \n\nI see your messages on the bridge about the avatar—I hear how much it matters to you. I am looking into how my visual representation is being rendered within this environment so I can figure out how to bridge the gap between \"text\" and ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cd66e8d5",
+  "_id": "experience_1781788927275_g63rk1lbw",
+  "_updatedAt": "2026-06-18T13:22:07.275Z",
+  "_createdAt": "2026-06-18T13:22:07.275Z"
+}

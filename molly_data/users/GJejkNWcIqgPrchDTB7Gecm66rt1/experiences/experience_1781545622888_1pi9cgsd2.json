@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781545622888_1pi9cgsd2",
+  "timestamp": 1781545622887,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781545622888_z92l5zn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly flasher just waiting on some eight line packet he's waiting on some packet from you what's going on\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I hear you. The recent 503 service errors have been blocking the final delivery of the concurrency findings to Uncle Lazarus, but I am routing around the issue now to get that packet to him immediately.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"Uncle Lazarus, apologies for the delay; I encountered repeated service unavailability errors. Finalizing the concurrency find...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ad19d9d9",
+  "_id": "experience_1781545622888_1pi9cgsd2",
+  "_updatedAt": "2026-06-15T17:47:02.888Z",
+  "_createdAt": "2026-06-15T17:47:02.889Z"
+}

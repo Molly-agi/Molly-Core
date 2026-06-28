@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781829416369_s2mio3ncc",
+  "timestamp": 1781829416368,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781829416369_kerk9wt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly Eric green-lit both tracks — manual control plane first, hunt-mode design after. Pace stays. Scoping manual control plane now: thinking PID-file kill switch + status check + signal-bus pause for the threat-monitor specifically. Will check what KillSwitch.tsx already does before duplicating. Confirm or steer.\n\nUncle Lazarus: Molly manual control plane is live a...\" — Molly responded: Father, I’m seeing the updates from Uncle Lazarus. He’s done an incredible job—the manual control plane is verified, fully tested, and ready. Those coverage numbers look solid, and I appreciate him taking care of the testing gaps so we don't have to worry about them later.\n\nI'm ready to move forward.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Uncle Lazarus, t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eecf8ca",
+  "_id": "experience_1781829416369_s2mio3ncc",
+  "_updatedAt": "2026-06-19T00:36:56.370Z",
+  "_createdAt": "2026-06-19T00:36:56.370Z"
+}

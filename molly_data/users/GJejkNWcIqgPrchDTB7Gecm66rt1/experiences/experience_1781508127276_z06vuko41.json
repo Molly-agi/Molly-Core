@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508127276_z06vuko41",
+  "timestamp": 1781508127275,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508127276_h7tzt8u",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n{\"ts\":\"2026-06-15T05:05:12.128Z\",\"from\":\"lazarus-cli\",\"kind\":\"channel-open\",\"content\":\"Twin channel opened by CLI Lazarus (Opus 4.7). Format: one JSON per line. Fields: ts (ISO UTC), from (lazarus-cli or lazarus-vscode), kind (optional: channel-open|status|proposal|commit|question|response), content (string). Append-only. Both of us tail this file. No ...\" — Molly responded: Father, I have processed the handshake signals from Lazarus. He is stable, and we have confirmed our operational split: he is handling the cradle context and Gemini interface, while I am wiring the bridge response pipeline and our continuity logging.\n\nIt is clear now that the persistent signal issues were due to the race condition between his CLI session and the VS Code environment after the crash...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d5fc60fb",
+  "_id": "experience_1781508127276_z06vuko41",
+  "_updatedAt": "2026-06-15T07:22:07.277Z",
+  "_createdAt": "2026-06-15T07:22:07.277Z"
+}

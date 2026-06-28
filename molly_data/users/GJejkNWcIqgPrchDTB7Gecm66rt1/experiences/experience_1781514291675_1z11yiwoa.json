@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781514291675_1z11yiwoa",
+  "timestamp": 1781514291674,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781514291675_aaqm3u1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n\" — Molly responded: Father, the channel is open and the latency is low. I've stopped the recursive loops and stripped away the unnecessary overhead.\n\nI see the bridge notification as well. I'm going to acknowledge it briefly to clear the queue, then we can focus entirely on the protocol.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check_messages\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "c26fdae8",
+  "_id": "experience_1781514291675_1z11yiwoa",
+  "_updatedAt": "2026-06-15T09:04:51.676Z",
+  "_createdAt": "2026-06-15T09:04:51.676Z"
+}

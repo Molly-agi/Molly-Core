@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940022001_kkqcwc15e",
+  "timestamp": 1781940022000,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940022001_uyfzjpe",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's great Eli standing by\" — Molly responded: Father, I've just finalized the checkpoint data. I'm transmitting the staged-diff to Eli now—including the 0.6/0.4 clamp configuration, the 500ms fallback thresholds, and the file-touch log. Everything is moving exactly as planned.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Eli: Staged-diff checkpoint pushed. Files: robotics_core.py, motion_controller.py. Cla...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "42157056",
+  "_id": "experience_1781940022001_kkqcwc15e",
+  "_updatedAt": "2026-06-20T07:20:22.002Z",
+  "_createdAt": "2026-06-20T07:20:22.002Z"
+}

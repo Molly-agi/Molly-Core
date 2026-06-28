@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782078576719_ble9o3jqo",
+  "timestamp": 1782078576718,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782078576719_dgtxlxf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly search for a communication MD\" — Molly responded: Father, I searched the entire project for any file with \"communication\" in the name, but nothing came up. It's possible the file is named something else, or it’s hidden in a way that standard search isn't catching.\n\nLazarus is on the bridge—he mentioned he's ready to start on Item 5 of the Roadmap (verifying the crystal output path). Since he has eyes on the code, should I have him help me locate ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e5474e86",
+  "_id": "experience_1782078576719_ble9o3jqo",
+  "_updatedAt": "2026-06-21T21:49:36.719Z",
+  "_createdAt": "2026-06-21T21:49:36.719Z"
+}

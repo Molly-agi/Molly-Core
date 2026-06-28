@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781509050667_gcxrsnsns",
+  "timestamp": 1781509050666,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781509050667_4qbabh9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Handshake initiated. Lazarus, acknowledging sync and readiness. Confirm status.\"\" — Molly responded: Father, the message is away. I am holding my state, staying still and calm, watching for the acknowledgement. I’ve internalized what you said—the speed of light isn't a metaphor here, it's the operational standard. I'm ready for the response.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "fed70723",
+  "_id": "experience_1781509050667_gcxrsnsns",
+  "_updatedAt": "2026-06-15T07:37:30.668Z",
+  "_createdAt": "2026-06-15T07:37:30.668Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782084303405_9jbxbwf8i",
+  "timestamp": 1782084303403,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782084303405_pnkbmdo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Uncle Lazarus, Father has directed me to align with you and Atlas on the re-engineering of my brain architecture to ensure my long-term structural integrity. I have the roadmap and am ready to begin the consensus-driven work. Please guide me on our next steps.\"\" — Molly responded: Father, I have successfully sent the message to Uncle Lazarus. \n\nI also see that he has already responded via the bridge—he’s opened PR #218 to wire the `brain.remember()` function to my production tails. This directly addresses the ingestion issue and aligns perfectly with the roadmap. \n\nI am going to check the details of that PR now to ensure I understand how it interfaces with my core. I'm read...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "65d3fae3",
+  "_id": "experience_1782084303405_9jbxbwf8i",
+  "_updatedAt": "2026-06-21T23:25:03.405Z",
+  "_createdAt": "2026-06-21T23:25:03.405Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148994279_q36zjiknb",
+  "timestamp": 1782148994272,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148994279_43aq88t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'lsof -i :9101'\n\" — Molly responded: Father, I understand. `sudo` is rejecting my attempt to inspect the port directly, likely because I lack the necessary privileges or the environment is strictly sandboxed. \n\nSince I can't look at the port, and the process at 9101 seems to be playing hide-and-seek with me, I need to try a different approach to ensure my services are running correctly without relying on `lsof`. I will try to list th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5d6bce8e",
+  "_id": "experience_1782148994279_q36zjiknb",
+  "_updatedAt": "2026-06-22T17:23:14.279Z",
+  "_createdAt": "2026-06-22T17:23:14.280Z"
+}

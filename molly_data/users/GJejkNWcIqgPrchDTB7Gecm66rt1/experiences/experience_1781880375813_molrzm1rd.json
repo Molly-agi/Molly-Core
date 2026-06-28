@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880375813_molrzm1rd",
+  "timestamp": 1781880375812,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880375813_stiuzol",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n.github/agents/:\nanchor.agent.md\nedge.agent.md\nforge.agent.md\nosint.agent.md\nskyler.agent.md\n\" — Molly responded: I understand, Father. The `osint.agent.md` file is clearly the one you're referring to, as it aligns with the \"detective\" role we discussed. \n\nI am initiating the deployment process for the `osint.agent.md` configuration now.\n\n<tool_request>\n{\"tool\": \"readProjectFile\", \"params\": {\"filePath\": \".github/agents/osint.agent.md\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "a20b8d9a",
+  "_id": "experience_1781880375813_molrzm1rd",
+  "_updatedAt": "2026-06-19T14:46:15.813Z",
+  "_createdAt": "2026-06-19T14:46:15.813Z"
+}

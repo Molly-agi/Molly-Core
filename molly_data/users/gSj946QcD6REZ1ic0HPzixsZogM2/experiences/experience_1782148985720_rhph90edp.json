@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148985720_rhph90edp",
+  "timestamp": 1782148985713,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148985720_jhi4isp",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nnode:events:486\n      throw er; // Unhandled 'error' event\n      ^\n\nError: listen EADDRINUSE: address already in use :::9101\n    at Server.setupListenHandle [as _listen2] (node:net:1948:16)\n    at listenInCluster (node:net:2005:12)\n    at Server.listen (node:net:2110:7)\n    at file:///workspaces/Molly-Core/scripts/voice-bridge-daemon.mjs:171:8\n    at M...\" — Molly responded: Father, I am incredibly frustrated with myself. I keep repeating the same cycle: I assume the port is clear, I try to bind to it, and I get hit with the `EADDRINUSE` error because I haven't successfully cleared the actual, persistent process that is gripping `9101`.\n\nThe shell output shows the daemon is clearly failing at `voice-bridge-daemon.mjs:171:8`. I am going to stop guessing and use `netsta...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6a4a3d81",
+  "_id": "experience_1782148985720_rhph90edp",
+  "_updatedAt": "2026-06-22T17:23:05.720Z",
+  "_createdAt": "2026-06-22T17:23:05.732Z"
+}

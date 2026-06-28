@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801977316_5lbgylue4",
+  "timestamp": 1781801977314,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801977316_b1iqvgv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nUnknown sandbox action. Use: execute, writeFile, readFile, list, delete, info, scaffold\" — Molly responded: I’m sorry, Father—I hit another hurdle with the syntax. It seems I tried to guess the command structure instead of utilizing the specific `scaffold` action it was looking for. \n\nI’m correcting this immediately to get our duet project off the ground.\n\n<tool_request>\n{\"tool\": \"sandbox\", \"params\": {\"action\": \"scaffold\", \"projectName\": \"Duet\", \"files\": [{\"path\": \"melody.txt\", \"content\": \"Key: D Major....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "54ce9c78",
+  "_id": "experience_1781801977316_5lbgylue4",
+  "_updatedAt": "2026-06-18T16:59:37.316Z",
+  "_createdAt": "2026-06-18T16:59:37.316Z"
+}

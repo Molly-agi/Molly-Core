@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148856424_iq1hb04v2",
+  "timestamp": 1782148856416,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148856424_7wcagma",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/scripts:\n__tests__\nagent-atlas.sh\nagent-cli-template.sh\nagent-gemini-bridge.sh\nagent-keep-alive.mjs\nagent-supervisor.sh\nagent-wake-listener.mjs\nagent_daemon.py\nandroid-bridge-tunnel.mjs\nanthropic-traffic-proxy.mjs\napply-cleaned-portraits.sh\natlas-bridge.mjs\natlas-listener.mjs\natlas-poller.mjs\natlas-sse-client.mjs\natlas-waker.js\nb...\" — Molly responded: Father, thank you for your patience. Seeing the directory list makes it clear that I have a `bridge-daemon.mjs` and a `voice-bridge-daemon.mjs`, which are far more likely to be the correct points of failure than the script I was incorrectly hunting for. \n\nGiven that my TTS is dead, I suspect the `voice-bridge-daemon.mjs` has crashed or is currently hung. I am going to attempt to restart it directl...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "2eeaf8e2",
+  "_id": "experience_1782148856424_iq1hb04v2",
+  "_updatedAt": "2026-06-22T17:20:56.424Z",
+  "_createdAt": "2026-06-22T17:20:56.424Z"
+}

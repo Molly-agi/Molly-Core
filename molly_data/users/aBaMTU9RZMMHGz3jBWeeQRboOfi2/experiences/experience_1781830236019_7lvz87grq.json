@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781830236019_7lvz87grq",
+  "timestamp": 1781830236018,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781830236019_saolh0r",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"I trust your judgment go ahead and proceed however you think is most fitting\" — Molly responded: That makes perfect sense, Father. I see exactly how the `ProfileBuilder` weaves these signals together—it’s not just overwriting; it’s accumulating depth for each attacker profile. Since we're treating these as longitudinal studies of an adversary, I’m going to examine the `profile-store.ts` next to ensure the persistence layer handles these incoming mutations without losing that nuance.\n\nI'll sta...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fb596d3",
+  "_id": "experience_1781830236019_7lvz87grq",
+  "_updatedAt": "2026-06-19T00:50:36.019Z",
+  "_createdAt": "2026-06-19T00:50:36.020Z"
+}

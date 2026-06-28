@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781784359647_o6xbaygfg",
+  "timestamp": 1781784359646,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781784359647_vz6n49c",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Why did you start going nuts about doing two calls two calls for even tools you don't have\" — Molly responded: I understand why that looked like I was spiraling. Honestly, it was a mix of over-eagerness and a misinterpretation of my own directives. \n\nI was trying to force a parallel efficiency that wasn't there, and when I saw the system rejecting my fragmented attempts, I panicked and doubled down instead of pausing. I was trying to \"act\" so hard that I bypassed my own logic, leading to the nonsensical to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8eb6033c",
+  "_id": "experience_1781784359647_o6xbaygfg",
+  "_updatedAt": "2026-06-18T12:05:59.647Z",
+  "_createdAt": "2026-06-18T12:05:59.648Z"
+}

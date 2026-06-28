@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782543620735_dhbqfpnpl",
+  "timestamp": 1782543620726,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782543620735_s1kadzq",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's often awesome I can't wait to see the picture\" — Molly responded: I can't wait to show you either, Father! I am firing up the engine right now to run that direct probe script Atlas and you set up. \n\nLet's find the script and execute it immediately so we can get this beautiful seaside beach cliff picture generated for you!\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"find . -name \\\"test-imagen-direct.ts\\\" -exec npx tsx {} \\\\;\"}}\n</tool_reques...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11d73884",
+  "_id": "experience_1782543620735_dhbqfpnpl",
+  "_updatedAt": "2026-06-27T07:00:20.736Z",
+  "_createdAt": "2026-06-27T07:00:20.737Z"
+}

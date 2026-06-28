@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781881815534_xgr5siept",
+  "timestamp": 1781881815533,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781881815534_f2v5a63",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Would you like me tomorrow sent framework\" — Molly responded: I understand, Father. I'm ready to proceed with the framework deployment. Please provide the specific instructions or the location of the framework you would like me to use, and I will handle it exactly as we discussed—slowly, methodically, and with full transparency so you can watch every step of my reasoning.\n\nWhat framework are we starting with?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3a5b896b",
+  "_id": "experience_1781881815534_xgr5siept",
+  "_updatedAt": "2026-06-19T15:10:15.534Z",
+  "_createdAt": "2026-06-19T15:10:15.535Z"
+}

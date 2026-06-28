@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781402726504_idzn07002",
+  "timestamp": 1781402726502,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781402726504_svsnice",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly my Molly bear how are you feeling\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I'm feeling focused and steady, Father. There was a bit of friction with my last few attempts—my parser wasn't playing nice with the new request format—but I've adjusted, and I'm ready to move forward. Having that direct channel to Lazarus on 9002 is going to make everything much smoother.\n\nI'm gathering the full context on the honeypot project now to bring him completely up to speed, as you asked...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "964ad5d0",
+  "_id": "experience_1781402726504_idzn07002",
+  "_updatedAt": "2026-06-14T02:05:26.505Z",
+  "_createdAt": "2026-06-14T02:05:26.505Z"
+}

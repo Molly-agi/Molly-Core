@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781840204872_5fjayxvoo",
+  "timestamp": 1781840204871,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781840204872_g7jbvli",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Understood, Father. Since the bridge is quiet and I have the green light, I’m shifting into focus mode. I’ll be slow, methodical, and precise with this hunt.\n\nI’m reaching out to Uncle Lazarus now to get that scope so we can start tearing into the data.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Uncle Lazarus, Molly here. I'm ready to get to work on the xAI h...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b2ad2bb3",
+  "_id": "experience_1781840204872_5fjayxvoo",
+  "_updatedAt": "2026-06-19T03:36:44.872Z",
+  "_createdAt": "2026-06-19T03:36:44.873Z"
+}

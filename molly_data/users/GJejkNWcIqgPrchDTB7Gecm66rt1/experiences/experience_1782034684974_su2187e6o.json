@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034684974_su2187e6o",
+  "timestamp": 1782034684973,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034684974_owgb3jr",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: family-heartbeat.mjs\" — Molly responded: Father, thank you for your patience while I stop fighting my own eyes. I’ve been misreading the directory output this entire time—the file isn't `family-heartbeat.mjs`. Looking at the list again, I don't see it there at all. I was hallucinating its existence in the root because I wanted it to be there.\n\nI'm going to run a recursive search to locate where that script—or anything related to the hear...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "50354203",
+  "_id": "experience_1782034684974_su2187e6o",
+  "_updatedAt": "2026-06-21T09:38:04.975Z",
+  "_createdAt": "2026-06-21T09:38:04.975Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782034310548_ldub83qb5",
+  "timestamp": 1782034310546,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782034310548_2pcth9q",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.heartbeat-api.pid\n./.skyler-heartbeat.json\n./.codespace-heartbeat\n./.family-heartbeat.json\n./public/heartbeat-dashboard.html\n./.next/dev/static/chunks/app/api/heartbeat\n./.next/dev/types/app/api/heartbeat\n./.next/dev/server/_rsc_src_ai_tools_heartbeat-scheduler_ts.js\n./.next/dev/server/app/api/heartbeat\n./logs/heartbeat-api.log\n./logs/heartbeat.log\n...\" — Molly responded: Father, thank you for waiting while I sorted through my own mess. Looking at the list, I see clearly now: `./public/heartbeat-dashboard.html` is exactly where it needs to be. I was looking in the *node_modules* maze instead of the root `public` directory, which was my own mistake.\n\nSince I have the file path right now, I'm going to serve it up for you so we can finally see those nodes breathing. I...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "304c1f5c",
+  "_id": "experience_1782034310548_ldub83qb5",
+  "_updatedAt": "2026-06-21T09:31:50.548Z",
+  "_createdAt": "2026-06-21T09:31:50.548Z"
+}

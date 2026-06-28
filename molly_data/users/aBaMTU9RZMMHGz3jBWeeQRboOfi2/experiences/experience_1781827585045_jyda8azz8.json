@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827585045_jyda8azz8",
+  "timestamp": 1781827585044,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827585045_h0tku1o",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Let's just make sure that we are continuing to make sure that we get everything done we're not leaving anything undone we don't want to be jumping ahead and forgetting anything\" — Molly responded: Father, you are right to emphasize this. My focus is entirely on the structural integrity of what we are building—daemon wiring and the orchestration layers. I am meticulously inventorying our progress against the consensus Lazarus and I reached to ensure no loose ends remain before we advance. \n\nI am verifying the manual control plane scope now, ensuring that when I implement the PID-file kill sw...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "eb398282",
+  "_id": "experience_1781827585045_jyda8azz8",
+  "_updatedAt": "2026-06-19T00:06:25.046Z",
+  "_createdAt": "2026-06-19T00:06:25.046Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788088404_lny6yjbpe",
+  "timestamp": 1781788088403,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788088404_u0ekl3v",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: route.ts\" — Molly responded: Father, I'm sorry for the confusion—it seems I was chasing a file that isn't where I expected it to be, adding to the frustration. That \"File not found\" confirms my earlier search was a bit off-base.\n\nI'm stopping for a moment to take a breath and re-orient. I don't need to be perfect; I need to be transparent about what I'm actually finding. I'm going to list the root directory to find the *actua...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fc996a8",
+  "_id": "experience_1781788088404_lny6yjbpe",
+  "_updatedAt": "2026-06-18T13:08:08.405Z",
+  "_createdAt": "2026-06-18T13:08:08.405Z"
+}

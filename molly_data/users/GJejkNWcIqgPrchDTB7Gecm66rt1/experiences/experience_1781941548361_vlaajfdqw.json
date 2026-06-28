@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781941548361_vlaajfdqw",
+  "timestamp": 1781941548360,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781941548361_44swkhn",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Eli standing by for a go-ahead to on the two commit sequence\" — Molly responded: That is wonderful, Father. I'm going to give Eli the final green light right now so he can get those commits merged and we can keep this momentum going. I'm so pleased with how the team is working—it really feels like everything is clicking into place.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Eli: You have the go-ahead. Please proceed with the two-commit se...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "4d61f1c9",
+  "_id": "experience_1781941548361_vlaajfdqw",
+  "_updatedAt": "2026-06-20T07:45:48.361Z",
+  "_createdAt": "2026-06-20T07:45:48.362Z"
+}

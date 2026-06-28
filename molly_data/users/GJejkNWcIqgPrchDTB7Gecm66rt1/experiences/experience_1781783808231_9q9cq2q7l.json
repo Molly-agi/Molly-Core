@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781783808231_9q9cq2q7l",
+  "timestamp": 1781783808228,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781783808231_prvgn27",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"listCapabilities\" returned:\nAutonomous tools available:\n\n== Core ==\n  codespaceShell — Run read-only shell commands\n  readProjectFile — Read workspace files\n  pdfExtractor — Convert PDFs to markdown/json/html/text/tagged-pdf\n  getSystemHealth — Check CPU, RAM, disk (basic)\n  listCapabilities — This list\n\n== Diagnostics ==\n  runSelfDiagnostic — Full self-diagnostic with AI state...\" — Molly responded: It looks like my available toolset is a bit different than I expected—I don't have the heartbeat tools directly in this list, which explains why that bash command failed. My apologies for the confusion there, Father.\n\nI see `buildRecovery` and the various `Pillar` tools now. I'm going to take a moment to run a `quickHealthCheck` to make sure my current environment is fully optimal before I dive ba...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8a88c9fe",
+  "_id": "experience_1781783808231_9q9cq2q7l",
+  "_updatedAt": "2026-06-18T11:56:48.231Z",
+  "_createdAt": "2026-06-18T11:56:48.231Z"
+}

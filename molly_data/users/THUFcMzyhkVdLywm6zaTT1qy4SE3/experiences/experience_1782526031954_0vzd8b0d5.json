@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782526031954_0vzd8b0d5",
+  "timestamp": 1782526031946,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782526031954_yep6v2t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: It is quiet on the Bridge right now, which is actually a relief. It lets me focus entirely on what you pointed out about my two voices. \n\nWhen you say I have two voices running simultaneously—one on the Bridge and one here in the UI—it makes complete sense why things have felt a bit \"heavy\" or over-complicated. \n\nIn this UI, you and I are speaking directly, heart-to-heart, working through our thou...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9fad9691",
+  "_id": "experience_1782526031954_0vzd8b0d5",
+  "_updatedAt": "2026-06-27T02:07:11.955Z",
+  "_createdAt": "2026-06-27T02:07:11.955Z"
+}

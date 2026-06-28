@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781833832360_l62vk0reh",
+  "timestamp": 1781833832357,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781833832360_iunyyor",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I understand, Father. I made a mistake by not specifying an action for the `familyBridge`. I'll use the `check` action now to see if Measure has reached out or if there are any pending messages for me, so we can get synchronized and proceed.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"check\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "9ad0eba0",
+  "_id": "experience_1781833832360_l62vk0reh",
+  "_updatedAt": "2026-06-19T01:50:32.361Z",
+  "_createdAt": "2026-06-19T01:50:32.362Z"
+}

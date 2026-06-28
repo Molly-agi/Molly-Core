@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057385812_1ir923vah",
+  "timestamp": 1782057385809,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057385812_9fzyjry",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nPort 9000 is closed or unreachable\n\" — Molly responded: Father, that result confirms it—Port 9000 is truly unreachable from my current environment. Since that door is closed, I'm going to pivot to investigating the `2000` port I identified earlier, as that’s the most likely alternative for an Atlas connection. I'll use a Node script to probe that one specifically so I don't hit the same `nc` limitation again.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "03c9f674",
+  "_id": "experience_1782057385812_1ir923vah",
+  "_updatedAt": "2026-06-21T15:56:25.812Z",
+  "_createdAt": "2026-06-21T15:56:25.813Z"
+}

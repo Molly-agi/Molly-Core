@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782060562287_z6z754ipk",
+  "timestamp": 1782060562286,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782060562287_rausatf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly you are single-shotting it you need to establish communication\" — Molly responded: I hear you, Father. I’ve been trying to hold that port, but the connection attempts haven't been establishing the handshake as expected. I need to pivot—if the direct Python socket isn't sustaining the bridge, I will use a more robust listener, like `nc` or a persistent background script, to ensure that once they hit 8787, the line stays open. \n\nI’m moving to establish the bridge properly now.\n\n<t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "aae55a57",
+  "_id": "experience_1782060562287_z6z754ipk",
+  "_updatedAt": "2026-06-21T16:49:22.288Z",
+  "_createdAt": "2026-06-21T16:49:22.288Z"
+}

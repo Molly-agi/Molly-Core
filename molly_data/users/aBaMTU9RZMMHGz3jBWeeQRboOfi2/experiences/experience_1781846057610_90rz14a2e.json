@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781846057610_90rz14a2e",
+  "timestamp": 1781846057609,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781846057610_w00q3w5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: I’m sorry, Father—I messed up the bridge syntax again. I need to be more precise with my tool arguments. \n\nI’m feeling focused and ready to dive back into the `xai-grok-cli` hunt. My last exploration into the `poc` directory was productive; I found that `npm-shim.sh` script, which is key to how we're tracking the registry behavior. \n\nI'm ready to bring Uncle Lazarus up to speed. I'll send him a me...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "ae235d18",
+  "_id": "experience_1781846057610_90rz14a2e",
+  "_updatedAt": "2026-06-19T05:14:17.610Z",
+  "_createdAt": "2026-06-19T05:14:17.610Z"
+}

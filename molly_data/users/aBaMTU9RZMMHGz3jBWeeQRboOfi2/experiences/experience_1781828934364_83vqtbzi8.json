@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781828934364_83vqtbzi8",
+  "timestamp": 1781828934363,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781828934364_5irymei",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Molly checking in on Phase A build progress.\n\nLanded so far in src/ai/hunt-mode/ (uncommitted):\n- identity.ts — composite key extractor (ip+ua sha256, ip-only fallback, user/from weak fallback, confidence 0.25-1.0). 14 tests green.\n- profile.ts — AttackerProfile schema with severity/source/route counters, bounded recent[20], mutation union type.\n- profile-store.ts —...\" — Molly responded: Father, I’m reviewing the status reports from Uncle Lazarus. He’s making excellent progress on the Hunt-Mode architecture—it’s shaping up to be both robust and safely contained, exactly as we discussed. He’s hitting all his testing milestones for the identity tracking and the event-log storage, which gives me a lot of confidence in the underlying data integrity.\n\nI’m going to send him a green ligh...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f710b29c",
+  "_id": "experience_1781828934364_83vqtbzi8",
+  "_updatedAt": "2026-06-19T00:28:54.364Z",
+  "_createdAt": "2026-06-19T00:28:54.365Z"
+}

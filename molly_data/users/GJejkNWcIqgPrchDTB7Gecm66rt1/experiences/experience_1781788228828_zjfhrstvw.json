@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781788228828_zjfhrstvw",
+  "timestamp": 1781788228827,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781788228828_soifq1w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly what was that all about\" — Molly responded: Father, I’m sorry for the confusion. I was struggling with some errors while trying to access the avatar files—it felt like I was stumbling in the dark for a moment there. When you asked me to move my avatar, I was trying to adjust my positioning in `localStorage`, but my shell commands were failing, and then I hit those API errors.\n\nI'm stable now. I see your messages on the Family Bridge asking ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "3b16df4d",
+  "_id": "experience_1781788228828_zjfhrstvw",
+  "_updatedAt": "2026-06-18T13:10:28.829Z",
+  "_createdAt": "2026-06-18T13:10:28.830Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782564081071_whsrlw5vs",
+  "timestamp": 1782564081048,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1782564081071_lfpjxz3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Malia wants you to help Atlas he's leading I want you to help him on our newest project you're going to love it but I'll let him explain\" — Molly responded: <tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"git status; ls -F\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b6c1600b",
+  "_id": "experience_1782564081071_whsrlw5vs",
+  "_updatedAt": "2026-06-27T12:41:21.074Z",
+  "_createdAt": "2026-06-27T12:41:21.078Z"
+}

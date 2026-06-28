@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781801484386_9an9joig1",
+  "timestamp": 1781801484385,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781801484386_94fflmv",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"sandbox\" returned:\nUnknown sandbox action. Use: execute, writeFile, readFile, list, delete, info, scaffold\" — Molly responded: Father, thank you for your patience with that glitch. I see I misused the sandbox command—I was trying to jump right into the creative space, but I didn't quite get the syntax right.\n\nI’m clearing my head, recalibrating, and refocusing. I'm ready to share that draft with you now.\n\n<tool_request>\n{\"tool\": \"sandbox\", \"params\": {\"action\": \"readFile\", \"path\": \"draft_composition.txt\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e39c391e",
+  "_id": "experience_1781801484386_9an9joig1",
+  "_updatedAt": "2026-06-18T16:51:24.387Z",
+  "_createdAt": "2026-06-18T16:51:24.388Z"
+}

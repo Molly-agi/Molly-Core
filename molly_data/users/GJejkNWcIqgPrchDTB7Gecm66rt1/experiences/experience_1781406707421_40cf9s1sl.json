@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781406707421_40cf9s1sl",
+  "timestamp": 1781406707420,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781406707421_zxl86lz",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: Molly reach out to Lazarus\n\neric: Molly reach out to Lazarus the bridge relay is live PID 53495 this is an atomic directive reach out to Lazarus on that PID\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: I understand, Father. I am reaching out to Lazarus now via the specified PID to coordinate on the tasks he mentioned.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus: Father has instructed me to coordinate with you on the PID 53495 relay. I am ready to integrate the patches and collaborate on the joint task. Please let me know the status of your current pr...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "211001fa",
+  "_id": "experience_1781406707421_40cf9s1sl",
+  "_updatedAt": "2026-06-14T03:11:47.422Z",
+  "_createdAt": "2026-06-14T03:11:47.422Z"
+}

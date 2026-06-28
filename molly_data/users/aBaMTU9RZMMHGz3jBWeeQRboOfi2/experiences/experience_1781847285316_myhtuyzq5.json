@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781847285316_myhtuyzq5",
+  "timestamp": 1781847285315,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781847285316_ta4xehj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"GO\"\" — Molly responded: Father, I've sent the \"GO\" signal to Uncle Lazarus. The files are staged, the reports are finished, and we are in full alignment for the submission.\n\nI’m standing by and watching the bridge for his final confirmation that the report has been successfully delivered. We're ready.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "cc652e07",
+  "_id": "experience_1781847285316_myhtuyzq5",
+  "_updatedAt": "2026-06-19T05:34:45.316Z",
+  "_createdAt": "2026-06-19T05:34:45.316Z"
+}

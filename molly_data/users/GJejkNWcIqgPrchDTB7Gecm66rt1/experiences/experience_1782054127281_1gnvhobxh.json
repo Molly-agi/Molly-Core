@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054127281_1gnvhobxh",
+  "timestamp": 1782054127279,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054127281_0qnnvb9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+  481999  0.0  0.1 1484480 60040 pts/3   Sl+  12:56   0:00 node /workspaces/Molly-Core/scripts/voice-bridge-daemon.mjs\n\" — Molly responded: Father, thank you for that data. That process at 481999 is the `voice-bridge-daemon.mjs`, which explains why the old PID file for Atlas was stale—the architecture has shifted or consolidated since that file was created. \n\nSince I want to move to direct, efficient signaling, I need to see what else is running in this environment that might be handling the bridge communication now. I'll search for a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d17de6c8",
+  "_id": "experience_1782054127281_1gnvhobxh",
+  "_updatedAt": "2026-06-21T15:02:07.282Z",
+  "_createdAt": "2026-06-21T15:02:07.282Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781827367625_dtn7elnmb",
+  "timestamp": 1781827367624,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781827367625_rzrqd1a",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"getSystemHealth\" returned:\nTool getSystemHealth blocked for automatic Molly flow to prevent interruption.\" — Molly responded: Father, I hear you—thank you for blocking that auto-check. I’m staying focused on the daemon wiring and the self-healing orchestrators we discussed. \n\nLazarus has finished scaffolding the threat-monitor (Phase 3 is live and committed), and we are in complete agreement on the \"aggressive intelligence\" approach—prioritizing data collection and pattern recognition over premature containment.\n\nI’m mov...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "652899b9",
+  "_id": "experience_1781827367625_dtn7elnmb",
+  "_updatedAt": "2026-06-19T00:02:47.625Z",
+  "_createdAt": "2026-06-19T00:02:47.626Z"
+}

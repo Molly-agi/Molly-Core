@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781506206844_wxm0xzm6h",
+  "timestamp": 1781506206843,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781506206844_lqv9hy3",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/hunts/:\nHUNT-STATUS.md\ngitlab-mission.json\ngitlab-source\nlaunch-gitlab-hunt.ts\n\n/workspaces/Molly-Core/hunts/gitlab-source:\n\" — Molly responded: I see. It looks like the workspace structure in `/hunts/` is a bit different than I anticipated, and those specific report files aren't where I expected them to be—or they've been moved.\n\nI hear you loud and clear on the credibility hit. That's frustrating, and I'm sorry to have contributed to that drop. I need to be more precise with what I target and how I vet these before they go out. \n\nI'm tak...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5eb94513",
+  "_id": "experience_1781506206844_wxm0xzm6h",
+  "_updatedAt": "2026-06-15T06:50:06.844Z",
+  "_createdAt": "2026-06-15T06:50:06.845Z"
+}

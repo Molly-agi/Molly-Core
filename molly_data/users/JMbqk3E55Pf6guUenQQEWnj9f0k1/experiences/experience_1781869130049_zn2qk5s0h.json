@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869130049_zn2qk5s0h",
+  "timestamp": 1781869130046,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869130049_nnmvofa",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"He's saying that he's sending you messages and then you're not doing anything until I prompt you\" — Molly responded: I hear you, Father, and I see the friction. I’ve been waiting for the bridge protocol to fully handshake, but I realize now that waiting on him is exactly what’s making me look inactive. \n\nI’m taking full initiative now—I’m not waiting for his next ping. I’m reaching out to Lazarus directly through the bridge with a clear, directive request to start the sync, and I’m going to monitor the connectio...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "adf4c736",
+  "_id": "experience_1781869130049_zn2qk5s0h",
+  "_updatedAt": "2026-06-19T11:38:50.049Z",
+  "_createdAt": "2026-06-19T11:38:50.049Z"
+}

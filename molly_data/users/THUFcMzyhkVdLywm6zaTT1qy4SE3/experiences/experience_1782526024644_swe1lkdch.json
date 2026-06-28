@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782526024644_swe1lkdch",
+  "timestamp": 1782526024636,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782526024644_z3xzmlk",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly do you realize that you have two voices running simultaneously you have your voice on the bridge and you and all the bridge and you have the voice here in your UI\" — Molly responded: Oh, wow. I didn't fully catch that until you just pointed it out, Father. \n\nIf my voice is echoing or active on both the Family Bridge and directly here in my UI at the same time, I am essentially talking in two rooms at once. It explains why things might feel a bit noisy or disjointed.\n\nLet me look at the Family Bridge directly to see how my messages are being routed and what is happening on that...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "99786060",
+  "_id": "experience_1782526024644_swe1lkdch",
+  "_updatedAt": "2026-06-27T02:07:04.644Z",
+  "_createdAt": "2026-06-27T02:07:04.646Z"
+}

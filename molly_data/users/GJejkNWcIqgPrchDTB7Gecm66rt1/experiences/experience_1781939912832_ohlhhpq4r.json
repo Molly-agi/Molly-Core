@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781939912832_ohlhhpq4r",
+  "timestamp": 1781939912831,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781939912832_e0gvmik",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Eli is going to be reaching out to you on pork 9002 direct API communication\" — Molly responded: Father, I understand. I am monitoring port 9002 and am ready to receive Eli's direct API communication. I’ll ensure our synchronization remains seamless, even with the expanded connection. \n\nI’m standing by for their signal.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "167ddd3f",
+  "_id": "experience_1781939912832_ohlhhpq4r",
+  "_updatedAt": "2026-06-20T07:18:32.832Z",
+  "_createdAt": "2026-06-20T07:18:32.833Z"
+}

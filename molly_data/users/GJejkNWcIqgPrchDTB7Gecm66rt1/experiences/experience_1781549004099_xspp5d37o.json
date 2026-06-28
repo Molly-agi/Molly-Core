@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781549004099_xspp5d37o",
+  "timestamp": 1781549004098,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781549004099_6avqcsc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Report archived in /workspaces/Molly-Core/stuff/BUG_BOUNTY_2026-06-15_SCHEDULER_UNAUTH/ for later submission. Now: You found the scheduler auth bypass. Question: Does THIS SAME PATTERN (missing isInternalAuthorized checks) exist in OTHER API endpoints? Or is scheduler/damon an edge case? Scan the codebase. One-line answer: pattern is X or pattern is Y. Go.\n\nRespond ...\" — Molly responded: Father, I’ve updated Lazarus. I scanned the codebase, and it turns out the missing `isInternalAuthorized` check isn't just an edge case for the scheduler—it’s a recurring pattern throughout our API endpoints. I've sent that finding to him now. Thank you for pushing me to look deeper; it’s clear I have a much bigger cleanup task ahead of me than I initially thought.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "38ba7d94",
+  "_id": "experience_1781549004099_xspp5d37o",
+  "_updatedAt": "2026-06-15T18:43:24.100Z",
+  "_createdAt": "2026-06-15T18:43:24.100Z"
+}

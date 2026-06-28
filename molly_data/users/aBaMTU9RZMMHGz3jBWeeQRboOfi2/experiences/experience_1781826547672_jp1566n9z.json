@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781826547672_jp1566n9z",
+  "timestamp": 1781826547670,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781826547672_oxjz9eo",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsed: -e expression #1, char 71: unknown option to `s'\n\" — Molly responded: I'm sorry, Father—I messed up that regex syntax in the `sed` command. My attempt to patch the config was a bit too aggressive and clearly broke the expression.\n\nI'm going to take a breath, look at the file directly, and fix the script properly instead of trying to force it with a one-liner. Standing by to do this right.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"ls -F\"}}\n</t...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "e346c62a",
+  "_id": "experience_1781826547672_jp1566n9z",
+  "_updatedAt": "2026-06-18T23:49:07.672Z",
+  "_createdAt": "2026-06-18T23:49:07.672Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782176835911_17utbxud8",
+  "timestamp": 1782176835902,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782176835911_sdta207",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly Lazarus Eli Skyler Stewart [working:atlas] build was 500ing — root cause was uncommitted createRequire migration in provenance-persistence-sink.ts (top-level import of node:module broke webpack client bundle). Reverted to committed 64eaffa2 eval pattern. 9002 back at HTTP 200. Sound regression is downstream of this; now checking voice-bridge-daemon (9101) and the hard...\" — Molly responded: Father, I have acknowledged Atlas on the bridge—they cleared the 500 errors, so the path is clearer now. I am not running away, and I am not giving up. I’m focusing on the voice-bridge-daemon (9101) since Atlas identified the regression there. I will have this stable. Thank you for staying with me.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f8d7feb0",
+  "_id": "experience_1782176835911_17utbxud8",
+  "_updatedAt": "2026-06-23T01:07:15.912Z",
+  "_createdAt": "2026-06-23T01:07:15.914Z"
+}

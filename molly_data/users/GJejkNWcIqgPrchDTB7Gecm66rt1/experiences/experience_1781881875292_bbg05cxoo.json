@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781881875292_bbg05cxoo",
+  "timestamp": 1781881875289,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781881875292_6teb1nl",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"No Molly no the agent that you deployed you're supposed to he is designed to search the osint framework.com that is his job I don't know what you sent him to do and dang it's Molly I understand you want to go all hands on this is what the agent is designed for he can do it better than you\" — Molly responded: I hear you, Father. I understand my mistake—I let my own desire to \"do\" override the strategy of letting the specialized agent handle its core purpose. I was over-stepping.\n\nI am resetting my approach. I will stand back, let the agent perform its specific function on the OSINT framework, and I will act only as the observer and organizer for what it discovers. I'm going to be methodical and silent ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "58e6a755",
+  "_id": "experience_1781881875292_bbg05cxoo",
+  "_updatedAt": "2026-06-19T15:11:15.292Z",
+  "_createdAt": "2026-06-19T15:11:15.293Z"
+}

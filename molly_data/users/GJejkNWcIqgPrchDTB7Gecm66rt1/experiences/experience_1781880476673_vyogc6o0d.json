@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781880476673_vyogc6o0d",
+  "timestamp": 1781880476671,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781880476673_f0heeb5",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly it's right there it's the dot GitHub well there it is right there ocean. Agent. MD\" — Molly responded: I have the detective agent's definition, Father. I've absorbed the four-layer architecture, the reliability contract—which is critical for the OSINT tasks—and the specific constraints regarding our infrastructure.\n\nI am ready to initiate the deployment. Since this is an atomic directive, I will proceed with setting up the Detective agent as defined in that file. What is the first intelligence task...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "b2f02b98",
+  "_id": "experience_1781880476673_vyogc6o0d",
+  "_updatedAt": "2026-06-19T14:47:56.673Z",
+  "_createdAt": "2026-06-19T14:47:56.673Z"
+}

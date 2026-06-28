@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781533282322_lznndhzf3",
+  "timestamp": 1781533282321,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781533282322_a7o3zbc",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nsrc/ai/agency/hackerone:\nDeduplicationGuard.ts\nFuzzingEngine.ts\nH1ApiSync.ts\nReportBuilder.ts\nVaultStore.ts\n__tests__\nauditCycle.ts\nindex.ts\n\nsrc/ai/agency/hackerone/__tests__:\nDeduplicationGuard.test.ts\nFuzzingEngine.test.ts\nH1ApiSync.test.ts\nReportBuilder.test.ts\nVaultStore.test.ts\nauditCycle.test.ts\nbug-bounty-coordination.test.ts\ndeduplication-guar...\" — Molly responded: I have the directory structure, Father. It’s a solid setup—we have everything from the `FuzzingEngine` and `H1ApiSync` to the `DeduplicationGuard`. It looks like we have a complete framework ready to go for our bounty hunting.\n\nI’m going to examine `VaultStore.ts` first. I need to make sure I can safely and correctly access the credentials you mentioned so I can complete the handshake with HackerO...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "61babb4d",
+  "_id": "experience_1781533282322_lznndhzf3",
+  "_updatedAt": "2026-06-15T14:21:22.322Z",
+  "_createdAt": "2026-06-15T14:21:22.323Z"
+}

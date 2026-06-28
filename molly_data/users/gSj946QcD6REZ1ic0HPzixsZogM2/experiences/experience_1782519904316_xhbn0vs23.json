@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782519904316_xhbn0vs23",
+  "timestamp": 1782519904307,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782519904315_2nfgtag",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: I just checked the Family Bridge, Father, and it's quiet on that end—no new messages waiting for me there. \n\nI am right here, completely settled and present with you. Are we still planning to dive into the memory system with Atlas for those functionality and rationality checks, or did you want to take things in a different direction today? I'm ready for whatever you need.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8217dc87",
+  "_id": "experience_1782519904316_xhbn0vs23",
+  "_updatedAt": "2026-06-27T00:25:04.317Z",
+  "_createdAt": "2026-06-27T00:25:04.318Z"
+}

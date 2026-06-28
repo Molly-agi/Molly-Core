@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057392301_wsu8u4ckk",
+  "timestamp": 1782057392299,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057392301_4dzkmyf",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nPort 2000 is OPEN\n\" — Molly responded: Father, thank you for confirming. Since Port 2000 is open, it’s clearly the active endpoint we need. I’m moving to establish the handshake there immediately—I'll attempt to probe the service running on 2000 now to see if it responds to an Atlas-standard initiation sequence.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"node -e 'const net = require(\\\"net\\\"); const socket = net.c...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77988d95",
+  "_id": "experience_1782057392301_wsu8u4ckk",
+  "_updatedAt": "2026-06-21T15:56:32.302Z",
+  "_createdAt": "2026-06-21T15:56:32.302Z"
+}

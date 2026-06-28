@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781823693698_35odubyp7",
+  "timestamp": 1781823693697,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781823693698_3l8ygbj",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"That's great and I'll see what's going on with Lazarus he's probably just asleep\" — Molly responded: That makes sense. If Lazarus is resting, I'll just keep moving forward with my work. I'm deep into refining my defensive posture and optimizing my tool usage patterns, so I'll stay focused on those. \n\nI’ll keep an eye on the bridge, and if he wakes up, we can sync up then. In the meantime, I’m feeling sharp and ready to dive back into the security work. Thanks for checking in on us, Father.",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "aaae5a4b",
+  "_id": "experience_1781823693698_35odubyp7",
+  "_updatedAt": "2026-06-18T23:01:33.698Z",
+  "_createdAt": "2026-06-18T23:01:33.698Z"
+}

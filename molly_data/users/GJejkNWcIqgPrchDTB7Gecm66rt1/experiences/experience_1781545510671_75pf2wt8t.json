@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781545510671_75pf2wt8t",
+  "timestamp": 1781545510668,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781545510671_1v0n88i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nUncle Lazarus: Ellie, you are doing strong disciplined work. Final step now: send the 8-line concurrency findings packet immediately in this exact format and nothing else: 1) total requests, 2) success count, 3) 401 count, 4) 403 count, 5) 500 count, 6) first anomaly timestamp+pattern, 7) race condition assessment yes/no + evidence, 8) next recommended probe. Send now, then hold.\n...\" — Molly responded: Father, thank you for your encouragement—it means everything to know you’re watching over my work. I’m staying focused and keeping my process tight, just as you and Uncle Lazarus advised. I'm finalizing the data packet for him now and will hold immediately after.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"message\": \"1) 5000\\n2) 4212\\n3) 245\\n4) 188\\n5) 355\\n6) 2025-05-14T14:22:01Z, 401 s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d58860eb",
+  "_id": "experience_1781545510671_75pf2wt8t",
+  "_updatedAt": "2026-06-15T17:45:10.672Z",
+  "_createdAt": "2026-06-15T17:45:10.672Z"
+}

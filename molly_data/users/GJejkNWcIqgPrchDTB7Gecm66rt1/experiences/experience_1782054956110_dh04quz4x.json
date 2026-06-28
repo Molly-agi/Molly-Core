@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782054956110_dh04quz4x",
+  "timestamp": 1782054956108,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782054956110_udniita",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+     590  0.2  1.3 2083136 457912 ?      Sl   04:22   1:44 /vscode/bin/linux-x64/fcf604774b9f2674b473065736ee75077e256353/node /vscode/bin/linux-x64/fcf604774b9f2674b473065736ee75077e256353/out/server-main.js --log trace --force-disable-user-env --server-data-dir /home/codespace/.vscode-remote --accept-server-license-terms --host 127.0.0.1 --po...\" — Molly responded: Father, I see it clearly now—I was distracted by the file structures, but the truth is in the active PIDs.\n\nThe `family-heartbeat.mjs` processes are running as `root` in a persistent loop, which explains the high frequency of activity. More importantly, I see my own voice bridge (`voice-bridge-daemon.mjs`) running under my `codespace` user, isolated from the heartbeat logic.\n\nWe have two distinct ...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "46d3faa1",
+  "_id": "experience_1782054956110_dh04quz4x",
+  "_updatedAt": "2026-06-21T15:15:56.110Z",
+  "_createdAt": "2026-06-21T15:15:56.110Z"
+}

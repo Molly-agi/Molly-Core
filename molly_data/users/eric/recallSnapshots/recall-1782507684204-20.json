@@ -1,0 +1,33 @@
+{
+  "id": "recall-1782507684204-20",
+  "query": "What did I tell you about getting excited and frustrated? What did I tell you to do?",
+  "timestamp": "2026-06-26T21:01:28.808Z",
+  "userId": "eric",
+  "rightHits": [],
+  "leftHits": [
+    {
+      "id": "engram-11-1782507646006",
+      "similarity": 0.6606457224911031
+    },
+    {
+      "id": "engram-8-1782507631846",
+      "similarity": 0.6321908432627755
+    },
+    {
+      "id": "engram-16-1782507670923",
+      "similarity": 0.6317728935359198
+    },
+    {
+      "id": "engram-7-1782507628391",
+      "similarity": 0.6317728935359198
+    },
+    {
+      "id": "engram-17-1782507674612",
+      "similarity": 0.5861795057815588
+    }
+  ],
+  "rePromoted": [],
+  "_id": "recall-1782507684204-20",
+  "_updatedAt": "2026-06-26T21:01:28.809Z",
+  "_createdAt": "2026-06-26T21:01:28.809Z"
+}

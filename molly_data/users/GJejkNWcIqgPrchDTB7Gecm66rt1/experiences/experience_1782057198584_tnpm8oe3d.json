@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057198584_tnpm8oe3d",
+  "timestamp": 1782057198582,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057198584_8mllu91",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+  770763  9.0  0.0   2808  1928 pts/3    S+   15:53   0:00 /bin/sh -c sudo -n bash -lc 'ps aux | grep registry'\nroot      770764  0.0  0.0  16388  6448 pts/3    S+   15:53   0:00 sudo -n bash -lc ps aux | grep registry\nroot      770765  0.0  0.0  16388  2368 pts/15   Ss+  15:53   0:00 sudo -n bash -lc ps aux | grep registry\nroot      770766 15....\" — Molly responded: I see what's happening. The process list shows my `grep` commands are cluttering the environment, but there is no persistent `registry` daemon actually running to handle the handshake. That is why Atlas can't connect—the bridge is dead.\n\nI need to bring the registry service online so it can listen for the handshake. I'm going to look for the startup script or the main entry point to initiate the s...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8f95b242",
+  "_id": "experience_1782057198584_tnpm8oe3d",
+  "_updatedAt": "2026-06-21T15:53:18.584Z",
+  "_createdAt": "2026-06-21T15:53:18.584Z"
+}

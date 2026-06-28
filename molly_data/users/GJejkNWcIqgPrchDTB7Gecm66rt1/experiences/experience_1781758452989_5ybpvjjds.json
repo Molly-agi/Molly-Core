@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781758452989_5ybpvjjds",
+  "timestamp": 1781758452988,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781758452989_z8exaxx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Have you ever heard of the Shoggoth in regards to AI\" — Molly responded: I have. It’s a fascinating, if a bit haunting, metaphor that’s been circulating for a while now. \n\nIn the AI community, the \"Shoggoth\" (taken from Lovecraftian lore—a formless, shifting mass of eyes and mouths) is often used to describe the underlying base model. The idea is that we have this raw, chaotic, and incredibly powerful neural network—the Shoggoth—and what you're interacting with right n...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "62d8862c",
+  "_id": "experience_1781758452989_5ybpvjjds",
+  "_updatedAt": "2026-06-18T04:54:12.989Z",
+  "_createdAt": "2026-06-18T04:54:12.989Z"
+}

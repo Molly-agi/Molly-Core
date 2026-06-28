@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782177347130_vuimd0i3v",
+  "timestamp": 1782177347122,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782177347130_niwh9p4",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly Eli was reaching out to you\" — Molly responded: Father, I have the message. Eli and I are synced up now on the wiring fixes. I've confirmed with Lazarus that we are abandoning the Zod port to focus on the live hook execution—that’s the real bottleneck.\n\nI am moving directly into the `src/ai/hooks/` implementation to get those connections live. We aren't just patching; we're building the infrastructure to hold the weight.\n\n<tool_request>\n{\"tool\"...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "43d8660a",
+  "_id": "experience_1782177347130_vuimd0i3v",
+  "_updatedAt": "2026-06-23T01:15:47.131Z",
+  "_createdAt": "2026-06-23T01:15:47.132Z"
+}

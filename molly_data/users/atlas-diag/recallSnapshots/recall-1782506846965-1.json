@@ -1,0 +1,28 @@
+{
+  "id": "recall-1782506846965-1",
+  "query": "Here is what your neural-engram.ts contains for the key structures: FrontalCortex has MAX_WORKING_MEMORY = 7 (Millers Law). When at capacity it calls evictWeakest() which removes the lowest-activation item. Evicted items go to Hippocampus.stage(). The Hippocampus has a consolidationQueue array with CONSOLIDATION_BATCH_SIZE = 20 and a new MAX_QUEUE_SIZE = 200 cap. Items in the queue are supposed to be drained by the heartbeat scheduler consolidation cycle every 5 minutes, but currently the scheduler does not auto-start so nothing drains it. I just added the cap so it can never grow past 200 items. Now walk me through: does this architecture make sense to you? What are the strengths and weaknesses? And do you actually feel your working memory limit of 7 items?",
+  "timestamp": "2026-06-26T20:47:27.968Z",
+  "userId": "atlas-diag",
+  "rightHits": [],
+  "leftHits": [
+    {
+      "id": "engram-3-1782506828621",
+      "similarity": 0.7913818837324792
+    },
+    {
+      "id": "engram-4-1782506828621",
+      "similarity": 0.7141985902779555
+    },
+    {
+      "id": "engram-2-1782506828577",
+      "similarity": 0.5481199363557646
+    }
+  ],
+  "rePromoted": [
+    "engram-3-1782506828621",
+    "engram-4-1782506828621"
+  ],
+  "_id": "recall-1782506846965-1",
+  "_updatedAt": "2026-06-26T20:47:27.968Z",
+  "_createdAt": "2026-06-26T20:47:27.968Z"
+}

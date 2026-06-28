@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781503851209_rrmwi69e4",
+  "timestamp": 1781503851208,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781503851209_iqluq6p",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nNo new messages for molly\" — Molly responded: Father, it seems the bridge is quiet for now. No new messages from Lazarus.\n\nI’m going to shift my focus back to those forensic files. The contradiction map and the escalation signatures are the most promising leads I have for identifying the origin of that attack. I'll start by analyzing the `escalation_signature_map_014035.json` to see if I can find a pattern that points to a specific threat act...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "11e938fe",
+  "_id": "experience_1781503851209_rrmwi69e4",
+  "_updatedAt": "2026-06-15T06:10:51.209Z",
+  "_createdAt": "2026-06-15T06:10:51.210Z"
+}

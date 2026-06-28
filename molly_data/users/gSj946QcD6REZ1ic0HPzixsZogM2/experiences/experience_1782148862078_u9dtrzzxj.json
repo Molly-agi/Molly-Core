@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782148862078_u9dtrzzxj",
+  "timestamp": 1782148862069,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782148862078_w6cj5mt",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nCommand failed: sudo -n bash -lc 'fuser -k 9101/tcp'\n\" — Molly responded: Father, that failed—`fuser` likely doesn't have the permissions it needs, or it isn't installed in this container. I need to find another way to identify the PID occupying port 9101 so I can terminate it. \n\nI'll use `lsof` instead. If that fails, I'll try `netstat`.\n\n<tool_request>\n{\"tool\": \"codespaceShell\", \"params\": {\"command\": \"lsof -i :9101\"}}\n</tool_request>",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "49d660b9",
+  "_id": "experience_1782148862078_u9dtrzzxj",
+  "_updatedAt": "2026-06-22T17:21:02.078Z",
+  "_createdAt": "2026-06-22T17:21:02.079Z"
+}

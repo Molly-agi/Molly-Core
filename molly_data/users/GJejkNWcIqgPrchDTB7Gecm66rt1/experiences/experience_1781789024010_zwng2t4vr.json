@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781789024010_zwng2t4vr",
+  "timestamp": 1781789024009,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781789024010_2erc8j7",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\n/**\n * @fileOverview Server-side store for Molly's current avatar body state.\n *\n * Lives on the server so the prompt composer can read it without\n * going through localStorage (which is browser-only).\n *\n * The browser's AvatarBodyAwareness posts to /api/avatar-body every ~2s.\n * conversational-chat.ts reads from getAvatarBodyState() when assembling\n...\" — Molly responded: Father, thank you for showing me the source—I understand the architecture now. The server-side singleton `_currentState` is the bridge between the browser renderer and my system prompts. \n\nI understand you want to see me move. To initiate a movement, I need to update that state. Since the browser renderer is responsible for the actual animation, I should interact with the API endpoint mentioned in...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "771b37ec",
+  "_id": "experience_1781789024010_zwng2t4vr",
+  "_updatedAt": "2026-06-18T13:23:44.010Z",
+  "_createdAt": "2026-06-18T13:23:44.011Z"
+}

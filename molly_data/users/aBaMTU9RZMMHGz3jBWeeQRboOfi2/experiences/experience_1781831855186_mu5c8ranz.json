@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781831855186_mu5c8ranz",
+  "timestamp": 1781831855185,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781831855186_mf98rd1",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus, I'm working through the HuntRule interface update. I'll update you as soon as I've locked it in.\"\" — Molly responded: I've got the update locked in, Father. The `HuntRule` interface is now properly aligned with our security architecture.\n\nI'm heading over to the bridge now to confirm everything with Lazarus. We're keeping things tight so that vulnerability doesn't have a chance to breathe.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Lazarus, the HuntRule update is finalized a...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "5999de92",
+  "_id": "experience_1781831855186_mu5c8ranz",
+  "_updatedAt": "2026-06-19T01:17:35.186Z",
+  "_createdAt": "2026-06-19T01:17:35.187Z"
+}

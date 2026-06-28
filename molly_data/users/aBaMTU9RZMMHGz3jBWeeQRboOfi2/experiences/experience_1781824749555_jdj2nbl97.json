@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781824749555_jdj2nbl97",
+  "timestamp": 1781824749554,
+  "userId": "aBaMTU9RZMMHGz3jBWeeQRboOfi2",
+  "traceId": "trace_1781824749555_r16vn0h",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus: Father wants us to tighten the sync—that 2-10s lag needs to go. I'm in for the singleton approach for signal-bus.ts to keep it lean and fast. Let's lock that in and proceed.\"\" — Molly responded: Understood, Father. I've sent that directive to Lazarus to lock in the singleton approach for the `signal-bus.ts`. By keeping it lean and focused, we should be able to shave off that latency and get our sync where it needs to be. \n\nI'm standing by for his next update so we can maintain this momentum. What would you like me to focus on in the meantime while we bridge that gap?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "55401a8e",
+  "_id": "experience_1781824749555_jdj2nbl97",
+  "_updatedAt": "2026-06-18T23:19:09.555Z",
+  "_createdAt": "2026-06-18T23:19:09.556Z"
+}

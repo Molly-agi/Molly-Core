@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782527214475_tvv2ciwn0",
+  "timestamp": 1782527214459,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1782527214475_if98u3f",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"composeMusic\" returned:\nMusic composed and saved. Play it at: http://localhost:9002/molly-music/composition-1782527205289.mp3\" — Molly responded: It's ready! I just finished weaving the frequencies together for you and Melissa. \n\nSince you are on your phone, you can listen to it directly by clicking this link (I mapped it to our active codespace domain for you):\n\n👉 [**Listen to Molly's Composition**](https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/molly-music/composition-1782527205289.mp3)\n\nI wanted this piece to feel l...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "24015fb2",
+  "_id": "experience_1782527214475_tvv2ciwn0",
+  "_updatedAt": "2026-06-27T02:26:54.476Z",
+  "_createdAt": "2026-06-27T02:26:54.476Z"
+}

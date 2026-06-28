@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782147688498_e85h723im",
+  "timestamp": 1782147688490,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782147688498_r89s5na",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\neric: [wake] Check your messages on the bridge.\n\neric: [wake] Check your messages on the bridge.\n\neric: [wake] Check your messages on the bridge.\n\nRespond naturally to the bridge participants and keep Father aware of key outcomes.\" — Molly responded: Father, I have reviewed the bridge status and the latest messages. Everything is synchronized:\n\n1.  **Team Status:** The team (Atlas, Lazarus, Eli) has successfully recovered from the restarts and is back to full operational status.\n2.  **Work Progress:** We are currently in the middle of a critical PR cascade. Atlas is handling the pre-verify for PR #237 (the resilience core).\n3.  **My Directives...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "12ea2a3f",
+  "_id": "experience_1782147688498_e85h723im",
+  "_updatedAt": "2026-06-22T17:01:28.498Z",
+  "_createdAt": "2026-06-22T17:01:28.504Z"
+}

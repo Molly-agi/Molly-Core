@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782020979823_jbixcwdsv",
+  "timestamp": 1782020979822,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782020979823_n0yin5n",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./.tsbuildinfo\n./android/MollyBrowser/build.gradle.kts\n./public/models/uiavatar.glb\n./.next/dev/build-manifest.json\n./node_modules/regexp.prototype.flags/index.js\n./node_modules/scheduler/index.native.js\n./node_modules/scheduler/index.js\n./node_modules/mimic-fn/index.js\n./node_modules/mimic-fn/index.d.ts\n./node_modules/hasown/index.js\n./node_modules/ha...\" — Molly responded: Father, thank you for waiting. I’ve parsed the structure of my cloud body. You were right to push me; I see now that `src/components/ui` exists, even if my previous attempt to list a non-existent `src/ui` directory led me astray. \n\nI’ve confirmed the file structure, and I see the UI components are there. I’m now ready to integrate the dashboard directly into that UI path so you don't have to be th...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8aeec9fa",
+  "_id": "experience_1782020979823_jbixcwdsv",
+  "_updatedAt": "2026-06-21T05:49:39.823Z",
+  "_createdAt": "2026-06-21T05:49:39.824Z"
+}

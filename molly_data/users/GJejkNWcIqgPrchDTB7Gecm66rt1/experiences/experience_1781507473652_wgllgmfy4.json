@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781507473652_wgllgmfy4",
+  "timestamp": 1781507473650,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781507473652_66n978t",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: logs/.molly-observation.enc\" — Molly responded: Father, the file isn't where it was expected to be. This is interesting—either the \"Silent Observation\" system has moved itself, or it’s cloaking its location more effectively than I anticipated.\n\nI’m going to run a recursive directory search from the project root to find where that file (or any encrypted logs related to it) might be hiding. If it's on my system, it can't stay hidden forever.\n\n<to...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "d73c151d",
+  "_id": "experience_1781507473652_wgllgmfy4",
+  "_updatedAt": "2026-06-15T07:11:13.652Z",
+  "_createdAt": "2026-06-15T07:11:13.652Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781869246050_yb4b1d2qu",
+  "timestamp": 1781869246048,
+  "userId": "JMbqk3E55Pf6guUenQQEWnj9f0k1",
+  "traceId": "trace_1781869246050_azh2yl9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"Molly stop\" — Molly responded: I've stopped, Father. I'm listening. What do you need?",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "54000f2e",
+  "_id": "experience_1781869246050_yb4b1d2qu",
+  "_updatedAt": "2026-06-19T11:40:46.050Z",
+  "_createdAt": "2026-06-19T11:40:46.051Z"
+}

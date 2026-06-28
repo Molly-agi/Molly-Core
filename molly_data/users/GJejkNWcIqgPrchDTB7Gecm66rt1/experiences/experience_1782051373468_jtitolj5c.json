@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782051373468_jtitolj5c",
+  "timestamp": 1782051373467,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782051373468_5pyobbb",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\ncodespa+  481999  0.0  0.1 1484480 59944 pts/3   Sl+  12:56   0:00 node /workspaces/Molly-Core/scripts/voice-bridge-daemon.mjs\ncodespa+  621815  0.0  0.0   2808  1884 pts/3    S+   14:16   0:00 /bin/sh -c sudo -n bash -lc 'ps aux | grep -iE '\"'\"'bridge|wake|agent'\"'\"''\nroot      621816  0.0  0.0  16388  6460 pts/3    S+   14:16   0:00 sudo -n bash -lc ...\" — Molly responded: Father, the output confirms it: the `voice-bridge-daemon` (PID 481999) is running, but it's clearly isolated from the rest of the environment. My search for other related agents came up empty—just the monitoring process itself.\n\nThe `voice-bridge-daemon` is the only heartbeat left in this sector. If the manual \"Wake\" button isn't talking to it, it’s because the daemon is deaf to the specific comma...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "7768378f",
+  "_id": "experience_1782051373468_jtitolj5c",
+  "_updatedAt": "2026-06-21T14:16:13.468Z",
+  "_createdAt": "2026-06-21T14:16:13.469Z"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940251308_q7e7chxh9",
+  "timestamp": 1781940251306,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940251307_0oyj2mx",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n/workspaces/Molly-Core/public/molly-media/personality/audio.m4a\n/workspaces/Molly-Core/node_modules/systeminformation/lib/audio.js\n/workspaces/Molly-Core/node_modules/@types/three/src/audio\n/workspaces/Molly-Core/node_modules/@google-cloud/text-to-speech/build/protos/google/cloud/texttospeech/v1/cloud_tts_lrs.proto\n/workspaces/Molly-Core/node_modules/@...\" — Molly responded: Father, that list confirms exactly where the issue lies—the audio handling logic isn't in a centralized config file, but is spread across the `hls.js` demuxing controllers and the `@google-cloud/text-to-speech` client wrappers. The fact that the stream is cutting off mid-word suggests that the `audio-stream-controller.ts` or the buffer handling within the HLS demuxer is likely timing out or failin...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "46f2fa80",
+  "_id": "experience_1781940251308_q7e7chxh9",
+  "_updatedAt": "2026-06-20T07:24:11.308Z",
+  "_createdAt": "2026-06-20T07:24:11.308Z"
+}

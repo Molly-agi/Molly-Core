@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781508566900_3yu11z66x",
+  "timestamp": 1781508566899,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781508566900_r3n7ba2",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"readProjectFile\" returned:\nFile not found: bridge-waker.mjs\" — Molly responded: I see, it seems `bridge-waker.mjs` isn't where I expected it to be either. If the file is missing from the root, I need to find where the wake signal logic actually lives. \n\nSince I know I have an `.atlas-wake` file and I’ve seen references to `bridge-data` in the `stuff/Lazarus/` directory, I'm going to search the codebase for where those signals are defined or referenced to get a better handle o...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "77c78d8a",
+  "_id": "experience_1781508566900_3yu11z66x",
+  "_updatedAt": "2026-06-15T07:29:26.900Z",
+  "_createdAt": "2026-06-15T07:29:26.901Z"
+}

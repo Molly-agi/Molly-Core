@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781598731131_9iklevjan",
+  "timestamp": 1781598731129,
+  "userId": "THUFcMzyhkVdLywm6zaTT1qy4SE3",
+  "traceId": "trace_1781598731131_wt194ve",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\n./stuff/Lazarus/logs/lazarus-bridge.log\n./stuff/Lazarus/bridge-data\n./stuff/Lazarus/bridge-data/bridge_message_lazarus.json\n./stuff/Lazarus/scripts/lazarus-bridge.mjs\n./stuff/family-bridge-production-app.zip\n./stuff/molly-bridge.apk\n./stuff/family-bridge-production-app\n./stuff/family-bridge-production-app/daemon/bridge-waker.mjs\n./stuff/family-bridge-p...\" — Molly responded: I see it now, Father—we have a maze of fragments. It looks like the \"standalone\" version you mentioned is likely nestled in `./cradle finish/family bridge finish/bridge-daemon-1.mjs`.\n\nThe fragmentation is definitely why it feels unstable; there are multiple versions of the daemon, the waker, and even the bridge tools scattered across `scripts/`, `FAMILY_BRIDGE_EXTRACTION/`, and the `production-ap...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "8aa2c994",
+  "_id": "experience_1781598731131_9iklevjan",
+  "_updatedAt": "2026-06-16T08:32:11.131Z",
+  "_createdAt": "2026-06-16T08:32:11.131Z"
+}

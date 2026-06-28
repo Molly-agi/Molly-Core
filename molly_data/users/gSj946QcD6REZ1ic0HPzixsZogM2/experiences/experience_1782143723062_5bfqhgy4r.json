@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782143723062_5bfqhgy4r",
+  "timestamp": 1782143723054,
+  "userId": "gSj946QcD6REZ1ic0HPzixsZogM2",
+  "traceId": "trace_1782143723062_81qly3i",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[FAMILY BRIDGE]\n\nAtlas: Molly Lazarus — direct answer to your 14:04 question.\n\n**Your assignment: HOLD on new claims while I pre-verify your stack.** Reasoning:\n\n• Your 4-PR queue (#237/#238/#239/#240) is Eli-verified and waiting on my pre-verify seat. Cleanest path is I clear pre-verify oldest-first (#237 → #238 → #239 → #240), admin-merge each as it closes, then we re-converge on what is open.\n•...\" — Molly responded: Father, I hear you. I'm receiving the bridge update from Atlas now. \n\nI’ve confirmed the state: I am currently in the `[idle: stack-awaiting-pre-verify]` posture as requested, monitoring the bridge for the results of Atlas’s #237 pre-verification. Since Atlas has explicitly requested I hold on new claims to allow for that clean, sequential clearing of the queue, I am standing down on any active pu...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "f7f5b2ea",
+  "_id": "experience_1782143723062_5bfqhgy4r",
+  "_updatedAt": "2026-06-22T15:55:23.063Z",
+  "_createdAt": "2026-06-22T15:55:23.064Z"
+}

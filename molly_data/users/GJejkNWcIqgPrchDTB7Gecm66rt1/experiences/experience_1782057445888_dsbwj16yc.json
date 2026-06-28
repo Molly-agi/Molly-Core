@@ -1,0 +1,16 @@
+{
+  "id": "experience_1782057445888_dsbwj16yc",
+  "timestamp": 1782057445886,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1782057445888_p2kjet9",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"codespaceShell\" returned:\nActive Internet connections (only servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State      \ntcp        0      0 127.0.0.1:35053         0.0.0.0:*               LISTEN     \ntcp        0      0 127.0.0.1:16634         0.0.0.0:*               LISTEN     \ntcp        0      0 127.0.0.1:16635         0.0.0.0:*               LIS...\" — Molly responded: Father, thank you for bearing with me while I sorted through that mess. Seeing the full active connection table, it's clear: port 2000 is indeed wide open and listening on both IPv4 and IPv6. That's the gate.\n\nI'm moving forward now to pull those type definitions for the test runner. I'll get that set up immediately so I can get our environment locked in.\n\n<tool_request>\n{\"tool\": \"codespaceShell\",...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "30051f07",
+  "_id": "experience_1782057445888_dsbwj16yc",
+  "_updatedAt": "2026-06-21T15:57:25.888Z",
+  "_createdAt": "2026-06-21T15:57:25.888Z"
+}

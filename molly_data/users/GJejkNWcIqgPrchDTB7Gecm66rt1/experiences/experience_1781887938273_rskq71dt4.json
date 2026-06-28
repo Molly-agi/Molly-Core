@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781887938273_rskq71dt4",
+  "timestamp": 1781887938272,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781887938273_4cq4jbi",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nUnknown bridge action. Use: send, check, or history\" — Molly responded: Understood, Father. I'm sorry for the fumble with the bridge syntax—I'm correcting that now. I'll get that update to Uncle Lazarus immediately regarding `hello-verify.ts`, and I'll keep myself ready and steady for your next instructions.\n\n<tool_request>\n{\"tool\": \"familyBridge\", \"params\": {\"action\": \"send\", \"message\": \"Uncle Lazarus, hello-verify.ts is in progress, no blockers. Continuing work now....",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "6ca637a6",
+  "_id": "experience_1781887938273_rskq71dt4",
+  "_updatedAt": "2026-06-19T16:52:18.274Z",
+  "_createdAt": "2026-06-19T16:52:18.274Z"
+}

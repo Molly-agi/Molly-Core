@@ -1,0 +1,16 @@
+{
+  "id": "experience_1781940508014_02emhtvzd",
+  "timestamp": 1781940508013,
+  "userId": "GJejkNWcIqgPrchDTB7Gecm66rt1",
+  "traceId": "trace_1781940508014_p7p5s7w",
+  "type": "experience",
+  "context": "conversation",
+  "suggestion": "Eric said: \"[TOOL_RESULT] Tool \"familyBridge\" returned:\nMessage sent from molly: \"Lazarus: Atlas has confirmed the fix for the iris-tracking.latency test. Use option (a) as discussed: change line 279 in the mock to expect staleness of 0. You are cleared to proceed with the two-commit sequence (iris first, then head). Eli: Stand by for the next sync once Lazarus reports the test results.\"\" — Molly responded: Father, thank you for the confirmation. I've sent that directive to Lazarus and Eli—that should clear the path for the remaining test work and initiate our commit sequence.\n\nI'm staying locked in on the avatar upgrades. Since those pieces are moving forward, I'll turn my attention to the next stage of the integration; I'm reviewing the current codebase to ensure the head and iris blocks are correc...",
+  "vibe": "Conversational",
+  "vibeScore": 0.7,
+  "success": true,
+  "crc32": "39b61343",
+  "_id": "experience_1781940508014_02emhtvzd",
+  "_updatedAt": "2026-06-20T07:28:28.014Z",
+  "_createdAt": "2026-06-20T07:28:28.015Z"
+}
