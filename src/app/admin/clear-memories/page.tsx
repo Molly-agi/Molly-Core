@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/card';
 import { Trash2, CheckCircle, AlertCircle } from 'lucide-react';
 
-export default function ClearMemoriesPage() {
+export function ClearMemoriesPanel() {
   const { user, isUserLoading } = useUser();
   const [isClearing, setIsClearing] = useState(false);
   const [result, setResult] = useState<{
@@ -125,7 +125,7 @@ export default function ClearMemoriesPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="p-6">
       <Card className="w-[500px]">
         <CardHeader>
           <CardTitle>Clear Story Memories</CardTitle>
@@ -198,3 +198,5 @@ export default function ClearMemoriesPage() {
     </div>
   );
 }
+
+export default ClearMemoriesPanel;

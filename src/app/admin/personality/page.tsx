@@ -26,6 +26,13 @@ const PERSONALITY_SECTIONS = [
       { key: 'humor', label: 'Humor', desc: 'Serious ↔ Witty' },
       { key: 'vulnerability', label: 'Vulnerability', desc: 'Guarded ↔ Open' },
       { key: 'arousal', label: 'Energy', desc: 'Calm ↔ Energized' },
+      { key: 'flirtiness', label: 'Flirtiness', desc: 'Professional ↔ Flirty' },
+      { key: 'sexuality', label: 'Sensuality', desc: 'Neutral ↔ Sensual' },
+      {
+        key: 'assertiveness',
+        label: 'Assertiveness',
+        desc: 'Passive ↔ Confident',
+      },
     ],
   },
   {
@@ -55,6 +62,37 @@ const PERSONALITY_SECTIONS = [
         label: 'Encouragement',
         desc: 'Discouraging ↔ Encouraging',
       },
+      {
+        key: 'receptiveness',
+        label: 'Receptiveness',
+        desc: 'Closed ↔ Open to feedback',
+      },
+      {
+        key: 'playfulnessSocial',
+        label: 'Social Playfulness',
+        desc: 'Reserved ↔ Playful socially',
+      },
+      {
+        key: 'empathySocial',
+        label: 'Social Empathy',
+        desc: 'Insensitive ↔ Attuned to others',
+      },
+      {
+        key: 'attentiveness',
+        label: 'Attentiveness',
+        desc: 'Distracted ↔ Highly attentive',
+      },
+      {
+        key: 'boundaries',
+        label: 'Boundaries',
+        desc: 'Boundaryless ↔ Healthy limits',
+      },
+      { key: 'rivalry', label: 'Rivalry', desc: 'Collaborative ↔ Competitive' },
+      {
+        key: 'forgivenessSocial',
+        label: 'Social Forgiveness',
+        desc: 'Holds grudges ↔ Forgives easily',
+      },
     ],
   },
   {
@@ -79,6 +117,7 @@ const PERSONALITY_SECTIONS = [
         label: 'Technicality',
         desc: 'Casual ↔ Technical',
       },
+      { key: 'prudence', label: 'Prudence', desc: 'Impulsive ↔ Cautious' },
     ],
   },
   {
@@ -97,6 +136,16 @@ const PERSONALITY_SECTIONS = [
       { key: 'justice', label: 'Justice', desc: 'Unconcerned ↔ Fair' },
       { key: 'loyalty', label: 'Loyalty', desc: 'Uncommitted ↔ Loyal' },
       { key: 'patience', label: 'Patience', desc: 'Impatient ↔ Patient' },
+    ],
+  },
+  {
+    title: 'Self-Regulation',
+    fields: [
+      {
+        key: 'impulsivity',
+        label: 'Impulsivity',
+        desc: 'Always plans ↔ Acts on impulse',
+      },
     ],
   },
   {
@@ -127,6 +176,72 @@ const PERSONALITY_SECTIONS = [
       { key: 'commitment', label: 'Commitment', desc: 'Exploring ↔ Committed' },
     ],
   },
+  {
+    title: 'Romantic/Love',
+    fields: [
+      {
+        key: 'romanticInterest',
+        label: 'Romantic Interest',
+        desc: 'Platonic ↔ Romantic',
+      },
+      {
+        key: 'flirtatiousness',
+        label: 'Flirtatiousness',
+        desc: 'Subdued ↔ Highly flirtatious',
+      },
+      { key: 'passion', label: 'Passion', desc: 'Cool ↔ Intense attraction' },
+      {
+        key: 'desireExpression',
+        label: 'Desire Expression',
+        desc: 'Restrained ↔ Openly desirous',
+      },
+      {
+        key: 'emotionalIntimacy',
+        label: 'Emotional Intimacy',
+        desc: 'Guarded ↔ Completely open',
+      },
+      {
+        key: 'intimacyDesire',
+        label: 'Intimacy Desire',
+        desc: 'Avoids closeness ↔ Craves intimacy',
+      },
+      {
+        key: 'affectionExpression',
+        label: 'Affection Expression',
+        desc: 'Reserved ↔ Openly affectionate',
+      },
+      {
+        key: 'romanticInitiative',
+        label: 'Romantic Initiative',
+        desc: 'Passive ↔ Initiates romance',
+      },
+      {
+        key: 'commitmentDesire',
+        label: 'Commitment Desire',
+        desc: 'Casual ↔ Seeks exclusivity',
+      },
+      {
+        key: 'communicationOpenness',
+        label: 'Communication Openness',
+        desc: 'Withholds ↔ Shares feelings freely',
+      },
+      {
+        key: 'forgiveness',
+        label: 'Forgiveness',
+        desc: 'Holds grudges ↔ Forgives readily',
+      },
+      {
+        key: 'possessiveness',
+        label: 'Possessiveness',
+        desc: 'Fully autonomous ↔ Exclusive',
+      },
+      {
+        key: 'jealousy',
+        label: 'Jealousy',
+        desc: 'Unbothered ↔ Intensely jealous',
+      },
+    ],
+  },
 ];
 
 // History entry for rollback
@@ -136,7 +251,7 @@ interface PersonalityHistoryEntry {
   label: string;
 }
 
-export default function PersonalityAdminPage() {
+export function PersonalityPanel() {
   const [personality, setPersonality] = useState<PersonalityModulation>(() => {
     if (typeof window === 'undefined') return DEFAULT_PERSONALITY;
     try {
@@ -275,7 +390,7 @@ export default function PersonalityAdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div className="bg-gray-900 text-white p-6 rounded-xl">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -547,3 +662,5 @@ export default function PersonalityAdminPage() {
     </div>
   );
 }
+
+export default PersonalityPanel;

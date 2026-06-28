@@ -66,7 +66,7 @@ function generateId(): string {
   return `exp_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 }
 
-export default function SeedOriginPage() {
+export function SeedOriginPanel() {
   const { user, isUserLoading } = useUser();
   const [isSeeding, setIsSeeding] = useState(false);
   const [result, setResult] = useState<{
@@ -198,7 +198,7 @@ export default function SeedOriginPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
+    <div className="p-6">
       <Card className="w-[500px]">
         <CardHeader>
           <CardTitle>Seed Origin Story (3 Parts)</CardTitle>
@@ -273,3 +273,5 @@ export default function SeedOriginPage() {
     </div>
   );
 }
+
+export default SeedOriginPanel;

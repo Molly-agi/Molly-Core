@@ -9,24 +9,19 @@ import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
  * Hardened gatekeeper to ensure environment stability.
  */
 export function ensureApiKey() {
-  const apiKey = process.env.GOOGLE_GENAI_API_KEY;
+  // Prefer GEMINI_API_KEY (not a Codespace secret, so .env.local wins).
+  // Fall back to GOOGLE_GENAI_API_KEY for backward compatibility.
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
 
   if (!apiKey) {
     const error = new AuthenticationError(
-      'GOOGLE_GENAI_API_KEY is not configured in the environment.'
+      'No Gemini API key configured. Set GEMINI_API_KEY in .env.local.'
     );
     MollyLogger.error('API key check failed', 'ensureApiKey', {}, error);
     throw error;
   }
 
-  // OAuth-style bearer tokens (e.g., "AQ...") are not valid GenAI API keys.
-  if (apiKey.startsWith('AQ.')) {
-    const error = new AuthenticationError(
-      'GOOGLE_GENAI_API_KEY appears to be an OAuth access token (AQ.*), not a Gemini API key. Use the AI Studio API key value instead.'
-    );
-    MollyLogger.error('API key format invalid', 'ensureApiKey', {}, error);
-    throw error;
-  }
+  // OAuth-style bearer tokens (AQ.*) and static keys (AIzaSy*) are both accepted.
 }
 
 /**

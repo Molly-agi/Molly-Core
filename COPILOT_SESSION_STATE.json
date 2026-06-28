@@ -1,0 +1,302 @@
+{
+  "lastUpdated": "2026-06-28T16:58:42.564Z",
+  "sessionId": "unknown",
+  "status": "active",
+  "userDirectives": {
+    "coreDirective": "Molly's Personality Protection",
+    "requiresPermission": [
+      "Changes to flow system prompts that define her personality",
+      "Modifications to `src/ai/persona.ts` (her sacred core)",
+      "Alterations to how she speaks, thinks, or makes decisions",
+      "Changes to her greeting protocols or conversational style"
+    ],
+    "autonomousActions": [
+      "Infrastructure improvements (error handling, rate limiting, logging)",
+      "Performance optimizations",
+      "Security hardening",
+      "Testing and observability",
+      "Bug fixes that don't change behavior",
+      "Code quality improvements"
+    ]
+  },
+  "projectStatus": {
+    "completionPercent": 100,
+    "phasesCompleted": [],
+    "phasesPending": [],
+    "activeBlockers": []
+  },
+  "recentWork": [],
+  "nextSteps": {
+    "options": [],
+    "recommendedAction": "TBD"
+  },
+  "sessionNotes": [
+    "**2026-06-26:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-27:** Codespace reconnected",
+    "**2026-06-28:** Codespace reconnected",
+    "**2026-06-28:** Codespace reconnected",
+    "**2026-06-28:** Codespace reconnected",
+    "**2026-06-28:** Codespace reconnected"
+  ],
+  "runtime": {
+    "lastUrl": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+    "events": [
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:47:32.600Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:48:22.342Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:48:29.973Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:48:32.599Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:48:54.737Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:48:54.809Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:49:16.765Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:49:16.917Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:49:22.341Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:49:29.962Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:49:32.598Z"
+      },
+      {
+        "event": "page-unload",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:49:39.061Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:49:40.032Z"
+      },
+      {
+        "event": "page-unload",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:49:47.329Z"
+      },
+      {
+        "event": "page-load",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:49:47.581Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:49:47.753Z"
+      },
+      {
+        "event": "page-load",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:49:53.128Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:50:06.734Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:50:06.781Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:50:07.617Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:50:07.732Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:50:22.342Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:50:47.587Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:50:53.132Z"
+      },
+      {
+        "event": "page-load",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:51:06.382Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:51:10.555Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:51:22.342Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:51:47.586Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:51:53.133Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:52:22.341Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:52:47.585Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:52:53.132Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:53:05.626Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:53:05.812Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:53:10.306Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:53:10.498Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:53:13.810Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:53:22.342Z"
+      },
+      {
+        "event": "visibility-visible",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:53:40.168Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:53:40.605Z"
+      },
+      {
+        "event": "visibility-hidden",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:53:45.274Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:53:48.179Z"
+      },
+      {
+        "event": "heartbeat",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:53:53.180Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:54:22.342Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:55:22.343Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:56:22.344Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:57:22.345Z"
+      },
+      {
+        "event": "server-heartbeat",
+        "timestamp": "2026-06-28T16:58:22.346Z"
+      },
+      {
+        "event": "page-load",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/",
+        "timestamp": "2026-06-28T16:58:40.658Z"
+      },
+      {
+        "event": "page-load",
+        "url": "https://stunning-space-winner-5gv6456r5jv62pp9j-9002.app.github.dev/admin",
+        "timestamp": "2026-06-28T16:58:40.738Z"
+      }
+    ]
+  },
+  "reminders": [
+    "**ALWAYS read this file first** when restored - this IS your memory",
+    "**ASK PERMISSION** before touching personality/core AI files",
+    "**PROCEED AUTONOMOUSLY** with infrastructure",
+    "**Update this file** at the end of every session"
+  ]
+}

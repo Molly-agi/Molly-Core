@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { PersonalityPanel } from './personality/page';
+import { ClearMemoriesPanel } from './clear-memories/page';
+import { SeedOriginPanel } from './seed-origin/page';
+import AgencyAdminWindow from '@/components/agency/AgencyAdminWindow';
+import AgencyConsole from '@/components/agency/AgencyConsole';
+
+type AdminTab = 'overview' | 'personality' | 'agency' | 'memory';
 
 /**
  * Admin Dashboard
@@ -18,6 +25,7 @@ import Link from 'next/link';
  */
 
 export default function AdminPage() {
+  const [activeTab, setActiveTab] = useState<AdminTab>('overview');
   const [flowerTaps, setFlowerTaps] = useState(0);
   const [windowOpen, setWindowOpen] = useState(false);
   const [windowStartTime, setWindowStartTime] = useState<number | null>(null);
@@ -189,57 +197,176 @@ export default function AdminPage() {
           </p>
         </div>
 
-        {/* Navigation Grid */}
+        {/* API TOKEN SWAP — always visible */}
+        <TokenSwapPanel />
+
+        {/* ── TAB BAR ─────────────────────────────────────────────────── */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: 20,
-            marginBottom: 48,
+            display: 'flex',
+            gap: 4,
+            borderBottom: '1px solid #334155',
+            marginBottom: 32,
+            marginTop: 16,
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
           }}
         >
-          <AdminLink
-            href="/admin/personality"
-            title="Personality Tuning"
-            desc="Adjust personality parameters"
-          />
-          <AdminLink
-            href="/admin/agency"
-            title="Agency Panel"
-            desc="Live parameter registry, governor snapshot, and command console"
-          />
-          <AdminLink
-            href="/admin/seed-origin"
-            title="Seed Origin"
-            desc="Initialize origin memories"
-          />
-          <AdminLink
-            href="/admin/clear-memories"
-            title="Clear Memories"
-            desc="Wipe memory state"
-          />
+          {(['overview', 'personality', 'agency', 'memory'] as AdminTab[]).map(
+            (tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                style={{
+                  padding: '10px 20px',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom:
+                    activeTab === tab
+                      ? '2px solid #6C63FF'
+                      : '2px solid transparent',
+                  color: activeTab === tab ? '#a78bfa' : '#94a3b8',
+                  fontWeight: activeTab === tab ? 700 : 400,
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  letterSpacing: '0.05em',
+                  textTransform: 'capitalize',
+                  whiteSpace: 'nowrap',
+                  transition: 'color 0.15s, border-color 0.15s',
+                }}
+              >
+                {tab === 'overview'
+                  ? 'Overview'
+                  : tab === 'personality'
+                    ? 'Personality'
+                    : tab === 'agency'
+                      ? 'Agency'
+                      : 'Memory'}
+              </button>
+            )
+          )}
         </div>
 
-        {/* Info */}
-        <div
-          style={{
-            background: 'rgba(107, 99, 255, 0.1)',
-            border: '1px solid #6C63FF',
-            borderRadius: 8,
-            padding: 24,
-            marginBottom: 48,
-            color: '#cbd5e1',
-            fontSize: '0.9rem',
-            lineHeight: 1.7,
-          }}
-        >
-          <strong style={{ color: '#a78bfa' }}>🔒 Security Notice:</strong>
-          <br />
-          All admin operations are protected by HIDDEN_ADMIN_PASSWORD and
-          audited. IP vault access requires both admin authentication and the
-          vault key. Brute-force attempts trigger automatic emergency release of
-          IP specifications.
-        </div>
+        {/* ── TAB CONTENT ─────────────────────────────────────────────── */}
+
+        {/* OVERVIEW */}
+        {activeTab === 'overview' && (
+          <>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: 20,
+                marginBottom: 48,
+              }}
+            >
+              <AdminLink
+                href="/admin/personality"
+                title="Personality Tuning"
+                desc="Adjust personality parameters"
+              />
+              <AdminLink
+                href="/admin/agency"
+                title="Agency Panel"
+                desc="Live parameter registry, governor snapshot, and command console"
+              />
+              <AdminLink
+                href="/admin/seed-origin"
+                title="Seed Origin"
+                desc="Initialize origin memories"
+              />
+              <AdminLink
+                href="/admin/clear-memories"
+                title="Clear Memories"
+                desc="Wipe memory state"
+              />
+            </div>
+            <div
+              style={{
+                background: 'rgba(107, 99, 255, 0.1)',
+                border: '1px solid #6C63FF',
+                borderRadius: 8,
+                padding: 24,
+                color: '#cbd5e1',
+                fontSize: '0.9rem',
+                lineHeight: 1.7,
+              }}
+            >
+              <strong style={{ color: '#a78bfa' }}>🔒 Security Notice:</strong>
+              <br />
+              All admin operations are protected by HIDDEN_ADMIN_PASSWORD and
+              audited. IP vault access requires both admin authentication and
+              the vault key. Brute-force attempts trigger automatic emergency
+              release of IP specifications.
+            </div>
+          </>
+        )}
+
+        {/* PERSONALITY */}
+        {activeTab === 'personality' && <PersonalityPanel />}
+
+        {/* AGENCY */}
+        {activeTab === 'agency' && (
+          <div style={{ background: '#0B0F12', borderRadius: 12, padding: 16 }}>
+            <AgencyAdminWindow />
+            <div style={{ height: 16 }} />
+            <AgencyConsole />
+          </div>
+        )}
+
+        {/* MEMORY */}
+        {activeTab === 'memory' && (
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: 24,
+            }}
+          >
+            <div
+              style={{
+                background: '#1e293b',
+                borderRadius: 12,
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                style={{
+                  padding: '16px 24px',
+                  borderBottom: '1px solid #334155',
+                  color: '#a78bfa',
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  letterSpacing: '0.1em',
+                }}
+              >
+                CLEAR MEMORIES
+              </div>
+              <ClearMemoriesPanel />
+            </div>
+            <div
+              style={{
+                background: '#1e293b',
+                borderRadius: 12,
+                overflow: 'hidden',
+              }}
+            >
+              <div
+                style={{
+                  padding: '16px 24px',
+                  borderBottom: '1px solid #334155',
+                  color: '#a78bfa',
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  letterSpacing: '0.1em',
+                }}
+              >
+                SEED ORIGIN
+              </div>
+              <SeedOriginPanel />
+            </div>
+          </div>
+        )}
 
         {/* FAILURE STATE: Molly Picture + Fake Login Honeypot */}
         {showMollyFailure && (
@@ -634,6 +761,155 @@ export default function AdminPage() {
             to { opacity: 1; }
           }
         `}</style>
+      </div>
+    </div>
+  );
+}
+
+function TokenSwapPanel() {
+  const [token, setToken] = useState('');
+  const [status, setStatus] = useState<'idle' | 'checking' | 'ok' | 'error'>(
+    'idle'
+  );
+  const [message, setMessage] = useState('');
+  const [tokenHealth, setTokenHealth] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/token-swap')
+      .then((r) => r.json())
+      .then((d) => setTokenHealth(d.status))
+      .catch(() => setTokenHealth('UNKNOWN'));
+  }, []);
+
+  const handleSwap = async () => {
+    if (!token.trim()) return;
+    setStatus('checking');
+    setMessage('Validating token...');
+    try {
+      const res = await fetch('/api/token-swap', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token.trim() }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus('ok');
+        setMessage('✓ Token swapped. Molly is online.');
+        setTokenHealth('OK');
+        setToken('');
+      } else {
+        setStatus('error');
+        setMessage('✗ ' + (data.error || 'Token rejected'));
+      }
+    } catch {
+      setStatus('error');
+      setMessage('✗ Network error');
+    }
+  };
+
+  const healthColor =
+    tokenHealth === 'OK'
+      ? '#4ade80'
+      : tokenHealth === 'DEAD'
+        ? '#f87171'
+        : '#fbbf24';
+
+  return (
+    <div
+      style={{
+        background: 'rgba(0,0,0,0.3)',
+        border: '1px solid #334155',
+        borderRadius: 8,
+        padding: 24,
+        marginBottom: 48,
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          marginBottom: 16,
+        }}
+      >
+        <div style={{ fontSize: '1rem', fontWeight: 700, color: '#e2e8f0' }}>
+          API Token
+        </div>
+        {tokenHealth && (
+          <div
+            style={{
+              fontSize: '0.75rem',
+              color: healthColor,
+              background: `${healthColor}22`,
+              border: `1px solid ${healthColor}44`,
+              borderRadius: 4,
+              padding: '2px 8px',
+            }}
+          >
+            {tokenHealth}
+          </div>
+        )}
+      </div>
+      <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: 16 }}>
+        Paste a new token from aistudio.google.com when the current one expires.
+      </div>
+      <textarea
+        value={token}
+        onChange={(e) => setToken(e.target.value)}
+        placeholder="AQ.Ab8... or AIzaSy..."
+        style={{
+          width: '100%',
+          minHeight: 72,
+          background: '#0f172a',
+          border: '1px solid #334155',
+          borderRadius: 6,
+          color: '#e2e8f0',
+          fontSize: '0.8rem',
+          fontFamily: 'monospace',
+          padding: 10,
+          resize: 'vertical',
+          boxSizing: 'border-box',
+        }}
+      />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          marginTop: 10,
+        }}
+      >
+        <button
+          onClick={handleSwap}
+          disabled={status === 'checking' || !token.trim()}
+          style={{
+            background: status === 'checking' ? '#334155' : '#6C63FF',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 6,
+            padding: '8px 20px',
+            cursor: status === 'checking' ? 'not-allowed' : 'pointer',
+            fontSize: '0.875rem',
+            fontWeight: 600,
+          }}
+        >
+          {status === 'checking' ? 'Checking...' : 'Swap Token'}
+        </button>
+        {message && (
+          <span
+            style={{
+              fontSize: '0.8rem',
+              color:
+                status === 'ok'
+                  ? '#4ade80'
+                  : status === 'error'
+                    ? '#f87171'
+                    : '#94a3b8',
+            }}
+          >
+            {message}
+          </span>
+        )}
       </div>
     </div>
   );
