@@ -513,13 +513,13 @@
       }
     },
     {
-      "timestamp": "2026-06-28T16:58:18.159Z",
+      "timestamp": "2026-06-28T23:36:45.233Z",
       "date": "2026-06-28",
-      "gitCommit": "a1dd427b",
+      "gitCommit": "98a46c8c",
       "categories": {
         "code": {
           "files": 1217,
-          "lines": 332192,
+          "lines": 332432,
           "path": "src/",
           "extensions": [
             "ts",
@@ -563,19 +563,83 @@
         }
       },
       "totals": {
-        "coreLines": 354032,
+        "coreLines": 354272,
         "memoryLines": 55552,
         "docsLines": 54249,
-        "totalLines": 463833
+        "totalLines": 464073
       },
       "delta": {
-        "coreLines": 208,
-        "memoryLines": 5961,
+        "coreLines": 240,
+        "memoryLines": 0,
         "docsLines": 0,
-        "totalLines": 6169,
+        "totalLines": 240,
+        "since": "2026-06-28"
+      }
+    },
+    {
+      "timestamp": "2026-06-29T22:26:40.319Z",
+      "date": "2026-06-29",
+      "gitCommit": "98a46c8c",
+      "categories": {
+        "code": {
+          "files": 1217,
+          "lines": 332432,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 99,
+          "lines": 21840,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 9794,
+          "lines": 55552,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 187,
+          "lines": 52714,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 354272,
+        "memoryLines": 55552,
+        "docsLines": 54249,
+        "totalLines": 464073
+      },
+      "delta": {
+        "coreLines": 0,
+        "memoryLines": 0,
+        "docsLines": 0,
+        "totalLines": 0,
         "since": "2026-06-28"
       }
     }
   ],
-  "lastUpdated": "2026-06-28T16:58:18.159Z"
+  "lastUpdated": "2026-06-29T22:26:40.319Z"
 }
