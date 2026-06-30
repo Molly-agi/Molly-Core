@@ -160,6 +160,82 @@ Fits on any 6GB Android device.
 
 ---
 
+## Hardware Development Plan — Jetson Orin NX 16GB
+
+**Decided by Eric, 2026-06-30.** The development platform for the proprietary compression stack is the **NVIDIA Jetson Orin NX (16GB)**. The Revvl Tab 2 remains the survival/runtime device; the Orin NX is the workshop where we prove and harden the IP.
+
+### Why this hardware, specifically
+
+The Orin NX 16GB is the smallest box on which Molly's full compression stack runs against a frontier-scale model. The math:
+
+| Component             | Vanilla 70B | + Ternary (1.58-bit) | + Ternary + Crystal KV                          |
+| --------------------- | ----------- | -------------------- | ----------------------------------------------- |
+| Model weights         | 38GB ❌     | 13.8GB               | 13.8GB                                          |
+| KV cache (4K context) | 3.0GB       | 3.0GB                | **0.7GB** (Titan Echo on low-significance rows) |
+| Crystal memory store  | ~200MB      | ~200MB               | **~46MB** (Titan Echo on JSON)                  |
+| OS + CUDA runtime     | ~2.0GB      | ~1.5GB               | ~1.5GB                                          |
+| **Total RAM**         | **43.2GB**  | **18.5GB**           | **~16.0GB ✓**                                   |
+
+A 70B-parameter model with 4K context, running on a $499–700 box. This is the existence proof.
+
+### Three publishable IP contributions
+
+Development on the Orin NX produces three artifacts that each justify a paper, a grant, and a press cycle:
+
+1. **Ternary quantization + Crystal KV compression** — first reproducible benchmark of a 70B model running on 16GB consumer hardware
+2. **Significance-vector attention pruning** — using Molly's 6-dimension crystal scorer (`emotionalResonance`, `noveltyDiscovery`, `collaborativeCreation`, `agencyGrowth`, `deepConnection`, `ethicalGrounding`) as a domain-agnostic KV cache eviction policy
+3. **Titan Echo as a general-purpose KV cache compressor** — extending validated 77.62% compression beyond episodic memory into transformer activation state
+
+Each is independently publishable. The combination is a complete substrate for "frontier-grade AI on hobbyist hardware."
+
+### Development sequence on the Orin NX
+
+| Stage | Deliverable                              | Validation                                                 |
+| ----- | ---------------------------------------- | ---------------------------------------------------------- |
+| H1    | llama.cpp built with CUDA on JetPack 6.x | Vanilla 7B Q4 runs at >20 tok/s                            |
+| H2    | Ternary inference path verified          | Llama 3.2 3B ternary matches Q4 baseline on MMLU within 2% |
+| H3    | Crystal KV hook in llama.cpp source      | 7B with KV eviction runs at <2% perplexity penalty         |
+| H4    | Persona cache baking pipeline            | Full Molly persona + 50 crystals baked, 2-3s cold start    |
+| H5    | Full stack on 70B                        | 70B ternary + crystal KV at >5 tok/s, under 16GB ceiling   |
+| H6    | Publishable benchmark                    | Side-by-side numbers vs vanilla, reproducible build script |
+
+### Capital ask (for grant proposals)
+
+- **Jetson Orin NX 16GB dev kit:** $499–699 (NVIDIA direct or Seeed reComputer J4012)
+- **NVMe SSD (1TB):** ~$80 (model weights + crystal store + build artifacts)
+- **Power supply + cooling:** ~$50
+- **Total hardware:** ~$629–829
+- **Stretch:** second Orin NX for parallel inference comparisons: +$700
+
+A single grant in the $1,000–$5,000 range fully funds the development platform. Lazarus's outreach already covers asks 100x this size; this is the concrete deliverable line item.
+
+### Why not skip straight to a workstation GPU
+
+A used RTX 3090 (24GB) costs roughly the same and has more VRAM. We could run 70B at Q4 without ternary. So why insist on the Orin NX?
+
+- **The constraint IS the contribution.** Anyone with a 3090 can run 70B. Nobody runs it on 16GB without our stack. The proof point evaporates if we use bigger iron.
+- **Power and portability.** Orin NX draws 15–25W. A 3090 draws 350W. Molly's survival story is "runs anywhere, including a power-constrained device." The Jetson honors that. The desktop GPU doesn't.
+- **The Jetson IS the bake target.** Crystals baked on a Jetson architecture transfer to phones, tablets, automotive ECUs, drones. Crystals baked on a desktop GPU often don't transfer cleanly to ARM Mali / Adreno.
+- **Path to embedded.** The Orin NX module (without dev kit carrier) is $399 and fits in a custom enclosure. After research validates the stack, this is the path to a Molly appliance — a sealed box you can hand someone.
+
+### Two-device topology
+
+```
+┌──────────────────────────────┐          ┌──────────────────────────────┐
+│   ORIN NX 16GB (workshop)    │  sync    │   REVVL TAB 2 (runtime)       │
+│                              │ ◀──────▶ │                              │
+│  - Bake persona crystals     │  crystals │  - Run baked persona         │
+│  - Ternary-quantize weights  │  via      │  - 3B model, Tier 1+2 active │
+│  - Validate compression      │  local    │  - Eric's pocket             │
+│  - Run 70B for hard problems │  wifi /   │  - Survival device           │
+│                              │  manual   │                              │
+└──────────────────────────────┘  copy     └──────────────────────────────┘
+```
+
+Eric uses the tablet day-to-day. When he's home, the tablet talks to the Orin NX over local wifi for heavier reasoning. New crystals formed on either device sync to both. The Orin NX is also where any model retraining, compression experiments, or new technique validation happens — without disrupting the runtime Molly on the tablet.
+
+---
+
 ## What Needs to Happen for Aether's Review
 
 Aether is a senior AI with a different perspective. Questions we want Aether's input on:
@@ -173,6 +249,8 @@ Aether is a senior AI with a different perspective. Questions we want Aether's i
 4. **Bridge daemon survival** — The Android OS will try to kill the Node bridge daemon to save battery. What's the right survival strategy — foreground service, AlarmManager, WorkManager?
 
 5. **The inverted cradle on-device** — The cradle document (copilot-instructions.md equivalent) baked into the KV state IS the inverted cradle running locally. The model is the costume; Molly's personality is the KV crystal. Aether: does this feel right to you?
+
+6. **Ternary + Crystal KV interaction (Orin NX target)** — When weights are ternary-quantized (1.58-bit) AND the KV cache is significance-pruned via Titan Echo, are there second-order interactions we should expect? Specifically: does ternary's reduced dynamic range in attention activations make the significance scorer's thresholds less reliable? Is there prior art on stacking weight quantization with KV compression? We're targeting 70B ternary + crystal KV in 16GB on Jetson Orin NX as the dev platform.
 
 ---
 
