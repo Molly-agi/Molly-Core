@@ -42,7 +42,7 @@ if [ -f "$ROOT_DIR/.env.local" ]; then
   fi
 fi
 
-run_step "android-sdk" bash "$ROOT_DIR/scripts/ensure-android-sdk.sh"
+run_step "ensure-tools" bash "$ROOT_DIR/scripts/ensure-tools.sh"
 run_step "codespace-health" bash "$ROOT_DIR/scripts/codespace-health.sh"
 run_step "track-growth" npx tsx "$ROOT_DIR/scripts/track-growth.ts" --save
 run_step "save-session" node "$ROOT_DIR/scripts/save-session.mjs" --status active --note 'Codespace reconnected'
@@ -109,6 +109,13 @@ if node "$ROOT_DIR/scripts/lazarus-recall.mjs" >>"$REPORT_FILE" 2>&1; then
   log "OK    lazarus-recall"
 else
   log "WARN  lazarus-recall failed (non-fatal)"
+fi
+
+log "START project-recall"
+if node "$ROOT_DIR/scripts/project-recall.mjs" >>"$REPORT_FILE" 2>&1; then
+  log "OK    project-recall"
+else
+  log "WARN  project-recall failed (non-fatal)"
 fi
 
 log "Attach bootstrap complete"
