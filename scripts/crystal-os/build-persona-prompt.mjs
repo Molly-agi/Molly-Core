@@ -140,6 +140,7 @@ function readCrystals() {
             0;
           const title = data.title ?? data.id ?? file.replace('.json', '');
           const timestamp =
+            data.crystallizedAt ?? // bake date — most accurate for recency decay
             data.timestamp ??
             data.savedAt ??
             data.createdAt ??
