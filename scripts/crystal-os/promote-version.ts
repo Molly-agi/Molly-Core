@@ -47,6 +47,10 @@ import {
   detectConflicts,
   type DetectionResult,
 } from '../../src/ai/memory/contradiction-detector';
+import {
+  logPromote,
+  logBlock,
+} from '../../src/ai/memory/crystal-health-logger';
 import type { RoutableCrystal } from '../../src/ai/memory/crystal-routing';
 import {
   BaseEmbeddingProvider,
@@ -325,6 +329,25 @@ async function main(): Promise<number> {
       JSON.stringify(manifest, null, 2)
     );
     log(`HEAD -> v${manifest.version}`);
+    logPromote({
+      version: manifest.version,
+      parentVersion: manifest.parentVersion,
+      crystalCount: manifest.crystals.length,
+      addedCount: transition.added.length,
+      removedCount: transition.removed.length,
+      coherenceMeanKl: manifest.gates.coherence.meanKl ?? null,
+      contradictionCount: manifest.gates.contradiction.conflictCount,
+    });
+  } else {
+    logBlock({
+      gate: manifest.gatedBy as 'coherence' | 'contradiction',
+      candidateVersion: manifest.version,
+      crystalCount: manifest.crystals.length,
+      coherenceMeanKl: manifest.gates.coherence.meanKl,
+      coherenceThreshold: manifest.gates.coherence.threshold,
+      hardConflictCount: manifest.gates.contradiction.hardConflictCount,
+      blockReasons: manifest.blockReasons,
+    });
   }
 
   return ok ? 0 : 1;
