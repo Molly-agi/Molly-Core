@@ -279,7 +279,7 @@ class WidgetStateManager {
     }
 
     fun getAllState(): JSONObject {
-        return JSONObject(state)
+        return JSONObject(state as Map<*, *>)
     }
 
     fun clearState() {

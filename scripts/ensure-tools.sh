@@ -54,6 +54,16 @@ if [ -f "$ADB_BIN" ] && ! command -v adb &>/dev/null; then
 fi
 command -v adb &>/dev/null && ok "adb" || fail "adb" "platform-tools may not have installed"
 
+# ── Java 17 (required for Android builds — Gradle 8.2 + AGP compat) ──────────
+JAVA17="/usr/local/sdkman/candidates/java/17.0.13-ms"
+if [ ! -d "$JAVA17" ]; then
+  echo "[tools] Installing Java 17 via sdkman (needed for Android/Gradle 8.2)..."
+  source /usr/local/sdkman/bin/sdkman-init.sh 2>/dev/null || true
+  sdk install java 17.0.13-ms < /dev/null 2>&1 | tail -3 && ok "Java 17" || fail "Java 17" "sdkman install failed"
+else
+  skip "Java 17 (17.0.13-ms)"
+fi
+
 # ── llama-server ──────────────────────────────────────────────────────────────
 # Persist the binary inside the repo under .tools/ so it survives resets.
 # First run: downloads from llama.cpp releases. After that: already there.
