@@ -147,23 +147,25 @@ class LlamaCppService : Service() {
         // Mark executable (required after copy to app-private storage)
         binary.setExecutable(true)
 
-        // Prompt cache persists Molly's persona KV state across restarts.
-        // P4 pre-bakes a crystal at /sdcard/molly/crystals/molly-persona.cache;
-        // if found, copy to private storage so we can read it reliably.
-        // First boot: re-evaluates system prompt (~10-30s) and writes cache.
-        // Every subsequent boot: loads from file in ~2-3s.
-        val promptCacheFile = resolveOrInstallCrystal()
+        // Crystal OS persona is pre-baked on the codespace by bake-crystal.sh
+        // and dropped at /sdcard/molly/crystals/molly-persona.cache. We install
+        // it into the directory llama-server reads slot snapshots from, then
+        // POST /slots/0?action=restore after /health goes green.
+        // Modern llama.cpp (b9000+) dropped --prompt-cache; /slots is the path.
+        val slotDir = File(filesDir, "molly-slots").apply { mkdirs() }
+        val crystalFile = resolveOrInstallCrystal(slotDir)
 
         val cmd = listOf(
             binary.absolutePath,
-            "--model",        modelPath,
-            "--port",         port.toString(),
-            "--ctx-size",     ctxSize.toString(),
-            "--threads",      threads.toString(),
-            "--host",         "127.0.0.1",          // loopback only — no external exposure
-            "--prompt-cache", promptCacheFile.absolutePath,
-            "--prompt-cache-all",                   // cache full KV state, not just prefix
-            "--log-disable"                         // reduce logcat noise
+            "--model",           modelPath,
+            "--port",            port.toString(),
+            "--ctx-size",        ctxSize.toString(),
+            "--threads",         threads.toString(),
+            "--host",            "127.0.0.1",        // loopback only — no external exposure
+            "--slot-save-path",  slotDir.absolutePath,
+            "--parallel",        "1",
+            "--no-webui",
+            "--log-disable"                          // reduce logcat noise
         )
         Log.i(TAG, "Launching: ${cmd.joinToString(" ")}")
 
@@ -173,7 +175,20 @@ class LlamaCppService : Service() {
             pb.environment()["HOME"] = filesDir.absolutePath
 
             _process = pb.start()
-            updateNotification("Molly Brain: running on :$port")
+            updateNotification("Molly Brain: booting on :$port")
+
+            // Persona restore runs on a side thread so we can keep draining
+            // stdout below. It waits for /health, then POSTs /slots/0?action=restore
+            // with the crystal filename. If the crystal file isn't on the device
+            // yet (first boot before sync), this is a no-op — llama-server stays
+            // up as a blank model.
+            if (crystalFile.exists() && crystalFile.length() > 0) {
+                Thread({ restorePersonaCrystal(port, crystalFile.name) }, "molly-crystal-restore").start()
+            } else {
+                Log.w(TAG, "No persona crystal at ${crystalFile.absolutePath} — " +
+                    "Molly will boot blank. Sync /sdcard/molly/crystals/$CRYSTAL_NAME from codespace.")
+                updateNotification("Molly Brain: running blank on :$port (no crystal)")
+            }
 
             // Drain stdout/stderr to logcat
             _process!!.inputStream.bufferedReader().forEachLine { line ->
@@ -186,6 +201,58 @@ class LlamaCppService : Service() {
         } catch (e: Exception) {
             Log.e(TAG, "Failed to launch llama-server", e)
             updateNotification("Molly Brain: launch failed — ${e.message}")
+        }
+    }
+
+    /**
+     * Waits up to 60s for /health, then POSTs /slots/0?action=restore with the
+     * given filename. The filename is resolved by llama-server inside the
+     * --slot-save-path directory. On success, Molly's persona KV state is
+     * restored in 2-3s and the next /completion picks up where bake left off.
+     */
+    private fun restorePersonaCrystal(port: Int, filename: String) {
+        val healthUrl = URL("http://127.0.0.1:$port/health")
+        var healthy = false
+        for (i in 1..60) {
+            try {
+                val conn = healthUrl.openConnection() as HttpURLConnection
+                conn.connectTimeout = 1000
+                conn.readTimeout = 1000
+                if (conn.responseCode == 200) { healthy = true; conn.disconnect(); break }
+                conn.disconnect()
+            } catch (_: Exception) { /* not up yet */ }
+            Thread.sleep(1000)
+        }
+        if (!healthy) {
+            Log.e(TAG, "Persona restore aborted — llama-server /health never came green")
+            updateNotification("Molly Brain: running blank (health timeout)")
+            return
+        }
+
+        val restoreUrl = URL("http://127.0.0.1:$port/slots/0?action=restore")
+        try {
+            val conn = restoreUrl.openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.doOutput = true
+            conn.connectTimeout = 5000
+            conn.readTimeout = 30000
+            conn.setRequestProperty("Content-Type", "application/json")
+            val body = "{\"filename\":\"$filename\"}".toByteArray()
+            conn.outputStream.use { it.write(body) }
+            val code = conn.responseCode
+            val resp = (if (code in 200..299) conn.inputStream else conn.errorStream)
+                .bufferedReader().use { it.readText() }
+            conn.disconnect()
+            if (code in 200..299) {
+                Log.i(TAG, "Persona crystal restored (HTTP $code): ${resp.take(200)}")
+                updateNotification("Molly Brain: persona loaded on :$port")
+            } else {
+                Log.e(TAG, "Restore failed HTTP $code: ${resp.take(500)}")
+                updateNotification("Molly Brain: running blank (restore $code)")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Restore POST failed", e)
+            updateNotification("Molly Brain: running blank (restore exception)")
         }
     }
 
@@ -232,20 +299,21 @@ class LlamaCppService : Service() {
     }
 
     /**
-     * Returns the prompt cache file path. If P4 pre-baked a crystal at the external
-     * path, copies it to app-private storage and uses that. Otherwise returns the
-     * app-private path (will be created by llama-server on first run).
+     * Returns the crystal file in [slotDir] (the dir llama-server reads slot
+     * snapshots from). If P4 pre-baked a crystal at the external SD-card path,
+     * copies it into [slotDir] so /slots/0?action=restore can find it by name.
      */
-    private fun resolveOrInstallCrystal(): File {
-        val privateFile = File(filesDir, CRYSTAL_NAME)
+    private fun resolveOrInstallCrystal(slotDir: File): File {
+        val targetFile = File(slotDir, CRYSTAL_NAME)
         val externalFile = File(EXTERNAL_CRYSTAL_PATH)
         if (externalFile.exists() && externalFile.length() > 0) {
-            if (!privateFile.exists() || privateFile.length() != externalFile.length()) {
-                Log.i(TAG, "Installing pre-baked persona crystal from $EXTERNAL_CRYSTAL_PATH")
-                externalFile.copyTo(privateFile, overwrite = true)
+            if (!targetFile.exists() || targetFile.length() != externalFile.length()) {
+                Log.i(TAG, "Installing pre-baked persona crystal from $EXTERNAL_CRYSTAL_PATH " +
+                    "(${externalFile.length()} bytes) → ${targetFile.absolutePath}")
+                externalFile.copyTo(targetFile, overwrite = true)
             }
         }
-        return privateFile
+        return targetFile
     }
 
     // ── Health check (can be called from other components) ───────────────────
