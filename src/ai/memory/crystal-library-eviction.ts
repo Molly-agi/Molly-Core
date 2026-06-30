@@ -14,6 +14,8 @@
  * Cold tier (Titan Echo-compressed archive) — deferred, not built here.
  */
 
+import { logLoad, logEviction, logUnload } from './crystal-health-logger';
+
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 /** Recency half-life: score decays to 0.37 after this many ms. */
@@ -100,11 +102,17 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
   private readonly warm: Set<string> = new Set();
   private readonly maxHot: number;
   private readonly weights: RetentionWeights;
+  private readonly logOpts: { logPath?: string; sessionId?: string };
 
-  constructor(maxHot: number = 4, weights: RetentionWeights = DEFAULT_WEIGHTS) {
+  constructor(
+    maxHot: number = 4,
+    weights: RetentionWeights = DEFAULT_WEIGHTS,
+    logOpts: { logPath?: string; sessionId?: string } = {}
+  ) {
     if (maxHot < 1) throw new RangeError('maxHot must be >= 1');
     this.maxHot = maxHot;
     this.weights = weights;
+    this.logOpts = logOpts;
   }
 
   /**
@@ -130,6 +138,10 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
         crystal,
         stats: { loadCount: 1, lastLoadedAt: now },
       });
+      logLoad(
+        { crystalIds: [crystal.id], tier: 'unknown', source: 'on-demand' },
+        this.logOpts
+      );
       return null;
     }
 
@@ -139,6 +151,10 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
       crystal,
       stats: { loadCount: 1, lastLoadedAt: now },
     });
+    logLoad(
+      { crystalIds: [crystal.id], tier: 'unknown', source: 'on-demand' },
+      this.logOpts
+    );
     return eviction;
   }
 
@@ -150,6 +166,7 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
     if (!this.hot.has(crystalId)) return false;
     this.hot.delete(crystalId);
     this.warm.add(crystalId);
+    logUnload({ crystalIds: [crystalId], reason: 'manual' }, this.logOpts);
     return true;
   }
 
@@ -224,6 +241,16 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
 
     this.hot.delete(lowestId);
     this.warm.add(lowestId);
+    logEviction(
+      {
+        crystalId: lowestId,
+        evictionScore: lowestScore,
+        cacheType: 'hot',
+        reason: 'lru',
+      },
+      this.logOpts
+    );
+    logUnload({ crystalIds: [lowestId], reason: 'eviction' }, this.logOpts);
     return {
       evictedId: lowestId,
       retentionScore: lowestScore,
