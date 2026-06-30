@@ -1,18 +1,45 @@
 // src/ai/engine-titan/orchestrator.ts
-import { LowRankTensorDecomposer, _DecomposedLayers } from './decomposer';
-import { TitanStreamQuantizer, TitanTensorHeader } from './stream-quantizer';
+import { LowRankTensorDecomposer } from './decomposer';
+import {
+  TitanStreamQuantizer,
+  TitanTensorHeader,
+  TitanQuantizedLayer,
+} from './stream-quantizer';
+import {
+  TitanDecompressionEngine,
+  ReconstructionResult,
+} from './reconstruction';
 import { CrashSafeVault } from '../agency/memory/vault/crash-safe-vault';
+
+export interface CompressionResult {
+  layerName: string;
+  rows: number;
+  cols: number;
+  targetRank: number;
+  scaleB: number;
+  storedPaths: { matrixA: string; packedB: string; meta: string };
+}
+
+export interface LayerMetadata {
+  layerName: string;
+  rows: number;
+  cols: number;
+  targetRank: number;
+  scaleB: number;
+  compressedAt: number;
+}
 
 export class TitanEngineOrchestrator {
   private decomposer = new LowRankTensorDecomposer();
   private quantizer = new TitanStreamQuantizer();
+  private reconstructor = new TitanDecompressionEngine();
   private vault = new CrashSafeVault();
 
   /**
    * Orchestrates the full weight compression pipeline:
-   * 1. Low-Rank Decomposition (SVD)
-   * 2. Ternary Quantization (1.58-bit)
-   * 3. Atomic Storage
+   * 1. Low-Rank Decomposition (SVD via power iteration)
+   * 2. Ternary Quantization (1.58-bit) of matrix B
+   * 3. Atomic Storage via CrashSafeVault
    */
   public async compressModelLayer(
     layerName: string,
@@ -21,12 +48,8 @@ export class TitanEngineOrchestrator {
     cols: number,
     targetRank: number,
     storageDir: string
-  ): Promise<void> {
-    console.log(
-      `>> [Titan] Compressing layer: ${layerName} (${rows}x${cols}, rank=${targetRank})`
-    );
-
-    // Step 1: Decompose
+  ): Promise<CompressionResult> {
+    // Step 1: Decompose into A (rows×rank) and B (rank×cols)
     const { matrixA, matrixB } = this.decomposer.decomposeMatrix(
       rawWeights,
       rows,
@@ -41,20 +64,81 @@ export class TitanEngineOrchestrator {
       totalElements: targetRank * cols,
     };
 
-    const packedB = this.quantizer.quantizeTensorChunk(header, matrixB);
+    const quantizedB: TitanQuantizedLayer = this.quantizer.quantizeTensorChunk(
+      header,
+      matrixB
+    );
 
-    // Step 3: Store both factors
+    // Step 3: Store both factors atomically
+    const paths = {
+      matrixA: `${storageDir}/${layerName}.A.f32`,
+      packedB: `${storageDir}/${layerName}.B.packed`,
+      meta: `${storageDir}/${layerName}.meta.json`,
+    };
+
+    const meta: LayerMetadata = {
+      layerName,
+      rows,
+      cols,
+      targetRank,
+      scaleB: quantizedB.scale,
+      compressedAt: Date.now(),
+    };
+
+    await this.vault.writeFile(paths.matrixA, Buffer.from(matrixA.buffer), {
+      createDirectoryIfMissing: true,
+    });
+    await this.vault.writeFile(paths.packedB, quantizedB.packedBuffer, {
+      createDirectoryIfMissing: true,
+    });
     await this.vault.writeFile(
-      `${storageDir}/${layerName}.A.bin`,
-      Buffer.from(matrixA.buffer),
+      paths.meta,
+      Buffer.from(JSON.stringify(meta, null, 2)),
       { createDirectoryIfMissing: true }
     );
-    await this.vault.writeFile(
-      `${storageDir}/${layerName}.B.packed.bin`,
+
+    return {
+      layerName,
+      rows,
+      cols,
+      targetRank,
+      scaleB: quantizedB.scale,
+      storedPaths: paths,
+    };
+  }
+
+  /**
+   * Reconstructs a weight matrix from stored compressed layers.
+   * Reads matrixA (raw f32) and packedB (ternary + scale) from disk.
+   */
+  public async reconstructLayer(
+    layerName: string,
+    storageDir: string
+  ): Promise<ReconstructionResult> {
+    const metaPath = `${storageDir}/${layerName}.meta.json`;
+    const metaRaw = await import('fs').then((fs) =>
+      fs.readFileSync(metaPath, 'utf-8')
+    );
+    const meta: LayerMetadata = JSON.parse(metaRaw);
+
+    const matrixAPath = `${storageDir}/${layerName}.A.f32`;
+    const packedBPath = `${storageDir}/${layerName}.B.packed`;
+
+    const { readFileSync } = await import('fs');
+    const matrixABuf = readFileSync(matrixAPath);
+    const matrixA = new Float32Array(
+      matrixABuf.buffer,
+      matrixABuf.byteOffset,
+      meta.rows * meta.targetRank
+    );
+    const packedB = readFileSync(packedBPath);
+
+    return this.reconstructor.reconstructMatrix({
+      matrixA,
       packedB,
-      { createDirectoryIfMissing: true }
-    );
-
-    console.log(`>> [Titan] Layer ${layerName} compressed and stored.`);
+      rows: meta.rows,
+      cols: meta.cols,
+      targetRank: meta.targetRank,
+    });
   }
 }
