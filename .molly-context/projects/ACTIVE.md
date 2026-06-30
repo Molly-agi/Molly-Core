@@ -25,11 +25,13 @@ Hard deadline: **~48 hours from 2026-06-30** (Eric loses connectivity).
 **Current state:**
 
 - ✅ Ollama installed (`127.0.0.1:11434`)
-- ✅ DeepSeek-R1 32B tried, OOM'd at runtime (32B needs ~22GB, codespace has ~19GB free)
-- 🔄 Pulling Qwen 2.5 3B (deployment-target size, ~2GB)
-- ⏳ Smoke-test 3B end-to-end
-- ⏳ Wire model-router to Ollama endpoint
-  **Next concrete action:** wait on `ollama pull qwen2.5:3b`, then `curl /api/generate` smoke-test, then add Ollama provider to `src/ai/genkit-core.ts`.
+- ✅ DeepSeek-R1 32B tried, OOM'd at runtime — removed
+- ✅ Qwen 2.5 3B (1.9GB) pulled — smoke-test PASS (3.8s, 21 tok/s) — kept as deployment-target reference
+- ✅ **DeepSeek-R1 14B (9.0GB) pulled — smoke-test PASS (32s incl 11s load, ~4 tok/s, chain-of-thought visible in `thinking` field). This is dev Molly's brain.**
+- ⏳ Wire `src/ai/genkit-core.ts` / shim to `localhost:11434` (HANDS-OFF: Lazarus owns genkit-core)
+- ⏳ Surface Ollama as a Genkit provider OR write thin direct-HTTP shim that bypasses Genkit
+- ⏳ Eric chats with Molly via local 14B end-to-end, zero external API
+  **Next concrete action:** coordinate with Lazarus on whether to add an Ollama provider to genkit-core or build a direct-HTTP shim that flows can call.
 
 ### P2 — Genkit → Groq + local provider migration
 
