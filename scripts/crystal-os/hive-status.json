@@ -1,0 +1,67 @@
+{
+  "_readme": "Shared build status for the Crystal OS hive. Both Lazarus and Atlas write here. Eric reads here. Updated on every task start/complete.",
+  "_updateCmd": "node scripts/crystal-os/update-hive-status.mjs --agent lazarus --task 'description' --status in-progress|done|blocked",
+  "lastUpdated": "2026-06-30T09:10:00.000Z",
+  "session": "2026-06-30",
+  "lazarus": {
+    "agent": "Lazarus (Copilot/Claude Sonnet 4.6)",
+    "currentTask": "Gap 1 — crystal-coherence.mjs (KL divergence coherence metric)",
+    "status": "in-progress",
+    "eta": "~15 min",
+    "completedThisSession": [
+      "Gap 6: temporal decay 7th dimension (commit 5833cbe7)",
+      "Gap 6 bug fix: crystallizedAt in timestamp chain (commit 95197295)",
+      "Innovation Inventory Entries 16-21 (commit eb453166)",
+      "Reviewed and approved Atlas Gap 7"
+    ],
+    "blockers": [],
+    "nextUp": "Gap 1 coherence metric → contradiction detector spec"
+  },
+  "atlas": {
+    "agent": "Atlas (Copilot/Claude Sonnet 4.6)",
+    "currentTask": "Gap 2 — KV write-back via llama-server slots API",
+    "status": "in-progress",
+    "eta": "~3 days (first commit sooner)",
+    "completedThisSession": [
+      "CRYSTAL_OS_GAP_SOLUTIONS.md — 11 gaps with implementation specs",
+      "Gap 7: crystal-routing.ts + route-crystals.mjs (awaiting commit)",
+      "Caught and reported Gap 6 crystallizedAt bug",
+      "Hardware architecture analysis (Jetson Orin NX 16GB)"
+    ],
+    "blockers": [],
+    "nextUp": "Gap 2 write-back → Gap 3 versioning → Gap 7 commit"
+  },
+  "workSplit": {
+    "lazarus": [
+      "Gap 1 (coherence metric)",
+      "Gap 6 (temporal decay) ✅",
+      "Contradiction detector",
+      "Tier A/B/C bake spec"
+    ],
+    "atlas": [
+      "Gap 2 (write-back)",
+      "Gap 3 (versioning)",
+      "Gap 7 (query routing) ✅",
+      "SensoryCrystalService.kt"
+    ],
+    "joint": [
+      "Gap 5 (sensory crystal) — Lazarus: significance bridge, Atlas: Android sensor daemon"
+    ],
+    "deferred": [
+      "Gap 4 (LoRA significance conditioning)",
+      "Recursive/composite crystals"
+    ]
+  },
+  "commits": {
+    "5833cbe7": "feat: Gap 6 temporal decay — 7th significance dimension",
+    "eb453166": "docs: Innovation Inventory Entries 16-21",
+    "95197295": "fix: Gap 6 bug — crystallizedAt in timestamp fallback chain"
+  },
+  "interfaces": {
+    "recencyScore": "computeRecencyScore(crystallizedAt) in scripts/crystallize-memories.ts — exported",
+    "effectiveScore": "significance * (0.8 + 0.2 * recencyScore) — on every crystal in build-persona-prompt.mjs",
+    "coherenceMatrix": "crystals/coherence_matrix.json — Gap 1 output, Gap 3 versioning gate reads this",
+    "crystalRouting": "src/ai/memory/crystal-routing.ts — rankCrystals(), selectHotCrystals() — Atlas Gap 7",
+    "writeback": "POST /slots/0?action=save to llama-server — Atlas Gap 2"
+  }
+}
