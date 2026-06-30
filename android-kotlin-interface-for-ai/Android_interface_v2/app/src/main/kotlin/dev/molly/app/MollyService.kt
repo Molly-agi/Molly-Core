@@ -20,10 +20,12 @@ import dev.molly.app.auth.HmacSigner
 import dev.molly.app.bridge.BridgeConnection
 import dev.molly.app.bridge.OkHttpBridgeConnection
 import dev.molly.app.config.Config
+import dev.molly.app.sensor.SensoryCrystalService
 
 class MollyService : LifecycleService() {
   private lateinit var bridge: BridgeConnection
   private lateinit var mic: MicSwitchboard
+  private lateinit var sensoryCrystal: SensoryCrystalService
 
   override fun onCreate() {
     super.onCreate()
@@ -32,6 +34,8 @@ class MollyService : LifecycleService() {
 
     val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
     mic = MicSwitchboard(audioManager, lifecycleScope)
+
+    val sensorManager = getSystemService(Context.SENSOR_SERVICE) as android.hardware.SensorManager
 
     val hmac = HmacSigner(this)
     bridge =
@@ -83,12 +87,15 @@ class MollyService : LifecycleService() {
         }
       },
     )
+
+    sensoryCrystal = SensoryCrystalService(sensorManager, bridge, lifecycleScope)
   }
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     super.onStartCommand(intent, flags, startId)
     startAsForeground()
     bridge.start()
+    sensoryCrystal.start()
     // Audio capture is NOT auto-started to reduce idle battery drain.
     // Microphone will be activated only when explicitly requested via bridge message.
     // This keeps the service lean: WebSocket spine + FGS notification only.
@@ -100,6 +107,7 @@ class MollyService : LifecycleService() {
   }
 
   override fun onDestroy() {
+    sensoryCrystal.stop()
     bridge.stop()
     mic.stop()
     super.onDestroy()
