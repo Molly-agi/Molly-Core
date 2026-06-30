@@ -38,6 +38,8 @@ const outputPath =
   outputIdx !== -1 ? args[outputIdx + 1] : '/tmp/molly-persona.txt';
 const topIdx = args.indexOf('--top-crystals');
 const maxCrystals = topIdx !== -1 ? parseInt(args[topIdx + 1], 10) : 50;
+const tierMapIdx = args.indexOf('--tier-map');
+const tierMapPath = tierMapIdx !== -1 ? args[tierMapIdx + 1] : null;
 const verbose = args.includes('--verbose');
 
 // ─── Constants ───────────────────────────────────────────────────
@@ -171,6 +173,7 @@ function readCrystals() {
 
           if (content && significance > 0) {
             crystals.push({
+              id: data.id ?? file.replace('.json', ''),
               significance,
               content,
               title,
@@ -205,6 +208,7 @@ function readCrystals() {
         const title = c.title ?? c.id ?? 'memory';
         if (content && significance > 0) {
           crystals.push({
+            id: c.id ?? title,
             significance,
             content,
             title,
@@ -261,8 +265,40 @@ function formatCrystalCompressed(crystal) {
 }
 
 // ─── Main ────────────────────────────────────────────────────────
+function loadTierMap() {
+  if (!tierMapPath) return null;
+  if (!existsSync(tierMapPath)) {
+    throw new Error(`--tier-map path does not exist: ${tierMapPath}`);
+  }
+  const raw = JSON.parse(readFileSync(tierMapPath, 'utf-8'));
+  if (raw.gate === 'blocked') {
+    throw new Error(
+      `tier-map gate=blocked (manifest v${raw.manifestVersion}) — bake refused. Reasons: ${(raw.blockReasons || []).join('; ')}`
+    );
+  }
+  const tierAIds = new Set((raw.tierA || []).map((e) => e.id));
+  const tierBIds = new Set((raw.tierB || []).map((e) => e.id));
+  return {
+    tierAIds,
+    tierBIds,
+    summary: raw.summary,
+    manifestVersion: raw.manifestVersion,
+  };
+}
+
 function main() {
   console.log('Crystal OS — P4: Building persona prompt...');
+
+  const tierMap = loadTierMap();
+  if (tierMap) {
+    console.log(
+      `  [Tier map] manifest v${tierMap.manifestVersion} — A=${tierMap.summary.tierA} B=${tierMap.summary.tierB} C=${tierMap.summary.tierC}`
+    );
+  } else {
+    console.log(
+      `  [Tier map] none provided — falling back to raw significance thresholds`
+    );
+  }
 
   const sections = [];
   let charCount = 0;
@@ -277,23 +313,39 @@ function main() {
   const allCrystals = readCrystals();
   console.log(`  [Layer 2] Found ${allCrystals.length} crystals`);
 
-  const verbatim = allCrystals
-    .filter((c) => c.significance >= VERBATIM_THRESHOLD)
-    .slice(0, maxCrystals);
-  const summary = allCrystals
-    .filter(
-      (c) =>
-        c.significance >= SUMMARY_THRESHOLD &&
-        c.significance < VERBATIM_THRESHOLD
-    )
-    .slice(0, maxCrystals);
+  // Match crystals to tier-map by id when available; fall back to raw thresholds.
+  // Note: tier-map loads from molly_data/crystals/, while readCrystals() also
+  // pulls from stuff/dont-panic and the crystallizer state file. Crystals
+  // outside the manifest's set fall through to the raw-threshold path so we
+  // don't silently drop them.
+  let verbatim;
+  let summary;
+  if (tierMap) {
+    verbatim = allCrystals
+      .filter((c) =>
+        tierMap.tierAIds.has(c.id ?? c.source?.replace('.json', ''))
+      )
+      .slice(0, 60);
+    summary = allCrystals
+      .filter((c) =>
+        tierMap.tierBIds.has(c.id ?? c.source?.replace('.json', ''))
+      )
+      .slice(0, 40);
+  } else {
+    verbatim = allCrystals
+      .filter((c) => c.significance >= VERBATIM_THRESHOLD)
+      .slice(0, maxCrystals);
+    summary = allCrystals
+      .filter(
+        (c) =>
+          c.significance >= SUMMARY_THRESHOLD &&
+          c.significance < VERBATIM_THRESHOLD
+      )
+      .slice(0, maxCrystals);
+  }
 
-  console.log(
-    `  [Layer 2] Verbatim (>=${VERBATIM_THRESHOLD}): ${verbatim.length}`
-  );
-  console.log(
-    `  [Layer 2] Compressed (${SUMMARY_THRESHOLD}-${VERBATIM_THRESHOLD}): ${summary.length}`
-  );
+  console.log(`  [Layer 2] Verbatim (Tier A): ${verbatim.length}`);
+  console.log(`  [Layer 2] Compressed (Tier B): ${summary.length}`);
 
   // Layer 3: Verbatim cornerstone memories
   if (verbatim.length > 0) {

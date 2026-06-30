@@ -26,6 +26,7 @@ LLAMA_SERVER="${LLAMA_SERVER:-llama-server}"
 MOLLY_MODEL="${MOLLY_MODEL:-/sdcard/Download/llama-3.2-3b-instruct-q4_k_m.gguf}"
 CACHE_OUT="${CACHE_OUT:-/tmp/molly-persona.cache}"
 PROMPT_FILE="${PROMPT_FILE:-/tmp/molly-persona.txt}"
+TIER_MAP="${TIER_MAP:-/tmp/crystal-tiers.json}"
 LLAMA_PORT="${LLAMA_PORT:-18080}"  # Different port from Molly's live server
 CTX_SIZE="${CTX_SIZE:-8192}"
 
@@ -37,6 +38,8 @@ while [[ $# -gt 0 ]]; do
     --model) MOLLY_MODEL="$2"; shift 2 ;;
     --output) CACHE_OUT="$2"; shift 2 ;;
     --prompt) PROMPT_FILE="$2"; shift 2 ;;
+    --tier-map) TIER_MAP="$2"; shift 2 ;;
+    --skip-classify) SKIP_CLASSIFY=1; shift ;;
     *) echo "Unknown arg: $1"; exit 1 ;;
   esac
 done
@@ -46,13 +49,32 @@ echo "=============================="
 echo "  Model:      $MOLLY_MODEL"
 echo "  Cache out:  $CACHE_OUT"
 echo "  Prompt:     $PROMPT_FILE"
+echo "  Tier map:   $TIER_MAP"
 echo ""
+
+# ─── Step 0: Classifier gate (Lazarus Tier A/B/C + manifest gate) ─
+# Refuses to bake on top of a blocked manifest. Writes the tier-map that
+# build-persona-prompt.mjs consumes in step 1.
+if [[ -z "${SKIP_CLASSIFY:-}" ]]; then
+  echo "[0/3] Classifying crystals (Tier A/B/C + manifest gate)..."
+  if ! npx tsx "$ROOT/scripts/crystal-os/classify-for-bake.ts" --output "$TIER_MAP"; then
+    echo ""
+    echo "ABORT: classifier gate refused. The HEAD manifest is blocked"
+    echo "(coherence or contradiction). Fix the gates and re-promote before"
+    echo "retrying bake. Pass --skip-classify to bypass (NOT recommended)."
+    exit 2
+  fi
+  echo "  ✓ Tier map: $(jq -r '"\(.summary.tierA) A, \(.summary.tierB) B, \(.summary.tierC) C (manifest v\(.manifestVersion))"' "$TIER_MAP" 2>/dev/null || echo 'wrote ' "$TIER_MAP")"
+  echo ""
+fi
 
 # ─── Step 1: Build persona prompt ────────────────────────────────
 echo "[1/3] Building persona prompt..."
-node "$ROOT/scripts/crystal-os/build-persona-prompt.mjs" \
-  --output "$PROMPT_FILE" \
-  --verbose
+PROMPT_ARGS=(--output "$PROMPT_FILE" --verbose)
+if [[ -z "${SKIP_CLASSIFY:-}" && -f "$TIER_MAP" ]]; then
+  PROMPT_ARGS+=(--tier-map "$TIER_MAP")
+fi
+node "$ROOT/scripts/crystal-os/build-persona-prompt.mjs" "${PROMPT_ARGS[@]}"
 
 if [[ ! -f "$PROMPT_FILE" ]]; then
   echo "ERROR: Persona prompt not generated. Check build-persona-prompt.mjs"
