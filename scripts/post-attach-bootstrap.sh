@@ -42,6 +42,7 @@ if [ -f "$ROOT_DIR/.env.local" ]; then
   fi
 fi
 
+run_step "android-sdk" bash "$ROOT_DIR/scripts/ensure-android-sdk.sh"
 run_step "codespace-health" bash "$ROOT_DIR/scripts/codespace-health.sh"
 run_step "track-growth" npx tsx "$ROOT_DIR/scripts/track-growth.ts" --save
 run_step "save-session" node "$ROOT_DIR/scripts/save-session.mjs" --status active --note 'Codespace reconnected'
