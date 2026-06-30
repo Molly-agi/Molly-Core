@@ -32,6 +32,25 @@ This is what Eric means by "crystallizing the LLM."
 
 ---
 
+## Key Architecture Finding: Zero llama.cpp Source Modifications (2026-06-30)
+
+**All four Tier-1 Crystal OS items ship without modifying llama.cpp source code.**
+
+This was confirmed during the 2026-06-30 build session (Lazarus + Atlas, commits 657589f7–6b478173). The implication is significant: Crystal OS is a pure application-layer system. It runs on any llama.cpp build — pre-built Android ARM64 binary, Jetson Orin NX, desktop. No custom fork. No recompilation. No maintenance burden on llama.cpp upstream.
+
+| Gap   | What it does                          | How it works (no source mods needed)                          |
+| ----- | ------------------------------------- | ------------------------------------------------------------- |
+| Gap 1 | Coherence metric (KL divergence)      | Scripts-only. Calls built-in `POST /completion` with logprobs |
+| Gap 2 | KV write-back (slot snapshots)        | Built-in slots API: `POST /slots/{id}?action=save`            |
+| Gap 6 | Temporal decay (recency dimension)    | Pure TypeScript/JS. No model interaction.                     |
+| Gap 7 | Query routing (hot crystal selection) | TypeScript module. Uses embedding provider singleton.         |
+
+The `--prompt-cache` / `--prompt-cache-all` / `--slot-save-path` flags are all built-in llama-server features. The full bake + load + snapshot + route pipeline uses only the public llama-server REST API.
+
+**H3 in the dev sequence table below ("Crystal KV hook in llama.cpp source") is therefore a Tier-2 stretch goal, not a Tier-1 requirement.** The persona baking pipeline (H4) is fully achievable without it.
+
+---
+
 ## Architecture: Full Stack on One Android Device
 
 ```
@@ -256,13 +275,21 @@ Aether is a senior AI with a different perspective. Questions we want Aether's i
 
 ## Timeline
 
-| Phase                        | Lead    | Status         | ETA          |
-| ---------------------------- | ------- | -------------- | ------------ |
-| P3: Crystal disk persistence | Atlas   | ✅ Done        | Done         |
-| P4: KV Cache Crystallizer    | Lazarus | 🔄 Building    | 2-3 days     |
-| P5: Android APK integration  | Atlas   | 🔄 In progress | 1 week       |
-| P6: Frontend consolidation   | Joint   | ⏳ Pending     | 2 weeks      |
-| **Crystal OS v1.0**          | Eric    | ⏳ Pending     | **~3 weeks** |
+| Phase                                   | Lead          | Status         | Commits                                |
+| --------------------------------------- | ------------- | -------------- | -------------------------------------- |
+| P3: Crystal disk persistence            | Atlas         | ✅ Done        | 8af2dca1                               |
+| Gap 6: Temporal decay (7th dimension)   | Lazarus       | ✅ Done        | 5833cbe7, 95197295                     |
+| Gap 1: Coherence metric (KL divergence) | Lazarus       | ✅ Done        | 657589f7                               |
+| Gap 7: Crystal query routing            | Atlas         | ✅ Done        | d20cf470                               |
+| Gap 2: KV write-back (slot snapshots)   | Atlas         | ✅ Done        | 25c94632, 8b8725da, 68bd44cd, 21e51737 |
+| Streaming output scorer                 | Lazarus       | ✅ Done        | 0a73bf16                               |
+| Contradiction detector                  | Lazarus       | ✅ Done        | 60a55dda                               |
+| Gap 3: Crystal version manifest         | Atlas         | ✅ Done        | de2a9945, 6b478173                     |
+| Tier A/B/C bake classifier              | Lazarus       | ✅ Done        | 1b804705                               |
+| P5: Android APK integration             | Atlas         | 🔄 In progress | —                                      |
+| Gap 5: Sensory crystal (joint)          | Lazarus+Atlas | ⏳ Pending     | —                                      |
+| Gap 4: Significance LoRA (deferred)     | —             | ⏳ Deferred    | Phase 2                                |
+| **Crystal OS v1.0**                     | Eric          | ⏳ Pending     | —                                      |
 
 ---
 
