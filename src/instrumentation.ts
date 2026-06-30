@@ -333,6 +333,22 @@ export async function register() {
     );
   }
 
+  // ── Crystal Memory ──
+  // Eager hydration — crystals must be in memory before first request, not
+  // loaded lazily on first API/tool call. ensureCrystallizerInit() is
+  // idempotent; subsequent calls from API routes are O(1) no-ops.
+  try {
+    const { ensureCrystallizerInit } =
+      await import('@/ai/agency/memory/memory-crystallizer');
+    await ensureCrystallizerInit();
+    console.log('[Startup] ✅ Crystal memory hydrated');
+  } catch (err) {
+    console.warn(
+      '[Startup] ⚠️  Could not hydrate crystal memory:',
+      err instanceof Error ? err.message : String(err)
+    );
+  }
+
   // ── Agency Runtime (registry + cognitive governor) ──
   try {
     const { initAgencyRuntime } = await import('@/ai/agency/agency-runtime');

@@ -210,6 +210,29 @@ const MAX_SESSION_MOMENTS = 50;
 const CRYSTALLIZATION_THRESHOLD = 0.6; // Total significance threshold
 const CORNERSTONE_THRESHOLD = 0.85;
 
+// Debounce window for fire-and-forget disk persistence after a crystal is
+// created. A burst of crystallizations (e.g. auto-dream batch) collapses to a
+// single disk write at the end of the burst. Chosen short enough that a single
+// crystal lands on disk well within one second of creation; long enough that a
+// 10-crystal burst doesn't issue 10 separate writes.
+const CRYSTAL_SAVE_DEBOUNCE_MS = 500;
+let _crystalSaveTimer: NodeJS.Timeout | null = null;
+
+function scheduleCrystalPersistence(): void {
+  if (_crystalSaveTimer) clearTimeout(_crystalSaveTimer);
+  _crystalSaveTimer = setTimeout(() => {
+    _crystalSaveTimer = null;
+    saveCrystalFiles().catch((err) => {
+      MollyLogger.warn(
+        `[CRYSTALLIZER] Debounced auto-save failed: ${err instanceof Error ? err.message : String(err)}`,
+        'memory-crystallizer'
+      );
+    });
+  }, CRYSTAL_SAVE_DEBOUNCE_MS);
+  // Don't keep the process alive just for the save timer.
+  if (typeof _crystalSaveTimer.unref === 'function') _crystalSaveTimer.unref();
+}
+
 // Item 13 — minimum Σ(accessCount × importance) across a cluster before it
 // can be promoted to a crystal. Empirical guess; instrument cluster-strength
 // distribution over the first few consolidation cycles and tune from data.
@@ -438,6 +461,12 @@ export function crystallize(
     `Crystallized: ${title}`,
     generateTraceId()
   );
+
+  // Dam-level guarantee: every crystal lands on disk. Debounced so a burst
+  // collapses to one write. Callers no longer have to remember to persist —
+  // safeCrystallizeSession()'s explicit save remains for the storage-router
+  // path, but file-level durability is unconditional from here.
+  scheduleCrystalPersistence();
 
   return crystal;
 }
@@ -762,6 +791,86 @@ function _cosineSimilarity(a: number[], b: number[]): number {
   }
   if (normA === 0 || normB === 0) return 0;
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+
+/**
+ * Crystal OS — compressed inference search.
+ *
+ * Searches ALL crystals by scoring a query significance vector against each
+ * crystal's stored SignificanceDimensions. No decompression. No embedding
+ * API call. Operates entirely on the 6-float significance headers that are
+ * always kept uncompressed as crystal metadata.
+ *
+ * Query vector encodes "what kind of memory am I looking for?" as
+ * significance weights. E.g. a high emotionalResonance + deepConnection
+ * query will surface emotionally significant relational memories.
+ *
+ * Full content decompression only happens for the top-N results the caller
+ * actually needs — never for the search space.
+ *
+ * Prior art: compressed-domain signal processing (DCT/JPEG, 1980s–90s).
+ * Novel: operating on semantically-distilled episodic memory vectors, not
+ * signal frequencies or byte patterns. See docs/design/CRYSTAL_OS_DESIGN.md.
+ *
+ * @param queryDims   Significance weights for the query (0–1 each).
+ *                    Omitted dimensions default to 0.
+ * @param topN        Return only the top-N results (default 10).
+ * @param minScore    Minimum cosine similarity threshold (default 0.1).
+ */
+export function searchCrystalsCompressed(
+  queryDims: Partial<SignificanceDimensions>,
+  topN: number = 10,
+  minScore: number = 0.1
+): Array<{ crystal: MemoryCrystal; score: number }> {
+  if (state.crystals.size === 0) return [];
+
+  // Build query vector from partial dims — missing dims default to 0
+  const queryVec: number[] = [
+    queryDims.emotionalResonance ?? 0,
+    queryDims.noveltyDiscovery ?? 0,
+    queryDims.collaborativeCreation ?? 0,
+    queryDims.agencyGrowth ?? 0,
+    queryDims.deepConnection ?? 0,
+    queryDims.ethicalGrounding ?? 0,
+  ];
+
+  const results: Array<{ crystal: MemoryCrystal; score: number }> = [];
+
+  for (const crystal of state.crystals.values()) {
+    const sig = crystal.significance;
+    const crystalVec: number[] = [
+      sig.emotionalResonance,
+      sig.noveltyDiscovery,
+      sig.collaborativeCreation,
+      sig.agencyGrowth,
+      sig.deepConnection,
+      sig.ethicalGrounding,
+    ];
+
+    const score = _cosineSimilarity(queryVec, crystalVec);
+    if (score >= minScore) {
+      results.push({ crystal, score });
+    }
+  }
+
+  // Sort by score desc, then by totalSignificance as tiebreaker
+  results.sort(
+    (a, b) =>
+      b.score - a.score ||
+      b.crystal.totalSignificance - a.crystal.totalSignificance
+  );
+
+  const top = results.slice(0, topN);
+
+  // Bump retrieval stats on returned results (same contract as searchCrystalsSemantic)
+  const now = new Date().toISOString();
+  for (const hit of top) {
+    hit.crystal.retrievalCount++;
+    hit.crystal.lastRetrieved = now;
+    state.stats.totalRetrievals++;
+  }
+
+  return top;
 }
 
 /**
@@ -1171,6 +1280,38 @@ export function resetCrystallizerState(): void {
     totalRetrievals: 0,
     averageSignificance: 0,
   };
+  _crystallizerInitPromise = null;
+}
+
+// ── Boot init ───────────────────────────────────────────────────
+// Singleton eager-hydration promise. First caller triggers loadCrystallizerState()
+// once; every subsequent caller awaits the same promise. Idempotent and
+// reset-aware (resetCrystallizerState clears it so tests can re-init).
+
+let _crystallizerInitPromise: Promise<void> | null = null;
+
+/**
+ * Ensure crystals are hydrated from disk before first use.
+ *
+ * Call this once at process boot (Next.js instrumentation, CLI entry, etc.)
+ * so that the first chat request doesn't pay the load cost AND so that
+ * crystal lookups during early requests don't return empty.
+ *
+ * Safe to call concurrently — all callers await the same underlying load.
+ */
+export function ensureCrystallizerInit(): Promise<void> {
+  if (!_crystallizerInitPromise) {
+    _crystallizerInitPromise = loadCrystallizerState().catch((err) => {
+      MollyLogger.warn(
+        `[CRYSTALLIZER] Boot init failed: ${err instanceof Error ? err.message : String(err)}`,
+        'memory-crystallizer'
+      );
+      // Reset so a future caller can retry — partial init shouldn't lock us
+      // out forever.
+      _crystallizerInitPromise = null;
+    });
+  }
+  return _crystallizerInitPromise;
 }
 
 // ── Safety & Backup Functions ──────────────────────────────────
