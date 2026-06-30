@@ -45,6 +45,10 @@ class LocalChatActivity : AppCompatActivity() {
 
     private fun prefs() = getSharedPreferences("molly_local_chat", Context.MODE_PRIVATE)
 
+    private val crystalStore by lazy {
+        CrystalMemoryStore(java.io.File(CrystalMemoryStore.DEFAULT_CRYSTAL_DIR))
+    }
+
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +58,7 @@ class LocalChatActivity : AppCompatActivity() {
         inputField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) { onSend(); true } else false
         }
+        injectSessionCrystals()
         checkHealth()
     }
 
@@ -215,6 +220,18 @@ class LocalChatActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    // ── Crystal memory injection ──────────────────────────────────────────────
+
+    private fun injectSessionCrystals() {
+        ioExecutor.execute {
+            val block = crystalStore.buildContextBlock() ?: return@execute
+            runOnUiThread {
+                // Insert as a system message at the start of history (not shown as a bubble)
+                history.add(0, "system" to block)
+            }
+        }
     }
 
     // ── Start llama-server (⚡ button) ─────────────────────────────────────────

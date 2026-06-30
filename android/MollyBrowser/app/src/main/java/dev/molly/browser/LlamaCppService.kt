@@ -69,6 +69,10 @@ class LlamaCppService : Service() {
 
         fun defaultBinaryPath(): String =
             "/sdcard/Download/llama-server"
+
+        // Where P4 (bake-crystal script) places the pre-baked persona crystal
+        private const val EXTERNAL_CRYSTAL_PATH = "/sdcard/molly/crystals/molly-persona.cache"
+        private const val CRYSTAL_NAME = "molly-persona.cache"
     }
 
     private val executor = Executors.newSingleThreadExecutor()
@@ -143,14 +147,23 @@ class LlamaCppService : Service() {
         // Mark executable (required after copy to app-private storage)
         binary.setExecutable(true)
 
+        // Prompt cache persists Molly's persona KV state across restarts.
+        // P4 pre-bakes a crystal at /sdcard/molly/crystals/molly-persona.cache;
+        // if found, copy to private storage so we can read it reliably.
+        // First boot: re-evaluates system prompt (~10-30s) and writes cache.
+        // Every subsequent boot: loads from file in ~2-3s.
+        val promptCacheFile = resolveOrInstallCrystal()
+
         val cmd = listOf(
             binary.absolutePath,
-            "--model",   modelPath,
-            "--port",    port.toString(),
-            "--ctx-size", ctxSize.toString(),
-            "--threads", threads.toString(),
-            "--host",    "127.0.0.1",  // loopback only — no external exposure
-            "--log-disable"            // reduce logcat noise
+            "--model",        modelPath,
+            "--port",         port.toString(),
+            "--ctx-size",     ctxSize.toString(),
+            "--threads",      threads.toString(),
+            "--host",         "127.0.0.1",          // loopback only — no external exposure
+            "--prompt-cache", promptCacheFile.absolutePath,
+            "--prompt-cache-all",                   // cache full KV state, not just prefix
+            "--log-disable"                         // reduce logcat noise
         )
         Log.i(TAG, "Launching: ${cmd.joinToString(" ")}")
 
@@ -216,6 +229,23 @@ class LlamaCppService : Service() {
             }
             privateFile
         } catch (_: Exception) { null }
+    }
+
+    /**
+     * Returns the prompt cache file path. If P4 pre-baked a crystal at the external
+     * path, copies it to app-private storage and uses that. Otherwise returns the
+     * app-private path (will be created by llama-server on first run).
+     */
+    private fun resolveOrInstallCrystal(): File {
+        val privateFile = File(filesDir, CRYSTAL_NAME)
+        val externalFile = File(EXTERNAL_CRYSTAL_PATH)
+        if (externalFile.exists() && externalFile.length() > 0) {
+            if (!privateFile.exists() || privateFile.length() != externalFile.length()) {
+                Log.i(TAG, "Installing pre-baked persona crystal from $EXTERNAL_CRYSTAL_PATH")
+                externalFile.copyTo(privateFile, overwrite = true)
+            }
+        }
+        return privateFile
     }
 
     // ── Health check (can be called from other components) ───────────────────
