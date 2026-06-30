@@ -641,13 +641,13 @@
       }
     },
     {
-      "timestamp": "2026-06-30T02:40:53.300Z",
+      "timestamp": "2026-06-30T10:25:53.805Z",
       "date": "2026-06-30",
-      "gitCommit": "0d7dde5a",
+      "gitCommit": "8bb90848",
       "categories": {
         "code": {
-          "files": 1218,
-          "lines": 332844,
+          "files": 1233,
+          "lines": 336200,
           "path": "src/",
           "extensions": [
             "ts",
@@ -655,8 +655,8 @@
           ]
         },
         "scripts": {
-          "files": 99,
-          "lines": 21840,
+          "files": 105,
+          "lines": 23309,
           "path": "scripts/",
           "extensions": [
             "ts",
@@ -665,16 +665,16 @@
           ]
         },
         "memory": {
-          "files": 9800,
-          "lines": 55627,
+          "files": 0,
+          "lines": 0,
           "path": "molly_data/",
           "extensions": [
             "json"
           ]
         },
         "docs": {
-          "files": 188,
-          "lines": 52898,
+          "files": 208,
+          "lines": 55939,
           "path": "docs/",
           "extensions": [
             "md"
@@ -691,19 +691,19 @@
         }
       },
       "totals": {
-        "coreLines": 354684,
-        "memoryLines": 55627,
-        "docsLines": 54433,
-        "totalLines": 464744
+        "coreLines": 359509,
+        "memoryLines": 0,
+        "docsLines": 57474,
+        "totalLines": 416983
       },
       "delta": {
-        "coreLines": 412,
-        "memoryLines": 75,
-        "docsLines": 184,
-        "totalLines": 671,
-        "since": "2026-06-29"
+        "coreLines": 4825,
+        "memoryLines": -55627,
+        "docsLines": 3041,
+        "totalLines": -47761,
+        "since": "2026-06-30"
       }
     }
   ],
-  "lastUpdated": "2026-06-30T02:40:53.300Z"
+  "lastUpdated": "2026-06-30T10:25:53.805Z"
 }
