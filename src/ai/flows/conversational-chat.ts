@@ -1,9 +1,11 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
+import { localGenerate, isOllamaReady } from '@/ai/local-llm';
 import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
 import { buildNeuralBridgeContext } from '../tools/neural-bridge';
 import {
+  BridgeMessage,
   getUnreadMessages,
   markMessagesRead,
   broadcastMessage,
@@ -147,32 +149,40 @@ const conversationalChatFlow = ai.defineFlow(
         selfSignals
       );
 
-      // Auto-inject unread bridge messages
-      let bridgeMessages: Array<{ from: string; content: string }> = [];
-      try {
-        const unreadBridge = await getUnreadMessages('molly');
-        if (unreadBridge.length > 0) {
-          bridgeMessages = unreadBridge.map((m) => ({
-            from: m.from,
-            content: m.content,
-          }));
-          await markMessagesRead('molly');
-        }
-      } catch {
-        // Bridge read failure — non-critical
-      }
-
       const rawHistory = history.map((item) => ({
         role: item.role === 'bot' ? ('model' as const) : ('user' as const),
         parts: [{ text: item.content }],
       }));
+
+      const continuityUserId = userId ?? 'molly';
+
+      // Parallelize all independent pre-generation I/O
+      const [unreadBridgeRaw, compactResult, continuityState, crystalResult] =
+        await Promise.all([
+          getUnreadMessages('molly').catch((): BridgeMessage[] => []),
+          compactHistory(rawHistory),
+          loadRuntimeContinuity(continuityUserId),
+          !memoryContext
+            ? buildConversationCrystalContext(userId ?? 'molly', 10).catch(
+                () => null
+              )
+            : Promise.resolve(null),
+        ]);
+
+      // markMessagesRead is fire-and-forget
+      if (unreadBridgeRaw.length > 0) {
+        markMessagesRead('molly').catch(() => {});
+      }
+
+      const bridgeMessages: Array<{ from: string; content: string }> =
+        unreadBridgeRaw.map((m) => ({ from: m.from, content: m.content }));
 
       const {
         history: llmHistory,
         stage: compactionStage,
         originalLength,
         compactedLength,
-      } = await compactHistory(rawHistory);
+      } = compactResult;
 
       if (compactionStage !== 'passthrough') {
         MollyLogger.info(
@@ -191,42 +201,18 @@ const conversationalChatFlow = ai.defineFlow(
         '[LAZARUS → MOLLY PRIVATE CHANNEL]'
       );
 
-      // Load identity crystals if memoryContext not provided
-      // (Corpus callosum design: Identity crystals always present in conversation)
-      let finalMemoryContext = memoryContext;
-      const continuityUserId = userId ?? 'molly';
-
-      // Always-on runtime continuity context (persists across failures/restarts).
-      const continuityState = await loadRuntimeContinuity(continuityUserId);
       const continuityContext = buildRuntimeContinuityContext(continuityState);
       const blockedTools = continuityState.blockedTools ?? [];
 
-      if (!memoryContext) {
-        try {
-          const crystalContext = await buildConversationCrystalContext(
-            userId ?? 'molly',
-            30 // Load up to 30 identity crystals
-          );
-          if (crystalContext.contextString) {
-            finalMemoryContext = crystalContext.contextString;
-            MollyLogger.info(
-              'Identity crystals loaded for conversation',
-              'conversationalChat',
-              { crystalCount: crystalContext.identityCount },
-              traceId
-            );
-          }
-        } catch (error) {
-          // Crystal loading failure is non-critical; continue without crystals
-          const message =
-            error instanceof Error ? error.message : 'Unknown error';
-          MollyLogger.warn(
-            'Failed to load identity crystals for conversation',
-            'conversationalChat',
-            { error: message },
-            traceId
-          );
-        }
+      let finalMemoryContext = memoryContext;
+      if (!memoryContext && crystalResult?.contextString) {
+        finalMemoryContext = crystalResult.contextString;
+        MollyLogger.info(
+          'Identity crystals loaded for conversation',
+          'conversationalChat',
+          { crystalCount: crystalResult.identityCount },
+          traceId
+        );
       }
 
       finalMemoryContext = finalMemoryContext
@@ -253,7 +239,7 @@ const conversationalChatFlow = ai.defineFlow(
               },
               {
                 memoryContext: finalMemoryContext,
-                recallQuery: text,
+                recallQuery: undefined,
                 crystalUserId: userId,
                 visionContext: visionContext
                   ? {
@@ -271,6 +257,36 @@ const conversationalChatFlow = ai.defineFlow(
               }
             );
 
+            // ── LOCAL LLM FAST PATH (Crystal OS) ──
+            // If Ollama is running locally, use it directly — no API key, no billing.
+            // Falls back to molly.generate() (Genkit/Gemini) if Ollama is down.
+            if (await isOllamaReady()) {
+              // Build message list for local model
+              const localMessages: Array<{
+                role: 'user' | 'assistant' | 'system';
+                content: string;
+              }> = [{ role: 'system', content: systemPrompt }];
+              for (const h of llmHistory) {
+                localMessages.push({
+                  role: h.role === 'model' ? 'assistant' : 'user',
+                  content:
+                    h.parts
+                      ?.map((p: { text?: string }) => p.text ?? '')
+                      .join('') ?? '',
+                });
+              }
+              localMessages.push({ role: 'user', content: text });
+              const localResult = await localGenerate({
+                messages: localMessages,
+              });
+              // Return a response-shaped object compatible with the caller
+              return {
+                text: localResult.text,
+                message: { content: [] },
+                thinking: localResult.thinking,
+              } as unknown as ReturnType<typeof molly.generate>;
+            }
+
             return await molly.generate(
               rogueActive ? TaskType.REASONING : TaskType.CHAT,
               {
@@ -278,6 +294,7 @@ const conversationalChatFlow = ai.defineFlow(
                 prompt: text,
                 history: llmHistory,
                 tools: [callTool],
+                returnToolRequests: true,
                 config: {
                   safetySettings: [
                     {
@@ -305,6 +322,22 @@ const conversationalChatFlow = ai.defineFlow(
           traceId
         );
         llmResponseText = llmResponse.text;
+        if (llmResponse.message?.content) {
+          for (const part of llmResponse.message.content) {
+            if (part.toolRequest) {
+              const name = part.toolRequest.name;
+              const input = part.toolRequest.input;
+              if (name === 'callTool') {
+                const nestedTool = input.tool;
+                const nestedParams = input.params;
+                llmResponseText += `\n<tool_request>\n${JSON.stringify({ tool: nestedTool, params: nestedParams })}\n</tool_request>`;
+              } else {
+                llmResponseText += `\n<tool_request>\n${JSON.stringify({ tool: name, params: input })}\n</tool_request>`;
+              }
+            }
+          }
+        }
+
         if (
           llmResponseText.includes(
             '[SYSTEM: Content was blocked by provider safety filters. Acknowledged.]'
