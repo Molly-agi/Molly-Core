@@ -171,6 +171,17 @@ export interface RetrievalPattern {
 
 // ── State ──────────────────────────────────────────────────────
 
+export interface KvDeltaRef {
+  id: string;
+  createdAt: string;
+  baselineFile: string;
+  afterFile: string;
+  descriptorPath: string;
+  blobPath: string;
+  bytes: number;
+  meta?: Record<string, unknown>;
+}
+
 interface CrystallizerState {
   /** Pending moments not yet crystallized */
   pendingMoments: Moment[];
@@ -180,6 +191,8 @@ interface CrystallizerState {
   sessionMoments: Moment[];
   /** Retrieval patterns */
   patterns: Map<string, RetrievalPattern>;
+  /** KV-delta descriptors loaded from kv-deltas/ — Gap 2 provenance */
+  deltas: Map<string, KvDeltaRef>;
   /** Statistics */
   stats: {
     totalMoments: number;
@@ -195,6 +208,7 @@ const state: CrystallizerState = {
   crystals: new Map(),
   sessionMoments: [],
   patterns: new Map(),
+  deltas: new Map(),
   stats: {
     totalMoments: 0,
     totalCrystals: 0,
@@ -1319,6 +1333,7 @@ export function ensureCrystallizerInit(): Promise<void> {
 const MOLLY_DATA_PATH = path.join(process.cwd(), 'molly_data');
 const BACKUP_PATH = path.join(MOLLY_DATA_PATH, 'backups');
 const CRYSTALS_PATH = path.join(MOLLY_DATA_PATH, 'crystals');
+const DELTAS_PATH = path.join(MOLLY_DATA_PATH, 'kv-deltas');
 
 /**
  * Create a timestamped backup of experiences before any destructive operation.
@@ -1465,6 +1480,74 @@ export async function loadCrystalsFromFiles(): Promise<number> {
     // Directory doesn't exist or is empty - that's ok
     return 0;
   }
+}
+
+/**
+ * Load KV-delta descriptor files written by DeltaPersister (Gap 2) into the
+ * crystallizer's delta registry. Safe to call repeatedly — existing entries
+ * are not overwritten. Returns the count of newly loaded descriptors.
+ *
+ * Companion to loadCrystalsFromFiles(). Deltas are exposed via getDeltaRefs()
+ * so promote-version.ts and the bake pipeline can reference them without
+ * rescanning disk on each run.
+ */
+export async function loadDeltasFromFiles(
+  deltaDir: string = DELTAS_PATH
+): Promise<number> {
+  let loaded = 0;
+  try {
+    const files = await fs.readdir(deltaDir);
+    for (const file of files) {
+      if (!file.endsWith('.json')) continue;
+      try {
+        const raw = JSON.parse(
+          await fs.readFile(path.join(deltaDir, file), 'utf-8')
+        ) as {
+          id?: string;
+          createdAt?: string;
+          baselineFile?: string;
+          afterFile?: string;
+          meta?: Record<string, unknown>;
+        };
+        if (typeof raw.id !== 'string') continue;
+        if (state.deltas.has(raw.id)) continue;
+        const blobPath = path.join(deltaDir, `${raw.id}.bin`);
+        let bytes = 0;
+        try {
+          bytes = (await fs.stat(blobPath)).size;
+        } catch {
+          // blob missing is non-fatal — record with bytes=0
+        }
+        state.deltas.set(raw.id, {
+          id: raw.id,
+          createdAt: raw.createdAt ?? new Date().toISOString(),
+          baselineFile: raw.baselineFile ?? '',
+          afterFile: raw.afterFile ?? '',
+          descriptorPath: path.join(deltaDir, file),
+          blobPath,
+          bytes,
+          meta: raw.meta,
+        });
+        loaded++;
+      } catch {
+        // skip malformed descriptor
+      }
+    }
+    if (loaded > 0) {
+      MollyLogger.info(
+        `[CRYSTALLIZER] Loaded ${loaded} KV-delta refs from ${deltaDir}`,
+        'memory-crystallizer'
+      );
+    }
+  } catch {
+    // Directory missing — not an error
+  }
+  return loaded;
+}
+
+/** Return all KV-delta refs currently in the registry. */
+export function getDeltaRefs(): KvDeltaRef[] {
+  return Array.from(state.deltas.values());
 }
 
 /**
