@@ -46,7 +46,9 @@ class LocalChatActivity : AppCompatActivity() {
     private fun prefs() = getSharedPreferences("molly_local_chat", Context.MODE_PRIVATE)
 
     private val crystalStore by lazy {
-        CrystalMemoryStore(java.io.File(CrystalMemoryStore.DEFAULT_CRYSTAL_DIR))
+        CrystalMemoryStore(java.io.File(
+            prefs().getString("crystal_dir", CrystalMemoryStore.DEFAULT_CRYSTAL_DIR)!!
+        ))
     }
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
@@ -58,6 +60,7 @@ class LocalChatActivity : AppCompatActivity() {
         inputField.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) { onSend(); true } else false
         }
+        checkFirstRun()
         injectSessionCrystals()
         checkHealth()
     }
@@ -192,6 +195,10 @@ class LocalChatActivity : AppCompatActivity() {
             hint = "GGUF model path"
             setText(prefs().getString("local_model_path", LlamaCppService.defaultModelPath()))
         }
+        val crystalDirInput = EditText(this).apply {
+            hint = "Crystal memory dir (/sdcard/molly/memory/crystals)"
+            setText(prefs().getString("crystal_dir", CrystalMemoryStore.DEFAULT_CRYSTAL_DIR))
+        }
 
         fun label(text: String) = TextView(this).apply {
             this.text = text; setTextColor(0xFF888888.toInt()); setPadding(0, 16, 0, 0)
@@ -204,6 +211,8 @@ class LocalChatActivity : AppCompatActivity() {
         layout.addView(binaryInput)
         layout.addView(label("GGUF model file path"))
         layout.addView(modelPathInput)
+        layout.addView(label("Crystal memory directory"))
+        layout.addView(crystalDirInput)
 
         AlertDialog.Builder(this)
             .setTitle("Local Chat Config")
@@ -214,11 +223,52 @@ class LocalChatActivity : AppCompatActivity() {
                     .putString("local_model", modelInput.text.toString().trim())
                     .putString("local_binary_path", binaryInput.text.toString().trim())
                     .putString("local_model_path", modelPathInput.text.toString().trim())
+                    .putString("crystal_dir", crystalDirInput.text.toString().trim())
                     .apply()
                 Toast.makeText(this, "Saved. Tap ⚡ to start local brain.", Toast.LENGTH_SHORT).show()
                 checkHealth()
             }
             .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    // ── First-run setup check ─────────────────────────────────────────────────
+
+    private fun checkFirstRun() {
+        if (prefs().getBoolean("setup_done", false)) return
+        val binaryOk = java.io.File(
+            prefs().getString("local_binary_path", LlamaCppService.defaultBinaryPath())!!
+        ).exists()
+        val modelOk = java.io.File(
+            prefs().getString("local_model_path", LlamaCppService.defaultModelPath())!!
+        ).exists()
+        if (binaryOk && modelOk) {
+            prefs().edit().putBoolean("setup_done", true).apply()
+            return
+        }
+        val msg = buildString {
+            appendLine("Molly needs two files on your tablet before the local brain can start.")
+            appendLine()
+            if (!binaryOk) {
+                appendLine("1. llama-server binary")
+                appendLine("   Download: github.com/ggml-org/llama.cpp/releases/download/b9843/llama-b9843-bin-android-arm64.tar.gz")
+                appendLine("   Extract llama-server → place at:")
+                appendLine("   /sdcard/Download/llama-server")
+                appendLine()
+            }
+            if (!modelOk) {
+                appendLine("${if (!binaryOk) "2" else "1"}. GGUF model file")
+                appendLine("   Place your model at:")
+                appendLine("   /sdcard/Download/qwen2.5-3b-q4_k_m.gguf")
+                appendLine()
+            }
+            appendLine("Long-press the title bar to change paths.")
+            append("Tap ⚡ once files are in place.")
+        }
+        AlertDialog.Builder(this)
+            .setTitle("Setup needed")
+            .setMessage(msg)
+            .setPositiveButton("Got it") { _, _ -> }
             .show()
     }
 
