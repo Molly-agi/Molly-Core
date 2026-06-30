@@ -77,6 +77,33 @@ function generateId(prefix: string): string {
   return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
+/**
+ * Gap 6 — Temporal Decay (7th significance dimension)
+ *
+ * Piecewise decay: full score for first 7 days, then exponential decay.
+ * Half-life ~35 days after the 7-day loyalty window.
+ *
+ *   recency = 1.0          if d <= 7
+ *           = exp(-0.02*(d-7))  if d > 7
+ *
+ * recencyScore is OPTIONAL in crystal JSON — defaults to 1.0 if absent
+ * so legacy crystals remain fully weighted.
+ *
+ * NOTE for Gap 1 tooling: normalize to bake-time recencyScore before
+ * computing KL coherence scores, otherwise scores drift with the clock.
+ */
+export function computeRecencyScore(crystallizedAt: string | number): number {
+  if (!crystallizedAt) return 1.0;
+  const bakeTime =
+    typeof crystallizedAt === 'number'
+      ? crystallizedAt
+      : new Date(crystallizedAt).getTime();
+  if (isNaN(bakeTime)) return 1.0;
+  const daysSince = (Date.now() - bakeTime) / (1000 * 60 * 60 * 24);
+  if (daysSince <= 7) return 1.0;
+  return Math.exp(-0.02 * (daysSince - 7));
+}
+
 function calculateSignificance(experiences: Experience[]): number {
   if (experiences.length === 0) return 0;
 

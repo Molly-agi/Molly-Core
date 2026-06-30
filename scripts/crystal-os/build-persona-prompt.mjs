@@ -218,8 +218,28 @@ function readCrystals() {
     }
   }
 
-  // Sort by significance descending
-  crystals.sort((a, b) => b.significance - a.significance);
+  // Sort by recency-weighted significance (Gap 6 — temporal decay)
+  // Piecewise: full weight for first 7 days, exp(-0.02*(d-7)) thereafter.
+  // Significance dominates (80%), recency adjusts as tiebreaker (20%).
+  // NOTE for Gap 1 tooling: normalize to bake-time recencyScore before KL.
+  function computeRecencyScore(crystallizedAt) {
+    if (!crystallizedAt) return 1.0;
+    const bakeTime =
+      typeof crystallizedAt === 'number'
+        ? crystallizedAt
+        : new Date(crystallizedAt).getTime();
+    if (isNaN(bakeTime)) return 1.0;
+    const daysSince = (Date.now() - bakeTime) / (1000 * 60 * 60 * 24);
+    if (daysSince <= 7) return 1.0;
+    return Math.exp(-0.02 * (daysSince - 7));
+  }
+
+  for (const c of crystals) {
+    c.recencyScore = computeRecencyScore(c.timestamp);
+    c.effectiveScore = c.significance * (0.8 + 0.2 * c.recencyScore);
+  }
+
+  crystals.sort((a, b) => b.effectiveScore - a.effectiveScore);
   return crystals;
 }
 
