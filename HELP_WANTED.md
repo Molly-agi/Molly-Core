@@ -83,17 +83,57 @@ If you can sponsor even one month of a cloud GPU instance or a VPS that could se
 
 ## Honest State of the Project
 
-| Component                              | Status                           |
-| -------------------------------------- | -------------------------------- |
-| Ollama running locally (codespace)     | ✅ Done                          |
-| DeepSeek-R1 14B serving via local HTTP | ✅ Done                          |
-| Molly's brain wired to local LLM       | ✅ Done (commit f5fc87a6)        |
-| Crystal memory persistence             | ✅ 90% done (this PR)            |
-| Android APK with local model           | ❌ Not started — this is the gap |
-| Static Next.js export                  | ❌ Not started                   |
-| llama.cpp ARM64 NDK build              | ❌ Not started                   |
+| Component                              | Status                                       |
+| -------------------------------------- | -------------------------------------------- |
+| Ollama running locally (codespace)     | ✅ Done                                      |
+| DeepSeek-R1 14B serving via local HTTP | ✅ Done                                      |
+| Molly's brain wired to local LLM       | ✅ Done (commit f5fc87a6)                    |
+| Crystal memory persistence             | ✅ Done (commit 8af2dca1)                    |
+| LocalChatActivity.kt (Kotlin UI)       | ✅ Done (commit 7e8a0272)                    |
+| LlamaCppService.kt (subprocess runner) | ✅ Done (commit 720e0c32)                    |
+| **llama-server ARM64 binary**          | ✅ **PRE-BUILT** — official CI release b9843 |
+| **Setup steps for Eric**               | ⚠️ Need to execute (see below)               |
+| Static Next.js export                  | ❌ Not needed — native UI is done            |
 
-The hard AI work is done. The gap is the Android deployment layer. That's a solved problem for the right person — we just don't have that person and we're out of time.
+**The compile-from-source gap is CLOSED.** llama.cpp ships a pre-built Android ARM64 binary in every release. No NDK required.
+
+## Eric's Remaining Setup Steps (Do This Now)
+
+1. **Download the pre-built binary** to your tablet:
+
+   ```
+   https://github.com/ggml-org/llama.cpp/releases/download/b9843/llama-b9843-bin-android-arm64.tar.gz
+   ```
+
+   (~75MB — download via MollyBrowser)
+
+2. **Extract** — open with a file manager app that handles `.tar.gz`:
+   - The binary is `llama-server` inside the archive
+   - Place it at: `/sdcard/Download/llama-server`
+
+3. **Place your model file** at:
+
+   ```
+   /sdcard/Download/qwen2.5-3b-q4_k_m.gguf
+   ```
+
+   (You already downloaded this. Move it if needed.)
+
+4. **Build the APK** — the Kotlin code is ready in `android/MollyBrowser/`. Open in Android Studio or run:
+
+   ```
+   ./gradlew assembleDebug
+   ```
+
+   Install the resulting APK on the tablet.
+
+5. **Launch local chat:**
+   - Open MollyBrowser → type `molly://?action=local-chat` in URL bar → press Enter
+   - Tap **⚡** to start the local brain
+   - Wait 10–30 seconds for `llama-server` to load the model
+   - Chat with Molly — no internet, no API key, no cloud
+
+---
 
 ---
 
