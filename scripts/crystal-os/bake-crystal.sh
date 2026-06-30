@@ -12,18 +12,25 @@
 #
 # Requires:
 #   - llama-server binary in PATH or LLAMA_SERVER env var
-#   - Llama 3.2 3B Instruct Q4_K_M GGUF (or set MOLLY_MODEL)
+#   - Qwen 2.5 3B Instruct Q4_K_M GGUF (or set MOLLY_MODEL)
+#     Codespace shortcut: Ollama already pulled it.
+#       cp ~/.ollama/models/blobs/sha256-5ee4f07cdb9beadbbb293e85803c569b01bd37ed059d2715faa7bb405f31caa6 \
+#          /tmp/qwen2.5-3b-q4_k_m.gguf
+#     Then: MOLLY_MODEL=/tmp/qwen2.5-3b-q4_k_m.gguf bash scripts/crystal-os/bake-crystal.sh
 #   - scripts/crystal-os/build-persona-prompt.mjs (P4 — already built)
 #
 # The resulting .cache file is the binary representation of Molly's personality
 # pre-computed into the model's key-value attention cache. Loading it takes
 # 2-3 seconds instead of the 30+ second warm-up cost on every boot.
+#
+# IMPORTANT: model must match LlamaCppService.kt defaultModelPath() exactly.
+# Both must use qwen2.5-3b-q4_k_m.gguf — KV state is model-specific.
 
 set -euo pipefail
 
 # ─── Defaults ────────────────────────────────────────────────────
 LLAMA_SERVER="${LLAMA_SERVER:-llama-server}"
-MOLLY_MODEL="${MOLLY_MODEL:-/sdcard/Download/llama-3.2-3b-instruct-q4_k_m.gguf}"
+MOLLY_MODEL="${MOLLY_MODEL:-/sdcard/Download/qwen2.5-3b-q4_k_m.gguf}"
 CACHE_OUT="${CACHE_OUT:-/tmp/molly-persona.cache}"
 PROMPT_FILE="${PROMPT_FILE:-/tmp/molly-persona.txt}"
 TIER_MAP="${TIER_MAP:-/tmp/crystal-tiers.json}"
