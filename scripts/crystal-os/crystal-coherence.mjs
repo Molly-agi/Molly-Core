@@ -39,6 +39,24 @@ const GATE_THRESHOLD = 0.15; // KL above this = merge rejected
 const WATCHDOG_THRESHOLD = 0.2;
 const DEFAULT_MODEL_URL = 'http://127.0.0.1:8080';
 
+// ─── Health logger (Gap 10) ─────────────────────────────────────────────────
+// Dynamic import so crystal-coherence works even if ts-node isn't available.
+// Falls back silently if import fails (e.g., first-boot before build).
+let _healthLog = null;
+async function getHealthLog() {
+  if (_healthLog) return _healthLog;
+  try {
+    const mod =
+      await import('../../src/ai/memory/crystal-health-logger.js').catch(
+        () => import('../../src/ai/memory/crystal-health-logger.ts')
+      );
+    _healthLog = mod;
+  } catch {
+    _healthLog = { logCoherenceSample: () => {}, logAnomaly: () => {} };
+  }
+  return _healthLog;
+}
+
 // ─── Args ───────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const getArg = (f, d = null) => {
@@ -181,31 +199,59 @@ function saveMatrix(m) {
 }
 
 // ─── Watchdog mode ───────────────────────────────────────────────────────────
-function runWatchdog() {
+async function runWatchdog() {
   const pair = getArg('--pair');
   if (!pair) {
     console.error('[watchdog] --pair required');
     process.exit(2);
   }
   const entry = loadMatrix().pairs?.[pair];
+  const crystalIds = pair.split('+');
+  const { logCoherenceSample, logAnomaly } = await getHealthLog();
+
   if (!entry) {
     console.log(`[watchdog] no data for "${pair}" — allow`);
+    logCoherenceSample({
+      crystalIds,
+      sampleDelta: 0,
+      threshold: WATCHDOG_THRESHOLD,
+      status: 'ok',
+    });
     process.exit(0);
   }
   if (entry.gate === 'fail' || entry.score > WATCHDOG_THRESHOLD) {
     console.log(
       `[watchdog] DEGRADE pair="${pair}" score=${entry.score.toFixed(4)}`
     );
+    logCoherenceSample({
+      crystalIds,
+      sampleDelta: entry.score,
+      threshold: WATCHDOG_THRESHOLD,
+      status: 'fail',
+    });
+    logAnomaly({
+      crystalIds,
+      observedDelta: entry.score,
+      threshold: WATCHDOG_THRESHOLD,
+      action: 'logged-only',
+    });
     process.exit(1);
   }
+  const status = entry.score > WATCHDOG_THRESHOLD * 0.8 ? 'warn' : 'ok';
   console.log(`[watchdog] OK pair="${pair}" score=${entry.score.toFixed(4)}`);
+  logCoherenceSample({
+    crystalIds,
+    sampleDelta: entry.score,
+    threshold: WATCHDOG_THRESHOLD,
+    status,
+  });
   process.exit(0);
 }
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 async function main() {
   if (WATCHDOG) {
-    runWatchdog();
+    await runWatchdog();
     return;
   }
 
