@@ -6,18 +6,32 @@ export interface TitanTensorHeader {
   readonly totalElements: number;
 }
 
+/**
+ * Quantized layer output: packed ternary weights + the scale needed to dequantize.
+ * scale is stored as the first 4 bytes (Float32LE) of packedBuffer so the
+ * payload is self-contained and reconstruction never needs out-of-band metadata.
+ */
+export interface TitanQuantizedLayer {
+  readonly header: TitanTensorHeader;
+  /** Packed buffer: [Float32LE scale (4 bytes)] + [packed ternary weights] */
+  readonly packedBuffer: Buffer;
+  /** Scale factor — also embedded in packedBuffer[0..3] for convenience. */
+  readonly scale: number;
+}
+
 export class TitanStreamQuantizer {
   // 3^5 = 243, fitting neatly inside a single 8-bit unsigned integer (max 255)
   private readonly weightsPerByte = 5;
 
   /**
-   * Methodically compresses raw FP16/FP32 tensor arrays into packed 1.58-bit ternary streams.
-   * Processes data in chunks to prevent V8 memory exhaustion in 16GB Codespaces.
+   * Compresses raw FP16/FP32 tensor arrays into packed 1.58-bit ternary streams.
+   * Output is self-contained: scale is prepended as Float32LE in the first 4 bytes
+   * so reconstruction never needs out-of-band metadata.
    */
   public quantizeTensorChunk(
     header: TitanTensorHeader,
     rawWeights: Float32Array
-  ): Buffer {
+  ): TitanQuantizedLayer {
     if (!rawWeights || rawWeights.length !== header.totalElements) {
       throw new RangeError(
         'Provided tensor buffer weight dimensions do not match header metadata specs.'
@@ -31,15 +45,18 @@ export class TitanStreamQuantizer {
     }
     const layerScale = absoluteSum / (rawWeights.length || 1);
 
-    // Step 2: Pre-allocate our output buffer to completely eliminate V8 heap resizing
-    const packedBufferSize = Math.ceil(
+    // Step 2: Pre-allocate output buffer: 4-byte scale header + packed weights
+    const packedWeightSize = Math.ceil(
       header.totalElements / this.weightsPerByte
     );
-    const packedOutputBuffer = Buffer.alloc(packedBufferSize);
+    const packedOutputBuffer = Buffer.alloc(4 + packedWeightSize);
+
+    // Embed scale as first 4 bytes (Float32LE) so reconstruction is self-contained
+    packedOutputBuffer.writeFloatLE(layerScale, 0);
 
     const weightBufferWindow = new Int8Array(this.weightsPerByte);
     let windowIndex = 0;
-    let byteOutputCursor = 0;
+    let byteOutputCursor = 4; // start after scale header
 
     // Step 3: Run the ternary translation loop (-1, 0, 1)
     for (let i = 0; i < rawWeights.length; i++) {
@@ -68,7 +85,7 @@ export class TitanStreamQuantizer {
         this.packTernaryWindow(weightBufferWindow);
     }
 
-    return packedOutputBuffer;
+    return { header, packedBuffer: packedOutputBuffer, scale: layerScale };
   }
 
   /**
