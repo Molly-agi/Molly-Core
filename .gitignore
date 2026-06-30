@@ -156,7 +156,7 @@ data/.bridge-bootstrap-key
 data/markitdown-inbox/
 
 # Sensitive files and working dirs that must never be committed
-stuff/
+# stuff/ is Eric's notes/handoffs folder — intentionally tracked, do NOT re-add here
 backups/
 sandbox/test.txt
 .sandbox/
