@@ -13,9 +13,7 @@
         "showReuseMessage": false,
         "clear": true
       },
-      "runOptions": {
-        "runOn": "folderOpen"
-      },
+
       "group": {
         "kind": "build",
         "isDefault": true
