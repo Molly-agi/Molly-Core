@@ -47,6 +47,7 @@ import {
   detectConflicts,
   type DetectionResult,
 } from '../../src/ai/memory/contradiction-detector';
+import { checkCoherenceGate } from '../../src/ai/memory/coherence-matrix';
 import {
   logPromote,
   logBlock,
@@ -181,8 +182,24 @@ interface CoherenceMatrix {
   pairs: Record<string, CoherenceMatrixEntry>;
 }
 
-function loadCoherenceGate(): CoherenceGate {
+function loadCoherenceGate(crystals: RoutableCrystal[]): CoherenceGate {
   if (!existsSync(COHERENCE_PATH)) {
+    // No pre-computed matrix — run live trigram gate on loaded crystals
+    if (crystals.length > 0) {
+      const input = crystals.map((c) => ({
+        id: c.id ?? '',
+        oneLineEssence: c.facets?.essential?.oneLineEssence ?? c.title ?? '',
+      }));
+      const result = checkCoherenceGate(input);
+      log(
+        `coherence_matrix.json missing — live gate: passed=${result.pass} meanCoherence=${result.meanCoherence.toFixed(4)}`
+      );
+      return {
+        passed: result.pass,
+        meanKl: Number(result.meanCoherence.toFixed(4)),
+        threshold: COHERENCE_BLOCK_THRESHOLD,
+      };
+    }
     log(`coherence_matrix.json missing — vacuous pass`);
     return { passed: true, threshold: COHERENCE_BLOCK_THRESHOLD };
   }
@@ -258,7 +275,7 @@ async function main(): Promise<number> {
   const crystals = loadCrystals();
   log(`crystals loaded: ${crystals.length}`);
 
-  const coherence = loadCoherenceGate();
+  const coherence = loadCoherenceGate(crystals);
   log(
     `coherence gate: passed=${coherence.passed} meanKl=${coherence.meanKl ?? 'n/a'}`
   );
