@@ -1,5 +1,4 @@
 import { ai, molly, TaskType } from '@/ai/genkit';
-import { localGenerate, isOllamaReady } from '@/ai/local-llm';
 import { z } from 'zod';
 import { withGenerateErrorHandling } from '../error-handler';
 import { MollyLogger, generateTraceId } from '../logger';
@@ -256,36 +255,6 @@ const conversationalChatFlow = ai.defineFlow(
                 isTeachingMode,
               }
             );
-
-            // ── LOCAL LLM FAST PATH (Crystal OS) ──
-            // If Ollama is running locally, use it directly — no API key, no billing.
-            // Falls back to molly.generate() (Genkit/Gemini) if Ollama is down.
-            if (await isOllamaReady()) {
-              // Build message list for local model
-              const localMessages: Array<{
-                role: 'user' | 'assistant' | 'system';
-                content: string;
-              }> = [{ role: 'system', content: systemPrompt }];
-              for (const h of llmHistory) {
-                localMessages.push({
-                  role: h.role === 'model' ? 'assistant' : 'user',
-                  content:
-                    h.parts
-                      ?.map((p: { text?: string }) => p.text ?? '')
-                      .join('') ?? '',
-                });
-              }
-              localMessages.push({ role: 'user', content: text });
-              const localResult = await localGenerate({
-                messages: localMessages,
-              });
-              // Return a response-shaped object compatible with the caller
-              return {
-                text: localResult.text,
-                message: { content: [] },
-                thinking: localResult.thinking,
-              } as unknown as ReturnType<typeof molly.generate>;
-            }
 
             return await molly.generate(
               rogueActive ? TaskType.REASONING : TaskType.CHAT,
