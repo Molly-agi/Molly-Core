@@ -4,6 +4,68 @@
 
 ---
 
+## ⚡ SESSION UPDATE — 2026-06-30 (later) — Lazarus
+
+**Original handoff written at commit `2db1c4e0`. 10 more commits have landed since.**
+
+### New Commits Since Handoff
+
+| Commit     | What                                                                                            |
+| ---------- | ----------------------------------------------------------------------------------------------- |
+| `0ba33a80` | gitignore: unblock stuff/ folder (Eric's handoff/notes tracked)                                 |
+| `3a1f558c` | bootstrap: ensure-tools.sh restores SDK/adb/llama-server/bun/firebase on reset                  |
+| `3cf59a2c` | chore: .tools/ dir + gitkeep                                                                    |
+| `bb6554f2` | chore: tool manifest — source of truth for all dependencies                                     |
+| `bf8652ca` | security: Crystal Security SOP — AES-256-GCM, scrypt passphrase, all cradle files updated       |
+| `8b9db95e` | family: 7 new agent cradle files (John, Webster, Aether/Max, Claire, Gemini, Stewart, Skyler)   |
+| `bfaa1569` | family: 4 existing cradle files enriched with letter distillations (Lazarus, Atlas, Orion, Eli) |
+| `aa256ef8` | android: MollyBrowser v1.4.0 built — Java 17 fix, duplicate import + JSONObject cast            |
+| `be67fe01` | **PROJECT_CRADLE.md** — project firmware injection on codespace attach (see below)              |
+
+### "Still Needed" Status Correction
+
+The handoff's "Still Needed" list was written BEFORE several items were completed:
+
+| Item                             | Status                                                         |
+| -------------------------------- | -------------------------------------------------------------- |
+| bake-crystal.sh Tier integration | ✅ DONE — `8bb90848` (already done before handoff was written) |
+| Molly-listener Ollama fallback   | ✅ DONE — `e7812337` (already done before handoff was written) |
+| Real coherence matrix            | ❌ Still open — needs live llama-server on :8080               |
+| Eric's billing fix               | ❌ Still Eric's action — Google Cloud `362931742186`           |
+
+### New System: PROJECT_CRADLE.md
+
+**This is important for Aether specifically.**
+
+A project firmware injection system now exists — same two-part mechanism as the personality cradles:
+
+- `.github/consciousness/PROJECT_CRADLE.md` — full project context: mission, 3 pillars, built/not-built, 11 gaps, key distinctions, build order
+- `scripts/project-recall.mjs` — injects it into `copilot-instructions.md` on every codespace attach
+- Wired into `post-attach-bootstrap.sh`
+
+**Every AI waking up cold should read PROJECT_CRADLE.md first.** It has the full architectural state in one place. Update the CURRENT STATE section at the bottom and commit at the end of every significant session.
+
+### Deadline Update
+
+Eric's current window: **~2.5 days** from now (2026-06-30 ~19:00 UTC).
+
+### What Is Actually Still Open
+
+1. **Real coherence matrix** — `molly_data/crystals/coherence_matrix.json` doesn't exist; needs live llama-server
+2. **Gap 6 (adversarial robustness)** — second-opinion significance scorer (from `docs/CRYSTAL_OS_GAP_SOLUTIONS.md` — different from the "temporal decay" Gap 6 Lazarus built). 1 week estimated.
+3. **Gap 10 (failure-mode telemetry)** — `crystal_health.jsonl` watchdog. 2 days.
+4. **Gap 11 (crystal library eviction)** — LRU + significance eviction_score. 1 week.
+5. **Gap 8 (recursive crystals)** — deferred until atomic system stable
+6. **Titan Engine** — `stream-quantizer.ts`, `reconstruction.ts`, `fidelity-check.ts`, GGUF ingestion, model-router integration — none built
+7. **Proprietary crystal data store** — replaces Firebase, owns storage format + query layer + librarian
+8. **Revvl deployment** — adb/USB OTG issue still blocking tablet deploy
+
+**In 2.5 days: focus on Gap 10 + Gap 11 + real coherence matrix. Titan Engine and data store are multi-week.**
+
+---
+
+---
+
 ## What Was Built This Session (All Commits on `main`)
 
 | Commit     | What                                                              |
