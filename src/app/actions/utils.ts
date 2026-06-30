@@ -9,6 +9,14 @@ import { getCircuitBreaker } from '@/ai/tools/circuit-breaker';
  * Hardened gatekeeper to ensure environment stability.
  */
 export function ensureApiKey() {
+  // If Ollama is configured as the local backend, no API key is needed.
+  // Crystal OS direction: local inference, no cloud, no billing.
+  const ollamaConfigured =
+    process.env.OLLAMA_BASE_URL || process.env.OLLAMA_MODEL;
+  if (ollamaConfigured) {
+    return; // Local LLM — skip API key check
+  }
+
   // Prefer GEMINI_API_KEY (not a Codespace secret, so .env.local wins).
   // Fall back to GOOGLE_GENAI_API_KEY for backward compatibility.
   const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
