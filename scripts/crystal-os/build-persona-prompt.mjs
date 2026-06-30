@@ -138,11 +138,34 @@ function readCrystals() {
             data.importanceScore ??
             data.emotionalSalience ??
             0;
-          const content =
-            data.content ?? data.text ?? data.summary ?? data.title ?? '';
           const title = data.title ?? data.id ?? file.replace('.json', '');
           const timestamp =
-            data.timestamp ?? data.savedAt ?? data.createdAt ?? '';
+            data.timestamp ??
+            data.savedAt ??
+            data.createdAt ??
+            data.facets?.factual?.when ??
+            '';
+
+          // Extract rich content from facets (crystallize-memories.ts format)
+          let content = data.content ?? data.text ?? data.summary ?? '';
+          if (!content && data.facets) {
+            const f = data.facets;
+            const parts = [];
+            if (f.factual?.what) parts.push(`What: ${f.factual.what}`);
+            if (f.factual?.who?.length)
+              parts.push(`Who: ${f.factual.who.join(', ')}`);
+            if (f.emotional?.primaryVibe)
+              parts.push(`Tone: ${f.emotional.primaryVibe}`);
+            const insights = f.transformative?.topInsights ?? [];
+            if (insights.length) {
+              parts.push('Key moments:');
+              insights
+                .slice(0, 3)
+                .forEach((i) => parts.push(`  - ${String(i).slice(0, 150)}`));
+            }
+            content = parts.join('\n');
+          }
+          if (!content) content = title;
           const tags = data.tags ?? data.facets ?? [];
 
           if (content && significance > 0) {
