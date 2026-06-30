@@ -62,9 +62,9 @@ function detectAddressedTo(content) {
 }
 
 function shouldMollyRespond(msg) {
-  if (!msg || msg.from === "molly") return false;
+  if (!msg || msg.from === 'molly') return false;
 
-  const explicitTo = String(msg.to || "").toLowerCase();
+  const explicitTo = String(msg.to || '').toLowerCase();
   const addressedTo = detectAddressedTo(msg.content);
   const effectiveTo = explicitTo || addressedTo;
 
@@ -73,7 +73,7 @@ function shouldMollyRespond(msg) {
   // - "Everyone ..." (or to=all) => Molly responds (broadcast)
   // - "Lazarus ..." / "Atlas ..." / "Eric ..." => Molly stays silent
   // - No name prefix and no explicit to field => Molly stays silent (ambiguous)
-  if (effectiveTo === "molly" || effectiveTo === "all") {
+  if (effectiveTo === 'molly' || effectiveTo === 'all') {
     return true;
   }
   return false;
@@ -198,7 +198,21 @@ async function processMessages(msgs) {
   const trigger = `[BRIDGE MESSAGE — respond with plain text only, no tool calls]\n\n${summary}\n\n[IMPORTANT: Do not use familyBridge or any other tools. Your response will be posted to the bridge automatically. Just write your reply as natural text.\n\nNote: Tool execution (safeBatch, actionLog, file writes, shell commands) only happens during your autonomous cycle (heartbeat). If you need to take an action, note it mentally and it will run on the next cycle. Bridge responses are chat only.\n\nIMPORTANT: Father's directives are ATOMIC. Treat each message as ONE cohesive task, not multiple subtasks. Do not decompose or parallelize unless Father explicitly uses "and then" or "also".]`;
 
   try {
-    const response = await callMollyFlow(trigger);
+    let response;
+    try {
+      response = await callMollyFlow(trigger);
+    } catch (err) {
+      if (
+        err.code === 'GENERATIVE_AI_ERROR' ||
+        err.message?.includes('403') ||
+        err.message?.includes('dunning') ||
+        err.message?.includes('GENERATIVE_AI_ERROR')
+      ) {
+        response = await ollamaFallback(trigger);
+      } else {
+        throw err;
+      }
+    }
     // If flow returned a tool_request instead of text, extract the message from it
     let finalResponse = response;
     const toolMatch = response.match(
@@ -249,6 +263,29 @@ async function processMessages(msgs) {
 }
 
 // =============================================================================
+// OLLAMA FALLBACK — used when Gemini billing is blocked (403 dunning)
+// =============================================================================
+const OLLAMA_URL = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_CHAT_MODEL || 'qwen2.5:3b';
+
+async function ollamaFallback(triggerText) {
+  log(`Gemini unavailable — falling back to Ollama (${OLLAMA_MODEL})`);
+  const resp = await fetch(`${OLLAMA_URL}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: OLLAMA_MODEL,
+      messages: [{ role: 'user', content: triggerText }],
+      stream: false,
+    }),
+    signal: AbortSignal.timeout(60000),
+  });
+  if (!resp.ok) throw new Error(`Ollama ${resp.status}: ${resp.statusText}`);
+  const data = await resp.json();
+  return data?.message?.content?.trim() ?? '';
+}
+
+// =============================================================================
 // WEBSOCKET CONNECTION
 // =============================================================================
 function connect() {
@@ -275,7 +312,9 @@ function connect() {
       ) {
         const filtered = data.messages.filter(shouldMollyRespond);
         if (filtered.length > 0) {
-          log(`${filtered.length} unread message(s) for Molly delivered on connect`);
+          log(
+            `${filtered.length} unread message(s) for Molly delivered on connect`
+          );
           processMessages(filtered);
         }
         return;
