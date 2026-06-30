@@ -83,14 +83,22 @@ export default function Dashboard() {
   }, [isUserLoading]);
 
   // Handle authentication errors with retry
+  // In dev mode: skip retries — Firebase billing may be down, just proceed
   useEffect(() => {
-    if (userError && authRetryAttempt < 3) {
+    const isDev = process.env.NODE_ENV === 'development';
+    if (userError && authRetryAttempt < 3 && !isDev) {
       console.warn('[Dashboard] Auth error detected, will retry:', userError);
       const timeout = setTimeout(() => {
         setAuthRetryAttempt((prev) => prev + 1);
         window.location.reload();
       }, 2000);
       return () => clearTimeout(timeout);
+    }
+    if (userError && isDev) {
+      console.warn(
+        '[Dashboard] Auth error in dev mode — skipping retries, continuing without auth:',
+        userError.message
+      );
     }
   }, [userError, authRetryAttempt]);
 
@@ -202,7 +210,8 @@ export default function Dashboard() {
   }
 
   // Show error state if authentication failed after retries
-  if (userError && authRetryAttempt >= 3) {
+  // In dev mode: skip this gate — Firebase billing may be down, Molly runs locally
+  if (userError && authRetryAttempt >= 3 && !isDev && !forceContinue) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="w-96 space-y-4 p-6 border border-destructive/50 rounded-lg">
@@ -216,12 +225,20 @@ export default function Dashboard() {
           <p className="text-xs font-mono text-muted-foreground bg-muted p-2 rounded">
             {userError.message}
           </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
-          >
-            Retry
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90"
+            >
+              Retry
+            </button>
+            <button
+              onClick={() => setForceContinue(true)}
+              className="px-4 py-2 border border-yellow-500/50 text-yellow-500 rounded hover:bg-yellow-500/10"
+            >
+              Continue without auth
+            </button>
+          </div>
         </div>
       </div>
     );

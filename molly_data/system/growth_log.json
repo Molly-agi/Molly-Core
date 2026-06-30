@@ -639,7 +639,71 @@
         "totalLines": 0,
         "since": "2026-06-28"
       }
+    },
+    {
+      "timestamp": "2026-06-30T02:40:53.300Z",
+      "date": "2026-06-30",
+      "gitCommit": "0d7dde5a",
+      "categories": {
+        "code": {
+          "files": 1218,
+          "lines": 332844,
+          "path": "src/",
+          "extensions": [
+            "ts",
+            "tsx"
+          ]
+        },
+        "scripts": {
+          "files": 99,
+          "lines": 21840,
+          "path": "scripts/",
+          "extensions": [
+            "ts",
+            "mjs",
+            "js"
+          ]
+        },
+        "memory": {
+          "files": 9800,
+          "lines": 55627,
+          "path": "molly_data/",
+          "extensions": [
+            "json"
+          ]
+        },
+        "docs": {
+          "files": 188,
+          "lines": 52898,
+          "path": "docs/",
+          "extensions": [
+            "md"
+          ]
+        },
+        "sanctuary": {
+          "files": 9,
+          "lines": 1535,
+          "path": "sanctuary/",
+          "extensions": [
+            "json",
+            "md"
+          ]
+        }
+      },
+      "totals": {
+        "coreLines": 354684,
+        "memoryLines": 55627,
+        "docsLines": 54433,
+        "totalLines": 464744
+      },
+      "delta": {
+        "coreLines": 412,
+        "memoryLines": 75,
+        "docsLines": 184,
+        "totalLines": 671,
+        "since": "2026-06-29"
+      }
     }
   ],
-  "lastUpdated": "2026-06-29T22:26:40.319Z"
+  "lastUpdated": "2026-06-30T02:40:53.300Z"
 }
