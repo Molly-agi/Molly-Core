@@ -202,3 +202,8 @@ sandbox/test.txt
 
 # Bridge audit log (runtime stream, not source)
 .molly-context/bridge-audit.jsonl
+
+# Tool binaries (restored by ensure-tools.sh on attach)
+.tools/*
+!.tools/.gitkeep
+!.tools/manifest.json

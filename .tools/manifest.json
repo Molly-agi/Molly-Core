@@ -1,0 +1,49 @@
+{
+  "comment": "Source of truth for all tools used in this project. ensure-tools.sh reads this. Add a tool here and it will be auto-restored on every codespace attach.",
+  "tools": {
+    "llama-server": {
+      "version": "b9844",
+      "source": "https://github.com/ggml-org/llama.cpp/releases/download/b9844/llama-b9844-bin-ubuntu-x64.zip",
+      "extract": "build/bin/llama-server",
+      "dest": ".tools/llama-server",
+      "purpose": "Crystal baking — evaluates persona prompt into KV slot"
+    },
+    "android-sdk": {
+      "version": "34",
+      "source": "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip",
+      "dest": "/home/codespace/android-sdk",
+      "components": [
+        "platforms;android-34",
+        "build-tools;34.0.0",
+        "platform-tools"
+      ],
+      "purpose": "Build MollyBrowser APK, adb push to tablet"
+    },
+    "adb": {
+      "version": "bundled-with-android-sdk",
+      "dest": "/home/codespace/android-sdk/platform-tools/adb",
+      "purpose": "Push APK and crystal files to Revvl Tab 2"
+    },
+    "bun": {
+      "version": "latest",
+      "source": "https://bun.sh/install",
+      "purpose": "Fast JS runtime used in build scripts"
+    },
+    "firebase": {
+      "version": "latest",
+      "source": "npm install -g firebase-tools",
+      "purpose": "Molly data layer CLI"
+    },
+    "ollama": {
+      "version": "installed-by-devcontainer",
+      "note": "Managed by devcontainer, should not disappear. If missing: curl -fsSL https://ollama.ai/install.sh | sh",
+      "models": ["qwen2.5:3b"],
+      "purpose": "Molly brain fallback when Gemini is down"
+    },
+    "tsx": {
+      "version": "from-node-modules",
+      "note": "Available as npx tsx or node_modules/.bin/tsx — no global install needed",
+      "purpose": "Run TypeScript scripts directly"
+    }
+  }
+}
