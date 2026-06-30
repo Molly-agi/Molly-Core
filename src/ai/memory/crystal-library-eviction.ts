@@ -24,6 +24,13 @@ const RECENCY_HALF_LIFE_MS = 24 * 60 * 60 * 1000; // 24 hours
 /** Load-count ceiling for normalization. Counts above this saturate at 1.0. */
 const LOAD_COUNT_NORM_CAP = 20;
 
+/**
+ * Osmotic pressure margin: a warm candidate must beat the weakest hot crystal's
+ * retention score by at least this amount to displace it when the tier is full.
+ * When the hot tier has free slots, any warm candidate is promoted unconditionally.
+ */
+export const OSMOTIC_PRESSURE_MARGIN = 0.1;
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface RetentionWeights {
@@ -62,6 +69,13 @@ export interface EvictionEvent {
   evictedId: string;
   retentionScore: number;
   demotedToWarm: boolean;
+}
+
+export interface OsmoticPromotionResult {
+  /** IDs of warm crystals promoted to hot this pass. */
+  promoted: string[];
+  /** Eviction events that occurred to make room (one per displaced crystal). */
+  evictions: EvictionEvent[];
 }
 
 // ─── Pure scoring function (exported for tests / CLI tooling) ─────────────────
@@ -207,6 +221,103 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
   }
 
   // ─── Internal ──────────────────────────────────────────────────────────────
+
+  /**
+   * Osmotic pressure pass — pull high-retention warm crystals into the hot tier.
+   *
+   * For each warm candidate (caller supplies crystal objects since warm stores IDs only):
+   *   - If hot tier has free slots: promote unconditionally.
+   *   - If hot tier is full: promote only if candidate's retention score beats
+   *     the weakest hot crystal by >= OSMOTIC_PRESSURE_MARGIN.
+   *
+   * Candidates are processed in descending significance order. Stops when no
+   * candidate qualifies or all slots are locked by cornerstones.
+   */
+  promoteByOsmoticPressure(
+    warmCandidates: C[],
+    now: number = Date.now()
+  ): OsmoticPromotionResult {
+    const result: OsmoticPromotionResult = { promoted: [], evictions: [] };
+
+    const eligible = warmCandidates
+      .filter((c) => this.warm.has(c.id))
+      .sort((a, b) => b.significance - a.significance);
+
+    for (const candidate of eligible) {
+      if (this.hot.size < this.maxHot) {
+        this.warm.delete(candidate.id);
+        this.hot.set(candidate.id, {
+          crystal: candidate,
+          stats: { loadCount: 1, lastLoadedAt: now },
+        });
+        logLoad(
+          { crystalIds: [candidate.id], tier: 'unknown', source: 'on-demand' },
+          this.logOpts
+        );
+        result.promoted.push(candidate.id);
+        continue;
+      }
+
+      // Find weakest evictable hot crystal.
+      let weakestId: string | null = null;
+      let weakestScore = Infinity;
+      for (const [id, entry] of this.hot) {
+        if (entry.crystal.isCornerstone) continue;
+        const score = computeRetentionScore(
+          entry.stats,
+          entry.crystal.significance,
+          this.weights,
+          now
+        );
+        if (score < weakestScore) {
+          weakestScore = score;
+          weakestId = id;
+        }
+      }
+
+      if (weakestId === null) break; // all hot are cornerstones
+
+      const candidateScore = computeRetentionScore(
+        { loadCount: 1, lastLoadedAt: now },
+        candidate.significance,
+        this.weights,
+        now
+      );
+
+      if (candidateScore - weakestScore < OSMOTIC_PRESSURE_MARGIN) break;
+
+      this.hot.delete(weakestId);
+      this.warm.add(weakestId);
+      logEviction(
+        {
+          crystalId: weakestId,
+          evictionScore: weakestScore,
+          cacheType: 'hot',
+          reason: 'lru',
+        },
+        this.logOpts
+      );
+      logUnload({ crystalIds: [weakestId], reason: 'eviction' }, this.logOpts);
+      result.evictions.push({
+        evictedId: weakestId,
+        retentionScore: weakestScore,
+        demotedToWarm: true,
+      });
+
+      this.warm.delete(candidate.id);
+      this.hot.set(candidate.id, {
+        crystal: candidate,
+        stats: { loadCount: 1, lastLoadedAt: now },
+      });
+      logLoad(
+        { crystalIds: [candidate.id], tier: 'unknown', source: 'on-demand' },
+        this.logOpts
+      );
+      result.promoted.push(candidate.id);
+    }
+
+    return result;
+  }
 
   private _touch(crystalId: string, now: number): void {
     const entry = this.hot.get(crystalId);

@@ -2,6 +2,7 @@ import {
   CrystalLibraryManager,
   computeRetentionScore,
   DEFAULT_WEIGHTS,
+  OSMOTIC_PRESSURE_MARGIN,
   type EvictableCrystal,
 } from '../crystal-library-eviction';
 
@@ -202,6 +203,69 @@ describe('CrystalLibraryManager', () => {
       mgr.loadToHot(crystal('a', 0.9), NOW);
       mgr.demoteToWarm('a');
       expect(mgr.getWarmIds()).toContain('a');
+    });
+  });
+
+  describe('promoteByOsmoticPressure', () => {
+    it('promotes a warm crystal when hot tier has free slots', () => {
+      const mgr = new CrystalLibraryManager<EvictableCrystal>(4);
+      mgr.loadToHot(crystal('a', 0.8), NOW);
+      mgr.demoteToWarm('a');
+      const result = mgr.promoteByOsmoticPressure([crystal('a', 0.8)], NOW);
+      expect(result.promoted).toContain('a');
+      expect(result.evictions).toHaveLength(0);
+      expect(mgr.isHot('a')).toBe(true);
+      expect(mgr.isWarm('a')).toBe(false);
+    });
+
+    it('ignores crystals not tracked as warm', () => {
+      const mgr = new CrystalLibraryManager<EvictableCrystal>(4);
+      const result = mgr.promoteByOsmoticPressure([crystal('ghost', 0.9)], NOW);
+      expect(result.promoted).toHaveLength(0);
+    });
+
+    it('displaces the weakest hot crystal when pressure margin is sufficient', () => {
+      // Setup: high-sig candidate goes warm first, then low-sig fill hot to capacity.
+      // This ensures hot is full with weaker crystals when osmotic pressure runs.
+      const mgr = new CrystalLibraryManager<EvictableCrystal>(3);
+      mgr.loadToHot(crystal('cand', 0.9), NOW);
+      mgr.demoteToWarm('cand'); // cand → warm; hot empty
+      mgr.loadToHot(crystal('low1', 0.45), NOW);
+      mgr.loadToHot(crystal('low2', 0.45), NOW);
+      mgr.loadToHot(crystal('low3', 0.45), NOW); // hot full (3/3)
+
+      // cand retention ≈ 0.77, low* retention ≈ 0.59 → delta 0.18 > OSMOTIC_PRESSURE_MARGIN
+      const result = mgr.promoteByOsmoticPressure([crystal('cand', 0.9)], NOW);
+      expect(result.promoted).toContain('cand');
+      expect(result.evictions).toHaveLength(1);
+      expect(mgr.isHot('cand')).toBe(true);
+      expect(mgr.isWarm(result.evictions[0].evictedId)).toBe(true);
+    });
+
+    it('does not promote when candidate does not exceed margin', () => {
+      // Load weak candidate first, then evict it with a strong incumbent.
+      const mgr = new CrystalLibraryManager<EvictableCrystal>(1);
+      mgr.loadToHot(crystal('cand', 0.1), NOW);
+      mgr.loadToHot(crystal('incumbent', 0.9), NOW); // evicts cand → warm
+      // cand retention ≈ 0.45, incumbent ≈ 0.77 → delta -0.32 < OSMOTIC_PRESSURE_MARGIN
+      const result = mgr.promoteByOsmoticPressure([crystal('cand', 0.1)], NOW);
+      expect(result.promoted).toHaveLength(0);
+      expect(mgr.isHot('incumbent')).toBe(true);
+    });
+
+    it('does not displace cornerstones', () => {
+      // Load candidate first, then evict it with a cornerstone to fill the slot.
+      const mgr = new CrystalLibraryManager<EvictableCrystal>(1);
+      mgr.loadToHot(crystal('cand', 0.99), NOW);
+      mgr.loadToHot(crystal('corner', 0.1, true), NOW); // evicts non-cornerstone cand
+      // hot:{corner(cornerstone)}, warm:{cand}
+      const result = mgr.promoteByOsmoticPressure([crystal('cand', 0.99)], NOW);
+      expect(result.promoted).toHaveLength(0);
+      expect(mgr.isHot('corner')).toBe(true);
+    });
+
+    it('exports OSMOTIC_PRESSURE_MARGIN as a positive number', () => {
+      expect(OSMOTIC_PRESSURE_MARGIN).toBeGreaterThan(0);
     });
   });
 });
