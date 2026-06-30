@@ -2,6 +2,8 @@ package dev.molly.browser
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.inputmethod.EditorInfo
@@ -38,7 +40,7 @@ class LocalChatActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private val ioExecutor = Executors.newSingleThreadExecutor()
 
-    private val ollamaUrl get() = prefs().getString("ollama_url", "http://127.0.0.1:11434")!!
+    private val ollamaUrl get() = prefs().getString("ollama_url", "http://127.0.0.1:8080")!!
     private val modelName get() = prefs().getString("local_model", "qwen2.5:3b")!!
 
     private fun prefs() = getSharedPreferences("molly_local_chat", Context.MODE_PRIVATE)
@@ -93,6 +95,14 @@ class LocalChatActivity : AppCompatActivity() {
             setOnLongClickListener { showConfigDialog(); true }
         }
 
+        val startBrainBtn = Button(this).apply {
+            text = "⚡"
+            setTextColor(0xFFFFCC44.toInt())
+            setBackgroundColor(0x00000000)
+            textSize = 16f
+            setOnClickListener { startLocalBrain() }
+        }
+
         statusText = TextView(this).apply {
             text = "● checking"
             setTextColor(0xFFFFCC44.toInt())
@@ -101,6 +111,7 @@ class LocalChatActivity : AppCompatActivity() {
 
         titleBar.addView(backBtn)
         titleBar.addView(titleView)
+        titleBar.addView(startBrainBtn)
         titleBar.addView(statusText)
 
         // Chat scroll area
@@ -161,17 +172,33 @@ class LocalChatActivity : AppCompatActivity() {
             setPadding(40, 24, 40, 8)
         }
         val urlInput = EditText(this).apply {
-            hint = "Ollama URL"
+            hint = "Server URL (http://127.0.0.1:8080)"
             setText(ollamaUrl)
         }
         val modelInput = EditText(this).apply {
-            hint = "Model name"
+            hint = "Model name (for Ollama) or leave blank"
             setText(modelName)
         }
-        layout.addView(TextView(this).apply { text = "Ollama URL"; setTextColor(0xFF888888.toInt()) })
+        val binaryInput = EditText(this).apply {
+            hint = "Binary path (llama-server)"
+            setText(prefs().getString("local_binary_path", LlamaCppService.defaultBinaryPath()))
+        }
+        val modelPathInput = EditText(this).apply {
+            hint = "GGUF model path"
+            setText(prefs().getString("local_model_path", LlamaCppService.defaultModelPath()))
+        }
+
+        fun label(text: String) = TextView(this).apply {
+            this.text = text; setTextColor(0xFF888888.toInt()); setPadding(0, 16, 0, 0)
+        }
+        layout.addView(label("Server URL"))
         layout.addView(urlInput)
-        layout.addView(TextView(this).apply { text = "Model"; setTextColor(0xFF888888.toInt()); setPadding(0, 16, 0, 0) })
+        layout.addView(label("Ollama model name"))
         layout.addView(modelInput)
+        layout.addView(label("llama-server binary path"))
+        layout.addView(binaryInput)
+        layout.addView(label("GGUF model file path"))
+        layout.addView(modelPathInput)
 
         AlertDialog.Builder(this)
             .setTitle("Local Chat Config")
@@ -180,33 +207,65 @@ class LocalChatActivity : AppCompatActivity() {
                 prefs().edit()
                     .putString("ollama_url", urlInput.text.toString().trim().trimEnd('/'))
                     .putString("local_model", modelInput.text.toString().trim())
+                    .putString("local_binary_path", binaryInput.text.toString().trim())
+                    .putString("local_model_path", modelPathInput.text.toString().trim())
                     .apply()
-                Toast.makeText(this, "Saved. Checking connection…", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Saved. Tap ⚡ to start local brain.", Toast.LENGTH_SHORT).show()
                 checkHealth()
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
+    // ── Start llama-server (⚡ button) ─────────────────────────────────────────
+
+    private fun startLocalBrain() {
+        val intent = Intent(this, LlamaCppService::class.java).apply {
+            action = LlamaCppService.ACTION_START
+            putExtra(LlamaCppService.EXTRA_MODEL_PATH,
+                prefs().getString("local_model_path", LlamaCppService.defaultModelPath()))
+            putExtra(LlamaCppService.EXTRA_BINARY_PATH,
+                prefs().getString("local_binary_path", LlamaCppService.defaultBinaryPath()))
+            putExtra(LlamaCppService.EXTRA_PORT, LlamaCppService.DEFAULT_PORT)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
+        Toast.makeText(this, "Starting local brain… may take 10-30s", Toast.LENGTH_LONG).show()
+        // Re-check health after a brief delay
+        inputField.postDelayed({ checkHealth() }, 5000)
+    }
+
     // ── Health check ──────────────────────────────────────────────────────────
 
     private fun checkHealth() {
         ioExecutor.execute {
-            val online = try {
-                val conn = URL("$ollamaUrl/api/tags").openConnection() as HttpURLConnection
-                conn.connectTimeout = 4000
-                conn.readTimeout = 4000
+            val (online, label) = try {
+                // Try llama-server /health first
+                val conn = URL("$ollamaUrl/health").openConnection() as HttpURLConnection
+                conn.connectTimeout = 3000
+                conn.readTimeout = 3000
                 val code = conn.responseCode
                 conn.disconnect()
-                code == 200
-            } catch (_: Exception) { false }
+                if (code == 200) true to "llama-server" else {
+                    // Fall back: try Ollama /api/tags
+                    val c2 = URL("$ollamaUrl/api/tags").openConnection() as HttpURLConnection
+                    c2.connectTimeout = 3000
+                    c2.readTimeout = 3000
+                    val c2code = c2.responseCode
+                    c2.disconnect()
+                    (c2code == 200) to "ollama"
+                }
+            } catch (_: Exception) { false to "" }
 
             runOnUiThread {
                 if (online) {
-                    statusText.text = "● online  [$modelName]"
+                    statusText.text = "● online  [$label]"
                     statusText.setTextColor(0xFF44FF88.toInt())
                 } else {
-                    statusText.text = "● offline"
+                    statusText.text = "● offline  tap ⚡ to start"
                     statusText.setTextColor(0xFFFF6B6B.toInt())
                 }
             }
@@ -247,6 +306,46 @@ class LocalChatActivity : AppCompatActivity() {
     }
 
     private fun callOllama(msgs: List<Pair<String, String>>): String? {
+        // Try llama-server (OpenAI-compatible) first, then fall back to Ollama native API
+        return callLlamaServer(msgs) ?: callOllamaApi(msgs)
+    }
+
+    private fun callLlamaServer(msgs: List<Pair<String, String>>): String? {
+        // llama-server exposes /v1/chat/completions (OpenAI-compatible)
+        return try {
+            val arr = JSONArray()
+            for ((role, content) in msgs) {
+                arr.put(JSONObject().put("role", role).put("content", content))
+            }
+            val body = JSONObject()
+                .put("messages", arr)
+                .put("max_tokens", 1024)
+                .put("stream", false)
+
+            val conn = URL("$ollamaUrl/v1/chat/completions").openConnection() as HttpURLConnection
+            conn.requestMethod = "POST"
+            conn.doOutput = true
+            conn.connectTimeout = 10_000
+            conn.readTimeout = 120_000
+            conn.setRequestProperty("Content-Type", "application/json")
+
+            OutputStreamWriter(conn.outputStream, Charsets.UTF_8).use { it.write(body.toString()) }
+            if (conn.responseCode !in 200..299) { conn.disconnect(); return null }
+
+            val raw = BufferedReader(InputStreamReader(conn.inputStream, Charsets.UTF_8)).readText()
+            conn.disconnect()
+
+            JSONObject(raw)
+                .getJSONArray("choices")
+                .getJSONObject(0)
+                .getJSONObject("message")
+                .getString("content")
+                .trim()
+        } catch (_: Exception) { null }
+    }
+
+    private fun callOllamaApi(msgs: List<Pair<String, String>>): String? {
+        // Ollama native /api/chat endpoint
         return try {
             val arr = JSONArray()
             for ((role, content) in msgs) {
@@ -261,11 +360,10 @@ class LocalChatActivity : AppCompatActivity() {
             conn.requestMethod = "POST"
             conn.doOutput = true
             conn.connectTimeout = 10_000
-            conn.readTimeout = 120_000  // local inference can be slow
+            conn.readTimeout = 120_000
             conn.setRequestProperty("Content-Type", "application/json")
 
             OutputStreamWriter(conn.outputStream, Charsets.UTF_8).use { it.write(body.toString()) }
-
             if (conn.responseCode !in 200..299) { conn.disconnect(); return null }
 
             val raw = BufferedReader(InputStreamReader(conn.inputStream, Charsets.UTF_8)).readText()

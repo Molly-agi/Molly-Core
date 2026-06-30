@@ -121,6 +121,12 @@
             android:exported="false"
             android:configChanges="orientation|screenSize|keyboardHidden" />
 
+        <!-- llama-server foreground service — runs pre-built ARM64 binary locally -->
+        <service
+            android:name=".LlamaCppService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
     </application>
 
 </manifest>
