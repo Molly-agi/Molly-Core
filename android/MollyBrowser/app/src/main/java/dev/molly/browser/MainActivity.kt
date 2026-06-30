@@ -379,6 +379,7 @@ class MainActivity : AppCompatActivity() {
         when (action) {
             "diagnose" -> runBridgeDiagnostics(autoRepair = true)
             "configure" -> showBridgeConfigDialog()
+            "local-chat" -> startActivity(Intent(this, LocalChatActivity::class.java))
             else -> {
                 executeControlAction(
                     action = action,

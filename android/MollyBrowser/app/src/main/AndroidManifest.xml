@@ -115,6 +115,12 @@
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 
+        <!-- Local chat UI — talks directly to Ollama on-device, no cloud -->
+        <activity
+            android:name=".LocalChatActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
     </application>
 
 </manifest>
