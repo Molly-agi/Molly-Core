@@ -18,6 +18,7 @@ import {
 } from './weight-crystal-adapter';
 import type { LayerMetadata } from './orchestrator';
 import { join } from 'path';
+import { existsSync } from 'fs';
 
 export interface StreamingCompressOptions {
   ggufPath: string;
@@ -109,6 +110,28 @@ export async function streamingCompress(
 
     if (targetRank >= Math.min(rows, cols)) {
       skippedTensors++;
+      continue;
+    }
+
+    // Resume: skip tensors already written to vault (all 3 files must exist)
+    const resumePaths = {
+      matrixA: join(outputDir, `${tensor.name}.A.f32`),
+      packedB: join(outputDir, `${tensor.name}.B.packed`),
+      meta: join(outputDir, `${tensor.name}.meta.json`),
+    };
+    if (
+      existsSync(resumePaths.matrixA) &&
+      existsSync(resumePaths.packedB) &&
+      existsSync(resumePaths.meta)
+    ) {
+      compressedTensors++;
+      onProgress?.({
+        tensorName: tensor.name,
+        index,
+        total,
+        phase: 'done',
+        memoryEstimate: memEstimate,
+      });
       continue;
     }
 
