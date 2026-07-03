@@ -10,12 +10,13 @@
  */
 
 import { appendFileSync, existsSync, mkdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..', '..', '..');
-const DEFAULT_LOG_PATH = join(ROOT, 'molly_data', 'crystal_health.jsonl');
+const DEFAULT_LOG_PATH = join(
+  process.cwd(),
+  'molly_data',
+  'crystal_health.jsonl'
+);
 
 // ── Event Types ────────────────────────────────────────────────────────────
 

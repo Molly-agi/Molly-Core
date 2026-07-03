@@ -14,7 +14,12 @@
  * Cold tier (Titan Echo-compressed archive) — deferred, not built here.
  */
 
-import { logLoad, logEviction, logUnload } from './crystal-health-logger';
+import {
+  logLoad,
+  logEviction,
+  logUnload,
+  logAnomaly,
+} from './crystal-health-logger';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -114,6 +119,14 @@ export function computeRetentionScore(
 export class CrystalLibraryManager<C extends EvictableCrystal> {
   private readonly hot: Map<string, HotEntry<C>> = new Map();
   private readonly warm: Set<string> = new Set();
+  /**
+   * Persistent per-crystal stats keyed by id. Survives tier transitions so
+   * an evicted crystal's loadCount + lastLoadedAt are preserved when it is
+   * re-promoted (fixes the evict → reload → evict thrash cycle flagged in
+   * Fable's 02e finding #1(b)). HotEntry.stats holds a reference into this
+   * map — mutations propagate to both.
+   */
+  private readonly stats: Map<string, CrystalLoadStats> = new Map();
   private readonly maxHot: number;
   private readonly weights: RetentionWeights;
   private readonly logOpts: { logPath?: string; sessionId?: string };
@@ -127,6 +140,24 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
     this.maxHot = maxHot;
     this.weights = weights;
     this.logOpts = logOpts;
+  }
+
+  /**
+   * Get or create the persistent stats entry for a crystal. On first sight,
+   * initializes with loadCount=1 and the current time; on subsequent calls,
+   * increments loadCount and refreshes lastLoadedAt. Returns the shared object
+   * so callers can wire it into a HotEntry and see mutations reflect back.
+   */
+  private _touchStats(crystalId: string, now: number): CrystalLoadStats {
+    const existing = this.stats.get(crystalId);
+    if (existing) {
+      existing.loadCount += 1;
+      existing.lastLoadedAt = now;
+      return existing;
+    }
+    const fresh: CrystalLoadStats = { loadCount: 1, lastLoadedAt: now };
+    this.stats.set(crystalId, fresh);
+    return fresh;
   }
 
   /**
@@ -150,7 +181,7 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
     if (this.hot.size < this.maxHot) {
       this.hot.set(crystal.id, {
         crystal,
-        stats: { loadCount: 1, lastLoadedAt: now },
+        stats: this._touchStats(crystal.id, now),
       });
       logLoad(
         { crystalIds: [crystal.id], tier: 'unknown', source: 'on-demand' },
@@ -161,9 +192,44 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
 
     // Hot tier full — evict the lowest-retention non-cornerstone crystal.
     const eviction = this._evictOne(now);
+
+    // Fable 02e finding #1(a): if _evictOne returned null (all hot crystals
+    // are cornerstones) and this candidate is NOT a cornerstone, refusing
+    // admission is the only way to respect maxHot. Silently exceeding it here
+    // caused memory creep by construction. Fall the candidate back to warm.
+    if (eviction === null && !crystal.isCornerstone) {
+      this.warm.add(crystal.id);
+      logAnomaly(
+        {
+          crystalIds: [crystal.id],
+          observedDelta: this.hot.size,
+          threshold: this.maxHot,
+          action: 'logged-only',
+        },
+        this.logOpts
+      );
+      return null;
+    }
+
+    // Either eviction succeeded, or the new crystal is a cornerstone. If it's
+    // a cornerstone with no room, we accept the overflow rather than reject —
+    // the operator explicitly marked it eviction-exempt. Emit an anomaly so
+    // the excess is visible in telemetry rather than silent.
+    if (eviction === null && crystal.isCornerstone) {
+      logAnomaly(
+        {
+          crystalIds: [crystal.id],
+          observedDelta: this.hot.size + 1,
+          threshold: this.maxHot,
+          action: 'logged-only',
+        },
+        this.logOpts
+      );
+    }
+
     this.hot.set(crystal.id, {
       crystal,
-      stats: { loadCount: 1, lastLoadedAt: now },
+      stats: this._touchStats(crystal.id, now),
     });
     logLoad(
       { crystalIds: [crystal.id], tier: 'unknown', source: 'on-demand' },
@@ -248,7 +314,7 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
         this.warm.delete(candidate.id);
         this.hot.set(candidate.id, {
           crystal: candidate,
-          stats: { loadCount: 1, lastLoadedAt: now },
+          stats: this._touchStats(candidate.id, now),
         });
         logLoad(
           { crystalIds: [candidate.id], tier: 'unknown', source: 'on-demand' },
@@ -307,7 +373,7 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
       this.warm.delete(candidate.id);
       this.hot.set(candidate.id, {
         crystal: candidate,
-        stats: { loadCount: 1, lastLoadedAt: now },
+        stats: this._touchStats(candidate.id, now),
       });
       logLoad(
         { crystalIds: [candidate.id], tier: 'unknown', source: 'on-demand' },
