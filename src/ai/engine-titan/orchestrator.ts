@@ -25,8 +25,13 @@ export interface LayerMetadata {
   rows: number;
   cols: number;
   targetRank: number;
-  scaleB: number;
+  scaleB?: number;
   compressedAt: number;
+  // Hadamard RHT fields — present when matrixB was preprocessed before quantization
+  rhtSeed?: number;
+  rhtPaddedCols?: number;
+  // Which quantizer produced packedB — determines dequantization path
+  quantizerType?: 'ternary' | 'e8-lattice';
 }
 
 export class TitanEngineOrchestrator {
@@ -126,11 +131,12 @@ export class TitanEngineOrchestrator {
 
     const { readFileSync } = await import('fs');
     const matrixABuf = readFileSync(matrixAPath);
-    const matrixA = new Float32Array(
-      matrixABuf.buffer,
-      matrixABuf.byteOffset,
-      meta.rows * meta.targetRank
-    );
+    // Node's small-file Buffer pool doesn't guarantee 4-byte alignment; copy into
+    // a fresh ArrayBuffer so Float32Array construction is always safe.
+    const elementCount = meta.rows * meta.targetRank;
+    const alignedBuffer = new ArrayBuffer(elementCount * 4);
+    Buffer.from(alignedBuffer).set(matrixABuf.subarray(0, elementCount * 4));
+    const matrixA = new Float32Array(alignedBuffer);
     const packedB = readFileSync(packedBPath);
 
     return this.reconstructor.reconstructMatrix({
@@ -139,6 +145,14 @@ export class TitanEngineOrchestrator {
       rows: meta.rows,
       cols: meta.cols,
       targetRank: meta.targetRank,
+      rht:
+        meta.rhtSeed !== undefined && meta.rhtPaddedCols !== undefined
+          ? {
+              seed: meta.rhtSeed,
+              originalCols: meta.cols,
+              paddedCols: meta.rhtPaddedCols,
+            }
+          : undefined,
     });
   }
 }

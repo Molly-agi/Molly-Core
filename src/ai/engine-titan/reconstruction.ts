@@ -1,11 +1,15 @@
 // src/ai/engine-titan/reconstruction.ts
 
+import { inverseRHT, type RHTMeta } from './hadamard-transform';
+
 export interface ReconstructionInput {
   readonly matrixA: Float32Array;
   readonly packedB: Buffer;
   readonly rows: number;
   readonly cols: number;
   readonly targetRank: number;
+  // Optional RHT metadata — if present, inverse transform applied to matrixB before matmul
+  readonly rht?: RHTMeta;
 }
 
 export interface ReconstructionResult {
@@ -22,8 +26,15 @@ export class TitanDecompressionEngine {
 
   /**
    * Unpacks a single compressed 8-bit byte back into 5 distinct ternary values.
+   * Bytes 243..255 are invalid — no ternary 5-tuple encodes to them (3^5 = 243).
+   * Silent aliasing would corrupt weights; throw so corruption surfaces immediately.
    */
   private unpackTernaryByte(packedByte: number): Int8Array {
+    if (packedByte > 242) {
+      throw new RangeError(
+        `Invalid ternary-packed byte ${packedByte}: max valid value is 242 (3^5 - 1). Payload corrupt.`
+      );
+    }
     const window = new Int8Array(this.weightsPerByte);
     let state = packedByte;
 
@@ -67,7 +78,7 @@ export class TitanDecompressionEngine {
    * packedB is a ternary-packed buffer with embedded scale (targetRank × cols).
    */
   public reconstructMatrix(input: ReconstructionInput): ReconstructionResult {
-    const { matrixA, packedB, rows, cols, targetRank } = input;
+    const { matrixA, packedB, rows, cols, targetRank, rht } = input;
 
     if (matrixA.length !== rows * targetRank) {
       throw new RangeError(
@@ -75,8 +86,15 @@ export class TitanDecompressionEngine {
       );
     }
 
-    const dequantizedB = this.dequantize(packedB, targetRank * cols);
+    // Dequantize matrixB — size is targetRank × paddedCols if RHT was applied
+    const paddedCols = rht ? rht.paddedCols : cols;
+    let dequantizedB = this.dequantize(packedB, targetRank * paddedCols);
     const scaleB = packedB.readFloatLE(0);
+
+    // Invert the Hadamard transform to recover original matrixB
+    if (rht) {
+      dequantizedB = inverseRHT(dequantizedB, targetRank, rht);
+    }
 
     const reconstructed = new Float32Array(rows * cols);
 
