@@ -204,7 +204,7 @@ describe('ModelRouter — Rogue Protocol', () => {
     it('resolves FLASH model for chat tasks', () => {
       const provider = new GeminiProvider();
       const model = provider.resolveModel(TaskType.CHAT);
-      expect(model).toContain('gemini-3.1-flash');
+      expect(model).toContain('gemini-3.5-flash');
       // Make sure it's not the TTS variant
       expect(model).not.toContain('preview-tts');
     });
@@ -250,7 +250,7 @@ describe('ModelRouter — Rogue Protocol', () => {
 
     it('resolves new 3.1 models correctly', () => {
       const provider = new GeminiProvider();
-      expect(provider.resolveModel(TaskType.LIVE_VOICE)).toContain('live');
+      expect(provider.resolveModel(TaskType.LIVE_VOICE)).toContain('tts');
       expect(provider.resolveModel(TaskType.COMPUTER_USE)).toContain(
         'computer-use'
       );

@@ -22,6 +22,15 @@ const config = {
     '/helpers/',
     '/e2e/',
     'src/ai/substrate/__tests__/fixtures/',
+    // Script-style files that use process.exit — run with `npx tsx` directly
+    'src/ai/engine-titan/__tests__/kv-longcontext\\.test\\.ts',
+    '<rootDir>/__tests__/ternary-roundtrip\\.test\\.ts',
+    // node:test based tests — run with `node --test` directly
+    '__tests__/crystal-os/',
+    // Duplicate orphan tests in stuff/
+    'stuff/',
+    // Empty bench files
+    'src/ai/engine-titan/__tests__/compression-quality\\.bench\\.ts',
   ],
   transform: {
     // Explicitly exclude .mjs from babel transform — they run as native ESM.
