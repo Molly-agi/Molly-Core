@@ -1,5 +1,6 @@
 // src/ai/engine-titan/streaming-compress.ts
 
+import { createHash } from 'crypto';
 import { parseGGUF, type GGUFTensorInfo } from './gguf-ingest';
 import {
   readTensorData,
@@ -215,8 +216,13 @@ export async function streamingCompress(
       memoryEstimate: memEstimate,
     });
 
-    // Hadamard RHT: spread heavy-tailed distribution to sub-Gaussian before ternary threshold
-    const rhtSeed = (Date.now() ^ (index * 2654435761)) >>> 0;
+    // Hadamard RHT: spread heavy-tailed distribution to sub-Gaussian before ternary threshold.
+    // Seed derived deterministically from tensor name so recompressing the same
+    // model twice produces byte-identical artifacts — required for audit byte-diff.
+    // (Prior: Date.now() ^ index. That made every run diverge; you could not
+    // verify a re-compression matched by hashing the vault. Fable Batch 02b F10.)
+    const seedHash = createHash('sha256').update(tensor.name).digest();
+    const rhtSeed = seedHash.readUInt32LE(0);
     const { transformed: matrixBRht, meta: rhtMeta } = applyRHT(
       matrixB,
       targetRank,

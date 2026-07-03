@@ -78,7 +78,10 @@ export interface EvictionEvent {
   crystalId: string;
   evictionScore: number;
   cacheType: 'hot' | 'warm';
-  reason: 'lru' | 'low-significance' | 'storage-budget';
+  // 'retention-score' = composite (recency + frequency + significance) picked as weakest.
+  // 'lru' = pure recency-based fallback. 'low-significance' = significance-only.
+  // 'storage-budget' = bytes cap hit, not score-based.
+  reason: 'retention-score' | 'lru' | 'low-significance' | 'storage-budget';
 }
 
 export interface AnomalyEvent {

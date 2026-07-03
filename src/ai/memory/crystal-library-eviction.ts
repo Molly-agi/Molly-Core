@@ -359,7 +359,7 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
           crystalId: weakestId,
           evictionScore: weakestScore,
           cacheType: 'hot',
-          reason: 'lru',
+          reason: 'retention-score',
         },
         this.logOpts
       );
@@ -423,7 +423,7 @@ export class CrystalLibraryManager<C extends EvictableCrystal> {
         crystalId: lowestId,
         evictionScore: lowestScore,
         cacheType: 'hot',
-        reason: 'lru',
+        reason: 'retention-score',
       },
       this.logOpts
     );

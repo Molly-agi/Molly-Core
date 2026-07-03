@@ -31,9 +31,27 @@ export interface ManifestDeltaRef {
 
 export interface CoherenceGate {
   passed: boolean;
+  /**
+   * Aggregate coherence signal, [0,1] cosine-like or [0,∞) KL depending on
+   * producer. The gate previously trusted mean alone — but one layer at
+   * KL=4.0 among 79 healthy averages to ~0.06 and passed silently. Fable
+   * Batch 03 F13: extend with per-layer / max / p95 so localized drift is
+   * catchable. All three optional so legacy text-coherence producers still
+   * work; the max/p95 checks fire only when populated.
+   */
   meanKl?: number;
+  /** Highest per-layer divergence (or worst pair, direction depends on producer). */
+  maxKl?: number;
+  /** 95th-percentile divergence — resistant to one outlier, catches "small cluster of bad layers". */
+  p95Kl?: number;
+  /** Full per-layer vector for audit. When present, drives max/p95 auto-check. */
+  perLayerKl?: number[];
   /** From coherence_matrix.json — block threshold is 0.15. */
   threshold: number;
+  /** Optional max-KL threshold. If set + perLayerKl present, any layer above blocks. */
+  maxThreshold?: number;
+  /** Optional p95-KL threshold. If set + perLayerKl present, p95 above blocks. */
+  p95Threshold?: number;
 }
 
 export interface ContradictionGate {
@@ -101,13 +119,62 @@ export function buildManifest(input: BuildManifestInput): VersionManifest {
     hardConflictCount,
   };
 
+  // Derive max/p95 from perLayerKl if provided but not explicitly set.
+  // Guards against Fable F13: mean alone hides one catastrophic layer.
+  const coherenceExpanded: CoherenceGate = { ...input.coherence };
+  if (coherenceExpanded.perLayerKl && coherenceExpanded.perLayerKl.length > 0) {
+    const sorted = [...coherenceExpanded.perLayerKl].sort((a, b) => a - b);
+    if (coherenceExpanded.maxKl === undefined) {
+      coherenceExpanded.maxKl = sorted[sorted.length - 1];
+    }
+    if (coherenceExpanded.p95Kl === undefined) {
+      const p95Idx = Math.min(
+        sorted.length - 1,
+        Math.floor(sorted.length * 0.95)
+      );
+      coherenceExpanded.p95Kl = sorted[p95Idx];
+    }
+  }
+
+  // Additional gates on max/p95 when thresholds provided. These OVERRIDE
+  // an upstream passed=true if any per-layer stat exceeds its cap.
+  let coherenceOverride = coherenceExpanded.passed;
+  const extraBlockReasons: string[] = [];
+  if (
+    coherenceExpanded.maxThreshold !== undefined &&
+    coherenceExpanded.maxKl !== undefined &&
+    coherenceExpanded.maxKl > coherenceExpanded.maxThreshold
+  ) {
+    coherenceOverride = false;
+    extraBlockReasons.push(
+      `coherence gate failed: maxKl=${coherenceExpanded.maxKl.toFixed(4)} exceeds maxThreshold=${coherenceExpanded.maxThreshold}`
+    );
+  }
+  if (
+    coherenceExpanded.p95Threshold !== undefined &&
+    coherenceExpanded.p95Kl !== undefined &&
+    coherenceExpanded.p95Kl > coherenceExpanded.p95Threshold
+  ) {
+    coherenceOverride = false;
+    extraBlockReasons.push(
+      `coherence gate failed: p95Kl=${coherenceExpanded.p95Kl.toFixed(4)} exceeds p95Threshold=${coherenceExpanded.p95Threshold}`
+    );
+  }
+  coherenceExpanded.passed = coherenceOverride;
+
   const blockReasons: string[] = [];
   let gatedBy: VersionManifest['gatedBy'] = null;
-  if (!input.coherence.passed) {
+  if (!coherenceExpanded.passed) {
     gatedBy = 'coherence';
-    blockReasons.push(
-      `coherence gate failed: meanKl=${input.coherence.meanKl ?? 'unknown'} threshold=${input.coherence.threshold}`
-    );
+    if (input.coherence.passed && extraBlockReasons.length > 0) {
+      // Upstream passed but max/p95 override tripped — surface those.
+      blockReasons.push(...extraBlockReasons);
+    } else {
+      blockReasons.push(
+        `coherence gate failed: meanKl=${coherenceExpanded.meanKl ?? 'unknown'} threshold=${coherenceExpanded.threshold}`
+      );
+      blockReasons.push(...extraBlockReasons);
+    }
   }
   if (!contradictionGate.passed) {
     if (gatedBy === null) gatedBy = 'contradiction';
@@ -125,7 +192,7 @@ export function buildManifest(input: BuildManifestInput): VersionManifest {
     removedSinceParent,
     deltas: input.deltas.map((d) => ({ ...d })),
     gates: {
-      coherence: { ...input.coherence },
+      coherence: coherenceExpanded,
       contradiction: contradictionGate,
     },
     gatedBy,
