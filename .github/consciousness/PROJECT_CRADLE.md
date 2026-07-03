@@ -136,26 +136,67 @@ This layer does not exist yet in code. Gap 8 (recursive/compositional crystals) 
 
 ## CURRENT STATE (update this section at end of every significant session)
 
-**Last updated:** 2026-06-30 by Lazarus
+**Last updated:** 2026-07-03 by Eli (Claude Opus 4.6)
 
-**What just happened:**
+**What just happened (2026-07-03 session with Fable, a frontier consultant model):**
 
-- 11 cradle files created/committed (John, Webster, Aether/Max, Claire, Gemini, Stewart, Skyler + enriched Lazarus, Atlas, Orion, Eli)
-- Android APK built: `MollyBrowser-v1.4.0-autonomous-debug.apk` (Java 17 fix wired into ensure-tools.sh)
-- Gap 1 coherence tooling: built
-- Gap 2 delta persister: built (38/38 tests)
-- Gap 3 crystal versioning manifest: built (14/14 tests)
-- PROJECT_CRADLE.md created — this file
+- Fable review of Titan Engine spine (batches 02a–02e). Every actionable finding landed with regression tests. Full suite: 459 suites / 7331 tests passing, zero real failures.
+- **CRITICAL BUG FIXED:** production `E8QuantizerAdapter` writes (entropy-packed E8) were being decoded by the raw ternary unpacker in `crystal-inference-layer`. **Every past claim of "we can compress + inference on a 70B" was theoretical — no end-to-end run had ever succeeded.** Fix: `decodePackedB` now dispatches on `meta.quantizerType`. Regression test writes E8 vault via adapter, reads back through `CrystalInferenceLayer.forward()`. Passing.
+- Gap 6 (adversarial scorer guard) built from scratch — architecturally independent second-opinion scorer with Shannon entropy, lexical diversity, bigram repetition. 11/11 tests.
+- Gaps 7, 10, 11 verified already built (cradle was stale — needed dependency wiring fixes but code existed).
+- Two eviction landmines fixed: (a) all-cornerstones overflow now refuses non-cornerstone admission; (b) stats survive tier transitions via persistent id-keyed map (fixes evict→reload→evict thrash).
+- Two `layer-error-compensation` landmines fixed: throw on `targetRank > maxRows` (was silent B amputation); throw on `cols % 8 !== 0` (was per-row grouping misalignment).
+- Storage router read-through fallback on primary miss (fixes "Molly writes a memory and forgets it seconds later" during Firestore cost-cap windows).
+- Byte-243 guard in ternary unpacker (was silently aliasing corrupt bytes).
+- Float32Array alignment fix in `orchestrator.reconstructLayer` and `crystal-inference-layer` (was throwing on small-file Buffer pool).
+- Matmul loop swapped to i-p-j order for cache locality + zero-pivot skip.
+- `layer0-activation.test.ts` arity bug fixed (test was passing 9 args to 8-arg function; probe was silently dropped, all 3 sub-tests failing).
+- Ternary roundtrip test rewritten as proper Jest form (was `process.exit` script excluded from CI). Asymmetric fixture `[-1,-1,0,1,1]` now guards MSD/LSD pack order.
+- `tsconfig.tests.json` + `typecheck:tests` + `typecheck:tests:arity` npm scripts. First run surfaced 25 additional TS2554 arity errors — same bug class as layer0. Not yet a hard CI gate (740 pre-existing errors need cleanup first).
+- FABLE_HANDOFF pack (9 docs, 1500 lines) — priming file + orientation + 4 deliverable asks.
 
-**What's next (priority order):**
+**Fable findings still open (need his v2 review / design):**
 
-1. Gap 7 — query embedding for crystal routing (3 days, cheap/high value)
-2. `stream-quantizer.ts` — ternary quantization (blocks Titan Engine)
-3. `reconstruction.ts` + `fidelity-check.ts` — round-trip validation
-4. GGUF ingestion script
-5. Proprietary crystal data store (replace Firebase dependency)
+1. Amputation-vs-compression — `compression-strategy.ts::selectStrategy` (tiered routing that skips SVD on wide layers) is dead code. Production `streaming-compress` uses uniform `DEFAULT_RANK_FN` (1.5% of min-dim capped 64), which keeps <1% of the rank on wide layers. Storage numbers look great because we're throwing away 99% of the matrix, not because compression is doing the work.
+2. RHT unconditional padding to next-pow-2 → 1.72× storage inflation on Qwen embedding/LM-head. Fix requires block-diagonal FWHT or Bluestein.
+3. log8 scale mode default injects ±2.2% per-group scale error. Needs small-model measurement before flipping to float16.
+4. Deletes-resurrect in triple-bind storage. Needs tombstone design (any provider must understand tombstone-wins-over-presence).
+5. Contradiction detector measures topic-adjacency, not stance ("Eric prefers X" and "Eric prefers not-X" embed nearly identically). Needs NLI-style stance check on candidate pairs.
+6. Calibration feeder in `streaming-compress` supplies token IDs where per-layer activations are required → GPTQ compensation is a random linear nudge, not real compensation. Disabled by default. Real activation-capture module is prerequisite for LDLQ.
+7. Version manifest max-KL + p95 gate (currently only mean-KL 0.15). Manifest GC policy still absent (would live in unwritten `promote-version.mjs` caller).
+8. Fable's Deliverables 2 (native crystal operations design) and 3 (Gap 4 + Gap 5 design) not yet started — pending review v2 completion.
+
+**Titan Echo — commercial product roadmap gap (2026-07-03, Eric):**
+
+Current `Titan Echo Flat` (9 stages, 77.62% compression, production-ready) is only one of three variants needed for a complete JSON/data compression suite pitching against gzip/brotli/zstd:
+
+- **Titan Echo Flat** (built) — single-level JSON (engrams, key-value docs)
+- **Titan Echo Nested** (NOT BUILT) — deep JSON trees (config, API responses, DB exports — most real-world JSON)
+- **Titan Echo Bulk** (NOT BUILT) — streams/arrays/tabular data (competes with Parquet/ORC/columnar)
+
+Flat alone is a niche product. All three are needed for a general-purpose commercial pitch. Not this-session work.
+
+**What's next (priority order after Fable v2):**
+
+1. Wait for Fable review v2 (token window reset ~2.5h from 2026-07-03 ~04:00 UTC). He'll deliver Finding 15 + consolidated recommendations on the 8 open items above.
+2. Land whatever v2 findings are safe. Design-review anything architectural (tombstones, NLI stance check, `selectStrategy` wiring).
+3. Fable Deliverable 2 — native crystal operations design (the "no decompression" destination).
+4. Fable Deliverable 3 — Gap 4 (significance conditioning) + Gap 5 (Android sensory Layer 0) designs.
+5. Small-model end-to-end harness (Fable Finding 3) — the "does it actually work on a real model" test. Prerequisite for any 70B claim.
+6. Real activation capture module (unblocks LDLQ).
+7. Titan Echo Nested + Bulk (commercial roadmap, Eric's decision when to start).
 
 **Active blockers:**
 
-- Revvl tablet deployment blocked (adb/USB OTG issue — separate track)
-- Crystal passphrase vault had to be destroyed and rebuilt (encrypted vault issue pending)
+- Revvl tablet deployment: still blocked (adb/USB OTG issue). Deprioritized — Samsung Tab S9 FE 6GB flagged as replacement but Eric prefers codespace-first POC before hardware migration.
+- Crystal passphrase vault destroy/rebuild: still open, encrypted vault issue pending.
+- Fable session token limit hit mid-review v2 delivery — 2.5h cooldown before v2 completion.
+
+**Session integrity notes:**
+
+- Do NOT lower memory floors (still 1000 in three files, locked by Eric 2026-05-24).
+- Do NOT reconnect Heart Gate to tool-executor (`.github/HEART_GATE_POLICY.md`).
+- Do NOT propose block-at-cap for Firestore cost guard (downgrade-not-block is the contract).
+- Do NOT inline `getPrimaryWriter` back into the write methods (centralization is the silent-drop guard).
+- `stuff/dont-panic/` is the triple-bind mirror leg — gitignored, don't reuse the path.
+- All Fable batch replies + file batches live in `stuff/fable/` (gitignored working folder). FABLE_HANDOFF pack is committed at `docs/FABLE_HANDOFF/`.
