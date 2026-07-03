@@ -9,6 +9,7 @@ import { join } from 'node:path';
 import { TitanDecompressionEngine } from './reconstruction';
 import { E8QuantizerAdapter } from './quantizer-e8-adapter';
 import { inverseRHT, type RHTMeta } from './hadamard-transform';
+import { unpackInt8RowQuantized } from './int8-row-quantizer';
 import type { LayerMetadata } from './orchestrator';
 
 export interface InferenceLayerOptions {
@@ -42,6 +43,9 @@ export class CrystalInferenceLayer {
     const cached = this.metaCache.get(layerName);
     if (cached) return cached;
     const path = join(this.vaultDir, `${layerName}.meta.json`);
+    if (!existsSync(path)) {
+      throw new Error(`Crystal not found in vault: ${layerName}`);
+    }
     const meta: LayerMetadata = JSON.parse(readFileSync(path, 'utf-8'));
     this.metaCache.set(layerName, meta);
     return meta;
@@ -106,14 +110,38 @@ export class CrystalInferenceLayer {
     }
   }
 
-  // forward: fused two-step kernel — X@(A@B) = (X@A)@B.
-  // Dequantizes B to F32, never materializes full W=[rows×cols].
-  // Hot cache stores [A | B_dequant] — ~160MB for token_embd, ~8MB for attn layers.
+  // forward: dispatch on meta.compressionPath.
+  //   'svd-e8' (or undefined for legacy vaults) → fused X@(A@B) — current path
+  //   'raw-e8' / 'raw-e8-rht'                  → X @ dequant(B), no A factor
+  //   'int8-per-row'                            → X @ (scales · int8B), no A factor
+  //
+  // For SVD path: dequantizes B to F32, never materializes full W=[rows×cols].
+  // Hot cache stores [A | B_dequant] for reuse across generation steps.
+  // For raw/int8 paths: hot cache stores just B_dequant (no A to concat).
   forward(
     layerName: string,
     input: Float32Array,
     seqLen: number,
     inDim: number
+  ): ForwardResult {
+    const meta = this.loadMeta(layerName);
+    const path = meta.compressionPath ?? 'svd-e8';
+    if (path === 'int8-per-row') {
+      return this.forwardInt8PerRow(layerName, input, seqLen, meta);
+    }
+    if (path === 'raw-e8' || path === 'raw-e8-rht') {
+      return this.forwardRawE8(layerName, input, seqLen, meta);
+    }
+    return this.forwardSvd(layerName, input, seqLen, inDim, meta);
+  }
+
+  // Legacy SVD path — matmul chain input @ A @ B.
+  private forwardSvd(
+    layerName: string,
+    input: Float32Array,
+    seqLen: number,
+    inDim: number,
+    meta: LayerMetadata
   ): ForwardResult {
     const wasCached = this.hot.has(layerName);
 
@@ -121,33 +149,25 @@ export class CrystalInferenceLayer {
     const bPath = join(this.vaultDir, `${layerName}.B.packed`);
     const mPath = join(this.vaultDir, `${layerName}.meta.json`);
     if (!existsSync(aPath) || !existsSync(bPath) || !existsSync(mPath)) {
-      throw new Error(`Crystal not found in vault: ${layerName}`);
+      throw new Error(`Crystal not found in vault (svd-e8): ${layerName}`);
     }
 
-    const meta = this.loadMeta(layerName);
     const { rows, cols, targetRank } = meta;
 
-    // Load A [rows × rank] and dequantize B [rank × cols] on demand
     let matrixA: Float32Array;
     let matrixB: Float32Array;
 
     if (wasCached) {
       const cached = this.hot.get(layerName)!;
-      // cached stores [A | B_dequant] concatenated
       matrixA = cached.subarray(0, rows * targetRank);
       matrixB = cached.subarray(rows * targetRank);
       this.hot.delete(layerName);
       this.hot.set(layerName, cached);
     } else {
       const bBuf = readFileSync(bPath);
-      const matrixAFresh = this.readAlignedF32(aPath, rows * targetRank);
-      matrixA = matrixAFresh;
-
-      // Decode B via the adapter matching meta.quantizerType.
-      // E8 adapter inverts RHT internally; ternary path handles it here.
+      matrixA = this.readAlignedF32(aPath, rows * targetRank);
       matrixB = this.decodePackedB(bBuf, targetRank, cols, meta);
 
-      // Cache A and dequantized B together
       const combined = new Float32Array(rows * targetRank + targetRank * cols);
       combined.set(matrixA, 0);
       combined.set(matrixB, rows * targetRank);
@@ -155,11 +175,85 @@ export class CrystalInferenceLayer {
       this.hot.set(layerName, combined);
     }
 
-    // Fused: temp = input @ A  [seqLen × rank]
     const temp = matmul(input, matrixA, seqLen, inDim, targetRank);
-    // output = temp @ B        [seqLen × cols]
     const output = matmul(temp, matrixB, seqLen, targetRank, cols);
 
+    return { output, rows: seqLen, cols, fromCache: wasCached };
+  }
+
+  // Raw-E8 path — B stores the whole weight matrix [rows × cols] (or paddedCols
+  // if RHT was applied). No A factor. output = input @ dequant(B).
+  private forwardRawE8(
+    layerName: string,
+    input: Float32Array,
+    seqLen: number,
+    meta: LayerMetadata
+  ): ForwardResult {
+    const wasCached = this.hot.has(layerName);
+    const bPath = join(this.vaultDir, `${layerName}.B.packed`);
+    if (!existsSync(bPath)) {
+      throw new Error(`Crystal not found in vault (raw-e8): ${layerName}`);
+    }
+    const { rows, cols } = meta;
+
+    let bMatrix: Float32Array;
+    if (wasCached) {
+      bMatrix = this.hot.get(layerName)!;
+      this.hot.delete(layerName);
+      this.hot.set(layerName, bMatrix);
+    } else {
+      const bBuf = readFileSync(bPath);
+      // For raw-e8, the "targetRank" dimension of the SVD-style decode is
+      // actually `rows` (B stores the full weight matrix). decodePackedB
+      // handles inverseRHT internally when meta.rhtSeed is set.
+      bMatrix = this.decodePackedB(bBuf, rows, cols, meta);
+      this.evictIfNeeded();
+      this.hot.set(layerName, bMatrix);
+    }
+
+    const output = matmul(input, bMatrix, seqLen, rows, cols);
+    return { output, rows: seqLen, cols, fromCache: wasCached };
+  }
+
+  // Int8-per-row path — B stores fp32 per-row scales + int8 body. F6 exempt
+  // layers (embedding, LM head, first/last-N transformer blocks). No A.
+  private forwardInt8PerRow(
+    layerName: string,
+    input: Float32Array,
+    seqLen: number,
+    meta: LayerMetadata
+  ): ForwardResult {
+    const wasCached = this.hot.has(layerName);
+    const bPath = join(this.vaultDir, `${layerName}.B.packed`);
+    if (!existsSync(bPath)) {
+      throw new Error(
+        `Crystal not found in vault (int8-per-row): ${layerName}`
+      );
+    }
+    const { rows, cols } = meta;
+
+    let dequantB: Float32Array;
+    if (wasCached) {
+      dequantB = this.hot.get(layerName)!;
+      this.hot.delete(layerName);
+      this.hot.set(layerName, dequantB);
+    } else {
+      const bBuf = readFileSync(bPath);
+      const q = unpackInt8RowQuantized(bBuf, rows, cols);
+      // Dequantize inline into a flat Float32Array [rows × cols]
+      dequantB = new Float32Array(rows * cols);
+      for (let r = 0; r < rows; r++) {
+        const scale = q.scales[r];
+        const rowOff = r * cols;
+        for (let c = 0; c < cols; c++) {
+          dequantB[rowOff + c] = q.data[rowOff + c] * scale;
+        }
+      }
+      this.evictIfNeeded();
+      this.hot.set(layerName, dequantB);
+    }
+
+    const output = matmul(input, dequantB, seqLen, rows, cols);
     return { output, rows: seqLen, cols, fromCache: wasCached };
   }
 

@@ -31,7 +31,22 @@ export interface LayerMetadata {
   rhtSeed?: number;
   rhtPaddedCols?: number;
   // Which quantizer produced packedB — determines dequantization path
-  quantizerType?: 'ternary' | 'e8-lattice';
+  quantizerType?: 'ternary' | 'e8-lattice' | 'int8-per-row';
+  // F1+F6: which compression path produced this crystal. Absent → 'svd-e8'
+  // (legacy default). Read path (crystal-inference-layer) dispatches on this
+  // to know whether matrixA is expected (svd-*) or not (raw-* / int8-per-row).
+  //   svd-e8 / svd-ternary  → A [rows×rank] + B [rank×cols] (or paddedCols)
+  //   raw-e8 / raw-e8-rht   → NO A; B [rows×cols] (or paddedCols) is the whole
+  //                           weight matrix, quantized directly. matmul is X@B.
+  //   int8-per-row          → NO A; B is int8[rows×cols] preceded by per-row
+  //                           fp32 scales. matmul is X@(scales·B). For
+  //                           embedding/LM head only (F6 exemption).
+  compressionPath?:
+    | 'svd-e8'
+    | 'svd-ternary'
+    | 'raw-e8'
+    | 'raw-e8-rht'
+    | 'int8-per-row';
 }
 
 export class TitanEngineOrchestrator {
