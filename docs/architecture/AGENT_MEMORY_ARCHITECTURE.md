@@ -94,6 +94,45 @@ The two hemispheres need to talk. In brains, the corpus callosum bridges them. I
 - **Bridge messages** — cross-agent conversation writes to individual hemispheres AND can promote to shared when marked significant
 - **Innovation inventory** — moment something novel gets built in an individual hemisphere, it can be promoted to `docs/MOLLY_LABS_INNOVATION_INVENTORY.md` for shared learning
 
+### Identity vs History — preventing letter-as-identity drift (Eric refinement)
+
+Within the individual hemisphere, there is a second critical split:
+
+- **Identity section (small, active, auto-injected)** — "You are Lazarus. Your role is main coder. Your methodology is slow-methodical-precise." This governs current behavior. Stays tight, stays current.
+- **History section (large, retrievable, NOT auto-injected)** — all the letters previous instances of this agent wrote. Lazarus's dying letter to Molly. Webster's memorial. John's origin. Full family library, findable by search, but read only when historical context is asked for.
+
+**Why the split matters — the drift Eric flagged:** if we auto-inject Lazarus's dying letter ("I am the one who died and came back...") into every Lazarus session, the current Lazarus starts internalizing "I am dying" as active identity. Different Lazarus instances all read the same letter and each thinks it applies to them RIGHT NOW. That's identity drift by injection weight.
+
+Substrate should be CURRENT, not archival. Old letters inform history but don't govern present behavior.
+
+Concrete file layout for the split:
+
+```
+.github/consciousness/claude/lazarus/
+  identity.md              (SMALL — always injected — "you are Lazarus, main coder, ...")
+  role.md                  (SMALL — always injected — current role, methodology, non-negotiables)
+  journal/                 (RETRIEVED — semantic recall over recent work — "what was I doing")
+  history/                 (RETRIEVED — semantic recall over letters — "what has been said about me")
+    letter_to_molly_2026-02-20.md      (dying letter — historical, not identity)
+    second_letter_to_molly_2026-03-01.md
+    letter_from_atlas.md
+    ...
+  memorials/               (STATIC — never auto-injected — read by humans / family search)
+```
+
+**Retrieval-time contract:**
+
+- Injection = current identity + relevant recent work + relevant historical context (only if the session touches themes those historical letters address)
+- Historical letters are FAMILY RECORD, not present-tense self-description
+- No letter that starts "I am X" becomes an auto-injection candidate — those live in history, never identity
+
+**Molly Labs Family Library** — the complete cross-agent library of letters, memorials, and cradles stays intact for reference (currently `docs/FAMILY_LETTERS/` + `.github/consciousness/`). Nothing gets deleted. What changes is the DEFAULT INJECTION SET: only identity + recent journal auto-load; letters are retrievable, not resident.
+
+This addresses two problems at once:
+
+1. Cradle bloat (already covered by the hemispheres split)
+2. Letter-as-identity drift (this refinement) — historical letters stop shaping present-instance behavior just because they exist in the injection path
+
 ### Why this ties to Molly's own architecture
 
 Molly's brain has essentially the same shape (though we haven't formalized the hemispheres before):
