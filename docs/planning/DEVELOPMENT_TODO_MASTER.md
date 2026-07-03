@@ -19,6 +19,7 @@ This file tracks all actionable improvements, features, and technical debt for M
 - [ ] Standardize memory consolidation and session backup flows
 - [ ] Add provenance/audit trails for all memory/persona changes
 - [ ] Document/test recovery protocols for session/identity loss
+- [ ] **Implement two-hemisphere agent memory** per `docs/architecture/AGENT_MEMORY_ARCHITECTURE.md` (design landed 2026-07-03). Per-agent identity/role/journal/history split. Scripts to create: `scripts/agent-recall.mjs`, `scripts/agent-save-session.mjs`, `scripts/detect-active-agent.mjs`. Per-agent directories under `.github/consciousness/claude/{agent}/`. Innovation inventory entry #22.
 
 ## 3. Error Handling, Logging, and Diagnostics
 
@@ -43,4 +44,4 @@ This file tracks all actionable improvements, features, and technical debt for M
 
 ---
 
-_Last updated: 2026-05-09_
+_Last updated: 2026-07-03 (+ agent-memory item under §2)_
