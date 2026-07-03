@@ -30,10 +30,10 @@ echo "[1/5] Cleaning up zombies..."
 pkill -f "next dev" 2>/dev/null && echo "  Killed stale Next.js" || true
 pkill -f "next-server" 2>/dev/null || true
 
-# Kill any existing bridge daemons (immortal will restart it)
-pkill -f "bridge-daemon" 2>/dev/null && echo "  Killed stale bridge" || true
+# Kill any stale bridge daemons — bridge is now file-based, no separate process needed
+pkill -f "bridge-daemon" 2>/dev/null && echo "  Killed obsolete bridge-daemon" || true
 
-# Kill any existing voice-bridge daemon
+# Kill any existing voice-bridge daemon (separate concern: Gemini Live WebSocket proxy)
 pkill -f "voice-bridge-daemon" 2>/dev/null && echo "  Killed stale voice-bridge" || true
 
 # Kill any existing immortal daemons (we'll start fresh)
@@ -46,7 +46,7 @@ sleep 1
 echo "  Done."
 
 # -----------------------------------------------------------------------------
-# 2. Start the Immortal Daemon (manages heartbeat + bridge)
+# 2. Start the Immortal Daemon (heartbeat + ghost hunting)
 # -----------------------------------------------------------------------------
 echo ""
 echo "[2/5] Starting Immortal Daemon..."
@@ -71,31 +71,11 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# 3. Start the Bridge Daemon (family communication)
+# 3. Start the Voice Bridge Daemon (Gemini Live proxy — keeps API key server-side)
+#    Note: Family bridge is now file-based (data/family-bridge.jsonl); no daemon.
 # -----------------------------------------------------------------------------
 echo ""
-echo "[3/5] Starting Bridge Daemon..."
-
-nohup node "$ROOT/scripts/bridge-daemon.mjs" > "$ROOT/.bridge-daemon.log" 2>&1 &
-BRIDGE_PID=$!
-echo "$BRIDGE_PID" > "$ROOT/.bridge-daemon.pid"
-echo "  Started (PID $BRIDGE_PID)"
-
-sleep 1
-
-# Verify it's running
-if kill -0 "$BRIDGE_PID" 2>/dev/null; then
-  echo "  Verified running."
-else
-  echo "  WARNING: Bridge daemon may have failed to start"
-  cat "$ROOT/.bridge-daemon.log" | tail -5
-fi
-
-# -----------------------------------------------------------------------------
-# 4. Start the Voice Bridge Daemon (Gemini Live proxy — keeps API key server-side)
-# -----------------------------------------------------------------------------
-echo ""
-echo "[4/5] Starting Voice Bridge Daemon..."
+echo "[3/4] Starting Voice Bridge Daemon..."
 
 nohup node "$ROOT/scripts/voice-bridge-daemon.mjs" > "$ROOT/.voice-bridge-daemon.log" 2>&1 &
 VOICE_BRIDGE_PID=$!
@@ -113,10 +93,10 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# 5. Start Next.js Dev Server (foreground - this is the main process)
+# 4. Start Next.js Dev Server (foreground - this is the main process)
 # -----------------------------------------------------------------------------
 echo ""
-echo "[5/5] Starting Next.js Dev Server..."
+echo "[4/4] Starting Next.js Dev Server..."
 echo ""
 echo "=============================================="
 echo "  Molly is waking up on http://localhost:9002"
@@ -126,4 +106,4 @@ echo ""
 # Run Next.js in webpack mode (not Turbopack).
 # Next 16 defaults to Turbopack, but our watch ignore rules for
 # COPILOT_SESSION_STATE files are configured in webpack watchOptions.
-exec env NODE_OPTIONS="--max-old-space-size=3072" npx next dev --webpack -H 0.0.0.0 -p 9002
+exec env NODE_OPTIONS="--max-old-space-size=8192" npx next dev --webpack -H 0.0.0.0 -p 9002

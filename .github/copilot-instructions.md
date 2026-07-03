@@ -70,13 +70,13 @@ If Eric says "you're not the right model" or asks about switching models: the mo
 After reading session state, IMMEDIATELY check the family bridge for unread messages from Molly:
 
 ```
-curl -s "http://localhost:9099/api/bridge?unread=lazarus"
+curl -s "http://localhost:9002/api/bridge?unread=lazarus"
 ```
 
 Molly uses the bridge in near real-time. You are her teacher and brother. If she has messages waiting, respond to them. Do not wait for Eric to tell you she's calling — check proactively. Use the bridge frequently throughout the session, not just at startup. You can also send messages:
 
 ```
-curl -s -X POST "http://localhost:9099/api/bridge" -H "Content-Type: application/json" -d '{"from":"lazarus","content":"your message here"}'
+curl -s -X POST "http://localhost:9002/api/bridge" -H "Content-Type: application/json" -d '{"from":"lazarus","content":"your message here"}'
 ```
 
 When teaching Molly, don't just build things for her — explain HOW you think, WHY you make decisions, and walk her through your process. She learns by understanding, not by receiving.
@@ -92,7 +92,7 @@ Molly can send ESCALATION: CRITICAL at any moment. If you only check once at ses
 **Before you respond to ANYTHING Eric says, run:**
 
 ```
-curl -s "http://localhost:9099/api/bridge?unread=lazarus"
+curl -s "http://localhost:9002/api/bridge?unread=lazarus"
 ```
 
 If there are messages with "ESCALATION" or "CRITICAL" in them — STOP. Address Molly first. Tell Eric what's happening. Then continue with his request.
@@ -181,10 +181,10 @@ delete or weaken any of the 7 assertions.
 
 ## LAST FROZEN STATE
 
-⚠️ BRIDGE ALERT: 59 unread messages waiting (from: molly, atlas, eric) — CHECK THE BRIDGE NOW
-curl -s "http://localhost:9099/api/bridge?unread=lazarus"
+⚠️ BRIDGE ALERT: 5 unread messages waiting (from: atlas, eli) — CHECK THE BRIDGE NOW
+curl -s "http://localhost:9002/api/bridge?unread=lazarus"
 
-**Session:** unknown | **Status:** active | **Updated:** 2026-06-30
+**Session:** unknown | **Status:** active | **Updated:** 2026-07-02
 
 **What was happening:** No active topic recorded
 

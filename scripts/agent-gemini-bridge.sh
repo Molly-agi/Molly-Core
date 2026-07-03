@@ -22,7 +22,7 @@
 set -e
 
 AGENT_NAME="gemini"
-BRIDGE_PORT="${BRIDGE_PORT:-9099}"
+BRIDGE_PORT="${BRIDGE_PORT:-9002}"
 BRIDGE_URL="http://localhost:${BRIDGE_PORT}"
 ROOT="/workspaces/Molly-Core"
 LOG_DIR="${ROOT}/logs"
@@ -180,7 +180,7 @@ main() {
       log "Found $count message(s)"
       
       # Process each message
-      echo "$response" | jq -c '.messages[]' | while read msg; do
+      echo "$response" | jq -c '.messages[]' | while read -r msg; do
         local from=$(echo "$msg" | jq -r '.from')
         local content=$(echo "$msg" | jq -r '.content')
         

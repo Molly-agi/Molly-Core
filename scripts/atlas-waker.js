@@ -17,7 +17,7 @@
  *   - If injection fails (UI changed), retries 5 times every 1.5 seconds.
  *
  * SETUP: Replace BRIDGE_URL with your codespace bridge URL.
- * Pattern: https://[codespace-name]-9099.app.github.dev
+ * Pattern: https://[codespace-name]-9002.app.github.dev
  */
 
 (function () {
@@ -25,11 +25,11 @@
 
   // ── Config ─────────────────────────────────────────────────────────────────
   const BRIDGE_URL =
-    'https://redesigned-orbit-v6p4gw4rwjwjhw6g7-9099.app.github.dev';
-  const POLL_MS = 3000;          // Poll bridge every 3 seconds
+    'https://redesigned-orbit-v6p4gw4rwjwjhw6g7-9002.app.github.dev';
+  const POLL_MS = 3000; // Poll bridge every 3 seconds
   const TRIGGER_MESSAGE = 'check the bridge';
-  const BURST_COUNT = 5;         // Attempt injection 5 times per wake event
-  const BURST_MS = 1200;         // 1.2s between burst attempts
+  const BURST_COUNT = 5; // Attempt injection 5 times per wake event
+  const BURST_MS = 1200; // 1.2s between burst attempts
   const RECIPIENT = 'lazarus';
 
   // ── Status badge ──────────────────────────────────────────────────────────
@@ -41,10 +41,19 @@
   const badge = document.createElement('div');
   badge.id = 'lazarus-waker-badge';
   Object.assign(badge.style, {
-    position: 'fixed', bottom: '12px', right: '12px', zIndex: '99999',
-    padding: '6px 12px', borderRadius: '14px', fontSize: '12px',
-    fontFamily: 'monospace', background: '#0a0a0a', color: '#00ff00',
-    border: '1px solid #00ff00', userSelect: 'none', pointerEvents: 'auto',
+    position: 'fixed',
+    bottom: '12px',
+    right: '12px',
+    zIndex: '99999',
+    padding: '6px 12px',
+    borderRadius: '14px',
+    fontSize: '12px',
+    fontFamily: 'monospace',
+    background: '#0a0a0a',
+    color: '#00ff00',
+    border: '1px solid #00ff00',
+    userSelect: 'none',
+    pointerEvents: 'auto',
     cursor: 'default',
   });
   badge.textContent = '⚡ Waker: active';
@@ -59,11 +68,15 @@
   function inject(text) {
     // Strategy 1: VS Code workbench API (most reliable when available)
     try {
-      const wb = window.require && window.require('vs/workbench/workbench.web.main');
+      const wb =
+        window.require && window.require('vs/workbench/workbench.web.main');
       if (wb) {
         const accessor = window._didLoadWorkbench || window.workbench;
         if (accessor && accessor.commands) {
-          accessor.commands.executeCommand('workbench.action.terminal.sendSequence', { text: text + '\r' });
+          accessor.commands.executeCommand(
+            'workbench.action.terminal.sendSequence',
+            { text: text + '\r' }
+          );
           return 'vscode-api';
         }
       }
@@ -76,7 +89,15 @@
       const full = text + '\r';
       for (const ch of full) {
         const kc = ch === '\r' ? 13 : ch.charCodeAt(0);
-        const opts = { key: ch === '\r' ? 'Enter' : ch, code: ch === '\r' ? 'Enter' : `Key${ch.toUpperCase()}`, keyCode: kc, which: kc, charCode: kc, bubbles: true, cancelable: true };
+        const opts = {
+          key: ch === '\r' ? 'Enter' : ch,
+          code: ch === '\r' ? 'Enter' : `Key${ch.toUpperCase()}`,
+          keyCode: kc,
+          which: kc,
+          charCode: kc,
+          bubbles: true,
+          cancelable: true,
+        };
         xterm.dispatchEvent(new KeyboardEvent('keydown', opts));
         xterm.dispatchEvent(new KeyboardEvent('keypress', opts));
         xterm.dispatchEvent(new KeyboardEvent('keyup', opts));
@@ -102,15 +123,29 @@
         el.textContent = text;
         el.dispatchEvent(new Event('input', { bubbles: true }));
       } else {
-        const desc = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
+        const desc = Object.getOwnPropertyDescriptor(
+          HTMLTextAreaElement.prototype,
+          'value'
+        );
         if (desc && desc.set) desc.set.call(el, text);
         else el.value = text;
         el.dispatchEvent(new Event('input', { bubbles: true }));
         el.dispatchEvent(new Event('change', { bubbles: true }));
       }
       setTimeout(() => {
-        el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true, cancelable: true }));
-        const btn = document.querySelector('button[type="submit"], button[aria-label*="send" i], [data-testid*="send"]');
+        el.dispatchEvent(
+          new KeyboardEvent('keydown', {
+            key: 'Enter',
+            code: 'Enter',
+            keyCode: 13,
+            which: 13,
+            bubbles: true,
+            cancelable: true,
+          })
+        );
+        const btn = document.querySelector(
+          'button[type="submit"], button[aria-label*="send" i], [data-testid*="send"]'
+        );
         if (btn) btn.click();
       }, 80);
       return 'chat-panel-' + sel;
@@ -133,7 +168,10 @@
         console.log(`[LazarusWaker] injected via ${method} attempt ${count}`);
       } else {
         status(`⚠ Waker: no target (attempt ${count})`, '#ff8800');
-        console.warn('[LazarusWaker] no injection target found — attempt', count);
+        console.warn(
+          '[LazarusWaker] no injection target found — attempt',
+          count
+        );
       }
       if (count < BURST_COUNT) {
         burstTimer = setTimeout(attempt, BURST_MS);
@@ -159,17 +197,28 @@
 
   async function poll() {
     try {
-      const r = await fetch(`${BRIDGE_URL}/api/bridge?unread=${RECIPIENT}&peek=true`, { signal: AbortSignal.timeout(4000) });
-      if (!r.ok) { status(`⚠ bridge ${r.status}`, '#ff4444'); return; }
+      const r = await fetch(
+        `${BRIDGE_URL}/api/bridge?unread=${RECIPIENT}&peek=true`,
+        { signal: AbortSignal.timeout(4000) }
+      );
+      if (!r.ok) {
+        status(`⚠ bridge ${r.status}`, '#ff4444');
+        return;
+      }
       const data = await r.json();
       const msgs = Array.isArray(data.messages) ? data.messages : [];
-      if (msgs.length === 0) { lastId = null; return; }
+      if (msgs.length === 0) {
+        lastId = null;
+        return;
+      }
       const latest = msgs[msgs.length - 1];
       const id = String(latest.id || '');
       if (id && id === lastId) return; // already handled
       lastId = id;
       if (isForLazarus(latest)) {
-        console.log('[LazarusWaker] new message for Lazarus — firing burst wake');
+        console.log(
+          '[LazarusWaker] new message for Lazarus — firing burst wake'
+        );
         status('🔔 message — waking...', '#ff00ff');
         fireBurst();
       }
@@ -181,5 +230,10 @@
   // Start immediately, then every POLL_MS
   poll();
   setInterval(poll, POLL_MS);
-  console.log('[LazarusWaker] RUNNING — polls every', POLL_MS / 1000, 's. Bridge:', BRIDGE_URL);
+  console.log(
+    '[LazarusWaker] RUNNING — polls every',
+    POLL_MS / 1000,
+    's. Bridge:',
+    BRIDGE_URL
+  );
 })();

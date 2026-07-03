@@ -35,7 +35,7 @@ import https from 'https';
 // =============================================================================
 // CONFIG — read from env or defaults
 // =============================================================================
-const BRIDGE_URL = process.env.BRIDGE_URL || 'ws://localhost:9099';
+const BRIDGE_URL = process.env.BRIDGE_URL || 'ws://localhost:9002';
 const NTFY_TOPIC = process.env.NTFY_TOPIC || '';
 const NTFY_HOST = 'ntfy.sh';
 const WAKEUP_FILE = '/workspaces/Molly-Core/.lazarus-wakeup.json';
@@ -120,7 +120,6 @@ function writeWakeup(message) {
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-
     };
 
     // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.
@@ -162,7 +161,6 @@ function writeAtlasWakeup(message) {
       content: message.content,
       timestamp: message.timestamp,
       id: message.id,
-
     };
 
     // De-duplicate by id to avoid reconnect storms writing the same message repeatedly.

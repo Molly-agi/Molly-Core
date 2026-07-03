@@ -16,7 +16,7 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
-const BRIDGE_PORT = parseInt(process.env.BRIDGE_PORT || '9099', 10);
+const BRIDGE_PORT = parseInt(process.env.BRIDGE_PORT || '9002', 10);
 const INTERVAL_MS = 3000;
 const PID_FILE = resolve(ROOT, '.family-heartbeat.pid');
 const STATUS_FILE = resolve(ROOT, '.family-heartbeat.json');
@@ -32,15 +32,22 @@ let lastMiss = null;
 
 function saveStatus() {
   try {
-    writeFileSync(STATUS_FILE, JSON.stringify({
-      pid: process.pid,
-      port: BRIDGE_PORT,
-      beats,
-      misses,
-      lastBeat,
-      lastMiss,
-      upSince: startedAt,
-    }, null, 2));
+    writeFileSync(
+      STATUS_FILE,
+      JSON.stringify(
+        {
+          pid: process.pid,
+          port: BRIDGE_PORT,
+          beats,
+          misses,
+          lastBeat,
+          lastMiss,
+          upSince: startedAt,
+        },
+        null,
+        2
+      )
+    );
   } catch {}
 }
 
@@ -75,7 +82,9 @@ setInterval(beat, INTERVAL_MS);
 
 function shutdown() {
   saveStatus();
-  try { unlinkSync(PID_FILE); } catch {}
+  try {
+    unlinkSync(PID_FILE);
+  } catch {}
   process.exit(0);
 }
 

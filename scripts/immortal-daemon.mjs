@@ -34,8 +34,7 @@ const ROOT = '/workspaces/Molly-Core';
 const HEARTBEAT_FILE = `${ROOT}/.codespace-heartbeat`;
 const PID_FILE = `${ROOT}/.immortal.pid`;
 const LOG_FILE = `${ROOT}/.immortal.log`;
-const BRIDGE_PID_FILE = `${ROOT}/.bridge-daemon.pid`;
-const BRIDGE_LOG = `${ROOT}/.bridge-daemon.log`;
+// BRIDGE_PID_FILE / BRIDGE_LOG removed 2026-07-03 — bridge is file-based now.
 const ATLAS_BRIDGE_PID_FILE = `${ROOT}/.atlas-bridge.pid`;
 const ATLAS_BRIDGE_LOG = `${ROOT}/.atlas-bridge.log`;
 const GEMINI_BRIDGE_PID_FILE = `${ROOT}/.gemini-bridge.pid`;
@@ -165,18 +164,7 @@ function httpPing() {
     req.end();
   } catch {}
 
-  // Ping bridge directly on 9099
-  try {
-    const req = http.request({
-      hostname: '127.0.0.1',
-      port: 9099,
-      path: '/ping',
-      method: 'GET',
-      timeout: 3000,
-    });
-    req.on('error', () => {});
-    req.end();
-  } catch {}
+  // 9099 bridge ping removed 2026-07-03 — bridge is file-based, no port to keep alive.
   httpPing.running = false;
 }
 
@@ -223,7 +211,10 @@ function huntGhosts() {
 }
 
 // =============================================================================
-// BRIDGE GUARDIAN - Every 15 seconds
+// BRIDGE GUARDIAN — RETIRED 2026-07-03
+// The family bridge is now file-based (data/family-bridge.jsonl written directly
+// by src/ai/bridge/family-bridge.ts). No separate daemon process to guard.
+// Reads happen through Next.js /api/bridge on port 9002 — covered by httpPing().
 // =============================================================================
 function isPortListening(port) {
   try {
@@ -235,56 +226,6 @@ function isPortListening(port) {
   } catch {
     return false;
   }
-}
-
-function ensureBridge() {
-  if (ensureBridge.running) return;
-  ensureBridge.running = true;
-  if (isPortListening(9099)) {
-    ensureBridge.running = false;
-    return;
-  } // Bridge is up
-
-  log('[BRIDGE] Port 9099 not listening - restarting bridge');
-
-  // Clean up old PID file
-  if (existsSync(BRIDGE_PID_FILE)) {
-    try {
-      unlinkSync(BRIDGE_PID_FILE);
-    } catch {}
-  }
-
-  // Start bridge
-  try {
-    const child = spawn('node', [`${ROOT}/scripts/bridge-daemon.mjs`], {
-      cwd: ROOT,
-      stdio: ['ignore', 'pipe', 'pipe'],
-      detached: true,
-    });
-
-    // Write log
-    if (child.stdout) {
-      child.stdout.on('data', (data) => {
-        try {
-          appendFileSync(BRIDGE_LOG, data);
-        } catch {}
-      });
-    }
-    if (child.stderr) {
-      child.stderr.on('data', (data) => {
-        try {
-          appendFileSync(BRIDGE_LOG, data);
-        } catch {}
-      });
-    }
-
-    child.unref();
-    writeFileSync(BRIDGE_PID_FILE, child.pid.toString());
-    log(`[BRIDGE] Started (PID ${child.pid})`);
-  } catch (e) {
-    log(`[ERROR] Failed to start bridge: ${e.message}`);
-  }
-  ensureBridge.running = false;
 }
 
 // =============================================================================
@@ -314,7 +255,7 @@ function ensureAtlasBridge() {
   // DISABLED: atlas-bridge spawn — violates no-bridge-daemons rule (Eric directive)
   // Bridge daemons should not auto-spawn. Only CLI agents Eric explicitly starts.
   // log('[ATLAS] Bridge client not running - starting');
-  // 
+  //
   // try {
   //   if (existsSync(ATLAS_BRIDGE_PID_FILE)) {
   //     unlinkSync(ATLAS_BRIDGE_PID_FILE);
@@ -674,7 +615,7 @@ function logStatus() {
       `ps aux 2>/dev/null | grep "type=extensionHost" | grep -v grep | wc -l`,
       { encoding: 'utf8', timeout: 2000 }
     ).trim();
-    const bridge = isPortListening(9099) ? 'UP' : 'DOWN';
+    // bridge port 9099 retired — file-based bridge, no port to check.
     const devServer = isPortListening(9002) ? 'UP' : 'DOWN';
     const uptime = Math.floor(process.uptime());
 
@@ -751,7 +692,7 @@ function logStatus() {
     } catch {}
 
     log(
-      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} bridge=${bridge} dev=${devServer} atlas=${atlasStatus} gemini=${geminiStatus} lazarus=${lazarusStatus} listener=${listenerStatus} ticker=${tickerStatus}`
+      `[STATUS] uptime=${uptime}s beats=${heartbeatCount} mem=${mem}MB extHosts=${extHosts} dev=${devServer} atlas=${atlasStatus} gemini=${geminiStatus} lazarus=${lazarusStatus} listener=${listenerStatus} ticker=${tickerStatus}`
     );
   } catch {}
   logStatus.running = false;
@@ -795,7 +736,7 @@ log(
 heartbeat();
 gitActivity();
 httpPing();
-ensureBridge();
+// ensureBridge() retired — bridge is file-based, no daemon to spawn.
 ensureSwitchboard();
 ensureAtlasBridge();
 ensureGeminiBridge();
@@ -809,7 +750,7 @@ setInterval(heartbeat, HEARTBEAT_MS);
 setInterval(gitActivity, GIT_ACTIVITY_MS);
 setInterval(httpPing, HTTP_PING_MS);
 setInterval(huntGhosts, GHOST_HUNT_MS);
-setInterval(ensureBridge, BRIDGE_CHECK_MS);
+// setInterval(ensureBridge, ...) retired — bridge is file-based.
 setInterval(ensureSwitchboard, BRIDGE_CHECK_MS);
 setInterval(ensureAtlasBridge, BRIDGE_CHECK_MS);
 setInterval(ensureGeminiBridge, BRIDGE_CHECK_MS);

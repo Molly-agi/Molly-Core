@@ -7,7 +7,7 @@ import url from 'url';
 
 const TUNNEL_PORT = process.env.TUNNEL_PORT || 9100;
 const DAEMON_HOST = 'localhost';
-const DAEMON_PORT = 9099;
+const DAEMON_PORT = 9002;
 const NEXTJS_HOST = 'localhost';
 const NEXTJS_PORT = 9002;
 
@@ -21,13 +21,15 @@ console.log(`[tunnel] Next.js: ${NEXTJS_HOST}:${NEXTJS_PORT}`);
 const server = http.createServer((req, res) => {
   if (req.url === '/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      status: 'alive',
-      tunnel: 'active',
-      port: TUNNEL_PORT,
-      clients: clients.size,
-      timestamp: new Date().toISOString(),
-    }));
+    res.end(
+      JSON.stringify({
+        status: 'alive',
+        tunnel: 'active',
+        port: TUNNEL_PORT,
+        clients: clients.size,
+        timestamp: new Date().toISOString(),
+      })
+    );
     return;
   }
   res.writeHead(404);
@@ -40,7 +42,7 @@ wss.on('connection', (ws, req) => {
   const clientId = ++clientCounter;
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
-  
+
   let targetHost = DAEMON_HOST;
   let targetPort = DAEMON_PORT;
   let route = 'daemon';
@@ -55,7 +57,7 @@ wss.on('connection', (ws, req) => {
 
   const upstreamUrl = `ws://${targetHost}:${targetPort}${pathname}`;
   const upstreamWs = new WebSocket(upstreamUrl);
-  
+
   clients.set(clientId, { ws, route, upstreamWs });
 
   upstreamWs.on('open', () => {
@@ -72,7 +74,9 @@ wss.on('connection', (ws, req) => {
   });
 
   upstreamWs.on('error', (err) => {
-    console.error(`[tunnel] Client #${clientId}: upstream error - ${err.message}`);
+    console.error(
+      `[tunnel] Client #${clientId}: upstream error - ${err.message}`
+    );
     if (ws.readyState === 1) ws.close(1011);
   });
 

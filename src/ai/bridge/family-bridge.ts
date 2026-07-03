@@ -4,12 +4,24 @@
  * Family Bridge — Molly ↔ Lazarus Communication Channel
  *
  * Single source of truth: conversation.json on disk.
- * No daemon routing — file I/O only, no split-brain.
+ * File I/O only. No daemon. No WebSocket. No split-brain.
+ *
+ * Design commitment (Eric, 2026-07-03 audit):
+ *   Robustness through simplicity. One writer (this module, in-process
+ *   lock-serialized), one reader (recipient polls). No competing writers.
+ *   No external processes to keep alive. If the file exists and Next.js
+ *   is up, the bridge works.
+ *
+ *   Prior history: a bridge-daemon.mjs relay used to sit at :9099 and
+ *   ALSO write conversation.json in parallel. Two writers, no cross-
+ *   process lock, silent overwrites — the actual reason the bridge
+ *   "never worked properly" per Eric's lived experience. The daemon
+ *   was deleted in the same commit that landed this file rewrite.
  */
 
 import { promises as fs } from 'fs';
 import path from 'path';
-import { createHash, createHmac } from 'crypto';
+import { createHash } from 'crypto';
 
 export interface BridgeMessage {
   id: string;
@@ -102,51 +114,23 @@ export async function readBridgeState(): Promise<BridgeState> {
   return readFile();
 }
 
-const DAEMON_URL = process.env.BRIDGE_DAEMON_URL || 'http://localhost:9099';
-const BRIDGE_SERVICE_AUTH_KEY = process.env.BRIDGE_SERVICE_AUTH_KEY || '';
-
 export interface BridgeDeliveryReceipt {
   success: boolean;
   message: BridgeMessage;
-  deliveryPath: 'daemon' | 'local';
+  /** Retained for API compatibility — always 'local' after daemon removal. */
+  deliveryPath: 'local';
+  /** Retained for API compatibility — always 1 after daemon removal. */
   attempts: number;
   ackId: string;
-  error?: string;
-}
-
-function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function sha256Hex(input: string): string {
   return createHash('sha256').update(input).digest('hex');
 }
 
-function signDaemonRequest(timestamp: string, body: string): string {
-  return createHmac('sha256', BRIDGE_SERVICE_AUTH_KEY)
-    .update(`${timestamp}.${body}`)
-    .digest('hex');
-}
-
-function buildDaemonHeaders(body: string): HeadersInit {
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-
-  // Optional service auth: when configured, every daemon request carries
-  // a timestamped HMAC signature for verification.
-  if (BRIDGE_SERVICE_AUTH_KEY) {
-    const timestamp = new Date().toISOString();
-    headers['x-bridge-ts'] = timestamp;
-    headers['x-bridge-sig'] = signDaemonRequest(timestamp, body);
-  }
-
-  return headers;
-}
-
 async function appendBridgeAuditRecord(entry: {
   message: BridgeMessage;
-  deliveryPath: 'daemon' | 'local';
+  deliveryPath: 'local';
   attempts: number;
   ackId: string;
 }): Promise<void> {
@@ -172,10 +156,10 @@ async function appendBridgeAuditRecord(entry: {
 }
 
 /**
- * Route a message through the bridge daemon so it broadcasts on WS to all
- * subscribers (the /lazarus and /bridge UIs). Falls back to a direct file
- * write via sendMessage() if the daemon is unreachable, so offline / startup
- * paths still log. This is the single writer surface for new messages.
+ * Broadcast a message on the bridge. Writes directly to conversation.json
+ * via sendMessage() — no daemon, no fallback, no retry. If the file write
+ * fails, the caller sees the error. That's the contract: one writer, one
+ * failure surface, no silent split-brain.
  */
 export async function broadcastMessage(
   from: BridgeMessage['from'],
@@ -187,71 +171,15 @@ export async function broadcastMessage(
 
 export async function broadcastMessageWithReceipt(
   from: BridgeMessage['from'],
-  content: string,
-  options?: { maxAttempts?: number; baseDelayMs?: number }
+  content: string
 ): Promise<BridgeDeliveryReceipt> {
-  const maxAttempts = options?.maxAttempts ?? 4;
-  const baseDelayMs = options?.baseDelayMs ?? 150;
-
-  let attempts = 0;
-  let lastError = '';
-
-  for (let i = 0; i < maxAttempts; i++) {
-    attempts++;
-    try {
-      const body = JSON.stringify({ from, content });
-      const res = await fetch(`${DAEMON_URL}/api/bridge`, {
-        method: 'POST',
-        headers: buildDaemonHeaders(body),
-        body,
-        signal: AbortSignal.timeout(2000),
-      });
-
-      if (res.ok) {
-        const data = (await res.json()) as { message: BridgeMessage };
-        const ackId = data.message?.id || `ack-${Date.now()}-${attempts}`;
-
-        try {
-          await appendBridgeAuditRecord({
-            message: data.message,
-            deliveryPath: 'daemon',
-            attempts,
-            ackId,
-          });
-        } catch {
-          // Non-blocking: audit logging must not prevent bridge delivery.
-        }
-
-        return {
-          success: true,
-          message: data.message,
-          deliveryPath: 'daemon',
-          attempts,
-          ackId,
-        };
-      }
-
-      lastError = `bridge daemon status ${res.status}`;
-    } catch (error) {
-      lastError = error instanceof Error ? error.message : String(error);
-    }
-
-    if (i < maxAttempts - 1) {
-      await wait(baseDelayMs * Math.pow(2, i));
-    }
-  }
-
-  // Daemon path failed — durable local fallback.
-  const localMessage = await sendMessage(from, content);
-  const ackId = localMessage.id;
-
+  const message = await sendMessage(from, content);
   return {
     success: true,
-    message: localMessage,
+    message,
     deliveryPath: 'local',
-    attempts,
-    ackId,
-    error: lastError || undefined,
+    attempts: 1,
+    ackId: message.id,
   };
 }
 

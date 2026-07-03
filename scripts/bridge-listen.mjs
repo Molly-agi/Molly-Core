@@ -11,7 +11,7 @@
 
 import WebSocket from 'ws';
 
-const PORT = 9099;
+const PORT = 9002;
 const IDENTITY = process.argv[2] || 'lazarus';
 const RECONNECT_DELAY = 3000;
 

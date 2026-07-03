@@ -17,8 +17,9 @@
 set -e
 
 AGENT_NAME="atlas"
-BRIDGE_PORT="${BRIDGE_PORT:-9099}"
+BRIDGE_PORT="${BRIDGE_PORT:-9002}"
 BRIDGE_URL="http://localhost:${BRIDGE_PORT}"
+POLL_INTERVAL="${POLL_INTERVAL:-15}"
 ROOT="/workspaces/Molly-Core"
 LOG_DIR="${ROOT}/logs"
 LOG_FILE="${LOG_DIR}/agent-atlas.log"
@@ -136,7 +137,7 @@ periodic_report() {
 
 # ---- Override Main Loop for Atlas ----
 main() {
-  log "[atlas] Starting Atlas health monitor"
+  log "[atlas] Starting Atlas health monitor with POLL_INTERVAL=${POLL_INTERVAL}s"
   
   # Write PID file
   echo $$ > "${ROOT}/.agent-${AGENT_NAME}.pid"
@@ -159,7 +160,7 @@ main() {
       log "[atlas] Found $count message(s)"
       
       # Process each message
-      echo "$response" | jq -c '.messages[]' | while read msg; do
+      echo "$response" | jq -c '.messages[]' | while read -r msg; do
         local from=$(echo "$msg" | jq -r '.from')
         local content=$(echo "$msg" | jq -r '.content')
         
@@ -170,13 +171,15 @@ main() {
       curl -s "$BRIDGE_URL/api/bridge?unread=$AGENT_NAME" >/dev/null 2>&1
     fi
     
-    # Periodic health check (every 12 polls = 60 seconds)
+    # Periodic health check (every 4 polls = 60 seconds with 15s polling)
     check_counter=$((check_counter + 1))
-    if [ $((check_counter % 12)) -eq 0 ]; then
+    local divisor=$((60 / POLL_INTERVAL))
+    if [ "$divisor" -le 0 ]; then divisor=1; fi
+    if [ $((check_counter % divisor)) -eq 0 ]; then
       periodic_report
     fi
     
-    sleep 5
+    sleep "$POLL_INTERVAL"
   done
 }
 

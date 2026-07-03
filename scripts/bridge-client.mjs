@@ -15,7 +15,7 @@ import { EventEmitter } from 'events';
 import readline from 'readline';
 
 export class BridgeClient extends EventEmitter {
-  constructor(identity, host = 'localhost', port = 9099) {
+  constructor(identity, host = 'localhost', port = 9002) {
     super();
     this.identity = identity;
     this.host = host;
@@ -150,7 +150,7 @@ export class BridgeClient extends EventEmitter {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const identity = process.argv[2] || 'lazarus';
   const host = process.argv[3] || 'localhost';
-  const port = parseInt(process.argv[4] || '9099', 10);
+  const port = parseInt(process.argv[4] || '9002', 10);
 
   const client = new BridgeClient(identity, host, port);
 

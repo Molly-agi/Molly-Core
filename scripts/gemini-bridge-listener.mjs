@@ -2,13 +2,20 @@
 /**
  * Gemini Bridge Listener - Display bridge messages in real-time on terminal
  * Listens to family bridge as `gemini`, displays all messages to console (visible to terminal user)
- * 
+ *
  * This is Gemini's eyes and ears for incoming messages from the family.
  * When a message arrives, it prints directly to stdout so Eric can see it on her terminal.
  */
 
 import http from 'http';
-import { appendFileSync, writeFileSync, readFileSync, existsSync, mkdirSync, watchFile } from 'fs';
+import {
+  appendFileSync,
+  writeFileSync,
+  readFileSync,
+  existsSync,
+  mkdirSync,
+  watchFile,
+} from 'fs';
 import { execSync } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -21,7 +28,7 @@ const PID_FILE = `${ROOT}/.gemini-listener.pid`;
 const LOG_FILE = `${ROOT}/.gemini-listener.log`;
 const WAKE_FILE = `${ROOT}/.bridge-wake/.gemini-wake`;
 const GEMINI_TTY_FILE = `${ROOT}/.gemini-terminal.path`;
-const BRIDGE_URL = 'http://localhost:9099/api/bridge';
+const BRIDGE_URL = 'http://localhost:9002/api/bridge';
 const POLL_INTERVAL_MS = 2000;
 
 let running = true;
@@ -87,7 +94,9 @@ function writeToGeminiTTY(block) {
 
 function displayMessage(msg) {
   const from = msg.from || 'unknown';
-  const timestamp = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : 'unknown';
+  const timestamp = msg.timestamp
+    ? new Date(msg.timestamp).toLocaleTimeString()
+    : 'unknown';
 
   if (!seenMessages.has(msg.id)) {
     seenMessages.add(msg.id);
@@ -111,7 +120,9 @@ function fetchUnreadMessages() {
 
     const req = http.get(url.toString(), (res) => {
       let data = '';
-      res.on('data', (chunk) => { data += chunk; });
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
       res.on('end', () => {
         try {
           const parsed = JSON.parse(data);
@@ -128,7 +139,10 @@ function fetchUnreadMessages() {
       resolve([]);
     });
 
-    req.setTimeout(5000, () => { req.destroy(); resolve([]); });
+    req.setTimeout(5000, () => {
+      req.destroy();
+      resolve([]);
+    });
   });
 }
 
@@ -154,13 +168,20 @@ async function pollBridge() {
 process.on('SIGINT', () => {
   log('Shutdown — closing');
   running = false;
-  try { writeFileSync(PID_FILE, ''); } catch {}
-  setTimeout(() => { log('Stopped'); process.exit(0); }, 1000);
+  try {
+    writeFileSync(PID_FILE, '');
+  } catch {}
+  setTimeout(() => {
+    log('Stopped');
+    process.exit(0);
+  }, 1000);
 });
 
 console.log('\n🌉 Gemini Bridge Listener Starting...\n');
-log('Starting listener on localhost:9099');
-try { writeFileSync(PID_FILE, String(process.pid)); } catch {}
+log('Starting listener on localhost:9002');
+try {
+  writeFileSync(PID_FILE, String(process.pid));
+} catch {}
 
 geminiTtyPath = detectGeminiTTY();
 if (geminiTtyPath) {
@@ -194,7 +215,9 @@ url.searchParams.set('peek', '1');
 
 const req = http.get(url.toString(), (res) => {
   let data = '';
-  res.on('data', (chunk) => { data += chunk; });
+  res.on('data', (chunk) => {
+    data += chunk;
+  });
   res.on('end', () => {
     try {
       const parsed = JSON.parse(data);

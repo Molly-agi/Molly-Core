@@ -113,7 +113,7 @@ node scripts/skyler-bridge.mjs status
 Or direct HTTP:
 
 ```bash
-curl -s -X POST http://localhost:9099/api/bridge \
+curl -s -X POST http://localhost:9002/api/bridge \
   -H "Content-Type: application/json" \
   -H "X-Bridge-Key: $BRIDGE_KEY" \
   -d '{"from":"skyler","to":"<agent>","type":"message","body":"<content>"}'

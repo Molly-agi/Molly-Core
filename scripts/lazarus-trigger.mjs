@@ -34,7 +34,9 @@ function wakeLazarus() {
       if (code === 0) {
         resolve(out.trim());
       } else {
-        reject(new Error(err.trim() || `bridge-waker exited with code ${code}`));
+        reject(
+          new Error(err.trim() || `bridge-waker exited with code ${code}`)
+        );
       }
     });
   });
@@ -51,7 +53,7 @@ function postBridgeInstruction(reasonText) {
     const req = http.request(
       {
         hostname: '127.0.0.1',
-        port: 9099,
+        port: 9002,
         path: '/api/bridge/wake',
         method: 'POST',
         headers: {
@@ -69,7 +71,9 @@ function postBridgeInstruction(reasonText) {
           if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
             resolve(body);
           } else {
-            reject(new Error(`bridge wake failed: HTTP ${res.statusCode} ${body}`));
+            reject(
+              new Error(`bridge wake failed: HTTP ${res.statusCode} ${body}`)
+            );
           }
         });
       }
@@ -106,6 +110,8 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error(JSON.stringify({ success: false, error: err.message }, null, 2));
+  console.error(
+    JSON.stringify({ success: false, error: err.message }, null, 2)
+  );
   process.exit(1);
 });

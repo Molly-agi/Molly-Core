@@ -13,7 +13,7 @@ const PID_FILE = `${ROOT}/.atlas-poller.pid`;
 const LOG_FILE = `${ROOT}/.atlas-poller.log`;
 const WAKEUP_FILE = `${ROOT}/.atlas-wakeup.json`;
 const BRIDGE_UNREAD_URL =
-  'http://localhost:9099/api/bridge?unread=atlas&peek=1';
+  'http://localhost:9002/api/bridge?unread=atlas&peek=1';
 const POLL_INTERVAL_MS = 2000;
 
 let running = true;

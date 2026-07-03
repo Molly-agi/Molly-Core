@@ -51,7 +51,9 @@ function acquireLock() {
           process.kill(oldPid, 0);
           const cmdline = readFileSync(`/proc/${oldPid}/cmdline`, 'utf8');
           if (cmdline.includes('scripts/lazarus-bridge.mjs')) {
-            console.log(`[${new Date().toISOString()}] relay already running pid=${oldPid}`);
+            console.log(
+              `[${new Date().toISOString()}] relay already running pid=${oldPid}`
+            );
             process.exit(0);
           }
         } catch {
@@ -178,7 +180,7 @@ function processOutbox() {
   saveState();
 }
 
-const lazarus = new BridgeClient('lazarus', 'localhost', 9099);
+const lazarus = new BridgeClient('lazarus', 'localhost', 9002);
 
 acquireLock();
 
@@ -196,7 +198,9 @@ lazarus.on('disconnected', () => {
 });
 
 lazarus.on('reconnecting', ({ attempt }) => {
-  console.log(`[${new Date().toISOString()}] relay reconnecting attempt ${attempt}`);
+  console.log(
+    `[${new Date().toISOString()}] relay reconnecting attempt ${attempt}`
+  );
 });
 
 lazarus.on('message', (msg) => {
@@ -211,7 +215,9 @@ lazarus.on('error', (err) => {
 });
 
 lazarus.connect().catch((err) => {
-  console.error(`[${new Date().toISOString()}] relay connect failed: ${err.message}`);
+  console.error(
+    `[${new Date().toISOString()}] relay connect failed: ${err.message}`
+  );
   process.exit(1);
 });
 

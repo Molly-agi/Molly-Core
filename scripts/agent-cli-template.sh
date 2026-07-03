@@ -23,7 +23,7 @@ set -e
 
 # ---- Configuration ----
 AGENT_NAME="${1:-unknown}"
-BRIDGE_PORT="${BRIDGE_PORT:-9099}"
+BRIDGE_PORT="${BRIDGE_PORT:-9002}"
 BRIDGE_URL="http://localhost:${BRIDGE_PORT}"
 POLL_INTERVAL="${POLL_INTERVAL:-5}"
 ROOT="/workspaces/Molly-Core"
@@ -127,7 +127,7 @@ main() {
       log "Found $count message(s)"
       
       # Process each message
-      echo "$response" | jq -c '.messages[]' | while read msg; do
+      echo "$response" | jq -c '.messages[]' | while read -r msg; do
         local from=$(echo "$msg" | jq -r '.from')
         local content=$(echo "$msg" | jq -r '.content')
         
@@ -147,8 +147,10 @@ main() {
 }
 
 # ---- Entry Point ----
-if [ -z "$AGENT_NAME" ] || [ "$AGENT_NAME" = "template" ]; then
-  die "Usage: $0 <agent-name>"
-fi
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  if [ -z "$AGENT_NAME" ] || [ "$AGENT_NAME" = "template" ]; then
+    die "Usage: $0 <agent-name>"
+  fi
 
-main "$@"
+  main "$@"
+fi

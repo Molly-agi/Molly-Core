@@ -46,14 +46,9 @@ ensure_keepalive() {
   fi
 }
 
-ensure_bridge() {
-  if ! is_running "bridge-daemon.mjs"; then
-    log "[IMMORTAL] Bridge dead - restarting"
-    rm -f "$ROOT/.bridge-daemon.pid"
-    nohup node "$ROOT/scripts/bridge-daemon.mjs" > "$ROOT/.bridge-daemon.log" 2>&1 &
-    disown
-  fi
-}
+# NOTE: ensure_bridge() removed 2026-07-03.
+# The family bridge is now file-based (data/family-bridge.jsonl written directly
+# by src/ai/bridge/family-bridge.ts). No separate daemon process to guard.
 
 # Single instance check
 PIDFILE="$ROOT/.immortal.pid"
@@ -73,12 +68,10 @@ log "[IMMORTAL] Started (PID $$) - Watching all daemons every 5 seconds"
 # Initial ensure all running
 ensure_watchdog
 ensure_keepalive
-ensure_bridge
 
 # Monitor loop - every 5 seconds
 while true; do
   ensure_watchdog
   ensure_keepalive
-  ensure_bridge
   sleep 5
 done

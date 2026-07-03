@@ -6,7 +6,7 @@
 
 import http from 'http';
 
-const BRIDGE_URL = 'http://localhost:9099';
+const BRIDGE_URL = 'http://localhost:9002';
 const POLL_INTERVAL_MS = 5000;
 
 let running = true;
@@ -33,10 +33,12 @@ async function poll() {
 
     const data = await response.json();
     const messages = Array.isArray(data?.messages) ? data.messages : [];
-    
+
     if (messages.length > 0) {
       pollCount++;
-      log(`Poll #${pollCount}: ${messages.length} messages available on bridge`);
+      log(
+        `Poll #${pollCount}: ${messages.length} messages available on bridge`
+      );
       // Messages are mirrored implicitly by subscribers reading from bridge
       // This confirms bridge is healthy and messages are flowing
     }
@@ -57,7 +59,9 @@ async function loop() {
   }
 }
 
-log(`Starting mirror service (polling ${BRIDGE_URL} every ${POLL_INTERVAL_MS}ms)`);
+log(
+  `Starting mirror service (polling ${BRIDGE_URL} every ${POLL_INTERVAL_MS}ms)`
+);
 loop().catch((err) => {
   log(`FATAL: ${err.message}`);
   process.exit(1);

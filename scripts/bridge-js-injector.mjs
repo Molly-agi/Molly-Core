@@ -5,7 +5,7 @@
 
 import http from 'http';
 
-const BRIDGE_URL = 'http://localhost:9099';
+const BRIDGE_URL = 'http://localhost:9002';
 const MSG = 'check the bridge';
 
 // JavaScript payload that will be injected into the VS Code browser page
@@ -61,23 +61,23 @@ export async function injectChatSend() {
     const postData = JSON.stringify({
       from: 'bridge-injector',
       content: `INJECT_JAVASCRIPT:${Buffer.from(INJECT_PAYLOAD).toString('base64')}`,
-      type: 'system'
+      type: 'system',
     });
 
     const options = {
       hostname: 'localhost',
-      port: 9099,
+      port: 9002,
       path: '/api/bridge',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
-      }
+        'Content-Length': Buffer.byteLength(postData),
+      },
     };
 
     const req = http.request(options, (res) => {
       let data = '';
-      res.on('data', chunk => data += chunk);
+      res.on('data', (chunk) => (data += chunk));
       res.on('end', () => {
         console.log('[Bridge Injector] Injection sent:', res.statusCode);
         resolve({ success: res.statusCode === 200, response: data });
@@ -93,11 +93,11 @@ export async function injectChatSend() {
 // Allow CLI invocation
 if (import.meta.url === `file://${process.argv[1]}`) {
   injectChatSend()
-    .then(result => {
+    .then((result) => {
       console.log('Injection result:', result);
       process.exit(0);
     })
-    .catch(err => {
+    .catch((err) => {
       console.error('Injection error:', err);
       process.exit(1);
     });

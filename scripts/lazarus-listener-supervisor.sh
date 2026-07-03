@@ -8,7 +8,7 @@ echo "[supervisor $(date -Is)] starting" >> "$LOG"
 while true; do
   echo "[supervisor $(date -Is)] spawning bridge-client" >> "$LOG"
   # sleep infinity keeps stdin open so readline doesn't EOF
-  sleep infinity | node scripts/bridge-client.mjs lazarus localhost 9099 >> "$LOG" 2>&1
+  sleep infinity | node scripts/bridge-client.mjs lazarus localhost 9002 >> "$LOG" 2>&1
   echo "[supervisor $(date -Is)] client exited, backoff 3s" >> "$LOG"
   sleep 3
 done

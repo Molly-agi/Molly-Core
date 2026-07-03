@@ -13,7 +13,7 @@ const PID_FILE = `${ROOT}/.lazarus-poller.pid`;
 const LOG_FILE = `${ROOT}/.lazarus-poller.log`;
 const WAKEUP_FILE = `${ROOT}/.lazarus-wakeup.json`;
 const BRIDGE_UNREAD_URL =
-  'http://localhost:9099/api/bridge?unread=lazarus&peek=1';
+  'http://localhost:9002/api/bridge?unread=lazarus&peek=1';
 const POLL_INTERVAL_MS = 2000;
 
 let running = true;
@@ -105,7 +105,9 @@ async function pollOnce() {
     if (messages.length > 0) {
       writeWakeup(messages);
       const last = messages[messages.length - 1];
-      log(`Received ${messages.length} unread message(s). Latest from=${last?.from || 'unknown'}`);
+      log(
+        `Received ${messages.length} unread message(s). Latest from=${last?.from || 'unknown'}`
+      );
     }
   } catch (err) {
     log(`Poll error: ${err?.message || String(err)}`);

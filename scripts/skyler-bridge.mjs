@@ -14,8 +14,8 @@
 
 import { WebSocket } from 'ws';
 
-const BRIDGE_WS = 'ws://localhost:9099';
-const BRIDGE_HTTP = 'http://localhost:9099';
+const BRIDGE_WS = 'ws://localhost:9002';
+const BRIDGE_HTTP = 'http://localhost:9002';
 const IDENTITY = 'skyler';
 
 const [, , command, ...args] = process.argv;

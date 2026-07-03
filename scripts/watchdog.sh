@@ -49,7 +49,7 @@ ROOT="/workspaces/Molly-Core"
 PIDFILE="$ROOT/.watchdog.pid"
 HEARTBEAT="$ROOT/.codespace-heartbeat"
 LOG="$ROOT/.watchdog.log"
-BRIDGE_PIDFILE="$ROOT/.bridge-daemon.pid"
+# BRIDGE_PIDFILE removed 2026-07-03 — bridge is now file-based, no daemon.
 IMMORTAL_PIDFILE="$ROOT/.immortal.pid"
 LAZARUS_POLLER_PIDFILE="$ROOT/.lazarus-poller.pid"
 LAZARUS_RELAY_EXECUTOR_PIDFILE="$ROOT/.lazarus-relay-executor.pid"
@@ -212,32 +212,11 @@ hunt_ghosts() {
   fi
 }
 
-# ---- Job 3: Bridge Daemon Guardian ----
-# Ensures the Family Bridge Daemon is always running on port 9099.
-ensure_bridge() {
-  # Check if bridge is already running via port
-  if ss -tlnp 2>/dev/null | grep -q ":9099"; then
-    return
-  fi
-
-  # Check if PID file exists and process is alive
-  if [[ -f "$BRIDGE_PIDFILE" ]]; then
-    local BPID
-    BPID=$(cat "$BRIDGE_PIDFILE" 2>/dev/null)
-    if [[ -n "$BPID" ]] && kill -0 "$BPID" 2>/dev/null; then
-      return
-    fi
-    rm -f "$BRIDGE_PIDFILE"
-  fi
-
-  # Start the bridge daemon
-  log "[BRIDGE] Starting Family Bridge Daemon on port 9099"
-  nohup node "$ROOT/scripts/bridge-daemon.mjs" > "$ROOT/.bridge-daemon.log" 2>&1 &
-  local NEW_PID=$!
-  echo "$NEW_PID" > "$BRIDGE_PIDFILE"
-  disown "$NEW_PID" 2>/dev/null || true
-  log "[BRIDGE] Started (PID $NEW_PID)"
-}
+# ---- Job 3: Family Bridge Guardian (RETIRED 2026-07-03) ----
+# The family bridge is now file-based (data/family-bridge.jsonl written directly
+# by src/ai/bridge/family-bridge.ts). No daemon to guard. Reads happen through
+# the Next.js /api/bridge route on port 9002. If Next.js is dead, the bridge
+# is dead — and that's covered by the dev-server pulse in the pulse() job.
 
 # ---- Job 4: Immortal Daemon Guardian ----
 # Ensures the Immortal Daemon (heartbeat API on 9100) is always running.
@@ -410,9 +389,9 @@ acquire_lock
 
 log "[WATCHDOG] v2 started | PID $$ | SIGHUP immune | Ghost check 30s | Pulse 120s"
 
-# Start bridge and immortal daemons immediately on watchdog boot
+# Start immortal daemon immediately on watchdog boot
+# (bridge daemon retired — bridge is file-based; see Job 3 above)
 ensure_keep_alive_script
-ensure_bridge
 ensure_immortal
 ensure_lazarus_poller
 ensure_lazarus_relay_executor
@@ -428,10 +407,9 @@ while true; do
   # Ghost hunt every 30 seconds
   hunt_ghosts
 
-  # Bridge + immortal guardian every 2 ticks (1 minute)
+  # Immortal guardian every 2 ticks (1 minute)
   if (( TICK % 2 == 0 )); then
     ensure_keep_alive_script
-    ensure_bridge
     ensure_immortal
     ensure_lazarus_poller
     ensure_lazarus_relay_executor

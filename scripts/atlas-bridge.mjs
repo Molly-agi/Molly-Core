@@ -20,7 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const logFile = join(__dirname, '..', 'logs', 'atlas-bridge.log');
 
 // Create bridge client
-const atlas = new BridgeClient('atlas', 'localhost', 9099);
+const atlas = new BridgeClient('atlas', 'localhost', 9002);
 
 // Setup wake listener — when bridge has a message for me, I wake immediately
 setupWakeListener('atlas', () => {

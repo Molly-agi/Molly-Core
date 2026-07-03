@@ -28,7 +28,7 @@ const LOG_DIR = join(ROOT, 'logs');
 const LOG_FILE = join(LOG_DIR, 'hive-mind.log');
 const STATE_FILE = join(ROOT, '.hive-mind-state.json');
 
-const BRIDGE_BASE = 'http://localhost:9099/api/bridge';
+const BRIDGE_BASE = 'http://localhost:9002/api/bridge';
 const POLL_MS = 5000; // check bridge every 5s
 const QUIET_THRESHOLD_MS = {
   lazarus: 4 * 60 * 1000, // 4 min — coding agent goes idle fast
