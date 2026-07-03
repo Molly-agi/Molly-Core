@@ -29,9 +29,16 @@ export interface E8AdapterOptions {
   rhtWidthThreshold?: number;
   /** Fixed seed for RHT reproducibility. Default 0xdeadbeef. */
   rhtSeed?: number;
-  /** Enable entropy coding (Huffman + log8 scale). Default true. */
+  /** Enable entropy coding (Huffman + fp16/log8 scale). Default true. */
   useEntropyCoding?: boolean;
-  /** Scale quantization mode for entropy coding. Default 'log8'. */
+  /**
+   * Scale quantization mode for entropy coding. Default 'float16'.
+   * log8 saves 1 bit/group at the cost of ±2.2% systematic scale error per
+   * group (Fable Batch 03 F16 finding). Float16 is the file-header-documented
+   * default and is safer until the F4 small-model E2E run empirically prices
+   * the trade. Vault format tag survives either choice (bit 0 of flags header),
+   * so old log8 vaults still decode correctly.
+   */
   scaleMode?: ScaleMode;
 }
 
@@ -51,7 +58,7 @@ export class E8QuantizerAdapter implements TitanQuantizer {
     this.rhtWidthThreshold = options?.rhtWidthThreshold ?? 4096;
     this.rhtSeed = options?.rhtSeed ?? 0xdeadbeef;
     this.useEntropyCoding = options?.useEntropyCoding ?? true;
-    this.scaleMode = options?.scaleMode ?? 'log8';
+    this.scaleMode = options?.scaleMode ?? 'float16';
   }
 
   quantize(
