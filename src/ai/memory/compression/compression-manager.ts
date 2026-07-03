@@ -810,6 +810,65 @@ export class CompressionManager {
 
     // T5: Numeric Quantization — no decompression needed (lossless truncation)
 
+    // S0: Schema Stripper (LAST reversal — first stage compressed, last decompressed).
+    //
+    // Bug found by self-audit 2026-07-03: this reversal was missing entirely.
+    // Compression replaced engram.data with the internal stripped shape
+    // { schemaVersion, structuralKeys, textPayloads, primitiveValues } but
+    // no decompress step ever reconstructed the original data. Any production
+    // deployment with TITAN_SCHEMA_STRIPPER=1 was silently corrupting every
+    // engram's data field. Existing round-trip tests set s0SchemaStripper:
+    // false so nothing caught it. See round-trip-hardened.test.ts for the
+    // regression case that surfaced this.
+    if (bundle.stages.afterS0) {
+      const s0Meta = bundle.stages.afterS0.metadata as
+        | { schemaManifest?: import('./schema-stripper').SchemaManifest }
+        | undefined;
+      const manifest = s0Meta?.schemaManifest;
+      if (manifest) {
+        const stripper = new SchemaStripper(manifest);
+        engrams = engrams.map((engram) => {
+          const strippedData = engram.data as unknown as
+            | import('./schema-stripper').StrippedMemory
+            | undefined;
+          if (
+            !strippedData ||
+            typeof strippedData !== 'object' ||
+            !('structuralKeys' in strippedData) ||
+            !('textPayloads' in strippedData) ||
+            !('primitiveValues' in strippedData)
+          ) {
+            // Not stripped (or upstream stage already reversed it) — pass through
+            return engram;
+          }
+          // Uint16Array may have been JSON-round-tripped into a plain object
+          // with numeric-string keys. Normalize back to Uint16Array before unstrip.
+          const rawKeys = strippedData.structuralKeys as
+            | Uint16Array
+            | Record<string, number>;
+          const normalizedKeys =
+            rawKeys instanceof Uint16Array
+              ? rawKeys
+              : Uint16Array.from(
+                  Object.keys(rawKeys)
+                    .map((k) => Number(k))
+                    .sort((a, b) => a - b)
+                    .map((k) => (rawKeys as Record<string, number>)[String(k)])
+                );
+          const reconstructed = stripper.unstrip({
+            schemaVersion: strippedData.schemaVersion,
+            structuralKeys: normalizedKeys,
+            textPayloads: strippedData.textPayloads,
+            primitiveValues: strippedData.primitiveValues,
+          });
+          return {
+            ...engram,
+            data: reconstructed as MemoryEngram['data'],
+          };
+        });
+      }
+    }
+
     MollyLogger.debug('Decompression complete', 'compression-manager', {
       techniquesReversed: bundle.techniqueOrder.length,
       latencyMs: Date.now() - startMs,
