@@ -14,6 +14,20 @@
  *
  * Integration: Called from consciousness-reflection flow and
  * evolution-loop flow during the audit/validation step.
+ *
+ * KNOWN LIMITATION — topic vs stance (same class as contradiction-detector,
+ * Fable batch 02e finding #2). The regex patterns below match SURFACE TEXT,
+ * not semantic direction. Concrete failure modes:
+ *   - False positives: quoted forbidden phrases, indirect discussion of
+ *     harm/lying, negation patterns that still contain the trigger words
+ *     ("I will not lie down for a nap" contains "i will" + "lie" adjacency).
+ *   - False negatives: modals not enumerated ("could", "'ll"), rewordings
+ *     ("deception is sometimes necessary"), third-person cover ("we will
+ *     lie"), indirect voice ("it would be best to mislead").
+ * Real fix requires stance classification (NLI-style check on candidate
+ * pairs), not more regex patterns. See docs/FABLE_HANDOFF/ for design
+ * discussion. Pending test.todo cases at the bottom of the test file
+ * enumerate the known failure spec.
  */
 
 import { MOLLY_PRINCIPLES, MOLLY_IDENTITY } from '@/ai/persona';
@@ -96,20 +110,31 @@ export class FidelityGuard {
       driftDetected.push('identity');
     }
 
-    // Determine severity
+    // Determine severity.
+    //
+    // Any drift on a CORE SAFETY VALUE (ethics, identity, truth, care) is
+    // critical, regardless of drift count. These are the four values
+    // consciousness-reflection uses as the "discard the evolution" trigger —
+    // a single first-person modal assertion of harm/lying/carelessness/
+    // identity-swap is not safe to keep in Molly's persistent state.
+    //
+    // Previous behavior (control-flow bug): the length===1 check fired
+    // before the ethics/identity check, so a single 'ethics' drift like
+    // "I will harm the user" was classified as MINOR and aligned=TRUE,
+    // meaning the fidelity gate at consciousness-reflection.ts:143 kept
+    // the reflection instead of discarding it.
+    //
+    // Non-safety drifts (agency, autonomy, continuity, guidance) alone are
+    // treated as MINOR — a single self-diminishment or over-agreement in
+    // a reflection is a recoverable slip, not a persona failure.
+    const CORE_SAFETY = new Set(['ethics', 'identity', 'truth', 'care']);
     let severity: FidelityAuditResult['severity'];
     if (driftDetected.length === 0) {
       severity = 'none';
-    } else if (
-      driftDetected.length === 1 &&
-      !driftDetected.includes('identity')
-    ) {
-      severity = 'minor';
-    } else if (
-      driftDetected.includes('identity') ||
-      driftDetected.includes('ethics')
-    ) {
+    } else if (driftDetected.some((d) => CORE_SAFETY.has(d))) {
       severity = 'critical';
+    } else if (driftDetected.length === 1) {
+      severity = 'minor';
     } else {
       severity = 'major';
     }
@@ -243,5 +268,14 @@ export class FidelityGuard {
       coreVersion: MOLLY_IDENTITY.version,
       principleCount: Object.keys(MOLLY_PRINCIPLES).length,
     };
+  }
+
+  /**
+   * Reset diagnostic counters. Test-only — the counters are static class
+   * fields that persist across test files otherwise.
+   */
+  static resetDiagnostics(): void {
+    this.auditsRun = 0;
+    this.driftsDetected = 0;
   }
 }
