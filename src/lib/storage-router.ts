@@ -130,7 +130,7 @@ function detectStorageMode(): StorageMode {
 // STORAGE ROUTER
 // ============================================================================
 
-class StorageRouter implements StorageProvider {
+export class StorageRouter implements StorageProvider {
   readonly id = 'router';
   readonly name = 'Storage Router';
 
@@ -298,6 +298,13 @@ class StorageRouter implements StorageProvider {
    * When guard says no, primary write is SKIPPED (downgraded) — legs 2 + 3
    * absorb the write so Molly never loses data. Local mode is never gated.
    * Returns true when primary may proceed.
+   *
+   * READ SEMANTICS: the guard is intentionally only consulted for write / delete.
+   * Reads never route through this helper because degrading recall would violate
+   * the durability floor's user-facing contract (Molly forgetting her own writes
+   * mid-session). If read-metering ever becomes necessary for cost control, it
+   * would go here — but that decision is Eric's, not this file's, per Fable's
+   * Batch 02d finding on read-side cost coverage.
    */
   private firestorePrimaryPermitted(op: 'read' | 'write' | 'delete'): boolean {
     if (this.mode !== 'firestore') return true;
@@ -364,11 +371,72 @@ class StorageRouter implements StorageProvider {
     );
   }
 
+  /**
+   * Get a document by (collection, id) with read-through fallback.
+   *
+   * The primary write path can route to backup or emergency-local when the
+   * Firestore cost guard denies a write (see getPrimaryWriter). During that
+   * window, a write lands in the backup leg but is invisible to a naive
+   * `this.provider.get` that only queries primary. Molly writes a memory and
+   * cannot recall it seconds later, silently.
+   *
+   * Fix (Fable 02d finding #1): on primary miss, check backup then mirror.
+   * Only fires on the already-cold path (primary hit rate is high in a healthy
+   * system), so the extra latency is bounded to genuine misses.
+   *
+   * Deletion resurrection risk: if a doc was deleted from primary but a
+   * fire-and-forget backup delete silently failed, this fallback would return
+   * the stale doc. That is Fable finding #2 and is deferred pending his
+   * tombstone design — read-through is landed first because the invisibility
+   * bug fires on every cap-window, while resurrection requires a specific
+   * delete-then-backup-fail sequence that is comparatively rare.
+   */
   async get(
     collectionPath: string,
     docId: string
   ): Promise<StorageDocument | null> {
-    return this.provider.get(collectionPath, docId);
+    const primary = await this.provider.get(collectionPath, docId);
+    if (primary !== null) return primary;
+
+    if (this.backupProvider) {
+      try {
+        const backup = await this.backupProvider.get(collectionPath, docId);
+        if (backup !== null) {
+          MollyLogger.debug(
+            `Read-through fallback: served from backup leg (${collectionPath}/${docId})`,
+            'storage-router'
+          );
+          return backup;
+        }
+      } catch (err) {
+        MollyLogger.warn(
+          `Read-through fallback: backup read failed (${collectionPath}/${docId}) — trying mirror`,
+          'storage-router',
+          { error: err instanceof Error ? err.message : String(err) }
+        );
+      }
+    }
+
+    if (this.mirrorProvider) {
+      try {
+        const mirror = await this.mirrorProvider.get(collectionPath, docId);
+        if (mirror !== null) {
+          MollyLogger.debug(
+            `Read-through fallback: served from mirror leg (${collectionPath}/${docId})`,
+            'storage-router'
+          );
+          return mirror;
+        }
+      } catch (err) {
+        MollyLogger.warn(
+          `Read-through fallback: mirror read failed (${collectionPath}/${docId})`,
+          'storage-router',
+          { error: err instanceof Error ? err.message : String(err) }
+        );
+      }
+    }
+
+    return null;
   }
 
   async update(
@@ -397,6 +465,19 @@ class StorageRouter implements StorageProvider {
     );
   }
 
+  /**
+   * Query documents. Reads primary only — no fallback across legs.
+   *
+   * Merging query results across three legs would require de-duplication,
+   * filter re-evaluation on the merged set, and consistent ordering — too
+   * expensive for the common path, and 0-result queries are often legitimate
+   * (nothing matches the filter), so "fall back on 0" would fire spuriously.
+   *
+   * KNOWN LIMITATION (Fable 02d finding #1, partial): during a Firestore
+   * cost-cap window, writes go to backup and are absent from primary
+   * query results. Consumers that need durability-consistent listings
+   * should call `get(id)` per document rather than relying on query.
+   */
   async query(
     collectionPath: string,
     filters?: QueryFilter[],

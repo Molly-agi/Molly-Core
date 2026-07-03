@@ -16,6 +16,7 @@
 import { MollyLogger, generateTraceId } from '../logger';
 import { readBridgeState, BridgeMessage, BridgeState } from './family-bridge';
 import { getStorageRouter } from '@/lib/storage-router';
+import { triggerHook } from '@/ai/hooks';
 
 // ============================================================
 // TYPES
@@ -212,6 +213,11 @@ export async function heartbeat(): Promise<HeartbeatPulse> {
 
     // Persist
     await saveHeartbeatState();
+
+    // Fire the typed HeartbeatCycle hook so subscribers (audit log,
+    // observability sinks) see every pulse. Molly owns her pulse —
+    // this monitor IS the live tick, not the dormant scheduler.
+    void triggerHook('HeartbeatCycle', pulse);
 
     // Log significant changes
     if (health === 'disconnected' || health === 'silent') {
@@ -532,7 +538,7 @@ async function saveHeartbeatState(): Promise<void> {
   if (!_initialized) return;
 
   try {
-    const storage = await getStorageRouter();
+    const storage = getStorageRouter();
     const memberActivityArray = Array.from(_state.memberActivity.entries());
 
     await storage.set(COLLECTION, HEARTBEAT_DOC, {
