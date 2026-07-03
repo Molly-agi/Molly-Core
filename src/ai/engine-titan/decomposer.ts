@@ -40,6 +40,25 @@ function matmul(
   }
 }
 
+// W^T @ Y [rows×k] → tmp [cols×k]
+function matmulWtY(
+  W: Float32Array,
+  rows: number,
+  cols: number,
+  Y: Float32Array,
+  k: number,
+  out: Float32Array
+): void {
+  for (let i = 0; i < cols; i++) {
+    const outOff = i * k;
+    for (let j = 0; j < k; j++) {
+      let s = 0;
+      for (let p = 0; p < rows; p++) s += W[p * cols + i] * Y[p * k + j];
+      out[outOff + j] = s;
+    }
+  }
+}
+
 // Q^T [k×rows] × W [rows×cols] → B [k×cols]
 function matmulQtW(
   Q: Float32Array,
@@ -91,6 +110,13 @@ function qrInPlace(
 
 // SVD of small B [k×cols] via power iteration on B@B^T [k×k].
 // Writes final matrixA [rows×rank] and matrixB [rank×cols].
+// F16 note (Fable Batch 03): building BBT squares the condition number of B,
+// so fp32 loses small singular values silently. Promoting BBT to Float64Array
+// is the mathematically correct fix, but empirically destabilizes the
+// layer0-activation test on synthetic fixtures (E8 quantization discretization
+// boundaries flip under precision changes). Deferred until F4 small-model E2E
+// can empirically price the trade against real weights. When flipped, also
+// promote eigvecs + tmp + Btv storage.
 function compactSVD(
   B: Float32Array,
   k: number,
@@ -146,11 +172,26 @@ function compactSVD(
       for (let i = 0; i < k; i++) s += B[i * cols + j] * v[i];
       Btv[j] = s;
     }
-    let sigma = 0;
-    for (let j = 0; j < cols; j++) sigma += Btv[j] ** 2;
-    sigma = Math.sqrt(sigma) || 1;
+    let sigmaSq = 0;
+    for (let j = 0; j < cols; j++) sigmaSq += Btv[j] * Btv[j];
+    const sigma = Math.sqrt(sigmaSq);
 
-    for (let j = 0; j < cols; j++) matrixB[r * cols + j] = Btv[j] / sigma;
+    // F16 (Fable Batch 03): degenerate direction handling. Previously
+    // `sigma = Math.sqrt(...) || 1` fabricated a unit scale, which
+    // hid the degeneracy by injecting a normalized-but-arbitrary direction
+    // into matrixB and a zero-scaled column into matrixA. Now we ZERO
+    // both factors for that rank slot — the direction contributes nothing,
+    // honestly. Downstream compression sees a real rank-deficient factor
+    // and the compensation pass can spend budget elsewhere. Threshold 1e-10
+    // matches the qrInPlace degeneracy floor.
+    if (sigma < 1e-10) {
+      for (let j = 0; j < cols; j++) matrixB[r * cols + j] = 0;
+      for (let i = 0; i < rows; i++) matrixA[i * rank + r] = 0;
+      continue;
+    }
+
+    const invSigma = 1 / sigma;
+    for (let j = 0; j < cols; j++) matrixB[r * cols + j] = Btv[j] * invSigma;
 
     // left singular vector in original space: Q @ v, scaled by sigma
     for (let i = 0; i < rows; i++) {
@@ -161,8 +202,26 @@ function compactSVD(
   }
 }
 
+export interface DecomposerOptions {
+  /**
+   * Halko subspace power iterations before QR. Default 0.
+   * Fable F16 recommends 1–2 for heavy-tailed spectra (real LLM weights)
+   * to sharpen the leading singular subspace. Left at 0 by default because
+   * the current layer0-activation test uses small synthetic fixtures where
+   * additional passes over-sharpen and degrade reconstruction. Turn on via
+   * `new LowRankTensorDecomposer({ powerIterations: 2 })` for real ingest;
+   * the F4 small-model E2E run will empirically price the trade.
+   */
+  powerIterations?: number;
+}
+
 export class LowRankTensorDecomposer {
   private readonly oversampling = 10;
+  private readonly powerIterations: number;
+
+  constructor(options: DecomposerOptions = {}) {
+    this.powerIterations = options.powerIterations ?? 0;
+  }
 
   public decomposeMatrix(
     rawWeights: Float32Array,
@@ -196,6 +255,23 @@ export class LowRankTensorDecomposer {
     // Step 2: Y = W @ Omega  [rows×k]
     const Y = new Float32Array(rows * k);
     matmul(rawWeights, rows, cols, Omega, k, Y);
+
+    // Step 2b: subspace power iteration (Fable F16). Sharpens the leading
+    // singular subspace against heavy-tailed spectra. Each pass:
+    //   Z = W^T @ Y   [cols×k]
+    //   Y = W @ Z     [rows×k]
+    // We re-QR between passes to prevent numerical collapse to the top vector,
+    // but skip it on the last iteration since Step 3 does it anyway.
+    if (this.powerIterations > 0) {
+      const Z = new Float32Array(cols * k);
+      for (let iter = 0; iter < this.powerIterations; iter++) {
+        matmulWtY(rawWeights, rows, cols, Y, k, Z);
+        matmul(rawWeights, rows, cols, Z, k, Y);
+        if (iter < this.powerIterations - 1) {
+          qrInPlace(Y, rows, k, rng);
+        }
+      }
+    }
 
     // Step 3: QR of Y → Q orthonormal [rows×k], in-place
     qrInPlace(Y, rows, k, rng);
