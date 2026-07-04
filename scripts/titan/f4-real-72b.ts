@@ -14,6 +14,7 @@
 
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join, resolve } from 'path';
+import { cpus } from 'os';
 import { verifyVaultIntegrity } from '../../src/ai/inference/vault-verifier';
 import {
   QWEN2_72B_CONFIG,
@@ -163,7 +164,10 @@ async function main(): Promise<void> {
   console.log('\n[6/6] Running F4 full evaluation...');
   console.log('  This will take a long time on 72B. Progress below:\n');
 
-  const report: F4Report = runF4FullReport({
+  const workerCount = Math.max(1, cpus().length - 1);
+  console.log(`  Parallel eval: ${workerCount} workers`);
+
+  const report: F4Report = await runF4FullReport({
     modelId: 'qwen2.5-72b',
     modelSize: '7B+',
     sourceGgufSha256: integrity.ggufSha256,
@@ -181,6 +185,8 @@ async function main(): Promise<void> {
     decode,
     newlineTokenId,
     maxHotLayers: config.maxHotLayers,
+    parallel: true,
+    parallelWorkers: workerCount,
     onProgress: (phase, detail) => {
       process.stdout.write(`  [${phase}] ${detail}\r`);
     },
