@@ -9,7 +9,10 @@ import { join } from 'node:path';
 import { TitanDecompressionEngine } from './reconstruction';
 import { E8QuantizerAdapter } from './quantizer-e8-adapter';
 import { inverseRHT, type RHTMeta } from './hadamard-transform';
-import { unpackInt8RowQuantized } from './int8-row-quantizer';
+import {
+  unpackInt8RowQuantized,
+  type Int8RowQuantized,
+} from './int8-row-quantizer';
 import type { LayerMetadata } from './orchestrator';
 
 export interface InferenceLayerOptions {
@@ -32,6 +35,9 @@ export class CrystalInferenceLayer {
 
   // LRU: Map preserves insertion order; least-recently-used is first entry
   private readonly hot = new Map<string, Float32Array>();
+  // B2 fix: int8 layers cache compact representation (scales + Int8Array)
+  // instead of materialized fp32. ~4× less RAM per cached layer.
+  private readonly hotInt8 = new Map<string, Int8RowQuantized>();
   private readonly metaCache = new Map<string, LayerMetadata>();
 
   constructor(opts: InferenceLayerOptions) {
@@ -104,9 +110,19 @@ export class CrystalInferenceLayer {
   }
 
   private evictIfNeeded(): void {
-    while (this.hot.size >= this.maxHot) {
-      const oldest = this.hot.keys().next().value;
-      if (oldest) this.hot.delete(oldest);
+    while (this.hot.size + this.hotInt8.size >= this.maxHot) {
+      // Evict from whichever cache has the oldest entry (by insertion order).
+      // Check both first-keys and evict the one that was inserted first.
+      const oldestF32 = this.hot.keys().next().value;
+      const oldestI8 = this.hotInt8.keys().next().value;
+      if (oldestF32 && !oldestI8) {
+        this.hot.delete(oldestF32);
+      } else if (oldestI8 && !oldestF32) {
+        this.hotInt8.delete(oldestI8);
+      } else if (oldestF32) {
+        // Both have entries — evict f32 first (larger footprint)
+        this.hot.delete(oldestF32);
+      }
     }
   }
 
@@ -215,15 +231,16 @@ export class CrystalInferenceLayer {
     return { output, rows: seqLen, cols, fromCache: wasCached };
   }
 
-  // Int8-per-row path — B stores fp32 per-row scales + int8 body. F6 exempt
-  // layers (embedding, LM head, first/last-N transformer blocks). No A.
+  // Int8-per-row path — keeps compact Int8Array + scales in hot cache.
+  // Fused matmul applies per-row scale inline: never materializes full fp32.
+  // RAM: rows*cols bytes (int8) + rows*4 bytes (scales) vs rows*cols*4 (fp32).
   private forwardInt8PerRow(
     layerName: string,
     input: Float32Array,
     seqLen: number,
     meta: LayerMetadata
   ): ForwardResult {
-    const wasCached = this.hot.has(layerName);
+    const wasCached = this.hotInt8.has(layerName);
     const bPath = join(this.vaultDir, `${layerName}.B.packed`);
     if (!existsSync(bPath)) {
       throw new Error(
@@ -232,47 +249,123 @@ export class CrystalInferenceLayer {
     }
     const { rows, cols } = meta;
 
-    let dequantB: Float32Array;
+    let q: Int8RowQuantized;
     if (wasCached) {
-      dequantB = this.hot.get(layerName)!;
-      this.hot.delete(layerName);
-      this.hot.set(layerName, dequantB);
+      q = this.hotInt8.get(layerName)!;
+      this.hotInt8.delete(layerName);
+      this.hotInt8.set(layerName, q);
     } else {
       const bBuf = readFileSync(bPath);
-      const q = unpackInt8RowQuantized(bBuf, rows, cols);
-      // Dequantize inline into a flat Float32Array [rows × cols]
-      dequantB = new Float32Array(rows * cols);
-      for (let r = 0; r < rows; r++) {
-        const scale = q.scales[r];
-        const rowOff = r * cols;
-        for (let c = 0; c < cols; c++) {
-          dequantB[rowOff + c] = q.data[rowOff + c] * scale;
-        }
-      }
+      q = unpackInt8RowQuantized(bBuf, rows, cols);
       this.evictIfNeeded();
-      this.hot.set(layerName, dequantB);
+      this.hotInt8.set(layerName, q);
     }
 
-    const output = matmul(input, dequantB, seqLen, rows, cols);
+    const output = matmulInt8Scaled(input, q, seqLen, rows, cols);
     return { output, rows: seqLen, cols, fromCache: wasCached };
   }
 
-  // Column gather: for [rows × cols] weight W = A @ B, returns W[:, tokenId].
-  // Used for embedding lookups (token_embd) — avoids materializing full [8192 × 152064].
-  // Load-and-cache path is identical to forward(), so hot-tier stays warm across calls.
+  // Column gather: returns W[:, tokenId] for embedding lookups.
+  // Dispatches on compressionPath like forward() does.
   getEmbeddingColumn(layerName: string, tokenId: number): Float32Array {
     const meta = this.loadMeta(layerName);
-    const { rows, cols, targetRank } = meta;
+    const { cols } = meta;
     if (tokenId < 0 || tokenId >= cols) {
       throw new RangeError(`tokenId ${tokenId} out of range [0, ${cols})`);
     }
+
+    const path = meta.compressionPath ?? 'svd-e8';
+
+    if (path === 'int8-per-row') {
+      return this.getEmbeddingColumnInt8(layerName, tokenId, meta);
+    }
+    if (path === 'raw-e8' || path === 'raw-e8-rht') {
+      return this.getEmbeddingColumnRawE8(layerName, tokenId, meta);
+    }
+    return this.getEmbeddingColumnSvd(layerName, tokenId, meta);
+  }
+
+  // Int8 column gather — extracts W[:, tokenId] directly from packed data.
+  // Never materializes full fp32 matrix. O(rows) work.
+  private getEmbeddingColumnInt8(
+    layerName: string,
+    tokenId: number,
+    meta: LayerMetadata
+  ): Float32Array {
+    const { rows, cols } = meta;
+    const bPath = join(this.vaultDir, `${layerName}.B.packed`);
+    if (!existsSync(bPath)) {
+      throw new Error(
+        `Crystal not found in vault (int8-per-row): ${layerName}`
+      );
+    }
+
+    let q: Int8RowQuantized;
+    const cached = this.hotInt8.get(layerName);
+    if (cached) {
+      q = cached;
+      this.hotInt8.delete(layerName);
+      this.hotInt8.set(layerName, q);
+    } else {
+      const bBuf = readFileSync(bPath);
+      q = unpackInt8RowQuantized(bBuf, rows, cols);
+      this.evictIfNeeded();
+      this.hotInt8.set(layerName, q);
+    }
+
+    const out = new Float32Array(rows);
+    for (let r = 0; r < rows; r++) {
+      out[r] = q.data[r * cols + tokenId] * q.scales[r];
+    }
+    return out;
+  }
+
+  // Raw-E8 column gather — dequant full matrix, extract column.
+  private getEmbeddingColumnRawE8(
+    layerName: string,
+    tokenId: number,
+    meta: LayerMetadata
+  ): Float32Array {
+    const { rows, cols } = meta;
+    const bPath = join(this.vaultDir, `${layerName}.B.packed`);
+    if (!existsSync(bPath)) {
+      throw new Error(`Crystal not found in vault (raw-e8): ${layerName}`);
+    }
+
+    let bMatrix: Float32Array;
+    const cached = this.hot.get(layerName);
+    if (cached) {
+      bMatrix = cached;
+      this.hot.delete(layerName);
+      this.hot.set(layerName, bMatrix);
+    } else {
+      const bBuf = readFileSync(bPath);
+      bMatrix = this.decodePackedB(bBuf, rows, cols, meta);
+      this.evictIfNeeded();
+      this.hot.set(layerName, bMatrix);
+    }
+
+    const out = new Float32Array(rows);
+    for (let i = 0; i < rows; i++) {
+      out[i] = bMatrix[i * cols + tokenId];
+    }
+    return out;
+  }
+
+  // SVD column gather — factored: W[:, tokenId] = A @ B[:, tokenId]
+  private getEmbeddingColumnSvd(
+    layerName: string,
+    tokenId: number,
+    meta: LayerMetadata
+  ): Float32Array {
+    const { rows, cols, targetRank } = meta;
 
     let cached = this.hot.get(layerName);
     if (!cached) {
       const aPath = join(this.vaultDir, `${layerName}.A.f32`);
       const bPath = join(this.vaultDir, `${layerName}.B.packed`);
       if (!existsSync(aPath) || !existsSync(bPath)) {
-        throw new Error(`Crystal not found in vault: ${layerName}`);
+        throw new Error(`Crystal not found in vault (svd-e8): ${layerName}`);
       }
       const bBuf = readFileSync(bPath);
       const matrixA = this.readAlignedF32(aPath, rows * targetRank);
@@ -304,20 +397,21 @@ export class CrystalInferenceLayer {
 
   // Evict a specific crystal from hot tier (free RAM explicitly)
   evict(layerName: string): boolean {
-    return this.hot.delete(layerName);
+    return this.hot.delete(layerName) || this.hotInt8.delete(layerName);
   }
 
   // Evict everything — use between inference calls on memory-constrained device
   evictAll(): void {
     this.hot.clear();
+    this.hotInt8.clear();
   }
 
   get hotCount(): number {
-    return this.hot.size;
+    return this.hot.size + this.hotInt8.size;
   }
 
   get hotLayerNames(): string[] {
-    return [...this.hot.keys()];
+    return [...this.hot.keys(), ...this.hotInt8.keys()];
   }
 }
 
@@ -342,6 +436,34 @@ function matmul(
       const bRowOff = p * n;
       for (let j = 0; j < n; j++) {
         C[cRowOff + j] += aip * B[bRowOff + j];
+      }
+    }
+  }
+  return C;
+}
+
+// Fused int8 matmul: A[m×k] × (scales[k] · int8B[k×n]) → C[m×n]
+// Applies per-row scale inside the inner loop. Never builds the fp32 copy.
+// Same i-p-j loop order for cache locality.
+function matmulInt8Scaled(
+  A: Float32Array,
+  q: Int8RowQuantized,
+  m: number,
+  k: number,
+  n: number
+): Float32Array {
+  const C = new Float32Array(m * n);
+  const { data, scales } = q;
+  for (let i = 0; i < m; i++) {
+    const cRowOff = i * n;
+    const aRowOff = i * k;
+    for (let p = 0; p < k; p++) {
+      const aip = A[aRowOff + p];
+      if (aip === 0) continue;
+      const scaledAip = aip * scales[p];
+      const bRowOff = p * n;
+      for (let j = 0; j < n; j++) {
+        C[cRowOff + j] += scaledAip * data[bRowOff + j];
       }
     }
   }

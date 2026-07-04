@@ -504,7 +504,7 @@ export async function streamingCompress(
             optimalScale: true,
           }
         );
-        const packed = entropyPackE8(compensated.quantizedB, 'log8');
+        const packed = entropyPackE8(compensated.quantizedB, 'float16');
         quantizedB = {
           packedBuffer: packed.packedBuffer,
           bitsPerWeight: packed.bitsPerWeight,

@@ -322,8 +322,8 @@ describe('F1+F6 dispatch integration — CrystalInferenceLayer', () => {
       for (let i = 0; i < rows; i++) s += input[i] * W[i * cols + j];
       ref[j] = s;
     }
-    // E8 quantization is lossy but should preserve direction reasonably well
-    expect(cosine(result.output, ref)).toBeGreaterThan(0.5);
+    // E8 quantization is lossy but should preserve direction well on structured data
+    expect(cosine(result.output, ref)).toBeGreaterThan(0.9);
   });
 
   it('dispatches legacy svd-e8 path (undefined compressionPath = back-compat)', () => {
@@ -420,5 +420,36 @@ describe('F1+F6 dispatch integration — CrystalInferenceLayer', () => {
     expect(() =>
       layer.forward('missing-int8.weight', new Float32Array(4), 1, 4)
     ).toThrow(/int8-per-row/);
+  });
+
+  it('getEmbeddingColumn dispatches int8-per-row (B1 regression)', () => {
+    const rows = 32,
+      cols = 64;
+    const W = makeRandomMatrix(rows, cols, 31);
+    const q = quantizeInt8PerRow(W, rows, cols);
+    const packed = packInt8RowQuantized(q);
+
+    writeMeta('emb_int8.weight', {
+      layerName: 'emb_int8.weight',
+      rows,
+      cols,
+      targetRank: cols,
+      compressedAt: 6,
+      quantizerType: 'int8-per-row',
+      compressionPath: 'int8-per-row',
+    });
+    writeBuffer('emb_int8.weight', 'B.packed', packed);
+
+    const layer = new CrystalInferenceLayer({ vaultDir: tmpDir });
+    const tokenId = 17;
+    const col = layer.getEmbeddingColumn('emb_int8.weight', tokenId);
+
+    expect(col.length).toBe(rows);
+    // Exact-direction assertion: int8 round-trip should match within fp32 epsilon
+    const unpacked = unpackInt8RowQuantized(packed, rows, cols);
+    for (let r = 0; r < rows; r++) {
+      const expected = unpacked.data[r * cols + tokenId] * unpacked.scales[r];
+      expect(col[r]).toBeCloseTo(expected, 5);
+    }
   });
 });
