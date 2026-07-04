@@ -150,6 +150,17 @@ export interface StreamingCompressOptions {
    * regardless of this config — those go int8-per-row unconditionally.
    */
   strategyConfig?: StrategyConfig;
+  /**
+   * Null-baseline harness override (Eli, F4 gate prep). When set, ALL 2D
+   * weight tensors are routed to this compressionPath regardless of name,
+   * cols heuristic, F6 exemption, or Category C. Purpose: isolate driver
+   * correctness from compression correctness. If a full-model ingest under
+   * `forceCompressionPath: 'int8-per-row'` produces PPL ratio > ~1.02, the
+   * failure is in the driver (CrystalTransformerDriver, attention, RoPE,
+   * KV cache) NOT in the compression pipeline. Do NOT use in production —
+   * bypasses all F1+F6 fidelity routing.
+   */
+  forceCompressionPath?: 'int8-per-row' | 'raw-e8' | 'raw-e8-rht';
   filter?: (tensor: GGUFTensorInfo) => boolean;
   onProgress?: (event: ProgressEvent) => void;
   maxMemoryBytes?: number;
@@ -299,15 +310,24 @@ export async function streamingCompress(
     // Decide compressionPath BEFORE loading weights so we can size the vault
     // format check correctly for resume and avoid unnecessary RHT allocation
     // on wide vocab layers (Atlas #B5).
+    //
+    // Null-baseline short-circuit: if `forceCompressionPath` is set, all F1/F6
+    // routing is bypassed and every tensor takes the same path. Used to
+    // isolate driver correctness from compression correctness in the F4 gate.
     const exempted =
-      isEmbeddingOrLMHead(tensor.name) ||
-      (totalLayers !== undefined &&
-        isFirstOrLastNLayers(tensor.name, totalLayers, 3));
+      options.forceCompressionPath === undefined &&
+      (isEmbeddingOrLMHead(tensor.name) ||
+        (totalLayers !== undefined &&
+          isFirstOrLastNLayers(tensor.name, totalLayers, 3)));
 
     let compressionPath: NonNullable<LayerMetadata['compressionPath']>;
     let targetRank: number;
 
-    if (exempted) {
+    if (options.forceCompressionPath) {
+      // Null-baseline harness — bypass all routing
+      compressionPath = options.forceCompressionPath;
+      targetRank = cols; // sentinel for all non-svd paths
+    } else if (exempted) {
       // F6 embedding / LM-head / first-last-N → per-row int8, no SVD, no RHT
       compressionPath = 'int8-per-row';
       targetRank = cols; // sentinel — no rank reduction
