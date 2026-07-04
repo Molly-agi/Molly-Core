@@ -8,6 +8,7 @@
 //   writeFileSync(`F4_EVAL_${report.modelId}_${report.timestamp}.json`, JSON.stringify(report, null, 2));
 
 import { runF4Eval, checkF4Thresholds } from './f4-eval-harness';
+import { runParallelEval } from './parallel-eval-pool';
 import { runNeedleProbe, checkNeedleThresholds } from './needle-probe';
 import { CrystalTransformerDriver } from './crystal-transformer-driver';
 import { CrystalInferenceLayer } from '../engine-titan/crystal-inference-layer';
@@ -45,6 +46,10 @@ export interface F4FullReportConfig {
 
   tier0Prompt?: string;
   maxHotLayers?: number;
+  /** Use parallel eval pool for PPL phase (worker_threads). Default true. */
+  parallel?: boolean;
+  /** Worker count for parallel eval. Default: os.cpus().length - 1 */
+  parallelWorkers?: number;
 
   onProgress?: (phase: string, detail: string) => void;
 }
@@ -117,12 +122,15 @@ function checkCoherence(text: string, tokenIds: number[]): boolean {
 
 // --- Main ---
 
-export function runF4FullReport(config: F4FullReportConfig): F4Report {
+export async function runF4FullReport(
+  config: F4FullReportConfig
+): Promise<F4Report> {
   const failures: string[] = [];
+  const useParallel = config.parallel !== false; // default true
   config.onProgress?.('ppl', 'Starting perplexity evaluation...');
 
-  // Phase 1: PPL eval
-  const pplResult = runF4Eval({
+  // Phase 1: PPL eval (parallel or sequential)
+  const pplConfig = {
     vaultDir: config.vaultDir,
     driverConfig: config.driverConfig,
     tokenIds: config.evalTokenIds,
@@ -135,10 +143,17 @@ export function runF4FullReport(config: F4FullReportConfig): F4Report {
     referenceLogits: config.referenceLogits,
     maxHotLayers: config.maxHotLayers ?? 8,
     enableNanTripwire: true,
-    onProgress: (w, total, ppl) => {
+    onProgress: (w: number, total: number, ppl: number) => {
       config.onProgress?.('ppl', `Window ${w}/${total}, PPL=${ppl.toFixed(2)}`);
     },
-  });
+  };
+
+  const pplResult = useParallel
+    ? await runParallelEval({
+        ...pplConfig,
+        workerCount: config.parallelWorkers,
+      })
+    : runF4Eval(pplConfig);
 
   const pplCheck = checkF4Thresholds(pplResult, config.modelSize);
   failures.push(...pplCheck.failures);
