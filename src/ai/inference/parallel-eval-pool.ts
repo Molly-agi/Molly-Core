@@ -142,9 +142,21 @@ export async function runParallelEval(
 
   const workerFile = fileURLToPath(import.meta.url);
 
+  // Resolve TypeScript loader for workers. Try tsx first, fall back to ts-node.
+  let loaderArgs: string[] = [];
+  try {
+    const tsxPath = require.resolve('tsx/esm');
+    loaderArgs = ['--import', tsxPath];
+  } catch {
+    // tsx not available — workers will only work with pre-compiled JS
+  }
+
   function spawnWorker(task: WindowTask): Promise<WindowResult> {
     return new Promise((resolve, reject) => {
-      const worker = new Worker(workerFile, { workerData: task });
+      const worker = new Worker(workerFile, {
+        workerData: task,
+        execArgv: loaderArgs,
+      });
       worker.on('message', (result: WindowResult) => {
         worker.terminate();
         resolve(result);
