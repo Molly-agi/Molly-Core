@@ -27,7 +27,22 @@ import { entropyPackE8 } from './e8-entropy';
 import { selectStrategy, type StrategyConfig } from './compression-strategy';
 import { quantizeInt8PerRow, packInt8RowQuantized } from './int8-row-quantizer';
 import { join } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, createReadStream } from 'fs';
+
+/**
+ * Stream a file through SHA-256 without loading it into memory.
+ * Returns lowercase hex string (64 chars). Used by streamingCompress to
+ * stamp source-GGUF hash into every crystal's meta.json per Fable v3.
+ */
+export async function hashFileSha256(filePath: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const hash = createHash('sha256');
+    const stream = createReadStream(filePath);
+    stream.on('data', (chunk) => hash.update(chunk));
+    stream.on('end', () => resolve(hash.digest('hex')));
+    stream.on('error', reject);
+  });
+}
 
 /**
  * F6 exemption — embedding + LM-head tensors are routed to per-row int8
@@ -226,6 +241,13 @@ export async function streamingCompress(
   // raw-e8 for wide layers even when `quantizerKind === 'ternary'`.
   const e8ForRaw = new E8QuantizerAdapter();
   const vault = new CrashSafeVault();
+
+  // Fable v3 requirement: SHA-256 of source GGUF stamped into every crystal's
+  // meta.json. Enables loader-time verification that the source at inference
+  // matches the source at compression (1D tensors — norms, biases — come from
+  // GGUF at inference; if the GGUF drifted, they won't match crystals silently
+  // and the model produces garbage). Computed once, streamed to bound memory.
+  const sourceGGUFSha256 = await hashFileSha256(ggufPath);
 
   // F6 Category D — extract total transformer layer count from GGUF metadata
   // once, upstream of the loop. Undefined for non-transformer models; then the
@@ -564,6 +586,7 @@ export async function streamingCompress(
       rhtPaddedCols: rhtPaddedColsForMeta,
       quantizerType: quantizedB.quantizerType,
       compressionPath,
+      sourceGGUFSha256,
     };
 
     // Vault write — only svd-* paths emit .A.f32

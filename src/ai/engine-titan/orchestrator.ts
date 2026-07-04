@@ -47,6 +47,15 @@ export interface LayerMetadata {
     | 'raw-e8'
     | 'raw-e8-rht'
     | 'int8-per-row';
+  /**
+   * SHA-256 hex of the source GGUF file this crystal was compressed from.
+   * Fable v3 requirement: the loader must verify the source GGUF at inference
+   * time matches what was compressed. 1D tensors (norms, biases) come from
+   * GGUF at inference time — if the source GGUF drifts between compress and
+   * load, those 1D tensors won't match the compressed crystals and the model
+   * silently produces garbage. Absent for legacy crystals (back-compat).
+   */
+  sourceGGUFSha256?: string;
 }
 
 export class TitanEngineOrchestrator {
