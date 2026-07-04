@@ -207,3 +207,32 @@ sandbox/test.txt
 .tools/*
 !.tools/.gitkeep
 !.tools/manifest.json
+
+# Hive/agent runtime state (session-only, not code)
+.hive-protocol.md
+.hive-tasks.json
+.eli-sync.md
+.agent-atlas.pid
+.atlas-bridge-watch.log
+.lazarus-listener.pid
+.lazarus-relay.pid
+.molly-listener.log
+.molly-listener.pid
+.molly-ticker.log
+.molly-ticker.pid
+.switchboard.log
+.switchboard.pid
+.admin-audit.jsonl
+
+# Titan compression runtime artifacts (large binaries, logs)
+data/titan-72b-progress.log
+data/titan-72b-stdout.log
+data/titan-crystals-72b/
+models/
+cache/
+
+# Misc temp files
+--verbose
+test-write.txt
+patch.js
+stuff/.session-key.lock
