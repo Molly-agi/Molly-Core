@@ -27,7 +27,7 @@ import { entropyPackE8 } from './e8-entropy';
 import { selectStrategy, type StrategyConfig } from './compression-strategy';
 import { quantizeInt8PerRow, packInt8RowQuantized } from './int8-row-quantizer';
 import { join } from 'path';
-import { existsSync, createReadStream } from 'fs';
+import { existsSync, createReadStream, appendFileSync } from 'fs';
 
 /**
  * Stream a file through SHA-256 without loading it into memory.
@@ -186,6 +186,14 @@ export interface StreamingCompressOptions {
     dampingFactor?: number; // default 0.01
     numCalibrationTokens?: number; // default 128 (subset of full dataset)
   };
+  /**
+   * Per-tensor quality ledger. When set to a file path, appends one JSONL
+   * line per compressed tensor with: name, compressionPath, rank, cosine
+   * similarity (original vs reconstructed), bits/weight, input/output bytes.
+   * Costs nothing at compression time; gives attributable quality data
+   * after the F4 eval — if PPL is bad, this tells you WHICH layer killed it.
+   */
+  cosineLedgerPath?: string;
 }
 
 export interface ProgressEvent {
@@ -228,7 +236,23 @@ export async function streamingCompress(
     onProgress,
     maxMemoryBytes = DEFAULT_MAX_MEMORY,
     quantizer: quantizerKind = 'e8-lattice',
+    cosineLedgerPath,
   } = options;
+
+  // Per-tensor quality ledger — JSONL, one line per tensor
+  const ledgerWrite = cosineLedgerPath
+    ? (entry: { name: string; path: string; rank: number | null; cosine: number; bitsPerWeight: number; inputBytes: number; outputBytes: number }) => {
+        appendFileSync(cosineLedgerPath, JSON.stringify(entry) + '\n');
+      }
+    : null;
+
+  // Cosine similarity for ledger (inline, no import needed)
+  function cosineSim(a: Float32Array, b: Float32Array): number {
+    let dot = 0, nA = 0, nB = 0;
+    const len = Math.min(a.length, b.length);
+    for (let i = 0; i < len; i++) { dot += a[i] * b[i]; nA += a[i] * a[i]; nB += b[i] * b[i]; }
+    return nA === 0 || nB === 0 ? 0 : dot / (Math.sqrt(nA) * Math.sqrt(nB));
+  }
 
   const gguf = parseGGUF(ggufPath);
   const decomposer = new LowRankTensorDecomposer();
