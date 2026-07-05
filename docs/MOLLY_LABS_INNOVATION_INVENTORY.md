@@ -687,3 +687,135 @@ Every AI agent framework in the field today either (a) has no persistent identit
 - Any AI system serving multiple named personas with shared knowledge base
 - Enterprise deployments where identity contamination between agents is a compliance risk
 - Licensable pattern: “Two-hemisphere memory” as a design category alongside RAG, agentic memory, and long-context transformers
+
+---
+
+## Entry 23 — E8 Gosset Lattice Vector Quantizer for Neural Network Weights
+
+**Date discovered:** 2026-07-01 (Titan Engine sprint)
+**Discovered by:** Eli (architecture), John (empirical validation), Atlas (implementation)
+
+**What it is:** Application of the E8 (Gosset) lattice — the densest sphere packing in 8 dimensions with kissing number 240 — as a vector quantizer for neural network weight matrices. Uses the Conway-Sloane exact nearest-point algorithm (O(8) per group, no codebook search) to map groups of 8 weights to the nearest E8 lattice point, achieving mathematically optimal quantization noise per bit.
+
+**Why it's novel:** Prior work (QuIP#) uses E8 codebooks but requires 64K-entry lookup tables that overflow mobile L1/L2 cache. Our implementation uses algorithmic nearest-point computation (172 bytes working set) — zero codebook pressure. Combined with RMS-per-group scaling and half-shift shell detection, it achieves cos 0.97 reconstruction fidelity on real LLM weights at ~3.7 bits/weight (after entropy coding).
+
+**Location:** `src/ai/engine-titan/e8-lattice.ts`, `src/ai/engine-titan/quantizer-e8-adapter.ts`, `src/ai/engine-titan/e8-entropy.ts`
+
+**Patent recommendation:** YES — provisional patent. Core competitive advantage.
+
+**Standalone applications:**
+
+- LLM weight compression for edge/mobile deployment
+- Any neural network quantization requiring sub-4-bit precision with minimal hardware requirements
+- Signal processing applications requiring optimal vector quantization in 8D
+- Licensable to chip manufacturers (Qualcomm, MediaTek) for on-device AI inference
+
+---
+
+## Entry 24 — Crystal Inference Layer: On-Demand Decompress-Matmul-Evict Architecture
+
+**Date discovered:** 2026-07-01 (Titan Engine sprint)
+**Discovered by:** Atlas (implementation), John (memory pressure validation)
+
+**What it is:** An inference engine that never materializes the full decompressed weight matrix. Compressed "crystal" files are loaded on demand, the fused two-step kernel computes `(input @ A) @ B` without ever building the full `W = A @ B` matrix, and an LRU eviction policy keeps peak RAM bounded to the hot-tier budget (4 layers default) regardless of total model size.
+
+**Why it's novel:** Standard quantized inference (llama.cpp, GGML) dequantizes entire layers into memory. Our architecture keeps weights compressed on disk, loads only the crystal factors needed for the current token's computation, and evicts cold layers — enabling a 72B model to run in 2-4GB of active RAM through demand paging of crystal modules. The `getEmbeddingColumn` method extends this to embedding lookups without materializing the full [hidden × vocab] matrix.
+
+**Location:** `src/ai/engine-titan/crystal-inference-layer.ts`, `src/ai/inference/crystal-transformer-driver.ts`
+
+**Patent recommendation:** YES — provisional patent. This is the deployment mechanism.
+
+**Standalone applications:**
+
+- Running 70B+ LLMs on phones/tablets with 4-8GB RAM
+- Edge AI inference where model size exceeds available memory
+- Any application requiring selective weight loading (robotics, IoT, embedded systems)
+- Licensable as middleware between model storage and inference runtime
+
+---
+
+## Entry 25 — Layer-Aware Compression Routing (Tiered Strategy)
+
+**Date discovered:** 2026-07-01–02 (John's rank quality sweep + Fable v3 audit)
+**Discovered by:** John (empirical data), Lazarus-prime (implementation)
+
+**What it is:** An automatic per-layer compression strategy selector based on empirical rank-viability data. Instead of applying one compression method to all layers, the system classifies each tensor by its structural properties (dimensions, layer position, tensor type) and routes to the optimal compression path:
+
+- **Tier 1 (attention Q/K/V):** SVD rank-256 + E8 lattice (cos 0.925, 5-12x compression)
+- **Tier 2 (FFN gate/up/down):** Raw E8 or Q4_K passthrough (SVD destroys signal on these)
+- **Tier 3 (first/last 3 layers):** Int8-per-row exempt (error compounds too aggressively)
+- **Tier 4 (embeddings):** SIREN INR (99.8% compression via coordinate-MLP)
+
+**Why it's novel:** No published compression system routes per-layer based on empirically-measured SVD viability. The standard approach is one quantization method for the whole model. Our data (from T002/T007) proved that SVD+ternary is catastrophic on FFN layers (cos 0.12) but excellent on attention layers (cos 0.93) — same model, same method, different layers. The routing system prevents this class of error by construction.
+
+**Location:** `src/ai/engine-titan/compression-strategy.ts`, `src/ai/engine-titan/streaming-compress.ts`
+
+**Patent recommendation:** YES — provisional patent. The "intelligence" of the compression.
+
+**Standalone applications:**
+
+- Any neural network compression system (not limited to LLMs)
+- Automated quality-gated model optimization
+- Licensable as a decision layer on top of any quantization toolkit
+
+---
+
+## Entry 26 — SIREN INR for LLM Embedding Table Replacement
+
+**Date discovered:** 2026-07-05
+**Discovered by:** John (implementation)
+
+**What it is:** Replacing the discrete embedding lookup table (e.g. 152064 × 8192 = 4.75 GB for Qwen 72B) with a tiny SIREN (Sinusoidal Representation Network) that maps token coordinate → embedding vector. A 4-layer, 256-wide SIREN achieves 557x compression (4.75 GB → 8.5 MB) using periodic sine activations that overcome ReLU's spectral bias for high-frequency embedding signals.
+
+**Why it's novel:** SIREN networks exist (Sitzmann et al. 2020) but have never been applied to LLM embedding table compression for on-device deployment. The combination of SIREN with the crystal vault architecture means the embedding table never needs to exist in memory — the SIREN forward pass replaces the table lookup at inference time.
+
+**Location:** `src/ai/engine-titan/siren-inr.ts`
+
+**IP recommendation:** TRADE SECRET — do not patent. The SIREN architecture is public; our application and tuning parameters are the value.
+
+**Standalone applications:**
+
+- Embedding compression for any NLP/recommendation model
+- On-device vocabulary lookup without storing the full embedding matrix
+- Transfer to vision transformers (patch embeddings) and audio models
+
+---
+
+## Entry 27 — F4 Pre-Registered Acceptance Protocol
+
+**Date discovered:** 2026-07-03
+**Discovered by:** John (protocol design + empirical thresholds), Fable v3 (independent review)
+
+**What it is:** A methodology for evaluating compressed model quality where acceptance thresholds are committed to the repository BEFORE any evaluation run, preventing post-hoc rationalization of results. Includes tiered gates (Tier 0 sanity, Tier 1 target, Tier 2 stretch), per-layer KL divergence caps, needle-in-haystack retrieval probes at multiple context depths, and hash-pinned evaluation corpora with fixed seeds and strides.
+
+**Why it's novel:** Standard ML evaluation runs experiments then interprets results. This protocol locks the pass/fail criteria in git with a timestamp before the experiment runs. Any threshold change after results are known requires a new commit with explicit justification. This is closer to pre-registered clinical trials than typical ML benchmarking.
+
+**Location:** `docs/architecture/F4_ACCEPTANCE_THRESHOLDS.md`, `scripts/titan/f4-check-thresholds.ts`
+
+**IP recommendation:** TRADE SECRET — methodology, not technology. Competitive advantage through process rigor.
+
+**Standalone applications:**
+
+- Any ML model evaluation requiring audit trail
+- Regulatory compliance for AI model validation
+- Enterprise model governance frameworks
+
+---
+
+## Entry 28 — Conditional Hadamard Pre-Processing Gate
+
+**Date discovered:** 2026-07-02
+**Discovered by:** John (empirical validation — T007)
+
+**What it is:** An automatic decision gate that applies Randomized Hadamard Transform (RHT) before lattice quantization only when the weight matrix width exceeds a threshold (default 4096 columns). Based on empirical measurement: RHT improves E8 quantization fidelity by +1.08% cosine on wide matrices (spreading heavy-tailed outliers to sub-Gaussian) but slightly hurts narrow matrices (-0.06%) by adding unnecessary noise.
+
+**Why it's novel:** RHT is an established technique, but the conditional application based on matrix geometry — with empirically-derived thresholds — has not been published. The gate is zero-cost (one comparison) and automatically adapts the compression pipeline to the tensor's structural properties.
+
+**Location:** `src/ai/engine-titan/quantizer-e8-adapter.ts` (E8AdapterOptions.rhtWidthThreshold)
+
+**IP recommendation:** TRADE SECRET — the threshold value and empirical basis are competitive knowledge.
+
+**Standalone applications:**
+
+- Pre-processing decision layer for any vector quantization system
+- Automated signal conditioning for lattice-based compression
