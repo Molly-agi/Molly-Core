@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/kotms.ts
 //
 // KOTMS — Kronecker Orthogonal Tri-Modal Shaping.

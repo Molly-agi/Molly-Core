@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 /**
  * nan-tripwire.ts  —  catch a poisoned activation at its source
  *

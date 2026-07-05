@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/weight-crystal-adapter.ts
 
 import type { EvictableCrystal } from '../memory/crystal-library-eviction';

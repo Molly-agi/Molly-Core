@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/e8-entropy.ts
 //
 // Static Huffman entropy coding for E_8 lattice coordinates.

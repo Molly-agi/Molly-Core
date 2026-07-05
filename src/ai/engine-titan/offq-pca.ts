@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/offq-pca.ts
 //
 // OffQ — Taming Structured Outliers via Top-1 PCA Concentration + Hadamard Absorption.

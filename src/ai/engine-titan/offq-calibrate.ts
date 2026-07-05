@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/offq-calibrate.ts
 //
 // Pre-computes OffQ PCA states per-layer from calibration activations.

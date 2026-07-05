@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/int8-row-quantizer.ts
 //
 // Per-row int8 quantizer for embedding + LM-head layers.

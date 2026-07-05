@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/vault-verifier.ts
 //
 // Fable v3 requirement: verify at inference load time that the source GGUF

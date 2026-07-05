@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/crystal-inference-layer.ts
 //
 // On-demand crystal load → reconstruct → matmul → evict.

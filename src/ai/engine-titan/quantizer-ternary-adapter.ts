@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/quantizer-ternary-adapter.ts
 //
 // Adapter wrapping existing TitanStreamQuantizer behind the TitanQuantizer interface.

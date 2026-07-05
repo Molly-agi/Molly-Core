@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/quantizer-e8-adapter.ts
 //
 // Adapter wrapping E_8 lattice quantizer behind the TitanQuantizer interface.

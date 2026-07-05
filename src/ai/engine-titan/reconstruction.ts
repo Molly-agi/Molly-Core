@@ -1,3 +1,4 @@
+// Copyright (c) 2026 Molly Labs Inc. Licensed under AGPL-3.0.
 // src/ai/engine-titan/reconstruction.ts
 
 import { inverseRHT, type RHTMeta } from './hadamard-transform';
