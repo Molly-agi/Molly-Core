@@ -1,4 +1,4 @@
-# F4 Perplexity Evaluation Report — July 7, 2026
+# Legacy Default-Settings Baseline Evals (Pre-Tier) — July 7, 2026
 
 **Prepared by:** John (edge-case role, Titan Engine sprint)
 **For:** Fable v3 review, Eric, internal record
