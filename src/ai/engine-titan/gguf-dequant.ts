@@ -216,6 +216,22 @@ const DEQUANT_DISPATCH: Partial<Record<GGUFType, DequantFn>> = {
   [GGUFType.F16]: dequantBlockF16,
 };
 
+/**
+ * Reads and dequantizes a tensor from the GGUF file.
+ *
+ * ORIENTATION CONTRACT (2026-07-07, post-transpose-bug-fix):
+ * - 1D tensors: returned as-is (norms, biases).
+ * - 2D tensors: returned as row-major [rows × cols] where:
+ *     rows = dimensions[0] (ne[0] in GGUF = output features)
+ *     cols = dimensions[1] (ne[1] in GGUF = input features)
+ *   GGML stores 2D weights as [out × in] with ne[0] (out) fastest.
+ *   This function returns data in that native order WITHOUT transposition.
+ *   Callers performing y = x @ W must index as: y[j] = sum_i(x[i] * W[j * cols + i])
+ *   where j iterates output dim and i iterates input dim.
+ *
+ * The CrystalTransformerDriver and GgufFallbackLoader use this convention.
+ * The decomposer treats the returned buffer as [rows × cols] for SVD factorization.
+ */
 export function readTensorData(
   gguf: GGUFFile,
   tensor: GGUFTensorInfo
