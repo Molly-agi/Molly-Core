@@ -11,15 +11,34 @@ import { readTensorData } from '../engine-titan/gguf-dequant';
 export class GgufFallbackLoader {
   private readonly gguf: GGUFFile;
   private readonly cache = new Map<string, Float32Array>();
+  private readonly pinned = new Map<string, Float32Array>();
   private readonly maxCached: number;
 
-  constructor(ggufPath: string, maxCached = 4) {
+  constructor(ggufPath: string, maxCached = 10) {
     this.gguf = parseGGUF(ggufPath);
     this.maxCached = maxCached;
   }
 
-  /** Get full dequantized tensor by name. Cached with LRU eviction. */
+  /**
+   * Pin a tensor permanently in memory (exempt from LRU eviction).
+   * Use for token_embd which is accessed every single token.
+   */
+  pin(name: string): void {
+    if (this.pinned.has(name)) return;
+    const tensor = this.gguf.tensors.find((t) => t.name === name);
+    if (!tensor) throw new Error(`Tensor not found in GGUF: ${name}`);
+    const data = readTensorData(this.gguf, tensor);
+    this.pinned.set(name, data);
+    // Remove from LRU if it was there
+    this.cache.delete(name);
+  }
+
+  /** Get full dequantized tensor by name. Pinned tensors served instantly. LRU for the rest. */
   getTensor(name: string): Float32Array {
+    // Check pinned first (zero-cost, no eviction)
+    const pinnedVal = this.pinned.get(name);
+    if (pinnedVal) return pinnedVal;
+
     if (this.cache.has(name)) {
       const val = this.cache.get(name)!;
       this.cache.delete(name);
