@@ -82,9 +82,12 @@ export class GgufFallbackLoader {
   }
 
   /**
-   * Forward: y = x @ W^T (GGML convention).
-   * W is stored as [outFeatures × inFeatures] row-major (ne[0]=out fastest).
-   * Correct matmul: y[j] = sum_i(x[i] * W[j * inDim + i])
+   * Forward: y = x @ W (GGML layout).
+   * GGML stores linear weights as [ne[0]=inFeatures, ne[1]=outFeatures] with ne[0] fastest.
+   * Buffer layout: W[inIdx * outDim + outIdx]
+   * Correct matmul: y[j] = sum_i(x[i] * W[i * outDim + j])
+   *
+   * Verified by one-hot probe: ffn_gate [8192,29568] matches W[i*29568+j] (Option A).
    */
   forward(
     name: string,
@@ -97,7 +100,7 @@ export class GgufFallbackLoader {
     for (let j = 0; j < outDim; j++) {
       let sum = 0;
       for (let i = 0; i < inDim; i++) {
-        sum += input[i] * W[j * inDim + i];
+        sum += input[i] * W[i * outDim + j];
       }
       output[j] = sum;
     }
