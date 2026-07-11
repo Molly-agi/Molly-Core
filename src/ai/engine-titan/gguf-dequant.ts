@@ -137,26 +137,39 @@ export function dequantBlockQ6_K(
   output: Float32Array,
   outOffset: number
 ): void {
+  // Q6_K block: ql[128] + qh[64] + scales[16](int8) + d(f16) = 210 bytes
+  // Reference: ggml-quants.c dequantize_row_q6_K
   const ql = block.subarray(0, 128);
   const qh = block.subarray(128, 192);
   const superScale = f16ToF32(block.readUInt16LE(208));
 
-  for (let j = 0; j < 16; j++) {
-    const sc = block.readInt8(192 + j);
-    const d = superScale * sc;
+  // Two halves (n=0, n=128), each processes 128 values
+  for (let n = 0; n < 256; n += 128) {
+    const qlOff = (n / 128) * 64; // ql pointer: 0 for first half, 64 for second
+    const qhOff = (n / 128) * 32; // qh pointer: 0 for first half, 32 for second
 
-    for (let i = 0; i < 16; i++) {
-      const idx = j * 16 + i;
-      const qlIdx = Math.floor(idx / 2);
-      const qlByte = ql[qlIdx];
-      const qlNibble = idx % 2 === 0 ? qlByte & 0x0f : (qlByte >> 4) & 0x0f;
+    for (let l = 0; l < 32; l++) {
+      const is = Math.floor(n / 16) + Math.floor(l / 16); // sub-block index for sc
 
-      const qhIdx = Math.floor(idx / 4);
-      const qhShift = (idx % 4) * 2;
-      const qhBits = (qh[qhIdx] >> qhShift) & 0x03;
+      // 4 values per iteration from the same ql/qh positions
+      const qlByte0 = ql[qlOff + l];
+      const qlByte32 = ql[qlOff + l + 32];
+      const qhByte = qh[qhOff + l];
 
-      const q = (qlNibble | (qhBits << 4)) - 32;
-      output[outOffset + idx] = q * d;
+      const q1 = ((qlByte0 & 0x0f) | (((qhByte >> 0) & 3) << 4)) - 32;
+      const q2 = ((qlByte32 & 0x0f) | (((qhByte >> 2) & 3) << 4)) - 32;
+      const q3 = ((qlByte0 >> 4) | (((qhByte >> 4) & 3) << 4)) - 32;
+      const q4 = ((qlByte32 >> 4) | (((qhByte >> 6) & 3) << 4)) - 32;
+
+      const sc0 = block.readInt8(192 + is + 0);
+      const sc2 = block.readInt8(192 + is + 2);
+      const sc4 = block.readInt8(192 + is + 4);
+      const sc6 = block.readInt8(192 + is + 6);
+
+      output[outOffset + n + l + 0] = superScale * sc0 * q1;
+      output[outOffset + n + l + 32] = superScale * sc2 * q2;
+      output[outOffset + n + l + 64] = superScale * sc4 * q3;
+      output[outOffset + n + l + 96] = superScale * sc6 * q4;
     }
   }
 }
