@@ -67,15 +67,18 @@ export function dequantBlockQ5_0(
   outOffset: number
 ): void {
   const scale = f16ToF32(block.readUInt16LE(0));
-  // qh is a 32-bit bitmask: bit i is the high bit of weight i
+  // qh: 4 bytes (uint32) — bit i is the 5th bit of weight i
   const qh = block.readUInt32LE(2);
-  for (let i = 0; i < 32; i++) {
-    const byteIdx = 6 + (i >> 1);
-    const byte = block[byteIdx];
-    const lo4 = (i & 1) === 0 ? byte & 0x0f : (byte >> 4) & 0x0f;
-    const hi1 = (qh >>> i) & 0x01;
-    const q = (lo4 | (hi1 << 4)) - 16;
-    output[outOffset + i] = q * scale;
+  // qs: 16 bytes of packed 4-bit quants
+  // Layout (matching gguf.quants): positions 0-15 get low nibbles, 16-31 get high nibbles
+  for (let i = 0; i < 16; i++) {
+    const byte = block[6 + i];
+    const lo = byte & 0x0F;
+    const hi = (byte >> 4) & 0x0F;
+    const qh_lo = (qh >>> i) & 0x01;
+    const qh_hi = (qh >>> (i + 16)) & 0x01;
+    output[outOffset + i] = ((lo | (qh_lo << 4)) - 16) * scale;
+    output[outOffset + i + 16] = ((hi | (qh_hi << 4)) - 16) * scale;
   }
 }
 
@@ -118,16 +121,19 @@ export function dequantBlockQ4_K(
   }
 
   // 128 bytes of quants at offset 16
-  // 8 sub-blocks × 16 bytes each. Within sub-block j:
-  //   byte l gives weight[j*32 + l] (low nibble) and weight[j*32 + l + 16] (high nibble)
+  // 4 chunks × 32 bytes each. For chunk j (per ggml-quants.c dequantize_row_q4_K):
+  //   32 low nibbles  → output[j*64 .. j*64+31] with scale/min at index 2*j
+  //   32 high nibbles → output[j*64+32 .. j*64+63] with scale/min at index 2*j+1
   const qBase = 16;
-  for (let j = 0; j < 8; j++) {
-    const sc = d * scales[j];
-    const mn = dmin * mins[j];
-    for (let l = 0; l < 16; l++) {
-      const qByte = block[qBase + j * 16 + l];
-      output[outOffset + j * 32 + l] = sc * (qByte & 0x0F) - mn;
-      output[outOffset + j * 32 + l + 16] = sc * ((qByte >> 4) & 0x0F) - mn;
+  for (let j = 0; j < 4; j++) {
+    const d1 = d * scales[2 * j];
+    const m1 = dmin * mins[2 * j];
+    const d2 = d * scales[2 * j + 1];
+    const m2 = dmin * mins[2 * j + 1];
+    for (let l = 0; l < 32; l++) {
+      const qByte = block[qBase + j * 32 + l];
+      output[outOffset + j * 64 + l] = d1 * (qByte & 0x0F) - m1;
+      output[outOffset + j * 64 + 32 + l] = d2 * ((qByte >> 4) & 0x0F) - m2;
     }
   }
 }
@@ -179,31 +185,49 @@ export function dequantBlockQ5_K(
   output: Float32Array,
   outOffset: number
 ): void {
-  const superScale = f16ToF32(block.readUInt16LE(0));
-  const superMin = f16ToF32(block.readUInt16LE(2));
-  const scalesAndMins = block.subarray(4, 16); // 12 bytes
-  const qh = block.subarray(16, 48); // 32 bytes — high bits (1 per weight)
-  const qs = block.subarray(48, 176); // 128 bytes — lower 4 bits (2 per byte)
+  // Q5_K block: 176 bytes -> 256 values
+  // Layout: d(2) + dmin(2) + scales(12) + qh(32) + qs(128) = 176
+  const d = f16ToF32(block.readUInt16LE(0));
+  const dmin = f16ToF32(block.readUInt16LE(2));
 
-  for (let j = 0; j < 8; j++) {
-    let sc: number, m: number;
-    if (j < 4) {
-      sc = scalesAndMins[j] & 0x3f;
-      m = scalesAndMins[j + 4] & 0x3f;
-    } else {
-      sc =
-        ((scalesAndMins[j + 4] & 0xf0) >> 4) |
-        ((scalesAndMins[j - 4] >> 6) << 4);
-      m = (scalesAndMins[j + 4] & 0x0f) | ((scalesAndMins[j] >> 6) << 4);
-    }
-    const d = superScale * sc;
-    const dm = superMin * m;
+  // Scale/min extraction (same as Q4_K)
+  const scales = new Float32Array(8);
+  const mins = new Float32Array(8);
+  for (let i = 0; i < 4; i++) {
+    scales[i] = block[4 + i] & 0x3F;
+    mins[i] = block[4 + i + 4] & 0x3F;
+  }
+  for (let i = 0; i < 4; i++) {
+    const scHi = (block[4 + i] >> 6) & 0x03;
+    const mnHi = (block[4 + i + 4] >> 6) & 0x03;
+    const scLo = block[4 + 8 + i] & 0x0F;
+    const mnLo = (block[4 + 8 + i] >> 4) & 0x0F;
+    scales[4 + i] = scLo | (scHi << 4);
+    mins[4 + i] = mnLo | (mnHi << 4);
+  }
 
-    for (let i = 0; i < 32; i++) {
-      const l = j * 32 + i;
-      const lo4 = (qs[l >> 1] >> ((l & 1) << 2)) & 0x0f;
-      const hi1 = (qh[l >> 3] >> (l & 7)) & 0x01;
-      output[outOffset + l] = (lo4 | (hi1 << 4)) * d - dm;
+  const qhBase = 16;  // 32 bytes of high bits
+  const qsBase = 48;  // 128 bytes of low 4-bit quants
+
+  // 4 chunks × 32 bytes each (per ggml-quants.c dequantize_row_q5_K):
+  //   32 low nibbles  → output[j*64 .. j*64+31] with scale/min at index 2*j
+  //   32 high nibbles → output[j*64+32 .. j*64+63] with scale/min at index 2*j+1
+  // High bit for low-nibble value l: (qh[l] >> (2*j)) & 1
+  // High bit for high-nibble value l: (qh[l] >> (2*j+1)) & 1
+  for (let j = 0; j < 4; j++) {
+    const d1 = d * scales[2 * j];
+    const m1 = dmin * mins[2 * j];
+    const d2 = d * scales[2 * j + 1];
+    const m2 = dmin * mins[2 * j + 1];
+    for (let l = 0; l < 32; l++) {
+      const qsByte = block[qsBase + j * 32 + l];
+      const qhByte = block[qhBase + l];
+      const lo4 = qsByte & 0x0F;
+      const hi4 = (qsByte >> 4) & 0x0F;
+      const hbitLo = (qhByte >> (2 * j)) & 1;
+      const hbitHi = (qhByte >> (2 * j + 1)) & 1;
+      output[outOffset + j * 64 + l] = d1 * (lo4 | (hbitLo << 4)) - m1;
+      output[outOffset + j * 64 + 32 + l] = d2 * (hi4 | (hbitHi << 4)) - m2;
     }
   }
 }
