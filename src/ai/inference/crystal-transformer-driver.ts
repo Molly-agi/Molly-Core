@@ -157,7 +157,10 @@ export class CrystalTransformerDriver {
 
       // e. Append to KV cache (per-layer, flat preallocated buffer)
       kvCache.append(l, k, vProj);
-      const tokenCount = kvCache.length;
+      // Token count = current position + 1 (includes self).
+      // Cannot use kvCache.length here — it only increments at the last layer,
+      // so layers 0..N-2 would see stale length and skip attention entirely.
+      const tokenCount = currentPos + 1;
 
       // f. Grouped attention (qHeads/kvHeads mapping)
       const attnOut = new Float32Array(this.hiddenSize);

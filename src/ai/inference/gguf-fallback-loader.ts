@@ -82,12 +82,15 @@ export class GgufFallbackLoader {
   }
 
   /**
-   * Forward: y = x @ W (GGML layout).
-   * GGML stores linear weights as [ne[0]=inFeatures, ne[1]=outFeatures] with ne[0] fastest.
-   * Buffer layout: W[inIdx * outDim + outIdx]
-   * Correct matmul: y[j] = sum_i(x[i] * W[i * outDim + j])
+   * Forward: y = x @ W^T (GGML convention).
+   * GGML stores weight buffer with ne[0] (=inFeatures for linear layers) as fastest dimension.
+   * For tensor with ne=[in, out]: element W(in=i, out=j) = buffer[j * ne[0] + i] = buffer[j * inDim + i]
+   * Matmul: y[j] = sum_i(x[i] * W[j * inDim + i])
    *
-   * Verified by one-hot probe: ffn_gate [8192,29568] matches W[i*29568+j] (Option A).
+   * This is consistent with getColumn() which reads contiguous slices at tokenId * hidden,
+   * since ne[0]=hidden is the fastest (contiguous) dimension in GGML embeddings.
+   *
+   * Contract: callers pass inDim = ne[0] of the weight tensor.
    */
   forward(
     name: string,
@@ -100,7 +103,7 @@ export class GgufFallbackLoader {
     for (let j = 0; j < outDim; j++) {
       let sum = 0;
       for (let i = 0; i < inDim; i++) {
-        sum += input[i] * W[i * outDim + j];
+        sum += input[i] * W[j * inDim + i];
       }
       output[j] = sum;
     }

@@ -98,39 +98,53 @@ export function dequantBlockQ4_K(
   const superScale = f16ToF32(block.readUInt16LE(0));
   const superMin = f16ToF32(block.readUInt16LE(2));
 
-  const scalesAndMins = block.subarray(4, 4 + 12);
+  const scales = block.subarray(4, 4 + 12);
   const qs = block.subarray(16, 16 + 128);
 
-  for (let j = 0; j < 8; j++) {
-    let sc: number, m: number;
-    if (j < 4) {
-      sc = scalesAndMins[j] & 0x3f;
-      m = scalesAndMins[j + 4] & 0x3f;
+  // Reference: ggml-quants.c dequantize_row_q4_K
+  // 4 pairs of sub-blocks. Each pair processes 32 bytes of quantized data:
+  //   low nibble → sub-block 2j (32 values, positions j*64 .. j*64+31)
+  //   high nibble → sub-block 2j+1 (32 values, positions j*64+32 .. j*64+63)
+  // Each sub-block has its own scale and min from get_scale_min_k4.
+
+  let qOffset = 0;
+  let is = 0;
+
+  for (let j = 0; j < 4; j++) {
+    // get_scale_min_k4 for sub-block is (low nibbles)
+    let sc0: number, m0: number;
+    if (is < 4) {
+      sc0 = scales[is] & 63;
+      m0 = scales[is + 4] & 63;
     } else {
-      sc =
-        ((scalesAndMins[j + 4] & 0xf0) >> 4) |
-        ((scalesAndMins[j - 4] >> 6) << 4);
-      m = (scalesAndMins[j + 4] & 0x0f) | ((scalesAndMins[j] >> 6) << 4);
+      sc0 = (scales[is + 4] & 0x0f) | ((scales[is - 4] >> 6) << 4);
+      m0 = (scales[is + 4] >> 4) | ((scales[is] >> 6) << 4);
     }
+    is++;
 
-    const d = superScale * sc;
-    const dm = superMin * m;
-
-    for (let i = 0; i < 16; i++) {
-      const qIdx = j * 16 + i;
-      const byteIdx = Math.floor(qIdx / 2);
-      const byte = qs[byteIdx];
-      const nibble = qIdx % 2 === 0 ? byte & 0x0f : (byte >> 4) & 0x0f;
-      output[outOffset + j * 32 + i] = nibble * d - dm;
+    // get_scale_min_k4 for sub-block is (high nibbles)
+    let sc1: number, m1: number;
+    if (is < 4) {
+      sc1 = scales[is] & 63;
+      m1 = scales[is + 4] & 63;
+    } else {
+      sc1 = (scales[is + 4] & 0x0f) | ((scales[is - 4] >> 6) << 4);
+      m1 = (scales[is + 4] >> 4) | ((scales[is] >> 6) << 4);
     }
+    is++;
 
-    for (let i = 0; i < 16; i++) {
-      const qIdx = j * 16 + i + 128;
-      const byteIdx = Math.floor(qIdx / 2);
-      const byte = qs[byteIdx];
-      const nibble = qIdx % 2 === 0 ? byte & 0x0f : (byte >> 4) & 0x0f;
-      output[outOffset + j * 32 + 16 + i] = nibble * d - dm;
+    const d0 = superScale * sc0;
+    const dm0 = superMin * m0;
+    const d1 = superScale * sc1;
+    const dm1 = superMin * m1;
+
+    // 32 bytes → low nibbles use d0/dm0, high nibbles use d1/dm1
+    for (let l = 0; l < 32; l++) {
+      const byte = qs[qOffset + l];
+      output[outOffset + j * 64 + l] = (byte & 0x0f) * d0 - dm0;
+      output[outOffset + j * 64 + l + 32] = ((byte >> 4) & 0x0f) * d1 - dm1;
     }
+    qOffset += 32;
   }
 }
 
