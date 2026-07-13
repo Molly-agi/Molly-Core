@@ -7,16 +7,33 @@
 
 import { parseGGUF, type GGUFFile } from '../engine-titan/gguf-ingest';
 import { readTensorData } from '../engine-titan/gguf-dequant';
+import { getMatmulPool, type MatmulPool } from './matmul-pool';
 
 export class GgufFallbackLoader {
   private readonly gguf: GGUFFile;
   private readonly cache = new Map<string, Float32Array>();
   private readonly pinned = new Map<string, Float32Array>();
   private readonly maxCached: number;
+  private pool: MatmulPool | null = null;
+  private poolReady = false;
 
   constructor(ggufPath: string, maxCached = 10) {
     this.gguf = parseGGUF(ggufPath);
     this.maxCached = maxCached;
+  }
+
+  /**
+   * Initialize the parallel matmul pool. Call once before inference.
+   * If not called, forward() falls back to single-threaded.
+   */
+  async initPool(): Promise<void> {
+    if (this.poolReady) return;
+    this.pool = getMatmulPool();
+    await this.pool.waitReady();
+    this.poolReady = true;
+    console.log(
+      `[GgufFallbackLoader] Matmul pool ready (${this.pool.poolSize} workers)`
+    );
   }
 
   /**
@@ -82,15 +99,28 @@ export class GgufFallbackLoader {
   }
 
   /**
-   * Forward: y = x @ W^T (GGML convention).
+   * Forward: y = x @ W^T (GGML convention) — PARALLEL via worker threads.
+   * Uses all available CPU cores. Falls back to single-threaded if pool not initialized.
+   */
+  async forwardAsync(
+    name: string,
+    input: Float32Array,
+    inDim: number,
+    outDim: number
+  ): Promise<Float32Array> {
+    const W = this.getTensor(name);
+    if (this.poolReady && this.pool) {
+      return this.pool.forward(W, input, inDim, outDim);
+    }
+    // Fallback: single-threaded
+    return this.forward(name, input, inDim, outDim);
+  }
+
+  /**
+   * Forward: y = x @ W^T (GGML convention) — single-threaded.
    * GGML stores weight buffer with ne[0] (=inFeatures for linear layers) as fastest dimension.
    * For tensor with ne=[in, out]: element W(in=i, out=j) = buffer[j * ne[0] + i] = buffer[j * inDim + i]
    * Matmul: y[j] = sum_i(x[i] * W[j * inDim + i])
-   *
-   * This is consistent with getColumn() which reads contiguous slices at tokenId * hidden,
-   * since ne[0]=hidden is the fastest (contiguous) dimension in GGML embeddings.
-   *
-   * Contract: callers pass inDim = ne[0] of the weight tensor.
    */
   forward(
     name: string,

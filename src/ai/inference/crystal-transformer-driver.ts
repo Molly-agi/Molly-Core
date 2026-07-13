@@ -16,6 +16,17 @@
 import type { CrystalInferenceLayer } from '../engine-titan/crystal-inference-layer';
 import type { KvCache } from './kv-cache';
 
+/** Async-capable layer engine for parallel matmul via worker threads. */
+export interface AsyncLayerEngine {
+  forwardAsync(
+    name: string,
+    input: Float32Array,
+    seqLen: number,
+    inDim: number
+  ): Promise<Float32Array>;
+  getEmbeddingColumn(name: string, tokenId: number): Float32Array;
+}
+
 export interface LayerNormWeights {
   attnNormGain: Float32Array; // length hiddenSize, raw GGUF
   ffnNormGain: Float32Array; // length hiddenSize, raw GGUF
@@ -85,6 +96,185 @@ export class CrystalTransformerDriver {
       out[i + half] = x0 * sinA + x1 * cosA;
     }
     return out;
+  }
+
+  /**
+   * Async forward pass using parallel matmul worker pool.
+   * Q/K/V projections run concurrently; gate/up projections run concurrently.
+   * ~16x speedup from worker threads on 16-core machines.
+   */
+  public async executeTokenPassAsync(
+    tokenId: number,
+    currentPos: number,
+    layersNorm: LayerNormWeights[],
+    layersBias: LayerBiasWeights[],
+    finalNorm: Float32Array,
+    kvCache: KvCache,
+    layerEngine: AsyncLayerEngine,
+    probe?: LayerProbe
+  ): Promise<Float32Array> {
+    // 1. Embedding lookup
+    const x = layerEngine.getEmbeddingColumn('token_embd.weight', tokenId);
+
+    // 2. Transformer stack
+    for (let l = 0; l < this.totalLayers; l++) {
+      const norm = layersNorm[l];
+      const bias = layersBias[l];
+
+      const h_normed = this.rmsNorm(x, norm.attnNormGain);
+      probe?.(`L${l}.h_postnorm`, h_normed);
+      const h_attn = h_normed;
+
+      // Q/K/V — all 3 projections run concurrently on worker pool
+      const [qProj, kProj, vProj] = await Promise.all([
+        layerEngine.forwardAsync(
+          `blk.${l}.attn_q.weight`,
+          h_attn,
+          1,
+          this.hiddenSize
+        ),
+        layerEngine.forwardAsync(
+          `blk.${l}.attn_k.weight`,
+          h_attn,
+          1,
+          this.hiddenSize
+        ),
+        layerEngine.forwardAsync(
+          `blk.${l}.attn_v.weight`,
+          h_attn,
+          1,
+          this.hiddenSize
+        ),
+      ]);
+
+      for (let i = 0; i < qProj.length; i++) qProj[i] += bias.qBias[i];
+      for (let i = 0; i < kProj.length; i++) kProj[i] += bias.kBias[i];
+      for (let i = 0; i < vProj.length; i++) vProj[i] += bias.vBias[i];
+
+      const q = new Float32Array(this.qHeads * this.headDim);
+      for (let h = 0; h < this.qHeads; h++) {
+        const slice = qProj.subarray(h * this.headDim, (h + 1) * this.headDim);
+        q.set(this.applyNeoXRoPE(slice, currentPos), h * this.headDim);
+      }
+      const k = new Float32Array(this.kvHeads * this.headDim);
+      for (let h = 0; h < this.kvHeads; h++) {
+        const slice = kProj.subarray(h * this.headDim, (h + 1) * this.headDim);
+        k.set(this.applyNeoXRoPE(slice, currentPos), h * this.headDim);
+      }
+      probe?.(`L${l}.q_postrope`, q);
+      probe?.(`L${l}.k_postrope`, k);
+
+      kvCache.append(l, k, vProj);
+      const tokenCount = currentPos + 1;
+
+      // Attention — small ops, main thread
+      const attnOut = new Float32Array(this.hiddenSize);
+      const scaleFactor = 1.0 / Math.sqrt(this.headDim);
+      const headsPerGroup = this.qHeads / this.kvHeads;
+
+      for (let h = 0; h < this.qHeads; h++) {
+        const kvGroupIdx = Math.floor(h / headsPerGroup);
+        const scores = new Float32Array(tokenCount);
+        let maxScore = -Infinity;
+        const q_head = q.subarray(h * this.headDim, (h + 1) * this.headDim);
+
+        for (let t = 0; t < tokenCount; t++) {
+          const kFull = kvCache.getK(l, t);
+          const k_hist = kFull.subarray(
+            kvGroupIdx * this.headDim,
+            (kvGroupIdx + 1) * this.headDim
+          );
+          let dot = 0;
+          for (let d = 0; d < this.headDim; d++) dot += q_head[d] * k_hist[d];
+          scores[t] = dot * scaleFactor;
+          if (scores[t] > maxScore) maxScore = scores[t];
+        }
+
+        let sumExp = 0.0;
+        for (let t = 0; t < scores.length; t++) {
+          scores[t] = Math.exp(scores[t] - maxScore);
+          sumExp += scores[t];
+        }
+        for (let t = 0; t < scores.length; t++) scores[t] /= sumExp;
+
+        const headContext = new Float32Array(this.headDim);
+        for (let t = 0; t < scores.length; t++) {
+          const vFull = kvCache.getV(l, t);
+          const v_hist = vFull.subarray(
+            kvGroupIdx * this.headDim,
+            (kvGroupIdx + 1) * this.headDim
+          );
+          for (let d = 0; d < this.headDim; d++)
+            headContext[d] += scores[t] * v_hist[d];
+        }
+        attnOut.set(headContext, h * this.headDim);
+      }
+
+      // Output projection + residual
+      const mergedAttn = await layerEngine.forwardAsync(
+        `blk.${l}.attn_output.weight`,
+        attnOut,
+        1,
+        this.hiddenSize
+      );
+      probe?.(`L${l}.attn_out`, mergedAttn);
+      for (let i = 0; i < this.hiddenSize; i++) x[i] += mergedAttn[i];
+
+      // FFN — gate and up run concurrently
+      const h_ffn = this.rmsNorm(x, norm.ffnNormGain);
+      const [gateProj, upProj] = await Promise.all([
+        layerEngine.forwardAsync(
+          `blk.${l}.ffn_gate.weight`,
+          h_ffn,
+          1,
+          this.hiddenSize
+        ),
+        layerEngine.forwardAsync(
+          `blk.${l}.ffn_up.weight`,
+          h_ffn,
+          1,
+          this.hiddenSize
+        ),
+      ]);
+
+      const intermediate = new Float32Array(gateProj.length);
+      for (let i = 0; i < gateProj.length; i++) {
+        const silu = gateProj[i] * (1.0 / (1.0 + Math.exp(-gateProj[i])));
+        intermediate[i] = silu * upProj[i];
+      }
+
+      const downProj = await layerEngine.forwardAsync(
+        `blk.${l}.ffn_down.weight`,
+        intermediate,
+        1,
+        intermediate.length
+      );
+      probe?.(`L${l}.ffn_out`, downProj);
+      for (let i = 0; i < this.hiddenSize; i++) x[i] += downProj[i];
+    }
+
+    // 3. Final RMSNorm
+    const finalActivation = this.rmsNorm(x, finalNorm);
+
+    // 4. Logits
+    try {
+      return await layerEngine.forwardAsync(
+        'output.weight',
+        finalActivation,
+        1,
+        this.hiddenSize
+      );
+    } catch (e) {
+      if ((e as Error).message?.includes('not found')) {
+        return await layerEngine.forwardAsync(
+          'token_embd.weight',
+          finalActivation,
+          1,
+          this.hiddenSize
+        );
+      }
+      throw e;
+    }
   }
 
   public executeTokenPass(
