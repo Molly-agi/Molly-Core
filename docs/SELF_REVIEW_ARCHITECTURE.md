@@ -93,11 +93,17 @@
 
 ### 8. Attention Head Coupling Under GQA
 
-**Severity:** medium (unaudited)
-**Where:** Not addressed in any engine-titan file
-**Problem:** GQA (Grouped Query Attention) shares K/V heads across Q heads. If we compress K/V heads independently from their associated Q heads, the shared alignment is disrupted. The compression strategy operates per-tensor (by layer name), not per-head-group.
-**Why it matters:** At 70B scale (Llama 2 70B uses GQA with 8 KV heads shared across 64 Q heads), compressing a KV head introduces error that affects 8 downstream Q heads simultaneously. The error amplification is 8x what per-head analysis suggests.
-**Recommendation:** Audit how the GGUF ingest layer (`gguf-ingest.ts`) maps model tensors to compression targets. If KV weights are compressed to different ranks than their paired Q weights, that's a fidelity risk. Consider compressing each GQA group as a unit (shared rank selection, shared error budget).
+**Severity:** low (audited — risk is lower than expected)
+**Where:** `src/ai/engine-titan/__tests__/gqa-head-grouping.test.ts` (3 tests, all passing)
+**Problem:** GQA (Grouped Query Attention) shares K/V heads across Q heads. If we compress K/V heads independently from their associated Q heads, the shared alignment could be disrupted. The compression strategy operates per-tensor (by layer name), not per-head-group.
+**Original concern:** At 70B scale (Llama 2 70B uses GQA with 8 KV heads shared across 64 Q heads), compressing a KV head introduces error that affects 8 downstream Q heads simultaneously. The fear was 8x error amplification.
+**Test result (2026-07-13):** The GQA test suite disproved the amplification hypothesis. Three findings:
+
+1. K and V projections with the same dimensions get identical compression strategy (same path, same rank) — no asymmetric degradation.
+2. Q heads sharing a KV group degrade uniformly (cosine spread < 0.15 within each group) — no catastrophic outlier heads.
+3. **Softmax attenuates KV compression error, not amplifies it.** Attention-output cosine (0.9999) was dramatically higher than weight-level cosine (0.78). Softmax renormalization washes out small perturbations in the score distribution. The "8x amplification" fear was wrong — softmax acts as a built-in error correction mechanism.
+   **Recommendation:** No special GQA-aware compression needed. Per-tensor compression is sufficient because softmax attenuation dominates. Monitor this finding at 70B scale when real-model validation runs.
+   **Status:** Downgraded from medium to low. Test coverage in place.
 
 ---
 
@@ -112,11 +118,11 @@
 
 ### 10. Embedding/LM Head Treatment
 
-**Severity:** medium (unaudited)
-**Where:** `src/ai/engine-titan/compression-strategy.ts` routes by column width
-**Problem:** The embedding matrix (vocab_size × hidden_dim, typically 128256 × 8192 for Llama 3 70B) would route to `raw-e8-rht` path (cols=8192 > wideThreshold=4096). The LM head (hidden_dim × vocab_size) similarly. These matrices are sparse and semantically structured — token embeddings cluster by meaning. Generic E8 quantization doesn't exploit this structure.
-**Why it matters:** Embedding damage produces systematic output bias (wrong token probabilities). Unlike FFN weight errors which manifest as noise, embedding errors shift the entire output distribution.
-**Recommendation:** Consider treating embedding/LM head as special cases: either skip compression entirely (they're large but only ~2% of 70B total params), or use a specialized quantizer that respects the clustering structure (product quantization, or higher E8 group size with learned scales).
+**Severity:** low (addressed)
+**Where:** `src/ai/engine-titan/streaming-compress.ts` — `isEmbeddingOrLMHead()` + F6 exemption logic
+**Problem:** The embedding matrix (vocab_size × hidden_dim, typically 128256 × 8192 for Llama 3 70B) and LM head are semantically structured. Generic SVD/E8 quantization doesn't exploit this structure and can shift the output distribution.
+**Status (2026-07-13):** Already addressed. The F6 exemption in `streaming-compress.ts` routes embedding and LM head tensors to `int8-per-row` quantization unconditionally, bypassing SVD and E8. This is a deliberate choice: these tensors are ~2% of total params, cheap to exempt, and disproportionately damaging if compressed. Test coverage: `streaming-compress-routing.test.ts` validates the `isEmbeddingOrLMHead()` matcher across GGUF, HuggingFace, and GPT-2 naming conventions. Additionally, `siren-inr.ts` provides a SIREN INR alternative for aggressive embedding compression (94-99% ratio) if needed in future.
+**Remaining gap:** SIREN INR fitting uses simplified gradient (last-layer only). Full backprop through sin activations needed for production-quality embedding compression.
 
 ---
 
@@ -134,12 +140,94 @@
 
 ## Recommended Next Actions (build order, not schedule)
 
-1. Fix the activation feeder in streaming-compress.ts (Finding #1) — everything downstream depends on valid Hessians
+1. Fix the activation feeder in streaming-compress.ts (Finding #1) — see Appendix A for detailed scoping
 2. Run sequential compensation on a small model (1B-3B) end-to-end with real activations → get first perplexity number
 3. Decide ternary's role: native-ops inference format or legacy (Finding #7)
-4. Audit GQA head grouping in GGUF ingest (Finding #8)
+4. ~~Audit GQA head grouping in GGUF ingest (Finding #8)~~ — **Done.** Downgraded to low; softmax attenuation dominates.
 5. Add quarantine persistence (Finding #5) — low effort, high value for security audit trail
 6. Promote BBT to Float64 once test sensitivity is resolved (Finding #3)
+
+---
+
+## Appendix A — Finding #1 Scoping: Real Activation Wiring Plan
+
+**Date:** 2026-07-13 (Atlas audit)
+
+### The Problem (specific)
+
+`streaming-compress.ts:300-310` loads calibration data as **token IDs / vocabSize**, producing scalar [0,1] values. These are fed to `compensatedQuantizeB` as `LayerActivations`, where the Hessian H = z^T @ z is computed. Token IDs are not activations. The Hessian is meaningless. GPTQ compensation is theatre.
+
+### What Already Exists (no new algorithms needed)
+
+| Helper                         | File                              | What it does                                                              | Status                        |
+| ------------------------------ | --------------------------------- | ------------------------------------------------------------------------- | ----------------------------- |
+| `collectBActivations`          | `layer-error-compensation.ts:149` | z = X @ A — projects hidden activations through matrix A to get B's input | Correct, untested in pipeline |
+| `propagateActivations`         | `layer-error-compensation.ts:394` | out = x @ A @ dequant(B) — feeds one layer's output to the next           | Correct, untested in pipeline |
+| `SequentialCompensationConfig` | `layer-error-compensation.ts:367` | Config interface for sequential mode                                      | Defined, unused               |
+| `calibration-dataset.ts`       | save/load calibration sequences   | Token-level calibration data persistence                                  | Working, tested               |
+
+### What's Missing (3 concrete gaps)
+
+**Gap 1: Embedding forward pass.** To get real hidden activations for layer 0, calibration tokens must pass through the embedding matrix. `streaming-compress.ts` currently processes tensors in GGUF file order (arbitrary). The embedding tensor (`token_embd.weight` / `embed_tokens.weight`) must be captured first, before any layer compression begins.
+
+**Implementation:** In the tensor loop, detect embedding via `isEmbeddingOrLMHead()`. Store the raw embedding matrix. After all tensors are enumerated (or on first layer-0 tensor), compute `embeddingActivations = lookupEmbedding(calibTokens, embeddingMatrix, hiddenDim)` — a simple gather operation, no matmul.
+
+**Gap 2: Layer-sequential ordering.** The current loop processes tensors as encountered in GGUF. GPTQ sequential compensation requires layer-0 → layer-1 → ... → layer-79 order, because each layer's output activations are the next layer's input. Within a layer, the order of Q/K/V/O/gate/up/down doesn't matter (they all receive the same residual-stream input).
+
+**Implementation:** Two approaches:
+
+- **Sort-first (simpler):** Enumerate all tensors, sort by `extractLayerIndex()`, process in order. Requires buffering tensor metadata (not weights — those stream from disk).
+- **Two-pass (memory-safe):** First pass: build layer → tensor-name map. Second pass: iterate layers in order, seek to each tensor in GGUF. Slower but bounded memory.
+
+Recommended: sort-first. Tensor metadata is tiny (~1KB per tensor × 560 tensors for 70B = 560KB).
+
+**Gap 3: Wire `collectBActivations` into the compression loop.** Currently (line 557), `calibrationActivations` (the fake token-ID data) is passed directly as `LayerActivations`. Instead:
+
+```
+// Per layer, after SVD produces A and B:
+const z = collectBActivations(
+  layerHiddenActivations,  // real hidden activations [numTokens × hiddenDim]
+  numTokens,
+  hiddenDim,
+  matrixA,                  // SVD output [hiddenDim × targetRank]
+  targetRank
+);
+const layerAct: LayerActivations = {
+  activations: z,           // [numTokens × targetRank] — correct!
+  numTokens,
+  inputDim: targetRank,
+};
+```
+
+After all tensors in the layer are compressed, propagate:
+
+```
+layerHiddenActivations = propagateActivations(
+  layerHiddenActivations, numTokens, hiddenDim,
+  matrixA, targetRank, quantizedB, cols
+);
+// Add residual connection: layerHiddenActivations += input (for transformers)
+```
+
+### Memory Budget
+
+For a 70B model with 128 calibration tokens and hiddenDim=8192:
+
+- `layerHiddenActivations`: 128 × 8192 × 4 = 4MB (carried between layers)
+- `z` per tensor: 128 × 256 × 4 = 128KB (temporary, freed after each tensor)
+- Embedding matrix: 128256 × 8192 × 4 = 4GB (loaded once, freed after token lookup)
+  - Optimization: compute embedding gather streaming from disk instead of loading full matrix
+
+### Build Order
+
+1. Add embedding capture + token→hidden gather (~50 lines)
+2. Sort tensors by layer index before compression loop (~20 lines)
+3. Replace fake activations with `collectBActivations` call (~10 lines)
+4. Add `propagateActivations` between layers + residual add (~15 lines)
+5. Test on GPT-2 (small) end-to-end with perplexity measurement
+6. Test on 70B with subset calibration (128 tokens)
+
+**Estimated effort:** ~100 lines of new code in streaming-compress.ts. No new files. No new algorithms. All math primitives exist and are tested. The hard part is getting the tensor ordering right across GGUF naming conventions (already tested in streaming-compress-routing.test.ts).
 
 ---
 

@@ -13,6 +13,18 @@
 import { WebSocket } from 'ws';
 import { EventEmitter } from 'events';
 import readline from 'readline';
+import { readFileSync, existsSync } from 'fs';
+
+function detectAgent() {
+  const f = '/workspaces/Molly-Core/.molly-context/active-agent.txt';
+  try {
+    if (existsSync(f)) {
+      const v = readFileSync(f, 'utf8').trim().toLowerCase();
+      if (v) return v;
+    }
+  } catch {}
+  return 'lazarus';
+}
 
 export class BridgeClient extends EventEmitter {
   constructor(identity, host = 'localhost', port = 9002) {
@@ -148,7 +160,7 @@ export class BridgeClient extends EventEmitter {
 
 // CLI mode: interactive bridge client
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const identity = process.argv[2] || 'lazarus';
+  const identity = process.argv[2] || detectAgent();
   const host = process.argv[3] || 'localhost';
   const port = parseInt(process.argv[4] || '9002', 10);
 
