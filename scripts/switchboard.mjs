@@ -226,7 +226,7 @@ function classifyMessage(msg) {
 
   const isForEric = isBroadcast || to === 'eric';
   const isForLazarus = isBroadcast || to === 'lazarus' || from === 'molly';
-  const isForAtlas = isBroadcast || to === 'atlas';
+  const isForAtlas = isBroadcast || to === 'atlas' || from === 'lazarus';
   const isFromMolly = from === 'molly';
   const isFromEric = from === 'eric';
   const isFromAtlas = from === 'atlas';
@@ -250,10 +250,12 @@ function classifyMessage(msg) {
 // ROUTING TABLE:
 //   ESCALATION (any)         → URGENT push to Eric + wakeup for Lazarus
 //   SYSTEM ALERT (any)       → HIGH push to Eric + wakeup for Lazarus
-//   to: 'all' or broadcast   → push to Eric (low) + wakeup for Lazarus
+//   to: 'all' or broadcast   → push to Eric (low) + wakeup for Lazarus + wakeup for Atlas
 //   Molly → anything         → push to Eric + wakeup for Lazarus
 //   to: 'eric'               → push to Eric (default priority)
 //   to: 'lazarus'            → wakeup file only
+//   to: 'atlas'              → Atlas wakeup file only
+//   Lazarus → anything       → Atlas wakeup file (Atlas hears all Lazarus messages)
 //   Eric always monitors all — he is the orchestrator
 // =============================================================================
 function routeMessage(msg) {
