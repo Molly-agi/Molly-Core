@@ -5,7 +5,7 @@
 // Usage: npx tsx scripts/titan/compress-parallel.ts [--gguf <path>] [--output <dir>] [--workers <n>]
 
 import { Worker } from 'worker_threads';
-import { parseGGUF } from '../../src/ai/engine-titan/gguf-ingest';
+import { parseGGUF, GGUFType } from '../../src/ai/engine-titan/gguf-ingest';
 import {
   selectStrategy,
   type StrategyConfig,
@@ -55,11 +55,24 @@ export type CompressionRouting =
   | { action: 'int8-per-row' }
   | { action: 'skip'; reason: string };
 
+function isSourceQuantized(ggufType: GGUFType): boolean {
+  return (
+    ggufType === GGUFType.Q4_K ||
+    ggufType === GGUFType.Q5_K ||
+    ggufType === GGUFType.Q6_K ||
+    ggufType === GGUFType.Q4_0 ||
+    ggufType === GGUFType.Q4_1 ||
+    ggufType === GGUFType.Q5_0 ||
+    ggufType === GGUFType.Q5_1
+  );
+}
+
 function routeTensor(
   name: string,
   rows: number,
   cols: number,
   totalLayers: number | undefined,
+  sourceType: GGUFType,
   strategyConfig?: StrategyConfig
 ): CompressionRouting {
   const exempted =
@@ -68,6 +81,15 @@ function routeTensor(
 
   if (exempted) {
     return { action: 'int8-per-row' };
+  }
+
+  // Fable directive: Q4_K source + FFN = passthrough. Re-quantizing an
+  // already-quantized FFN stacks two lossy quantizers for negligible size win.
+  if (isFFNProjection(name) && isSourceQuantized(sourceType)) {
+    return {
+      action: 'skip',
+      reason: 'FFN passthrough (source already quantized)',
+    };
   }
 
   if (isFFNProjection(name)) {
@@ -147,7 +169,13 @@ async function main() {
     .map(({ tensor, index }) => {
       const rows = tensor.dimensions[0];
       const cols = tensor.dimensions.length > 1 ? tensor.dimensions[1] : 1;
-      const routing = routeTensor(tensor.name, rows, cols, totalLayers);
+      const routing = routeTensor(
+        tensor.name,
+        rows,
+        cols,
+        totalLayers,
+        tensor.type
+      );
       return { tensor, index, routing };
     })
     .filter(({ routing }) => routing.action !== 'skip');

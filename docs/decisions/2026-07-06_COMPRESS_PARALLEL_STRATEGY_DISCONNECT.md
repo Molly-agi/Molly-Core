@@ -50,13 +50,22 @@ v3 says "F1 FIXED @ 0aed68c9, verified." True of the path shown and told was pro
 
 ## Action Items
 
-1. [ ] Structural fix: compress-parallel imports selectStrategy, does not duplicate policy
+1. [x] Structural fix: compress-parallel imports selectStrategy, does not duplicate policy _(a56a1bca, 2026-07-13)_
 2. [ ] Vault manifest with intended coverage (crystal vs declared-passthrough)
-3. [ ] GGUF SHA-256 binding enforced at load time
-4. [ ] Source-aware routing: Q4_K sources → passthrough FFN always
+3. [x] GGUF SHA-256 binding enforced at load time _(a7efe729)_
+4. [x] Source-aware routing: Q4_K sources → passthrough FFN always _(2026-07-13)_
 5. [ ] Memory audit: 14 workers × ~1GB f32 tensor + SVD workspace = validate against 64GB box
-6. [ ] Null-compression baseline for 72B before interpreting any compression PPL
-7. [ ] Checklist addition: "which code is production" requires grep proof
+6. [ ] Null-compression baseline for 72B before interpreting any compression PPL _(running 2026-07-13)_
+7. [x] Checklist addition: "which code is production" requires grep proof _(2026-07-13)_
+
+## Production Code Verification Checklist
+
+Before declaring any code path "fixed" or "tested", verify:
+
+1. **Which script is actually invoked?** `grep -r` for the entry point in scripts/, package.json, CI, and any Makefile/task runner.
+2. **Is there a parallel/alternate path?** Search for duplicates: `grep -r "functionName\|importantConstant"` across the full tree.
+3. **Does the tested path match the production path?** If tests exercise `streaming-compress.ts` but real runs use `scripts/titan/compress-parallel.ts`, the tests prove nothing about production.
+4. **Who calls it?** `git log --all --oneline -- <file>` to verify the file has been run in anger, not just committed.
 
 ---
 
