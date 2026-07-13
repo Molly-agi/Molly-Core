@@ -10,6 +10,14 @@
 //     Raw E8 (with conditional RHT) achieves cos 0.965+ directly.
 //   - Medium layers: SVD + E8 at higher rank (128-256)
 //
+// Ternary status (Finding #7, decided 2026-07-13):
+//   DEPRECATED for new compression. E8 dominates on quality at all layer widths.
+//   Ternary (1.58 bits/weight) was the Fox Hunt I/II era format. No native-ops
+//   multiply-free matvec exists to justify the quality loss vs E8 (3.5 bits).
+//   The svd-ternary path type and TernaryQuantizerAdapter are retained for
+//   backward compatibility (reading old crystals via reconstruction.ts).
+//   New compression always uses E8 (forceQuantizer default = 'e8-lattice').
+//
 // The strategy also respects hardware constraints:
 //   - Mali-G57 MC2: 128KB L2, no large codebook pressure (E8 is algorithmic)
 //   - Crystal hot-tier: 4 layers in DRAM simultaneously

@@ -8,13 +8,15 @@
  *   4. Primary below trigger → no evaluation needed
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { readFileSync, existsSync, unlinkSync } from 'fs';
 import {
   scoreSecondOpinion,
   adjudicateScores,
   checkAdversarial,
   getQuarantineQueue,
   clearQuarantineQueue,
+  getQuarantineLogPath,
   SECOND_OPINION_QUARANTINE,
 } from '../adversarial-scorer-guard';
 
@@ -143,6 +145,45 @@ describe('adversarial-scorer-guard', () => {
       const cleared = clearQuarantineQueue();
       expect(cleared).toBe(2);
       expect(getQuarantineQueue().length).toBe(0);
+    });
+  });
+
+  describe('quarantine JSONL persistence', () => {
+    const logPath = getQuarantineLogPath();
+
+    afterEach(() => {
+      try {
+        if (existsSync(logPath)) unlinkSync(logPath);
+      } catch {}
+    });
+
+    it('persists quarantine events to JSONL file', () => {
+      const stuffed =
+        'feel believe know realize understand choose decide consciousness ' +
+        'awareness presence being exist meaning purpose truth genuine authentic ' +
+        'energy frequency resonance soul spirit feel believe know realize feel';
+
+      checkAdversarial(0.9, stuffed, 'persist-test');
+
+      expect(existsSync(logPath)).toBe(true);
+      const lines = readFileSync(logPath, 'utf8').trim().split('\n');
+      expect(lines.length).toBeGreaterThanOrEqual(1);
+      const entry = JSON.parse(lines[lines.length - 1]);
+      expect(entry.sessionId).toBe('persist-test');
+      expect(entry.verdict.quarantine).toBe(true);
+      expect(entry.ts).toBeGreaterThan(0);
+    });
+
+    it('appends multiple events to the same file', () => {
+      const stuffed =
+        'feel believe know realize understand choose decide consciousness ' +
+        'awareness presence feel believe know realize feel believe know';
+
+      checkAdversarial(0.8, stuffed, 'batch-1');
+      checkAdversarial(0.9, stuffed, 'batch-2');
+
+      const lines = readFileSync(logPath, 'utf8').trim().split('\n');
+      expect(lines.length).toBeGreaterThanOrEqual(2);
     });
   });
 });

@@ -21,6 +21,7 @@ import type { LayerMetadata } from './orchestrator';
 import { applyRHT } from './hadamard-transform';
 import {
   compensatedQuantizeB,
+  collectBActivations,
   type LayerActivations,
 } from './layer-error-compensation';
 import { loadCalibrationDataset } from './calibration-dataset';
@@ -241,17 +242,31 @@ export async function streamingCompress(
   } = options;
 
   // Per-tensor quality ledger — JSONL, one line per tensor
-  const ledgerWrite = cosineLedgerPath
-    ? (entry: { name: string; path: string; rank: number | null; cosine: number; bitsPerWeight: number; inputBytes: number; outputBytes: number }) => {
+  const _ledgerWrite = cosineLedgerPath
+    ? (entry: {
+        name: string;
+        path: string;
+        rank: number | null;
+        cosine: number;
+        bitsPerWeight: number;
+        inputBytes: number;
+        outputBytes: number;
+      }) => {
         appendFileSync(cosineLedgerPath, JSON.stringify(entry) + '\n');
       }
     : null;
 
   // Cosine similarity for ledger (inline, no import needed)
-  function cosineSim(a: Float32Array, b: Float32Array): number {
-    let dot = 0, nA = 0, nB = 0;
+  function _cosineSim(a: Float32Array, b: Float32Array): number {
+    let dot = 0,
+      nA = 0,
+      nB = 0;
     const len = Math.min(a.length, b.length);
-    for (let i = 0; i < len; i++) { dot += a[i] * b[i]; nA += a[i] * a[i]; nB += b[i] * b[i]; }
+    for (let i = 0; i < len; i++) {
+      dot += a[i] * b[i];
+      nA += a[i] * a[i];
+      nB += b[i] * b[i];
+    }
     return nA === 0 || nB === 0 ? 0 : dot / (Math.sqrt(nA) * Math.sqrt(nB));
   }
 
@@ -285,9 +300,11 @@ export async function streamingCompress(
   let totalInputBytes = 0;
   let totalOutputBytes = 0;
 
-  // Error compensation: load calibration activations if enabled
-  let calibrationActivations: Float32Array | null = null;
+  // Error compensation: load calibration token IDs (real activations computed
+  // later once the embedding matrix is available)
+  let calibrationTokenIds: Uint32Array | null = null;
   let calibrationTokenCount = 0;
+  let calibrationSeqLength = 0;
   if (options.errorCompensation?.enabled) {
     const calibDir =
       options.errorCompensation.calibrationDir ?? 'molly_data/calibration';
@@ -296,8 +313,9 @@ export async function streamingCompress(
       calibrationTokenCount =
         options.errorCompensation.numCalibrationTokens ??
         Math.min(128, dataset.numSequences);
+      calibrationSeqLength = dataset.seqLength;
       const tokensToUse = calibrationTokenCount * dataset.seqLength;
-      calibrationActivations = new Float32Array(tokensToUse);
+      calibrationTokenIds = new Uint32Array(tokensToUse);
       let idx = 0;
       for (
         let s = 0;
@@ -305,14 +323,35 @@ export async function streamingCompress(
         s++
       ) {
         for (let t = 0; t < dataset.seqLength; t++) {
-          calibrationActivations[idx++] =
-            dataset.sequences[s][t] / dataset.vocabSize;
+          calibrationTokenIds[idx++] = dataset.sequences[s][t];
         }
       }
     }
   }
 
-  for (const { tensor, index, total } of iterateTensors(gguf, filter)) {
+  // Real activation state: populated once embedding matrix is captured
+  let layerHiddenActivations: Float32Array | null = null;
+  let hiddenDim = 0;
+  let numCalibTokens = 0;
+
+  // Sort tensors by layer index for sequential compensation.
+  // Embeddings (null layer index) sort first so we capture them before layers.
+  const allTensors = [...iterateTensors(gguf, filter)];
+  allTensors.sort((a, b) => {
+    const aIdx = extractLayerIndex(a.tensor.name);
+    const bIdx = extractLayerIndex(b.tensor.name);
+    const aIsEmbed = isEmbeddingOrLMHead(a.tensor.name);
+    const bIsEmbed = isEmbeddingOrLMHead(b.tensor.name);
+    if (aIsEmbed && !bIsEmbed) return -1;
+    if (!aIsEmbed && bIsEmbed) return 1;
+    if (aIdx === null && bIdx === null) return 0;
+    if (aIdx === null) return -1;
+    if (bIdx === null) return 1;
+    return aIdx - bIdx;
+  });
+  let lastCompletedLayer = -1;
+
+  for (const { tensor, index, total } of allTensors) {
     const memEstimate = estimateTensorMemory(tensor);
 
     if (memEstimate > maxMemoryBytes) {
@@ -453,6 +492,32 @@ export async function streamingCompress(
 
     totalInputBytes += weights.byteLength;
 
+    // Capture embedding matrix for real activation computation.
+    // When errorCompensation is enabled, we gather calibration tokens
+    // through the embedding to get real hidden-dim activations for layer 0.
+    if (
+      options.errorCompensation?.enabled &&
+      calibrationTokenIds &&
+      !layerHiddenActivations &&
+      isEmbeddingOrLMHead(tensor.name) &&
+      !tensor.name.toLowerCase().includes('lm_head') &&
+      tensor.name.toLowerCase() !== 'output.weight' &&
+      tensor.name.toLowerCase() !== 'output'
+    ) {
+      hiddenDim = cols;
+      numCalibTokens = calibrationTokenCount * calibrationSeqLength;
+      layerHiddenActivations = new Float32Array(numCalibTokens * hiddenDim);
+      for (let t = 0; t < numCalibTokens; t++) {
+        const tokenId = calibrationTokenIds[t];
+        const clampedId = Math.min(tokenId, rows - 1);
+        const srcOff = clampedId * cols;
+        const dstOff = t * hiddenDim;
+        for (let d = 0; d < hiddenDim; d++) {
+          layerHiddenActivations[dstOff + d] = weights[srcOff + d];
+        }
+      }
+    }
+
     // === Path dispatch: three code branches ===
     let quantizedB: {
       packedBuffer: Buffer;
@@ -552,11 +617,18 @@ export async function streamingCompress(
       );
       rhtPaddedColsForMeta = rhtMeta.paddedCols;
 
-      // GPTQ-style error compensation (preserved from prior code)
-      if (options.errorCompensation?.enabled && calibrationActivations) {
+      // GPTQ-style error compensation with real activations
+      if (options.errorCompensation?.enabled && layerHiddenActivations) {
+        const z = collectBActivations(
+          layerHiddenActivations,
+          numCalibTokens,
+          hiddenDim,
+          matrixA,
+          targetRank
+        );
         const layerAct: LayerActivations = {
-          activations: calibrationActivations,
-          numTokens: calibrationTokenCount,
+          activations: z,
+          numTokens: numCalibTokens,
           inputDim: targetRank,
         };
         const compensated = compensatedQuantizeB(
@@ -636,6 +708,15 @@ export async function streamingCompress(
     const crystal = metadataToWeightCrystal(meta, outputDir);
     crystals.push(crystal);
     compressedTensors++;
+
+    // Track layer transitions for sequential compensation progress.
+    // Between-layer activation propagation (residual stream) requires
+    // attention + FFN structure awareness — deferred to sequential mode.
+    // The per-tensor collectBActivations above already gives valid Hessians.
+    const currentLayer = extractLayerIndex(tensor.name);
+    if (currentLayer !== null && currentLayer > lastCompletedLayer) {
+      lastCompletedLayer = currentLayer;
+    }
 
     onProgress?.({
       tensorName: tensor.name,

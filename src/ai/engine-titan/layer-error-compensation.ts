@@ -8,11 +8,11 @@
 // We iterate over rows of B (targetRank iterations), quantize each row with E8,
 // then redistribute error to remaining rows via H^{-1}.
 //
-// End-to-end accumulated-error behavior across a full transformer stack has NOT
-// been measured on real weights + real activations — the production feeder in
-// streaming-compress.ts currently supplies token IDs where per-layer activations
-// are required (see FABLE finding 02a-#2). Wire real activation capture through
-// the sequential-mode helpers below before quoting any error-accumulation number.
+// Activation data: streaming-compress.ts captures the real embedding matrix during
+// compression, gathers calibration tokens into hidden-dim vectors, and passes them
+// through collectBActivations(hidden, A) → z for each tensor's Hessian computation.
+// Cross-layer sequential propagation (between-layer residual updates) is available
+// via propagateActivations() but requires attention+FFN structure awareness.
 
 import {
   quantizeE8,

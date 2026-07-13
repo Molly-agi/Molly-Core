@@ -83,11 +83,11 @@
 
 ### 7. Compression Strategy Routes Correctly but Ternary is Dead
 
-**Severity:** low
+**Severity:** low (decided — deprecated for new compression)
 **Where:** `src/ai/engine-titan/compression-strategy.ts`
 **Problem:** The strategy controller routes narrow layers to `svd-e8`, wide layers to `raw-e8-rht`. The `svd-ternary` path exists as a type but `forceQuantizer` defaults to `'e8-lattice'`. Ternary quantization (stream-quantizer.ts) is the historical format — Fox Hunt I/II era — but E8 dominates on quality (cos 0.965+ vs ternary's cos 0.86 on wide layers). The 5-per-byte ternary packing is still used in the reconstruction engine and the reconstruction.ts dequantizer.
-**Why it matters:** We carry two quantization paths. The ternary path is unused in production but still maintained. If we're fully committed to E8, the ternary code is dead weight. If ternary serves a role (faster inference via conditional-add-only arithmetic), it should be documented.
-**Recommendation:** Decide: is ternary the "native ops" inference format (where {-1,0,+1} enables multiply-free computation), or is it legacy? If native ops, keep it and build the matvec primitive. If legacy, deprecate clearly.
+**Decision (2026-07-13):** Ternary is **deprecated for new compression**. No native-ops multiply-free matvec implementation exists to justify the quality loss. E8 dominates at all layer widths. The `svd-ternary` path type and `TernaryQuantizerAdapter` are retained for backward compatibility only (reading old crystals via `reconstruction.ts`). If native-ops multiply-free inference is needed in the future, it should be designed for the E8 lattice structure, not ternary. Decision documented in `compression-strategy.ts` header.
+**Status:** Decided. No code removal needed — ternary adapter and dequantizer stay for old crystal compatibility.
 
 ---
 
@@ -142,9 +142,9 @@
 
 1. Fix the activation feeder in streaming-compress.ts (Finding #1) — see Appendix A for detailed scoping
 2. Run sequential compensation on a small model (1B-3B) end-to-end with real activations → get first perplexity number
-3. Decide ternary's role: native-ops inference format or legacy (Finding #7)
+3. ~~Decide ternary's role: native-ops inference format or legacy (Finding #7)~~ — **Done.** Deprecated for new compression; retained for old crystal compat.
 4. ~~Audit GQA head grouping in GGUF ingest (Finding #8)~~ — **Done.** Downgraded to low; softmax attenuation dominates.
-5. Add quarantine persistence (Finding #5) — low effort, high value for security audit trail
+5. ~~Add quarantine persistence (Finding #5)~~ — **Done.** JSONL audit log at `logs/quarantine-events.jsonl`.
 6. Promote BBT to Float64 once test sensitivity is resolved (Finding #3)
 
 ---

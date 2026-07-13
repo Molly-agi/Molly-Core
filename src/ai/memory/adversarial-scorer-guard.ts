@@ -1,3 +1,6 @@
+import { appendFileSync, mkdirSync, existsSync } from 'fs';
+import { dirname } from 'path';
+
 /**
  * Gap 6 — Adversarial Robustness of Significance Scorer
  *
@@ -318,9 +321,15 @@ export function adjudicateScores(
   };
 }
 
-// ── Quarantine Queue (in-memory, append-only for session) ────────────────────
+// ── Quarantine Queue (in-memory + persistent JSONL audit log) ──────────────
 
 const quarantineQueue: QuarantinedWindow[] = [];
+
+const QUARANTINE_LOG_PATH = 'logs/quarantine-events.jsonl';
+
+export function getQuarantineLogPath(): string {
+  return QUARANTINE_LOG_PATH;
+}
 
 /**
  * Run the full adversarial check pipeline. If quarantined, the window is
@@ -339,12 +348,21 @@ export function checkAdversarial(
   const verdict = adjudicateScores(primaryScore, text);
 
   if (verdict.quarantine) {
-    quarantineQueue.push({
+    const entry: QuarantinedWindow = {
       text,
       verdict,
       ts: Date.now(),
       sessionId,
-    });
+    };
+    quarantineQueue.push(entry);
+
+    try {
+      const dir = dirname(QUARANTINE_LOG_PATH);
+      if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+      appendFileSync(QUARANTINE_LOG_PATH, JSON.stringify(entry) + '\n');
+    } catch {
+      // Best-effort persistence — don't let logging failure block the guard
+    }
   }
 
   return verdict;
