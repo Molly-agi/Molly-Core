@@ -184,7 +184,8 @@ export class GgufFallbackLoader {
   ): { output: Float32Array; rows: number; cols: number; fromCache: boolean } {
     const info = this.gguf.tensors.find((t) => t.name === name);
     if (!info) throw new Error(`Tensor not found: ${name}`);
-    const outDim = info.dimensions[0];
+    const outDim =
+      info.dimensions.length > 1 ? info.dimensions[1] : info.dimensions[0];
     const W = this.getTensor(name);
     const output = new Float32Array(seqLen * outDim);
     for (let s = 0; s < seqLen; s++) {
