@@ -78,7 +78,8 @@ export async function POST(request: NextRequest) {
           );
         }
         const result = await sandboxWriteFile(filePath, content);
-        return NextResponse.json(result);
+        // Normalise: always include `size` so callers never see `undefined`
+        return NextResponse.json({ ...result, size: result.size ?? 0 });
       }
 
       case 'readFile': {
@@ -90,7 +91,18 @@ export async function POST(request: NextRequest) {
           );
         }
         const result = await sandboxReadFile(filePath);
-        return NextResponse.json(result);
+        // Normalise: expose content as `output` so callers get a string, not
+        // the whole result object (which would render as "[object Object]").
+        if (!result.success) {
+          return NextResponse.json(
+            { success: false, error: result.error ?? 'Read failed' },
+            { status: 500 }
+          );
+        }
+        return NextResponse.json({
+          success: true,
+          output: result.content ?? '',
+        });
       }
 
       case 'listFiles': {
