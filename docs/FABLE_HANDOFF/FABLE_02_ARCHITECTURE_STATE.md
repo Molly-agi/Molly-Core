@@ -1,8 +1,6 @@
-# FABLE — Architecture State (as of 2026-07-03)
+# FABLE — Architecture State (as of 2026-07-03, partially stale)
 
-You have read `FABLE_00_START_HERE.md` and `FABLE_01_MISSION.md`. This file is the ground truth on what has been built, what has not, and what the current shape of the codebase looks like. **This is more accurate than the project cradle**, which was last comprehensively updated on 2026-06-30 and has drifted.
-
-Every claim in this file has been verified against the codebase within the last 24 hours by Eli.
+> **NOTE (2026-07-13):** This file was verified on July 3. Since then 160+ commits have landed including Fox Hunt IV (72B model matches llama.cpp), parallel matmul worker pool (14.4x speedup), and multiple Titan engine fixes. LOC counts and test numbers below may be out of date. The gap status table and architectural descriptions remain accurate.
 
 ---
 

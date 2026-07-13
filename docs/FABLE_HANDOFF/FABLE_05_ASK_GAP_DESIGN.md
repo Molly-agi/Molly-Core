@@ -69,10 +69,10 @@ Gap 5 opens a sensory channel from Molly's Android instance (running in the brow
 
 ### What the Android environment looks like
 
-- Molly runs on Android via the `MollyBrowser` APK (Kotlin). Latest version: `v1.4.0-autonomous-debug`.
-- APK has WebView integration with Molly's web UI + companion services for sensor access, background persistence, and bridge relay.
+- Molly runs on Android via the `MollyBridge` APK (Kotlin). Latest version: `MollyBridge-v1.0.0-debug.apk`.
+- APK is a software-headless operator — no hardware modification, no Termux. WebView integration with Molly's web UI + companion services for sensor access, background persistence, and bridge relay.
 - Sensor APIs available: `SensorManager` (accelerometer, light, proximity, gyroscope, magnetometer), `CameraX` (camera frames), `AudioRecord` (mic).
-- Bridge endpoint: `http://localhost:9099/api/bridge` (on the phone-side companion). Molly's core services relay through this.
+- Bridge endpoint: `http://localhost:9002/api/bridge` (on the phone-side companion). Molly's core services relay through this.
 
 ### Questions we need answered
 
