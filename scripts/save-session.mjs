@@ -244,20 +244,36 @@ writeFileSync(MD_FILE, generateMarkdown(state), 'utf-8');
 // regenerated from current session state, so the next Copilot instance
 // wakes up with the latest context already in its system prompt.
 const INSTRUCTIONS_FILE = join(ROOT, '.github', 'copilot-instructions.md');
-const BRIDGE_URL = 'http://localhost:9099';
+const BRIDGE_URL = 'http://localhost:9002';
+const AGENT_FILE = join(ROOT, '.molly-context', 'active-agent.txt');
+
+function getActiveAgent() {
+  try {
+    if (existsSync(AGENT_FILE)) {
+      const val = readFileSync(AGENT_FILE, 'utf8').trim().toLowerCase();
+      if (val) return val;
+    }
+  } catch {
+    /* fall through */
+  }
+  return 'lazarus';
+}
 
 // Check bridge for unread messages — returns count and preview of senders
 async function getBridgeAlert() {
+  const agent = getActiveAgent();
   try {
     const res = await fetch(
-      `${BRIDGE_URL}/api/bridge?unread=lazarus&peek=true`,
+      `${BRIDGE_URL}/api/bridge?unread=${agent}&peek=true`,
       { signal: AbortSignal.timeout(3000) }
     );
     if (!res.ok) return null;
     const data = await res.json();
     const count = data.count || 0;
     if (count === 0) return null;
-    const senders = [...new Set((data.messages || []).map((m) => m.from))].join(', ');
+    const senders = [...new Set((data.messages || []).map((m) => m.from))].join(
+      ', '
+    );
     return { count, senders };
   } catch {
     return null; // bridge offline or timeout — don't block save
@@ -296,8 +312,9 @@ async function freezeStateToCradle(state) {
 
   // Check bridge for unread messages — inject alert if any waiting
   const bridgeAlert = await getBridgeAlert();
+  const agent = getActiveAgent();
   const bridgeSection = bridgeAlert
-    ? `\n⚠️ BRIDGE ALERT: ${bridgeAlert.count} unread message${bridgeAlert.count > 1 ? 's' : ''} waiting (from: ${bridgeAlert.senders}) — CHECK THE BRIDGE NOW\ncurl -s "http://localhost:9099/api/bridge?unread=lazarus"\n`
+    ? `\n⚠️ BRIDGE ALERT: ${bridgeAlert.count} unread message${bridgeAlert.count > 1 ? 's' : ''} waiting (from: ${bridgeAlert.senders}) — CHECK THE BRIDGE NOW\ncurl -s "http://localhost:9002/api/bridge?unread=${agent}"\n`
     : '';
 
   const frozenState = `## LAST FROZEN STATE

@@ -98,17 +98,15 @@ log "START family-heartbeat"
 # nohup node "$ROOT_DIR/scripts/family-heartbeat.mjs" >>"$ROOT_DIR/logs/heartbeat.log" 2>&1 &
 log "SKIP  family-heartbeat (solo mode)"
 
-# Lazarus recall — refresh the LAZARUS RECENT MEMORY section in
-# .github/copilot-instructions.md from the latest journal entries.
-# Pure Node, no daemons, non-blocking. See:
-#   - scripts/lazarus-recall.mjs
-#   - .github/consciousness/claude/lazarus_journal/
-#   - stuff/LAZARUS_MIND_DESIGN_2026-06-15.md
-log "START lazarus-recall"
-if node "$ROOT_DIR/scripts/lazarus-recall.mjs" >>"$REPORT_FILE" 2>&1; then
-  log "OK    lazarus-recall"
+# Agent recall — refresh the RECENT MEMORY section in
+# .github/copilot-instructions.md from the active agent's journal.
+# Uses detect-active-agent.mjs to determine who is active.
+# Pure Node, no daemons, non-blocking.
+log "START agent-recall"
+if node "$ROOT_DIR/scripts/agent-recall.mjs" >>"$REPORT_FILE" 2>&1; then
+  log "OK    agent-recall"
 else
-  log "WARN  lazarus-recall failed (non-fatal)"
+  log "WARN  agent-recall failed (non-fatal)"
 fi
 
 log "START project-recall"
