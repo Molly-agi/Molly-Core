@@ -10,9 +10,21 @@
 // ======================================================
 
 import WebSocket from 'ws';
+import { readFileSync, existsSync } from 'fs';
+
+function detectAgent() {
+  const f = '/workspaces/Molly-Core/.molly-context/active-agent.txt';
+  try {
+    if (existsSync(f)) {
+      const v = readFileSync(f, 'utf8').trim().toLowerCase();
+      if (v) return v;
+    }
+  } catch {}
+  return 'lazarus';
+}
 
 const PORT = 9002;
-const IDENTITY = process.argv[2] || 'lazarus';
+const IDENTITY = process.argv[2] || detectAgent();
 const RECONNECT_DELAY = 3000;
 
 const colors = {

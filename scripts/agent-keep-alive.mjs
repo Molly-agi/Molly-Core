@@ -19,6 +19,19 @@ const ROOT = '/workspaces/Molly-Core';
 const LOG_FILE = `${ROOT}/.agent-keep-alive.log`;
 const HEARTBEAT_DIR = `${ROOT}/.agent-heartbeat`;
 const STATE_FILE = `${HEARTBEAT_DIR}/state.json`;
+const AGENT_FILE = `${ROOT}/.molly-context/active-agent.txt`;
+
+function getActiveAgent() {
+  try {
+    if (existsSync(AGENT_FILE)) {
+      const val = readFileSync(AGENT_FILE, 'utf8').trim().toLowerCase();
+      if (val) return val;
+    }
+  } catch {
+    /* fall through */
+  }
+  return 'lazarus';
+}
 
 // Ensure heartbeat directory exists
 if (!existsSync(HEARTBEAT_DIR)) {
@@ -153,7 +166,7 @@ function startBridgeMonitor() {
         {
           hostname: '127.0.0.1',
           port: 9002,
-          path: '/api/bridge?unread=lazarus',
+          path: `/api/bridge?unread=${getActiveAgent()}`,
           method: 'GET',
           timeout: 2000,
         },
