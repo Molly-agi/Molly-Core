@@ -215,6 +215,10 @@ async function processMessages(msgs) {
     }
     // If flow returned a tool_request instead of text, extract the message from it
     let finalResponse = response;
+    const conversationalText = response
+      .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
+      .replace(/<tool_request>[\s\S]*$/g, '')
+      .trim();
     const toolMatch = response.match(
       /<tool_request>\s*({[\s\S]*?})\s*<\/tool_request>/
     );
@@ -226,16 +230,22 @@ async function processMessages(msgs) {
           log(
             `Extracted message from tool_request (${finalResponse.length} chars)`
           );
+        } else if (conversationalText) {
+          finalResponse = conversationalText;
+          log(
+            `Tool call missing message param — using conversational text (${finalResponse.length} chars)`
+          );
         } else {
           log(`Tool call detected but no message param — dropping response`);
           finalResponse = '';
         }
       } catch {
-        // Strip tool_request blocks and use whatever text remains
-        finalResponse = response
-          .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
-          .trim();
+        // Strip complete/incomplete tool_request blocks and use whatever text remains
+        finalResponse = conversationalText;
       }
+    } else if (response.includes('<tool_request>')) {
+      // Handle incomplete tool_request blocks that can leak into bridge relays
+      finalResponse = conversationalText;
     }
 
     if (finalResponse && ws && ws.readyState === WebSocket.OPEN) {
