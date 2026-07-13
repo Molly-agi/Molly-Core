@@ -97,6 +97,16 @@ export class MatmulPool {
     return this.readyPromise;
   }
 
+  /**
+   * Pre-convert tensors to SharedArrayBuffer. Call during warmup
+   * to eliminate the first-token SAB copy penalty.
+   */
+  prewarmTensors(tensors: Iterable<Float32Array>): void {
+    for (const t of tensors) {
+      this.getShared(t);
+    }
+  }
+
   private getShared(tensor: Float32Array): SharedArrayBuffer {
     let sab = this.sharedCache.get(tensor);
     if (!sab) {

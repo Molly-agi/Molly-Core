@@ -37,6 +37,42 @@ export class GgufFallbackLoader {
   }
 
   /**
+   * Pre-dequantize and cache ALL weight tensors in RAM.
+   * Call once at startup for models that fit in memory (e.g., 3B = ~10GB dequanted).
+   * After warmup, all forward() calls are pure matmul — no dequant overhead.
+   */
+  warmup(): void {
+    const weights = this.gguf.tensors.filter(
+      (t) => t.name.includes('.weight') && !this.pinned.has(t.name)
+    );
+    console.log(`[GgufFallbackLoader] Warming up ${weights.length} tensors...`);
+    const start = Date.now();
+    for (const tensor of weights) {
+      if (this.cache.has(tensor.name)) continue;
+      const data = readTensorData(this.gguf, tensor);
+      this.cache.set(tensor.name, data);
+    }
+    const elapsed = ((Date.now() - start) / 1000).toFixed(1);
+    const sizeMB =
+      [...this.cache.values()].reduce((s, v) => s + v.byteLength, 0) / 1e6;
+    console.log(
+      `[GgufFallbackLoader] Warmup complete: ${weights.length} tensors, ${sizeMB.toFixed(0)}MB, ${elapsed}s`
+    );
+
+    // Pre-convert large tensors to SharedArrayBuffer for zero first-token penalty
+    if (this.pool) {
+      const largeTensors = [...this.cache.values()].filter(
+        (v) => v.length >= 512
+      );
+      console.log(
+        `[GgufFallbackLoader] Pre-warming ${largeTensors.length} SharedArrayBuffers...`
+      );
+      this.pool.prewarmTensors(largeTensors);
+      console.log(`[GgufFallbackLoader] SAB pre-warm complete`);
+    }
+  }
+
+  /**
    * Pin a tensor permanently in memory (exempt from LRU eviction).
    * Use for token_embd which is accessed every single token.
    */
@@ -100,7 +136,8 @@ export class GgufFallbackLoader {
 
   /**
    * Forward: y = x @ W^T (GGML convention) — PARALLEL via worker threads.
-   * Uses all available CPU cores. Falls back to single-threaded if pool not initialized.
+   * Small tensors (outDim < 512) run on main thread to avoid dispatch overhead.
+   * Uses all available CPU cores for large tensors.
    */
   async forwardAsync(
     name: string,
@@ -109,11 +146,17 @@ export class GgufFallbackLoader {
     outDim: number
   ): Promise<Float32Array> {
     const W = this.getTensor(name);
-    if (this.poolReady && this.pool) {
-      return this.pool.forward(W, input, inDim, outDim);
+    // Small tensors: main thread is faster than worker dispatch overhead
+    if (!this.poolReady || !this.pool || outDim < 512) {
+      const output = new Float32Array(outDim);
+      for (let j = 0; j < outDim; j++) {
+        let sum = 0;
+        for (let i = 0; i < inDim; i++) sum += input[i] * W[j * inDim + i];
+        output[j] = sum;
+      }
+      return output;
     }
-    // Fallback: single-threaded
-    return this.forward(name, input, inDim, outDim);
+    return this.pool.forward(W, input, inDim, outDim);
   }
 
   /**

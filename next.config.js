@@ -28,15 +28,19 @@ const nextConfig = {
     '@grpc/proto-loader',
     // OpenTelemetry ecosystem (all of it)
     '@opentelemetry/sdk-node',
+    '@opentelemetry/configuration',
     '@opentelemetry/otlp-grpc-exporter-base',
     '@opentelemetry/exporter-trace-otlp-grpc',
     '@opentelemetry/exporter-jaeger',
+    '@opentelemetry/exporter-prometheus',
     '@opentelemetry/instrumentation',
+    '@opentelemetry/sdk-metrics',
     '@opentelemetry/core',
     '@opentelemetry/api',
     // Genkit ecosystem
     '@genkit-ai/core',
     '@genkit-ai/ai',
+    '@genkit-ai/google-genai',
     'genkit',
   ],
   typescript: {
@@ -79,6 +83,7 @@ const nextConfig = {
         tls: false,
         stream: false,
         os: false,
+        http: false,
         http2: false,
         async_hooks: false,
         dgram: false,
