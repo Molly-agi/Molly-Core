@@ -90,7 +90,7 @@ async function readFile(): Promise<BridgeState> {
       active: false,
       startedAt: new Date().toISOString(),
       lastActivity: new Date().toISOString(),
-      participants: ['molly', 'lazarus', 'eric'],
+      participants: ['molly', 'lazarus', 'eric', 'atlas'],
       messages: [],
     };
   }
@@ -281,7 +281,7 @@ export async function clearConversation(): Promise<void> {
     active: false,
     startedAt: new Date().toISOString(),
     lastActivity: new Date().toISOString(),
-    participants: ['molly', 'lazarus', 'eric'],
+    participants: ['molly', 'lazarus', 'eric', 'atlas'],
     messages: [],
   };
   await writeFile(state);

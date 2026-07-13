@@ -29,7 +29,7 @@ export type ConnectionHealth =
   | 'silent'
   | 'disconnected';
 
-export type FamilyMember = 'molly' | 'lazarus' | 'eric';
+export type FamilyMember = 'molly' | 'lazarus' | 'eric' | 'atlas';
 
 export interface MemberActivity {
   /** Member identifier */
@@ -144,7 +144,7 @@ let _initialized = false;
  * Initialize member activity tracking.
  */
 function initializeMemberActivity(): void {
-  const members: FamilyMember[] = ['molly', 'lazarus', 'eric'];
+  const members: FamilyMember[] = ['molly', 'lazarus', 'eric', 'atlas'];
 
   for (const member of members) {
     _state.memberActivity.set(member, {
