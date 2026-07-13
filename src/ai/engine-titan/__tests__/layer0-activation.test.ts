@@ -28,6 +28,7 @@ import {
 } from '../../inference/crystal-transformer-driver';
 import { CrystalInferenceLayer } from '../crystal-inference-layer';
 import { TitanEngineOrchestrator } from '../orchestrator';
+import { E8QuantizerAdapter } from '../quantizer-e8-adapter';
 import { KvCache } from '../../inference/kv-cache';
 
 // ── Small model geometry for testing ────────────────────────────────────────
@@ -50,13 +51,13 @@ const CONFIG: DriverConfig = {
 };
 
 // ── Tolerances ──────────────────────────────────────────────────────────────
-// Ternary quantization ({-1,0,+1} × scale) is inherently lossy. These
-// thresholds catch LOGIC bugs (wrong RoPE pairing → cos<0.3, wrong GQA index
-// → cos<0.4) while allowing for ternary+rank compression noise.
-// A "healthy" compressed forward gives cos≈0.75-0.90 on small random models.
+// E8 lattice quantization (3.5 bits/weight) is much higher fidelity than the
+// old ternary path (1.58 bits). These thresholds catch LOGIC bugs (wrong RoPE
+// pairing → cos<0.3, wrong GQA index → cos<0.4) while allowing for
+// E8+rank compression noise. E8 typically gives cos≈0.90-0.99.
 const TOL = {
-  cosMin: 0.65, // floor: a logic bug drops this below 0.3
-  relRmseMax: 1.2, // ceiling: a logic bug pushes this above 2.0
+  cosMin: 0.85,
+  relRmseMax: 0.8,
 };
 
 // ── Deterministic weight generation ─────────────────────────────────────────
@@ -199,7 +200,7 @@ function relRmse(a: Float32Array, b: Float32Array): number {
 // ── Test suite ──────────────────────────────────────────────────────────────
 describe('Layer-0 Activation Localization', () => {
   let tmpDir: string;
-  const orchestrator = new TitanEngineOrchestrator();
+  const orchestrator = new TitanEngineOrchestrator(new E8QuantizerAdapter());
 
   // Raw weight matrices (uncompressed) for golden reference
   const W_embd = makeWeights(HIDDEN, VOCAB, 42);

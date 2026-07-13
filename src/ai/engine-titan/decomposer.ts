@@ -111,13 +111,8 @@ function qrInPlace(
 
 // SVD of small B [k×cols] via power iteration on B@B^T [k×k].
 // Writes final matrixA [rows×rank] and matrixB [rank×cols].
-// F16 note (Fable Batch 03): building BBT squares the condition number of B,
-// so fp32 loses small singular values silently. Promoting BBT to Float64Array
-// is the mathematically correct fix, but empirically destabilizes the
-// layer0-activation test on synthetic fixtures (E8 quantization discretization
-// boundaries flip under precision changes). Deferred until F4 small-model E2E
-// can empirically price the trade against real weights. When flipped, also
-// promote eigvecs + tmp + Btv storage.
+// BBT and intermediate eigenvector storage use Float64 to avoid squaring
+// the condition number in single precision (Finding #6, Fable Batch 03).
 function compactSVD(
   B: Float32Array,
   k: number,
@@ -128,8 +123,8 @@ function compactSVD(
   matrixA: Float32Array,
   matrixB: Float32Array
 ): void {
-  // BBT = B @ B^T  [k×k]
-  const BBT = new Float32Array(k * k);
+  // BBT = B @ B^T  [k×k] — Float64 prevents condition-number squaring
+  const BBT = new Float64Array(k * k);
   for (let i = 0; i < k; i++)
     for (let j = 0; j <= i; j++) {
       let s = 0;
@@ -139,8 +134,8 @@ function compactSVD(
     }
 
   const rng = xorshift32(0xdeadbeef);
-  const eigvecs = new Float32Array(k * rank);
-  const tmp = new Float32Array(k);
+  const eigvecs = new Float64Array(k * rank);
+  const tmp = new Float64Array(k);
 
   for (let r = 0; r < rank; r++) {
     const v = eigvecs.subarray(r * k, (r + 1) * k);
@@ -167,7 +162,7 @@ function compactSVD(
     }
 
     // right singular vector: Bt_v = B^T @ v, sigma = ||Bt_v||
-    const Btv = new Float32Array(cols);
+    const Btv = new Float64Array(cols);
     for (let j = 0; j < cols; j++) {
       let s = 0;
       for (let i = 0; i < k; i++) s += B[i * cols + j] * v[i];

@@ -242,7 +242,7 @@ export async function streamingCompress(
   } = options;
 
   // Per-tensor quality ledger — JSONL, one line per tensor
-  const _ledgerWrite = cosineLedgerPath
+  const ledgerWrite = cosineLedgerPath
     ? (entry: {
         name: string;
         path: string;
@@ -257,7 +257,7 @@ export async function streamingCompress(
     : null;
 
   // Cosine similarity for ledger (inline, no import needed)
-  function _cosineSim(a: Float32Array, b: Float32Array): number {
+  function cosineSim(a: Float32Array, b: Float32Array): number {
     let dot = 0,
       nA = 0,
       nB = 0;
@@ -491,6 +491,7 @@ export async function streamingCompress(
     }
 
     totalInputBytes += weights.byteLength;
+    const tensorInputBytes = weights.byteLength;
 
     // Capture embedding matrix for real activation computation.
     // When errorCompensation is enabled, we gather calibration tokens
@@ -527,6 +528,7 @@ export async function streamingCompress(
     let matrixABytes: Uint8Array | null = null;
     let rhtSeedForMeta: number | undefined;
     let rhtPaddedColsForMeta: number | undefined;
+    let ledgerCosine = 0;
 
     if (compressionPath === 'int8-per-row') {
       onProgress?.({
@@ -543,6 +545,16 @@ export async function streamingCompress(
         bitsPerWeight: 8 + 32 / cols,
         quantizerType: 'int8-per-row',
       };
+      if (ledgerWrite) {
+        const dequant = new Float32Array(rows * cols);
+        for (let r = 0; r < rows; r++) {
+          const s = q8.scales[r];
+          for (let c = 0; c < cols; c++) {
+            dequant[r * cols + c] = q8.data[r * cols + c] * s;
+          }
+        }
+        ledgerCosine = cosineSim(weights, dequant);
+      }
       weights = null!;
     } else if (
       compressionPath === 'raw-e8' ||
@@ -578,6 +590,14 @@ export async function streamingCompress(
         bitsPerWeight: rawQ.bitsPerWeight,
         quantizerType: rawQ.quantizerType as 'e8-lattice',
       };
+      if (ledgerWrite) {
+        const dequantResult = e8ForRaw.dequantize(
+          rawQ.packedBuffer,
+          rows,
+          bCols
+        );
+        ledgerCosine = cosineSim(bMatrix, dequantResult.weights);
+      }
     } else {
       // svd-e8 (current path, preserved)
       onProgress?.({
@@ -662,6 +682,16 @@ export async function streamingCompress(
           quantizerType: svdQ.quantizerType as 'ternary' | 'e8-lattice',
         };
       }
+      if (ledgerWrite) {
+        const dequantAdapter =
+          quantizedB.quantizerType === 'e8-lattice' ? e8ForRaw : q;
+        const bDequant = dequantAdapter.dequantize(
+          quantizedB.packedBuffer,
+          targetRank,
+          rhtMeta.paddedCols
+        );
+        ledgerCosine = cosineSim(matrixBRht, bDequant.weights);
+      }
       matrixABytes = new Uint8Array(matrixA.buffer);
     }
 
@@ -704,6 +734,18 @@ export async function streamingCompress(
     const outputSize =
       (matrixABytes?.byteLength ?? 0) + quantizedB.packedBuffer.length;
     totalOutputBytes += outputSize;
+
+    if (ledgerWrite) {
+      ledgerWrite({
+        name: tensor.name,
+        path: compressionPath,
+        rank: compressionPath.startsWith('svd') ? targetRank : null,
+        cosine: ledgerCosine,
+        bitsPerWeight: quantizedB.bitsPerWeight,
+        inputBytes: tensorInputBytes,
+        outputBytes: outputSize,
+      });
+    }
 
     const crystal = metadataToWeightCrystal(meta, outputDir);
     crystals.push(crystal);

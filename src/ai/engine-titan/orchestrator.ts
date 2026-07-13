@@ -11,6 +11,8 @@ import {
   ReconstructionResult,
 } from './reconstruction';
 import { CrashSafeVault } from '../agency/memory/vault/crash-safe-vault';
+import type { TitanQuantizer } from './quantizer-interface';
+import type { E8QuantizerResultWithMeta } from './quantizer-e8-adapter';
 
 export interface CompressionResult {
   layerName: string;
@@ -61,16 +63,15 @@ export interface LayerMetadata {
 
 export class TitanEngineOrchestrator {
   private decomposer = new LowRankTensorDecomposer();
-  private quantizer = new TitanStreamQuantizer();
+  private legacyQuantizer = new TitanStreamQuantizer();
+  private pluggableQuantizer: TitanQuantizer | null;
   private reconstructor = new TitanDecompressionEngine();
   private vault = new CrashSafeVault();
 
-  /**
-   * Orchestrates the full weight compression pipeline:
-   * 1. Low-Rank Decomposition (SVD via power iteration)
-   * 2. Ternary Quantization (1.58-bit) of matrix B
-   * 3. Atomic Storage via CrashSafeVault
-   */
+  constructor(quantizer?: TitanQuantizer) {
+    this.pluggableQuantizer = quantizer ?? null;
+  }
+
   public async compressModelLayer(
     layerName: string,
     rawWeights: Float32Array,
@@ -79,7 +80,6 @@ export class TitanEngineOrchestrator {
     targetRank: number,
     storageDir: string
   ): Promise<CompressionResult> {
-    // Step 1: Decompose into A (rows×rank) and B (rank×cols)
     const { matrixA, matrixB } = this.decomposer.decomposeMatrix(
       rawWeights,
       rows,
@@ -87,19 +87,38 @@ export class TitanEngineOrchestrator {
       targetRank
     );
 
-    // Step 2: Quantize Matrix B (the dominant features)
-    const header: TitanTensorHeader = {
-      layerName,
-      dimensions: [targetRank, cols],
-      totalElements: targetRank * cols,
-    };
+    let packedBuffer: Buffer;
+    let scaleB: number | undefined;
+    let quantizerType: LayerMetadata['quantizerType'];
+    let rhtSeed: number | undefined;
+    let rhtPaddedCols: number | undefined;
 
-    const quantizedB: TitanQuantizedLayer = this.quantizer.quantizeTensorChunk(
-      header,
-      matrixB
-    );
+    if (this.pluggableQuantizer) {
+      const result = this.pluggableQuantizer.quantize(
+        matrixB,
+        layerName,
+        targetRank,
+        cols
+      );
+      packedBuffer = result.packedBuffer;
+      quantizerType = result.quantizerType;
+      const e8Result = result as E8QuantizerResultWithMeta;
+      if (e8Result.rhtMeta) {
+        rhtSeed = e8Result.rhtMeta.seed;
+        rhtPaddedCols = e8Result.rhtMeta.paddedCols;
+      }
+    } else {
+      const header: TitanTensorHeader = {
+        layerName,
+        dimensions: [targetRank, cols],
+        totalElements: targetRank * cols,
+      };
+      const quantizedB: TitanQuantizedLayer =
+        this.legacyQuantizer.quantizeTensorChunk(header, matrixB);
+      packedBuffer = quantizedB.packedBuffer;
+      scaleB = quantizedB.scale;
+    }
 
-    // Step 3: Store both factors atomically
     const paths = {
       matrixA: `${storageDir}/${layerName}.A.f32`,
       packedB: `${storageDir}/${layerName}.B.packed`,
@@ -111,14 +130,17 @@ export class TitanEngineOrchestrator {
       rows,
       cols,
       targetRank,
-      scaleB: quantizedB.scale,
+      scaleB,
       compressedAt: Date.now(),
+      quantizerType,
+      rhtSeed,
+      rhtPaddedCols,
     };
 
     await this.vault.writeFile(paths.matrixA, Buffer.from(matrixA.buffer), {
       createDirectoryIfMissing: true,
     });
-    await this.vault.writeFile(paths.packedB, quantizedB.packedBuffer, {
+    await this.vault.writeFile(paths.packedB, packedBuffer, {
       createDirectoryIfMissing: true,
     });
     await this.vault.writeFile(
@@ -132,7 +154,7 @@ export class TitanEngineOrchestrator {
       rows,
       cols,
       targetRank,
-      scaleB: quantizedB.scale,
+      scaleB: scaleB ?? 0,
       storedPaths: paths,
     };
   }

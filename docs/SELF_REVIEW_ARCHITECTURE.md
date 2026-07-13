@@ -47,7 +47,7 @@
 **Problem:** The decomposer runs in fp32. The compactSVD builds BBT in Float32Array, which squares the condition number. The code comment acknowledges this loses small singular values silently. At inference time, if we ever run fp16 (which the hardware target Mali-G57 MC2 would push toward), reconstruction amplifies the precision gap.
 **Why it matters:** The ternary reconstruction path is: unpack → multiply by scale → accumulate. In fp16, the accumulation across targetRank (128-256) terms can lose precision on small contributions. The singular values we already lost at decomposition time are doubly invisible.
 **Recommendation:** The code has a clear plan (promote BBT to Float64Array) but it's blocked by E8 test instability. Priority: fix the test sensitivity to precision changes, then flip to f64 for BBT. For inference: fp32 accumulation in the inner loop even if inputs are fp16 (mixed-precision accumulator pattern).
-**Status:** Deferred until "F4 small-model E2E" per code comment. Still unresolved.
+**Status:** Done. BBT, eigvecs, tmp, and Btv promoted to Float64Array. Test blocker resolved by switching orchestrator from ternary to E8 quantizer.
 
 ---
 
@@ -145,7 +145,7 @@
 3. ~~Decide ternary's role: native-ops inference format or legacy (Finding #7)~~ — **Done.** Deprecated for new compression; retained for old crystal compat.
 4. ~~Audit GQA head grouping in GGUF ingest (Finding #8)~~ — **Done.** Downgraded to low; softmax attenuation dominates.
 5. ~~Add quarantine persistence (Finding #5)~~ — **Done.** JSONL audit log at `logs/quarantine-events.jsonl`.
-6. Promote BBT to Float64 once test sensitivity is resolved (Finding #3)
+6. ~~Promote BBT to Float64 once test sensitivity is resolved (Finding #3)~~ — **Done.** Float64 for BBT/eigvecs/tmp/Btv. Test switched to E8 quantizer.
 
 ---
 
