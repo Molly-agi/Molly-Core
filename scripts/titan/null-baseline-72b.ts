@@ -13,14 +13,14 @@ import { cpus } from 'os';
 import { parseGGUF } from '../../src/ai/engine-titan/gguf-ingest';
 import { readTensorData } from '../../src/ai/engine-titan/gguf-dequant';
 import { GgufFallbackLoader } from '../../src/ai/inference/gguf-fallback-loader';
-import type { CrystalInferenceLayer } from '../../src/ai/engine-titan/crystal-inference-layer';
+import type { AsyncLayerEngine } from '../../src/ai/inference/crystal-transformer-driver';
 import {
   CrystalTransformerDriver,
   type LayerNormWeights,
   type LayerBiasWeights,
 } from '../../src/ai/inference/crystal-transformer-driver';
 import { KvCache } from '../../src/ai/inference/kv-cache';
-import { evaluatePerplexity } from '../../src/ai/inference/perplexity-eval';
+import { evaluatePerplexityAsync } from '../../src/ai/inference/perplexity-eval';
 import {
   loadEvalCorpus,
   pinHashes,
@@ -159,15 +159,30 @@ async function main() {
     }
 
     const windowStart = Date.now();
-    const result = evaluatePerplexity(
+    let tokensThisWindow = 0;
+    const result = await evaluatePerplexityAsync(
       windows[w],
       driver,
-      fallback as unknown as CrystalInferenceLayer,
+      fallback as unknown as AsyncLayerEngine,
       layersNorm,
       layersBias,
       finalNorm,
-      kvCache
+      kvCache,
+      (pos, total) => {
+        tokensThisWindow = pos + 1;
+        if (pos % 50 === 0) {
+          const elapsed = ((Date.now() - windowStart) / 1000).toFixed(0);
+          const tps = (
+            tokensThisWindow /
+            ((Date.now() - windowStart) / 1000)
+          ).toFixed(1);
+          process.stdout.write(
+            `\r    token ${pos}/${total} (${tps} tok/s, ${elapsed}s)`
+          );
+        }
+      }
     );
+    process.stdout.write('\r' + ' '.repeat(70) + '\r');
 
     totalLoss += result.avgLoss * result.tokenCount;
     totalTokens += result.tokenCount;

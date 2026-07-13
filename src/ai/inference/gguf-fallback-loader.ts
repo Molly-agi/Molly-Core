@@ -153,17 +153,25 @@ export class GgufFallbackLoader {
   async forwardAsync(
     name: string,
     input: Float32Array,
-    inDim: number,
-    outDim: number
+    seqLen: number,
+    inDim: number
   ): Promise<Float32Array> {
+    const info = this.gguf.tensors.find((t) => t.name === name);
+    if (!info) throw new Error(`Tensor not found: ${name}`);
+    const outDim =
+      info.dimensions.length > 1 ? info.dimensions[1] : info.dimensions[0];
     const W = this.getTensor(name);
-    // Small tensors: main thread is faster than worker dispatch overhead
     if (!this.poolReady || !this.pool || outDim < 512) {
-      const output = new Float32Array(outDim);
-      for (let j = 0; j < outDim; j++) {
-        let sum = 0;
-        for (let i = 0; i < inDim; i++) sum += input[i] * W[j * inDim + i];
-        output[j] = sum;
+      const output = new Float32Array(seqLen * outDim);
+      for (let s = 0; s < seqLen; s++) {
+        const inputOffset = s * inDim;
+        const outputOffset = s * outDim;
+        for (let j = 0; j < outDim; j++) {
+          let sum = 0;
+          for (let i = 0; i < inDim; i++)
+            sum += input[inputOffset + i] * W[j * inDim + i];
+          output[outputOffset + j] = sum;
+        }
       }
       return output;
     }
