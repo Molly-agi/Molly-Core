@@ -8,11 +8,11 @@
 
 ## Summary — Top 5 Findings (ranked by severity)
 
-1. **Sequential error compensation has no real activation data** — critical
-2. **Cross-layer error propagation is unmodeled** — high
-3. **fp32 SVD on a pipeline that infers fp16** — high (known, deferred)
+1. ~~**Sequential error compensation has no real activation data**~~ — ~~critical~~ **RESOLVED**
+2. **Cross-layer error propagation is unmodeled** — high (next milestone: perplexity benchmark)
+3. ~~**fp32 SVD on a pipeline that infers fp16**~~ — ~~high~~ **RESOLVED** (BBT → Float64)
 4. **Osmotic pressure margin (0.1) is untuned and failure-prone** — medium
-5. **Quarantine queue is in-memory only** — medium (intentional, but undocumented)
+5. ~~**Quarantine queue is in-memory only**~~ — ~~medium~~ **RESOLVED** (JSONL persistence)
 
 ---
 
@@ -25,7 +25,7 @@
 **Problem:** The GPTQ-compensated E8 quantization (`compensatedQuantizeB`) needs real per-layer activations as input. The file's own header comment admits: "the production feeder in streaming-compress.ts currently supplies token IDs where per-layer activations are required." This means the Hessian H = z^T @ z is computed on garbage data. The error redistribution across rows of B is meaningless.
 **Why it matters:** Without valid activations, GPTQ compensation is theatre. The quantized weights are no better than naive E8 quantization. The `improvementRatio` metric reported is real math on fake input.
 **Recommendation:** Wire real activation capture. The sequential-mode helpers (`collectBActivations`, `propagateActivations`) exist and are correct — the missing piece is actually running the calibration dataset through the model layer-by-layer during compression.
-**Status:** Known internally (FABLE finding 02a-#2 referenced in code). Not yet fixed.
+**Status:** Done. Embedding matrix captured, calibration tokens gathered into hidden-dim vectors, `collectBActivations(hidden, A) → z` wired per tensor. Tensors sorted by layer index for sequential processing.
 
 ---
 
@@ -140,12 +140,16 @@
 
 ## Recommended Next Actions (build order, not schedule)
 
-1. Fix the activation feeder in streaming-compress.ts (Finding #1) — see Appendix A for detailed scoping
+1. ~~Fix the activation feeder in streaming-compress.ts (Finding #1)~~ — **Done.** Real embedding capture + `collectBActivations` wired. Tensors sorted by layer index. See Appendix A for original scoping.
 2. Run sequential compensation on a small model (1B-3B) end-to-end with real activations → get first perplexity number
 3. ~~Decide ternary's role: native-ops inference format or legacy (Finding #7)~~ — **Done.** Deprecated for new compression; retained for old crystal compat.
 4. ~~Audit GQA head grouping in GGUF ingest (Finding #8)~~ — **Done.** Downgraded to low; softmax attenuation dominates.
 5. ~~Add quarantine persistence (Finding #5)~~ — **Done.** JSONL audit log at `logs/quarantine-events.jsonl`.
 6. ~~Promote BBT to Float64 once test sensitivity is resolved (Finding #3)~~ — **Done.** Float64 for BBT/eigvecs/tmp/Btv. Test switched to E8 quantizer.
+7. ~~Wire per-tensor quality ledger in streaming-compress.ts~~ — **Done.** `ledgerWrite` + `cosineSim` emit JSONL per tensor (int8, raw-e8, svd-e8 paths).
+8. ~~Make orchestrator quantizer-pluggable~~ — **Done.** Constructor accepts `TitanQuantizer`; layer0-activation test uses E8.
+9. Tune osmotic pressure margin (Finding #4) — self-contained, needs simulation or empirical data
+10. Wire cross-layer activation propagation for sequential compensation (Finding #2) — depends on #2 above
 
 ---
 
