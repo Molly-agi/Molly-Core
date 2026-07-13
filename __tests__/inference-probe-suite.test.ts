@@ -99,7 +99,7 @@ console.log('  Contract: y[j] = Σ_i x[i] * W[j * inDim + i]');
 // Probe 4: attn_k [8192→1024]
 const oneHotK = new Float32Array(HIDDEN);
 oneHotK[42] = 1.0;
-const kOut = fallback.forward('blk.0.attn_k.weight', oneHotK, HIDDEN, 1024);
+const kOut = fallback.forward('blk.0.attn_k.weight', oneHotK, 1, HIDDEN).output;
 const kTensor = fallback.getTensor('blk.0.attn_k.weight');
 let matchK = 0;
 for (let j = 0; j < 1024; j++) {
@@ -110,7 +110,12 @@ assert('attn_k [8192→1024] one-hot', matchK === 1024, `${matchK}/1024`);
 // Probe 5: ffn_gate [8192→29568]
 const oneHotG = new Float32Array(HIDDEN);
 oneHotG[7] = 1.0;
-const gOut = fallback.forward('blk.0.ffn_gate.weight', oneHotG, HIDDEN, 29568);
+const gOut = fallback.forward(
+  'blk.0.ffn_gate.weight',
+  oneHotG,
+  1,
+  HIDDEN
+).output;
 const gTensor = fallback.getTensor('blk.0.ffn_gate.weight');
 let matchG = 0;
 for (let j = 0; j < 29568; j++) {
@@ -121,7 +126,12 @@ assert('ffn_gate [8192→29568] one-hot', matchG === 29568, `${matchG}/29568`);
 // Probe 6: ffn_down [29568→8192]
 const oneHotD = new Float32Array(29568);
 oneHotD[100] = 1.0;
-const dOut = fallback.forward('blk.0.ffn_down.weight', oneHotD, 29568, 8192);
+const dOut = fallback.forward(
+  'blk.0.ffn_down.weight',
+  oneHotD,
+  1,
+  29568
+).output;
 const dTensor2 = fallback.getTensor('blk.0.ffn_down.weight');
 let matchD = 0;
 for (let j = 0; j < 8192; j++) {

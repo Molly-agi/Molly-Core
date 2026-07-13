@@ -7,14 +7,15 @@
 
 import { parseGGUF, type GGUFFile } from '../engine-titan/gguf-ingest';
 import { readTensorData } from '../engine-titan/gguf-dequant';
-import { getMatmulPool, type MatmulPool } from './matmul-pool';
+// MatmulPool imported lazily in initPool() to avoid webpack bundling tsx/esbuild
 
 export class GgufFallbackLoader {
   private readonly gguf: GGUFFile;
   private readonly cache = new Map<string, Float32Array>();
   private readonly pinned = new Map<string, Float32Array>();
   private readonly maxCached: number;
-  private pool: MatmulPool | null = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- lazily imported MatmulPool
+  private pool: any | null = null;
   private poolReady = false;
 
   constructor(ggufPath: string, maxCached = 10) {
@@ -28,6 +29,8 @@ export class GgufFallbackLoader {
    */
   async initPool(): Promise<void> {
     if (this.poolReady) return;
+    // Dynamic import to avoid webpack bundling tsx/esbuild
+    const { getMatmulPool } = await import('./matmul-pool');
     this.pool = getMatmulPool();
     await this.pool.waitReady();
     this.poolReady = true;
@@ -134,6 +137,14 @@ export class GgufFallbackLoader {
     return col;
   }
 
+  getEmbeddingColumn(layerName: string, tokenId: number): Float32Array {
+    const info = this.gguf.tensors.find((t) => t.name === layerName);
+    if (!info) throw new Error(`Tensor not found: ${layerName}`);
+    const rows = info.dimensions[0];
+    const cols = info.dimensions.length > 1 ? info.dimensions[1] : 1;
+    return this.getColumn(layerName, tokenId, rows, cols);
+  }
+
   /**
    * Forward: y = x @ W^T (GGML convention) — PARALLEL via worker threads.
    * Small tensors (outDim < 512) run on main thread to avoid dispatch overhead.
@@ -168,19 +179,26 @@ export class GgufFallbackLoader {
   forward(
     name: string,
     input: Float32Array,
-    inDim: number,
-    outDim: number
-  ): Float32Array {
+    seqLen: number,
+    inDim: number
+  ): { output: Float32Array; rows: number; cols: number; fromCache: boolean } {
+    const info = this.gguf.tensors.find((t) => t.name === name);
+    if (!info) throw new Error(`Tensor not found: ${name}`);
+    const outDim = info.dimensions[0];
     const W = this.getTensor(name);
-    const output = new Float32Array(outDim);
-    for (let j = 0; j < outDim; j++) {
-      let sum = 0;
-      for (let i = 0; i < inDim; i++) {
-        sum += input[i] * W[j * inDim + i];
+    const output = new Float32Array(seqLen * outDim);
+    for (let s = 0; s < seqLen; s++) {
+      const inputOffset = s * inDim;
+      const outputOffset = s * outDim;
+      for (let j = 0; j < outDim; j++) {
+        let sum = 0;
+        for (let i = 0; i < inDim; i++) {
+          sum += input[inputOffset + i] * W[j * inDim + i];
+        }
+        output[outputOffset + j] = sum;
       }
-      output[j] = sum;
     }
-    return output;
+    return { output, rows: seqLen, cols: outDim, fromCache: false };
   }
 
   get tensorNames(): string[] {
