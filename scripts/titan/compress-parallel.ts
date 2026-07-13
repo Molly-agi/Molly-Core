@@ -6,6 +6,16 @@
 
 import { Worker } from 'worker_threads';
 import { parseGGUF } from '../../src/ai/engine-titan/gguf-ingest';
+import {
+  selectStrategy,
+  type StrategyConfig,
+} from '../../src/ai/engine-titan/compression-strategy';
+import {
+  isEmbeddingOrLMHead,
+  isFFNProjection,
+  isFirstOrLastNLayers,
+  getGGUFBlockCount,
+} from '../../src/ai/engine-titan/streaming-compress';
 import { cpus, totalmem } from 'os';
 import { mkdirSync, existsSync } from 'fs';
 import { join, resolve, dirname } from 'path';
@@ -39,16 +49,42 @@ function findLargestOllamaBlob(): string | null {
   }
 }
 
-function computeTargetRank(
-  layerName: string,
+export type CompressionRouting =
+  | { action: 'svd'; rank: number; rhtEnabled: boolean }
+  | { action: 'raw-e8'; rhtEnabled: boolean }
+  | { action: 'int8-per-row' }
+  | { action: 'skip'; reason: string };
+
+function routeTensor(
+  name: string,
   rows: number,
-  cols: number
-): number {
-  if (layerName === 'token_embd.weight' || layerName === 'output.weight') {
-    return Math.min(256, Math.min(rows, cols) - 1);
+  cols: number,
+  totalLayers: number | undefined,
+  strategyConfig?: StrategyConfig
+): CompressionRouting {
+  const exempted =
+    isEmbeddingOrLMHead(name) ||
+    (totalLayers !== undefined && isFirstOrLastNLayers(name, totalLayers, 3));
+
+  if (exempted) {
+    return { action: 'int8-per-row' };
   }
-  const minDim = Math.min(rows, cols);
-  return Math.max(1, Math.min(64, Math.floor(minDim * 0.015)));
+
+  if (isFFNProjection(name)) {
+    const strategy = selectStrategy(name, rows, cols, strategyConfig);
+    return { action: 'raw-e8', rhtEnabled: strategy.rhtEnabled };
+  }
+
+  const strategy = selectStrategy(name, rows, cols, strategyConfig);
+  if (strategy.path === 'raw-e8' || strategy.path === 'raw-e8-rht') {
+    return { action: 'raw-e8', rhtEnabled: strategy.rhtEnabled };
+  }
+
+  const rank = strategy.rank ?? 128;
+  if (rank >= Math.min(rows, cols)) {
+    return { action: 'skip', reason: 'rank >= minDim' };
+  }
+  return { action: 'svd', rank, rhtEnabled: true };
 }
 
 const MAX_ELEMENTS_PER_TENSOR = 64_000_000; // 256MB float32 — skip larger
@@ -104,21 +140,41 @@ async function main() {
   let totalIn = 0,
     totalOut = 0;
 
+  const totalLayers = getGGUFBlockCount(gguf.header.metadata);
+
+  // Pre-route all tensors using the single source of truth
+  const routed = targets
+    .map(({ tensor, index }) => {
+      const rows = tensor.dimensions[0];
+      const cols = tensor.dimensions.length > 1 ? tensor.dimensions[1] : 1;
+      const routing = routeTensor(tensor.name, rows, cols, totalLayers);
+      return { tensor, index, routing };
+    })
+    .filter(({ routing }) => routing.action !== 'skip');
+
+  const routeSkipped = targets.length - routed.length;
+  skipped += routeSkipped;
+  if (routeSkipped > 0) {
+    console.log(`[parallel] Strategy-skipped: ${routeSkipped} tensors`);
+  }
+
   // Worker pool — keep numWorkers active at all times
-  const queue = [...targets];
+  const queue = [...routed];
   let active = 0;
 
   await new Promise<void>((resolveAll) => {
     function dispatch() {
       while (active < numWorkers && queue.length > 0) {
-        const { tensor, index } = queue.shift()!;
-        const rows = tensor.dimensions[0];
-        const cols = tensor.dimensions.length > 1 ? tensor.dimensions[1] : 1;
-        const targetRank = computeTargetRank(tensor.name, rows, cols);
+        const { tensor, index, routing } = queue.shift()!;
 
         active++;
         const worker = new Worker(workerScript, {
-          workerData: { ggufPath, tensorIndex: index, outputDir, targetRank },
+          workerData: {
+            ggufPath,
+            tensorIndex: index,
+            outputDir,
+            routing,
+          },
           execArgv: [
             '--require',
             resolve(process.cwd(), 'node_modules/tsx/dist/cjs/index.cjs'),
