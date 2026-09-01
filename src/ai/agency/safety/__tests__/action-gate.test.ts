@@ -172,6 +172,27 @@ describe('Action Gate (D.1)', () => {
 
         expect(decision.allowed).toBe(true);
       });
+
+      test(`denies autonomous ${tool} without confirmed or dryRun`, async () => {
+        const decision = await evaluateActionGate({
+          tool,
+          params: {},
+          source: 'autonomous',
+        });
+
+        expect(decision.allowed).toBe(false);
+        expect(decision.reason).toContain('confirmed');
+      });
+
+      test(`allows autonomous ${tool} when confirmed`, async () => {
+        const decision = await evaluateActionGate({
+          tool,
+          params: { confirmed: true },
+          source: 'autonomous',
+        });
+
+        expect(decision.allowed).toBe(true);
+      });
     });
   });
 
@@ -210,7 +231,6 @@ describe('Action Gate (D.1)', () => {
       });
 
       expect(decision.allowed).toBe(true);
-      // Session ID is passed to gate but not returned; it's used for logging
     });
 
     test('tracks trace ID in context', async () => {
@@ -221,7 +241,6 @@ describe('Action Gate (D.1)', () => {
       });
 
       expect(decision.allowed).toBe(true);
-      // Trace ID is passed to gate but not returned; it's used for logging
     });
   });
 
