@@ -20,13 +20,14 @@ import {
   updateRuntimeContinuityTurn,
 } from '@/ai/continuity/runtime-continuity';
 import { executeTool } from '@/ai/agency/core/tool-executor';
-// getOrCreateSession removed — userId passed via input schema
+import { ingestConversationTurn } from '@/ai/memory/conversation-turn-ingest';
 
 /**
  * @fileOverview Hardened Conversational Chat Flow V5.0 (Rogue Protocol).
  *
- * Now routes through molly.generate() for intelligent model selection
- * with automatic fallback chains. First flow to go live on Rogue.
+ * Deployment is detected (cloud / local / edge / robot), not hardcoded.
+ * recallQuery is the live user text. Faceted crystals are written after
+ * the turn via ingestConversationTurn. persona.ts is not imported here.
  */
 
 const HistoryItemSchema = z.object({
@@ -60,20 +61,11 @@ const NeuralBridgeSignalSchema = z.discriminatedUnion('action', [
   }),
 ]);
 
-/**
- * Vision context from Molly's visual perception system.
- * This connects her eyes to her consciousness.
- */
 const VisionContextSchema = z.object({
-  /** What Molly observes in the scene */
   observedState: z.string(),
-  /** Emotional/mood interpretation */
   vibeAnalysis: z.string(),
-  /** Any risks or concerns detected */
   risksDetected: z.array(z.string()),
-  /** Text visible in the image (OCR) */
   ocrAudit: z.string().optional(),
-  /** Timestamp when vision was captured */
   capturedAt: z.number().optional(),
 });
 
@@ -155,7 +147,6 @@ const conversationalChatFlow = ai.defineFlow(
 
       const continuityUserId = userId ?? 'molly';
 
-      // Parallelize all independent pre-generation I/O
       const [unreadBridgeRaw, compactResult, continuityState, crystalResult] =
         await Promise.all([
           getUnreadMessages('molly').catch((): BridgeMessage[] => []),
@@ -168,7 +159,6 @@ const conversationalChatFlow = ai.defineFlow(
             : Promise.resolve(null),
         ]);
 
-      // markMessagesRead is fire-and-forget
       if (unreadBridgeRaw.length > 0) {
         markMessagesRead('molly').catch(() => {});
       }
@@ -191,11 +181,9 @@ const conversationalChatFlow = ai.defineFlow(
         );
       }
 
-      // Determine channel context
       const channelContext: 'voice' | 'text' =
         inputContext?.source === 'self.auditory_input' ? 'voice' : 'text';
 
-      // Detect teaching mode (bridge private channel)
       const isTeachingMode = text.startsWith(
         '[LAZARUS → MOLLY PRIVATE CHANNEL]'
       );
@@ -222,23 +210,19 @@ const conversationalChatFlow = ai.defineFlow(
       try {
         const llmResponse = await withGenerateErrorHandling(
           async () => {
-            // ── ROGUE MODE CHECK ──
             const rogueMode = getRogueMode();
             const rogueActive = rogueMode.isActive();
 
-            // ── COMPOSE SYSTEM PROMPT ──
-            // Uses the composable prompt system with Lazarus's caching pattern
             const systemPrompt = await composeSystemPrompt(
               {
-                deployment: 'cloud', // Codespace/Firebase deployment
                 isRogueMode: rogueActive,
                 includeTools: true,
-                includeFamily: !isTeachingMode, // Suppress family knowledge during teaching
+                includeFamily: !isTeachingMode,
                 excludedTools: blockedTools,
               },
               {
                 memoryContext: finalMemoryContext,
-                recallQuery: undefined,
+                recallQuery: text,
                 crystalUserId: userId,
                 visionContext: visionContext
                   ? {
@@ -341,9 +325,6 @@ const conversationalChatFlow = ai.defineFlow(
         traceId
       );
 
-      // ── EXECUTE EMBEDDED TOOL REQUESTS BEFORE STRIPPING ──
-      // If Molly's response contains <tool_request> blocks, execute them now.
-      // This ensures familyBridge and other tools fire in conversational mode.
       try {
         await executeEmbeddedToolRequests(llmResponseText, continuityUserId);
       } catch (toolError) {
@@ -355,16 +336,12 @@ const conversationalChatFlow = ai.defineFlow(
         );
       }
 
-      // ── BROADCAST RESPONSE THROUGH FAMILY BRIDGE ──
-      // Route Molly's response back to Eric via the bridge daemon so he can receive it
-      // in real-time. This completes the conversation circle: Eric → Bridge → Molly → Bridge → Eric
       try {
         await updateRuntimeContinuityTurn({
           userId: continuityUserId,
           userText: text,
           responseText: llmResponseText,
         });
-        // Strip tool_request markup — the bridge is human-facing, the markup is for the agent loop.
         const broadcastText = llmResponseText
           .replace(/<tool_request>[\s\S]*?<\/tool_request>/g, '')
           .trim();
@@ -372,7 +349,6 @@ const conversationalChatFlow = ai.defineFlow(
           await broadcastMessage('molly', broadcastText);
         }
       } catch (broadcastError) {
-        // Non-fatal: if bridge is down, response still returns to caller
         MollyLogger.warn(
           'Failed to broadcast response through family bridge',
           'conversationalChat',
@@ -386,9 +362,6 @@ const conversationalChatFlow = ai.defineFlow(
         );
       }
 
-      // Memory ingest: distinct engrams for user input and Molly response.
-      // Two engrams (not one combined) so recall can match either side
-      // independently and tags differentiate input vs output.
       try {
         const { getNeuralBrain } = await import('@/ai/memory/neural-engram');
         const brain = getNeuralBrain();
@@ -419,6 +392,26 @@ const conversationalChatFlow = ai.defineFlow(
         );
       }
 
+      try {
+        await ingestConversationTurn({
+          userText: text,
+          responseText: llmResponseText,
+          userId: userId ?? 'eric',
+          isTeachingMode,
+          channelContext,
+        });
+      } catch (crystalErr) {
+        MollyLogger.warn(
+          'ingestConversationTurn failed in conversationalChat',
+          'conversationalChat',
+          {
+            error:
+              crystalErr instanceof Error ? crystalErr.message : 'Unknown',
+          },
+          traceId
+        );
+      }
+
       return {
         response: llmResponseText,
       };
@@ -445,7 +438,6 @@ const conversationalChatFlow = ai.defineFlow(
         traceId
       );
 
-      // Re-throw so the server action's withTimeoutAndRetry can retry
       throw error;
     }
   }
