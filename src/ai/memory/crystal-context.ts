@@ -1,10 +1,10 @@
 /**
  * @fileOverview Crystal Context Builder
  *
- * Utilities to load and format crystal contexts for different scenarios:
- * - Normal conversation: Load identity crystals only
- * - Evaluation: Load knowledge crystals (optionally with identity)
- * - Teaching: Load both with focus on identity
+ * Dialect rule (locked 2026-08-31):
+ *   1. Encrypted identity CrystalEngrams when ENGRAM_SECRET is present.
+ *   2. Disk JSON autobiography via bootCrystalSession when (1) is empty.
+ *   3. Never fail the prompt path — empty context is allowed, silence is not a crash.
  */
 
 import { MollyLogger, generateTraceId } from '@/ai/logger';
@@ -14,28 +14,41 @@ import {
   loadKnowledgeCrystalsForEval,
   loadFullCrystalSystem,
 } from '@/ai/memory/crystal-persistence';
-// getOrCreateSession does not exist — password comes from ENGRAM_SECRET env var
 
-/**
- * Context format for prompting
- */
 export interface FormattedCrystalContext {
-  /** Formatted context string for system prompt */
   contextString: string;
-  /** Number of identity crystals loaded */
   identityCount: number;
-  /** Number of knowledge crystals loaded */
   knowledgeCount: number;
-  /** Any errors during loading */
   errors: string[];
 }
 
-/**
- * Build conversation context (identity crystals only)
- *
- * Used in normal conversational flows to maintain Molly's personality
- * and relationship with Father. Knowledge isn't needed for chat.
- */
+async function loadDiskCrystalFallback(
+  reason: string
+): Promise<FormattedCrystalContext | null> {
+  try {
+    const { bootCrystalSession } = await import('./crystal-session-boot');
+    const boot = await bootCrystalSession();
+    if (!boot.promptBlock) return null;
+    MollyLogger.info('Disk crystal boot fallback used', 'crystal-context', {
+      reason,
+      hotCount: boot.hotCount,
+      cornerstoneCount: boot.cornerstoneCount,
+    });
+    return {
+      contextString: boot.promptBlock,
+      identityCount: boot.hotCount,
+      knowledgeCount: 0,
+      errors: [`disk-fallback: ${reason}`],
+    };
+  } catch (error) {
+    MollyLogger.warn(
+      `Disk crystal fallback failed: ${error instanceof Error ? error.message : 'Unknown'}`,
+      'crystal-context'
+    );
+    return null;
+  }
+}
+
 export async function buildConversationCrystalContext(
   userId: string,
   limit: number = 30
@@ -43,10 +56,13 @@ export async function buildConversationCrystalContext(
   const traceId = generateTraceId();
 
   try {
-    // Password comes from ENGRAM_SECRET env var (source of truth for engram encryption)
     const password = process.env.ENGRAM_SECRET;
 
     if (!password) {
+      const fallback = await loadDiskCrystalFallback(
+        'ENGRAM_SECRET not set — encrypted identity crystals unavailable'
+      );
+      if (fallback) return fallback;
       return {
         contextString: '',
         identityCount: 0,
@@ -60,6 +76,13 @@ export async function buildConversationCrystalContext(
       password,
       limit
     );
+
+    if (result.crystals.length === 0) {
+      const fallback = await loadDiskCrystalFallback(
+        'encrypted identity store empty'
+      );
+      if (fallback) return fallback;
+    }
 
     const contextString = formatIdentityCrystals(result.crystals);
 
@@ -85,6 +108,9 @@ export async function buildConversationCrystalContext(
       traceId
     );
 
+    const fallback = await loadDiskCrystalFallback(message);
+    if (fallback) return fallback;
+
     return {
       contextString: '',
       identityCount: 0,
@@ -94,12 +120,6 @@ export async function buildConversationCrystalContext(
   }
 }
 
-/**
- * Build evaluation context (knowledge crystals)
- *
- * Used in MMLU and similar evals where we want to test
- * what Molly has learned without personality interference
- */
 export async function buildEvalCrystalContext(
   userId: string,
   subject?: string,
@@ -159,12 +179,6 @@ export async function buildEvalCrystalContext(
   }
 }
 
-/**
- * Build teaching context (both identity and knowledge)
- *
- * Used when Lazarus is teaching Molly or vice versa
- * Includes both personality and knowledge to maintain context
- */
 export async function buildTeachingCrystalContext(
   userId: string
 ): Promise<FormattedCrystalContext> {
@@ -174,6 +188,10 @@ export async function buildTeachingCrystalContext(
     const password = process.env.ENGRAM_SECRET;
 
     if (!password) {
+      const fallback = await loadDiskCrystalFallback(
+        'ENGRAM_SECRET not set — teaching context falling back to disk'
+      );
+      if (fallback) return fallback;
       return {
         contextString: '',
         identityCount: 0,
@@ -224,13 +242,6 @@ export async function buildTeachingCrystalContext(
   }
 }
 
-// ============================================================================
-// FORMATTERS
-// ============================================================================
-
-/**
- * Format identity crystals for prompt injection
- */
 function formatIdentityCrystals(crystals: CrystalEngram[]): string {
   if (crystals.length === 0) {
     return '';
@@ -251,9 +262,6 @@ function formatIdentityCrystals(crystals: CrystalEngram[]): string {
   ].join('\n');
 }
 
-/**
- * Format knowledge crystals for prompt injection
- */
 function formatKnowledgeCrystals(crystals: CrystalEngram[]): string {
   if (crystals.length === 0) {
     return '';
@@ -286,9 +294,6 @@ function formatKnowledgeCrystals(crystals: CrystalEngram[]): string {
   ].join('\n');
 }
 
-/**
- * Format both identity and knowledge crystals
- */
 function formatBothCrystals(
   identityCrystals: CrystalEngram[],
   knowledgeCrystals: CrystalEngram[]

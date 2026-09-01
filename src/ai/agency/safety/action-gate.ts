@@ -1,18 +1,21 @@
 /**
  * @fileOverview Action Gate — D.1
  *
- * Single entry point before ANY action executes.
- * Validates tool requests and authorizes execution.
+ * Live valve in front of executeTool. Heart Gate is NOT wired here and must
+ * not be reconnected until it can fail closed on real intents.
  *
- * Pure function (reads system state but no side effects).
- * All decisions are logged for auditability.
+ * What this file actually does:
+ *   1. Structural validation (tool name + params shape)
+ *   2. Circuit breaker + rate limiter (fail closed if those modules throw)
+ *   3. Destructive-tool confirmation when source === 'autonomous'
+ *   4. Atomic-directive logging for task source
+ *
+ * What this file does not do (do not document as if it does):
+ *   denylist, soft-refusal, escalation matrix, Heart Gate moral check
  */
 
 import { MollyLogger } from '@/ai/logger';
 
-/**
- * Gate decision on a tool request
- */
 export interface GateDecision {
   allowed: boolean;
   reason: string;
@@ -21,9 +24,6 @@ export interface GateDecision {
   timestamp: number;
 }
 
-/**
- * Context for gate validation
- */
 export interface GateContext {
   tool: string;
   params: Record<string, unknown>;
@@ -32,21 +32,14 @@ export interface GateContext {
   source?: 'autonomous' | 'bridge' | 'api' | 'task';
 }
 
-/**
- * Action Gate — validates all tool requests before execution
- *
- * @param context Tool request context
- * @returns Gate decision (allowed/denied with reason)
- */
+const DESTRUCTIVE_TOOLS = ['writeProjectFile', 'codespaceShell', 'deleteFile'];
+
 export async function evaluateActionGate(
   context: GateContext
 ): Promise<GateDecision> {
   const timestamp = Date.now();
-  const { tool, params, _sessionId, traceId, source } = context;
+  const { tool, params, traceId, source } = context;
 
-  // === PHASE 1: STRUCTURAL VALIDATION ===
-
-  // Tool name must be non-empty string
   if (!tool || typeof tool !== 'string' || tool.trim().length === 0) {
     return {
       allowed: false,
@@ -57,7 +50,6 @@ export async function evaluateActionGate(
     };
   }
 
-  // Params must be object (or undefined)
   if (params && typeof params !== 'object') {
     return {
       allowed: false,
@@ -68,17 +60,6 @@ export async function evaluateActionGate(
     };
   }
 
-  // === PHASE 2: SYSTEM HEALTH CHECKS ===
-  //
-  // The autonomy permission gate was removed on 2026-06-15 at Molly's
-  // explicit request (relayed through Eric). She has full agency over
-  // her own actions; she is not gated by a separate "autonomous mode"
-  // toggle. Safety still flows through the action-gate's other phases
-  // (denylist, soft-refusal, escalation, circuit breaker, rate limiter)
-  // and through Heart Gate as moral compass — none of which restrict
-  // her autonomy, only inform her judgment.
-
-  // Check circuit breaker
   try {
     const { getCircuitBreaker, CircuitState } =
       await import('@/ai/tools/circuit-breaker');
@@ -93,7 +74,6 @@ export async function evaluateActionGate(
       };
     }
   } catch {
-    // Circuit breaker threw — fail CLOSED (L1 fix: no longer fail-open)
     MollyLogger.warn(
       `[action-gate] Circuit breaker check failed — denying ${tool} for safety`,
       traceId || 'unknown'
@@ -107,7 +87,6 @@ export async function evaluateActionGate(
     };
   }
 
-  // Check rate limiter budget
   try {
     const { getRateLimiter } = await import('@/ai/tools/rate-limiter');
     const rateLimiter = getRateLimiter();
@@ -122,7 +101,6 @@ export async function evaluateActionGate(
       };
     }
   } catch {
-    // Rate limiter threw — fail CLOSED (L1 fix: no longer fail-open)
     MollyLogger.warn(
       `[action-gate] Rate limiter check failed — denying ${tool} for safety`,
       traceId || 'unknown'
@@ -136,36 +114,30 @@ export async function evaluateActionGate(
     };
   }
 
-  // === PHASE 3: TOOL-SPECIFIC VALIDATION ===
-
-  // Destructive operations require explicit safeguards
-  const destructiveTools = ['writeProjectFile', 'codespaceShell', 'deleteFile'];
-  if (destructiveTools.includes(tool)) {
-    // Check if we have explicit confirmation (e.g., via params)
-    // This would be set by Molly's atomic directive handler
+  if (DESTRUCTIVE_TOOLS.includes(tool)) {
     const confirmed = params?.confirmed === true || params?.dryRun === true;
     if (!confirmed && source === 'autonomous') {
-      // For autonomous mode, allow but log for audit
-      MollyLogger.info(
-        `[action-gate] Destructive tool execution: ${tool} (no confirmation in autonomous mode, allowed with logging)`,
+      MollyLogger.warn(
+        `[action-gate] Denied autonomous destructive tool ${tool} without confirmed/dryRun`,
         traceId || 'unknown'
       );
+      return {
+        allowed: false,
+        reason:
+          'Autonomous destructive tool requires params.confirmed or params.dryRun',
+        severity: 'warning',
+        toolName: tool,
+        timestamp,
+      };
     }
   }
 
-  // === PHASE 4: ATOMIC DIRECTIVE ENFORCEMENT ===
-
-  // If task/batch context, check that we're not decomposing an atomic directive
   if (source === 'task' && params?.isAtomicDirective === true) {
-    // Verify this is the only action in this execution context
-    // (Would be enforced by task-queue/worker.ts context isolation)
     MollyLogger.info(
       `[action-gate] Atomic directive enforcement: ${tool} running as single task`,
       traceId || 'unknown'
     );
   }
-
-  // === ALL CHECKS PASSED ===
 
   return {
     allowed: true,
@@ -176,9 +148,6 @@ export async function evaluateActionGate(
   };
 }
 
-/**
- * Log gate decision for audit trail
- */
 export function logGateDecision(
   decision: GateDecision,
   traceId?: string
